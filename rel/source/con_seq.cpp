@@ -16,7 +16,7 @@ void (*gTrampoline_seq_logoMain)(ttyd::seqdrv::SeqInfo *);
 MOD_INIT_FUNCTION()
 {
 	// Skip logo
-	gTrampoline_seq_logoMain = patch::HookFunction(ttyd::seq_logo::seq_logoMain, [](ttyd::seqdrv::SeqInfo *info)
+	gTrampoline_seq_logoMain = patch::hookFunction(ttyd::seq_logo::seq_logoMain, [](ttyd::seqdrv::SeqInfo *info)
 	{
 		if (seq_logo_skip.value > 0)
 		{

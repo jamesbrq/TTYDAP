@@ -49,14 +49,14 @@ void Mod::init()
 {
 	gMod = this;
 
-	mPFN_makeKey_trampoline = patch::HookFunction(ttyd::system::makeKey, []()
+	mPFN_makeKey_trampoline = patch::hookFunction(ttyd::system::makeKey, []()
 	{
 		gMod->updateEarly();
 	});
 
 	// Initialize typesetting early
 	ttyd::fontmgr::fontmgrTexSetup();
-	patch::HookFunction(ttyd::fontmgr::fontmgrTexSetup, [](){});
+	patch::hookFunction(ttyd::fontmgr::fontmgrTexSetup, [](){});
 
 	mConsole.init();
 

@@ -12,6 +12,7 @@
 #include <ttyd/seqdrv.h>
 #include <ttyd/event.h>
 #include <ttyd/string.h>
+#include <patches_gor1.h>
 
 #include "common.h"
 #include "OWR.h"
@@ -108,13 +109,13 @@ namespace mod::owr
 	 {
 		gSelf = this;
 
-		g_itemEntry_trampoline = patch::HookFunction(
+		/* g_itemEntry_trampoline = patch::HookFunction(
 			ttyd::itemdrv::itemEntry, [](const char* name, uint32_t id, uint32_t mode, int32_t collection_expr, void* script, float x, float y, float z) 
 			{
 				return g_itemEntry_trampoline(name, ItemId::ULTRA_HAMMER, mode, collection_expr, script, x, y, z);
-			});
+			}); */
 
-		g_OSLink_trampoline = patch::HookFunction(
+		g_OSLink_trampoline = patch::hookFunction(
 			ttyd::oslink::OSLink, [](OSModuleInfo* new_module, void* bss) {
 				bool result = g_OSLink_trampoline(new_module, bss);
 				if (new_module != nullptr && result) {
@@ -123,7 +124,7 @@ namespace mod::owr
 				return result;
 			});
 
-		g_stg0_00_init_trampoline = patch::HookFunction(
+		g_stg0_00_init_trampoline = patch::hookFunction(
 			ttyd::event::stg0_00_init, []() {
 				gSelf->NewFileInit();
 				g_stg0_00_init_trampoline();
@@ -131,7 +132,7 @@ namespace mod::owr
 
 		uint32_t* kSkipUHCutsceneOpcode = reinterpret_cast<uint32_t*>(0x800abcd8);
 		const uint32_t skip_cutscene_opcode = 0x48000030;     // b 0x0030
-		mod::patch::WritePatch(
+		mod::patch::writePatch(
 			kSkipUHCutsceneOpcode, &skip_cutscene_opcode, sizeof(uint32_t));
 
 		uint16_t size = GSWF_ARR_SIZE;
@@ -169,6 +170,7 @@ namespace mod::owr
 	void OWR::OnModuleLoaded(OSModuleInfo* module_info)
 	{
 		if (module_info == nullptr) return;
+		DoPatches(module_info);
 		int32_t module_id = module_info->id;
 		uintptr_t module_ptr = reinterpret_cast<uintptr_t>(module_info);
 		if (module_id != ModuleId::GOR) return;
