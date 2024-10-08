@@ -15,16 +15,16 @@ using namespace ttyd::item_data;
 
 using ::ttyd::oslink::OSModuleInfo;
 
-extern const int32_t gor_gor_01_gor_01_init_evt[];
+extern int32_t gor_gor_01_gor_01_init_evt[];
 
 EVT_BEGIN(gor_01_init)
-USER_FUNC(evt_item::evt_item_entry, PTR("item_00"), ItemType::L_EMBLEM, 490, 0, 245, 16, GSWF(5570), 0)
-RETURN()
+	USER_FUNC(evt_item::evt_item_entry, PTR("item_00"), ItemType::L_EMBLEM, 490, 0, 245, 16, GSWF(5570), 0)
+	RETURN()
 EVT_END()
 
-void DoPatches(OSModuleInfo* new_module) {
-	switch (new_module->id) {
+void DoPatches(ModuleId::e module_id) {
+	switch (module_id) {
 	case ModuleId::GOR:
-		patch::writePatch(reinterpret_cast<void*>(gor_gor_01_gor_01_init_evt[276]), gor_01_init, sizeof(gor_01_init));
+		patch::writePatch(reinterpret_cast<void*>(gor_gor_01_gor_01_init_evt[224]), gor_01_init, sizeof(gor_01_init));
 	}
 }

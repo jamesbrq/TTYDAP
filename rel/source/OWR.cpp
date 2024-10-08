@@ -21,6 +21,7 @@
 using ::ttyd::common::ItemData;
 using ::ttyd::oslink::OSModuleInfo;
 using ::ttyd::common::ShopItemData;
+using namespace ::ttyd::common;
 using ::ttyd::seqdrv::SeqIndex;
 
 namespace ItemId = ::ttyd::common::ItemId;
@@ -89,8 +90,6 @@ namespace mod::owr
 		{
 			ttyd::swdrv::swSet(GSWF_ARR[i]);
 		}
-
-		ttyd::swdrv::swSet(5570);
 	}
 
 	void OWR::LZTest()
@@ -166,7 +165,7 @@ namespace mod::owr
 		int32_t module_id = module_info->id;
 		uintptr_t module_ptr = reinterpret_cast<uintptr_t>(module_info);
 		if (module_id != ModuleId::GOR) return;
-		DoPatches(module_info);
+		DoPatches(static_cast<ttyd::common::ModuleId::e>(module_id));
 		ShopItemData* item_data = reinterpret_cast<ShopItemData*>(module_ptr + kShopOffsets[0]);
 		for (int32_t copy = 0; copy < 7; ++copy) {
 			// Skip first item slot on additional copies.

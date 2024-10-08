@@ -1,5 +1,8 @@
 #pragma once
 
-#include <ttyd/OSLink.h>
+#include <gc/OSLink.h>
+#include "common_types.h"
 
-void DoPatches(ttyd::oslink::OSModuleInfo*);
+using namespace ttyd::common;
+
+void DoPatches(ModuleId::e module_id);
