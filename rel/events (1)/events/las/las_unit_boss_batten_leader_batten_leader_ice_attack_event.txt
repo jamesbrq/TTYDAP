@@ -1,0 +1,150 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [batten_leader_ice_attack_event unit_boss_batten_leader.o] AT 8061B83C ---
+8061B83C:   callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_BOSS_SRYO_STUFF_PUTOUT1"] [F1194D80] 0 [F1194D80]
+8061B858:   callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 1 ["A_1A"]
+8061B86C:   wait_ms 170
+8061B874:   callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_BOSS_SRYO_STUFF_PUTOUT2"] [F1194D80] 0 [F1194D80]
+8061B890:   callc [eff_staff unit_boss_batten_leader.o] -2
+8061B89C:   callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 1 ["A_1B"]
+8061B8B0:   wait_ms 2000
+8061B8B8:   callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_BOSS_SRYO_STUFF_PISECE1"] [F1194D80] 0 [F1194D80]
+8061B8D4:   callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 1 ["A_2"]
+8061B8E8:   wait_ms 270
+8061B8F0:   callc [enzan_lw_save unit_boss_batten_leader.o]
+8061B8F8:   setii LW(9) [btl_shuryolight_rod_normal unit_boss_batten_leader.o]
+8061B904:   setii LW(0) 8
+8061B910:   callc [btlevtcmd_GetUnitWork battle_event_cmd.o] -2 7 LW(1)
+8061B924:   if_int_ne LW(0) LW(1)
+8061B930:     callc [btlevtcmd_SetUnitWork battle_event_cmd.o] -2 7 LW(0)
+8061B944:     callc [btlevtcmd_GetUnitWork battle_event_cmd.o] -2 5 LW(0)
+8061B958:     stop_tid LW(0)
+8061B960:     callsa_tid [light_rod_anim_rtn unit_boss_batten_leader.o] LW(0)
+8061B96C:     callc [btlevtcmd_SetUnitWork battle_event_cmd.o] -2 5 LW(0)
+8061B980:   endif
+8061B984:   callc [enzan_lw_load unit_boss_batten_leader.o]
+8061B98C:   callc [btlevtcmd_GetUnitWork battle_event_cmd.o] -2 2 LW(1)
+8061B9A0:   if_int_gt LW(1) 0
+8061B9AC:     callc [btlevtcmd_SetUnitWork battle_event_cmd.o] -2 2 0
+8061B9C0:     callc [btlevtcmd_GetRandomValue battle_event_cmd.o] 100 LW(2)
+8061B9D0:     if_int_lt LW(2) LW(1)
+8061B9DC:       callc [btlevtcmd_GetPosFloat battle_event_cmd.o] -2 LW(0) LW(1) LW(2)
+8061B9F4:       addf LW(0) -52.00
+8061BA00:       addf LW(1) 60.00
+8061BA0C:       addf LW(2) 20.00
+8061BA18:       callc [evt_eff evt_eff.o] ["KEMURI_EFF_00"] ["kemuri_test"] 19 LW(0) LW(1) LW(2) 1.00 0 0 0 0 0 0 0
+8061BA58:       wait_ms 600
+8061BA60:       return
+8061BA64:     endif
+8061BA68:   endif
+8061BA6C:   callc [btlevtcmd_GetEnemyBelong battle_event_cmd.o] -2 LW(0)
+8061BA7C:   callc [btlevtcmd_SamplingEnemy battle_event_cmd.o] -2 LW(0) LW(9)
+8061BA90:   callc [btlevtcmd_ChoiceSamplingEnemy battle_event_cmd.o] LW(9) LW(3) LW(4)
+8061BAA4:   if_int_eq LW(3) -1
+8061BAB0:     callc [btlevtcmd_CheckToken battle_event_cmd.o] -2 16 LW(0)
+8061BAC4:     if_int_ne LW(0) 0
+8061BAD0:       callss [subsetevt_confuse_flustered battle_event_subset.o]
+8061BAD8:     endif
+8061BADC:     return
+8061BAE0:   endif
+8061BAE4:   callc [btlevtcmd_WeaponAftereffect battle_event_cmd.o] LW(9)
+8061BAF0:   callc [btlevtcmd_AttackDeclare battle_event_cmd.o] -2 LW(3) LW(4)
+8061BB04:   callc [btlevtcmd_WaitGuardMove battle_event_cmd.o]
+8061BB0C:   callc [btlevtcmd_PayWeaponCost battle_event_cmd.o] -2 LW(9)
+8061BB1C:   callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_BOSS_SRYO_ICE1"] [F1194D80] 0 [F1194D80]
+8061BB38:   callc [btlevtcmd_GetPosFloat battle_event_cmd.o] -2 LW(0) LW(1) LW(2)
+8061BB50:   addf LW(0) -52.00
+8061BB5C:   addf LW(1) 60.00
+8061BB68:   addf LW(2) 10.00
+8061BB74:   callc [btlevtcmd_GetHitPos battle_event_cmd.o] LW(3) LW(4) LW(5) LW(6) LW(7)
+8061BB90:   addf LW(7) 10.00
+8061BB9C:   callc [evt_eff64 evt_eff.o] ["ICE_EFF_00"] ["opuku_wgun_n64"] 0 LW(0) LW(1) LW(2) LW(5) LW(6) LW(7) 1.00 9 0 0 0
+8061BBDC:   wait_ms 150
+8061BBE4:   callc [btlevtcmd_PreCheckDamage battle_event_cmd.o] -2 LW(3) LW(4) LW(9) 256 LW(5)
+8061BC04:   switchi LW(5)
+8061BC0C:     case_int_eq_any 4
+8061BC14:       goto 90
+8061BC1C:       end_multi_case
+8061BC20:     case_int_eq 3
+8061BC28:       callc [btlevtcmd_StartAvoid battle_event_cmd.o] LW(3) 38
+8061BC38:       goto 90
+8061BC40:       end_multi_case
+8061BC44:     case_int_eq 6
+8061BC4C:       callc [btlevtcmd_StartAvoid battle_event_cmd.o] LW(3) 39
+8061BC5C:       goto 90
+8061BC64:     case_int_eq 2
+8061BC6C:       callc [btlevtcmd_StartAvoid battle_event_cmd.o] LW(3) 40
+8061BC7C:       goto 90
+8061BC84:     case_int_eq 1
+8061BC8C:       goto 91
+8061BC94:       end_multi_case
+8061BC98:     case_default
+8061BC9C:       goto 98
+8061BCA4:       end_multi_case
+8061BCA8:   end_switch
+8061BCAC: 90:
+8061BCB4:   callc [btlevtcmd_AnimeChangePoseType battle_event_cmd.o] -2 1 69
+8061BCC8:   wait_ms 300
+8061BCD0:   goto 98
+8061BCD8: 91:
+8061BCE0:   callc [btlevtcmd_ResultACDefence battle_event_cmd.o] LW(3) LW(9)
+8061BCF0:   callc [btlevtcmd_CheckDamage battle_event_cmd.o] -2 LW(3) LW(4) LW(9) 256 LW(5)
+8061BD10:   callc [btlevtcmd_AnimeChangePoseType battle_event_cmd.o] -2 1 69
+8061BD24: 98:
+8061BD2C:   callc [btlevtcmd_ResetFaceDirection battle_event_cmd.o] -2
+8061BD38:   return
+8061BD3C:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [light_rod_anim_rtn unit_boss_batten_leader.o] AT 80618C68 ---
+80618C68:   mo_set_base_int LW(9)
+80618C70:   loop 0
+80618C78:     mo_read_int LW(1)
+80618C80:     if_int_eq LW(1) 0
+80618C8C:       mo_set_base_int LW(9)
+80618C94:       mo_read_int LW(1)
+80618C9C:     endif
+80618CA0:     callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 7 LW(1)
+80618CB4:     mo_read_int LW(1)
+80618CBC:     if_int_gt LW(1) 0
+80618CC8:       wait_ms LW(1)
+80618CD0:     else
+80618CD4:       switchi LW(1)
+80618CDC:         case_int_eq 0
+80618CE4:           wait_frames 1
+80618CEC:           callc [btlevtcmd_AnimeWaitPlayComplete battle_event_cmd.o] -2 7
+80618CFC:         case_int_eq -1
+80618D04:           loop_break
+80618D08:         case_int_eq -2
+80618D10:           loop 0
+80618D18:             callc [evt_sub_random evt_sub.o] 3000 LW(0)
+80618D28:             addi LW(0) 3000
+80618D34:             wait_ms LW(0)
+80618D3C:             callc [evt_sub_random evt_sub.o] 100 LW(0)
+80618D4C:             divi LW(0) 30
+80618D58:             if_int_gt LW(0) 0
+80618D64:               loop_break
+80618D68:             endif
+80618D6C:           end_loop
+80618D70:           mo_read_int4 LW(1) LW(2) LW(3) LW(4)
+80618D84:           loop LW(0)
+80618D8C:             callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 7 LW(1)
+80618DA0:             wait_ms LW(2)
+80618DA8:             callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 7 LW(3)
+80618DBC:             wait_ms LW(4)
+80618DC4:           end_loop
+80618DC8:         case_int_eq -3
+80618DD0:           callc [evt_sub_random evt_sub.o] 3000 LW(0)
+80618DE0:           callc [evt_sub_random evt_sub.o] 1000 LW(2)
+80618DF0:           addi LW(0) LW(2)
+80618DFC:           addi LW(0) 700
+80618E08:           wait_ms LW(0)
+80618E10:         case_int_eq -4
+80618E18:           callc [evt_sub_random evt_sub.o] 300 LW(0)
+80618E28:           addi LW(0) 100
+80618E34:           wait_ms LW(0)
+80618E3C:       end_switch
+80618E40:     endif
+80618E44:   end_loop
+80618E48:   return
+80618E4C:   end

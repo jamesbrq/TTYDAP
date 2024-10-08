@@ -1,0 +1,65 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [nokkosu_talk gon_08.o] AT 805CBEFC ---
+805CBEFC:   callc [evt_npc_flag_onoff evt_npc.o] 1 ["me"] 1073741856
+805CBF10:   begin_thread
+805CBF14:     callc [evt_mario_mov_pos2 evt_mario.o] -206 -147 120.00
+805CBF28:     callc [evt_mario_set_dir evt_mario.o] 90 200 0
+805CBF3C:   end_thread
+805CBF40:   loop 0
+805CBF48:     callc [evt_mario_party_use_check evt_mario.o] LW(0)
+805CBF54:     if_int_eq LW(0) 0
+805CBF60:       loop_break
+805CBF64:     endif
+805CBF68:     wait_frames 1
+805CBF70:   end_loop
+805CBF74:   callc [evt_party_wait_landon evt_party.o] 0
+805CBF80:   callc [evt_party_outofscreen evt_party.o] 0 LW(0)
+805CBF90:   if_int_eq LW(0) 0
+805CBF9C:     callc [evt_party_set_pos evt_party.o] 0 -200 500 -87
+805CBFB4:   endif
+805CBFB8:   callc [evt_party_move_pos2 evt_party.o] 0 -228 -130 120.00
+805CBFD0:   callc [evt_party_set_dir evt_party.o] 0 90 200
+805CBFE4:   callc [evt_npc_set_ry_lr evt_npc.o] ["me"] 0
+805CBFF4:   callc [evt_msg_print evt_msg.o] 0 ["irai_07_00"] 0 ["me"]
+805CC00C:   callc [evt_mario_get_party evt_mario.o] LW(0)
+805CC018:   if_int_ne LW(0) 2
+805CC024:     callc [evt_mario_goodbye_party evt_mario.o] 0
+805CC030:     callc [evt_mario_hello_party evt_mario.o] 0 2
+805CC040:   endif
+805CC044:   callc [evt_party_stop evt_party.o] 0
+805CC050:   callc [evt_msg_print evt_msg.o] 0 ["irai_07_01"] 0 ["party"]
+805CC068:   callc [evt_npc_get_position evt_npc.o] ["me"] LW(0) LW(1) LW(2)
+805CC080:   callc [evt_party_get_pos evt_party.o] 0 LW(3) LW(4) LW(5)
+805CC098:   if_int_ge LW(3) LW(0)
+805CC0A4:     callc [evt_npc_set_ry evt_npc.o] ["me"] 90
+805CC0B4:   else
+805CC0B8:     callc [evt_npc_set_ry evt_npc.o] ["me"] 270
+805CC0C8:   endif
+805CC0CC:   wait_frames 1
+805CC0D4:   callc [evt_npc_wait_pera evt_npc.o] ["me"]
+805CC0E0:   callc [evt_msg_print evt_msg.o] 0 ["irai_07_02"] 0 ["me"]
+805CC0F8:   callc [evt_msg_print evt_msg.o] 0 ["irai_07_03"] 0 ["party"]
+805CC110:   callc [evt_msg_print evt_msg.o] 0 ["irai_07_04"] 0 ["me"]
+805CC128:   callc [evt_msg_print evt_msg.o] 0 ["irai_07_05"] 0 ["party"]
+805CC140:   callc [evt_msg_print evt_msg.o] 0 ["irai_07_06"] 0 ["me"]
+805CC158:   callc [evt_set_dir_to_target evt_npc.o] ["me"] ["mario"]
+805CC168:   wait_frames 1
+805CC170:   callc [evt_npc_wait_pera evt_npc.o] ["me"]
+805CC17C:   callc [evt_party_run evt_party.o] 0
+805CC188:   callc [evt_item_entry evt_item.o] ["irai_item"] 91 0 -1000 0 16 -1 0
+805CC1B0:   callc [evt_item_flag_on evt_item.o] ["irai_item"] 2
+805CC1C0:   callc [evt_item_get_item evt_item.o] ["irai_item"]
+805CC1CC:   callc [evt_msg_print evt_msg.o] 0 ["irai_07_07"] 0 ["me"]
+805CC1E4:   callc [evt_npc_set_ry evt_npc.o] ["me"] 90
+805CC1F4:   wait_frames 1
+805CC1FC:   callc [evt_npc_wait_pera evt_npc.o] ["me"]
+805CC208:   callc [evt_npc_jump_position_nohit evt_npc.o] ["me"] -66 100 -112 800 220
+805CC228:   callc [evt_npc_set_position evt_npc.o] ["me"] 0 -1000 0
+805CC240:   callc [evt_sub_save_playtime evt_sub.o] GSW(1421)
+805CC24C:   setii GSW(1420) 0
+805CC258:   setii GSWF(5381) 1
+805CC264:   callc [evt_msg_print evt_msg.o] 0 ["sys_request_finish"] 0 0
+805CC27C:   return
+805CC280:   end

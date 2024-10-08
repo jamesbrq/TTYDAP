@@ -1,0 +1,50 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [talk_gard1 tou_02.o] AT 805DE408 ---
+805DE408:   switchi GSW(0)
+805DE410:     case_int_lt 128
+805DE418:       callc [evt_msg_print evt_msg.o] 0 ["stg3_tou_24"] 0 0
+805DE430:     case_int_lt 129
+805DE438:       callc [evt_msg_print evt_msg.o] 0 ["stg3_tou_37"] 0 0
+805DE450:       callss [evt_move_g tou_02.o]
+805DE458:     case_int_lt 131
+805DE460:       callc [evt_msg_print evt_msg.o] 0 ["stg3_tou_37_01"] 0 0
+805DE478:     case_int_lt 171
+805DE480:       callc [evt_msg_print evt_msg.o] 0 ["stg3_tou_37_02"] 0 0
+805DE498:     case_default
+805DE49C:       if_int_eq GSWF(2496) 0
+805DE4A8:         callc [evt_msg_print evt_msg.o] 0 ["stg3_tou_re_002_1"] 0 0
+805DE4C0:       else
+805DE4C4:         if_int_eq GSWF(2497) 0
+805DE4D0:           callc [evt_msg_print evt_msg.o] 0 ["stg3_tou_re_001"] 0 0
+805DE4E8:           callss [evt_move_g tou_02.o]
+805DE4F0:         else
+805DE4F4:           callc [evt_msg_print evt_msg.o] 0 ["stg3_tou_re_002"] 0 0
+805DE50C:         endif
+805DE510:       endif
+805DE514:   end_switch
+805DE518:   return
+805DE51C:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [evt_move_g tou_02.o] AT 805DE270 ---
+805DE270:   callc [evt_npc_get_position evt_npc.o] ["me"] LW(0) LW(1) LW(2)
+805DE288:   addi LW(2) 100
+805DE294:   callc [evt_mario_mov_pos evt_mario.o] LW(0) LW(2) 500
+805DE2A8:   begin_thread
+805DE2AC:     callc [evt_npc_move_position evt_npc.o] ["ガードマン１"] -530 -185 0 80.00 1
+805DE2CC:     callc [evt_set_dir_to_target evt_npc.o] ["ガードマン１"] ["mario"]
+805DE2DC:   end_thread
+805DE2E0:   callc [evt_npc_move_position evt_npc.o] ["ガードマン２"] 530 -185 0 80.00 1
+805DE300:   callc [evt_set_dir_to_target evt_npc.o] ["ガードマン２"] ["mario"]
+805DE310:   setii LW(0) 3
+805DE31C:   callss [bero_case_switch_on evt_bero.o]
+805DE324:   setii LW(0) 4
+805DE330:   callss [bero_case_switch_on evt_bero.o]
+805DE338:   if_int_lt GSW(0) 129
+805DE344:     setii GSW(0) 129
+805DE350:   else
+805DE354:     setii GSWF(2497) 1
+805DE360:   endif
+805DE364:   return
+805DE368:   end

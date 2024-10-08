@@ -1,0 +1,466 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [las_10_init_evt las_10.o] AT 805DF594 ---
+805DF594:   if_int_eq GSW(0) 389
+805DF5A0:     callc [evt_bero_get_entername evt_bero.o] LW(0)
+805DF5AC:     if_string_eq LW(0) ["ret_chgmap_evt"]
+805DF5B8:       callc [evt_snd_bgmoff evt_snd.o] 512
+805DF5C4:       callc [evt_snd_envon evt_snd.o] 272 ["ENV_STG8_LAS4"]
+805DF5D4:       callc [evt_snd_set_rev_mode evt_snd.o] 2
+805DF5E0:     else
+805DF5E4:       callc [evt_snd_bgmon evt_snd.o] 512 ["BGM_STG8_LST2"]
+805DF5F4:       callc [evt_snd_envon evt_snd.o] 272 ["ENV_STG8_LAS4"]
+805DF604:       callc [evt_snd_set_rev_mode evt_snd.o] 2
+805DF610:     endif
+805DF614:   else
+805DF618:     callc [evt_snd_bgmon evt_snd.o] 512 ["BGM_STG8_LST2"]
+805DF628:     callc [evt_snd_envon evt_snd.o] 272 ["ENV_STG8_LAS4"]
+805DF638:     callc [evt_snd_set_rev_mode evt_snd.o] 2
+805DF644:   endif
+805DF648:   setii LW(0) [bero_entry_data las_10.o]
+805DF654:   callc [evt_bero_get_info evt_bero.o]
+805DF65C:   callss [evt_bero_info_run evt_bero.o]
+805DF664:   callsa [las_10_temae_kabe las_10.o]
+805DF66C:   if_int_eq GSWF(4330) 0
+805DF678:     callsa [first_evt las_10.o]
+805DF680:   endif
+805DF684:   if_int_lt GSW(0) 389
+805DF690:     callc [evt_mapobj_flag_onoff evt_map.o] 1 1 ["hosi_on"] 1
+805DF6A8:     callc [evt_run_case_evt evt_case.o] 9 1 ["A_daiza1"] 0 [daiza_evt las_10.o] 0
+805DF6C8:   else
+805DF6CC:     callc [evt_mapobj_flag_onoff evt_map.o] 1 1 ["hosi_off"] 1
+805DF6E4:   endif
+805DF6E8:   callsa [kagi_8_init las_10.o]
+805DF6F0:   if_int_eq GSW(0) 389
+805DF6FC:     callc [evt_bero_get_entername evt_bero.o] LW(0)
+805DF708:     if_string_eq LW(0) ["tenkyugi_evt"]
+805DF714:       begin_thread
+805DF718:         callc [evt_mario_set_pos evt_mario.o] -84 400 240
+805DF72C:         callc [evt_party_set_pos evt_party.o] 0 -123 400 255
+805DF744:         callc [evt_cam_road_reset evt_cam.o]
+805DF74C:         callc [evt_seq_wait evt_seq.o] 2
+805DF758:         callc [evt_bero_exec_wait evt_bero.o] 65536
+805DF764:         callsa [tenkyugi_evt las_10.o]
+805DF76C:       end_thread
+805DF770:     endif
+805DF774:     if_string_eq LW(0) ["ret_chgmap_evt"]
+805DF780:       callsa [tenkyugi_evt2 las_10.o]
+805DF788:     endif
+805DF78C:   endif
+805DF790:   if_int_ge GSW(0) 390
+805DF79C:     callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_STG8_CELESTIAL_MOVE2"] 0 400 -150 LW(10)
+805DF7B8:     callc [evt_snd_sfx_dist evt_snd.o] LW(10) 10
+805DF7C8:     callc [evt_map_playanim evt_map.o] ["en"] 1 0
+805DF7DC:   else
+805DF7E0:     callc [evt_mapobj_flag_onoff evt_map.o] 1 1 ["S_hoshihoshi"] 1
+805DF7F8:   endif
+805DF7FC:   callc [evt_mapobj_flag_onoff evt_map.o] 1 0 ["group19"] 2
+805DF814:   callc [evt_mapobj_flag_onoff evt_map.o] 1 0 ["group18"] 2
+805DF82C:   callc [evt_mapobj_flag_onoff evt_map.o] 1 0 ["group10"] 2
+805DF844:   callc [evt_mapobj_flag_onoff evt_map.o] 1 0 ["group11"] 2
+805DF85C:   callc [evt_mapobj_flag_onoff evt_map.o] 1 0 ["group12"] 2
+805DF874:   callc [evt_mapobj_flag_onoff evt_map.o] 1 0 ["group13"] 2
+805DF88C:   callc [evt_mapobj_flag_onoff evt_map.o] 1 0 ["group14"] 2
+805DF8A4:   callc [evt_mapobj_flag_onoff evt_map.o] 1 0 ["S11_kabe5_ushi"] 2
+805DF8BC:   callc [evt_mapobj_flag_onoff evt_map.o] 1 0 ["S11_kabe1_ushi"] 2
+805DF8D4:   callc [evt_mapobj_flag_onoff evt_map.o] 1 0 ["S11_dan"] 2
+805DF8EC:   callc [evt_mapobj_flag_onoff evt_map.o] 1 0 ["S112_hashira9"] 2
+805DF904:   callc [evt_mapobj_flag_onoff evt_map.o] 1 0 ["S112_hashira10"] 2
+805DF91C:   callc [evt_mapobj_flag_onoff evt_map.o] 1 0 ["S112_hashira1"] 2
+805DF934:   callc [evt_mapobj_flag_onoff evt_map.o] 1 0 ["S112_hashira2"] 2
+805DF94C:   callc [evt_mapobj_flag_onoff evt_map.o] 1 0 ["S112_hashira3"] 2
+805DF964:   callc [evt_mapobj_flag_onoff evt_map.o] 1 0 ["S112_hashira4"] 2
+805DF97C:   callc [evt_mapobj_flag_onoff evt_map.o] 1 0 ["S112_kabe5_ushi"] 2
+805DF994:   callc [evt_mapobj_flag_onoff evt_map.o] 1 0 ["S12_kabe1"] 2
+805DF9AC:   callc [evt_mapobj_flag_onoff evt_map.o] 1 0 ["S_112_dan"] 2
+805DF9C4:   callc [evt_mapobj_flag_onoff evt_map.o] 1 0 ["S113_hashira6"] 2
+805DF9DC:   callc [evt_mapobj_flag_onoff evt_map.o] 1 0 ["S113_hashira5"] 2
+805DF9F4:   callc [evt_mapobj_flag_onoff evt_map.o] 1 0 ["S113_kabe5"] 2
+805DFA0C:   callc [evt_mapobj_flag_onoff evt_map.o] 1 0 ["S113_kabe1"] 2
+805DFA24:   return
+805DFA28:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [las_10_temae_kabe las_10.o] AT 805DD500 ---
+805DD500:   callc [evt_seq_wait evt_seq.o] 2
+805DD50C:   loop 0
+805DD514:     callc [temae_kesu las_10.o]
+805DD51C:     wait_frames 1
+805DD524:   end_loop
+805DD528:   return
+805DD52C:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [first_evt las_10.o] AT 805DD530 ---
+805DD530:   callc [evt_seq_wait evt_seq.o] 2
+805DD53C:   loop 0
+805DD544:     callc [evt_mario_get_name_hitobj_ride evt_mario.o] LW(0)
+805DD550:     if_string_eq LW(0) ["A_3_3"]
+805DD55C:       loop_break
+805DD560:     endif
+805DD564:     if_string_eq LW(0) ["A_3_2"]
+805DD570:       loop_break
+805DD574:     endif
+805DD578:     wait_frames 1
+805DD580:   end_loop
+805DD584:   callc [evt_mario_key_onoff evt_mario.o] 0
+805DD590:   callc [evt_mario_normalize evt_mario.o]
+805DD598:   callc [evt_mario_get_party evt_mario.o] LW(0)
+805DD5A4:   if_int_eq LW(0) 0
+805DD5B0:     callc [evt_mario_hello_party evt_mario.o] 0 1
+805DD5C0:   endif
+805DD5C4:   setii GF(0) 1
+805DD5D0:   begin_thread
+805DD5D4:     loop 0
+805DD5DC:       callc [evt_mario_party_use_check evt_mario.o] LW(0)
+805DD5E8:       if_int_eq LW(0) 0
+805DD5F4:         loop_break
+805DD5F8:       endif
+805DD5FC:       wait_frames 1
+805DD604:     end_loop
+805DD608:     callc [evt_party_stop evt_party.o] 0
+805DD614:     callc [check_party_pos las_10.o] LW(0)
+805DD620:     if_int_eq LW(0) 0
+805DD62C:       callc [evt_party_set_pos evt_party.o] 0 97 360 43
+805DD644:     endif
+805DD648:     setii GF(0) 0
+805DD654:   end_thread
+805DD658:   callc [evt_mario_mov_pos2 evt_mario.o] -40 79 60
+805DD66C:   callc [evt_mario_adjust_dir evt_mario.o]
+805DD674:   wait_until GF(0)
+805DD67C:   callc [evt_party_move_pos2 evt_party.o] 0 -55 107 80
+805DD694:   wait_ms 300
+805DD69C:   callc [evt_party_set_dir evt_party.o] 0 90 300
+805DD6B0:   wait_ms 300
+805DD6B8:   callc [evt_msg_print_party evt_msg.o] ["stg8_las_31"]
+805DD6C4:   callc [evt_mario_set_dir evt_mario.o] 90 300 0
+805DD6D8:   wait_ms 300
+805DD6E0:   callc [evt_cam3d_evt_set evt_cam.o] 0 530 644 0 560 95 3000 11
+805DD708:   wait_ms 3000
+805DD710:   wait_ms 3000
+805DD718:   callc [evt_cam3d_evt_set evt_cam.o] -460 865 594 0 455 -128 0 11
+805DD740:   callc [evt_mario_set_dir evt_mario.o] 270 0 0
+805DD754:   callc [evt_mario_set_reardir evt_mario.o]
+805DD75C:   callc [evt_party_set_dir evt_party.o] 0 270 0
+805DD770:   wait_frames 1
+805DD778:   wait_ms 1000
+805DD780:   callc [evt_msg_print_party evt_msg.o] ["stg8_las_32"]
+805DD78C:   setii GSWF(4330) 1
+805DD798:   wait_ms 2000
+805DD7A0:   callc [evt_party_run evt_party.o] 0
+805DD7AC:   callc [evt_cam3d_evt_off evt_cam.o] 0 11
+805DD7BC:   wait_frames 1
+805DD7C4:   callc [evt_mario_set_dir evt_mario.o] 90 0 0
+805DD7D8:   callc [evt_party_set_dir evt_party.o] 0 90 0
+805DD7EC:   wait_frames 1
+805DD7F4:   callc [evt_mario_key_onoff evt_mario.o] 1
+805DD800:   return
+805DD804:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [kagi_8_init las_10.o] AT 805DF430 ---
+805DF430:   if_int_lt GSW(0) 389
+805DF43C:     callss [kagi_8_off las_10.o]
+805DF444:   else
+805DF448:     callss [kagi_8_on las_10.o]
+805DF450:   endif
+805DF454:   return
+805DF458:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [tenkyugi_evt las_10.o] AT 805DD808 ---
+805DD808:   callc [evt_mario_key_onoff evt_mario.o] 0
+805DD814:   callc [evt_snd_bgmoff_f evt_snd.o] 512 3000
+805DD824:   callc [evt_snd_sfxon evt_snd.o] ["SFX_STG8_CELESTIAL_SHAKE1"] LW(10)
+805DD834:   callc [evt_cam_shake evt_cam.o] 4 0.01 0.00 1200
+805DD84C:   callc [evt_snd_sfxoff evt_snd.o] LW(10)
+805DD858:   wait_ms 1200
+805DD860:   callc [evt_cam3d_evt_set evt_cam.o] 0 425 787 0 530 95 0 11
+805DD888:   wait_frames 1
+805DD890:   wait_ms 1000
+805DD898:   callc [evt_mapobj_color evt_map.o] 1 ["S_hoshihoshi"] 255 255 255 0
+805DD8B8:   callc [evt_mapobj_flag_onoff evt_map.o] 1 0 ["S_hoshihoshi"] 1
+805DD8D0:   callc [evt_snd_sfxon evt_snd.o] ["SFX_STG8_CELESTIAL_MOVE1"] 0
+805DD8E0:   callc [evt_sub_intpl_msec_init evt_sub.o] 11 0 255 1000
+805DD8F8: 0:
+805DD900:   callc [evt_sub_intpl_msec_get_value evt_sub.o]
+805DD908:   callc [evt_mapobj_color evt_map.o] 1 ["S_hoshihoshi"] 255 255 255 LW(0)
+805DD928:   wait_frames 1
+805DD930:   if_int_eq LW(1) 1
+805DD93C:     goto 0
+805DD944:   endif
+805DD948:   callc [evt_map_playanim evt_map.o] ["en"] 1 0
+805DD95C:   callc [evt_sub_intpl_msec_init evt_sub.o] 1 0 1000 3000
+805DD974:   loop 0
+805DD97C:     callc [evt_sub_intpl_msec_get_value evt_sub.o]
+805DD984:     divf LW(0) 1000.00
+805DD990:     callc [evt_map_set_playrate evt_map.o] ["en"] LW(0)
+805DD9A0:     wait_frames 1
+805DD9A8:     if_int_eq LW(1) 0
+805DD9B4:       loop_break
+805DD9B8:     endif
+805DD9BC:   end_loop
+805DD9C0:   callc [evt_map_set_playrate evt_map.o] ["en"] 1.00
+805DD9D0:   wait_ms 1000
+805DD9D8:   callc [evt_cam3d_evt_set evt_cam.o] -125 575 295 -125 575 95 0 11
+805DDA00:   wait_frames 1
+805DDA08:   callc [evt_cam3d_evt_set evt_cam.o] 125 575 295 125 575 95 5000 0
+805DDA30:   wait_ms 5000
+805DDA38:   callc [evt_mario_set_pos evt_mario.o] -55 400 60
+805DDA4C:   callc [evt_mario_get_party evt_mario.o] LW(0)
+805DDA58:   if_int_eq LW(0) 0
+805DDA64:     callc [evt_mario_set_party evt_mario.o] 0 1
+805DDA74:   endif
+805DDA78:   callc [evt_party_stop evt_party.o] 0
+805DDA84:   callc [evt_party_set_pos evt_party.o] 0 -25 400 80
+805DDA9C:   callc [evt_mario_dispflag_onoff evt_mario.o] 1 512
+805DDAAC:   callc [evt_party_dispflg_onoff evt_party.o] 0 32 1
+805DDAC0:   callc [evt_mario_set_dispdir evt_mario.o] 180
+805DDACC:   callc [evt_party_set_dispdir evt_party.o] 0 180
+805DDADC:   callc [evt_mario_adjust_dir evt_mario.o]
+805DDAE4:   wait_frames 1
+805DDAEC:   callc [evt_mario_dispflag_onoff evt_mario.o] 0 512
+805DDAFC:   callc [evt_party_dispflg_onoff evt_party.o] 0 32 0
+805DDB10:   callc [evt_cam3d_evt_set evt_cam.o] 0 500 390 0 450 95 0 11
+805DDB38:   wait_frames 1
+805DDB40:   wait_ms 500
+805DDB48:   callc [evt_msg_print_party evt_msg.o] ["stg8_las_33"]
+805DDB54:   wait_ms 2000
+805DDB5C:   setii GF(0) 0
+805DDB68:   begin_thread
+805DDB6C:     callc [evt_snd_sfxon evt_snd.o] ["SFX_STG8_CELESTIAL_SHAKE1"] LW(10)
+805DDB7C:     loop 20
+805DDB84:       if_int_ne GF(0) 0
+805DDB90:         loop_break
+805DDB94:       endif
+805DDB98:       callc [evt_cam_shake evt_cam.o] 4 0.01 0.00 500
+805DDBB0:     end_loop
+805DDBB4:     callc [evt_snd_sfxoff evt_snd.o] LW(10)
+805DDBC0:   end_thread
+805DDBC4:   callc [evt_mario_get_pos evt_mario.o] 0 LW(0) LW(1) LW(2)
+805DDBDC:   callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_VOICE_MARIO_FIND1_2"] LW(0) LW(1) LW(2) 0
+805DDBF8:   callc [evt_eff_fukidashi evt_eff.o] 0 0 0 0 0 0 0 0 0 0 60
+805DDC2C:   callc [evt_eff_fukidashi evt_eff.o] 3 0 0 0 0 0 0 0 0 0 60
+805DDC60:   wait_ms 1500
+805DDC68:   begin_thread
+805DDC6C:     callc [evt_mario_set_dir evt_mario.o] 270 100 0
+805DDC80:     wait_ms 300
+805DDC88:     callc [evt_mario_set_dir evt_mario.o] 90 100 0
+805DDC9C:   end_thread
+805DDCA0:   wait_ms 500
+805DDCA8:   callc [evt_msg_print_party evt_msg.o] ["stg8_las_34"]
+805DDCB4:   setii GF(0) 1
+805DDCC0:   callc [evt_bero_mapchange evt_bero.o] ["las_19"] ["chgmap_evt"]
+805DDCD0:   callc [evt_mario_key_onoff evt_mario.o] 1
+805DDCDC:   return
+805DDCE0:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [tenkyugi_evt2 las_10.o] AT 805DDCE4 ---
+805DDCE4:   callc [evt_mario_key_onoff evt_mario.o] 0
+805DDCF0:   callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_STG8_CELESTIAL_MOVE2"] 0 400 -150 LW(15)
+805DDD0C:   callc [evt_snd_sfx_dist evt_snd.o] LW(15) 10
+805DDD1C:   callc [evt_mapobj_flag_onoff evt_map.o] 1 0 ["S_hoshihoshi"] 1
+805DDD34:   callc [evt_map_playanim evt_map.o] ["en"] 1 0
+805DDD48:   callc [evt_mario_dispflag_onoff evt_mario.o] 1 512
+805DDD58:   callc [evt_party_dispflg_onoff evt_party.o] 0 32 1
+805DDD6C:   callc [evt_mario_set_dispdir evt_mario.o] 180
+805DDD78:   callc [evt_party_set_dispdir evt_party.o] 0 180
+805DDD88:   callc [evt_party_stop evt_party.o] 0
+805DDD94:   callc [evt_cam_road_reset evt_cam.o]
+805DDD9C:   wait_frames 1
+805DDDA4:   callc [evt_mario_dispflag_onoff evt_mario.o] 0 512
+805DDDB4:   callc [evt_party_dispflg_onoff evt_party.o] 0 32 0
+805DDDC8:   wait_frames 1
+805DDDD0:   callc [evt_cam3d_evt_set evt_cam.o] 0 500 390 0 450 95 0 11
+805DDDF8:   callc [evt_seq_wait evt_seq.o] 2
+805DDE04:   callc [evt_mario_set_pos evt_mario.o] -55 400 60
+805DDE18:   callc [evt_party_set_pos evt_party.o] 0 -25 400 80
+805DDE30:   callc [evt_snd_sfxon evt_snd.o] ["SFX_STG8_CELESTIAL_SHAKE1"] LW(10)
+805DDE40:   setff LW(0) 0.01
+805DDE4C:   loop 4
+805DDE54:     mulf LW(0) 0.75
+805DDE60:     callc [evt_cam_shake evt_cam.o] 4 LW(0) 0.00 1000
+805DDE78:   end_loop
+805DDE7C:   callc [evt_snd_sfxoff evt_snd.o] LW(10)
+805DDE88:   wait_ms 500
+805DDE90:   callc [evt_msg_print_party evt_msg.o] ["stg8_las_35"]
+805DDE9C:   setii GSW(0) 390
+805DDEA8:   begin_thread
+805DDEAC:     wait_ms 1000
+805DDEB4:     callc [evt_snd_bgmon_f evt_snd.o] 768 ["BGM_STG8_LST2"] 2000
+805DDEC8:   end_thread
+805DDECC:   callc [evt_cam3d_evt_off evt_cam.o] 1000 11
+805DDEDC:   callc [evt_party_run evt_party.o] 0
+805DDEE8:   callc [evt_mario_key_onoff evt_mario.o] 1
+805DDEF4:   return
+805DDEF8:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [kagi_8_off las_10.o] AT 805DED58 ---
+805DED58:   callc [evt_mapobj_flag_onoff evt_map.o] 1 1 ["S_kagi"] 1
+805DED70:   callc [evt_hitobj_onoff evt_hit.o] ["A113_daiza1"] 1 0
+805DED84:   callc [evt_hitobj_onoff evt_hit.o] ["A113_daiza2"] 1 0
+805DED98:   callc [evt_hitobj_onoff evt_hit.o] ["A113_daiza3"] 1 0
+805DEDAC:   callc [evt_hitobj_onoff evt_hit.o] ["A113_daiza4"] 1 0
+805DEDC0:   callc [evt_hitobj_onoff evt_hit.o] ["A113_daiza5"] 1 0
+805DEDD4:   callc [evt_hitobj_onoff evt_hit.o] ["A113_daiza6"] 1 0
+805DEDE8:   callc [evt_hitobj_onoff evt_hit.o] ["A113_daiza7"] 1 0
+805DEDFC:   callc [evt_hitobj_onoff evt_hit.o] ["A113_daiza8"] 1 0
+805DEE10:   return
+805DEE14:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [kagi_8_on las_10.o] AT 805DEE7C ---
+805DEE7C:   if_int_lt GSW(0) 389
+805DEE88:     wait_ms 500
+805DEE90:     setii GF(0) 0
+805DEE9C:     begin_thread
+805DEEA0:       callc [evt_snd_sfxon evt_snd.o] ["SFX_STG8_KEYSTAND_SHAKE1"] LW(10)
+805DEEB0:       loop 0
+805DEEB8:         if_int_ne GF(0) 0
+805DEEC4:           loop_break
+805DEEC8:         endif
+805DEECC:         callc [evt_cam_shake evt_cam.o] 4 0.00 0.00 300
+805DEEE4:       end_loop
+805DEEE8:       callc [evt_snd_sfxoff evt_snd.o] LW(10)
+805DEEF4:     end_thread
+805DEEF8:     wait_ms 2000
+805DEF00:     callc [evt_mapobj_flag_onoff evt_map.o] 1 0 ["S_kagi"] 1
+805DEF18:     mo_set_base_int [daiza_name las_10.o]
+805DEF20:     loop 0
+805DEF28:       mo_read_int3 LW(0) LW(1) LW(2)
+805DEF38:       if_int_eq LW(0) 0
+805DEF44:         loop_break
+805DEF48:       endif
+805DEF4C:       callc [evt_mapobj_trans evt_map.o] 1 LW(0) 0 -100 0
+805DEF68:     end_loop
+805DEF6C:     callc [evt_mapobj_get_position evt_map.o] ["S_daizadai"] LW(0) LW(1) LW(2)
+805DEF84:     callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_STG8_KEYSTAND_APPEAR1"] LW(0) LW(1) LW(2) LW(5)
+805DEFA0:     mo_set_base_int [daiza_name las_10.o]
+805DEFA8:     loop 0
+805DEFB0:       mo_read_int3 LW(0) LW(1) LW(2)
+805DEFC0:       if_int_eq LW(0) 0
+805DEFCC:         loop_break
+805DEFD0:       endif
+805DEFD4:       callsa [daiza_up las_10.o]
+805DEFDC:       wait_ms 1000
+805DEFE4:     end_loop
+805DEFE8:     wait_ms 4000
+805DEFF0:     callc [evt_snd_sfxoff evt_snd.o] LW(5)
+805DEFFC:     setii GF(0) 1
+805DF008:   else
+805DF00C:     callc [evt_mapobj_flag_onoff evt_map.o] 1 0 ["S_kagi"] 1
+805DF024:   endif
+805DF028:   callc [evt_hitobj_onoff evt_hit.o] ["A113_daiza1"] 1 1
+805DF03C:   callc [evt_hitobj_onoff evt_hit.o] ["A113_daiza2"] 1 1
+805DF050:   callc [evt_hitobj_onoff evt_hit.o] ["A113_daiza3"] 1 1
+805DF064:   callc [evt_hitobj_onoff evt_hit.o] ["A113_daiza4"] 1 1
+805DF078:   callc [evt_hitobj_onoff evt_hit.o] ["A113_daiza5"] 1 1
+805DF08C:   callc [evt_hitobj_onoff evt_hit.o] ["A113_daiza6"] 1 1
+805DF0A0:   callc [evt_hitobj_onoff evt_hit.o] ["A113_daiza7"] 1 1
+805DF0B4:   callc [evt_hitobj_onoff evt_hit.o] ["A113_daiza8"] 1 1
+805DF0C8:   callc [evt_hit_bind_mapobj evt_hit.o] ["A113_daiza1"] ["S_kagi1"]
+805DF0D8:   callc [evt_hit_bind_mapobj evt_hit.o] ["A113_daiza2"] ["S_kagi2"]
+805DF0E8:   callc [evt_hit_bind_mapobj evt_hit.o] ["A113_daiza3"] ["S_kagi3"]
+805DF0F8:   callc [evt_hit_bind_mapobj evt_hit.o] ["A113_daiza4"] ["S_kagi4"]
+805DF108:   callc [evt_hit_bind_mapobj evt_hit.o] ["A113_daiza5"] ["S_kagi5"]
+805DF118:   callc [evt_hit_bind_mapobj evt_hit.o] ["A113_daiza6"] ["S_kagi6"]
+805DF128:   callc [evt_hit_bind_mapobj evt_hit.o] ["A113_daiza7"] ["S_kagi7"]
+805DF138:   callc [evt_hit_bind_mapobj evt_hit.o] ["A113_daiza8"] ["S_kagi8"]
+805DF148:   if_int_eq GSWF(4331) 0
+805DF154:     callc [evt_run_case_evt evt_case.o] 9 1 ["A_kagi1"] 0 [kagi1_evt las_10.o] 0
+805DF174:   else
+805DF178:     callc [evt_mapobj_rotate evt_map.o] 1 ["S_kagi1"] 0 180 0
+805DF194:     callc [evt_hit_bind_update evt_hit.o] ["A113_daiza1"]
+805DF1A0:   endif
+805DF1A4:   if_int_eq GSWF(4332) 0
+805DF1B0:     callc [evt_run_case_evt evt_case.o] 9 1 ["A_kagi2"] 0 [kagi2_evt las_10.o] 0
+805DF1D0:   else
+805DF1D4:     callc [evt_mapobj_rotate evt_map.o] 1 ["S_kagi2"] 0 180 0
+805DF1F0:     callc [evt_hit_bind_update evt_hit.o] ["A113_daiza2"]
+805DF1FC:   endif
+805DF200:   if_int_eq GSWF(4333) 0
+805DF20C:     callc [evt_run_case_evt evt_case.o] 9 1 ["A_kagi3"] 0 [kagi3_evt las_10.o] 0
+805DF22C:   else
+805DF230:     callc [evt_mapobj_rotate evt_map.o] 1 ["S_kagi3"] 0 180 0
+805DF24C:     callc [evt_hit_bind_update evt_hit.o] ["A113_daiza3"]
+805DF258:   endif
+805DF25C:   if_int_eq GSWF(4334) 0
+805DF268:     callc [evt_run_case_evt evt_case.o] 9 1 ["A_kagi4"] 0 [kagi4_evt las_10.o] 0
+805DF288:   else
+805DF28C:     callc [evt_mapobj_rotate evt_map.o] 1 ["S_kagi4"] 0 180 0
+805DF2A8:     callc [evt_hit_bind_update evt_hit.o] ["A113_daiza4"]
+805DF2B4:   endif
+805DF2B8:   if_int_eq GSWF(4335) 0
+805DF2C4:     callc [evt_run_case_evt evt_case.o] 9 1 ["A_kagi5"] 0 [kagi5_evt las_10.o] 0
+805DF2E4:   else
+805DF2E8:     callc [evt_mapobj_rotate evt_map.o] 1 ["S_kagi5"] 0 180 0
+805DF304:     callc [evt_hit_bind_update evt_hit.o] ["A113_daiza5"]
+805DF310:   endif
+805DF314:   if_int_eq GSWF(4336) 0
+805DF320:     callc [evt_run_case_evt evt_case.o] 9 1 ["A_kagi6"] 0 [kagi6_evt las_10.o] 0
+805DF340:   else
+805DF344:     callc [evt_mapobj_rotate evt_map.o] 1 ["S_kagi6"] 0 180 0
+805DF360:     callc [evt_hit_bind_update evt_hit.o] ["A113_daiza6"]
+805DF36C:   endif
+805DF370:   if_int_eq GSWF(4337) 0
+805DF37C:     callc [evt_run_case_evt evt_case.o] 9 1 ["A_kagi7"] 0 [kagi7_evt las_10.o] 0
+805DF39C:   else
+805DF3A0:     callc [evt_mapobj_rotate evt_map.o] 1 ["S_kagi7"] 0 180 0
+805DF3BC:     callc [evt_hit_bind_update evt_hit.o] ["A113_daiza7"]
+805DF3C8:   endif
+805DF3CC:   if_int_eq GSWF(4338) 0
+805DF3D8:     callc [evt_run_case_evt evt_case.o] 9 1 ["A_kagi8"] 0 [kagi8_evt las_10.o] 0
+805DF3F8:   else
+805DF3FC:     callc [evt_mapobj_rotate evt_map.o] 1 ["S_kagi8"] 0 180 0
+805DF418:     callc [evt_hit_bind_update evt_hit.o] ["A113_daiza8"]
+805DF424:   endif
+805DF428:   return
+805DF42C:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [daiza_up las_10.o] AT 805DEA34 ---
+805DEA34:   setii LW(8) LW(0)
+805DEA40:   setii LW(9) LW(1)
+805DEA4C:   setii LW(7) LW(2)
+805DEA58:   callc [evt_mapobj_get_position evt_map.o] LW(8) LW(0) LW(1) LW(2)
+805DEA70:   callc [evt_eff evt_eff.o] LW(7) ["mist2"] 0 LW(0) 410 LW(2) 40 0 0 0 0 0 0 0
+805DEAB0:   wait_ms 1000
+805DEAB8:   begin_thread_tid LW(6)
+805DEAC0:     callc [evt_mapobj_get_position evt_map.o] LW(8) LW(10) LW(11) LW(12)
+805DEAD8:     loop 0
+805DEAE0:       callc [evt_mapobj_get_position evt_map.o] LW(8) LW(0) LW(1) LW(2)
+805DEAF8:       subf LW(1) LW(11)
+805DEB04:       subf LW(1) 38.00
+805DEB10:       callc [evt_eff evt_eff.o] 0 ["mist2"] 1 LW(0) 400 LW(2) 15 LW(1) 100 0 0 0 0 0
+805DEB50:       wait_ms 200
+805DEB58:     end_loop
+805DEB5C:   end_thread
+805DEB60:   callc [evt_mapobj_color evt_map.o] 1 LW(9) 0 0 0 255
+805DEB80:   begin_thread
+805DEB84:     wait_ms 1700
+805DEB8C:     callc [evt_mapobj_get_position evt_map.o] LW(8) LW(0) LW(1) LW(2)
+805DEBA4:     callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_STG8_KEYSTAND_APPEAR2"] LW(0) LW(1) LW(2) 0
+805DEBC0:   end_thread
+805DEBC4:   callc [evt_sub_intpl_msec_init evt_sub.o] 11 -10000 0 3000
+805DEBDC: 0:
+805DEBE4:   callc [evt_sub_intpl_msec_get_value evt_sub.o]
+805DEBEC:   divf LW(0) 100.00
+805DEBF8:   callc [evt_mapobj_trans evt_map.o] 1 LW(8) 0 LW(0) 0
+805DEC14:   mulf LW(0) 3.60
+805DEC20:   callc [evt_mapobj_rotate evt_map.o] 1 LW(8) 0 LW(0) 0
+805DEC3C:   wait_frames 1
+805DEC44:   if_int_eq LW(1) 1
+805DEC50:     goto 0
+805DEC58:   endif
+805DEC5C:   stop_tid LW(6)
+805DEC64:   callc [evt_eff_softdelete evt_eff.o] LW(7)
+805DEC70:   wait_ms 1000
+805DEC78:   callc [evt_mapobj_get_position evt_map.o] LW(9) LW(0) LW(1) LW(2)
+805DEC90:   callc [evt_sub_intpl_msec_init evt_sub.o] 11 0 255 1000
+805DECA8: 1:
+805DECB0:   callc [evt_sub_intpl_msec_get_value evt_sub.o]
+805DECB8:   callc [evt_mapobj_color evt_map.o] 1 LW(9) LW(0) LW(0) LW(0) 255
+805DECD8:   wait_frames 1
+805DECE0:   if_int_eq LW(1) 1
+805DECEC:     goto 1
+805DECF4:   endif
+805DECF8:   callc [evt_mapobj_trans evt_map.o] 1 LW(8) 0 0 0
+805DED14:   callc [evt_mapobj_rotate evt_map.o] 1 LW(8) 0 0 0
+805DED30:   callc [evt_mapobj_color evt_map.o] 1 LW(9) 255 255 255 255
+805DED50:   return
+805DED54:   end

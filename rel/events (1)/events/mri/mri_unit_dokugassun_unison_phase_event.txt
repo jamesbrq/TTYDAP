@@ -1,0 +1,40 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [unison_phase_event unit_dokugassun.o] AT 80614AC4 ---
+80614AC4:   callc [btlevtcmd_CheckPhase battle_event_cmd.o] LW(0) 67108865
+80614AD4:   if_int_eq LW(0) 0
+80614AE0:     goto 99
+80614AE8:   endif
+80614AEC:   callc [btlevtcmd_CheckActStatus battle_event_cmd.o] -2 LW(0)
+80614AFC:   if_int_eq LW(0) 0
+80614B08:     goto 99
+80614B10:   endif
+80614B14:   callc [btlevtcmd_CheckPartsCounterAttribute battle_event_cmd.o] -2 1 512 LW(0)
+80614B2C:   if_int_eq LW(0) 1
+80614B38:     goto 99
+80614B40:   endif
+80614B44:   callc [evt_sub_random evt_sub.o] 99 LW(0)
+80614B54:   if_int_lt LW(0) 25
+80614B60:     callc [btlevtcmd_GetUnitWork battle_event_cmd.o] -2 0 LW(0)
+80614B74:     if_int_eq LW(0) 1
+80614B80:       callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_ENM_KUMO_MOVE4"] [F1194D80] 0 [F1194D80]
+80614B9C:       callc [btlevtcmd_GetPos battle_event_cmd.o] -2 LW(0) LW(1) LW(2)
+80614BB4:       setii LW(1) 40
+80614BC0:       callc [btlevtcmd_DivePosition battle_event_cmd.o] -2 LW(0) LW(1) LW(2) 60 10 4 0 -1
+80614BEC:       callc [btlevtcmd_SetHomePos battle_event_cmd.o] -2 LW(0) LW(1) LW(2)
+80614C04:       callc [btlevtcmd_OnPartsAttribute battle_event_cmd.o] -2 1 6291456
+80614C18:       callc [btlevtcmd_SetUnitWork battle_event_cmd.o] -2 0 0
+80614C2C:     else
+80614C30:       callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_ENM_KUMO_MOVE5"] [F1194D80] 0 [F1194D80]
+80614C4C:       callc [btlevtcmd_GetPos battle_event_cmd.o] -2 LW(0) LW(1) LW(2)
+80614C64:       setii LW(1) 10
+80614C70:       callc [btlevtcmd_DivePosition battle_event_cmd.o] -2 LW(0) LW(1) LW(2) 60 -10 4 0 -1
+80614C9C:       callc [btlevtcmd_SetHomePos battle_event_cmd.o] -2 LW(0) LW(1) LW(2)
+80614CB4:       callc [btlevtcmd_OffPartsAttribute battle_event_cmd.o] -2 1 6291456
+80614CC8:       callc [btlevtcmd_SetUnitWork battle_event_cmd.o] -2 0 1
+80614CDC:     endif
+80614CE0:   endif
+80614CE4: 99:
+80614CEC:   return
+80614CF0:   end

@@ -1,0 +1,39 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [evt_fogreset tik_05.o] AT 805D3FDC ---
+805D3FDC:   callc [evt_map_get_fog evt_map.o] LW(4) LW(5) LW(6) LW(7) LW(8) LW(9)
+805D3FFC:   setii GW(2) LW(5)
+805D4008:   setii GW(3) LW(6)
+805D4014:   begin_thread
+805D4018:     callc [evt_sub_intpl_msec_init evt_sub.o] 11 LW(5) 300 2000
+805D4030:     loop 0
+805D4038:       callc [evt_sub_intpl_msec_get_value evt_sub.o]
+805D4040:       setii GW(2) LW(0)
+805D404C:       if_int_eq LW(1) 0
+805D4058:         loop_break
+805D405C:       endif
+805D4060:       wait_frames 1
+805D4068:     end_loop
+805D406C:   end_thread
+805D4070:   begin_thread
+805D4074:     callc [evt_sub_intpl_msec_init evt_sub.o] 11 LW(6) 1500 2000
+805D408C:     loop 0
+805D4094:       callc [evt_sub_intpl_msec_get_value evt_sub.o]
+805D409C:       setii GW(3) LW(0)
+805D40A8:       if_int_eq LW(1) 0
+805D40B4:         loop_break
+805D40B8:       endif
+805D40BC:       wait_frames 1
+805D40C4:     end_loop
+805D40C8:   end_thread
+805D40CC:   begin_thread_tid LW(10)
+805D40D4:     loop 0
+805D40DC:       callc [evt_map_set_fog evt_map.o] LW(4) GW(2) GW(3) LW(7) LW(8) LW(9)
+805D40FC:       wait_frames 1
+805D4104:     end_loop
+805D4108:   end_thread
+805D410C:   wait_ms 3000
+805D4114:   stop_tid LW(10)
+805D411C:   return
+805D4120:   end

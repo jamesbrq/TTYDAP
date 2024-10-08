@@ -1,0 +1,44 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [s_bero_out aji_09.o] AT 805E6168 ---
+805E6168:   callc [evt_mario_key_onoff evt_mario.o] 0
+805E6174:   if_int_eq GSWF(4204) 0
+805E6180:     setii LW(1) 0
+805E618C:     callsa [bero_open_door_play_se evt_bero.o]
+805E6194:     callc [evt_sub_intpl_msec_init evt_sub.o] 11 0 180 500
+805E61AC:     loop 0
+805E61B4:       callc [evt_sub_intpl_msec_get_value_para evt_sub.o] LW(0) LW(10)
+805E61C4:       if_int_eq LW(10) 0
+805E61D0:         setff LW(0) 180.00
+805E61DC:         callss [s_door_open aji_09.o]
+805E61E4:         loop_break
+805E61E8:       else
+805E61EC:         callss [s_door_open aji_09.o]
+805E61F4:       endif
+805E61F8:     end_loop
+805E61FC:     begin_thread
+805E6200:       callc [evt_bero_get_start_position evt_bero.o] LW(0) LW(1) LW(2)
+805E6214:       callc [evt_mario_flag_onoff evt_mario.o] 1 256
+805E6224:       callc [evt_mario_mov_pos2 evt_mario.o] LW(0) 450 150.00
+805E6238:     end_thread
+805E623C:     wait_ms 150
+805E6244:     callc [evt_fade_entry evt_fade.o] 10 300 0 0 0
+805E6260:     callc [evt_fade_end_wait evt_fade.o]
+805E6268:     wait_ms 1000
+805E6270:     callc [evt_fade_set_mapchange_type evt_fade.o] 0 0 0 9 300
+805E628C:     callc [evt_bero_mapchange evt_bero.o] ["aji_17"] ["w_bero"]
+805E629C:   else
+805E62A0:     callc [evt_msg_print evt_msg.o] 0 ["peach_aji_155_01"] 0 0
+805E62B8:   endif
+805E62BC:   callc [evt_mario_key_onoff evt_mario.o] 1
+805E62C8:   return
+805E62CC:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [s_door_open aji_09.o] AT 805E4B38 ---
+805E4B38:   mulf LW(0) 0.17
+805E4B44:   callc [evt_mapobj_trans evt_map.o] 1 ["S_door1_2"] LW(0) 0 0
+805E4B60:   mulf LW(0) -1.00
+805E4B6C:   callc [evt_mapobj_trans evt_map.o] 1 ["S_door1_1"] LW(0) 0 0
+805E4B88:   return
+805E4B8C:   end

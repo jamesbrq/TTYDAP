@@ -1,0 +1,33 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [charge_event unit_togenoko.o] AT 805F5B90 ---
+805F5B90:   setii LW(3) -2
+805F5B9C:   setii LW(4) 1
+805F5BA8:   callc [btlevtcmd_WeaponAftereffect battle_event_cmd.o] [weapon_togenoko_charge unit_togenoko.o]
+805F5BB4:   callc [btlevtcmd_AttackDeclare battle_event_cmd.o] -2 LW(3) LW(4)
+805F5BC8:   callc [btlevtcmd_PayWeaponCost battle_event_cmd.o] -2 [weapon_togenoko_charge unit_togenoko.o]
+805F5BD8:   callc [evt_btl_camera_set_mode battle_camera.o] 0 7
+805F5BE8:   callc [evt_btl_camera_set_homing_unit battle_camera.o] 0 -2 -1
+805F5BFC:   callc [evt_btl_camera_set_moveSpeedLv battle_camera.o] 0 2
+805F5C0C:   callc [evt_btl_camera_set_zoom battle_camera.o] 0 300
+805F5C1C:   callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_ENM_TOGENOKO_CHARGE1"] [F1194D80] 0 [F1194D80]
+805F5C38:   begin_child_thread
+805F5C3C:     loop 8
+805F5C44:       callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_ENM_TOGENOKO_MOVE3"] [F1194D80] 0 [F1194D80]
+805F5C60:       wait_frames 3
+805F5C68:       callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_ENM_TOGENOKO_MOVE4"] [F1194D80] 0 [F1194D80]
+805F5C84:       wait_frames 3
+805F5C8C:     end_loop
+805F5C90:   end_child_thread
+805F5C94:   callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 1 ["R_3"]
+805F5CA8:   wait_frames 48
+805F5CB0:   callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 1 ["S_1"]
+805F5CC4:   begin_thread
+805F5CC8:     wait_frames 60
+805F5CD0:     callc [evt_btl_camera_set_mode battle_camera.o] 0 0
+805F5CE0:   end_thread
+805F5CE4:   callc [btlevtcmd_ResultACDefence battle_event_cmd.o] LW(3) [weapon_togenoko_charge unit_togenoko.o]
+805F5CF4:   callc [btlevtcmd_CheckDamage battle_event_cmd.o] -2 LW(3) LW(4) [weapon_togenoko_charge unit_togenoko.o] 256 LW(5)
+805F5D14:   return
+805F5D18:   end

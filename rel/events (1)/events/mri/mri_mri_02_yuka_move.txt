@@ -1,0 +1,54 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [yuka_move mri_02.o] AT 805F2ED4 ---
+805F2ED4:   setii LW(12) GW(0)
+805F2EE0:   loop 0
+805F2EE8:     setii LW(10) 1
+805F2EF4:     setii LW(11) 0
+805F2F00:     loop 0
+805F2F08:       callc [evt_puni_get_flag mri_puni.o] LW(10) LW(0)
+805F2F18:       callc [evt_puni_get_flag mri_puni.o] LW(10) LW(1)
+805F2F28:       andi LW(0) 0x400
+805F2F34:       andi LW(1) 0x80
+805F2F40:       if_int_ne LW(0) 0
+805F2F4C:         if_int_eq LW(1) 0
+805F2F58:           callc [evt_puni_get_position mri_puni.o] LW(10) LW(0) LW(1) LW(2)
+805F2F70:           if_int_ge LW(1) -20
+805F2F7C:             if_int_le LW(1) 20
+805F2F88:               callc [evt_sub_area_check evt_sub.o] 0 0 -20 50 LW(0) LW(2) LW(15)
+805F2FAC:               if_int_eq LW(15) 1
+805F2FB8:                 addi LW(11) 1
+805F2FC4:               endif
+805F2FC8:             endif
+805F2FCC:           endif
+805F2FD0:         endif
+805F2FD4:       endif
+805F2FD8:       addi LW(10) 1
+805F2FE4:       if_int_eq LW(10) 103
+805F2FF0:         loop_break
+805F2FF4:       endif
+805F2FF8:     end_loop
+805F2FFC:     setii GW(0) 10
+805F3008:     subi GW(0) LW(11)
+805F3014:     if_int_ge GW(0) 10
+805F3020:       setii GW(0) 10
+805F302C:     endif
+805F3030:     if_int_le GW(0) 0
+805F303C:       setii GW(0) 0
+805F3048:     endif
+805F304C:     setff LW(0) 0.00
+805F3058:     subf LW(0) LW(11)
+805F3064:     if_int_eq GSWF(2830) 1
+805F3070:       callc [setPuniWeight mri_02.o] LW(0)
+805F307C:     else
+805F3080:       callc [setPuniWeight mri_02.o] 0
+805F308C:     endif
+805F3090:     if_int_ne GW(0) LW(12)
+805F309C:       callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_STG2_SWITCH_COUNTER1"] 0 0 -305 0
+805F30B8:     endif
+805F30BC:     setii LW(12) GW(0)
+805F30C8:     wait_frames 1
+805F30D0:   end_loop
+805F30D4:   return
+805F30D8:   end

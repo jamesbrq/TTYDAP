@@ -1,0 +1,40 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [fake_dead_event unit_honenoko.o] AT 8062D240 ---
+8062D240:   callc [btlevtcmd_GetHomePos battle_event_cmd.o] -2 LW(2) LW(3) LW(4)
+8062D258:   callc [btlevtcmd_SetMoveSpeed battle_event_cmd.o] -2 4.00
+8062D268:   callc [btlevtcmd_MovePosition battle_event_cmd.o] -2 LW(2) LW(3) LW(4) 0 -1 0
+8062D28C:   callc [btlevtcmd_GetUnitWork battle_event_cmd.o] -2 1 LW(0)
+8062D2A0:   if_int_eq LW(0) 0
+8062D2AC:     callc [btlevtcmd_SetUnitWork battle_event_cmd.o] -2 1 1
+8062D2C0:     setii LW(10) -2
+8062D2CC:     callc [btlevtcmd_snd_se battle_event_cmd.o] LW(10) ["SFX_BTL_ENEMY_DIE1_2"] [F1194D80] 0 [F1194D80]
+8062D2E8:     callc [btlevtcmd_GetPos battle_event_cmd.o] LW(10) LW(0) LW(1) LW(2)
+8062D300:     addi LW(2) 10
+8062D30C:     callc [evt_eff evt_eff.o] 0 ["kemuri_test"] 4 LW(0) LW(1) LW(2) 0.80 0 0 0 0 0 0 0
+8062D34C:     callc [btlevtcmd_GetCoin battle_event_cmd.o] LW(10) LW(0)
+8062D35C:     callc [btlevtcmd_StoreCoin battle_event_cmd.o] LW(0)
+8062D368:     callc [btlevtcmd_GetExp battle_event_cmd.o] LW(10) LW(0)
+8062D378:     callc [btlevtcmd_StoreExp battle_event_cmd.o] LW(0)
+8062D384:     callc [btlevtcmd_GetPos battle_event_cmd.o] LW(10) LW(3) LW(1) LW(2)
+8062D39C:     addi LW(2) 10
+8062D3A8:     addi LW(1) 30
+8062D3B4:     callc [_add_star_point_disp_offset battle_event_subset.o] LW(10) LW(3) LW(1) LW(2)
+8062D3CC:     callc [evt_eff evt_eff.o] [zero_las_0001a7bc unit_honenoko.o] ["star_point"] 0 LW(3) LW(1) LW(2) LW(0) 0 0 0 0 0 0 0
+8062D40C:     if_int_ge LW(0) 1
+8062D418:       loop LW(0)
+8062D420:       end_loop
+8062D424:     endif
+8062D428:   endif
+8062D42C:   callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 1 ["KRN_D_2"]
+8062D440:   callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_ENM_HONENOKO_CRUMBLE1"] [F1194D80] 0 [F1194D80]
+8062D45C:   wait_ms 1000
+8062D464:   callc [btlevtcmd_KillUnit battle_event_cmd.o] -2 2
+8062D474:   callc [evt_sub_random evt_sub.o] 2 LW(0)
+8062D484:   addi LW(0) 2
+8062D490:   callc [btlevtcmd_SetUnitWork battle_event_cmd.o] -2 2 LW(0)
+8062D4A4:   callc [btlevtcmd_SetHitOffset battle_event_cmd.o] LW(10) LW(11) 0 -20 0
+8062D4C0:   callc [btlevtcmd_StartWaitEvent battle_event_cmd.o] -2
+8062D4CC:   return
+8062D4D0:   end

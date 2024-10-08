@@ -1,0 +1,54 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [daiza_up las_10.o] AT 805DEA34 ---
+805DEA34:   setii LW(8) LW(0)
+805DEA40:   setii LW(9) LW(1)
+805DEA4C:   setii LW(7) LW(2)
+805DEA58:   callc [evt_mapobj_get_position evt_map.o] LW(8) LW(0) LW(1) LW(2)
+805DEA70:   callc [evt_eff evt_eff.o] LW(7) ["mist2"] 0 LW(0) 410 LW(2) 40 0 0 0 0 0 0 0
+805DEAB0:   wait_ms 1000
+805DEAB8:   begin_thread_tid LW(6)
+805DEAC0:     callc [evt_mapobj_get_position evt_map.o] LW(8) LW(10) LW(11) LW(12)
+805DEAD8:     loop 0
+805DEAE0:       callc [evt_mapobj_get_position evt_map.o] LW(8) LW(0) LW(1) LW(2)
+805DEAF8:       subf LW(1) LW(11)
+805DEB04:       subf LW(1) 38.00
+805DEB10:       callc [evt_eff evt_eff.o] 0 ["mist2"] 1 LW(0) 400 LW(2) 15 LW(1) 100 0 0 0 0 0
+805DEB50:       wait_ms 200
+805DEB58:     end_loop
+805DEB5C:   end_thread
+805DEB60:   callc [evt_mapobj_color evt_map.o] 1 LW(9) 0 0 0 255
+805DEB80:   begin_thread
+805DEB84:     wait_ms 1700
+805DEB8C:     callc [evt_mapobj_get_position evt_map.o] LW(8) LW(0) LW(1) LW(2)
+805DEBA4:     callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_STG8_KEYSTAND_APPEAR2"] LW(0) LW(1) LW(2) 0
+805DEBC0:   end_thread
+805DEBC4:   callc [evt_sub_intpl_msec_init evt_sub.o] 11 -10000 0 3000
+805DEBDC: 0:
+805DEBE4:   callc [evt_sub_intpl_msec_get_value evt_sub.o]
+805DEBEC:   divf LW(0) 100.00
+805DEBF8:   callc [evt_mapobj_trans evt_map.o] 1 LW(8) 0 LW(0) 0
+805DEC14:   mulf LW(0) 3.60
+805DEC20:   callc [evt_mapobj_rotate evt_map.o] 1 LW(8) 0 LW(0) 0
+805DEC3C:   wait_frames 1
+805DEC44:   if_int_eq LW(1) 1
+805DEC50:     goto 0
+805DEC58:   endif
+805DEC5C:   stop_tid LW(6)
+805DEC64:   callc [evt_eff_softdelete evt_eff.o] LW(7)
+805DEC70:   wait_ms 1000
+805DEC78:   callc [evt_mapobj_get_position evt_map.o] LW(9) LW(0) LW(1) LW(2)
+805DEC90:   callc [evt_sub_intpl_msec_init evt_sub.o] 11 0 255 1000
+805DECA8: 1:
+805DECB0:   callc [evt_sub_intpl_msec_get_value evt_sub.o]
+805DECB8:   callc [evt_mapobj_color evt_map.o] 1 LW(9) LW(0) LW(0) LW(0) 255
+805DECD8:   wait_frames 1
+805DECE0:   if_int_eq LW(1) 1
+805DECEC:     goto 1
+805DECF4:   endif
+805DECF8:   callc [evt_mapobj_trans evt_map.o] 1 LW(8) 0 0 0
+805DED14:   callc [evt_mapobj_rotate evt_map.o] 1 LW(8) 0 0 0
+805DED30:   callc [evt_mapobj_color evt_map.o] 1 LW(9) 255 255 255 255
+805DED50:   return
+805DED54:   end

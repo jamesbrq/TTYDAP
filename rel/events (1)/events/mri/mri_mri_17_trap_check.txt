@@ -1,0 +1,363 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [trap_check mri_17.o] AT 80617E88 ---
+80617E88:   setii LW(10) 50
+80617E94:   setii LW(11) 0
+80617EA0:   setii LW(12) -25
+80617EAC:   setii LW(13) 70
+80617EB8:   callc [evt_puni_wait_systemmode mri_puni.o] 2
+80617EC4:   loop 0
+80617ECC:     callc [evt_puni_count_area mri_puni.o] LW(10) LW(11) LW(12) LW(13) LW(8)
+80617EE8:     callc [evt_mario_get_pos evt_mario.o] 0 LW(0) LW(1) LW(2)
+80617F00:     callc [evt_sub_area_check evt_sub.o] 1 LW(10) LW(12) LW(13) LW(0) LW(2) LW(9)
+80617F24:     if_int_ge LW(11) 5
+80617F30:       setii LW(9) 0
+80617F3C:     endif
+80617F40:     if_int_le LW(11) -5
+80617F4C:       setii LW(9) 0
+80617F58:     endif
+80617F5C:     callc [evt_party_get_pos evt_party.o] 0 LW(0) LW(1) LW(2)
+80617F74:     callc [evt_sub_area_check evt_sub.o] 1 LW(10) LW(12) LW(13) LW(0) LW(2) LW(14)
+80617F98:     if_int_ge LW(11) 5
+80617FA4:       setii LW(14) 0
+80617FB0:     endif
+80617FB4:     if_int_le LW(11) -5
+80617FC0:       setii LW(14) 0
+80617FCC:     endif
+80617FD0:     if_int_ge LW(8) 10
+80617FDC:       if_int_eq GSWF(2870) 1
+80617FE8:         if_int_eq LW(9) 1
+80617FF4:           if_int_eq LW(14) 1
+80618000:             loop_break
+80618004:           endif
+80618008:         endif
+8061800C:       endif
+80618010:     endif
+80618014:     wait_frames 1
+8061801C:   end_loop
+80618020:   callsa [trap_event mri_17.o]
+80618028:   setii GF(1) 1
+80618034:   wait_until GF(1)
+8061803C:   setii LW(8) 1
+80618048:   loop 0
+80618050:     callc [evt_puni_get_flag mri_puni.o] LW(8) LW(9)
+80618060:     andi LW(9) 0x400
+8061806C:     if_int_ne LW(9) 0
+80618078:       callc [evt_puni_get_position mri_puni.o] LW(8) LW(0) LW(1) LW(2)
+80618090:       setii LW(9) 0
+8061809C:       if_int_gt LW(0) -50
+806180A8:         if_int_lt LW(0) 160
+806180B4:           if_int_gt LW(2) -100
+806180C0:             if_int_lt LW(2) 70
+806180CC:               if_int_lt LW(1) 10
+806180D8:                 if_int_gt LW(1) -5
+806180E4:                   setii LW(9) 1
+806180F0:                 endif
+806180F4:               endif
+806180F8:             endif
+806180FC:           endif
+80618100:         endif
+80618104:       endif
+80618108:       if_int_eq LW(9) 1
+80618114:         callc [evt_puni_flag_onoff mri_puni.o] LW(8) 0 8388608
+80618128:         callc [evt_puni_set_trap_index mri_puni.o] LW(8) 1
+80618138:       endif
+8061813C:     endif
+80618140:     addi LW(8) 1
+8061814C:     if_int_eq LW(8) 103
+80618158:       loop_break
+8061815C:     endif
+80618160:   end_loop
+80618164:   return
+80618168:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [trap_event mri_17.o] AT 80617358 ---
+80617358:   wait_until GF(15)
+80617360:   callc [evt_npc_flag_onoff evt_npc.o] 1 ["第三勢力幹部"] 1073742368
+80617374:   callc [evt_npc_flag_onoff evt_npc.o] 1 ["第三勢力部下Ａ"] 1073742368
+80617388:   callc [evt_npc_flag_onoff evt_npc.o] 1 ["第三勢力部下Ｂ"] 1073742368
+8061739C:   callc [evt_mario_key_onoff evt_mario.o] 0
+806173A8:   callc [evt_mario_normalize evt_mario.o]
+806173B0:   wait_ms 500
+806173B8:   callc [evt_cam3d_evt_set evt_cam.o] 80 151 555 80 56 13 500 11
+806173E0:   wait_ms 500
+806173E8:   callss [wana_offscreen mri_17.o]
+806173F0:   callss [mri_guide_goryu mri.o]
+806173F8:   callc [evt_target_flag_onoff mri_puni.o] 0 1 1
+8061740C:   setii LW(10) 1
+80617418:   loop 0
+80617420:     callc [evt_puni_set_mode mri_puni.o] LW(10) 24
+80617430:     callc [evt_puni_flag_onoff mri_puni.o] LW(10) 0 2097152
+80617444:     callc [evt_puni_set_anim mri_puni.o] LW(10) 0
+80617454:     addi LW(10) 1
+80617460:     if_int_eq LW(10) 103
+8061746C:       loop_break
+80617470:     endif
+80617474:   end_loop
+80617478:   callc [evt_puni_flag_onoff mri_puni.o] 1 0 262144
+8061748C:   callc [evt_puni_set_mode mri_puni.o] 1 30
+8061749C:   callc [evt_puni_get_position mri_puni.o] 1 LW(0) LW(1) LW(2)
+806174B4:   callc [evt_npc_set_position evt_npc.o] ["ガイド"] LW(0) LW(1) LW(2)
+806174CC:   callc [evt_npc_flag_onoff evt_npc.o] 1 ["ガイド"] 1073743392
+806174E0:   callc [evt_npc_set_ry evt_npc.o] ["ガイド"] 270
+806174F0:   setii LW(0) ["ガイド"]
+806174FC:   callsa_tid [mri_puni_walk_se mri.o] LW(9)
+80617508:   callc [evt_npc_glide_position evt_npc.o] ["ガイド"] 12 6 8 0 120.00 0 0 0
+80617534:   stop_tid LW(9)
+8061753C:   callc [evt_cam3d_evt_set evt_cam.o] 13 110 326 13 56 20 500 11
+80617564:   wait_ms 500
+8061756C:   callc [evt_msg_print evt_msg.o] 0 ["stg2_mri_e18_00_01"] 0 ["ガイド"]
+80617584:   callc [evt_msg_toge evt_msg.o] 2 5 230 0
+8061759C:   callc [evt_snd_bgmon evt_snd.o] 512 ["BGM_EVT_3RD_ENEMY"]
+806175AC:   callc [evt_msg_print evt_msg.o] 0 ["stg2_mri_e18_00_02"] 0 0
+806175C4:   callc [evt_cam3d_evt_set evt_cam.o] 50 164 624 50 56 7 500 11
+806175EC:   wait_ms 500
+806175F4:   callc [evt_npc_set_position evt_npc.o] ["第三勢力部下Ａ"] 10 180 90
+8061760C:   callc [evt_npc_set_position evt_npc.o] ["第三勢力部下Ｂ"] 90 180 90
+80617624:   callc [evt_npc_set_position evt_npc.o] ["第三勢力幹部"] 50 180 90
+8061763C:   callc [evt_npc_set_ry evt_npc.o] ["第三勢力部下Ａ"] 90
+8061764C:   callc [evt_npc_set_ry evt_npc.o] ["第三勢力部下Ｂ"] 270
+8061765C:   callc [evt_npc_sound_data_set evt_npc.o] ["第三勢力部下Ａ"] 0 0 0 0 0
+8061767C:   callc [evt_npc_sound_data_set evt_npc.o] ["第三勢力部下Ｂ"] 0 0 0 0 0
+8061769C:   callc [evt_npc_sound_data_set evt_npc.o] ["第三勢力幹部"] 0 0 0 0 0
+806176BC:   begin_thread
+806176C0:     wait_ms 100
+806176C8:     callc [evt_npc_set_anim evt_npc.o] ["第三勢力部下Ａ"] ["R_1"]
+806176D8:     callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_STG2_3RD_FALL1"] LW(0) LW(1) LW(2) 0
+806176F4:     callc [evt_npc_set_anim evt_npc.o] ["第三勢力部下Ａ"] ["S_1"]
+80617704:     callc [evt_npc_glide_position evt_npc.o] ["第三勢力部下Ａ"] 10 0 90 500 0 0 2 0
+80617730:     callc [evt_npc_set_position evt_npc.o] ["第三勢力部下Ａ"] 10 0 90
+80617748:     callc [evt_npc_get_position evt_npc.o] ["第三勢力部下Ａ"] LW(0) LW(1) LW(2)
+80617760:     callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_STG2_3RD_LANDING1"] LW(0) LW(1) LW(2) 0
+8061777C:     callc [evt_npc_set_anim evt_npc.o] ["第三勢力部下Ａ"] ["S_1"]
+8061778C:   end_thread
+80617790:   begin_thread
+80617794:     wait_ms 150
+8061779C:     callc [evt_npc_set_anim evt_npc.o] ["第三勢力部下Ｂ"] ["R_1"]
+806177AC:     callc [evt_npc_get_position evt_npc.o] ["第三勢力部下Ｂ"] LW(0) LW(1) LW(2)
+806177C4:     callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_STG2_3RD_FALL1"] LW(0) LW(1) LW(2) 0
+806177E0:     callc [evt_npc_glide_position evt_npc.o] ["第三勢力部下Ｂ"] 90 0 90 500 0 0 2 0
+8061780C:     callc [evt_npc_set_position evt_npc.o] ["第三勢力部下Ｂ"] 90 0 90
+80617824:     callc [evt_npc_get_position evt_npc.o] ["第三勢力部下Ｂ"] LW(0) LW(1) LW(2)
+8061783C:     callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_STG2_3RD_LANDING1"] LW(0) LW(1) LW(2) 0
+80617858:     callc [evt_npc_set_anim evt_npc.o] ["第三勢力部下Ｂ"] ["S_1"]
+80617868:   end_thread
+8061786C:   callc [evt_npc_set_anim evt_npc.o] ["第三勢力幹部"] ["R_1"]
+8061787C:   callc [evt_npc_get_position evt_npc.o] ["第三勢力幹部"] LW(0) LW(1) LW(2)
+80617894:   callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_STG2_KANBU_FALL1"] LW(0) LW(1) LW(2) 0
+806178B0:   callc [evt_npc_glide_position evt_npc.o] ["第三勢力幹部"] 50 0 90 500 0 0 2 0
+806178DC:   callc [evt_npc_set_position evt_npc.o] ["第三勢力幹部"] 50 0 90
+806178F4:   callc [evt_npc_get_position evt_npc.o] ["第三勢力幹部"] LW(0) LW(1) LW(2)
+8061790C:   callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_STG2_KANBU_LANDING1"] LW(0) LW(1) LW(2) 0
+80617928:   callc [evt_npc_set_anim evt_npc.o] ["第三勢力幹部"] ["S_1"]
+80617938:   begin_thread
+8061793C:     callc [evt_cam_shake evt_cam.o] 4 0.00 0.01 500
+80617954:   end_thread
+80617958:   wait_ms 1000
+80617960:   begin_thread
+80617964:     callc [evt_mario_mov_pos2 evt_mario.o] 50 8 120.00
+80617978:   end_thread
+8061797C:   callc [evt_npc_flag_onoff evt_npc.o] 1 ["第三勢力幹部"] 1024
+80617990:   callc [evt_npc_flag_onoff evt_npc.o] 1 ["第三勢力部下Ａ"] 1024
+806179A4:   callc [evt_npc_flag_onoff evt_npc.o] 1 ["第三勢力部下Ｂ"] 1024
+806179B8:   callc [evt_npc_sound_data_reset evt_npc.o] ["第三勢力部下Ａ"]
+806179C4:   callc [evt_npc_sound_data_reset evt_npc.o] ["第三勢力部下Ｂ"]
+806179D0:   callc [evt_npc_sound_data_reset evt_npc.o] ["第三勢力幹部"]
+806179DC:   callc [evt_cam3d_evt_set evt_cam.o] 50 121 451 50 43 7 500 11
+80617A04:   wait_ms 500
+80617A0C:   callc [evt_msg_print evt_msg.o] 0 ["stg2_mri_e18_00_03"] 0 ["第三勢力幹部"]
+80617A24:   callc [evt_cam3d_evt_set evt_cam.o] 50 151 548 50 56 7 500 11
+80617A4C:   wait_ms 500
+80617A54:   callc [evt_npc_set_ry evt_npc.o] ["第三勢力幹部"] 270
+80617A64:   wait_ms 200
+80617A6C:   begin_thread
+80617A70:     wait_ms 500
+80617A78:     callc [evt_npc_set_ry evt_npc.o] ["第三勢力部下Ａ"] 90
+80617A88:   end_thread
+80617A8C:   callc [evt_msg_print evt_msg.o] 0 ["stg2_mri_e18_00_04"] 0 ["第三勢力幹部"]
+80617AA4:   wait_ms 500
+80617AAC:   setii GF(0) 1
+80617AB8:   begin_thread
+80617ABC:     callc [evt_cam3d_evt_set evt_cam.o] -58 151 548 -58 56 7 1300 11
+80617AE4:     wait_ms 1300
+80617AEC:     setii GF(0) 0
+80617AF8:   end_thread
+80617AFC:   begin_thread
+80617B00:     setii LW(10) ["第三勢力部下Ａ"]
+80617B0C:     callc [evt_npc_set_ry evt_npc.o] LW(10) 270
+80617B1C:     callc [evt_npc_move_position evt_npc.o] LW(10) -84 66 0 120.00 0
+80617B3C:     callc [evt_npc_move_position evt_npc.o] LW(10) -200 -5 0 120.00 0
+80617B5C:     callc [evt_npc_set_position evt_npc.o] LW(10) 0 -1000 0
+80617B74:   end_thread
+80617B78:   begin_thread
+80617B7C:     setii LW(10) ["第三勢力部下Ｂ"]
+80617B88:     callc [evt_npc_set_ry evt_npc.o] LW(10) 270
+80617B98:     callc [evt_npc_move_position evt_npc.o] LW(10) -84 66 0 120.00 0
+80617BB8:     callc [evt_npc_move_position evt_npc.o] LW(10) -200 -5 0 120.00 0
+80617BD8:     callc [evt_npc_set_position evt_npc.o] LW(10) 0 -1000 0
+80617BF0:   end_thread
+80617BF4:   setii LW(10) ["第三勢力幹部"]
+80617C00:   callc [evt_npc_set_ry evt_npc.o] LW(10) 270
+80617C10:   callc [evt_npc_move_position evt_npc.o] LW(10) -84 66 0 120.00 0
+80617C30:   callc [evt_npc_move_position evt_npc.o] LW(10) -200 -5 0 120.00 0
+80617C50:   callc [evt_npc_set_position evt_npc.o] LW(10) 0 -1000 0
+80617C68:   wait_until GF(0)
+80617C70:   wait_ms 2000
+80617C78:   callc [evt_snd_bgmoff_f evt_snd.o] 512 1000
+80617C88:   callc [evt_cam3d_evt_set evt_cam.o] 34 122 390 34 56 14 500 11
+80617CB0:   wait_ms 500
+80617CB8:   callc [evt_npc_set_ry evt_npc.o] ["ガイド"] 90
+80617CC8:   callc [evt_mario_set_dir evt_mario.o] 270 200 0
+80617CDC:   callc [evt_msg_print evt_msg.o] 0 ["stg2_mri_e18_00_05"] 0 ["ガイド"]
+80617CF4:   callc [evt_npc_get_position evt_npc.o] ["ガイド"] LW(0) LW(1) LW(2)
+80617D0C:   callc [evt_puni_flag_onoff mri_puni.o] 1 1 262144
+80617D20:   callc [evt_puni_set_position mri_puni.o] 1 LW(0) LW(1) LW(2)
+80617D38:   callc [evt_puni_set_mode mri_puni.o] 1 24
+80617D48:   setii GSW(0) 102
+80617D54:   setii GF(1) 0
+80617D60:   callc [evt_cam3d_evt_off evt_cam.o] 300 11
+80617D70:   wait_ms 500
+80617D78:   callc [evt_mario_key_onoff evt_mario.o] 1
+80617D84:   loop 0
+80617D8C:     callc [evt_mario_get_pos evt_mario.o] 0 LW(0) LW(1) LW(2)
+80617DA4:     if_int_ge LW(2) 73
+80617DB0:       loop_break
+80617DB4:     endif
+80617DB8:     if_int_le LW(2) -105
+80617DC4:       loop_break
+80617DC8:     endif
+80617DCC:     wait_frames 1
+80617DD4:   end_loop
+80617DD8:   callc [evt_mario_key_onoff evt_mario.o] 0
+80617DE4:   callc [evt_mario_normalize evt_mario.o]
+80617DEC:   callc [evt_party_stop evt_party.o] 0
+80617DF8:   callc [evt_msg_print_party evt_msg.o] ["stg2_mri_e18_00_09"]
+80617E04:   callc [evt_puni_get_position mri_puni.o] 1 LW(0) LW(1) LW(2)
+80617E1C:   addi LW(1) 20
+80617E28:   callc [evt_msg_toge evt_msg.o] 2 LW(0) LW(1) LW(2)
+80617E40:   callc [evt_msg_print evt_msg.o] 0 ["stg2_mri_e18_00_12"] 0 ["ガイド"]
+80617E58:   callc [evt_party_run evt_party.o] 0
+80617E64:   callc [evt_mario_key_onoff evt_mario.o] 1
+80617E70:   callc [evt_snd_bgmon evt_snd.o] 512 ["BGM_STG2_MRI1"]
+80617E80:   return
+80617E84:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [wana_offscreen mri_17.o] AT 80616FEC ---
+80616FEC:   callc [evt_img_entry evt_img.o] ["capture_img"]
+80616FF8:   callc [evt_img_set_paper evt_img.o] ["capture_img"] ["OFF_d_batan"]
+80617008:   callc [evt_img_onoff evt_img.o] ["capture_img"] 0
+80617018:   callc [evt_offscreen_entry evt_offscreen.o] ["offscreen"]
+80617024:   callc [evt_mapobj_set_offscreen evt_map.o] 1 ["S_hako"] ["offscreen"]
+80617038:   callc [evt_img_alloc_capture evt_img.o] ["capture_img"] 0 ["offscreen"] 1 0 0 0 0
+80617060:   begin_thread
+80617064:     callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_OFF2_DOOR_GRID_SHUT1"] 50 0 0 0
+80617080:     wait_ms 1750
+80617088:     callc [evt_snd_bgmoff evt_snd.o] 512
+80617094:     callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_STG2_DOOR_GRID_DOWN1"] 50 0 0 0
+806170B0:     callsa [wana_kemuri mri_17.o]
+806170B8:     callc [evt_cam_shake evt_cam.o] 4 0.03 0.00 500
+806170D0:   end_thread
+806170D4:   callc [evt_img_set_paper_anim evt_img.o] ["capture_img"] ["A_1"]
+806170E4:   callc [evt_img_onoff evt_img.o] ["capture_img"] 1
+806170F4:   callc [evt_img_wait_animend evt_img.o] ["capture_img"]
+80617100:   callc [evt_img_free_capture evt_img.o] ["capture_img"] 0
+80617110:   callc [evt_img_onoff evt_img.o] ["capture_img"] 0
+80617120:   callc [evt_img_release evt_img.o] ["capture_img"]
+8061712C:   callc [evt_mapobj_clear_offscreen evt_map.o] 1 ["S_hako"]
+8061713C:   callc [evt_offscreen_delete evt_offscreen.o] ["offscreen"]
+80617148:   callc [evt_mapobj_flag_onoff evt_map.o] 1 0 ["S_hako"] 1
+80617160:   callc [evt_hitobj_onoff evt_hit.o] ["A_hako"] 1 1
+80617174:   callc [evt_img_entry evt_img.o] ["capture_img"]
+80617180:   callc [evt_img_set_paper evt_img.o] ["capture_img"] ["OFF_d_saku"]
+80617190:   callc [evt_img_onoff evt_img.o] ["capture_img"] 0
+806171A0:   callc [evt_offscreen_entry evt_offscreen.o] ["offscreen"]
+806171AC:   callc [evt_mapobj_set_offscreen evt_map.o] 1 ["S_dokan1"] ["offscreen"]
+806171C0:   callc [evt_offscreen_get_boundingbox evt_offscreen.o] ["offscreen"] LW(10) LW(11) LW(12) LW(13)
+806171DC:   callc [evt_img_alloc_capture evt_img.o] ["capture_img"] 0 0 1 LW(10) LW(11) LW(12) LW(13)
+80617204:   callc [evt_img_clear_virtual_point evt_img.o] ["capture_img"]
+80617210:   callc [set_depthPlaneOffset mri_17.o] ["capture_img"] -4.00
+80617220:   callc [evt_img_set_shadow evt_img.o] ["capture_img"] 2
+80617230:   wait_ms 1000
+80617238:   begin_thread
+8061723C:     callc [evt_hit_get_position evt_hit.o] ["A_dokan1"] LW(0) LW(1) LW(2)
+80617254:     callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_OFF2_DOKAN_APPEAR1"] LW(0) LW(1) LW(2) 0
+80617270:     wait_ms 1000
+80617278:     callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_OFF2_DOKAN_APPEAR2"] LW(0) LW(1) LW(2) 0
+80617294:   end_thread
+80617298:   callc [evt_img_set_paper_anim evt_img.o] ["capture_img"] ["A_2"]
+806172A8:   callc [evt_mapobj_flag_onoff evt_map.o] 1 0 ["S_dokan1"] 1
+806172C0:   callc [evt_img_onoff evt_img.o] ["capture_img"] 1
+806172D0:   callc [evt_img_wait_animend evt_img.o] ["capture_img"]
+806172DC:   callc [evt_img_free_capture evt_img.o] ["capture_img"] 0
+806172EC:   callc [evt_img_onoff evt_img.o] ["capture_img"] 0
+806172FC:   callc [evt_img_release evt_img.o] ["capture_img"]
+80617308:   callc [evt_mapobj_clear_offscreen evt_map.o] 1 ["S_dokan1"]
+80617318:   callc [evt_offscreen_delete evt_offscreen.o] ["offscreen"]
+80617324:   callc [evt_mapobj_flag_onoff evt_map.o] 1 0 ["S_dokan1"] 1
+8061733C:   callc [evt_hitobj_onoff evt_hit.o] ["A_dokan1"] 1 1
+80617350:   return
+80617354:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [mri_guide_goryu mri.o] AT 805E3CEC ---
+805E3CEC:   callss [mri_guide_hagure_check mri.o]
+805E3CF4:   if_int_eq LW(1) 0
+805E3D00:     return
+805E3D04:   endif
+805E3D08:   callc [evt_puni_set_lsw_index mri_puni.o] LSW(0) 0 0 0 0 0
+805E3D28:   callc [evt_puni_set_trap_index mri_puni.o] 1 0
+805E3D38:   callc [evt_puni_init_puni mri_puni.o] 1 30 0 -1000 0 0
+805E3D58:   callc [evt_puni_flag_onoff mri_puni.o] 1 1 65536
+805E3D6C:   callc [evt_mario_get_pos evt_mario.o] 0 LW(0) LW(1) LW(2)
+805E3D84:   callc [evt_mario_get_dir evt_mario.o] LW(3)
+805E3D90:   addi LW(2) -10
+805E3D9C:   if_int_le LW(0) 180
+805E3DA8:     addi LW(0) -10
+805E3DB4:   else
+805E3DB8:     addi LW(0) 10
+805E3DC4:   endif
+805E3DC8:   callc [evt_puni_set_position mri_puni.o] 1 LW(0) LW(1) LW(2)
+805E3DE0:   return
+805E3DE4:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [mri_puni_walk_se mri.o] AT 805E3DE8 ---
+805E3DE8:   loop 0
+805E3DF0:     callc [evt_npc_get_position evt_npc.o] LW(0) LW(10) LW(11) LW(12)
+805E3E08:     callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_STG2_PUNI_MOVE2_1"] LW(10) LW(11) LW(12) 0
+805E3E24:     wait_frames 5
+805E3E2C:   end_loop
+805E3E30:   return
+805E3E34:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [wana_kemuri mri_17.o] AT 80616DE4 ---
+80616DE4:   callc [evt_eff evt_eff.o] 0 ["kemuri_test"] 0 -18 25 76 1.00 0 0 0 0 0 0 0
+80616E24:   callc [evt_eff evt_eff.o] 0 ["kemuri_test"] 0 5 10 70 1.00 0 0 0 0 0 0 0
+80616E64:   callc [evt_eff evt_eff.o] 0 ["kemuri_test"] 0 23 23 77 1.00 0 0 0 0 0 0 0
+80616EA4:   callc [evt_eff evt_eff.o] 0 ["kemuri_test"] 0 41 0 70 1.00 0 0 0 0 0 0 0
+80616EE4:   callc [evt_eff evt_eff.o] 0 ["kemuri_test"] 0 66 9 72 1.00 0 0 0 0 0 0 0
+80616F24:   callc [evt_eff evt_eff.o] 0 ["kemuri_test"] 0 85 14 70 1.00 0 0 0 0 0 0 0
+80616F64:   callc [evt_eff evt_eff.o] 0 ["kemuri_test"] 0 103 2 78 1.00 0 0 0 0 0 0 0
+80616FA4:   callc [evt_eff evt_eff.o] 0 ["kemuri_test"] 0 124 15 70 1.00 0 0 0 0 0 0 0
+80616FE4:   return
+80616FE8:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [mri_guide_hagure_check mri.o] AT 805E3C24 ---
+805E3C24:   callc [evt_puni_get_lsw_index mri_puni.o] LSW(0) 0 LW(0) LW(1) LW(2) LW(3)
+805E3C44:   callc [evt_puni_get_trap_index mri_puni.o] 1 LW(4)
+805E3C54:   setii LW(1) 0
+805E3C60:   if_int_ne LW(4) 0
+805E3C6C:     setii LW(1) 3
+805E3C78:     dbg_report ["ガイド・トラップにはまっている"]
+805E3C80:   endif
+805E3C84:   if_int_ne LW(0) 0
+805E3C90:     setii LW(1) 1
+805E3C9C:     dbg_report ["ガイド・別のエリアにはぐれている"]
+805E3CA4:   endif
+805E3CA8:   callc [evt_puni_get_mode mri_puni.o] 1 LW(0)
+805E3CB8:   if_int_eq LW(0) 16
+805E3CC4:     setii LW(1) 2
+805E3CD0:     dbg_report ["ガイド・同じエリアではぐれている"]
+805E3CD8:   endif
+805E3CDC:   dbg_report ["ガイド・普通の状態"]
+805E3CE4:   return
+805E3CE8:   end

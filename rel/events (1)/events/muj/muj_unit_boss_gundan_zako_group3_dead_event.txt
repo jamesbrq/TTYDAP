@@ -1,0 +1,38 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [dead_event unit_boss_gundan_zako_group3.o] AT 80600D40 ---
+80600D40:   callc [btlevtcmd_SetUnitWork battle_event_cmd.o] -2 1 1
+80600D54:   callc [zakogun_dead3 unit_boss_gundan_zako_group3.o]
+80600D5C:   callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_BTL_ENEMY_DIE1_1"] [F1194D80] 0 [F1194D80]
+80600D78:   wait_frames 48
+80600D80:   begin_child_thread
+80600D84:     callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_BTL_ENEMY_DIE1_2"] [F1194D80] 0 [F1194D80]
+80600DA0:     loop 20
+80600DA8:       callc [btlevtcmd_GetPos battle_event_cmd.o] -2 LW(0) LW(1) LW(2)
+80600DC0:       callc [evt_sub_random evt_sub.o] 300 LW(3)
+80600DD0:       subi LW(3) 150
+80600DDC:       addi LW(0) LW(3)
+80600DE8:       callc [evt_sub_random evt_sub.o] 30 LW(3)
+80600DF8:       addi LW(1) LW(3)
+80600E04:       setii LW(2) 75
+80600E10:       callc [evt_eff evt_eff.o] 0 ["kemuri_test"] 4 LW(0) LW(1) LW(2) 0.80 0 0 0 0 0 0 0
+80600E50:       wait_frames 1
+80600E58:     end_loop
+80600E5C:   end_child_thread
+80600E60:   callc [btlevtcmd_GetCoin battle_event_cmd.o] -2 LW(0)
+80600E70:   callc [btlevtcmd_StoreCoin battle_event_cmd.o] LW(0)
+80600E7C:   callc [btlevtcmd_GetExp battle_event_cmd.o] -2 LW(0)
+80600E8C:   callc [btlevtcmd_StoreExp battle_event_cmd.o] LW(0)
+80600E98:   callc [btlevtcmd_GetPos battle_event_cmd.o] -2 LW(3) LW(1) LW(2)
+80600EB0:   callc [_add_star_point_disp_offset battle_event_subset.o] -2 LW(3) LW(1) LW(2)
+80600EC8:   callc [evt_eff evt_eff.o] [zero_muj_000137ac unit_boss_gundan_zako_group3.o] ["star_point"] 0 LW(3) LW(1) LW(2) LW(0) 0 0 0 0 0 0 0
+80600F08:   wait_frames 20
+80600F10:   callc [btlevtcmd_CheckDamageCode battle_event_cmd.o] -2 1024 LW(0)
+80600F24:   if_int_ne LW(0) 0
+80600F30:     callc [btlevtcmd_KillUnit battle_event_cmd.o] -2 0
+80600F40:   else
+80600F44:     callc [btlevtcmd_KillUnit battle_event_cmd.o] -2 2
+80600F54:   endif
+80600F58:   return
+80600F5C:   end

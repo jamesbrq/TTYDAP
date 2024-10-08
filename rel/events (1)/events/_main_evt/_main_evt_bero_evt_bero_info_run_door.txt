@@ -1,0 +1,131 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [evt_bero_info_run_door evt_bero.o] AT 8030EA20 ---
+8030EA20:   callc [evt_bero_mario_go_init evt_bero.o]
+8030EA28:   callsa [bero_play_enter_anime evt_bero.o]
+8030EA30:   callc [evt_bero_mario_go_wait evt_bero.o]
+8030EA38:   loadf LW(13) [BeroEX evt_bero.o]
+8030EA44:   loadf LW(14) [BeroEY evt_bero.o]
+8030EA50:   loadf LW(15) [BeroEZ evt_bero.o]
+8030EA5C:   callc [evt_party_set_homing_dist evt_party.o] 0 20.00
+8030EA6C:   callc [evt_party_set_homing_dist evt_party.o] 1 20.00
+8030EA7C:   callc [evt_mario_party_bero_move evt_mario.o] LW(13) LW(15) 150.00
+8030EA90:   callc [evt_mario_key_onoff evt_mario.o] 1
+8030EA9C:   callc [evt_party_run evt_party.o] 0
+8030EAA8:   callc [evt_party_run evt_party.o] 1
+8030EAB4:   callc [evt_party_set_homing_dist evt_party.o] 0 50.00
+8030EAC4:   callc [evt_party_set_homing_dist evt_party.o] 1 50.00
+8030EAD4:   return
+8030EAD8:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [bero_play_enter_anime evt_bero.o] AT 8030D428 ---
+8030D428:   callc [evt_bero_get_info_anime evt_bero.o] LW(1) LW(10) LW(11) LW(12) LW(13)
+8030D444:   switchi LW(10)
+8030D44C:     case_int_eq 0
+8030D454:     case_int_eq 1
+8030D45C:       begin_thread
+8030D460:         wait_ms 200
+8030D468:         callc [evt_bero_mario_go evt_bero.o]
+8030D470:       end_thread
+8030D474:       if_int_ne LW(12) 0
+8030D480:         callc [evt_map_playanim evt_map.o] LW(12) 0 0
+8030D494:         callc [evt_map_pauseanim evt_map.o] 0 LW(12)
+8030D4A4:         wait_ms 700
+8030D4AC:         callsa [bero_close_door_play_se evt_bero.o]
+8030D4B4:         callc [evt_map_replayanim evt_map.o] 0 LW(12)
+8030D4C4:       endif
+8030D4C8:     case_int_eq 2
+8030D4D0:       if_int_eq LW(12) 0
+8030D4DC:         switch_break
+8030D4E0:       endif
+8030D4E4:       setii LW(8) LW(12)
+8030D4F0:       callc [evt_mapobj_rotate evt_map.o] 1 LW(8) 0 -80 0
+8030D50C:       callc [evt_bero_mario_go evt_bero.o]
+8030D514:       wait_ms 500
+8030D51C:       callsa [bero_close_door_play_se evt_bero.o]
+8030D524:       callc [evt_sub_intpl_msec_init evt_sub.o] 11 -80 0 500
+8030D53C:       loop 0
+8030D544:         callc [evt_sub_intpl_msec_get_value_para evt_sub.o] LW(0) LW(1)
+8030D554:         callc [evt_mapobj_rotate evt_map.o] 1 LW(8) 0 LW(0) 0
+8030D570:         if_int_eq LW(1) 0
+8030D57C:           loop_break
+8030D580:         endif
+8030D584:         wait_frames 1
+8030D58C:       end_loop
+8030D590:     case_int_eq 4
+8030D598:       if_int_ne LW(12) 0
+8030D5A4:         callsa LW(12)
+8030D5AC:       endif
+8030D5B0:     case_int_eq 5
+8030D5B8:       if_int_ne LW(12) 0
+8030D5C4:         setff LW(0) 180.00
+8030D5D0:         callss LW(12)
+8030D5D8:         callc [evt_bero_mario_go evt_bero.o]
+8030D5E0:         wait_ms 500
+8030D5E8:         callsa [bero_close_door_play_se evt_bero.o]
+8030D5F0:         setii LW(9) LW(12)
+8030D5FC:         callc [evt_sub_intpl_msec_init evt_sub.o] 11 180 0 500
+8030D614:         loop 0
+8030D61C:           callc [evt_sub_intpl_msec_get_value_para evt_sub.o] LW(0) LW(10)
+8030D62C:           if_int_eq LW(10) 0
+8030D638:             setff LW(0) 0.00
+8030D644:             callss LW(9)
+8030D64C:             loop_break
+8030D650:           else
+8030D654:             callss LW(9)
+8030D65C:           endif
+8030D660:         end_loop
+8030D664:       endif
+8030D668:   end_switch
+8030D66C:   return
+8030D670:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [bero_close_door_play_se evt_bero.o] AT 8030D138 ---
+8030D138:   callc [evt_bero_get_info_num evt_bero.o] LW(1)
+8030D144:   setii LW(4) 0
+8030D150:   setii LW(5) 0
+8030D15C:   setii LW(6) 0
+8030D168:   if_int_ne LW(3) 0
+8030D174:     callc [evt_hit_get_position evt_hit.o] LW(3) LW(4) LW(5) LW(6)
+8030D18C:   endif
+8030D190:   callc [evt_bero_get_info_kinddir evt_bero.o] LW(1) LW(10) LW(11) LW(12)
+8030D1A8:   switchi LW(11)
+8030D1B0:     case_int_eq 0
+8030D1B8:     case_int_eq 1
+8030D1C0:       callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_DOOR_SHUT1"] LW(4) LW(5) LW(6) 0
+8030D1DC:     case_int_eq 2
+8030D1E4:       callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_DOOR_SHUT_WOOD1"] LW(4) LW(5) LW(6) 0
+8030D200:     case_int_eq 3
+8030D208:       callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_DOOR_SHUT_WOOD2"] LW(4) LW(5) LW(6) 0
+8030D224:     case_int_eq 4
+8030D22C:       callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_DOOR_SHUT_WOOD2"] LW(4) LW(5) LW(6) 0
+8030D248:     case_int_eq 5
+8030D250:       callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_DOOR_SHUT_IRON1"] LW(4) LW(5) LW(6) 0
+8030D26C:     case_int_eq 6
+8030D274:       callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_DOOR_SHUT_IRON2"] LW(4) LW(5) LW(6) 0
+8030D290:     case_int_eq 7
+8030D298:       callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_DOOR_SHUT_GRILLE1"] LW(4) LW(5) LW(6) 0
+8030D2B4:     case_int_eq 8
+8030D2BC:       callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_DOOR_SHUT_SLIDE1"] LW(4) LW(5) LW(6) 0
+8030D2D8:     case_int_eq 9
+8030D2E0:       callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_DOOR_SHUT_TURN1"] LW(4) LW(5) LW(6) 0
+8030D2FC:     case_int_eq 10
+8030D304:       callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_DOOR_SHUT_ELEC1"] LW(4) LW(5) LW(6) 0
+8030D320:     case_int_eq 11
+8030D328:       callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_DOOR_OPEN_STONE1"] LW(4) LW(5) LW(6) 0
+8030D344:     case_int_eq 12
+8030D34C:       callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_DOOR_SHUT_CASTLE1"] LW(4) LW(5) LW(6) 0
+8030D368:     case_int_eq 13
+8030D370:       callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_DOOR_SHUT_CASTLE2"] LW(4) LW(5) LW(6) 0
+8030D38C:     case_int_eq 14
+8030D394:       callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_DOOR_SHUT_METAL1"] LW(4) LW(5) LW(6) 0
+8030D3B0:     case_int_eq 15
+8030D3B8:       callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_STG3_AUTO_DOOR1"] LW(4) LW(5) LW(6) 0
+8030D3D4:     case_int_eq 16
+8030D3DC:       callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_STG3_LOCKER_CLOSE1"] LW(4) LW(5) LW(6) 0
+8030D3F8:     case_int_eq 17
+8030D400:       callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_DOOR_SHUT_SLIDE1_3"] LW(4) LW(5) LW(6) 0
+8030D41C:   end_switch
+8030D420:   return
+8030D424:   end

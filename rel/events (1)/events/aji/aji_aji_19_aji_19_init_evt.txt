@@ -1,0 +1,38 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [aji_19_init_evt aji_19.o] AT 80601680 ---
+80601680:   callc [evt_snd_bgmon evt_snd.o] 512 ["BGM_STG7_DUN1"]
+80601690:   callc [evt_snd_envon evt_snd.o] 272 ["ENV_STG7_AJI1"]
+806016A0:   callc [evt_snd_set_rev_mode evt_snd.o] 1
+806016AC:   setii LW(0) [bero_entry_data aji_19.o]
+806016B8:   callc [evt_bero_get_info evt_bero.o]
+806016C0:   callss [evt_bero_info_run evt_bero.o]
+806016C8:   callc [evt_map_playanim evt_map.o] ["hosi_01"] 1 0
+806016DC:   callc [evt_map_playanim evt_map.o] ["hosi_02"] 1 0
+806016F0:   callc [evt_map_playanim evt_map.o] ["hosi_03"] 1 0
+80601704:   callc [evt_map_playanim evt_map.o] ["yuka"] 1 0
+80601718:   begin_thread
+8060171C:     callc [mario_chk aji_19.o]
+80601724:   end_thread
+80601728:   if_int_lt GSW(0) 360
+80601734:     callsa [evt_hajimete aji_19.o]
+8060173C:   endif
+80601740:   callc [evt_mapobj_flag_onoff evt_map.o] 1 0 ["kanaami2"] 2
+80601758:   return
+8060175C:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [evt_hajimete aji_19.o] AT 806015FC ---
+806015FC:   callc [evt_mario_key_onoff evt_mario.o] 0
+80601608:   callc [evt_seq_wait evt_seq.o] 2
+80601614:   callc [evt_bero_exec_wait evt_bero.o] 65536
+80601620:   wait_ms 1000
+80601628:   callc [evt_party_stop evt_party.o] 0
+80601634:   wait_ms 200
+8060163C:   callc [evt_msg_print_party evt_msg.o] ["stg7_aji_00_00_01"]
+80601648:   callc [evt_party_run evt_party.o] 0
+80601654:   setii GSW(0) 360
+80601660:   callc [evt_mario_key_onoff evt_mario.o] 1
+8060166C:   callc [evt_telop_entry evt_telop.o] 15
+80601678:   return
+8060167C:   end

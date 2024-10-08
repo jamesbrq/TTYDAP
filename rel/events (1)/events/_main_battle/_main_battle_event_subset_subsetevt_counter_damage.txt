@@ -1,0 +1,57 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [subsetevt_counter_damage battle_event_subset.o] AT 8035149C ---
+8035149C:   callc [btlevtcmd_OnUnitFlag battle_event_cmd.o] LW(10) 1
+803514AC:   begin_child_thread
+803514B0:     switchi LW(0)
+803514B8:       case_int_eq_any 43
+803514C0:       case_int_eq_any 44
+803514C8:       case_int_eq_any 45
+803514D0:         callc [btlevtcmd_GetUnitKind battle_event_cmd.o] LW(10) LW(2)
+803514E0:         if_int_eq LW(2) 222
+803514EC:           callc [btlevtcmd_GetPos battle_event_cmd.o] LW(10) LW(2) LW(3) LW(4)
+80351504:           callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_VOICE_MARIO_DAMAGED1"] LW(2) LW(3) LW(4) 0
+80351520:         endif
+80351524:         end_multi_case
+80351528:     end_switch
+8035152C:   end_child_thread
+80351530:   switchi LW(0)
+80351538:     case_int_eq 43
+80351540:       callc [evt_snd_sfxon evt_snd.o] ["SFX_BTL_ATTACK_MISS3"] 0
+80351550:       setii LW(14) 36
+8035155C:     case_int_eq 46
+80351564:       callc [btlevtcmd_GetUnitKind battle_event_cmd.o] LW(10) LW(2)
+80351574:       if_int_eq LW(2) 222
+80351580:         callc [btlevtcmd_snd_se battle_event_cmd.o] LW(10) ["SFX_VOICE_MARIO_DAMAGED1"] [F1194D80] 0 [F1194D80]
+8035159C:       endif
+803515A0:       setii LW(14) 29
+803515AC:     case_int_eq_any 49
+803515B4:     case_int_eq_any 50
+803515BC:     case_int_eq_any 54
+803515C4:       setii LW(14) 29
+803515D0:       end_multi_case
+803515D4:     case_default
+803515D8:       setii LW(14) 39
+803515E4:   end_switch
+803515E8:   callc [btlevtcmd_AnimeChangePoseType battle_event_cmd.o] LW(10) LW(11) LW(14)
+803515FC:   begin_child_thread
+80351600:     callc [btlevtcmd_RunDataEventChild battle_event_cmd.o] LW(10) 10
+80351610:   end_child_thread
+80351614:   callc [btlevtcmd_SetFallAccel battle_event_cmd.o] LW(10) 1.00
+80351624:   callc [btlevtcmd_GetPos battle_event_cmd.o] LW(10) LW(2) LW(3) LW(4)
+8035163C:   callc [btlevtcmd_FaceDirectionSub battle_event_cmd.o] LW(10) LW(2) 25
+80351650:   addi LW(3) 25
+8035165C:   callc [btlevtcmd_DivePosition battle_event_cmd.o] LW(10) LW(2) LW(3) LW(4) 10 0 0 0 -1
+80351688:   wait_ms 500
+80351690:   callc [btlevtcmd_SetFallAccel battle_event_cmd.o] LW(10) 1.00
+803516A0:   callc [btlevtcmd_GetPos battle_event_cmd.o] LW(10) LW(2) LW(3) LW(4)
+803516B8:   callc [btlevtcmd_TransStageFloorPosition battle_event_cmd.o] LW(2) LW(3) LW(4)
+803516CC:   callc [btlevtcmd_FaceDirectionSub battle_event_cmd.o] LW(10) LW(2) 30
+803516E0:   callc [btlevtcmd_JumpPosition battle_event_cmd.o] LW(10) LW(2) LW(3) LW(4) 20 -1
+80351700:   callc [btlevtcmd_FaceDirectionSub battle_event_cmd.o] LW(10) LW(2) 15
+80351714:   callc [btlevtcmd_JumpPosition battle_event_cmd.o] LW(10) LW(2) LW(3) LW(4) 10 -1
+80351734:   wait_frames 30
+8035173C:   callc [evt_btl_camera_set_mode battle_camera.o] 0 0
+8035174C:   return
+80351750:   end

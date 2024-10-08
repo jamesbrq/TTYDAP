@@ -1,0 +1,61 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [peach_evt_stg3_syuryo_talk aji_10.o] AT 805E9264 ---
+805E9264:   callc [evt_snd_bgmoff evt_snd.o] 512
+805E9270:   callc [evt_mario_key_onoff evt_mario.o] 0
+805E927C:   callc [evt_npc_flag_onoff evt_npc.o] 1 ["シュリョー"] 32
+805E9290:   callss [peach_move aji_10.o]
+805E9298:   callc [evt_mario_set_dir evt_mario.o] 90 200 0
+805E92AC:   wait_ms 300
+805E92B4:   callc [evt_set_dir_to_target evt_npc.o] ["シュリョー"] ["mario"]
+805E92C4:   wait_ms 500
+805E92CC:   callc [evt_msg_print evt_msg.o] 0 ["peach_aji_141"] 0 ["mario"]
+805E92E4:   callc [evt_msg_print evt_msg.o] 0 ["peach_aji_142"] 0 ["シュリョー"]
+805E92FC:   callc [evt_cam3d_evt_set evt_cam.o] -125 116 374 -125 57 -18 1000 11
+805E9324:   wait_ms 1000
+805E932C:   callc [evt_msg_print evt_msg.o] 0 ["peach_aji_143"] 0 ["mario"]
+805E9344:   callc [evt_msg_print evt_msg.o] 0 ["peach_aji_144"] 0 ["シュリョー"]
+805E935C:   callc [evt_msg_print evt_msg.o] 0 ["peach_aji_145"] 0 ["mario"]
+805E9374:   callc [evt_msg_print evt_msg.o] 0 ["peach_aji_146"] 0 ["シュリョー"]
+805E938C:   callc [evt_npc_set_ry evt_npc.o] ["シュリョー"] 90
+805E939C:   wait_ms 300
+805E93A4:   begin_thread
+805E93A8:     callc [evt_npc_move_position evt_npc.o] ["シュリョー"] -90 0 500 0 0
+805E93C8:     callc [evt_npc_set_ry evt_npc.o] ["シュリョー"] 270
+805E93D8:   end_thread
+805E93DC:   callc [evt_msg_print evt_msg.o] 0 ["peach_aji_147"] 0 ["mario"]
+805E93F4:   callc [evt_msg_print evt_msg.o] 0 ["peach_aji_148"] 0 ["シュリョー"]
+805E940C:   callc [evt_msg_print evt_msg.o] 0 ["peach_aji_149"] 0 ["mario"]
+805E9424:   callc [evt_msg_print evt_msg.o] 0 ["peach_aji_150"] 0 ["シュリョー"]
+805E943C:   callc [evt_msg_print evt_msg.o] 0 ["peach_aji_151"] 0 ["mario"]
+805E9454:   callc [evt_mario_mov_pos2 evt_mario.o] -300 0 80.00
+805E9468:   setii GSW(0) 168
+805E9474:   callc [evt_bero_mapchange evt_bero.o] ["aji_09"] ["s_bero"]
+805E9484:   return
+805E9488:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [peach_move aji_10.o] AT 805E9144 ---
+805E9144:   callc [evt_mario_get_pos evt_mario.o] 0 LW(0) LW(1) LW(2)
+805E915C:   callc [evt_npc_get_position evt_npc.o] ["シュリョー"] LW(3) LW(4) LW(5)
+805E9174:   setii LW(6) LW(3)
+805E9180:   addi LW(6) 35
+805E918C:   if_int_gt LW(0) LW(6)
+805E9198:     setii LW(6) LW(5)
+805E91A4:     subi LW(6) 10
+805E91B0:     setii LW(7) LW(5)
+805E91BC:     addi LW(7) 10
+805E91C8:     if_int_ge LW(2) LW(6)
+805E91D4:       if_int_le LW(2) LW(7)
+805E91E0:         subi LW(0) 5
+805E91EC:         callc [evt_mario_mov_pos2 evt_mario.o] LW(0) -15 70
+805E9200:       endif
+805E9204:     endif
+805E9208:   endif
+805E920C:   callc [evt_mario_get_pos evt_mario.o] 0 LW(0) LW(1) LW(2)
+805E9224:   if_int_gt LW(0) -130
+805E9230:     callc [evt_mario_mov_pos2 evt_mario.o] -130 LW(2) 70
+805E9244:   endif
+805E9248:   callc [evt_mario_mov_pos2 evt_mario.o] -150 0 70
+805E925C:   return
+805E9260:   end

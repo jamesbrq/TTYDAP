@@ -1,0 +1,68 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [damage_fire_explosion_event unit_bubble.o] AT 805D3718 ---
+805D3718:   callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 1 ["A_2B"]
+805D372C:   callc [btlevtcmd_GetPos battle_event_cmd.o] -2 LW(0) LW(1) LW(2)
+805D3744:   wait_frames LW(0)
+805D374C:   callc [btlevtcmd_GetPos battle_event_cmd.o] -2 LW(0) LW(1) LW(2)
+805D3764:   loop 0
+805D376C:     callc [btlevtcmd_FaceDirectionSub battle_event_cmd.o] -2 LW(0) 40
+805D3780:     if_int_le LW(0) 170
+805D378C:       addi LW(2) 10
+805D3798:       callc [btlevtcmd_CheckSpace battle_event_cmd.o] LW(3) LW(0) LW(1) LW(2) 40 0 0 0
+805D37C0:       if_int_eq LW(3) -1
+805D37CC:         callss [friend_event unit_bubble.o]
+805D37D4:         wait_ms 500
+805D37DC:         goto 99
+805D37E4:       endif
+805D37E8:     else
+805D37EC:       loop_break
+805D37F0:     endif
+805D37F4:   end_loop
+805D37F8:   callc [btlevtcmd_GetPos battle_event_cmd.o] -2 LW(0) LW(1) LW(2)
+805D3810:   loop 0
+805D3818:     callc [btlevtcmd_FaceDirectionAdd battle_event_cmd.o] -2 LW(0) 40
+805D382C:     if_int_ge LW(0) 10
+805D3838:       subi LW(2) 10
+805D3844:       callc [btlevtcmd_CheckSpace battle_event_cmd.o] LW(3) LW(0) LW(1) LW(2) 40 0 0 0
+805D386C:       if_int_eq LW(3) -1
+805D3878:         callss [friend_event unit_bubble.o]
+805D3880:         wait_ms 500
+805D3888:         goto 99
+805D3890:       endif
+805D3894:     else
+805D3898:       loop_break
+805D389C:     endif
+805D38A0:   end_loop
+805D38A4: 99:
+805D38AC:   return
+805D38B0:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [friend_event unit_bubble.o] AT 805D38B4 ---
+805D38B4:   callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] LW(10) LW(11) ["S_1"]
+805D38C8:   callc [btlevtcmd_GetPos battle_event_cmd.o] -2 LW(12) LW(13) LW(14)
+805D38E0:   callc [btlevtcmd_SpawnUnit battle_event_cmd.o] LW(3) [entry_bubble unit_bubble.o] 0
+805D38F4:   callc [bubble_copy_status unit_bubble.o] -2 LW(3)
+805D3904:   callc [btlevtcmd_SetPos battle_event_cmd.o] LW(3) LW(12) LW(13) LW(14)
+805D391C:   callc [btlevtcmd_JumpSetting battle_event_cmd.o] LW(3) 0 10 0.50
+805D3934:   callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_ENM_BUBBLE_SPLIT1"] [F1194D80] 0 [F1194D80]
+805D3950:   begin_child_thread
+805D3954:     callc [btlevtcmd_SetRotateOffset battle_event_cmd.o] LW(3) 0 10 0
+805D396C:     setii LW(12) 0
+805D3978:     loop 0
+805D3980:       wait_frames 1
+805D3988:       addi LW(12) 1
+805D3994:       if_int_ge LW(12) 30
+805D39A0:         loop_break
+805D39A4:       endif
+805D39A8:       callc [btlevtcmd_AddRotate battle_event_cmd.o] LW(3) 0 0 40
+805D39C0:     end_loop
+805D39C4:     callc [btlevtcmd_SetRotate battle_event_cmd.o] LW(3) 0 0 0
+805D39DC:     callc [btlevtcmd_SetRotateOffset battle_event_cmd.o] LW(3) 0 0 0
+805D39F4:   end_child_thread
+805D39F8:   callc [btlevtcmd_JumpPosition battle_event_cmd.o] LW(3) LW(0) LW(1) LW(2) 30.00 -1
+805D3A18:   callc [btlevtcmd_SetHomePos battle_event_cmd.o] LW(3) LW(0) LW(1) LW(2)
+805D3A30:   wait_ms 1000
+805D3A38:   return
+805D3A3C:   end

@@ -1,0 +1,39 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [dmg_turn_event unit_yamitogedaruma.o] AT 80CC4E14 ---
+80CC4E14:   setii LW(10) -2
+80CC4E20:   setii LW(11) 1
+80CC4E2C:   callc [btlevtcmd_SetPartsDefenceTable battle_event_cmd.o] LW(10) LW(11) [defence_turn unit_yamitogedaruma.o]
+80CC4E40:   callc [btlevtcmd_AnimeSetPoseTable battle_event_cmd.o] LW(10) LW(11) [pose_table_turn unit_yamitogedaruma.o]
+80CC4E54:   callc [btlevtcmd_OnStatusFlag battle_event_cmd.o] LW(10) 1
+80CC4E64:   callc [btlevtcmd_GetOverTurnCount battle_event_cmd.o] LW(10) LW(12)
+80CC4E74:   callc [btlevtcmd_SetOverTurnCount battle_event_cmd.o] LW(10) 2
+80CC4E84:   wait_frames 2
+80CC4E8C:   callc [btlevtcmd_snd_se battle_event_cmd.o] LW(10) ["SFX_ENM_INSIDE1"] [F1194D80] 0 [F1194D80]
+80CC4EA8:   callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] LW(10) LW(11) ["TGD_S_1"]
+80CC4EBC:   if_int_le LW(12) 0
+80CC4EC8:     setii LW(12) 0
+80CC4ED4:     callc [btlevtcmd_SetRotateOffset battle_event_cmd.o] -2 0 10 0
+80CC4EEC:     begin_child_thread
+80CC4EF0:       loop 0
+80CC4EF8:         if_int_ge LW(12) 10
+80CC4F04:           loop_break
+80CC4F08:         endif
+80CC4F0C:         addi LW(12) 1
+80CC4F18:         wait_frames 1
+80CC4F20:         callc [btlevtcmd_AddRotate battle_event_cmd.o] -2 0 0 -18
+80CC4F38:       end_loop
+80CC4F3C:     end_child_thread
+80CC4F40:   endif
+80CC4F44:   callc [btlevtcmd_SetFallAccel battle_event_cmd.o] -2 0.70
+80CC4F54:   callc [btlevtcmd_GetPos battle_event_cmd.o] -2 LW(0) LW(1) LW(2)
+80CC4F6C:   callc [btlevtcmd_JumpPosition battle_event_cmd.o] -2 LW(0) LW(1) LW(2) 25 -1
+80CC4F8C:   callc [btlevtcmd_SetRotate battle_event_cmd.o] -2 0 0 0
+80CC4FA4:   callc [btlevtcmd_SetRotateOffset battle_event_cmd.o] -2 0 0 0
+80CC4FBC:   callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] LW(10) LW(11) ["TGD_S_5"]
+80CC4FD0:   callc [btlevtcmd_GetPos battle_event_cmd.o] -2 LW(0) LW(1) LW(2)
+80CC4FE8:   callc [btlevtcmd_SetPos battle_event_cmd.o] -2 LW(0) 10 LW(2)
+80CC5000:   callc [btlevtcmd_SetHomePos battle_event_cmd.o] -2 LW(0) 10 LW(2)
+80CC5018:   return
+80CC501C:   end

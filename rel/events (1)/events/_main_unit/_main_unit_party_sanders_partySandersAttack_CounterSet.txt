@@ -1,0 +1,73 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [partySandersAttack_CounterSet unit_party_sanders.o] AT 8038A4C4 ---
+8038A4C4:   callc [btlevtcmd_JumpSetting battle_event_cmd.o] -2 20 0.00 0.70
+8038A4DC:   callc [btlevtcmd_GetSelectEnemy battle_event_cmd.o] LW(3) LW(4)
+8038A4EC:   if_int_eq LW(3) -1
+8038A4F8:     goto 99
+8038A500:   endif
+8038A504:   setii LW(12) [partyWeapon_SandersCounterSet unit_party_sanders.o]
+8038A510:   callc [btlevtcmd_PayWeaponCost battle_event_cmd.o] -2 LW(12)
+8038A520:   callc [btlevtcmd_RunDataEventChild battle_event_cmd.o] -2 7
+8038A530:   wait_frames 20
+8038A538:   callc [btlevtcmd_GetPos battle_event_cmd.o] -2 LW(0) [F1194D80] [F1194D80]
+8038A550:   callc [btlevtcmd_GetPos battle_event_cmd.o] -3 LW(1) [F1194D80] [F1194D80]
+8038A568:   addi LW(0) LW(1)
+8038A574:   divi LW(0) 2
+8038A580:   callc [evt_btl_camera_set_mode battle_camera.o] 0 3
+8038A590:   callc [evt_btl_camera_set_moveto battle_camera.o] 1 LW(0) 73 400 LW(0) 43 0 30 5
+8038A5BC:   callc [btlevtcmd_GetBodyId battle_event_cmd.o] -2 LW(9)
+8038A5CC:   callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 LW(9) ["O_1"]
+8038A5E0:   callc [btlevtcmd_CommandGetWeaponActionLv battle_event_cmd.o] LW(0)
+8038A5EC:   callc [btlevtcmd_AcSetDifficulty battle_event_cmd.o] -2 LW(0)
+8038A5FC:   callc [btlevtcmd_AcSetParamAll battle_event_cmd.o] 3 0 40 1 0 1 2 0
+8038A624:   callc [btlevtcmd_AcSetFlag battle_event_cmd.o] 8
+8038A630:   callc [btlevtcmd_SetupAC battle_event_cmd.o] -2 18 1 0
+8038A648:   wait_frames 52
+8038A650:   callc [btlevtcmd_AnimeWaitPlayComplete battle_event_cmd.o] -2 1
+8038A660:   callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 1 ["S_2"]
+8038A674:   callc [btlevtcmd_StartAC battle_event_cmd.o] 1
+8038A680:   callc [btlevtcmd_ResultAC battle_event_cmd.o]
+8038A688:   callc [btlevtcmd_GetResultAC battle_event_cmd.o] LW(0)
+8038A694:   callc [btlevtcmd_StopAC battle_event_cmd.o]
+8038A69C:   if_bits_clear LW(0) 2
+8038A6A8:     callc [btlevtcmd_AudienceDeclareACResult battle_event_cmd.o] LW(12) -1
+8038A6B8:   else
+8038A6BC:     callc [btlevtcmd_AcGetOutputParam battle_event_cmd.o] 0 LW(0)
+8038A6CC:     subi LW(0) 1
+8038A6D8:     callc [btlevtcmd_GetResultPrizeLv battle_event_cmd.o] -1 LW(0) LW(6)
+8038A6EC:     callc [btlevtcmd_GetPos battle_event_cmd.o] -2 LW(0) LW(1) LW(2)
+8038A704:     callc [btlevtcmd_ACSuccessEffect battle_event_cmd.o] LW(6) LW(0) LW(1) LW(2)
+8038A71C:     callc [btlevtcmd_AudienceDeclareACResult battle_event_cmd.o] LW(12) LW(6)
+8038A72C:   endif
+8038A730:   callc [btlevtcmd_ACRStart battle_event_cmd.o] -2 0 12 12 0
+8038A74C:   callc [btlevtcmd_ACRGetResult battle_event_cmd.o] LW(6) LW(7)
+8038A75C:   switchi LW(6)
+8038A764:     case_int_ge 2
+8038A76C:       callc [btlevtcmd_CommandGetWeaponAddress battle_event_cmd.o] -2 LW(0)
+8038A77C:       callc [btlevtcmd_AudienceDeclareAcrobatResult battle_event_cmd.o] LW(0) 1 0 0 0
+8038A798:       callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 1 ["Y_1"]
+8038A7AC:       wait_frames 30
+8038A7B4:     case_default
+8038A7B8:       callc [evt_audience_acrobat_notry evt_audience.o]
+8038A7C0:   end_switch
+8038A7C4:   callc [btlevtcmd_AcGetOutputParam battle_event_cmd.o] 0 LW(0)
+8038A7D4:   addi LW(0) 1
+8038A7E0:   callc [_make_counterset_weapon unit_party_sanders.o] LW(12) LW(0)
+8038A7F0:   wait_frames 20
+8038A7F8:   begin_thread
+8038A7FC:     wait_frames 30
+8038A804:     callc [evt_btl_camera_set_mode battle_camera.o] 0 0
+8038A814:     callc [evt_btl_camera_set_moveSpeedLv battle_camera.o] 0 1
+8038A824:   end_thread
+8038A828:   callc [evt_audience_ap_recovery evt_audience.o]
+8038A830:   callc [btlevtcmd_InviteApInfoReport battle_event_cmd.o]
+8038A838:   callc [btlevtcmd_CheckDamage battle_event_cmd.o] -2 LW(3) LW(4) LW(12) 256 LW(5)
+8038A858:   wait_frames 80
+8038A860: 99:
+8038A868:   callc [evt_audience_ap_recovery evt_audience.o]
+8038A870:   callc [btlevtcmd_InviteApInfoReport battle_event_cmd.o]
+8038A878:   callc [btlevtcmd_StartWaitEvent battle_event_cmd.o] -2
+8038A884:   return
+8038A888:   end

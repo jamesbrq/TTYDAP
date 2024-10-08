@@ -1,0 +1,72 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [mony_peton_talk gor_00.o] AT 805DB760 ---
+805DB760:   callc [evt_snd_bgmoff_f evt_snd.o] 1024 3000
+805DB770:   callc [evt_mario_key_onoff evt_mario.o] 0
+805DB77C:   wait_ms 500
+805DB784:   callc [evt_set_dir_to_target evt_npc.o] ["モニー"] ["mario"]
+805DB794:   callc [evt_msg_print evt_msg.o] 0 ["mac_2_072"] 0 ["モニー"]
+805DB7AC:   callc [evt_mario_get_pos evt_mario.o] 0 LW(0) LW(1) LW(2)
+805DB7C4:   callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_VOICE_MARIO_HAND_UP1_3"] LW(0) LW(1) LW(2) 0
+805DB7E0:   callc [evt_mario_set_pose evt_mario.o] ["M_I_2"]
+805DB7EC:   wait_ms 800
+805DB7F4:   callc [evt_msg_print evt_msg.o] 0 ["mac_2_073"] 0 ["モニー"]
+805DB80C:   callc [evt_npc_flag_onoff evt_npc.o] 1 ["モニー"] 1073741856
+805DB820:   callc [evt_npc_flag_onoff evt_npc.o] 1 ["ピートン"] 1073741856
+805DB834:   callc [evt_party_stop evt_party.o] 0
+805DB840:   begin_thread
+805DB844:     callc [evt_mario_get_pos evt_mario.o] 0 LW(0) LW(1) LW(2)
+805DB85C:     if_int_ge LW(0) 150
+805DB868:       callc [evt_mario_mov_pos2 evt_mario.o] LW(0) 235 120.00
+805DB87C:     endif
+805DB880:     callc [evt_mario_mov_pos2 evt_mario.o] 80 240 120.00
+805DB894:     callc [evt_mario_set_dir evt_mario.o] 90 200 0
+805DB8A8:   end_thread
+805DB8AC:   begin_thread
+805DB8B0:     callc [evt_party_move_pos2 evt_party.o] 0 55 235 120.00
+805DB8C8:     callc [evt_party_set_dir evt_party.o] 0 90 200
+805DB8DC:   end_thread
+805DB8E0:   callc [evt_cam3d_evt_set evt_cam.o] 157 115 562 157 55 217 1000 11
+805DB908:   callc [evt_npc_set_ry evt_npc.o] ["モニー"] 90
+805DB918:   callc [evt_npc_set_ry evt_npc.o] ["ピートン"] 270
+805DB928:   wait_ms 800
+805DB930:   callc [evt_msg_print evt_msg.o] 0 ["mac_2_074"] 0 ["モニー"]
+805DB948:   callc [evt_msg_print evt_msg.o] 0 ["mac_2_075"] 0 ["ピートン"]
+805DB960:   callc [evt_msg_print evt_msg.o] 0 ["mac_2_076"] 0 ["モニー"]
+805DB978:   callc [evt_msg_print evt_msg.o] 0 ["mac_2_077"] 0 ["ピートン"]
+805DB990:   callc [evt_msg_print evt_msg.o] 0 ["mac_2_078"] 0 ["モニー"]
+805DB9A8:   callc [evt_msg_print evt_msg.o] 0 ["mac_2_079"] 0 ["ピートン"]
+805DB9C0:   callc [evt_msg_print evt_msg.o] 0 ["mac_2_080"] 0 ["モニー"]
+805DB9D8:   callc [evt_msg_print evt_msg.o] 0 ["mac_2_081"] 0 ["ピートン"]
+805DB9F0:   callc [evt_msg_print evt_msg.o] 0 ["mac_2_082"] 0 ["モニー"]
+805DBA08:   callc [evt_npc_get_position evt_npc.o] ["モニー"] LW(0) LW(1) LW(2)
+805DBA20:   callc [evt_mario_get_pos evt_mario.o] 0 LW(3) LW(1) LW(2)
+805DBA38:   if_int_gt LW(0) LW(3)
+805DBA44:     callc [evt_npc_set_ry evt_npc.o] ["モニー"] 270
+805DBA54:     callc [evt_npc_get_position evt_npc.o] ["モニー"] LW(0) LW(1) LW(2)
+805DBA6C:   else
+805DBA70:     callc [evt_npc_get_position evt_npc.o] ["ピートン"] LW(0) LW(1) LW(2)
+805DBA88:   endif
+805DBA8C:   callc [evt_cam3d_evt_set evt_cam.o] LW(0) 115 562 LW(0) 55 217 300 11
+805DBAB4:   wait_ms 600
+805DBABC:   callc [evt_msg_print evt_msg.o] 0 ["mac_2_083"] 0 ["モニー"]
+805DBAD4:   callc [evt_msg_select evt_msg.o] 0 ["mac_2_083_yesno"]
+805DBAE4:   if_int_eq LW(0) 0
+805DBAF0:     callc [evt_msg_print_add evt_msg.o] 0 ["mac_2_084"]
+805DBB00:     setii GSWF(1176) 1
+805DBB0C:   else
+805DBB10:     callc [evt_msg_print_add evt_msg.o] 0 ["mac_2_086"]
+805DBB20:     setii GSWF(1176) 0
+805DBB2C:   endif
+805DBB30:   callc [evt_npc_flag_onoff evt_npc.o] 0 ["モニー"] 1073741856
+805DBB44:   callc [evt_npc_flag_onoff evt_npc.o] 0 ["ピートン"] 1073741856
+805DBB58:   callc [evt_cam3d_evt_off evt_cam.o] 500 11
+805DBB68:   callc [evt_party_run evt_party.o] 0
+805DBB74:   callc [evt_run_case_evt evt_case.o] 0 1 ["A_oku_yuka_01"] 0 [mony_peton_after gor_00.o] 0
+805DBB94:   setii GSW(0) 123
+805DBBA0:   callc [evt_mario_key_onoff evt_mario.o] 1
+805DBBAC:   callc [evt_snd_bgmoff_f evt_snd.o] 513 2000
+805DBBBC:   callc [evt_snd_bgmon_f evt_snd.o] 288 0 2000
+805DBBD0:   return
+805DBBD4:   end

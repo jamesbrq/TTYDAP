@@ -1,0 +1,74 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [bero_case_exec_road evt_bero.o] AT 8030DAC8 ---
+8030DAC8:   callc [evt_mario_key_onoff evt_mario.o] 0
+8030DAD4:   callss [bero_case_init_check evt_bero.o]
+8030DADC:   callc [evt_mario_key_onoff evt_mario.o] 1
+8030DAE8:   if_int_eq LW(0) 1
+8030DAF4:     return
+8030DAF8:   endif
+8030DAFC:   callc [evt_mario_key_onoff evt_mario.o] 0
+8030DB08:   begin_thread
+8030DB0C:     setii LW(0) LW(5)
+8030DB18:     muli LW(0) 45
+8030DB24:     callc [evt_mario_set_force_dir evt_mario.o] LW(0)
+8030DB30:     callc [evt_mario_wait_landon evt_mario.o]
+8030DB38:     callc [bero_get_position_normal evt_bero.o] 0 150.00
+8030DB48:     loadf LW(10) [BeroEX evt_bero.o]
+8030DB54:     loadf LW(12) [BeroEZ evt_bero.o]
+8030DB60:     callc [evt_mario_mov_pos2 evt_mario.o] LW(10) LW(12) 150.00
+8030DB74:     callc [evt_bero_exec_onoff evt_bero.o] 0 65536
+8030DB84:     callc [evt_bero_exec_onoff evt_bero.o] 1 1
+8030DB94:   end_thread
+8030DB98:   wait_ms 150
+8030DBA0:   callc [evt_bero_exec_onoff evt_bero.o] 0 8
+8030DBB0:   wait_frames 2
+8030DBB8:   callc [evt_bero_1stcheck evt_bero.o] LW(0)
+8030DBC4:   if_int_eq LW(0) 1
+8030DBD0:     wait_ms 1000
+8030DBD8:   endif
+8030DBDC:   callc [evt_bero_mapchange evt_bero.o] LW(13) LW(14)
+8030DBEC:   return
+8030DBF0:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [bero_case_init_check evt_bero.o] AT 8030D888 ---
+8030D888:   callc [evt_bero_exec_onoff evt_bero.o] 1 65536
+8030D898:   callc [evt_bero_exec_get evt_bero.o] LW(0)
+8030D8A4:   andr LW(0) 0x1
+8030D8B0:   if_int_ne LW(0) 0
+8030D8BC:     setii LW(0) 1
+8030D8C8:     return
+8030D8CC:   endif
+8030D8D0:   callc [evt_npc_change_fbat_mode evt_npc.o] 7
+8030D8DC:   callc [evt_npc_stop_for_event evt_npc.o]
+8030D8E4:   setii LW(0) LW(4)
+8030D8F0:   andr LW(0) 0xFFF
+8030D8FC:   switchi LW(0)
+8030D904:     case_int_eq_any 0
+8030D90C:     case_int_eq_any 1
+8030D914:       callc [evt_bero_get_info_length evt_bero.o] LW(1) LW(0)
+8030D924:       callc [bero_get_position_normal evt_bero.o] 0 LW(0)
+8030D934:       end_multi_case
+8030D938:     case_int_eq_any 3840
+8030D940:     case_int_eq_any 3
+8030D948:       callc [bero_get_position_normal evt_bero.o] 0 0.00
+8030D958:       end_multi_case
+8030D95C:     case_int_eq 2
+8030D964:       callc [evt_bero_get_info_length evt_bero.o] LW(1) LW(0)
+8030D974:       callc [bero_get_position_pipe_pure evt_bero.o] 0 LW(0)
+8030D984:   end_switch
+8030D988:   callc [evt_bero_set_now_number evt_bero.o] LW(1)
+8030D994:   callc [evt_bero_exec_onoff evt_bero.o] 0 1
+8030D9A4:   setii LW(15) 0
+8030D9B0:   callss LW(11)
+8030D9B8:   if_int_eq LW(0) 1
+8030D9C4:     callc [evt_npc_change_fbat_mode evt_npc.o] 1
+8030D9D0:     callc [evt_npc_start_for_event evt_npc.o]
+8030D9D8:     callc [evt_bero_exec_onoff evt_bero.o] 0 65536
+8030D9E8:     callc [evt_bero_exec_onoff evt_bero.o] 1 1
+8030D9F8:     setii LW(0) 1
+8030DA04:     return
+8030DA08:   endif
+8030DA0C:   return
+8030DA10:   end

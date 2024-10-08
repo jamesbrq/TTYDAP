@@ -1,0 +1,83 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [evt_kinoshikowa tou_05.o] AT 805E93D8 ---
+805E93D8:   callc [evt_msg_print evt_msg.o] 0 ["stg3_tou_57"] 0 ["ガンス"]
+805E93F0:   wait_ms 300
+805E93F8:   callc [evt_npc_set_position evt_npc.o] ["キノシコワ"] 0 0 -180
+805E9410:   setii LW(1) 0
+805E941C:   callsa [bero_open_door_play_se evt_bero.o]
+805E9424:   callc [evt_sub_intpl_msec_init evt_sub.o] 11 0 -180 500
+805E943C:   loop 0
+805E9444:     callc [evt_sub_intpl_msec_get_value evt_sub.o]
+805E944C:     callss [n_door_open tou_05.o]
+805E9454:     if_int_eq LW(1) 0
+805E9460:       loop_break
+805E9464:     endif
+805E9468:   end_loop
+805E946C:   begin_thread
+805E9470:     wait_ms 2000
+805E9478:     setii LW(1) 0
+805E9484:     callsa [bero_close_door_play_se evt_bero.o]
+805E948C:     callc [evt_sub_intpl_msec_init evt_sub.o] 11 -180 0 500
+805E94A4:     loop 0
+805E94AC:       callc [evt_sub_intpl_msec_get_value evt_sub.o]
+805E94B4:       callss [n_door_open tou_05.o]
+805E94BC:       if_int_eq LW(1) 0
+805E94C8:         loop_break
+805E94CC:       endif
+805E94D0:     end_loop
+805E94D4:   end_thread
+805E94D8:   callc [evt_npc_status_onoff evt_npc.o] 1 ["キノシコワ"] 2
+805E94EC:   callc [evt_npc_move_position evt_npc.o] ["キノシコワ"] 1 -70 0 50.00 1
+805E950C:   callc [evt_npc_move_position evt_npc.o] ["キノシコワ"] 35 -75 0 50.00 1
+805E952C:   wait_ms 300
+805E9534:   callc [evt_npc_set_anim evt_npc.o] ["キノシコワ"] ["M_1"]
+805E9544:   wait_ms 600
+805E954C:   callc [evt_npc_set_anim evt_npc.o] ["キノシコワ"] ["S_1"]
+805E955C:   callc [evt_mario_set_dir_npc evt_mario.o] ["ガンス"]
+805E9568:   callc [evt_set_dir_to_target evt_npc.o] ["キノシコワ"] ["ガンス"]
+805E9578:   callc [evt_msg_print evt_msg.o] 0 ["stg3_tou_58"] 0 ["キノシコワ"]
+805E9590:   wait_ms 300
+805E9598:   callc [evt_msg_print evt_msg.o] 0 ["stg3_tou_59"] 0 ["ガンス"]
+805E95B0:   wait_ms 300
+805E95B8:   callc [evt_npc_set_anim evt_npc.o] ["キノシコワ"] ["M_1"]
+805E95C8:   wait_ms 600
+805E95D0:   callc [evt_msg_print evt_msg.o] 0 ["stg3_tou_60"] 0 ["キノシコワ"]
+805E95E8:   wait_ms 300
+805E95F0:   callc [evt_mario_set_dir_npc evt_mario.o] ["キノシコワ"]
+805E95FC:   callc [evt_set_dir_to_target evt_npc.o] ["キノシコワ"] ["mario"]
+805E960C:   callc [evt_msg_print evt_msg.o] 0 ["stg3_tou_61"] 0 ["キノシコワ"]
+805E9624:   wait_ms 300
+805E962C:   callc [evt_npc_set_anim evt_npc.o] ["キノシコワ"] ["M_1"]
+805E963C:   wait_ms 600
+805E9644:   begin_thread
+805E9648:     wait_ms 1000
+805E9650:     callc [evt_mario_mov_pos evt_mario.o] 0 -200 3000
+805E9664:   end_thread
+805E9668:   callc [evt_npc_move_position evt_npc.o] ["キノシコワ"] 0 -120 0 50.00 1
+805E9688:   setii LW(1) 0
+805E9694:   callsa [bero_open_door_play_se evt_bero.o]
+805E969C:   callc [evt_sub_intpl_msec_init evt_sub.o] 11 0 180 500
+805E96B4:   loop 0
+805E96BC:     callc [evt_sub_intpl_msec_get_value evt_sub.o]
+805E96C4:     callss [n_door_open tou_05.o]
+805E96CC:     if_int_eq LW(1) 0
+805E96D8:       loop_break
+805E96DC:     endif
+805E96E0:   end_loop
+805E96E4:   begin_thread
+805E96E8:     callc [evt_npc_move_position evt_npc.o] ["キノシコワ"] 0 -200 0 50.00 1
+805E9708:     callc [evt_npc_set_position evt_npc.o] ["キノシコワ"] 0 -1000 0
+805E9720:   end_thread
+805E9724:   wait_ms 500
+805E972C:   setii GSWF(2376) 1
+805E9738:   callc [evt_bero_mapchange evt_bero.o] ["tou_04"] 0
+805E9748:   return
+805E974C:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [n_door_open tou_05.o] AT 805E7E00 ---
+805E7E00:   mulf LW(0) 0.44
+805E7E0C:   callc [evt_mapobj_rotate evt_map.o] 1 ["door_1"] 0 LW(0) 0
+805E7E28:   return
+805E7E2C:   end

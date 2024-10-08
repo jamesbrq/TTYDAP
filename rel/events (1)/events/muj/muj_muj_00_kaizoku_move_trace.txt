@@ -1,0 +1,53 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [kaizoku_move_trace muj_00.o] AT 805D532C ---
+805D532C:   setff LW(5) GW(5)
+805D5338:   setff LW(6) GW(6)
+805D5344:   setii LW(8) 0
+805D5350:   setii LW(9) LW(0)
+805D535C:   muli LW(9) 100
+805D5368:   callc [evt_sub_spline_init evt_sub.o] 1 0 [kaizoku_spline_dt muj_00.o] 10 0 LW(0)
+805D5388:   loop 0
+805D5390:     setii LW(10) LW(8)
+805D539C:     divi LW(10) 100
+805D53A8:     callc [evt_sub_spline_get_value_manual evt_sub.o] LW(10) LW(0) LW(1) LW(2)
+805D53C0:     switchi LW(8)
+805D53C8:       case_int_lt 200000
+805D53D0:         setii LW(7) 600
+805D53DC:       case_int_lt 300000
+805D53E4:         setii LW(7) 1000
+805D53F0:       case_int_lt 400000
+805D53F8:         setii LW(7) 1300
+805D5404:       case_int_lt 600000
+805D540C:         setii LW(7) 1600
+805D5418:       case_int_lt 800000
+805D5420:         setii LW(7) 2000
+805D542C:     end_switch
+805D5430:     addi LW(8) LW(7)
+805D543C:     setii LW(3) 1
+805D5448:     if_int_ge LW(8) LW(9)
+805D5454:       setii LW(3) 0
+805D5460:     endif
+805D5464:     setff GW(5) LW(0)
+805D5470:     setff GW(6) LW(2)
+805D547C:     setii LF(0) 1
+805D5488:     if_float_eq GW(5) LW(5)
+805D5494:       if_float_eq GW(6) LW(6)
+805D54A0:         setii LF(0) 0
+805D54AC:       endif
+805D54B0:     endif
+805D54B4:     if_int_eq LF(0) 1
+805D54C0:       callc [ship_rotate muj_00.o] LW(5) LW(6) GW(5) GW(6) GW(4)
+805D54DC:     endif
+805D54E0:     if_int_eq LW(3) 0
+805D54EC:       loop_break
+805D54F0:     endif
+805D54F4:     wait_frames 1
+805D54FC:     setff LW(5) GW(5)
+805D5508:     setff LW(6) GW(6)
+805D5514:   end_loop
+805D5518:   callc [evt_sub_spline_free evt_sub.o]
+805D5520:   setii GF(10) 0
+805D552C:   return
+805D5530:   end

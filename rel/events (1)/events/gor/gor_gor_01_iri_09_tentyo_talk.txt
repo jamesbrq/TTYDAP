@@ -1,0 +1,64 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [iri_09_tentyo_talk gor_01.o] AT 805F5820 ---
+805F5820:   if_int_eq GSWF(5383) 1
+805F582C:     setii LW(0) 0
+805F5838:     return
+805F583C:   endif
+805F5840:   if_int_eq GSWF(5405) 0
+805F584C:     callc [evt_msg_print evt_msg.o] 0 ["irai_09_001"] 0 ["店長"]
+805F5864:     setii GSWF(5405) 1
+805F5870:     setii LW(0) -1
+805F587C:   else
+805F5880:     callc [evt_msg_print evt_msg.o] 0 ["irai_09_002"] 0 ["店長"]
+805F5898:     callc [evt_pouch_check_item evt_pouch.o] 143 LW(0)
+805F58A8:     if_int_gt LW(0) 0
+805F58B4:       callc [iri_09_item_tbl_alloc gor_01.o] LW(0)
+805F58C0:       loop 0
+805F58C8:         callc [evt_msg_continue evt_msg.o]
+805F58D0:         callc [iri_09_item_tbl_make gor_01.o] LW(0) LW(1)
+805F58E0:         callc [evt_win_item_select evt_window.o] 0 LW(1) LW(2) 0
+805F58F8:         if_int_eq LW(2) -1
+805F5904:           setii LF(0) 1
+805F5910:           loop_break
+805F5914:         endif
+805F5918:         callc [evt_msg_print evt_msg.o] 0 ["irai_09_003"] 0 ["店長"]
+805F5930:         callc [evt_pouch_remove_item evt_pouch.o] 143 LW(1)
+805F5940:         addi GSW(1469) 1
+805F594C:         if_int_eq GSW(1469) 5
+805F5958:           setii LF(0) 0
+805F5964:           loop_break
+805F5968:         endif
+805F596C:         callc [evt_pouch_check_item evt_pouch.o] 143 LW(0)
+805F597C:         if_int_le LW(0) 0
+805F5988:           setii LF(0) 0
+805F5994:           loop_break
+805F5998:         endif
+805F599C:       end_loop
+805F59A0:       callc [iri_09_item_tbl_free gor_01.o]
+805F59A8:       if_int_lt GSW(1469) 5
+805F59B4:         if_int_eq LF(0) 0
+805F59C0:           callc [evt_msg_print_add evt_msg.o] 0 ["irai_09_006_1"]
+805F59D0:         else
+805F59D4:           callc [evt_msg_print evt_msg.o] 0 ["irai_09_006_1"] 0 ["店長"]
+805F59EC:         endif
+805F59F0:       else
+805F59F4:         callc [evt_msg_print_add evt_msg.o] 0 ["irai_09_004"]
+805F5A04:         callc [evt_item_entry evt_item.o] ["uk"] 150 0 -1000 0 17 -1 0
+805F5A2C:         callc [evt_item_get_item evt_item.o] ["uk"]
+805F5A38:         callc [evt_item_get_item_end_wait evt_item.o] ["uk"]
+805F5A44:         callc [evt_msg_print evt_msg.o] 0 ["irai_09_006"] 0 ["店長"]
+805F5A5C:         setii GSW(1420) 0
+805F5A68:         setii GSWF(5383) 1
+805F5A74:         callc [evt_msg_print evt_msg.o] 0 ["sys_request_finish"] 0 0
+805F5A8C:         setii LW(0) -1
+805F5A98:         return
+805F5A9C:       endif
+805F5AA0:     else
+805F5AA4:       callc [evt_msg_print_add evt_msg.o] 0 ["irai_09_008"]
+805F5AB4:     endif
+805F5AB8:     setii LW(0) -100
+805F5AC4:   endif
+805F5AC8:   return
+805F5ACC:   end

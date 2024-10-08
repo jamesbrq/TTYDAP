@@ -1,0 +1,168 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [rsh_01_a_init_evt_nidome rsh_01.o] AT 805D6150 ---
+805D6150:   if_int_eq GSWF(3578) 0
+805D615C:     setii LW(0) [bero_data_a rsh_01.o]
+805D6168:   else
+805D616C:     setii LW(0) [bero_data_a_return rsh_01.o]
+805D6178:   endif
+805D617C:   callc [evt_bero_get_info evt_bero.o]
+805D6184:   callss [evt_bero_info_run evt_bero.o]
+805D618C:   callss [rsh_01_init_evt_nidome rsh_01.o]
+805D6194:   callc [evt_npc_setup evt_npc.o] [npc_data_2 rsh_01.o]
+805D61A0:   setii GSWF(3453) 1
+805D61AC:   setii GSWF(3454) 0
+805D61B8:   setii GSWF(3455) 0
+805D61C4:   if_int_eq GSWF(3461) 1
+805D61D0:     setii LW(0) ["s_bero"]
+805D61DC:     callss [bero_case_switch_off evt_bero.o]
+805D61E4:     callc [evt_bero_overwrite evt_bero.o] ["s_bero"] [gor_bero rsh_01.o]
+805D61F4:     setii LW(0) ["s_bero"]
+805D6200:     callss [bero_case_switch_on evt_bero.o]
+805D6208:   endif
+805D620C:   return
+805D6210:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [rsh_01_init_evt_nidome rsh_01.o] AT 805D5E18 ---
+805D5E18:   if_int_eq GSWF(3579) 0
+805D5E24:     if_int_eq GSWF(3580) 0
+805D5E30:       if_int_eq GSWF(3581) 0
+805D5E3C:         callc [evt_map_playanim evt_map.o] ["yure"] 1 0
+805D5E50:         if_int_eq GSWF(3578) 0
+805D5E5C:           callc [evt_map_playanim evt_map.o] ["hai_sora"] 1 0
+805D5E70:           callc [evt_map_playanim evt_map.o] ["hai_yama"] 1 0
+805D5E84:           callc [evt_map_playanim evt_map.o] ["hai_iwayama"] 1 0
+805D5E98:           callc [evt_map_playanim evt_map.o] ["hai_saboten"] 1 0
+805D5EAC:         else
+805D5EB0:           callc [evt_map_playanim evt_map.o] ["rt_hai_sora"] 1 0
+805D5EC4:           callc [evt_map_playanim evt_map.o] ["rt_hai_yama"] 1 0
+805D5ED8:           callc [evt_map_playanim evt_map.o] ["rt_hai_iwayama"] 1 0
+805D5EEC:           callc [evt_map_playanim evt_map.o] ["rt_hai_saboten"] 1 0
+805D5F00:         endif
+805D5F04:       endif
+805D5F08:     endif
+805D5F0C:   endif
+805D5F10:   callss [evt_rsh_door_init rsh.o]
+805D5F18:   setii LW(0) [door_3 rsh_01.o]
+805D5F24:   callss [evt_rsh_door_entry rsh.o]
+805D5F2C:   setii LW(0) [door_4 rsh_01.o]
+805D5F38:   callss [evt_rsh_door_entry rsh.o]
+805D5F40:   callss [evt_access_entry rsh_01.o]
+805D5F48:   if_int_eq GSWF(3579) 0
+805D5F54:     if_int_eq GSWF(3580) 0
+805D5F60:       if_int_eq GSWF(3581) 0
+805D5F6C:         begin_thread
+805D5F70:           callc [evt_bero_exec_wait evt_bero.o] 65536
+805D5F7C:           setii LW(0) ["s_bero"]
+805D5F88:           callss [bero_case_switch_off evt_bero.o]
+805D5F90:           setii LW(1) ["stg6_rsh_261"]
+805D5F9C:           setii LW(2) ["stg6_rsh_261"]
+805D5FA8:           callc [evt_run_case_evt evt_case.o] 9 1 ["s_bero"] 0 [evt_access rsh_01.o] 0
+805D5FC8:         end_thread
+805D5FCC:       endif
+805D5FD0:     endif
+805D5FD4:   endif
+805D5FD8:   if_int_eq GSWF(3460) 1
+805D5FE4:     callc [evt_snd_bgmon evt_snd.o] 512 ["BGM_STG6_PIK1"]
+805D5FF4:     callc [evt_snd_envoff evt_snd.o] 512
+805D6000:     callc [evt_snd_bgmoff evt_snd.o] 26624
+805D600C:   else
+805D6010:     if_int_eq GSWF(3461) 1
+805D601C:       callc [evt_snd_bgmon evt_snd.o] 512 ["BGM_STG0_GOR1"]
+805D602C:       callc [evt_snd_envoff evt_snd.o] 512
+805D6038:       callc [evt_snd_bgmoff evt_snd.o] 26624
+805D6044:     else
+805D6048:       callc [evt_sub_get_mapname evt_sub.o] LW(0)
+805D6054:       if_string_eq LW(0) ["rsh_01_a"]
+805D6060:         callc [evt_snd_bgmon evt_snd.o] 512 ["BGM_STG6_RSH1"]
+805D6070:         callc [evt_snd_envon evt_snd.o] 272 ["ENV_STG6_RSH1"]
+805D6080:       endif
+805D6084:       if_string_eq LW(0) ["rsh_01_b"]
+805D6090:       endif
+805D6094:       if_string_eq LW(0) ["rsh_01_c"]
+805D60A0:         callc [evt_snd_bgmon evt_snd.o] 512 ["BGM_STG6_RSH2"]
+805D60B0:         callc [evt_snd_envon evt_snd.o] 272 ["ENV_STG6_RSH1"]
+805D60C0:       endif
+805D60C4:     endif
+805D60C8:   endif
+805D60CC:   callss [evt_rsh_01_rnd_npc_entry rsh.o]
+805D60D4:   if_int_eq GSWF(3578) 1
+805D60E0:     callc [evt_npc_set_position evt_npc.o] ["車掌"] 395 0 -90
+805D60F8:     callc [evt_npc_flag_onoff evt_npc.o] 1 ["車掌"] 1073874448
+805D610C:     callc [evt_npc_set_ry evt_npc.o] ["車掌"] 270
+805D611C:     callc [evt_npc_change_interrupt evt_npc.o] ["車掌"] 6 [talk_syasyou rsh_01.o]
+805D6130:     setii LW(0) ["e_bero"]
+805D613C:     callss [bero_case_switch_off evt_bero.o]
+805D6144:   endif
+805D6148:   return
+805D614C:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [evt_rsh_door_init rsh.o] AT 805D0228 ---
+805D0228:   callc [evt_paper_entry evt_paper.o] ["OFF_d_meku"]
+805D0234:   callc [evt_img_entry evt_img.o] ["capture_img"]
+805D0240:   callc [evt_img_set_paper evt_img.o] ["capture_img"] ["OFF_d_meku"]
+805D0250:   callc [evt_img_set_paper_anim evt_img.o] ["capture_img"] ["Z_1"]
+805D0260:   callc [evt_offscreen_entry evt_offscreen.o] ["offscreen"]
+805D026C:   callc [evt_img_onoff evt_img.o] ["capture_img"] 0
+805D027C:   return
+805D0280:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [evt_rsh_door_entry rsh.o] AT 805D0284 ---
+805D0284:   mo_set_base_int LW(0)
+805D028C:   mo_read_int LW(1)
+805D0294:   mo_read_int LW(2)
+805D029C:   mo_read_int LW(3)
+805D02A4:   mo_read_int LW(4)
+805D02AC:   mo_read_int LW(5)
+805D02B4:   mo_read_int LW(6)
+805D02BC:   mo_read_int LW(7)
+805D02C4:   callc [evt_mapobj_flag_onoff evt_map.o] 1 1 LW(1) 1
+805D02DC:   callc [evt_mapobj_flag_onoff evt_map.o] 1 1 LW(2) 1
+805D02F4:   callc [evt_run_case_evt evt_case.o] 9 1 LW(4) 0 [evt_rsh_door_open rsh.o] 0
+805D0314:   callc [evt_run_case_evt evt_case.o] 9 1 LW(6) 0 [evt_rsh_door_close rsh.o] 0
+805D0334:   return
+805D0338:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [evt_access_entry rsh_01.o] AT 805D54EC ---
+805D54EC:   mo_set_base_int [access_tbl rsh_01.o]
+805D54F4:   loop 0
+805D54FC:     mo_read_int3 LW(0) LW(1) LW(2)
+805D550C:     if_int_eq LW(0) 0
+805D5518:       loop_break
+805D551C:     endif
+805D5520:     callc [evt_run_case_evt evt_case.o] 9 1 LW(0) 0 [evt_access rsh_01.o] 0
+805D5540:   end_loop
+805D5544:   return
+805D5548:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [evt_rsh_01_rnd_npc_entry rsh.o] AT 805D1E3C ---
+805D1E3C:   callc [evt_rsh_get_rnd_npc rsh.o] 0 0 LW(0)
+805D1E50:   callc [evt_rsh_get_rnd_npc_data rsh.o] 0 0 LW(0) LW(1) LW(2)
+805D1E6C:   callc [evt_rsh_get_rnd_npc_talk_evt rsh.o] 0 0 LW(0) LW(3)
+805D1E84:   callc [evt_npc_entry evt_npc.o] ["乗客１"] LW(1)
+805D1E94:   callc [evt_npc_set_tribe evt_npc.o] ["乗客１"] LW(2)
+805D1EA4:   callc [evt_npc_set_position evt_npc.o] ["乗客１"] -275 0 -225
+805D1EBC:   callc [evt_npc_set_ry evt_npc.o] ["乗客１"] 90
+805D1ECC:   callc [evt_npc_flag_onoff evt_npc.o] 1 ["乗客１"] 512
+805D1EE0:   callc [evt_rsh_set_rnd_npc_talk_evt rsh.o] ["乗客１"] LW(3)
+805D1EF0:   callc [evt_rsh_get_rnd_npc rsh.o] 0 1 LW(0)
+805D1F04:   callc [evt_rsh_get_rnd_npc_data rsh.o] 0 1 LW(0) LW(1) LW(2)
+805D1F20:   callc [evt_rsh_get_rnd_npc_talk_evt rsh.o] 0 1 LW(0) LW(3)
+805D1F38:   callc [evt_npc_entry evt_npc.o] ["乗客２"] LW(1)
+805D1F48:   callc [evt_npc_set_tribe evt_npc.o] ["乗客２"] LW(2)
+805D1F58:   callc [evt_npc_set_position evt_npc.o] ["乗客２"] -45 0 -175
+805D1F70:   callc [evt_npc_set_ry evt_npc.o] ["乗客２"] 90
+805D1F80:   callc [evt_npc_flag_onoff evt_npc.o] 1 ["乗客２"] 512
+805D1F94:   callc [evt_rsh_set_rnd_npc_talk_evt rsh.o] ["乗客２"] LW(3)
+805D1FA4:   callc [evt_rsh_get_rnd_npc rsh.o] 0 2 LW(0)
+805D1FB8:   callc [evt_rsh_get_rnd_npc_data rsh.o] 0 2 LW(0) LW(1) LW(2)
+805D1FD4:   callc [evt_rsh_get_rnd_npc_talk_evt rsh.o] 0 2 LW(0) LW(3)
+805D1FEC:   callc [evt_npc_entry evt_npc.o] ["乗客３"] LW(1)
+805D1FFC:   callc [evt_npc_set_tribe evt_npc.o] ["乗客３"] LW(2)
+805D200C:   callc [evt_npc_set_position evt_npc.o] ["乗客３"] 85 16 -255
+805D2024:   callc [evt_npc_set_ry evt_npc.o] ["乗客３"] 270
+805D2034:   callc [evt_npc_flag_onoff evt_npc.o] 1 ["乗客３"] 512
+805D2048:   callc [evt_rsh_set_rnd_npc_talk_evt rsh.o] ["乗客３"] LW(3)
+805D2058:   return
+805D205C:   end

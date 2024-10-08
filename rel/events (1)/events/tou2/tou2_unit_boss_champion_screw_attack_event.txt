@@ -1,0 +1,88 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [screw_attack_event unit_boss_champion.o] AT 805E11F4 ---
+805E11F4:   callc [btlevtcmd_GetEnemyBelong battle_event_cmd.o] -2 LW(0)
+805E1204:   callc [btlevtcmd_SamplingEnemy battle_event_cmd.o] -2 LW(0) LW(9)
+805E1218:   callc [btlevtcmd_ChoiceSamplingEnemy battle_event_cmd.o] LW(9) LW(3) LW(4)
+805E122C:   if_int_eq LW(3) -1
+805E1238:     callc [btlevtcmd_CheckToken battle_event_cmd.o] -2 16 LW(0)
+805E124C:     if_int_ne LW(0) 0
+805E1258:       callss [subsetevt_confuse_flustered battle_event_subset.o]
+805E1260:     endif
+805E1264:     return
+805E1268:   endif
+805E126C:   callc [btlevtcmd_WeaponAftereffect battle_event_cmd.o] LW(9)
+805E1278:   callc [btlevtcmd_AttackDeclareAll battle_event_cmd.o] -2
+805E1284:   callc [btlevtcmd_WaitGuardMove battle_event_cmd.o]
+805E128C:   callc [btlevtcmd_PayWeaponCost battle_event_cmd.o] -2 LW(9)
+805E129C:   callc [evt_btl_camera_set_mode battle_camera.o] 0 8
+805E12AC:   callc [evt_btl_camera_set_homing_unit battle_camera.o] 0 -2 LW(3)
+805E12C0:   callc [evt_btl_camera_set_moveSpeedLv battle_camera.o] 0 2
+805E12D0:   callc [evt_btl_camera_set_zoom battle_camera.o] 0 200
+805E12E0:   callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 1 ["J_1A"]
+805E12F4:   wait_ms 250
+805E12FC:   callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 1 ["J_1F"]
+805E1310:   callc [btlevtcmd_JumpSetting battle_event_cmd.o] -2 0 5.00 0.40
+805E1328:   callc [btlevtcmd_GetSelectEnemy battle_event_cmd.o] LW(3) LW(4)
+805E1338:   setii LW(10) 0
+805E1344: 10:
+805E134C:   callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_BOSS_BLED_CHOP_ROUND1"] [F1194D80] 0 [F1194D80]
+805E1368:   callc [btlevtcmd_GetHitPos battle_event_cmd.o] LW(3) LW(4) LW(0) LW(1) LW(2)
+805E1384:   callc [btlevtcmd_JumpPosition battle_event_cmd.o] -2 LW(0) LW(1) LW(2) 0 -1
+805E13A4:   callc [btlevtcmd_PreCheckDamage battle_event_cmd.o] -2 LW(3) LW(4) LW(9) 256 LW(5)
+805E13C4:   switchi LW(5)
+805E13CC:     case_int_eq_any 4
+805E13D4:       goto 90
+805E13DC:       end_multi_case
+805E13E0:     case_int_eq 3
+805E13E8:       callc [btlevtcmd_StartAvoid battle_event_cmd.o] LW(3) 38
+805E13F8:       goto 90
+805E1400:       end_multi_case
+805E1404:     case_int_eq 6
+805E140C:       callc [btlevtcmd_StartAvoid battle_event_cmd.o] LW(3) 39
+805E141C:       goto 90
+805E1424:     case_int_eq 2
+805E142C:       callc [btlevtcmd_StartAvoid battle_event_cmd.o] LW(3) 40
+805E143C:       goto 90
+805E1444:     case_int_eq 1
+805E144C:       goto 91
+805E1454:       end_multi_case
+805E1458:     case_default
+805E145C:       goto 98
+805E1464:       end_multi_case
+805E1468:   end_switch
+805E146C: 90:
+805E1474:   callc [btlevtcmd_JumpContinue battle_event_cmd.o] -2
+805E1480:   wait_ms 150
+805E1488:   goto 98
+805E1490: 91:
+805E1498:   if_int_eq LW(10) 0
+805E14A4:     callc [btlevtcmd_ResultACDefence battle_event_cmd.o] LW(3) LW(9)
+805E14B4:   endif
+805E14B8:   callc [btlevtcmd_CheckDamage battle_event_cmd.o] -2 LW(3) LW(4) LW(9) 256 LW(5)
+805E14D8: 97:
+805E14E0:   callc [btlevtcmd_GetSelectNextEnemy battle_event_cmd.o] LW(3) LW(4)
+805E14F0:   callc [btlevtcmd_JumpSetting battle_event_cmd.o] -2 0 1.50 0.70
+805E1508:   if_int_ne LW(3) -1
+805E1514:     addi LW(10) 1
+805E1520:     goto 10
+805E1528:   endif
+805E152C: 98:
+805E1534:   callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_BOSS_BLED_CHOP_ROUND1"] [F1194D80] 0 [F1194D80]
+805E1550:   callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 1 ["J_1B"]
+805E1564:   callc [btlevtcmd_GetPos battle_event_cmd.o] -2 LW(0) LW(1) LW(2)
+805E157C:   addi LW(0) 100
+805E1588:   callc [btlevtcmd_JumpSetting battle_event_cmd.o] -2 0 3.00 0.25
+805E15A0:   callc [btlevtcmd_JumpPosition battle_event_cmd.o] -2 LW(0) 0 LW(2) 0 -1
+805E15C0:   callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_BOSS_BLED_LANDING1"] [F1194D80] 0 [F1194D80]
+805E15DC:   callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 1 ["J_1A"]
+805E15F0:   wait_ms 250
+805E15F8:   callc [evt_btl_camera_set_mode battle_camera.o] 0 0
+805E1608:   callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 1 ["J_1C"]
+805E161C:   callc [btlevtcmd_GetHomePos battle_event_cmd.o] -2 LW(0) LW(1) LW(2)
+805E1634:   callc [btlevtcmd_JumpSetting battle_event_cmd.o] -2 0 4.00 0.25
+805E164C:   callc [btlevtcmd_JumpPosition battle_event_cmd.o] -2 LW(0) LW(1) LW(2) 0 -1
+805E166C:   callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_BOSS_BLED_LANDING1"] [F1194D80] 0 [F1194D80]
+805E1688:   return
+805E168C:   end

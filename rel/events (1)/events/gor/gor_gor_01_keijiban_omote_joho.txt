@@ -1,0 +1,34 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [keijiban_omote_joho gor_01.o] AT 805F3D44 ---
+805F3D44:   callc [evt_mario_key_onoff evt_mario.o] 0
+805F3D50:   callc [evt_party_stop evt_party.o] 0
+805F3D5C:   callc [keijiban_data_alloc evt_keijiban.o] ["kj_omote"]
+805F3D68:   callc [keijiban_joho_check evt_keijiban.o] LW(0)
+805F3D74:   if_int_eq LW(0) 1
+805F3D80:     callc [keijiban_joho_makelabel evt_keijiban.o] 0 LW(1)
+805F3D90:     callc [evt_msg_print evt_msg.o] 0 LW(1) 0 0
+805F3DA8:   else
+805F3DAC:     if_int_eq LW(0) 0
+805F3DB8:       callc [evt_osreport gor_01.o] 0 LW(1)
+805F3DC8:       callc [evt_msg_print evt_msg.o] 1 ["<plate>\nゆうこうな　データが\n見つかりませんでした\nメッセージを　とうろく　してください\n<key>\n<scrl_auto>\n<once_stop>\n"] 0 0
+805F3DE0:       callc [evt_msg_print_add_insert evt_msg.o] 1 ["げんざいの　イベントばんごうは\n『%s』\nです\n<key>"] LW(1)
+805F3DF4:     else
+805F3DF8:       callc [evt_osreport gor_01.o] 0 LW(1)
+805F3E08:       callc [evt_msg_print evt_msg.o] 1 ["<plate>\nゆうこうな　データが\nじゅうふくして　みつかりました\nゆうこうな　メッセージは　１つにしてください\n<key>\n<scrl_auto>\n<once_stop>"] 0 0
+805F3E20:       setii LW(2) 0
+805F3E2C:       setii LW(3) LW(0)
+805F3E38:       loop LW(0)
+805F3E40:         callc [keijiban_joho_makelabel evt_keijiban.o] LW(2) LW(1)
+805F3E50:         callc [evt_msg_print_add_insert evt_msg.o] 1 ["『%s』\n<key>\n<scrl_auto>\n<once_stop>\n"] LW(1)
+805F3E64:         addi LW(2) 1
+805F3E70:       end_loop
+805F3E74:       callc [evt_msg_print_add_insert evt_msg.o] 1 ["いじょう　%dこが\nじゅうふくしている　メッセージです\n<key>"] LW(3)
+805F3E88:     endif
+805F3E8C:   endif
+805F3E90:   callc [keijiban_data_free evt_keijiban.o]
+805F3E98:   callc [evt_party_run evt_party.o] 0
+805F3EA4:   callc [evt_mario_key_onoff evt_mario.o] 1
+805F3EB0:   return
+805F3EB4:   end

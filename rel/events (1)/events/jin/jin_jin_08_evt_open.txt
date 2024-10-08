@@ -1,0 +1,25 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [evt_open jin_08.o] AT 805CDF40 ---
+805CDF40:   callc [evt_mario_key_onoff evt_mario.o] 0
+805CDF4C:   callc [evt_mapobj_get_position evt_map.o] ["hako"] LW(10) LW(11) LW(12)
+805CDF64:   callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_STG4_TBOX_OPEN1"] LW(10) LW(11) LW(12) 0
+805CDF80:   callc [evt_sub_intpl_msec_init evt_sub.o] 11 900 0 800
+805CDF98:   loop 0
+805CDFA0:     callc [evt_sub_intpl_msec_get_value evt_sub.o]
+805CDFA8:     divf LW(0) 10.00
+805CDFB4:     callc [evt_mapobj_rotate evt_map.o] 1 ["hako_futa"] LW(0) 0 0
+805CDFD0:     wait_frames 1
+805CDFD8:     if_int_eq LW(1) 0
+805CDFE4:       loop_break
+805CDFE8:     endif
+805CDFEC:   end_loop
+805CDFF0:   callc [evt_mapobj_get_position evt_map.o] ["hako"] LW(0) LW(1) LW(2)
+805CE008:   callc [evt_item_entry evt_item.o] ["n_character"] 68 LW(0) LW(1) LW(2) 17 -1 0
+805CE030:   callc [evt_item_get_item evt_item.o] ["n_character"]
+805CE03C:   setii GSW(0) 209
+805CE048:   callc [evt_mario_key_onoff evt_mario.o] 1
+805CE054:   callc [evt_exit_case_evt evt_case.o]
+805CE05C:   return
+805CE060:   end

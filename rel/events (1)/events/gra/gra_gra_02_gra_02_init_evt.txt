@@ -1,0 +1,45 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [gra_02_init_evt gra_02.o] AT 805BFCA8 ---
+805BFCA8:   callc [evt_snd_bgmon evt_snd.o] 512 ["BGM_STG4_GRA1"]
+805BFCB8:   callc [evt_snd_envon evt_snd.o] 272 ["ENV_STG4_USU1"]
+805BFCC8:   callc [evt_kagemario_init evt_kagemario.o]
+805BFCD0:   setii LW(0) [bero_entry_data gra_02.o]
+805BFCDC:   callc [evt_bero_get_info evt_bero.o]
+805BFCE4:   callss [evt_bero_info_run evt_bero.o]
+805BFCEC:   callc [evt_item_entry evt_item.o] ["item00"] 125 -125 0 -110 16 GSWF(5631) 0
+805BFD14:   callc [evt_item_entry evt_item.o] ["item01"] 125 305 0 -35 16 GSWF(5632) 0
+805BFD3C:   callss [evt_usu_kagemario_party_kill evt_kagemario.o]
+805BFD44:   callc [evt_npc_setup evt_npc.o] [npcEnt gra_02.o]
+805BFD50:   if_int_lt GSW(0) 184
+805BFD5C:     callc [evt_item_entry evt_item.o] ["key00"] 21 -30 0 0 0 -1 [gra02_get_key gra_02.o]
+805BFD84:   endif
+805BFD88:   if_int_lt GSW(0) 188
+805BFD94:     callc [evt_cloud_init evt_cloud.o]
+805BFD9C:     callc [evt_cloud_ent evt_cloud.o] 0 ["S_wara"] ["polySurface981_q023"] [gra02_straw_blow_evt gra_02.o]
+805BFDB4:   else
+805BFDB8:     callc [evt_mapobj_flag_onoff evt_map.o] 1 1 ["S_wara"] 1
+805BFDD0:     callc [evt_hitobj_onoff evt_hit.o] ["polySurface981_q023"] 0 0
+805BFDE4:   endif
+805BFDE8:   begin_thread
+805BFDEC:     callc [booboo_main gra_02.o]
+805BFDF4:   end_thread
+805BFDF8:   return
+805BFDFC:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [evt_usu_kagemario_party_kill evt_kagemario.o] AT 805C2910 ---
+805C2910:   switchi GSW(0)
+805C2918:     case_int_range 201 205
+805C2924:       callc [evt_party_stop evt_party.o] 0
+805C2930:       callc [evt_party_set_pos evt_party.o] 0 0 -1000 0
+805C2948:       callc [evt_party_cont_onoff evt_party.o] 0 0
+805C2958:       callc [evt_mario_kill_party evt_mario.o] 0
+805C2964:       callc [evt_party_stop evt_party.o] 1
+805C2970:       callc [evt_party_set_pos evt_party.o] 1 0 -1000 0
+805C2988:       callc [evt_party_cont_onoff evt_party.o] 1 0
+805C2998:       callc [evt_mario_clear_party evt_mario.o] 1
+805C29A4:       callc [test evt_kagemario.o]
+805C29AC:   end_switch
+805C29B0:   return
+805C29B4:   end

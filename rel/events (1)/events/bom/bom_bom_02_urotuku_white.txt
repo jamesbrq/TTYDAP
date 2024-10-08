@@ -1,0 +1,69 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [urotuku_white bom_02.o] AT 805C8F24 ---
+805C8F24:   if_int_eq GSWF(3888) 1
+805C8F30:     callc [evt_msg_print evt_msg.o] 0 ["stg7_bom_41_01"] 0 ["me"]
+805C8F48:     return
+805C8F4C:   endif
+805C8F50:   callc [evt_cam3d_evt_set evt_cam.o] 120 97 700 120 65 251 800 11
+805C8F78:   wait_ms 1000
+805C8F80:   callc [evt_msg_print evt_msg.o] 0 ["stg7_bom_39"] 0 ["me"]
+805C8F98:   callc [evt_mario_set_pose evt_mario.o] ["M_N_2"]
+805C8FA4:   callc [evt_npc_set_position evt_npc.o] ["ホワイト"] 230 30 -125
+805C8FBC:   callc [evt_sub_intpl_msec_init evt_sub.o] 11 0 180 500
+805C8FD4: 0:
+805C8FDC:   callc [evt_sub_intpl_msec_get_value evt_sub.o]
+805C8FE4:   callss [evt_ie3_door_1 bom_02.o]
+805C8FEC:   if_int_eq LW(1) 1
+805C8FF8:     goto 0
+805C9000:   endif
+805C9004:   begin_thread
+805C9008:     wait_ms 1000
+805C9010:     callc [evt_sub_intpl_msec_init evt_sub.o] 11 180 0 500
+805C9028: 1:
+805C9030:     callc [evt_sub_intpl_msec_get_value evt_sub.o]
+805C9038:     callss [evt_ie3_door_1 bom_02.o]
+805C9040:     if_int_eq LW(1) 1
+805C904C:       goto 1
+805C9054:     endif
+805C9058:   end_thread
+805C905C:   callc [evt_npc_flag_onoff evt_npc.o] 1 ["ホワイト"] 132624
+805C9070:   callc [evt_npc_status_onoff evt_npc.o] 1 ["ホワイト"] 2
+805C9084:   callc [evt_npc_move_position evt_npc.o] ["ホワイト"] 200 -85 0 60.00 1
+805C90A4:   begin_thread
+805C90A8:     callc [evt_msg_print evt_msg.o] 0 ["stg7_bom_41"] 0 ["ホワイト"]
+805C90C0:     callc [evt_sub_intpl_msec_init evt_sub.o] 11 0 180 500
+805C90D8: 3:
+805C90E0:     callc [evt_sub_intpl_msec_get_value evt_sub.o]
+805C90E8:     callss [evt_ie3_door_1 bom_02.o]
+805C90F0:     if_int_eq LW(1) 1
+805C90FC:       goto 3
+805C9104:     endif
+805C9108:     callc [evt_npc_move_position evt_npc.o] ["ホワイト"] 230 -125 0 80.00 1
+805C9128:     callc [evt_sub_intpl_msec_init evt_sub.o] 11 180 0 500
+805C9140: 4:
+805C9148:     callc [evt_sub_intpl_msec_get_value evt_sub.o]
+805C9150:     callss [evt_ie3_door_1 bom_02.o]
+805C9158:     if_int_eq LW(1) 1
+805C9164:       goto 4
+805C916C:     endif
+805C9170:     callc [evt_npc_set_position evt_npc.o] ["ホワイト"] 380 45 -150
+805C9188:     callc [evt_npc_set_ry evt_npc.o] ["ホワイト"] 270
+805C9198:     callc [evt_npc_flag_onoff evt_npc.o] 0 ["ホワイト"] 1536
+805C91AC:     callc [evt_npc_set_anim evt_npc.o] ["ホワイト"] ["N_1"]
+805C91BC:   end_thread
+805C91C0:   callc [evt_mario_set_pose evt_mario.o] ["M_I_2"]
+805C91CC:   callc [evt_msg_print_add evt_msg.o] 0 ["stg7_bom_40"]
+805C91DC:   callc [evt_msg_print_add evt_msg.o] 0 ["stg7_bom_40_02"]
+805C91EC:   callc [evt_mario_set_pose evt_mario.o] ["M_S_1"]
+805C91F8:   callc [evt_cam3d_evt_off evt_cam.o] 500 11
+805C9208:   setii GSWF(3888) 1
+805C9214:   return
+805C9218:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [evt_ie3_door_1 bom_02.o] AT 805C8990 ---
+805C8990:   mulf LW(0) 0.44
+805C899C:   callc [evt_mapobj_rotate evt_map.o] 1 ["S_ie3_door"] 0.00 LW(0) 0.00
+805C89B8:   return
+805C89BC:   end

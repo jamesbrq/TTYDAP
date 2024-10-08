@@ -1,0 +1,355 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [cooking_evt gor_01.o] AT 805F8820 ---
+805F8820:   callc [evt_mario_key_onoff evt_mario.o] 0
+805F882C:   setii LW(11) -1
+805F8838:   setii LW(12) -1
+805F8844:   setii LW(14) 0
+805F8850:   setii LW(15) 0
+805F885C:   callc [evt_npc_flag_onoff evt_npc.o] 1 ["ナンシー"] 32
+805F8870:   setii GF(0) 1
+805F887C:   begin_thread
+805F8880:     callc [evt_party_move_pos2 evt_party.o] 1 -337 -80 60
+805F8898:     callc [evt_party_set_dir_npc evt_party.o] 1 ["ナンシー"]
+805F88A8:   end_thread
+805F88AC:   begin_thread
+805F88B0:     callc [evt_party_move_pos2 evt_party.o] 0 -347 -100 60
+805F88C8:     callc [evt_party_set_dir_npc evt_party.o] 0 ["ナンシー"]
+805F88D8:     setii GF(0) 0
+805F88E4:   end_thread
+805F88E8:   callc [evt_mario_get_pos evt_mario.o] 0 LW(0) LW(1) LW(2)
+805F8900:   callc [evt_sub_get_dist evt_sub.o] LW(0) LW(2) -377 -100 LW(3)
+805F891C:   if_int_lt LW(3) 10
+805F8928:     callc [evt_mario_dispflag_onoff evt_mario.o] 1 4
+805F8938:   endif
+805F893C:   callc [evt_mario_mov_pos2 evt_mario.o] -377 -100 60
+805F8950:   callc [evt_mario_dispflag_onoff evt_mario.o] 0 4
+805F8960:   callc [evt_mario_set_dir_npc evt_mario.o] ["ナンシー"]
+805F896C:   wait_ms 500
+805F8974:   wait_until GF(0)
+805F897C:   callc [evt_set_dir_to_target evt_npc.o] ["ナンシー"] ["mario"]
+805F898C:   wait_frames 1
+805F8994:   callc [evt_npc_wait_pera evt_npc.o] ["ナンシー"]
+805F89A0:   callc [evt_npc_flag_onoff evt_npc.o] 0 ["ナンシー"] 32
+805F89B4:   if_int_eq GSW(1420) 18
+805F89C0:     if_int_eq GSWF(5405) 0
+805F89CC:       callc [evt_msg_print evt_msg.o] 0 ["irai_18_001"] 0 ["ナンシー"]
+805F89E4:       setii GSWF(5405) 1
+805F89F0:       callc [evt_msg_print_add evt_msg.o] 0 ["irai_18_008_1"]
+805F8A00:     else
+805F8A04:       callc [evt_msg_print evt_msg.o] 0 ["irai_18_002"] 0 ["ナンシー"]
+805F8A1C:       setii LF(0) 0
+805F8A28:       callc [evt_pouch_check_item evt_pouch.o] 60 LW(0)
+805F8A38:       if_int_ge LW(0) 1
+805F8A44:         callc [evt_msg_continue evt_msg.o]
+805F8A4C:         callc [evt_win_item_select evt_window.o] 0 [iri_18_item_tbl gor_01.o] LW(0) 0
+805F8A64:       else
+805F8A68:         setii LW(0) -1
+805F8A74:         setii LF(0) 1
+805F8A80:       endif
+805F8A84:       if_int_ne LW(0) -1
+805F8A90:         callc [evt_pouch_remove_item evt_pouch.o] 60 LW(0)
+805F8AA0:         callc [evt_msg_print evt_msg.o] 0 ["irai_18_003"] 0 ["ナンシー"]
+805F8AB8:         callc [evt_mario_get_pos evt_mario.o] 0 LW(0) LW(1) LW(2)
+805F8AD0:         callc [evt_npc_get_position evt_npc.o] ["ナンシー"] LW(3) LW(4) LW(5)
+805F8AE8:         if_int_lt LW(0) LW(3)
+805F8AF4:           addi LW(0) 20
+805F8B00:         else
+805F8B04:           subi LW(0) 20
+805F8B10:         endif
+805F8B14:         addi LW(1) 20
+805F8B20:         addi LW(2) 5
+805F8B2C:         callc [evt_item_entry evt_item.o] ["cb"] 60 LW(0) LW(1) LW(2) 17 -1 0
+805F8B54:         callc [evt_mario_set_pose evt_mario.o] ["M_C_3"]
+805F8B60:         wait_ms 800
+805F8B68:         callc [evt_item_delete evt_item.o] ["cb"]
+805F8B74:         callc [evt_mario_set_pose evt_mario.o] ["M_S_1"]
+805F8B80:         wait_ms 500
+805F8B88:         callc [evt_msg_print evt_msg.o] 0 ["irai_18_004"] 0 ["ナンシー"]
+805F8BA0:         callc [evt_mario_set_pose evt_mario.o] ["M_N_1"]
+805F8BAC:         setii LW(13) 183
+805F8BB8:         setii LW(14) 148
+805F8BC4:         setii LW(15) 154
+805F8BD0:         callss [cooking_evt_sub gor_01.o]
+805F8BD8:         callc [evt_msg_print evt_msg.o] 0 ["irai_18_005"] 0 ["ナンシー"]
+805F8BF0:         setii LF(0) 0
+805F8BFC:         callc [evt_pouch_get_haveitemcnt evt_pouch.o] LW(0)
+805F8C08:         callc [evt_pouch_check_item evt_pouch.o] 1 LW(1)
+805F8C18:         if_int_eq LW(1) 0
+805F8C24:           if_int_ge LW(0) 10
+805F8C30:             setii LF(0) 1
+805F8C3C:           endif
+805F8C40:         else
+805F8C44:           if_int_ge LW(0) 20
+805F8C50:             setii LF(0) 1
+805F8C5C:           endif
+805F8C60:         endif
+805F8C64:         if_int_eq LF(0) 0
+805F8C70:           callc [evt_msg_continue evt_msg.o]
+805F8C78:           callc [evt_item_entry evt_item.o] ["hk"] 183 0 -1000 0 17 -1 0
+805F8CA0:           callc [evt_item_get_item evt_item.o] ["hk"]
+805F8CAC:           callc [evt_item_get_item_end_wait evt_item.o] ["hk"]
+805F8CB8:           setii GSWF(1202) 1
+805F8CC4:         else
+805F8CC8:           callc [evt_msg_print_add evt_msg.o] 0 ["irai_18_006_1"]
+805F8CD8:           callc [evt_npc_set_ry evt_npc.o] ["ナンシー"] 270
+805F8CE8:           wait_frames 1
+805F8CF0:           callc [evt_npc_wait_pera evt_npc.o] ["ナンシー"]
+805F8CFC:           wait_ms 300
+805F8D04:           callc [evt_item_entry evt_item.o] ["iri_18"] 183 -440 30 -80 16 GSWF(1202) 0
+805F8D2C:           wait_ms 300
+805F8D34:           callc [evt_npc_set_ry evt_npc.o] ["ナンシー"] 90
+805F8D44:           wait_frames 1
+805F8D4C:           callc [evt_npc_wait_pera evt_npc.o] ["ナンシー"]
+805F8D58:         endif
+805F8D5C:         callc [evt_msg_print evt_msg.o] 0 ["irai_18_007"] 0 ["ナンシー"]
+805F8D74:         setii GSW(1420) 0
+805F8D80:         setii GSWF(5392) 1
+805F8D8C:         callc [evt_msg_print evt_msg.o] 0 ["sys_request_finish"] 0 0
+805F8DA4:         callc [evt_mario_key_onoff evt_mario.o] 1
+805F8DB0:         return
+805F8DB4:       else
+805F8DB8:         if_int_eq LF(0) 0
+805F8DC4:           callc [evt_msg_print evt_msg.o] 0 ["irai_18_008"] 0 ["ナンシー"]
+805F8DDC:         else
+805F8DE0:           callc [evt_msg_print_add evt_msg.o] 0 ["irai_18_008"]
+805F8DF0:         endif
+805F8DF4:         callc [evt_msg_print_add evt_msg.o] 0 ["irai_18_008_1"]
+805F8E04:       endif
+805F8E08:     endif
+805F8E0C:   endif
+805F8E10:   if_int_eq GSWF(1197) 0
+805F8E1C:     if_int_ne GSW(1420) 18
+805F8E28:       if_int_eq GSWF(5392) 0
+805F8E34:         callc [evt_msg_print evt_msg.o] 0 ["gor_01_cook_000"] 0 ["ナンシー"]
+805F8E4C:       endif
+805F8E50:     endif
+805F8E54:     callc [evt_msg_print_add evt_msg.o] 0 ["gor_01_cook_001"]
+805F8E64:     setii GSWF(1197) 1
+805F8E70:   else
+805F8E74:     if_int_eq LSWF(1) 0
+805F8E80:       setii LF(0) 0
+805F8E8C:       if_int_ge GSW(0) 215
+805F8E98:         if_int_ne GSW(1420) 18
+805F8EA4:           if_int_eq GSWF(5392) 0
+805F8EB0:             setii LF(0) 1
+805F8EBC:           endif
+805F8EC0:         endif
+805F8EC4:       endif
+805F8EC8:       if_int_eq LF(0) 0
+805F8ED4:         if_int_ne GSW(1420) 18
+805F8EE0:           callc [evt_msg_print evt_msg.o] 0 ["gor_01_cook_002"] 0 ["ナンシー"]
+805F8EF8:         else
+805F8EFC:           callc [evt_msg_print_add evt_msg.o] 0 ["gor_01_cook_002"]
+805F8F0C:         endif
+805F8F10:       else
+805F8F14:         callc [evt_msg_print evt_msg.o] 0 ["gor_01_cook_003"] 0 ["ナンシー"]
+805F8F2C:       endif
+805F8F30:     else
+805F8F34:       if_int_ne GSW(1420) 18
+805F8F40:         callc [evt_msg_print evt_msg.o] 0 ["gor_01_cook_004"] 0 ["ナンシー"]
+805F8F58:       else
+805F8F5C:         callc [evt_msg_print_add evt_msg.o] 0 ["gor_01_cook_004"]
+805F8F6C:       endif
+805F8F70:     endif
+805F8F74:   endif
+805F8F78:   setii LSWF(1) 1
+805F8F84:   callc [evt_msg_select evt_msg.o] 0 ["gor_01_select"]
+805F8F94:   if_int_eq LW(0) 1
+805F8FA0:     goto 0
+805F8FA8:   endif
+805F8FAC:   callc [make_item_tbl gor_01.o] LW(11) LW(0)
+805F8FBC:   if_int_eq LW(0) 0
+805F8FC8:     callc [evt_msg_print_add evt_msg.o] 0 ["gor_01_cook_005"]
+805F8FD8:     goto 5
+805F8FE0:   endif
+805F8FE4:   callc [evt_msg_print_add evt_msg.o] 0 ["gor_01_cook_007"]
+805F8FF4: 1:
+805F8FFC:   callc [evt_win_item_select evt_window.o] 1 [803C8480] LW(0) LW(1)
+805F9014:   if_int_eq LW(0) -1
+805F9020:     callc [evt_msg_print evt_msg.o] 0 ["gor_01_cook_008"] 0 ["ナンシー"]
+805F9038:     callc [evt_msg_select evt_msg.o] 0 ["gor_01_select"]
+805F9048:     switchi LW(0)
+805F9050:       case_int_eq 0
+805F9058:         goto 0
+805F9060:       case_int_eq 1
+805F9068:         callc [evt_msg_continue evt_msg.o]
+805F9070:         goto 1
+805F9078:     end_switch
+805F907C:   endif
+805F9080:   setii LW(14) LW(0)
+805F908C:   setii LW(11) LW(1)
+805F9098:   setii LF(0) 0
+805F90A4:   if_int_eq GSWF(5392) 1
+805F90B0:     callc [make_item_tbl gor_01.o] LW(11) LW(0)
+805F90C0:     if_int_ne LW(0) 0
+805F90CC:       callc [evt_msg_print evt_msg.o] 0 ["gor_01_cook_009"] 0 ["ナンシー"]
+805F90E4:       callc [evt_msg_select evt_msg.o] 0 ["gor_01_select"]
+805F90F4:       if_int_eq LW(0) 0
+805F9100:         callc [evt_msg_continue evt_msg.o]
+805F9108: 2:
+805F9110:         callc [evt_win_item_select evt_window.o] 1 [803C8480] LW(0) LW(1)
+805F9128:         if_int_eq LW(0) -1
+805F9134:           callc [evt_msg_print evt_msg.o] 0 ["gor_01_cook_010"] 0 ["ナンシー"]
+805F914C:           callc [evt_msg_select evt_msg.o] 0 ["gor_01_cook_select"]
+805F915C:           switchi LW(0)
+805F9164:             case_int_eq 0
+805F916C:               setii LF(0) 1
+805F9178:               goto 3
+805F9180:             case_int_eq 1
+805F9188:               callc [evt_msg_continue evt_msg.o]
+805F9190:               goto 2
+805F9198:             case_int_eq 2
+805F91A0:               goto 0
+805F91A8:           end_switch
+805F91AC:         endif
+805F91B0:         if_int_eq LW(14) LW(0)
+805F91BC:           callc [evt_msg_print evt_msg.o] 0 ["gor_01_cook_011"] 0 ["ナンシー"]
+805F91D4:           goto 2
+805F91DC:         endif
+805F91E0:         setii LW(15) LW(0)
+805F91EC:         setii LW(12) LW(1)
+805F91F8:       else
+805F91FC:         setii LF(0) 1
+805F9208:       endif
+805F920C:     endif
+805F9210:   endif
+805F9214: 3:
+805F921C:   if_int_eq LW(15) 0
+805F9228:     callc [get_item_name gor_01.o] LW(14) LW(0)
+805F9238:     if_int_eq LF(0) 0
+805F9244:       callc [evt_msg_print_insert evt_msg.o] 0 ["gor_01_cook_012"] 0 ["ナンシー"] LW(0)
+805F9260:     else
+805F9264:       callc [evt_msg_print_add_insert evt_msg.o] 0 ["gor_01_cook_012"] LW(0)
+805F9278:     endif
+805F927C:   else
+805F9280:     callc [get_item_name gor_01.o] LW(14) LW(0)
+805F9290:     callc [get_item_name gor_01.o] LW(15) LW(1)
+805F92A0:     callc [evt_msg_print_insert evt_msg.o] 0 ["gor_01_cook_013"] 0 ["ナンシー"] LW(0) LW(1)
+805F92C0:   endif
+805F92C4:   callc [evt_msg_select evt_msg.o] 0 ["gor_01_select"]
+805F92D4:   if_int_eq LW(0) 1
+805F92E0:     goto 4
+805F92E8:   endif
+805F92EC:   if_int_eq LW(15) 0
+805F92F8:     callc [cook_chk gor_01.o] LW(14) LW(0) LW(1)
+805F930C:     callc [N_evt_pouch_remove_item_index evt_pouch.o] LW(14) LW(11) LW(3)
+805F9320:     if_int_eq GSWF(5392) 1
+805F932C:       setii LW(2) LW(1)
+805F9338:     else
+805F933C:       setii LW(2) LW(0)
+805F9348:     endif
+805F934C:   else
+805F9350:     callc [cook_chk2 gor_01.o] LW(14) LW(15) LW(2)
+805F9364:     callc [N_evt_pouch_remove_item_index evt_pouch.o] LW(14) LW(11) LW(3)
+805F9378:     callc [N_evt_pouch_remove_item_index evt_pouch.o] LW(15) LW(12) LW(3)
+805F938C:   endif
+805F9390:   if_int_eq LW(2) 0
+805F939C:     setii LW(2) 182
+805F93A8:   endif
+805F93AC:   callc [evt_msg_print_add evt_msg.o] 0 ["gor_01_cook_015"]
+805F93BC:   setii LW(13) LW(2)
+805F93C8:   callss [cooking_evt_sub gor_01.o]
+805F93D0:   setii LW(2) LW(13)
+805F93DC:   callc [chk_cook_msg gor_01.o] LW(2) LW(3)
+805F93EC:   switchi LW(3)
+805F93F4:     case_int_eq 0
+805F93FC:       callc [evt_msg_print evt_msg.o] 0 ["gor_01_cook_018"] 0 ["ナンシー"]
+805F9414:     case_int_eq 1
+805F941C:       callc [evt_msg_print evt_msg.o] 0 ["gor_01_cook_017"] 0 ["ナンシー"]
+805F9434:     case_int_eq 2
+805F943C:       callc [evt_msg_print evt_msg.o] 0 ["gor_01_cook_020"] 0 ["ナンシー"]
+805F9454:     case_int_eq 3
+805F945C:       callc [evt_msg_print evt_msg.o] 0 ["gor_01_cook_019"] 0 ["ナンシー"]
+805F9474:     case_int_eq 4
+805F947C:       callc [evt_msg_print evt_msg.o] 0 ["gor_01_cook_021"] 0 ["ナンシー"]
+805F9494:   end_switch
+805F9498:   callc [evt_msg_print_add evt_msg.o] 0 ["gor_01_cook_022"]
+805F94A8:   callc [evt_item_entry evt_item.o] ["cook"] LW(2) 0 -1000 0 17 -1 0
+805F94D0:   callc [evt_item_get_item evt_item.o] ["cook"]
+805F94DC:   setii GSWF(64) 1
+805F94E8:   callc [cooking_flag gor_01.o] LW(2)
+805F94F4:   callc [evt_msg_print evt_msg.o] 0 ["gor_01_cook_023"] 0 ["ナンシー"]
+805F950C:   goto 5
+805F9514: 0:
+805F951C:   callc [evt_msg_print_add evt_msg.o] 0 ["gor_01_cook_006"]
+805F952C:   goto 5
+805F9534: 4:
+805F953C:   callc [evt_msg_print_add evt_msg.o] 0 ["gor_01_cook_014"]
+805F954C:   goto 5
+805F9554: 5:
+805F955C:   callc [evt_mario_key_onoff evt_mario.o] 1
+805F9568:   return
+805F956C:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [cooking_evt_sub gor_01.o] AT 805F83A8 ---
+805F83A8:   callc [evt_snd_bgmoff evt_snd.o] 1024
+805F83B4:   callc [evt_snd_bgmon evt_snd.o] 1 ["BGM_EVT_COOKING1"]
+805F83C4:   wait_ms 500
+805F83CC:   callc [evt_npc_flag_onoff evt_npc.o] 1 ["ナンシー"] 32
+805F83E0:   callc [evt_npc_status_onoff evt_npc.o] 1 ["ナンシー"] 2
+805F83F4:   callc [evt_npc_move_position evt_npc.o] ["ナンシー"] -485 -150 0 80 0
+805F8414:   callc [evt_npc_flag_onoff evt_npc.o] 0 ["ナンシー"] 1536
+805F8428:   callc [evt_npc_flag_onoff evt_npc.o] 1 ["ナンシー"] 32768
+805F843C:   callc [evt_npc_set_ry evt_npc.o] ["ナンシー"] 90
+805F844C:   callc [evt_npc_set_anim evt_npc.o] ["ナンシー"] ["S_1R"]
+805F845C:   wait_frames 1
+805F8464:   callc [evt_npc_flag_onoff evt_npc.o] 0 ["ナンシー"] 32768
+805F8478:   begin_thread
+805F847C:     callc [evt_msg_toge evt_msg.o] 1 0 0 0
+805F8494:     callc [evt_msg_print evt_msg.o] 0 ["gor_01_cook_016"] 0 ["ナンシー"]
+805F84AC:   end_thread
+805F84B0:   wait_ms 500
+805F84B8:   callc [evt_npc_get_position evt_npc.o] ["ナンシー"] LW(0) LW(1) LW(2)
+805F84D0:   callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_EVT_COOK_COOKING1"] LW(0) LW(1) LW(2) LW(3)
+805F84EC:   callc [evt_npc_set_anim evt_npc.o] ["ナンシー"] ["C_1"]
+805F84FC:   wait_ms 2500
+805F8504:   callc [evt_snd_sfxoff evt_snd.o] LW(3)
+805F8510:   callc [evt_npc_flag_onoff evt_npc.o] 1 ["ナンシー"] 1024
+805F8524:   callc [evt_npc_move_position evt_npc.o] ["ナンシー"] -430 -150 0 80 0
+805F8544:   callc [evt_npc_flag_onoff evt_npc.o] 0 ["ナンシー"] 1024
+805F8558:   callc [evt_npc_set_anim evt_npc.o] ["ナンシー"] ["C_1"]
+805F8568:   callc [evt_npc_get_position evt_npc.o] ["ナンシー"] LW(0) LW(1) LW(2)
+805F8580:   callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_EVT_COOK_COOKING2"] LW(0) LW(1) LW(2) 0
+805F859C:   wait_ms 1500
+805F85A4:   callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_EVT_COOK_COOKING2"] LW(0) LW(1) LW(2) 0
+805F85C0:   wait_ms 1500
+805F85C8:   callc [evt_npc_flag_onoff evt_npc.o] 1 ["ナンシー"] 1024
+805F85DC:   callc [evt_npc_move_position evt_npc.o] ["ナンシー"] -380 -150 0 80 0
+805F85FC:   callc [evt_npc_flag_onoff evt_npc.o] 0 ["ナンシー"] 1024
+805F8610:   callc [evt_npc_set_anim evt_npc.o] ["ナンシー"] ["S_1R"]
+805F8620:   wait_ms 200
+805F8628:   callc [evt_npc_get_position evt_npc.o] ["ナンシー"] LW(0) LW(1) LW(2)
+805F8640:   callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_EVT_COOK_COOKING3"] LW(0) LW(1) LW(2) LW(3)
+805F865C:   callc [evt_npc_set_anim evt_npc.o] ["ナンシー"] ["C_1"]
+805F866C:   wait_ms 2800
+805F8674:   callc [evt_snd_sfxoff evt_snd.o] LW(3)
+805F8680:   wait_ms 200
+805F8688:   callc [cook_effect gor_01.o] LW(14)
+805F8694:   wait_ms 1300
+805F869C:   if_int_ne LW(15) 0
+805F86A8:     callc [cook_effect gor_01.o] LW(15)
+805F86B4:     wait_ms 1300
+805F86BC:   endif
+805F86C0:   callc [chk_special_cook gor_01.o] LW(13) LW(0)
+805F86D0:   if_int_eq LW(0) 1
+805F86DC:     callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_EVT_COOK_LIGHT1"] -380 40 -170 LW(0)
+805F86F8:     callc [evt_eff64 evt_eff.o] ["rad"] ["radiation_n64"] 3 -380 40 -170 1.00 0 0 0 0 0 0 0
+805F8738:     wait_ms 1300
+805F8740:     callc [evt_eff_delete evt_eff.o] ["rad"]
+805F874C:     callc [evt_snd_sfxoff evt_snd.o] LW(0)
+805F8758:     wait_ms 500
+805F8760:   endif
+805F8764:   callc [evt_npc_flag_onoff evt_npc.o] 1 ["ナンシー"] 1024
+805F8778:   callc [evt_npc_move_position evt_npc.o] ["ナンシー"] -405 -100 0 80 0
+805F8798:   callc [evt_set_dir_to_target evt_npc.o] ["ナンシー"] ["mario"]
+805F87A8:   callc [evt_npc_status_onoff evt_npc.o] 0 ["ナンシー"] 2
+805F87BC:   callc [evt_npc_flag_onoff evt_npc.o] 0 ["ナンシー"] 32
+805F87D0:   callc [evt_npc_flag_onoff evt_npc.o] 1 ["ナンシー"] 512
+805F87E4:   wait_ms 300
+805F87EC:   callc [evt_snd_bgmoff evt_snd.o] 513
+805F87F8:   callc [evt_snd_bgmon evt_snd.o] 288 0
+805F8808:   wait_ms 500
+805F8810:   return
+805F8814:   end

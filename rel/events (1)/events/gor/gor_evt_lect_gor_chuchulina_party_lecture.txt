@@ -1,0 +1,65 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [chuchulina_party_lecture evt_lect_gor.o] AT 806260C8 ---
+806260C8:   callc [evt_msg_print evt_msg.o] 0 ["lecture_friends_17_0_1"] 0 0
+806260E0:   callc [evt_msg_print evt_msg.o] 0 ["lecture_friends_17_1"] 0 0
+806260F8:   callc [evt_party_get_pos evt_party.o] 0 LW(2) LW(3) LW(4)
+80626110:   callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_PARTY_CHURINA_SMELL1"] LW(2) LW(3) LW(4) 0
+8062612C:   callc [evt_party_set_pose evt_party.o] 0 ["PCH_A2_1"]
+8062613C:   wait_ms 1000
+80626144:   callc [evt_party_set_pose evt_party.o] 0 ["PCH_S_1"]
+80626154:   callc [evt_msg_print evt_msg.o] 0 ["lecture_friends_18"] 0 ["party"]
+8062616C:   setii LW(1) ["TESTMOBJ"]
+80626178:   callc [evt_mobj_entry evt_mobj.o] LW(1) ["MOBJ_TreasureBox"]
+80626188:   callc [lect_mobj_hit_nasi evt_lect_gor.o] LW(1)
+80626194:   callc [evt_mobj_set_camid evt_mobj.o] LW(1) 7
+806261A4:   callc [evt_mario_get_pos evt_mario.o] 0 LW(2) LW(3) LW(4)
+806261BC:   addi LW(2) 200
+806261C8:   callc [evt_mobj_flag_onoff evt_mobj.o] 0 LW(1) 64
+806261DC:   callc [evt_mobj_set_position evt_mobj.o] LW(1) LW(2) LW(3) LW(4)
+806261F4:   callc [x_flag_set evt_lect_gor.o] 0 1
+80626204:   begin_thread
+80626208:     loop 0
+80626210:       callc [evt_cam3d_evt_set_rel evt_cam.o] 0.00 100.00 569.00 0.00 37.40 -101.80 0 11
+80626238:       callc [x_flag_get evt_lect_gor.o] 0 LW(0)
+80626248:       if_int_eq LW(0) 2
+80626254:         loop_break
+80626258:       endif
+8062625C:       wait_frames 1
+80626264:     end_loop
+80626268:   end_thread
+8062626C:   subi LW(2) 30
+80626278:   begin_thread
+8062627C:     callc [evt_mario_mov_pos2 evt_mario.o] LW(2) LW(4) 80.00
+80626290:     callc [x_flag_set evt_lect_gor.o] 0 2
+806262A0:   end_thread
+806262A4:   subi LW(2) 40
+806262B0:   callc [evt_party_move_pos2 evt_party.o] 0 LW(2) LW(4) 80.00
+806262C8:   wait_ms 100
+806262D0:   callc [evt_party_get_pos evt_party.o] 0 LW(2) LW(3) LW(4)
+806262E8:   callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_PARTY_CHURINA_SMELL1"] LW(2) LW(3) LW(4) 0
+80626304:   callc [evt_party_set_pose evt_party.o] 0 ["PCH_A2_1"]
+80626314:   wait_ms 1000
+8062631C:   callc [evt_party_get_pos evt_party.o] 0 LW(2) LW(3) LW(4)
+80626334:   callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_PARTY_CHURINA_SMELL_JUMP1"] LW(2) LW(3) LW(4) 0
+80626350:   callc [evt_party_set_pose evt_party.o] 0 ["PCH_Y_1"]
+80626360:   wait_ms 700
+80626368:   callc [evt_party_set_pose evt_party.o] 0 ["PCH_S_1"]
+80626378:   callc [evt_eff_fukidashi evt_eff.o] 3 ["fuki"] 0 6 0 0 0 0 0 0 60
+806263AC:   callc [efffukidashichange_cam evt_lect_gor.o] ["fuki"] 7
+806263BC:   callc [evt_msg_print evt_msg.o] 0 ["lecture_friends_19"] 0 ["party"]
+806263D4:   loop 6
+806263DC:     callc [evt_mobj_flag_onoff evt_mobj.o] 1 LW(1) 16384
+806263F0:     wait_ms 100
+806263F8:     callc [evt_mobj_flag_onoff evt_mobj.o] 0 LW(1) 16384
+8062640C:     wait_ms 100
+80626414:   end_loop
+80626418:   callc [evt_mobj_delete evt_mobj.o] LW(1)
+80626424:   callc [evt_msg_print evt_msg.o] 0 ["lecture_friends_20"] 0 0
+8062643C:   callc [evt_party_set_pose evt_party.o] 0 ["PCH_O_2"]
+8062644C:   wait_ms 1000
+80626454:   callc [evt_party_set_pose evt_party.o] 0 ["PCH_S_1"]
+80626464:   callc [N_evt_mapdisp_onoff evt_map.o] 1
+80626470:   return
+80626474:   end

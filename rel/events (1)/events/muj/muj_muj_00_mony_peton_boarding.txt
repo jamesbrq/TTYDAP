@@ -1,0 +1,67 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [mony_peton_boarding muj_00.o] AT 805D8C88 ---
+805D8C88:   setii LW(0) 0
+805D8C94:   if_int_eq GSW(0) 276
+805D8CA0:     setii LW(0) 1
+805D8CAC:   endif
+805D8CB0:   if_int_eq GSW(0) 277
+805D8CBC:     setii LW(0) 1
+805D8CC8:   endif
+805D8CCC:   if_int_eq LW(0) 0
+805D8CD8:     return
+805D8CDC:   endif
+805D8CE0:   callc [evt_npc_set_position evt_npc.o] ["モニー"] 710 40 -590
+805D8CF8:   callc [evt_npc_set_ry evt_npc.o] ["モニー"] 90
+805D8D08:   callc [evt_npc_set_position evt_npc.o] ["ピートン"] 745 40 -575
+805D8D20:   callc [evt_npc_set_ry evt_npc.o] ["ピートン"] 90
+805D8D30:   callsa [mony_peton_boarding_sub muj_00.o]
+805D8D38:   if_int_eq GSW(0) 277
+805D8D44:     return
+805D8D48:   endif
+805D8D4C:   loop 0
+805D8D54:     callc [evt_mario_get_pos evt_mario.o] 0 LW(0) LW(1) LW(2)
+805D8D6C:     callc [evt_mario_get_name_hitobj_ride evt_mario.o] LW(10)
+805D8D78:     if_int_le LW(0) 790
+805D8D84:       if_string_eq LW(10) ["A_hasi_hon"]
+805D8D90:         loop_break
+805D8D94:       endif
+805D8D98:     endif
+805D8D9C:     wait_frames 1
+805D8DA4:   end_loop
+805D8DA8:   callc [evt_mario_key_onoff evt_mario.o] 0
+805D8DB4:   callc [evt_mario_normalize evt_mario.o]
+805D8DBC:   callc [evt_cam3d_evt_set evt_cam.o] 727 170 -204 727 127 -415 500 11
+805D8DE4:   wait_ms 1000
+805D8DEC:   callc [evt_msg_print evt_msg.o] 0 ["stg5_muj_145"] 0 ["ピートン"]
+805D8E04:   callc [evt_msg_print evt_msg.o] 0 ["stg5_muj_146"] 0 ["モニー"]
+805D8E1C:   callc [evt_cam3d_evt_off evt_cam.o] 500 11
+805D8E2C:   wait_ms 500
+805D8E34:   callc [evt_mario_key_onoff evt_mario.o] 1
+805D8E40:   setii GSW(0) 277
+805D8E4C:   return
+805D8E50:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [mony_peton_boarding_sub muj_00.o] AT 805D8B7C ---
+805D8B7C:   setff LW(10) GW(0)
+805D8B88:   setff LW(11) GW(1)
+805D8B94:   loop 0
+805D8B9C:     setff LW(4) GW(0)
+805D8BA8:     subf LW(4) LW(10)
+805D8BB4:     setff LW(5) GW(1)
+805D8BC0:     subf LW(5) LW(11)
+805D8BCC:     callc [evt_npc_get_position evt_npc.o] ["モニー"] LW(1) LW(2) LW(3)
+805D8BE4:     addf LW(1) LW(4)
+805D8BF0:     addf LW(2) LW(5)
+805D8BFC:     callc [evt_npc_set_position evt_npc.o] ["モニー"] LW(1) LW(2) LW(3)
+805D8C14:     callc [evt_npc_get_position evt_npc.o] ["ピートン"] LW(1) LW(2) LW(3)
+805D8C2C:     addf LW(1) LW(4)
+805D8C38:     addf LW(2) LW(5)
+805D8C44:     callc [evt_npc_set_position evt_npc.o] ["ピートン"] LW(1) LW(2) LW(3)
+805D8C5C:     setff LW(10) GW(0)
+805D8C68:     setff LW(11) GW(1)
+805D8C74:     wait_frames 1
+805D8C7C:   end_loop
+805D8C80:   return
+805D8C84:   end

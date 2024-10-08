@@ -1,0 +1,37 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [guard_event unit_togenoko_ace.o] AT 80617654 ---
+80617654:   setii LW(10) -2
+80617660:   setii LW(11) 1
+8061766C:   begin_child_thread
+80617670:     wait_frames 10
+80617678:     callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_ENM_TOGENOKO_SHELL1"] [F1194D80] 0 [F1194D80]
+80617694:     wait_frames 5
+8061769C:     callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] LW(10) LW(11) ["A_1"]
+806176B0:   end_child_thread
+806176B4:   callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_ENM_TOGENOKO_MOVE1"] [F1194D80] 0 [F1194D80]
+806176D0:   callc [btlevtcmd_GetPos battle_event_cmd.o] LW(10) LW(0) LW(1) LW(2)
+806176E8:   callc [btlevtcmd_JumpSetting battle_event_cmd.o] LW(10) 20 0 0.50
+80617700:   callc [btlevtcmd_JumpPosition battle_event_cmd.o] LW(10) LW(0) LW(1) LW(2) 20 -1
+80617720:   setff LW(12) 30.00
+8061772C:   setff LW(13) 0.00
+80617738:   loop 15
+80617740:     callc [evt_sub_get_sincos evt_sub.o] LW(13) LW(14) LW(15)
+80617754:     mulf LW(14) LW(12)
+80617760:     callc [btlevtcmd_SetRotate battle_event_cmd.o] LW(10) 0 0 LW(14)
+80617778:     subf LW(12) 2.00
+80617784:     addf LW(13) 30.00
+80617790:     wait_frames 1
+80617798:   end_loop
+8061779C:   callc [btlevtcmd_SetRotate battle_event_cmd.o] LW(10) 0 0 0
+806177B4:   callc [btlevtcmd_SetPartsDefenceTable battle_event_cmd.o] LW(10) LW(11) [defence_guard unit_togenoko_ace.o]
+806177C8:   callc [btlevtcmd_SetPartsDefenceAttrTable battle_event_cmd.o] LW(10) LW(11) [defence_attr_guard unit_togenoko_ace.o]
+806177DC:   callc [btlevtcmd_SetRegistStatus battle_event_cmd.o] LW(10) [regist_guard unit_togenoko_ace.o]
+806177EC:   callc [btlevtcmd_AnimeSetPoseTable battle_event_cmd.o] LW(10) LW(11) [pose_table_guard unit_togenoko_ace.o]
+80617800:   callc [btlevtcmd_ChangeDataTable battle_event_cmd.o] LW(10) [data_table_guard unit_togenoko_ace.o]
+80617810:   callc [btlevtcmd_SetUnitWork battle_event_cmd.o] LW(10) 0 1
+80617824:   callc [btlevtcmd_SetHitOffset battle_event_cmd.o] LW(10) LW(11) 0 -20 0
+80617840:   wait_ms 300
+80617848:   return
+8061784C:   end

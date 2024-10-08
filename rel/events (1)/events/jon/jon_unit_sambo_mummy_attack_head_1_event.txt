@@ -1,0 +1,189 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [attack_head_1_event unit_sambo_mummy.o] AT 80CBFEC8 ---
+80CBFEC8:   callc [btlevtcmd_GetEnemyBelong battle_event_cmd.o] -2 LW(0)
+80CBFED8:   callc [btlevtcmd_SamplingEnemy battle_event_cmd.o] -2 LW(0) [weapon_sambo_mummy_head_attack_1 unit_sambo_mummy.o]
+80CBFEEC:   callc [btlevtcmd_ChoiceSamplingEnemy battle_event_cmd.o] [weapon_sambo_mummy_head_attack_1 unit_sambo_mummy.o] LW(3) LW(4)
+80CBFF00:   if_int_eq LW(3) -1
+80CBFF0C:     callc [btlevtcmd_CheckToken battle_event_cmd.o] -2 16 LW(0)
+80CBFF20:     if_int_ne LW(0) 0
+80CBFF2C:       callss [subsetevt_confuse_flustered battle_event_subset.o]
+80CBFF34:       return
+80CBFF38:     endif
+80CBFF3C:     goto 99
+80CBFF44:   endif
+80CBFF48:   callc [btlevtcmd_WeaponAftereffect battle_event_cmd.o] [weapon_sambo_mummy_head_attack_1 unit_sambo_mummy.o]
+80CBFF54:   callc [btlevtcmd_AttackDeclare battle_event_cmd.o] -2 LW(3) LW(4)
+80CBFF68:   callc [btlevtcmd_WaitGuardMove battle_event_cmd.o]
+80CBFF70:   callc [btlevtcmd_PayWeaponCost battle_event_cmd.o] -2 [weapon_sambo_mummy_head_attack_1 unit_sambo_mummy.o]
+80CBFF80:   callc [evt_btl_camera_set_mode battle_camera.o] 0 8
+80CBFF90:   callc [evt_btl_camera_set_homing_unit battle_camera.o] 0 -2 LW(3)
+80CBFFA4:   callc [evt_btl_camera_set_moveSpeedLv battle_camera.o] 0 2
+80CBFFB4:   callc [evt_btl_camera_set_zoom battle_camera.o] 0 200
+80CBFFC4:   callc [btlevtcmd_SetMoveSpeed battle_event_cmd.o] -2 2.00
+80CBFFD4:   callc [btlevtcmd_SetFallAccel battle_event_cmd.o] -2 0.60
+80CBFFE4:   callc [btlevtcmd_GetHitPos battle_event_cmd.o] LW(3) LW(4) LW(5) LW(6) LW(7)
+80CC0000:   callc [btlevtcmd_TransStageFloorPosition battle_event_cmd.o] LW(5) LW(6) LW(7)
+80CC0014:   callc [btlevtcmd_FaceDirectionAdd battle_event_cmd.o] LW(3) LW(5) 50
+80CC0028:   setii LW(8) 35
+80CC0034:   callss [sambo_rabbit_move unit_sambo_mummy.o]
+80CC003C:   wait_frames 10
+80CC0044:   callc [btlevtcmd_PreCheckDamage battle_event_cmd.o] -2 LW(3) LW(4) [weapon_sambo_mummy_head_attack_1 unit_sambo_mummy.o] 256 LW(5)
+80CC0064:   switchi LW(5)
+80CC006C:     case_int_eq_any 4
+80CC0074:       goto 90
+80CC007C:       end_multi_case
+80CC0080:     case_int_eq 3
+80CC0088:       callc [btlevtcmd_StartAvoid battle_event_cmd.o] LW(3) 38
+80CC0098:       goto 90
+80CC00A0:       end_multi_case
+80CC00A4:     case_int_eq 6
+80CC00AC:       callc [btlevtcmd_StartAvoid battle_event_cmd.o] LW(3) 39
+80CC00BC:       goto 90
+80CC00C4:     case_int_eq 2
+80CC00CC:       callc [btlevtcmd_StartAvoid battle_event_cmd.o] LW(3) 40
+80CC00DC:       goto 90
+80CC00E4:     case_int_eq 1
+80CC00EC:       goto 91
+80CC00F4:       end_multi_case
+80CC00F8:     case_default
+80CC00FC:       goto 98
+80CC0104:       end_multi_case
+80CC0108:   end_switch
+80CC010C: 90:
+80CC0114:   callc [btlevtcmd_SetFallAccel battle_event_cmd.o] -2 0.30
+80CC0124:   callc [btlevtcmd_GetHitPos battle_event_cmd.o] LW(3) LW(4) LW(0) LW(1) LW(2)
+80CC0140:   callc [btlevtcmd_FaceDirectionSub battle_event_cmd.o] LW(3) LW(0) 5
+80CC0154:   callc [btlevtcmd_TransStageFloorPosition battle_event_cmd.o] LW(0) LW(1) LW(2)
+80CC0168:   addi LW(1) 10
+80CC0174:   begin_child_thread
+80CC0178:     wait_frames 2
+80CC0180:     callc [btlevtcmd_CalculateFaceDirection battle_event_cmd.o] -2 -1 LW(3) LW(4) 16 LW(15)
+80CC01A0:     setii LW(14) -10
+80CC01AC:     if_int_eq LW(15) -1
+80CC01B8:       setii LW(14) 10
+80CC01C4:     endif
+80CC01C8:     setii LW(0) 0
+80CC01D4:     loop 15
+80CC01DC:       addi LW(0) LW(14)
+80CC01E8:       callc [btlevtcmd_SetRotate battle_event_cmd.o] -2 0 0 LW(0)
+80CC0200:       wait_frames 1
+80CC0208:     end_loop
+80CC020C:   end_child_thread
+80CC0210:   callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_ENM_SAMBO_MOVE3"] [F1194D80] 0 [F1194D80]
+80CC022C:   callc [btlevtcmd_JumpPosition battle_event_cmd.o] -2 LW(0) LW(1) LW(2) 44 -1
+80CC024C:   callc [btlevtcmd_SetRotateOffset battle_event_cmd.o] -2 0 10 0
+80CC0264:   begin_child_thread
+80CC0268:     wait_frames 2
+80CC0270:     callc [btlevtcmd_CalculateFaceDirection battle_event_cmd.o] -2 -1 LW(3) LW(4) 16 LW(15)
+80CC0290:     setii LW(0) 180
+80CC029C:     loop 12
+80CC02A4:       if_int_eq LW(15) -1
+80CC02B0:         addi LW(0) 15
+80CC02BC:         if_int_eq LW(0) 360
+80CC02C8:           setii LW(0) 0
+80CC02D4:         endif
+80CC02D8:       else
+80CC02DC:         subi LW(0) 15
+80CC02E8:         if_int_eq LW(0) 0
+80CC02F4:           setii LW(0) 360
+80CC0300:         endif
+80CC0304:       endif
+80CC0308:       callc [btlevtcmd_SetRotate battle_event_cmd.o] -2 0 0 LW(0)
+80CC0320:       wait_frames 1
+80CC0328:     end_loop
+80CC032C:     callc [btlevtcmd_SetRotateOffset battle_event_cmd.o] -2 0 0 0
+80CC0344:   end_child_thread
+80CC0348:   callc [btlevtcmd_SetFallAccel battle_event_cmd.o] -2 1.00
+80CC0358:   callc [btlevtcmd_GetPos battle_event_cmd.o] -2 LW(0) LW(1) LW(2)
+80CC0370:   callc [btlevtcmd_FaceDirectionSub battle_event_cmd.o] LW(3) LW(0) 30
+80CC0384:   callc [btlevtcmd_TransStageFloorPosition battle_event_cmd.o] LW(0) LW(1) LW(2)
+80CC0398:   callc [btlevtcmd_JumpPosition battle_event_cmd.o] -2 LW(0) LW(1) LW(2) 12 -1
+80CC03B8:   callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_ENM_SAMBO_MOVE2"] [F1194D80] 0 [F1194D80]
+80CC03D4:   wait_frames 30
+80CC03DC:   callc [evt_btl_camera_set_mode battle_camera.o] 0 0
+80CC03EC:   goto 98
+80CC03F4: 91:
+80CC03FC:   callc [btlevtcmd_GetHitPos battle_event_cmd.o] LW(3) LW(4) LW(0) LW(1) LW(2)
+80CC0418:   addi LW(1) 10
+80CC0424:   callc [btlevtcmd_SetFallAccel battle_event_cmd.o] -2 0.30
+80CC0434:   begin_child_thread
+80CC0438:     wait_frames 2
+80CC0440:     callc [btlevtcmd_CalculateFaceDirection battle_event_cmd.o] -2 -1 LW(3) LW(4) 16 LW(15)
+80CC0460:     setii LW(14) -10
+80CC046C:     if_int_eq LW(15) -1
+80CC0478:       setii LW(14) 10
+80CC0484:     endif
+80CC0488:     setii LW(0) 0
+80CC0494:     loop 15
+80CC049C:       addi LW(0) LW(14)
+80CC04A8:       callc [btlevtcmd_SetRotate battle_event_cmd.o] -2 0 0 LW(0)
+80CC04C0:       wait_frames 1
+80CC04C8:     end_loop
+80CC04CC:   end_child_thread
+80CC04D0:   callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_ENM_SAMBO_MOVE3"] [F1194D80] 0 [F1194D80]
+80CC04EC:   callc [btlevtcmd_JumpPosition battle_event_cmd.o] -2 LW(0) LW(1) LW(2) 36 -1
+80CC050C:   callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_ENM_SAMBO_ATTACK6"] [F1194D80] 0 [F1194D80]
+80CC0528:   callc [evt_btl_camera_shake_h battle_camera.o] 0 1 1 8 0
+80CC0544:   callc [evt_btl_camera_set_moveSpeedLv battle_camera.o] 0 2
+80CC0554:   callc [evt_btl_camera_add_zoom battle_camera.o] 0 -50
+80CC0564:   wait_frames 2
+80CC056C:   callc [btlevtcmd_ResultACDefence battle_event_cmd.o] LW(3) [weapon_sambo_mummy_head_attack_1 unit_sambo_mummy.o]
+80CC057C:   callc [btlevtcmd_CheckDamage battle_event_cmd.o] -2 LW(3) LW(4) [weapon_sambo_mummy_head_attack_1 unit_sambo_mummy.o] 256 LW(5)
+80CC059C:   callc [evt_btl_camera_set_mode battle_camera.o] 0 0
+80CC05AC:   callc [btlevtcmd_SetFallAccel battle_event_cmd.o] -2 0.90
+80CC05BC:   callc [btlevtcmd_SetRotate battle_event_cmd.o] -2 0 0 0
+80CC05D4:   callc [btlevtcmd_GetPos battle_event_cmd.o] -2 LW(0) LW(1) LW(2)
+80CC05EC:   callc [btlevtcmd_FaceDirectionSub battle_event_cmd.o] -2 LW(0) 40
+80CC0600:   callc [btlevtcmd_TransStageFloorPosition battle_event_cmd.o] LW(0) LW(1) LW(2)
+80CC0614:   callc [btlevtcmd_JumpPosition battle_event_cmd.o] -2 LW(0) LW(1) LW(2) 20 -1
+80CC0634:   callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_ENM_SAMBO_MOVE2"] [F1194D80] 0 [F1194D80]
+80CC0650:   callc [btlevtcmd_FaceDirectionSub battle_event_cmd.o] -2 LW(0) 30
+80CC0664:   callc [btlevtcmd_JumpPosition battle_event_cmd.o] -2 LW(0) LW(1) LW(2) 16 -1
+80CC0684:   callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_ENM_SAMBO_MOVE2"] [F1194D80] 0 [F1194D80]
+80CC06A0:   callc [btlevtcmd_FaceDirectionSub battle_event_cmd.o] -2 LW(0) 20
+80CC06B4:   callc [btlevtcmd_JumpPosition battle_event_cmd.o] -2 LW(0) LW(1) LW(2) 12 -1
+80CC06D4:   callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_ENM_SAMBO_MOVE2"] [F1194D80] 0 [F1194D80]
+80CC06F0:   callc [btlevtcmd_FaceDirectionSub battle_event_cmd.o] -2 LW(0) 10
+80CC0704:   callc [btlevtcmd_JumpPosition battle_event_cmd.o] -2 LW(0) LW(1) LW(2) 8 -1
+80CC0724:   callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_ENM_SAMBO_MOVE2"] [F1194D80] 0 [F1194D80]
+80CC0740:   callc [btlevtcmd_AnimeChangePoseType battle_event_cmd.o] -2 4 43
+80CC0754: 98:
+80CC075C:   callc [evt_btl_camera_set_mode battle_camera.o] 0 0
+80CC076C:   callc [btlevtcmd_AnimeChangePoseType battle_event_cmd.o] -2 4 41
+80CC0780:   callc [btlevtcmd_SetMoveSpeed battle_event_cmd.o] -2 3.00
+80CC0790:   callc [btlevtcmd_SetFallAccel battle_event_cmd.o] -2 0.50
+80CC07A0:   callc [btlevtcmd_GetHomePos battle_event_cmd.o] -2 LW(5) LW(6) LW(7)
+80CC07B8:   setii LW(8) 35
+80CC07C4:   callss [sambo_rabbit_move unit_sambo_mummy.o]
+80CC07CC: 99:
+80CC07D4:   callc [btlevtcmd_ResetFaceDirection battle_event_cmd.o] -2
+80CC07E0:   callc [btlevtcmd_StartWaitEvent battle_event_cmd.o] -2
+80CC07EC:   return
+80CC07F0:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [sambo_rabbit_move unit_sambo_mummy.o] AT 80CC1A54 ---
+80CC1A54: 0:
+80CC1A5C:   callc [btlevtcmd_GetPos battle_event_cmd.o] -2 LW(0) LW(1) LW(2)
+80CC1A74:   setii LW(11) LW(5)
+80CC1A80:   subi LW(11) LW(0)
+80CC1A8C:   setii LW(12) LW(11)
+80CC1A98:   if_int_lt LW(12) 0
+80CC1AA4:     muli LW(12) -1
+80CC1AB0:   endif
+80CC1AB4:   if_int_gt LW(12) LW(8)
+80CC1AC0:     if_int_ge LW(11) 0
+80CC1ACC:       addi LW(0) LW(8)
+80CC1AD8:     else
+80CC1ADC:       subi LW(0) LW(8)
+80CC1AE8:     endif
+80CC1AEC:     callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_ENM_SAMBO_MOVE2"] [F1194D80] 0 [F1194D80]
+80CC1B08:     callc [btlevtcmd_JumpPosition battle_event_cmd.o] -2 LW(0) LW(6) LW(2) 0 -1
+80CC1B28:     goto 0
+80CC1B30:   else
+80CC1B34:     callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_ENM_SAMBO_MOVE2"] [F1194D80] 0 [F1194D80]
+80CC1B50:     callc [btlevtcmd_JumpPosition battle_event_cmd.o] -2 LW(5) LW(6) LW(7) 0 -1
+80CC1B70:   endif
+80CC1B74:   return
+80CC1B78:   end

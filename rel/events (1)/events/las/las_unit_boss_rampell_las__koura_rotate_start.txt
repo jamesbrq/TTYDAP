@@ -1,0 +1,39 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [_koura_rotate_start unit_boss_rampell_las.o] AT 806047D0 ---
+806047D0:   callc [btlevtcmd_SetUnitWork battle_event_cmd.o] -2 8 1
+806047E4:   callc [btlevtcmd_SetUnitWork battle_event_cmd.o] -2 10 0
+806047F8:   begin_thread
+806047FC: 0:
+80604804:     callc [btlevtcmd_GetUnitWork battle_event_cmd.o] -2 8 LW(1)
+80604818:     if_int_eq LW(1) 0
+80604824:       goto 10
+8060482C:     endif
+80604830:     callc [btlevtcmd_GetUnitWork battle_event_cmd.o] -2 10 LW(11)
+80604844:     if_int_ne LW(11) 0
+80604850:       callc [btlevtcmd_SetUnitWork battle_event_cmd.o] -2 10 0
+80604864:       callc [btlevtcmd_GetUnitWork battle_event_cmd.o] -2 9 LW(10)
+80604878:       muli LW(10) -1
+80604884:       muli LW(0) -1
+80604890:       callc [btlevtcmd_SetUnitWork battle_event_cmd.o] -2 9 LW(10)
+806048A4:     endif
+806048A8:     callc [btlevtcmd_GetUnitWork battle_event_cmd.o] -2 9 LW(10)
+806048BC:     if_int_ge LW(10) 0
+806048C8:       addi LW(0) 1
+806048D4:       if_int_gt LW(0) LW(10)
+806048E0:         setii LW(0) LW(10)
+806048EC:       endif
+806048F0:     else
+806048F4:       subi LW(0) 1
+80604900:       if_int_lt LW(0) LW(10)
+8060490C:         setii LW(0) LW(10)
+80604918:       endif
+8060491C:     endif
+80604920:     callc [btlevtcmd_AddRotate battle_event_cmd.o] -2 0 LW(0) 0
+80604938:     wait_frames 1
+80604940:     goto 0
+80604948: 10:
+80604950:   end_thread
+80604954:   return
+80604958:   end

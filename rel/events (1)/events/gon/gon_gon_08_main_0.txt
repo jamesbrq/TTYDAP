@@ -1,0 +1,186 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [main_0 gon_08.o] AT 805CB6EC ---
+805CB6EC:   set_thread_type_mask 239
+805CB6F4:   callc [evt_mobj_hitevt_onoff evt_mobj.o] ["me"] 0
+805CB704:   if_int_ne 1 0
+805CB710:     setii LW(10) 0
+805CB71C:     if_int_eq 0 0
+805CB728:       if_int_eq LSWF(3) 0
+805CB734:         setii LW(10) 0
+805CB740:       else
+805CB744:         setii LW(10) 1
+805CB750:       endif
+805CB754:     else
+805CB758:       if_int_eq LSWF(3) 0
+805CB764:         setii LW(10) 1
+805CB770:       else
+805CB774:         setii LW(10) 0
+805CB780:       endif
+805CB784:     endif
+805CB788:     if_int_eq LW(10) 0
+805CB794:       callc [evt_mobj_get_y_position evt_mobj.o] ["blk_0"] LW(2)
+805CB7A4:       setff LW(3) LW(2)
+805CB7B0:       addf LW(3) 600.00
+805CB7BC:       setff LW(8) 0.00
+805CB7C8:       setff LW(9) 2.00
+805CB7D4:     else
+805CB7D8:       callc [evt_mobj_get_y_position evt_mobj.o] ["blk_0"] LW(2)
+805CB7E8:       setff LW(3) LW(2)
+805CB7F4:       subf LW(3) 600.00
+805CB800:       setff LW(8) -0.20
+805CB80C:       setff LW(9) 0
+805CB818:     endif
+805CB81C:     begin_thread
+805CB820:       wait_frames 10
+805CB828:       callc [evt_sub_intpl_init evt_sub.o] 11 10 3 4
+805CB840: 0:
+805CB848:       callc [evt_sub_intpl_get_value evt_sub.o]
+805CB850:       divf LW(0) 1000.00
+805CB85C:       callc [evt_cam_shake evt_cam.o] 4 0.00 LW(0) 100
+805CB874:       if_int_eq LW(1) 1
+805CB880:         goto 0
+805CB888:       endif
+805CB88C:     end_thread
+805CB890:     wait_ms 500
+805CB898:     callc [evt_mobj_get_position evt_mobj.o] ["blk_0"] LW(12) LW(13) LW(14)
+805CB8B0:     callc [evt_mobj_get_kindname evt_mobj.o] ["blk_0"] LW(11)
+805CB8C0:     setii LF(0) 0
+805CB8CC:     if_string_eq LW(11) ["MOBJ_green_big02_FlowBlock"]
+805CB8D8:       setii LF(0) 1
+805CB8E4:     endif
+805CB8E8:     if_string_eq LW(11) ["MOBJ_purple_big02_FlowBlock"]
+805CB8F4:       setii LF(0) 1
+805CB900:     endif
+805CB904:     if_string_eq LW(11) ["MOBJ_orange_big02_FlowBlock"]
+805CB910:       setii LF(0) 1
+805CB91C:     endif
+805CB920:     if_int_eq LW(10) 0
+805CB92C:       setii LF(1) 0
+805CB938:       if_int_eq LF(0) 1
+805CB944:         callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_MOBJ_BLOCK_B_FLOAT_MOVE1"] LW(12) LW(13) LW(14) LW(15)
+805CB960:       else
+805CB964:         callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_MOBJ_BLOCK_S_FLOAT_MOVE1"] LW(12) LW(13) LW(14) LW(15)
+805CB980:       endif
+805CB984:     else
+805CB988:       setii LF(1) 1
+805CB994:       if_int_eq LF(0) 1
+805CB9A0:         callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_MOBJ_BLOCK_B_FLOAT_DOWN1"] LW(12) LW(13) LW(14) LW(15)
+805CB9BC:       else
+805CB9C0:         callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_MOBJ_BLOCK_S_FLOAT_DOWN1"] LW(12) LW(13) LW(14) LW(15)
+805CB9DC:       endif
+805CB9E0:     endif
+805CB9E4:     setff LW(4) LW(2)
+805CB9F0:     setii LF(0) 0
+805CB9FC:     loop 0
+805CBA04:       callc [evt_mario_get_party evt_mario.o] LW(5)
+805CBA10:       if_int_eq LW(5) 0
+805CBA1C:         callc [evt_mario_get_name_hitobj_head evt_mario.o] LW(6)
+805CBA28:         if_string_eq LW(6) ["blk_0"]
+805CBA34:           goto 1
+805CBA3C:         endif
+805CBA40:       else
+805CBA44:         callc [evt_mario_get_name_hitobj_head evt_mario.o] LW(6)
+805CBA50:         if_string_eq LW(6) ["MOBJ_blk_0"]
+805CBA5C:           goto 1
+805CBA64:         endif
+805CBA68:         if_string_eq LW(7) ["MOBJ_blk_0"]
+805CBA74:           goto 1
+805CBA7C:         endif
+805CBA80:       endif
+805CBA84:       goto 2
+805CBA8C: 1:
+805CBA94:       if_int_eq LW(10) 1
+805CBAA0:         setff LW(5) LW(2)
+805CBAAC:         setff LW(2) LW(3)
+805CBAB8:         setff LW(3) LW(5)
+805CBAC4:         setff LW(9) 2.00
+805CBAD0:         setff LW(8) 0
+805CBADC:         setff LW(10) 0
+805CBAE8:         if_int_eq LSWF(3) 0
+805CBAF4:           setii LSWF(3) 1
+805CBB00:         else
+805CBB04:           setii LSWF(3) 0
+805CBB10:         endif
+805CBB14:         callc [evt_mobj_exec_cancel evt_mobj.o] ["sw_0"]
+805CBB20:       endif
+805CBB24: 2:
+805CBB2C:       addf LW(4) LW(9)
+805CBB38:       addf LW(9) LW(8)
+805CBB44:       if_float_ge LW(9) 4.00
+805CBB50:         setff LW(9) 4.00
+805CBB5C:       endif
+805CBB60:       callc [evt_mobj_get_position evt_mobj.o] ["blk_0"] LW(11) LW(12) LW(13)
+805CBB78:       callc [evt_snd_sfx_pos evt_snd.o] LW(15) LW(11) LW(12) LW(13)
+805CBB90:       if_int_eq LW(10) 0
+805CBB9C:         if_int_ge LW(4) LW(3)
+805CBBA8:           setff LW(4) LW(3)
+805CBBB4:           setii LF(0) 1
+805CBBC0:         endif
+805CBBC4:       else
+805CBBC8:         if_int_le LW(4) LW(3)
+805CBBD4:           setff LW(4) LW(3)
+805CBBE0:           setii LF(0) 1
+805CBBEC:         endif
+805CBBF0:       endif
+805CBBF4:       callc [evt_mobj_set_y_position evt_mobj.o] ["blk_0"] LW(4)
+805CBC04:       if_int_eq LF(0) 1
+805CBC10:         loop_break
+805CBC14:       endif
+805CBC18:       wait_frames 1
+805CBC20:     end_loop
+805CBC24:     if_int_eq LF(1) 0
+805CBC30:       callc [evt_snd_sfxoff evt_snd.o] LW(15)
+805CBC3C:     endif
+805CBC40:     begin_thread
+805CBC44:       callc [evt_mobj_get_position evt_mobj.o] ["blk_0"] LW(13) LW(14) LW(15)
+805CBC5C:       callc [evt_mobj_get_kindname evt_mobj.o] ["blk_0"] LW(12)
+805CBC6C:       setii LF(0) 0
+805CBC78:       if_string_eq LW(12) ["MOBJ_green_big02_FlowBlock"]
+805CBC84:         setii LF(0) 1
+805CBC90:       endif
+805CBC94:       if_string_eq LW(12) ["MOBJ_purple_big02_FlowBlock"]
+805CBCA0:         setii LF(0) 1
+805CBCAC:       endif
+805CBCB0:       if_string_eq LW(12) ["MOBJ_orange_big02_FlowBlock"]
+805CBCBC:         setii LF(0) 1
+805CBCC8:       endif
+805CBCCC:       if_int_eq LW(10) 1
+805CBCD8:         callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_MOBJ_BLOCK_B_FLOAT_STOP1"] LW(13) LW(14) LW(15) 0
+805CBCF4:       endif
+805CBCF8:     end_thread
+805CBCFC:     if_int_eq LW(10) 1
+805CBD08:       begin_thread
+805CBD0C:         callc [evt_sub_intpl_init evt_sub.o] 11 10 3 10
+805CBD24: 2:
+805CBD2C:         callc [evt_sub_intpl_get_value evt_sub.o]
+805CBD34:         divf LW(0) 1000.00
+805CBD40:         callc [evt_cam_shake evt_cam.o] 4 0.00 LW(0) 100
+805CBD58:         if_int_eq LW(1) 1
+805CBD64:           goto 2
+805CBD6C:         endif
+805CBD70:       end_thread
+805CBD74:       wait_ms 1000
+805CBD7C:     endif
+805CBD80:     if_int_eq LSWF(3) 0
+805CBD8C:       setii LSWF(3) 1
+805CBD98:     else
+805CBD9C:       setii LSWF(3) 0
+805CBDA8:     endif
+805CBDAC:   else
+805CBDB0:     callc [evt_mobj_exec_cancel evt_mobj.o] ["sw_0"]
+805CBDBC:     setii LW(0) 0
+805CBDC8:     loop 0
+805CBDD0:       wait_frames 2
+805CBDD8:       setii LW(1) LW(0)
+805CBDE4:       modi LW(1) 2
+805CBDF0:       addi LW(0) 1
+805CBDFC:       if_int_ge LW(0) 20
+805CBE08:         loop_break
+805CBE0C:       endif
+805CBE10:     end_loop
+805CBE14:   endif
+805CBE18:   callc [evt_mobj_hitevt_onoff evt_mobj.o] ["me"] 1
+805CBE28:   return
+805CBE2C:   end

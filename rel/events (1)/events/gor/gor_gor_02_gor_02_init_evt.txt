@@ -1,0 +1,1144 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [gor_02_init_evt gor_02.o] AT 80607EF4 ---
+80607EF4:   switchi GSW(0)
+80607EFC:     case_int_eq_any 18
+80607F04:     case_int_eq_any 64
+80607F0C:     case_int_eq_any 120
+80607F14:     case_int_eq_any 174
+80607F1C:     case_int_eq_any 221
+80607F24:     case_int_eq_any 271
+80607F2C:     case_int_eq_any 347
+80607F34:       callc [evt_snd_bgmon evt_snd.o] 512 ["BGM_EVT_FRANKURI1"]
+80607F44:       callc [evt_snd_envoff evt_snd.o] 512
+80607F50:       end_multi_case
+80607F54:     case_default
+80607F58:       if_int_ne GSW(0) 402
+80607F64:         callc [evt_snd_bgmon evt_snd.o] 512 ["BGM_STG0_GOR1"]
+80607F74:         callc [evt_snd_envon evt_snd.o] 272 ["ENV_STG0_GOR3"]
+80607F84:       endif
+80607F88:   end_switch
+80607F8C:   setii LW(0) [bero_entry_data gor_02.o]
+80607F98:   callc [evt_bero_get_info evt_bero.o]
+80607FA0:   callss [evt_bero_info_run evt_bero.o]
+80607FA8:   if_int_ge GSW(0) 268
+80607FB4:     callsa [dearu_event gor_02.o]
+80607FBC:   else
+80607FC0:     setii GSWF(1203) 0
+80607FCC:   endif
+80607FD0:   callc [evt_npc_setup evt_npc.o] [npcEnt gor_02.o]
+80607FDC:   if_int_eq GSW(0) 7
+80607FE8:     callc [evt_npc_entry evt_npc.o] ["盗賊"] ["c_borodo_n"]
+80607FF8:     callc [evt_npc_set_tribe evt_npc.o] ["盗賊"] ["盗賊"]
+80608008:     callc [evt_npc_set_position evt_npc.o] ["盗賊"] 0 -1000 0
+80608020:     callc [evt_npc_set_ry evt_npc.o] ["盗賊"] 90
+80608030:   endif
+80608034:   callc [evt_map_playanim evt_map.o] ["mizu"] 1 0
+80608048:   callc [evt_map_playanim evt_map.o] ["noname"] 1 0
+8060805C:   callc [evt_map_playanim evt_map.o] ["ie_01_light"] 1 0
+80608070:   callc [evt_hit_damage_return_set evt_hit.o] [hitDmgRetPoints gor_02.o]
+8060807C:   callss [evt_gazigazi_entry evt_damage.o]
+80608084:   callc [evt_mobj_kururing_floor evt_mobj.o] ["kururin1"] -220 0 50 ["S_yuka_A01"] 125 GSWF(5574)
+806080A8:   callc [evt_mobj_kururing_floor evt_mobj.o] ["kururin2"] 500 124 -75 ["S_i06_kabe_01A"] 125 GSWF(5578)
+806080CC:   callc [evt_mobj_itembox evt_mobj.o] ["mobj_box01"] 175 -50 350 0 0 [mobj_box01 gor_02.o] GSWF(1248)
+806080F4:   callc [evt_mobj_powerupblk evt_mobj.o] ["pblk1"] -250 288 -500 0 GSWF(5525) 0
+80608118:   callc [evt_mobj_powerupblk evt_mobj.o] ["pblk2"] -30 60 -215 0 GSWF(5526) 0
+8060813C:   callc [evt_mobj_powerupblk evt_mobj.o] ["pblk3"] 540 60 -260 0 GSWF(5529) 0
+80608160:   callc [evt_item_entry evt_item.o] ["item_star1"] 125 -3 40 -325 16 GSWF(5575) 0
+80608188:   callc [evt_item_entry evt_item.o] ["item_star2"] 125 65 150 -165 16 GSWF(5576) 0
+806081B0:   callc [evt_item_entry evt_item.o] ["item_star3"] 125 50 0 -390 16 GSWF(5577) 0
+806081D8:   setii LW(0) [door_data_02 gor_02.o]
+806081E4:   callss [evt_door_02_entry gor_02.o]
+806081EC:   setii LW(0) [door_data_03 gor_02.o]
+806081F8:   callss [evt_door_03_entry gor_02.o]
+80608200:   setii LW(0) [door_data_03_roll gor_02.o]
+8060820C:   callss [evt_door_03_roll_entry gor_02.o]
+80608214:   if_int_lt GSW(0) 23
+80608220:     callc [evt_mapobj_flag_onoff evt_map.o] 1 1 ["S_ie_04_naka"] 1
+80608238:     callc [evt_hitobj_onoff evt_hit.o] ["A_ie_04C"] 1 0
+8060824C:     callc [evt_run_case_evt evt_case.o] 9 1 ["A_ie_04_doa01"] 0 [evt_door_04_junbi gor_02.o] 0
+8060826C:   else
+80608270:     setii LW(0) [door_data_04 gor_02.o]
+8060827C:     callss [evt_door_entry evt_door.o]
+80608284:   endif
+80608288:   setii LW(0) [door_data_05 gor_02.o]
+80608294:   callc [evt_door_data_copy evt_door.o] LW(0) GW(11)
+806082A4:   setii LW(0) GW(11)
+806082B0:   if_int_ne GSW(1420) 1
+806082BC:     callc [evt_door_set_param evt_door.o] GW(11) 0 [door_data_05_npc gor_02.o]
+806082D0:   else
+806082D4:     callc [evt_door_set_param evt_door.o] GW(11) 0 [door_data_05_npc_01 gor_02.o]
+806082E8:   endif
+806082EC:   callc [evt_door_param evt_door.o] LW(0) 3 LW(1) LW(2)
+80608304:   if_int_ne LW(1) 0
+80608310:     callc [evt_mapobj_flag_onoff evt_map.o] 1 1 LW(1) 1
+80608328:   endif
+8060832C:   if_int_ne LW(2) 0
+80608338:     callc [evt_hitobj_onoff evt_hit.o] LW(2) 1 0
+8060834C:   endif
+80608350:   callc [evt_door_param evt_door.o] LW(0) 1 LW(1) LW(2) LW(3)
+8060836C:   if_int_ne LW(2) 0
+80608378:     setii LW(15) 0
+80608384:     callc [evt_run_case_evt evt_case.o] 9 1 LW(2) 0 [evt_door_close evt_door.o] 0
+806083A4:   endif
+806083A8:   if_int_ne LW(3) 0
+806083B4:     setii LW(15) 4
+806083C0:     callc [evt_run_case_evt evt_case.o] 9 1 LW(3) 0 [evt_door_open evt_door.o] 0
+806083E0:   endif
+806083E4:   if_int_eq GSWF(1219) 0
+806083F0:     callc [evt_mobj_lock evt_mobj.o] ["mobj_lock00"] 49 446 18 50 0 [evt_chk gor_02.o] [evt_unlock gor_02.o] GSWF(1219)
+8060841C:   else
+80608420:     setii LW(0) [door_data_06 gor_02.o]
+8060842C:     callc [evt_door_data_copy evt_door.o] LW(0) LW(1)
+8060843C:     setii LW(0) LW(1)
+80608448:     if_int_eq GSWF(5375) 0
+80608454:       callc [evt_door_set_param evt_door.o] LW(0) 0 [door_data_06_npc gor_02.o]
+80608468:     else
+8060846C:       callc [evt_door_set_param evt_door.o] LW(0) 0 [door_data_06_npc_01 gor_02.o]
+80608480:     endif
+80608484:     callss [evt_door_entry evt_door.o]
+8060848C:   endif
+80608490:   if_int_ge GSW(0) 10
+8060849C:     callc [evt_mapobj_flag_onoff evt_map.o] 1 1 ["S_saku04"] 1
+806084B4:     callc [evt_hitobj_onoff evt_hit.o] ["A_saku_04"] 1 0
+806084C8:   endif
+806084CC:   if_int_ge GSW(0) 7
+806084D8:     if_int_le GSW(0) 10
+806084E4:       callc [evt_npc_entry evt_npc.o] ["クリスチーヌ"] ["c_pkr"]
+806084F4:       callc [evt_npc_set_tribe evt_npc.o] ["クリスチーヌ"] ["クリスチーヌ"]
+80608504:       callc [evt_npc_set_position evt_npc.o] ["クリスチーヌ"] 0 -1000 0
+8060851C:       callc [evt_npc_set_ry evt_npc.o] ["クリスチーヌ"] 90
+8060852C:     endif
+80608530:   endif
+80608534:   if_int_eq GSW(0) 10
+80608540:     callsa [kurihakase_lecture gor_02.o]
+80608548:   endif
+8060854C:   switchi GSW(0)
+80608554:     case_int_eq 18
+8060855C:       callsa [epigraphy_map gor_02.o]
+80608564:     case_int_eq 64
+8060856C:       callsa [epigraphy_map_after_stage1 gor_02.o]
+80608574:     case_int_eq 120
+8060857C:       callsa [epigraphy_map_after_stage2 gor_02.o]
+80608584:     case_int_eq 174
+8060858C:       callsa [epigraphy_map_after_stage3 gor_02.o]
+80608594:     case_int_eq 221
+8060859C:       callsa [epigraphy_map_after_stage4 gor_02.o]
+806085A4:     case_int_eq 271
+806085AC:       callsa [epigraphy_map_after_stage5 gor_02.o]
+806085B4:     case_int_eq 347
+806085BC:       callsa [epigraphy_map_after_stage6 gor_02.o]
+806085C4:   end_switch
+806085C8:   callsa [evt_gor_offscren_door_entry gor_02.o]
+806085D0:   callsa [gor_goki1_urouro gor_02.o]
+806085D8:   callsa [gor_goki2_urouro gor_02.o]
+806085E0:   callsa [gor_irai_init gor_irai.o]
+806085E8:   if_int_eq GSWF(1221) 0
+806085F4:     callc [evt_cloud_init evt_cloud.o]
+806085FC:     callc [evt_cloud_ent evt_cloud.o] 0 ["S_i04_kabe_msk"] ["A_i04_kabe_msk"] [evt_cloud gor_02.o]
+80608614:     begin_thread
+80608618:       loop 0
+80608620:         if_int_eq GSWF(1221) 1
+8060862C:           loop_break
+80608630:         endif
+80608634:         callc [evt_cloud_get_mode evt_cloud.o] LW(0)
+80608640:         if_int_ne LW(0) -1
+8060864C:           if_int_eq LW(0) 0
+80608658:             callc [evt_mapobj_flag_onoff evt_map.o] 1 1 ["S_i04_ura_01B"] 1
+80608670:           else
+80608674:             callc [evt_mapobj_flag_onoff evt_map.o] 1 0 ["S_i04_ura_01B"] 1
+8060868C:           endif
+80608690:         endif
+80608694:         wait_frames 1
+8060869C:       end_loop
+806086A0:     end_thread
+806086A4:   else
+806086A8:     setii LW(0) [door_data_04_ura gor_02.o]
+806086B4:     callss [evt_door_entry evt_door.o]
+806086BC:     callc [evt_mapobj_flag_onoff evt_map.o] 1 1 ["S_i04_kabe_msk"] 1
+806086D4:     callc [evt_hitobj_onoff evt_hit.o] ["A_i04_kabe_msk"] 1 0
+806086E8:   endif
+806086EC:   callc [evt_map_entry_airport_harbor evt_map.o] 1 ["S_sanbashi_01"] ["Ship_Change01"]
+80608700:   callc [evt_map_entry_airport_harbor evt_map.o] 1 ["S_sanbashi_02"] ["Ship_Change02"]
+80608714:   callsa [front_wall_keshi gor_02.o]
+8060871C:   callsa [tobiori_check gor_02.o]
+80608724:   callsa [evt_sub_mail_event evt_sub.o]
+8060872C:   callss [evt_monosiri_follow gor_02.o]
+80608734:   callsa [iri_19_init gor_02.o]
+8060873C:   if_int_eq GSW(0) 402
+80608748:     callc [evt_mario_kill_party evt_mario.o] 0
+80608754:     callss [epilogue_npc_entry gor_02.o]
+8060875C:     callsa [epilogue_evt gor_02.o]
+80608764:   endif
+80608768:   return
+8060876C:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [dearu_event gor_02.o] AT 80607D94 ---
+80607D94:   if_int_eq GSWF(1186) 0
+80607DA0:     setii GSWF(1203) 1
+80607DAC:   else
+80607DB0:     setii GSWF(1203) 0
+80607DBC:   endif
+80607DC0:   return
+80607DC4:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [evt_door_02_entry gor_02.o] AT 806006B0 ---
+806006B0:   callc [evt_door_param evt_door.o] LW(0) 3 LW(1) LW(2)
+806006C8:   if_int_ne LW(1) 0
+806006D4:     callc [evt_mapobj_flag_onoff evt_map.o] 1 1 LW(1) 1
+806006EC:   endif
+806006F0:   if_int_ne LW(2) 0
+806006FC:     callc [evt_hitobj_onoff evt_hit.o] LW(2) 1 0
+80600710:   endif
+80600714:   callc [evt_door_param evt_door.o] LW(0) 1 LW(1) LW(2) LW(3)
+80600730:   if_int_ne LW(2) 0
+8060073C:     setii LW(15) 8
+80600748:     callc [evt_run_case_evt evt_case.o] 9 1 LW(2) 0 [evt_door_close evt_door.o] 0
+80600768:   endif
+8060076C:   if_int_ne LW(3) 0
+80600778:     setii LW(15) 0
+80600784:     callc [evt_run_case_evt evt_case.o] 9 1 LW(3) 0 [evt_door_open evt_door.o] 0
+806007A4:   endif
+806007A8:   return
+806007AC:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [evt_door_03_entry gor_02.o] AT 80600C4C ---
+80600C4C:   callc [evt_door_param evt_door.o] LW(0) 3 LW(1) LW(2)
+80600C64:   if_int_ne LW(1) 0
+80600C70:     callc [evt_mapobj_flag_onoff evt_map.o] 1 1 LW(1) 1
+80600C88:   endif
+80600C8C:   if_int_ne LW(2) 0
+80600C98:     callc [evt_hitobj_onoff evt_hit.o] LW(2) 1 0
+80600CAC:   endif
+80600CB0:   callc [evt_door_param evt_door.o] LW(0) 1 LW(1) LW(2) LW(3)
+80600CCC:   if_int_ne LW(2) 0
+80600CD8:     setii LW(15) 0
+80600CE4:     callc [evt_run_case_evt evt_case.o] 9 1 LW(2) 0 [evt_door_sanders_close gor_02.o] 0
+80600D04:   endif
+80600D08:   if_int_ne LW(3) 0
+80600D14:     setii LW(15) 0
+80600D20:     callc [evt_run_case_evt evt_case.o] 9 1 LW(3) 0 [evt_door_sanders_open gor_02.o] 0
+80600D40:   endif
+80600D44:   return
+80600D48:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [evt_door_03_roll_entry gor_02.o] AT 80601158 ---
+80601158:   callc [evt_door_param evt_door.o] LW(0) 1 LW(1) LW(2) LW(3)
+80601174:   setii LW(15) 0
+80601180:   callc [evt_run_case_evt evt_case.o] 0 1 LW(3) 0 [evt_door_03_caseopen gor_02.o] 0
+806011A0:   return
+806011A4:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [kurihakase_lecture gor_02.o] AT 80603E9C ---
+80603E9C:   callc [evt_mario_get_pos evt_mario.o] 0 LW(0) LW(1) LW(2)
+80603EB4:   setff LW(3) LW(0)
+80603EC0:   setff LW(4) LW(1)
+80603ECC:   setff LW(5) LW(2)
+80603ED8:   loop 0
+80603EE0:     callc [evt_mario_get_pos evt_mario.o] 0 LW(0) LW(1) LW(2)
+80603EF8:     callc [evt_sub_check_intersect evt_sub.o] LW(0) LW(2) LW(3) LW(5) -300.00 250.00 -200.00 250.00 LW(6)
+80603F24:     if_int_eq LW(6) 1
+80603F30:       loop_break
+80603F34:     endif
+80603F38:     wait_frames 1
+80603F40:     setff LW(3) LW(0)
+80603F4C:     setff LW(5) LW(1)
+80603F58:   end_loop
+80603F5C:   callc [evt_mario_key_onoff evt_mario.o] 0
+80603F68:   callc [evt_party_stop evt_party.o] 0
+80603F74:   setii GF(0) 1
+80603F80:   begin_thread
+80603F84:     callc [evt_mario_get_pos evt_mario.o] 0 LW(0) LW(1) LW(2)
+80603F9C:     callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_VOICE_MARIO_FIND1"] LW(0) LW(1) LW(2) 0
+80603FB8:     callc [evt_eff_fukidashi evt_eff.o] 0 [zero_gor_00018790 gor_02.o] 0 0 0 0 0 0 0 0 60
+80603FEC:     callc [evt_mario_set_dir evt_mario.o] 90 200 0
+80604000:     wait_ms 800
+80604008:     setii GF(0) 0
+80604014:   end_thread
+80604018:   begin_thread
+8060401C:     callc [evt_party_set_dir evt_party.o] 0 90 200
+80604030:   end_thread
+80604034:   callc [evt_msg_print evt_msg.o] 0 ["mac_0_084_01"] 0 ["クリハカセ"]
+8060404C:   wait_until GF(0)
+80604054:   callc [evt_cam3d_evt_set evt_cam.o] -245 100 639 -245 40 294 500 11
+8060407C:   begin_thread
+80604080:     callc [evt_party_move_pos2 evt_party.o] 0 -290 280 120.00
+80604098:     callc [evt_party_set_dir evt_party.o] 0 90 200
+806040AC:   end_thread
+806040B0:   callc [evt_mario_mov_pos2 evt_mario.o] -270 305 120.00
+806040C4:   callc [evt_mario_set_dir evt_mario.o] 90 200 0
+806040D8:   callc [evt_msg_print evt_msg.o] 0 ["mac_0_084_02"] 0 ["クリハカセ"]
+806040F0:   callc [evt_msg_select evt_msg.o] 0 ["mac_0_084_02_yesno"]
+80604100:   if_int_eq LW(0) 1
+8060410C:     goto 50
+80604114:   endif
+80604118:   callc [evt_msg_print_add evt_msg.o] 0 ["mac_0_084_03"]
+80604128:   callc [evt_msg_select evt_msg.o] 0 ["mac_0_084_03_yesno"]
+80604138:   if_int_eq LW(0) 0
+80604144:     goto 50
+8060414C:   endif
+80604150:   callc [evt_msg_print_add evt_msg.o] 0 ["mac_0_084_04"]
+80604160:   goto 100
+80604168: 50:
+80604170:   callc [evt_msg_print_add evt_msg.o] 0 ["mac_0_084_05"]
+80604180:   callc [evt_party_get_pos evt_party.o] 0 LW(0) LW(1) LW(2)
+80604198:   callc [evt_npc_flag_onoff evt_npc.o] 1 ["クリスチーヌ"] 33408
+806041AC:   callc [evt_party_get_pos evt_party.o] 0 LW(0) LW(1) LW(2)
+806041C4:   callc [evt_npc_set_position evt_npc.o] ["クリスチーヌ"] LW(0) LW(1) LW(2)
+806041DC:   wait_frames 1
+806041E4:   callc [evt_npc_flag_onoff evt_npc.o] 0 ["クリスチーヌ"] 128
+806041F8:   callc [evt_mario_kill_party evt_mario.o] 0
+80604204:   callc [evt_npc_jump_position_nohit evt_npc.o] ["クリスチーヌ"] LW(0) LW(1) LW(2) 200 20
+80604224:   callc [evt_npc_flag_onoff evt_npc.o] 0 ["クリスチーヌ"] 32768
+80604238:   callc [evt_msg_print evt_msg.o] 0 ["mac_0_084_06"] 0 ["クリスチーヌ"]
+80604250:   callc [evt_npc_set_battle_info evt_npc.o] ["クリハカセ"] 3
+80604260:   callc [evt_npc_battle_start evt_npc.o] ["クリハカセ"]
+8060426C:   callc [evt_npc_wait_battle_end evt_npc.o]
+80604274:   callc [evt_npc_flag_onoff evt_npc.o] 0 ["クリスチーヌ"] 32768
+80604288:   callc [evt_mario_set_prev_party_pos evt_mario.o] 0 LW(0) LW(1) LW(2)
+806042A0:   callc [evt_npc_set_position evt_npc.o] ["クリスチーヌ"] 0 -1000 0
+806042B8:   callc [evt_msg_print evt_msg.o] 0 ["mac_0_084_07"] 0 ["クリハカセ"]
+806042D0: 100:
+806042D8:   setii GSW(0) 11
+806042E4:   callc [evt_cam3d_evt_off evt_cam.o] 500 11
+806042F4:   callc [evt_party_run evt_party.o] 0
+80604300:   callc [evt_mario_key_onoff evt_mario.o] 1
+8060430C:   return
+80604310:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [epigraphy_map gor_02.o] AT 80604AF8 ---
+80604AF8:   callc [evt_pouch_get_max_ap evt_pouch.o] LW(0)
+80604B04:   callc [evt_pouch_set_ap evt_pouch.o] LW(0)
+80604B10:   callc [evt_mario_key_onoff evt_mario.o] 0
+80604B1C:   callc [evt_mario_cont_onoff evt_mario.o] 0
+80604B28:   callc [evt_party_cont_onoff evt_party.o] 0 0
+80604B38:   callc [evt_party_stop evt_party.o] 0
+80604B44:   callc [evt_mario_clear_party evt_mario.o] 1
+80604B50:   callc [evt_mario_cont_onoff evt_mario.o] 1
+80604B5C:   callc [evt_party_cont_onoff evt_party.o] 0 1
+80604B6C:   callsa [Mario_Party_position gor_02.o]
+80604B74:   callc [evt_cam3d_evt_set evt_cam.o] -170 75 717 -170 75 -8 0 11
+80604B9C:   callc [evt_npc_entry evt_npc.o] ["ピーチダミー"] ["c_peach"]
+80604BAC:   callc [evt_seq_wait evt_seq.o] 2
+80604BB8:   wait_ms 2000
+80604BC0:   callc [evt_msg_toge evt_msg.o] 1 0 0 0
+80604BD8:   callc [evt_msg_print evt_msg.o] 0 ["mac_0_102"] 0 0
+80604BF0:   wait_ms 2000
+80604BF8:   callc [evt_fade_entry evt_fade.o] 2 500 0 0 0
+80604C14:   callc [evt_fade_end_wait evt_fade.o]
+80604C1C:   setii LW(0) [door_data_02 gor_02.o]
+80604C28:   callsa [evt_door_open_quick evt_door.o]
+80604C30:   callc [evt_cam3d_evt_set evt_cam.o] -185 90 78 -185 40 -218 0 11
+80604C58:   wait_ms 1000
+80604C60:   callc [evt_fade_entry evt_fade.o] 1 500 0 0 0
+80604C7C:   callc [evt_fade_end_wait evt_fade.o]
+80604C84:   wait_ms 1000
+80604C8C:   callc [evt_msg_print_party evt_msg.o] ["mac_0_103"]
+80604C98:   callc [evt_msg_print evt_msg.o] 0 ["mac_0_103_01"] 0 ["クリハカセ"]
+80604CB0:   wait_ms 500
+80604CB8:   callc [evt_msg_print_party evt_msg.o] ["mac_0_103_02"]
+80604CC4:   wait_ms 500
+80604CCC:   callc [evt_msg_print evt_msg.o] 0 ["mac_0_103_03"] 0 ["クリハカセ"]
+80604CE4:   callc [evt_msg_select evt_msg.o] 0 ["mac_0_103_03_yesno"]
+80604CF4:   if_int_eq LW(0) 1
+80604D00:     callc [evt_msg_print_add evt_msg.o] 0 ["mac_0_103_04"]
+80604D10:     callc [evt_msg_select evt_msg.o] 0 ["mac_0_103_03_yesno"]
+80604D20:     if_int_eq LW(0) 0
+80604D2C:       goto 10
+80604D34:     endif
+80604D38:     callc [evt_msg_print_add evt_msg.o] 0 ["mac_0_103_06"]
+80604D48:     goto 20
+80604D50:   endif
+80604D54: 10:
+80604D5C:   callc [evt_msg_print_add evt_msg.o] 0 ["mac_0_103_05"]
+80604D6C:   begin_thread_tid LW(10)
+80604D74:     callc [evt_party_move_pos2 evt_party.o] 0 -220 -90 120.00
+80604D8C:   end_thread
+80604D90:   begin_thread_tid LW(11)
+80604D98:     callc [evt_npc_move_position evt_npc.o] ["クリハカセ"] -190 -210 0 120.00 0
+80604DB8:     callc [evt_npc_move_position evt_npc.o] ["クリハカセ"] -210 -90 0 120.00 0
+80604DD8:   end_thread
+80604DDC:   callc [evt_mario_mov_pos2 evt_mario.o] -210 -80 120.00
+80604DF0:   wait_frames 1
+80604DF8:   callc [evt_npc_set_battle_info evt_npc.o] ["クリハカセ"] 4
+80604E08:   callc [evt_npc_battle_start evt_npc.o] ["クリハカセ"]
+80604E14:   callc [evt_npc_wait_battle_end evt_npc.o]
+80604E1C:   stop_tid LW(10)
+80604E24:   stop_tid LW(11)
+80604E2C:   callc [evt_npc_set_position evt_npc.o] ["クリハカセ"] -140 0 -225
+80604E44:   callss [Mario_Party_position gor_02.o]
+80604E4C:   wait_ms 1000
+80604E54:   callc [evt_msg_print evt_msg.o] 0 ["mac_0_104"] 0 ["クリハカセ"]
+80604E6C: 20:
+80604E74:   callc [evt_msg_print_party evt_msg.o] ["mac_0_105"]
+80604E80:   callc [evt_cam3d_evt_set evt_cam.o] -140 60 -40 -140 30 -218 500 11
+80604EA8:   wait_ms 800
+80604EB0:   callc [evt_msg_print evt_msg.o] 0 ["mac_0_106"] 0 ["クリハカセ"]
+80604EC8:   callc [evt_cam3d_evt_set evt_cam.o] -250 133 93 -180 43 -210 0 11
+80604EF0:   wait_ms 200
+80604EF8:   callc [evt_msg_print_party evt_msg.o] ["mac_0_107"]
+80604F04:   callc [evt_msg_print evt_msg.o] 0 ["mac_0_108"] 0 ["クリハカセ"]
+80604F1C:   callc [evt_npc_set_ry evt_npc.o] ["クリハカセ"] 90
+80604F2C:   wait_ms 200
+80604F34:   callss [book_close gor_02.o]
+80604F3C:   callc [evt_npc_set_ry evt_npc.o] ["クリハカセ"] 270
+80604F4C:   wait_ms 200
+80604F54:   callc [evt_msg_print evt_msg.o] 0 ["mac_0_109"] 0 ["クリハカセ"]
+80604F6C:   begin_thread
+80604F70:     callc [evt_mario_get_pos evt_mario.o] 0 LW(0) LW(1) LW(2)
+80604F88:     callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_VOICE_MARIO_HAND_UP1_4"] LW(0) LW(1) LW(2) 0
+80604FA4:   end_thread
+80604FA8:   callc [evt_mario_set_pose evt_mario.o] ["M_I_2"]
+80604FB4:   wait_ms 500
+80604FBC:   callc [evt_mario_set_pose evt_mario.o] ["M_S_1"]
+80604FC8:   wait_ms 500
+80604FD0:   callc [evt_msg_print evt_msg.o] 0 ["mac_0_110"] 0 ["クリハカセ"]
+80604FE8:   begin_thread
+80604FEC:     callc [evt_mario_get_pos evt_mario.o] 0 LW(0) LW(1) LW(2)
+80605004:     callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_VOICE_MARIO_NOD1_4"] LW(0) LW(1) LW(2) 0
+80605020:   end_thread
+80605024:   callc [evt_mario_set_pose evt_mario.o] ["M_N_2"]
+80605030:   wait_ms 400
+80605038:   callc [evt_mario_set_pose evt_mario.o] ["M_S_1"]
+80605044:   wait_ms 500
+8060504C:   callc [evt_cam3d_evt_set evt_cam.o] -140 60 -40 -140 30 -218 500 11
+80605074:   wait_ms 500
+8060507C:   callc [evt_msg_print evt_msg.o] 0 ["mac_0_111"] 0 ["クリハカセ"]
+80605094:   callc [evt_cam3d_evt_set evt_cam.o] -185 90 78 -185 40 -218 0 11
+806050BC:   wait_ms 500
+806050C4:   callc [evt_msg_print_party evt_msg.o] ["mac_0_112"]
+806050D0:   callc [evt_msg_print evt_msg.o] 0 ["mac_0_113"] 0 ["クリハカセ"]
+806050E8:   callc [evt_cam3d_evt_set evt_cam.o] -140 60 -40 -140 30 -218 500 11
+80605110:   wait_ms 800
+80605118:   callc [evt_msg_print evt_msg.o] 0 ["mac_0_114"] 0 ["クリハカセ"]
+80605130:   callc [evt_cam3d_evt_set evt_cam.o] -150 100 82 -150 47 -217 500 11
+80605158:   wait_ms 500
+80605160:   callc [evt_npc_flag_onoff evt_npc.o] 1 ["クリハカセ"] 1073741856
+80605174:   callc [evt_npc_move_position evt_npc.o] ["クリハカセ"] -150 -205 0 60.00 0
+80605194:   wait_ms 500
+8060519C:   callc [evt_mapobj_flag_onoff evt_map.o] 1 1 ["S_tizu_on"] 1
+806051B4:   callc [evt_npc_get_position evt_npc.o] ["クリハカセ"] LW(0) LW(1) LW(2)
+806051CC:   addi LW(2) 10
+806051D8:   callc [evt_item_entry evt_item.o] ["item_map"] 96 LW(0) LW(1) LW(2) 16 -1 0
+80605200:   callc [evt_item_flag_on evt_item.o] ["item_map"] 2
+80605210:   callc [evt_item_set_scale evt_item.o] ["item_map"] 0.55
+80605220:   begin_thread_tid LW(10)
+80605228:     loop 0
+80605230:       callc [evt_npc_get_position evt_npc.o] ["クリハカセ"] LW(0) LW(1) LW(2)
+80605248:       addi LW(2) 10
+80605254:       callc [evt_item_set_position evt_item.o] ["item_map"] LW(0) LW(1) LW(2)
+8060526C:       wait_frames 1
+80605274:     end_loop
+80605278:   end_thread
+8060527C:   callc [evt_npc_move_position evt_npc.o] ["クリハカセ"] -165 -215 0 60.00 0
+8060529C:   callc [evt_npc_flag_onoff evt_npc.o] 0 ["クリハカセ"] 1073741856
+806052B0:   wait_ms 500
+806052B8:   stop_tid LW(10)
+806052C0:   callc [evt_mario_set_pose evt_mario.o] ["M_C_3"]
+806052CC:   callc [evt_mario_get_pos evt_mario.o] 0 LW(0) LW(1) LW(2)
+806052E4:   addi LW(0) 20
+806052F0:   addi LW(1) 20
+806052FC:   addi LW(2) 10
+80605308:   callc [evt_item_set_position evt_item.o] ["item_map"] LW(0) LW(1) LW(2)
+80605320:   wait_ms 700
+80605328:   callc [evt_item_set_position evt_item.o] ["item_map"] 0 -1000 0
+80605340:   callc [evt_mario_set_pose evt_mario.o] ["M_S_1"]
+8060534C:   callc [evt_party_get_pos evt_party.o] 0 LW(0) LW(1) LW(2)
+80605364:   addi LW(0) 10
+80605370:   callc [evt_party_move_pos2 evt_party.o] 0 LW(0) LW(2) 60.00
+80605388:   callc [evt_cam3d_evt_set evt_cam.o] -180 100 82 -180 47 -217 500 11
+806053B0:   wait_ms 200
+806053B8:   callc [evt_msg_print_party evt_msg.o] ["mac_0_117"]
+806053C4:   callc [evt_msg_print evt_msg.o] 0 ["mac_0_118"] 0 ["クリハカセ"]
+806053DC:   callc [evt_msg_print_party evt_msg.o] ["mac_0_119"]
+806053E8:   callc [evt_mario_set_dir evt_mario.o] 270 200 0
+806053FC:   wait_ms 500
+80605404:   callc [evt_msg_print_party evt_msg.o] ["mac_0_120"]
+80605410:   callc [evt_cam3d_evt_off evt_cam.o] 500 11
+80605420:   callc [N_evt_bero_set_mario_bottomless_respawn_pos_on_bero_entry evt_bero.o] -190 30 325
+80605434:   callc [evt_party_run evt_party.o] 0
+80605440:   callc [evt_mario_key_onoff evt_mario.o] 1
+8060544C:   callc [evt_snd_bgmon_f evt_snd.o] 768 ["BGM_STG0_GOR1"] 2000
+80605460:   callc [evt_snd_envon evt_snd.o] 272 ["ENV_STG0_GOR3"]
+80605470:   callc [evt_snd_envoff evt_snd.o] 18496
+8060547C:   callc [evt_snd_env_lpf evt_snd.o] 0 800
+8060548C:   setii GSWF(1246) 1
+80605498:   setii GSW(0) 19
+806054A4:   return
+806054A8:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [epigraphy_map_after_stage1 gor_02.o] AT 806054AC ---
+806054AC:   callc [evt_mario_key_onoff evt_mario.o] 0
+806054B8:   callc [evt_mario_cont_onoff evt_mario.o] 0
+806054C4:   callc [evt_party_cont_onoff evt_party.o] 0 0
+806054D4:   callc [evt_party_stop evt_party.o] 0
+806054E0:   callc [evt_mario_cont_onoff evt_mario.o] 1
+806054EC:   callc [evt_party_cont_onoff evt_party.o] 0 1
+806054FC:   callsa [Mario_Party_position gor_02.o]
+80605504:   callc [evt_cam3d_evt_set evt_cam.o] -170 75 717 -170 75 -8 0 11
+8060552C:   callc [evt_seq_wait evt_seq.o] 2
+80605538:   wait_ms 2000
+80605540:   callc [evt_msg_toge evt_msg.o] 1 0 0 0
+80605558:   callc [evt_msg_print evt_msg.o] 0 ["mac_1_004"] 0 0
+80605570:   callc [evt_fade_entry evt_fade.o] 2 500 0 0 0
+8060558C:   callc [evt_fade_end_wait evt_fade.o]
+80605594:   setii LW(0) [door_data_02 gor_02.o]
+806055A0:   callsa [evt_door_open_quick evt_door.o]
+806055A8:   wait_frames 1
+806055B0:   callc [evt_mapobj_trans evt_map.o] 1 ["S_open_book"] -15 0 0
+806055CC:   callc [evt_mapobj_rotate evt_map.o] 1 ["S_open_book_r"] 0 0 180
+806055E8:   callc [evt_cam3d_evt_set evt_cam.o] -185 90 78 -185 40 -218 0 11
+80605610:   wait_ms 1000
+80605618:   callc [evt_fade_entry evt_fade.o] 1 500 0 0 0
+80605634:   callc [evt_fade_end_wait evt_fade.o]
+8060563C:   wait_ms 1000
+80605644:   callss [book_close gor_02.o]
+8060564C:   callc [evt_msg_print evt_msg.o] 0 ["mac_1_005"] 0 ["クリハカセ"]
+80605664:   wait_ms 333
+8060566C:   callc [evt_msg_print_party evt_msg.o] ["mac_1_006"]
+80605678:   wait_ms 333
+80605680:   callc [evt_msg_print evt_msg.o] 0 ["mac_1_007"] 0 ["クリハカセ"]
+80605698:   callc [evt_msg_print_party evt_msg.o] ["mac_1_008"]
+806056A4:   callc [evt_cam3d_evt_set evt_cam.o] -140 60 -40 -140 30 -218 500 11
+806056CC:   wait_ms 500
+806056D4:   callc [evt_msg_print evt_msg.o] 0 ["mac_1_009"] 0 ["クリハカセ"]
+806056EC:   callc [evt_cam3d_evt_set evt_cam.o] -185 90 78 -185 40 -218 0 11
+80605714:   wait_ms 500
+8060571C:   callc [evt_msg_print_party evt_msg.o] ["mac_1_010"]
+80605728:   wait_ms 333
+80605730:   callc [evt_msg_print evt_msg.o] 0 ["mac_1_010_01"] 0 ["クリハカセ"]
+80605748:   callc [evt_mario_get_pos evt_mario.o] 0 LW(0) LW(1) LW(2)
+80605760:   callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_VOICE_MARIO_HAND_UP1_2"] LW(0) LW(1) LW(2) 0
+8060577C:   callc [evt_mario_set_pose evt_mario.o] ["M_N_2"]
+80605788:   callc [evt_party_get_pos evt_party.o] 0 LW(0) LW(1) LW(2)
+806057A0:   addi LW(0) 10
+806057AC:   addi LW(2) 20
+806057B8:   callc [evt_party_move_pos2 evt_party.o] 0 LW(0) LW(2) 60.00
+806057D0:   callc [evt_msg_print_party evt_msg.o] ["mac_1_010_02"]
+806057DC:   callc [evt_cam3d_evt_set evt_cam.o] -140 60 -40 -140 30 -218 500 11
+80605804:   wait_ms 1000
+8060580C:   callc [evt_msg_print evt_msg.o] 0 ["mac_1_010_03"] 0 ["クリハカセ"]
+80605824:   callc [evt_cam3d_evt_off evt_cam.o] 500 11
+80605834:   callc [N_evt_bero_set_mario_bottomless_respawn_pos_on_bero_entry evt_bero.o] -190 30 325
+80605848:   callc [evt_party_run evt_party.o] 0
+80605854:   callc [evt_mario_key_onoff evt_mario.o] 1
+80605860:   callc [evt_snd_bgmon_f evt_snd.o] 768 ["BGM_STG0_GOR1"] 2000
+80605874:   callc [evt_snd_envon evt_snd.o] 272 ["ENV_STG0_GOR3"]
+80605884:   callc [evt_snd_envoff evt_snd.o] 18496
+80605890:   callc [evt_snd_env_lpf evt_snd.o] 0 800
+806058A0:   setii GSW(0) 65
+806058AC:   return
+806058B0:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [epigraphy_map_after_stage2 gor_02.o] AT 806058B4 ---
+806058B4:   callc [evt_mario_key_onoff evt_mario.o] 0
+806058C0:   callc [evt_mario_cont_onoff evt_mario.o] 0
+806058CC:   callc [evt_party_cont_onoff evt_party.o] 0 0
+806058DC:   callc [evt_party_stop evt_party.o] 0
+806058E8:   callc [evt_mario_cont_onoff evt_mario.o] 1
+806058F4:   callc [evt_party_cont_onoff evt_party.o] 0 1
+80605904:   callsa [Mario_Party_position gor_02.o]
+8060590C:   callc [evt_cam3d_evt_set evt_cam.o] -170 75 717 -170 75 -8 0 11
+80605934:   callc [evt_seq_wait evt_seq.o] 2
+80605940:   wait_ms 2000
+80605948:   callc [evt_msg_toge evt_msg.o] 1 0 0 0
+80605960:   callc [evt_msg_print evt_msg.o] 0 ["mac_2_002_01"] 0 0
+80605978:   callc [evt_fade_entry evt_fade.o] 2 500 0 0 0
+80605994:   callc [evt_fade_end_wait evt_fade.o]
+8060599C:   setii LW(0) [door_data_02 gor_02.o]
+806059A8:   callsa [evt_door_open_quick evt_door.o]
+806059B0:   wait_ms 1000
+806059B8:   callc [evt_cam3d_evt_set evt_cam.o] -185 90 78 -185 40 -218 0 11
+806059E0:   callc [evt_fade_entry evt_fade.o] 1 500 0 0 0
+806059FC:   callc [evt_fade_end_wait evt_fade.o]
+80605A04:   wait_ms 1000
+80605A0C:   callss [book_close gor_02.o]
+80605A14:   callc [evt_msg_print evt_msg.o] 0 ["mac_2_002_02"] 0 ["クリハカセ"]
+80605A2C:   callc [evt_msg_print_party evt_msg.o] ["mac_2_002_03"]
+80605A38:   callc [evt_cam3d_evt_set evt_cam.o] -140 70 4 -140 32 -218 500 11
+80605A60:   wait_ms 800
+80605A68:   callc [evt_msg_print evt_msg.o] 0 ["mac_2_002_04"] 0 ["クリハカセ"]
+80605A80:   callc [evt_cam3d_evt_set evt_cam.o] -208 63 -40 -208 32 -218 0 11
+80605AA8:   wait_ms 500
+80605AB0:   callc [evt_msg_print_party evt_msg.o] ["mac_2_002_05"]
+80605ABC:   callc [evt_cam3d_evt_set evt_cam.o] -140 63 -40 -140 32 -218 0 11
+80605AE4:   wait_ms 500
+80605AEC:   callc [evt_msg_print evt_msg.o] 0 ["mac_2_002_06"] 0 ["クリハカセ"]
+80605B04:   begin_thread
+80605B08:     callc [evt_snd_bgmoff evt_snd.o] 1024
+80605B14:     callc [evt_snd_bgmon evt_snd.o] 1 ["BGM_FF_ENV_SURPRISED2"]
+80605B24:     wait_ms 2000
+80605B2C:     callc [evt_snd_bgmoff evt_snd.o] 513
+80605B38:     callc [evt_snd_bgmon evt_snd.o] 288 0
+80605B48:   end_thread
+80605B4C:   callc [evt_cam3d_evt_set evt_cam.o] -185 90 78 -185 40 -218 0 11
+80605B74:   wait_frames 1
+80605B7C:   callc [evt_mario_get_pos evt_mario.o] 0 LW(0) LW(1) LW(2)
+80605B94:   callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_MARIO_FALL_CRUSH1"] LW(0) LW(1) LW(2) 0
+80605BB0:   callc [evt_mario_set_pose evt_mario.o] ["M_D_8"]
+80605BBC:   callc [evt_party_set_breed_pose evt_party.o] 0 8
+80605BCC:   begin_thread
+80605BD0:     callc [evt_cam_shake evt_cam.o] 4 0.00 0.01 500
+80605BE8:   end_thread
+80605BEC:   wait_ms 1500
+80605BF4:   callc [evt_mario_set_pose evt_mario.o] ["M_U_3"]
+80605C00:   callc [evt_party_set_breed_pose evt_party.o] 0 1
+80605C10:   wait_ms 500
+80605C18:   callc [evt_cam3d_evt_set evt_cam.o] -208 70 4 -208 32 -218 500 11
+80605C40:   wait_ms 800
+80605C48:   callc [evt_msg_print_party evt_msg.o] ["mac_2_002_07"]
+80605C54:   callc [evt_cam3d_evt_set evt_cam.o] -140 63 -40 -140 32 -218 0 11
+80605C7C:   wait_ms 500
+80605C84:   callc [evt_msg_print evt_msg.o] 0 ["mac_2_002"] 0 ["クリハカセ"]
+80605C9C:   callc [evt_msg_print_party evt_msg.o] ["mac_2_003"]
+80605CA8:   callc [evt_cam3d_evt_set evt_cam.o] -185 90 78 -185 40 -218 0 11
+80605CD0:   wait_ms 500
+80605CD8:   callc [evt_msg_print evt_msg.o] 0 ["mac_2_004"] 0 ["クリハカセ"]
+80605CF0:   callc [evt_cam3d_evt_set evt_cam.o] -208 70 4 -208 32 -218 0 11
+80605D18:   wait_ms 500
+80605D20:   callc [evt_msg_print_party evt_msg.o] ["mac_2_005"]
+80605D2C:   callc [evt_cam3d_evt_set evt_cam.o] -185 90 78 -185 40 -218 0 11
+80605D54:   wait_ms 500
+80605D5C:   callc [evt_msg_print evt_msg.o] 0 ["mac_2_006"] 0 ["クリハカセ"]
+80605D74:   callc [evt_msg_print_party evt_msg.o] ["mac_2_007"]
+80605D80:   callc [evt_msg_print evt_msg.o] 0 ["mac_2_008"] 0 ["クリハカセ"]
+80605D98:   callc [evt_cam3d_evt_set evt_cam.o] -140 60 -40 -140 30 -218 500 11
+80605DC0:   wait_ms 800
+80605DC8:   callc [evt_msg_print evt_msg.o] 0 ["mac_2_009"] 0 ["クリハカセ"]
+80605DE0:   callc [evt_cam3d_evt_set evt_cam.o] -208 66 -20 -208 33 -218 0 11
+80605E08:   wait_frames 1
+80605E10:   callc [evt_msg_print_party evt_msg.o] ["mac_2_010"]
+80605E1C:   callc [evt_cam3d_evt_set evt_cam.o] -185 90 78 -185 40 -218 0 11
+80605E44:   wait_frames 1
+80605E4C:   callc [evt_msg_print evt_msg.o] 0 ["mac_2_011"] 0 ["クリハカセ"]
+80605E64:   callc [evt_cam3d_evt_off evt_cam.o] 500 11
+80605E74:   callc [N_evt_bero_set_mario_bottomless_respawn_pos_on_bero_entry evt_bero.o] -190 30 325
+80605E88:   callc [evt_party_run evt_party.o] 0
+80605E94:   callc [evt_mario_key_onoff evt_mario.o] 1
+80605EA0:   callc [evt_snd_bgmon_f evt_snd.o] 768 ["BGM_STG0_GOR1"] 2000
+80605EB4:   callc [evt_snd_envon evt_snd.o] 272 ["ENV_STG0_GOR3"]
+80605EC4:   callc [evt_snd_envoff evt_snd.o] 18496
+80605ED0:   callc [evt_snd_env_lpf evt_snd.o] 0 800
+80605EE0:   setii GSW(0) 121
+80605EEC:   return
+80605EF0:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [epigraphy_map_after_stage3 gor_02.o] AT 80605EF4 ---
+80605EF4:   callc [evt_mario_key_onoff evt_mario.o] 0
+80605F00:   callc [evt_mario_cont_onoff evt_mario.o] 0
+80605F0C:   callc [evt_party_cont_onoff evt_party.o] 0 0
+80605F1C:   callc [evt_party_stop evt_party.o] 0
+80605F28:   callc [evt_mario_cont_onoff evt_mario.o] 1
+80605F34:   callc [evt_party_cont_onoff evt_party.o] 0 1
+80605F44:   callsa [Mario_Party_position gor_02.o]
+80605F4C:   callc [evt_cam3d_evt_set evt_cam.o] -170 75 717 -170 75 -8 0 11
+80605F74:   callc [evt_seq_wait evt_seq.o] 2
+80605F80:   wait_ms 2000
+80605F88:   callc [evt_msg_toge evt_msg.o] 1 0 0 0
+80605FA0:   callc [evt_msg_print evt_msg.o] 0 ["mac_3_001_01"] 0 0
+80605FB8:   callc [evt_fade_entry evt_fade.o] 2 500 0 0 0
+80605FD4:   callc [evt_fade_end_wait evt_fade.o]
+80605FDC:   setii LW(0) [door_data_02 gor_02.o]
+80605FE8:   callss [evt_door_open_quick evt_door.o]
+80605FF0:   wait_frames 1
+80605FF8:   callss [book_center_init gor_02.o]
+80606000:   callc [evt_cam3d_evt_set evt_cam.o] -185 90 78 -185 40 -218 0 11
+80606028:   wait_ms 1000
+80606030:   callc [evt_fade_entry evt_fade.o] 1 500 0 0 0
+8060604C:   callc [evt_fade_end_wait evt_fade.o]
+80606054:   wait_ms 1000
+8060605C:   callc [evt_msg_print evt_msg.o] 0 ["mac_3_001_02"] 0 ["クリハカセ"]
+80606074:   wait_ms 250
+8060607C:   callc [evt_msg_print_party evt_msg.o] ["mac_3_001_03"]
+80606088:   wait_ms 250
+80606090:   callc [evt_msg_print evt_msg.o] 0 ["mac_3_001_04"] 0 ["クリハカセ"]
+806060A8:   callc [evt_cam3d_evt_set evt_cam.o] -140 60 -40 -140 30 -218 500 11
+806060D0:   wait_ms 500
+806060D8:   callc [evt_msg_print evt_msg.o] 0 ["mac_3_001_05"] 0 ["クリハカセ"]
+806060F0:   callc [evt_cam3d_evt_set evt_cam.o] -185 90 78 -185 40 -218 0 11
+80606118:   wait_ms 250
+80606120:   callc [evt_msg_print_party evt_msg.o] ["mac_3_001_06"]
+8060612C:   callc [evt_msg_print evt_msg.o] 0 ["mac_3_001_07"] 0 ["クリハカセ"]
+80606144:   callc [evt_cam3d_evt_set evt_cam.o] -208 70 4 -208 32 -218 0 11
+8060616C:   wait_ms 250
+80606174:   callc [evt_msg_print_party evt_msg.o] ["mac_3_001_07"]
+80606180:   callc [evt_cam3d_evt_set evt_cam.o] -185 90 78 -185 40 -218 500 11
+806061A8:   wait_ms 750
+806061B0:   callc [evt_msg_print evt_msg.o] 0 ["mac_3_002"] 0 ["クリハカセ"]
+806061C8:   wait_ms 250
+806061D0:   callc [evt_msg_print_party evt_msg.o] ["mac_3_003"]
+806061DC:   callc [evt_cam3d_evt_set evt_cam.o] -140 60 -40 -140 30 -218 500 11
+80606204:   wait_ms 750
+8060620C:   callc [evt_msg_print evt_msg.o] 0 ["mac_3_004"] 0 ["クリハカセ"]
+80606224:   begin_thread
+80606228:     callc [evt_cam3d_evt_set evt_cam.o] -185 90 78 -185 40 -218 500 11
+80606250:   end_thread
+80606254:   callc [evt_npc_move_position evt_npc.o] ["クリハカセ"] -145 -285 0 60.00 0
+80606274:   wait_ms 500
+8060627C:   callc [evt_npc_move_position evt_npc.o] ["クリハカセ"] -135 -225 0 60.00 0
+8060629C:   wait_ms 500
+806062A4:   callc [evt_mapobj_get_position evt_map.o] ["S_open_book"] LW(0) LW(1) LW(2)
+806062BC:   callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_STG0_PUT_BOOK1"] LW(0) LW(1) LW(2) 0
+806062D8:   callc [evt_mapobj_flag_onoff evt_map.o] 1 0 ["S_open_book"] 1
+806062F0:   wait_ms 500
+806062F8:   callss [book_open gor_02.o]
+80606300:   wait_ms 500
+80606308:   callc [evt_npc_move_position evt_npc.o] ["クリハカセ"] -145 -225 0 60.00 0
+80606328:   callc [evt_eff_fukidashi evt_eff.o] 1 [zero_gor_00018790 gor_02.o] ["クリハカセ"] 0 0 0 0 0 0 0 30
+8060635C:   wait_ms 500
+80606364:   callc [evt_msg_print evt_msg.o] 0 ["mac_3_005"] 0 ["クリハカセ"]
+8060637C:   wait_frames 1
+80606384:   if_int_eq GSWF(1341) 0
+80606390:     callc [evt_msg_print_party evt_msg.o] ["mac_3_006"]
+8060639C:   else
+806063A0:     callc [evt_msg_print_party evt_msg.o] ["mac_3_007"]
+806063AC:     callc [evt_msg_print evt_msg.o] 0 ["mac_3_009"] 0 ["クリハカセ"]
+806063C4:     wait_ms 1500
+806063CC:     callc [evt_eff_fukidashi evt_eff.o] 1 [zero_gor_00018790 gor_02.o] ["クリハカセ"] 0 0 0 0 0 0 0 60
+80606400:     wait_ms 1000
+80606408:     callc [evt_msg_print evt_msg.o] 0 ["mac_3_010"] 0 ["クリハカセ"]
+80606420:   endif
+80606424:   callc [evt_cam3d_evt_off evt_cam.o] 500 11
+80606434:   callc [N_evt_bero_set_mario_bottomless_respawn_pos_on_bero_entry evt_bero.o] -190 30 325
+80606448:   callc [evt_party_run evt_party.o] 0
+80606454:   callc [evt_mario_key_onoff evt_mario.o] 1
+80606460:   callc [evt_snd_bgmon_f evt_snd.o] 768 ["BGM_STG0_GOR1"] 2000
+80606474:   callc [evt_snd_envon evt_snd.o] 272 ["ENV_STG0_GOR3"]
+80606484:   callc [evt_snd_envoff evt_snd.o] 18496
+80606490:   callc [evt_snd_env_lpf evt_snd.o] 0 800
+806064A0:   setii GSW(0) 175
+806064AC:   return
+806064B0:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [epigraphy_map_after_stage4 gor_02.o] AT 806064B4 ---
+806064B4:   callc [evt_mario_key_onoff evt_mario.o] 0
+806064C0:   callc [evt_mario_cont_onoff evt_mario.o] 0
+806064CC:   callc [evt_party_cont_onoff evt_party.o] 0 0
+806064DC:   callc [evt_party_stop evt_party.o] 0
+806064E8:   callc [evt_mario_cont_onoff evt_mario.o] 1
+806064F4:   callc [evt_party_cont_onoff evt_party.o] 0 1
+80606504:   callsa [Mario_Party_position gor_02.o]
+8060650C:   callc [evt_cam3d_evt_set evt_cam.o] -170 75 717 -170 75 -8 0 11
+80606534:   callc [evt_seq_wait evt_seq.o] 2
+80606540:   wait_ms 2000
+80606548:   callc [evt_msg_toge evt_msg.o] 1 0 0 0
+80606560:   callc [evt_msg_print evt_msg.o] 0 ["mac_4_001_01"] 0 0
+80606578:   callc [evt_fade_entry evt_fade.o] 2 500 0 0 0
+80606594:   callc [evt_fade_end_wait evt_fade.o]
+8060659C:   setii LW(0) [door_data_02 gor_02.o]
+806065A8:   callsa [evt_door_open_quick evt_door.o]
+806065B0:   callc [evt_cam3d_evt_set evt_cam.o] -185 90 78 -185 40 -218 0 11
+806065D8:   wait_ms 1000
+806065E0:   callc [evt_fade_entry evt_fade.o] 1 500 0 0 0
+806065FC:   callc [evt_fade_end_wait evt_fade.o]
+80606604:   wait_ms 1000
+8060660C:   callc [evt_msg_print evt_msg.o] 0 ["mac_4_001_02"] 0 ["クリハカセ"]
+80606624:   callc [evt_msg_print_party evt_msg.o] ["mac_4_001_03"]
+80606630:   callc [evt_msg_print evt_msg.o] 0 ["mac_4_001_04"] 0 ["クリハカセ"]
+80606648:   callc [evt_cam3d_evt_set evt_cam.o] -140 60 -40 -140 30 -218 500 11
+80606670:   callc [evt_npc_set_ry evt_npc.o] ["クリハカセ"] 90
+80606680:   wait_ms 500
+80606688:   callc [evt_msg_print evt_msg.o] 0 ["mac_4_001_05"] 0 ["クリハカセ"]
+806066A0:   callc [evt_cam3d_evt_set evt_cam.o] -185 90 78 -185 40 -218 0 11
+806066C8:   wait_ms 500
+806066D0:   callc [evt_msg_print_party evt_msg.o] ["mac_4_001_06"]
+806066DC:   callc [evt_npc_set_ry evt_npc.o] ["クリハカセ"] 270
+806066EC:   wait_ms 500
+806066F4:   callc [evt_msg_print evt_msg.o] 0 ["mac_4_001_07"] 0 ["クリハカセ"]
+8060670C:   callc [evt_cam3d_evt_set evt_cam.o] -140 60 -40 -140 30 -218 500 11
+80606734:   wait_ms 500
+8060673C:   callc [evt_msg_print evt_msg.o] 0 ["mac_4_001_08"] 0 ["クリハカセ"]
+80606754:   callc [evt_cam3d_evt_set evt_cam.o] -260 125 256 -180 75 -54 0 11
+8060677C:   wait_ms 500
+80606784:   callc [evt_msg_print evt_msg.o] 0 ["mac_4_001_09"] 0 ["クリハカセ"]
+8060679C:   callc [evt_cam3d_evt_set evt_cam.o] -208 77 28 -208 35 -218 0 11
+806067C4:   wait_ms 500
+806067CC:   callc [evt_msg_print_party evt_msg.o] ["mac_4_001_10"]
+806067D8:   callc [evt_cam3d_evt_set evt_cam.o] -140 60 -40 -140 30 -218 0 11
+80606800:   wait_ms 500
+80606808:   callc [evt_msg_print evt_msg.o] 0 ["mac_4_001_11"] 0 ["クリハカセ"]
+80606820:   callc [evt_cam3d_evt_set evt_cam.o] -185 90 78 -185 40 -218 0 11
+80606848:   wait_ms 500
+80606850:   callc [evt_msg_print_party evt_msg.o] ["mac_4_001_12"]
+8060685C:   callc [evt_msg_print evt_msg.o] 0 ["mac_4_002"] 0 ["クリハカセ"]
+80606874:   callc [evt_msg_print_party evt_msg.o] ["mac_4_002"]
+80606880:   callc [evt_cam3d_evt_set evt_cam.o] -140 60 -40 -140 30 -218 500 11
+806068A8:   wait_ms 800
+806068B0:   callc [evt_msg_print evt_msg.o] 0 ["mac_4_003"] 0 ["クリハカセ"]
+806068C8:   callc [evt_cam3d_evt_off evt_cam.o] 500 11
+806068D8:   callc [N_evt_bero_set_mario_bottomless_respawn_pos_on_bero_entry evt_bero.o] -190 30 325
+806068EC:   callc [evt_party_run evt_party.o] 0
+806068F8:   callc [evt_mario_key_onoff evt_mario.o] 1
+80606904:   callc [evt_snd_bgmon_f evt_snd.o] 768 ["BGM_STG0_GOR1"] 2000
+80606918:   callc [evt_snd_envon evt_snd.o] 272 ["ENV_STG0_GOR3"]
+80606928:   callc [evt_snd_envoff evt_snd.o] 18496
+80606934:   callc [evt_snd_env_lpf evt_snd.o] 0 800
+80606944:   setii GSW(0) 222
+80606950:   return
+80606954:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [epigraphy_map_after_stage5 gor_02.o] AT 80606958 ---
+80606958:   callc [evt_mario_key_onoff evt_mario.o] 0
+80606964:   callc [evt_mario_cont_onoff evt_mario.o] 0
+80606970:   callc [evt_party_cont_onoff evt_party.o] 0 0
+80606980:   callc [evt_party_stop evt_party.o] 0
+8060698C:   callc [evt_mario_cont_onoff evt_mario.o] 1
+80606998:   callc [evt_party_cont_onoff evt_party.o] 0 1
+806069A8:   callsa [Mario_Party_position gor_02.o]
+806069B0:   callc [evt_cam3d_evt_set evt_cam.o] -170 75 717 -170 75 -8 0 11
+806069D8:   callc [evt_seq_wait evt_seq.o] 2
+806069E4:   wait_ms 2000
+806069EC:   callc [evt_msg_toge evt_msg.o] 1 0 0 0
+80606A04:   callc [evt_msg_print evt_msg.o] 0 ["mac_5_002"] 0 ["クリハカセ"]
+80606A1C:   callc [evt_fade_entry evt_fade.o] 2 500 0 0 0
+80606A38:   callc [evt_fade_end_wait evt_fade.o]
+80606A40:   setii LW(0) [door_data_02 gor_02.o]
+80606A4C:   callsa [evt_door_open_quick evt_door.o]
+80606A54:   callc [evt_cam3d_evt_set evt_cam.o] -185 90 78 -185 40 -218 0 11
+80606A7C:   wait_ms 1000
+80606A84:   callc [evt_fade_entry evt_fade.o] 1 500 0 0 0
+80606AA0:   callc [evt_fade_end_wait evt_fade.o]
+80606AA8:   wait_ms 1000
+80606AB0:   callss [book_close gor_02.o]
+80606AB8:   callc [evt_msg_print_party evt_msg.o] ["mac_5_002"]
+80606AC4:   wait_ms 500
+80606ACC:   callc [evt_msg_print evt_msg.o] 0 ["mac_5_003"] 0 ["クリハカセ"]
+80606AE4:   wait_ms 500
+80606AEC:   callc [evt_msg_print_party evt_msg.o] ["mac_5_004"]
+80606AF8:   callc [evt_cam3d_evt_set evt_cam.o] -140 60 -40 -140 30 -218 500 11
+80606B20:   wait_ms 1000
+80606B28:   callc [evt_msg_print evt_msg.o] 0 ["mac_5_005"] 0 ["クリハカセ"]
+80606B40:   callc [evt_cam3d_evt_set evt_cam.o] -208 77 28 -208 35 -218 0 11
+80606B68:   wait_ms 500
+80606B70:   callc [evt_msg_print_party evt_msg.o] ["mac_5_006"]
+80606B7C:   callc [evt_cam3d_evt_set evt_cam.o] -185 90 78 -185 40 -218 0 11
+80606BA4:   wait_ms 500
+80606BAC:   callc [evt_msg_print evt_msg.o] 0 ["mac_5_007"] 0 ["クリハカセ"]
+80606BC4:   wait_ms 500
+80606BCC:   callc [evt_msg_print_party evt_msg.o] ["mac_5_008"]
+80606BD8:   callc [evt_mario_set_dir evt_mario.o] 270 270 0
+80606BEC:   callc [evt_mario_get_pos evt_mario.o] 0 LW(0) LW(1) LW(2)
+80606C04:   callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_VOICE_MARIO_NOD1_4"] LW(0) LW(1) LW(2) 0
+80606C20:   callc [evt_mario_set_pose evt_mario.o] ["M_N_2"]
+80606C2C:   wait_ms 1000
+80606C34:   callc [evt_msg_print evt_msg.o] 0 ["mac_5_009"] 0 ["クリハカセ"]
+80606C4C:   callc [evt_cam3d_evt_off evt_cam.o] 500 11
+80606C5C:   callc [N_evt_bero_set_mario_bottomless_respawn_pos_on_bero_entry evt_bero.o] -190 30 325
+80606C70:   callc [evt_party_run evt_party.o] 0
+80606C7C:   callc [evt_mario_key_onoff evt_mario.o] 1
+80606C88:   callc [evt_snd_bgmon_f evt_snd.o] 768 ["BGM_STG0_GOR1"] 2000
+80606C9C:   callc [evt_snd_envon evt_snd.o] 272 ["ENV_STG0_GOR3"]
+80606CAC:   callc [evt_snd_envoff evt_snd.o] 18496
+80606CB8:   callc [evt_snd_env_lpf evt_snd.o] 0 800
+80606CC8:   setii GSW(0) 272
+80606CD4:   return
+80606CD8:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [epigraphy_map_after_stage6 gor_02.o] AT 80606CDC ---
+80606CDC:   callc [evt_mario_key_onoff evt_mario.o] 0
+80606CE8:   callc [evt_mario_cont_onoff evt_mario.o] 0
+80606CF4:   callc [evt_party_cont_onoff evt_party.o] 0 0
+80606D04:   callc [evt_party_stop evt_party.o] 0
+80606D10:   callc [evt_mario_cont_onoff evt_mario.o] 1
+80606D1C:   callc [evt_party_cont_onoff evt_party.o] 0 1
+80606D2C:   callsa [Mario_Party_position gor_02.o]
+80606D34:   callc [evt_cam3d_evt_set evt_cam.o] -170 75 717 -170 75 -8 0 11
+80606D5C:   callc [evt_seq_wait evt_seq.o] 2
+80606D68:   wait_ms 2000
+80606D70:   callc [evt_msg_toge evt_msg.o] 1 0 0 0
+80606D88:   callc [evt_msg_print evt_msg.o] 0 ["mac_6_002_00"] 0 ["クリハカセ"]
+80606DA0:   callc [evt_fade_entry evt_fade.o] 2 500 0 0 0
+80606DBC:   callc [evt_fade_end_wait evt_fade.o]
+80606DC4:   setii LW(0) [door_data_02 gor_02.o]
+80606DD0:   callss [evt_door_open_quick evt_door.o]
+80606DD8:   wait_frames 1
+80606DE0:   callss [book_center_init gor_02.o]
+80606DE8:   callc [evt_cam3d_evt_set evt_cam.o] -185 90 78 -185 40 -218 0 11
+80606E10:   wait_ms 1000
+80606E18:   callc [evt_fade_entry evt_fade.o] 1 500 0 0 0
+80606E34:   callc [evt_fade_end_wait evt_fade.o]
+80606E3C:   wait_ms 1000
+80606E44:   callc [evt_msg_print evt_msg.o] 0 ["mac_6_002"] 0 ["クリハカセ"]
+80606E5C:   callc [evt_cam3d_evt_set evt_cam.o] -140 60 -40 -140 30 -218 500 11
+80606E84:   wait_ms 500
+80606E8C:   callc [evt_msg_print evt_msg.o] 0 ["mac_6_003"] 0 ["クリハカセ"]
+80606EA4:   callc [evt_cam3d_evt_set evt_cam.o] -208 77 28 -208 35 -218 0 11
+80606ECC:   wait_ms 500
+80606ED4:   callc [evt_msg_print_party evt_msg.o] ["mac_6_004"]
+80606EE0:   callc [evt_cam3d_evt_set evt_cam.o] -185 90 78 -185 40 -218 0 11
+80606F08:   wait_ms 500
+80606F10:   callc [evt_msg_print evt_msg.o] 0 ["mac_6_005"] 0 ["クリハカセ"]
+80606F28:   callc [evt_npc_move_position evt_npc.o] ["クリハカセ"] -145 -285 0 60.00 0
+80606F48:   wait_ms 500
+80606F50:   callc [evt_npc_set_ry evt_npc.o] ["クリハカセ"] 90
+80606F60:   wait_ms 200
+80606F68:   callc [evt_npc_move_position evt_npc.o] ["クリハカセ"] -135 -225 0 60.00 0
+80606F88:   wait_ms 500
+80606F90:   callc [evt_mapobj_get_position evt_map.o] ["S_open_book"] LW(0) LW(1) LW(2)
+80606FA8:   callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_STG0_PUT_BOOK1"] LW(0) LW(1) LW(2) 0
+80606FC4:   callc [evt_mapobj_flag_onoff evt_map.o] 1 0 ["S_open_book"] 1
+80606FDC:   wait_ms 500
+80606FE4:   callss [book_open gor_02.o]
+80606FEC:   wait_ms 500
+80606FF4:   callc [evt_msg_print evt_msg.o] 0 ["mac_6_005_01"] 0 ["クリハカセ"]
+8060700C:   callc [evt_sub_save_playtime evt_sub.o] GSW(100)
+80607018:   callc [evt_cam3d_evt_off evt_cam.o] 500 11
+80607028:   callc [N_evt_bero_set_mario_bottomless_respawn_pos_on_bero_entry evt_bero.o] -190 30 325
+8060703C:   callc [evt_party_run evt_party.o] 0
+80607048:   callc [evt_mario_key_onoff evt_mario.o] 1
+80607054:   setii GSWF(1220) 1
+80607060:   setii GSW(0) 348
+8060706C:   callc [evt_snd_bgmon evt_snd.o] 512 ["BGM_STG0_GOR1"]
+8060707C:   callc [evt_snd_envon evt_snd.o] 272 ["ENV_STG0_GOR3"]
+8060708C:   callc [evt_snd_envoff evt_snd.o] 18496
+80607098:   callc [evt_snd_env_lpf evt_snd.o] 0 800
+806070A8:   return
+806070AC:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [evt_gor_offscren_door_entry gor_02.o] AT 806026B0 ---
+806026B0:   callc [_door_color_init_func gor_02.o]
+806026B8:   setii LW(4) ["A_ie_03_doa_02"]
+806026C4:   setii LW(6) ["A_ie_03_doa_04"]
+806026D0:   callc [evt_run_case_evt evt_case.o] 9 1 ["A_ie_03_doa_02"] 0 [evt_gor_door_open gor_02.o] 0
+806026F0:   callc [evt_run_case_evt evt_case.o] 9 1 ["A_ie_03_doa_04"] 0 [evt_gor_door_close gor_02.o] 0
+80602710:   return
+80602714:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [gor_goki1_urouro gor_02.o] AT 80607444 ---
+80607444:   setii LW(4) 0
+80607450:   setii LW(5) 0
+8060745C:   callc [evt_mapobj_rotate evt_map.o] 1 ["S_goki_01"] 0 270 0
+80607478:   loop 0
+80607480:     setii LW(0) LW(4)
+8060748C:     setii LW(1) LW(5)
+80607498:     callc [evt_npc_get_loiter_dir evt_npc.o] LW(3) 120.00 240.00
+806074AC:     callc [evt_npc_add_dirdist evt_npc.o] LW(0) LW(1) LW(3) 50.00
+806074C4:     callc [evt_gor_villager_urouro_check_func gor.o] LW(0) LW(1) 0 0 70.00
+806074E0:     callc [evt_sub_get_dir evt_sub.o] LW(4) LW(5) LW(0) LW(1) LW(3)
+806074FC:     if_int_lt LW(3) 180
+80607508:       setii LW(6) 270
+80607514:     else
+80607518:       setii LW(6) 90
+80607524:     endif
+80607528:     callc [evt_goki_sub_intpl_init gor.o] 13 LW(4) LW(0) LW(5) LW(1) 50
+80607548:     loop 50
+80607550:       callc [evt_goki_sub_intpl_get_value gor.o]
+80607558:       setii LW(2) LW(0)
+80607564:       setii LW(3) LW(1)
+80607570:       addi LW(2) -320
+8060757C:       addi LW(3) -480
+80607588:       callc [evt_mapobj_trans evt_map.o] 1 ["S_goki_01"] LW(2) 0 LW(3)
+806075A4:       callc [evt_mapobj_rotate evt_map.o] 1 ["S_goki_01"] 0 LW(6) 0
+806075C0:       wait_frames 1
+806075C8:     end_loop
+806075CC:     setii LW(4) LW(0)
+806075D8:     setii LW(5) LW(1)
+806075E4:     callc [evt_sub_random evt_sub.o] 3000 LW(2)
+806075F4:     addi LW(2) 500
+80607600:     wait_ms LW(2)
+80607608:   end_loop
+8060760C:   return
+80607610:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [gor_goki2_urouro gor_02.o] AT 80607614 ---
+80607614:   setii LW(4) 0
+80607620:   setii LW(5) 0
+8060762C:   loop 0
+80607634:     setii LW(0) LW(4)
+80607640:     setii LW(1) LW(5)
+8060764C:     callc [evt_npc_get_loiter_dir evt_npc.o] LW(3) 120.00 240.00
+80607660:     callc [evt_npc_add_dirdist evt_npc.o] LW(0) LW(1) LW(3) 50.00
+80607678:     callc [evt_gor_villager_urouro_check_func gor.o] LW(0) LW(1) 0 0 70.00
+80607694:     callc [evt_sub_get_dir evt_sub.o] LW(4) LW(5) LW(0) LW(1) LW(3)
+806076B0:     if_int_gt LW(3) 180
+806076BC:       setii LW(6) 0
+806076C8:     else
+806076CC:       setii LW(6) 180
+806076D8:     endif
+806076DC:     callc [evt_goki_sub_intpl_init gor.o] 13 LW(4) LW(0) LW(5) LW(1) 50
+806076FC:     loop 50
+80607704:       callc [evt_goki_sub_intpl_get_value gor.o]
+8060770C:       setii LW(2) LW(0)
+80607718:       setii LW(3) LW(1)
+80607724:       addi LW(2) -400
+80607730:       addi LW(3) 290
+8060773C:       callc [evt_mapobj_trans evt_map.o] 1 ["S_goki_02"] LW(2) 0 LW(3)
+80607758:       callc [evt_mapobj_rotate evt_map.o] 1 ["S_goki_02"] 0 LW(6) 0
+80607774:       wait_frames 1
+8060777C:     end_loop
+80607780:     setii LW(4) LW(0)
+8060778C:     setii LW(5) LW(1)
+80607798:     callc [evt_sub_random evt_sub.o] 3000 LW(2)
+806077A8:     addi LW(2) 500
+806077B4:     wait_ms LW(2)
+806077BC:   end_loop
+806077C0:   return
+806077C4:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [gor_irai_init gor_irai.o] AT 80620958 ---
+80620958:   callc [evt_run_case_evt evt_case.o] 9 1 ["A_i04_keizi"] 0 [gor_irai_main gor_irai.o] 0
+80620978:   callc [evt_run_case_evt evt_case.o] 9 1 ["A_i04_kunter"] 0 [gor_irai_tenshu_main gor_irai.o] 0
+80620998:   return
+8062099C:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [front_wall_keshi gor_02.o] AT 80607DC8 ---
+80607DC8:   loop 0
+80607DD0:     callc [camera_front_check gor_02.o] LF(0)
+80607DDC:     if_int_eq LF(0) 1
+80607DE8:       callc [evt_mapobj_flag_onoff evt_map.o] 1 1 ["S_gai_kabe_mae"] 1
+80607E00:     else
+80607E04:       callc [evt_mapobj_flag_onoff evt_map.o] 1 0 ["S_gai_kabe_mae"] 1
+80607E1C:     endif
+80607E20:     wait_frames 1
+80607E28:   end_loop
+80607E2C:   return
+80607E30:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [tobiori_check gor_02.o] AT 80607E34 ---
+80607E34:   callc [get_camcurve_init gor_02.o]
+80607E3C:   loop 0
+80607E44:     loop 0
+80607E4C:       callc [get_camcurve gor_02.o] LW(10)
+80607E58:       callc [evt_mario_get_pos evt_mario.o] 0 LW(0) LW(1) LW(2)
+80607E70:       if_int_eq LW(10) 1
+80607E7C:         if_int_ge LW(0) 370
+80607E88:           loop_break
+80607E8C:         endif
+80607E90:       endif
+80607E94:       wait_frames 1
+80607E9C:     end_loop
+80607EA0:     dbg_report ["カメラ移動開始"]
+80607EA8:     callc [evt_mapobj_flag_onoff evt_map.o] 1 1 ["S_ie_05_soto"] 1
+80607EC0:     callc [camera_move_check gor_02.o]
+80607EC8:     dbg_report ["カメラ移動終了"]
+80607ED0:     callc [evt_mapobj_flag_onoff evt_map.o] 1 0 ["S_ie_05_soto"] 1
+80607EE8:   end_loop
+80607EEC:   return
+80607EF0:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [evt_monosiri_follow gor_02.o] AT 806079C0 ---
+806079C0:   callc [monosiri_check gor_02.o] LW(0) LW(1)
+806079D0:   if_int_eq LW(0) 1
+806079DC:     callc [evt_run_case_evt evt_case.o] 9 1 ["A_i02_gomibako"] 0 [evt_monosiri gor_02.o] 0
+806079FC:   endif
+80607A00:   return
+80607A04:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [iri_19_init gor_02.o] AT 80607A30 ---
+80607A30:   if_int_eq GSW(1420) 19
+80607A3C:     if_int_eq GSWF(5405) 1
+80607A48:       callc [evt_item_entry evt_item.o] ["wr"] 73 525 0 160 16 GSWF(5406) 0
+80607A70:     endif
+80607A74:   endif
+80607A78:   return
+80607A7C:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [epilogue_npc_entry gor_02.o] AT 80607A80 ---
+80607A80:   callc [evt_npc_entry evt_npc.o] ["クリスチーヌ"] ["c_pkr"]
+80607A90:   callc [evt_npc_set_tribe evt_npc.o] ["クリスチーヌ"] ["クリスチーヌ"]
+80607AA0:   callc [evt_npc_set_position evt_npc.o] ["クリスチーヌ"] -240 0 -260
+80607AB8:   callc [evt_npc_set_ry evt_npc.o] ["クリスチーヌ"] 270
+80607AC8:   callc [evt_npc_flag_onoff evt_npc.o] 1 ["クリスチーヌ"] 1073742880
+80607ADC:   callc [evt_npc_status_onoff evt_npc.o] 1 ["クリスチーヌ"] 2
+80607AF0:   callc [evt_map_blend_set_flag evt_map.o] 1 ["クリスチーヌ"] 2048
+80607B04:   callc [evt_map_blend_set_flag evt_map.o] 1 ["クリスチーヌ"] 4096
+80607B18:   return
+80607B1C:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [epilogue_evt gor_02.o] AT 80607C00 ---
+80607C00:   callc [evt_snd_bgmon evt_snd.o] 512 ["BGM_STG0_GOR1"]
+80607C10:   callc [evt_snd_envoff evt_snd.o] 512
+80607C1C:   callc [evt_snd_bgm_scope evt_snd.o] 0 1
+80607C2C:   callc [evt_mario_key_onoff evt_mario.o] 0
+80607C38:   callc [evt_mario_dispflag_onoff evt_mario.o] 1 1
+80607C48:   callc [evt_mapobj_flag_onoff evt_map.o] 1 0 ["S_open_book"] 1
+80607C60:   callc [evt_mapobj_flag_onoff evt_map.o] 1 1 ["S_tizu_on"] 1
+80607C78:   callc [evt_npc_set_position evt_npc.o] ["クリハカセ"] -140 0 -225
+80607C90:   callc [evt_npc_flag_onoff evt_npc.o] 1 ["クリハカセ"] 32768
+80607CA4:   callc [evt_npc_set_ry evt_npc.o] ["クリハカセ"] 90
+80607CB4:   callc [evt_seq_wait evt_seq.o] 2
+80607CC0:   setii LW(0) [door_data_02 gor_02.o]
+80607CCC:   callss [evt_door_open_quick evt_door.o]
+80607CD4:   callc [evt_cam3d_evt_set evt_cam.o] -185 90 78 -185 40 -218 0 11
+80607CFC:   callc [evt_npc_flag_onoff evt_npc.o] 0 ["クリハカセ"] 32768
+80607D10:   callsa [epilogue_evt_sub gor_02.o]
+80607D18:   callc [evt_fade_end_wait evt_fade.o]
+80607D20:   callc [evt_msg_print evt_msg.o] 0 ["ep_36"] 0 0
+80607D38:   wait_ms 1000
+80607D40:   callc [evt_snd_bgmoff_f evt_snd.o] 512 3000
+80607D50:   callc [evt_snd_envoff_f evt_snd.o] 512 3000
+80607D60:   callc [evt_fade_set_mapchange_type evt_fade.o] 1 10 900 9 900
+80607D7C:   callc [evt_bero_mapchange evt_bero.o] ["hei_00"] [zero_gor_00018790 gor_02.o]
+80607D8C:   return
+80607D90:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [Mario_Party_position gor_02.o] AT 806048CC ---
+806048CC:   callc [evt_mario_set_pos evt_mario.o] -190 0 -215
+806048E0:   callc [evt_mario_set_dir evt_mario.o] 90 0 0
+806048F4:   callc [evt_party_set_pos evt_party.o] 0 -225 0 -215
+8060490C:   callc [evt_party_set_dir evt_party.o] 0 90 0
+80604920:   callc [evt_party_set_breed_pose evt_party.o] 0 0
+80604930:   wait_frames 1
+80604938:   callc [evt_party_set_breed_pose evt_party.o] 0 1
+80604948:   return
+8060494C:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [book_close gor_02.o] AT 806049F8 ---
+806049F8:   callc [evt_sub_intpl_msec_init evt_sub.o] 11 180 360 500
+80604A10:   loop 0
+80604A18:     callc [evt_sub_intpl_msec_get_value evt_sub.o]
+80604A20:     callc [evt_mapobj_rotate evt_map.o] 1 ["S_open_book_r"] 0 0 LW(0)
+80604A3C:     if_int_eq LW(1) 0
+80604A48:       callc [evt_mapobj_get_position evt_map.o] ["S_open_book_r"] LW(0) LW(1) LW(2)
+80604A60:       callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_STG0_SHUT_BOOK1"] LW(0) LW(1) LW(2) 0
+80604A7C:       loop_break
+80604A80:     endif
+80604A84:     wait_frames 1
+80604A8C:   end_loop
+80604A90:   wait_ms 500
+80604A98:   return
+80604A9C:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [book_center_init gor_02.o] AT 80604AA0 ---
+80604AA0:   callc [evt_mapobj_flag_onoff evt_map.o] 1 1 ["S_open_book"] 1
+80604AB8:   callc [evt_mapobj_trans evt_map.o] 1 ["S_open_book"] -15 0 0
+80604AD4:   callc [evt_mapobj_rotate evt_map.o] 1 ["S_open_book_r"] 0 0 0
+80604AF0:   return
+80604AF4:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [book_open gor_02.o] AT 80604950 ---
+80604950:   callc [evt_mapobj_get_position evt_map.o] ["S_open_book_r"] LW(0) LW(1) LW(2)
+80604968:   callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_STG0_OPEN_BOOK1"] LW(0) LW(1) LW(2) 0
+80604984:   callc [evt_sub_intpl_msec_init evt_sub.o] 11 360 180 500
+8060499C:   loop 0
+806049A4:     callc [evt_sub_intpl_msec_get_value evt_sub.o]
+806049AC:     callc [evt_mapobj_rotate evt_map.o] 1 ["S_open_book_r"] 0 0 LW(0)
+806049C8:     if_int_eq LW(1) 0
+806049D4:       loop_break
+806049D8:     endif
+806049DC:     wait_frames 1
+806049E4:   end_loop
+806049E8:   wait_ms 500
+806049F0:   return
+806049F4:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [epilogue_evt_sub gor_02.o] AT 80607B20 ---
+80607B20:   wait_ms 2000
+80607B28:   loop 0
+80607B30:     callc [evt_npc_move_position evt_npc.o] ["クリスチーヌ"] -170 -225 0 60 0
+80607B50:     callc [evt_npc_set_ry evt_npc.o] ["クリハカセ"] 270
+80607B60:     wait_frames 1
+80607B68:     callc [evt_npc_wait_pera evt_npc.o] ["クリハカセ"]
+80607B74:     callc [evt_npc_set_anim evt_npc.o] ["クリスチーヌ"] ["PKR_T_1"]
+80607B84:     wait_ms 1500
+80607B8C:     callc [evt_npc_set_anim evt_npc.o] ["クリスチーヌ"] ["PKR_S_1"]
+80607B9C:     wait_ms 500
+80607BA4:     callc [evt_npc_set_anim evt_npc.o] ["クリハカセ"] ["T_1"]
+80607BB4:     wait_ms 1500
+80607BBC:     callc [evt_npc_set_anim evt_npc.o] ["クリハカセ"] ["S_1"]
+80607BCC:     callc [evt_npc_move_position evt_npc.o] ["クリスチーヌ"] -240 -260 0 60 0
+80607BEC:     wait_ms 4000
+80607BF4:   end_loop
+80607BF8:   return
+80607BFC:   end

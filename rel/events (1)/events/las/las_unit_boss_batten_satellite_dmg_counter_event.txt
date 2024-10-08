@@ -1,0 +1,49 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [dmg_counter_event unit_boss_batten_satellite.o] AT 8061CB24 ---
+8061CB24:   callc [btlevtcmd_OnUnitFlag battle_event_cmd.o] LW(10) 1
+8061CB34:   switchi LW(0)
+8061CB3C:     case_int_eq 43
+8061CB44:       callc [evt_snd_sfxon evt_snd.o] ["SFX_BTL_ATTACK_MISS3"] 0
+8061CB54:       setii LW(14) 36
+8061CB60:     case_int_eq_any 46
+8061CB68:     case_int_eq_any 49
+8061CB70:     case_int_eq_any 50
+8061CB78:     case_int_eq_any 54
+8061CB80:       setii LW(14) 29
+8061CB8C:       end_multi_case
+8061CB90:     case_default
+8061CB94:       setii LW(14) 39
+8061CBA0:   end_switch
+8061CBA4:   callc [btlevtcmd_AnimeChangePoseType battle_event_cmd.o] LW(10) LW(11) LW(14)
+8061CBB8:   begin_child_thread
+8061CBBC:     callc [btlevtcmd_RunDataEventChild battle_event_cmd.o] LW(10) 10
+8061CBCC:   end_child_thread
+8061CBD0:   callc [btlevtcmd_SetFallAccel battle_event_cmd.o] LW(10) 1.00
+8061CBE0:   callc [btlevtcmd_GetPos battle_event_cmd.o] LW(10) LW(2) LW(3) LW(4)
+8061CBF8:   callc [btlevtcmd_FaceDirectionSub battle_event_cmd.o] LW(10) LW(2) 25
+8061CC0C:   addi LW(3) 25
+8061CC18:   callc [btlevtcmd_DivePosition battle_event_cmd.o] LW(10) LW(2) LW(3) LW(4) 10 0 0 0 -1
+8061CC44:   wait_ms 500
+8061CC4C:   callc [evt_btl_camera_set_mode battle_camera.o] 0 0
+8061CC5C:   callc [btlevtcmd_CheckDamageCode battle_event_cmd.o] LW(10) 512 LW(0)
+8061CC70:   if_int_ne LW(0) 0
+8061CC7C:     callc [btlevtcmd_CheckDamageCode battle_event_cmd.o] LW(10) 2048 LW(0)
+8061CC90:     if_int_eq LW(0) 0
+8061CC9C:       return
+8061CCA0:     endif
+8061CCA4:   endif
+8061CCA8:   callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_BOSS_SATELLITE_ATTACK2"] [F1194D80] 0 [F1194D80]
+8061CCC4:   callc [btlevtcmd_GetHomePos battle_event_cmd.o] LW(10) LW(5) LW(6) LW(7)
+8061CCDC:   wait_ms 80
+8061CCE4:   setii LW(8) 42
+8061CCF0:   loop LW(8)
+8061CCF8:     callc [bts_wariai_enzan_1 unit_boss_batten_satellite.o] LW(8) 42 LW(2) LW(5) LW(12)
+8061CD14:     callc [bts_wariai_enzan_1 unit_boss_batten_satellite.o] LW(8) 42 LW(3) LW(6) LW(13)
+8061CD30:     callc [bts_wariai_enzan_1 unit_boss_batten_satellite.o] LW(8) 42 LW(4) LW(7) LW(14)
+8061CD4C:     callc [btlevtcmd_SetPos battle_event_cmd.o] -2 LW(12) LW(13) LW(14)
+8061CD64:     wait_frames 1
+8061CD6C:   end_loop
+8061CD70:   return
+8061CD74:   end

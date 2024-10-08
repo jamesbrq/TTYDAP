@@ -1,0 +1,240 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [peach_evt_kaihei3 aji_06.o] AT 805DFDA8 ---
+805DFDA8:   callc [evt_cam_letter_box_disable evt_cam.o] 1
+805DFDB4:   callc [evt_mario_key_onoff evt_mario.o] 0
+805DFDC0:   if_int_eq LSWF(6) 0
+805DFDCC:     if_int_eq LSW(3) 0
+805DFDD8:       callss [peach_evt_kusuri_select aji_06.o]
+805DFDE0:       setii LSW(3) LW(0)
+805DFDEC:       switchi LSW(3)
+805DFDF4:         case_int_eq 1
+805DFDFC:           setii LW(0) ["kusuri_aka"]
+805DFE08:           setii LW(1) 102
+805DFE14:           setii LSWF(1) 0
+805DFE20:         case_int_eq 2
+805DFE28:           setii LW(0) ["kusuri_ao"]
+805DFE34:           setii LW(1) 101
+805DFE40:           setii LSWF(2) 0
+805DFE4C:         case_int_eq 3
+805DFE54:           setii LW(0) ["kusuri_ki"]
+805DFE60:           setii LW(1) 103
+805DFE6C:           setii LSWF(3) 0
+805DFE78:         case_int_eq 4
+805DFE80:           setii LW(0) ["kusuri_mid"]
+805DFE8C:           setii LW(1) 104
+805DFE98:           setii LSWF(4) 0
+805DFEA4:       end_switch
+805DFEA8:       if_int_gt LSW(3) 0
+805DFEB4:         callc [evt_item_entry evt_item.o] LW(0) LW(1) -10 31 -107 17 -1 0
+805DFEDC:         callc [evt_pouch_check_item evt_pouch.o] LW(1) LW(2)
+805DFEEC:         if_int_gt LW(2) 0
+805DFEF8:           callc [evt_pouch_remove_item evt_pouch.o] LW(1) LW(2)
+805DFF08:         endif
+805DFF0C:       endif
+805DFF10:       setii LW(0) LSW(3)
+805DFF1C:       subi LW(0) 1
+805DFF28:       storei LW(0) [g_Kusuri3_No aji_06.o]
+805DFF34:       callss [peach_evt_check_all_kusuri_set aji_06.o]
+805DFF3C:     else
+805DFF40:       setii LW(0) LSW(3)
+805DFF4C:       callss [peach_evt_pick_kusuri aji_06.o]
+805DFF54:       setii LSW(3) 0
+805DFF60:     endif
+805DFF64:   else
+805DFF68:     setii LF(0) 0
+805DFF74:     if_int_eq GW(12) 2
+805DFF80:       if_int_eq LSWF(8) 1
+805DFF8C:         setii LSWF(7) 1
+805DFF98:         callc [peach_evt_seikai_check aji_06.o] GW(11) LSW(3) LW(0)
+805DFFAC:         if_int_eq LW(0) 1
+805DFFB8:           addi GW(13) 1
+805DFFC4:           setii LF(0) 1
+805DFFD0:         else
+805DFFD4:           subi GW(13) 1
+805DFFE0:         endif
+805DFFE4:       endif
+805DFFE8:     endif
+805DFFEC:     setii LW(0) ["S_mizu3"]
+805DFFF8:     setii LW(1) LSW(3)
+805E0004:     callss [peach_evt_kusuri_dasu aji_06.o]
+805E000C:     if_int_eq LF(0) 1
+805E0018:       setii LW(0) ["hika3"]
+805E0024:       setii LW(1) ["kesu3"]
+805E0030:       callsa [peach_evt_seikai_evt aji_06.o]
+805E0038:     endif
+805E003C:   endif
+805E0040:   callc [evt_mario_key_onoff evt_mario.o] 1
+805E004C:   callc [evt_cam_letter_box_disable evt_cam.o] 0
+805E0058:   return
+805E005C:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [peach_evt_kusuri_select aji_06.o] AT 805DF22C ---
+805DF22C:   callc [kusuri_list_init aji_06.o]
+805DF234:   setii LF(0) 0
+805DF240:   if_int_ne LSWF(2) 0
+805DF24C:     callc [kusuri_list_add aji_06.o] 2
+805DF258:     setii LF(0) 1
+805DF264:   endif
+805DF268:   if_int_ne LSWF(1) 0
+805DF274:     callc [kusuri_list_add aji_06.o] 1
+805DF280:     setii LF(0) 1
+805DF28C:   endif
+805DF290:   if_int_ne LSWF(3) 0
+805DF29C:     callc [kusuri_list_add aji_06.o] 3
+805DF2A8:     setii LF(0) 1
+805DF2B4:   endif
+805DF2B8:   if_int_ne LSWF(4) 0
+805DF2C4:     callc [kusuri_list_add aji_06.o] 4
+805DF2D0:     setii LF(0) 1
+805DF2DC:   endif
+805DF2E0:   if_int_eq LF(0) 1
+805DF2EC:     callc [evt_win_item_select evt_window.o] 0 [kusuri_list aji_06.o] LW(1) 0
+805DF304:   else
+805DF308:     setii LW(1) -1
+805DF314:   endif
+805DF318:   if_int_ne LW(1) -1
+805DF324:     callc [kusuri_list_get_no aji_06.o] LW(1) LW(0)
+805DF334:   else
+805DF338:     setii LW(0) 0
+805DF344:   endif
+805DF348:   return
+805DF34C:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [peach_evt_check_all_kusuri_set aji_06.o] AT 805DF42C ---
+805DF42C:   setii LW(0) LSW(1)
+805DF438:   addi LW(0) LSW(2)
+805DF444:   addi LW(0) LSW(3)
+805DF450:   addi LW(0) LSW(4)
+805DF45C:   if_int_eq LSWF(10) 1
+805DF468:     return
+805DF46C:   endif
+805DF470:   if_int_eq LW(0) 10
+805DF47C:     callc [evt_mario_key_onoff evt_mario.o] 0
+805DF488:     callc [evt_msg_print evt_msg.o] 0 ["peach_aji_227"] 0 0
+805DF4A0:     callc [evt_msg_select evt_msg.o] 0 ["peach_aji_227_sel"]
+805DF4B0:     if_int_eq LW(0) 0
+805DF4BC:       callc [evt_msg_print_add evt_msg.o] 0 ["peach_aji_229"]
+805DF4CC:       setii LSWF(5) 1
+805DF4D8:       callc [evt_run_case_evt evt_case.o] 9 1 ["A_sui1"] 0 [peach_evt_tyogo_entry aji_06.o] GW(5)
+805DF4F8:       setii LW(0) ["S_pato1"]
+805DF504:       callsa_tid [peach_evt_pato_on aji_06.o] GW(0)
+805DF510:     else
+805DF514:       callc [evt_msg_print_add evt_msg.o] 0 ["peach_aji_228"]
+805DF524:       setii LSWF(5) 0
+805DF530:     endif
+805DF534:     callc [evt_mario_key_onoff evt_mario.o] 1
+805DF540:   endif
+805DF544:   return
+805DF548:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [peach_evt_pick_kusuri aji_06.o] AT 805DF350 ---
+805DF350:   switchi LW(0)
+805DF358:     case_int_eq 1
+805DF360:       setii LSWF(1) 1
+805DF36C:       callc [evt_item_delete evt_item.o] ["kusuri_aka"]
+805DF378:     case_int_eq 2
+805DF380:       setii LSWF(2) 1
+805DF38C:       callc [evt_item_delete evt_item.o] ["kusuri_ao"]
+805DF398:     case_int_eq 3
+805DF3A0:       setii LSWF(3) 1
+805DF3AC:       callc [evt_item_delete evt_item.o] ["kusuri_ki"]
+805DF3B8:     case_int_eq 4
+805DF3C0:       setii LSWF(4) 1
+805DF3CC:       callc [evt_item_delete evt_item.o] ["kusuri_mid"]
+805DF3D8:   end_switch
+805DF3DC:   if_int_eq LSWF(5) 1
+805DF3E8:     callc [evt_del_case_evt evt_case.o] 0 GW(5)
+805DF3F8:     stop_tid GW(0)
+805DF400:     setii LW(0) ["S_pato1"]
+805DF40C:     callss [peach_evt_pato_off aji_06.o]
+805DF414:   endif
+805DF418:   setii LSWF(5) 0
+805DF424:   return
+805DF428:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [peach_evt_kusuri_dasu aji_06.o] AT 805DF54C ---
+805DF54C:   setii LW(5) LW(0)
+805DF558:   setii LW(6) LW(1)
+805DF564:   callc [evt_map_playanim evt_map.o] ["mizu"] 0 0
+805DF578:   callc [evt_map_checkanim evt_map.o] ["mizu"] LW(0) LW(2)
+805DF58C:   callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_PEACH_MACHINE_MEDICINE1"] 0 0 -100 0
+805DF5A8:   if_int_eq LSWF(7) 1
+805DF5B4:     setii LW(3) LW(2)
+805DF5C0:     mulf LW(3) 0.80
+805DF5CC:     begin_thread
+805DF5D0:       callc [kusuri_color_set aji_06.o] LW(6) LW(3)
+805DF5E0:     end_thread
+805DF5E4:     begin_thread
+805DF5E8:       callc [evt_sub_intpl_msec_init evt_sub.o] 11 0 125 LW(3)
+805DF600: 2:
+805DF608:       callc [evt_sub_intpl_msec_get_value evt_sub.o]
+805DF610:       divf LW(0) 1000.00
+805DF61C:       addf LW(0) GW(10)
+805DF628:       callc [evt_mapobj_scale evt_map.o] 0 ["S_naka"] 1 LW(0) 1
+805DF644:       wait_frames 1
+805DF64C:       if_int_eq LW(1) 1
+805DF658:         goto 2
+805DF660:       endif
+805DF664:       addf GW(10) 0.13
+805DF670:     end_thread
+805DF674:   endif
+805DF678:   divi LW(2) 3
+805DF684:   callc [evt_sub_intpl_msec_init evt_sub.o] 11 0 1000 LW(2)
+805DF69C: 0:
+805DF6A4:   callc [evt_sub_intpl_msec_get_value evt_sub.o]
+805DF6AC:   divf LW(0) 1000.00
+805DF6B8:   callc [evt_mapobj_scale evt_map.o] 0 LW(5) 1 LW(0) 1
+805DF6D4:   wait_frames 1
+805DF6DC:   if_int_eq LW(1) 1
+805DF6E8:     goto 0
+805DF6F0:   endif
+805DF6F4:   wait_ms LW(2)
+805DF6FC:   callc [evt_sub_intpl_msec_init evt_sub.o] 11 1000 0 LW(2)
+805DF714: 1:
+805DF71C:   callc [evt_sub_intpl_msec_get_value evt_sub.o]
+805DF724:   divf LW(0) 1000.00
+805DF730:   callc [evt_mapobj_scale evt_map.o] 0 LW(5) 1 LW(0) 1
+805DF74C:   wait_frames 1
+805DF754:   if_int_eq LW(1) 1
+805DF760:     goto 1
+805DF768:   endif
+805DF76C:   setii LSWF(7) 0
+805DF778:   return
+805DF77C:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [peach_evt_seikai_evt aji_06.o] AT 805DF780 ---
+805DF780:   loop 3
+805DF788:     callc [evt_mapobj_flag_onoff evt_map.o] 1 0 LW(0) 1
+805DF7A0:     callc [evt_mapobj_flag_onoff evt_map.o] 1 1 LW(1) 1
+805DF7B8:     wait_ms 100
+805DF7C0:     callc [evt_mapobj_flag_onoff evt_map.o] 1 1 LW(0) 1
+805DF7D8:     callc [evt_mapobj_flag_onoff evt_map.o] 1 0 LW(1) 1
+805DF7F0:     wait_ms 100
+805DF7F8:   end_loop
+805DF7FC:   return
+805DF800:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [peach_evt_pato_on aji_06.o] AT 805E0354 ---
+805E0354:   setii LW(15) LW(0)
+805E0360:   callc [evt_mapobj_get_position evt_map.o] LW(15) LW(0) LW(1) LW(2)
+805E0378:   callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_PEACH_MACHINE_SIREN1"] LW(0) LW(1) LW(2) GW(4)
+805E0394:   callc [evt_mapobj_flag_onoff evt_map.o] 0 0 LW(15) 1
+805E03AC:   loop 0
+805E03B4:     callc [evt_mapobj_rotate evt_map.o] 0 LW(15) 0 LW(0) 0
+805E03D0:     addi LW(0) 12
+805E03DC:     if_int_ge LW(0) 360
+805E03E8:       subi LW(0) 360
+805E03F4:     endif
+805E03F8:     wait_ms 30
+805E0400:   end_loop
+805E0404:   return
+805E0408:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [peach_evt_pato_off aji_06.o] AT 805E040C ---
+805E040C:   callc [evt_mapobj_flag_onoff evt_map.o] 0 1 LW(0) 1
+805E0424:   callc [evt_mapobj_rotate evt_map.o] 0 LW(0) 0 0 0
+805E0440:   callc [evt_snd_sfxoff evt_snd.o] GW(4)
+805E044C:   return
+805E0450:   end

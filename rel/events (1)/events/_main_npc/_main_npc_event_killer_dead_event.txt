@@ -1,0 +1,42 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [killer_dead_event npc_event.o] AT 803439FC ---
+803439FC:   callc [evt_npc_flag_onoff evt_npc.o] 1 ["me"] 1024
+80343A10:   callc [evt_npc_set_attack_mode evt_npc.o] ["me"] 0
+80343A20:   callc [evt_npc_set_damage_anim evt_npc.o] ["me"]
+80343A2C:   wait_ms 500
+80343A34:   callc [evt_npc_get_position evt_npc.o] ["me"] LW(0) LW(1) LW(2)
+80343A4C:   callc [evt_eff evt_eff.o] 0 ["kemuri_test"] 4 LW(0) LW(1) LW(2) 0.80 0 0 0 0 0 0 0
+80343A8C:   callc [evt_snd_sfxon evt_snd.o] ["SFX_ENEMY_DIE1"] 0
+80343A9C:   callc [evt_npc_get_position evt_npc.o] ["me"] LW(0) LW(1) LW(2)
+80343AB4:   callc [evt_npc_get_drop_coin evt_npc.o] ["me"] LW(3)
+80343AC4:   if_int_gt LW(3) 0
+80343AD0:     loop LW(3)
+80343AD8:       callc [evt_item_entry evt_item.o] 0 121 LW(0) LW(1) LW(2) 8 -1 0
+80343B00:     end_loop
+80343B04:   endif
+80343B08:   callc [evt_npc_get_drop_heart evt_npc.o] ["me"] LW(3)
+80343B18:   if_int_gt LW(3) 0
+80343B24:     loop LW(3)
+80343B2C:       callc [evt_item_entry evt_item.o] 0 123 LW(0) LW(1) LW(2) 8 -1 0
+80343B54:     end_loop
+80343B58:   endif
+80343B5C:   callc [evt_npc_get_drop_flower evt_npc.o] ["me"] LW(3)
+80343B6C:   if_int_gt LW(3) 0
+80343B78:     loop LW(3)
+80343B80:       callc [evt_item_entry evt_item.o] 0 124 LW(0) LW(1) LW(2) 8 -1 0
+80343BA8:     end_loop
+80343BAC:   endif
+80343BB0:   callc [evt_npc_get_drop_item evt_npc.o] ["me"] LW(3)
+80343BC0:   if_int_ne LW(3) 0
+80343BCC:     callc [evt_item_entry evt_item.o] 0 LW(3) LW(0) LW(1) LW(2) 9 -1 0
+80343BF4:   endif
+80343BF8:   callc [evt_npc_getback_item_entry evt_npc.o] ["me"]
+80343C04:   callc [evt_npc_get_drop_fixitem evt_npc.o] ["me"] LW(3)
+80343C14:   if_int_ne LW(3) 0
+80343C20:     callc [evt_item_entry evt_item.o] 0 LW(3) LW(0) LW(1) LW(2) 9 -1 0
+80343C48:   endif
+80343C4C:   callc [evt_npc_set_position evt_npc.o] ["me"] 0 -1000 0
+80343C64:   return
+80343C68:   end

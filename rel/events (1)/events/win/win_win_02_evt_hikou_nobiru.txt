@@ -1,0 +1,62 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [evt_hikou_nobiru win_02.o] AT 805C52F0 ---
+805C52F0:   callc [evt_mario_key_onoff evt_mario.o] 0
+805C52FC:   callc [evt_mapobj_flag_onoff evt_map.o] 1 1 ["S_tree_ha04"] 1
+805C5314:   callc [evt_cam3d_evt_set evt_cam.o] -307 220 533 -307 124 -7 500 11
+805C533C:   wait_ms 1000
+805C5344:   callc [evt_snd_sfxon evt_snd.o] ["SFX_STG2_SWITCH_QUAKE1"] LW(10)
+805C5354:   callc [evt_cam_shake evt_cam.o] 4 0.01 0.00 1000
+805C536C:   callc [evt_snd_sfxoff evt_snd.o] LW(10)
+805C5378:   wait_ms 500
+805C5380:   callc [evt_cam3d_evt_set evt_cam.o] -307 393 533 -307 297 -7 3000 0
+805C53A8:   callc [evt_hit_bind_mapobj evt_hit.o] ["a_dai"] ["hikou"]
+805C53B8:   callc [evt_hit_bind_mapobj evt_hit.o] ["a_hi"] ["hikou"]
+805C53C8:   callc [evt_hit_bind_mapobj evt_hit.o] ["A_dokan1"] ["S_dokan2"]
+805C53D8:   callc [evt_hit_bind_mapobj evt_hit.o] ["A_hi_kabe"] ["S_nob_tree"]
+805C53E8:   callc [evt_hit_bind_mapobj evt_hit.o] ["A_dokan_nobi"] ["S_dokan2"]
+805C53F8:   callc [evt_hit_get_position evt_hit.o] ["A_dokan1"] LW(0) LW(1) LW(2)
+805C5410:   callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_STG2_STEP_EXTEND1"] LW(0) LW(1) LW(2) LW(9)
+805C542C:   begin_thread
+805C5430:     callc [evt_sub_intpl_msec_init evt_sub.o] 0 0 175 3000
+805C5448:     loop 0
+805C5450:       callc [evt_sub_intpl_msec_get_value evt_sub.o]
+805C5458:       callc [evt_mapobj_trans evt_map.o] 1 ["S_dokan_ha"] 0 LW(0) 0
+805C5474:       setff LW(2) LW(0)
+805C5480:       addf LW(2) 90
+805C548C:       divf LW(2) 90
+805C5498:       callc [evt_mapobj_scale evt_map.o] 1 ["S_dokan2"] 1 LW(2) 1
+805C54B4:       callc [evt_hit_bind_update evt_hit.o] ["A_dokan1"]
+805C54C0:       callc [evt_hit_bind_update evt_hit.o] ["A_dokan_nobi"]
+805C54CC:       callc [evt_hit_bind_update evt_hit.o] ["A_hi_kabe"]
+805C54D8:       if_int_eq LW(1) 0
+805C54E4:         loop_break
+805C54E8:       endif
+805C54EC:       wait_frames 1
+805C54F4:     end_loop
+805C54F8:   end_thread
+805C54FC:   callc [evt_sub_intpl_msec_init evt_sub.o] 0 0 175 3000
+805C5514:   loop 0
+805C551C:     callc [evt_sub_intpl_msec_get_value evt_sub.o]
+805C5524:     callc [evt_mapobj_trans evt_map.o] 1 ["hikou"] 0 LW(0) 0
+805C5540:     setff LW(2) LW(0)
+805C554C:     addf LW(2) 116
+805C5558:     divf LW(2) 116
+805C5564:     callc [evt_mapobj_scale evt_map.o] 1 ["S_nob_tree"] 1 LW(2) 1
+805C5580:     callc [evt_hit_bind_update evt_hit.o] ["a_dai"]
+805C558C:     callc [evt_hit_bind_update evt_hit.o] ["a_hi"]
+805C5598:     callc [evt_hit_bind_update evt_hit.o] ["A_dokan1"]
+805C55A4:     if_int_eq LW(1) 0
+805C55B0:       loop_break
+805C55B4:     endif
+805C55B8:     wait_frames 1
+805C55C0:   end_loop
+805C55C4:   callc [evt_snd_sfxoff evt_snd.o] LW(9)
+805C55D0:   wait_ms 1000
+805C55D8:   callc [evt_cam3d_evt_off evt_cam.o] 500 11
+805C55E8:   wait_ms 500
+805C55F0:   callc [evt_mapobj_flag_onoff evt_map.o] 1 0 ["S_tree_ha04"] 1
+805C5608:   callc [evt_mario_key_onoff evt_mario.o] 1
+805C5614:   return
+805C5618:   end

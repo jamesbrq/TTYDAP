@@ -1,0 +1,41 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [wakeup_event unit_togedaruma.o] AT 80601EE0 ---
+80601EE0:   setii LW(10) -2
+80601EEC:   setii LW(11) 1
+80601EF8:   callc [btlevtcmd_GetOverTurnCount battle_event_cmd.o] LW(10) LW(0)
+80601F08:   subi LW(0) 1
+80601F14:   callc [btlevtcmd_SetOverTurnCount battle_event_cmd.o] LW(10) LW(0)
+80601F24:   if_int_ne LW(0) 0
+80601F30:     callc [btlevtcmd_StartWaitEvent battle_event_cmd.o] -2
+80601F3C:     return
+80601F40:   endif
+80601F44:   callc [btlevtcmd_SetPartsDefenceTable battle_event_cmd.o] LW(10) LW(11) [defence unit_togedaruma.o]
+80601F58:   callc [btlevtcmd_OffStatusFlag battle_event_cmd.o] LW(10) 1
+80601F68:   callc [btlevtcmd_AnimeSetPoseTable battle_event_cmd.o] LW(10) LW(11) [pose_table unit_togedaruma.o]
+80601F7C:   setii LW(12) 0
+80601F88:   callc [btlevtcmd_SetRotateOffset battle_event_cmd.o] -2 0 10 0
+80601FA0:   begin_child_thread
+80601FA4:     loop 0
+80601FAC:       if_int_ge LW(12) 10
+80601FB8:         loop_break
+80601FBC:       endif
+80601FC0:       addi LW(12) 1
+80601FCC:       wait_frames 1
+80601FD4:       callc [btlevtcmd_AddRotate battle_event_cmd.o] -2 0 0 -18
+80601FEC:     end_loop
+80601FF0:   end_child_thread
+80601FF4:   callc [btlevtcmd_snd_se battle_event_cmd.o] LW(10) ["SFX_ENM_TOGEDA_MOVE6"] [F1194D80] 0 [F1194D80]
+80602010:   callc [btlevtcmd_SetFallAccel battle_event_cmd.o] -2 1.00
+80602020:   callc [btlevtcmd_GetPos battle_event_cmd.o] -2 LW(0) LW(1) LW(2)
+80602038:   callc [btlevtcmd_JumpPosition battle_event_cmd.o] -2 LW(0) LW(1) LW(2) 18 -1
+80602058:   callc [btlevtcmd_SetRotate battle_event_cmd.o] -2 0 0 0
+80602070:   callc [btlevtcmd_SetRotateOffset battle_event_cmd.o] -2 0 0 0
+80602088:   callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] LW(10) LW(11) ["TGD_S_4"]
+8060209C:   callc [btlevtcmd_GetPos battle_event_cmd.o] -2 LW(0) LW(1) LW(2)
+806020B4:   callc [btlevtcmd_SetPos battle_event_cmd.o] -2 LW(0) 0 LW(2)
+806020CC:   callc [btlevtcmd_SetHomePos battle_event_cmd.o] -2 LW(0) 0 LW(2)
+806020E4:   callc [btlevtcmd_StartWaitEvent battle_event_cmd.o] -2
+806020F0:   return
+806020F4:   end

@@ -1,0 +1,70 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [first_attack_event unit_ura_pata.o] AT 8060759C ---
+8060759C:   callc [btlevtcmd_GetFirstAttackTarget battle_event_cmd.o] LW(3) LW(4)
+806075AC:   if_int_eq LW(3) -1
+806075B8:     goto 99
+806075C0:   endif
+806075C4:   callc [btlevtcmd_WeaponAftereffect battle_event_cmd.o] [weapon_nokonoko_attack unit_ura_pata.o]
+806075D0:   callc [evt_btl_camera_set_mode battle_camera.o] 0 8
+806075E0:   callc [evt_btl_camera_set_homing_unit battle_camera.o] 0 -2 LW(3)
+806075F4:   callc [evt_btl_camera_set_moveSpeedLv battle_camera.o] 0 1
+80607604:   callc [evt_btl_camera_set_zoom battle_camera.o] 0 200
+80607614:   callc [btlevtcmd_CalculateFaceDirection battle_event_cmd.o] -2 -1 LW(3) LW(4) 16 LW(15)
+80607634:   callc [btlevtcmd_ChangeFaceDirection battle_event_cmd.o] -2 LW(15)
+80607644:   callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_ENM_NOKO_JUMP1"] [F1194D80] 0 [F1194D80]
+80607660:   callc [btlevtcmd_JumpSetting battle_event_cmd.o] -2 20 0.00 0.70
+80607678:   callc [btlevtcmd_GetPos battle_event_cmd.o] -2 LW(0) LW(1) LW(2)
+80607690:   callc [btlevtcmd_JumpPosition battle_event_cmd.o] -2 LW(0) LW(1) LW(2) 0 -1
+806076B0:   callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_ENM_NOKO_SHELL1"] [F1194D80] 0 [F1194D80]
+806076CC:   callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 1 ["NKT_A_1"]
+806076E0:   callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_ENM_NOKO_MOVE1"] [F1194D80] 0 [F1194D80]
+806076FC:   callc [btlevtcmd_SetUnitWork battle_event_cmd.o] -2 0 0
+80607710:   callc [btlevtcmd_SetUnitWork battle_event_cmd.o] -2 1 0
+80607724:   begin_child_thread
+80607728:     loop 0
+80607730:       callc [btlevtcmd_GetUnitWork battle_event_cmd.o] -2 0 LW(15)
+80607744:       if_int_eq LW(15) 1
+80607750:         callc [btlevtcmd_SetRotate battle_event_cmd.o] -2 0 0 0
+80607768:         loop_break
+8060776C:       endif
+80607770:       wait_frames 1
+80607778:       callc [btlevtcmd_GetUnitWork battle_event_cmd.o] -2 1 LW(14)
+8060778C:       callc [btlevtcmd_AddRotate battle_event_cmd.o] -2 0 LW(14) 0
+806077A4:     end_loop
+806077A8:   end_child_thread
+806077AC:   wait_ms 100
+806077B4:   callc [btlevtcmd_SetUnitWork battle_event_cmd.o] -2 1 20
+806077C8:   wait_ms 100
+806077D0:   callc [btlevtcmd_SetUnitWork battle_event_cmd.o] -2 1 40
+806077E4:   wait_ms 100
+806077EC:   callc [btlevtcmd_SetMoveSpeed battle_event_cmd.o] -2 8.00
+806077FC:   callc [btlevtcmd_GetHitPos battle_event_cmd.o] LW(3) LW(4) LW(0) LW(1) LW(2)
+80607818:   callc [btlevtcmd_GetPos battle_event_cmd.o] -2 [F1194D80] LW(5) [F1194D80]
+80607830:   callc [btlevtcmd_MovePosition battle_event_cmd.o] -2 LW(0) LW(5) LW(2) 0 0 1
+80607854:   callc [evt_btl_camera_set_mode battle_camera.o] 0 0
+80607864:   callc [btlevtcmd_ResultACDefence battle_event_cmd.o] LW(3) [weapon_nokonoko_attack unit_ura_pata.o]
+80607874:   callc [btlevtcmd_CheckDamage battle_event_cmd.o] -2 LW(3) LW(4) [weapon_nokonoko_attack unit_ura_pata.o] 256 LW(5)
+80607894:   callc [btlevtcmd_SetUnitWork battle_event_cmd.o] -2 1 10
+806078A8:   callc [btlevtcmd_JumpSetting battle_event_cmd.o] -2 20 3.00 0.20
+806078C0:   callc [btlevtcmd_GetPos battle_event_cmd.o] LW(3) LW(0) LW(1) LW(2)
+806078D8:   callc [btlevtcmd_FaceDirectionSub battle_event_cmd.o] -2 LW(0) 50
+806078EC:   callc [btlevtcmd_JumpPosition battle_event_cmd.o] -2 LW(0) 0 LW(2) 20 -1
+8060790C:   callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_ENM_NOKO_MOVE2"] [F1194D80] 0 [F1194D80]
+80607928:   callc [btlevtcmd_JumpSetting battle_event_cmd.o] -2 20 0.50 0.20
+80607940:   callc [btlevtcmd_GetPos battle_event_cmd.o] LW(3) LW(0) LW(1) LW(2)
+80607958:   callc [btlevtcmd_FaceDirectionSub battle_event_cmd.o] -2 LW(0) 75
+8060796C:   callc [btlevtcmd_JumpPosition battle_event_cmd.o] -2 LW(0) 0 LW(2) 20 -1
+8060798C:   callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_ENM_NOKO_MOVE2"] [F1194D80] 0 [F1194D80]
+806079A8:   callc [btlevtcmd_SetUnitWork battle_event_cmd.o] -2 0 1
+806079BC:   callc [evt_btl_camera_set_mode battle_camera.o] 0 0
+806079CC:   callc [btlevtcmd_AnimeChangePoseType battle_event_cmd.o] -2 1 42
+806079E0:   callc [btlevtcmd_SetMoveSpeed battle_event_cmd.o] -2 4.00
+806079F0:   callc [btlevtcmd_GetHomePos battle_event_cmd.o] -2 LW(0) LW(1) LW(2)
+80607A08:   callc [btlevtcmd_MovePosition battle_event_cmd.o] -2 LW(0) LW(1) LW(2) 0 -1 0
+80607A2C: 99:
+80607A34:   callc [btlevtcmd_ResetFaceDirection battle_event_cmd.o] -2
+80607A40:   callc [btlevtcmd_StartWaitEvent battle_event_cmd.o] -2
+80607A4C:   return
+80607A50:   end

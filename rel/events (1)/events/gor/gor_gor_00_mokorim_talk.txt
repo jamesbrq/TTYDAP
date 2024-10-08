@@ -1,0 +1,167 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [mokorim_talk gor_00.o] AT 805DE2A0 ---
+805DE2A0:   setii LF(15) 0
+805DE2AC:   switchi GSW(0)
+805DE2B4:     case_int_range 18 177
+805DE2C0:       if_int_eq GSW(116) 3
+805DE2CC:         callc [evt_msg_print evt_msg.o] 0 ["salari_before_010"] 0 0
+805DE2E4:         return
+805DE2E8:       endif
+805DE2EC:       callc [evt_cam3d_evt_set evt_cam.o] 500 120 90 500 55 -280 800 11
+805DE314:       wait_ms 800
+805DE31C:       if_int_eq GSWF(1182) 0
+805DE328:         setii GSWF(1182) 1
+805DE334:         callc [evt_snd_bgmoff evt_snd.o] 1024
+805DE340:         callc [evt_snd_bgmon evt_snd.o] 1 ["BGM_EVT_DANGER3"]
+805DE350:         setii LF(15) 1
+805DE35C:         callc [evt_msg_print evt_msg.o] 0 ["salari_before_000"] 0 0
+805DE374:         callc [evt_mario_set_pose evt_mario.o] ["M_N_2"]
+805DE380:         wait_ms 500
+805DE388:         callc [evt_mario_set_pose evt_mario.o] ["M_S_1"]
+805DE394:         callc [evt_msg_print evt_msg.o] 0 ["salari_before_001"] 0 0
+805DE3AC:         callc [evt_mario_set_pose evt_mario.o] ["M_N_1"]
+805DE3B8:         wait_ms 500
+805DE3C0:         callc [evt_msg_print evt_msg.o] 0 ["salari_before_002"] 0 0
+805DE3D8:         callc [evt_mario_set_pose evt_mario.o] ["M_I_Z"]
+805DE3E4:         wait_ms 500
+805DE3EC:       else
+805DE3F0:         callc [evt_msg_print evt_msg.o] 0 ["salari_before_003"] 0 0
+805DE408:         callc [evt_mario_set_pose evt_mario.o] ["M_I_Z"]
+805DE414:         wait_ms 500
+805DE41C:       endif
+805DE420:       callc [evt_unitwin_alloc evt_win.o] 0
+805DE42C:       callc [unitwincoin_disp_onoff evt_win.o] 1
+805DE438:       callc [evt_msg_print evt_msg.o] 0 ["salari_before_004"] 0 0
+805DE450:       callc [evt_msg_select evt_msg.o] 0 ["salari_before_005"]
+805DE460:       if_int_eq LW(0) 0
+805DE46C:         callc [evt_pouch_get_coin evt_pouch.o] LW(0)
+805DE478:         if_int_ge LW(0) 100
+805DE484:           callc [evt_msg_continue evt_msg.o]
+805DE48C:           callc [evt_mario_set_pose evt_mario.o] ["M_I_2"]
+805DE498:           wait_ms 500
+805DE4A0:           callc [evt_mario_set_pose evt_mario.o] ["M_S_1"]
+805DE4AC:           callc [evt_npc_get_position evt_npc.o] ["me"] LW(0) LW(1) LW(2)
+805DE4C4:           loop 2
+805DE4CC:             callc [evt_npc_jump_position_nohit evt_npc.o] ["me"] LW(0) LW(1) LW(2) 200 10
+805DE4EC:             wait_frames 1
+805DE4F4:           end_loop
+805DE4F8:           addi GSW(116) 1
+805DE504:           if_int_eq GSW(116) 3
+805DE510:             callc [evt_msg_print evt_msg.o] 0 ["salari_before_007"] 0 0
+805DE528:           else
+805DE52C:             callc [evt_msg_print evt_msg.o] 0 ["salari_before_006"] 0 0
+805DE544:           endif
+805DE548:           callc [evt_pouch_add_coin evt_pouch.o] -100
+805DE554:           callc [unitwincoin_wait evt_win.o]
+805DE55C:         else
+805DE560:           callc [evt_mario_set_pose evt_mario.o] ["M_S_1"]
+805DE56C:           callc [evt_msg_print_add evt_msg.o] 0 ["salari_before_009"]
+805DE57C:         endif
+805DE580:       else
+805DE584:         callc [evt_msg_continue evt_msg.o]
+805DE58C:         callc [evt_mario_set_pose evt_mario.o] ["M_N_B"]
+805DE598:         wait_ms 500
+805DE5A0:         callc [evt_mario_set_pose evt_mario.o] ["M_S_1"]
+805DE5AC:         callc [evt_msg_print evt_msg.o] 0 ["salari_before_008"] 0 0
+805DE5C4:       endif
+805DE5C8:       callc [unitwincoin_disp_onoff evt_win.o] 0
+805DE5D4:       callc [evt_unitwin_free evt_win.o]
+805DE5DC:       callc [evt_cam3d_evt_off evt_cam.o] 500 11
+805DE5EC:       wait_ms 500
+805DE5F4:     case_int_ge 345
+805DE5FC:       if_int_eq GSWF(1183) 0
+805DE608:         setii GSWF(1183) 1
+805DE614:         callc [evt_cam3d_evt_set evt_cam.o] 500 120 90 500 55 -280 800 11
+805DE63C:         wait_ms 800
+805DE644:         callc [evt_msg_print evt_msg.o] 0 ["salari_after_000"] 0 0
+805DE65C:         callc [evt_mario_set_pose evt_mario.o] ["M_N_2"]
+805DE668:         wait_ms 500
+805DE670:         callc [evt_mario_set_pose evt_mario.o] ["M_S_1"]
+805DE67C:         callc [evt_cam3d_evt_set evt_cam.o] 515 105 5 515 55 -280 800 11
+805DE6A4:         wait_ms 800
+805DE6AC:         callc [evt_msg_print evt_msg.o] 0 ["salari_after_000_1"] 0 0
+805DE6C4:         callc [evt_cam3d_evt_set evt_cam.o] 515 90 -70 515 55 -280 800 11
+805DE6EC:         wait_ms 800
+805DE6F4:         callc [evt_msg_print evt_msg.o] 0 ["salari_after_000_2"] 0 0
+805DE70C:         callc [evt_npc_get_position evt_npc.o] ["me"] LW(0) LW(1) LW(2)
+805DE724:         loop 2
+805DE72C:           callc [evt_npc_jump_position_nohit evt_npc.o] ["me"] LW(0) LW(1) LW(2) 200 10
+805DE74C:           wait_frames 1
+805DE754:         end_loop
+805DE758:         callc [evt_msg_print evt_msg.o] 0 ["salari_after_001"] 0 0
+805DE770:         callc [evt_mario_get_pos evt_mario.o] 0 LW(0) LW(1) LW(2)
+805DE788:         callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_VOICE_MARIO_SURPRISED1"] LW(0) LW(1) LW(2) 0
+805DE7A4:         callc [evt_mario_set_pose evt_mario.o] ["M_N_7"]
+805DE7B0:         wait_ms 500
+805DE7B8:         callc [evt_mario_set_pose evt_mario.o] ["M_S_1"]
+805DE7C4:         callc [evt_cam3d_evt_set evt_cam.o] 500 120 90 500 55 -280 800 11
+805DE7EC:         wait_ms 800
+805DE7F4:         if_int_gt GSW(116) 0
+805DE800:           callc [evt_msg_print evt_msg.o] 0 ["salari_after_002"] 0 0
+805DE818:           switchi GSW(116)
+805DE820:             case_int_eq 1
+805DE828:               setii LW(0) 300
+805DE834:             case_int_eq 2
+805DE83C:               setii LW(0) 600
+805DE848:             case_int_eq 3
+805DE850:               setii LW(0) 999
+805DE85C:           end_switch
+805DE860:           callc [evt_unitwin_alloc evt_win.o] 0
+805DE86C:           callc [unitwincoin_disp_onoff evt_win.o] 1
+805DE878:           callc [evt_msg_print_insert evt_msg.o] 0 ["salari_after_003"] 0 0 LW(0)
+805DE894:           callc [evt_pouch_add_coin evt_pouch.o] LW(0)
+805DE8A0:           callc [unitwincoin_wait evt_win.o]
+805DE8A8:           callc [unitwincoin_disp_onoff evt_win.o] 0
+805DE8B4:           callc [evt_unitwin_free evt_win.o]
+805DE8BC:           callc [evt_msg_print evt_msg.o] 0 ["salari_after_004"] 0 0
+805DE8D4:         else
+805DE8D8:           callc [evt_msg_print evt_msg.o] 0 ["salari_after_005"] 0 0
+805DE8F0:         endif
+805DE8F4:         callc [evt_cam3d_evt_off evt_cam.o] 500 11
+805DE904:       else
+805DE908:         callc [evt_msg_print evt_msg.o] 0 ["salari_after_006"] 0 0
+805DE920:         callc [evt_msg_select evt_msg.o] 0 ["salari_after_006_1"]
+805DE930:         if_int_eq LW(0) 0
+805DE93C:           loop 0
+805DE944:             callc [evt_msg_print_add evt_msg.o] 0 ["salari_after_007"]
+805DE954:             callc [evt_msg_select evt_msg.o] 0 ["salari_after_008"]
+805DE964:             callc [evt_msg_continue evt_msg.o]
+805DE96C:             callc [evt_npc_flag_onoff evt_npc.o] 0 ["me"] 512
+805DE980:             switchi LW(0)
+805DE988:               case_int_eq 0
+805DE990:                 callc [evt_msg_print evt_msg.o] 0 ["salari_after_009"] 0 0
+805DE9A8:               case_int_eq 1
+805DE9B0:                 callc [evt_msg_print evt_msg.o] 0 ["salari_after_010"] 0 0
+805DE9C8:               case_int_eq 2
+805DE9D0:                 callc [evt_msg_print evt_msg.o] 0 ["salari_after_011"] 0 0
+805DE9E8:               case_int_eq 3
+805DE9F0:                 callc [evt_msg_print evt_msg.o] 0 ["salari_after_012"] 0 0
+805DEA08:               case_int_eq 4
+805DEA10:                 callc [evt_msg_print evt_msg.o] 0 ["salari_after_013"] 0 0
+805DEA28:               case_int_eq 5
+805DEA30:                 callc [evt_msg_print evt_msg.o] 0 ["salari_after_014"] 0 0
+805DEA48:               case_int_eq 6
+805DEA50:                 callc [evt_msg_print evt_msg.o] 0 ["salari_after_015"] 0 0
+805DEA68:             end_switch
+805DEA6C:             callc [evt_npc_flag_onoff evt_npc.o] 1 ["me"] 512
+805DEA80:             callc [evt_msg_print evt_msg.o] 0 ["salari_after_016"] 0 0
+805DEA98:             callc [evt_msg_select evt_msg.o] 0 ["salari_after_017"]
+805DEAA8:             if_int_eq LW(0) 0
+805DEAB4:             else
+805DEAB8:               callc [evt_msg_print_add evt_msg.o] 0 ["salari_after_018"]
+805DEAC8:               loop_break
+805DEACC:             endif
+805DEAD0:           end_loop
+805DEAD4:         else
+805DEAD8:           callc [evt_msg_print_add evt_msg.o] 0 ["salari_after_018"]
+805DEAE8:         endif
+805DEAEC:       endif
+805DEAF0:   end_switch
+805DEAF4:   if_int_eq LF(15) 1
+805DEB00:     callc [evt_snd_bgmoff evt_snd.o] 513
+805DEB0C:     callc [evt_snd_bgmon evt_snd.o] 288 0
+805DEB1C:   endif
+805DEB20:   return
+805DEB24:   end

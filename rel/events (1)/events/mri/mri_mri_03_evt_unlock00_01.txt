@@ -1,0 +1,29 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [evt_unlock00_01 mri_03.o] AT 805F4F88 ---
+805F4F88:   callsa [red_jail_open mri_03.o]
+805F4F90:   return
+805F4F94:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [red_jail_open mri_03.o] AT 805F4E28 ---
+805F4E28:   setii GSWF(2833) 1
+805F4E34:   callc [evt_mario_key_onoff evt_mario.o] 0
+805F4E40:   wait_ms 1000
+805F4E48:   callc [evt_mapobj_get_position evt_map.o] ["S_hako_r_doa"] LW(0) LW(1) LW(2)
+805F4E60:   callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_STG2_DOOR_GRID_OPEN1"] LW(0) LW(1) LW(2) 0
+805F4E7C:   callc [evt_sub_intpl_msec_init evt_sub.o] 11 0 85 500
+805F4E94:   loop 0
+805F4E9C:     callc [evt_sub_intpl_msec_get_value evt_sub.o]
+805F4EA4:     callc [evt_mapobj_rotate evt_map.o] 1 ["S_hako_r_doa"] 0 LW(0) 0
+805F4EC0:     if_int_eq LW(1) 0
+805F4ECC:       loop_break
+805F4ED0:     endif
+805F4ED4:     wait_frames 1
+805F4EDC:   end_loop
+805F4EE0:   callc [evt_hitobj_onoff evt_hit.o] ["A_hako_r1"] 1 0
+805F4EF4:   callc [evt_hitobj_onoff evt_hit.o] ["A_hako_r_01"] 1 0
+805F4F08:   callc [evt_mario_key_onoff evt_mario.o] 1
+805F4F14:   callc [evt_exit_case_evt evt_case.o]
+805F4F1C:   return
+805F4F20:   end

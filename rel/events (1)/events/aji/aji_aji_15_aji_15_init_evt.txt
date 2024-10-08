@@ -1,0 +1,67 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [aji_15_init_evt aji_15.o] AT 805EFBB0 ---
+805EFBB0:   setii LW(0) [bero_entry_data aji_15.o]
+805EFBBC:   callc [evt_bero_get_info evt_bero.o]
+805EFBC4:   callss [evt_bero_info_run evt_bero.o]
+805EFBCC:   if_int_ge GSW(0) 373
+805EFBD8:     callc [evt_npc_check_delete evt_npc.o] ["軍団ザコエリート"]
+805EFBE4:   endif
+805EFBE8:   callc [evt_mario_get_mode evt_mario.o] LW(0)
+805EFBF4:   if_int_eq LW(0) 1
+805EFC00:     callc [evt_mario_set_mode evt_mario.o] 1
+805EFC0C:     callc [evt_npc_check_delete evt_npc.o] ["軍団ザコエリート"]
+805EFC18:     callc [evt_snd_bgmon evt_snd.o] 512 ["BGM_EVT_PEACH1"]
+805EFC28:     callc [evt_snd_envoff evt_snd.o] 512
+805EFC34:   else
+805EFC38:     callc [evt_snd_bgmon evt_snd.o] 512 ["BGM_EVT_PEACH1"]
+805EFC48:     callc [evt_snd_envoff evt_snd.o] 512
+805EFC54:   endif
+805EFC58:   callc [evt_snd_set_rev_mode evt_snd.o] 1
+805EFC64:   callss [peach_evt_syawa_init aji_15.o]
+805EFC6C:   if_int_eq GSWF(4199) 0
+805EFC78:     setii GSWF(4199) 1
+805EFC84:   endif
+805EFC88:   callsa [evt_emergency aji_17.o]
+805EFC90:   return
+805EFC94:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [peach_evt_syawa_init aji_15.o] AT 805EFAB4 ---
+805EFAB4:   callc [evt_mapobj_flag_onoff evt_map.o] 1 1 ["p_fuku"] 1
+805EFACC:   callc [evt_mapobj_flag_onoff evt_map.o] 1 1 ["taoru"] 1
+805EFAE4:   callc [evt_mapobj_scale evt_map.o] 1 ["S_syawa"] 0 1 1
+805EFB00:   callc [evt_map_playanim evt_map.o] ["syawa"] 1 0
+805EFB14:   callc [evt_mario_get_mode evt_mario.o] LW(0)
+805EFB20:   if_int_ne LW(0) 1
+805EFB2C:     return
+805EFB30:   endif
+805EFB34:   callc [evt_mario_kill_party evt_mario.o] 0
+805EFB40:   callc [evt_mapobj_flag_onoff evt_map.o] 1 0 ["taoru"] 1
+805EFB58:   callc [evt_map_playanim evt_map.o] ["taoru"] 0 0
+805EFB6C:   callc [evt_map_checkanim evt_map.o] ["taoru"] LW(0) LW(1)
+805EFB80:   wait_ms LW(1)
+805EFB88:   callc [evt_run_case_evt evt_case.o] 9 1 ["A_furo"] 0 [peach_evt_syawa_main aji_15.o] 0
+805EFBA8:   return
+805EFBAC:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [evt_emergency aji_17.o] AT 805F1150 ---
+805F1150:   if_int_ne GSW(0) 376
+805F115C:     loop 0
+805F1164:       if_int_eq GSW(0) 376
+805F1170:         loop_break
+805F1174:       endif
+805F1178:       wait_frames 1
+805F1180:     end_loop
+805F1184:     callc [evt_sub_intpl_msec_init evt_sub.o] 11 255 96 1000
+805F119C: 0:
+805F11A4:     callc [evt_sub_intpl_msec_get_value evt_sub.o]
+805F11AC:     callc [evt_map_set_blend evt_map.o] 0 255 LW(0) LW(0) 255
+805F11C8:     wait_frames 1
+805F11D0:     if_int_eq LW(1) 1
+805F11DC:       goto 0
+805F11E4:     endif
+805F11E8:   endif
+805F11EC:   callc [evt_map_set_blend evt_map.o] 0 255 96 96 255
+805F1208:   return
+805F120C:   end

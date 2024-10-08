@@ -1,0 +1,120 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [enemy_2d_common_dead_event npc_event.o] AT 8033F2F4 ---
+8033F2F4:   callc [evt_npc_flag_onoff evt_npc.o] 0 ["me"] 1024
+8033F308:   callc [evt_npc_status_onoff evt_npc.o] 1 ["me"] 268435456
+8033F31C:   callc [pressCheck npc_event.o] LW(15)
+8033F328:   callc [evt_npc_get_position evt_npc.o] ["me"] LW(0) LW(1) LW(2)
+8033F340:   callc [evt_npc_set_position evt_npc.o] ["me"] LW(0) LW(1) 200
+8033F358:   callc [evt_npc_get_position evt_npc.o] ["me"] LW(0) LW(1) LW(2)
+8033F370:   callc [evt_eff evt_eff.o] 0 ["kemuri_test"] 4 LW(0) LW(1) LW(2) 0.80 0 0 0 0 0 0 0
+8033F3B0:   callc [evt_snd_sfxon evt_snd.o] ["SFX_ENEMY_DIE1"] 0
+8033F3C0:   callc [evt_npc_set_damage_anim evt_npc.o] ["me"]
+8033F3CC:   callc [evt_npc_get_kpencount_type evt_npc.o] ["me"] LW(0)
+8033F3DC:   switchi LW(0)
+8033F3E4:     case_bits_set 1
+8033F3EC:       if_int_eq LW(15) 0
+8033F3F8:         callc [evt_npc_calc_score evt_npc.o] ["me"]
+8033F404:         callsa [_2d_dead_rotate_event npc_event.o]
+8033F40C:         callc [evt_npc_get_position evt_npc.o] ["me"] LW(0) LW(1) LW(2)
+8033F424:         callc [_2d_get_dead_jump_offset npc_event.o] ["me"] LW(3)
+8033F434:         addi LW(0) LW(3)
+8033F440:         callc [_2d_dead_jump npc_event.o] ["me"] LW(0) LW(1) LW(2) 600 40.00 0.00 -300
+8033F468:       else
+8033F46C:         callc [evt_npc_calc_score evt_npc.o] ["me"]
+8033F478:         callc [evt_npc_flag_onoff evt_npc.o] 0 ["me"] 131072
+8033F48C:         callc [evt_npc_flag_onoff evt_npc.o] 0 ["me"] 1024
+8033F4A0:         callc [evt_npc_status_onoff evt_npc.o] 0 ["me"] 2
+8033F4B4:         callc [evt_npc_set_talk_anim evt_npc.o] ["me"]
+8033F4C0:         callc [evt_npc_get_position evt_npc.o] ["me"] LW(0) LW(1) LW(2)
+8033F4D8:         subi LW(1) 5
+8033F4E4:         callc [evt_npc_set_position evt_npc.o] ["me"] LW(0) LW(1) LW(2)
+8033F4FC:         wait_frames 30
+8033F504:         callc [evt_npc_get_position evt_npc.o] ["me"] LW(0) LW(1) LW(2)
+8033F51C:         begin_child_thread
+8033F520:           loop 30
+8033F528:             callc [evt_npc_add_rotate evt_npc.o] ["me"] 0 0 1
+8033F540:             wait_frames 1
+8033F548:           end_loop
+8033F54C:         end_child_thread
+8033F550:         subi LW(0) 40
+8033F55C:         subi LW(1) 20
+8033F568:         callc [evt_npc_glide_position evt_npc.o] ["me"] LW(0) LW(1) LW(2) 500 0 -10 4 0
+8033F594:         loop 0
+8033F59C:           begin_child_thread
+8033F5A0:             loop 60
+8033F5A8:               callc [evt_npc_add_rotate evt_npc.o] ["me"] 0 0 -1
+8033F5C0:               wait_frames 1
+8033F5C8:             end_loop
+8033F5CC:           end_child_thread
+8033F5D0:           callc [evt_npc_get_position evt_npc.o] ["me"] LW(0) LW(1) LW(2)
+8033F5E8:           addi LW(0) 80
+8033F5F4:           subi LW(1) 20
+8033F600:           callc [evt_npc_glide_position evt_npc.o] ["me"] LW(0) LW(1) LW(2) 1000 0 -10 4 0
+8033F62C:           begin_child_thread
+8033F630:             loop 60
+8033F638:               callc [evt_npc_add_rotate evt_npc.o] ["me"] 0 0 1
+8033F650:               wait_frames 1
+8033F658:             end_loop
+8033F65C:           end_child_thread
+8033F660:           callc [evt_npc_get_position evt_npc.o] ["me"] LW(0) LW(1) LW(2)
+8033F678:           subi LW(0) 80
+8033F684:           subi LW(1) 20
+8033F690:           callc [evt_npc_glide_position evt_npc.o] ["me"] LW(0) LW(1) LW(2) 1000 0 -10 4 0
+8033F6BC:           if_int_le LW(1) -200
+8033F6C8:             loop_break
+8033F6CC:           endif
+8033F6D0:         end_loop
+8033F6D4:       endif
+8033F6D8:     case_bits_set 2
+8033F6E0:       callc [evt_npc_calc_score evt_npc.o] ["me"]
+8033F6EC:       callsa [_2d_dead_rotate_event npc_event.o]
+8033F6F4:       callc [evt_npc_status_onoff evt_npc.o] 1 ["me"] 4194304
+8033F708:       callc [evt_npc_get_position evt_npc.o] ["me"] LW(0) LW(1) LW(2)
+8033F720:       callc [_2d_get_dead_jump_offset npc_event.o] ["me"] LW(3)
+8033F730:       addi LW(0) LW(3)
+8033F73C:       callc [_2d_dead_jump npc_event.o] ["me"] LW(0) LW(1) LW(2) 600 40.00 65.00 -300
+8033F764:     case_bits_set 4
+8033F76C:       callc [evt_npc_calc_score evt_npc.o] ["me"]
+8033F778:       callsa [_2d_dead_rotate_event npc_event.o]
+8033F780:       callc [evt_npc_get_position evt_npc.o] ["me"] LW(0) LW(1) LW(2)
+8033F798:       callc [_2d_get_dead_jump_offset npc_event.o] ["me"] LW(3)
+8033F7A8:       addi LW(0) LW(3)
+8033F7B4:       callc [_2d_dead_jump npc_event.o] ["me"] LW(0) LW(1) LW(2) 600 40.00 65.00 -300
+8033F7DC:     case_bits_set 32
+8033F7E4:       callsa [_2d_dead_rotate_event npc_event.o]
+8033F7EC:       callc [evt_npc_get_position evt_npc.o] ["me"] LW(0) LW(1) LW(2)
+8033F804:       callc [_2d_get_dead_jump_offset npc_event.o] ["me"] LW(3)
+8033F814:       addi LW(0) LW(3)
+8033F820:       callc [_2d_dead_jump npc_event.o] ["me"] LW(0) LW(1) LW(2) 600 40.00 65.00 -300
+8033F848:     case_bits_set 8
+8033F850:       callc [evt_npc_calc_score evt_npc.o] ["me"]
+8033F85C:       callsa [_2d_dead_rotate_event npc_event.o]
+8033F864:       callc [evt_npc_get_position evt_npc.o] ["me"] LW(0) LW(1) LW(2)
+8033F87C:       callc [_2d_get_dead_jump_offset npc_event.o] ["me"] LW(3)
+8033F88C:       addi LW(0) LW(3)
+8033F898:       callc [_2d_dead_jump npc_event.o] ["me"] LW(0) LW(1) LW(2) 600 40.00 65.00 -300
+8033F8C0:     case_bits_set 16
+8033F8C8:       callc [evt_npc_calc_score evt_npc.o] ["me"]
+8033F8D4:       callsa [_2d_dead_rotate_event npc_event.o]
+8033F8DC:       callc [evt_npc_status_onoff evt_npc.o] 1 ["me"] 4194304
+8033F8F0:       callc [evt_npc_get_position evt_npc.o] ["me"] LW(0) LW(1) LW(2)
+8033F908:       callc [_2d_get_dead_jump_offset npc_event.o] ["me"] LW(3)
+8033F918:       addi LW(0) LW(3)
+8033F924:       callc [_2d_dead_jump npc_event.o] ["me"] LW(0) LW(1) LW(2) 600 40.00 65.00 -300
+8033F94C:     case_default
+8033F950:       wait_ms 500
+8033F958:   end_switch
+8033F95C:   callc [evt_npc_return_interrupt evt_npc.o] ["me"]
+8033F968:   return
+8033F96C:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [_2d_dead_rotate_event npc_event.o] AT 8033F970 ---
+8033F970:   setii LW(0) -12
+8033F97C:   loop 15
+8033F984:     callc [evt_npc_add_rotate evt_npc.o] ["me"] 0 0 LW(0)
+8033F99C:     wait_frames 1
+8033F9A4:   end_loop
+8033F9A8:   return
+8033F9AC:   end

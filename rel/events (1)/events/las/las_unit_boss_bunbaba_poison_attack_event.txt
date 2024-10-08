@@ -1,0 +1,87 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [poison_attack_event unit_boss_bunbaba.o] AT 8061F2AC ---
+8061F2AC:   callc [btlevtcmd_GetEnemyBelong battle_event_cmd.o] -2 LW(0)
+8061F2BC:   callc [btlevtcmd_SamplingEnemy battle_event_cmd.o] -2 LW(0) LW(9)
+8061F2D0:   callc [btlevtcmd_ChoiceSamplingEnemy battle_event_cmd.o] LW(9) LW(3) LW(4)
+8061F2E4:   if_int_eq LW(3) -1
+8061F2F0:     goto 99
+8061F2F8:   endif
+8061F2FC:   callc [btlevtcmd_WeaponAftereffect battle_event_cmd.o] LW(9)
+8061F308:   callc [btlevtcmd_AttackDeclareAll battle_event_cmd.o] -2
+8061F314:   callc [btlevtcmd_WaitGuardMove battle_event_cmd.o]
+8061F31C:   callc [btlevtcmd_PayWeaponCost battle_event_cmd.o] -2 LW(9)
+8061F32C:   callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 1 ["GNB_A2_1"]
+8061F340:   wait_ms 833
+8061F348:   callc [btlevtcmd_snd_se_offset battle_event_cmd.o] -2 ["SFX_BOSS_GNB_NECK_UP1"] [F1194D80] 0 -250 0 0 [F1194D80]
+8061F370:   wait_ms 1000
+8061F378:   callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 1 ["GNB_A2_3"]
+8061F38C:   callc [btlevtcmd_snd_se_offset battle_event_cmd.o] -2 ["SFX_BOSS_GNB_BREATH_POISON1"] [F1194D80] 0 -300 0 0 [F1194D80]
+8061F3B4:   setii LW(10) 120
+8061F3C0:   setii LW(11) 30
+8061F3CC:   callc [btlevtcmd_GetPos battle_event_cmd.o] -2 LW(6) LW(7) LW(8)
+8061F3E4:   callc [btlevtcmd_FaceDirectionAdd battle_event_cmd.o] -2 LW(6) 360
+8061F3F8:   addi LW(7) 30
+8061F404:   callc [btlevtcmd_GetPos battle_event_cmd.o] -2 LW(12) [F1194D80] [F1194D80]
+8061F41C:   callc [btlevtcmd_FaceDirectionAdd battle_event_cmd.o] -2 LW(12) 360
+8061F430:   callc [btlevtcmd_FaceDirectionAdd battle_event_cmd.o] -2 LW(12) LW(10)
+8061F444:   begin_thread
+8061F448:     wait_ms 333
+8061F450:     addi LW(11) 45
+8061F45C:     subi LW(8) 10
+8061F468:     callc [evt_eff evt_eff.o] 0 ["gonbaba_breath"] 1 LW(6) LW(7) LW(8) 3.00 LW(11) 0 0 0 0 0 0
+8061F4A8:   end_thread
+8061F4AC:   callc [btlevtcmd_GetHitPos battle_event_cmd.o] LW(3) LW(4) LW(12) [F1194D80] [F1194D80]
+8061F4C8:   subi LW(12) LW(6)
+8061F4D4:   if_int_lt LW(12) 0
+8061F4E0:     muli LW(12) -1
+8061F4EC:   endif
+8061F4F0:   addi LW(12) 20
+8061F4FC:   muli LW(12) LW(11)
+8061F508:   divi LW(12) LW(10)
+8061F514:   addi LW(12) 20
+8061F520:   wait_frames LW(12)
+8061F528:   setii LW(10) 0
+8061F534: 10:
+8061F53C:   callc [btlevtcmd_PreCheckDamage battle_event_cmd.o] -2 LW(3) LW(4) LW(9) 256 LW(5)
+8061F55C:   switchi LW(5)
+8061F564:     case_int_eq_any 4
+8061F56C:       goto 90
+8061F574:       end_multi_case
+8061F578:     case_int_eq 3
+8061F580:       callc [btlevtcmd_StartAvoid battle_event_cmd.o] LW(3) 38
+8061F590:       goto 90
+8061F598:       end_multi_case
+8061F59C:     case_int_eq 6
+8061F5A4:       callc [btlevtcmd_StartAvoid battle_event_cmd.o] LW(3) 39
+8061F5B4:       goto 90
+8061F5BC:     case_int_eq 2
+8061F5C4:       callc [btlevtcmd_StartAvoid battle_event_cmd.o] LW(3) 40
+8061F5D4:       goto 90
+8061F5DC:     case_int_eq 1
+8061F5E4:       goto 91
+8061F5EC:       end_multi_case
+8061F5F0:     case_default
+8061F5F4:       goto 98
+8061F5FC:       end_multi_case
+8061F600:   end_switch
+8061F604: 90:
+8061F60C:   goto 97
+8061F614: 91:
+8061F61C:   if_int_eq LW(10) 0
+8061F628:     callc [btlevtcmd_ResultACDefence battle_event_cmd.o] LW(3) LW(9)
+8061F638:   endif
+8061F63C:   callc [btlevtcmd_CheckDamage battle_event_cmd.o] -2 LW(3) LW(4) LW(9) 256 LW(5)
+8061F65C:   goto 97
+8061F664: 97:
+8061F66C:   callc [btlevtcmd_GetSelectNextEnemy battle_event_cmd.o] LW(3) LW(4)
+8061F67C:   if_int_ne LW(3) -1
+8061F688:     wait_ms 333
+8061F690:     addi LW(10) 1
+8061F69C:     goto 10
+8061F6A4:   endif
+8061F6A8:   wait_ms 1400
+8061F6B0: 99:
+8061F6B8:   return
+8061F6BC:   end

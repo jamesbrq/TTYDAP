@@ -160,20 +160,13 @@ namespace mod::owr
 
 	 }
 
-	int16_t OWR::ReplaceGeneralItem(int16_t id, int32_t collection_expr)
-	{
-		if (id == ItemId::STAR_PIECE)
-			return ItemId::DRIED_SHROOM;
-		return id;
-	}
-
 	void OWR::OnModuleLoaded(OSModuleInfo* module_info)
 	{
 		if (module_info == nullptr) return;
-		DoPatches(module_info);
 		int32_t module_id = module_info->id;
 		uintptr_t module_ptr = reinterpret_cast<uintptr_t>(module_info);
 		if (module_id != ModuleId::GOR) return;
+		DoPatches(module_info);
 		ShopItemData* item_data = reinterpret_cast<ShopItemData*>(module_ptr + kShopOffsets[0]);
 		for (int32_t copy = 0; copy < 7; ++copy) {
 			// Skip first item slot on additional copies.

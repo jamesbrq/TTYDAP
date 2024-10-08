@@ -1,0 +1,1237 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [tou_01_init_evt tou_01.o] AT 805DC320 ---
+805DC320:   setii LW(0) [bero_data tou_01.o]
+805DC32C:   callc [evt_bero_get_info evt_bero.o]
+805DC334:   callss [evt_bero_info_run evt_bero.o]
+805DC33C:   callc [evt_mobj_save_blk evt_mobj.o] ["mobj_save"] -225 70 -225 0 0
+805DC35C:   callc [evt_mobj_powerupblk evt_mobj.o] ["pblk01"] 245 100 -220 0 GSWF(5546) 0
+805DC380:   callc [evt_mobj_brick evt_mobj.o] ["hblk01"] 245 10 -220 121 11 0 GSWF(2507)
+805DC3A8:   callc [evt_mobj_itembox evt_mobj.o] ["mobj_box00"] 700 160 -10 0 0 [mobj_box00 tou_01.o] GSWF(2519)
+805DC3D0:   callc [evt_mobj_kururing_floor evt_mobj.o] ["kururin1"] 0 0 800 ["jimen"] 125 GSWF(5622)
+805DC3F4:   callc [evt_item_entry evt_item.o] ["item_03"] 125 675 10 -165 16 GSWF(5618) 0
+805DC41C:   callc [evt_item_entry evt_item.o] ["item_01"] 125 -785 10 390 16 GSWF(5619) 0
+805DC444:   callc [evt_item_entry evt_item.o] ["item_02"] 125 60 30 -365 16 GSWF(5620) 0
+805DC46C:   callc [evt_item_entry evt_item.o] ["item_04"] 125 615 160 -75 16 GSWF(5621) 0
+805DC494:   callc [evt_item_entry evt_item.o] ["item_05"] 164 450 10 -90 16 GSWF(2533) 0
+805DC4BC:   setii LF(0) 0
+805DC4C8:   if_int_eq GSW(0) 400
+805DC4D4:     callc [evt_bero_get_entername evt_bero.o] LW(0)
+805DC4E0:     if_string_eq LW(0) ["sekai_yami1"]
+805DC4EC:       setii LF(0) 1
+805DC4F8:     endif
+805DC4FC:     if_string_eq LW(0) ["minnnanokoe"]
+805DC508:       setii LF(0) 1
+805DC514:     endif
+805DC518:   endif
+805DC51C:   if_int_eq LF(0) 0
+805DC528:     callc [evt_npc_setup evt_npc.o] [npcEnt tou_01.o]
+805DC534:     callss [init_roten_1 tou_01.o]
+805DC53C:     callc [evt_npc_change_interrupt evt_npc.o] ["ロテン1"] 6 [talk_roten_1 tou_01.o]
+805DC550:   endif
+805DC554:   if_int_eq GSWF(5398) 1
+805DC560:     callc [evt_item_entry evt_item.o] ["iri_24"] 173 -265 10 -70 16 GSWF(2528) 0
+805DC588:   endif
+805DC58C:   setii LW(0) [door_1 tou_01.o]
+805DC598:   callss [evt_door_entry evt_door.o]
+805DC5A0:   setii LW(0) [door_2 tou_01.o]
+805DC5AC:   callss [evt_door_entry evt_door.o]
+805DC5B4:   callc [evt_map_playanim evt_map.o] ["anm_kemuri"] 1 0
+805DC5C8:   callc [evt_map_playanim evt_map.o] ["anm_aisu"] 1 0
+805DC5DC:   callc [evt_map_playanim evt_map.o] ["anm_den"] 1 0
+805DC5F0:   callc [evt_map_playanim evt_map.o] ["anm_denden"] 1 0
+805DC604:   callc [evt_map_playanim evt_map.o] ["anm_raito"] 1 0
+805DC618:   setii LW(0) ["sati_1"]
+805DC624:   callsa [evt_search_light tou_01.o]
+805DC62C:   setii LW(0) ["sati_2"]
+805DC638:   callsa [evt_search_light tou_01.o]
+805DC640:   callsa [evt_kanban tou_01.o]
+805DC648:   callc [evt_run_case_evt evt_case.o] 9 1 ["a_telbox"] 0 [evt_telbox tou_01.o] 0
+805DC668:   if_int_eq GSW(0) 145
+805DC674:     callc [evt_item_entry evt_item.o] ["key"] 18 -745 20 435 16 -1 [evt_key tou_01.o]
+805DC69C:   endif
+805DC6A0:   callc [evt_shop_setup evt_shop.o] [obj_list tou_01.o] [goods_list tou_01.o] [shopper_data tou_01.o] [trade_list tou_01.o]
+805DC6B8:   callsa [evt_ship_shadow tou_01.o]
+805DC6C0:   callc [evt_map_entry_airport_harbor evt_map.o] 0 ["hikou"] ["a_hi1"]
+805DC6D4:   if_int_eq GSWF(2522) 0
+805DC6E0:     callc [evt_mapobj_flag_onoff evt_map.o] 1 0 ["neon_1"] 1
+805DC6F8:     callc [evt_mapobj_flag_onoff evt_map.o] 1 1 ["neon_2"] 1
+805DC710:     callc [evt_mapobj_flag_onoff evt_map.o] 1 1 ["neon_3"] 1
+805DC728:     callc [evt_hitobj_onoff evt_hit.o] ["a_sak_kaidan"] 1 0
+805DC73C:     callc [evt_mobj_tornadoswitch_blue evt_mobj.o] 0 ["dummy_sw"] 735 10 455 [evt_dummy_sw tou_01.o] GSWF(2522)
+805DC760:     setii GF(10) 0
+805DC76C:     callsa [evt_kanban2 tou_01.o]
+805DC774:   else
+805DC778:     callc [evt_map_playanim evt_map.o] ["anm_kan"] 2 0
+805DC78C:     callc [evt_mapobj_flag_onoff evt_map.o] 1 1 ["neon_1"] 1
+805DC7A4:     callc [evt_mapobj_flag_onoff evt_map.o] 1 1 ["neon_2"] 1
+805DC7BC:     callc [evt_mapobj_flag_onoff evt_map.o] 1 0 ["neon_3"] 1
+805DC7D4:     callc [evt_hitobj_onoff evt_hit.o] ["a_sak_kaidan"] 1 1
+805DC7E8:     callc [evt_hitobj_onoff evt_hit.o] ["a_hasira"] 1 0
+805DC7FC:   endif
+805DC800:   if_int_lt GSW(0) 136
+805DC80C:     callc [evt_tou_get_ranking tou.o] LW(0)
+805DC818:     if_int_le LW(0) 15
+805DC824:     else
+805DC828:       callc [evt_run_case_evt evt_case.o] 9 1 ["a_kaunta_"] 0 [evt_hotdog tou_01.o] 0
+805DC848:     endif
+805DC84C:   endif
+805DC850:   if_int_ge GSW(0) 137
+805DC85C:     callc [evt_run_case_evt evt_case.o] 9 1 ["a_kaunta_"] 0 [evt_hotdog tou_01.o] 0
+805DC87C:   endif
+805DC880:   callc [evt_hit_bind_mapobj evt_hit.o] ["a_gondora"] ["gondora"]
+805DC890:   callc [evt_mapobj_trans evt_map.o] 1 ["gondora"] 0 300 0
+805DC8AC:   callc [evt_hit_bind_update evt_hit.o] ["a_gondora"]
+805DC8B8:   callc [evt_mapobj_flag_onoff evt_map.o] 1 1 ["gondora"] 1
+805DC8D0:   callc [evt_mobj_jumpstand_blue evt_mobj.o] 0 ["jump"] 180 610 160 0 0 0
+805DC8F8:   callc [evt_mapobj_flag_onoff evt_map.o] 1 1 ["J_hot"] 16384
+805DC910:   callc [evt_mapobj_flag_onoff evt_map.o] 1 1 ["E_hot"] 16384
+805DC928:   callc [evt_mapobj_flag_onoff evt_map.o] 1 1 ["D_hot"] 16384
+805DC940:   callc [evt_mapobj_flag_onoff evt_map.o] 1 1 ["F_hot"] 16384
+805DC958:   callc [evt_mapobj_flag_onoff evt_map.o] 1 1 ["Sp_hot"] 16384
+805DC970:   callc [evt_mapobj_flag_onoff evt_map.o] 1 1 ["I_hot"] 16384
+805DC988:   callc [evt_mapobj_flag_onoff evt_map.o] 1 1 ["J_wel"] 16384
+805DC9A0:   callc [evt_mapobj_flag_onoff evt_map.o] 1 1 ["E_wel"] 16384
+805DC9B8:   callc [evt_mapobj_flag_onoff evt_map.o] 1 1 ["D_wel"] 16384
+805DC9D0:   callc [evt_mapobj_flag_onoff evt_map.o] 1 1 ["F_wel"] 16384
+805DC9E8:   callc [evt_mapobj_flag_onoff evt_map.o] 1 1 ["Sp_wel"] 16384
+805DCA00:   callc [evt_mapobj_flag_onoff evt_map.o] 1 1 ["I_wel"] 16384
+805DCA18:   callc [evt_mapobj_flag_onoff evt_map.o] 1 1 ["J_E_moji"] 16384
+805DCA30:   callc [evt_mapobj_flag_onoff evt_map.o] 1 1 ["D_F_moji"] 16384
+805DCA48:   callc [evt_mapobj_flag_onoff evt_map.o] 1 1 ["Sp_moji"] 16384
+805DCA60:   callc [evt_mapobj_flag_onoff evt_map.o] 1 1 ["I_moji"] 16384
+805DCA78:   callc [evt_mapobj_flag_onoff evt_map.o] 1 1 ["J_saka"] 16384
+805DCA90:   callc [evt_mapobj_flag_onoff evt_map.o] 1 1 ["E_saka"] 16384
+805DCAA8:   callc [evt_mapobj_flag_onoff evt_map.o] 1 1 ["D_saka"] 16384
+805DCAC0:   callc [evt_mapobj_flag_onoff evt_map.o] 1 1 ["F_saka"] 16384
+805DCAD8:   callc [evt_mapobj_flag_onoff evt_map.o] 1 1 ["Sp_saka"] 16384
+805DCAF0:   callc [evt_mapobj_flag_onoff evt_map.o] 1 1 ["I_saka"] 16384
+805DCB08:   callc [evt_mapobj_flag_onoff evt_map.o] 1 1 ["J_maku"] 16384
+805DCB20:   callc [evt_mapobj_flag_onoff evt_map.o] 1 1 ["E_maku"] 16384
+805DCB38:   callc [evt_mapobj_flag_onoff evt_map.o] 1 1 ["D_maku"] 16384
+805DCB50:   callc [evt_mapobj_flag_onoff evt_map.o] 1 1 ["F_maku"] 16384
+805DCB68:   callc [evt_mapobj_flag_onoff evt_map.o] 1 1 ["Sp_maku"] 16384
+805DCB80:   callc [evt_mapobj_flag_onoff evt_map.o] 1 1 ["J_maku5"] 16384
+805DCB98:   callc [evt_mapobj_flag_onoff evt_map.o] 1 1 ["J_kan_1"] 16384
+805DCBB0:   callc [evt_mapobj_flag_onoff evt_map.o] 1 1 ["E_kan_1"] 16384
+805DCBC8:   callc [evt_mapobj_flag_onoff evt_map.o] 1 1 ["D_kan_1"] 16384
+805DCBE0:   callc [evt_mapobj_flag_onoff evt_map.o] 1 1 ["F_kan_1"] 16384
+805DCBF8:   callc [evt_mapobj_flag_onoff evt_map.o] 1 1 ["Sp_kan_1"] 16384
+805DCC10:   callc [evt_mapobj_flag_onoff evt_map.o] 1 1 ["I_kan_1"] 16384
+805DCC28:   callc [evt_mapobj_flag_onoff evt_map.o] 1 1 ["J_E_gai_1"] 16384
+805DCC40:   callc [evt_mapobj_flag_onoff evt_map.o] 1 1 ["D_gai_1"] 16384
+805DCC58:   callc [evt_mapobj_flag_onoff evt_map.o] 1 1 ["F_gai_1"] 16384
+805DCC70:   callc [evt_mapobj_flag_onoff evt_map.o] 1 1 ["Sp_gai_1"] 16384
+805DCC88:   callc [evt_mapobj_flag_onoff evt_map.o] 1 1 ["I_gai_1"] 16384
+805DCCA0:   callc [evt_mapobj_flag_onoff evt_map.o] 1 1 ["J_E_gai_2"] 16384
+805DCCB8:   callc [evt_mapobj_flag_onoff evt_map.o] 1 1 ["D_gai_2"] 16384
+805DCCD0:   callc [evt_mapobj_flag_onoff evt_map.o] 1 1 ["F_gai_2"] 16384
+805DCCE8:   callc [evt_mapobj_flag_onoff evt_map.o] 1 1 ["Sp_gai_2"] 16384
+805DCD00:   callc [evt_mapobj_flag_onoff evt_map.o] 1 1 ["I_gai_2"] 16384
+805DCD18:   callc [evt_sub_get_language evt_sub.o] LW(0)
+805DCD24:   switchi LW(0)
+805DCD2C:     case_int_eq 0
+805DCD34:       callc [evt_mapobj_flag_onoff evt_map.o] 1 0 ["J_hot"] 16384
+805DCD4C:       callc [evt_mapobj_flag_onoff evt_map.o] 1 0 ["J_wel"] 16384
+805DCD64:       callc [evt_mapobj_flag_onoff evt_map.o] 1 0 ["J_E_moji"] 16384
+805DCD7C:       callc [evt_mapobj_flag_onoff evt_map.o] 1 0 ["J_saka"] 16384
+805DCD94:       callc [evt_mapobj_flag_onoff evt_map.o] 1 0 ["J_maku"] 16384
+805DCDAC:       callc [evt_mapobj_flag_onoff evt_map.o] 1 0 ["J_kan_1"] 16384
+805DCDC4:       callc [evt_mapobj_flag_onoff evt_map.o] 1 0 ["J_E_gai_1"] 16384
+805DCDDC:       callc [evt_mapobj_flag_onoff evt_map.o] 1 0 ["J_E_gai_2"] 16384
+805DCDF4:     case_int_eq 1
+805DCDFC:       callc [evt_mapobj_flag_onoff evt_map.o] 1 0 ["E_hot"] 16384
+805DCE14:       callc [evt_mapobj_flag_onoff evt_map.o] 1 0 ["E_wel"] 16384
+805DCE2C:       callc [evt_mapobj_flag_onoff evt_map.o] 1 0 ["J_E_moji"] 16384
+805DCE44:       callc [evt_mapobj_flag_onoff evt_map.o] 1 0 ["E_saka"] 16384
+805DCE5C:       callc [evt_mapobj_flag_onoff evt_map.o] 1 0 ["E_maku"] 16384
+805DCE74:       callc [evt_mapobj_flag_onoff evt_map.o] 1 0 ["E_kan_1"] 16384
+805DCE8C:       callc [evt_mapobj_flag_onoff evt_map.o] 1 0 ["J_E_gai_1"] 16384
+805DCEA4:       callc [evt_mapobj_flag_onoff evt_map.o] 1 0 ["J_E_gai_2"] 16384
+805DCEBC:     case_int_eq 2
+805DCEC4:       callc [evt_mapobj_flag_onoff evt_map.o] 1 0 ["D_hot"] 16384
+805DCEDC:       callc [evt_mapobj_flag_onoff evt_map.o] 1 0 ["D_wel"] 16384
+805DCEF4:       callc [evt_mapobj_flag_onoff evt_map.o] 1 0 ["D_F_moji"] 16384
+805DCF0C:       callc [evt_mapobj_flag_onoff evt_map.o] 1 0 ["D_saka"] 16384
+805DCF24:       callc [evt_mapobj_flag_onoff evt_map.o] 1 0 ["D_maku"] 16384
+805DCF3C:       callc [evt_mapobj_flag_onoff evt_map.o] 1 0 ["D_kan_1"] 16384
+805DCF54:       callc [evt_mapobj_flag_onoff evt_map.o] 1 0 ["D_gai_1"] 16384
+805DCF6C:       callc [evt_mapobj_flag_onoff evt_map.o] 1 0 ["D_gai_2"] 16384
+805DCF84:     case_int_eq 3
+805DCF8C:       callc [evt_mapobj_flag_onoff evt_map.o] 1 0 ["F_hot"] 16384
+805DCFA4:       callc [evt_mapobj_flag_onoff evt_map.o] 1 0 ["F_wel"] 16384
+805DCFBC:       callc [evt_mapobj_flag_onoff evt_map.o] 1 0 ["D_F_moji"] 16384
+805DCFD4:       callc [evt_mapobj_flag_onoff evt_map.o] 1 0 ["F_saka"] 16384
+805DCFEC:       callc [evt_mapobj_flag_onoff evt_map.o] 1 0 ["F_maku"] 16384
+805DD004:       callc [evt_mapobj_flag_onoff evt_map.o] 1 0 ["F_kan_1"] 16384
+805DD01C:       callc [evt_mapobj_flag_onoff evt_map.o] 1 0 ["F_gai_1"] 16384
+805DD034:       callc [evt_mapobj_flag_onoff evt_map.o] 1 0 ["F_gai_2"] 16384
+805DD04C:     case_int_eq 4
+805DD054:       callc [evt_mapobj_flag_onoff evt_map.o] 1 0 ["Sp_hot"] 16384
+805DD06C:       callc [evt_mapobj_flag_onoff evt_map.o] 1 0 ["Sp_wel"] 16384
+805DD084:       callc [evt_mapobj_flag_onoff evt_map.o] 1 0 ["Sp_moji"] 16384
+805DD09C:       callc [evt_mapobj_flag_onoff evt_map.o] 1 0 ["Sp_saka"] 16384
+805DD0B4:       callc [evt_mapobj_flag_onoff evt_map.o] 1 0 ["Sp_maku"] 16384
+805DD0CC:       callc [evt_mapobj_flag_onoff evt_map.o] 1 0 ["Sp_kan_1"] 16384
+805DD0E4:       callc [evt_mapobj_flag_onoff evt_map.o] 1 0 ["Sp_gai_1"] 16384
+805DD0FC:       callc [evt_mapobj_flag_onoff evt_map.o] 1 0 ["Sp_gai_2"] 16384
+805DD114:     case_int_eq 5
+805DD11C:       callc [evt_mapobj_flag_onoff evt_map.o] 1 0 ["I_hot"] 16384
+805DD134:       callc [evt_mapobj_flag_onoff evt_map.o] 1 0 ["I_wel"] 16384
+805DD14C:       callc [evt_mapobj_flag_onoff evt_map.o] 1 0 ["I_moji"] 16384
+805DD164:       callc [evt_mapobj_flag_onoff evt_map.o] 1 0 ["I_saka"] 16384
+805DD17C:       callc [evt_mapobj_flag_onoff evt_map.o] 1 0 ["J_maku5"] 16384
+805DD194:       callc [evt_mapobj_flag_onoff evt_map.o] 1 0 ["I_kan_1"] 16384
+805DD1AC:       callc [evt_mapobj_flag_onoff evt_map.o] 1 0 ["I_gai_1"] 16384
+805DD1C4:       callc [evt_mapobj_flag_onoff evt_map.o] 1 0 ["I_gai_2"] 16384
+805DD1DC:   end_switch
+805DD1E0:   callc [evt_mapobj_flag_onoff evt_map.o] 1 1 ["J_hot"] 16384
+805DD1F8:   callc [evt_mapobj_flag_onoff evt_map.o] 1 1 ["E_hot"] 16384
+805DD210:   callc [evt_mapobj_flag_onoff evt_map.o] 1 1 ["D_hot"] 16384
+805DD228:   callc [evt_mapobj_flag_onoff evt_map.o] 1 1 ["F_hot"] 16384
+805DD240:   callc [evt_mapobj_flag_onoff evt_map.o] 1 1 ["Sp_hot"] 16384
+805DD258:   callc [evt_mapobj_flag_onoff evt_map.o] 1 1 ["I_hot"] 16384
+805DD270:   callc [evt_mapobj_flag_onoff evt_map.o] 1 1 ["J_wel"] 16384
+805DD288:   callc [evt_mapobj_flag_onoff evt_map.o] 1 1 ["E_wel"] 16384
+805DD2A0:   callc [evt_mapobj_flag_onoff evt_map.o] 1 1 ["D_wel"] 16384
+805DD2B8:   callc [evt_mapobj_flag_onoff evt_map.o] 1 1 ["F_wel"] 16384
+805DD2D0:   callc [evt_mapobj_flag_onoff evt_map.o] 1 1 ["Sp_wel"] 16384
+805DD2E8:   callc [evt_mapobj_flag_onoff evt_map.o] 1 1 ["I_wel"] 16384
+805DD300:   callc [evt_mapobj_flag_onoff evt_map.o] 1 1 ["J_E_moji"] 16384
+805DD318:   callc [evt_mapobj_flag_onoff evt_map.o] 1 1 ["D_F_moji"] 16384
+805DD330:   callc [evt_mapobj_flag_onoff evt_map.o] 1 1 ["Sp_moji"] 16384
+805DD348:   callc [evt_mapobj_flag_onoff evt_map.o] 1 1 ["I_moji"] 16384
+805DD360:   callc [evt_mapobj_flag_onoff evt_map.o] 1 1 ["J_saka"] 16384
+805DD378:   callc [evt_mapobj_flag_onoff evt_map.o] 1 1 ["E_saka"] 16384
+805DD390:   callc [evt_mapobj_flag_onoff evt_map.o] 1 1 ["D_saka"] 16384
+805DD3A8:   callc [evt_mapobj_flag_onoff evt_map.o] 1 1 ["F_saka"] 16384
+805DD3C0:   callc [evt_mapobj_flag_onoff evt_map.o] 1 1 ["Sp_saka"] 16384
+805DD3D8:   callc [evt_mapobj_flag_onoff evt_map.o] 1 1 ["I_saka"] 16384
+805DD3F0:   callc [evt_mapobj_flag_onoff evt_map.o] 1 1 ["J_maku"] 16384
+805DD408:   callc [evt_mapobj_flag_onoff evt_map.o] 1 1 ["E_maku"] 16384
+805DD420:   callc [evt_mapobj_flag_onoff evt_map.o] 1 1 ["D_maku"] 16384
+805DD438:   callc [evt_mapobj_flag_onoff evt_map.o] 1 1 ["F_maku"] 16384
+805DD450:   callc [evt_mapobj_flag_onoff evt_map.o] 1 1 ["Sp_maku"] 16384
+805DD468:   callc [evt_mapobj_flag_onoff evt_map.o] 1 1 ["J_maku5"] 16384
+805DD480:   callc [evt_mapobj_flag_onoff evt_map.o] 1 1 ["J_kan_1"] 16384
+805DD498:   callc [evt_mapobj_flag_onoff evt_map.o] 1 1 ["E_kan_1"] 16384
+805DD4B0:   callc [evt_mapobj_flag_onoff evt_map.o] 1 1 ["D_kan_1"] 16384
+805DD4C8:   callc [evt_mapobj_flag_onoff evt_map.o] 1 1 ["F_kan_1"] 16384
+805DD4E0:   callc [evt_mapobj_flag_onoff evt_map.o] 1 1 ["Sp_kan_1"] 16384
+805DD4F8:   callc [evt_mapobj_flag_onoff evt_map.o] 1 1 ["I_kan_1"] 16384
+805DD510:   callc [evt_sub_get_language evt_sub.o] LW(0)
+805DD51C:   switchi LW(0)
+805DD524:     case_int_eq 0
+805DD52C:       callc [evt_mapobj_flag_onoff evt_map.o] 1 0 ["J_hot"] 16384
+805DD544:       callc [evt_mapobj_flag_onoff evt_map.o] 1 0 ["J_wel"] 16384
+805DD55C:       callc [evt_mapobj_flag_onoff evt_map.o] 1 0 ["J_E_moji"] 16384
+805DD574:       callc [evt_mapobj_flag_onoff evt_map.o] 1 0 ["J_saka"] 16384
+805DD58C:       callc [evt_mapobj_flag_onoff evt_map.o] 1 0 ["J_maku"] 16384
+805DD5A4:       callc [evt_mapobj_flag_onoff evt_map.o] 1 0 ["J_kan_1"] 16384
+805DD5BC:     case_int_eq 1
+805DD5C4:       callc [evt_mapobj_flag_onoff evt_map.o] 1 0 ["E_hot"] 16384
+805DD5DC:       callc [evt_mapobj_flag_onoff evt_map.o] 1 0 ["E_wel"] 16384
+805DD5F4:       callc [evt_mapobj_flag_onoff evt_map.o] 1 0 ["J_E_moji"] 16384
+805DD60C:       callc [evt_mapobj_flag_onoff evt_map.o] 1 0 ["E_saka"] 16384
+805DD624:       callc [evt_mapobj_flag_onoff evt_map.o] 1 0 ["E_maku"] 16384
+805DD63C:       callc [evt_mapobj_flag_onoff evt_map.o] 1 0 ["E_kan_1"] 16384
+805DD654:     case_int_eq 2
+805DD65C:       callc [evt_mapobj_flag_onoff evt_map.o] 1 0 ["D_hot"] 16384
+805DD674:       callc [evt_mapobj_flag_onoff evt_map.o] 1 0 ["D_wel"] 16384
+805DD68C:       callc [evt_mapobj_flag_onoff evt_map.o] 1 0 ["D_F_moji"] 16384
+805DD6A4:       callc [evt_mapobj_flag_onoff evt_map.o] 1 0 ["D_saka"] 16384
+805DD6BC:       callc [evt_mapobj_flag_onoff evt_map.o] 1 0 ["D_maku"] 16384
+805DD6D4:       callc [evt_mapobj_flag_onoff evt_map.o] 1 0 ["D_kan_1"] 16384
+805DD6EC:     case_int_eq 3
+805DD6F4:       callc [evt_mapobj_flag_onoff evt_map.o] 1 0 ["F_hot"] 16384
+805DD70C:       callc [evt_mapobj_flag_onoff evt_map.o] 1 0 ["F_wel"] 16384
+805DD724:       callc [evt_mapobj_flag_onoff evt_map.o] 1 0 ["D_F_moji"] 16384
+805DD73C:       callc [evt_mapobj_flag_onoff evt_map.o] 1 0 ["F_saka"] 16384
+805DD754:       callc [evt_mapobj_flag_onoff evt_map.o] 1 0 ["F_maku"] 16384
+805DD76C:       callc [evt_mapobj_flag_onoff evt_map.o] 1 0 ["F_kan_1"] 16384
+805DD784:     case_int_eq 4
+805DD78C:       callc [evt_mapobj_flag_onoff evt_map.o] 1 0 ["Sp_hot"] 16384
+805DD7A4:       callc [evt_mapobj_flag_onoff evt_map.o] 1 0 ["Sp_wel"] 16384
+805DD7BC:       callc [evt_mapobj_flag_onoff evt_map.o] 1 0 ["Sp_moji"] 16384
+805DD7D4:       callc [evt_mapobj_flag_onoff evt_map.o] 1 0 ["Sp_saka"] 16384
+805DD7EC:       callc [evt_mapobj_flag_onoff evt_map.o] 1 0 ["Sp_maku"] 16384
+805DD804:       callc [evt_mapobj_flag_onoff evt_map.o] 1 0 ["Sp_kan_1"] 16384
+805DD81C:     case_int_eq 5
+805DD824:       callc [evt_mapobj_flag_onoff evt_map.o] 1 0 ["I_hot"] 16384
+805DD83C:       callc [evt_mapobj_flag_onoff evt_map.o] 1 0 ["I_wel"] 16384
+805DD854:       callc [evt_mapobj_flag_onoff evt_map.o] 1 0 ["I_moji"] 16384
+805DD86C:       callc [evt_mapobj_flag_onoff evt_map.o] 1 0 ["I_saka"] 16384
+805DD884:       callc [evt_mapobj_flag_onoff evt_map.o] 1 0 ["J_maku5"] 16384
+805DD89C:       callc [evt_mapobj_flag_onoff evt_map.o] 1 0 ["I_kan_1"] 16384
+805DD8B4:   end_switch
+805DD8B8:   begin_thread
+805DD8BC:     callc [unk_tou_000039b4 tou_01.o]
+805DD8C4:   end_thread
+805DD8C8:   callc [evt_sub_get_system_flag evt_sub.o] LW(0)
+805DD8D4:   if_bits_set LW(0) 2
+805DD8E0:     return
+805DD8E4:   endif
+805DD8E8:   callc [evt_sub_get_system_flag evt_sub.o] LW(0)
+805DD8F4:   if_bits_set LW(0) 1
+805DD900:   else
+805DD904:     callc [evt_bero_get_entername evt_bero.o] LW(0)
+805DD910:     if_string_ne LW(0) ["a_door_mon"]
+805DD91C:       if_int_eq LF(0) 0
+805DD928:         callsa [evt_gondora tou_01.o]
+805DD930:       endif
+805DD934:     else
+805DD938:       callc [evt_cam_road_reset evt_cam.o]
+805DD940:     endif
+805DD944:   endif
+805DD948:   setii LF(0) 0
+805DD954:   if_int_eq GSW(0) 400
+805DD960:     callc [evt_bero_get_entername evt_bero.o] LW(0)
+805DD96C:     if_string_eq LW(0) ["sekai_yami1"]
+805DD978:       callc [evt_snd_bgmon evt_snd.o] 512 ["BGM_EVT_STG8_WITCH1"]
+805DD988:       callc [evt_snd_envoff evt_snd.o] 512
+805DD994:       setii LF(0) 1
+805DD9A0:     endif
+805DD9A4:     if_string_eq LW(0) ["minnnanokoe"]
+805DD9B0:       callc [evt_snd_bgmon evt_snd.o] 512 ["BGM_EVT_STG8_VOICE1"]
+805DD9C0:       callc [evt_snd_envoff evt_snd.o] 512
+805DD9CC:       setii LF(0) 1
+805DD9D8:     endif
+805DD9DC:   endif
+805DD9E0:   if_int_eq LF(0) 0
+805DD9EC:     callc [evt_tou_get_ranking tou.o] LW(0)
+805DD9F8:     if_int_le LW(0) 15
+805DDA04:       switchi GSW(0)
+805DDA0C:         case_int_lt 135
+805DDA14:           callc [evt_snd_bgmon evt_snd.o] 512 ["BGM_EVT_STG3_EGG1"]
+805DDA24:           callc [evt_snd_envoff evt_snd.o] 512
+805DDA30:           callc [evt_snd_bgmon evt_snd.o] 160 0
+805DDA40:           callsa [evt_tamago tou_01.o]
+805DDA48:           callsa [evt_tamago_sleep tou_01.o]
+805DDA50:         case_int_lt 136
+805DDA58:           callc [evt_snd_bgmon evt_snd.o] 512 ["BGM_EVT_STG3_EGG1"]
+805DDA68:           callc [evt_snd_envoff evt_snd.o] 512
+805DDA74:           callc [evt_snd_bgmon evt_snd.o] 160 0
+805DDA84:           callsa [evt_tamago_move tou_01.o]
+805DDA8C:           callsa [evt_tamago_sleep tou_01.o]
+805DDA94:           callc [evt_npc_set_position evt_npc.o] ["ホットドッグ"] -288 10 -110
+805DDAAC:           callc [evt_npc_change_interrupt evt_npc.o] ["ホットドッグ"] 1 [hot_move_evt tou_01.o]
+805DDAC0:           callc [evt_npc_restart_regular_event evt_npc.o] ["ホットドッグ"]
+805DDACC:         case_int_lt 137
+805DDAD4:           callc [evt_snd_bgmon evt_snd.o] 512 ["BGM_STG3_URN1"]
+805DDAE4:           callc [evt_snd_envon evt_snd.o] 272 ["ENV_STG3_TOU1"]
+805DDAF4:           callc [evt_snd_bgmon evt_snd.o] 160 0
+805DDB04:           callc [evt_npc_flag_onoff evt_npc.o] 0 ["ホットドッグ"] 262144
+805DDB18:           callc [evt_npc_set_position evt_npc.o] ["たまご"] -400 110 -120
+805DDB30:           callc [evt_npc_set_position evt_npc.o] ["ホットドッグ"] -288 10 -110
+805DDB48:           callc [evt_set_dir_to_target evt_npc.o] ["ホットドッグ"] ["たまご"]
+805DDB58:           callc [evt_npc_change_interrupt evt_npc.o] ["たまご"] 6 [talk_tamago tou_01.o]
+805DDB6C:           callc [eff_sleep_on tou_01.o]
+805DDB74:           callsa [evt_tamago_sleep tou_01.o]
+805DDB7C:         case_default
+805DDB80:           callc [evt_snd_bgmon evt_snd.o] 512 ["BGM_STG3_URN1"]
+805DDB90:           callc [evt_snd_envon evt_snd.o] 272 ["ENV_STG3_TOU1"]
+805DDBA0:           callc [evt_snd_bgmon evt_snd.o] 160 0
+805DDBB0:       end_switch
+805DDBB4:     else
+805DDBB8:       callc [evt_snd_bgmon evt_snd.o] 512 ["BGM_STG3_URN1"]
+805DDBC8:       callc [evt_snd_envon evt_snd.o] 272 ["ENV_STG3_TOU1"]
+805DDBD8:       callc [evt_snd_bgmon evt_snd.o] 160 0
+805DDBE8:     endif
+805DDBEC:   endif
+805DDBF0:   if_int_eq GSW(0) 171
+805DDBFC:     callc [evt_mario_get_party evt_mario.o] LW(15)
+805DDC08:     if_int_eq LW(15) 0
+805DDC14:       callc [evt_mario_set_party evt_mario.o] 0 1
+805DDC24:       callc [evt_party_run evt_party.o] 0
+805DDC30:     endif
+805DDC34:     callc [evt_pouch_mario_recovery evt_pouch.o]
+805DDC3C:     callc [evt_pouch_all_party_recovery evt_pouch.o]
+805DDC44:     callc [N_evt_sub_status_gauge_force_update evt_sub.o]
+805DDC4C:     callsa [evt_peach_after tou_01.o]
+805DDC54:   endif
+805DDC58:   if_int_eq GSW(0) 400
+805DDC64:     callc [evt_bero_get_entername evt_bero.o] LW(0)
+805DDC70:     if_string_eq LW(0) ["sekai_yami1"]
+805DDC7C:       callss [sekai_yami_npc_init tou_01.o]
+805DDC84:       callsa [sekai_yami_evt tou_01.o]
+805DDC8C:     endif
+805DDC90:     if_string_eq LW(0) ["minnnanokoe"]
+805DDC9C:       callss [minnnanokoe_npc_entry tou_01.o]
+805DDCA4:       callsa [minnnanokoe_evt tou_01.o]
+805DDCAC:     endif
+805DDCB0:   endif
+805DDCB4:   callsa [evt_sub_mail_event evt_sub.o]
+805DDCBC:   return
+805DDCC0:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [init_roten_1 tou_01.o] AT 805D705C ---
+805D705C:   callc [evt_npc_set_position evt_npc.o] ["ロテン1"] 350 0 700
+805D7074:   return
+805D7078:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [evt_search_light tou_01.o] AT 805DA8E4 ---
+805DA8E4:   setii LW(8) LW(0)
+805DA8F0:   loop 0
+805DA8F8:     callc [evt_sub_intpl_msec_init evt_sub.o] 11 -50 50 3000
+805DA910: 0:
+805DA918:     callc [evt_sub_intpl_msec_get_value evt_sub.o]
+805DA920:     callc [evt_mapobj_rotate evt_map.o] 1 LW(8) 0 0 LW(0)
+805DA93C:     wait_frames 1
+805DA944:     if_int_eq LW(1) 1
+805DA950:       goto 0
+805DA958:     endif
+805DA95C:     callc [evt_sub_random evt_sub.o] 5 LW(0)
+805DA96C:     addi LW(0) 1
+805DA978:     muli LW(0) 500
+805DA984:     wait_ms LW(0)
+805DA98C:     callc [evt_sub_intpl_msec_init evt_sub.o] 11 50 -50 3000
+805DA9A4: 1:
+805DA9AC:     callc [evt_sub_intpl_msec_get_value evt_sub.o]
+805DA9B4:     callc [evt_mapobj_rotate evt_map.o] 1 LW(8) 0 0 LW(0)
+805DA9D0:     wait_frames 1
+805DA9D8:     if_int_eq LW(1) 1
+805DA9E4:       goto 1
+805DA9EC:     endif
+805DA9F0:     callc [evt_sub_random evt_sub.o] 5 LW(0)
+805DAA00:     addi LW(0) 1
+805DAA0C:     muli LW(0) 500
+805DAA18:     wait_ms LW(0)
+805DAA20:   end_loop
+805DAA24:   return
+805DAA28:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [evt_kanban tou_01.o] AT 805D54BC ---
+805D54BC:   loop 0
+805D54C4:     callc [evt_sub_intpl_init evt_sub.o] 11 2000 -2000 60
+805D54DC:     loop 61
+805D54E4:       callc [evt_sub_intpl_get_value evt_sub.o]
+805D54EC:       divf LW(0) 100.00
+805D54F8:       callc [evt_mapobj_rotate evt_map.o] 1 ["kanban_e"] LW(0) 0 0
+805D5514:       wait_frames 1
+805D551C:     end_loop
+805D5520:     callc [evt_sub_intpl_init evt_sub.o] 11 -2000 2000 60
+805D5538:     loop 61
+805D5540:       callc [evt_sub_intpl_get_value evt_sub.o]
+805D5548:       divf LW(0) 100.00
+805D5554:       callc [evt_mapobj_rotate evt_map.o] 1 ["kanban_e"] LW(0) 0 0
+805D5570:       wait_frames 1
+805D5578:     end_loop
+805D557C:   end_loop
+805D5580:   return
+805D5584:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [evt_ship_shadow tou_01.o] AT 805D5AFC ---
+805D5AFC:   callc [proj_on tou_01.o]
+805D5B04:   begin_thread
+805D5B08:     set_thread_type_mask 0
+805D5B10:     callc [make_shadow tou_01.o]
+805D5B18:   end_thread
+805D5B1C:   callc [evt_mapobj_flag_onoff evt_map.o] 1 1 ["tou_jimenn"] 1024
+805D5B34:   callc [evt_mapobj_flag_onoff evt_map.o] 1 0 ["tou_jimenn"] 256
+805D5B4C:   callc [evt_mapobj_flag_onoff evt_map.o] 1 1 ["gondora"] 1024
+805D5B64:   callc [evt_mapobj_flag_onoff evt_map.o] 1 0 ["gondora"] 256
+805D5B7C:   callc [evt_mapobj_flag_onoff evt_map.o] 1 1 ["den"] 1024
+805D5B94:   callc [evt_mapobj_flag_onoff evt_map.o] 1 0 ["den"] 256
+805D5BAC:   loop 0
+805D5BB4:     callc [evt_sub_intpl_init evt_sub.o] 11 2000 2300 100
+805D5BCC:     loop 101
+805D5BD4:       callc [evt_sub_intpl_get_value evt_sub.o]
+805D5BDC:       callc [proj_mtx tou_01.o] 0 LW(0) 420 0 0 420
+805D5BFC:       wait_frames 1
+805D5C04:     end_loop
+805D5C08:     callc [evt_sub_intpl_init evt_sub.o] 11 2300 2000 100
+805D5C20:     loop 101
+805D5C28:       callc [evt_sub_intpl_get_value evt_sub.o]
+805D5C30:       callc [proj_mtx tou_01.o] 0 LW(0) 420 0 0 420
+805D5C50:       wait_frames 1
+805D5C58:     end_loop
+805D5C5C:   end_loop
+805D5C60:   return
+805D5C64:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [evt_kanban2 tou_01.o] AT 805D5588 ---
+805D5588:   loop 0
+805D5590:     callc [evt_sub_intpl_msec_init evt_sub.o] 12 0 1000 1000
+805D55A8:     loop 0
+805D55B0:       callc [evt_sub_intpl_msec_get_value evt_sub.o]
+805D55B8:       divf LW(0) 100.00
+805D55C4:       callc [evt_mapobj_rotate evt_map.o] 1 ["taore"] 0 0 LW(0)
+805D55E0:       if_int_eq GF(10) 1
+805D55EC:         loop_break
+805D55F0:       endif
+805D55F4:       wait_frames 1
+805D55FC:       if_int_eq LW(1) 0
+805D5608:         loop_break
+805D560C:       endif
+805D5610:     end_loop
+805D5614:     if_int_eq GF(10) 1
+805D5620:       loop_break
+805D5624:     endif
+805D5628:     callc [evt_sub_intpl_msec_init evt_sub.o] 11 1000 -1000 2000
+805D5640:     loop 0
+805D5648:       callc [evt_sub_intpl_msec_get_value evt_sub.o]
+805D5650:       divf LW(0) 100.00
+805D565C:       callc [evt_mapobj_rotate evt_map.o] 1 ["taore"] 0 0 LW(0)
+805D5678:       if_int_eq GF(10) 1
+805D5684:         loop_break
+805D5688:       endif
+805D568C:       wait_frames 1
+805D5694:       if_int_eq LW(1) 0
+805D56A0:         loop_break
+805D56A4:       endif
+805D56A8:     end_loop
+805D56AC:     if_int_eq GF(10) 1
+805D56B8:       loop_break
+805D56BC:     endif
+805D56C0:     callc [evt_sub_intpl_msec_init evt_sub.o] 11 -1000 1000 2000
+805D56D8:     loop 0
+805D56E0:       callc [evt_sub_intpl_msec_get_value evt_sub.o]
+805D56E8:       divf LW(0) 100.00
+805D56F4:       callc [evt_mapobj_rotate evt_map.o] 1 ["taore"] 0 0 LW(0)
+805D5710:       if_int_eq GF(10) 1
+805D571C:         loop_break
+805D5720:       endif
+805D5724:       wait_frames 1
+805D572C:       if_int_eq LW(1) 0
+805D5738:         loop_break
+805D573C:       endif
+805D5740:     end_loop
+805D5744:     if_int_eq GF(10) 1
+805D5750:       loop_break
+805D5754:     endif
+805D5758:     callc [evt_sub_intpl_msec_init evt_sub.o] 13 1000 0 1000
+805D5770:     loop 0
+805D5778:       callc [evt_sub_intpl_msec_get_value evt_sub.o]
+805D5780:       divf LW(0) 100.00
+805D578C:       callc [evt_mapobj_rotate evt_map.o] 1 ["taore"] 0 0 LW(0)
+805D57A8:       if_int_eq GF(10) 1
+805D57B4:         loop_break
+805D57B8:       endif
+805D57BC:       wait_frames 1
+805D57C4:       if_int_eq LW(1) 0
+805D57D0:         loop_break
+805D57D4:       endif
+805D57D8:     end_loop
+805D57DC:     if_int_eq GF(10) 1
+805D57E8:       loop_break
+805D57EC:     endif
+805D57F0:     callc [evt_sub_random evt_sub.o] 3000 LW(0)
+805D5800:     addi LW(0) 3000
+805D580C:     wait_ms 3000
+805D5814:   end_loop
+805D5818:   wait_frames 1
+805D5820:   callc [evt_mapobj_rotate evt_map.o] 1 ["taore"] 0 0 0
+805D583C:   return
+805D5840:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [evt_gondora tou_01.o] AT 805DA320 ---
+805DA320:   callc [evt_mario_key_onoff evt_mario.o] 0
+805DA32C:   callc [evt_mario_normalize evt_mario.o]
+805DA334:   callc [evt_party_stop evt_party.o] 0
+805DA340:   callc [evt_party_stop evt_party.o] 1
+805DA34C:   callc [evt_mario_set_pos evt_mario.o] -20 315 410
+805DA360:   callc [evt_party_set_pos evt_party.o] 0 20 315 410
+805DA378:   callc [evt_party_set_pos evt_party.o] 1 0 315 400
+805DA390:   callc [evt_mario_set_dir evt_mario.o] 90 0 0
+805DA3A4:   callc [evt_party_set_dir evt_party.o] 0 270 0
+805DA3B8:   callc [evt_cam3d_evt_set evt_cam.o] 0 473 1000 0 400 403 0 11
+805DA3E0:   callc [evt_mapobj_flag_onoff evt_map.o] 1 0 ["gondora"] 1
+805DA3F8:   callc [evt_hit_bind_mapobj evt_hit.o] ["a_gondora"] ["gondora"]
+805DA408:   callc [evt_mapobj_trans evt_map.o] 1 ["gondora"] 0 300 0
+805DA424:   callc [evt_hit_bind_update evt_hit.o] ["a_gondora"]
+805DA430:   callc [evt_seq_wait evt_seq.o] 2
+805DA43C:   callc [evt_cam3d_evt_set evt_cam.o] 0 115 1000 0 42 403 4000 0
+805DA464:   setii LW(0) 300
+805DA470:   setii LW(1) 0
+805DA47C:   setii LW(2) 1
+805DA488:   callss [evt_gondora_updown tou_01.o]
+805DA490:   setii LW(0) 0
+805DA49C:   setii LW(1) 120
+805DA4A8:   callss [evt_gondora_mon tou_01.o]
+805DA4B0:   callc [evt_party_move_pos2 evt_party.o] 0 20 500 60.00
+805DA4C8:   callc [evt_party_stop evt_party.o] 0
+805DA4D4:   callc [evt_mario_mov_pos2 evt_mario.o] 20 410 60.00
+805DA4E8:   callc [evt_mario_mov_pos2 evt_mario.o] 20 490 60.00
+805DA4FC:   callc [evt_mario_mov_pos2 evt_mario.o] -20 500 60.00
+805DA510:   callc [evt_mario_set_dir_npc evt_mario.o] ["飛空船"]
+805DA51C:   callc [evt_party_run evt_party.o] 0
+805DA528:   callc [evt_party_run evt_party.o] 1
+805DA534:   setii LW(0) 120
+805DA540:   setii LW(1) 0
+805DA54C:   callss [evt_gondora_mon tou_01.o]
+805DA554:   setii LW(0) 0
+805DA560:   setii LW(1) 800
+805DA56C:   setii LW(2) 0
+805DA578:   callsa [evt_gondora_updown tou_01.o]
+805DA580:   callc [evt_cam3d_evt_off evt_cam.o] 1000 11
+805DA590:   wait_ms 1500
+805DA598:   if_int_lt GSW(0) 127
+805DA5A4:     callss [evt_uron tou_01.o]
+805DA5AC:   endif
+805DA5B0:   callc [evt_mario_key_onoff evt_mario.o] 1
+805DA5BC:   return
+805DA5C0:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [evt_tamago tou_01.o] AT 805D9958 ---
+805D9958:   callc [evt_mario_set_dir evt_mario.o] 90 0 0
+805D996C:   callc [evt_mario_key_onoff evt_mario.o] 0
+805D9978:   callc [evt_mario_normalize evt_mario.o]
+805D9980:   callc [evt_mario_wait_move_end evt_mario.o]
+805D9988:   wait_ms 500
+805D9990:   callc [evt_msg_print evt_msg.o] 0 ["stg3_tou_241"] 0 0
+805D99A8:   wait_ms 300
+805D99B0:   callc [evt_mario_get_pos evt_mario.o] 0 LW(0) LW(1) LW(2)
+805D99C8:   callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_VOICE_MARIO_FIND1"] LW(0) LW(1) LW(2) 0
+805D99E4:   callc [evt_eff_fukidashi evt_eff.o] 0 ["e"] 0 0 0 0 0 0 0 0 0
+805D9A18:   wait_ms 300
+805D9A20:   callc [evt_mario_set_dir evt_mario.o] 270 300 0
+805D9A34:   callc [evt_cam3d_evt_set evt_cam.o] -345 169 544 -345 38 -204 1000 11
+805D9A5C:   wait_ms 1000
+805D9A64:   setii GF(0) 0
+805D9A70:   callsa [evt_tamago_move tou_01.o]
+805D9A78:   callsa [evt_oyaji_move tou_01.o]
+805D9A80:   wait_ms 6000
+805D9A88: 0:
+805D9A90:   if_int_eq GF(0) 0
+805D9A9C:     wait_frames 1
+805D9AA4:     goto 0
+805D9AAC:   endif
+805D9AB0:   callc [evt_cam3d_evt_off evt_cam.o] 500 11
+805D9AC0:   wait_ms 500
+805D9AC8:   setii GSW(0) 135
+805D9AD4:   callc [evt_mario_key_onoff evt_mario.o] 1
+805D9AE0:   return
+805D9AE4:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [evt_tamago_sleep tou_01.o] AT 805D8E28 ---
+805D8E28:   loop 0
+805D8E30:     if_int_ne GSW(0) 136
+805D8E3C:       wait_frames 1
+805D8E44:     else
+805D8E48:       callc [evt_sub_intpl_init evt_sub.o] 12 100 120 100
+805D8E60:       loop 100
+805D8E68:         callc [evt_sub_intpl_get_value evt_sub.o]
+805D8E70:         divf LW(0) 100.00
+805D8E7C:         callc [evt_npc_set_scale evt_npc.o] ["たまご"] LW(0) LW(0) LW(0)
+805D8E94:         wait_frames 1
+805D8E9C:       end_loop
+805D8EA0:       callc [evt_sub_intpl_init evt_sub.o] 13 120 100 100
+805D8EB8:       loop 100
+805D8EC0:         callc [evt_sub_intpl_get_value evt_sub.o]
+805D8EC8:         divf LW(0) 100.00
+805D8ED4:         callc [evt_npc_set_scale evt_npc.o] ["たまご"] LW(0) LW(0) LW(0)
+805D8EEC:         wait_frames 1
+805D8EF4:       end_loop
+805D8EF8:     endif
+805D8EFC:   end_loop
+805D8F00:   return
+805D8F04:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [evt_tamago_move tou_01.o] AT 805D9490 ---
+805D9490:   callc [evt_npc_flag_onoff evt_npc.o] 1 ["たまご"] 1073741856
+805D94A4:   callc [evt_npc_set_position evt_npc.o] ["たまご"] -400 10 -135
+805D94BC:   setii LW(3) 600
+805D94C8:   callc [evt_npc_jump_position_nohit evt_npc.o] ["たまご"] -400 40 -60 LW(3) 60
+805D94E8:   setii LW(3) 400
+805D94F4:   callc [evt_npc_jump_position_nohit evt_npc.o] ["たまご"] -390 10 -15 LW(3) 50
+805D9514:   setii LW(10) 0
+805D9520: 0:
+805D9528:   mo_set_base_int [yoshi_data tou_01.o]
+805D9530:   loop 10
+805D9538:     mo_read_int3 LW(0) LW(1) LW(2)
+805D9548:     callc [evt_sub_random evt_sub.o] 400 LW(3)
+805D9558:     addi LW(3) 200
+805D9564:     callc [evt_sub_random evt_sub.o] 30 LW(4)
+805D9574:     addi LW(4) 30
+805D9580:     muli LW(4) 120
+805D958C:     divi LW(4) 100
+805D9598:     callsa [evt_tamago_scale tou_01.o]
+805D95A0:     callc [evt_npc_jump_position_nohit evt_npc.o] ["たまご"] LW(0) LW(1) LW(2) LW(3) LW(4)
+805D95C0:     callc [mario_chk tou_01.o] LW(0)
+805D95CC:     if_int_eq LW(0) 1
+805D95D8:       callc [evt_mario_get_pos evt_mario.o] 0 LW(0) LW(1) LW(2)
+805D95F0:       callc [evt_npc_get_position evt_npc.o] ["たまご"] LW(3) LW(4) LW(5)
+805D9608:       callc [evt_sub_get_dist evt_sub.o] LW(0) LW(2) LW(3) LW(5) LW(6)
+805D9624:       if_int_lt LW(6) 20
+805D9630:         addi LW(10) 1
+805D963C:         dbg_expr_to_string LW(10)
+805D9644:         if_int_ge LW(10) 2
+805D9650:           goto 10
+805D9658:         endif
+805D965C:       endif
+805D9660:     endif
+805D9664:   end_loop
+805D9668:   goto 0
+805D9670: 10:
+805D9678:   loop 0
+805D9680:     callc [mario_chk tou_01.o] LW(0)
+805D968C:     if_int_eq LW(0) 1
+805D9698:       loop_break
+805D969C:     endif
+805D96A0:     wait_frames 1
+805D96A8:   end_loop
+805D96AC:   callc [evt_mario_key_onoff evt_mario.o] 0
+805D96B8:   callc [evt_mario_normalize evt_mario.o]
+805D96C0:   callc [evt_npc_change_interrupt evt_npc.o] ["ホットドッグ"] 1 [dummy tou_01.o]
+805D96D4:   callc [evt_npc_restart_regular_event evt_npc.o] ["ホットドッグ"]
+805D96E0:   callc [evt_set_dir_to_target evt_npc.o] ["ホットドッグ"] ["たまご"]
+805D96F0:   setii LW(3) 400
+805D96FC:   callsa [evt_tamago_scale tou_01.o]
+805D9704:   callc [evt_npc_jump_position_nohit evt_npc.o] ["たまご"] -360 10 -60 LW(3) 30
+805D9724:   setii LW(3) 400
+805D9730:   callsa [evt_tamago_scale tou_01.o]
+805D9738:   callc [evt_npc_jump_position_nohit evt_npc.o] ["たまご"] -400 10 -45 LW(3) 40
+805D9758:   setii LW(3) 400
+805D9764:   callsa [evt_tamago_scale tou_01.o]
+805D976C:   callc [evt_npc_jump_position_nohit evt_npc.o] ["たまご"] -400 110 -120 LW(3) 50
+805D978C:   loop 3
+805D9794:     callc [evt_npc_get_position evt_npc.o] ["たまご"] LW(0) LW(1) LW(2)
+805D97AC:     callc [evt_sub_random evt_sub.o] 200 LW(3)
+805D97BC:     addi LW(3) 200
+805D97C8:     callc [evt_sub_random evt_sub.o] 20 LW(4)
+805D97D8:     addi LW(4) 20
+805D97E4:     callsa [evt_tamago_scale tou_01.o]
+805D97EC:     callc [evt_npc_jump_position_nohit evt_npc.o] ["たまご"] LW(0) LW(1) LW(2) LW(3) LW(4)
+805D980C:   end_loop
+805D9810:   setii LW(3) 400
+805D981C:   callsa [evt_tamago_scale2 tou_01.o]
+805D9824:   wait_ms 500
+805D982C:   callc [evt_msg_print evt_msg.o] 0 ["stg3_tou_244"] 0 ["ホットドッグ"]
+805D9844:   wait_ms 300
+805D984C:   setii GSW(0) 136
+805D9858:   callc [evt_snd_bgmoff_f evt_snd.o] 512 2000
+805D9868:   callc [evt_cam3d_evt_set evt_cam.o] -400 211 321 -400 156 -132 3000 11
+805D9890:   wait_ms 3000
+805D9898:   callc [evt_msg_print evt_msg.o] 0 ["stg3_tou_245"] 0 ["たまご"]
+805D98B0:   callc [eff_sleep_on tou_01.o]
+805D98B8:   wait_ms 2000
+805D98C0:   callc [evt_cam3d_evt_off evt_cam.o] 0 11
+805D98D0:   wait_frames 1
+805D98D8:   callc [evt_npc_change_interrupt evt_npc.o] ["ホットドッグ"] 1 [hot_move_evt2 tou_01.o]
+805D98EC:   callc [evt_npc_restart_regular_event evt_npc.o] ["ホットドッグ"]
+805D98F8:   callc [evt_npc_change_interrupt evt_npc.o] ["たまご"] 6 [talk_tamago tou_01.o]
+805D990C:   callc [evt_npc_flag_onoff evt_npc.o] 0 ["たまご"] 32
+805D9920:   callc [evt_snd_bgmon_f evt_snd.o] 768 ["BGM_STG3_URN1"] 2000
+805D9934:   callc [evt_snd_envon evt_snd.o] 272 ["ENV_STG3_TOU1"]
+805D9944:   callc [evt_mario_key_onoff evt_mario.o] 1
+805D9950:   return
+805D9954:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [evt_peach_after tou_01.o] AT 805DACF4 ---
+805DACF4:   callc [evt_mario_key_onoff evt_mario.o] 0
+805DAD00:   callc [evt_cam3d_evt_set evt_cam.o] 0 130 134 0 75 -312 0 11
+805DAD28:   callc [evt_seq_wait evt_seq.o] 2
+805DAD34:   callc [evt_bero_exec_wait evt_bero.o] 65536
+805DAD40:   begin_thread
+805DAD44:     callc [evt_mario_mov_pos2 evt_mario.o] -25 -305 80.00
+805DAD58:     callc [evt_mario_set_dir evt_mario.o] 90 300 0
+805DAD6C:   end_thread
+805DAD70:   callc [evt_party_stop evt_party.o] 0
+805DAD7C:   callc [evt_party_move_pos2 evt_party.o] 0 25 -308 80.00
+805DAD94:   callc [evt_party_set_dir evt_party.o] 0 270 300
+805DADA8:   wait_ms 300
+805DADB0:   callc [evt_msg_print_party evt_msg.o] ["stg3_tou_479"]
+805DADBC:   callc [evt_mario_get_pos evt_mario.o] 0 LW(0) LW(1) LW(2)
+805DADD4:   callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_VOICE_MARIO_NOD1_6"] LW(0) LW(1) LW(2) 0
+805DADF0:   callc [evt_mario_set_pose evt_mario.o] ["M_N_2"]
+805DADFC:   wait_ms 500
+805DAE04:   callc [evt_mario_set_pose evt_mario.o] ["M_S_1"]
+805DAE10:   callc [evt_cam3d_evt_off evt_cam.o] 500 11
+805DAE20:   callc [evt_npc_set_position evt_npc.o] ["美女"] 0 -1000 0
+805DAE38:   setii GSW(0) 172
+805DAE44:   callc [evt_mario_key_onoff evt_mario.o] 1
+805DAE50:   callc [evt_party_run evt_party.o] 0
+805DAE5C:   return
+805DAE60:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [sekai_yami_npc_init tou_01.o] AT 805DAE64 ---
+805DAE64:   callc [evt_npc_entry evt_npc.o] ["キノシコワ"] ["c_ksikowa"]
+805DAE74:   callc [evt_npc_set_tribe evt_npc.o] ["キノシコワ"] ["キノシコワ"]
+805DAE84:   callc [evt_npc_set_position evt_npc.o] ["キノシコワ"] 4 0 420
+805DAE9C:   callc [evt_npc_set_ry evt_npc.o] ["キノシコワ"] 270
+805DAEAC:   callc [evt_npc_flag_onoff evt_npc.o] 1 ["キノシコワ"] 512
+805DAEC0:   callc [evt_npc_set_position evt_npc.o] ["飛空船"] -170 0 -20
+805DAED8:   callc [evt_npc_set_position evt_npc.o] ["ジュゲム1"] 50 0 200
+805DAEF0:   callc [evt_npc_set_position evt_npc.o] ["ロテン2"] -130 0 220
+805DAF08:   callc [evt_npc_flag_onoff evt_npc.o] 0 ["ロテン2"] 2048
+805DAF1C:   callc [evt_npc_set_position evt_npc.o] ["パパ"] 0 -1000 0
+805DAF34:   callc [evt_npc_set_position evt_npc.o] ["ママ"] 0 -1000 0
+805DAF4C:   callc [evt_npc_set_position evt_npc.o] ["コナリキン"] 0 -1000 0
+805DAF64:   callc [evt_npc_set_position evt_npc.o] ["キノピオ2"] 0 -1000 0
+805DAF7C:   callc [evt_npc_set_position evt_npc.o] ["キノピオ1"] 0 -1000 0
+805DAF94:   callc [delete_npc_regl_evt tou_01.o] ["キノピオ1"]
+805DAFA0:   callc [delete_npc_regl_evt tou_01.o] ["ロテン1"]
+805DAFAC:   return
+805DAFB0:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [sekai_yami_evt tou_01.o] AT 805DB0B8 ---
+805DB0B8:   callc [evt_mario_key_onoff evt_mario.o] 0
+805DB0C4:   callc [evt_mario_cont_onoff evt_mario.o] 0
+805DB0D0:   callc [evt_party_cont_onoff evt_party.o] 0 0
+805DB0E0:   callc [evt_cam3d_evt_set evt_cam.o] 420 200 1500 -305 100 -360 0 11
+805DB108:   callc [evt_mario_set_pos evt_mario.o] 0 -1000 0
+805DB11C:   callc [evt_party_set_pos evt_party.o] 0 0 -1000 0
+805DB134:   callc [evt_seq_wait evt_seq.o] 2
+805DB140:   wait_ms 1000
+805DB148:   callc [evt_sub_intpl_msec_init evt_sub.o] 11 255 64 2000
+805DB160:   loop 0
+805DB168:     callc [evt_sub_intpl_msec_get_value evt_sub.o]
+805DB170:     callc [evt_bg_set_color evt_bg.o] LW(0) LW(0) LW(0) 255
+805DB188:     wait_frames 1
+805DB190:     if_int_eq LW(1) 0
+805DB19C:       loop_break
+805DB1A0:     endif
+805DB1A4:   end_loop
+805DB1A8:   wait_ms 2000
+805DB1B0:   callc [evt_map_set_tevcallback evt_map.o] 1 [envSetYami envdrv.o]
+805DB1C0:   callc [evt_mapobj_flag_onoff evt_map.o] 1 1 ["S"] 16777216
+805DB1D8:   callc [evt_mapobj_flag_onoff evt_map.o] 1 0 ["S"] 256
+805DB1F0:   callc [anim_tevcallback tou_01.o] ["キノシコワ"] 1
+805DB200:   callc [anim_tevcallback tou_01.o] ["飛空船"] 1
+805DB210:   callc [anim_tevcallback tou_01.o] ["ジュゲム1"] 1
+805DB220:   callc [anim_tevcallback tou_01.o] ["ロテン2"] 1
+805DB230:   callc [anim_tevcallback tou_01.o] ["ホットドッグ"] 1
+805DB240:   callc [anim_tevcallback_mobj tou_01.o] ["mobj_save"] 1
+805DB250:   setii GW(0) -600
+805DB25C:   setii LW(0) ["キノシコワ"]
+805DB268:   callsa_tid [sekai_yami_npc tou_01.o] GW(1)
+805DB274:   setii LW(0) ["飛空船"]
+805DB280:   callsa [sekai_yami_npc tou_01.o]
+805DB288:   setii LW(0) ["ジュゲム1"]
+805DB294:   callsa [sekai_yami_npc tou_01.o]
+805DB29C:   setii LW(0) ["ロテン2"]
+805DB2A8:   callsa [sekai_yami_npc tou_01.o]
+805DB2B0:   callc [evt_snd_sfxon evt_snd.o] ["SFX_STG8_WORLD_DARK1"] 0
+805DB2C0:   callc [evt_sub_intpl_msec_init evt_sub.o] 11 -600 900 5000
+805DB2D8:   loop 0
+805DB2E0:     callc [evt_sub_intpl_msec_get_value evt_sub.o]
+805DB2E8:     callc [yami_view tou_01.o] LW(0)
+805DB2F4:     setii GW(0) LW(0)
+805DB300:     wait_frames 1
+805DB308:     if_int_eq LW(1) 0
+805DB314:       loop_break
+805DB318:     endif
+805DB31C:   end_loop
+805DB320:   wait_ms 1000
+805DB328:   callc [evt_cam3d_evt_set evt_cam.o] 130 70 756 -305 10 -360 1000 11
+805DB350:   wait_ms 1000
+805DB358:   stop_tid GW(1)
+805DB360:   wait_frames 1
+805DB368:   callc [evt_npc_wait_pera evt_npc.o] ["キノシコワ"]
+805DB374:   callc [evt_npc_reverse_ry evt_npc.o] ["キノシコワ"]
+805DB380:   wait_frames 1
+805DB388:   callc [evt_npc_wait_pera evt_npc.o] ["キノシコワ"]
+805DB394:   callc [evt_npc_reverse_ry evt_npc.o] ["キノシコワ"]
+805DB3A0:   wait_frames 1
+805DB3A8:   callc [evt_npc_wait_pera evt_npc.o] ["キノシコワ"]
+805DB3B4:   callc [evt_msg_print evt_msg.o] 0 ["stg8_dark_03"] 0 ["キノシコワ"]
+805DB3CC:   wait_ms 1000
+805DB3D4:   callc [evt_fade_set_mapchange_type evt_fade.o] 1 10 300 9 300
+805DB3F0:   callc [evt_bero_mapchange evt_bero.o] ["las_29"] ["sekai_yami1"]
+805DB400:   callc [evt_mario_key_onoff evt_mario.o] 1
+805DB40C:   return
+805DB410:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [minnnanokoe_npc_entry tou_01.o] AT 805DB414 ---
+805DB414:   callc [evt_npc_entry evt_npc.o] ["キノシコワ"] ["c_ksikowa"]
+805DB424:   callc [evt_npc_set_tribe evt_npc.o] ["キノシコワ"] ["キノシコワ"]
+805DB434:   callc [evt_npc_set_position evt_npc.o] ["キノシコワ"] 0 0 350
+805DB44C:   callc [evt_npc_set_ry evt_npc.o] ["キノシコワ"] 270
+805DB45C:   callc [evt_npc_flag_onoff evt_npc.o] 1 ["キノシコワ"] 33280
+805DB470:   callc [evt_npc_entry evt_npc.o] ["ブレッドハート"] ["c_bred_h"]
+805DB480:   callc [evt_npc_set_tribe evt_npc.o] ["ブレッドハート"] ["ブレッドハート"]
+805DB490:   callc [evt_npc_set_position evt_npc.o] ["ブレッドハート"] -50 0 250
+805DB4A8:   callc [evt_npc_set_ry evt_npc.o] ["ブレッドハート"] 90
+805DB4B8:   callc [evt_npc_flag_onoff evt_npc.o] 1 ["ブレッドハート"] 33280
+805DB4CC:   callc [evt_npc_entry evt_npc.o] ["シンエモンＡ"] ["c_sinemon_a"]
+805DB4DC:   callc [evt_npc_set_tribe evt_npc.o] ["シンエモンＡ"] ["アイアンシンエモン"]
+805DB4EC:   callc [evt_npc_set_position evt_npc.o] ["シンエモンＡ"] 50 0 375
+805DB504:   callc [evt_npc_set_ry evt_npc.o] ["シンエモンＡ"] 270
+805DB514:   callc [evt_npc_flag_onoff evt_npc.o] 1 ["シンエモンＡ"] 33280
+805DB528:   callc [evt_npc_set_scale evt_npc.o] ["シンエモンＡ"] 1.50 1.50 1.00
+805DB540:   callc [evt_npc_entry evt_npc.o] ["シンエモンＢ"] ["c_sinemon_m"]
+805DB550:   callc [evt_npc_set_tribe evt_npc.o] ["シンエモンＢ"] ["アイアンシンエモン2"]
+805DB560:   callc [evt_npc_set_position evt_npc.o] ["シンエモンＢ"] -50 0 400
+805DB578:   callc [evt_npc_set_ry evt_npc.o] ["シンエモンＢ"] 90
+805DB588:   callc [evt_npc_flag_onoff evt_npc.o] 1 ["シンエモンＢ"] 33280
+805DB59C:   callc [evt_npc_set_scale evt_npc.o] ["シンエモンＢ"] 1.50 1.50 1.00
+805DB5B4:   callc [evt_npc_entry evt_npc.o] ["レポーター"] ["c_report"]
+805DB5C4:   callc [evt_npc_set_tribe evt_npc.o] ["レポーター"] ["リポーター"]
+805DB5D4:   callc [evt_npc_set_position evt_npc.o] ["レポーター"] 75 0 350
+805DB5EC:   callc [evt_npc_set_ry evt_npc.o] ["レポーター"] 270
+805DB5FC:   callc [evt_npc_flag_onoff evt_npc.o] 1 ["レポーター"] 32768
+805DB610:   callc [evt_npc_entry evt_npc.o] ["カメラマン"] ["c_kinopio_b"]
+805DB620:   callc [evt_npc_set_tribe evt_npc.o] ["カメラマン"] ["キノピオ青"]
+805DB630:   callc [evt_npc_set_position evt_npc.o] ["カメラマン"] 100 0 375
+805DB648:   callc [evt_npc_set_ry evt_npc.o] ["カメラマン"] 270
+805DB658:   callc [evt_npc_flag_onoff evt_npc.o] 1 ["カメラマン"] 32768
+805DB66C:   callc [evt_npc_entry evt_npc.o] ["ウラノコ"] ["c_uranoko"]
+805DB67C:   callc [evt_npc_set_tribe evt_npc.o] ["ウラノコ"] ["ウラノコ"]
+805DB68C:   callc [evt_npc_set_position evt_npc.o] ["ウラノコ"] -100 0 300
+805DB6A4:   callc [evt_npc_set_ry evt_npc.o] ["ウラノコ"] 90
+805DB6B4:   callc [evt_npc_flag_onoff evt_npc.o] 1 ["ウラノコ"] 33280
+805DB6C8:   return
+805DB6CC:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [minnnanokoe_evt tou_01.o] AT 805DB6D0 ---
+805DB6D0:   callc [evt_mario_key_onoff evt_mario.o] 0
+805DB6DC:   callc [evt_mario_cont_onoff evt_mario.o] 0
+805DB6E8:   callc [evt_party_cont_onoff evt_party.o] 0 0
+805DB6F8:   callc [evt_cam3d_evt_set evt_cam.o] 0 132 888 0 65 342 0 11
+805DB720:   callc [evt_mario_set_pos evt_mario.o] 0 -1000 0
+805DB734:   callc [evt_party_set_pos evt_party.o] 0 0 -1000 0
+805DB74C:   callc [evt_npc_set_position evt_npc.o] ["酒場店主"] 50 0 450
+805DB764:   callc [evt_npc_set_ry evt_npc.o] ["酒場店主"] 90
+805DB774:   callc [evt_npc_set_position evt_npc.o] ["キノピオ1"] -150 0 60
+805DB78C:   callc [evt_npc_set_ry evt_npc.o] ["キノピオ1"] 90
+805DB79C:   callc [evt_npc_set_position evt_npc.o] ["キノピオ2"] -270 0 361
+805DB7B4:   callc [evt_npc_set_ry evt_npc.o] ["キノピオ2"] 90
+805DB7C4:   callc [evt_map_set_tevcallback evt_map.o] 1 [envSetYami envdrv.o]
+805DB7D4:   callc [evt_mapobj_flag_onoff evt_map.o] 1 1 ["S"] 16777216
+805DB7EC:   callc [evt_mapobj_flag_onoff evt_map.o] 1 0 ["S"] 256
+805DB804:   callc [anim_tevcallback tou_01.o] ["キノシコワ"] 1
+805DB814:   callc [anim_tevcallback tou_01.o] ["ブレッドハート"] 1
+805DB824:   callc [anim_tevcallback tou_01.o] ["シンエモンＡ"] 1
+805DB834:   callc [anim_tevcallback tou_01.o] ["シンエモンＢ"] 1
+805DB844:   callc [anim_tevcallback tou_01.o] ["酒場店主"] 1
+805DB854:   callc [anim_tevcallback tou_01.o] ["レポーター"] 1
+805DB864:   callc [anim_tevcallback tou_01.o] ["カメラマン"] 1
+805DB874:   callc [anim_tevcallback tou_01.o] ["ウラノコ"] 1
+805DB884:   callc [anim_tevcallback tou_01.o] ["キノピオ1"] 1
+805DB894:   callc [anim_tevcallback tou_01.o] ["キノピオ2"] 1
+805DB8A4:   callc [anim_tevcallback_mobj tou_01.o] ["mobj_save"] 1
+805DB8B4:   callc [anim_tevcallback_mobj tou_01.o] ["pblk01"] 1
+805DB8C4:   callc [anim_tevcallback_mobj tou_01.o] ["hblk01"] 1
+805DB8D4:   callc [yami_view tou_01.o] 700
+805DB8E0:   callc [evt_bg_set_color evt_bg.o] 64 64 64 255
+805DB8F8:   callc [evt_mapobj_flag_onoff evt_map.o] 1 0 ["tou_jimenn"] 1024
+805DB910:   callc [evt_mapobj_flag_onoff evt_map.o] 1 0 ["gondora"] 1024
+805DB928:   callc [evt_mapobj_flag_onoff evt_map.o] 1 0 ["den"] 1024
+805DB940:   callc [starstone_entry tou_01.o] ["starstone"] 0 60 415
+805DB958:   setii GW(0) 60
+805DB964:   begin_thread
+805DB968:     loop 0
+805DB970:       callc [starstone_set_pos tou_01.o] ["starstone"] 0 GW(0) 415
+805DB988:       wait_frames 1
+805DB990:     end_loop
+805DB994:   end_thread
+805DB998:   begin_thread
+805DB99C:     setff LW(0) 0.00
+805DB9A8:     loop 0
+805DB9B0:       callc [starstone_set_ry tou_01.o] ["starstone"] LW(0)
+805DB9C0:       subf LW(0) 3.00
+805DB9CC:       if_int_le LW(0) 0.00
+805DB9D8:         addf LW(0) 360.00
+805DB9E4:       endif
+805DB9E8:       wait_frames 1
+805DB9F0:     end_loop
+805DB9F4:   end_thread
+805DB9F8:   begin_thread
+805DB9FC:     loop 0
+805DBA04:       callc [evt_sub_intpl_msec_init evt_sub.o] 11 6000 6500 500
+805DBA1C: 1:
+805DBA24:       callc [evt_sub_intpl_msec_get_value evt_sub.o]
+805DBA2C:       divf LW(0) 100.00
+805DBA38:       setff GW(0) LW(0)
+805DBA44:       wait_frames 1
+805DBA4C:       if_int_eq LW(1) 1
+805DBA58:         goto 1
+805DBA60:       endif
+805DBA64:       callc [evt_sub_intpl_msec_init evt_sub.o] 11 6500 6000 500
+805DBA7C: 2:
+805DBA84:       callc [evt_sub_intpl_msec_get_value evt_sub.o]
+805DBA8C:       divf LW(0) 100.00
+805DBA98:       setff GW(0) LW(0)
+805DBAA4:       wait_frames 1
+805DBAAC:       if_int_eq LW(1) 1
+805DBAB8:         goto 2
+805DBAC0:       endif
+805DBAC4:     end_loop
+805DBAC8:   end_thread
+805DBACC:   callc [evt_seq_wait evt_seq.o] 2
+805DBAD8:   wait_ms 1000
+805DBAE0:   callc [evt_msg_print evt_msg.o] 0 ["stg8_las_148_18"] 0 ["キノシコワ"]
+805DBAF8:   wait_ms 300
+805DBB00:   callc [evt_npc_set_anim evt_npc.o] ["キノシコワ"] ["M_1"]
+805DBB10:   wait_ms 300
+805DBB18:   callc [evt_npc_set_stay_anim evt_npc.o] ["キノシコワ"]
+805DBB24:   callc [evt_cam3d_evt_set evt_cam.o] 500 60 1278 0 140 415 0 11
+805DBB4C:   wait_frames 1
+805DBB54:   wait_ms 500
+805DBB5C:   callc [evt_msg_print evt_msg.o] 0 ["stg8_las_148_19"] 0 ["キノシコワ"]
+805DBB74:   callc [evt_cam3d_evt_set evt_cam.o] 0 101 763 0 60 415 0 11
+805DBB9C:   wait_frames 1
+805DBBA4:   wait_ms 500
+805DBBAC:   callc [evt_msg_print evt_msg.o] 0 ["stg8_las_148_20"] 0 ["キノシコワ"]
+805DBBC4:   callc [evt_npc_set_anim evt_npc.o] ["キノシコワ"] ["M_1"]
+805DBBD4:   wait_ms 300
+805DBBDC:   callc [evt_npc_set_stay_anim evt_npc.o] ["キノシコワ"]
+805DBBE8:   callc [evt_msg_print evt_msg.o] 0 ["stg8_las_148_21"] 0 ["ブレッドハート"]
+805DBC00:   callc [evt_npc_set_anim evt_npc.o] ["ブレッドハート"] ["H_3"]
+805DBC10:   wait_ms 200
+805DBC18:   callc [evt_npc_set_autotalkpose evt_npc.o] ["ブレッドハート"] ["S_5"] ["T_5"]
+805DBC2C:   callc [evt_msg_print evt_msg.o] 0 ["stg8_las_148_22"] 0 ["ブレッドハート"]
+805DBC44:   callc [evt_npc_set_stay_anim evt_npc.o] ["ブレッドハート"]
+805DBC50:   callc [evt_npc_get_position evt_npc.o] ["シンエモンＡ"] LW(0) LW(1) LW(2)
+805DBC68:   callc [evt_npc_jump_position_nohit evt_npc.o] ["シンエモンＡ"] LW(0) LW(1) LW(2) 300 10
+805DBC88:   wait_frames 1
+805DBC90:   callc [evt_msg_print evt_msg.o] 0 ["stg8_las_148_23"] 0 ["シンエモンＡ"]
+805DBCA8:   callc [evt_npc_get_position evt_npc.o] ["シンエモンＢ"] LW(0) LW(1) LW(2)
+805DBCC0:   callc [evt_npc_jump_position_nohit evt_npc.o] ["シンエモンＢ"] LW(0) LW(1) LW(2) 300 10
+805DBCE0:   wait_frames 1
+805DBCE8:   callc [evt_msg_print evt_msg.o] 0 ["stg8_las_148_24"] 0 ["シンエモンＢ"]
+805DBD00:   callc [evt_msg_print evt_msg.o] 0 ["stg8_las_148_24_01"] 0 ["ウラノコ"]
+805DBD18:   callc [evt_cam3d_evt_set evt_cam.o] 500 60 1278 0 140 415 0 11
+805DBD40:   wait_frames 1
+805DBD48:   wait_ms 2000
+805DBD50:   callc [evt_msg_print evt_msg.o] 0 ["stg8_las_148_25"] 0 ["キノシコワ"]
+805DBD68:   callc [evt_npc_set_anim evt_npc.o] ["キノシコワ"] ["M_1"]
+805DBD78:   wait_ms 300
+805DBD80:   callc [evt_npc_set_stay_anim evt_npc.o] ["キノシコワ"]
+805DBD8C:   wait_ms 2000
+805DBD94:   callc [evt_fade_set_mapchange_type evt_fade.o] 1 10 300 9 300
+805DBDB0:   callc [evt_bero_mapchange evt_bero.o] ["usu_00"] ["minnnanokoe"]
+805DBDC0:   return
+805DBDC4:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [evt_gondora_updown tou_01.o] AT 805D9FEC ---
+805D9FEC:   setii LW(3) LW(0)
+805D9FF8:   setii LW(4) LW(1)
+805DA004:   if_int_eq LW(2) 1
+805DA010:     setii LF(0) 1
+805DA01C:   else
+805DA020:     setii LF(0) 0
+805DA02C:   endif
+805DA030:   callc [evt_mapobj_get_position evt_map.o] ["gondora"] LW(10) LW(11) LW(12)
+805DA048:   callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_STG3_AIR_SHIP_GONDOLA_MOVE1"] LW(10) LW(11) LW(12) LW(5)
+805DA064:   callc [evt_mapobj_flag_onoff evt_map.o] 1 0 ["gondora"] 1
+805DA07C:   callc [evt_hit_bind_mapobj evt_hit.o] ["a_gondora"] ["gondora"]
+805DA08C:   mulf LW(3) 10.00
+805DA098:   mulf LW(4) 10.00
+805DA0A4:   callc [evt_sub_intpl_msec_init evt_sub.o] 0 LW(3) LW(4) 4000
+805DA0BC: 0:
+805DA0C4:   callc [evt_sub_intpl_msec_get_value evt_sub.o]
+805DA0CC:   divf LW(0) 10.00
+805DA0D8:   callc [evt_mapobj_trans evt_map.o] 1 ["gondora"] 0 LW(0) 0
+805DA0F4:   callc [evt_hit_bind_update evt_hit.o] ["a_gondora"]
+805DA100:   callc [evt_mapobj_get_position evt_map.o] ["gondora"] LW(7) LW(8) LW(9)
+805DA118:   callc [evt_snd_sfx_pos evt_snd.o] LW(5) LW(7) LW(8) LW(9)
+805DA130:   if_int_eq LF(0) 1
+805DA13C:     callc [evt_mario_get_pos evt_mario.o] 0 LW(7) LW(8) LW(9)
+805DA154:     setii LW(6) LW(0)
+805DA160:     addi LW(6) 9
+805DA16C:     callc [evt_mario_set_pos evt_mario.o] LW(7) LW(6) LW(9)
+805DA180:     callc [evt_party_get_pos evt_party.o] 0 LW(7) LW(8) LW(9)
+805DA198:     setii LW(6) LW(0)
+805DA1A4:     addi LW(6) 9
+805DA1B0:     callc [evt_party_set_pos evt_party.o] 0 LW(7) LW(6) LW(9)
+805DA1C8:   endif
+805DA1CC:   wait_frames 1
+805DA1D4:   if_int_eq LW(1) 1
+805DA1E0:     goto 0
+805DA1E8:   endif
+805DA1EC:   if_int_gt LW(4) 0
+805DA1F8:     callc [evt_mapobj_flag_onoff evt_map.o] 1 1 ["gondora"] 1
+805DA210:   endif
+805DA214:   callc [evt_snd_sfxoff evt_snd.o] LW(5)
+805DA220:   return
+805DA224:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [evt_gondora_mon tou_01.o] AT 805DA228 ---
+805DA228:   setii LW(3) LW(0)
+805DA234:   setii LW(4) LW(1)
+805DA240:   callc [evt_mapobj_get_position evt_map.o] ["g_mon"] LW(10) LW(11) LW(12)
+805DA258:   callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_STG3_AIR_SHIP_GONDOLA_DOOR1"] LW(10) LW(11) LW(12) 0
+805DA274:   callc [evt_hit_bind_mapobj evt_hit.o] ["a_g_mon"] ["g_mon"]
+805DA284:   mulf LW(3) 10.00
+805DA290:   mulf LW(4) 10.00
+805DA29C:   callc [evt_sub_intpl_msec_init evt_sub.o] 11 LW(3) LW(4) 800
+805DA2B4: 0:
+805DA2BC:   callc [evt_sub_intpl_msec_get_value evt_sub.o]
+805DA2C4:   divf LW(0) 10.00
+805DA2D0:   callc [evt_mapobj_rotate evt_map.o] 1 ["g_mon"] 0 LW(0) 0
+805DA2EC:   callc [evt_hit_bind_update evt_hit.o] ["a_g_mon"]
+805DA2F8:   wait_frames 1
+805DA300:   if_int_eq LW(1) 1
+805DA30C:     goto 0
+805DA314:   endif
+805DA318:   return
+805DA31C:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [evt_uron tou_01.o] AT 805D8B1C ---
+805D8B1C:   callc [evt_mario_key_onoff evt_mario.o] 0
+805D8B28:   callc [evt_mario_normalize evt_mario.o]
+805D8B30:   callc [evt_party_stop evt_party.o] 0
+805D8B3C:   callc [evt_snd_bgm_scope evt_snd.o] 0 1
+805D8B4C:   begin_thread
+805D8B50:     callc [evt_telop_entry evt_telop.o] 6
+805D8B5C:   end_thread
+805D8B60:   callc [evt_cam3d_evt_set evt_cam.o] 0 600 2150 0 200 394 2000 11
+805D8B88:   begin_thread
+805D8B8C:     callc [evt_mario_mov_pos2 evt_mario.o] -25 400 60.00
+805D8BA0:   end_thread
+805D8BA4:   callc [evt_party_move_pos2 evt_party.o] 0 25 400 60.00
+805D8BBC:   wait_ms 500
+805D8BC4:   callc [evt_msg_print_party evt_msg.o] ["stg3_tou_03"]
+805D8BD0:   wait_ms 300
+805D8BD8:   begin_thread_tid LW(10)
+805D8BE0:     loop 0
+805D8BE8:       callc [evt_mario_set_dir evt_mario.o] 90 300 0
+805D8BFC:       callc [evt_sub_random evt_sub.o] 1000 LW(0)
+805D8C0C:       addi LW(0) 500
+805D8C18:       wait_ms LW(0)
+805D8C20:       callc [evt_mario_set_dir evt_mario.o] 270 300 0
+805D8C34:       callc [evt_sub_random evt_sub.o] 1000 LW(0)
+805D8C44:       addi LW(0) 500
+805D8C50:       wait_ms LW(0)
+805D8C58:     end_loop
+805D8C5C:   end_thread
+805D8C60:   begin_thread_tid LW(11)
+805D8C68:     loop 0
+805D8C70:       callc [evt_sub_random evt_sub.o] 500 LW(0)
+805D8C80:       addi LW(0) 1000
+805D8C8C:       wait_ms LW(0)
+805D8C94:       callc [evt_party_set_dir evt_party.o] 0 90 300
+805D8CA8:       callc [evt_sub_random evt_sub.o] 1000 LW(0)
+805D8CB8:       addi LW(0) 500
+805D8CC4:       wait_ms LW(0)
+805D8CCC:       callc [evt_party_set_dir evt_party.o] 0 270 300
+805D8CE0:     end_loop
+805D8CE4:   end_thread
+805D8CE8:   callc [evt_cam3d_evt_set evt_cam.o] -88 40 1216 -500 135 453 0 11
+805D8D10:   wait_frames 1
+805D8D18:   callc [evt_cam3d_evt_set evt_cam.o] 730 40 774 318 135 11 10000 0
+805D8D40:   wait_ms 10000
+805D8D48:   stop_tid LW(10)
+805D8D50:   stop_tid LW(11)
+805D8D58:   wait_frames 1
+805D8D60:   callc [evt_mario_set_dir evt_mario.o] 90 0 0
+805D8D74:   callc [evt_party_set_dir evt_party.o] 0 270 0
+805D8D88:   callc [evt_mario_adjust_dir evt_mario.o]
+805D8D90:   callc [evt_cam3d_evt_set evt_cam.o] 0 10 740 0 60 393 0 0
+805D8DB8:   wait_ms 300
+805D8DC0:   callc [evt_msg_print_party evt_msg.o] ["stg3_tou_04"]
+805D8DCC:   wait_ms 300
+805D8DD4:   callc [evt_cam3d_evt_off evt_cam.o] 500 11
+805D8DE4:   callc [N_evt_bero_set_mario_bottomless_respawn_pos_to_current_mario_pos evt_bero.o]
+805D8DEC:   callc [evt_mario_key_onoff evt_mario.o] 1
+805D8DF8:   callc [evt_party_run evt_party.o] 0
+805D8E04:   callc [evt_snd_bgm_scope evt_snd.o] 0 0
+805D8E14:   setii GSW(0) 127
+805D8E20:   return
+805D8E24:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [evt_oyaji_move tou_01.o] AT 805D9078 ---
+805D9078:   wait_ms 1000
+805D9080:   callc [evt_npc_flag_onoff evt_npc.o] 1 ["ホットドッグ"] 1073741824
+805D9094:   callc [evt_npc_status_onoff evt_npc.o] 1 ["ホットドッグ"] 2
+805D90A8:   callc [evt_npc_move_position evt_npc.o] ["ホットドッグ"] -470 -95 0 100.00 1
+805D90C8:   wait_ms 500
+805D90D0:   callc [evt_npc_flag_onoff evt_npc.o] 0 ["ホットドッグ"] 262144
+805D90E4:   callc [evt_npc_set_position evt_npc.o] ["ホットドッグ"] -333 10 -258
+805D90FC:   callc [evt_npc_move_position evt_npc.o] ["ホットドッグ"] -238 -180 0 100.00 1
+805D911C:   callc [evt_msg_print evt_msg.o] 0 ["stg3_tou_242"] 0 ["ホットドッグ"]
+805D9134:   setii GF(0) 1
+805D9140:   callc [evt_npc_change_interrupt evt_npc.o] ["ホットドッグ"] 1 [hot_move_evt tou_01.o]
+805D9154:   callc [evt_npc_restart_regular_event evt_npc.o] ["ホットドッグ"]
+805D9160:   return
+805D9164:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [evt_tamago_scale tou_01.o] AT 805D9168 ---
+805D9168:   setff GW(10) 1.20
+805D9174:   setff GW(11) 0.90
+805D9180:   begin_thread
+805D9184:     divi LW(3) 2
+805D9190:     addi LW(3) 1
+805D919C:     callc [evt_sub_intpl_msec_init evt_sub.o] 11 120 90 LW(3)
+805D91B4: 0:
+805D91BC:     callc [evt_sub_intpl_msec_get_value evt_sub.o]
+805D91C4:     divf LW(0) 100.00
+805D91D0:     setff GW(10) LW(0)
+805D91DC:     wait_frames 1
+805D91E4:     if_int_eq LW(1) 1
+805D91F0:       goto 0
+805D91F8:     endif
+805D91FC:   end_thread
+805D9200:   begin_thread
+805D9204:     divi LW(3) 2
+805D9210:     addi LW(3) 1
+805D921C:     callc [evt_sub_intpl_msec_init evt_sub.o] 11 90 110 LW(3)
+805D9234: 0:
+805D923C:     callc [evt_sub_intpl_msec_get_value evt_sub.o]
+805D9244:     divf LW(0) 100.00
+805D9250:     setff GW(11) LW(0)
+805D925C:     wait_frames 1
+805D9264:     if_int_eq LW(1) 1
+805D9270:       goto 0
+805D9278:     endif
+805D927C:   end_thread
+805D9280:   cvt_f_ms LW(3) LW(4)
+805D928C:   addi LW(4) 1
+805D9298:   loop LW(4)
+805D92A0:     callc [evt_npc_set_scale evt_npc.o] ["たまご"] GW(10) GW(11) 1.00
+805D92B8:     wait_frames 1
+805D92C0:   end_loop
+805D92C4:   return
+805D92C8:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [evt_tamago_scale2 tou_01.o] AT 805D92CC ---
+805D92CC:   begin_thread
+805D92D0:     divi LW(3) 2
+805D92DC:     addi LW(3) 1
+805D92E8:     callc [evt_sub_intpl_msec_init evt_sub.o] 4 90 100 LW(3)
+805D9300: 0:
+805D9308:     callc [evt_sub_intpl_msec_get_value evt_sub.o]
+805D9310:     divf LW(0) 100.00
+805D931C:     setff GW(10) LW(0)
+805D9328:     wait_frames 1
+805D9330:     if_int_eq LW(1) 1
+805D933C:       goto 0
+805D9344:     endif
+805D9348:   end_thread
+805D934C:   begin_thread
+805D9350:     divi LW(3) 2
+805D935C:     addi LW(3) 1
+805D9368:     callc [evt_sub_intpl_msec_init evt_sub.o] 4 110 100 LW(3)
+805D9380: 0:
+805D9388:     callc [evt_sub_intpl_msec_get_value evt_sub.o]
+805D9390:     divf LW(0) 100.00
+805D939C:     setff GW(11) LW(0)
+805D93A8:     wait_frames 1
+805D93B0:     if_int_eq LW(1) 1
+805D93BC:       goto 0
+805D93C4:     endif
+805D93C8:   end_thread
+805D93CC:   cvt_f_ms LW(3) LW(4)
+805D93D8:   addi LW(4) 1
+805D93E4:   loop LW(4)
+805D93EC:     callc [evt_npc_set_scale evt_npc.o] ["たまご"] GW(10) GW(11) 1.00
+805D9404:     wait_frames 1
+805D940C:   end_loop
+805D9410:   return
+805D9414:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [sekai_yami_npc tou_01.o] AT 805DAFB4 ---
+805DAFB4:   loop 0
+805DAFBC:     callc [evt_npc_get_position evt_npc.o] LW(0) LW(1) LW(2) LW(3)
+805DAFD4:     callc [yami_oowareru_check tou_01.o] GW(0) LW(1) LW(3) LW(4)
+805DAFEC:     if_int_eq LW(4) 1
+805DAFF8:       loop_break
+805DAFFC:     endif
+805DB000:     wait_frames 1
+805DB008:   end_loop
+805DB00C:   callc [evt_npc_get_reglid evt_npc.o] LW(0) LW(1)
+805DB01C:   stop_tid LW(1)
+805DB024:   callc [evt_eff_fukidashi evt_eff.o] 1 [zero_tou_0000c4a4 tou_01.o] LW(0) 0 0 0 0 0 0 0 48
+805DB058:   wait_ms 1000
+805DB060:   loop 0
+805DB068:     callc [evt_sub_random evt_sub.o] 400 LW(1)
+805DB078:     addi LW(1) 100
+805DB084:     wait_ms LW(1)
+805DB08C:     callc [evt_npc_reverse_ry evt_npc.o] LW(0)
+805DB098:     wait_frames 1
+805DB0A0:     callc [evt_npc_wait_pera evt_npc.o] LW(0)
+805DB0AC:   end_loop
+805DB0B0:   return
+805DB0B4:   end

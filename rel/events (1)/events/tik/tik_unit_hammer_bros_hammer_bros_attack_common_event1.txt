@@ -1,0 +1,79 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [hammer_bros_attack_common_event1 unit_hammer_bros.o] AT 805ECE60 ---
+805ECE60:   callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_ENM_HUMMER_ATTACK1"] [F1194D80] 0 [F1194D80]
+805ECE7C:   callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 LW(15) ["BRO_A_1B"]
+805ECE90:   callc [btlevtcmd_GetPos battle_event_cmd.o] -2 LW(6) LW(7) LW(8)
+805ECEA8:   callc [btlevtcmd_GetFaceDirection battle_event_cmd.o] -2 LW(0)
+805ECEB8:   muli LW(0) 10
+805ECEC4:   addi LW(6) LW(0)
+805ECED0:   callc [btlevtcmd_SetPartsPos battle_event_cmd.o] -2 LW(15) LW(6) LW(7) LW(8)
+805ECEEC:   callc [btlevtcmd_SetPartsRotate battle_event_cmd.o] -2 LW(15) 0 0 -135
+805ECF08:   callc [btlevtcmd_SetPartsRotateOffset battle_event_cmd.o] -2 LW(15) 0 5 0
+805ECF24:   callc [btlevtcmd_OffPartsAttribute battle_event_cmd.o] -2 LW(15) 16777216
+805ECF38:   callc [btlevtcmd_OffPartsAttribute battle_event_cmd.o] -2 LW(15) 33554432
+805ECF4C:   begin_child_thread
+805ECF50:     loop 0
+805ECF58:       callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_ENM_HUMMER_ATTACK2"] [F1194D80] 0 [F1194D80]
+805ECF74:       wait_frames 10
+805ECF7C:     end_loop
+805ECF80:   end_child_thread
+805ECF84:   begin_child_thread
+805ECF88:     loop 0
+805ECF90:       wait_frames 1
+805ECF98:       callc [btlevtcmd_AddPartsRotate battle_event_cmd.o] -2 LW(15) 0 0 32
+805ECFB4:     end_loop
+805ECFB8:   end_child_thread
+805ECFBC:   begin_child_thread
+805ECFC0:     loop 0
+805ECFC8:       callc [btlevtcmd_GetFaceDirection battle_event_cmd.o] -2 LW(0)
+805ECFD8:       if_int_eq LW(0) -1
+805ECFE4:         callc [btlevtcmd_GetPartsPos battle_event_cmd.o] -2 LW(15) LW(0) LW(1) LW(2)
+805ED000:         callc [btlevtcmd_GetHitPos battle_event_cmd.o] LW(3) LW(4) LW(6) LW(7) LW(8)
+805ED01C:         if_int_le LW(0) LW(6)
+805ED028:           callss [start_avoid unit_hammer_bros.o]
+805ED030:           loop_break
+805ED034:         endif
+805ED038:       else
+805ED03C:         callc [btlevtcmd_GetPartsPos battle_event_cmd.o] -2 LW(15) LW(0) LW(1) LW(2)
+805ED058:         callc [btlevtcmd_GetHitPos battle_event_cmd.o] LW(3) LW(4) LW(6) LW(7) LW(8)
+805ED074:         if_int_ge LW(0) LW(6)
+805ED080:           callss [start_avoid unit_hammer_bros.o]
+805ED088:           loop_break
+805ED08C:         endif
+805ED090:       endif
+805ED094:       wait_frames 1
+805ED09C:     end_loop
+805ED0A0:   end_child_thread
+805ED0A4:   callc [btlevtcmd_GetHitPos battle_event_cmd.o] LW(3) LW(4) LW(6) LW(7) LW(8)
+805ED0C0:   callc [btlevtcmd_JumpPartsSetting battle_event_cmd.o] -2 LW(15) 60 0 0.20
+805ED0DC:   callc [btlevtcmd_JumpPartsPosition battle_event_cmd.o] -2 LW(15) LW(6) LW(7) LW(8) 60 -1
+805ED100:   callc [btlevtcmd_JumpPartsContinue battle_event_cmd.o] -2 LW(15)
+805ED110:   callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_ENM_HUMMER_ATTACK3"] [F1194D80] 0 [F1194D80]
+805ED12C:   callc [btlevtcmd_GetHitPos battle_event_cmd.o] LW(3) LW(4) LW(6) LW(7) LW(8)
+805ED148:   callc [btlevtcmd_FaceDirectionSub battle_event_cmd.o] LW(3) LW(6) 100
+805ED15C:   callc [btlevtcmd_JumpPartsSetting battle_event_cmd.o] -2 LW(15) 0 4.00 0.60
+805ED178:   callc [btlevtcmd_JumpPartsPosition battle_event_cmd.o] -2 LW(15) LW(6) 0 LW(8) 0 -1
+805ED19C:   callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_ENM_HUMMER_ATTACK3"] [F1194D80] 0 [F1194D80]
+805ED1B8:   callc [btlevtcmd_GetHitPos battle_event_cmd.o] LW(3) LW(4) LW(6) LW(7) LW(8)
+805ED1D4:   callc [btlevtcmd_FaceDirectionSub battle_event_cmd.o] LW(3) LW(6) 150
+805ED1E8:   callc [btlevtcmd_JumpPartsSetting battle_event_cmd.o] -2 LW(15) 0 4.00 0.40
+805ED204:   callc [btlevtcmd_JumpPartsPosition battle_event_cmd.o] -2 LW(15) LW(6) 0 LW(8) 0 -1
+805ED228:   callc [btlevtcmd_OnPartsAttribute battle_event_cmd.o] -2 LW(15) 16777216
+805ED23C:   callc [btlevtcmd_OnPartsAttribute battle_event_cmd.o] -2 LW(15) 33554432
+805ED250:   return
+805ED254:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [start_avoid unit_hammer_bros.o] AT 805ECDF8 ---
+805ECDF8:   if_int_eq LW(5) 3
+805ECE04:     callc [btlevtcmd_StartAvoid battle_event_cmd.o] LW(3) 38
+805ECE14:   endif
+805ECE18:   if_int_eq LW(5) 6
+805ECE24:     callc [btlevtcmd_StartAvoid battle_event_cmd.o] LW(3) 39
+805ECE34:   endif
+805ECE38:   if_int_eq LW(5) 2
+805ECE44:     callc [btlevtcmd_StartAvoid battle_event_cmd.o] LW(3) 40
+805ECE54:   endif
+805ECE58:   return
+805ECE5C:   end

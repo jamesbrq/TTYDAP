@@ -1,0 +1,129 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [peach_evt_stg2 aji_10.o] AT 805E861C ---
+805E861C:   callc [evt_mario_key_onoff evt_mario.o] 0
+805E8628:   callc [evt_mario_cont_onoff evt_mario.o] 0
+805E8634:   callc [evt_mario_set_pos evt_mario.o] 0 -1000 0
+805E8648:   callc [evt_npc_set_position evt_npc.o] ["シュリョー"] 210 30 0
+805E8660:   callc [evt_npc_set_ry evt_npc.o] ["シュリョー"] 270
+805E8670:   callc [evt_npc_set_position evt_npc.o] ["研究員"] 60 0 0
+805E8688:   callc [evt_npc_set_ry evt_npc.o] ["研究員"] 90
+805E8698:   callc [evt_npc_flag_onoff evt_npc.o] 1 ["研究員"] 32768
+805E86AC:   callc [evt_cam3d_evt_set evt_cam.o] 0 273 972 0 100 -13 0 11
+805E86D4:   callc [evt_seq_wait evt_seq.o] 2
+805E86E0:   callc [evt_bero_exec_wait evt_bero.o] 65536
+805E86EC:   callc [evt_fade_end_wait evt_fade.o]
+805E86F4:   callc [evt_npc_flag_onoff evt_npc.o] 0 ["研究員"] 32768
+805E8708:   wait_ms 2000
+805E8710:   callc [evt_cam3d_evt_set evt_cam.o] 200 130 283 200 78 -13 0 11
+805E8738:   wait_frames 1
+805E8740:   wait_ms 500
+805E8748:   callc [evt_msg_print evt_msg.o] 0 ["peach_aji_72_01"] 0 ["シュリョー"]
+805E8760:   callc [evt_cam3d_evt_set evt_cam.o] 60 90 283 60 38 -12 0 11
+805E8788:   wait_frames 1
+805E8790:   wait_ms 500
+805E8798:   callc [evt_msg_print evt_msg.o] 0 ["peach_aji_72_02"] 0 ["研究員"]
+805E87B0:   callc [evt_cam3d_evt_set evt_cam.o] -350 90 283 -350 38 -13 0 11
+805E87D8:   wait_frames 1
+805E87E0:   callc [evt_npc_set_position evt_npc.o] ["手下２"] -420 0 0
+805E87F8:   setii LW(1) 0
+805E8804:   callsa [bero_open_door_play_se evt_bero.o]
+805E880C:   callc [evt_sub_intpl_msec_init evt_sub.o] 11 0 180 500
+805E8824: 0:
+805E882C:   callc [evt_sub_intpl_msec_get_value evt_sub.o]
+805E8834:   callss [w_door_open aji_10.o]
+805E883C:   if_int_eq LW(1) 1
+805E8848:     goto 0
+805E8850:   endif
+805E8854:   begin_thread
+805E8858:     wait_ms 1400
+805E8860:     setii LW(1) 0
+805E886C:     callsa [bero_close_door_play_se evt_bero.o]
+805E8874:     callc [evt_sub_intpl_msec_init evt_sub.o] 11 180 0 500
+805E888C: 1:
+805E8894:     callc [evt_sub_intpl_msec_get_value evt_sub.o]
+805E889C:     callss [w_door_close aji_10.o]
+805E88A4:     if_int_eq LW(1) 1
+805E88B0:       goto 1
+805E88B8:     endif
+805E88BC:   end_thread
+805E88C0:   callc [evt_npc_move_position evt_npc.o] ["手下２"] -350 0 0 60 0
+805E88E0:   wait_ms 500
+805E88E8:   callc [evt_npc_set_anim evt_npc.o] ["手下２"] ["P_1"]
+805E88F8:   callc [evt_npc_get_position evt_npc.o] ["手下２"] LW(0) LW(1) LW(2)
+805E8910:   callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_PEACH_3RD_BATTEN1"] LW(0) LW(1) LW(2) 0
+805E892C:   wait_ms 1000
+805E8934:   callc [evt_npc_set_anim evt_npc.o] ["手下２"] ["S_1"]
+805E8944:   wait_ms 500
+805E894C:   callc [evt_msg_print evt_msg.o] 0 ["peach_aji_72_03"] 0 ["手下２"]
+805E8964:   callc [evt_npc_move_position evt_npc.o] ["手下２"] -260 0 0 60 0
+805E8984:   callc [evt_npc_set_position evt_npc.o] ["研究員"] 45 0 -50
+805E899C:   callc [evt_npc_set_position evt_npc.o] ["手下２"] -25 0 0
+805E89B4:   callc [evt_cam3d_evt_set evt_cam.o] 135 170 478 135 84 -13 0 11
+805E89DC:   wait_frames 1
+805E89E4:   setii GF(0) 0
+805E89F0:   begin_thread
+805E89F4:     callc [evt_npc_move_position evt_npc.o] ["手下２"] 60 0 0 60 0
+805E8A14:     setii GF(0) 1
+805E8A20:   end_thread
+805E8A24:   callc [evt_msg_print evt_msg.o] 0 ["peach_aji_72_04"] 0 ["シュリョー"]
+805E8A3C:   loop 0
+805E8A44:     if_int_ne GF(0) 0
+805E8A50:       loop_break
+805E8A54:     endif
+805E8A58:     wait_frames 1
+805E8A60:   end_loop
+805E8A64:   callc [evt_msg_print evt_msg.o] 0 ["peach_aji_72_05"] 0 ["手下２"]
+805E8A7C:   callc [evt_msg_print evt_msg.o] 0 ["peach_aji_72_06"] 0 ["シュリョー"]
+805E8A94:   callc [evt_msg_print evt_msg.o] 0 ["peach_aji_72_07"] 0 ["手下２"]
+805E8AAC:   callc [evt_cam3d_evt_set evt_cam.o] 200 130 283 200 78 -13 500 11
+805E8AD4:   wait_ms 500
+805E8ADC:   callc [evt_msg_print evt_msg.o] 0 ["peach_aji_72_08"] 0 ["シュリョー"]
+805E8AF4:   callc [evt_cam3d_evt_set evt_cam.o] 60 90 283 60 38 -12 0 11
+805E8B1C:   wait_frames 1
+805E8B24:   callc [evt_msg_print evt_msg.o] 0 ["peach_aji_72_09"] 0 ["手下２"]
+805E8B3C:   callc [evt_msg_print evt_msg.o] 0 ["peach_aji_72_10"] 0 ["シュリョー"]
+805E8B54:   callc [evt_cam3d_evt_set evt_cam.o] 135 170 478 135 84 -13 0 11
+805E8B7C:   wait_frames 1
+805E8B84:   callc [evt_msg_print evt_msg.o] 0 ["peach_aji_72_11"] 0 ["手下２"]
+805E8B9C:   callc [evt_npc_set_anim evt_npc.o] ["手下２"] ["P_1"]
+805E8BAC:   callc [evt_npc_get_position evt_npc.o] ["手下２"] LW(0) LW(1) LW(2)
+805E8BC4:   callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_PEACH_3RD_BATTEN1"] LW(0) LW(1) LW(2) 0
+805E8BE0:   wait_ms 500
+805E8BE8:   callc [evt_npc_set_ry evt_npc.o] ["手下２"] 270
+805E8BF8:   wait_ms 500
+805E8C00:   callc [evt_npc_move_position evt_npc.o] ["手下２"] -50 0 0 60 0
+805E8C20:   callc [evt_msg_print evt_msg.o] 0 ["peach_aji_72_12"] 0 ["シュリョー"]
+805E8C38:   callc [evt_msg_print evt_msg.o] 0 ["peach_aji_72_13"] 0 ["研究員"]
+805E8C50:   callc [evt_npc_set_anim evt_npc.o] ["研究員"] ["P_1"]
+805E8C60:   callc [evt_npc_get_position evt_npc.o] ["研究員"] LW(0) LW(1) LW(2)
+805E8C78:   callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_PEACH_3RD_BATTEN1"] LW(0) LW(1) LW(2) 0
+805E8C94:   wait_ms 500
+805E8C9C:   callc [evt_npc_set_ry evt_npc.o] ["研究員"] 270
+805E8CAC:   wait_ms 500
+805E8CB4:   callc [evt_npc_move_position evt_npc.o] ["研究員"] -50 -50 0 60 0
+805E8CD4:   callc [evt_cam3d_evt_set evt_cam.o] 200 130 283 200 78 -13 500 11
+805E8CFC:   wait_ms 500
+805E8D04:   callc [evt_msg_print evt_msg.o] 0 ["peach_aji_72_14"] 0 ["シュリョー"]
+805E8D1C:   wait_ms 2000
+805E8D24:   callc [evt_fade_set_mapchange_type evt_fade.o] 0 2 300 1 300
+805E8D40:   callc [evt_bero_mapchange evt_bero.o] ["aji_16"] 0
+805E8D50:   return
+805E8D54:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [w_door_open aji_10.o] AT 805E6BA8 ---
+805E6BA8:   mulf LW(0) 0.25
+805E6BB4:   callc [evt_mapobj_trans evt_map.o] 0 ["door_w_A"] 0 0 LW(0)
+805E6BD0:   mulf LW(0) -1.00
+805E6BDC:   callc [evt_mapobj_trans evt_map.o] 0 ["door_w_B"] 0 0 LW(0)
+805E6BF8:   return
+805E6BFC:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [w_door_close aji_10.o] AT 805E6B50 ---
+805E6B50:   mulf LW(0) 0.25
+805E6B5C:   callc [evt_mapobj_trans evt_map.o] 0 ["door_w_A"] 0 0 LW(0)
+805E6B78:   mulf LW(0) -1.00
+805E6B84:   callc [evt_mapobj_trans evt_map.o] 0 ["door_w_B"] 0 0 LW(0)
+805E6BA0:   return
+805E6BA4:   end

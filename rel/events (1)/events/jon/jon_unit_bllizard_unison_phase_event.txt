@@ -1,0 +1,40 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [unison_phase_event unit_bllizard.o] AT 80CE8064 ---
+80CE8064:   callc [btlevtcmd_CheckPhase battle_event_cmd.o] LW(0) 67108865
+80CE8074:   if_int_eq LW(0) 0
+80CE8080:     goto 99
+80CE8088:   endif
+80CE808C:   callc [btlevtcmd_CheckActStatus battle_event_cmd.o] -2 LW(0)
+80CE809C:   if_int_eq LW(0) 0
+80CE80A8:     goto 99
+80CE80B0:   endif
+80CE80B4:   callc [btlevtcmd_CheckPartsCounterAttribute battle_event_cmd.o] -2 1 64 LW(0)
+80CE80CC:   if_int_eq LW(0) 1
+80CE80D8:     goto 99
+80CE80E0:   endif
+80CE80E4:   callc [evt_sub_random evt_sub.o] 99 LW(0)
+80CE80F4:   if_int_lt LW(0) 50
+80CE8100:     callc [btlevtcmd_GetUnitWork battle_event_cmd.o] -2 0 LW(0)
+80CE8114:     if_int_eq LW(0) 1
+80CE8120:       callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_ENM_KUMO_MOVE4"] [F1194D80] 0 [F1194D80]
+80CE813C:       callc [btlevtcmd_GetPos battle_event_cmd.o] -2 LW(0) LW(1) LW(2)
+80CE8154:       setii LW(1) 40
+80CE8160:       callc [btlevtcmd_DivePosition battle_event_cmd.o] -2 LW(0) LW(1) LW(2) 60 10 4 0 -1
+80CE818C:       callc [btlevtcmd_SetHomePos battle_event_cmd.o] -2 LW(0) LW(1) LW(2)
+80CE81A4:       callc [btlevtcmd_OnPartsAttribute battle_event_cmd.o] -2 1 6291456
+80CE81B8:       callc [btlevtcmd_SetUnitWork battle_event_cmd.o] -2 0 0
+80CE81CC:     else
+80CE81D0:       callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_ENM_KUMO_MOVE5"] [F1194D80] 0 [F1194D80]
+80CE81EC:       callc [btlevtcmd_GetPos battle_event_cmd.o] -2 LW(0) LW(1) LW(2)
+80CE8204:       setii LW(1) 10
+80CE8210:       callc [btlevtcmd_DivePosition battle_event_cmd.o] -2 LW(0) LW(1) LW(2) 60 -10 4 0 -1
+80CE823C:       callc [btlevtcmd_SetHomePos battle_event_cmd.o] -2 LW(0) LW(1) LW(2)
+80CE8254:       callc [btlevtcmd_OffPartsAttribute battle_event_cmd.o] -2 1 6291456
+80CE8268:       callc [btlevtcmd_SetUnitWork battle_event_cmd.o] -2 0 1
+80CE827C:     endif
+80CE8280:   endif
+80CE8284: 99:
+80CE828C:   return
+80CE8290:   end

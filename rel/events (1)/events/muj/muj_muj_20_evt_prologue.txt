@@ -1,0 +1,82 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [evt_prologue muj_20.o] AT 805EE458 ---
+805EE458:   wait_ms 500
+805EE460:   callc [evt_snd_bgmon evt_snd.o] 512 ["BGM_OPENING1"]
+805EE470:   callc [evt_snd_envon evt_snd.o] 272 ["ENV_OPN_MUJ1"]
+805EE480:   wait_ms 3500
+805EE488:   setii GF(0) 0
+805EE494:   setii GF(1) 0
+805EE4A0:   setii GF(2) 0
+805EE4AC:   begin_thread
+805EE4B0:     callc [logo muj_20.o]
+805EE4B8:   end_thread
+805EE4BC:   setff GW(10) 0.00
+805EE4C8:   setff LW(2) -1800.00
+805EE4D4:   callc [evt_sub_intpl_msec_init evt_sub.o] 11 -1800 0 10000
+805EE4EC:   loop 0
+805EE4F4:     callc [evt_sub_intpl_msec_get_value evt_sub.o]
+805EE4FC:     setff LW(3) LW(0)
+805EE508:     subf LW(3) LW(2)
+805EE514:     setff GW(10) LW(3)
+805EE520:     setff LW(2) LW(0)
+805EE52C:     setff GW(0) LW(0)
+805EE538:     wait_frames 1
+805EE540:     if_int_eq LW(1) 0
+805EE54C:       loop_break
+805EE550:     endif
+805EE554:   end_loop
+805EE558:   setii GF(0) 1
+805EE564:   begin_thread
+805EE568:     loop 5
+805EE570:       wait_ms 1000
+805EE578:       if_int_ne GF(1) 0
+805EE584:         return
+805EE588:       endif
+805EE58C:     end_loop
+805EE590:     if_int_eq GF(1) 0
+805EE59C:       callc [evt_snd_bgmon evt_snd.o] 512 ["BGM_EVT_SAILING1"]
+805EE5AC:     endif
+805EE5B0:   end_thread
+805EE5B4:   loop 0
+805EE5BC:     if_int_eq GF(1) 1
+805EE5C8:       loop_break
+805EE5CC:     endif
+805EE5D0:     wait_frames 1
+805EE5D8:   end_loop
+805EE5DC:   callc [evt_snd_sfxon evt_snd.o] ["SFX_PRESS_START1"] 0
+805EE5EC:   begin_thread
+805EE5F0:     wait_ms 4000
+805EE5F8:     callc [evt_snd_bgmoff_f evt_snd.o] 512 6000
+805EE608:     callc [evt_snd_envoff_f evt_snd.o] 512 6000
+805EE618:     callc [evt_fade_set_mapchange_type evt_fade.o] 1 17 800 16 800
+805EE634:     callc [evt_bero_mapchange evt_bero.o] ["sys_01"] ["prologue"]
+805EE644:   end_thread
+805EE648:   begin_thread
+805EE64C:     wait_ms 5000
+805EE654:     callc [evt_snd_sfxoff evt_snd.o] GW(4)
+805EE660:   end_thread
+805EE664:   setff GW(10) 0.00
+805EE670:   setff LW(2) 0.00
+805EE67C:   callc [evt_sub_intpl_msec_init evt_sub.o] 11 0 1800 10000
+805EE694:   loop 0
+805EE69C:     callc [evt_sub_intpl_msec_get_value evt_sub.o]
+805EE6A4:     setff LW(3) LW(0)
+805EE6B0:     subf LW(3) LW(2)
+805EE6BC:     setff GW(10) LW(3)
+805EE6C8:     setff LW(2) LW(0)
+805EE6D4:     setff GW(0) LW(0)
+805EE6E0:     wait_frames 1
+805EE6E8:     if_int_eq LW(1) 0
+805EE6F4:       loop_break
+805EE6F8:     endif
+805EE6FC:   end_loop
+805EE700:   loop 0
+805EE708:     if_int_eq GF(2) 1
+805EE714:       loop_break
+805EE718:     endif
+805EE71C:     wait_frames 1
+805EE724:   end_loop
+805EE728:   return
+805EE72C:   end

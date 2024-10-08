@@ -1,0 +1,83 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [queen_attack_bress3 unit_boss_black_peach.o] AT 8060FB6C ---
+8060FB6C:   callc [btlevtcmd_GetEnemyBelong battle_event_cmd.o] -2 LW(0)
+8060FB7C:   callc [btlevtcmd_SamplingEnemy battle_event_cmd.o] -2 LW(0) [weapon_peach_black_poison_attack unit_boss_black_peach.o]
+8060FB90:   callc [btlevtcmd_ChoiceSamplingEnemy battle_event_cmd.o] [weapon_peach_black_poison_attack unit_boss_black_peach.o] LW(3) LW(4)
+8060FBA4:   callc [btlevtcmd_CheckToken battle_event_cmd.o] -2 16 LW(0)
+8060FBB8:   if_int_ne LW(0) 0
+8060FBC4:     callss [subsetevt_confuse_flustered battle_event_subset.o]
+8060FBCC:     return
+8060FBD0:   endif
+8060FBD4:   callc [btlevtcmd_AttackDeclare battle_event_cmd.o] -2 LW(3) LW(4)
+8060FBE8:   callc [btlevtcmd_WaitGuardMove battle_event_cmd.o]
+8060FBF0:   callc [btlevtcmd_PayWeaponCost battle_event_cmd.o] -2 [weapon_peach_black_poison_attack unit_boss_black_peach.o]
+8060FC00:   wait_ms 200
+8060FC08:   callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 1 ["KRT_A_1"]
+8060FC1C:   callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 3 ["KRT_A_1"]
+8060FC30:   wait_ms 500
+8060FC38:   callc [btlevtcmd_GetPos battle_event_cmd.o] -2 LW(0) LW(1) LW(2)
+8060FC50:   addi LW(0) -33
+8060FC5C:   addi LW(1) 82
+8060FC68:   callc [evt_eff evt_eff.o] [zero_las_000183fc unit_boss_black_peach.o] ["toge_flush"] 4 LW(0) LW(1) LW(2) 60 0 0 0 0 0 0 0
+8060FCA8:   callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_BOSS_QWEN_EYE_SHINE1"] LW(0) LW(1) LW(2) 0
+8060FCC4:   callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 3 ["KRT_A2_1"]
+8060FCD8:   callc [btlevtcmd_GetPos battle_event_cmd.o] -2 LW(0) LW(1) LW(2)
+8060FCF0:   callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_BOSS_BPCH_HAND_UP1"] LW(0) LW(1) LW(2) 0
+8060FD0C:   wait_ms 250
+8060FD14:   callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 3 ["KRT_A2_2"]
+8060FD28:   callc [evt_eff evt_eff.o] [zero_las_000183fc unit_boss_black_peach.o] ["toiki"] 2 73 112 0 180 0 0 0 0 0 0 0
+8060FD68:   callc [btlevtcmd_GetPos battle_event_cmd.o] -2 LW(0) LW(1) LW(2)
+8060FD80:   callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_BOSS_QWEN_BREATH1"] LW(0) LW(1) LW(2) 0
+8060FD9C:   wait_ms 2500
+8060FDA4:   callc [btlevtcmd_GetPos battle_event_cmd.o] LW(3) LW(0) LW(1) LW(2)
+8060FDBC:   callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_BOSS_QWEN_BREATH2"] LW(0) LW(1) LW(2) 0
+8060FDD8:   callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 3 ["KRT_A2_3"]
+8060FDEC:   wait_ms 80
+8060FDF4:   callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 3 ["KRT_S_1"]
+8060FE08:   callc [btlevtcmd_WeaponAftereffect battle_event_cmd.o] [weapon_peach_black_poison_attack unit_boss_black_peach.o]
+8060FE14:   setii LF(0) 0
+8060FE20: 0:
+8060FE28:   callc [btlevtcmd_PreCheckDamage battle_event_cmd.o] -2 LW(3) LW(4) [weapon_peach_black_poison_attack unit_boss_black_peach.o] 256 LW(5)
+8060FE48:   switchi LW(5)
+8060FE50:     case_int_eq_any 4
+8060FE58:       goto 90
+8060FE60:       end_multi_case
+8060FE64:     case_int_eq 3
+8060FE6C:       callc [btlevtcmd_StartAvoid battle_event_cmd.o] LW(3) 38
+8060FE7C:       goto 90
+8060FE84:       end_multi_case
+8060FE88:     case_int_eq 6
+8060FE90:       callc [btlevtcmd_StartAvoid battle_event_cmd.o] LW(3) 39
+8060FEA0:       goto 90
+8060FEA8:     case_int_eq 2
+8060FEB0:       callc [btlevtcmd_StartAvoid battle_event_cmd.o] LW(3) 40
+8060FEC0:       goto 90
+8060FEC8:     case_int_eq 1
+8060FED0:       goto 91
+8060FED8:       end_multi_case
+8060FEDC:     case_default
+8060FEE0:       goto 95
+8060FEE8:       end_multi_case
+8060FEEC:   end_switch
+8060FEF0: 90:
+8060FEF8:   goto 95
+8060FF00: 91:
+8060FF08:   callc [evt_btl_camera_set_mode battle_camera.o] 0 0
+8060FF18:   if_int_eq LF(0) 0
+8060FF24:     callc [btlevtcmd_ResultACDefence battle_event_cmd.o] LW(3) [weapon_peach_black_poison_attack unit_boss_black_peach.o]
+8060FF34:     setii LF(0) 1
+8060FF40:   endif
+8060FF44:   callc [btlevtcmd_CheckDamage battle_event_cmd.o] -2 LW(3) LW(4) [weapon_peach_black_poison_attack unit_boss_black_peach.o] 256 LW(5)
+8060FF64: 95:
+8060FF6C:   callc [btlevtcmd_GetSelectNextEnemy battle_event_cmd.o] LW(3) LW(4)
+8060FF7C:   if_int_eq LW(3) -1
+8060FF88:     goto 98
+8060FF90:   endif
+8060FF94:   goto 0
+8060FF9C: 98:
+8060FFA4:   callc [evt_btl_camera_set_mode battle_camera.o] 0 0
+8060FFB4: 99:
+8060FFBC:   return
+8060FFC0:   end

@@ -1,0 +1,261 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [partyChuchurinaAttack_ItemSteal unit_party_chuchurina.o] AT 80385918 ---
+80385918:   callc [btlevtcmd_GetSelectEnemy battle_event_cmd.o] LW(3) LW(4)
+80385928:   if_int_eq LW(3) -1
+80385934:     goto 99
+8038593C:   endif
+80385940:   callc [btlevtcmd_CommandGetWeaponAddress battle_event_cmd.o] -2 LW(12)
+80385950:   callc [btlevtcmd_WeaponAftereffect battle_event_cmd.o] LW(12)
+8038595C:   callc [btlevtcmd_AttackDeclareAll battle_event_cmd.o] -2
+80385968:   callc [btlevtcmd_WaitGuardMove battle_event_cmd.o]
+80385970:   callc [btlevtcmd_CommandPayWeaponCost battle_event_cmd.o] -2
+8038597C:   callc [btlevtcmd_RunDataEventChild battle_event_cmd.o] -2 7
+8038598C:   setii LW(14) 0
+80385998:   callc [btlevtcmd_PreCheckDamage battle_event_cmd.o] -2 LW(3) LW(4) [partyWeapon_ChuchurinaItemSteal unit_party_chuchurina.o] 256 LW(5)
+803859B8:   if_int_eq LW(5) 5
+803859C4:     callc [btlevtcmd_AnimeChangePoseType battle_event_cmd.o] -2 1 42
+803859D8:     callc [btlevtcmd_SetMoveSpeed battle_event_cmd.o] -2 3.00
+803859E8:     callc [btlevtcmd_GetWidth battle_event_cmd.o] LW(3) LW(15)
+803859F8:     divi LW(15) 2
+80385A04:     callc [btlevtcmd_GetHitPos battle_event_cmd.o] LW(3) LW(4) LW(0) LW(1) LW(2)
+80385A20:     callc [btlevtcmd_FaceDirectionAdd battle_event_cmd.o] LW(3) LW(0) LW(15)
+80385A34:     callc [btlevtcmd_FaceDirectionAdd battle_event_cmd.o] LW(3) LW(0) 20
+80385A48:     callc [btlevtcmd_TransStageFloorPosition battle_event_cmd.o] LW(0) LW(1) LW(2)
+80385A5C:     callc [btlevtcmd_GetMoveFrame battle_event_cmd.o] -2 LW(0) LW(1) LW(2) 0 LW(8)
+80385A7C:     begin_child_thread_tid LW(9)
+80385A84:       callc [btlevtcmd_MovePosition battle_event_cmd.o] -2 LW(0) LW(1) LW(2) LW(8) -1 0
+80385AA8:     end_child_thread
+80385AAC:     if_int_gt LW(8) 5
+80385AB8:       subi LW(8) 2
+80385AC4:       setii LW(15) LW(8)
+80385AD0:       divi LW(15) 3
+80385ADC:       setii LW(8) LW(15)
+80385AE8:       muli LW(8) 2
+80385AF4:       callc [btlevtcmd_ACRStart battle_event_cmd.o] -2 LW(15) LW(8) LW(8) 0
+80385B10:       callc [btlevtcmd_ACRGetResult battle_event_cmd.o] LW(6) LW(7)
+80385B20:       switchi LW(6)
+80385B28:         case_int_ge 2
+80385B30:           stop_tid LW(9)
+80385B38:           callc [btlevtcmd_AudienceDeclareAcrobatResult battle_event_cmd.o] LW(12) 1 0 0 0
+80385B54:           callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 1 ["PCH_Y_1"]
+80385B68:           callc [btlevtcmd_AnimeWaitPlayComplete battle_event_cmd.o] -2 1
+80385B78:           callc [btlevtcmd_AnimeChangePoseType battle_event_cmd.o] -2 1 42
+80385B8C:           callc [btlevtcmd_MovePosition battle_event_cmd.o] -2 LW(0) LW(1) LW(2) 0 -1 0
+80385BB0:         case_default
+80385BB4:           callc [evt_audience_acrobat_notry evt_audience.o]
+80385BBC:       end_switch
+80385BC0:     else
+80385BC4:       callc [btlevtcmd_WaitEventEnd battle_event_cmd.o] LW(9)
+80385BD0:     endif
+80385BD4:     callc [btlevtcmd_CheckDamage battle_event_cmd.o] -2 LW(3) LW(4) [partyWeapon_ChuchurinaItemSteal unit_party_chuchurina.o] 256 LW(5)
+80385BF4:     return
+80385BF8:   endif
+80385BFC:   callc [btlevtcmd_AnimeChangePoseType battle_event_cmd.o] -2 1 42
+80385C10:   callc [btlevtcmd_SetMoveSpeed battle_event_cmd.o] -2 3.00
+80385C20:   callc [btlevtcmd_GetWidth battle_event_cmd.o] LW(3) LW(15)
+80385C30:   muli LW(15) 2
+80385C3C:   divi LW(15) 3
+80385C48:   addi LW(15) 10
+80385C54:   callc [btlevtcmd_GetHitPos battle_event_cmd.o] LW(3) LW(4) LW(0) LW(1) LW(2)
+80385C70:   callc [btlevtcmd_FaceDirectionAdd battle_event_cmd.o] LW(3) LW(0) LW(15)
+80385C84:   addi LW(2) 8
+80385C90:   callc [btlevtcmd_TransStageFloorPosition battle_event_cmd.o] LW(0) LW(1) LW(2)
+80385CA4:   callc [btlevtcmd_GetMoveFrame battle_event_cmd.o] -2 LW(0) LW(1) LW(2) 0 LW(8)
+80385CC4:   begin_child_thread_tid LW(9)
+80385CCC:     callc [btlevtcmd_MovePosition battle_event_cmd.o] -2 LW(0) LW(1) LW(2) LW(8) -1 0
+80385CF0:   end_child_thread
+80385CF4:   if_int_gt LW(8) 5
+80385D00:     subi LW(8) 2
+80385D0C:     setii LW(15) LW(8)
+80385D18:     divi LW(15) 3
+80385D24:     setii LW(8) LW(15)
+80385D30:     muli LW(8) 2
+80385D3C:     callc [btlevtcmd_ACRStart battle_event_cmd.o] -2 LW(15) LW(8) LW(8) 0
+80385D58:     callc [btlevtcmd_ACRGetResult battle_event_cmd.o] LW(6) LW(7)
+80385D68:     switchi LW(6)
+80385D70:       case_int_ge 2
+80385D78:         stop_tid LW(9)
+80385D80:         callc [btlevtcmd_AudienceDeclareAcrobatResult battle_event_cmd.o] LW(12) 1 0 0 0
+80385D9C:         callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 1 ["PCH_Y_1"]
+80385DB0:         callc [btlevtcmd_AnimeWaitPlayComplete battle_event_cmd.o] -2 1
+80385DC0:         callc [btlevtcmd_AnimeChangePoseType battle_event_cmd.o] -2 1 42
+80385DD4:         callc [btlevtcmd_MovePosition battle_event_cmd.o] -2 LW(0) LW(1) LW(2) 0 -1 0
+80385DF8:       case_default
+80385DFC:         callc [evt_audience_acrobat_notry evt_audience.o]
+80385E04:         callc [btlevtcmd_WaitEventEnd battle_event_cmd.o] LW(9)
+80385E10:     end_switch
+80385E14:   else
+80385E18:     callc [btlevtcmd_WaitEventEnd battle_event_cmd.o] LW(9)
+80385E24:   endif
+80385E28:   callc [evt_btl_camera_set_mode battle_camera.o] 0 7
+80385E38:   callc [evt_btl_camera_set_homing_unit battle_camera.o] 0 -2 1
+80385E4C:   callc [evt_btl_camera_set_moveSpeedLv battle_camera.o] 0 2
+80385E5C:   callc [evt_btl_camera_set_zoom battle_camera.o] 0 350
+80385E6C:   wait_ms 200
+80385E74:   callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 1 ["PCH_K_1"]
+80385E88:   wait_frames 6
+80385E90:   if_int_ne LW(5) 1
+80385E9C:     wait_frames 20
+80385EA4:     callc [btlevtcmd_AnimeChangePoseType battle_event_cmd.o] -2 1 43
+80385EB8:     switchi LW(5)
+80385EC0:       case_int_eq_any 4
+80385EC8:         end_multi_case
+80385ECC:       case_int_eq 3
+80385ED4:         callc [btlevtcmd_StartAvoid battle_event_cmd.o] LW(3) 38
+80385EE4:       case_int_eq 6
+80385EEC:         callc [btlevtcmd_StartAvoid battle_event_cmd.o] LW(3) 39
+80385EFC:       case_int_eq 2
+80385F04:         callc [btlevtcmd_StartAvoid battle_event_cmd.o] LW(3) 40
+80385F14:       case_int_eq 1
+80385F1C:       case_default
+80385F20:     end_switch
+80385F24:     wait_frames 30
+80385F2C:     callc [btlevtcmd_StopAC battle_event_cmd.o]
+80385F34:     goto 90
+80385F3C:   endif
+80385F40:   callc [evt_btl_camera_set_moveSpeedLv battle_camera.o] 0 2
+80385F50:   callc [evt_btl_camera_set_zoom battle_camera.o] 0 350
+80385F60:   callc [btlevtcmd_CheckDamage battle_event_cmd.o] -2 LW(3) LW(4) [partyWeapon_ChuchurinaItemSteal unit_party_chuchurina.o] 256 LW(5)
+80385F80:   callc [btlevtcmd_GetPos battle_event_cmd.o] -2 LW(0) LW(1) LW(2)
+80385F98:   callc [btlevtcmd_GetHeight battle_event_cmd.o] -2 LW(15)
+80385FA8:   muli LW(15) 2
+80385FB4:   divi LW(15) 3
+80385FC0:   addi LW(1) LW(15)
+80385FCC:   callc [btlevtcmd_FaceDirectionAdd battle_event_cmd.o] -2 LW(0) 20
+80385FE0:   callc [evt_eff evt_eff.o] [zero_80424110 unit_party_chuchurina.o] ["kiss"] 0 LW(0) LW(1) LW(2) 1 0 0 0 0 0 0 0
+80386020:   callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_BTL_CHURINA_KISS1"] [F1194D80] 0 [F1194D80]
+8038603C:   callc [btlevtcmd_OnUnitFlag battle_event_cmd.o] LW(3) 33554432
+8038604C:   wait_frames 20
+80386054:   callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 1 ["PCH_Z_1"]
+80386068:   callc [evt_btl_camera_set_mode battle_camera.o] 0 3
+80386078:   callc [btlevtcmd_AnimeFlagOnOff battle_event_cmd.o] -2 1 256 1
+80386090:   wait_frames 1
+80386098:   callc [mono_capture_event unit_party_chuchurina.o]
+803860A0:   callsa_tid [main_evt unit_party_chuchurina.o] LW(13)
+803860AC:   begin_thread
+803860B0:     callc [mono_on unit_party_chuchurina.o]
+803860B8:   end_thread
+803860BC:   callc [btlevtcmd_CommandGetWeaponActionLv battle_event_cmd.o] LW(0)
+803860C8:   callc [btlevtcmd_AcSetDifficulty battle_event_cmd.o] -2 LW(0)
+803860D8:   callc [_get_itemsteal_param unit_party_chuchurina.o] LW(3) LW(0) LW(1)
+803860EC:   callc [btlevtcmd_AcSetParamAll battle_event_cmd.o] 1 LW(0) 2 2 LW(1) [F1194D80] [F1194D80] [F1194D80]
+80386114:   callc [btlevtcmd_AcSetFlag battle_event_cmd.o] 0
+80386120:   callc [btlevtcmd_SetupAC battle_event_cmd.o] -2 15 1 0
+80386138:   wait_frames 22
+80386140:   callc [btlevtcmd_StartAC battle_event_cmd.o] 1
+8038614C:   callc [btlevtcmd_ResultAC battle_event_cmd.o]
+80386154:   callc [btlevtcmd_GetResultAC battle_event_cmd.o] LW(6)
+80386160:   if_bits_set LW(6) 2
+8038616C:     callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 1 ["PCH_A4_1"]
+80386180:   endif
+80386184:   wait_frames 35
+8038618C:   callc [evt_snd_sfxon evt_snd.o] ["SFX_BTL_CHURINA_EYE1"] 0
+8038619C:   wait_frames 47
+803861A4:   callc [btlevtcmd_GetPos battle_event_cmd.o] LW(3) LW(0) LW(1) LW(2)
+803861BC:   callc [btlevtcmd_GetWidth battle_event_cmd.o] LW(3) LW(15)
+803861CC:   divi LW(15) 2
+803861D8:   addi LW(0) LW(15)
+803861E4:   callc [btlevtcmd_GetHeight battle_event_cmd.o] LW(3) LW(15)
+803861F4:   addi LW(1) LW(15)
+80386200:   addi LW(1) 5
+8038620C:   addi LW(2) 8
+80386218:   callc [btlevtcmd_SetFallAccel battle_event_cmd.o] -2 0.70
+80386228:   callc [btlevtcmd_JumpPosition battle_event_cmd.o] -2 LW(0) LW(1) LW(2) 16 -1
+80386248:   callc [btlevtcmd_GetResultAC battle_event_cmd.o] LW(6)
+80386254:   callc [_chuchu_item_steal unit_party_chuchurina.o] LW(3) LW(14) LW(6)
+80386268:   if_int_eq LW(14) 0
+80386274:     callc [btlevtcmd_JumpContinue battle_event_cmd.o] -2
+80386280:     callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 1 ["PCH_F_1"]
+80386294:     wait_frames 22
+8038629C:     begin_thread
+803862A0:       callc [mono_off unit_party_chuchurina.o]
+803862A8:       stop_tid LW(13)
+803862B0:     end_thread
+803862B4:     wait_frames 20
+803862BC:     callc [btlevtcmd_OffUnitFlag battle_event_cmd.o] LW(3) 33554432
+803862CC:     callc [btlevtcmd_AudienceDeclareACResult battle_event_cmd.o] LW(12) -1
+803862DC:     callc [evt_btl_camera_set_mode battle_camera.o] 0 0
+803862EC:     callc [evt_btl_camera_set_moveSpeedLv battle_camera.o] 0 1
+803862FC:     callc [btlevtcmd_SetMoveSpeed battle_event_cmd.o] -2 3.00
+8038630C:     callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 1 ["PCH_R_2"]
+80386320:     callc [btlevtcmd_AddRotate battle_event_cmd.o] -2 0 180 0
+80386338:     callc [btlevtcmd_GetHomePos battle_event_cmd.o] -2 LW(0) LW(1) LW(2)
+80386350:     callc [btlevtcmd_DivePosition battle_event_cmd.o] -2 LW(0) LW(1) LW(2) 0 0 2 0 -1
+8038637C:     callc [btlevtcmd_SetRotate battle_event_cmd.o] -2 0 0 0
+80386394:     goto 99
+8038639C:   endif
+803863A0:   callc [btlevtcmd_GetResultPrizeLv battle_event_cmd.o] 0 0 LW(6)
+803863B4:   callc [btlevtcmd_GetHitPos battle_event_cmd.o] LW(3) LW(4) LW(0) LW(1) LW(2)
+803863D0:   callc [btlevtcmd_ACSuccessEffect battle_event_cmd.o] LW(6) LW(0) LW(1) LW(2)
+803863E8:   callc [btlevtcmd_AudienceDeclareACResult battle_event_cmd.o] LW(12) LW(6)
+803863F8:   callc [evt_snd_sfxon evt_snd.o] ["SFX_BTL_CHURINA_HEARTCATCH1"] 0
+80386408:   callc [btlevtcmd_OffUnitFlag battle_event_cmd.o] LW(3) 33554432
+80386418:   begin_thread
+8038641C:     callc [mono_off unit_party_chuchurina.o]
+80386424:     stop_tid LW(13)
+8038642C:   end_thread
+80386430:   callc [btlevtcmd_GetPos battle_event_cmd.o] -2 LW(0) LW(1) LW(2)
+80386448:   callc [btlevtcmd_FaceDirectionSub battle_event_cmd.o] -2 LW(0) 50
+8038645C:   callc [btlevtcmd_TransStageFloorPosition battle_event_cmd.o] LW(0) LW(1) LW(2)
+80386470:   callc [btlevtcmd_SetFallAccel battle_event_cmd.o] -2 0.30
+80386480:   begin_thread
+80386484:     callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 1 ["PCH_A3_1"]
+80386498:     callc [btlevtcmd_SetRotateOffset battle_event_cmd.o] -2 0 10 0
+803864B0:     loop 18
+803864B8:       callc [btlevtcmd_AddRotate battle_event_cmd.o] -2 0 0 20
+803864D0:       wait_frames 1
+803864D8:     end_loop
+803864DC:     callc [btlevtcmd_SetRotate battle_event_cmd.o] -2 0 0 0
+803864F4:     callc [btlevtcmd_SetRotateOffset battle_event_cmd.o] -2 0 0 0
+8038650C:   end_thread
+80386510:   callc [btlevtcmd_JumpPosition battle_event_cmd.o] -2 LW(0) LW(1) LW(2) 30 -1
+80386530: 90:
+80386538:   callc [evt_btl_camera_set_mode battle_camera.o] 0 0
+80386548:   callc [evt_btl_camera_set_moveSpeedLv battle_camera.o] 0 1
+80386558:   if_int_ne LW(14) 0
+80386564:     callc [btlevtcmd_GetPos battle_event_cmd.o] -2 LW(0) LW(1) LW(2)
+8038657C:     callc [btlevtcmd_GetHeight battle_event_cmd.o] -2 LW(5)
+8038658C:     addi LW(1) LW(5)
+80386598:     addi LW(1) 5
+803865A4:     callc [btlevtcmd_BtlIconEntryItemId battle_icon.o] LW(14) LW(0) LW(1) LW(2) LW(8)
+803865C0:     begin_child_thread_tid LW(15)
+803865C8:       callc [btlevtcmd_SetMoveSpeed battle_event_cmd.o] -2 3.00
+803865D8:       callc [btlevtcmd_AnimeChangePoseType battle_event_cmd.o] -2 1 42
+803865EC:       callc [btlevtcmd_AddRotate battle_event_cmd.o] -2 0 180 0
+80386604:       callc [btlevtcmd_GetHomePos battle_event_cmd.o] -2 LW(0) LW(1) LW(2)
+8038661C:       callc [btlevtcmd_DivePosition battle_event_cmd.o] -2 LW(0) LW(1) LW(2) 0 0 2 0 -1
+80386648:       callc [btlevtcmd_SetRotate battle_event_cmd.o] -2 0 0 0
+80386660:     end_child_thread
+80386664: 91:
+8038666C:     callc [btlevtcmd_GetPos battle_event_cmd.o] -2 LW(0) LW(1) LW(2)
+80386684:     callc [btlevtcmd_GetHeight battle_event_cmd.o] -2 LW(5)
+80386694:     addi LW(1) LW(5)
+803866A0:     addi LW(1) 5
+803866AC:     callc [btlevtcmd_BtlIconSetPosition battle_icon.o] LW(8) LW(0) LW(1) LW(2)
+803866C4:     check_thread_running LW(15) LW(0)
+803866D0:     if_int_ne LW(0) 0
+803866DC:       wait_frames 1
+803866E4:       goto 91
+803866EC:     endif
+803866F0:     callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 1 ["PCH_A2_2"]
+80386704:     wait_frames 4
+8038670C:     callc [btlevtcmd_AnnounceSetParam battle_message.o] 0 LW(14)
+8038671C:     callc [btlevtcmd_AnnounceMessage battle_message.o] 1 0 0 ["btl_msg_steal_item_get"] 90
+80386738:     callc [btlevtcmd_BtlIconDelete battle_icon.o] LW(8)
+80386744:   else
+80386748:     callc [btlevtcmd_SetMoveSpeed battle_event_cmd.o] -2 3.00
+80386758:     callc [btlevtcmd_AnimeChangePoseType battle_event_cmd.o] -2 1 42
+8038676C:     callc [btlevtcmd_AddRotate battle_event_cmd.o] -2 0 180 0
+80386784:     callc [btlevtcmd_GetHomePos battle_event_cmd.o] -2 LW(0) LW(1) LW(2)
+8038679C:     callc [btlevtcmd_DivePosition battle_event_cmd.o] -2 LW(0) LW(1) LW(2) 0 0 2 0 -1
+803867C8:     callc [btlevtcmd_SetRotate battle_event_cmd.o] -2 0 0 0
+803867E0:   endif
+803867E4: 99:
+803867EC:   callc [evt_audience_ap_recovery evt_audience.o]
+803867F4:   callc [btlevtcmd_InviteApInfoReport battle_event_cmd.o]
+803867FC:   callc [btlevtcmd_ResetFaceDirection battle_event_cmd.o] -2
+80386808:   callc [btlevtcmd_StartWaitEvent battle_event_cmd.o] -2
+80386814:   return
+80386818:   end

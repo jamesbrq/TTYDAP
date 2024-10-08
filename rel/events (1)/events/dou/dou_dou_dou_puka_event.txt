@@ -1,0 +1,45 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [dou_puka_event dou.o] AT 805C1764 ---
+805C1764:   setii LW(7) LW(0)
+805C1770:   setii LW(8) LW(1)
+805C177C:   setii LW(2) -10
+805C1788:   setii LW(3) 200
+805C1794:   callss [dou_puka_event_sub dou.o]
+805C179C:   setii LW(2) -8
+805C17A8:   setii LW(3) 150
+805C17B4:   callss [dou_puka_event_sub dou.o]
+805C17BC:   setii LW(2) -5
+805C17C8:   setii LW(3) 100
+805C17D4:   callss [dou_puka_event_sub dou.o]
+805C17DC:   setii LW(2) -2
+805C17E8:   setii LW(3) 50
+805C17F4:   callss [dou_puka_event_sub dou.o]
+805C17FC:   return
+805C1800:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [dou_puka_event_sub dou.o] AT 805C168C ---
+805C168C:   dbg_report ["しずむ"]
+805C1694:   callc [evt_sub_intpl_msec_init evt_sub.o] 4 0 LW(2) 300
+805C16AC:   loop 0
+805C16B4:     callc [evt_sub_intpl_msec_get_value_para evt_sub.o] LW(0) LW(1)
+805C16C4:     storef_ind LW(6) LW(0)
+805C16D0:     if_int_eq LW(1) 0
+805C16DC:       loop_break
+805C16E0:     endif
+805C16E4:     wait_frames 1
+805C16EC:   end_loop
+805C16F0:   wait_ms LW(3)
+805C16F8:   dbg_report ["うく"]
+805C1700:   callc [evt_sub_intpl_msec_init evt_sub.o] 1 LW(2) 0 300
+805C1718:   loop 0
+805C1720:     callc [evt_sub_intpl_msec_get_value_para evt_sub.o] LW(0) LW(1)
+805C1730:     storef_ind LW(6) LW(0)
+805C173C:     if_int_eq LW(1) 0
+805C1748:       loop_break
+805C174C:     endif
+805C1750:     wait_frames 1
+805C1758:   end_loop
+805C175C:   return
+805C1760:   end

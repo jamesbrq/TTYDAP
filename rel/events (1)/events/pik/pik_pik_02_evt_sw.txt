@@ -1,0 +1,31 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [evt_sw pik_02.o] AT 805C7BF0 ---
+805C7BF0:   callc [evt_mario_key_onoff evt_mario.o] 0
+805C7BFC:   callc [evt_cam3d_evt_set evt_cam.o] -65 450 -480 -165 115 -930 1000 11
+805C7C24:   wait_ms 1000
+805C7C2C:   wait_ms 1000
+805C7C34:   callc [evt_mapobj_get_position evt_map.o] ["ka_ten"] LW(0) LW(1) LW(2)
+805C7C4C:   callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_STG6_CURTAIN_UP1"] LW(0) LW(1) LW(2) LW(9)
+805C7C68:   callc [evt_sub_intpl_msec_init evt_sub.o] 11 0 150 1500
+805C7C80: 1:
+805C7C88:   callc [evt_sub_intpl_msec_get_value evt_sub.o]
+805C7C90:   callc [evt_mapobj_trans evt_map.o] 1 ["ka_ten"] 0 LW(0) 0
+805C7CAC:   callc [evt_hit_bind_update evt_hit.o] ["a_ka_ten"]
+805C7CB8:   wait_frames 1
+805C7CC0:   if_int_eq LW(1) 1
+805C7CCC:     goto 1
+805C7CD4:   endif
+805C7CD8:   callc [evt_snd_sfxoff evt_snd.o] LW(9)
+805C7CE4:   setii GSW(0) 337
+805C7CF0:   setii LW(0) 1
+805C7CFC:   callss [bero_case_switch_on evt_bero.o]
+805C7D04:   callc [evt_snd_bgmoff evt_snd.o] 1024
+805C7D10:   callc [evt_snd_bgmon evt_snd.o] 1 ["BGM_FF_ENV_SUCCESS1"]
+805C7D20:   wait_ms 1000
+805C7D28:   wait_ms 1000
+805C7D30:   callc [evt_cam3d_evt_off evt_cam.o] 500 11
+805C7D40:   callc [evt_mario_key_onoff evt_mario.o] 1
+805C7D4C:   return
+805C7D50:   end

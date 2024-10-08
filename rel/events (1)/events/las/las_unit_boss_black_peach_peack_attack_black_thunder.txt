@@ -1,0 +1,56 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [peack_attack_black_thunder unit_boss_black_peach.o] AT 8060B674 ---
+8060B674:   callc [btlevtcmd_GetEnemyBelong battle_event_cmd.o] -2 LW(0)
+8060B684:   callc [btlevtcmd_SamplingEnemy battle_event_cmd.o] -2 LW(0) [weapon_peach_black_thunder_attack unit_boss_black_peach.o]
+8060B698:   callc [btlevtcmd_ChoiceSamplingEnemy battle_event_cmd.o] [weapon_peach_black_thunder_attack unit_boss_black_peach.o] LW(3) LW(4)
+8060B6AC:   callc [btlevtcmd_CheckToken battle_event_cmd.o] -2 16 LW(0)
+8060B6C0:   if_int_ne LW(0) 0
+8060B6CC:     callss [subsetevt_confuse_flustered battle_event_subset.o]
+8060B6D4:     return
+8060B6D8:   endif
+8060B6DC:   callc [btlevtcmd_AttackDeclare battle_event_cmd.o] -2 LW(3) LW(4)
+8060B6F0:   callc [btlevtcmd_WaitGuardMove battle_event_cmd.o]
+8060B6F8:   callc [btlevtcmd_PayWeaponCost battle_event_cmd.o] -2 [weapon_peach_black_thunder_attack unit_boss_black_peach.o]
+8060B708:   callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 1 ["KRT_A_1"]
+8060B71C:   wait_ms 500
+8060B724:   wait_ms 700
+8060B72C:   callc [btlevtcmd_GetHitPos battle_event_cmd.o] LW(3) LW(4) LW(0) LW(1) LW(2)
+8060B748:   callc [queen_thunder unit_boss_black_peach.o] LW(0) LW(1) LW(2)
+8060B75C:   wait_ms 80
+8060B764:   callc [btlevtcmd_PreCheckDamage battle_event_cmd.o] -2 LW(3) LW(4) [weapon_peach_black_thunder_attack unit_boss_black_peach.o] 256 LW(5)
+8060B784:   switchi LW(5)
+8060B78C:     case_int_eq_any 4
+8060B794:       goto 90
+8060B79C:       end_multi_case
+8060B7A0:     case_int_eq 3
+8060B7A8:       callc [btlevtcmd_StartAvoid battle_event_cmd.o] LW(3) 38
+8060B7B8:       goto 90
+8060B7C0:       end_multi_case
+8060B7C4:     case_int_eq 6
+8060B7CC:       callc [btlevtcmd_StartAvoid battle_event_cmd.o] LW(3) 39
+8060B7DC:       goto 90
+8060B7E4:     case_int_eq 2
+8060B7EC:       callc [btlevtcmd_StartAvoid battle_event_cmd.o] LW(3) 40
+8060B7FC:       goto 90
+8060B804:     case_int_eq 1
+8060B80C:       goto 91
+8060B814:       end_multi_case
+8060B818:     case_default
+8060B81C:       goto 98
+8060B824:       end_multi_case
+8060B828:   end_switch
+8060B82C: 90:
+8060B834:   goto 95
+8060B83C: 91:
+8060B844:   callc [btlevtcmd_WeaponAftereffect battle_event_cmd.o] [weapon_peach_black_thunder_attack unit_boss_black_peach.o]
+8060B850:   callc [evt_btl_camera_set_mode battle_camera.o] 0 0
+8060B860:   callc [btlevtcmd_ResultACDefence battle_event_cmd.o] LW(3) [weapon_peach_black_thunder_attack unit_boss_black_peach.o]
+8060B870:   callc [btlevtcmd_CheckDamage battle_event_cmd.o] -2 LW(3) LW(4) [weapon_peach_black_thunder_attack unit_boss_black_peach.o] 256 LW(5)
+8060B890: 95:
+8060B898: 98:
+8060B8A0:   callc [evt_btl_camera_set_mode battle_camera.o] 0 0
+8060B8B0: 99:
+8060B8B8:   return
+8060B8BC:   end

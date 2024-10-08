@@ -1,0 +1,36 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [stop_2 rsh_06.o] AT 805E706C ---
+805E706C:   setii GSWF(3583) 1
+805E7078:   setff GW(0) 0.00
+805E7084:   setff GW(1) 0.00
+805E7090:   setff LW(2) -3000.00
+805E709C:   callc [evt_sub_get_mapname evt_sub.o] LW(0)
+805E70A8:   if_string_eq LW(0) ["gor_04"]
+805E70B4:     callc [evt_snd_sfxon evt_snd.o] ["SFX_STG6_TRAIN_MOVE2"] 0
+805E70C4:   endif
+805E70C8:   if_string_eq LW(0) ["hom_00"]
+805E70D4:     callc [evt_snd_sfxon evt_snd.o] ["SFX_STG6_TRAIN_MOVE2_2_2"] 0
+805E70E4:   endif
+805E70E8:   if_string_eq LW(0) ["pik_00"]
+805E70F4:     callc [evt_snd_sfxon evt_snd.o] ["SFX_STG6_TRAIN_MOVE2_3"] 0
+805E7104:   endif
+805E7108:   callc [evt_sub_intpl_msec_init evt_sub.o] 11 -3000 0 10000
+805E7120: 0:
+805E7128:   callc [evt_sub_intpl_msec_get_value evt_sub.o]
+805E7130:   mulf LW(0) 1.00
+805E713C:   callc [evt_mapobj_trans evt_map.o] 1 ["train"] LW(0) 0 0
+805E7158:   subf LW(2) LW(0)
+805E7164:   setff GW(0) LW(2)
+805E7170:   setff GW(1) LW(2)
+805E717C:   mulf GW(0) -1.00
+805E7188:   mulf GW(1) -1.00
+805E7194:   setff LW(2) LW(0)
+805E71A0:   wait_frames 1
+805E71A8:   if_int_eq LW(1) 1
+805E71B4:     goto 0
+805E71BC:   endif
+805E71C0:   setii GSWF(3583) 0
+805E71CC:   return
+805E71D0:   end

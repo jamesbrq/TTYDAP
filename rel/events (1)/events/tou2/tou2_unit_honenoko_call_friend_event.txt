@@ -1,0 +1,86 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [call_friend_event unit_honenoko.o] AT 805F5DAC ---
+805F5DAC:   callc [evt_btl_camera_set_mode battle_camera.o] 0 7
+805F5DBC:   callc [evt_btl_camera_set_homing_unit battle_camera.o] 0 -2 -1
+805F5DD0:   callc [evt_btl_camera_set_moveSpeedLv battle_camera.o] 0 2
+805F5DE0:   callc [evt_btl_camera_set_zoom battle_camera.o] 0 200
+805F5DF0:   setii LW(10) 0
+805F5DFC:   loop 6
+805F5E04:     callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 1 ["KRN_A_3"]
+805F5E18:     wait_frames 5
+805F5E20:     callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 1 ["KRN_A_4"]
+805F5E34:     wait_frames 15
+805F5E3C:     callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_ENM_HONENOKO_SEND_GROUP1"] [F1194D80] 0 [F1194D80]
+805F5E58:     switchi LW(10)
+805F5E60:       case_int_eq 0
+805F5E68:         callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 3 ["KRN_H_4"]
+805F5E7C:       case_int_eq 1
+805F5E84:         callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 3 ["KRN_H_5"]
+805F5E98:       case_int_eq 2
+805F5EA0:         callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 3 ["KRN_H_5"]
+805F5EB4:       case_int_eq 3
+805F5EBC:         callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 3 ["KRN_H_3"]
+805F5ED0:       case_int_eq 4
+805F5ED8:         callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 3 ["KRN_H_3"]
+805F5EEC:       case_default
+805F5EF0:         callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 3 ["KRN_H_2"]
+805F5F04:     end_switch
+805F5F08:     callc [btlevtcmd_OffPartsAttribute battle_event_cmd.o] -2 3 50331648
+805F5F1C:     callc [btlevtcmd_GetPartsPos battle_event_cmd.o] -2 1 LW(4) LW(5) LW(6)
+805F5F38:     callc [btlevtcmd_FaceDirectionAdd battle_event_cmd.o] -2 LW(4) 15
+805F5F4C:     addi LW(5) 14
+805F5F58:     callc [btlevtcmd_SetPartsPos battle_event_cmd.o] -2 3 LW(4) LW(5) LW(6)
+805F5F74:     begin_child_thread
+805F5F78:       callc [btlevtcmd_SetUnitWork battle_event_cmd.o] -2 0 0
+805F5F8C:       setii LW(15) 0
+805F5F98:       loop 0
+805F5FA0:         callc [btlevtcmd_GetUnitWork battle_event_cmd.o] -2 0 LW(14)
+805F5FB4:         if_int_eq LW(14) 1
+805F5FC0:           loop_break
+805F5FC4:         endif
+805F5FC8:         callc [btlevtcmd_SetPartsRotate battle_event_cmd.o] -2 3 0 0 LW(15)
+805F5FE4:         addi LW(15) 25
+805F5FF0:         wait_frames 1
+805F5FF8:       end_loop
+805F5FFC:     end_child_thread
+805F6000:     callc [btlevtcmd_JumpPartsSetting battle_event_cmd.o] -2 3 0 6.00 1.00
+805F601C:     callc [btlevtcmd_JumpPartsPosition battle_event_cmd.o] -2 3 LW(0) LW(1) LW(2) 20 0
+805F6040:     callc [btlevtcmd_GetPartsPos battle_event_cmd.o] -2 3 LW(0) LW(1) LW(2)
+805F605C:     callc [btlevtcmd_SetPartsPos battle_event_cmd.o] -2 4 LW(0) LW(1) LW(2)
+805F6078:     callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_ENM_HONENOKO_SEND_GROUP2"] [F1194D80] 0 [F1194D80]
+805F6094:     switchi LW(10)
+805F609C:       case_int_eq 0
+805F60A4:         callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 4 ["KRN_C_5"]
+805F60B8:         callc [btlevtcmd_OffPartsAttribute battle_event_cmd.o] -2 4 50331648
+805F60CC:       case_int_eq 1
+805F60D4:         callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 4 ["KRN_C_4"]
+805F60E8:       case_int_eq 2
+805F60F0:         callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 4 ["KRN_C_3"]
+805F6104:       case_int_eq 3
+805F610C:         callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 4 ["KRN_C_2"]
+805F6120:       case_int_eq 4
+805F6128:         callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 4 ["KRN_C_1"]
+805F613C:       case_default
+805F6140:         callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 4 ["KRN_Z_2"]
+805F6154:     end_switch
+805F6158:     callc [btlevtcmd_OnPartsAttribute battle_event_cmd.o] -2 3 50331648
+805F616C:     addi LW(10) 1
+805F6178:   end_loop
+805F617C:   wait_frames 15
+805F6184:   callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 4 ["KRN_D_3"]
+805F6198:   callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_ENM_HONENOKO_UNITE1"] [F1194D80] 0 [F1194D80]
+805F61B4:   wait_frames 60
+805F61BC:   callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 4 ["KRN_D_4"]
+805F61D0:   callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_ENM_HONENOKO_UNITE2"] [F1194D80] 0 [F1194D80]
+805F61EC:   wait_frames 30
+805F61F4:   callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 1 ["KRN_S_1"]
+805F6208:   callc [btlevtcmd_SpawnUnit battle_event_cmd.o] LW(3) [entry_honenoko unit_honenoko.o] 0
+805F621C:   callc [btlevtcmd_OnPartsAttribute battle_event_cmd.o] -2 4 50331648
+805F6230:   callc [btlevtcmd_SetPos battle_event_cmd.o] LW(3) LW(0) LW(1) LW(2)
+805F6248:   callc [btlevtcmd_SetHomePos battle_event_cmd.o] LW(3) LW(0) LW(1) LW(2)
+805F6260:   callc [honenoko_copy_status unit_honenoko.o] -2 LW(3)
+805F6270:   callc [evt_btl_camera_set_mode battle_camera.o] 0 0
+805F6280:   return
+805F6284:   end

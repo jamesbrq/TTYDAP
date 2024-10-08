@@ -1,0 +1,80 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [epilogue_evt_sub gor_01.o] AT 805F636C ---
+805F636C:   setii LW(0) [door_data_03_f2 gor_01.o]
+805F6378:   callsa [door_open_se evt_door.o]
+805F6380:   callc [evt_sub_intpl_msec_init evt_sub.o] 5 0 180 500
+805F6398:   loop 0
+805F63A0:     callc [evt_sub_intpl_msec_get_value evt_sub.o]
+805F63A8:     callsa [evt_door_03_00_f2 gor_01.o]
+805F63B0:     wait_frames 1
+805F63B8:     if_int_eq LW(1) 0
+805F63C4:       loop_break
+805F63C8:     endif
+805F63CC:   end_loop
+805F63D0:   setii GF(0) 1
+805F63DC:   begin_thread
+805F63E0:     callc [evt_npc_move_position evt_npc.o] ["クリスチーヌ"] -50 -110 0 60 0
+805F6400:     setii GF(0) 0
+805F640C:   end_thread
+805F6410:   wait_ms 1100
+805F6418:   setii LW(0) [door_data_03_f2 gor_01.o]
+805F6424:   callsa [door_close_se evt_door.o]
+805F642C:   callc [evt_sub_intpl_msec_init evt_sub.o] 5 180 0 500
+805F6444:   loop 0
+805F644C:     callc [evt_sub_intpl_msec_get_value evt_sub.o]
+805F6454:     callsa [evt_door_03_00_f2 gor_01.o]
+805F645C:     wait_frames 1
+805F6464:     if_int_eq LW(1) 0
+805F6470:       loop_break
+805F6474:     endif
+805F6478:   end_loop
+805F647C:   wait_until GF(0)
+805F6484:   setii LW(0) [door_data_02_f2 gor_01.o]
+805F6490:   callsa [door_open_se evt_door.o]
+805F6498:   callc [evt_sub_intpl_msec_init evt_sub.o] 5 0 180 500
+805F64B0:   loop 0
+805F64B8:     callc [evt_sub_intpl_msec_get_value evt_sub.o]
+805F64C0:     callsa [evt_door_02_00_f2 gor_01.o]
+805F64C8:     wait_frames 1
+805F64D0:     if_int_eq LW(1) 0
+805F64DC:       loop_break
+805F64E0:     endif
+805F64E4:   end_loop
+805F64E8:   callc [evt_npc_move_position evt_npc.o] ["バッジ店長"] -114 -100 0 60 0
+805F6508:   callc [evt_set_dir_to_target evt_npc.o] ["バッジ店長"] ["クリスチーヌ"]
+805F6518:   setii LW(0) [door_data_02_f2 gor_01.o]
+805F6524:   callsa [door_close_se evt_door.o]
+805F652C:   callc [evt_sub_intpl_msec_init evt_sub.o] 5 180 0 500
+805F6544:   loop 0
+805F654C:     callc [evt_sub_intpl_msec_get_value evt_sub.o]
+805F6554:     callsa [evt_door_02_00_f2 gor_01.o]
+805F655C:     wait_frames 1
+805F6564:     if_int_eq LW(1) 0
+805F6570:       loop_break
+805F6574:     endif
+805F6578:   end_loop
+805F657C:   loop 0
+805F6584:     callc [evt_npc_set_anim evt_npc.o] ["バッジ店長"] ["CHU_T_1"]
+805F6594:     wait_ms 1500
+805F659C:     callc [evt_npc_set_anim evt_npc.o] ["バッジ店長"] ["CHU_S_1"]
+805F65AC:     callc [evt_npc_set_anim evt_npc.o] ["クリスチーヌ"] ["PKR_T_1"]
+805F65BC:     setii GF(15) 0
+805F65C8:     wait_ms 1500
+805F65D0:     callc [evt_npc_set_anim evt_npc.o] ["クリスチーヌ"] ["PKR_S_1"]
+805F65E0:   end_loop
+805F65E4:   return
+805F65E8:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [evt_door_03_00_f2 gor_01.o] AT 805F102C ---
+805F102C:   mulf LW(0) 0.60
+805F1038:   callc [evt_mapobj_rotate evt_map.o] 1 ["S_ie_03_f21_doa"] 0 LW(0) 0
+805F1054:   return
+805F1058:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [evt_door_02_00_f2 gor_01.o] AT 805F0378 ---
+805F0378:   mulf LW(0) 0.60
+805F0384:   callc [evt_mapobj_rotate evt_map.o] 1 ["S_ie_02_f2_doaD"] 0 LW(0) 0
+805F03A0:   return
+805F03A4:   end

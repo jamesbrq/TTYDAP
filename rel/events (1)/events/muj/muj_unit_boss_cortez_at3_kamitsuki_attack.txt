@@ -1,0 +1,76 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [at3_kamitsuki_attack unit_boss_cortez.o] AT 805F497C ---
+805F497C:   setii LW(12) [weapon_cortez_mode3_kamitsuki_attack unit_boss_cortez.o]
+805F4988:   callc [btlevtcmd_GetEnemyBelong battle_event_cmd.o] -2 LW(0)
+805F4998:   callc [btlevtcmd_SamplingEnemy battle_event_cmd.o] -2 LW(0) LW(12)
+805F49AC:   callc [btlevtcmd_ChoiceSamplingEnemy battle_event_cmd.o] LW(12) LW(3) LW(4)
+805F49C0:   if_int_eq LW(3) -1
+805F49CC:     goto 99
+805F49D4:   endif
+805F49D8:   callc [btlevtcmd_WeaponAftereffect battle_event_cmd.o] LW(12)
+805F49E4:   callc [btlevtcmd_AttackDeclare battle_event_cmd.o] -2 LW(3) LW(4)
+805F49F8:   callc [btlevtcmd_WaitGuardMove battle_event_cmd.o]
+805F4A00:   callc [btlevtcmd_PayWeaponCost battle_event_cmd.o] -2 LW(12)
+805F4A10:   callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 1 ["KRT_W_1"]
+805F4A24:   callc [btlevtcmd_GetHitPos battle_event_cmd.o] LW(3) LW(4) LW(0) LW(1) LW(2)
+805F4A40:   callc [btlevtcmd_FaceDirectionAdd battle_event_cmd.o] LW(3) LW(0) 40
+805F4A54:   callc [btlevtcmd_GetMoveFrame battle_event_cmd.o] -2 LW(0) LW(1) LW(2) 6.00 LW(15)
+805F4A74:   callc [btlevtcmd_DivePosition battle_event_cmd.o] -2 LW(0) LW(1) LW(2) LW(15) -12 5 0 -1
+805F4AA0:   begin_child_thread
+805F4AA4:     callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_BOSS_KOR_ROUND1"] [F1194D80] 0 LW(15)
+805F4AC0:     callc [btlevtcmd_ftomsec battle_event_cmd.o] 32 LW(0)
+805F4AD0:     wait_ms LW(0)
+805F4AD8:     callc [evt_snd_sfxoff evt_snd.o] LW(15)
+805F4AE4:   end_child_thread
+805F4AE8:   begin_child_thread
+805F4AEC:     callc [btlevtcmd_ftomsec battle_event_cmd.o] 46 LW(0)
+805F4AFC:     wait_ms LW(0)
+805F4B04:     callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_BOSS_KOR_BITE1"] [F1194D80] 0 [F1194D80]
+805F4B20:   end_child_thread
+805F4B24:   callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 1 ["KRT_A3_3"]
+805F4B38:   callc [btlevtcmd_ftomsec battle_event_cmd.o] 50 LW(0)
+805F4B48:   wait_ms LW(0)
+805F4B50:   callc [btlevtcmd_PreCheckDamage battle_event_cmd.o] -2 LW(3) LW(4) LW(12) 256 LW(5)
+805F4B70:   switchi LW(5)
+805F4B78:     case_int_eq_any 4
+805F4B80:       goto 90
+805F4B88:       end_multi_case
+805F4B8C:     case_int_eq 3
+805F4B94:       callc [btlevtcmd_StartAvoid battle_event_cmd.o] LW(3) 38
+805F4BA4:       goto 90
+805F4BAC:     case_int_eq 6
+805F4BB4:       callc [btlevtcmd_StartAvoid battle_event_cmd.o] LW(3) 39
+805F4BC4:       goto 90
+805F4BCC:     case_int_eq 2
+805F4BD4:       callc [btlevtcmd_StartAvoid battle_event_cmd.o] LW(3) 40
+805F4BE4:       goto 90
+805F4BEC:     case_default
+805F4BF0:       goto 91
+805F4BF8:   end_switch
+805F4BFC: 90:
+805F4C04:   goto 97
+805F4C0C: 91:
+805F4C14:   callc [btlevtcmd_ResultACDefence battle_event_cmd.o] LW(3) LW(12)
+805F4C24:   callc [btlevtcmd_CheckDamage battle_event_cmd.o] -2 LW(3) LW(4) LW(12) 256 LW(5)
+805F4C44:   if_int_eq LW(5) 21
+805F4C50:     callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 1 ["KRT_A3_1"]
+805F4C64:     goto 98
+805F4C6C:   endif
+805F4C70: 97:
+805F4C78:   callc [btlevtcmd_AnimeWaitPlayComplete battle_event_cmd.o] -2 1
+805F4C88:   callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 1 ["KRT_Z_1"]
+805F4C9C: 98:
+805F4CA4:   callc [btlevtcmd_GetPos battle_event_cmd.o] -2 LW(0) LW(1) LW(2)
+805F4CBC:   callc [btlevtcmd_FaceDirectionSub battle_event_cmd.o] -2 LW(0) 50
+805F4CD0:   addi LW(1) 10
+805F4CDC:   callc [btlevtcmd_DivePosition battle_event_cmd.o] -2 LW(0) LW(1) LW(2) 30 -10 2 0 -1
+805F4D08:   callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 1 ["KRT_S_1"]
+805F4D1C:   callc [btlevtcmd_GetHomePos battle_event_cmd.o] -2 LW(0) LW(1) LW(2)
+805F4D34:   callc [btlevtcmd_GetMoveFrame battle_event_cmd.o] -2 LW(0) LW(1) LW(2) 6.00 LW(15)
+805F4D54:   callc [btlevtcmd_DivePosition battle_event_cmd.o] -2 LW(0) LW(1) LW(2) LW(15) 15 11 0 -1
+805F4D80: 99:
+805F4D88:   callc [btlevtcmd_StartWaitEvent battle_event_cmd.o] -2
+805F4D94:   return
+805F4D98:   end

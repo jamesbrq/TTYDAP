@@ -1,0 +1,407 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [attack_event unit_flower_chorobon.o] AT 80603EF8 ---
+80603EF8:   callc [btlevtcmd_EnemyItemUseCheck battle_event_cmd.o] -2 LW(0)
+80603F08:   if_int_ne LW(0) 0
+80603F14:     callss LW(0)
+80603F1C:     callc [btlevtcmd_StartWaitEvent battle_event_cmd.o] -2
+80603F28:     return
+80603F2C:   endif
+80603F30:   callc [btlevtcmd_GetFp battle_event_cmd.o] -2 LW(0)
+80603F40:   callc [btlevtcmd_GetMaxFp battle_event_cmd.o] -2 LW(1)
+80603F50:   if_int_lt LW(0) 2
+80603F5C:     goto 10
+80603F64:   endif
+80603F68:   if_int_ge LW(0) LW(1)
+80603F74:     goto 20
+80603F7C:   endif
+80603F80:   setii LW(0) 50
+80603F8C:   addi LW(0) 10
+80603F98:   subi LW(0) 1
+80603FA4:   callc [evt_sub_random evt_sub.o] LW(0) LW(1)
+80603FB4:   if_int_lt LW(1) 50
+80603FC0: 10:
+80603FC8:     callss [drain_attack_event unit_flower_chorobon.o]
+80603FD0:     goto 99
+80603FD8:   endif
+80603FDC: 20:
+80603FE4:   callss [magic_attack_event unit_flower_chorobon.o]
+80603FEC:   goto 99
+80603FF4: 99:
+80603FFC:   return
+80604000:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [drain_attack_event unit_flower_chorobon.o] AT 806049FC ---
+806049FC:   callc [btlevtcmd_GetEnemyBelong battle_event_cmd.o] -2 LW(0)
+80604A0C:   callc [btlevtcmd_SamplingEnemy battle_event_cmd.o] -2 LW(0) [weapon_chorobon_drain_attack unit_flower_chorobon.o]
+80604A20:   callc [btlevtcmd_ChoiceSamplingEnemy battle_event_cmd.o] [weapon_chorobon_drain_attack unit_flower_chorobon.o] LW(3) LW(4)
+80604A34:   if_int_eq LW(3) -1
+80604A40:     callc [btlevtcmd_CheckToken battle_event_cmd.o] -2 16 LW(0)
+80604A54:     if_int_ne LW(0) 0
+80604A60:       callss [subsetevt_confuse_flustered battle_event_subset.o]
+80604A68:       return
+80604A6C:     endif
+80604A70:     goto 99
+80604A78:   endif
+80604A7C:   callc [btlevtcmd_WeaponAftereffect battle_event_cmd.o] [weapon_chorobon_drain_attack unit_flower_chorobon.o]
+80604A88:   callc [btlevtcmd_AttackDeclare battle_event_cmd.o] -2 LW(3) LW(4)
+80604A9C:   callc [btlevtcmd_WaitGuardMove battle_event_cmd.o]
+80604AA4:   callc [btlevtcmd_PayWeaponCost battle_event_cmd.o] -2 [weapon_chorobon_drain_attack unit_flower_chorobon.o]
+80604AB4:   callc [btlevtcmd_CalculateFaceDirection battle_event_cmd.o] -2 -1 LW(3) LW(4) 16 LW(15)
+80604AD4:   callc [btlevtcmd_ChangeFaceDirection battle_event_cmd.o] -2 LW(15)
+80604AE4:   callc [evt_btl_camera_set_mode battle_camera.o] 0 8
+80604AF4:   callc [evt_btl_camera_set_homing_unit battle_camera.o] 0 -2 LW(3)
+80604B08:   callc [evt_btl_camera_set_moveSpeedLv battle_camera.o] 0 1
+80604B18:   callc [evt_btl_camera_set_zoom battle_camera.o] 0 250
+80604B28:   callc [btlevtcmd_AnimeChangePoseType battle_event_cmd.o] -2 1 40
+80604B3C:   callc [btlevtcmd_JumpSetting battle_event_cmd.o] -2 0 4.00 0.60
+80604B54:   callc [btlevtcmd_GetHitPos battle_event_cmd.o] LW(3) LW(4) LW(5) LW(6) LW(7)
+80604B70:   setii LW(6) 0
+80604B7C:   callc [btlevtcmd_FaceDirectionAdd battle_event_cmd.o] LW(3) LW(5) 50
+80604B90:   setii LW(8) 50
+80604B9C:   callss [rabbit_move unit_flower_chorobon.o]
+80604BA4:   callc [evt_btl_camera_set_moveSpeedLv battle_camera.o] 0 2
+80604BB4:   callc [evt_btl_camera_set_zoom battle_camera.o] 0 350
+80604BC4:   callc [evt_btl_camera_nomove_y_onoff battle_camera.o] 0 1
+80604BD4:   callc [btlevtcmd_AnimeChangePoseType battle_event_cmd.o] -2 1 40
+80604BE8:   callc [btlevtcmd_JumpSetting battle_event_cmd.o] -2 60 0 0.70
+80604C00:   callc [btlevtcmd_GetHitPos battle_event_cmd.o] LW(3) LW(4) LW(0) LW(1) LW(2)
+80604C1C:   callc [btlevtcmd_FaceDirectionAdd battle_event_cmd.o] -2 LW(0) 5
+80604C30:   subi LW(1) 10
+80604C3C:   subi LW(2) 2
+80604C48:   callc [btlevtcmd_JumpPosition battle_event_cmd.o] -2 LW(0) LW(1) LW(2) 20 -1
+80604C68:   callc [btlevtcmd_PreCheckDamage battle_event_cmd.o] -2 LW(3) LW(4) [weapon_chorobon_drain_attack unit_flower_chorobon.o] 256 LW(5)
+80604C88:   switchi LW(5)
+80604C90:     case_int_eq_any 4
+80604C98:       goto 90
+80604CA0:       end_multi_case
+80604CA4:     case_int_eq 3
+80604CAC:       callc [btlevtcmd_StartAvoid battle_event_cmd.o] LW(3) 38
+80604CBC:       goto 90
+80604CC4:       end_multi_case
+80604CC8:     case_int_eq 6
+80604CD0:       callc [btlevtcmd_StartAvoid battle_event_cmd.o] LW(3) 39
+80604CE0:       goto 90
+80604CE8:     case_int_eq 2
+80604CF0:       callc [btlevtcmd_StartAvoid battle_event_cmd.o] LW(3) 40
+80604D00:       goto 90
+80604D08:     case_int_eq 1
+80604D10:       goto 91
+80604D18:       end_multi_case
+80604D1C:     case_default
+80604D20:       goto 98
+80604D28:       end_multi_case
+80604D2C:   end_switch
+80604D30: 90:
+80604D38:   callc [btlevtcmd_JumpSetting battle_event_cmd.o] -2 0 3.00 0.20
+80604D50:   callc [btlevtcmd_GetPos battle_event_cmd.o] LW(3) LW(0) LW(1) LW(2)
+80604D68:   callc [btlevtcmd_FaceDirectionSub battle_event_cmd.o] LW(3) LW(0) 5
+80604D7C:   setii LW(1) 0
+80604D88:   callc [btlevtcmd_JumpPosition battle_event_cmd.o] -2 LW(0) LW(1) LW(2) 0 -1
+80604DA8:   callc [btlevtcmd_JumpSetting battle_event_cmd.o] -2 0 1.50 0.20
+80604DC0:   callc [btlevtcmd_GetPos battle_event_cmd.o] LW(3) LW(0) LW(1) LW(2)
+80604DD8:   callc [btlevtcmd_FaceDirectionSub battle_event_cmd.o] LW(3) LW(0) 30
+80604DEC:   setii LW(1) 0
+80604DF8:   callc [btlevtcmd_JumpPosition battle_event_cmd.o] -2 LW(0) LW(1) LW(2) 0 -1
+80604E18:   callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_ENM_CHORO2_LANDING1"] [F1194D80] 0 [F1194D80]
+80604E34:   callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 1 ["CBN_N_1"]
+80604E48:   wait_ms 1000
+80604E50:   goto 98
+80604E58: 91:
+80604E60:   setii LF(0) 0
+80604E6C:   callc [btlevtcmd_PreCheckCounter battle_event_cmd.o] -2 LW(3) LW(4) [weapon_chorobon_drain_attack unit_flower_chorobon.o] 256 LW(5)
+80604E8C:   if_int_eq LW(5) 17
+80604E98:     setii LF(0) 1
+80604EA4:   endif
+80604EA8:   if_int_eq LW(5) 14
+80604EB4:     setii LF(0) 1
+80604EC0:   endif
+80604EC4:   if_int_eq LF(0) 1
+80604ED0:     callc [btlevtcmd_SetRotate battle_event_cmd.o] -2 0 0 0
+80604EE8:     callc [btlevtcmd_ResultACDefence battle_event_cmd.o] LW(3) [weapon_chorobon_drain_attack unit_flower_chorobon.o]
+80604EF8:     setii LW(9) [weapon_chorobon_drain_attack_biribiri_counterd unit_flower_chorobon.o]
+80604F04:     callc [btlevtcmd_CheckDamage battle_event_cmd.o] -2 LW(3) LW(4) LW(9) 256 LW(5)
+80604F24:     return
+80604F28:   endif
+80604F2C:   callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_ENM_CHORO2_ATTACK1_1"] [F1194D80] 0 [F1194D80]
+80604F48:   callc [btlevtcmd_GetBodyId battle_event_cmd.o] LW(3) LW(0)
+80604F58:   callc [btlevtcmd_AnimeChangePoseType battle_event_cmd.o] LW(3) LW(0) 37
+80604F6C:   begin_thread
+80604F70:     setii LW(0) 89
+80604F7C:     setii LW(1) 1
+80604F88:     setii LW(2) 2
+80604F94:     setii LW(5) LW(2)
+80604FA0: 20:
+80604FA8:     subi LW(5) 1
+80604FB4:     if_int_le LW(5) 0
+80604FC0:       setii LW(5) LW(2)
+80604FCC:       if_int_eq LW(1) 0
+80604FD8:         setii LW(1) 1
+80604FE4:       else
+80604FE8:         setii LW(1) 0
+80604FF4:       endif
+80604FF8:     endif
+80604FFC:     callc [btlevtcmd_SetDispOffset battle_event_cmd.o] LW(3) LW(1) 0 0
+80605014:     wait_frames 1
+8060501C:     subi LW(0) 1
+80605028:     if_int_ge LW(0) 1
+80605034:       goto 20
+8060503C:     endif
+80605040:     callc [btlevtcmd_SetDispOffset battle_event_cmd.o] LW(3) 0 0 0
+80605058:   end_thread
+8060505C:   callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_ENM_CHORO2_ATTACK1_2"] [F1194D80] 0 [F1194D80]
+80605078:   callc [btlevtcmd_GetFaceDirection battle_event_cmd.o] -2 LW(15)
+80605088:   setii LW(14) 20
+80605094:   if_int_eq LW(15) -1
+806050A0:     setii LW(14) -20
+806050AC:   endif
+806050B0:   callc [btlevtcmd_SetRotate battle_event_cmd.o] -2 0 0 LW(14)
+806050C8:   callc [btlevtcmd_AnimeSetMotionSpeed battle_event_cmd.o] -2 1 1.50
+806050DC:   callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 1 [dat_muj_00013cc8 unit_flower_chorobon.o]
+806050F0:   wait_frames 90
+806050F8:   callc [btlevtcmd_AnimeSetMotionSpeed battle_event_cmd.o] -2 1 1.00
+8060510C:   callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 1 ["CBN_R_2"]
+80605120:   callc [btlevtcmd_SetScale battle_event_cmd.o] -2 1.00 1.00 1.00
+80605138:   loop 4
+80605140:     wait_frames 1
+80605148:     callc [btlevtcmd_AddScale battle_event_cmd.o] -2 0 -0.20 0
+80605160:   end_loop
+80605164:   callc [btlevtcmd_SetScale battle_event_cmd.o] -2 1.00 0.20 1.00
+8060517C:   loop 20
+80605184:     wait_frames 1
+8060518C:     callc [btlevtcmd_AddScale battle_event_cmd.o] -2 -0.01 0.05 0
+806051A4:   end_loop
+806051A8:   wait_frames 1
+806051B0:   callc [btlevtcmd_SetScale battle_event_cmd.o] -2 1.00 1.00 1.00
+806051C8:   callc [evt_btl_camera_shake_h battle_camera.o] 0 1 1 8 0
+806051E4:   callc [evt_btl_camera_set_moveSpeedLv battle_camera.o] 0 2
+806051F4:   callc [evt_btl_camera_add_zoom battle_camera.o] 0 -50
+80605204:   callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_ENM_CHORO2_ATTACK2"] [F1194D80] 0 [F1194D80]
+80605220:   callc [btlevtcmd_SetRotate battle_event_cmd.o] -2 0 0 0
+80605238:   callc [btlevtcmd_ResultACDefence battle_event_cmd.o] LW(3) [weapon_chorobon_drain_attack unit_flower_chorobon.o]
+80605248:   callc [btlevtcmd_GetFp battle_event_cmd.o] LW(3) LW(0)
+80605258:   if_int_gt LW(0) 0
+80605264:     setii LW(9) [weapon_chorobon_drain_attack_fp unit_flower_chorobon.o]
+80605270:     callc [btlevtcmd_CheckDamage battle_event_cmd.o] -2 LW(3) LW(4) LW(9) 256 LW(5)
+80605290:     callc [btlevtcmd_GetFpDamage battle_event_cmd.o] LW(3) LW(10)
+806052A0:   else
+806052A4:     setii LW(9) [weapon_chorobon_drain_attack unit_flower_chorobon.o]
+806052B0:     callc [btlevtcmd_CheckDamage battle_event_cmd.o] -2 LW(3) LW(4) LW(9) 256 LW(5)
+806052D0:     callc [btlevtcmd_GetHpDamage battle_event_cmd.o] LW(3) LW(10)
+806052E0:   endif
+806052E4:   callc [btlevtcmd_AnimeChangePoseType battle_event_cmd.o] -2 1 40
+806052F8:   if_int_ge LW(10) 1
+80605304:     callc [btlevtcmd_AddScale battle_event_cmd.o] -2 0.50 0.50 0
+8060531C:   endif
+80605320:   loop 4
+80605328:     callc [btlevtcmd_AddScale battle_event_cmd.o] -2 -0.08 0.12 0
+80605340:     wait_frames 1
+80605348:   end_loop
+8060534C:   callc [btlevtcmd_GetPos battle_event_cmd.o] -2 LW(0) LW(1) LW(2)
+80605364:   callc [btlevtcmd_FaceDirectionSub battle_event_cmd.o] -2 LW(0) 40
+80605378:   callc [btlevtcmd_SetFallAccel battle_event_cmd.o] -2 0.70
+80605388:   callc [btlevtcmd_AddScale battle_event_cmd.o] -2 0.32 -0.48 0
+806053A0:   callc [btlevtcmd_JumpPosition battle_event_cmd.o] -2 LW(0) 0 LW(2) 20 -1
+806053C0:   loop 2
+806053C8:     callc [btlevtcmd_AddScale battle_event_cmd.o] -2 0.16 -0.24 0
+806053E0:     wait_frames 1
+806053E8:   end_loop
+806053EC:   callc [btlevtcmd_FaceDirectionSub battle_event_cmd.o] -2 LW(0) 20
+80605400:   callc [btlevtcmd_AddScale battle_event_cmd.o] -2 -0.32 0.48 0
+80605418:   callc [btlevtcmd_JumpPosition battle_event_cmd.o] -2 LW(0) 0 LW(2) 10 -1
+80605438:   callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_ENM_CHORO2_LANDING1"] [F1194D80] 0 [F1194D80]
+80605454:   loop 2
+8060545C:     callc [btlevtcmd_AddScale battle_event_cmd.o] -2 0.16 -0.24 0
+80605474:     wait_frames 1
+8060547C:   end_loop
+80605480:   loop 2
+80605488:     callc [btlevtcmd_AddScale battle_event_cmd.o] -2 -0.16 0.24 0
+806054A0:     wait_frames 1
+806054A8:   end_loop
+806054AC:   callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 1 ["CBN_W_1"]
+806054C0:   if_int_ge LW(10) 1
+806054CC:     loop 20
+806054D4:       callc [btlevtcmd_AddScale battle_event_cmd.o] -2 -0.02 -0.02 0
+806054EC:       wait_frames 1
+806054F4:     end_loop
+806054F8:     callc [btlevtcmd_GetBodyId battle_event_cmd.o] -2 LW(1)
+80605508:     callc [btlevtcmd_GetPos battle_event_cmd.o] -2 LW(5) LW(6) LW(7)
+80605520:     addi LW(6) 45
+8060552C:     addi LW(7) 10
+80605538:     if_int_eq LW(9) [weapon_chorobon_drain_attack unit_flower_chorobon.o]
+80605544:       callc [btlevtcmd_RecoverHp battle_event_cmd.o] -2 LW(1) LW(10)
+80605558:       callc [evt_eff evt_eff.o] [zero_muj_00013bb0 unit_flower_chorobon.o] ["recovery"] 7 LW(5) LW(6) LW(7) LW(10) 0 0 0 0 0 0 0
+80605598:     else
+8060559C:       callc [btlevtcmd_RecoverFp battle_event_cmd.o] -2 LW(1) LW(10)
+806055B0:       callc [evt_eff evt_eff.o] [zero_muj_00013bb0 unit_flower_chorobon.o] ["recovery"] 8 LW(5) LW(6) LW(7) LW(10) 0 0 0 0 0 0 0
+806055F0:     endif
+806055F4:     callc [btlevtcmd_SetScale battle_event_cmd.o] -2 1.00 1.00 1.00
+8060560C:   endif
+80605610:   loop 2
+80605618:     callc [btlevtcmd_GetPos battle_event_cmd.o] -2 LW(0) LW(1) LW(2)
+80605630:     addi LW(1) 30
+8060563C:     callc [btlevtcmd_SetMoveSoundDataWork battle_event_cmd.o] -2 ["SFX_ENM_CHORO2_ATTACK3"] 0 0 -1 -1 0 0
+80605664:     loop 2
+8060566C:       callc [btlevtcmd_AddScale battle_event_cmd.o] -2 0.16 -0.24 0
+80605684:       wait_frames 1
+8060568C:     end_loop
+80605690:     callc [btlevtcmd_SetScale battle_event_cmd.o] -2 1.00 1.00 1.00
+806056A8:     callc [btlevtcmd_JumpPosition battle_event_cmd.o] -2 LW(0) LW(1) LW(2) 6 -2
+806056C8:     wait_frames 16
+806056D0:     loop 2
+806056D8:       callc [btlevtcmd_AddScale battle_event_cmd.o] -2 0.16 -0.24 0
+806056F0:       wait_frames 1
+806056F8:     end_loop
+806056FC:     callc [btlevtcmd_SetScale battle_event_cmd.o] -2 1.00 1.00 1.00
+80605714:     callc [btlevtcmd_SetMoveSoundDataWork battle_event_cmd.o] -2 0 0 0 -1 -1 0 0
+8060573C:     callc [btlevtcmd_JumpPosition battle_event_cmd.o] -2 LW(0) 0 LW(2) 6 -2
+8060575C:   end_loop
+80605760:   loop 2
+80605768:     callc [btlevtcmd_AddScale battle_event_cmd.o] -2 0.16 -0.24 0
+80605780:     wait_frames 1
+80605788:   end_loop
+8060578C:   loop 2
+80605794:     callc [btlevtcmd_AddScale battle_event_cmd.o] -2 -0.16 0.24 0
+806057AC:     wait_frames 1
+806057B4:   end_loop
+806057B8:   goto 98
+806057C0: 98:
+806057C8:   callc [evt_btl_camera_set_mode battle_camera.o] 0 0
+806057D8:   callc [evt_btl_camera_set_moveSpeedLv battle_camera.o] 0 2
+806057E8:   callc [evt_btl_camera_nomove_y_onoff battle_camera.o] 0 0
+806057F8:   callss [return_event unit_flower_chorobon.o]
+80605800:   callc [evt_btl_camera_set_moveSpeedLv battle_camera.o] 0 1
+80605810: 99:
+80605818:   callc [btlevtcmd_ResetFaceDirection battle_event_cmd.o] -2
+80605824:   callc [btlevtcmd_StartWaitEvent battle_event_cmd.o] -2
+80605830:   return
+80605834:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [magic_attack_event unit_flower_chorobon.o] AT 80604004 ---
+80604004:   callc [btlevtcmd_GetEnemyBelong battle_event_cmd.o] -2 LW(0)
+80604014:   callc [btlevtcmd_SamplingEnemy battle_event_cmd.o] -2 LW(0) [weapon_chorobon_magic_attack unit_flower_chorobon.o]
+80604028:   callc [btlevtcmd_ChoiceSamplingEnemy battle_event_cmd.o] [weapon_chorobon_magic_attack unit_flower_chorobon.o] LW(3) LW(4)
+8060403C:   if_int_eq LW(3) -1
+80604048:     callc [btlevtcmd_CheckToken battle_event_cmd.o] -2 16 LW(0)
+8060405C:     if_int_ne LW(0) 0
+80604068:       callss [subsetevt_confuse_flustered battle_event_subset.o]
+80604070:       return
+80604074:     endif
+80604078:     goto 99
+80604080:   endif
+80604084:   callc [btlevtcmd_WeaponAftereffect battle_event_cmd.o] [weapon_chorobon_magic_attack unit_flower_chorobon.o]
+80604090:   callc [btlevtcmd_AttackDeclareAll battle_event_cmd.o] -2
+8060409C:   callc [btlevtcmd_WaitGuardMove battle_event_cmd.o]
+806040A4:   callc [btlevtcmd_PayWeaponCost battle_event_cmd.o] -2 [weapon_chorobon_magic_attack unit_flower_chorobon.o]
+806040B4:   setii LW(0) 2
+806040C0:   muli LW(0) -1
+806040CC:   callc [btlevtcmd_RecoverFp battle_event_cmd.o] -2 1 LW(0)
+806040E0:   callc [btlevtcmd_GetPos battle_event_cmd.o] -2 LW(0) LW(1) LW(2)
+806040F8:   callc [btlevtcmd_JumpSetting battle_event_cmd.o] -2 0 0 0.10
+80604110:   callc [btlevtcmd_JumpPosition battle_event_cmd.o] -2 LW(0) LW(1) LW(2) 50.00 -1
+80604130:   callc [btlevtcmd_GetPos battle_event_cmd.o] -2 LW(0) LW(1) LW(2)
+80604148:   callc [evt_eff64 evt_eff.o] [zero_muj_00013bb0 unit_flower_chorobon.o] ["shock_n64"] 1 LW(0) LW(1) LW(2) 20 20 0 0 0 0 0 0
+80604188:   callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_ENM_CHORO2_MAGIC1"] [F1194D80] 0 [F1194D80]
+806041A4:   wait_frames 10
+806041AC:   callc [evt_eff64 evt_eff.o] [zero_muj_00013bb0 unit_flower_chorobon.o] ["shock_n64"] 1 LW(0) LW(1) LW(2) 20 20 0 0 0 0 0 0
+806041EC:   callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_ENM_CHORO2_MAGIC1"] [F1194D80] 0 [F1194D80]
+80604208:   wait_frames 10
+80604210:   callc [evt_eff64 evt_eff.o] [zero_muj_00013bb0 unit_flower_chorobon.o] ["shock_n64"] 1 LW(0) LW(1) LW(2) 20 20 0 0 0 0 0 0
+80604250:   callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_ENM_CHORO2_MAGIC1"] [F1194D80] 0 [F1194D80]
+8060426C:   wait_frames 20
+80604274:   callc [evt_btl_camera_shake_h battle_camera.o] 0 3 0 30 0
+80604290:   callc [btlevtcmd_GetSelectEnemy battle_event_cmd.o] LW(3) LW(4)
+806042A0:   setii LW(10) 0
+806042AC: 0:
+806042B4:   callc [btlevtcmd_PreCheckDamage battle_event_cmd.o] -2 LW(3) LW(4) [weapon_chorobon_magic_attack unit_flower_chorobon.o] 256 LW(5)
+806042D4:   switchi LW(5)
+806042DC:     case_int_eq_any 4
+806042E4:       goto 90
+806042EC:       end_multi_case
+806042F0:     case_int_eq 3
+806042F8:       callc [btlevtcmd_StartAvoid battle_event_cmd.o] LW(3) 38
+80604308:       goto 90
+80604310:       end_multi_case
+80604314:     case_int_eq 6
+8060431C:       callc [btlevtcmd_StartAvoid battle_event_cmd.o] LW(3) 39
+8060432C:       goto 90
+80604334:     case_int_eq 2
+8060433C:       callc [btlevtcmd_StartAvoid battle_event_cmd.o] LW(3) 40
+8060434C:       goto 90
+80604354:     case_int_eq 1
+8060435C:       goto 91
+80604364:       end_multi_case
+80604368:     case_default
+8060436C:       goto 98
+80604374:       end_multi_case
+80604378:   end_switch
+8060437C: 90:
+80604384:   goto 97
+8060438C: 91:
+80604394:   if_int_eq LW(10) 0
+806043A0:     callc [btlevtcmd_ResultACDefence battle_event_cmd.o] LW(3) [weapon_chorobon_magic_attack unit_flower_chorobon.o]
+806043B0:   endif
+806043B4:   callc [btlevtcmd_CheckDamage battle_event_cmd.o] -2 LW(3) LW(4) [weapon_chorobon_magic_attack unit_flower_chorobon.o] 256 LW(5)
+806043D4:   goto 97
+806043DC: 97:
+806043E4:   callc [btlevtcmd_GetSelectNextEnemy battle_event_cmd.o] LW(3) LW(4)
+806043F4:   if_int_ne LW(3) -1
+80604400:     addi LW(10) 1
+8060440C:     goto 0
+80604414:   endif
+80604418: 99:
+80604420:   callc [evt_btl_camera_set_mode battle_camera.o] 0 0
+80604430:   return
+80604434:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [rabbit_move unit_flower_chorobon.o] AT 806045F8 ---
+806045F8:   loop 2
+80604600:     callc [btlevtcmd_AddScale battle_event_cmd.o] -2 0.16 -0.24 0
+80604618:     wait_frames 1
+80604620:   end_loop
+80604624: 0:
+8060462C:   callc [btlevtcmd_GetPos battle_event_cmd.o] -2 LW(0) LW(1) LW(2)
+80604644:   setii LW(11) LW(5)
+80604650:   subi LW(11) LW(0)
+8060465C:   setii LW(12) LW(11)
+80604668:   if_int_lt LW(12) 0
+80604674:     muli LW(12) -1
+80604680:   endif
+80604684:   if_int_gt LW(12) LW(8)
+80604690:     if_int_ge LW(11) 0
+8060469C:       addi LW(0) LW(8)
+806046A8:     else
+806046AC:       subi LW(0) LW(8)
+806046B8:     endif
+806046BC:     callc [btlevtcmd_SetScale battle_event_cmd.o] -2 1.00 1.00 1.00
+806046D4:     callc [btlevtcmd_JumpPosition battle_event_cmd.o] -2 LW(0) LW(6) LW(2) 0 -1
+806046F4:     loop 2
+806046FC:       callc [btlevtcmd_AddScale battle_event_cmd.o] -2 0.16 -0.24 0
+80604714:       wait_frames 1
+8060471C:     end_loop
+80604720:     goto 0
+80604728:   else
+8060472C:     callc [btlevtcmd_SetScale battle_event_cmd.o] -2 1.00 1.00 1.00
+80604744:     callc [btlevtcmd_JumpPosition battle_event_cmd.o] -2 LW(5) LW(6) LW(7) 0 -1
+80604764:     callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_ENM_CHORO2_LANDING1"] [F1194D80] 0 [F1194D80]
+80604780:     loop 2
+80604788:       callc [btlevtcmd_AddScale battle_event_cmd.o] -2 0.16 -0.24 0
+806047A0:       wait_frames 1
+806047A8:     end_loop
+806047AC:   endif
+806047B0:   loop 2
+806047B8:     callc [btlevtcmd_AddScale battle_event_cmd.o] -2 -0.16 0.24 0
+806047D0:     wait_frames 1
+806047D8:   end_loop
+806047DC:   return
+806047E0:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [return_event unit_flower_chorobon.o] AT 8060499C ---
+8060499C:   callc [btlevtcmd_AnimeChangePoseType battle_event_cmd.o] -2 1 42
+806049B0:   callc [btlevtcmd_JumpSetting battle_event_cmd.o] -2 0 4.00 0.60
+806049C8:   callc [btlevtcmd_GetHomePos battle_event_cmd.o] -2 LW(5) LW(6) LW(7)
+806049E0:   setii LW(8) 40
+806049EC:   callss [rabbit_move unit_flower_chorobon.o]
+806049F4:   return
+806049F8:   end

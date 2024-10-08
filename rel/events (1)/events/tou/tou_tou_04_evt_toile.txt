@@ -1,0 +1,33 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [evt_toile tou_04.o] AT 805E6780 ---
+805E6780:   callc [evt_mario_key_onoff evt_mario.o] 0
+805E678C:   callc [evt_cam3d_evt_set evt_cam.o] 450 133 -1033 450 37 -492 0 11
+805E67B4:   wait_frames 1
+805E67BC:   callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_STG3_DRAINING1"] 450 0 -500 LW(3)
+805E67D8:   begin_thread_tid LW(4)
+805E67E0:     callc [evt_sub_intpl_msec_init evt_sub.o] 0 450 450 5000
+805E67F8:     loop 0
+805E6800:       callc [evt_sub_intpl_msec_get_value evt_sub.o]
+805E6808:       callc [evt_snd_sfx_pos evt_snd.o] LW(3) LW(0) 0 -500
+805E6820:       wait_frames 1
+805E6828:       if_int_eq LW(1) 0
+805E6834:         loop_break
+805E6838:       endif
+805E683C:     end_loop
+805E6840:   end_thread
+805E6844:   callc [evt_seq_wait evt_seq.o] 2
+805E6850:   callc [evt_cam3d_evt_set evt_cam.o] -450 133 -1033 -450 37 -492 5000 0
+805E6878:   begin_thread
+805E687C:     wait_ms 333
+805E6884:     callc [evt_eff_fukidashi evt_eff.o] 1 ["a"] ["ガードマン６"] 1 0 0 0 0 0 0 0
+805E68B8:     wait_ms 4000
+805E68C0:     callc [evt_eff_fukidashi evt_eff.o] 1 ["b"] ["ガードマン４"] 1 0 0 0 0 0 0 0
+805E68F4:   end_thread
+805E68F8:   wait_ms 5000
+805E6900:   stop_tid LW(4)
+805E6908:   callc [evt_snd_sfxoff evt_snd.o] LW(3)
+805E6914:   callc [evt_bero_mapchange evt_bero.o] ["tou_08"] ["dokan"]
+805E6924:   return
+805E6928:   end

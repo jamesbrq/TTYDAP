@@ -1,0 +1,55 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [light_rod_anim_rtn unit_boss_batten_leader.o] AT 80618C68 ---
+80618C68:   mo_set_base_int LW(9)
+80618C70:   loop 0
+80618C78:     mo_read_int LW(1)
+80618C80:     if_int_eq LW(1) 0
+80618C8C:       mo_set_base_int LW(9)
+80618C94:       mo_read_int LW(1)
+80618C9C:     endif
+80618CA0:     callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 7 LW(1)
+80618CB4:     mo_read_int LW(1)
+80618CBC:     if_int_gt LW(1) 0
+80618CC8:       wait_ms LW(1)
+80618CD0:     else
+80618CD4:       switchi LW(1)
+80618CDC:         case_int_eq 0
+80618CE4:           wait_frames 1
+80618CEC:           callc [btlevtcmd_AnimeWaitPlayComplete battle_event_cmd.o] -2 7
+80618CFC:         case_int_eq -1
+80618D04:           loop_break
+80618D08:         case_int_eq -2
+80618D10:           loop 0
+80618D18:             callc [evt_sub_random evt_sub.o] 3000 LW(0)
+80618D28:             addi LW(0) 3000
+80618D34:             wait_ms LW(0)
+80618D3C:             callc [evt_sub_random evt_sub.o] 100 LW(0)
+80618D4C:             divi LW(0) 30
+80618D58:             if_int_gt LW(0) 0
+80618D64:               loop_break
+80618D68:             endif
+80618D6C:           end_loop
+80618D70:           mo_read_int4 LW(1) LW(2) LW(3) LW(4)
+80618D84:           loop LW(0)
+80618D8C:             callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 7 LW(1)
+80618DA0:             wait_ms LW(2)
+80618DA8:             callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 7 LW(3)
+80618DBC:             wait_ms LW(4)
+80618DC4:           end_loop
+80618DC8:         case_int_eq -3
+80618DD0:           callc [evt_sub_random evt_sub.o] 3000 LW(0)
+80618DE0:           callc [evt_sub_random evt_sub.o] 1000 LW(2)
+80618DF0:           addi LW(0) LW(2)
+80618DFC:           addi LW(0) 700
+80618E08:           wait_ms LW(0)
+80618E10:         case_int_eq -4
+80618E18:           callc [evt_sub_random evt_sub.o] 300 LW(0)
+80618E28:           addi LW(0) 100
+80618E34:           wait_ms LW(0)
+80618E3C:       end_switch
+80618E40:     endif
+80618E44:   end_loop
+80618E48:   return
+80618E4C:   end

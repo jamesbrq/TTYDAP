@@ -1,0 +1,465 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [uranaisi_table_talk tik_00.o] AT 805C9A18 ---
+805C9A18:   callc [setmertn tik_00.o] ["うらない師"]
+805C9A24:   callc [evt_mario_key_onoff evt_mario.o] 0
+805C9A30:   callc [evt_party_stop evt_party.o] 0
+805C9A3C:   callc [evt_set_dir_to_target evt_npc.o] ["me"] ["mario"]
+805C9A4C:   callc [evt_npc_set_ry evt_npc.o] ["me"] 180
+805C9A5C:   loop 0
+805C9A64:     if_int_eq GSWF(6) 0
+805C9A70:       if_int_eq GSWF(5) 0
+805C9A7C:         callc [evt_msg_print evt_msg.o] 0 ["uranaisi_00"] 0 ["me"]
+805C9A94:         setii GSWF(5) 1
+805C9AA0:         setii GSWF(237) 1
+805C9AAC:       else
+805C9AB0:         if_int_eq GSWF(237) 0
+805C9ABC:           callc [evt_msg_print evt_msg.o] 0 ["uranaisi_01"] 0 ["me"]
+805C9AD4:           setii GSWF(237) 1
+805C9AE0:         else
+805C9AE4:           callc [evt_msg_print evt_msg.o] 0 ["uranaisi_19"] 0 ["me"]
+805C9AFC:         endif
+805C9B00:       endif
+805C9B04:       callc [evt_msg_select evt_msg.o] 0 ["uranaisi_03"]
+805C9B14:       if_int_eq LW(0) 1
+805C9B20:         callc [evt_msg_print_add evt_msg.o] 0 ["uranaisi_06"]
+805C9B30:         goto 0
+805C9B38:       endif
+805C9B3C:       wait_ms 200
+805C9B44:     else
+805C9B48:       callc [evt_msg_print evt_msg.o] 0 ["uranaisi_02"] 0 ["me"]
+805C9B60:     endif
+805C9B64:     setii GSWF(6) 1
+805C9B70:     callc [evt_win_coin_on evt_window.o] 0 LW(12)
+805C9B80:     callc [evt_uranaisi_msg_alloc tik_00.o]
+805C9B88:     callc [unk_tik_0000109c tik_00.o] ["uranaisi_04"] LW(1)
+805C9B98:     callc [evt_msg_select evt_msg.o] 1 LW(1)
+805C9BA8:     callc [evt_uranaisi_msg_free tik_00.o]
+805C9BB0:     if_int_eq LW(0) 4
+805C9BBC:       callc [evt_win_coin_off evt_window.o] LW(12)
+805C9BC8:       callc [evt_msg_print_add evt_msg.o] 0 ["uranaisi_06"]
+805C9BD8:       goto 0
+805C9BE0:     endif
+805C9BE4:     callc [uranaisi_ryokin evt_uranaisi.o] LW(0) LW(2)
+805C9BF4:     callc [evt_pouch_get_coin evt_pouch.o] LW(1)
+805C9C00:     if_int_lt LW(1) LW(2)
+805C9C0C:       callc [evt_msg_print_add evt_msg.o] 0 ["uranaisi_07"]
+805C9C1C:       callc [evt_win_coin_off evt_window.o] LW(12)
+805C9C28:       goto 0
+805C9C30:     endif
+805C9C34:     switchi LW(0)
+805C9C3C:       case_int_eq 0
+805C9C44:         callc [evt_msg_print_add evt_msg.o] 0 ["uranaisi_08"]
+805C9C54:       case_int_eq 1
+805C9C5C:         callc [evt_msg_print_add evt_msg.o] 0 ["uranaisi_09"]
+805C9C6C:       case_int_eq 2
+805C9C74:         callc [evt_msg_print_add evt_msg.o] 0 ["uranaisi_11"]
+805C9C84:     end_switch
+805C9C88:     muli LW(2) -1
+805C9C94:     callc [evt_pouch_add_coin evt_pouch.o] LW(2)
+805C9CA0:     callc [evt_win_coin_wait evt_window.o] LW(12)
+805C9CAC:     wait_ms 200
+805C9CB4:     callc [evt_win_coin_off evt_window.o] LW(12)
+805C9CC0:     callss [uranai_init tik_00.o]
+805C9CC8:     callc [evt_msg_print evt_msg.o] 0 ["uranaisi_12"] 0 ["me"]
+805C9CE0:     begin_thread
+805C9CE4:       callc [evt_npc_set_anim evt_npc.o] ["me"] ["I_1"]
+805C9CF4:       wait_ms 240
+805C9CFC:       callc [evt_npc_set_anim evt_npc.o] ["me"] ["S_2"]
+805C9D0C:     end_thread
+805C9D10:     callss [uranai_main tik_00.o]
+805C9D18:     callc [evt_npc_set_anim evt_npc.o] ["me"] ["D_1"]
+805C9D28:     wait_ms 170
+805C9D30:     switchi LW(0)
+805C9D38:       case_int_eq 0
+805C9D40:         callss [uranaisi_next_evt tik_00.o]
+805C9D48:       case_int_eq 1
+805C9D50:         callss [uranaisi_starpiece_evt tik_00.o]
+805C9D58:       case_int_eq 2
+805C9D60:         callss [uranaisi_supercoin_evt tik_00.o]
+805C9D68:     end_switch
+805C9D6C:     callss [uranai_exit tik_00.o]
+805C9D74:   end_loop
+805C9D78: 0:
+805C9D80:   callc [evt_party_run evt_party.o] 0
+805C9D8C:   callc [evt_mario_key_onoff evt_mario.o] 1
+805C9D98:   return
+805C9D9C:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [uranai_init tik_00.o] AT 805C8CF8 ---
+805C8CF8:   callc [uranai_init_func tik_00.o]
+805C8D00:   setii GW(15) LW(0)
+805C8D0C:   callc [evt_mapobj_flag_onoff evt_map.o] 1 0 ["supotto"] 1
+805C8D24:   callc [unk_tik_000005e8 tik_00.o]
+805C8D2C:   callc [evt_mapobj_flag_onoff evt_map.o] 1 1 ["uranai_mae"] 6144
+805C8D44:   callc [evt_sub_intpl_msec_init evt_sub.o] 11 255 0 1000
+805C8D5C:   setii LW(0) 0
+805C8D68:   loop 0
+805C8D70:     callc [evt_sub_intpl_msec_get_value evt_sub.o]
+805C8D78:     callc [evt_mapobj_color evt_map.o] 1 ["uranai_mae"] LW(0) LW(0) LW(0) 255
+805C8D98:     callc [evt_mapobj_color evt_map.o] 1 ["ie_1_door"] LW(0) LW(0) LW(0) 255
+805C8DB8:     wait_frames 1
+805C8DC0:     if_int_eq LW(1) 0
+805C8DCC:       loop_break
+805C8DD0:     endif
+805C8DD4:   end_loop
+805C8DD8:   callc [evt_mapobj_flag_onoff evt_map.o] 1 1 ["uranai_mae"] 1
+805C8DF0:   callc [evt_mapobj_flag_onoff evt_map.o] 1 1 ["ie_1_door"] 1
+805C8E08:   callc [evt_mapobj_trans evt_map.o] 1 ["card"] 0 0 0
+805C8E24:   mo_set_base_int [name_tbl tik_00.o]
+805C8E2C:   loop 9
+805C8E34:     mo_read_int2 LW(0) LW(1)
+805C8E40:     callc [evt_mapobj_flag_onoff evt_map.o] 1 0 LW(0) 1
+805C8E58:     callc [evt_mapobj_flag_onoff evt_map.o] 1 1 LW(0) 6144
+805C8E70:     callc [evt_mapobj_trans evt_map.o] 1 LW(0) 0 -1000 0
+805C8E8C:   end_loop
+805C8E90:   callc [evt_map_set_tevcallback evt_map.o] 1 [card_tev tik_00.o]
+805C8EA0:   callc [evt_mapobj_flag_onoff evt_map.o] 1 1 ["card_omote_5"] 16777216
+805C8EB8:   callc [evt_mapobj_flag_onoff evt_map.o] 1 0 ["card_omote_5"] 256
+805C8ED0:   callc [evt_offscreen_entry evt_offscreen.o] ["ofs"]
+805C8EDC:   callc [evt_npc_set_offscreen evt_npc.o] ["うらない師"] ["ofs"]
+805C8EEC:   callc [evt_offscreen_get_boundingbox evt_offscreen.o] ["ofs"] LW(0) LW(1) LW(2) LW(3)
+805C8F08:   callc [uranai_bbox tik_00.o] LW(0) LW(1) LW(2) LW(3)
+805C8F20:   callc [evt_offscreen_delete evt_offscreen.o] ["ofs"]
+805C8F2C:   callc [evt_npc_set_offscreen evt_npc.o] ["うらない師"] 0
+805C8F3C:   return
+805C8F40:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [uranai_main tik_00.o] AT 805C8F44 ---
+805C8F44:   begin_thread
+805C8F48:     wait_ms 500
+805C8F50:     callc [evt_snd_sfxon evt_snd.o] ["SFX_EVT_FORTUNE_CARD_MOVE1"] 0
+805C8F60:   end_thread
+805C8F64:   callc [evt_sub_intpl_msec_init evt_sub.o] 11 -1300 1300 3000
+805C8F7C:   loop 0
+805C8F84:     callc [evt_sub_intpl_msec_get_value evt_sub.o]
+805C8F8C:     divf LW(0) 10.00
+805C8F98:     callc [evt_mapobj_trans evt_map.o] 1 ["card_1"] 0 -200 0
+805C8FB4:     callc [evt_mapobj_rotate evt_map.o] 1 ["card_1"] LW(0) 0 0
+805C8FD0:     callc [evt_mapobj_trans evt_map.o] 1 ["card_1"] 0 180 0
+805C8FEC:     if_float_gt LW(0) -20.00
+805C8FF8:       callc [evt_npc_flag_onoff evt_npc.o] 1 ["うらない師"] 128
+805C900C:     endif
+805C9010:     wait_frames 1
+805C9018:     if_int_eq LW(1) 0
+805C9024:       loop_break
+805C9028:     endif
+805C902C:   end_loop
+805C9030:   setff LW(8) 0.00
+805C903C:   mo_set_base_int [name_tbl tik_00.o]
+805C9044:   loop 9
+805C904C:     mo_read_int2 LW(0) LW(1)
+805C9058:     switchi LW(1)
+805C9060:       case_int_eq 0
+805C9068:         setii LW(2) 500
+805C9074:         setii LF(0) 0
+805C9080:       case_int_eq 1
+805C9088:         setii LW(2) -500
+805C9094:         setii LF(0) 0
+805C90A0:       case_int_eq 2
+805C90A8:         setii LW(2) 500
+805C90B4:         setii LF(0) 1
+805C90C0:       case_int_eq 3
+805C90C8:         setii LW(2) -500
+805C90D4:         setii LF(0) 1
+805C90E0:     end_switch
+805C90E4:     begin_thread
+805C90E8:       wait_ms 100
+805C90F0:       callc [evt_mapobj_get_position evt_map.o] LW(0) LW(10) LW(11) LW(12)
+805C9108:       callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_EVT_FORTUNE_CARD_MOVE2"] LW(10) LW(11) LW(12) 0
+805C9124:     end_thread
+805C9128:     begin_thread
+805C912C:       setii LW(9) LW(0)
+805C9138:       mulf LW(2) 10.00
+805C9144:       callc [evt_sub_intpl_msec_init evt_sub.o] 11 LW(2) 0 360
+805C915C:       loop 0
+805C9164:         callc [evt_sub_intpl_msec_get_value evt_sub.o]
+805C916C:         divf LW(0) 10.00
+805C9178:         if_int_eq LF(0) 0
+805C9184:           callc [evt_mapobj_trans evt_map.o] 1 LW(9) LW(8) 0 LW(0)
+805C91A0:         else
+805C91A4:           callc [evt_mapobj_trans evt_map.o] 1 LW(9) LW(8) LW(0) 0
+805C91C0:         endif
+805C91C4:         wait_frames 1
+805C91CC:         if_int_eq LW(1) 0
+805C91D8:           loop_break
+805C91DC:         endif
+805C91E0:       end_loop
+805C91E4:     end_thread
+805C91E8:     addf LW(8) 0.20
+805C91F4:     wait_ms 300
+805C91FC:   end_loop
+805C9200:   wait_ms 1000
+805C9208:   callc [evt_snd_sfxon evt_snd.o] ["SFX_EVT_FORTUNE_CARD_MOVE3"] 0
+805C9218:   callc [evt_sub_intpl_msec_init evt_sub.o] 11 0 600 1000
+805C9230:   loop 0
+805C9238:     callc [evt_sub_intpl_msec_get_value evt_sub.o]
+805C9240:     divf LW(0) 10.00
+805C924C:     setff LW(8) 0.00
+805C9258:     mo_set_base_int [name_tbl tik_00.o]
+805C9260:     loop 9
+805C9268:       mo_read_int2 LW(2) LW(3)
+805C9274:       callc [evt_mapobj_trans evt_map.o] 1 LW(2) LW(8) -100 0
+805C9290:       callc [evt_mapobj_rotate evt_map.o] 1 LW(2) LW(0) 0 0
+805C92AC:       callc [evt_mapobj_trans evt_map.o] 1 LW(2) LW(8) 100 0
+805C92C8:       addf LW(8) 0.20
+805C92D4:     end_loop
+805C92D8:     wait_frames 1
+805C92E0:     if_int_eq LW(1) 0
+805C92EC:       loop_break
+805C92F0:     endif
+805C92F4:   end_loop
+805C92F8:   callc [evt_sub_intpl_msec_init evt_sub.o] 11 600 -600 1500
+805C9310:   loop 0
+805C9318:     callc [evt_sub_intpl_msec_get_value evt_sub.o]
+805C9320:     divf LW(0) 10.00
+805C932C:     setff LW(8) 0.00
+805C9338:     setff LW(9) 0.00
+805C9344:     mo_set_base_int [name_tbl tik_00.o]
+805C934C:     loop 9
+805C9354:       mo_read_int2 LW(2) LW(3)
+805C9360:       setff LW(6) 60.00
+805C936C:       setff LW(7) LW(9)
+805C9378:       mulf LW(7) 15.00
+805C9384:       subf LW(6) LW(7)
+805C9390:       callc [evt_mapobj_trans evt_map.o] 1 LW(2) LW(8) -100 0
+805C93AC:       if_float_lt LW(0) LW(6)
+805C93B8:         callc [evt_mapobj_rotate evt_map.o] 1 LW(2) LW(6) 0 0
+805C93D4:       else
+805C93D8:         callc [evt_mapobj_rotate evt_map.o] 1 LW(2) LW(0) 0 0
+805C93F4:       endif
+805C93F8:       callc [evt_mapobj_trans evt_map.o] 1 LW(2) LW(8) 100 0
+805C9414:       addf LW(8) 0.20
+805C9420:       addf LW(9) 1.00
+805C942C:     end_loop
+805C9430:     wait_frames 1
+805C9438:     if_int_eq LW(1) 0
+805C9444:       loop_break
+805C9448:     endif
+805C944C:   end_loop
+805C9450:   setff LW(8) 0.00
+805C945C:   setff LW(9) 0.00
+805C9468:   mo_set_base_int [name_tbl tik_00.o]
+805C9470:   loop 9
+805C9478:     mo_read_int2 LW(2) LW(3)
+805C9484:     setff LW(6) 60.00
+805C9490:     setff LW(7) LW(9)
+805C949C:     mulf LW(7) 15.00
+805C94A8:     subf LW(6) LW(7)
+805C94B4:     begin_thread
+805C94B8:       if_int_eq LW(9) 4
+805C94C4:         callc [evt_snd_sfxon evt_snd.o] ["SFX_EVT_FORTUNE_CARD_MOVE4"] 0
+805C94D4:         callc [evt_sub_intpl_msec_init evt_sub.o] 0 0 500 1000
+805C94EC:       else
+805C94F0:         callc [evt_sub_intpl_msec_init evt_sub.o] 1 0 -3000 1000
+805C9508:       endif
+805C950C:       loop 0
+805C9514:         callc [evt_sub_intpl_msec_get_value evt_sub.o]
+805C951C:         divf LW(0) 10.00
+805C9528:         callc [evt_mapobj_trans evt_map.o] 1 LW(2) 0 LW(0) 0
+805C9544:         callc [evt_mapobj_trans evt_map.o] 1 LW(2) LW(8) -100 0
+805C9560:         callc [evt_mapobj_rotate evt_map.o] 1 LW(2) LW(6) 0 0
+805C957C:         callc [evt_mapobj_trans evt_map.o] 1 LW(2) LW(8) 100 0
+805C9598:         wait_frames 1
+805C95A0:         if_int_eq LW(1) 0
+805C95AC:           loop_break
+805C95B0:         endif
+805C95B4:       end_loop
+805C95B8:     end_thread
+805C95BC:     addf LW(8) 0.20
+805C95C8:     addf LW(9) 1.00
+805C95D4:   end_loop
+805C95D8:   wait_ms 1200
+805C95E0:   callc [card_camid tik_00.o] ["card_omote_5"] 4
+805C95F0:   callc [card_camid tik_00.o] ["card_ura_5"] 4
+805C9600:   setff GW(0) 0.00
+805C960C:   setff GW(1) 50.00
+805C9618:   setff GW(2) 0.00
+805C9624:   setff GW(3) 0.00
+805C9630:   callc [evt_snd_sfxon evt_snd.o] ["SFX_EVT_FORTUNE_CARD_MOVE5"] 0
+805C9640:   begin_thread_tid LW(9)
+805C9648:     loop 0
+805C9650:       callc [evt_mapobj_trans evt_map.o] 1 ["card_5"] GW(0) GW(1) GW(2)
+805C966C:       callc [evt_mapobj_rotate evt_map.o] 1 ["card_5"] 0 GW(3) 0
+805C9688:       wait_frames 1
+805C9690:     end_loop
+805C9694:   end_thread
+805C9698:   begin_thread
+805C969C:     callc [evt_sub_intpl_msec_init evt_sub.o] 13 500 700 300
+805C96B4:     loop 0
+805C96BC:       callc [evt_sub_intpl_msec_get_value evt_sub.o]
+805C96C4:       divf LW(0) 10.00
+805C96D0:       setff GW(1) LW(0)
+805C96DC:       wait_frames 1
+805C96E4:       if_int_eq LW(1) 0
+805C96F0:         loop_break
+805C96F4:       endif
+805C96F8:     end_loop
+805C96FC:     callc [evt_sub_intpl_msec_init evt_sub.o] 12 700 -200 1000
+805C9714:     loop 0
+805C971C:       callc [evt_sub_intpl_msec_get_value evt_sub.o]
+805C9724:       divf LW(0) 10.00
+805C9730:       setff GW(1) LW(0)
+805C973C:       wait_frames 1
+805C9744:       if_int_eq LW(1) 0
+805C9750:         loop_break
+805C9754:       endif
+805C9758:     end_loop
+805C975C:   end_thread
+805C9760:   begin_thread
+805C9764:     callc [evt_sub_intpl_msec_init evt_sub.o] 11 0 -450 1000
+805C977C:     loop 0
+805C9784:       callc [evt_sub_intpl_msec_get_value evt_sub.o]
+805C978C:       divf LW(0) 10.00
+805C9798:       setff GW(2) LW(0)
+805C97A4:       wait_frames 1
+805C97AC:       if_int_eq LW(1) 0
+805C97B8:         loop_break
+805C97BC:       endif
+805C97C0:     end_loop
+805C97C4:   end_thread
+805C97C8:   begin_thread
+805C97CC:     callc [evt_sub_intpl_msec_init evt_sub.o] 11 0 37800 2000
+805C97E4:     loop 0
+805C97EC:       callc [evt_sub_intpl_msec_get_value evt_sub.o]
+805C97F4:       divf LW(0) 10.00
+805C9800:       setff GW(3) LW(0)
+805C980C:       if_float_gt GW(3) 3600.00
+805C9818:         callc [evt_mapobj_flag_onoff evt_map.o] 1 1 ["card_omote_5"] 1
+805C9830:         callc [evt_npc_flag_onoff evt_npc.o] 0 ["うらない師"] 128
+805C9844:       endif
+805C9848:       wait_frames 1
+805C9850:       if_int_eq LW(1) 0
+805C985C:         loop_break
+805C9860:       endif
+805C9864:     end_loop
+805C9868:   end_thread
+805C986C:   wait_ms 2500
+805C9874:   stop_tid LW(9)
+805C987C:   setii LW(0) GW(15)
+805C9888:   return
+805C988C:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [uranaisi_next_evt tik_00.o] AT 805C8860 ---
+805C8860:   if_int_lt GSW(0) 405
+805C886C:     callc [uranaisi_data_alloc evt_uranaisi.o] 0 ["un_next"]
+805C887C:     callc [uranaisi_next_check evt_uranaisi.o] LW(0)
+805C8888:     if_int_eq LW(0) 1
+805C8894:       callc [uranaisi_next_makelabel evt_uranaisi.o] 0 LW(1)
+805C88A4:       callc [evt_msg_print evt_msg.o] 0 LW(1) 0 ["me"]
+805C88BC:     else
+805C88C0:       if_int_eq LW(0) 0
+805C88CC:         callc [evt_win_coin_on evt_window.o] 0 LW(12)
+805C88DC:         callc [evt_osreport tik_00.o] 0 LW(1)
+805C88EC:         callc [evt_msg_print evt_msg.o] 1 ["ゆうこうな　データが\n見つかりませんでした\nメッセージを　とうろく　してください\n<key>\n<scrl_auto>\n<once_stop>\n"] 0 ["me"]
+805C8904:         callc [evt_msg_print_add_insert evt_msg.o] 1 ["げんざいの　イベントばんごうは\n『%s』\nです\n<key>"] LW(1)
+805C8918:         callc [uranaisi_ryokin evt_uranaisi.o] 0 LW(2)
+805C8928:         callc [evt_pouch_add_coin evt_pouch.o] LW(2)
+805C8934:         callc [evt_win_coin_wait evt_window.o] LW(12)
+805C8940:         wait_ms 200
+805C8948:         callc [evt_win_coin_off evt_window.o] LW(12)
+805C8954:       else
+805C8958:         callc [evt_win_coin_on evt_window.o] 0 LW(12)
+805C8968:         callc [evt_osreport tik_00.o] 0 LW(1)
+805C8978:         callc [evt_msg_print evt_msg.o] 1 ["ゆうこうな　データが\nじゅうふくして　みつかりました\nゆうこうな　メッセージは　１つにしてください\n<key>\n<scrl_auto>\n<once_stop>"] 0 ["me"]
+805C8990:         setii LW(2) 0
+805C899C:         setii LW(3) LW(0)
+805C89A8:         loop LW(0)
+805C89B0:           callc [uranaisi_next_makelabel evt_uranaisi.o] LW(2) LW(1)
+805C89C0:           callc [evt_msg_print_add_insert evt_msg.o] 1 ["『%s』\n<key>\n<scrl_auto>\n<once_stop>\n"] LW(1)
+805C89D4:           addi LW(2) 1
+805C89E0:         end_loop
+805C89E4:         callc [evt_msg_print_add_insert evt_msg.o] 1 ["いじょう　%dこが\nじゅうふくしている　メッセージです\n<key>"] LW(3)
+805C89F8:         callc [uranaisi_ryokin evt_uranaisi.o] 0 LW(2)
+805C8A08:         callc [evt_pouch_add_coin evt_pouch.o] LW(2)
+805C8A14:         callc [evt_win_coin_wait evt_window.o] LW(12)
+805C8A20:         wait_ms 200
+805C8A28:         callc [evt_win_coin_off evt_window.o] LW(12)
+805C8A34:       endif
+805C8A38:     endif
+805C8A3C:     callc [uranaisi_data_free evt_uranaisi.o]
+805C8A44:   else
+805C8A48:     callc [evt_msg_print evt_msg.o] 0 ["uranaisi_17"] 0 ["me"]
+805C8A60:     callc [evt_win_coin_on evt_window.o] 0 LW(12)
+805C8A70:     wait_ms 500
+805C8A78:     callc [uranaisi_ryokin evt_uranaisi.o] 0 LW(2)
+805C8A88:     callc [evt_pouch_add_coin evt_pouch.o] LW(2)
+805C8A94:     callc [evt_win_coin_wait evt_window.o] LW(12)
+805C8AA0:     wait_ms 500
+805C8AA8:     callc [evt_win_coin_off evt_window.o] LW(12)
+805C8AB4:   endif
+805C8AB8:   return
+805C8ABC:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [uranaisi_starpiece_evt tik_00.o] AT 805C8AC0 ---
+805C8AC0:   callc [uranaisi_data_alloc evt_uranaisi.o] 1 ["un_starpiece"]
+805C8AD0:   callc [uranaisi_starpiece_check evt_uranaisi.o] LW(0)
+805C8ADC:   if_int_eq LW(0) 0
+805C8AE8:     callc [evt_win_coin_on evt_window.o] 0 LW(12)
+805C8AF8:     callc [evt_msg_print evt_msg.o] 0 ["uranaisi_14"] 0 ["me"]
+805C8B10:     callc [uranaisi_ryokin evt_uranaisi.o] 1 LW(2)
+805C8B20:     callc [evt_pouch_add_coin evt_pouch.o] LW(2)
+805C8B2C:     callc [evt_win_coin_wait evt_window.o] LW(12)
+805C8B38:     wait_ms 200
+805C8B40:     callc [evt_win_coin_off evt_window.o] LW(12)
+805C8B4C:   else
+805C8B50:     subi LW(0) 1
+805C8B5C:     callc [evt_sub_random evt_sub.o] LW(0) LW(0)
+805C8B6C:     callc [uranaisi_starpiece_makelabel evt_uranaisi.o] LW(0) LW(0)
+805C8B7C:     callc [evt_msg_print evt_msg.o] 0 LW(0) 0 ["me"]
+805C8B94:     callc [uranaisi_starpiece_setreadflag evt_uranaisi.o]
+805C8B9C:   endif
+805C8BA0:   callc [uranaisi_data_free evt_uranaisi.o]
+805C8BA8:   return
+805C8BAC:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [uranaisi_supercoin_evt tik_00.o] AT 805C8BB0 ---
+805C8BB0:   callc [uranaisi_data_alloc evt_uranaisi.o] 2 ["un_supercoin"]
+805C8BC0:   callc [uranaisi_supercoin_check evt_uranaisi.o] LW(0)
+805C8BCC:   if_int_eq LW(0) 0
+805C8BD8:     callc [evt_win_coin_on evt_window.o] 0 LW(12)
+805C8BE8:     callc [evt_msg_print evt_msg.o] 0 ["uranaisi_16"] 0 ["me"]
+805C8C00:     callc [uranaisi_ryokin evt_uranaisi.o] 2 LW(2)
+805C8C10:     callc [evt_pouch_add_coin evt_pouch.o] LW(2)
+805C8C1C:     callc [evt_win_coin_wait evt_window.o] LW(12)
+805C8C28:     wait_ms 200
+805C8C30:     callc [evt_win_coin_off evt_window.o] LW(12)
+805C8C3C:   else
+805C8C40:     subi LW(0) 1
+805C8C4C:     callc [evt_sub_random evt_sub.o] LW(0) LW(0)
+805C8C5C:     callc [uranaisi_supercoin_makelabel evt_uranaisi.o] LW(0) LW(0)
+805C8C6C:     callc [evt_msg_print evt_msg.o] 0 LW(0) 0 ["me"]
+805C8C84:     callc [uranaisi_supercoin_setreadflag evt_uranaisi.o]
+805C8C8C:   endif
+805C8C90:   callc [uranaisi_data_free evt_uranaisi.o]
+805C8C98:   return
+805C8C9C:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [uranai_exit tik_00.o] AT 805C9890 ---
+805C9890:   callc [evt_mapobj_flag_onoff evt_map.o] 1 0 ["uranai_mae"] 1
+805C98A8:   callc [evt_mapobj_flag_onoff evt_map.o] 1 0 ["ie_1_door"] 1
+805C98C0:   callc [evt_sub_intpl_msec_init evt_sub.o] 11 0 255 1000
+805C98D8:   loop 0
+805C98E0:     callc [evt_sub_intpl_msec_get_value evt_sub.o]
+805C98E8:     callc [evt_mapobj_color evt_map.o] 1 ["uranai_mae"] LW(0) LW(0) LW(0) 255
+805C9908:     callc [evt_mapobj_color evt_map.o] 1 ["ie_1_door"] LW(0) LW(0) LW(0) 255
+805C9928:     setii LW(2) 255
+805C9934:     subi LW(2) LW(0)
+805C9940:     callc [evt_mapobj_color evt_map.o] 1 ["supotto"] 255 255 255 LW(2)
+805C9960:     wait_frames 1
+805C9968:     if_int_eq LW(1) 0
+805C9974:       loop_break
+805C9978:     endif
+805C997C:   end_loop
+805C9980:   callc [evt_mapobj_flag_onoff evt_map.o] 1 1 ["supotto"] 1
+805C9998:   callc [evt_mapobj_color evt_map.o] 1 ["supotto"] 255 255 255 255
+805C99B8:   mo_set_base_int [name_tbl tik_00.o]
+805C99C0:   loop 9
+805C99C8:     mo_read_int2 LW(0) LW(1)
+805C99D4:     callc [evt_mapobj_flag_onoff evt_map.o] 1 1 LW(0) 1
+805C99EC:     callc [evt_mapobj_flag_onoff evt_map.o] 1 0 LW(0) 6144
+805C9A04:   end_loop
+805C9A08:   callc [uranai_exit_func tik_00.o]
+805C9A10:   return
+805C9A14:   end

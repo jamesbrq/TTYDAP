@@ -1,0 +1,191 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [peach_evt_kusuri_nomu aji_06.o] AT 805E07A4 ---
+805E07A4:   callc [evt_mario_key_onoff evt_mario.o] 0
+805E07B0:   callc [evt_mario_adjust_dir evt_mario.o]
+805E07B8:   callc [peach_chg_pose aji_06.o] ["P_M_1"]
+805E07C4:   wait_ms 500
+805E07CC:   callc [evt_mapobj_flag_onoff evt_map.o] 1 1 ["S_bika"] 1
+805E07E4:   callc [evt_mario_get_pos evt_mario.o] 0 LW(0) LW(1) LW(2)
+805E07FC:   callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_PEACH_DRINK_MEDICINE1"] LW(0) LW(1) LW(2) 0
+805E0818:   callc [peach_chg_pose aji_06.o] ["P_M_3"]
+805E0824:   wait_ms 500
+805E082C:   callc [evt_mapobj_scale evt_map.o] 0 ["S_naka"] 0 0 0
+805E0848:   callc [evt_mario_get_pos evt_mario.o] 0 LW(0) LW(1) LW(2)
+805E0860:   addi LW(1) 15
+805E086C:   addi LW(2) 10
+805E0878:   callc [evt_eff evt_eff.o] [zero_aji_0001269c aji_06.o] ["kemuri_test"] 13 LW(0) LW(1) LW(2) 1.00 0 0 0 0 0 0 0
+805E08B8:   wait_ms 100
+805E08C0:   callc [evt_mario_get_pos evt_mario.o] 0 LW(0) LW(1) LW(2)
+805E08D8:   callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_VOICE_PEACH_SURPRISED1_3"] LW(0) LW(1) LW(2) 0
+805E08F4:   callc [evt_mapobj_flag_onoff evt_map.o] 1 0 ["S_bika"] 1
+805E090C:   if_int_eq LSWF(9) 0
+805E0918:     wait_ms 200
+805E0920:     callc [evt_sub_random evt_sub.o] 1 LW(0)
+805E0930:     setii LW(2) LW(0)
+805E093C:     switchi LW(2)
+805E0944:       case_int_eq 0
+805E094C:         callc [evt_mario_get_pos evt_mario.o] 0 LW(3) LW(4) LW(5)
+805E0964:         callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_PEACH_DEKADEKA1"] LW(3) LW(4) LW(5) 0
+805E0980:         callc [evt_sub_intpl_msec_init evt_sub.o] 11 1000 2000 1000
+805E0998: 0:
+805E09A0:         callc [evt_sub_intpl_msec_get_value evt_sub.o]
+805E09A8:         divf LW(0) 1000.00
+805E09B4:         callc [peach_set_scale aji_06.o] LW(0)
+805E09C0:         wait_frames 1
+805E09C8:         if_int_eq LW(1) 1
+805E09D4:           goto 0
+805E09DC:         endif
+805E09E0:       case_int_eq 1
+805E09E8:         callc [evt_mario_get_pos evt_mario.o] 0 LW(3) LW(4) LW(5)
+805E0A00:         callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_PEACH_MINIMINI1"] LW(3) LW(4) LW(5) 0
+805E0A1C:         callc [evt_sub_intpl_msec_init evt_sub.o] 11 1000 500 1000
+805E0A34: 0:
+805E0A3C:         callc [evt_sub_intpl_msec_get_value evt_sub.o]
+805E0A44:         divf LW(0) 1000.00
+805E0A50:         callc [peach_set_scale aji_06.o] LW(0)
+805E0A5C:         wait_frames 1
+805E0A64:         if_int_eq LW(1) 1
+805E0A70:           goto 0
+805E0A78:         endif
+805E0A7C:     end_switch
+805E0A80:     setii LSW(5) LW(2)
+805E0A8C:     callc [evt_msg_print evt_msg.o] 0 ["peach_aji_234"] 0 ["mario"]
+805E0AA4:     callc [evt_msg_print evt_msg.o] 0 ["peach_aji_235"] 0 0
+805E0ABC:     callc [evt_msg_print evt_msg.o] 0 ["peach_aji_236"] 0 ["mario"]
+805E0AD4:     callsa [peach_evt_sugata_modoru aji_06.o]
+805E0ADC:     callss [peach_evt_kaihei_open_all aji_06.o]
+805E0AE4:     callc [evt_run_case_evt evt_case.o] 9 1 ["A_sui1"] 0 [peach_evt_tyogo_entry aji_06.o] GW(5)
+805E0B04:     callc [evt_run_case_evt evt_case.o] 9 1 ["A_sui2"] 0 [peach_evt_kaihei1 aji_06.o] GW(6)
+805E0B24:     callc [evt_run_case_evt evt_case.o] 9 1 ["A_sui3"] 0 [peach_evt_kaihei2 aji_06.o] GW(7)
+805E0B44:     callc [evt_run_case_evt evt_case.o] 9 1 ["A_sui4"] 0 [peach_evt_kaihei3 aji_06.o] GW(8)
+805E0B64:     callc [evt_run_case_evt evt_case.o] 9 1 ["A_sui5"] 0 [peach_evt_kaihei4 aji_06.o] GW(9)
+805E0B84:     setii LW(0) ["S_pato1"]
+805E0B90:     callsa_tid [peach_evt_pato_on aji_06.o] GW(0)
+805E0B9C:   else
+805E0BA0:     callc [evt_snd_bgmoff evt_snd.o] 512
+805E0BAC:     wait_ms 300
+805E0BB4:     callc [evt_mario_get_pos evt_mario.o] 0 LW(0) LW(1) LW(2)
+805E0BCC:     callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_PEACH_TOUMEI1"] LW(0) LW(1) LW(2) 0
+805E0BE8:     callc [evt_peach_set_condition evt_mario.o] 2
+805E0BF4:     wait_ms 1000
+805E0BFC:     callc [evt_msg_print evt_msg.o] 0 ["peach_aji_237"] 0 0
+805E0C14:     callc [evt_npc_set_autotalkpose evt_npc.o] ["mario"] ["P_S_3"] ["P_T_3"]
+805E0C28:     callc [evt_msg_print evt_msg.o] 0 ["peach_aji_238"] 0 ["mario"]
+805E0C40:     wait_ms 2000
+805E0C48:     callc [evt_mario_get_pos evt_mario.o] 0 LW(0) LW(1) LW(2)
+805E0C60:     subi LW(0) 15
+805E0C6C:     callc [evt_mario_mov_pos2 evt_mario.o] LW(0) LW(2) 30
+805E0C80:     callc [evt_msg_print evt_msg.o] 0 ["peach_aji_239"] 0 ["mario"]
+805E0C98:     callc [evt_mario_get_pos evt_mario.o] 0 LW(0) LW(1) LW(2)
+805E0CB0:     callc [evt_cam3d_get_shift evt_cam.o] LW(0) LW(1) LW(2) LW(3)
+805E0CC8:     callc [evt_cam3d_event_from_road evt_cam.o] LW(0) LW(1) LW(2) LW(3) LW(4) LW(5) LW(6) LW(7) LW(8) LW(9)
+805E0CF8:     callc [evt_cam3d_evt_set evt_cam.o] LW(4) LW(5) LW(6) LW(7) LW(8) LW(9) 0 11
+805E0D20:     wait_frames 1
+805E0D28:     callc [evt_mario_mov_pos2 evt_mario.o] 114 76 72.00
+805E0D3C:     callc [evt_mario_mov_pos2 evt_mario.o] 90 104 72.00
+805E0D50:     callc [evt_mario_mov_pos2 evt_mario.o] -80 115 72.00
+805E0D64:     wait_ms 1000
+805E0D6C:     callc [evt_mario_get_pos evt_mario.o] 0 LW(0) LW(1) LW(2)
+805E0D84:     callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_PEACH_CHANGE_CLOTH1"] LW(0) LW(1) LW(2) LW(3)
+805E0DA0:     callc [evt_snd_sfx_dist evt_snd.o] LW(3) 0
+805E0DB0:     wait_ms 2000
+805E0DB8:     callc [peach_evt_toumei_onoff aji_06.o] 1
+805E0DC4:     callc [evt_mario_mov_pos2 evt_mario.o] 100 115 72.00
+805E0DD8:     callc [evt_msg_print evt_msg.o] 0 ["peach_aji_240"] 0 0
+805E0DF0:     callc [evt_msg_print evt_msg.o] 0 ["peach_aji_241"] 0 ["mario"]
+805E0E08:     callc [evt_msg_print evt_msg.o] 0 ["peach_aji_242"] 0 0
+805E0E20:     callc [evt_cam3d_evt_off evt_cam.o] 500 11
+805E0E30:     setii GSW(0) 263
+805E0E3C:   endif
+805E0E40:   stop_tid GW(2)
+805E0E48:   setii LSWF(10) 0
+805E0E54:   callc [evt_mario_key_onoff evt_mario.o] 1
+805E0E60:   callc [evt_exit_case_evt evt_case.o]
+805E0E68:   return
+805E0E6C:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [peach_evt_sugata_modoru aji_06.o] AT 805E0650 ---
+805E0650:   wait_ms 15000
+805E0658:   switchi LSW(5)
+805E0660:     case_int_eq 0
+805E0668:       callc [evt_mario_get_pos evt_mario.o] 0 LW(3) LW(4) LW(5)
+805E0680:       callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_PEACH_MINIMINI1"] LW(3) LW(4) LW(5) 0
+805E069C:       callc [evt_sub_intpl_msec_init evt_sub.o] 11 2000 1000 1000
+805E06B4: 0:
+805E06BC:       callc [evt_sub_intpl_msec_get_value evt_sub.o]
+805E06C4:       divf LW(0) 1000.00
+805E06D0:       callc [peach_set_scale aji_06.o] LW(0)
+805E06DC:       wait_frames 1
+805E06E4:       if_int_eq LW(1) 1
+805E06F0:         goto 0
+805E06F8:       endif
+805E06FC:     case_int_eq 1
+805E0704:       callc [evt_mario_get_pos evt_mario.o] 0 LW(3) LW(4) LW(5)
+805E071C:       callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_PEACH_DEKADEKA1"] LW(3) LW(4) LW(5) 0
+805E0738:       callc [evt_sub_intpl_msec_init evt_sub.o] 11 500 1000 1000
+805E0750: 0:
+805E0758:       callc [evt_sub_intpl_msec_get_value evt_sub.o]
+805E0760:       divf LW(0) 1000.00
+805E076C:       callc [peach_set_scale aji_06.o] LW(0)
+805E0778:       wait_frames 1
+805E0780:       if_int_eq LW(1) 1
+805E078C:         goto 0
+805E0794:       endif
+805E0798:   end_switch
+805E079C:   return
+805E07A0:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [peach_evt_kaihei_open_all aji_06.o] AT 805DF050 ---
+805DF050:   begin_thread
+805DF054:     setii LW(0) ["S_kaihei1"]
+805DF060:     callss [peach_evt_kaihei_open aji_06.o]
+805DF068:   end_thread
+805DF06C:   begin_thread
+805DF070:     setii LW(0) ["S_kaihei2"]
+805DF07C:     callss [peach_evt_kaihei_open aji_06.o]
+805DF084:   end_thread
+805DF088:   begin_thread
+805DF08C:     setii LW(0) ["S_kaihei3"]
+805DF098:     callss [peach_evt_kaihei_open aji_06.o]
+805DF0A0:   end_thread
+805DF0A4:   setii LW(0) ["S_kaihei4"]
+805DF0B0:   callss [peach_evt_kaihei_open aji_06.o]
+805DF0B8:   return
+805DF0BC:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [peach_evt_pato_on aji_06.o] AT 805E0354 ---
+805E0354:   setii LW(15) LW(0)
+805E0360:   callc [evt_mapobj_get_position evt_map.o] LW(15) LW(0) LW(1) LW(2)
+805E0378:   callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_PEACH_MACHINE_SIREN1"] LW(0) LW(1) LW(2) GW(4)
+805E0394:   callc [evt_mapobj_flag_onoff evt_map.o] 0 0 LW(15) 1
+805E03AC:   loop 0
+805E03B4:     callc [evt_mapobj_rotate evt_map.o] 0 LW(15) 0 LW(0) 0
+805E03D0:     addi LW(0) 12
+805E03DC:     if_int_ge LW(0) 360
+805E03E8:       subi LW(0) 360
+805E03F4:     endif
+805E03F8:     wait_ms 30
+805E0400:   end_loop
+805E0404:   return
+805E0408:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [peach_evt_kaihei_open aji_06.o] AT 805DEF84 ---
+805DEF84:   setii LW(5) LW(0)
+805DEF90:   callc [evt_mapobj_get_position evt_map.o] LW(5) LW(0) LW(1) LW(2)
+805DEFA8:   if_int_lt LW(1) 45
+805DEFB4:     return
+805DEFB8:   endif
+805DEFBC:   callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_PEACH_MACHINE_OPEN1"] LW(0) LW(1) LW(2) LW(3)
+805DEFD8:   callc [evt_sub_intpl_msec_init evt_sub.o] 11 0 -25 800
+805DEFF0: 0:
+805DEFF8:   callc [evt_sub_intpl_msec_get_value evt_sub.o]
+805DF000:   callc [evt_mapobj_trans evt_map.o] 0 LW(5) 0 LW(0) 0
+805DF01C:   wait_frames 1
+805DF024:   if_int_eq LW(1) 1
+805DF030:     goto 0
+805DF038:   endif
+805DF03C:   callc [evt_snd_sfxoff evt_snd.o] LW(3)
+805DF048:   return
+805DF04C:   end

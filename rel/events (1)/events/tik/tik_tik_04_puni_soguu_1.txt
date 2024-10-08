@@ -1,0 +1,44 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [puni_soguu_1 tik_04.o] AT 805D29C4 ---
+805D29C4:   callc [evt_npc_set_position evt_npc.o] ["ガイド"] -155 25 -80
+805D29DC:   callc [evt_npc_set_ry evt_npc.o] ["ガイド"] 90
+805D29EC:   callc [evt_npc_flag_onoff evt_npc.o] 1 ["ガイド"] 1073741856
+805D2A00:   loop 0
+805D2A08:     callc [evt_mario_get_pos evt_mario.o] 0 LW(0) LW(1) LW(2)
+805D2A20:     if_int_ge LW(0) -275
+805D2A2C:       loop_break
+805D2A30:     endif
+805D2A34:     wait_frames 1
+805D2A3C:   end_loop
+805D2A40:   callc [evt_mario_key_onoff evt_mario.o] 0
+805D2A4C:   callc [evt_mario_normalize evt_mario.o]
+805D2A54:   callc [evt_party_stop evt_party.o] 0
+805D2A60:   callc [evt_npc_set_ry evt_npc.o] ["ガイド"] 270
+805D2A70:   wait_ms 200
+805D2A78:   callc [evt_eff_fukidashi evt_eff.o] 1 [zero_tik_0000995c tik_04.o] ["ガイド"] 0 0 0 0 0 0 0 30
+805D2AAC:   wait_ms 500
+805D2AB4:   begin_thread
+805D2AB8:     callc [evt_npc_set_anim evt_npc.o] ["ガイド"] ["R_1"]
+805D2AC8:     callc [evt_npc_set_ry evt_npc.o] ["ガイド"] 90
+805D2AD8:     callsa_tid [puni_walk_se tik_04.o] LW(10)
+805D2AE4:     callc [evt_npc_move_position evt_npc.o] ["ガイド"] -150 -220 0 180.00 0
+805D2B04:     stop_tid LW(10)
+805D2B0C:     callc [evt_npc_set_position evt_npc.o] ["ガイド"] 0 -1000 0
+805D2B24:   end_thread
+805D2B28:   wait_ms 500
+805D2B30:   callc [evt_party_run evt_party.o] 0
+805D2B3C:   callc [evt_mario_key_onoff evt_mario.o] 1
+805D2B48:   setii GSW(0) 13
+805D2B54:   return
+805D2B58:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [puni_walk_se tik_04.o] AT 805D2974 ---
+805D2974:   loop 0
+805D297C:     callc [evt_npc_get_position evt_npc.o] ["ガイド"] LW(0) LW(1) LW(2)
+805D2994:     callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_STG2_PUNI_MOVE2_1"] LW(0) LW(1) LW(2) 0
+805D29B0:     wait_frames 5
+805D29B8:   end_loop
+805D29BC:   return
+805D29C0:   end

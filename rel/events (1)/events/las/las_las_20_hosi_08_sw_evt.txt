@@ -1,0 +1,122 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [hosi_08_sw_evt las_20.o] AT 805E3DF8 ---
+805E3DF8:   setii LW(0) ["S_hosi_08a"]
+805E3E04:   setii LW(1) ["S_hosi_08b"]
+805E3E10:   setir LW(2) 0xf9718887
+805E3E1C:   callss [hosi_onoff las_20.o]
+805E3E24:   callss [hosi_sw_check las_20.o]
+805E3E2C:   return
+805E3E30:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [hosi_onoff las_20.o] AT 805E3B7C ---
+805E3B7C:   loadi_ind LW(2) LW(3)
+805E3B88:   if_int_eq LW(3) 0
+805E3B94:     callc [evt_mapobj_flag_onoff evt_map.o] 1 0 LW(0) 1
+805E3BAC:     callc [evt_mapobj_flag_onoff evt_map.o] 1 1 LW(1) 1
+805E3BC4:     storei_ind LW(2) 1
+805E3BD0:     callc [evt_mapobj_get_position evt_map.o] LW(0) LW(3) LW(4) LW(5)
+805E3BE8:     callc [evt_eff64 evt_eff.o] 0 ["stardust_n64"] 2 LW(3) LW(4) LW(5) 30 0 0 0 0 0 0 0
+805E3C28:     callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_STG8_STAR_LIGHTUP1"] LW(3) LW(4) LW(5) 0
+805E3C44:   else
+805E3C48:     callc [evt_mapobj_flag_onoff evt_map.o] 1 1 LW(0) 1
+805E3C60:     callc [evt_mapobj_flag_onoff evt_map.o] 1 0 LW(1) 1
+805E3C78:     storei_ind LW(2) 0
+805E3C84:   endif
+805E3C88:   return
+805E3C8C:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [hosi_sw_check las_20.o] AT 805E36C0 ---
+805E36C0:   setii LW(0) 0
+805E36CC:   if_int_eq LSWF(1) 1
+805E36D8:     addi LW(0) 1
+805E36E4:   endif
+805E36E8:   if_int_eq LSWF(2) 0
+805E36F4:     addi LW(0) 1
+805E3700:   endif
+805E3704:   if_int_eq LSWF(3) 1
+805E3710:     addi LW(0) 1
+805E371C:   endif
+805E3720:   if_int_eq LSWF(4) 1
+805E372C:     addi LW(0) 1
+805E3738:   endif
+805E373C:   if_int_eq LSWF(5) 0
+805E3748:     addi LW(0) 1
+805E3754:   endif
+805E3758:   if_int_eq LSWF(6) 1
+805E3764:     addi LW(0) 1
+805E3770:   endif
+805E3774:   if_int_eq LSWF(7) 0
+805E3780:     addi LW(0) 1
+805E378C:   endif
+805E3790:   if_int_eq LW(0) 7
+805E379C:     callc [evt_mario_key_onoff evt_mario.o] 0
+805E37A8:     wait_ms 1000
+805E37B0:     callc [evt_cam3d_evt_set evt_cam.o] -289 112 1038 -289 -43 -63 800 11
+805E37D8:     wait_ms 800
+805E37E0:     setii LW(0) 0
+805E37EC:     loop 7
+805E37F4:       callc [get_hosi_name las_20.o] LW(0) LW(1) LW(2)
+805E3808:       callc [evt_mapobj_flag_onoff evt_map.o] 1 1 LW(1) 1
+805E3820:       callc [evt_mapobj_flag_onoff evt_map.o] 1 0 LW(2) 1
+805E3838:       addi LW(0) 1
+805E3844:     end_loop
+805E3848:     setii LW(0) 0
+805E3854:     setii LW(1) 6
+805E3860:     loop 50
+805E3868:       callc [get_hosi_name las_20.o] LW(0) LW(2) LW(3)
+805E387C:       callc [evt_mapobj_flag_onoff evt_map.o] 1 0 LW(2) 1
+805E3894:       callc [evt_mapobj_flag_onoff evt_map.o] 1 1 LW(3) 1
+805E38AC:       callc [get_hosi_name las_20.o] LW(1) LW(2) LW(3)
+805E38C0:       callc [evt_mapobj_flag_onoff evt_map.o] 1 1 LW(2) 1
+805E38D8:       callc [evt_mapobj_flag_onoff evt_map.o] 1 0 LW(3) 1
+805E38F0:       wait_ms 50
+805E38F8:       setii LW(1) LW(0)
+805E3904:       addi LW(0) 1
+805E3910:       modi LW(0) 7
+805E391C:     end_loop
+805E3920:     loop 0
+805E3928:       if_int_eq LW(0) 0
+805E3934:         loop_break
+805E3938:       endif
+805E393C:       callc [get_hosi_name las_20.o] LW(0) LW(2) LW(3)
+805E3950:       callc [evt_mapobj_flag_onoff evt_map.o] 1 0 LW(2) 1
+805E3968:       callc [evt_mapobj_flag_onoff evt_map.o] 1 1 LW(3) 1
+805E3980:       callc [get_hosi_name las_20.o] LW(1) LW(2) LW(3)
+805E3994:       callc [evt_mapobj_flag_onoff evt_map.o] 1 1 LW(2) 1
+805E39AC:       callc [evt_mapobj_flag_onoff evt_map.o] 1 0 LW(3) 1
+805E39C4:       wait_ms 50
+805E39CC:       setii LW(1) LW(0)
+805E39D8:       addi LW(0) 1
+805E39E4:       modi LW(0) 7
+805E39F0:     end_loop
+805E39F4:     callc [get_hosi_name las_20.o] LW(1) LW(2) LW(3)
+805E3A08:     callc [evt_mapobj_flag_onoff evt_map.o] 1 1 LW(2) 1
+805E3A20:     callc [evt_mapobj_flag_onoff evt_map.o] 1 0 LW(3) 1
+805E3A38:     wait_ms 200
+805E3A40:     setii LW(0) 0
+805E3A4C:     loop 7
+805E3A54:       callc [get_hosi_name las_20.o] LW(0) LW(1) LW(2)
+805E3A68:       callc [evt_mapobj_flag_onoff evt_map.o] 1 0 LW(1) 1
+805E3A80:       callc [evt_mapobj_flag_onoff evt_map.o] 1 1 LW(2) 1
+805E3A98:       addi LW(0) 1
+805E3AA4:     end_loop
+805E3AA8:     callc [evt_snd_sfxon evt_snd.o] ["SFX_STG8_STAR_LIGHTUP2"] 0
+805E3AB8:     wait_ms 100
+805E3AC0:     callc [evt_snd_sfxon evt_snd.o] ["SFX_STG8_QUAKE3"] LW(10)
+805E3AD0:     callc [evt_cam_shake evt_cam.o] 4 0.02 0.00 1000
+805E3AE8:     callc [evt_snd_sfxoff evt_snd.o] LW(10)
+805E3AF4:     callc [evt_mobj_delete evt_mobj.o] ["hosi_02_sw"]
+805E3B00:     callc [evt_mobj_delete evt_mobj.o] ["hosi_03_sw"]
+805E3B0C:     callc [evt_mobj_delete evt_mobj.o] ["hosi_04_sw"]
+805E3B18:     callc [evt_mobj_delete evt_mobj.o] ["hosi_05_sw"]
+805E3B24:     callc [evt_mobj_delete evt_mobj.o] ["hosi_06_sw"]
+805E3B30:     callc [evt_mobj_delete evt_mobj.o] ["hosi_07_sw"]
+805E3B3C:     callc [evt_mobj_delete evt_mobj.o] ["hosi_08_sw"]
+805E3B48:     setii GSW(0) 395
+805E3B54:     callc [evt_cam3d_evt_off evt_cam.o] 800 11
+805E3B64:     callc [evt_mario_key_onoff evt_mario.o] 1
+805E3B70:   endif
+805E3B74:   return
+805E3B78:   end

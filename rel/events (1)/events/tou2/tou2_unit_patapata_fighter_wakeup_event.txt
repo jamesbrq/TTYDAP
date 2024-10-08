@@ -1,0 +1,27 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [wakeup_event unit_patapata_fighter.o] AT 80623B3C ---
+80623B3C:   setii LW(10) -2
+80623B48:   setii LW(11) 1
+80623B54:   callc [btlevtcmd_GetOverTurnCount battle_event_cmd.o] LW(10) LW(0)
+80623B64:   subi LW(0) 1
+80623B70:   callc [btlevtcmd_SetOverTurnCount battle_event_cmd.o] LW(10) LW(0)
+80623B80:   if_int_ne LW(0) 0
+80623B8C:     callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 1 ["NKT_S_3"]
+80623BA0:     wait_ms 400
+80623BA8:     callc [btlevtcmd_StartWaitEvent battle_event_cmd.o] -2
+80623BB4:     return
+80623BB8:   endif
+80623BBC:   callc [btlevtcmd_SetPartsDefenceTable battle_event_cmd.o] LW(10) LW(11) [defence unit_patapata_fighter.o]
+80623BD0:   callc [btlevtcmd_OffStatusFlag battle_event_cmd.o] LW(10) 1
+80623BE0:   callc [btlevtcmd_AnimeSetPoseTable battle_event_cmd.o] LW(10) LW(11) [pose_table unit_patapata_fighter.o]
+80623BF4:   callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] LW(10) LW(11) ["NKT_S_1"]
+80623C08:   callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_ENM_INSIDE2"] [F1194D80] 0 [F1194D80]
+80623C24:   callc [btlevtcmd_SetFallAccel battle_event_cmd.o] -2 1.00
+80623C34:   callc [btlevtcmd_GetPos battle_event_cmd.o] -2 LW(0) LW(1) LW(2)
+80623C4C:   callc [btlevtcmd_JumpPosition battle_event_cmd.o] -2 LW(0) LW(1) LW(2) 12 -1
+80623C6C:   callc [btlevtcmd_SetHitOffset battle_event_cmd.o] -2 1 0 0 0
+80623C88:   callc [btlevtcmd_StartWaitEvent battle_event_cmd.o] -2
+80623C94:   return
+80623C98:   end

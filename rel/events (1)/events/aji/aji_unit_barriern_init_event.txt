@@ -1,0 +1,42 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [init_event unit_barriern.o] AT 8060E278 ---
+8060E278:   callc [btlevtcmd_SetEventWait battle_event_cmd.o] -2 [wait_event unit_barriern.o]
+8060E288:   callc [btlevtcmd_SetEventUnisonPhase battle_event_cmd.o] -2 [unison_phase_event unit_barriern.o]
+8060E298:   callc [btlevtcmd_SetEventAttack battle_event_cmd.o] -2 [attack_event unit_barriern.o]
+8060E2A8:   callc [btlevtcmd_SetEventDamage battle_event_cmd.o] -2 [damage_event unit_barriern.o]
+8060E2B8:   callc [btlevtcmd_SetEventConfusion battle_event_cmd.o] -2 [attack_event unit_barriern.o]
+8060E2C8:   callc [btlevtcmd_SetPartsScale battle_event_cmd.o] -2 1 0.80 0.80 1.00
+8060E2E4:   callc [btlevtcmd_OnUnitFlag battle_event_cmd.o] -2 3145728
+8060E2F4:   setii LW(0) 4
+8060E300:   loop 2
+8060E308:     callc [btlevtcmd_SetUnitWork battle_event_cmd.o] -2 LW(0) -1
+8060E31C:     addi LW(0) 1
+8060E328:   end_loop
+8060E32C:   setii LW(6) 0
+8060E338:   callc [btlevtcmd_GetUnitWork battle_event_cmd.o] -2 0 LW(7)
+8060E34C: 0:
+8060E354:   if_int_lt LW(6) LW(7)
+8060E360:     callc [btlevtcmd_GetUnitId battle_event_cmd.o] -2 LW(5)
+8060E370:     setii LW(8) LW(6)
+8060E37C:     addi LW(8) 4
+8060E388:     callc [btlevtcmd_SpawnUnit battle_event_cmd.o] LW(3) [entry_barriern_satellite unit_barriern.o] 0
+8060E39C:     callc [btlevtcmd_SetUnitWork battle_event_cmd.o] -2 LW(8) LW(3)
+8060E3B0:     callc [btlevtcmd_SetUnitWork battle_event_cmd.o] LW(3) 0 LW(5)
+8060E3C4:     callc [btlevtcmd_SetUnitWork battle_event_cmd.o] LW(3) 1 1
+8060E3D8:     callc [btlevtcmd_GetPos battle_event_cmd.o] -2 LW(0) LW(1) LW(2)
+8060E3F0:     callc [battleGetBarriernSatelliteInitPos unit_barriern.o] -2 LW(7) LW(6) LW(10) LW(11) LW(12)
+8060E410:     addi LW(0) LW(10)
+8060E41C:     addi LW(1) LW(11)
+8060E428:     addi LW(2) LW(12)
+8060E434:     callc [btlevtcmd_SetPos battle_event_cmd.o] LW(3) LW(0) LW(1) LW(2)
+8060E44C:     callc [btlevtcmd_SetHomePos battle_event_cmd.o] LW(3) LW(0) LW(1) LW(2)
+8060E464:     callc [btlevtcmd_SetScale battle_event_cmd.o] LW(3) 0.80 0.80 1.00
+8060E47C:     addi LW(6) 1
+8060E488:     goto 0
+8060E490:   endif
+8060E494: 10:
+8060E49C:   callc [outSplineTableSet unit_barriern.o] -2 LW(7)
+8060E4AC:   return
+8060E4B0:   end

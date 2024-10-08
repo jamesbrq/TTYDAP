@@ -1,0 +1,95 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [aji_08_init_evt aji_08.o] AT 805E4898 ---
+805E4898:   callc [evt_snd_bgmon evt_snd.o] 512 ["BGM_STG7_DUN2"]
+805E48A8:   callc [evt_snd_envon evt_snd.o] 272 ["ENV_STG7_AJI2"]
+805E48B8:   callc [evt_snd_set_rev_mode evt_snd.o] 1
+805E48C4:   setii LW(0) [bero_entry_data aji_08.o]
+805E48D0:   callc [evt_bero_get_info evt_bero.o]
+805E48D8:   callss [evt_bero_info_run evt_bero.o]
+805E48E0:   callsa_tid [heya_tenura_onoff aji_08.o] LW(0)
+805E48EC:   callsa [evt_emergency aji_17.o]
+805E48F4:   begin_thread
+805E48F8:     callc [slit_chk aji_08.o]
+805E4900:   end_thread
+805E4904:   callc [evt_map_playanim evt_map.o] ["bari"] 1 0
+805E4918:   callc [evt_map_playanim evt_map.o] ["awa1"] 1 0
+805E492C:   callc [evt_map_playanim evt_map.o] ["awa2"] 1 0
+805E4940:   callc [evt_item_entry evt_item.o] ["item00"] 125 -975 170 75 16 GSWF(5666) 0
+805E4968:   begin_thread
+805E496C:     loop 0
+805E4974:       callc [evt_mapobj_get_position evt_map.o] ["S_ita"] LW(0) LW(1) LW(2)
+805E498C:       callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_STG7_AMB_CEILING_MOVE1"] LW(0) LW(1) LW(2) 0
+805E49A8:       callc [evt_sub_intpl_msec_init evt_sub.o] 11 -100 100 1000
+805E49C0: 0:
+805E49C8:       callc [evt_sub_intpl_msec_get_value evt_sub.o]
+805E49D0:       divf LW(0) 10.00
+805E49DC:       callc [evt_mapobj_rotate evt_map.o] 1 ["S_ita"] 0 0 LW(0)
+805E49F8:       wait_frames 1
+805E4A00:       if_int_eq LW(1) 1
+805E4A0C:         goto 0
+805E4A14:       endif
+805E4A18:       callc [evt_mapobj_get_position evt_map.o] ["S_ita"] LW(0) LW(1) LW(2)
+805E4A30:       callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_STG7_AMB_CEILING_MOVE1"] LW(0) LW(1) LW(2) 0
+805E4A4C:       callc [evt_sub_intpl_msec_init evt_sub.o] 11 100 -100 1000
+805E4A64: 1:
+805E4A6C:       callc [evt_sub_intpl_msec_get_value evt_sub.o]
+805E4A74:       divf LW(0) 10.00
+805E4A80:       callc [evt_mapobj_rotate evt_map.o] 1 ["S_ita"] 0 0 LW(0)
+805E4A9C:       wait_frames 1
+805E4AA4:       if_int_eq LW(1) 1
+805E4AB0:         goto 1
+805E4AB8:       endif
+805E4ABC:     end_loop
+805E4AC0:   end_thread
+805E4AC4:   if_int_ge GSW(0) 373
+805E4AD0:     callc [evt_npc_check_delete evt_npc.o] ["軍団ザコ魔法使い"]
+805E4ADC:   endif
+805E4AE0:   return
+805E4AE4:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [heya_tenura_onoff aji_08.o] AT 805E4788 ---
+805E4788:   callc [evt_mapobj_flag_onoff evt_map.o] 1 0 ["S_heya"] 1
+805E47A0:   callc [evt_mapobj_flag_onoff evt_map.o] 1 1 ["S_tenura"] 1
+805E47B8:   setii LW(0) 0
+805E47C4:   loop 0
+805E47CC:     callc [camAtY aji_08.o] LW(1)
+805E47D8:     if_int_ge LW(1) 180
+805E47E4:       if_int_eq LW(0) 0
+805E47F0:         callc [evt_mapobj_flag_onoff evt_map.o] 1 1 ["S_heya"] 1
+805E4808:         callc [evt_mapobj_flag_onoff evt_map.o] 1 0 ["S_tenura"] 1
+805E4820:         setii LW(0) 1
+805E482C:       endif
+805E4830:     else
+805E4834:       if_int_eq LW(0) 1
+805E4840:         callc [evt_mapobj_flag_onoff evt_map.o] 1 0 ["S_heya"] 1
+805E4858:         callc [evt_mapobj_flag_onoff evt_map.o] 1 1 ["S_tenura"] 1
+805E4870:         setii LW(0) 0
+805E487C:       endif
+805E4880:     endif
+805E4884:     wait_frames 1
+805E488C:   end_loop
+805E4890:   return
+805E4894:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [evt_emergency aji_17.o] AT 805F1150 ---
+805F1150:   if_int_ne GSW(0) 376
+805F115C:     loop 0
+805F1164:       if_int_eq GSW(0) 376
+805F1170:         loop_break
+805F1174:       endif
+805F1178:       wait_frames 1
+805F1180:     end_loop
+805F1184:     callc [evt_sub_intpl_msec_init evt_sub.o] 11 255 96 1000
+805F119C: 0:
+805F11A4:     callc [evt_sub_intpl_msec_get_value evt_sub.o]
+805F11AC:     callc [evt_map_set_blend evt_map.o] 0 255 LW(0) LW(0) 255
+805F11C8:     wait_frames 1
+805F11D0:     if_int_eq LW(1) 1
+805F11DC:       goto 0
+805F11E4:     endif
+805F11E8:   endif
+805F11EC:   callc [evt_map_set_blend evt_map.o] 0 255 96 96 255
+805F1208:   return
+805F120C:   end

@@ -1,0 +1,181 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [dou_02_init_evt dou_02.o] AT 805C25D4 ---
+805C25D4:   callc [evt_snd_bgmon evt_snd.o] 512 ["BGM_STG5_DOU1"]
+805C25E4:   callc [evt_snd_envon evt_snd.o] 272 ["ENV_STG5_DOU3"]
+805C25F4:   callc [evt_snd_set_rev_mode evt_snd.o] 2
+805C2600:   setii LW(0) [bero_entry_data dou_02.o]
+805C260C:   callc [evt_bero_get_info evt_bero.o]
+805C2614:   callss [evt_bero_info_run evt_bero.o]
+805C261C:   callc [evt_map_playanim evt_map.o] ["nami"] 1 0
+805C2630:   callc [evt_map_playanim evt_map.o] ["moku"] 1 0
+805C2644:   callsa [yari_trap dou_02.o]
+805C264C:   setii LW(0) ["s02_fune_01"]
+805C2658:   setii LW(1) ["a02_fune_01"]
+805C2664:   setii LW(2) ["a02_fune_ata1"]
+805C2670:   setii LW(3) [evt_ride_ship dou_02.o]
+805C267C:   callss [dou_puka_event_init0 dou_02.o]
+805C2684:   callsa [dou_puka_event_main0 dou_02.o]
+805C268C:   callsa [dou_puka_event_sub0 dou_02.o]
+805C2694:   callc [evt_run_case_evt evt_case.o] 0 1 ["a02_fune_ata1"] 0 [dou_puka_event_0 dou_02.o] 0
+805C26B4:   callc [evt_run_case_evt evt_case.o] 1 1 ["a02_fune_ata1"] 0 [dou_puka_event_rev_0 dou_02.o] 0
+805C26D4:   setii LW(0) ["s02_fune02"]
+805C26E0:   setii LW(1) ["a02_fune_02"]
+805C26EC:   setii LW(2) ["a02_fune_ata2"]
+805C26F8:   setii LW(3) [evt_ride_ship dou_02.o]
+805C2704:   callss [dou_puka_event_init1 dou_02.o]
+805C270C:   callsa [dou_puka_event_main1 dou_02.o]
+805C2714:   callsa [dou_puka_event_sub1 dou_02.o]
+805C271C:   callc [evt_run_case_evt evt_case.o] 0 1 ["a02_fune_ata2"] 0 [dou_puka_event_1 dou_02.o] 0
+805C273C:   callc [evt_run_case_evt evt_case.o] 1 1 ["a02_fune_ata2"] 0 [dou_puka_event_rev_1 dou_02.o] 0
+805C275C:   callc [evt_item_entry evt_item.o] ["handle"] 72 147 42 101 0 GSWF(2975) 0
+805C2784:   callc [evt_item_entry evt_item.o] ["item_00"] 125 -25 25 100 16 GSWF(5644) 0
+805C27AC:   callc [evt_mobj_powerupblk evt_mobj.o] ["pblk1"] -300 145 -130 0 GSWF(5554) 0
+805C27D0:   callc [evt_hit_damage_return_set evt_hit.o] [hitDmgRetPoints dou_02.o]
+805C27DC:   callss [evt_gazigazi_entry evt_damage.o]
+805C27E4:   callc [evt_map_entry_airport_harbor evt_map.o] 1 ["S_Ship_Change"] ["Ship_Change"]
+805C27F8:   return
+805C27FC:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [yari_trap dou_02.o] AT 805C218C ---
+805C218C:   callc [evt_hit_bind_mapobj evt_hit.o] ["a02_yari"] ["s02_yari"]
+805C219C:   setii GW(15) 0
+805C21A8:   callsa [yari_trap_sub dou_02.o]
+805C21B0:   return
+805C21B4:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [dou_puka_event_init0 dou_02.o] AT 805C21B8 ---
+805C21B8:   setii GW(0) 0
+805C21C4:   setii GW(1) 0
+805C21D0:   return
+805C21D4:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [dou_puka_event_main0 dou_02.o] AT 805C2260 ---
+805C2260:   callc [evt_hit_bind_mapobj evt_hit.o] LW(1) LW(0)
+805C2270:   loop 0
+805C2278:     callc [evt_mapobj_trans evt_map.o] 1 LW(0) 0 GW(1) 0
+805C2294:     callc [evt_hit_bind_update evt_hit.o] LW(1)
+805C22A0:     wait_frames 1
+805C22A8:   end_loop
+805C22AC:   return
+805C22B0:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [dou_puka_event_sub0 dou_02.o] AT 805C22B4 ---
+805C22B4:   callc [evt_sub_random evt_sub.o] 400 LW(0)
+805C22C4:   addi LW(0) 200
+805C22D0:   wait_ms LW(0)
+805C22D8:   setir LW(6) 0xfd050f81
+805C22E4:   callsa_tid [dou_normal_puka dou.o] LW(0)
+805C22F0:   loop 0
+805C22F8:     loop 0
+805C2300:       if_int_eq GW(0) 1
+805C230C:         loop_break
+805C2310:       endif
+805C2314:       wait_frames 1
+805C231C:     end_loop
+805C2320:     stop_tid LW(0)
+805C2328:     loop 0
+805C2330:       if_int_eq GW(0) 2
+805C233C:         loop_break
+805C2340:       endif
+805C2344:       wait_frames 1
+805C234C:     end_loop
+805C2350:     callsa_tid [dou_normal_puka dou.o] LW(0)
+805C235C:   end_loop
+805C2360:   return
+805C2364:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [dou_puka_event_init1 dou_02.o] AT 805C2368 ---
+805C2368:   setii GW(2) 0
+805C2374:   setii GW(3) 0
+805C2380:   return
+805C2384:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [dou_puka_event_main1 dou_02.o] AT 805C2410 ---
+805C2410:   callc [evt_hit_bind_mapobj evt_hit.o] LW(1) LW(0)
+805C2420:   loop 0
+805C2428:     callc [evt_mapobj_trans evt_map.o] 1 LW(0) 0 GW(3) 0
+805C2444:     callc [evt_hit_bind_update evt_hit.o] LW(1)
+805C2450:     wait_frames 1
+805C2458:   end_loop
+805C245C:   return
+805C2460:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [dou_puka_event_sub1 dou_02.o] AT 805C2464 ---
+805C2464:   callc [evt_sub_random evt_sub.o] 400 LW(0)
+805C2474:   addi LW(0) 200
+805C2480:   wait_ms LW(0)
+805C2488:   setir LW(6) 0xfd050f83
+805C2494:   callsa_tid [dou_normal_puka dou.o] LW(0)
+805C24A0:   loop 0
+805C24A8:     loop 0
+805C24B0:       if_int_eq GW(2) 1
+805C24BC:         loop_break
+805C24C0:       endif
+805C24C4:       wait_frames 1
+805C24CC:     end_loop
+805C24D0:     stop_tid LW(0)
+805C24D8:     loop 0
+805C24E0:       if_int_eq GW(2) 2
+805C24EC:         loop_break
+805C24F0:       endif
+805C24F4:       wait_frames 1
+805C24FC:     end_loop
+805C2500:     callsa_tid [dou_normal_puka dou.o] LW(0)
+805C250C:   end_loop
+805C2510:   return
+805C2514:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [yari_trap_sub dou_02.o] AT 805C1FB0 ---
+805C1FB0:   if_int_ne GW(15) 0
+805C1FBC:     return
+805C1FC0:   endif
+805C1FC4:   setii GW(15) 1
+805C1FD0:   loop 0
+805C1FD8:     callc [evt_hitobj_attr_onoff evt_hit.o] 1 1 ["bb"] 2048
+805C1FF0:     callc [evt_mapobj_get_position evt_map.o] ["s02_yari"] LW(0) LW(1) LW(2)
+805C2008:     callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_MOBJ_FLOOR_TRAP1"] LW(0) LW(1) LW(2) 0
+805C2024:     callc [evt_sub_intpl_msec_init evt_sub.o] 1 0 50 150
+805C203C:     loop 0
+805C2044:       callc [evt_sub_intpl_msec_get_value evt_sub.o]
+805C204C:       callc [evt_mapobj_trans evt_map.o] 1 ["s02_yari"] 0 LW(0) 0
+805C2068:       callc [evt_hit_bind_update evt_hit.o] ["a02_yari"]
+805C2074:       if_int_eq LW(1) 0
+805C2080:         loop_break
+805C2084:       endif
+805C2088:       wait_frames 1
+805C2090:     end_loop
+805C2094:     wait_ms 1000
+805C209C:     callc [evt_mapobj_get_position evt_map.o] ["s02_yari"] LW(0) LW(1) LW(2)
+805C20B4:     callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_MOBJ_FLOOR_TRAP2"] LW(0) LW(1) LW(2) 0
+805C20D0:     callc [evt_sub_intpl_msec_init evt_sub.o] 4 50 0 300
+805C20E8:     loop 0
+805C20F0:       callc [evt_sub_intpl_msec_get_value evt_sub.o]
+805C20F8:       callc [evt_mapobj_trans evt_map.o] 1 ["s02_yari"] 0 LW(0) 0
+805C2114:       callc [evt_hit_bind_update evt_hit.o] ["a02_yari"]
+805C2120:       if_int_eq LW(1) 0
+805C212C:         loop_break
+805C2130:       endif
+805C2134:       wait_frames 1
+805C213C:     end_loop
+805C2140:     callc [evt_hitobj_attr_onoff evt_hit.o] 1 0 ["bb"] 2048
+805C2158:     wait_ms 2500
+805C2160:     if_int_eq GW(15) 2
+805C216C:       loop_break
+805C2170:     endif
+805C2174:   end_loop
+805C2178:   setii GW(15) 0
+805C2184:   return
+805C2188:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [dou_normal_puka dou.o] AT 805C1640 ---
+805C1640:   setii LW(0) 1
+805C164C:   loop 0
+805C1654:     callc [evt_dou_normal_puka dou.o] LW(1)
+805C1660:     storef_ind LW(6) LW(1)
+805C166C:     addi LW(0) 1
+805C1678:     wait_ms 130
+805C1680:   end_loop
+805C1684:   return
+805C1688:   end

@@ -1,0 +1,36 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [las_17_init_evt las_17.o] AT 805E1C5C ---
+805E1C5C:   callc [evt_snd_bgmon evt_snd.o] 512 ["BGM_STG8_LST2"]
+805E1C6C:   callc [evt_snd_envon evt_snd.o] 272 ["ENV_STG8_LAS1"]
+805E1C7C:   callc [evt_snd_set_rev_mode evt_snd.o] 2
+805E1C88:   setii LW(0) [bero_entry_data las_17.o]
+805E1C94:   callc [evt_bero_get_info evt_bero.o]
+805E1C9C:   callss [evt_bero_info_run evt_bero.o]
+805E1CA4:   if_int_lt GSW(1123) 4
+805E1CB0:     setii GSW(1123) 0
+805E1CBC:   endif
+805E1CC0:   callc [evt_npc_flag_onoff evt_npc.o] 0 ["クリボー"] 4
+805E1CD4:   callc [evt_npc_flag_onoff evt_npc.o] 0 ["トゲクリボー"] 4
+805E1CE8:   callc [evt_npc_flag_onoff evt_npc.o] 0 ["ノコノコ"] 4
+805E1CFC:   callc [evt_npc_flag_onoff evt_npc.o] 0 ["シンノスケ"] 4
+805E1D10:   callc [evt_npc_change_interrupt evt_npc.o] ["クリボー"] 8 [enemy1_dead_evt las_17.o]
+805E1D24:   callc [evt_npc_change_interrupt evt_npc.o] ["トゲクリボー"] 8 [enemy2_dead_evt las_17.o]
+805E1D38:   callc [evt_npc_change_interrupt evt_npc.o] ["ノコノコ"] 8 [enemy3_dead_evt las_17.o]
+805E1D4C:   callc [evt_npc_change_interrupt evt_npc.o] ["シンノスケ"] 8 [enemy4_dead_evt las_17.o]
+805E1D60:   if_int_eq GSW(1123) 4
+805E1D6C:     callc [evt_mobj_floatswitch_blue evt_mobj.o] 0 ["switch"] -225 60 0 [switch_evt las_17.o] GSWF(4351)
+805E1D90:     callc [evt_npc_check_delete evt_npc.o] ["クリボー"]
+805E1D9C:     callc [evt_npc_check_delete evt_npc.o] ["トゲクリボー"]
+805E1DA8:     callc [evt_npc_check_delete evt_npc.o] ["ノコノコ"]
+805E1DB4:     callc [evt_npc_check_delete evt_npc.o] ["シンノスケ"]
+805E1DC0:   endif
+805E1DC4:   callc [evt_mobj_itembox evt_mobj.o] ["box"] 0 0 0 0 0 [box_evt las_17.o] GSWF(4368)
+805E1DEC:   if_int_eq GSWF(4351) 0
+805E1DF8:     callc [evt_mobj_flag_onoff evt_mobj.o] 1 ["box"] 16384
+805E1E0C:     callc [evt_mobj_hit_onoff evt_mobj.o] ["box"] 0
+805E1E1C:   endif
+805E1E20:   callc [evt_run_case_evt evt_case.o] 9 1 ["A_pure"] 0 [hint_plate las_17.o] 0
+805E1E40:   return
+805E1E44:   end

@@ -1,0 +1,151 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [phase_event unit_boss_rampell.o] AT 805DC1FC ---
+805DC1FC:   callc [btlevtcmd_CheckPhase battle_event_cmd.o] LW(0) 67108867
+805DC20C:   if_int_ne LW(0) 0
+805DC218:     callc [btlevtcmd_CheckActStatus battle_event_cmd.o] -2 LW(0)
+805DC228:     if_int_ne LW(0) 0
+805DC234:       callc [btlevtcmd_GetUnitWork battle_event_cmd.o] -2 0 LW(0)
+805DC248:       if_int_ne LW(0) 2
+805DC254:         callc [btlevtcmd_get_turn battle_event_cmd.o] LW(0)
+805DC260:         if_int_ge LW(0) 5
+805DC26C:           callc [btlevtcmd_PhaseEventStartDeclare battle_event_cmd.o] -2
+805DC278:           callss [to_faker_mario unit_boss_rampell.o]
+805DC280:           callc [btlevtcmd_StartWaitEvent battle_event_cmd.o] -2
+805DC28C:         endif
+805DC290:       endif
+805DC294:       callc [btlevtcmd_GetUnitWork battle_event_cmd.o] -2 0 LW(0)
+805DC2A8:       switchi LW(0)
+805DC2B0:         case_int_eq 0
+805DC2B8:           callc [btlevtcmd_SetUnitWork battle_event_cmd.o] -2 0 1
+805DC2CC:           callc [btlevtcmd_PhaseEventStartDeclare battle_event_cmd.o] -2
+805DC2D8:           callc [btlevtcmd_StatusWindowOnOff battle_event_cmd.o] 0
+805DC2E4:           callss [rampell_zoom unit_boss_rampell.o]
+805DC2EC:           callc [evt_msg_print evt_msg.o] 2 ["stg4_jin_08_01"] 0 -2
+805DC304:           wait_ms 200
+805DC30C:           callc [btlevtcmd_StatusWindowOnOff battle_event_cmd.o] 1
+805DC318:           callc [evt_btl_camera_set_mode battle_camera.o] 0 0
+805DC328:           callc [btlevtcmd_StartWaitEvent battle_event_cmd.o] -2
+805DC334:         case_int_eq 1
+805DC33C:           callc [btlevtcmd_GetHp battle_event_cmd.o] -2 LW(0)
+805DC34C:           callc [btlevtcmd_GetUnitWork battle_event_cmd.o] -2 1 LW(1)
+805DC360:           if_int_lt LW(0) LW(1)
+805DC36C:             callc [btlevtcmd_PhaseEventStartDeclare battle_event_cmd.o] -2
+805DC378:             callss [to_faker_mario unit_boss_rampell.o]
+805DC380:             callc [btlevtcmd_StartWaitEvent battle_event_cmd.o] -2
+805DC38C:           endif
+805DC390:       end_switch
+805DC394:     endif
+805DC398:   endif
+805DC39C:   return
+805DC3A0:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [to_faker_mario unit_boss_rampell.o] AT 805DBA6C ---
+805DBA6C:   callc [btlevtcmd_SetUnitWork battle_event_cmd.o] -2 0 2
+805DBA80:   callc [btlevtcmd_WaitAttackEnd battle_event_cmd.o]
+805DBA88:   callc [btlevtcmd_StatusWindowOnOff battle_event_cmd.o] 0
+805DBA94:   callss [rampell_zoom unit_boss_rampell.o]
+805DBA9C:   callc [evt_msg_print evt_msg.o] 2 ["stg4_jin_08_02"] 0 -2
+805DBAB4:   wait_ms 200
+805DBABC:   callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_BOSS_RNPL_ARM_UP1"] [F1194D80] 0 [F1194D80]
+805DBAD8:   callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 1 ["A_3A"]
+805DBAEC:   wait_ms 600
+805DBAF4:   callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_BOSS_RNPL_ARM_UP1"] [F1194D80] 0 [F1194D80]
+805DBB10:   callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 1 ["A_3A"]
+805DBB24:   wait_ms 600
+805DBB2C:   callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_BOSS_RNPL_ARM_UP1"] [F1194D80] 0 [F1194D80]
+805DBB48:   callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 1 ["A_3A"]
+805DBB5C:   wait_ms 200
+805DBB64:   callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_BOSS_RNPL_LAUGH1"] [F1194D80] 0 [F1194D80]
+805DBB80:   callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 1 ["A_3B"]
+805DBB94:   wait_ms 800
+805DBB9C:   callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_BOSS_RNPL_EYE_SHINE1"] [F1194D80] 0 [F1194D80]
+805DBBB8:   callc [btlevtcmd_GetStatusMg battle_event_cmd.o] -2 LW(6)
+805DBBC8:   callc [btlevtcmd_GetPos battle_event_cmd.o] -2 LW(0) LW(1) LW(2)
+805DBBE0:   setff LW(7) -6.00
+805DBBEC:   mulf LW(7) LW(6)
+805DBBF8:   addf LW(0) LW(7)
+805DBC04:   setff LW(7) 33.00
+805DBC10:   mulf LW(7) LW(6)
+805DBC1C:   addf LW(1) LW(7)
+805DBC28:   callc [evt_eff evt_eff.o] [zero_jin_000097e4 unit_boss_rampell.o] ["toge_flush"] 3 LW(0) LW(1) LW(2) 60 0 0 0 0 0 0 0
+805DBC68:   setff LW(7) 7.00
+805DBC74:   mulf LW(7) LW(6)
+805DBC80:   addf LW(0) LW(7)
+805DBC8C:   setff LW(7) -1.00
+805DBC98:   mulf LW(7) LW(6)
+805DBCA4:   addf LW(1) LW(7)
+805DBCB0:   callc [evt_eff evt_eff.o] [zero_jin_000097e4 unit_boss_rampell.o] ["toge_flush"] 3 LW(0) LW(1) LW(2) 60 0 0 0 0 0 0 0
+805DBCF0:   wait_ms 1000
+805DBCF8:   callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_BOSS_RNPL_TRANSFORM4"] [F1194D80] 0 [F1194D80]
+805DBD14:   callc [btlevtcmd_GetPos battle_event_cmd.o] -2 LW(0) LW(1) LW(2)
+805DBD2C:   addi LW(2) 5
+805DBD38:   callc [evt_eff evt_eff.o] [zero_jin_000097e4 unit_boss_rampell.o] ["kemuri_test"] 7 LW(0) LW(1) LW(2) 2.00 0 0 0 0 0 0 0
+805DBD78:   wait_ms 200
+805DBD80:   callc [btlevtcmd_SetPos battle_event_cmd.o] -2 -1000 -1000 0
+805DBD98:   wait_ms 500
+805DBDA0:   callc [evt_btl_camera_set_mode battle_camera.o] 0 3
+805DBDB0:   callc [evt_btl_camera_set_moveto battle_camera.o] 0 -110 65 332 -110 30 -340 30 11
+805DBDDC:   wait_frames 37
+805DBDE4:   callc [btlevtcmd_GetPos battle_event_cmd.o] -3 LW(0) LW(1) LW(2)
+805DBDFC:   addi LW(0) 3
+805DBE08:   addi LW(1) -5
+805DBE14:   addi LW(2) 5
+805DBE20:   callc [eff_scanning unit_boss_rampell.o] -3 LW(0) LW(1) LW(2)
+805DBE38:   callc [btlevtcmd_snd_se battle_event_cmd.o] -3 ["SFX_BOSS_RNPL_TRANSFORM2"] [F1194D80] 0 [F1194D80]
+805DBE54:   wait_ms 200
+805DBE5C:   callc [btlevtcmd_snd_se battle_event_cmd.o] -3 ["SFX_BOSS_RNPL_TRANSFORM1"] [F1194D80] 0 [F1194D80]
+805DBE78:   wait_ms 1300
+805DBE80:   callc [btlevtcmd_snd_se battle_event_cmd.o] -3 ["SFX_BOSS_RNPL_TRANSFORM3"] [F1194D80] 0 [F1194D80]
+805DBE9C:   wait_ms 500
+805DBEA4:   callss [rampell_zoom unit_boss_rampell.o]
+805DBEAC:   callss [init_event_fmario unit_boss_rampell.o]
+805DBEB4:   callc [btlevtcmd_GetHp battle_event_cmd.o] -2 LW(0)
+805DBEC4:   if_int_lt LW(0) 10
+805DBED0:     callc [btlevtcmd_SetHp battle_event_cmd.o] -2 10
+805DBEE0:   endif
+805DBEE4:   callc [evt_snd_sfxon evt_snd.o] ["SFX_BOSS_RNPLTRANSFORM5"] 0
+805DBEF4:   callc [btlevtcmd_GetHomePos battle_event_cmd.o] -2 LW(5) LW(6) LW(7)
+805DBF0C:   callc [evt_sub_intpl_msec_init evt_sub.o] 11 -50 0 1000
+805DBF24:   loop 0
+805DBF2C:     callc [evt_sub_intpl_msec_get_value_para evt_sub.o] LW(0) LW(1)
+805DBF3C:     callc [btlevtcmd_SetPos battle_event_cmd.o] -2 LW(5) LW(0) LW(7)
+805DBF54:     if_int_eq LW(1) 0
+805DBF60:       loop_break
+805DBF64:     endif
+805DBF68:     wait_frames 1
+805DBF70:   end_loop
+805DBF74:   callc [evt_msg_print evt_msg.o] 2 ["stg4_jin_08_03"] 0 -2
+805DBF8C:   wait_ms 200
+805DBF94:   callc [btlevtcmd_StatusWindowOnOff battle_event_cmd.o] 1
+805DBFA0:   callc [evt_btl_camera_set_mode battle_camera.o] 0 0
+805DBFB0:   return
+805DBFB4:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [rampell_zoom unit_boss_rampell.o] AT 805DBA20 ---
+805DBA20:   callc [evt_btl_camera_set_mode battle_camera.o] 0 3
+805DBA30:   callc [evt_btl_camera_set_moveto battle_camera.o] 0 90 65 332 90 30 -340 30 11
+805DBA5C:   wait_frames 37
+805DBA64:   return
+805DBA68:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [init_event_fmario unit_boss_rampell.o] AT 805DD0F4 ---
+805DD0F4:   callc [btlevtcmd_AnimeSetPoseTable battle_event_cmd.o] -2 LW(11) [pose_table_fmario_stay unit_boss_rampell.o]
+805DD108:   callc [btlevtcmd_ChangeDataTable battle_event_cmd.o] -2 [data_table_fmario unit_boss_rampell.o]
+805DD118:   callc [btlevtcmd_ReplaceParts battle_event_cmd.o] -2 LW(11) [parts_fmario unit_boss_rampell.o] 1
+805DD130:   callc [btlevtcmd_SetRegistStatus battle_event_cmd.o] -2 [regist_fmario unit_boss_rampell.o]
+805DD140:   callc [btlevtcmd_SetEventWait battle_event_cmd.o] -2 [wait_event_fmario unit_boss_rampell.o]
+805DD150:   callc [btlevtcmd_SetEventAttack battle_event_cmd.o] -2 [attack_event_fmario unit_boss_rampell.o]
+805DD160:   callc [btlevtcmd_SetEventDamage battle_event_cmd.o] -2 [damage_event_fmario unit_boss_rampell.o]
+805DD170:   callc [btlevtcmd_SetEventConfusion battle_event_cmd.o] -2 [btldefaultevt_Confuse battle_event_default.o]
+805DD180:   callc [btlevtcmd_OnUnitFlag battle_event_cmd.o] -2 4
+805DD190:   callc [btlevtcmd_ClearAllStatus battle_event_cmd.o] -2
+805DD19C:   callc [_mario_makkuro_set unit_boss_rampell.o]
+805DD1A4:   setii GW(17) -1
+805DD1B0:   callc [btlevtcmd_SetWalkSound battle_event_cmd.o] -2 ["SFX_BOSS_NM_MOVE1L"] ["SFX_BOSS_NM_MOVE1R"] 0 20 20
+805DD1D0:   callc [btlevtcmd_SetRunSound battle_event_cmd.o] -2 ["SFX_BOSS_NM_MOVE1L"] ["SFX_BOSS_NM_MOVE1R"] 0 10 10
+805DD1F0:   callc [btlevtcmd_SetJumpSound battle_event_cmd.o] -2 ["SFX_BOSS_NM_JUMP1"] ["SFX_BOSS_NM_LANDING1"]
+805DD204:   callc [btlevtcmd_StartWaitEvent battle_event_cmd.o] -2
+805DD210:   return
+805DD214:   end

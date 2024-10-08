@@ -1,0 +1,40 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [unison_phase_event unit_kurokumorn.o] AT 805D8D24 ---
+805D8D24:   callc [btlevtcmd_CheckPhase battle_event_cmd.o] LW(0) 67108865
+805D8D34:   if_int_eq LW(0) 0
+805D8D40:     goto 99
+805D8D48:   endif
+805D8D4C:   callc [btlevtcmd_CheckActStatus battle_event_cmd.o] -2 LW(0)
+805D8D5C:   if_int_eq LW(0) 0
+805D8D68:     goto 99
+805D8D70:   endif
+805D8D74:   callc [btlevtcmd_CheckPartsCounterAttribute battle_event_cmd.o] -2 1 1024 LW(0)
+805D8D8C:   if_int_eq LW(0) 1
+805D8D98:     goto 99
+805D8DA0:   endif
+805D8DA4:   callc [evt_sub_random evt_sub.o] 99 LW(0)
+805D8DB4:   if_int_lt LW(0) 50
+805D8DC0:     callc [btlevtcmd_GetUnitWork battle_event_cmd.o] -2 0 LW(0)
+805D8DD4:     if_int_eq LW(0) 1
+805D8DE0:       callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_ENM_KUMO_MOVE4"] [F1194D80] 0 [F1194D80]
+805D8DFC:       callc [btlevtcmd_GetPos battle_event_cmd.o] -2 LW(0) LW(1) LW(2)
+805D8E14:       setii LW(1) 40
+805D8E20:       callc [btlevtcmd_DivePosition battle_event_cmd.o] -2 LW(0) LW(1) LW(2) 60 10 4 0 -1
+805D8E4C:       callc [btlevtcmd_SetHomePos battle_event_cmd.o] -2 LW(0) LW(1) LW(2)
+805D8E64:       callc [btlevtcmd_OnPartsAttribute battle_event_cmd.o] -2 1 6291456
+805D8E78:       callc [btlevtcmd_SetUnitWork battle_event_cmd.o] -2 0 0
+805D8E8C:     else
+805D8E90:       callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_ENM_KUMO_MOVE5"] [F1194D80] 0 [F1194D80]
+805D8EAC:       callc [btlevtcmd_GetPos battle_event_cmd.o] -2 LW(0) LW(1) LW(2)
+805D8EC4:       setii LW(1) 10
+805D8ED0:       callc [btlevtcmd_DivePosition battle_event_cmd.o] -2 LW(0) LW(1) LW(2) 60 -10 4 0 -1
+805D8EFC:       callc [btlevtcmd_SetHomePos battle_event_cmd.o] -2 LW(0) LW(1) LW(2)
+805D8F14:       callc [btlevtcmd_OffPartsAttribute battle_event_cmd.o] -2 1 6291456
+805D8F28:       callc [btlevtcmd_SetUnitWork battle_event_cmd.o] -2 0 1
+805D8F3C:     endif
+805D8F40:   endif
+805D8F44: 99:
+805D8F4C:   return
+805D8F50:   end

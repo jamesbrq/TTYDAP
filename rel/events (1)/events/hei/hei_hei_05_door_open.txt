@@ -1,0 +1,35 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [door_open hei_05.o] AT 805CAFC0 ---
+805CAFC0:   if_int_lt GSW(0) 30
+805CAFCC:     callc [evt_mario_key_onoff evt_mario.o] 0
+805CAFD8:     wait_ms 800
+805CAFE0:     begin_thread
+805CAFE4:       callc [evt_cam_shake evt_cam.o] 4 0.00 0.00 6000
+805CAFFC:     end_thread
+805CB000:     callc [evt_snd_sfxon evt_snd.o] ["SFX_STG1_QUAKE3"] LW(10)
+805CB010:     wait_ms 1000
+805CB018:     callc [evt_cam3d_evt_set evt_cam.o] -144 61 226 276 74 -43 1000 11
+805CB040:     wait_ms 1200
+805CB048:     begin_thread
+805CB04C:       callc [evt_mapobj_get_position evt_map.o] ["MON"] LW(0) LW(1) LW(2)
+805CB064:       loop 8
+805CB06C:         callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_STG1_GRID_UP2"] LW(0) LW(1) LW(2) 0
+805CB088:         wait_ms 140
+805CB090:       end_loop
+805CB094:       wait_ms 280
+805CB09C:       callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_STG1_GRID_UP1"] LW(0) LW(1) LW(2) 0
+805CB0B8:     end_thread
+805CB0BC:     callc [evt_map_playanim evt_map.o] ["anm_mon"] 0 0
+805CB0D0:     callc [evt_map_checkanim evt_map.o] ["anm_mon"] LW(0) LW(1)
+805CB0E4:     wait_ms LW(1)
+805CB0EC:     callc [evt_snd_sfxoff evt_snd.o] LW(10)
+805CB0F8:     callc [evt_cam3d_evt_off evt_cam.o] 1000 11
+805CB108:     wait_ms 1000
+805CB110:     callc [evt_hitobj_onoff evt_hit.o] ["a_mon"] 0 0
+805CB124:     setii GSW(0) 30
+805CB130:     callc [evt_mario_key_onoff evt_mario.o] 1
+805CB13C:   endif
+805CB140:   return
+805CB144:   end

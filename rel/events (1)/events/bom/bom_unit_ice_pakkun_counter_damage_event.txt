@@ -1,0 +1,82 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [counter_damage_event unit_ice_pakkun.o] AT 805D0414 ---
+805D0414:   callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 1 ["PKF_D_1"]
+805D0428:   wait_ms 1000
+805D0430:   callc [btlevtcmd_CheckDamageCode battle_event_cmd.o] -2 512 LW(0)
+805D0444:   if_int_ne LW(0) 0
+805D0450:     callc [btlevtcmd_CheckDamageCode battle_event_cmd.o] -2 2048 LW(0)
+805D0464:     if_int_eq LW(0) 0
+805D0470:       return
+805D0474:     endif
+805D0478:   endif
+805D047C:   callss [return_event unit_ice_pakkun.o]
+805D0484:   return
+805D0488:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [return_event unit_ice_pakkun.o] AT 805D0698 ---
+805D0698:   callc [evt_btl_camera_set_mode battle_camera.o] 0 0
+805D06A8:   callc [pakkun_ceil_exist unit_ice_pakkun.o] LW(0)
+805D06B4:   if_int_eq LW(0) 1
+805D06C0:     callc [evt_sub_random evt_sub.o] 1 LW(15)
+805D06D0:   else
+805D06D4:     setii LW(15) 0
+805D06E0:   endif
+805D06E4:   callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_ENM_PAKKUN_MOVE1"] [F1194D80] 0 [F1194D80]
+805D0700:   begin_child_thread
+805D0704:     callc [shadow_scale_small unit_ice_pakkun.o] -2
+805D0710:   end_child_thread
+805D0714:   callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 1 ["PKF_E_2"]
+805D0728:   wait_ms 300
+805D0730:   callc [btlevtcmd_OnAttribute battle_event_cmd.o] -2 16777216
+805D0740:   callc [btlevtcmd_OnPartsAttribute battle_event_cmd.o] -2 1 33554432
+805D0754:   if_int_eq LW(15) 0
+805D0760:     callc [btlevtcmd_SetEventCeilFall battle_event_cmd.o] -2 0
+805D0770:     callc [btlevtcmd_GetHomePos battle_event_cmd.o] -2 LW(0) LW(1) LW(2)
+805D0788:     callc [btlevtcmd_SetPos battle_event_cmd.o] -2 LW(0) 0 LW(2)
+805D07A0:     callc [btlevtcmd_SetHomePos battle_event_cmd.o] -2 LW(0) 0 LW(2)
+805D07B8:     wait_ms 500
+805D07C0:     callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_ENM_PAKKUN_MOVE2"] [F1194D80] 0 [F1194D80]
+805D07DC:     begin_child_thread
+805D07E0:       callc [shadow_scale_return unit_ice_pakkun.o] -2
+805D07EC:     end_child_thread
+805D07F0:     callc [btlevtcmd_OffAttribute battle_event_cmd.o] -2 16777216
+805D0800:     callc [btlevtcmd_OffPartsAttribute battle_event_cmd.o] -2 1 33554432
+805D0814:     callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 1 ["PKF_E_1"]
+805D0828:     callc [btlevtcmd_SetHitOffset battle_event_cmd.o] -2 1 0 0 0
+805D0844:     callc [btlevtcmd_SetHitCursorOffset battle_event_cmd.o] -2 1 0 50 0
+805D0860:     callc [btlevtcmd_SetStatusIconOffset battle_event_cmd.o] -2 4 48
+805D0874:     callc [btlevtcmd_SetKissHitOffset battle_event_cmd.o] -2 16 32 0
+805D088C:     callc [btlevtcmd_OffAttribute battle_event_cmd.o] -2 2
+805D089C:     callc [btlevtcmd_OffPartsAttribute battle_event_cmd.o] -2 1 4194304
+805D08B0:     callc [btlevtcmd_OffPartsAttribute battle_event_cmd.o] -2 1 2097152
+805D08C4:     callc [btlevtcmd_AnimeSetPoseTable battle_event_cmd.o] -2 1 [pose_table unit_ice_pakkun.o]
+805D08D8:     wait_ms 500
+805D08E0:     callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 1 ["PKF_S_1"]
+805D08F4:   else
+805D08F8:     callc [btlevtcmd_SetEventCeilFall battle_event_cmd.o] -2 [ceil_fall_ready_event unit_ice_pakkun.o]
+805D0908:     callc [btlevtcmd_GetHomePos battle_event_cmd.o] -2 LW(0) LW(1) LW(2)
+805D0920:     callc [btlevtcmd_SetPos battle_event_cmd.o] -2 LW(0) 130 LW(2)
+805D0938:     callc [btlevtcmd_SetHomePos battle_event_cmd.o] -2 LW(0) 130 LW(2)
+805D0950:     wait_ms 500
+805D0958:     callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_ENM_PAKKUN_MOVE2"] [F1194D80] 0 [F1194D80]
+805D0974:     begin_child_thread
+805D0978:       callc [shadow_scale_return unit_ice_pakkun.o] -2
+805D0984:     end_child_thread
+805D0988:     callc [btlevtcmd_OffAttribute battle_event_cmd.o] -2 16777216
+805D0998:     callc [btlevtcmd_OffPartsAttribute battle_event_cmd.o] -2 1 33554432
+805D09AC:     callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 1 ["PKF_E_3"]
+805D09C0:     callc [btlevtcmd_SetHitOffset battle_event_cmd.o] -2 1 0 -80 0
+805D09DC:     callc [btlevtcmd_SetHitCursorOffset battle_event_cmd.o] -2 1 0 -50 0
+805D09F8:     callc [btlevtcmd_SetStatusIconOffset battle_event_cmd.o] -2 4 10
+805D0A0C:     callc [btlevtcmd_SetKissHitOffset battle_event_cmd.o] -2 16 -32 0
+805D0A24:     callc [btlevtcmd_OnAttribute battle_event_cmd.o] -2 2
+805D0A34:     callc [btlevtcmd_OnPartsAttribute battle_event_cmd.o] -2 1 4194304
+805D0A48:     callc [btlevtcmd_OnPartsAttribute battle_event_cmd.o] -2 1 2097152
+805D0A5C:     callc [btlevtcmd_AnimeSetPoseTable battle_event_cmd.o] -2 1 [pose_table_ceil unit_ice_pakkun.o]
+805D0A70:     wait_ms 500
+805D0A78:     callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 1 ["PKF_S_3"]
+805D0A8C:   endif
+805D0A90:   return
+805D0A94:   end

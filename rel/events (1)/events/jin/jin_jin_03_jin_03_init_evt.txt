@@ -1,0 +1,61 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [jin_03_init_evt jin_03.o] AT 805C9554 ---
+805C9554:   callc [evt_snd_bgmon evt_snd.o] 512 ["BGM_STG4_JIN1"]
+805C9564:   callc [evt_snd_envon evt_snd.o] 272 ["ENV_STG4_JIN1"]
+805C9574:   callc [evt_snd_set_rev_mode evt_snd.o] 2
+805C9580:   callc [evt_kagemario_init evt_kagemario.o]
+805C9588:   setii LW(0) [bero_entry_data jin_03.o]
+805C9594:   callc [evt_bero_get_info evt_bero.o]
+805C959C:   callss [evt_bero_info_run evt_bero.o]
+805C95A4:   callss [evt_usu_kagemario_party_kill evt_kagemario.o]
+805C95AC:   if_int_eq LSW(1) 0
+805C95B8:     callsa [jin_03_kaidan_temae_kesu jin_03.o]
+805C95C0:     callsa [jin_03_kaidan_oku_kesu jin_03.o]
+805C95C8:   else
+805C95CC:     if_int_eq LSW(1) 1
+805C95D8:       callsa [jin_03_kaidan_naka_kesu jin_03.o]
+805C95E0:       callsa [jin_03_kaidan_oku_kesu jin_03.o]
+805C95E8:     else
+805C95EC:       callsa [jin_03_kaidan_temae_kesu jin_03.o]
+805C95F4:       callsa [jin_03_kaidan_naka_kesu jin_03.o]
+805C95FC:     endif
+805C9600:   endif
+805C9604:   callc [evt_mobj_kururing_floor evt_mobj.o] ["kururin1"] 125 0 0 ["S_yuka"] 125 GSWF(5634)
+805C9628:   return
+805C962C:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [evt_usu_kagemario_party_kill evt_kagemario.o] AT 805CFAA8 ---
+805CFAA8:   switchi GSW(0)
+805CFAB0:     case_int_range 201 205
+805CFABC:       callc [evt_party_stop evt_party.o] 0
+805CFAC8:       callc [evt_party_set_pos evt_party.o] 0 0 -1000 0
+805CFAE0:       callc [evt_party_cont_onoff evt_party.o] 0 0
+805CFAF0:       callc [evt_mario_kill_party evt_mario.o] 0
+805CFAFC:       callc [evt_party_stop evt_party.o] 1
+805CFB08:       callc [evt_party_set_pos evt_party.o] 1 0 -1000 0
+805CFB20:       callc [evt_party_cont_onoff evt_party.o] 1 0
+805CFB30:       callc [evt_mario_clear_party evt_mario.o] 1
+805CFB3C:       callc [test evt_kagemario.o]
+805CFB44:   end_switch
+805CFB48:   return
+805CFB4C:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [jin_03_kaidan_temae_kesu jin_03.o] AT 805C94B8 ---
+805C94B8:   callc [evt_mapobj_flag_onoff evt_map.o] 1 1 ["kaidan01"] 1
+805C94D0:   callc [evt_hitobj_onoff evt_hit.o] ["a_kaidan01"] 1 0
+805C94E4:   return
+805C94E8:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [jin_03_kaidan_oku_kesu jin_03.o] AT 805C9520 ---
+805C9520:   callc [evt_mapobj_flag_onoff evt_map.o] 1 1 ["kaidan03"] 1
+805C9538:   callc [evt_hitobj_onoff evt_hit.o] ["a_kaidan03"] 1 0
+805C954C:   return
+805C9550:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [jin_03_kaidan_naka_kesu jin_03.o] AT 805C94EC ---
+805C94EC:   callc [evt_mapobj_flag_onoff evt_map.o] 1 1 ["kaidan02"] 1
+805C9504:   callc [evt_hitobj_onoff evt_hit.o] ["a_kaidan02"] 1 0
+805C9518:   return
+805C951C:   end

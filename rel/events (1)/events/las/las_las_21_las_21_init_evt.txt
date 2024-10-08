@@ -1,0 +1,83 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [las_21_init_evt las_21.o] AT 805E4EB0 ---
+805E4EB0:   if_int_lt GSW(0) 390
+805E4EBC:     callc [evt_snd_bgmon evt_snd.o] 512 ["BGM_STG8_LST1"]
+805E4ECC:   else
+805E4ED0:     callc [evt_snd_bgmon evt_snd.o] 512 ["BGM_STG8_LST3"]
+805E4EE0:   endif
+805E4EE4:   callc [evt_snd_envon evt_snd.o] 272 ["ENV_STG8_LAS1"]
+805E4EF4:   callc [evt_snd_set_rev_mode evt_snd.o] 2
+805E4F00:   setii LW(0) [bero_entry_data las_21.o]
+805E4F0C:   callc [evt_bero_get_info evt_bero.o]
+805E4F14:   callss [evt_bero_info_run evt_bero.o]
+805E4F1C:   if_int_lt GSW(0) 390
+805E4F28:     callc [evt_mapobj_flag_onoff evt_map.o] 1 1 ["S_under"] 1
+805E4F40:     callc [evt_hitobj_onoff evt_hit.o] ["A_under"] 1 0
+805E4F54:     callc [evt_npc_check_delete evt_npc.o] ["ワンワン２"]
+805E4F60:   else
+805E4F64:     callc [evt_mapobj_flag_onoff evt_map.o] 1 1 ["S_yuka"] 1
+805E4F7C:     callc [evt_hitobj_onoff evt_hit.o] ["A_be"] 1 0
+805E4F90:     setii LW(0) ["w_bero"]
+805E4F9C:     callss [bero_case_switch_off evt_bero.o]
+805E4FA4:     callc [evt_bero_overwrite evt_bero.o] ["w_bero"] [w_bero_mapchg las_21.o]
+805E4FB4:     setii LW(0) ["w_bero"]
+805E4FC0:     callss [bero_case_switch_on evt_bero.o]
+805E4FC8:     callc [evt_npc_check_delete evt_npc.o] ["ワンワン１"]
+805E4FD4:     callsa [hikari_evt las.o]
+805E4FDC:   endif
+805E4FE0:   if_int_ge GSW(0) 390
+805E4FEC:     if_int_eq GSWF(4353) 0
+805E4FF8:       setii LW(0) -220
+805E5004:     else
+805E5008:       setii LW(0) -580
+805E5014:     endif
+805E5018:     if_int_eq GSWF(4354) 0
+805E5024:       setii LW(1) -120
+805E5030:     else
+805E5034:       setii LW(1) -580
+805E5040:     endif
+805E5044:     setii LW(2) -580
+805E5050:     setii LSWF(8) 1
+805E505C:     setii LW(3) -580
+805E5068:     setii LSWF(9) 1
+805E5074:     callc [evt_mobj_float_blk evt_mobj.o] ["19blk1"] -350 LW(0) 0 2 2 0 0
+805E509C:     callc [evt_mobj_float_blk evt_mobj.o] ["19blk2"] -250 LW(1) 0 0 2 0 0
+805E50C4:     callc [evt_mobj_float_blk evt_mobj.o] ["21blk1"] 50 LW(2) 0 1 2 0 0
+805E50EC:     callc [evt_mobj_float_blk evt_mobj.o] ["21blk2"] 150 LW(3) 0 3 2 0 0
+805E5114:     callc [evt_mobj_flag_onoff evt_mobj.o] 1 ["19blk1"] 128
+805E5128:     callc [evt_mobj_flag_onoff evt_mobj.o] 1 ["19blk2"] 128
+805E513C:     callc [evt_mobj_flag_onoff evt_mobj.o] 1 ["21blk1"] 128
+805E5150:     callc [evt_mobj_flag_onoff evt_mobj.o] 1 ["21blk2"] 128
+805E5164:     callc [evt_mobj_switch_float_blk evt_mobj.o] ["21switch1"] 175 -480 -67 ["21blk1"] 1 [floatblk21_1_evt las_21.o] 0
+805E518C:     callc [evt_mobj_switch_float_blk evt_mobj.o] ["21switch2"] 300 -30 15 ["21blk2"] 3 [floatblk21_2_evt las_21.o] 0
+805E51B4:   endif
+805E51B8:   callc [evt_mobj_jumpstand_blue evt_mobj.o] 0 ["jump"] 700 -650 -580 75 0 0
+805E51E0:   callc [evt_mobj_flag_onoff evt_mobj.o] 0 ["jump"] 64
+805E51F4:   return
+805E51F8:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [hikari_evt las.o] AT 805D5E7C ---
+805D5E7C:   loop 0
+805D5E84:     callc [evt_sub_random evt_sub.o] 5 LW(0)
+805D5E94:     switchi LW(0)
+805D5E9C:       case_int_eq 0
+805D5EA4:         setii LW(1) ["hikari_01"]
+805D5EB0:       case_int_eq 1
+805D5EB8:         setii LW(1) ["hikari_02"]
+805D5EC4:       case_int_eq 2
+805D5ECC:         setii LW(1) ["hikari_03"]
+805D5ED8:       case_int_eq 3
+805D5EE0:         setii LW(1) ["hikari_04"]
+805D5EEC:       case_int_eq 4
+805D5EF4:         setii LW(1) ["hikari_05"]
+805D5F00:       case_int_eq 5
+805D5F08:         setii LW(1) ["hikari_06"]
+805D5F14:     end_switch
+805D5F18:     callc [evt_map_playanim evt_map.o] LW(1) 0 0
+805D5F2C:     callc [evt_map_checkanim evt_map.o] LW(1) LW(2) LW(3)
+805D5F40:     wait_ms LW(3)
+805D5F48:   end_loop
+805D5F4C:   return
+805D5F50:   end

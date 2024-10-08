@@ -1,0 +1,25 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [dokan2D_regl_event npc_event.o] AT 8034B744 ---
+8034B744: 0:
+8034B74C:   callc [evt_npc_get_position evt_npc.o] ["me"] LW(0) [F1194D80] [F1194D80]
+8034B764:   callc [camGetPos npc_event.o] LW(1)
+8034B770:   subi LW(0) LW(1)
+8034B77C:   if_int_le LW(0) 250
+8034B788:     goto 1
+8034B790:   endif
+8034B794:   wait_frames 1
+8034B79C:   goto 0
+8034B7A4: 1:
+8034B7AC:   callc [dokanCheck npc_event.o] LW(0)
+8034B7B8:   if_int_eq LW(0) 0
+8034B7C4:     goto 99
+8034B7CC:   endif
+8034B7D0:   callc [zakoEntryDokan npc_event.o]
+8034B7D8:   wait_frames 120
+8034B7E0:   goto 1
+8034B7E8: 99:
+8034B7F0:   callc [evt_npc_delete evt_npc.o] ["me"]
+8034B7FC:   return
+8034B800:   end

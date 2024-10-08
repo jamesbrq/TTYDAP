@@ -1,0 +1,52 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [peach_evt_kusuri_dasu aji_06.o] AT 805DF54C ---
+805DF54C:   setii LW(5) LW(0)
+805DF558:   setii LW(6) LW(1)
+805DF564:   callc [evt_map_playanim evt_map.o] ["mizu"] 0 0
+805DF578:   callc [evt_map_checkanim evt_map.o] ["mizu"] LW(0) LW(2)
+805DF58C:   callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_PEACH_MACHINE_MEDICINE1"] 0 0 -100 0
+805DF5A8:   if_int_eq LSWF(7) 1
+805DF5B4:     setii LW(3) LW(2)
+805DF5C0:     mulf LW(3) 0.80
+805DF5CC:     begin_thread
+805DF5D0:       callc [kusuri_color_set aji_06.o] LW(6) LW(3)
+805DF5E0:     end_thread
+805DF5E4:     begin_thread
+805DF5E8:       callc [evt_sub_intpl_msec_init evt_sub.o] 11 0 125 LW(3)
+805DF600: 2:
+805DF608:       callc [evt_sub_intpl_msec_get_value evt_sub.o]
+805DF610:       divf LW(0) 1000.00
+805DF61C:       addf LW(0) GW(10)
+805DF628:       callc [evt_mapobj_scale evt_map.o] 0 ["S_naka"] 1 LW(0) 1
+805DF644:       wait_frames 1
+805DF64C:       if_int_eq LW(1) 1
+805DF658:         goto 2
+805DF660:       endif
+805DF664:       addf GW(10) 0.13
+805DF670:     end_thread
+805DF674:   endif
+805DF678:   divi LW(2) 3
+805DF684:   callc [evt_sub_intpl_msec_init evt_sub.o] 11 0 1000 LW(2)
+805DF69C: 0:
+805DF6A4:   callc [evt_sub_intpl_msec_get_value evt_sub.o]
+805DF6AC:   divf LW(0) 1000.00
+805DF6B8:   callc [evt_mapobj_scale evt_map.o] 0 LW(5) 1 LW(0) 1
+805DF6D4:   wait_frames 1
+805DF6DC:   if_int_eq LW(1) 1
+805DF6E8:     goto 0
+805DF6F0:   endif
+805DF6F4:   wait_ms LW(2)
+805DF6FC:   callc [evt_sub_intpl_msec_init evt_sub.o] 11 1000 0 LW(2)
+805DF714: 1:
+805DF71C:   callc [evt_sub_intpl_msec_get_value evt_sub.o]
+805DF724:   divf LW(0) 1000.00
+805DF730:   callc [evt_mapobj_scale evt_map.o] 0 LW(5) 1 LW(0) 1
+805DF74C:   wait_frames 1
+805DF754:   if_int_eq LW(1) 1
+805DF760:     goto 1
+805DF768:   endif
+805DF76C:   setii LSWF(7) 0
+805DF778:   return
+805DF77C:   end

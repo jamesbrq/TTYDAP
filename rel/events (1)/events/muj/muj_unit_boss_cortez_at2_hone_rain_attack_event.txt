@@ -1,0 +1,225 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [at2_hone_rain_attack_event unit_boss_cortez.o] AT 805F3994 ---
+805F3994:   callc [btlevtcmd_SetUnitWork battle_event_cmd.o] -2 10 0
+805F39A8:   setii LW(12) [weapon_cortez_mode2_bone_attack unit_boss_cortez.o]
+805F39B4:   callc [btlevtcmd_GetEnemyBelong battle_event_cmd.o] -2 LW(0)
+805F39C4:   callc [btlevtcmd_SamplingEnemy battle_event_cmd.o] -2 LW(0) LW(12)
+805F39D8:   callc [btlevtcmd_GetSelectEnemy battle_event_cmd.o] LW(3) LW(4)
+805F39E8:   if_int_eq LW(3) -1
+805F39F4:     goto 99
+805F39FC:   endif
+805F3A00:   callc [btlevtcmd_WeaponAftereffect battle_event_cmd.o] LW(12)
+805F3A0C:   callc [btlevtcmd_AttackDeclareAll battle_event_cmd.o] -2
+805F3A18:   callc [btlevtcmd_WaitGuardMove battle_event_cmd.o]
+805F3A20:   callc [btlevtcmd_PayWeaponCost battle_event_cmd.o] -2 LW(12)
+805F3A30:   callc [btlevtcmd_GetUnitWork battle_event_cmd.o] -2 5 LW(0)
+805F3A44:   switchi LW(0)
+805F3A4C:     case_int_eq 1
+805F3A54:       callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 1 ["KRT_3A_1"]
+805F3A68:     case_int_eq 2
+805F3A70:       callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 1 ["KRT_3A_2"]
+805F3A84:     case_int_eq 3
+805F3A8C:       callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 1 ["KRT_3A_3"]
+805F3AA0:   end_switch
+805F3AA4:   wait_ms 1700
+805F3AAC:   begin_child_thread
+805F3AB0:     callc [btlevtcmd_AnimeWaitPlayComplete battle_event_cmd.o] -2 1
+805F3AC0:     callc [btlevtcmd_AnimeChangePoseFromTable battle_event_cmd.o] -2 1
+805F3AD0:   end_child_thread
+805F3AD4:   callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_BOSS_KOR_BONE_FLY1"] [F1194D80] 0 [F1194D80]
+805F3AF0:   callc [btlevtcmd_OffPartsAttribute battle_event_cmd.o] -2 5 16777216
+805F3B04:   callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 5 ["KRT_A_1"]
+805F3B18:   begin_thread
+805F3B1C:     callc [btlevtcmd_AnimeWaitPlayComplete battle_event_cmd.o] -2 5
+805F3B2C:     wait_ms 500
+805F3B34:     callc [btlevtcmd_OnPartsAttribute battle_event_cmd.o] -2 5 16777216
+805F3B48:   end_thread
+805F3B4C:   setii LW(5) 12
+805F3B58:   callsa [_bone_rain_event unit_boss_cortez.o]
+805F3B60:   setii LW(5) 13
+805F3B6C:   callsa [_bone_rain_event unit_boss_cortez.o]
+805F3B74:   setii LW(5) 14
+805F3B80:   callsa [_bone_rain_event unit_boss_cortez.o]
+805F3B88:   setii LW(5) 15
+805F3B94:   callsa [_bone_rain_event unit_boss_cortez.o]
+805F3B9C:   setii LW(5) 16
+805F3BA8:   callsa [_bone_rain_event unit_boss_cortez.o]
+805F3BB0:   setii LW(5) 17
+805F3BBC:   callsa [_bone_rain_event unit_boss_cortez.o]
+805F3BC4:   setii LW(5) 18
+805F3BD0:   callsa [_bone_rain_event unit_boss_cortez.o]
+805F3BD8:   setii LW(5) 19
+805F3BE4:   callsa [_bone_rain_event unit_boss_cortez.o]
+805F3BEC:   begin_thread_tid LW(15)
+805F3BF4:     callc [btlevtcmd_GetPos battle_event_cmd.o] -2 LW(0) LW(1) LW(2)
+805F3C0C:     callc [btlevtcmd_SetPartsPos battle_event_cmd.o] -2 6 LW(0) LW(1) LW(2)
+805F3C28:     callc [btlevtcmd_OffPartsAttribute battle_event_cmd.o] -2 6 16777216
+805F3C3C:     callc [btlevtcmd_SetPartsFallAccel battle_event_cmd.o] -2 6 0.90
+805F3C50:     callc [btlevtcmd_GetHitPos battle_event_cmd.o] LW(3) LW(4) LW(0) LW(1) LW(2)
+805F3C6C:     callc [btlevtcmd_JumpPartsPosition battle_event_cmd.o] -2 6 LW(0) LW(1) LW(2) 30 -1
+805F3C90:   end_thread
+805F3C94:   begin_thread
+805F3C98:     callc [btlevtcmd_SetPartsRotateOffset battle_event_cmd.o] -2 6 0 0 0
+805F3CB4:     loop 30
+805F3CBC:       callc [btlevtcmd_AddPartsRotate battle_event_cmd.o] -2 6 0 0 30
+805F3CD8:       wait_frames 1
+805F3CE0:     end_loop
+805F3CE4:   end_thread
+805F3CE8:   callc [btlevtcmd_GetSelectNextEnemy battle_event_cmd.o] LW(3) LW(4)
+805F3CF8:   if_int_ne LW(3) -1
+805F3D04:     begin_thread
+805F3D08:       callc [btlevtcmd_GetPos battle_event_cmd.o] -2 LW(0) LW(1) LW(2)
+805F3D20:       callc [btlevtcmd_SetPartsPos battle_event_cmd.o] -2 9 LW(0) LW(1) LW(2)
+805F3D3C:       callc [btlevtcmd_OffPartsAttribute battle_event_cmd.o] -2 9 16777216
+805F3D50:       callc [btlevtcmd_SetPartsFallAccel battle_event_cmd.o] -2 9 0.90
+805F3D64:       callc [btlevtcmd_GetHitPos battle_event_cmd.o] LW(3) LW(4) LW(0) LW(1) LW(2)
+805F3D80:       callc [btlevtcmd_JumpPartsPosition battle_event_cmd.o] -2 9 LW(0) LW(1) LW(2) 30 -1
+805F3DA4:     end_thread
+805F3DA8:     begin_thread
+805F3DAC:       callc [btlevtcmd_SetPartsRotateOffset battle_event_cmd.o] -2 9 0 0 0
+805F3DC8:       loop 30
+805F3DD0:         callc [btlevtcmd_AddPartsRotate battle_event_cmd.o] -2 9 0 0 30
+805F3DEC:         wait_frames 1
+805F3DF4:       end_loop
+805F3DF8:     end_thread
+805F3DFC:   endif
+805F3E00:   callc [btlevtcmd_WaitEventEnd battle_event_cmd.o] LW(15)
+805F3E0C:   callc [btlevtcmd_GetEnemyBelong battle_event_cmd.o] -2 LW(0)
+805F3E1C:   callc [btlevtcmd_SamplingEnemy battle_event_cmd.o] -2 LW(0) LW(12)
+805F3E30:   callc [btlevtcmd_GetSelectEnemy battle_event_cmd.o] LW(3) LW(4)
+805F3E40:   setii LW(10) 0
+805F3E4C: 10:
+805F3E54:   callc [btlevtcmd_PreCheckDamage battle_event_cmd.o] -2 LW(3) LW(4) LW(12) 256 LW(5)
+805F3E74:   switchi LW(5)
+805F3E7C:     case_int_eq_any 4
+805F3E84:       goto 90
+805F3E8C:       end_multi_case
+805F3E90:     case_int_eq 3
+805F3E98:       callc [btlevtcmd_StartAvoid battle_event_cmd.o] LW(3) 38
+805F3EA8:       goto 90
+805F3EB0:     case_int_eq 6
+805F3EB8:       callc [btlevtcmd_StartAvoid battle_event_cmd.o] LW(3) 39
+805F3EC8:       goto 90
+805F3ED0:     case_int_eq 2
+805F3ED8:       callc [btlevtcmd_StartAvoid battle_event_cmd.o] LW(3) 40
+805F3EE8:       goto 90
+805F3EF0:     case_int_eq 1
+805F3EF8:       goto 91
+805F3F00:     case_default
+805F3F04:       goto 90
+805F3F0C:   end_switch
+805F3F10: 90:
+805F3F18:   if_int_eq LW(10) 0
+805F3F24:     begin_thread
+805F3F28:       callc [btlevtcmd_JumpPartsContinue battle_event_cmd.o] -2 6
+805F3F38:       callc [btlevtcmd_GetPartsPos battle_event_cmd.o] -2 6 LW(0) LW(1) LW(2)
+805F3F54:       callc [btlevtcmd_FaceDirectionAdd battle_event_cmd.o] -2 LW(0) 40
+805F3F68:       callc [btlevtcmd_SetPartsFallAccel battle_event_cmd.o] -2 6 0.70
+805F3F7C:       callc [btlevtcmd_JumpPartsPosition battle_event_cmd.o] -2 6 LW(0) LW(1) LW(2) 24 -1
+805F3FA0:       callc [btlevtcmd_OnPartsAttribute battle_event_cmd.o] -2 6 16777216
+805F3FB4:     end_thread
+805F3FB8:     begin_thread
+805F3FBC:       loop 24
+805F3FC4:         callc [btlevtcmd_AddPartsRotate battle_event_cmd.o] -2 6 0 0 30
+805F3FE0:         wait_frames 1
+805F3FE8:       end_loop
+805F3FEC:     end_thread
+805F3FF0:   else
+805F3FF4:     begin_thread
+805F3FF8:       callc [btlevtcmd_JumpPartsContinue battle_event_cmd.o] -2 9
+805F4008:       callc [btlevtcmd_GetPartsPos battle_event_cmd.o] -2 9 LW(0) LW(1) LW(2)
+805F4024:       callc [btlevtcmd_FaceDirectionAdd battle_event_cmd.o] -2 LW(0) 40
+805F4038:       callc [btlevtcmd_SetPartsFallAccel battle_event_cmd.o] -2 9 0.70
+805F404C:       callc [btlevtcmd_JumpPartsPosition battle_event_cmd.o] -2 9 LW(0) LW(1) LW(2) 24 -1
+805F4070:       callc [btlevtcmd_OnPartsAttribute battle_event_cmd.o] -2 9 16777216
+805F4084:     end_thread
+805F4088:     begin_thread
+805F408C:       loop 24
+805F4094:         callc [btlevtcmd_AddPartsRotate battle_event_cmd.o] -2 9 0 0 30
+805F40B0:         wait_frames 1
+805F40B8:       end_loop
+805F40BC:     end_thread
+805F40C0:   endif
+805F40C4:   goto 97
+805F40CC: 91:
+805F40D4:   if_int_eq LW(10) 0
+805F40E0:     callc [btlevtcmd_ResultACDefence battle_event_cmd.o] LW(3) LW(12)
+805F40F0:   endif
+805F40F4:   callc [btlevtcmd_CheckDamage battle_event_cmd.o] -2 LW(3) LW(4) LW(12) 256 LW(5)
+805F4114:   if_int_eq LW(10) 0
+805F4120:     begin_thread
+805F4124:       callc [btlevtcmd_GetPartsPos battle_event_cmd.o] -2 6 LW(0) LW(1) LW(2)
+805F4140:       callc [btlevtcmd_FaceDirectionAdd battle_event_cmd.o] -2 LW(0) 80
+805F4154:       callc [btlevtcmd_SetPartsFallAccel battle_event_cmd.o] -2 6 0.60
+805F4168:       callc [btlevtcmd_JumpPartsPosition battle_event_cmd.o] -2 6 LW(0) LW(1) LW(2) 26 -1
+805F418C:       callc [btlevtcmd_OnPartsAttribute battle_event_cmd.o] -2 6 16777216
+805F41A0:     end_thread
+805F41A4:     begin_thread
+805F41A8:       loop 26
+805F41B0:         callc [btlevtcmd_AddPartsRotate battle_event_cmd.o] -2 6 0 0 30
+805F41CC:         wait_frames 1
+805F41D4:       end_loop
+805F41D8:     end_thread
+805F41DC:   else
+805F41E0:     begin_thread
+805F41E4:       callc [btlevtcmd_GetPartsPos battle_event_cmd.o] -2 9 LW(0) LW(1) LW(2)
+805F4200:       callc [btlevtcmd_FaceDirectionAdd battle_event_cmd.o] -2 LW(0) 80
+805F4214:       callc [btlevtcmd_SetPartsFallAccel battle_event_cmd.o] -2 9 0.60
+805F4228:       callc [btlevtcmd_JumpPartsPosition battle_event_cmd.o] -2 9 LW(0) LW(1) LW(2) 26 -1
+805F424C:       callc [btlevtcmd_OnPartsAttribute battle_event_cmd.o] -2 9 16777216
+805F4260:     end_thread
+805F4264:     begin_thread
+805F4268:       loop 26
+805F4270:         callc [btlevtcmd_AddPartsRotate battle_event_cmd.o] -2 9 0 0 30
+805F428C:         wait_frames 1
+805F4294:       end_loop
+805F4298:     end_thread
+805F429C:   endif
+805F42A0: 97:
+805F42A8:   callc [btlevtcmd_GetSelectNextEnemy battle_event_cmd.o] LW(3) LW(4)
+805F42B8:   if_int_ne LW(3) -1
+805F42C4:     wait_ms 60
+805F42CC:     addi LW(10) 1
+805F42D8:     goto 10
+805F42E0:   endif
+805F42E4:   wait_frames 84
+805F42EC: 99:
+805F42F4:   callc [btlevtcmd_StartWaitEvent battle_event_cmd.o] -2
+805F4300:   return
+805F4304:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [_bone_rain_event unit_boss_cortez.o] AT 805F4308 ---
+805F4308:   callc [evt_sub_random evt_sub.o] 20 LW(10)
+805F4318:   addi LW(10) 20
+805F4324:   begin_thread
+805F4328:     callc [btlevtcmd_GetPos battle_event_cmd.o] -2 LW(0) LW(1) LW(2)
+805F4340:     callc [evt_sub_random evt_sub.o] 90 LW(7)
+805F4350:     subi LW(7) 45
+805F435C:     addi LW(0) LW(7)
+805F4368:     callc [evt_sub_random evt_sub.o] 60 LW(7)
+805F4378:     subi LW(7) 30
+805F4384:     addi LW(2) LW(7)
+805F4390:     callc [btlevtcmd_SetPartsPos battle_event_cmd.o] -2 LW(5) LW(0) LW(1) LW(2)
+805F43AC:     callc [btlevtcmd_OffPartsAttribute battle_event_cmd.o] -2 LW(5) 16777216
+805F43C0:     callc [btlevtcmd_SetPartsFallAccel battle_event_cmd.o] -2 LW(5) 1.40
+805F43D4:     callc [btlevtcmd_GetHitPos battle_event_cmd.o] LW(3) LW(4) LW(0) LW(1) LW(2)
+805F43F0:     callc [evt_sub_random evt_sub.o] 120 LW(7)
+805F4400:     subi LW(7) 60
+805F440C:     addi LW(0) LW(7)
+805F4418:     callc [evt_sub_random evt_sub.o] 60 LW(7)
+805F4428:     subi LW(7) 30
+805F4434:     addi LW(2) LW(7)
+805F4440:     callc [btlevtcmd_TransStageFloorPosition battle_event_cmd.o] LW(0) LW(1) LW(2)
+805F4454:     callc [btlevtcmd_JumpPartsPosition battle_event_cmd.o] -2 LW(5) LW(0) LW(1) LW(2) LW(10) -1
+805F4478:     callc [btlevtcmd_OnPartsAttribute battle_event_cmd.o] -2 LW(5) 16777216
+805F448C:   end_thread
+805F4490:   begin_thread
+805F4494:     loop LW(10)
+805F449C:       callc [btlevtcmd_AddPartsRotate battle_event_cmd.o] -2 LW(5) 0 0 30
+805F44B8:       wait_frames 1
+805F44C0:     end_loop
+805F44C4:   end_thread
+805F44C8:   return
+805F44CC:   end

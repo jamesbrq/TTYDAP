@@ -1,0 +1,206 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [powerdownya_mario_level_rtn tik_11.o] AT 805DBD00 ---
+805DBD00:   callc [evt_pouch_get_coin evt_pouch.o] LW(0)
+805DBD0C:   if_int_lt LW(0) 39
+805DBD18:     callc [evt_msg_print_add evt_msg.o] 0 ["powerdown_04"]
+805DBD28:     return
+805DBD2C:   endif
+805DBD30:   callc [evt_msg_continue evt_msg.o]
+805DBD38:   callc [evt_win_coin_on evt_window.o] 0 LW(12)
+805DBD48:   loop 0
+805DBD50:     callc [evt_win_other_select evt_window.o] 9
+805DBD5C:     if_int_eq LW(0) 0
+805DBD68:       callc [evt_win_coin_off evt_window.o] LW(12)
+805DBD74:       callc [evt_msg_print evt_msg.o] 0 ["powerdown_03_01"] 0 ["me"]
+805DBD8C:       return
+805DBD90:     endif
+805DBD94:     wait_ms 240
+805DBD9C:     setii GW(1) LW(1)
+805DBDA8:     callc [evt_win_other_select evt_window.o] 10
+805DBDB4:     if_int_eq LW(0) 0
+805DBDC0:       wait_ms 240
+805DBDC8:       loop_continue
+805DBDCC:     endif
+805DBDD0:     callc [evt_sub_get_language evt_sub.o] LW(15)
+805DBDDC:     switchi LW(15)
+805DBDE4:       case_int_eq 0
+805DBDEC:         callc [evt_msg_print_insert evt_msg.o] 0 ["powerdown_06"] 0 ["me"] LW(2) LW(3) 39
+805DBE10:       case_default
+805DBE14:         callc [unk_800d0998 evt_msg.o] 0 LW(14) ["powerdown_06"] 39
+805DBE2C:         callc [evt_msg_print_insert evt_msg.o] 1 LW(14) 0 ["me"] LW(2) LW(3)
+805DBE4C:     end_switch
+805DBE50:     callc [evt_msg_select evt_msg.o] 0 ["powerdown_09"]
+805DBE60:     if_int_eq LW(0) 0
+805DBE6C:       loop_break
+805DBE70:     endif
+805DBE74:     callc [evt_msg_continue evt_msg.o]
+805DBE7C:   end_loop
+805DBE80:   callc [evt_pouch_get_coin evt_pouch.o] LW(0)
+805DBE8C:   subi LW(0) 39
+805DBE98:   callc [evt_pouch_set_coin evt_pouch.o] LW(0)
+805DBEA4:   callc [evt_win_coin_wait evt_window.o] LW(12)
+805DBEB0:   wait_ms 500
+805DBEB8:   callc [evt_win_coin_off evt_window.o] LW(12)
+805DBEC4:   callc [enzan_lw_save tik_11.o]
+805DBECC:   callsa_tid [unk_evt_tik_00021320 tik_11.o] GW(1)
+805DBED8:   callc [evt_snd_bgmoff_f evt_snd.o] 1024 2000
+805DBEE8:   callc [evt_msg_print_add evt_msg.o] 0 ["powerdown_11"]
+805DBEF8:   callc [bgScrollControll tik_11.o] 0
+805DBF04:   callc [evt_sub_intpl_msec_init evt_sub.o] 11 0 -20 500
+805DBF1C:   loop 0
+805DBF24:     callc [evt_sub_intpl_msec_get_value_para evt_sub.o] LW(0) LW(5)
+805DBF34:     callc [evt_mapobj_trans evt_map.o] 1 ["down_pira"] 0 LW(0) 0
+805DBF50:     wait_frames 1
+805DBF58:     if_int_eq LW(5) 0
+805DBF64:       loop_break
+805DBF68:     endif
+805DBF6C:   end_loop
+805DBF70:   wait_ms 500
+805DBF78:   callc [evt_snd_bgmoff evt_snd.o] 1024
+805DBF84:   callc [evt_snd_bgmon evt_snd.o] 1 ["BGM_FF_POWERDOWN1"]
+805DBF94:   callc [bgm_start_wait tik_11.o]
+805DBF9C:   callc [evt_eff64 evt_eff.o] ["aaax"] ["lensflare_n64"] 0 -9 49 0 1.00 -1 0 0 0 0 0 0
+805DBFDC:   wait_ms 500
+805DBFE4:   callc [evt_mapobj_flag_onoff evt_map.o] 1 1 ["down_pira"] 1
+805DBFFC:   wait_frames 5
+805DC004:   callc [evt_msg_print evt_msg.o] 0 ["powerdown_12"] 0 ["me"]
+805DC01C:   begin_thread
+805DC020:     callc [evt_sub_intpl_msec_init evt_sub.o] 0 255 0 1200
+805DC038:     loop 0
+805DC040:       callc [evt_sub_intpl_msec_get_value evt_sub.o]
+805DC048:       callc [evt_mapobj_color evt_map.o] 1 ["S"] 255 255 255 LW(0)
+805DC068:       callc [evt_mapobj_color evt_map.o] 1 ["down_pira"] 255 255 255 255
+805DC088:       callc [evt_mapobj_color evt_map.o] 1 ["ie_naka"] 255 255 255 255
+805DC0A8:       wait_frames 1
+805DC0B0:       if_int_eq LW(1) 0
+805DC0BC:         loop_break
+805DC0C0:       endif
+805DC0C4:     end_loop
+805DC0C8:   end_thread
+805DC0CC:   begin_thread
+805DC0D0:     callc [evt_sub_intpl_msec_init evt_sub.o] 0 0 90 1600
+805DC0E8:     loop 0
+805DC0F0:       callc [evt_sub_intpl_msec_get_value_para evt_sub.o] LW(0) LW(1)
+805DC100:       callc [evt_mapobj_rotate evt_map.o] 1 ["ie_l"] 0 0 LW(0)
+805DC11C:       muli LW(0) -1
+805DC128:       callc [evt_mapobj_rotate evt_map.o] 1 ["ie_o"] LW(0) 0 0
+805DC144:       callc [evt_mapobj_rotate evt_map.o] 1 ["ie_r"] 0 0 LW(0)
+805DC160:       wait_frames 1
+805DC168:       if_int_eq LW(1) 0
+805DC174:         loop_break
+805DC178:       endif
+805DC17C:     end_loop
+805DC180:   end_thread
+805DC184:   begin_thread
+805DC188:     callc [evt_cam_shake evt_cam.o] 4 0.01 0.00 1600
+805DC1A0:   end_thread
+805DC1A4:   callc [evt_cam3d_evt_set evt_cam.o] -9 212 886 -9 56 0 1600 11
+805DC1CC:   wait_ms 1600
+805DC1D4:   begin_thread
+805DC1D8:     callc [evt_sub_intpl_msec_init evt_sub.o] 11 0 100 7000
+805DC1F0:     loop 0
+805DC1F8:       callc [evt_sub_intpl_msec_get_value_para evt_sub.o] LW(0) LW(1)
+805DC208:       callc [enzan_cam_turn_keisan_f tik_11.o] LW(0)
+805DC214:       wait_frames 1
+805DC21C:       if_int_eq LW(1) 0
+805DC228:         loop_break
+805DC22C:       endif
+805DC230:     end_loop
+805DC234:   end_thread
+805DC238:   begin_thread
+805DC23C:     setii LW(6) 7000
+805DC248:     divi LW(6) 1000
+805DC254:     addi LW(6) 1
+805DC260:     loop LW(6)
+805DC268:       callc [evt_eff64 evt_eff.o] 0 ["crystal_n64"] 3 -9 49 0 1.00 60 0 0 0 0 0 0
+805DC2A8:       wait_ms 1000
+805DC2B0:     end_loop
+805DC2B4:   end_thread
+805DC2B8:   begin_thread
+805DC2BC:     callc [evt_mario_get_pos evt_mario.o] 0 LW(3) LW(4) LW(5)
+805DC2D4:     setff LW(7) LW(4)
+805DC2E0:     addf LW(7) 18.00
+805DC2EC:     callc [evt_eff64 evt_eff.o] ["cccx"] ["pokopi_pcharge_n64"] 2 LW(3) LW(7) LW(5) 1 -1 0 0 0 0 0 0
+805DC32C:     wait_ms 500
+805DC334:     callc [evt_mario_set_pose evt_mario.o] ["M_I_Z"]
+805DC340:   end_thread
+805DC344:   wait_ms 7000
+805DC34C:   callc [evt_eff_softdelete evt_eff.o] ["aaax"]
+805DC358:   callc [evt_mapobj_flag_onoff evt_map.o] 1 0 ["down_pira"] 1
+805DC370:   wait_ms 500
+805DC378:   callc [evt_eff64 evt_eff.o] ["dddx"] ["release_n64"] 65283 -9 49 0 1.00 200 0 0 0 0 0 0
+805DC3B8:   wait_ms 1500
+805DC3C0:   callc [evt_eff_softdelete evt_eff.o] ["cccx"]
+805DC3CC:   callc [evt_mario_set_pose evt_mario.o] ["M_I_1"]
+805DC3D8:   callc [evt_mario_get_pos evt_mario.o] 0 LW(3) LW(4) LW(5)
+805DC3F0:   setff LW(7) LW(4)
+805DC3FC:   addf LW(7) 18.00
+805DC408:   callc [effect_stardust tik_11.o] 0 LW(3) LW(7) LW(5) 50.00 50.00 20 120
+805DC430:   begin_thread
+805DC434:     wait_ms 400
+805DC43C:     callc [evt_sub_intpl_msec_init evt_sub.o] 0 0 255 1200
+805DC454:     loop 0
+805DC45C:       callc [evt_sub_intpl_msec_get_value evt_sub.o]
+805DC464:       callc [evt_mapobj_color evt_map.o] 1 ["S"] 255 255 255 LW(0)
+805DC484:       callc [evt_mapobj_color evt_map.o] 1 ["down_pira"] 255 255 255 255
+805DC4A4:       callc [evt_mapobj_color evt_map.o] 1 ["ie_naka"] 255 255 255 255
+805DC4C4:       wait_frames 1
+805DC4CC:       if_int_eq LW(1) 0
+805DC4D8:         loop_break
+805DC4DC:       endif
+805DC4E0:     end_loop
+805DC4E4:   end_thread
+805DC4E8:   begin_thread
+805DC4EC:     callc [evt_sub_intpl_msec_init evt_sub.o] 0 90 0 1600
+805DC504:     loop 0
+805DC50C:       callc [evt_sub_intpl_msec_get_value_para evt_sub.o] LW(0) LW(1)
+805DC51C:       callc [evt_mapobj_rotate evt_map.o] 1 ["ie_l"] 0 0 LW(0)
+805DC538:       muli LW(0) -1
+805DC544:       callc [evt_mapobj_rotate evt_map.o] 1 ["ie_o"] LW(0) 0 0
+805DC560:       callc [evt_mapobj_rotate evt_map.o] 1 ["ie_r"] 0 0 LW(0)
+805DC57C:       wait_frames 1
+805DC584:       if_int_eq LW(1) 0
+805DC590:         loop_break
+805DC594:       endif
+805DC598:     end_loop
+805DC59C:     callc [bgScrollControll tik_11.o] 1
+805DC5A8:   end_thread
+805DC5AC:   callc [evt_cam3d_evt_off evt_cam.o] 1600 11
+805DC5BC:   wait_ms 1400
+805DC5C4:   callc [evt_mario_set_pose evt_mario.o] ["M_S_1"]
+805DC5D0:   callc [evt_sub_intpl_msec_init evt_sub.o] 11 -20 0 500
+805DC5E8:   loop 0
+805DC5F0:     callc [evt_sub_intpl_msec_get_value_para evt_sub.o] LW(0) LW(5)
+805DC600:     callc [evt_mapobj_trans evt_map.o] 1 ["down_pira"] 0 LW(0) 0
+805DC61C:     wait_frames 1
+805DC624:     if_int_eq LW(5) 0
+805DC630:       loop_break
+805DC634:     endif
+805DC638:   end_loop
+805DC63C:   callc [evt_mario_set_pose evt_mario.o] ["M_V_2"]
+805DC648:   wait_ms 1500
+805DC650:   callc [evt_mario_set_pose evt_mario.o] ["M_S_1"]
+805DC65C:   callc [evt_mario_dispflag_onoff evt_mario.o] 0 4
+805DC66C:   stop_tid GW(1)
+805DC674:   callc [enzan_lw_load tik_11.o]
+805DC67C:   callc [evt_snd_bgmoff evt_snd.o] 513
+805DC688:   callc [evt_snd_bgmon evt_snd.o] 288 0
+805DC698:   callc [unitwin_setmariolevel evt_win.o] LW(5) LW(6) LW(7) LW(8)
+805DC6B0:   if_int_ne LW(8) 0
+805DC6BC:     callc [evt_msg_print evt_msg.o] 0 ["powerdown_10"] 0 ["me"]
+805DC6D4:   else
+805DC6D8:     callc [evt_msg_print evt_msg.o] 0 ["powerdown_13"] 0 ["me"]
+805DC6F0:   endif
+805DC6F4:   return
+805DC6F8:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [unk_evt_tik_00021320 tik_11.o] AT 805DBCC0 ---
+805DBCC0:   loop 0
+805DBCC8:     callc [evt_party_set_dir_pos evt_party.o] 0 -9 0
+805DBCDC:     callc [unk_800e6b1c evt_mario.o] -9 0
+805DBCEC:     wait_frames 1
+805DBCF4:   end_loop
+805DBCF8:   return
+805DBCFC:   end

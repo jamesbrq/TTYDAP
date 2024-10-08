@@ -1,0 +1,32 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [evt_dakuto tou_05.o] AT 805E7C98 ---
+805E7C98:   callc [evt_mario_normalize evt_mario.o]
+805E7CA0:   callc [evt_mario_set_pos evt_mario.o] -160 85 -65
+805E7CB4:   callc [evt_party_set_pos evt_party.o] 0 -160 85 -70
+805E7CCC:   begin_thread
+805E7CD0:     callc [evt_mario_key_onoff evt_mario.o] 0
+805E7CDC:     callc [evt_seq_wait evt_seq.o] 2
+805E7CE8:     if_int_eq GSWF(2401) 0
+805E7CF4:       callc [evt_mapobj_get_position evt_map.o] ["haikikau_2"] LW(0) LW(1) LW(2)
+805E7D0C:       callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_STG3_DUCT_KOUSHI_FALL1"] LW(0) LW(1) LW(2) 0
+805E7D28:       callc [evt_mapobj_flag_onoff evt_map.o] 1 0 ["haikikau_2"] 1
+805E7D40:       callc [evt_hitobj_onoff evt_hit.o] ["a_haikikan"] 1 1
+805E7D54:       wait_ms 300
+805E7D5C:     endif
+805E7D60:     callc [evt_mario_mov_pos evt_mario.o] -130 -65 500
+805E7D74:     callc [evt_party_move_pos evt_party.o] 0 -130 -70 500
+805E7D8C:     if_int_eq GSWF(2401) 0
+805E7D98:       callc [evt_party_stop evt_party.o] 0
+805E7DA4:       wait_ms 300
+805E7DAC:       callc [evt_msg_print_party evt_msg.o] ["stg3_tou_456"]
+805E7DB8:       wait_ms 300
+805E7DC0:       callc [evt_party_run evt_party.o] 0
+805E7DCC:       setii GSWF(2401) 1
+805E7DD8:     endif
+805E7DDC:     callc [evt_mario_key_onoff evt_mario.o] 1
+805E7DE8:   end_thread
+805E7DEC:   setii LW(0) 1
+805E7DF8:   return
+805E7DFC:   end

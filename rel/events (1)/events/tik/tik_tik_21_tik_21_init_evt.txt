@@ -1,0 +1,50 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [tik_21_init_evt tik_21.o] AT 805E5FEC ---
+805E5FEC:   callc [evt_snd_bgmon evt_snd.o] 512 ["BGM_STG0_TIK1"]
+805E5FFC:   callc [evt_snd_envon evt_snd.o] 272 ["ENV_STG0_TIK1"]
+805E600C:   callc [evt_snd_set_rev_mode evt_snd.o] 2
+805E6018:   setii LW(0) [bero_entry_data tik_21.o]
+805E6024:   callc [evt_bero_get_info evt_bero.o]
+805E602C:   callss [evt_bero_info_run evt_bero.o]
+805E6034:   callc [evt_hit_damage_return_set evt_hit.o] [hitDmgRetPoints tik_21.o]
+805E6040:   callsa [hari_trap tik_21.o]
+805E6048:   callc [evt_mobj_itembox evt_mobj.o] ["mobj_box00"] 150 0 -100 0 0 [mobj_box00 tik_21.o] GSWF(1368)
+805E6070:   return
+805E6074:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [hari_trap tik_21.o] AT 805E5D88 ---
+805E5D88:   callc [evt_hit_bind_mapobj evt_hit.o] ["a_toge"] ["s_toge"]
+805E5D98:   loop 0
+805E5DA0:     callc [evt_hitobj_attr_onoff evt_hit.o] 1 1 ["a_yuka"] 2048
+805E5DB8:     callc [evt_mapobj_get_position evt_map.o] ["s_toge"] LW(0) LW(1) LW(2)
+805E5DD0:     callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_MOBJ_FLOOR_TRAP1"] LW(0) LW(1) LW(2) 0
+805E5DEC:     callc [evt_sub_intpl_msec_init evt_sub.o] 1 -5 30 150
+805E5E04:     loop 0
+805E5E0C:       callc [evt_sub_intpl_msec_get_value evt_sub.o]
+805E5E14:       callc [evt_mapobj_trans evt_map.o] 1 ["s_toge"] 0 LW(0) 0
+805E5E30:       callc [evt_hit_bind_update evt_hit.o] ["a_toge"]
+805E5E3C:       if_int_eq LW(1) 0
+805E5E48:         loop_break
+805E5E4C:       endif
+805E5E50:       wait_frames 1
+805E5E58:     end_loop
+805E5E5C:     wait_ms 1500
+805E5E64:     callc [evt_mapobj_get_position evt_map.o] ["s_toge"] LW(0) LW(1) LW(2)
+805E5E7C:     callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_MOBJ_FLOOR_TRAP2"] LW(0) LW(1) LW(2) 0
+805E5E98:     callc [evt_sub_intpl_msec_init evt_sub.o] 4 30 -5 300
+805E5EB0:     loop 0
+805E5EB8:       callc [evt_sub_intpl_msec_get_value evt_sub.o]
+805E5EC0:       callc [evt_mapobj_trans evt_map.o] 1 ["s_toge"] 0 LW(0) 0
+805E5EDC:       callc [evt_hit_bind_update evt_hit.o] ["a_toge"]
+805E5EE8:       if_int_eq LW(1) 0
+805E5EF4:         loop_break
+805E5EF8:       endif
+805E5EFC:       wait_frames 1
+805E5F04:     end_loop
+805E5F08:     callc [evt_hitobj_attr_onoff evt_hit.o] 1 0 ["a_yuka"] 2048
+805E5F20:     wait_ms 2000
+805E5F28:   end_loop
+805E5F2C:   return
+805E5F30:   end

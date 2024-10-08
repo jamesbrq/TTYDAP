@@ -1,0 +1,122 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [muj_gor_ship_start muj_00.o] AT 805D84F4 ---
+805D84F4:   callc [evt_snd_bgmon evt_snd.o] 512 ["BGM_EVT_STG5_GHOST_SHIP1"]
+805D8504:   begin_thread
+805D8508:     callc [evt_sub_intpl_msec_init evt_sub.o] 0 100 0 500
+805D8520:     loop 0
+805D8528:       callc [evt_sub_intpl_msec_get_value_para evt_sub.o] LW(0) LW(1)
+805D8538:       divf LW(0) 100.00
+805D8544:       callc [scale_func muj_00.o] LW(0)
+805D8550:       callc [evt_npc_set_scale evt_npc.o] ["コルテス"] LW(0) LW(0) LW(0)
+805D8568:       callc [evt_npc_set_scale evt_npc.o] ["モニー"] LW(0) LW(0) LW(0)
+805D8580:       callc [evt_npc_set_scale evt_npc.o] ["ピートン"] LW(0) LW(0) LW(0)
+805D8598:       if_int_eq LW(1) 0
+805D85A4:         loop_break
+805D85A8:       endif
+805D85AC:       wait_frames 1
+805D85B4:     end_loop
+805D85B8:     callc [evt_mario_cont_onoff evt_mario.o] 0
+805D85C4:     callc [evt_party_cont_onoff evt_party.o] 0 0
+805D85D4:     callc [evt_party_cont_onoff evt_party.o] 1 0
+805D85E4:     callc [evt_mario_set_pos evt_mario.o] 0 -1000 0
+805D85F8:     callc [evt_party_set_pos evt_party.o] 0 0 -1000 0
+805D8610:     callc [evt_party_set_pos evt_party.o] 1 0 -1000 0
+805D8628:   end_thread
+805D862C:   callc [evt_cam3d_evt_set evt_cam.o] 685 278 455 685 158 -537 500 11
+805D8654:   wait_ms 1000
+805D865C:   stop_tid GW(10)
+805D8664:   setii GF(10) 1
+805D8670:   callc [evt_npc_set_position evt_npc.o] ["船ダミー"] 0 GW(1) 0
+805D8688:   begin_thread
+805D868C:     wait_ms 400
+805D8694:     callss [ship_pera muj_00.o]
+805D869C:   end_thread
+805D86A0:   begin_thread
+805D86A4:     loop 0
+805D86AC:       callc [evt_npc_get_position evt_npc.o] ["船ダミー"] LW(0) LW(1) LW(2)
+805D86C4:       setff GW(1) LW(1)
+805D86D0:       if_int_eq GF(10) 0
+805D86DC:         loop_break
+805D86E0:       endif
+805D86E4:       wait_frames 1
+805D86EC:     end_loop
+805D86F0:   end_thread
+805D86F4:   callc [evt_mapobj_get_position evt_map.o] ["S_b"] LW(0) LW(1) LW(2)
+805D870C:   callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_STG0_SHIP_JUMP1"] LW(0) LW(1) LW(2) 0
+805D8728:   callc [evt_npc_jump_position_nohit evt_npc.o] ["船ダミー"] 0 GW(1) 0 1800 150
+805D8748:   callc [evt_mapobj_get_position evt_map.o] ["S_b"] LW(0) LW(1) LW(2)
+805D8760:   callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_STG0_SHIP_LANDING1"] LW(0) LW(1) LW(2) 0
+805D877C:   setii GF(10) 0
+805D8788:   callc [evt_mapobj_flag_onoff evt_map.o] 1 0 ["S_mizu_06"] 1
+805D87A0:   begin_thread
+805D87A4:     callc [evt_sub_intpl_msec_init evt_sub.o] 0 0 255 2000
+805D87BC:     loop 0
+805D87C4:       callc [evt_sub_intpl_msec_get_value evt_sub.o]
+805D87CC:       callc [alpha_set_func muj_00.o] LW(0)
+805D87D8:       if_int_eq LW(1) 0
+805D87E4:         loop_break
+805D87E8:       endif
+805D87EC:       wait_frames 1
+805D87F4:     end_loop
+805D87F8:   end_thread
+805D87FC:   setir LW(0) 0xfd050f81
+805D8808:   setff LW(1) 1.50
+805D8814:   callsa_tid [muj_ship_puka muj.o] GW(10)
+805D8820:   callc [evt_snd_sfxon evt_snd.o] ["SFX_STG5_SHIP_STARTING1_4"] 0
+805D8830:   setff LW(0) GW(0)
+805D883C:   setff LW(1) GW(0)
+805D8848:   addf LW(1) -800.00
+805D8854:   callc [evt_sub_intpl_msec_init evt_sub.o] 1 LW(0) LW(1) 10000
+805D886C:   loop 0
+805D8874:     callc [evt_sub_intpl_msec_get_value_para evt_sub.o] LW(0) LW(1)
+805D8884:     setff GW(0) LW(0)
+805D8890:     if_int_eq LW(1) 0
+805D889C:       loop_break
+805D88A0:     endif
+805D88A4:     wait_frames 1
+805D88AC:   end_loop
+805D88B0:   callc [evt_bero_mapchange evt_bero.o] ["muj_20"] [zero_muj_0000e2b8 muj_00.o]
+805D88C0:   return
+805D88C4:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [ship_pera muj_00.o] AT 805D8328 ---
+805D8328:   callc [evt_img_entry evt_img.o] ["capture_img"]
+805D8334:   callc [evt_img_set_paper evt_img.o] ["capture_img"] ["OFF_d_kaiten"]
+805D8344:   callc [evt_offscreen_entry evt_offscreen.o] ["offscreen"]
+805D8350:   callc [evt_offscreen_set_texture_fmt evt_offscreen.o] ["offscreen"] 6 6
+805D8364:   callc [evt_mapobj_set_offscreen evt_map.o] 1 ["S_b"] ["offscreen"]
+805D8378:   callc [evt_img_alloc_capture evt_img.o] ["capture_img"] 0 ["offscreen"] 0 0 0 608 480
+805D83A0:   callc [evt_img_alloc_capture evt_img.o] ["capture_img"] 1 ["offscreen"] 0 0 0 608 480
+805D83C8:   callc [evt_img_onoff evt_img.o] ["capture_img"] 0
+805D83D8:   callc [evt_img_set_virtual_point evt_img.o] ["capture_img"] 685 0 -605
+805D83F0:   callc [evt_img_set_paper_anim evt_img.o] ["capture_img"] ["Z_1"]
+805D8400:   callc [evt_img_onoff evt_img.o] ["capture_img"] 1
+805D8410:   callc [evt_snd_sfxon evt_snd.o] ["SFX_OFF_SHIP_REVERSE1"] 0
+805D8420:   callc [evt_mapobj_flag_onoff evt_map.o] 1 1 ["S_b"] 1
+805D8438:   callc [evt_img_set_paper_anim evt_img.o] ["capture_img"] ["A_1"]
+805D8448:   callc [evt_img_wait_animend evt_img.o] ["capture_img"]
+805D8454:   callc [evt_img_onoff evt_img.o] ["capture_img"] 0
+805D8464:   callc [evt_mapobj_flag_onoff evt_map.o] 1 0 ["S_b"] 1
+805D847C:   setii GW(2) 180
+805D8488:   callc [evt_mapobj_clear_offscreen evt_map.o] 1 ["S_b"]
+805D8498:   callc [evt_img_free_capture evt_img.o] ["capture_img"] 0
+805D84A8:   callc [evt_img_free_capture evt_img.o] ["capture_img"] 1
+805D84B8:   callc [evt_img_onoff evt_img.o] ["capture_img"] 0
+805D84C8:   callc [evt_img_release evt_img.o] ["capture_img"]
+805D84D4:   callc [evt_offscreen_delete evt_offscreen.o] ["offscreen"]
+805D84E0:   callc [evt_paper_delete evt_paper.o] ["OFF_d_kaiten"]
+805D84EC:   return
+805D84F0:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [muj_ship_puka muj.o] AT 805CF290 ---
+805CF290:   setii LW(10) 0
+805CF29C:   loop 0
+805CF2A4:     callc [muj_ship_puka_func muj.o] LW(10) LW(1) LW(11)
+805CF2B8:     storef_ind LW(0) LW(11)
+805CF2C4:     addi LW(10) 1
+805CF2D0:     wait_ms 130
+805CF2D8:   end_loop
+805CF2DC:   return
+805CF2E0:   end

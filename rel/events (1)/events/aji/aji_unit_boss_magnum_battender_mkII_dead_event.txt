@@ -1,0 +1,71 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [dead_event unit_boss_magnum_battender_mkII.o] AT 805FAB54 ---
+805FAB54:   callc [btlevtcmd_SetUnitWork battle_event_cmd.o] -2 6 1
+805FAB68:   callc [btlevtcmd_GetPos battle_event_cmd.o] -2 LW(0) LW(1) LW(2)
+805FAB80:   addi LW(1) 70
+805FAB8C:   addi LW(2) 10
+805FAB98:   callc [eff_dead unit_boss_magnum_battender_mkII.o] LW(0) LW(1) LW(2)
+805FABAC:   callc [btlevtcmd_WaitAttackEnd battle_event_cmd.o]
+805FABB4:   callc [btlevtcmd_StatusWindowOnOff battle_event_cmd.o] 0
+805FABC0:   callc [evt_btl_camera_set_prilimit battle_camera.o] 1
+805FABCC:   callc [evt_btl_camera_set_mode battle_camera.o] 1 3
+805FABDC:   callc [btlevtcmd_GetPos battle_event_cmd.o] -2 LW(0) LW(1) LW(2)
+805FABF4:   subi LW(0) 20
+805FAC00:   callc [evt_btl_camera_set_moveto battle_camera.o] 1 LW(0) 160 600 LW(0) 110 -100 20 11
+805FAC2C:   wait_frames 20
+805FAC34:   callc [btlevtcmd_SetTalkPoseType battle_event_cmd.o] -2 39
+805FAC44:   callc [btlevtcmd_SetStayPoseType battle_event_cmd.o] -2 39
+805FAC54:   callc [evt_msg_print evt_msg.o] 2 ["stg7_aji_41_07"] 0 -2
+805FAC6C:   callc [evt_btl_camera_set_prilimit battle_camera.o] 0
+805FAC78:   callc [evt_btl_camera_set_mode battle_camera.o] 0 0
+805FAC88:   callc [btlevtcmd_StatusWindowOnOff battle_event_cmd.o] 1
+805FAC94:   wait_ms 500
+805FAC9C:   callc [arm_check unit_boss_magnum_battender_mkII.o] 0 LW(0)
+805FACAC:   if_int_ne LW(0) -1
+805FACB8:     callc [btlevtcmd_CheckDamageCode battle_event_cmd.o] LW(0) 512 LW(1)
+805FACCC:     if_int_eq LW(1) 0
+805FACD8:       setii LW(10) LW(0)
+805FACE4:       begin_thread
+805FACE8:         callss [subsetevt_dead_core battle_event_subset.o]
+805FACF0:         callc [arm_end unit_boss_magnum_battender_mkII.o] 0
+805FACFC:         callc [btlevtcmd_OnPartsAttribute battle_event_cmd.o] LW(10) 1 16777216
+805FAD10:         callc [btlevtcmd_OnPartsAttribute battle_event_cmd.o] LW(10) 1 33554432
+805FAD24:       end_thread
+805FAD28:     endif
+805FAD2C:   endif
+805FAD30:   callc [arm_check unit_boss_magnum_battender_mkII.o] 1 LW(0)
+805FAD40:   if_int_ne LW(0) -1
+805FAD4C:     callc [btlevtcmd_CheckDamageCode battle_event_cmd.o] LW(0) 512 LW(1)
+805FAD60:     if_int_eq LW(1) 0
+805FAD6C:       setii LW(10) LW(0)
+805FAD78:       begin_thread
+805FAD7C:         callss [subsetevt_dead_core battle_event_subset.o]
+805FAD84:         callc [arm_end unit_boss_magnum_battender_mkII.o] 1
+805FAD90:         callc [btlevtcmd_OnPartsAttribute battle_event_cmd.o] LW(10) 1 16777216
+805FADA4:         callc [btlevtcmd_OnPartsAttribute battle_event_cmd.o] LW(10) 1 33554432
+805FADB8:       end_thread
+805FADBC:     endif
+805FADC0:   endif
+805FADC4:   setii LW(10) -2
+805FADD0:   callc [btlevtcmd_snd_se battle_event_cmd.o] LW(10) ["SFX_BTL_ENEMY_DIE1_2"] [F1194D80] 0 [F1194D80]
+805FADEC:   callc [btlevtcmd_GetCoin battle_event_cmd.o] LW(10) LW(0)
+805FADFC:   callc [btlevtcmd_StoreCoin battle_event_cmd.o] LW(0)
+805FAE08:   callc [btlevtcmd_GetExp battle_event_cmd.o] LW(10) LW(0)
+805FAE18:   callc [btlevtcmd_StoreExp battle_event_cmd.o] LW(0)
+805FAE24:   callc [btlevtcmd_GetPos battle_event_cmd.o] LW(10) LW(3) LW(1) LW(2)
+805FAE3C:   addi LW(2) 50
+805FAE48:   addi LW(1) 30
+805FAE54:   callc [_add_star_point_disp_offset battle_event_subset.o] LW(10) LW(3) LW(1) LW(2)
+805FAE6C:   callc [evt_eff evt_eff.o] [zero_aji_0001626c unit_boss_magnum_battender_mkII.o] ["star_point"] 0 LW(3) LW(1) LW(2) LW(0) 0 0 0 0 0 0 0
+805FAEAC:   if_int_ge LW(0) 1
+805FAEB8:     loop LW(0)
+805FAEC0:     end_loop
+805FAEC4:   endif
+805FAEC8:   wait_frames 120
+805FAED0:   callc [btlevtcmd_GetBackItem battle_event_cmd.o] LW(10)
+805FAEDC:   callc [btlevtcmd_KillUnit battle_event_cmd.o] LW(10) 1
+805FAEEC:   callc [eff_dead_delete unit_boss_magnum_battender_mkII.o]
+805FAEF4:   return
+805FAEF8:   end

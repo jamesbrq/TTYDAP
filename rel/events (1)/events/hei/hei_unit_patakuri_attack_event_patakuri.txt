@@ -1,0 +1,103 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [attack_event_patakuri unit_patakuri.o] AT 805D8854 ---
+805D8854:   callc [btlevtcmd_EnemyItemUseCheck battle_event_cmd.o] -2 LW(0)
+805D8864:   if_int_ne LW(0) 0
+805D8870:     callss LW(0)
+805D8878:     callc [btlevtcmd_StartWaitEvent battle_event_cmd.o] -2
+805D8884:     return
+805D8888:   endif
+805D888C:   callc [btlevtcmd_GetEnemyBelong battle_event_cmd.o] -2 LW(0)
+805D889C:   callc [btlevtcmd_SamplingEnemy battle_event_cmd.o] -2 LW(0) [weapon_patakuri_attack unit_patakuri.o]
+805D88B0:   callc [btlevtcmd_ChoiceSamplingEnemy battle_event_cmd.o] [weapon_patakuri_attack unit_patakuri.o] LW(3) LW(4)
+805D88C4:   if_int_eq LW(3) -1
+805D88D0:     callc [btlevtcmd_CheckToken battle_event_cmd.o] -2 16 LW(0)
+805D88E4:     if_int_ne LW(0) 0
+805D88F0:       callss [subsetevt_confuse_flustered battle_event_subset.o]
+805D88F8:       return
+805D88FC:     endif
+805D8900:     goto 99
+805D8908:   endif
+805D890C:   callc [evt_btl_camera_set_mode battle_camera.o] 0 8
+805D891C:   callc [evt_btl_camera_set_homing_unit battle_camera.o] 0 -2 LW(3)
+805D8930:   callc [evt_btl_camera_set_moveSpeedLv battle_camera.o] 0 1
+805D8940:   callc [evt_btl_camera_set_zoom battle_camera.o] 0 250
+805D8950:   callc [btlevtcmd_WeaponAftereffect battle_event_cmd.o] [weapon_patakuri_attack unit_patakuri.o]
+805D895C:   callc [btlevtcmd_AttackDeclare battle_event_cmd.o] -2 LW(3) LW(4)
+805D8970:   callc [btlevtcmd_WaitGuardMove battle_event_cmd.o]
+805D8978:   callc [btlevtcmd_PayWeaponCost battle_event_cmd.o] -2 [weapon_patakuri_attack unit_patakuri.o]
+805D8988:   callc [btlevtcmd_AnimeChangePoseType battle_event_cmd.o] -2 1 40
+805D899C:   callc [btlevtcmd_GetHitPos battle_event_cmd.o] LW(3) LW(4) LW(0) LW(1) LW(2)
+805D89B8:   callc [btlevtcmd_FaceDirectionAdd battle_event_cmd.o] LW(3) LW(0) 50
+805D89CC:   addi LW(1) 40
+805D89D8:   callc [btlevtcmd_CalculateFaceDirection battle_event_cmd.o] -2 -1 LW(0) LW(2) 1 LW(15)
+805D89F8:   callc [btlevtcmd_ChangeFaceDirection battle_event_cmd.o] -2 LW(15)
+805D8A08:   callc [btlevtcmd_SetMoveSpeed battle_event_cmd.o] -2 4.00
+805D8A18:   callc [btlevtcmd_DivePosition battle_event_cmd.o] -2 LW(0) LW(1) LW(2) 0 -16 0 0 -1
+805D8A44:   wait_ms 100
+805D8A4C:   callc [btlevtcmd_CalculateFaceDirection battle_event_cmd.o] -2 -1 LW(3) LW(4) 16 LW(15)
+805D8A6C:   callc [btlevtcmd_ChangeFaceDirection battle_event_cmd.o] -2 LW(15)
+805D8A7C:   callc [evt_btl_camera_set_mode battle_camera.o] 0 3
+805D8A8C:   callc [evt_btl_camera_nomove_y_onoff battle_camera.o] 0 1
+805D8A9C:   callc [btlevtcmd_AnimeChangePoseType battle_event_cmd.o] -2 1 50
+805D8AB0:   callc [btlevtcmd_FaceDirectionAdd battle_event_cmd.o] LW(3) LW(0) 50
+805D8AC4:   callc [btlevtcmd_SetMoveSpeed battle_event_cmd.o] -2 5.00
+805D8AD4:   callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_ENM_PATAKURI_MOVE2"] [F1194D80] 0 [F1194D80]
+805D8AF0:   callc [btlevtcmd_DivePosition battle_event_cmd.o] -2 LW(0) LW(1) LW(2) 0 5 4 0 0
+805D8B1C:   callc [btlevtcmd_PreCheckDamage battle_event_cmd.o] -2 LW(3) LW(4) [weapon_patakuri_attack unit_patakuri.o] 256 LW(5)
+805D8B3C:   switchi LW(5)
+805D8B44:     case_int_eq_any 4
+805D8B4C:       goto 90
+805D8B54:       end_multi_case
+805D8B58:     case_int_eq 3
+805D8B60:       callc [btlevtcmd_StartAvoid battle_event_cmd.o] LW(3) 38
+805D8B70:       goto 90
+805D8B78:       end_multi_case
+805D8B7C:     case_int_eq 6
+805D8B84:       callc [btlevtcmd_StartAvoid battle_event_cmd.o] LW(3) 39
+805D8B94:       goto 90
+805D8B9C:     case_int_eq 2
+805D8BA4:       callc [btlevtcmd_StartAvoid battle_event_cmd.o] LW(3) 40
+805D8BB4:       goto 90
+805D8BBC:     case_int_eq 1
+805D8BC4:       goto 91
+805D8BCC:       end_multi_case
+805D8BD0:     case_default
+805D8BD4:       goto 98
+805D8BDC:       end_multi_case
+805D8BE0:   end_switch
+805D8BE4: 90:
+805D8BEC:   callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_ENM_PATAKURI_MOVE3"] [F1194D80] 0 [F1194D80]
+805D8C08:   callc [btlevtcmd_SetMoveSpeed battle_event_cmd.o] -2 5.00
+805D8C18:   callc [btlevtcmd_GetHitPos battle_event_cmd.o] LW(3) LW(4) LW(0) LW(1) LW(2)
+805D8C34:   callc [btlevtcmd_FaceDirectionSub battle_event_cmd.o] LW(3) LW(0) 50
+805D8C48:   subi LW(1) 10
+805D8C54:   callc [btlevtcmd_DivePosition battle_event_cmd.o] -2 LW(0) LW(1) LW(2) 0 -20 1 0 0
+805D8C80:   callc [btlevtcmd_AnimeChangePoseType battle_event_cmd.o] -2 1 69
+805D8C94:   wait_ms 500
+805D8C9C:   goto 98
+805D8CA4: 91:
+805D8CAC:   callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_ENM_PATAKURI_MOVE3"] [F1194D80] 0 [F1194D80]
+805D8CC8:   callc [btlevtcmd_SetMoveSpeed battle_event_cmd.o] -2 5.00
+805D8CD8:   callc [btlevtcmd_GetHitPos battle_event_cmd.o] LW(3) LW(4) LW(0) LW(1) LW(2)
+805D8CF4:   subi LW(1) 10
+805D8D00:   callc [btlevtcmd_DivePosition battle_event_cmd.o] -2 LW(0) LW(1) LW(2) 0 -16 1 0 0
+805D8D2C:   callc [evt_btl_camera_shake_h battle_camera.o] 0 1 1 8 0
+805D8D48:   callc [evt_btl_camera_set_moveSpeedLv battle_camera.o] 0 2
+805D8D58:   callc [evt_btl_camera_add_zoom battle_camera.o] 0 -50
+805D8D68:   callc [btlevtcmd_ResultACDefence battle_event_cmd.o] LW(3) [weapon_patakuri_attack unit_patakuri.o]
+805D8D78:   callc [btlevtcmd_CheckDamage battle_event_cmd.o] -2 LW(3) LW(4) [weapon_patakuri_attack unit_patakuri.o] 256 LW(5)
+805D8D98:   goto 98
+805D8DA0: 98:
+805D8DA8:   callc [evt_btl_camera_set_mode battle_camera.o] 0 0
+805D8DB8:   callc [btlevtcmd_SetMoveSoundDataWork battle_event_cmd.o] -2 ["SFX_ENM_PATAKURI_MOVE1"] ["SFX_ENM_PATAKURI_MOVE1"] 0 15 15 0 0
+805D8DE0:   callc [btlevtcmd_AnimeChangePoseType battle_event_cmd.o] -2 1 42
+805D8DF4:   callc [btlevtcmd_SetMoveSpeed battle_event_cmd.o] -2 7.00
+805D8E04:   callc [btlevtcmd_GetHomePos battle_event_cmd.o] -2 LW(0) LW(1) LW(2)
+805D8E1C:   callc [btlevtcmd_DivePosition battle_event_cmd.o] -2 LW(0) LW(1) LW(2) 0 -10 0 0 -2
+805D8E48: 99:
+805D8E50:   callc [btlevtcmd_ResetFaceDirection battle_event_cmd.o] -2
+805D8E5C:   callc [btlevtcmd_StartWaitEvent battle_event_cmd.o] -2
+805D8E68:   return
+805D8E6C:   end

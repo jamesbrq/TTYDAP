@@ -1,0 +1,95 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [kagenuke_attack_event unit_boss_majolyne.o] AT 805D4138 ---
+805D4138:   callc [btlevtcmd_GetEnemyBelong battle_event_cmd.o] -2 LW(0)
+805D4148:   callc [btlevtcmd_SamplingEnemy battle_event_cmd.o] -2 LW(0) LW(9)
+805D415C:   callc [btlevtcmd_ChoiceSamplingEnemy battle_event_cmd.o] LW(9) LW(3) LW(4)
+805D4170:   if_int_eq LW(3) -1
+805D417C:     callc [btlevtcmd_CheckToken battle_event_cmd.o] -2 16 LW(0)
+805D4190:     if_int_ne LW(0) 0
+805D419C:       callss [subsetevt_confuse_flustered battle_event_subset.o]
+805D41A4:     endif
+805D41A8:     return
+805D41AC:   endif
+805D41B0:   callc [btlevtcmd_WeaponAftereffect battle_event_cmd.o] LW(9)
+805D41BC:   callc [btlevtcmd_AttackDeclare battle_event_cmd.o] -2 LW(3) LW(4)
+805D41D0:   callc [btlevtcmd_WaitGuardMove battle_event_cmd.o]
+805D41D8:   callc [btlevtcmd_PayWeaponCost battle_event_cmd.o] -2 LW(9)
+805D41E8:   callc [btlevtcmd_CalculateFaceDirection battle_event_cmd.o] -2 -1 LW(3) LW(4) 16 LW(15)
+805D4208:   callc [btlevtcmd_ChangeFaceDirection battle_event_cmd.o] -2 LW(15)
+805D4218:   callc [evt_btl_camera_set_mode battle_camera.o] 0 8
+805D4228:   callc [evt_btl_camera_set_homing_unit battle_camera.o] 0 -2 LW(3)
+805D423C:   callc [evt_btl_camera_set_moveSpeedLv battle_camera.o] 0 2
+805D424C:   callc [evt_btl_camera_set_zoom battle_camera.o] 0 200
+805D425C:   callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 1 ["MJR_A1_1"]
+805D4270:   callss [majolyne_down unit_boss_majolyne.o]
+805D4278:   wait_ms 300
+805D4280:   callc [btlevtcmd_GetPos battle_event_cmd.o] LW(3) LW(0) LW(1) LW(2)
+805D4298:   addi LW(2) 5
+805D42A4:   callc [btlevtcmd_FaceDirectionAdd battle_event_cmd.o] LW(3) LW(0) 30
+805D42B8:   setii LW(1) 0
+805D42C4:   callss [majolyne_up unit_boss_majolyne.o]
+805D42CC:   callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_BOSS_MAJO_PUSH1"] [F1194D80] 0 LW(15)
+805D42E8:   callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 1 ["MJR_A1_2"]
+805D42FC:   wait_frames 25
+805D4304:   callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 1 ["MJR_A1_3"]
+805D4318:   wait_ms 350
+805D4320:   callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 1 ["MJR_A1_4"]
+805D4334:   wait_ms 200
+805D433C:   callc [evt_snd_sfxoff evt_snd.o] LW(15)
+805D4348:   callc [btlevtcmd_PreCheckDamage battle_event_cmd.o] -2 LW(3) LW(4) LW(9) 256 LW(5)
+805D4368:   switchi LW(5)
+805D4370:     case_int_eq_any 4
+805D4378:       goto 90
+805D4380:       end_multi_case
+805D4384:     case_int_eq 3
+805D438C:       callc [btlevtcmd_StartAvoid battle_event_cmd.o] LW(3) 38
+805D439C:       goto 90
+805D43A4:       end_multi_case
+805D43A8:     case_int_eq 6
+805D43B0:       callc [btlevtcmd_StartAvoid battle_event_cmd.o] LW(3) 39
+805D43C0:       goto 90
+805D43C8:     case_int_eq 2
+805D43D0:       callc [btlevtcmd_StartAvoid battle_event_cmd.o] LW(3) 40
+805D43E0:       goto 90
+805D43E8:     case_int_eq 1
+805D43F0:       goto 91
+805D43F8:       end_multi_case
+805D43FC:     case_default
+805D4400:       goto 98
+805D4408:       end_multi_case
+805D440C:   end_switch
+805D4410: 90:
+805D4418:   goto 98
+805D4420: 91:
+805D4428:   callc [btlevtcmd_ResultACDefence battle_event_cmd.o] LW(3) LW(9)
+805D4438:   callc [btlevtcmd_CheckDamage battle_event_cmd.o] -2 LW(3) LW(4) LW(9) 256 LW(5)
+805D4458: 98:
+805D4460:   callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 1 ["MJR_A1_1"]
+805D4474:   callss [majolyne_down unit_boss_majolyne.o]
+805D447C:   callc [evt_btl_camera_set_mode battle_camera.o] 0 0
+805D448C:   wait_ms 200
+805D4494:   callc [btlevtcmd_GetHomePos battle_event_cmd.o] -2 LW(0) LW(1) LW(2)
+805D44AC:   callss [majolyne_up unit_boss_majolyne.o]
+805D44B4:   return
+805D44B8:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [majolyne_down unit_boss_majolyne.o] AT 805D2EC8 ---
+805D2EC8:   begin_thread
+805D2ECC:     wait_ms 250
+805D2ED4:     callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_BOSS_MAJO_SHADOW1"] [F1194D80] 0 [F1194D80]
+805D2EF0:   end_thread
+805D2EF4:   callc [battle_evt_majo_disp_off unit_party_vivian.o] -2 1 0 0
+805D2F0C:   return
+805D2F10:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [majolyne_up unit_boss_majolyne.o] AT 805D2F14 ---
+805D2F14:   begin_thread
+805D2F18:     wait_ms 250
+805D2F20:     callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_BOSS_MAJO_SHADOW2"] [F1194D80] 0 [F1194D80]
+805D2F3C:   end_thread
+805D2F40:   callc [battle_evt_majo_disp_on unit_party_vivian.o] -2 1 LW(0) LW(1) LW(2) 0
+805D2F60:   callc [btlevtcmd_SetPos battle_event_cmd.o] -2 LW(0) LW(1) LW(2)
+805D2F78:   return
+805D2F7C:   end

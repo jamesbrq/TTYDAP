@@ -1,0 +1,100 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [hom_10_evt_resha_start rsh_06.o] AT 805E66D0 ---
+805E66D0:   setii GSWF(3583) 1
+805E66DC:   setii GSWF(3579) 0
+805E66E8:   setii GSWF(3580) 0
+805E66F4:   setii GSWF(3581) 0
+805E6700:   callc [evt_mapobj_get_position evt_map.o] ["ranpu"] LW(0) LW(1) LW(2)
+805E6718:   callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_STG6_TRAIN_BELL1"] LW(0) LW(1) LW(2) 0
+805E6734:   wait_ms 200
+805E673C:   callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_STG6_TRAIN_BELL1"] LW(0) LW(1) LW(2) 0
+805E6758:   callc [evt_sub_get_mapname evt_sub.o] LW(0)
+805E6764:   if_string_eq LW(0) ["gor_04"]
+805E6770:     callc [evt_snd_sfxon evt_snd.o] ["SFX_STG6_TRAIN_MOVE1"] 0
+805E6780:   endif
+805E6784:   if_string_eq LW(0) ["hom_00"]
+805E6790:     if_int_lt GSW(0) 339
+805E679C:       callc [evt_snd_sfxon evt_snd.o] ["SFX_STG6_TRAIN_MOVE1_2"] 0
+805E67AC:     else
+805E67B0:       callc [evt_snd_sfxon evt_snd.o] ["SFX_STG6_TRAIN_MOVE1_2_2"] 0
+805E67C0:     endif
+805E67C4:   endif
+805E67C8:   if_string_eq LW(0) ["pik_00"]
+805E67D4:     callc [evt_snd_sfxon evt_snd.o] ["SFX_STG6_TRAIN_MOVE1_3"] 0
+805E67E4:   endif
+805E67E8:   callc [evt_sub_get_mapname evt_sub.o] LW(0)
+805E67F4:   if_string_eq LW(0) ["hom_00"]
+805E6800:     begin_thread
+805E6804:       setff LW(0) 0.00
+805E6810:       loop 0
+805E6818:         addf LW(0) GW(0)
+805E6824:         callc [evt_mapobj_trans evt_map.o] 1 ["train"] LW(0) 0 0
+805E6840:         wait_frames 1
+805E6848:       end_loop
+805E684C:     end_thread
+805E6850:   endif
+805E6854:   if_string_eq LW(0) ["gor_04"]
+805E6860:     begin_thread
+805E6864:       setff LW(0) 0.00
+805E6870:       loop 0
+805E6878:         addf LW(0) GW(0)
+805E6884:         callc [evt_mapobj_trans evt_map.o] 1 ["train"] LW(0) 0 0
+805E68A0:         wait_frames 1
+805E68A8:       end_loop
+805E68AC:     end_thread
+805E68B0:   endif
+805E68B4:   begin_thread
+805E68B8:     setff GW(0) 0.00
+805E68C4:     callc [evt_sub_intpl_msec_init evt_sub.o] 11 0 -1500 20000
+805E68DC: 0:
+805E68E4:     callc [evt_sub_intpl_msec_get_value evt_sub.o]
+805E68EC:     divf LW(0) 100.00
+805E68F8:     setff GW(0) LW(0)
+805E6904:     wait_frames 1
+805E690C:     if_int_eq LW(1) 1
+805E6918:       goto 0
+805E6920:     endif
+805E6924:     loop 0
+805E692C:       setff GW(0) -15.00
+805E6938:       wait_frames 1
+805E6940:     end_loop
+805E6944:   end_thread
+805E6948:   begin_thread
+805E694C:     callsa_tid [evt_sub_stopwatch evt_sub.o] LW(0)
+805E6958:     loop 0
+805E6960:       setff GW(1) GW(0)
+805E696C:       callc [evt_sub_get_stopwatch evt_sub.o] LW(0) LW(1)
+805E697C:       if_int_gt LW(1) 1500
+805E6988:         loop_break
+805E698C:       endif
+805E6990:       wait_frames 1
+805E6998:     end_loop
+805E699C:     callc [evt_sub_intpl_msec_init evt_sub.o] 11 0 -1000 1000
+805E69B4: 1:
+805E69BC:     callc [evt_sub_intpl_msec_get_value evt_sub.o]
+805E69C4:     divf LW(0) 100.00
+805E69D0:     setff GW(1) GW(0)
+805E69DC:     addf GW(1) LW(0)
+805E69E8:     wait_frames 1
+805E69F0:     if_int_eq LW(1) 1
+805E69FC:       goto 1
+805E6A04:     endif
+805E6A08:     callc [evt_sub_intpl_msec_init evt_sub.o] 11 -1000 0 1000
+805E6A20: 2:
+805E6A28:     callc [evt_sub_intpl_msec_get_value evt_sub.o]
+805E6A30:     divf LW(0) 100.00
+805E6A3C:     setff GW(1) GW(0)
+805E6A48:     addf GW(1) LW(0)
+805E6A54:     wait_frames 1
+805E6A5C:     if_int_eq LW(1) 1
+805E6A68:       goto 2
+805E6A70:     endif
+805E6A74:     loop 0
+805E6A7C:       setff GW(1) GW(0)
+805E6A88:       wait_frames 1
+805E6A90:     end_loop
+805E6A94:   end_thread
+805E6A98:   return
+805E6A9C:   end

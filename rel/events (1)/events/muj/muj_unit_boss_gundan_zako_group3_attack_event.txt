@@ -1,0 +1,142 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [attack_event unit_boss_gundan_zako_group3.o] AT 80600F60 ---
+80600F60:   callc [btlevtcmd_SetUnitWork battle_event_cmd.o] -2 0 0
+80600F74:   setii LW(9) [weapon_gundan_zako_group3_attack unit_boss_gundan_zako_group3.o]
+80600F80:   callc [btlevtcmd_GetEnemyBelong battle_event_cmd.o] -2 LW(0)
+80600F90:   callc [btlevtcmd_SamplingEnemy battle_event_cmd.o] -2 LW(0) LW(9)
+80600FA4:   callc [btlevtcmd_ChoiceSamplingEnemy battle_event_cmd.o] LW(9) LW(3) LW(4)
+80600FB8:   if_int_eq LW(3) -1
+80600FC4:     callc [btlevtcmd_CheckToken battle_event_cmd.o] -2 16 LW(0)
+80600FD8:     if_int_ne LW(0) 0
+80600FE4:       callss [subsetevt_confuse_flustered battle_event_subset.o]
+80600FEC:       return
+80600FF0:     endif
+80600FF4:     goto 99
+80600FFC:   endif
+80601000:   callc [btlevtcmd_WeaponAftereffect battle_event_cmd.o] LW(9)
+8060100C:   callc [btlevtcmd_AttackDeclare battle_event_cmd.o] -2 LW(3) LW(4)
+80601020:   callc [btlevtcmd_WaitGuardMove battle_event_cmd.o]
+80601028:   callc [btlevtcmd_PayWeaponCost battle_event_cmd.o] -2 LW(9)
+80601038:   callc [zakogun_get_kanbu_id_evtcmd unit_boss_gundan_zako_group1.o] LW(5)
+80601044:   callc [btlevtcmd_CheckActStatus battle_event_cmd.o] LW(5) LW(12)
+80601054:   if_int_ne LW(12) 0
+80601060:     callc [zakogun_get_kanbu_id_evtcmd unit_boss_gundan_zako_group1.o] LW(5)
+8060106C:     begin_child_thread_tid LW(15)
+80601074:       wait_frames 10
+8060107C:       callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] LW(5) 1 ["W_1"]
+80601090:       callc [btlevtcmd_GetPos battle_event_cmd.o] LW(5) LW(0) LW(1) LW(2)
+806010A8:       callc [btlevtcmd_FaceDirectionSub battle_event_cmd.o] LW(5) LW(0) 50
+806010BC:       callc [btlevtcmd_MovePosition battle_event_cmd.o] LW(5) LW(0) LW(1) LW(2) 60 -1 0
+806010E0:       callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] LW(5) 1 ["S_1"]
+806010F4:     end_child_thread
+806010F8:   endif
+806010FC:   begin_child_thread
+80601100:     wait_frames 32
+80601108:     callc [evt_snd_sfxon evt_snd.o] ["SFX_BOSS_TEAM_3RD_ADHERE1"] 0
+80601118:   end_child_thread
+8060111C:   callc [zakogun_attack3_1 unit_boss_gundan_zako_group3.o]
+80601124:   if_int_ne LW(12) 0
+80601130:     stop_tid LW(15)
+80601138:     callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] LW(5) 1 ["A_1A"]
+8060114C:     callc [btlevtcmd_snd_se battle_event_cmd.o] LW(5) ["SFX_BOSS_KANBU_JUMP1"] [F1194D80] 0 LW(13)
+80601168:     callc [btlevtcmd_JumpSetting battle_event_cmd.o] LW(5) 0 6.00 0.30
+80601180:     callc [btlevtcmd_JumpPosition battle_event_cmd.o] LW(5) 0 100 0 0 -1
+806011A0:     callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] LW(5) 1 ["S_1"]
+806011B4:     callc [evt_snd_sfxoff evt_snd.o] LW(13)
+806011C0:   endif
+806011C4:   callc [btlevtcmd_GetSelectEnemy battle_event_cmd.o] LW(3) LW(4)
+806011D4:   callc [zakogun_set_target_id unit_boss_gundan_zako_group1.o] LW(3)
+806011E0:   if_int_ne LW(12) 0
+806011EC:     begin_child_thread_tid LW(14)
+806011F4:       callc [zakogun_get_kanbu_id_evtcmd unit_boss_gundan_zako_group1.o] LW(5)
+80601200:       callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] LW(5) 1 ["R_2"]
+80601214:       loop 0
+8060121C:         callc [zakogun_kanbu_on_ball unit_boss_gundan_zako_group3.o]
+80601224:         wait_frames 1
+8060122C:       end_loop
+80601230:     end_child_thread
+80601234:   endif
+80601238:   begin_child_thread
+8060123C:     callss [hit_check_event unit_boss_gundan_zako_group3.o]
+80601244:   end_child_thread
+80601248:   callc [evt_snd_sfxon evt_snd.o] ["SFX_BOSS_TEAM_3RD_ROUND1"] LW(13)
+80601258:   callc [zakogun_attack3_2 unit_boss_gundan_zako_group3.o] LW(13)
+80601264:   if_int_ne LW(12) 0
+80601270:     stop_tid LW(14)
+80601278:     stop_tid LW(15)
+80601280:   endif
+80601284:   if_int_ne LW(12) 0
+80601290:     begin_thread
+80601294:       callc [zakogun_get_kanbu_id_evtcmd unit_boss_gundan_zako_group1.o] LW(5)
+806012A0:       callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] LW(5) 1 ["A_1A"]
+806012B4:       callc [btlevtcmd_GetPos battle_event_cmd.o] LW(5) LW(0) LW(1) LW(2)
+806012CC:       callc [btlevtcmd_JumpSetting battle_event_cmd.o] LW(5) 30 0 0.30
+806012E4:       callc [btlevtcmd_JumpPosition battle_event_cmd.o] LW(5) LW(0) 0 LW(2) 30 -1
+80601304:       callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] LW(5) 1 ["S_1"]
+80601318:       callc [btlevtcmd_ChangeFaceDirection battle_event_cmd.o] LW(5) 1
+80601328:       callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] LW(5) 1 ["R_1"]
+8060133C:       callc [btlevtcmd_GetHomePos battle_event_cmd.o] LW(5) LW(0) LW(1) LW(2)
+80601354:       callc [btlevtcmd_SetMoveSpeed battle_event_cmd.o] LW(5) 6.00
+80601364:       callc [btlevtcmd_MovePosition battle_event_cmd.o] LW(5) LW(0) LW(1) LW(2) 0 -1 0
+80601388:       callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] LW(5) 1 ["S_1"]
+8060139C:       callc [btlevtcmd_ResetFaceDirection battle_event_cmd.o] LW(5)
+806013A8:     end_thread
+806013AC:   endif
+806013B0:   callc [evt_snd_sfxon evt_snd.o] ["SFX_BOSS_TEAM_3RD_ADHERE2"] 0
+806013C0:   callc [zakogun_attack3_3 unit_boss_gundan_zako_group3.o]
+806013C8:   callc [btlevtcmd_StartWaitEvent battle_event_cmd.o] -2
+806013D4:   return
+806013D8:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [hit_check_event unit_boss_gundan_zako_group3.o] AT 806013DC ---
+806013DC: 10:
+806013E4:   loop 0
+806013EC:     callc [btlevtcmd_GetUnitWork battle_event_cmd.o] -2 0 LW(0)
+80601400:     if_int_ne LW(0) 0
+8060140C:       loop_break
+80601410:     endif
+80601414:     wait_frames 1
+8060141C:   end_loop
+80601420:   callc [btlevtcmd_PreCheckDamage battle_event_cmd.o] -2 LW(3) LW(4) LW(9) 0 LW(5)
+80601440:   switchi LW(5)
+80601448:     case_int_eq_any 4
+80601450:       goto 90
+80601458:       end_multi_case
+8060145C:     case_int_eq 3
+80601464:       callc [btlevtcmd_StartAvoid battle_event_cmd.o] LW(3) 38
+80601474:       goto 90
+8060147C:       end_multi_case
+80601480:     case_int_eq 6
+80601488:       callc [btlevtcmd_StartAvoid battle_event_cmd.o] LW(3) 39
+80601498:       goto 90
+806014A0:     case_int_eq 2
+806014A8:       callc [btlevtcmd_StartAvoid battle_event_cmd.o] LW(3) 40
+806014B8:       goto 90
+806014C0:     case_int_eq 1
+806014C8:       goto 91
+806014D0:       end_multi_case
+806014D4:     case_default
+806014D8:       goto 98
+806014E0:       end_multi_case
+806014E4:   end_switch
+806014E8: 90:
+806014F0:   goto 98
+806014F8: 91:
+80601500:   callc [evt_btl_camera_set_mode battle_camera.o] 0 0
+80601510:   callc [btlevtcmd_ResultACDefence battle_event_cmd.o] LW(3) LW(9)
+80601520:   callc [btlevtcmd_CheckDamage battle_event_cmd.o] -2 LW(3) LW(4) LW(9) 256 LW(5)
+80601540:   goto 98
+80601548: 98:
+80601550:   callc [btlevtcmd_GetSelectNextEnemy battle_event_cmd.o] LW(3) LW(4)
+80601560:   callc [btlevtcmd_SetUnitWork battle_event_cmd.o] -2 0 0
+80601574:   if_int_ne LW(3) -1
+80601580:     callc [zakogun_set_target_id unit_boss_gundan_zako_group1.o] LW(3)
+8060158C:     goto 10
+80601594:   else
+80601598:     callc [zakogun_set_target_id unit_boss_gundan_zako_group1.o] -1
+806015A4:   endif
+806015A8: 99:
+806015B0:   return
+806015B4:   end

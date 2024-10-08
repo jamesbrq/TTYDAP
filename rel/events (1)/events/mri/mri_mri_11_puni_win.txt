@@ -1,0 +1,94 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [puni_win mri_11.o] AT 805FFF6C ---
+805FFF6C:   callc [evt_snd_bgmoff evt_snd.o] 512
+805FFF78:   callc [evt_mario_key_onoff evt_mario.o] 0
+805FFF84:   callc [evt_mario_normalize evt_mario.o]
+805FFF8C:   callc [evt_puni_winddisable_onoff mri_puni.o] 1
+805FFF98:   loop 0
+805FFFA0:     callc [evt_puni_landon_check mri_puni.o] 0 0.00 LW(0)
+805FFFB4:     if_int_eq LW(0) 1
+805FFFC0:       loop_break
+805FFFC4:     endif
+805FFFC8:     wait_frames 1
+805FFFD0:   end_loop
+805FFFD4:   callc [evt_mri_puni_win_init mri.o]
+805FFFDC:   callc [evt_puni_get_position mri_puni.o] 1 LW(0) LW(1) LW(2)
+805FFFF4:   callc [evt_cam3d_get_shift evt_cam.o] LW(0) LW(1) LW(2) LW(3)
+8060000C:   callc [evt_cam3d_event_from_road evt_cam.o] LW(0) LW(1) LW(2) LW(3) LW(4) LW(5) LW(6) LW(7) LW(8) LW(9)
+8060003C:   callc [evt_cam3d_evt_set evt_cam.o] LW(4) LW(5) LW(6) LW(7) LW(8) LW(9) 500 11
+80600064:   wait_ms 500
+8060006C:   callc [evt_puni_flag_onoff mri_puni.o] 1 0 131072
+80600080:   callc [evt_npc_flag_onoff evt_npc.o] 1 ["ガイドsp"] 512
+80600094:   callc [evt_puni_get_flag mri_puni.o] 1 LW(0)
+806000A4:   andi LW(0) 0x4000
+806000B0:   if_int_ne LW(0) 0
+806000BC:     callc [evt_puni_flag_onoff mri_puni.o] 1 1 16384
+806000D0:     callc [evt_npc_set_anim evt_npc.o] ["ガイドsp"] ["S_1"]
+806000E0:     callc [evt_npc_get_position evt_npc.o] ["ガイドsp"] LW(0) LW(1) LW(2)
+806000F8:     callc [evt_npc_jump_position_nohit evt_npc.o] ["ガイドsp"] LW(0) LW(1) LW(2) 300 20
+80600118:   endif
+8060011C:   callc [evt_msg_print evt_msg.o] 0 ["stg2_mri_e17_01_04"] 0 ["ガイドsp"]
+80600134:   callc [evt_puni_flag_onoff mri_puni.o] 1 1 262144
+80600148:   callc [evt_cam3d_evt_set evt_cam.o] 275 140 516 -275 50 0 1000 11
+80600170:   callc [evt_party_stop evt_party.o] 0
+8060017C:   begin_thread
+80600180:     wait_ms 1000
+80600188:     callc [evt_mario_set_dir evt_mario.o] 270 200 0
+8060019C:   end_thread
+806001A0:   begin_thread
+806001A4:     wait_ms 1000
+806001AC:     callc [evt_party_set_dir evt_party.o] 0 270 200
+806001C0:   end_thread
+806001C4:   callc [evt_mri_puni_win_attack mri.o] -350 0 0 -450 0 0
+806001E4:   wait_ms 5000
+806001EC:   loop 5
+806001F4:     callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_STG2_TORIDE_BREAK1"] -400 0 0 0
+80600210:     callc [evt_cam_shake evt_cam.o] 4 0.01 0.00 500
+80600228:     wait_ms 500
+80600230:   end_loop
+80600234:   begin_thread
+80600238:     wait_ms 1000
+80600240:     callc [evt_mri_puni_win_end mri.o] -450 0 0 -350 0 0
+80600260:   end_thread
+80600264:   callss [puni_win_offscreen mri_11.o]
+8060026C:   begin_thread
+80600270:     wait_ms 1000
+80600278:     callc [evt_snd_bgmon_f evt_snd.o] 768 ["BGM_STG2_MRI2"] 3000
+8060028C:   end_thread
+80600290:   callc [evt_cam3d_evt_off evt_cam.o] 500 11
+806002A0:   setii GSWF(2857) 1
+806002AC:   callc [evt_party_run evt_party.o] 0
+806002B8:   callc [evt_puni_winddisable_onoff mri_puni.o] 0
+806002C4:   callc [evt_mario_key_onoff evt_mario.o] 1
+806002D0:   return
+806002D4:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [puni_win_offscreen mri_11.o] AT 805FFDCC ---
+805FFDCC:   callc [evt_paper_entry evt_paper.o] ["OFF_d_bom"]
+805FFDD8:   callc [evt_img_entry evt_img.o] ["capture_img"]
+805FFDE4:   callc [evt_img_set_paper evt_img.o] ["capture_img"] ["OFF_d_bom"]
+805FFDF4:   callc [evt_img_onoff evt_img.o] ["capture_img"] 0
+805FFE04:   callc [evt_offscreen_entry evt_offscreen.o] ["offscreen"]
+805FFE10:   callc [evt_mapobj_set_offscreen evt_map.o] 1 ["S_hati"] ["offscreen"]
+805FFE24:   callc [evt_mapobj_set_offscreen evt_map.o] 1 ["S_patolight1"] ["offscreen"]
+805FFE38:   callc [evt_img_alloc_capture evt_img.o] ["capture_img"] 0 ["offscreen"] 1 0 0 0 0
+805FFE60:   wait_ms 1000
+805FFE68:   setii GW(1) 0
+805FFE74:   callc [evt_snd_sfxoff evt_snd.o] GW(0)
+805FFE80:   callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_OFF2_TORIDE_BREAK2"] -400 0 0 0
+805FFE9C:   callc [evt_mapobj_flag_onoff evt_map.o] 1 1 ["S_hati"] 1
+805FFEB4:   callc [evt_mapobj_flag_onoff evt_map.o] 1 1 ["S_patolight1"] 1
+805FFECC:   callc [evt_hitobj_onoff evt_hit.o] ["A_hati"] 1 0
+805FFEE0:   callc [evt_img_set_paper_anim evt_img.o] ["capture_img"] ["A_1"]
+805FFEF0:   callc [evt_img_onoff evt_img.o] ["capture_img"] 1
+805FFF00:   callc [evt_img_wait_animend evt_img.o] ["capture_img"]
+805FFF0C:   callc [evt_img_free_capture evt_img.o] ["capture_img"] 0
+805FFF1C:   callc [evt_img_onoff evt_img.o] ["capture_img"] 0
+805FFF2C:   callc [evt_img_release evt_img.o] ["capture_img"]
+805FFF38:   callc [evt_mapobj_clear_offscreen evt_map.o] 1 ["S_hati"]
+805FFF48:   callc [evt_mapobj_clear_offscreen evt_map.o] 1 ["S_patolight1"]
+805FFF58:   callc [evt_offscreen_delete evt_offscreen.o] ["offscreen"]
+805FFF64:   return
+805FFF68:   end

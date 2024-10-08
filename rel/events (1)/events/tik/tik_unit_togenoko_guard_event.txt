@@ -1,0 +1,37 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [guard_event unit_togenoko.o] AT 805F5D1C ---
+805F5D1C:   setii LW(10) -2
+805F5D28:   setii LW(11) 1
+805F5D34:   begin_child_thread
+805F5D38:     wait_frames 10
+805F5D40:     callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_ENM_TOGENOKO_SHELL1"] [F1194D80] 0 [F1194D80]
+805F5D5C:     wait_frames 5
+805F5D64:     callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] LW(10) LW(11) ["A_1"]
+805F5D78:   end_child_thread
+805F5D7C:   callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_ENM_TOGENOKO_MOVE1"] [F1194D80] 0 [F1194D80]
+805F5D98:   callc [btlevtcmd_GetPos battle_event_cmd.o] LW(10) LW(0) LW(1) LW(2)
+805F5DB0:   callc [btlevtcmd_JumpSetting battle_event_cmd.o] LW(10) 20 0 0.50
+805F5DC8:   callc [btlevtcmd_JumpPosition battle_event_cmd.o] LW(10) LW(0) LW(1) LW(2) 20 -1
+805F5DE8:   setff LW(12) 30.00
+805F5DF4:   setff LW(13) 0.00
+805F5E00:   loop 15
+805F5E08:     callc [evt_sub_get_sincos evt_sub.o] LW(13) LW(14) LW(15)
+805F5E1C:     mulf LW(14) LW(12)
+805F5E28:     callc [btlevtcmd_SetRotate battle_event_cmd.o] LW(10) 0 0 LW(14)
+805F5E40:     subf LW(12) 2.00
+805F5E4C:     addf LW(13) 30.00
+805F5E58:     wait_frames 1
+805F5E60:   end_loop
+805F5E64:   callc [btlevtcmd_SetRotate battle_event_cmd.o] LW(10) 0 0 0
+805F5E7C:   callc [btlevtcmd_SetPartsDefenceTable battle_event_cmd.o] LW(10) LW(11) [defence_guard unit_togenoko.o]
+805F5E90:   callc [btlevtcmd_SetPartsDefenceAttrTable battle_event_cmd.o] LW(10) LW(11) [defence_attr_guard unit_togenoko.o]
+805F5EA4:   callc [btlevtcmd_SetRegistStatus battle_event_cmd.o] LW(10) [regist_guard unit_togenoko.o]
+805F5EB4:   callc [btlevtcmd_AnimeSetPoseTable battle_event_cmd.o] LW(10) LW(11) [pose_table_guard unit_togenoko.o]
+805F5EC8:   callc [btlevtcmd_ChangeDataTable battle_event_cmd.o] LW(10) [data_table_guard unit_togenoko.o]
+805F5ED8:   callc [btlevtcmd_SetUnitWork battle_event_cmd.o] LW(10) 0 1
+805F5EEC:   callc [btlevtcmd_SetHitOffset battle_event_cmd.o] LW(10) LW(11) 0 -20 0
+805F5F08:   wait_ms 300
+805F5F10:   return
+805F5F14:   end

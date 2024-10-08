@@ -1,0 +1,56 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [damage_event unit_boss_champion.o] AT 805E0018 ---
+805E0018:   setii LW(10) -2
+805E0024:   setii LW(11) 1
+805E0030:   callss [btldefaultevt_Damage battle_event_default.o]
+805E0038:   callc [btlevtcmd_CheckAttribute battle_event_cmd.o] -2 2 LW(0)
+805E004C:   if_int_ne LW(0) 0
+805E0058:     setii LW(2) 0
+805E0064:     callc [btlevtcmd_GetDamageCode battle_event_cmd.o] -2 LW(0)
+805E0074:     switchi LW(0)
+805E007C:       case_int_eq_any 23
+805E0084:       case_int_eq_any 24
+805E008C:       case_int_eq_any 25
+805E0094:       case_int_eq_any 26
+805E009C:       case_int_eq_any 27
+805E00A4:         callc [btlevtcmd_GetTotalDamage battle_event_cmd.o] -2 LW(1)
+805E00B4:         if_int_ge LW(1) 1
+805E00C0:           setii LW(2) 1
+805E00CC:         endif
+805E00D0:         end_multi_case
+805E00D4:     end_switch
+805E00D8:     callc [btlevtcmd_CheckStatus battle_event_cmd.o] -2 11 LW(0)
+805E00EC:     if_int_ne LW(0) 0
+805E00F8:       setii LW(2) 1
+805E0104:     endif
+805E0108:     if_int_ne LW(2) 0
+805E0114:       callc [btlevtcmd_StopWaitEvent battle_event_cmd.o] -2
+805E0120:       callss [to_floor unit_boss_champion.o]
+805E0128:       callc [btlevtcmd_StartWaitEvent battle_event_cmd.o] -2
+805E0134:     endif
+805E0138:   endif
+805E013C:   return
+805E0140:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [to_floor unit_boss_champion.o] AT 805DF844 ---
+805DF844:   callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 1 ["D_2"]
+805DF858:   callc [btlevtcmd_JumpSetting battle_event_cmd.o] -2 0 4.00 0.20
+805DF870:   callc [btlevtcmd_GetPos battle_event_cmd.o] -2 LW(0) [F1194D80] LW(2)
+805DF888:   callc [btlevtcmd_JumpPosition battle_event_cmd.o] -2 LW(0) 0 LW(2) 20 -1
+805DF8A8:   callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_BOSS_BLED_LANDING1"] [F1194D80] 0 [F1194D80]
+805DF8C4:   callc [btlevtcmd_SetHomePos battle_event_cmd.o] -2 LW(0) 0 LW(2)
+805DF8DC:   callc [evt_btl_camera_shake_h battle_camera.o] 0 3 0 50 13
+805DF8F8:   wait_ms 250
+805DF900:   callc [btlevtcmd_AnimeSetPoseTable battle_event_cmd.o] -2 1 [pose_table unit_boss_champion.o]
+805DF914:   callc [btlevtcmd_SetTalkPoseType battle_event_cmd.o] -2 65
+805DF924:   callc [btlevtcmd_SetStayPoseType battle_event_cmd.o] -2 43
+805DF934:   callc [btlevtcmd_AnimeChangePoseType battle_event_cmd.o] -2 1 43
+805DF948:   callc [btlevtcmd_OffAttribute battle_event_cmd.o] -2 2
+805DF958:   callc [btlevtcmd_OffPartsAttribute battle_event_cmd.o] -2 1 6291456
+805DF96C:   callc [btlevtcmd_SetKissHitOffset battle_event_cmd.o] -2 10 48 10
+805DF984:   callc [btlevtcmd_SetCutBaseOffset battle_event_cmd.o] -2 0 32 0
+805DF99C:   callc [btlevtcmd_SetHitCursorOffset battle_event_cmd.o] -2 1 0 0 0
+805DF9B8:   return
+805DF9BC:   end

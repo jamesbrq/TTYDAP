@@ -1,0 +1,63 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [healing_event unit_boss_champion.o] AT 805E22F4 ---
+805E22F4:   callc [btlevtcmd_GetEnemyBelong battle_event_cmd.o] -2 LW(0)
+805E2304:   callc [btlevtcmd_SamplingEnemy battle_event_cmd.o] -2 LW(0) LW(9)
+805E2318:   callc [btlevtcmd_ChoiceSamplingEnemy battle_event_cmd.o] LW(9) LW(3) LW(4)
+805E232C:   if_int_eq LW(3) -1
+805E2338:     callc [btlevtcmd_CheckToken battle_event_cmd.o] -2 16 LW(0)
+805E234C:     if_int_ne LW(0) 0
+805E2358:       callss [subsetevt_confuse_flustered battle_event_subset.o]
+805E2360:     endif
+805E2364:     return
+805E2368:   endif
+805E236C:   callc [btlevtcmd_WeaponAftereffect battle_event_cmd.o] LW(9)
+805E2378:   callc [btlevtcmd_AttackDeclare battle_event_cmd.o] -2 LW(3) LW(4)
+805E238C:   callc [btlevtcmd_WaitGuardMove battle_event_cmd.o]
+805E2394:   callc [btlevtcmd_PayWeaponCost battle_event_cmd.o] -2 LW(9)
+805E23A4:   callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 1 ["A_4"]
+805E23B8:   wait_frames 16
+805E23C0:   loop 3
+805E23C8:     callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_BOSS_BLED_SHAKE_CAILING1"] [F1194D80] 0 [F1194D80]
+805E23E4:     callc [evt_btl_camera_shake_h battle_camera.o] 0 2 0 10 13
+805E2400:     wait_frames 18
+805E2408:   end_loop
+805E240C:   callc [evt_btl_camera_shake_h battle_camera.o] 0 2 0 10 13
+805E2428:   begin_thread
+805E242C:     callc [btlevtcmd_GetPos battle_event_cmd.o] -2 LW(5) LW(6) LW(7)
+805E2444:     addi LW(5) -30
+805E2450:     addi LW(6) 80
+805E245C:     addi LW(7) 40
+805E2468:     callc [btlevtcmd_BtlIconEntryItemId battle_icon.o] 148 LW(5) LW(6) LW(7) LW(8)
+805E2484:     setii LW(0) LW(6)
+805E2490:     addi LW(0) -62
+805E249C:     callc [evt_sub_intpl_msec_init evt_sub.o] 1 LW(6) LW(0) 500
+805E24B4:     loop 0
+805E24BC:       callc [evt_sub_intpl_msec_get_value_para evt_sub.o] LW(0) LW(1)
+805E24CC:       callc [btlevtcmd_BtlIconSetPosition battle_icon.o] LW(8) LW(5) LW(0) LW(7)
+805E24E4:       if_int_eq LW(1) 0
+805E24F0:         loop_break
+805E24F4:       endif
+805E24F8:       wait_frames 1
+805E2500:     end_loop
+805E2504:     callc [btlevtcmd_BtlIconDelete battle_icon.o] LW(8)
+805E2510:   end_thread
+805E2514:   wait_ms 200
+805E251C:   callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 1 ["S_8"]
+805E2530:   wait_ms 100
+805E2538:   callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_BOSS_BLED_EAT1"] [F1194D80] 0 [F1194D80]
+805E2554:   callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 1 ["B_2"]
+805E2568:   wait_ms 200
+805E2570:   callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 1 ["E_2"]
+805E2584:   wait_ms 700
+805E258C:   callc [btlevtcmd_RecoverHp battle_event_cmd.o] LW(3) LW(4) 5
+805E25A0:   callc [btlevtcmd_GetPos battle_event_cmd.o] LW(3) LW(0) LW(1) LW(2)
+805E25B8:   addi LW(1) 30
+805E25C4:   addi LW(2) 10
+805E25D0:   callc [evt_eff evt_eff.o] [zero_tou2_0000bbc4 unit_boss_champion.o] ["recovery"] 0 LW(0) LW(1) LW(2) 5 0 0 0 0 0 0 0
+805E2610:   wait_frames 40
+805E2618: 98:
+805E2620:   callc [evt_btl_camera_set_mode battle_camera.o] 0 0
+805E2630:   return
+805E2634:   end

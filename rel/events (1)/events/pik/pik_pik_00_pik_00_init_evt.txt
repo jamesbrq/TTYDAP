@@ -1,0 +1,521 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [pik_00_init_evt pik_00.o] AT 805C2780 ---
+805C2780:   setii GF(11) 0
+805C278C:   setii GSWF(3580) 1
+805C2798:   if_int_lt GSW(0) 339
+805C27A4:     setii GSWF(3578) 0
+805C27B0:     callss [hom_10_evt_resha_right pik_00.o]
+805C27B8:     callc [evt_mapobj_flag_onoff evt_map.o] 1 1 ["train_5"] 1
+805C27D0:     callc [evt_mapobj_flag_onoff evt_map.o] 1 1 ["train_6"] 1
+805C27E8:   else
+805C27EC:     callc [evt_bero_get_entername evt_bero.o] LW(0)
+805C27F8:     if_string_eq LW(0) ["resha"]
+805C2804:       setii GSWF(3578) 0
+805C2810:       callss [hom_10_evt_resha_right pik_00.o]
+805C2818:       callc [evt_mapobj_flag_onoff evt_map.o] 1 1 ["train_5"] 1
+805C2830:       callc [evt_mapobj_flag_onoff evt_map.o] 1 1 ["train_6"] 1
+805C2848:     endif
+805C284C:     if_string_eq LW(0) ["n_bero"]
+805C2858:       if_int_eq GSWF(3578) 0
+805C2864:         callss [hom_10_evt_resha_right pik_00.o]
+805C286C:         callc [evt_mapobj_flag_onoff evt_map.o] 1 1 ["train_5"] 1
+805C2884:         callc [evt_mapobj_flag_onoff evt_map.o] 1 1 ["train_6"] 1
+805C289C:       else
+805C28A0:         callss [hom_10_evt_resha_left pik_00.o]
+805C28A8:         callc [evt_mapobj_flag_onoff evt_map.o] 1 1 ["train_5"] 1
+805C28C0:         callc [evt_mapobj_flag_onoff evt_map.o] 1 1 ["train_6"] 1
+805C28D8:         callc [evt_mapobj_flag_onoff evt_map.o] 1 1 ["train_7"] 1
+805C28F0:       endif
+805C28F4:     endif
+805C28F8:     if_string_eq LW(0) ["se_bero"]
+805C2904:       setii GSWF(3578) 1
+805C2910:       callss [hom_10_evt_resha_left pik_00.o]
+805C2918:       callc [evt_mapobj_flag_onoff evt_map.o] 1 1 ["train_5"] 1
+805C2930:       callc [evt_mapobj_flag_onoff evt_map.o] 1 1 ["train_6"] 1
+805C2948:       callc [evt_mapobj_flag_onoff evt_map.o] 1 1 ["train_7"] 1
+805C2960:     endif
+805C2964:     callc [evt_sub_get_system_flag evt_sub.o] LW(0)
+805C2970:     if_bits_set LW(0) 1
+805C297C:       if_int_eq GSWF(3578) 0
+805C2988:         callss [hom_10_evt_resha_right pik_00.o]
+805C2990:         callc [evt_mapobj_flag_onoff evt_map.o] 1 1 ["train_5"] 1
+805C29A8:         callc [evt_mapobj_flag_onoff evt_map.o] 1 1 ["train_6"] 1
+805C29C0:       else
+805C29C4:         callss [hom_10_evt_resha_left pik_00.o]
+805C29CC:         callc [evt_mapobj_flag_onoff evt_map.o] 1 1 ["train_5"] 1
+805C29E4:         callc [evt_mapobj_flag_onoff evt_map.o] 1 1 ["train_6"] 1
+805C29FC:         callc [evt_mapobj_flag_onoff evt_map.o] 1 1 ["train_7"] 1
+805C2A14:       endif
+805C2A18:     endif
+805C2A1C:     callc [evt_sub_get_system_flag evt_sub.o] LW(0)
+805C2A28:     if_bits_set LW(0) 2
+805C2A34:       setii GSWF(3578) 1
+805C2A40:       callss [hom_10_evt_resha_left pik_00.o]
+805C2A48:       callc [evt_mapobj_flag_onoff evt_map.o] 1 1 ["train_5"] 1
+805C2A60:       callc [evt_mapobj_flag_onoff evt_map.o] 1 1 ["train_6"] 1
+805C2A78:       callc [evt_mapobj_flag_onoff evt_map.o] 1 1 ["train_7"] 1
+805C2A90:     endif
+805C2A94:   endif
+805C2A98:   mo_set_base_int [name_tbl pik_00.o]
+805C2AA0:   loop 6
+805C2AA8:     mo_read_int LW(9)
+805C2AB0:     callsa [evt_pik_yajirushi pik_00.o]
+805C2AB8:   end_loop
+805C2ABC:   callc [evt_snd_bgmon evt_snd.o] 512 ["BGM_STG6_PIK1"]
+805C2ACC:   callc [evt_snd_envon evt_snd.o] 272 ["ENV_STG6_PIK1"]
+805C2ADC:   callc [evt_snd_bgmon evt_snd.o] 160 0
+805C2AEC:   callc [evt_npc_setup evt_npc.o] [npc_data pik_00.o]
+805C2AF8:   callc [evt_mobj_save_blk evt_mobj.o] ["mobj_save"] -100 60 25 0 0
+805C2B18:   callc [evt_mobj_kururing_floor evt_mobj.o] ["kururin1"] 8 -5 130 ["jimenn"] 125 GSWF(5655)
+805C2B3C:   callc [evt_mobj_itembox evt_mobj.o] ["mobj_badge_gat"] -225 15 -15 0 0 [mobj_box00 pik_00.o] GSWF(3276)
+805C2B64:   callc [evt_item_entry evt_item.o] ["item_00"] 125 488 0 15 16 GSWF(5654) 0
+805C2B8C:   callc [evt_item_entry evt_item.o] ["item_01"] 125 -460 0 100 16 GSWF(5656) 0
+805C2BB4:   setii LW(0) [door_1 pik_00.o]
+805C2BC0:   callss [evt_door_entry evt_door.o]
+805C2BC8:   setii LW(0) [door_2 pik_00.o]
+805C2BD4:   callss [evt_door_entry evt_door.o]
+805C2BDC:   callc [evt_bero_get_entername evt_bero.o] LW(0)
+805C2BE8:   if_string_eq LW(0) ["resha"]
+805C2BF4:     callc [evt_npc_set_position evt_npc.o] ["サラリーマン"] 0 -1000 0
+805C2C0C:     callsa [evt_pik_00_arrival pik_00.o]
+805C2C14:     callss [hom_10_evt_resha_stop pik_00.o]
+805C2C1C:     return
+805C2C20:   else
+805C2C24:     setii LW(0) [bero_data pik_00.o]
+805C2C30:     callc [evt_bero_get_info evt_bero.o]
+805C2C38:     callss [evt_bero_info_run evt_bero.o]
+805C2C40:     wait_frames 1
+805C2C48:   endif
+805C2C4C:   if_int_eq GSWF(3578) 1
+805C2C58:     setii LW(0) ["n_bero"]
+805C2C64:     callss [bero_case_switch_off evt_bero.o]
+805C2C6C:   endif
+805C2C70:   begin_thread
+805C2C74:     setii LW(0) 0
+805C2C80:     loop 0
+805C2C88:       callc [evt_mapobj_rotate evt_map.o] 1 ["puro"] 0 LW(0) 0
+805C2CA4:       addi LW(0) 1
+805C2CB0:       wait_frames 1
+805C2CB8:     end_loop
+805C2CBC:   end_thread
+805C2CC0:   callc [evt_mapobj_flag_onoff evt_map.o] 1 0 ["bero_"] 2
+805C2CD8:   callc [evt_mapobj_flag_onoff evt_map.o] 1 0 ["ie_1_N"] 2
+805C2CF0:   begin_thread
+805C2CF4:     callc [under pik_00.o]
+805C2CFC:   end_thread
+805C2D00:   callc [evt_bero_get_entername evt_bero.o] LW(0)
+805C2D0C:   if_string_eq LW(0) ["n_bero"]
+805C2D18:     setii GF(11) 1
+805C2D24:     callc [evt_mapobj_flag_onoff evt_map.o] 1 1 ["ie_1"] 1
+805C2D3C:     begin_thread
+805C2D40:       wait_ms 1000
+805C2D48:       setii GF(11) 0
+805C2D54:     end_thread
+805C2D58:   endif
+805C2D5C:   callc [evt_run_case_evt evt_case.o] 0 1 ["a_ie_1_2_yuka"] 0 [evt_seacret pik_00.o] 0
+805C2D7C:   callc [evt_hitobj_attr_onoff evt_hit.o] 0 1 ["se_bero"] 4
+805C2D94:   callc [evt_hit_damage_return_set evt_hit.o] [dmgReturnPt pik_00.o]
+805C2DA0:   callss [evt_gazigazi_entry evt_damage.o]
+805C2DA8:   callsa [evt_sub_mail_event evt_sub.o]
+805C2DB0:   callc [evt_mapobj_flag_onoff evt_map.o] 1 0 ["train_2"] 2
+805C2DC8:   callc [evt_mapobj_flag_onoff evt_map.o] 1 0 ["group1878"] 2
+805C2DE0:   return
+805C2DE4:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [hom_10_evt_resha_right pik_00.o] AT 805BFD90 ---
+805BFD90:   callss [hom_10_evt_resha_sub pik_00.o]
+805BFD98:   callc [evt_sub_get_mapname evt_sub.o] LW(0)
+805BFDA4:   if_string_ne LW(0) ["rsh_06_a"]
+805BFDB0:     callc [evt_mapobj_flag_onoff evt_map.o] 1 1 ["train_7"] 1
+805BFDC8:     callc [evt_mapobj_flag_onoff evt_map.o] 1 1 ["train_8"] 1
+805BFDE0:     callc [evt_mapobj_flag_onoff evt_map.o] 1 1 ["renketu_6"] 1
+805BFDF8:     callc [evt_mapobj_flag_onoff evt_map.o] 1 1 ["renketu_7"] 1
+805BFE10:   endif
+805BFE14:   return
+805BFE18:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [hom_10_evt_resha_left pik_00.o] AT 805BFE1C ---
+805BFE1C:   callss [hom_10_evt_resha_sub pik_00.o]
+805BFE24:   callc [evt_mapobj_flag_onoff evt_map.o] 1 1 ["train_1"] 1
+805BFE3C:   callc [evt_mapobj_flag_onoff evt_map.o] 1 1 ["train_6"] 1
+805BFE54:   callc [evt_mapobj_flag_onoff evt_map.o] 1 1 ["renketu_1"] 1
+805BFE6C:   callc [evt_mapobj_flag_onoff evt_map.o] 1 1 ["renketu_5"] 1
+805BFE84:   return
+805BFE88:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [evt_pik_yajirushi pik_00.o] AT 805C01A8 ---
+805C01A8: 0:
+805C01B0:   callc [evt_sub_intpl_msec_init evt_sub.o] 11 20 -20 1000
+805C01C8: 10:
+805C01D0:   callc [evt_sub_intpl_msec_get_value evt_sub.o]
+805C01D8:   callc [evt_mapobj_rotate evt_map.o] 0 LW(9) 0 LW(0) 0
+805C01F4:   wait_frames 1
+805C01FC:   if_int_eq LW(1) 1
+805C0208:     goto 10
+805C0210:   endif
+805C0214:   callc [evt_sub_random evt_sub.o] 100 LW(0)
+805C0224:   if_int_lt LW(0) 90
+805C0230:     callc [evt_sub_intpl_msec_init evt_sub.o] 11 -20 20 1000
+805C0248:   else
+805C024C:     callc [evt_sub_intpl_msec_init evt_sub.o] 11 -20 380 1000
+805C0264:   endif
+805C0268: 20:
+805C0270:   callc [evt_sub_intpl_msec_get_value evt_sub.o]
+805C0278:   callc [evt_mapobj_rotate evt_map.o] 0 LW(9) 0 LW(0) 0
+805C0294:   wait_frames 1
+805C029C:   if_int_eq LW(1) 1
+805C02A8:     goto 20
+805C02B0:   endif
+805C02B4:   goto 0
+805C02BC:   return
+805C02C0:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [evt_pik_00_arrival pik_00.o] AT 805C2394 ---
+805C2394:   callc [evt_snd_bgm_scope evt_snd.o] 0 1
+805C23A4:   callc [evt_mario_cont_onoff evt_mario.o] 0
+805C23B0:   callc [evt_party_cont_onoff evt_party.o] 0 0
+805C23C0:   callc [evt_mario_set_pos evt_mario.o] 0 -1000 0
+805C23D4:   callc [evt_party_set_pos evt_party.o] 0 0 -1000 0
+805C23EC:   callc [evt_cam3d_evt_set evt_cam.o] 507 309 1118 3 81 -72 0 11
+805C2414:   callc [evt_seq_wait evt_seq.o] 2
+805C2420:   begin_thread
+805C2424:     wait_ms 2000
+805C242C:     callc [evt_telop_entry evt_telop.o] 12
+805C2438:   end_thread
+805C243C:   callc [evt_cam3d_evt_set evt_cam.o] 347 236 740 3 81 -72 10000 11
+805C2464:   wait_ms 10000
+805C246C:   setii GSWF(3580) 1
+805C2478:   callc [evt_snd_bgm_scope evt_snd.o] 0 0
+805C2488:   switchi GSW(0)
+805C2490:     case_int_lt 334
+805C2498:       setii GSWF(3444) 1
+805C24A4:       callc [evt_bero_mapchange evt_bero.o] ["rsh_02_a"] 0
+805C24B4:     case_int_lt 339
+805C24BC:       callc [evt_bero_mapchange evt_bero.o] ["rsh_01_a"] ["w_bero"]
+805C24CC:     case_default
+805C24D0:       callc [evt_bero_mapchange evt_bero.o] ["rsh_02_a"] ["pik_touchaku"]
+805C24E0:   end_switch
+805C24E4:   return
+805C24E8:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [hom_10_evt_resha_stop pik_00.o] AT 805BFA80 ---
+805BFA80:   callc [evt_sub_get_mapname evt_sub.o] LW(0)
+805BFA8C:   if_string_eq LW(0) ["pik_00"]
+805BFA98:     callsa [stop_1 pik_00.o]
+805BFAA0:   endif
+805BFAA4:   callc [evt_sub_get_mapname evt_sub.o] LW(0)
+805BFAB0:   if_string_eq LW(0) ["gor_04"]
+805BFABC:     callsa [stop_2 pik_00.o]
+805BFAC4:   endif
+805BFAC8:   callc [evt_sub_get_mapname evt_sub.o] LW(0)
+805BFAD4:   if_string_eq LW(0) ["hom_00"]
+805BFAE0:     if_int_eq GSWF(3578) 0
+805BFAEC:       callsa [stop_1 pik_00.o]
+805BFAF4:     else
+805BFAF8:       callsa [stop_2 pik_00.o]
+805BFB00:     endif
+805BFB04:   endif
+805BFB08:   return
+805BFB0C:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [hom_10_evt_resha_sub pik_00.o] AT 805BFBF8 ---
+805BFBF8:   setii GSWF(3583) 0
+805BFC04:   setff GW(0) 0.00
+805BFC10:   setff GW(1) 0.00
+805BFC1C:   callsa [evt_sharin pik_00.o]
+805BFC24:   callsa [evt_clank pik_00.o]
+805BFC2C:   setii LF(0) 0
+805BFC38:   callc [evt_sub_get_mapname evt_sub.o] LW(0)
+805BFC44:   if_string_eq LW(0) ["hom_10"]
+805BFC50:     setii LF(0) 1
+805BFC5C:   endif
+805BFC60:   if_string_eq LW(0) ["hom_11"]
+805BFC6C:     setii LF(0) 1
+805BFC78:   endif
+805BFC7C:   if_string_eq LW(0) ["hom_12"]
+805BFC88:     setii LF(0) 1
+805BFC94:   endif
+805BFC98:   if_string_eq LW(0) ["rsh_06_a"]
+805BFCA4:     setii LF(0) 1
+805BFCB0:   endif
+805BFCB4:   if_int_eq LF(0) 1
+805BFCC0:     callsa [evt_bg pik_00.o]
+805BFCC8:   endif
+805BFCCC:   callsa [evt_hoshi pik_00.o]
+805BFCD4:   callsa [evt_ramp pik_00.o]
+805BFCDC:   callc [evt_map_set_tevcallback evt_map.o] 1 [resha_tev pik_00.o]
+805BFCEC:   mo_set_base_int [pika_tbl pik_00.o]
+805BFCF4:   callc [evt_sub_get_mapname evt_sub.o] LW(0)
+805BFD00:   if_string_eq LW(0) ["rsh_06_a"]
+805BFD0C:     mo_set_base_int [pika_tbl_rsh_06 pik_00.o]
+805BFD14:   endif
+805BFD18:   loop 0
+805BFD20:     mo_read_int LW(0)
+805BFD28:     if_int_eq LW(0) 0
+805BFD34:       loop_break
+805BFD38:     endif
+805BFD3C:     callc [evt_mapobj_flag_onoff evt_map.o] 1 1 LW(0) 16777216
+805BFD54:     callc [evt_mapobj_flag_onoff evt_map.o] 1 0 LW(0) 256
+805BFD6C:     callc [evt_mapobj_flag_onoff evt_map.o] 1 1 LW(0) 268435456
+805BFD84:   end_loop
+805BFD88:   return
+805BFD8C:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [stop_1 pik_00.o] AT 805BF7B0 ---
+805BF7B0:   setii GSWF(3583) 1
+805BF7BC:   setff GW(0) 0.00
+805BF7C8:   setff GW(1) 0.00
+805BF7D4:   setff LW(2) 3000.00
+805BF7E0:   callc [evt_sub_get_mapname evt_sub.o] LW(0)
+805BF7EC:   if_string_eq LW(0) ["gor_04"]
+805BF7F8:     callc [evt_snd_sfxon evt_snd.o] ["SFX_STG6_TRAIN_MOVE2"] 0
+805BF808:   endif
+805BF80C:   if_string_eq LW(0) ["hom_00"]
+805BF818:     callc [evt_snd_sfxon evt_snd.o] ["SFX_STG6_TRAIN_MOVE2_2"] 0
+805BF828:   endif
+805BF82C:   if_string_eq LW(0) ["pik_00"]
+805BF838:     callc [evt_snd_sfxon evt_snd.o] ["SFX_STG6_TRAIN_MOVE2_3"] 0
+805BF848:   endif
+805BF84C:   callc [evt_sub_intpl_msec_init evt_sub.o] 11 3000 0 10000
+805BF864: 0:
+805BF86C:   callc [evt_sub_intpl_msec_get_value evt_sub.o]
+805BF874:   mulf LW(0) 1.00
+805BF880:   callc [evt_mapobj_trans evt_map.o] 1 ["train"] LW(0) 0 0
+805BF89C:   subf LW(2) LW(0)
+805BF8A8:   setff GW(0) LW(2)
+805BF8B4:   setff GW(1) LW(2)
+805BF8C0:   mulf GW(0) -1.00
+805BF8CC:   mulf GW(1) -1.00
+805BF8D8:   setff LW(2) LW(0)
+805BF8E4:   wait_frames 1
+805BF8EC:   if_int_eq LW(1) 1
+805BF8F8:     goto 0
+805BF900:   endif
+805BF904:   setii GSWF(3583) 0
+805BF910:   return
+805BF914:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [stop_2 pik_00.o] AT 805BF918 ---
+805BF918:   setii GSWF(3583) 1
+805BF924:   setff GW(0) 0.00
+805BF930:   setff GW(1) 0.00
+805BF93C:   setff LW(2) -3000.00
+805BF948:   callc [evt_sub_get_mapname evt_sub.o] LW(0)
+805BF954:   if_string_eq LW(0) ["gor_04"]
+805BF960:     callc [evt_snd_sfxon evt_snd.o] ["SFX_STG6_TRAIN_MOVE2"] 0
+805BF970:   endif
+805BF974:   if_string_eq LW(0) ["hom_00"]
+805BF980:     callc [evt_snd_sfxon evt_snd.o] ["SFX_STG6_TRAIN_MOVE2_2_2"] 0
+805BF990:   endif
+805BF994:   if_string_eq LW(0) ["pik_00"]
+805BF9A0:     callc [evt_snd_sfxon evt_snd.o] ["SFX_STG6_TRAIN_MOVE2_3"] 0
+805BF9B0:   endif
+805BF9B4:   callc [evt_sub_intpl_msec_init evt_sub.o] 11 -3000 0 10000
+805BF9CC: 0:
+805BF9D4:   callc [evt_sub_intpl_msec_get_value evt_sub.o]
+805BF9DC:   mulf LW(0) 1.00
+805BF9E8:   callc [evt_mapobj_trans evt_map.o] 1 ["train"] LW(0) 0 0
+805BFA04:   subf LW(2) LW(0)
+805BFA10:   setff GW(0) LW(2)
+805BFA1C:   setff GW(1) LW(2)
+805BFA28:   mulf GW(0) -1.00
+805BFA34:   mulf GW(1) -1.00
+805BFA40:   setff LW(2) LW(0)
+805BFA4C:   wait_frames 1
+805BFA54:   if_int_eq LW(1) 1
+805BFA60:     goto 0
+805BFA68:   endif
+805BFA6C:   setii GSWF(3583) 0
+805BFA78:   return
+805BFA7C:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [evt_sharin pik_00.o] AT 805BE9E4 ---
+805BE9E4:   mo_set_base_int [sharinDt pik_00.o]
+805BE9EC:   loop 0
+805BE9F4:     mo_read_int4 LW(0) LW(1) LW(2) LW(3)
+805BEA08:     if_int_eq LW(0) 0
+805BEA14:       loop_break
+805BEA18:     endif
+805BEA1C:     callsa [evt_sharin_main pik_00.o]
+805BEA24:   end_loop
+805BEA28:   return
+805BEA2C:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [evt_clank pik_00.o] AT 805BEC84 ---
+805BEC84:   mo_set_base_int [clankDt pik_00.o]
+805BEC8C:   loop 0
+805BEC94:     mo_read_int4 LW(0) LW(1) LW(2) LW(3)
+805BECA8:     mo_read_int LW(4)
+805BECB0:     if_int_eq LW(0) 0
+805BECBC:       loop_break
+805BECC0:     endif
+805BECC4:     callsa [evt_clank_main pik_00.o]
+805BECCC:   end_loop
+805BECD0:   return
+805BECD4:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [evt_bg pik_00.o] AT 805BECD8 ---
+805BECD8:   setff LW(10) 0.00
+805BECE4:   setff LW(11) 0.00
+805BECF0:   loop 0
+805BECF8:     setff LW(0) GW(0)
+805BED04:     addf LW(10) LW(0)
+805BED10:     if_int_gt LW(10) 800.00
+805BED1C:       subf LW(10) 1600.00
+805BED28:     endif
+805BED2C:     if_int_lt LW(10) -800.00
+805BED38:       addf LW(10) 1600.00
+805BED44:     endif
+805BED48:     addf LW(11) LW(0)
+805BED54:     if_int_gt LW(11) 2400.00
+805BED60:       subf LW(11) 4800.00
+805BED6C:     endif
+805BED70:     if_int_lt LW(11) -2400.00
+805BED7C:       addf LW(11) 4800.00
+805BED88:     endif
+805BED8C:     callc [evt_mapobj_trans evt_map.o] 1 ["jimen"] LW(10) 0 0
+805BEDA8:     callc [evt_mapobj_trans evt_map.o] 1 ["yama"] LW(10) 0 0
+805BEDC4:     callc [evt_mapobj_trans evt_map.o] 1 ["iwayama"] LW(11) 0 0
+805BEDE0:     wait_frames 1
+805BEDE8:     loop 0
+805BEDF0:       if_int_eq GSWF(3583) 1
+805BEDFC:         loop_break
+805BEE00:       endif
+805BEE04:       wait_frames 1
+805BEE0C:     end_loop
+805BEE10:   end_loop
+805BEE14:   return
+805BEE18:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [evt_hoshi pik_00.o] AT 805BEE1C ---
+805BEE1C:   setff LW(10) 0.00
+805BEE28:   loop 0
+805BEE30:     setff LW(9) GW(0)
+805BEE3C:     divf LW(9) 30.00
+805BEE48:     mulf LW(9) 57.29
+805BEE54:     addf LW(10) LW(9)
+805BEE60:     if_int_gt LW(10) 360.00
+805BEE6C:       subf LW(10) 360.00
+805BEE78:     endif
+805BEE7C:     if_int_lt LW(10) 0.00
+805BEE88:       addf LW(10) 360.00
+805BEE94:     endif
+805BEE98:     callc [evt_mapobj_rotate evt_map.o] 0 ["hosi_right"] LW(10) 0 0
+805BEEB4:     callc [evt_mapobj_rotate evt_map.o] 0 ["hosi_left"] LW(10) 0 0
+805BEED0:     callc [evt_mapobj_rotate evt_map.o] 0 ["hosi_center"] LW(10) 0 0
+805BEEEC:     callc [evt_mapobj_rotate evt_map.o] 0 ["hosi_right_c"] LW(10) 0 0
+805BEF08:     callc [evt_mapobj_rotate evt_map.o] 0 ["hosi_left_c"] LW(10) 0 0
+805BEF24:     callc [evt_mapobj_rotate evt_map.o] 0 ["hosi_center_c"] LW(10) 0 0
+805BEF40:     wait_frames 1
+805BEF48:     loop 0
+805BEF50:       if_int_eq GSWF(3583) 1
+805BEF5C:         loop_break
+805BEF60:       endif
+805BEF64:       wait_frames 1
+805BEF6C:     end_loop
+805BEF70:   end_loop
+805BEF74:   return
+805BEF78:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [evt_ramp pik_00.o] AT 805BFB10 ---
+805BFB10:   loop 0
+805BFB18:     callc [ramp_r pik_00.o]
+805BFB20:     callc [evt_mapobj_rotate evt_map.o] 1 ["ranpu"] 0 0 LW(10)
+805BFB3C:     callc [evt_mapobj_rotate evt_map.o] 1 ["ranpu_c"] 0 0 LW(10)
+805BFB58:     wait_frames 1
+805BFB60:     loop 0
+805BFB68:       if_int_eq GSWF(3583) 1
+805BFB74:         loop_break
+805BFB78:       endif
+805BFB7C:       wait_frames 1
+805BFB84:     end_loop
+805BFB88:   end_loop
+805BFB8C:   return
+805BFB90:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [evt_sharin_main pik_00.o] AT 805BE888 ---
+805BE888:   setff LW(10) 0.00
+805BE894:   switchi LW(1)
+805BE89C:     case_int_eq 0
+805BE8A4:       setff LW(11) 23.89
+805BE8B0:     case_int_eq 1
+805BE8B8:       setff LW(11) 31.14
+805BE8C4:     case_int_eq 2
+805BE8CC:       setff LW(11) 55.02
+805BE8D8:   end_switch
+805BE8DC:   loop 0
+805BE8E4:     switchi LW(2)
+805BE8EC:       case_int_eq 0
+805BE8F4:         setff LW(9) GW(0)
+805BE900:       case_int_eq 1
+805BE908:         setff LW(9) GW(1)
+805BE914:     end_switch
+805BE918:     divf LW(9) LW(11)
+805BE924:     mulf LW(9) 57.29
+805BE930:     addf LW(10) LW(9)
+805BE93C:     if_int_gt LW(10) 360.00
+805BE948:       subf LW(10) 360.00
+805BE954:     endif
+805BE958:     if_int_lt LW(10) 0.00
+805BE964:       addf LW(10) 360.00
+805BE970:     endif
+805BE974:     setff LW(12) LW(10)
+805BE980:     mulf LW(12) LW(3)
+805BE98C:     callc [evt_mapobj_rotate evt_map.o] 1 LW(0) 0 0 LW(12)
+805BE9A8:     wait_frames 1
+805BE9B0:     loop 0
+805BE9B8:       if_int_eq GSWF(3583) 1
+805BE9C4:         loop_break
+805BE9C8:       endif
+805BE9CC:       wait_frames 1
+805BE9D4:     end_loop
+805BE9D8:   end_loop
+805BE9DC:   return
+805BE9E0:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [evt_clank_main pik_00.o] AT 805BEAE4 ---
+805BEAE4:   setff LW(10) 0.00
+805BEAF0:   switchi LW(1)
+805BEAF8:     case_int_eq 0
+805BEB00:       setff LW(11) 23.89
+805BEB0C:     case_int_eq 1
+805BEB14:       setff LW(11) 31.14
+805BEB20:     case_int_eq 2
+805BEB28:       setff LW(11) 55.02
+805BEB34:   end_switch
+805BEB38:   loop 0
+805BEB40:     switchi LW(2)
+805BEB48:       case_int_eq 0
+805BEB50:         setff LW(9) GW(0)
+805BEB5C:       case_int_eq 1
+805BEB64:         setff LW(9) GW(1)
+805BEB70:     end_switch
+805BEB74:     divf LW(9) LW(11)
+805BEB80:     mulf LW(9) 57.29
+805BEB8C:     addf LW(10) LW(9)
+805BEB98:     if_int_gt LW(10) 360.00
+805BEBA4:       subf LW(10) 360.00
+805BEBB0:     endif
+805BEBB4:     if_int_lt LW(10) 0.00
+805BEBC0:       addf LW(10) 360.00
+805BEBCC:     endif
+805BEBD0:     setff LW(12) LW(10)
+805BEBDC:     mulf LW(12) LW(4)
+805BEBE8:     callc [evt_sub_get_sincos evt_sub.o] LW(12) LW(13) LW(14)
+805BEBFC:     mulf LW(13) LW(3)
+805BEC08:     mulf LW(14) LW(3)
+805BEC14:     subf LW(14) LW(3)
+805BEC20:     mulf LW(14) -1.00
+805BEC2C:     callc [evt_mapobj_trans evt_map.o] 1 LW(0) LW(14) LW(13) 0.00
+805BEC48:     wait_frames 1
+805BEC50:     loop 0
+805BEC58:       if_int_eq GSWF(3583) 1
+805BEC64:         loop_break
+805BEC68:       endif
+805BEC6C:       wait_frames 1
+805BEC74:     end_loop
+805BEC78:   end_loop
+805BEC7C:   return
+805BEC80:   end

@@ -1,0 +1,216 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [kuribo_talk dou_04.o] AT 805C46C0 ---
+805C46C0:   if_int_eq GSW(1420) 21
+805C46CC:     if_int_eq GSWF(5405) 0
+805C46D8:       callc [evt_msg_print evt_msg.o] 0 ["irai_21_001"] 0 0
+805C46F0:       setii GSWF(5405) 1
+805C46FC:     else
+805C4700:       callc [evt_mario_get_party evt_mario.o] LW(0)
+805C470C:       if_int_eq LW(0) 1
+805C4718:         callc [evt_party_stop evt_party.o] 0
+805C4724:         callc [evt_npc_set_ry evt_npc.o] ["me"] 90
+805C4734:         callc [evt_party_set_dir_npc evt_party.o] 0 ["クリチェロ"]
+805C4744:         wait_ms 300
+805C474C:         callc [evt_msg_print evt_msg.o] 0 ["irai_21_002"] 0 ["me"]
+805C4764:         setii GF(0) 1
+805C4770:         begin_thread
+805C4774:           callc [evt_mario_mov_pos2 evt_mario.o] -120 126 50
+805C4788:           wait_frames 1
+805C4790:           callc [evt_mario_set_dir evt_mario.o] 270 300 0
+805C47A4:         end_thread
+805C47A8:         begin_thread
+805C47AC:           callc [evt_party_dispflg_onoff evt_party.o] 0 16 1
+805C47C0:           callc [evt_party_move_pos2 evt_party.o] 0 -144 86 40
+805C47D8:           wait_frames 1
+805C47E0:           callc [evt_party_dispflg_onoff evt_party.o] 0 16 0
+805C47F4:           setii GF(0) 0
+805C4800:         end_thread
+805C4804:         callc [evt_npc_flag_onoff evt_npc.o] 1 ["me"] 32
+805C4818:         callc [evt_npc_move_position evt_npc.o] ["me"] -175 86 0 40 0
+805C4838:         wait_until GF(0)
+805C4840:         wait_ms 500
+805C4848:         callc [evt_msg_print evt_msg.o] 0 ["irai_21_003"] 0 ["me"]
+805C4860:         callc [evt_msg_print evt_msg.o] 0 ["irai_21_004"] 0 ["party"]
+805C4878:         callc [evt_eff_fukidashi evt_eff.o] 1 [zero_dou_000043e0 dou_04.o] ["me"] 0 0 0 0 0 0 0 30
+805C48AC:         wait_ms 600
+805C48B4:         callc [evt_npc_get_position evt_npc.o] ["me"] LW(0) LW(1) LW(2)
+805C48CC:         addi LW(0) 5
+805C48D8:         callc [evt_npc_move_position evt_npc.o] ["me"] LW(0) LW(2) 0 30 0
+805C48F8:         begin_thread
+805C48FC:           wait_ms 250
+805C4904:           callc [evt_mario_dispflag_onoff evt_mario.o] 1 2
+805C4914:           callc [evt_mario_get_pos evt_mario.o] 0 LW(0) LW(1) LW(2)
+805C492C:           callc [evt_mario_jump_pos evt_mario.o] LW(0) LW(1) LW(2) 200 1 5
+805C494C:           callc [evt_mario_dispflag_onoff evt_mario.o] 0 2
+805C495C:         end_thread
+805C4960:         begin_thread
+805C4964:           wait_ms 250
+805C496C:           callc [evt_party_dispflg_onoff evt_party.o] 0 16 1
+805C4980:           callc [evt_party_get_pos evt_party.o] 0 LW(0) LW(1) LW(2)
+805C4998:           callc [evt_party_jump_pos evt_party.o] 0 LW(0) LW(1) LW(2) 200 1 5
+805C49BC:           callc [evt_party_dispflg_onoff evt_party.o] 0 16 0
+805C49D0:         end_thread
+805C49D4:         callc [evt_msg_print evt_msg.o] 0 ["irai_21_005"] 0 ["me"]
+805C49EC:         callc [evt_npc_get_position evt_npc.o] ["me"] LW(0) LW(1) LW(2)
+805C4A04:         addi LW(0) 10
+805C4A10:         addi LW(1) 15
+805C4A1C:         addi LW(2) 5
+805C4A28:         callc [evt_item_entry evt_item.o] ["ff"] 219 LW(0) LW(1) LW(2) 17 GSWF(2991) 0
+805C4A50:         wait_ms 800
+805C4A58:         callc [evt_msg_print evt_msg.o] 0 ["irai_21_006"] 0 ["party"]
+805C4A70:         wait_ms 500
+805C4A78:         callc [evt_eff_fukidashi evt_eff.o] 3 [zero_dou_000043e0 dou_04.o] 0 0 0 0 0 0 0 0 30
+805C4AAC:         wait_ms 600
+805C4AB4:         callc [evt_mario_get_pos evt_mario.o] 0 LW(0) LW(1) LW(2)
+805C4ACC:         subi LW(0) 15
+805C4AD8:         subi LW(2) 20
+805C4AE4:         callc [evt_party_move_pos2 evt_party.o] 0 LW(0) LW(2) 60
+805C4AFC:         callc [evt_party_set_dir evt_party.o] 0 270 300
+805C4B10:         wait_ms 300
+805C4B18:         callc [evt_msg_print evt_msg.o] 0 ["irai_21_007"] 0 ["party"]
+805C4B30:         begin_thread
+805C4B34:           callc [evt_mario_set_pose evt_mario.o] ["M_N_5B"]
+805C4B40:           wait_ms 500
+805C4B48:           callc [evt_mario_set_pose evt_mario.o] ["M_I_G"]
+805C4B54:           wait_ms 600
+805C4B5C:           callc [evt_mario_set_pose evt_mario.o] ["M_S_1"]
+805C4B68:         end_thread
+805C4B6C:         begin_thread
+805C4B70:           callc [evt_eff_fukidashi evt_eff.o] 1 [zero_dou_000043e0 dou_04.o] ["me"] 0 0 0 0 0 0 0 30
+805C4BA4:           wait_ms 600
+805C4BAC:         end_thread
+805C4BB0:         begin_thread
+805C4BB4:           wait_ms 100
+805C4BBC:           callc [evt_item_get_position evt_item.o] ["ff"] LW(2) LW(3) LW(4)
+805C4BD4:           callc [evt_sub_intpl_msec_init evt_sub.o] 1 LW(3) 10 100
+805C4BEC:           loop 0
+805C4BF4:             callc [evt_sub_intpl_msec_get_value evt_sub.o]
+805C4BFC:             callc [evt_item_set_position evt_item.o] ["ff"] LW(2) LW(0) LW(4)
+805C4C14:             wait_frames 1
+805C4C1C:             if_int_eq LW(1) 0
+805C4C28:               loop_break
+805C4C2C:             endif
+805C4C30:           end_loop
+805C4C34:         end_thread
+805C4C38:         wait_ms 800
+805C4C40:         callc [evt_msg_print evt_msg.o] 0 ["irai_21_008"] 0 ["me"]
+805C4C58:         callc [evt_npc_move_position evt_npc.o] ["me"] -140 -76 0 60 0
+805C4C78:         wait_ms 1000
+805C4C80:         begin_thread
+805C4C84:           wait_ms 200
+805C4C8C:           callc [evt_eff_fukidashi evt_eff.o] 0 [zero_dou_000043e0 dou_04.o] 0 0 0 0 0 0 0 0 30
+805C4CC0:           callc [evt_eff_fukidashi evt_eff.o] 3 [zero_dou_000043e0 dou_04.o] 0 0 0 0 0 0 0 0 30
+805C4CF4:         end_thread
+805C4CF8:         callc [evt_msg_print evt_msg.o] 0 ["irai_21_009"] 0 ["me"]
+805C4D10:         begin_thread
+805C4D14:           wait_ms 400
+805C4D1C:           callc [evt_mario_set_dir evt_mario.o] 90 300 0
+805C4D30:         end_thread
+805C4D34:         begin_thread
+805C4D38:           wait_ms 400
+805C4D40:           callc [evt_party_set_dir evt_party.o] 0 90 300
+805C4D54:         end_thread
+805C4D58:         callc [evt_npc_move_position evt_npc.o] ["me"] 140 -76 0 150 0
+805C4D78:         callc [evt_npc_set_position evt_npc.o] ["me"] 0 -1000 0
+805C4D90:         callc [evt_msg_print evt_msg.o] 0 ["irai_21_010"] 0 ["party"]
+805C4DA8:         callc [evt_item_get_position evt_item.o] ["ff"] LW(0) LW(1) LW(2)
+805C4DC0:         subi LW(2) 10
+805C4DCC:         callc [evt_party_move_pos2 evt_party.o] 0 LW(0) LW(2) 40
+805C4DE4:         callc [evt_item_set_position evt_item.o] ["ff"] 0 -1000 0
+805C4DFC:         wait_ms 300
+805C4E04:         callc [evt_mario_get_pos evt_mario.o] 0 LW(0) LW(1) LW(2)
+805C4E1C:         subi LW(0) 20
+805C4E28:         subi LW(2) 20
+805C4E34:         callc [evt_party_move_pos2 evt_party.o] 0 LW(0) LW(2) 40
+805C4E4C:         wait_frames 1
+805C4E54:         callc [evt_party_set_dir evt_party.o] 0 90 300
+805C4E68:         callc [evt_msg_print evt_msg.o] 0 ["irai_21_011"] 0 ["party"]
+805C4E80:         callc [evt_mario_set_dir evt_mario.o] 270 300 0
+805C4E94:         wait_ms 300
+805C4E9C:         callc [evt_pouch_get_haveitemcnt evt_pouch.o] LW(0)
+805C4EA8:         callc [evt_pouch_check_item evt_pouch.o] 1 LW(1)
+805C4EB8:         if_int_eq LW(1) 0
+805C4EC4:           setii LW(1) 10
+805C4ED0:         else
+805C4ED4:           setii LW(1) 20
+805C4EE0:         endif
+805C4EE4:         if_int_lt LW(0) LW(1)
+805C4EF0:           callc [evt_msg_continue evt_msg.o]
+805C4EF8:           callc [evt_item_get_item evt_item.o] ["ff"]
+805C4F04:           callc [evt_item_get_item_end_wait evt_item.o] ["ff"]
+805C4F10:         else
+805C4F14:           callc [evt_msg_print_add evt_msg.o] 0 ["irai_21_011_1"]
+805C4F24:           callc [evt_party_set_dir evt_party.o] 0 270 300
+805C4F38:           wait_ms 300
+805C4F40:           callc [evt_item_set_position evt_item.o] ["ff"] -165 10 106
+805C4F58:           callc [evt_item_flag_off evt_item.o] ["ff"] 2
+805C4F68:           wait_ms 300
+805C4F70:           callc [evt_party_set_dir evt_party.o] 0 90 300
+805C4F84:         endif
+805C4F88:         callc [evt_msg_print evt_msg.o] 0 ["irai_21_013"] 0 ["party"]
+805C4FA0:         callc [evt_party_run evt_party.o] 0
+805C4FAC:         setii GSW(1420) 0
+805C4FB8:         setii GSWF(5395) 1
+805C4FC4:         callc [evt_msg_print evt_msg.o] 0 ["sys_request_finish"] 0 0
+805C4FDC:       else
+805C4FE0:         loop 0
+805C4FE8:           callc [evt_mario_party_use_check evt_mario.o] LW(1)
+805C4FF4:           if_int_eq LW(1) 0
+805C5000:             loop_break
+805C5004:           endif
+805C5008:           wait_frames 1
+805C5010:         end_loop
+805C5014:         callc [evt_party_stop evt_party.o] 0
+805C5020:         setii GF(0) 1
+805C502C:         begin_thread
+805C5030:           callc [evt_mario_mov_pos2 evt_mario.o] -150 100 60
+805C5044:           callc [evt_mario_set_dir_npc evt_mario.o] ["クリチェロ"]
+805C5050:           setii GF(0) 0
+805C505C:         end_thread
+805C5060:         callc [evt_party_move_pos2 evt_party.o] 0 -130 130 60
+805C5078:         callc [evt_party_set_dir_npc evt_party.o] 0 ["クリチェロ"]
+805C5088:         wait_until GF(0)
+805C5090:         callc [evt_npc_set_ry evt_npc.o] ["me"] 90
+805C50A0:         wait_frames 1
+805C50A8:         callc [evt_npc_wait_pera evt_npc.o] ["me"]
+805C50B4:         switchi LW(0)
+805C50BC:           case_int_eq 2
+805C50C4:             setii LW(0) ["irai_21_014"]
+805C50D0:             setii LW(1) ["irai_21_015"]
+805C50DC:           case_int_eq 5
+805C50E4:             setii LW(0) ["irai_21_016"]
+805C50F0:             setii LW(1) ["irai_21_017"]
+805C50FC:           case_int_eq 4
+805C5104:             setii LW(0) ["irai_21_018"]
+805C5110:             setii LW(1) ["irai_21_019"]
+805C511C:           case_int_eq 6
+805C5124:             setii LW(0) ["irai_21_020"]
+805C5130:             setii LW(1) ["irai_21_021"]
+805C513C:           case_int_eq 3
+805C5144:             setii LW(0) ["irai_21_022"]
+805C5150:             setii LW(1) ["irai_21_023"]
+805C515C:           case_int_eq 7
+805C5164:             setii LW(0) ["irai_21_024"]
+805C5170:             setii LW(1) ["irai_21_025"]
+805C517C:         end_switch
+805C5180:         callc [evt_msg_print evt_msg.o] 0 LW(0) 0 0
+805C5198:         begin_thread
+805C519C:           wait_ms 200
+805C51A4:           callc [evt_mario_get_pos evt_mario.o] 0 LW(2) LW(3) LW(4)
+805C51BC:           callc [evt_party_get_pos evt_party.o] 0 LW(5) LW(6) LW(7)
+805C51D4:           if_int_ge LW(2) LW(5)
+805C51E0:             callc [evt_mario_set_dir evt_mario.o] 270 200 0
+805C51F4:           else
+805C51F8:             callc [evt_mario_set_dir evt_mario.o] 90 200 0
+805C520C:           endif
+805C5210:         end_thread
+805C5214:         callc [evt_msg_print evt_msg.o] 0 LW(1) 0 ["party"]
+805C522C:         callc [evt_party_run evt_party.o] 0
+805C5238:       endif
+805C523C:     endif
+805C5240:     return
+805C5244:   endif
+805C5248:   return
+805C524C:   end

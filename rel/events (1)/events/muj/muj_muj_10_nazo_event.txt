@@ -1,0 +1,49 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [nazo_event muj_10.o] AT 805E6058 ---
+805E6058:   loop 0
+805E6060:     callc [evt_mario_get_pos evt_mario.o] 0 LW(0) LW(1) LW(2)
+805E6078:     callc [evt_mario_get_name_hitobj_ride evt_mario.o] LW(3)
+805E6084:     callc [evt_mario_get_motion evt_mario.o] LW(4)
+805E6090:     if_int_ge LW(0) -250
+805E609C:       if_string_eq LW(3) ["A_hasi_ita"]
+805E60A8:         if_int_ne LW(4) 31
+805E60B4:           loop_break
+805E60B8:         endif
+805E60BC:       endif
+805E60C0:     endif
+805E60C4:     wait_frames 1
+805E60CC:   end_loop
+805E60D0:   callc [evt_mario_key_onoff evt_mario.o] 0
+805E60DC:   callc [evt_mario_normalize evt_mario.o]
+805E60E4:   callc [evt_party_stop evt_party.o] 0
+805E60F0:   callc [evt_npc_flag_onoff evt_npc.o] 1 ["めがね水夫"] 1536
+805E6104:   callc [evt_npc_flag_onoff evt_npc.o] 1 ["めがね水夫"] 65536
+805E6118:   callc [evt_npc_set_position evt_npc.o] ["めがね水夫"] -540 25 0
+805E6130:   callc [evt_npc_set_ry evt_npc.o] ["めがね水夫"] 90
+805E6140:   callc [evt_cam3d_evt_set evt_cam.o] -382.70 158.00 527.80 -382.70 62.50 -13.80 500 11
+805E6168:   wait_ms 1000
+805E6170:   begin_thread
+805E6174:     wait_ms 500
+805E617C:     callc [evt_mario_get_pos evt_mario.o] 0 LW(0) LW(1) LW(2)
+805E6194:     callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_VOICE_MARIO_FIND1_2"] LW(0) LW(1) LW(2) 0
+805E61B0:     callc [evt_eff_fukidashi evt_eff.o] 0 [zero_muj_00011070 muj_10.o] 0 0 0 0 0 0 0 0 60
+805E61E4:     callc [evt_eff_fukidashi evt_eff.o] 3 [zero_muj_00011070 muj_10.o] 0 0 0 0 0 0 0 0 60
+805E6218:     wait_ms 1000
+805E6220:     callc [evt_mario_set_dir evt_mario.o] 270 200 0
+805E6234:     callc [evt_party_set_dir evt_party.o] 0 270 200
+805E6248:   end_thread
+805E624C:   callc [evt_msg_print evt_msg.o] 0 ["stg5_dou_19_00_00"] 0 ["めがね水夫"]
+805E6264:   wait_ms 1000
+805E626C:   callc [evt_npc_move_position evt_npc.o] ["めがね水夫"] -454 0 0 120.00 0
+805E628C:   wait_ms 1000
+805E6294:   callc [evt_msg_print evt_msg.o] 0 ["stg5_dou_19"] 0 ["めがね水夫"]
+805E62AC:   callc [evt_npc_get_position evt_npc.o] ["めがね水夫"] LW(0) LW(1) LW(2)
+805E62C4:   callc [evt_npc_move_position evt_npc.o] ["めがね水夫"] LW(0) -40 0 120.00 0
+805E62E4:   callc [evt_cam3d_evt_off evt_cam.o] 500 11
+805E62F4:   setii GSW(0) 251
+805E6300:   callc [evt_party_run evt_party.o] 0
+805E630C:   callc [evt_mario_key_onoff evt_mario.o] 1
+805E6318:   return
+805E631C:   end

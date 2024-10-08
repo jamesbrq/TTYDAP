@@ -1,0 +1,282 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [attack_magic_event unit_super_mahorn.o] AT 806252B4 ---
+806252B4:   callc [btlevtcmd_check_battleflag battle_event_cmd.o] LW(0) 2
+806252C4:   if_int_ne LW(0) 0
+806252D0:     callc [btlevtcmd_GetFirstAttackTarget battle_event_cmd.o] LW(3) LW(4)
+806252E0:   else
+806252E4:     callc [btlevtcmd_GetEnemyBelong battle_event_cmd.o] -2 LW(0)
+806252F4:     callc [btlevtcmd_SamplingEnemy battle_event_cmd.o] -2 LW(0) LW(9)
+80625308:     callc [btlevtcmd_ChoiceSamplingEnemy battle_event_cmd.o] LW(9) LW(3) LW(4)
+8062531C:   endif
+80625320:   if_int_eq LW(3) -1
+8062532C:     callc [btlevtcmd_CheckToken battle_event_cmd.o] -2 16 LW(0)
+80625340:     if_int_ne LW(0) 0
+8062534C:       callss [subsetevt_confuse_flustered battle_event_subset.o]
+80625354:       return
+80625358:     endif
+8062535C:     goto 99
+80625364:   endif
+80625368:   callss [attack_enemy_common_event unit_super_mahorn.o]
+80625370: 99:
+80625378:   callc [btlevtcmd_ResetFaceDirection battle_event_cmd.o] -2
+80625384:   return
+80625388:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [attack_enemy_common_event unit_super_mahorn.o] AT 80624444 ---
+80624444:   callc [btlevtcmd_WeaponAftereffect battle_event_cmd.o] LW(9)
+80624450:   callc [btlevtcmd_AttackDeclare battle_event_cmd.o] -2 LW(3) LW(4)
+80624464:   callc [btlevtcmd_WaitGuardMove battle_event_cmd.o]
+8062446C:   callc [btlevtcmd_PayWeaponCost battle_event_cmd.o] -2 LW(9)
+8062447C:   callc [btlevtcmd_CalculateFaceDirection battle_event_cmd.o] -2 -1 LW(3) LW(4) 16 LW(15)
+8062449C:   callc [btlevtcmd_ChangeFaceDirection battle_event_cmd.o] -2 LW(15)
+806244AC:   callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_ENM_MAHO_CHARGE1"] [F1194D80] 0 [F1194D80]
+806244C8:   callc [mahorn_get_bunsin unit_super_mahorn.o] LW(11) LW(12) LW(13) LW(14) LW(0)
+806244E4:   setii LW(15) LW(11)
+806244F0:   callsa [attack_enemy_common_event_sub1 unit_super_mahorn.o]
+806244F8:   setii LW(15) LW(12)
+80624504:   callsa [attack_enemy_common_event_sub1 unit_super_mahorn.o]
+8062450C:   setii LW(15) LW(13)
+80624518:   callsa [attack_enemy_common_event_sub1 unit_super_mahorn.o]
+80624520:   setii LW(15) LW(14)
+8062452C:   callsa [attack_enemy_common_event_sub1 unit_super_mahorn.o]
+80624534:   setii LW(15) -2
+80624540:   callss [attack_enemy_common_event_sub1 unit_super_mahorn.o]
+80624548:   begin_child_thread
+8062454C:     callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_ENM_MAHO_MAGIC2"] [F1194D80] 0 [F1194D80]
+80624568:     wait_frames 25
+80624570:     callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_ENM_MAHO_MAGIC2"] [F1194D80] 0 [F1194D80]
+8062458C:   end_child_thread
+80624590:   callc [btlevtcmd_PreCheckDamage battle_event_cmd.o] -2 LW(3) LW(4) LW(9) 0 LW(5)
+806245B0:   switchi LW(5)
+806245B8:     case_int_eq_any 4
+806245C0:       goto 90
+806245C8:       end_multi_case
+806245CC:     case_int_eq 3
+806245D4:       goto 90
+806245DC:       end_multi_case
+806245E0:     case_int_eq 6
+806245E8:       goto 90
+806245F0:     case_int_eq 2
+806245F8:       goto 90
+80624600:     case_int_eq 1
+80624608:       goto 91
+80624610:       end_multi_case
+80624614:     case_default
+80624618:       goto 98
+80624620:       end_multi_case
+80624624: 90:
+8062462C:       begin_child_thread
+80624630:         wait_frames 60
+80624638:         loop 0
+80624640:           callc [btlevtcmd_GetFaceDirection battle_event_cmd.o] -2 LW(0)
+80624650:           if_int_eq LW(0) -1
+8062465C:             callc [eff_magic_get_posX unit_super_mahorn.o] -2 LW(0)
+8062466C:             callc [btlevtcmd_GetHitPos battle_event_cmd.o] LW(3) LW(4) LW(6) LW(7) LW(8)
+80624688:             if_int_le LW(0) LW(6)
+80624694:               callss [start_avoid unit_super_mahorn.o]
+8062469C:               loop_break
+806246A0:             endif
+806246A4:           else
+806246A8:             callc [eff_magic_get_posX unit_super_mahorn.o] -2 LW(0)
+806246B8:             callc [btlevtcmd_GetHitPos battle_event_cmd.o] LW(3) LW(4) LW(6) LW(7) LW(8)
+806246D4:             if_int_ge LW(0) LW(6)
+806246E0:               callss [start_avoid unit_super_mahorn.o]
+806246E8:               loop_break
+806246EC:             endif
+806246F0:           endif
+806246F4:           wait_frames 1
+806246FC:         end_loop
+80624700:       end_child_thread
+80624704:       callc [mahorn_get_bunsin unit_super_mahorn.o] LW(11) LW(12) LW(13) LW(14) LW(0)
+80624720:       setii LW(15) LW(11)
+8062472C:       callsa [attack_enemy_common_event_sub_no_hit unit_super_mahorn.o]
+80624734:       setii LW(15) LW(12)
+80624740:       callsa [attack_enemy_common_event_sub_no_hit unit_super_mahorn.o]
+80624748:       setii LW(15) LW(13)
+80624754:       callsa [attack_enemy_common_event_sub_no_hit unit_super_mahorn.o]
+8062475C:       setii LW(15) LW(14)
+80624768:       callsa [attack_enemy_common_event_sub_no_hit unit_super_mahorn.o]
+80624770:       setii LW(15) -2
+8062477C:       callss [attack_enemy_common_event_sub_no_hit unit_super_mahorn.o]
+80624784:       goto 98
+8062478C: 91:
+80624794:       callc [mahorn_get_bunsin unit_super_mahorn.o] LW(11) LW(12) LW(13) LW(14) LW(0)
+806247B0:       setii LW(15) LW(11)
+806247BC:       callsa [attack_enemy_common_event_sub_hit unit_super_mahorn.o]
+806247C4:       setii LW(15) LW(12)
+806247D0:       callsa [attack_enemy_common_event_sub_hit unit_super_mahorn.o]
+806247D8:       setii LW(15) LW(13)
+806247E4:       callsa [attack_enemy_common_event_sub_hit unit_super_mahorn.o]
+806247EC:       setii LW(15) LW(14)
+806247F8:       callsa [attack_enemy_common_event_sub_hit unit_super_mahorn.o]
+80624800:       setii LW(15) -2
+8062480C:       callss [attack_enemy_common_event_sub_hit unit_super_mahorn.o]
+80624814:       callc [btlevtcmd_ResultACDefence battle_event_cmd.o] LW(3) LW(9)
+80624824:       callc [btlevtcmd_CheckDamage battle_event_cmd.o] -2 LW(3) LW(4) LW(9) 256 LW(5)
+80624844:       goto 98
+8062484C: 98:
+80624854:       callc [mahorn_get_bunsin unit_super_mahorn.o] LW(11) LW(12) LW(13) LW(14) LW(0)
+80624870:       if_int_ne LW(11) -1
+8062487C:         callc [btlevtcmd_StartWaitEvent battle_event_cmd.o] LW(11)
+80624888:       endif
+8062488C:       if_int_ne LW(12) -1
+80624898:         callc [btlevtcmd_StartWaitEvent battle_event_cmd.o] LW(12)
+806248A4:       endif
+806248A8:       if_int_ne LW(13) -1
+806248B4:         callc [btlevtcmd_StartWaitEvent battle_event_cmd.o] LW(13)
+806248C0:       endif
+806248C4:       if_int_ne LW(14) -1
+806248D0:         callc [btlevtcmd_StartWaitEvent battle_event_cmd.o] LW(14)
+806248DC:       endif
+806248E0:       wait_frames 30
+806248E8:       return
+806248EC:       end
+
+--- START OF DISASSEMBLY FOR FUNCTION [attack_enemy_common_event_sub1 unit_super_mahorn.o] AT 80624BE4 ---
+80624BE4:   if_int_eq LW(15) -1
+80624BF0:     return
+80624BF4:   endif
+80624BF8:   callc [btlevtcmd_StopWaitEvent battle_event_cmd.o] LW(15)
+80624C04:   callc [btlevtcmd_GetPos battle_event_cmd.o] LW(15) LW(0) LW(1) LW(2)
+80624C1C:   addi LW(1) 40
+80624C28:   callc [evt_eff64 evt_eff.o] [zero_las_00019b70 unit_super_mahorn.o] ["akari_charge_n64"] 0 LW(0) LW(1) LW(2) 1.00 70 0 0 0 0 0 0
+80624C68:   callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] LW(15) 1 ["MAH_A_4"]
+80624C7C:   callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] LW(15) 2 ["MAH_S_5A"]
+80624C90:   callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] LW(15) 3 ["MAH_S_5A"]
+80624CA4:   callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] LW(15) 4 ["MAH_S_5A"]
+80624CB8:   callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] LW(15) 5 ["MAH_S_5A"]
+80624CCC:   callc [set_hand_dest unit_super_mahorn.o] LW(15) 2 -16.00 29.00 -5.00
+80624CE8:   callc [set_hand_dest unit_super_mahorn.o] LW(15) 3 16.00 29.00 5.00
+80624D04:   callc [set_hand_dest unit_super_mahorn.o] LW(15) 4 -16.00 11.00 -5.00
+80624D20:   callc [set_hand_dest unit_super_mahorn.o] LW(15) 5 16.00 11.00 5.00
+80624D3C:   wait_frames 50
+80624D44:   return
+80624D48:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [start_avoid unit_super_mahorn.o] AT 806243DC ---
+806243DC:   if_int_eq LW(5) 3
+806243E8:     callc [btlevtcmd_StartAvoid battle_event_cmd.o] LW(3) 38
+806243F8:   endif
+806243FC:   if_int_eq LW(5) 6
+80624408:     callc [btlevtcmd_StartAvoid battle_event_cmd.o] LW(3) 39
+80624418:   endif
+8062441C:   if_int_eq LW(5) 2
+80624428:     callc [btlevtcmd_StartAvoid battle_event_cmd.o] LW(3) 40
+80624438:   endif
+8062443C:   return
+80624440:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [attack_enemy_common_event_sub_no_hit unit_super_mahorn.o] AT 806250E8 ---
+806250E8:   if_int_eq LW(15) -1
+806250F4:     return
+806250F8:   endif
+806250FC:   callc [btlevtcmd_GetPos battle_event_cmd.o] LW(15) LW(0) LW(1) LW(2)
+80625114:   addi LW(1) 10
+80625120:   callc [btlevtcmd_GetHitPos battle_event_cmd.o] LW(3) LW(4) LW(10) LW(11) LW(12)
+8062513C:   callc [btlevtcmd_GetStageSize battle_event_cmd.o] LW(10) [F1194D80] [F1194D80]
+80625150:   callc [btlevtcmd_GetFaceDirection battle_event_cmd.o] LW(15) LW(13)
+80625160:   muli LW(10) LW(13)
+8062516C:   subi LW(11) 5
+80625178:   callc [eff_magic unit_super_mahorn.o] LW(15) LW(10) LW(11) LW(12) 40
+80625194:   callss [attack_enemy_common_event_sub2 unit_super_mahorn.o]
+8062519C:   wait_frames 5
+806251A4:   callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_ENM_MAHO_MAGIC1"] [F1194D80] 0 [F1194D80]
+806251C0:   callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_ENM_MAHO_MAGIC3"] [F1194D80] 0 [F1194D80]
+806251DC:   wait_frames 40
+806251E4:   return
+806251E8:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [attack_enemy_common_event_sub_hit unit_super_mahorn.o] AT 806251EC ---
+806251EC:   if_int_eq LW(15) -1
+806251F8:     return
+806251FC:   endif
+80625200:   callc [btlevtcmd_GetPos battle_event_cmd.o] LW(15) LW(0) LW(1) LW(2)
+80625218:   addi LW(1) 10
+80625224:   callc [btlevtcmd_GetHitPos battle_event_cmd.o] LW(3) LW(4) LW(10) LW(11) LW(12)
+80625240:   callc [eff_magic unit_super_mahorn.o] LW(15) LW(10) LW(11) LW(12) 20
+8062525C:   callss [attack_enemy_common_event_sub2 unit_super_mahorn.o]
+80625264:   wait_frames 5
+8062526C:   callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_ENM_MAHO_MAGIC1"] [F1194D80] 0 [F1194D80]
+80625288:   callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_ENM_MAHO_MAGIC3"] [F1194D80] 0 [F1194D80]
+806252A4:   wait_frames 20
+806252AC:   return
+806252B0:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [attack_enemy_common_event_sub2 unit_super_mahorn.o] AT 80624D4C ---
+80624D4C:   if_int_eq LW(15) -1
+80624D58:     return
+80624D5C:   endif
+80624D60:   callc [btlevtcmd_StopWaitEvent battle_event_cmd.o] LW(15)
+80624D6C:   callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] LW(15) 1 ["MAH_A_1"]
+80624D80:   begin_thread
+80624D84:     loop 2
+80624D8C:       setff LW(0) -16.00
+80624D98:       setff LW(1) 20.00
+80624DA4:       callc [btlevtcmd_GetFaceDirection battle_event_cmd.o] -2 LW(2)
+80624DB4:       mulf LW(1) LW(2)
+80624DC0:       callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] LW(15) 2 ["MAH_S_2B"]
+80624DD4:       addi LW(0) LW(1)
+80624DE0:       callc [set_hand_dest unit_super_mahorn.o] LW(15) 2 LW(0) 29.00 -5.00
+80624DFC:       wait_frames 20
+80624E04:       callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] LW(15) 2 ["MAH_S_2A"]
+80624E18:       subi LW(0) LW(1)
+80624E24:       callc [set_hand_dest unit_super_mahorn.o] LW(15) 2 LW(0) 29.00 -5.00
+80624E40:       wait_frames 20
+80624E48:     end_loop
+80624E4C:   end_thread
+80624E50:   begin_thread
+80624E54:     wait_frames 7
+80624E5C:     loop 2
+80624E64:       setff LW(0) 16.00
+80624E70:       setff LW(1) 20.00
+80624E7C:       callc [btlevtcmd_GetFaceDirection battle_event_cmd.o] -2 LW(2)
+80624E8C:       mulf LW(1) LW(2)
+80624E98:       callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] LW(15) 5 ["MAH_S_2B"]
+80624EAC:       addi LW(0) LW(1)
+80624EB8:       callc [set_hand_dest unit_super_mahorn.o] LW(15) 5 LW(0) 11.00 5.00
+80624ED4:       wait_frames 20
+80624EDC:       callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] LW(15) 5 ["MAH_S_2A"]
+80624EF0:       subi LW(0) LW(1)
+80624EFC:       callc [set_hand_dest unit_super_mahorn.o] LW(15) 5 LW(0) 11.00 5.00
+80624F18:       wait_frames 20
+80624F20:     end_loop
+80624F24:   end_thread
+80624F28:   begin_thread
+80624F2C:     wait_frames 10
+80624F34:     loop 2
+80624F3C:       setff LW(0) -16.00
+80624F48:       setff LW(1) 20.00
+80624F54:       callc [btlevtcmd_GetFaceDirection battle_event_cmd.o] -2 LW(2)
+80624F64:       mulf LW(1) LW(2)
+80624F70:       callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] LW(15) 4 ["MAH_S_2B"]
+80624F84:       addi LW(0) LW(1)
+80624F90:       callc [set_hand_dest unit_super_mahorn.o] LW(15) 4 LW(0) 11.00 -5.00
+80624FAC:       wait_frames 20
+80624FB4:       callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] LW(15) 4 ["MAH_S_2A"]
+80624FC8:       subi LW(0) LW(1)
+80624FD4:       callc [set_hand_dest unit_super_mahorn.o] LW(15) 4 LW(0) 11.00 -5.00
+80624FF0:       wait_frames 20
+80624FF8:     end_loop
+80624FFC:   end_thread
+80625000:   begin_thread
+80625004:     wait_frames 15
+8062500C:     loop 2
+80625014:       setff LW(0) 16.00
+80625020:       setff LW(1) 20.00
+8062502C:       callc [btlevtcmd_GetFaceDirection battle_event_cmd.o] -2 LW(2)
+8062503C:       mulf LW(1) LW(2)
+80625048:       callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] LW(15) 3 ["MAH_S_2B"]
+8062505C:       addi LW(0) LW(1)
+80625068:       callc [set_hand_dest unit_super_mahorn.o] LW(15) 3 LW(0) 29.00 5.00
+80625084:       wait_frames 20
+8062508C:       callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] LW(15) 3 ["MAH_S_2A"]
+806250A0:       subi LW(0) LW(1)
+806250AC:       callc [set_hand_dest unit_super_mahorn.o] LW(15) 3 LW(0) 29.00 5.00
+806250C8:       wait_frames 20
+806250D0:     end_loop
+806250D4:   end_thread
+806250D8:   wait_frames 55
+806250E0:   return
+806250E4:   end

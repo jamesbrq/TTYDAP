@@ -1,0 +1,122 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [kamec_subset_dead_event unit_kamec.o] AT 805EEFFC ---
+805EEFFC:   callc [btlevtcmd_CheckDataOfDataTable battle_event_cmd.o] LW(10) LW(0) 50
+805EF010:   if_int_ne LW(0) 0
+805EF01C:     callc [btlevtcmd_RunDataEventChild battle_event_cmd.o] LW(10) 50
+805EF02C:   endif
+805EF030:   setii LW(0) 48
+805EF03C:   callc [btlevtcmd_OnUnitFlag battle_event_cmd.o] LW(10) 134217728
+805EF04C:   callc [btlevtcmd_snd_se battle_event_cmd.o] LW(10) ["SFX_BTL_ENEMY_DIE1_1"] [F1194D80] 0 [F1194D80]
+805EF068: 10:
+805EF070:   wait_frames 1
+805EF078:   callc [btlevtcmd_AddRotate battle_event_cmd.o] LW(10) 0 -15 0
+805EF090:   subi LW(0) 1
+805EF09C:   if_int_gt LW(0) 0
+805EF0A8:     goto 10
+805EF0B0:   endif
+805EF0B4:   callc [btlevtcmd_SetRotate battle_event_cmd.o] LW(10) 0 0 0
+805EF0CC:   callc [btlevtcmd_snd_se battle_event_cmd.o] LW(10) ["SFX_BTL_ENEMY_DIE1_2"] [F1194D80] 0 [F1194D80]
+805EF0E8:   callc [btlevtcmd_GetPos battle_event_cmd.o] LW(10) LW(0) LW(1) LW(2)
+805EF100:   addi LW(2) 10
+805EF10C:   callc [evt_eff evt_eff.o] 0 ["kemuri_test"] 4 LW(0) LW(1) LW(2) 0.80 0 0 0 0 0 0 0
+805EF14C:   callc [btlevtcmd_GetCoin battle_event_cmd.o] LW(10) LW(0)
+805EF15C:   callc [btlevtcmd_StoreCoin battle_event_cmd.o] LW(0)
+805EF168:   callc [btlevtcmd_GetExp battle_event_cmd.o] LW(10) LW(0)
+805EF178:   callc [btlevtcmd_StoreExp battle_event_cmd.o] LW(0)
+805EF184:   callc [btlevtcmd_GetPos battle_event_cmd.o] LW(10) LW(3) LW(1) LW(2)
+805EF19C:   addi LW(2) 10
+805EF1A8:   addi LW(1) 30
+805EF1B4:   callc [_add_star_point_disp_offset battle_event_subset.o] LW(10) LW(3) LW(1) LW(2)
+805EF1CC:   callc [evt_eff evt_eff.o] [zero_tik_0000ce88 unit_kamec.o] ["star_point"] 0 LW(3) LW(1) LW(2) LW(0) 0 0 0 0 0 0 0
+805EF20C:   if_int_ge LW(0) 1
+805EF218:     loop LW(0)
+805EF220:     end_loop
+805EF224:   endif
+805EF228:   callc [btlevtcmd_SetRotateOffset battle_event_cmd.o] LW(10) 0 0 0
+805EF240:   setii LW(0) 30
+805EF24C: 20:
+805EF254:   wait_frames 1
+805EF25C:   callc [btlevtcmd_AddRotate battle_event_cmd.o] LW(10) 3 0 0
+805EF274:   subi LW(0) 1
+805EF280:   if_int_gt LW(0) 0
+805EF28C:     goto 20
+805EF294:   endif
+805EF298:   callc [btlevtcmd_GetBackItem battle_event_cmd.o] LW(10)
+805EF2A4:   callc [btlevtcmd_ClearAllStatus battle_event_cmd.o] LW(10)
+805EF2B0:   callc [btlevtcmd_OnAttribute battle_event_cmd.o] LW(10) 16777216
+805EF2C0:   callc [btlevtcmd_OnAttribute battle_event_cmd.o] LW(10) 536870912
+805EF2D0:   callss [kamec_subset_bunsin_all_kill unit_kamec.o]
+805EF2D8:   callc [btlevtcmd_CheckDamageCode battle_event_cmd.o] LW(10) 1024 LW(0)
+805EF2EC:   if_int_ne LW(0) 0
+805EF2F8:     callc [btlevtcmd_KillUnit battle_event_cmd.o] LW(10) 0
+805EF308:   else
+805EF30C:     callc [btlevtcmd_KillUnit battle_event_cmd.o] LW(10) 2
+805EF31C:   endif
+805EF320:   return
+805EF324:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [kamec_subset_bunsin_all_kill unit_kamec.o] AT 805EEEEC ---
+805EEEEC:   callc [btlevtcmd_GetUnitWork battle_event_cmd.o] -2 1 LW(0)
+805EEF00:   if_int_eq LW(0) 0
+805EEF0C:     callc [kamec_get_bunsin unit_kamec.o] LW(1) LW(2) LW(3) LW(4) LW(0)
+805EEF28:     if_int_ge LW(0) 1
+805EEF34:       callc [btlevtcmd_WaitAttackEnd battle_event_cmd.o]
+805EEF3C:       callc [kamec_get_bunsin unit_kamec.o] LW(1) LW(2) LW(3) LW(4) LW(0)
+805EEF58:       setii LW(0) LW(1)
+805EEF64:       callsa [bunsin_kill_event unit_kamec.o]
+805EEF6C:       setii LW(0) LW(2)
+805EEF78:       callsa [bunsin_kill_event unit_kamec.o]
+805EEF80:       setii LW(0) LW(3)
+805EEF8C:       callsa [bunsin_kill_event unit_kamec.o]
+805EEF94:       setii LW(0) LW(4)
+805EEFA0:       callsa [bunsin_kill_event unit_kamec.o]
+805EEFA8:       loop 0
+805EEFB0:         callc [kamec_get_bunsin unit_kamec.o] LW(1) LW(2) LW(3) LW(4) LW(0)
+805EEFCC:         if_int_eq LW(0) 0
+805EEFD8:           loop_break
+805EEFDC:         endif
+805EEFE0:         wait_frames 1
+805EEFE8:       end_loop
+805EEFEC:     endif
+805EEFF0:   endif
+805EEFF4:   return
+805EEFF8:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [bunsin_kill_event unit_kamec.o] AT 805EF4A0 ---
+805EF4A0:   callc [btlevtcmd_GetUnitId battle_event_cmd.o] LW(0) LW(0)
+805EF4B0:   if_int_eq LW(0) -1
+805EF4BC:     return
+805EF4C0:   endif
+805EF4C4:   callc [btlevtcmd_GetUnitWork battle_event_cmd.o] LW(0) 3 LW(1)
+805EF4D8:   if_int_eq LW(1) 1
+805EF4E4:     goto 10
+805EF4EC:   endif
+805EF4F0:   callc [btlevtcmd_SetUnitWork battle_event_cmd.o] LW(0) 3 1
+805EF504:   callss [alpha_down_event unit_kamec.o]
+805EF50C: 10:
+805EF514:   callc [btlevtcmd_WaitAttackEnd battle_event_cmd.o]
+805EF51C:   callc [btlevtcmd_KillUnit battle_event_cmd.o] LW(0) 0
+805EF52C:   return
+805EF530:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [alpha_down_event unit_kamec.o] AT 805EEC14 ---
+805EEC14:   if_int_eq LW(0) -1
+805EEC20:     return
+805EEC24:   endif
+805EEC28:   callc [btlevtcmd_SetAlpha battle_event_cmd.o] LW(0) 1 254
+805EEC3C:   callc [btlevtcmd_AnimeFlagOnOff battle_event_cmd.o] LW(0) 1 1 1
+805EEC54:   wait_frames 1
+805EEC5C:   callc [evt_sub_intpl_init evt_sub.o] 0 254 0 30
+805EEC74:   loop 30
+805EEC7C:     callc [evt_sub_intpl_get_value_para evt_sub.o] LW(1) LW(2)
+805EEC8C:     callc [btlevtcmd_SetAlpha battle_event_cmd.o] LW(0) 1 LW(1)
+805EECA0:     wait_frames 1
+805EECA8:   end_loop
+805EECAC:   callc [btlevtcmd_OnPartsAttribute battle_event_cmd.o] LW(0) 1 33554432
+805EECC0:   callc [btlevtcmd_SetAlpha battle_event_cmd.o] LW(0) 1 0
+805EECD4:   callc [btlevtcmd_AnimeFlagOnOff battle_event_cmd.o] LW(0) 1 1 1
+805EECEC:   wait_frames 1
+805EECF4:   return
+805EECF8:   end

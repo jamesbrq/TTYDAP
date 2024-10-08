@@ -1,0 +1,96 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [queen_hand_small_drag_attack unit_boss_black_peach.o] AT 80611E04 ---
+80611E04:   callc [btlevtcmd_GetEnemyBelong battle_event_cmd.o] -2 LW(0)
+80611E14:   callc [btlevtcmd_SamplingEnemy battle_event_cmd.o] -2 LW(0) [weapon_peach_dark_drag_attack unit_boss_black_peach.o]
+80611E28:   callc [btlevtcmd_ChoiceSamplingEnemy battle_event_cmd.o] [weapon_peach_dark_drag_attack unit_boss_black_peach.o] LW(3) LW(4)
+80611E3C:   callc [btlevtcmd_CheckToken battle_event_cmd.o] -2 16 LW(0)
+80611E50:   if_int_ne LW(0) 0
+80611E5C:     callss [subsetevt_confuse_flustered battle_event_subset.o]
+80611E64:     return
+80611E68:   endif
+80611E6C:   callc [btlevtcmd_AttackDeclare battle_event_cmd.o] -2 LW(3) LW(4)
+80611E80:   callc [btlevtcmd_WaitGuardMove battle_event_cmd.o]
+80611E88:   callc [btlevtcmd_PayWeaponCost battle_event_cmd.o] -2 [weapon_peach_dark_drag_attack unit_boss_black_peach.o]
+80611E98:   callc [evt_eff_softdelete evt_eff.o] ["m_h_s1"]
+80611EA4:   callc [evt_eff_softdelete evt_eff.o] ["m_h_s2"]
+80611EB0:   callc [evt_eff_softdelete evt_eff.o] ["m_h_s3"]
+80611EBC:   callc [evt_snd_sfxon evt_snd.o] ["SFX_BOSS_QWEN_HAND_GOOUT1"] 0
+80611ECC:   callc [queen_hand_small_drag_2_evt unit_boss_black_peach.o]
+80611ED4:   callc [evt_btl_camera_set_mode battle_camera.o] 0 7
+80611EE4:   callc [evt_btl_camera_set_homing_unit battle_camera.o] 0 LW(3) LW(3)
+80611EF8:   callc [evt_btl_camera_set_moveSpeedLv battle_camera.o] 0 1
+80611F08:   callc [evt_btl_camera_set_zoom battle_camera.o] 0 200
+80611F18:   callc [btlevtcmd_GetPos battle_event_cmd.o] LW(3) LW(0) LW(1) LW(2)
+80611F30:   callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_BOSS_QWENH_HAND_APPEAR1"] LW(0) LW(1) LW(2) 0
+80611F4C:   begin_thread
+80611F50:     callc [queen_hand_small_drag_1_evt unit_boss_black_peach.o]
+80611F58:   end_thread
+80611F5C:   callc [evt_eff evt_eff.o] ["m_h_s1_"] ["mist2"] 0 -100 15 0 100 0 -1 0 0 0 0 0
+80611F9C:   callc [evt_eff evt_eff.o] ["m_h_s2_"] ["mist2"] 0 -100 15 0 100 0 -1 0 0 0 0 0
+80611FDC:   callc [evt_eff evt_eff.o] ["m_h_s3_"] ["mist2"] 0 -100 15 0 100 0 -1 0 0 0 0 0
+8061201C:   wait_ms 1250
+80612024:   callc [btlevtcmd_PreCheckDamage battle_event_cmd.o] -2 LW(3) LW(4) [weapon_peach_dark_drag_attack unit_boss_black_peach.o] 256 LW(5)
+80612044:   switchi LW(5)
+8061204C:     case_int_eq_any 4
+80612054:       goto 90
+8061205C:       end_multi_case
+80612060:     case_int_eq 3
+80612068:       callc [btlevtcmd_StartAvoid battle_event_cmd.o] LW(3) 38
+80612078:       goto 90
+80612080:       end_multi_case
+80612084:     case_int_eq 6
+8061208C:       callc [btlevtcmd_StartAvoid battle_event_cmd.o] LW(3) 39
+8061209C:       goto 90
+806120A4:     case_int_eq 2
+806120AC:       callc [btlevtcmd_StartAvoid battle_event_cmd.o] LW(3) 40
+806120BC:       goto 90
+806120C4:     case_int_eq 1
+806120CC:       goto 91
+806120D4:       end_multi_case
+806120D8:     case_default
+806120DC:       goto 98
+806120E4:       end_multi_case
+806120E8:   end_switch
+806120EC: 90:
+806120F4:   wait_ms 2250
+806120FC:   callc [evt_eff_softdelete evt_eff.o] ["m_h_s1_"]
+80612108:   callc [evt_eff_softdelete evt_eff.o] ["m_h_s2_"]
+80612114:   callc [evt_eff_softdelete evt_eff.o] ["m_h_s3_"]
+80612120:   goto 95
+80612128: 91:
+80612130:   callc [btlevtcmd_WeaponAftereffect battle_event_cmd.o] [weapon_peach_dark_drag_attack unit_boss_black_peach.o]
+8061213C:   callc [battle_evt_majo_disp_off unit_party_vivian.o] LW(3) LW(4) 0 0
+80612154:   callc [btlevtcmd_SetScale battle_event_cmd.o] LW(3) 0 0 0
+8061216C:   callc [btlevtcmd_GetHomePos battle_event_cmd.o] LW(3) LW(0) LW(1) LW(2)
+80612184:   callc [btlevtcmd_SetPos battle_event_cmd.o] LW(3) LW(0) LW(1) LW(2)
+8061219C:   callc [btlevtcmd_ResultACDefence battle_event_cmd.o] LW(3) [weapon_peach_dark_drag_attack unit_boss_black_peach.o]
+806121AC:   callc [btlevtcmd_CheckDamage battle_event_cmd.o] -2 LW(3) LW(4) [weapon_peach_dark_drag_attack unit_boss_black_peach.o] 0 LW(5)
+806121CC:   wait_ms 750
+806121D4:   callc [btlevtcmd_ResultACDefence battle_event_cmd.o] LW(3) [weapon_peach_dark_drag_attack unit_boss_black_peach.o]
+806121E4:   callc [btlevtcmd_CheckDamage battle_event_cmd.o] -2 LW(3) LW(4) [weapon_peach_dark_drag_attack unit_boss_black_peach.o] 0 LW(5)
+80612204:   wait_ms 750
+8061220C:   callc [btlevtcmd_ResultACDefence battle_event_cmd.o] LW(3) [weapon_peach_dark_drag_attack unit_boss_black_peach.o]
+8061221C:   callc [btlevtcmd_CheckDamage battle_event_cmd.o] -2 LW(3) LW(4) [weapon_peach_dark_drag_attack unit_boss_black_peach.o] 0 LW(5)
+8061223C:   wait_ms 750
+80612244:   callc [evt_eff_softdelete evt_eff.o] ["m_h_s1_"]
+80612250:   callc [evt_eff_softdelete evt_eff.o] ["m_h_s2_"]
+8061225C:   callc [evt_eff_softdelete evt_eff.o] ["m_h_s3_"]
+80612268:   callc [btlevtcmd_GetHomePos battle_event_cmd.o] LW(3) LW(0) LW(1) LW(2)
+80612280:   callc [btlevtcmd_SetScale battle_event_cmd.o] LW(3) 1 1 1
+80612298:   callc [battle_evt_majo_disp_on unit_party_vivian.o] LW(3) LW(4) LW(0) LW(1) LW(2) 0
+806122B8:   callc [btlevtcmd_SetPos battle_event_cmd.o] LW(3) LW(0) LW(1) LW(2)
+806122D0:   callc [btlevtcmd_ResultACDefence battle_event_cmd.o] LW(3) [weapon_peach_dark_drag_attack unit_boss_black_peach.o]
+806122E0:   callc [btlevtcmd_CheckDamage battle_event_cmd.o] -2 LW(3) LW(4) [weapon_peach_dark_drag_last_attack unit_boss_black_peach.o] 256 LW(5)
+80612300:   wait_ms 750
+80612308: 95:
+80612310: 98:
+80612318:   callc [evt_btl_camera_set_mode battle_camera.o] 0 0
+80612328:   callc [evt_eff evt_eff.o] ["m_h_s1"] ["mist2"] 0 100 15 0 150 0 -1 0 0 0 0 0
+80612368:   callc [evt_eff evt_eff.o] ["m_h_s2"] ["mist2"] 0 100 15 0 150 0 -1 0 0 0 0 0
+806123A8:   callc [evt_eff evt_eff.o] ["m_h_s3"] ["mist2"] 0 100 15 0 150 0 -1 0 0 0 0 0
+806123E8:   callc [evt_snd_sfxon evt_snd.o] ["SFX_BOSS_QWEN_HAND_APPEAR1_2"] 0
+806123F8:   callc [queen_hand_small_drag_3_evt unit_boss_black_peach.o]
+80612400:   return
+80612404:   end

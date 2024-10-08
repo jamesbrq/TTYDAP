@@ -1,0 +1,32 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [evt_memcard_delete evt_memcard.o] AT 803BA10C ---
+803BA10C:   setii GF(0) 0
+803BA118:   setii LW(10) LW(0)
+803BA124:   addi LW(10) 1
+803BA130:   callc [evt_msg_print_insert evt_msg.o] 0 ["msg_savefile_delete"] 0 0 LW(10)
+803BA14C:   callc [evt_msg_select evt_msg.o] 0 ["msg_mcard_yesno2"]
+803BA15C:   if_int_eq LW(0) 0
+803BA168:     callc [evt_msg_print_add evt_msg.o] 0 ["msg_savefile_delete_warnning"]
+803BA178:     callc [memcard_delete evt_memcard.o] LW(10)
+803BA184:     callc [memcard_code evt_memcard.o] LW(0)
+803BA190:     if_int_ne LW(0) 0
+803BA19C:       callc [evt_msg_print_add evt_msg.o] 0 ["msg_savefile_delete_copy_miss"]
+803BA1AC:     else
+803BA1B0:       callc [evt_msg_print_add_insert evt_msg.o] 0 ["msg_savefile_delete_finish"] LW(10)
+803BA1C4:       return
+803BA1C8:     endif
+803BA1CC:   else
+803BA1D0:     callc [evt_msg_continue evt_msg.o]
+803BA1D8:     return
+803BA1DC:   endif
+803BA1E0:   callc [evt_fade_entry evt_fade.o] 24 0 0 0 0
+803BA1FC:   callc [evt_fade_end_wait evt_fade.o]
+803BA204:   callc [evt_fade_entry evt_fade.o] 26 0 0 0 0
+803BA220:   callc [evt_fade_end_wait evt_fade.o]
+803BA228:   callc [evt_msg_continue evt_msg.o]
+803BA230:   callc [unk_800f72e4 seq_load.o]
+803BA238:   setii GF(0) 1
+803BA244:   return
+803BA248:   end

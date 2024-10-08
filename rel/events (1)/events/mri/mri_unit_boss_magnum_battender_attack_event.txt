@@ -1,0 +1,365 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [attack_event unit_boss_magnum_battender.o] AT 8060B248 ---
+8060B248:   callc [btlevtcmd_GetUnitWork battle_event_cmd.o] -2 0 LW(0)
+8060B25C:   if_int_eq LW(0) 1
+8060B268:     callc [arm_check unit_boss_magnum_battender.o] 0 LW(0)
+8060B278:     if_int_eq LW(0) -1
+8060B284:       callc [arm_check unit_boss_magnum_battender.o] 1 LW(0)
+8060B294:       if_int_eq LW(0) -1
+8060B2A0:         callc [btlevtcmd_AddUnitWork battle_event_cmd.o] -2 1 -1
+8060B2B4:         callc [btlevtcmd_GetUnitWork battle_event_cmd.o] -2 1 LW(0)
+8060B2C8:         if_int_le LW(0) 0
+8060B2D4:           callss [arm_return_event unit_boss_magnum_battender.o]
+8060B2DC:         endif
+8060B2E0:       endif
+8060B2E4:     endif
+8060B2E8:   endif
+8060B2EC:   callc [btlevtcmd_EnemyItemUseCheck battle_event_cmd.o] -2 LW(0)
+8060B2FC:   if_int_ne LW(0) 0
+8060B308:     callss LW(0)
+8060B310:     callc [btlevtcmd_StartWaitEvent battle_event_cmd.o] -2
+8060B31C:     return
+8060B320:   endif
+8060B324:   callc [btlevtcmd_GetUnitWork battle_event_cmd.o] -2 0 LW(0)
+8060B338:   if_int_eq LW(0) 0
+8060B344:     callc [btlevtcmd_GetUnitWork battle_event_cmd.o] -2 5 LW(0)
+8060B358:     if_int_eq LW(0) 0
+8060B364:       callss [stamp_attack_event unit_boss_magnum_battender.o]
+8060B36C:       goto 99
+8060B374:     endif
+8060B378:     callc [btlevtcmd_GetHp battle_event_cmd.o] -2 LW(0)
+8060B388:     if_int_gt LW(0) 20
+8060B394:       callss [stamp_attack_event unit_boss_magnum_battender.o]
+8060B39C:       goto 99
+8060B3A4:     else
+8060B3A8:       callc [btlevtcmd_GetUnitWork battle_event_cmd.o] -2 2 LW(0)
+8060B3BC:       if_int_eq LW(0) 0
+8060B3C8:         callss [arm_bunri_event unit_boss_magnum_battender.o]
+8060B3D0:         goto 99
+8060B3D8:       endif
+8060B3DC:       setii LW(0) 0
+8060B3E8:       addi LW(0) 60
+8060B3F4:       addi LW(0) 40
+8060B400:       subi LW(0) 1
+8060B40C:       callc [evt_sub_random evt_sub.o] LW(0) LW(1)
+8060B41C:       setii LW(0) 60
+8060B428:       if_int_lt LW(1) LW(0)
+8060B434:         callss [stamp_attack_event unit_boss_magnum_battender.o]
+8060B43C:         goto 99
+8060B444:       else
+8060B448:         callss [arm_bunri_event unit_boss_magnum_battender.o]
+8060B450:         goto 99
+8060B458:       endif
+8060B45C:     endif
+8060B460:   else
+8060B464:     callss [shake_attack_event unit_boss_magnum_battender.o]
+8060B46C:     goto 99
+8060B474:   endif
+8060B478: 99:
+8060B480:   callc [btlevtcmd_ResetFaceDirection battle_event_cmd.o] -2
+8060B48C:   callc [btlevtcmd_StartWaitEvent battle_event_cmd.o] -2
+8060B498:   return
+8060B49C:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [arm_return_event unit_boss_magnum_battender.o] AT 8060C24C ---
+8060C24C:   callc [btlevtcmd_SetUnitWork battle_event_cmd.o] -2 0 0
+8060C260:   callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 1 ["MGN_A1_6"]
+8060C274:   wait_ms 600
+8060C27C:   callc [btlevtcmd_SpawnUnit battle_event_cmd.o] LW(3) [entry_rocket_punch unit_boss_magnum_battender.o] 0
+8060C290:   callc [btlevtcmd_SetUnitWork battle_event_cmd.o] LW(3) 0 2
+8060C2A4:   callc [btlevtcmd_SetUnitWork battle_event_cmd.o] -2 3 LW(3)
+8060C2B8:   callc [btlevtcmd_AnimeChangePoseType battle_event_cmd.o] LW(3) 1 69
+8060C2CC:   callc [btlevtcmd_SpawnUnit battle_event_cmd.o] LW(4) [entry_rocket_punch unit_boss_magnum_battender.o] 0
+8060C2E0:   callc [btlevtcmd_SetUnitWork battle_event_cmd.o] LW(4) 0 3
+8060C2F4:   callc [btlevtcmd_SetUnitWork battle_event_cmd.o] -2 4 LW(4)
+8060C308:   callc [btlevtcmd_AnimeChangePoseType battle_event_cmd.o] LW(4) 1 69
+8060C31C:   callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_BOSS_MBTN_PUNCH_FLY1"] [F1194D80] 0 [F1194D80]
+8060C338:   begin_child_thread
+8060C33C:     callc [btlevtcmd_SetPos battle_event_cmd.o] LW(3) 300 40 -100
+8060C354:     callc [btlevtcmd_DivePosition battle_event_cmd.o] LW(3) 30 100 -40 30 -10 0 0 -1
+8060C380:   end_child_thread
+8060C384:   callc [btlevtcmd_SetPos battle_event_cmd.o] LW(4) 350 40 100
+8060C39C:   callc [btlevtcmd_DivePosition battle_event_cmd.o] LW(4) 80 100 40 30 -10 0 0 -1
+8060C3C8:   callc [arm_end unit_boss_magnum_battender.o] 0
+8060C3D4:   callc [arm_end unit_boss_magnum_battender.o] 1
+8060C3E0:   callc [btlevtcmd_KillUnit battle_event_cmd.o] LW(3) 0
+8060C3F0:   callc [btlevtcmd_KillUnit battle_event_cmd.o] LW(4) 0
+8060C400:   callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_BOSS_MBTN_PUNCH_IGNITE1"] [F1194D80] 0 [F1194D80]
+8060C41C:   callc [evt_btl_camera_shake_w battle_camera.o] 0 3 0 20 0
+8060C438:   callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 1 ["MGN_A1_7"]
+8060C44C:   wait_ms 300
+8060C454:   callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 1 ["MGN_A1_8"]
+8060C468:   wait_ms 600
+8060C470:   callc [btlevtcmd_AnimeSetPoseTable battle_event_cmd.o] -2 1 [pose_table unit_boss_magnum_battender.o]
+8060C484:   callc [btlevtcmd_AnimeChangePoseType battle_event_cmd.o] -2 1 69
+8060C498:   wait_ms 500
+8060C4A0:   return
+8060C4A4:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [stamp_attack_event unit_boss_magnum_battender.o] AT 8060B4A0 ---
+8060B4A0:   callc [btlevtcmd_GetEnemyBelong battle_event_cmd.o] -2 LW(0)
+8060B4B0:   callc [btlevtcmd_SamplingEnemy battle_event_cmd.o] -2 LW(0) [weapon_batten_stamp_attack unit_boss_magnum_battender.o]
+8060B4C4:   callc [btlevtcmd_ChoiceSamplingEnemy battle_event_cmd.o] [weapon_batten_stamp_attack unit_boss_magnum_battender.o] LW(3) LW(4)
+8060B4D8:   if_int_eq LW(3) -1
+8060B4E4:     callc [btlevtcmd_CheckToken battle_event_cmd.o] -2 16 LW(0)
+8060B4F8:     if_int_ne LW(0) 0
+8060B504:       callss [subsetevt_confuse_flustered battle_event_subset.o]
+8060B50C:     endif
+8060B510:     return
+8060B514:   endif
+8060B518:   callc [btlevtcmd_GetUnitWork battle_event_cmd.o] -2 5 LW(0)
+8060B52C:   if_int_eq LW(0) 0
+8060B538:     callc [btlevtcmd_SetUnitWork battle_event_cmd.o] -2 5 1
+8060B54C:     callc [btlevtcmd_StatusWindowOnOff battle_event_cmd.o] 0
+8060B558:     callc [evt_btl_camera_set_prilimit battle_camera.o] 1
+8060B564:     callc [evt_btl_camera_set_mode battle_camera.o] 1 3
+8060B574:     callc [btlevtcmd_GetPos battle_event_cmd.o] -2 LW(0) LW(1) LW(2)
+8060B58C:     subi LW(0) 20
+8060B598:     callc [evt_btl_camera_set_moveto battle_camera.o] 1 LW(0) 160 600 LW(0) 110 -100 20 11
+8060B5C4:     wait_frames 20
+8060B5CC:     callc [evt_msg_print evt_msg.o] 2 ["stg2_mri_e24_11"] 0 -2
+8060B5E4:     callc [evt_btl_camera_set_prilimit battle_camera.o] 0
+8060B5F0:     callc [evt_btl_camera_set_mode battle_camera.o] 0 0
+8060B600:     callc [btlevtcmd_StatusWindowOnOff battle_event_cmd.o] 1
+8060B60C:     wait_ms 500
+8060B614:   endif
+8060B618:   callc [btlevtcmd_WeaponAftereffect battle_event_cmd.o] [weapon_batten_stamp_attack unit_boss_magnum_battender.o]
+8060B624:   callc [btlevtcmd_AttackDeclare battle_event_cmd.o] -2 LW(3) LW(4)
+8060B638:   callc [btlevtcmd_WaitGuardMove battle_event_cmd.o]
+8060B640:   callc [btlevtcmd_PayWeaponCost battle_event_cmd.o] -2 [weapon_batten_stamp_attack unit_boss_magnum_battender.o]
+8060B650:   callc [btlevtcmd_GetPos battle_event_cmd.o] LW(3) LW(0) LW(1) LW(2)
+8060B668:   callc [btlevtcmd_FaceDirectionAdd battle_event_cmd.o] LW(3) LW(0) 100
+8060B67C:   callc [btlevtcmd_CalculateFaceDirection battle_event_cmd.o] -2 -1 LW(0) LW(2) 1 LW(15)
+8060B69C:   callc [btlevtcmd_ChangeFaceDirection battle_event_cmd.o] -2 LW(15)
+8060B6AC:   callc [btlevtcmd_AnimeChangePoseType battle_event_cmd.o] -2 1 40
+8060B6C0:   callc [btlevtcmd_MovePosition battle_event_cmd.o] -2 -50 0 0 120 -1 1
+8060B6E4:   callc [btlevtcmd_CalculateFaceDirection battle_event_cmd.o] -2 -1 LW(3) LW(4) 16 LW(15)
+8060B704:   callc [btlevtcmd_ChangeFaceDirection battle_event_cmd.o] -2 LW(15)
+8060B714:   callc [btlevtcmd_GetPos battle_event_cmd.o] LW(3) LW(0) LW(1) LW(2)
+8060B72C:   if_int_ge LW(0) -125
+8060B738:     setii LW(15) 1
+8060B744:   else
+8060B748:     setii LW(15) 0
+8060B754:   endif
+8060B758:   callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_BOSS_MBTN_LEG_UP1"] [F1194D80] 0 [F1194D80]
+8060B774:   callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 1 ["MGN_A2_1"]
+8060B788:   wait_ms 450
+8060B790:   begin_child_thread
+8060B794:     loop 3
+8060B79C:       callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_BOSS_MBTN_LEG_PERPLEX1"] [F1194D80] 0 [F1194D80]
+8060B7B8:       wait_ms 333
+8060B7C0:     end_loop
+8060B7C4:   end_child_thread
+8060B7C8:   callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 1 ["MGN_A2_2"]
+8060B7DC:   wait_ms 1000
+8060B7E4:   if_int_eq LW(15) 1
+8060B7F0:     callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 1 ["MGN_A2_3"]
+8060B804:   else
+8060B808:     callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 1 ["MGN_A2_4"]
+8060B81C:   endif
+8060B820:   wait_ms 150
+8060B828:   callc [evt_btl_camera_shake_h battle_camera.o] 0 5 0 60 0
+8060B844:   callc [btlevtcmd_PreCheckDamage battle_event_cmd.o] -2 LW(3) LW(4) [weapon_batten_stamp_attack unit_boss_magnum_battender.o] 256 LW(5)
+8060B864:   switchi LW(5)
+8060B86C:     case_int_eq_any 4
+8060B874:       goto 90
+8060B87C:       end_multi_case
+8060B880:     case_int_eq 3
+8060B888:       callc [btlevtcmd_StartAvoid battle_event_cmd.o] LW(3) 38
+8060B898:       goto 90
+8060B8A0:       end_multi_case
+8060B8A4:     case_int_eq 6
+8060B8AC:       callc [btlevtcmd_StartAvoid battle_event_cmd.o] LW(3) 39
+8060B8BC:       goto 90
+8060B8C4:     case_int_eq 2
+8060B8CC:       callc [btlevtcmd_StartAvoid battle_event_cmd.o] LW(3) 40
+8060B8DC:       goto 90
+8060B8E4:     case_int_eq 1
+8060B8EC:       goto 91
+8060B8F4:       end_multi_case
+8060B8F8:     case_default
+8060B8FC:       goto 98
+8060B904:       end_multi_case
+8060B908:   end_switch
+8060B90C: 90:
+8060B914:   goto 95
+8060B91C: 91:
+8060B924:   callc [btlevtcmd_ResultACDefence battle_event_cmd.o] LW(3) [weapon_batten_stamp_attack unit_boss_magnum_battender.o]
+8060B934:   callc [btlevtcmd_CheckDamage battle_event_cmd.o] -2 LW(3) LW(4) [weapon_batten_stamp_attack unit_boss_magnum_battender.o] 256 LW(5)
+8060B954:   goto 95
+8060B95C: 95:
+8060B964:   wait_ms 1000
+8060B96C:   if_int_eq LW(15) 1
+8060B978:     callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 1 ["MGN_A2_5"]
+8060B98C:   else
+8060B990:     callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 1 ["MGN_A2_6"]
+8060B9A4:   endif
+8060B9A8:   wait_ms 1000
+8060B9B0:   callc [evt_btl_camera_set_mode battle_camera.o] 0 0
+8060B9C0:   wait_ms 200
+8060B9C8:   callc [btlevtcmd_AnimeChangePoseType battle_event_cmd.o] -2 1 41
+8060B9DC:   callc [btlevtcmd_GetHomePos battle_event_cmd.o] -2 LW(0) LW(1) LW(2)
+8060B9F4:   callc [btlevtcmd_MovePosition battle_event_cmd.o] -2 LW(0) LW(1) LW(2) 60 -2 0
+8060BA18:   return
+8060BA1C:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [arm_bunri_event unit_boss_magnum_battender.o] AT 8060BF30 ---
+8060BF30:   callc [btlevtcmd_GetUnitWork battle_event_cmd.o] -2 2 LW(0)
+8060BF44:   if_int_eq LW(0) 0
+8060BF50:     callc [btlevtcmd_StatusWindowOnOff battle_event_cmd.o] 0
+8060BF5C:     callc [evt_btl_camera_set_prilimit battle_camera.o] 1
+8060BF68:     callc [evt_btl_camera_set_mode battle_camera.o] 1 3
+8060BF78:     callc [btlevtcmd_GetPos battle_event_cmd.o] -2 LW(0) LW(1) LW(2)
+8060BF90:     subi LW(0) 20
+8060BF9C:     callc [evt_btl_camera_set_moveto battle_camera.o] 1 LW(0) 160 600 LW(0) 110 -100 20 11
+8060BFC8:     wait_frames 20
+8060BFD0:     callc [evt_msg_print evt_msg.o] 2 ["stg2_mri_e24_12"] 0 -2
+8060BFE8:     callc [evt_btl_camera_set_prilimit battle_camera.o] 0
+8060BFF4:     callc [evt_btl_camera_set_mode battle_camera.o] 0 0
+8060C004:     callc [btlevtcmd_StatusWindowOnOff battle_event_cmd.o] 1
+8060C010:     wait_ms 500
+8060C018:   endif
+8060C01C:   callc [btlevtcmd_SetUnitWork battle_event_cmd.o] -2 0 1
+8060C030:   callc [btlevtcmd_SetUnitWork battle_event_cmd.o] -2 2 1
+8060C044:   callc [btlevtcmd_SetUnitWork battle_event_cmd.o] -2 1 2
+8060C058:   callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_BOSS_MBTN_PUNCH_ACTIVE1"] [F1194D80] 0 LW(15)
+8060C074:   callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 1 ["MGN_A1_1"]
+8060C088:   wait_ms 600
+8060C090:   callc [evt_snd_sfxoff evt_snd.o] LW(15)
+8060C09C:   wait_ms 200
+8060C0A4:   callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_BOSS_MBTN_PUNCH_STOP1"] [F1194D80] 0 LW(15)
+8060C0C0:   callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 1 ["MGN_A1_2"]
+8060C0D4:   wait_ms 500
+8060C0DC:   callc [evt_snd_sfxoff evt_snd.o] LW(15)
+8060C0E8:   wait_ms 100
+8060C0F0:   callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 1 ["MGN_A1_3"]
+8060C104:   wait_ms 100
+8060C10C:   callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_BOSS_MBTN_PUNCH_IGNITE1"] [F1194D80] 0 [F1194D80]
+8060C128:   callc [evt_btl_camera_shake_w battle_camera.o] 0 3 0 20 0
+8060C144:   wait_ms 100
+8060C14C:   callc [btlevtcmd_SpawnUnit battle_event_cmd.o] LW(3) [entry_rocket_punch unit_boss_magnum_battender.o] 0
+8060C160:   callc [btlevtcmd_SetUnitWork battle_event_cmd.o] LW(3) 0 0
+8060C174:   callc [btlevtcmd_SetUnitWork battle_event_cmd.o] LW(3) 1 1
+8060C188:   callc [btlevtcmd_SetUnitWork battle_event_cmd.o] -2 3 LW(3)
+8060C19C:   callc [btlevtcmd_AnimeChangePoseType battle_event_cmd.o] LW(3) 1 69
+8060C1B0:   callc [btlevtcmd_SpawnUnit battle_event_cmd.o] LW(4) [entry_rocket_punch unit_boss_magnum_battender.o] 0
+8060C1C4:   callc [btlevtcmd_SetUnitWork battle_event_cmd.o] LW(4) 0 1
+8060C1D8:   callc [btlevtcmd_SetUnitWork battle_event_cmd.o] LW(4) 1 1
+8060C1EC:   callc [btlevtcmd_SetUnitWork battle_event_cmd.o] -2 4 LW(4)
+8060C200:   callc [btlevtcmd_AnimeChangePoseType battle_event_cmd.o] LW(4) 1 69
+8060C214:   callc [btlevtcmd_AnimeSetPoseTable battle_event_cmd.o] -2 1 [pose_table_no_arm unit_boss_magnum_battender.o]
+8060C228:   callc [btlevtcmd_AnimeChangePoseType battle_event_cmd.o] -2 1 69
+8060C23C:   wait_ms 1500
+8060C244:   return
+8060C248:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [shake_attack_event unit_boss_magnum_battender.o] AT 8060BA20 ---
+8060BA20:   callc [btlevtcmd_GetEnemyBelong battle_event_cmd.o] -2 LW(0)
+8060BA30:   callc [btlevtcmd_SamplingEnemy battle_event_cmd.o] -2 LW(0) [weapon_batten_shake_attack unit_boss_magnum_battender.o]
+8060BA44:   callc [btlevtcmd_ChoiceSamplingEnemy battle_event_cmd.o] [weapon_batten_shake_attack unit_boss_magnum_battender.o] LW(3) LW(4)
+8060BA58:   if_int_eq LW(3) -1
+8060BA64:     callc [btlevtcmd_CheckToken battle_event_cmd.o] -2 16 LW(0)
+8060BA78:     if_int_ne LW(0) 0
+8060BA84:       callss [subsetevt_confuse_flustered battle_event_subset.o]
+8060BA8C:     endif
+8060BA90:     return
+8060BA94:   endif
+8060BA98:   callc [btlevtcmd_WeaponAftereffect battle_event_cmd.o] [weapon_batten_shake_attack unit_boss_magnum_battender.o]
+8060BAA4:   callc [btlevtcmd_AttackDeclare battle_event_cmd.o] -2 LW(3) LW(4)
+8060BAB8:   callc [btlevtcmd_WaitGuardMove battle_event_cmd.o]
+8060BAC0:   callc [btlevtcmd_PayWeaponCost battle_event_cmd.o] -2 [weapon_batten_shake_attack unit_boss_magnum_battender.o]
+8060BAD0:   callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 1 ["MGN_A3_3"]
+8060BAE4:   wait_ms 900
+8060BAEC:   callc [btlevtcmd_CheckActStatus battle_event_cmd.o] -3 LW(0)
+8060BAFC:   if_int_ne LW(0) 0
+8060BB08:     callc [btlevtcmd_CheckStatus battle_event_cmd.o] -3 18 LW(0)
+8060BB1C:     if_int_eq LW(0) 0
+8060BB28:       callc [btlevtcmd_StopWaitEvent battle_event_cmd.o] -3
+8060BB34:       callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -3 1 ["M_I_O"]
+8060BB48:     endif
+8060BB4C:   endif
+8060BB50:   callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_BOSS_MBTN_QUAKE1"] [F1194D80] 0 [F1194D80]
+8060BB6C:   callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_BOSS_MBTN_CAILING1"] [F1194D80] 0 LW(15)
+8060BB88:   callc [evt_btl_camera_shake_h battle_camera.o] 0 7 0 30 0
+8060BBA4:   callc [eff_hokori unit_boss_magnum_battender.o] 0 250 0 80
+8060BBBC:   wait_frames 30
+8060BBC4:   callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 1 ["MGN_A3_4"]
+8060BBD8:   begin_child_thread
+8060BBDC:     wait_frames 20
+8060BBE4:     callc [eff_hokori unit_boss_magnum_battender.o] 100 250 0 80
+8060BBFC:     wait_frames 20
+8060BC04:     callc [eff_hokori unit_boss_magnum_battender.o] -100 250 0 80
+8060BC1C:     wait_frames 20
+8060BC24:     callc [eff_hokori unit_boss_magnum_battender.o] 50 250 0 80
+8060BC3C:     wait_frames 20
+8060BC44:     callc [eff_hokori unit_boss_magnum_battender.o] -100 250 0 80
+8060BC5C:     wait_frames 20
+8060BC64:     callc [evt_snd_sfxoff evt_snd.o] LW(15)
+8060BC70:   end_child_thread
+8060BC74:   begin_child_thread
+8060BC78:     setff LW(0) 0.00
+8060BC84:     loop 12
+8060BC8C:       wait_frames 10
+8060BC94:       addf LW(0) 0.70
+8060BCA0:       callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_BOSS_MBTN_QUAKE1"] [F1194D80] 0 [F1194D80]
+8060BCBC:       callc [evt_btl_camera_shake_h battle_camera.o] 0 LW(0) 0 10 0
+8060BCD8:     end_loop
+8060BCDC:     callc [evt_btl_camera_shake_h battle_camera.o] 0 6 0 60 0
+8060BCF8:   end_child_thread
+8060BCFC:   wait_frames 120
+8060BD04:   callc [btlevtcmd_AnimeChangePoseType battle_event_cmd.o] -2 1 69
+8060BD18:   callc [btlevtcmd_GetSelectEnemy battle_event_cmd.o] LW(3) LW(4)
+8060BD28:   setii LW(6) 0
+8060BD34: 10:
+8060BD3C:   if_int_eq LW(3) -1
+8060BD48:     goto 95
+8060BD50:   endif
+8060BD54:   callc [btlevtcmd_PreCheckDamage battle_event_cmd.o] -2 LW(3) LW(4) [weapon_batten_shake_attack unit_boss_magnum_battender.o] 256 LW(5)
+8060BD74:   switchi LW(5)
+8060BD7C:     case_int_eq_any 4
+8060BD84:       goto 90
+8060BD8C:       end_multi_case
+8060BD90:     case_int_eq 3
+8060BD98:       callc [btlevtcmd_StartAvoid battle_event_cmd.o] LW(3) 38
+8060BDA8:       goto 90
+8060BDB0:       end_multi_case
+8060BDB4:     case_int_eq 6
+8060BDBC:       callc [btlevtcmd_StartAvoid battle_event_cmd.o] LW(3) 39
+8060BDCC:       goto 90
+8060BDD4:     case_int_eq 2
+8060BDDC:       callc [btlevtcmd_StartAvoid battle_event_cmd.o] LW(3) 40
+8060BDEC:       goto 90
+8060BDF4:     case_int_eq 1
+8060BDFC:       goto 91
+8060BE04:       end_multi_case
+8060BE08:     case_default
+8060BE0C:       goto 98
+8060BE14:       end_multi_case
+8060BE18:   end_switch
+8060BE1C: 90:
+8060BE24:   callc [btlevtcmd_CheckActStatus battle_event_cmd.o] -3 LW(0)
+8060BE34:   if_int_ne LW(0) 0
+8060BE40:     callc [btlevtcmd_CheckStatus battle_event_cmd.o] -3 18 LW(0)
+8060BE54:     if_int_eq LW(0) 0
+8060BE60:       callc [btlevtcmd_StopWaitEvent battle_event_cmd.o] -3
+8060BE6C:       callc [btlevtcmd_AnimeChangePoseFromTable battle_event_cmd.o] -2 1
+8060BE7C:     endif
+8060BE80:   endif
+8060BE84:   goto 93
+8060BE8C: 91:
+8060BE94:   if_int_eq LW(6) 0
+8060BEA0:     callc [btlevtcmd_ResultACDefence battle_event_cmd.o] LW(3) [weapon_batten_shake_attack unit_boss_magnum_battender.o]
+8060BEB0:     setii LW(6) 1
+8060BEBC:   endif
+8060BEC0:   callc [btlevtcmd_CheckDamage battle_event_cmd.o] -2 LW(3) LW(4) [weapon_batten_shake_attack unit_boss_magnum_battender.o] 256 LW(5)
+8060BEE0:   goto 93
+8060BEE8: 93:
+8060BEF0:   callc [btlevtcmd_GetSelectNextEnemy battle_event_cmd.o] LW(3) LW(4)
+8060BF00:   goto 10
+8060BF08: 95:
+8060BF10:   callc [evt_btl_camera_set_mode battle_camera.o] 0 0
+8060BF20:   wait_ms 1000
+8060BF28:   return
+8060BF2C:   end

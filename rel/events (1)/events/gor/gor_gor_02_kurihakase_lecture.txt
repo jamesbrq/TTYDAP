@@ -1,0 +1,79 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [kurihakase_lecture gor_02.o] AT 80603E9C ---
+80603E9C:   callc [evt_mario_get_pos evt_mario.o] 0 LW(0) LW(1) LW(2)
+80603EB4:   setff LW(3) LW(0)
+80603EC0:   setff LW(4) LW(1)
+80603ECC:   setff LW(5) LW(2)
+80603ED8:   loop 0
+80603EE0:     callc [evt_mario_get_pos evt_mario.o] 0 LW(0) LW(1) LW(2)
+80603EF8:     callc [evt_sub_check_intersect evt_sub.o] LW(0) LW(2) LW(3) LW(5) -300.00 250.00 -200.00 250.00 LW(6)
+80603F24:     if_int_eq LW(6) 1
+80603F30:       loop_break
+80603F34:     endif
+80603F38:     wait_frames 1
+80603F40:     setff LW(3) LW(0)
+80603F4C:     setff LW(5) LW(1)
+80603F58:   end_loop
+80603F5C:   callc [evt_mario_key_onoff evt_mario.o] 0
+80603F68:   callc [evt_party_stop evt_party.o] 0
+80603F74:   setii GF(0) 1
+80603F80:   begin_thread
+80603F84:     callc [evt_mario_get_pos evt_mario.o] 0 LW(0) LW(1) LW(2)
+80603F9C:     callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_VOICE_MARIO_FIND1"] LW(0) LW(1) LW(2) 0
+80603FB8:     callc [evt_eff_fukidashi evt_eff.o] 0 [zero_gor_00018790 gor_02.o] 0 0 0 0 0 0 0 0 60
+80603FEC:     callc [evt_mario_set_dir evt_mario.o] 90 200 0
+80604000:     wait_ms 800
+80604008:     setii GF(0) 0
+80604014:   end_thread
+80604018:   begin_thread
+8060401C:     callc [evt_party_set_dir evt_party.o] 0 90 200
+80604030:   end_thread
+80604034:   callc [evt_msg_print evt_msg.o] 0 ["mac_0_084_01"] 0 ["クリハカセ"]
+8060404C:   wait_until GF(0)
+80604054:   callc [evt_cam3d_evt_set evt_cam.o] -245 100 639 -245 40 294 500 11
+8060407C:   begin_thread
+80604080:     callc [evt_party_move_pos2 evt_party.o] 0 -290 280 120.00
+80604098:     callc [evt_party_set_dir evt_party.o] 0 90 200
+806040AC:   end_thread
+806040B0:   callc [evt_mario_mov_pos2 evt_mario.o] -270 305 120.00
+806040C4:   callc [evt_mario_set_dir evt_mario.o] 90 200 0
+806040D8:   callc [evt_msg_print evt_msg.o] 0 ["mac_0_084_02"] 0 ["クリハカセ"]
+806040F0:   callc [evt_msg_select evt_msg.o] 0 ["mac_0_084_02_yesno"]
+80604100:   if_int_eq LW(0) 1
+8060410C:     goto 50
+80604114:   endif
+80604118:   callc [evt_msg_print_add evt_msg.o] 0 ["mac_0_084_03"]
+80604128:   callc [evt_msg_select evt_msg.o] 0 ["mac_0_084_03_yesno"]
+80604138:   if_int_eq LW(0) 0
+80604144:     goto 50
+8060414C:   endif
+80604150:   callc [evt_msg_print_add evt_msg.o] 0 ["mac_0_084_04"]
+80604160:   goto 100
+80604168: 50:
+80604170:   callc [evt_msg_print_add evt_msg.o] 0 ["mac_0_084_05"]
+80604180:   callc [evt_party_get_pos evt_party.o] 0 LW(0) LW(1) LW(2)
+80604198:   callc [evt_npc_flag_onoff evt_npc.o] 1 ["クリスチーヌ"] 33408
+806041AC:   callc [evt_party_get_pos evt_party.o] 0 LW(0) LW(1) LW(2)
+806041C4:   callc [evt_npc_set_position evt_npc.o] ["クリスチーヌ"] LW(0) LW(1) LW(2)
+806041DC:   wait_frames 1
+806041E4:   callc [evt_npc_flag_onoff evt_npc.o] 0 ["クリスチーヌ"] 128
+806041F8:   callc [evt_mario_kill_party evt_mario.o] 0
+80604204:   callc [evt_npc_jump_position_nohit evt_npc.o] ["クリスチーヌ"] LW(0) LW(1) LW(2) 200 20
+80604224:   callc [evt_npc_flag_onoff evt_npc.o] 0 ["クリスチーヌ"] 32768
+80604238:   callc [evt_msg_print evt_msg.o] 0 ["mac_0_084_06"] 0 ["クリスチーヌ"]
+80604250:   callc [evt_npc_set_battle_info evt_npc.o] ["クリハカセ"] 3
+80604260:   callc [evt_npc_battle_start evt_npc.o] ["クリハカセ"]
+8060426C:   callc [evt_npc_wait_battle_end evt_npc.o]
+80604274:   callc [evt_npc_flag_onoff evt_npc.o] 0 ["クリスチーヌ"] 32768
+80604288:   callc [evt_mario_set_prev_party_pos evt_mario.o] 0 LW(0) LW(1) LW(2)
+806042A0:   callc [evt_npc_set_position evt_npc.o] ["クリスチーヌ"] 0 -1000 0
+806042B8:   callc [evt_msg_print evt_msg.o] 0 ["mac_0_084_07"] 0 ["クリハカセ"]
+806042D0: 100:
+806042D8:   setii GSW(0) 11
+806042E4:   callc [evt_cam3d_evt_off evt_cam.o] 500 11
+806042F4:   callc [evt_party_run evt_party.o] 0
+80604300:   callc [evt_mario_key_onoff evt_mario.o] 1
+8060430C:   return
+80604310:   end

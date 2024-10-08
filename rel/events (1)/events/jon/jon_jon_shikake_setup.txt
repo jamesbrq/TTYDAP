@@ -1,0 +1,47 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [shikake_setup jon.o] AT 80C8989C ---
+80C8989C:   if_int_eq GSW(1321) 99
+80C898A8:     return
+80C898AC:   endif
+80C898B0:   callc [evt_npc_check evt_npc.o] ["敵"] LW(0)
+80C898C0:   if_int_ne LW(0) 1
+80C898CC:     return
+80C898D0:   endif
+80C898D4:   callc [evt_sub_random evt_sub.o] 1000 LW(0)
+80C898E4:   if_int_gt LW(0) 200
+80C898F0:     return
+80C898F4:   endif
+80C898F8:   begin_thread
+80C898FC:     callc [evt_mario_key_onoff evt_mario.o] 0
+80C89908:     callc [evt_seq_wait evt_seq.o] 2
+80C89914:     callc [evt_bero_exec_wait evt_bero.o] 65536
+80C89920:     callc [evt_npc_stop_for_event evt_npc.o]
+80C89928:     callc [evt_mario_wait_landon evt_mario.o]
+80C89930:     wait_ms 100
+80C89938:     callc [evt_fade_entry evt_fade.o] 17 150 0 0 0
+80C89954:     callc [evt_fade_end_wait evt_fade.o]
+80C8995C:     callc [evt_fade_entry evt_fade.o] 16 150 0 0 0
+80C89978:     callc [evt_fade_end_wait evt_fade.o]
+80C89980:     wait_ms 200
+80C89988:     callc [evt_sub_random evt_sub.o] 1000 LW(0)
+80C89998:     switchi LW(0)
+80C899A0:       case_int_lt 200
+80C899A8:         callc [evt_msg_print evt_msg.o] 0 ["msg_jon_trick_1"] 0 0
+80C899C0:         callc [shikakeFlag jon.o] 0
+80C899CC:       case_int_lt 400
+80C899D4:         callc [evt_msg_print evt_msg.o] 0 ["msg_jon_trick_2"] 0 0
+80C899EC:         callc [shikakeFlag jon.o] 1
+80C899F8:       case_int_lt 600
+80C89A00:         callc [evt_msg_print evt_msg.o] 0 ["msg_jon_trick_3"] 0 0
+80C89A18:         callc [shikakeFlag jon.o] 2
+80C89A24:       case_default
+80C89A28:         callc [evt_msg_print evt_msg.o] 0 ["msg_jon_trick_4"] 0 0
+80C89A40:         callc [shikakeFlag jon.o] 3
+80C89A4C:     end_switch
+80C89A50:     callc [evt_mario_key_onoff evt_mario.o] 1
+80C89A5C:     callc [evt_npc_start_for_event evt_npc.o]
+80C89A64:   end_thread
+80C89A68:   return
+80C89A6C:   end

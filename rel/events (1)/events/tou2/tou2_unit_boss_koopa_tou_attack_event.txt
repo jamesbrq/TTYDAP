@@ -1,0 +1,420 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [attack_event unit_boss_koopa_tou.o] AT 8061E0D0 ---
+8061E0D0:   callc [btlevtcmd_EnemyItemUseCheck battle_event_cmd.o] -2 LW(0)
+8061E0E0:   if_int_ne LW(0) 0
+8061E0EC:     callss LW(0)
+8061E0F4:     callc [btlevtcmd_StartWaitEvent battle_event_cmd.o] -2
+8061E100:     return
+8061E104:   endif
+8061E108:   callc [btlevtcmd_GetUnitWork battle_event_cmd.o] -2 4 LW(0)
+8061E11C:   switchi LW(0)
+8061E124:     case_int_eq 0
+8061E12C:       setii LW(9) [weapon_koopa_fire_attack unit_boss_koopa_tou.o]
+8061E138:       callss [fire_attack_event unit_boss_koopa_tou.o]
+8061E140:       callc [btlevtcmd_SetUnitWork battle_event_cmd.o] -2 4 1
+8061E154:     case_int_eq 1
+8061E15C:       setii LW(9) [weapon_koopa_bite_attack unit_boss_koopa_tou.o]
+8061E168:       callss [bite_attack_event unit_boss_koopa_tou.o]
+8061E170:       callc [btlevtcmd_SetUnitWork battle_event_cmd.o] -2 4 2
+8061E184:     case_int_eq 2
+8061E18C:       setii LW(9) [weapon_koopa_hip_attack unit_boss_koopa_tou.o]
+8061E198:       callss [hip_attack_event unit_boss_koopa_tou.o]
+8061E1A0:       callc [btlevtcmd_SetUnitWork battle_event_cmd.o] -2 4 3
+8061E1B4:     case_default
+8061E1B8:       callc [btlevtcmd_DrawLots battle_event_cmd.o] LW(0) 4 30 30 0 30
+8061E1D8:       switchi LW(0)
+8061E1E0:         case_int_eq 0
+8061E1E8:           setii LW(9) [weapon_koopa_hip_attack unit_boss_koopa_tou.o]
+8061E1F4:           callss [hip_attack_event unit_boss_koopa_tou.o]
+8061E1FC:         case_int_eq 1
+8061E204:           setii LW(9) [weapon_koopa_bite_attack unit_boss_koopa_tou.o]
+8061E210:           callss [bite_attack_event unit_boss_koopa_tou.o]
+8061E218:         case_int_eq 2
+8061E220:           setii LW(9) [weapon_koopa_critical_bite_attack unit_boss_koopa_tou.o]
+8061E22C:           callss [critical_bite_attack_event unit_boss_koopa_tou.o]
+8061E234:         case_int_eq 3
+8061E23C:           setii LW(9) [weapon_koopa_fire_attack unit_boss_koopa_tou.o]
+8061E248:           callss [fire_attack_event unit_boss_koopa_tou.o]
+8061E250:       end_switch
+8061E254:   end_switch
+8061E258: 90:
+8061E260:   callc [btlevtcmd_ResetFaceDirection battle_event_cmd.o] -2
+8061E26C:   callc [btlevtcmd_StartWaitEvent battle_event_cmd.o] -2
+8061E278:   return
+8061E27C:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [fire_attack_event unit_boss_koopa_tou.o] AT 8061F124 ---
+8061F124:   callc [btlevtcmd_GetEnemyBelong battle_event_cmd.o] -2 LW(0)
+8061F134:   callc [btlevtcmd_SamplingEnemy battle_event_cmd.o] -2 LW(0) LW(9)
+8061F148:   callc [btlevtcmd_ChoiceSamplingEnemy battle_event_cmd.o] LW(9) LW(3) LW(4)
+8061F15C:   if_int_eq LW(3) -1
+8061F168:     callc [btlevtcmd_CheckToken battle_event_cmd.o] -2 16 LW(0)
+8061F17C:     if_int_ne LW(0) 0
+8061F188:       callss [subsetevt_confuse_flustered battle_event_subset.o]
+8061F190:     endif
+8061F194:     return
+8061F198:   endif
+8061F19C:   callc [btlevtcmd_WeaponAftereffect battle_event_cmd.o] LW(9)
+8061F1A8:   callc [btlevtcmd_AttackDeclareAll battle_event_cmd.o] -2
+8061F1B4:   callc [btlevtcmd_WaitGuardMove battle_event_cmd.o]
+8061F1BC:   callc [btlevtcmd_PayWeaponCost battle_event_cmd.o] -2 LW(9)
+8061F1CC:   callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 1 ["KPA_R_1"]
+8061F1E0:   callc [btlevtcmd_GetPos battle_event_cmd.o] LW(3) LW(0) LW(1) LW(2)
+8061F1F8:   callc [btlevtcmd_FaceDirectionAdd battle_event_cmd.o] LW(3) LW(0) 120
+8061F20C:   callc [evt_btl_camera_set_mode battle_camera.o] 0 8
+8061F21C:   callc [evt_btl_camera_set_homing_unit battle_camera.o] 0 -2 LW(3)
+8061F230:   callc [evt_btl_camera_set_moveSpeedLv battle_camera.o] 0 2
+8061F240:   callc [evt_btl_camera_set_zoom battle_camera.o] 0 200
+8061F250:   callc [btlevtcmd_CalculateFaceDirection battle_event_cmd.o] -2 -1 LW(0) LW(2) 1 LW(15)
+8061F270:   callc [btlevtcmd_ChangeFaceDirection battle_event_cmd.o] -2 LW(15)
+8061F280:   callc [btlevtcmd_SetMoveSpeed battle_event_cmd.o] -2 4.00
+8061F290:   callc [btlevtcmd_MovePosition battle_event_cmd.o] -2 LW(0) 0 LW(2) 0 -1 1
+8061F2B4:   callc [btlevtcmd_CalculateFaceDirection battle_event_cmd.o] -2 -1 LW(3) LW(4) 16 LW(15)
+8061F2D4:   callc [btlevtcmd_ChangeFaceDirection battle_event_cmd.o] -2 LW(15)
+8061F2E4:   wait_ms 170
+8061F2EC:   callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 1 ["KPA_A_1A"]
+8061F300:   wait_ms 300
+8061F308:   callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_VOICE_KOOPA_FIRE1"] [F1194D80] 0 [F1194D80]
+8061F324:   callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_BOSS_KOOPA_FIRE_BREATH1"] [F1194D80] 0 LW(15)
+8061F340:   begin_thread
+8061F344:     wait_ms 1500
+8061F34C:     callc [evt_snd_sfxoff evt_snd.o] LW(15)
+8061F358:   end_thread
+8061F35C:   callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 1 ["KPA_A_1B"]
+8061F370:   wait_ms 300
+8061F378:   callc [btlevtcmd_GetPos battle_event_cmd.o] -2 LW(0) LW(1) LW(2)
+8061F390:   callc [btlevtcmd_GetStatusMg battle_event_cmd.o] -2 LW(5)
+8061F3A0:   setff LW(6) 60.00
+8061F3AC:   mulf LW(6) LW(5)
+8061F3B8:   callc [btlevtcmd_FaceDirectionAdd battle_event_cmd.o] -2 LW(0) LW(6)
+8061F3CC:   setff LW(6) 22.50
+8061F3D8:   mulf LW(6) LW(5)
+8061F3E4:   addf LW(1) LW(6)
+8061F3F0:   subi LW(2) 5
+8061F3FC:   mulf LW(5) 3.50
+8061F408:   callc [evt_eff evt_eff.o] [zero_tou2_000110bc unit_boss_koopa_tou.o] ["gonbaba_breath"] 7 LW(0) LW(1) LW(2) LW(5) 90 0 0 0 0 0 0
+8061F448:   callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 1 ["KPA_A_1C"]
+8061F45C:   wait_ms 300
+8061F464:   callc [btlevtcmd_GetSelectEnemy battle_event_cmd.o] LW(3) LW(4)
+8061F474:   setii LW(10) 0
+8061F480: 10:
+8061F488:   callc [btlevtcmd_PreCheckDamage battle_event_cmd.o] -2 LW(3) LW(4) LW(9) 256 LW(5)
+8061F4A8:   switchi LW(5)
+8061F4B0:     case_int_eq_any 4
+8061F4B8:       goto 90
+8061F4C0:       end_multi_case
+8061F4C4:     case_int_eq 3
+8061F4CC:       callc [btlevtcmd_StartAvoid battle_event_cmd.o] LW(3) 38
+8061F4DC:       goto 90
+8061F4E4:       end_multi_case
+8061F4E8:     case_int_eq 6
+8061F4F0:       callc [btlevtcmd_StartAvoid battle_event_cmd.o] LW(3) 39
+8061F500:       goto 90
+8061F508:     case_int_eq 2
+8061F510:       callc [btlevtcmd_StartAvoid battle_event_cmd.o] LW(3) 40
+8061F520:       goto 90
+8061F528:     case_int_eq 1
+8061F530:       goto 91
+8061F538:       end_multi_case
+8061F53C:     case_default
+8061F540:       goto 98
+8061F548:       end_multi_case
+8061F54C:   end_switch
+8061F550: 90:
+8061F558:   goto 97
+8061F560: 91:
+8061F568:   if_int_eq LW(10) 0
+8061F574:     callc [btlevtcmd_ResultACDefence battle_event_cmd.o] LW(3) LW(9)
+8061F584:   endif
+8061F588:   callc [btlevtcmd_CheckDamage battle_event_cmd.o] -2 LW(3) LW(4) LW(9) 256 LW(5)
+8061F5A8: 97:
+8061F5B0:   callc [btlevtcmd_GetSelectNextEnemy battle_event_cmd.o] LW(3) LW(4)
+8061F5C0:   if_int_ne LW(3) -1
+8061F5CC:     addi LW(10) 1
+8061F5D8:     goto 10
+8061F5E0:   endif
+8061F5E4: 98:
+8061F5EC:   wait_ms 1200
+8061F5F4:   callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 1 ["KPA_A_1D"]
+8061F608:   callc [evt_btl_camera_set_mode battle_camera.o] 0 0
+8061F618:   wait_ms 250
+8061F620:   callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 1 ["KPA_R_1"]
+8061F634:   callc [btlevtcmd_GetHomePos battle_event_cmd.o] -2 LW(0) LW(1) LW(2)
+8061F64C:   callc [btlevtcmd_SetMoveSpeed battle_event_cmd.o] -2 4.00
+8061F65C:   callc [btlevtcmd_MovePosition battle_event_cmd.o] -2 LW(0) LW(1) LW(2) 0 -1 0
+8061F680:   return
+8061F684:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [bite_attack_event unit_boss_koopa_tou.o] AT 8061E910 ---
+8061E910:   callc [btlevtcmd_GetEnemyBelong battle_event_cmd.o] -2 LW(0)
+8061E920:   callc [btlevtcmd_SamplingEnemy battle_event_cmd.o] -2 LW(0) LW(9)
+8061E934:   callc [btlevtcmd_ChoiceSamplingEnemy battle_event_cmd.o] LW(9) LW(3) LW(4)
+8061E948:   if_int_eq LW(3) -1
+8061E954:     callc [btlevtcmd_CheckToken battle_event_cmd.o] -2 16 LW(0)
+8061E968:     if_int_ne LW(0) 0
+8061E974:       callss [subsetevt_confuse_flustered battle_event_subset.o]
+8061E97C:     endif
+8061E980:     return
+8061E984:   endif
+8061E988:   callc [btlevtcmd_WeaponAftereffect battle_event_cmd.o] LW(9)
+8061E994:   callc [btlevtcmd_AttackDeclare battle_event_cmd.o] -2 LW(3) LW(4)
+8061E9A8:   callc [btlevtcmd_WaitGuardMove battle_event_cmd.o]
+8061E9B0:   callc [btlevtcmd_PayWeaponCost battle_event_cmd.o] -2 LW(9)
+8061E9C0:   callc [evt_btl_camera_set_mode battle_camera.o] 0 8
+8061E9D0:   callc [evt_btl_camera_set_homing_unit battle_camera.o] 0 -2 LW(3)
+8061E9E4:   callc [evt_btl_camera_set_moveSpeedLv battle_camera.o] 0 2
+8061E9F4:   callc [evt_btl_camera_set_zoom battle_camera.o] 0 200
+8061EA04:   callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 1 ["KPA_R_1"]
+8061EA18:   callc [btlevtcmd_GetPos battle_event_cmd.o] LW(3) LW(0) LW(1) LW(2)
+8061EA30:   callc [btlevtcmd_FaceDirectionAdd battle_event_cmd.o] LW(3) LW(0) 65
+8061EA44:   callc [btlevtcmd_CalculateFaceDirection battle_event_cmd.o] -2 -1 LW(0) LW(2) 1 LW(15)
+8061EA64:   callc [btlevtcmd_ChangeFaceDirection battle_event_cmd.o] -2 LW(15)
+8061EA74:   callc [btlevtcmd_SetMoveSpeed battle_event_cmd.o] -2 4.00
+8061EA84:   callc [btlevtcmd_MovePosition battle_event_cmd.o] -2 LW(0) 0 LW(2) 0 -1 1
+8061EAA8:   callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 1 ["KPA_A_3A"]
+8061EABC:   callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_BOSS_KOOPA_BITE1"] [F1194D80] 0 [F1194D80]
+8061EAD8:   callc [btlevtcmd_CalculateFaceDirection battle_event_cmd.o] -2 -1 LW(3) LW(4) 16 LW(15)
+8061EAF8:   callc [btlevtcmd_ChangeFaceDirection battle_event_cmd.o] -2 LW(15)
+8061EB08:   wait_ms 170
+8061EB10:   callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 1 ["KPA_A_3B"]
+8061EB24:   wait_ms 150
+8061EB2C:   callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_BOSS_KOOPA_BITE2"] [F1194D80] 0 [F1194D80]
+8061EB48:   callc [btlevtcmd_PreCheckDamage battle_event_cmd.o] -2 LW(3) LW(4) LW(9) 256 LW(5)
+8061EB68:   switchi LW(5)
+8061EB70:     case_int_eq_any 4
+8061EB78:       goto 90
+8061EB80:       end_multi_case
+8061EB84:     case_int_eq 3
+8061EB8C:       callc [btlevtcmd_StartAvoid battle_event_cmd.o] LW(3) 38
+8061EB9C:       goto 90
+8061EBA4:       end_multi_case
+8061EBA8:     case_int_eq 6
+8061EBB0:       callc [btlevtcmd_StartAvoid battle_event_cmd.o] LW(3) 39
+8061EBC0:       goto 90
+8061EBC8:     case_int_eq 2
+8061EBD0:       callc [btlevtcmd_StartAvoid battle_event_cmd.o] LW(3) 40
+8061EBE0:       goto 90
+8061EBE8:     case_int_eq 1
+8061EBF0:       goto 91
+8061EBF8:       end_multi_case
+8061EBFC:     case_default
+8061EC00:       goto 98
+8061EC08:       end_multi_case
+8061EC0C:   end_switch
+8061EC10: 90:
+8061EC18:   wait_ms 100
+8061EC20:   callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 1 ["KPA_A_3C"]
+8061EC34:   wait_ms 150
+8061EC3C:   goto 98
+8061EC44: 91:
+8061EC4C:   wait_ms 100
+8061EC54:   callc [btlevtcmd_ResultACDefence battle_event_cmd.o] LW(3) LW(9)
+8061EC64:   callc [btlevtcmd_CheckDamage battle_event_cmd.o] -2 LW(3) LW(4) LW(9) 256 LW(5)
+8061EC84:   callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 1 ["KPA_A_3C"]
+8061EC98:   wait_ms 150
+8061ECA0: 98:
+8061ECA8:   callc [evt_btl_camera_set_mode battle_camera.o] 0 0
+8061ECB8:   wait_ms 250
+8061ECC0:   callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 1 ["KPA_R_1"]
+8061ECD4:   callc [btlevtcmd_GetHomePos battle_event_cmd.o] -2 LW(0) LW(1) LW(2)
+8061ECEC:   callc [btlevtcmd_SetMoveSpeed battle_event_cmd.o] -2 4.00
+8061ECFC:   callc [btlevtcmd_MovePosition battle_event_cmd.o] -2 LW(0) LW(1) LW(2) 0 -1 0
+8061ED20:   callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 1 ["KPA_S_1"]
+8061ED34:   return
+8061ED38:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [hip_attack_event unit_boss_koopa_tou.o] AT 8061E280 ---
+8061E280:   callc [btlevtcmd_GetEnemyBelong battle_event_cmd.o] -2 LW(0)
+8061E290:   callc [btlevtcmd_SamplingEnemy battle_event_cmd.o] -2 LW(0) LW(9)
+8061E2A4:   callc [btlevtcmd_ChoiceSamplingEnemy battle_event_cmd.o] LW(9) LW(3) LW(4)
+8061E2B8:   if_int_eq LW(3) -1
+8061E2C4:     callc [btlevtcmd_CheckToken battle_event_cmd.o] -2 16 LW(0)
+8061E2D8:     if_int_ne LW(0) 0
+8061E2E4:       callss [subsetevt_confuse_flustered battle_event_subset.o]
+8061E2EC:     endif
+8061E2F0:     return
+8061E2F4:   endif
+8061E2F8:   callc [btlevtcmd_WeaponAftereffect battle_event_cmd.o] LW(9)
+8061E304:   callc [btlevtcmd_AttackDeclare battle_event_cmd.o] -2 LW(3) LW(4)
+8061E318:   callc [btlevtcmd_WaitGuardMove battle_event_cmd.o]
+8061E320:   callc [btlevtcmd_PayWeaponCost battle_event_cmd.o] -2 LW(9)
+8061E330:   callc [btlevtcmd_CalculateFaceDirection battle_event_cmd.o] -2 -1 LW(3) LW(4) 16 LW(15)
+8061E350:   callc [btlevtcmd_ChangeFaceDirection battle_event_cmd.o] -2 LW(15)
+8061E360:   callc [btlevtcmd_AnimeChangePoseType battle_event_cmd.o] -2 1 40
+8061E374:   callc [btlevtcmd_GetPos battle_event_cmd.o] -2 LW(0) LW(1) LW(2)
+8061E38C:   callc [btlevtcmd_FaceDirectionAdd battle_event_cmd.o] -2 LW(0) 40
+8061E3A0:   callc [btlevtcmd_SetMoveSpeed battle_event_cmd.o] -2 2.00
+8061E3B0:   callc [btlevtcmd_MovePosition battle_event_cmd.o] -2 LW(0) LW(1) LW(2) 0 -1 0
+8061E3D4:   callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_BOSS_KOOPA_JUMP1"] [F1194D80] 0 [F1194D80]
+8061E3F0:   callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 1 ["KPA_A_2A"]
+8061E404:   wait_ms 300
+8061E40C:   callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 1 ["KPA_A_2B"]
+8061E420:   begin_child_thread
+8061E424:     wait_frames 25
+8061E42C:     callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 1 ["KPA_A_2C"]
+8061E440:     wait_frames 15
+8061E448:     callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 1 ["KPA_A_2D"]
+8061E45C:   end_child_thread
+8061E460:   callc [btlevtcmd_SetFallAccel battle_event_cmd.o] -2 0.25
+8061E470:   callc [btlevtcmd_GetHitPos battle_event_cmd.o] LW(3) LW(4) LW(0) LW(1) LW(2)
+8061E48C:   subi LW(2) 20
+8061E498:   callc [btlevtcmd_JumpPosition battle_event_cmd.o] -2 LW(0) LW(1) LW(2) 50 -1
+8061E4B8:   callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_BOSS_KOOPA_HIP_ATTACK1"] [F1194D80] 0 [F1194D80]
+8061E4D4:   callc [btlevtcmd_PreCheckDamage battle_event_cmd.o] -2 LW(3) LW(4) LW(9) 256 LW(5)
+8061E4F4:   switchi LW(5)
+8061E4FC:     case_int_eq_any 4
+8061E504:       goto 90
+8061E50C:       end_multi_case
+8061E510:     case_int_eq 3
+8061E518:       callc [btlevtcmd_StartAvoid battle_event_cmd.o] LW(3) 38
+8061E528:       goto 90
+8061E530:       end_multi_case
+8061E534:     case_int_eq 6
+8061E53C:       callc [btlevtcmd_StartAvoid battle_event_cmd.o] LW(3) 39
+8061E54C:       goto 90
+8061E554:     case_int_eq 2
+8061E55C:       callc [btlevtcmd_StartAvoid battle_event_cmd.o] LW(3) 40
+8061E56C:       goto 90
+8061E574:     case_int_eq 1
+8061E57C:       goto 91
+8061E584:       end_multi_case
+8061E588:     case_default
+8061E58C:       goto 98
+8061E594:       end_multi_case
+8061E598:   end_switch
+8061E59C: 90:
+8061E5A4:   callc [btlevtcmd_JumpContinue battle_event_cmd.o] -2
+8061E5B0:   callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 1 ["KPA_A_2E"]
+8061E5C4:   wait_ms 500
+8061E5CC:   goto 98
+8061E5D4: 91:
+8061E5DC:   callc [btlevtcmd_ResultACDefence battle_event_cmd.o] LW(3) LW(9)
+8061E5EC:   callc [btlevtcmd_CheckDamage battle_event_cmd.o] -2 LW(3) LW(4) LW(9) 256 LW(5)
+8061E60C:   callc [evt_btl_camera_shake_h battle_camera.o] 0 3 0 50 13
+8061E628:   callc [btlevtcmd_JumpContinue battle_event_cmd.o] -2
+8061E634:   wait_ms 500
+8061E63C:   callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 1 ["KPA_A_2E"]
+8061E650:   wait_ms 300
+8061E658:   callc [btlevtcmd_GetResultACDefence battle_event_cmd.o] LW(7)
+8061E664:   if_int_le LW(7) 3
+8061E670:     setii LW(15) 0
+8061E67C:     callc [btlevtcmd_GetUnitKind battle_event_cmd.o] LW(3) LW(0)
+8061E68C:     switchi LW(0)
+8061E694:       case_int_eq 222
+8061E69C:         callc [mario_cannot_use_command unit_boss_koopa_tou.o] LW(15)
+8061E6A8:       case_int_range 224 230
+8061E6B4:         callc [party_cannot_use_command unit_boss_koopa_tou.o] LW(15) LW(3)
+8061E6C4:       case_default
+8061E6C8:         setii LW(0) -1
+8061E6D4:     end_switch
+8061E6D8:     if_int_ne LW(0) -1
+8061E6E4:       if_int_ne LW(15) 0
+8061E6F0:         begin_thread
+8061E6F4:           callc [btlevtcmd_GetPos battle_event_cmd.o] -2 LW(0) LW(1) LW(2)
+8061E70C:           callc [btlevtcmd_GetPos battle_event_cmd.o] -2 LW(5) LW(6) LW(7)
+8061E724:           callc [btlevtcmd_FaceDirectionSub battle_event_cmd.o] LW(3) LW(5) 60
+8061E738:           callc [btlevtcmd_TransStageFloorPosition battle_event_cmd.o] LW(5) LW(6) LW(7)
+8061E74C:           callc [_icon_jump_icon unit_boss_koopa_tou.o] LW(15) LW(0) LW(1) LW(2) LW(5) LW(6) LW(7) 0.50 30
+8061E778:           setii LW(0) LW(5)
+8061E784:           setii LW(1) LW(6)
+8061E790:           setii LW(2) LW(7)
+8061E79C:           callc [btlevtcmd_FaceDirectionSub battle_event_cmd.o] LW(3) LW(5) 40
+8061E7B0:           callc [_icon_jump_icon unit_boss_koopa_tou.o] LW(15) LW(0) LW(1) LW(2) LW(5) LW(6) LW(7) 0.50 20
+8061E7DC:           setii LW(0) LW(5)
+8061E7E8:           setii LW(1) LW(6)
+8061E7F4:           setii LW(2) LW(7)
+8061E800:           callc [btlevtcmd_FaceDirectionSub battle_event_cmd.o] LW(3) LW(5) 25
+8061E814:           callc [_icon_jump_icon unit_boss_koopa_tou.o] LW(15) LW(0) LW(1) LW(2) LW(5) LW(6) LW(7) 0.50 12
+8061E840:         end_thread
+8061E844:       endif
+8061E848:       begin_child_thread
+8061E84C:         callc [btlevtcmd_AnnounceMessage battle_message.o] 0 0 0 LW(0) 120
+8061E868:       end_child_thread
+8061E86C:     endif
+8061E870:   endif
+8061E874: 98:
+8061E87C:   callc [evt_btl_camera_set_mode battle_camera.o] 0 0
+8061E88C:   wait_ms 250
+8061E894:   callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 1 ["KPA_R_1"]
+8061E8A8:   callc [btlevtcmd_GetHomePos battle_event_cmd.o] -2 LW(0) LW(1) LW(2)
+8061E8C0:   callc [btlevtcmd_SetMoveSpeed battle_event_cmd.o] -2 4.00
+8061E8D0:   callc [btlevtcmd_MovePosition battle_event_cmd.o] -2 LW(0) LW(1) LW(2) 0 -1 0
+8061E8F4:   callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 1 ["KPA_S_1"]
+8061E908:   return
+8061E90C:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [critical_bite_attack_event unit_boss_koopa_tou.o] AT 8061ED3C ---
+8061ED3C:   callc [btlevtcmd_GetEnemyBelong battle_event_cmd.o] -2 LW(0)
+8061ED4C:   callc [btlevtcmd_SamplingEnemy battle_event_cmd.o] -2 LW(0) LW(9)
+8061ED60:   callc [btlevtcmd_ChoiceSamplingEnemy battle_event_cmd.o] LW(9) LW(3) LW(4)
+8061ED74:   if_int_eq LW(3) -1
+8061ED80:     callc [btlevtcmd_CheckToken battle_event_cmd.o] -2 16 LW(0)
+8061ED94:     if_int_ne LW(0) 0
+8061EDA0:       callss [subsetevt_confuse_flustered battle_event_subset.o]
+8061EDA8:     endif
+8061EDAC:     return
+8061EDB0:   endif
+8061EDB4:   callc [btlevtcmd_WeaponAftereffect battle_event_cmd.o] LW(9)
+8061EDC0:   callc [btlevtcmd_AttackDeclare battle_event_cmd.o] -2 LW(3) LW(4)
+8061EDD4:   callc [btlevtcmd_WaitGuardMove battle_event_cmd.o]
+8061EDDC:   callc [btlevtcmd_PayWeaponCost battle_event_cmd.o] -2 LW(9)
+8061EDEC:   callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 1 ["KPA_R_1"]
+8061EE00:   callc [btlevtcmd_GetPos battle_event_cmd.o] LW(3) LW(0) LW(1) LW(2)
+8061EE18:   callc [btlevtcmd_FaceDirectionAdd battle_event_cmd.o] LW(3) LW(0) 65
+8061EE2C:   callc [btlevtcmd_CalculateFaceDirection battle_event_cmd.o] -2 -1 LW(0) LW(2) 1 LW(15)
+8061EE4C:   callc [btlevtcmd_ChangeFaceDirection battle_event_cmd.o] -2 LW(15)
+8061EE5C:   callc [btlevtcmd_SetMoveSpeed battle_event_cmd.o] -2 4.00
+8061EE6C:   callc [btlevtcmd_MovePosition battle_event_cmd.o] -2 LW(0) 0 LW(2) 0 -1 1
+8061EE90:   callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 1 ["KPA_A_3A"]
+8061EEA4:   callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_BOSS_KOOPA_BITE1"] [F1194D80] 0 [F1194D80]
+8061EEC0:   callc [btlevtcmd_CalculateFaceDirection battle_event_cmd.o] -2 -1 LW(3) LW(4) 16 LW(15)
+8061EEE0:   callc [btlevtcmd_ChangeFaceDirection battle_event_cmd.o] -2 LW(15)
+8061EEF0:   wait_ms 170
+8061EEF8:   callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 1 ["KPA_A_3B"]
+8061EF0C:   wait_ms 150
+8061EF14:   callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_BOSS_KOOPA_BITE3"] [F1194D80] 0 [F1194D80]
+8061EF30:   callc [btlevtcmd_PreCheckDamage battle_event_cmd.o] -2 LW(3) LW(4) LW(9) 256 LW(5)
+8061EF50:   switchi LW(5)
+8061EF58:     case_int_eq_any 4
+8061EF60:       goto 90
+8061EF68:       end_multi_case
+8061EF6C:     case_int_eq 3
+8061EF74:       callc [btlevtcmd_StartAvoid battle_event_cmd.o] LW(3) 38
+8061EF84:       goto 90
+8061EF8C:       end_multi_case
+8061EF90:     case_int_eq 6
+8061EF98:       callc [btlevtcmd_StartAvoid battle_event_cmd.o] LW(3) 39
+8061EFA8:       goto 90
+8061EFB0:     case_int_eq 2
+8061EFB8:       callc [btlevtcmd_StartAvoid battle_event_cmd.o] LW(3) 40
+8061EFC8:       goto 90
+8061EFD0:     case_int_eq 1
+8061EFD8:       goto 91
+8061EFE0:       end_multi_case
+8061EFE4:     case_default
+8061EFE8:       goto 98
+8061EFF0:       end_multi_case
+8061EFF4:   end_switch
+8061EFF8: 90:
+8061F000:   wait_ms 100
+8061F008:   callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 1 ["KPA_A_3C"]
+8061F01C:   wait_ms 150
+8061F024:   goto 98
+8061F02C: 91:
+8061F034:   callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 1 ["KPA_A_4"]
+8061F048:   wait_ms 1500
+8061F050:   callc [btlevtcmd_ResultACDefence battle_event_cmd.o] LW(3) LW(9)
+8061F060:   callc [btlevtcmd_CheckDamage battle_event_cmd.o] -2 LW(3) LW(4) LW(9) 256 LW(5)
+8061F080:   callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 1 ["KPA_A_3C"]
+8061F094:   wait_ms 150
+8061F09C: 98:
+8061F0A4:   callc [evt_btl_camera_set_mode battle_camera.o] 0 0
+8061F0B4:   wait_ms 250
+8061F0BC:   callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 1 ["KPA_R_1"]
+8061F0D0:   callc [btlevtcmd_GetHomePos battle_event_cmd.o] -2 LW(0) LW(1) LW(2)
+8061F0E8:   callc [btlevtcmd_SetMoveSpeed battle_event_cmd.o] -2 4.00
+8061F0F8:   callc [btlevtcmd_MovePosition battle_event_cmd.o] -2 LW(0) LW(1) LW(2) 0 -1 0
+8061F11C:   return
+8061F120:   end

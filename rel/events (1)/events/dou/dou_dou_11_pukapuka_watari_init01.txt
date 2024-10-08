@@ -1,0 +1,117 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [pukapuka_watari_init01 dou_11.o] AT 805CF508 ---
+805CF508:   setii LW(0) ["S_taru_n01"]
+805CF514:   setii LW(1) ["A_taru_n01"]
+805CF520:   setii LW(2) ["A_taru_n01"]
+805CF52C:   setii LW(3) [evt_ride_taru dou_11.o]
+805CF538:   callss [dou_puka_event_init1 dou_11.o]
+805CF540:   callsa [dou_puka_event_main1 dou_11.o]
+805CF548:   callsa [dou_puka_event_sub1 dou_11.o]
+805CF550:   callc [evt_run_case_evt evt_case.o] 0 1 ["A_taru_n01"] 0 [dou_puka_event_1 dou_11.o] 0
+805CF570:   callc [evt_run_case_evt evt_case.o] 1 1 ["A_taru_n01"] 0 [dou_puka_event_rev_1 dou_11.o] 0
+805CF590:   setii LW(0) ["S_taru_n02"]
+805CF59C:   setii LW(1) ["A_taru_n02"]
+805CF5A8:   setii LW(2) ["A_taru_n02"]
+805CF5B4:   setii LW(3) [evt_ride_taru dou_11.o]
+805CF5C0:   callss [dou_puka_event_init2 dou_11.o]
+805CF5C8:   callsa [dou_puka_event_main2 dou_11.o]
+805CF5D0:   callsa [dou_puka_event_sub2 dou_11.o]
+805CF5D8:   callc [evt_run_case_evt evt_case.o] 0 1 ["A_taru_n02"] 0 [dou_puka_event_2 dou_11.o] 0
+805CF5F8:   callc [evt_run_case_evt evt_case.o] 1 1 ["A_taru_n02"] 0 [dou_puka_event_rev_2 dou_11.o] 0
+805CF618:   return
+805CF61C:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [dou_puka_event_init1 dou_11.o] AT 805CEE48 ---
+805CEE48:   setii GW(1) 0
+805CEE54:   setii GW(2) 0
+805CEE60:   return
+805CEE64:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [dou_puka_event_main1 dou_11.o] AT 805CEEF0 ---
+805CEEF0:   callc [evt_hit_bind_mapobj evt_hit.o] LW(1) LW(0)
+805CEF00:   loop 0
+805CEF08:     callc [evt_mapobj_trans evt_map.o] 1 LW(0) 0 GW(2) 0
+805CEF24:     callc [evt_hit_bind_update evt_hit.o] LW(1)
+805CEF30:     wait_frames 1
+805CEF38:   end_loop
+805CEF3C:   return
+805CEF40:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [dou_puka_event_sub1 dou_11.o] AT 805CEF44 ---
+805CEF44:   callc [evt_sub_random evt_sub.o] 400 LW(0)
+805CEF54:   addi LW(0) 200
+805CEF60:   wait_ms LW(0)
+805CEF68:   setir LW(6) 0xfd050f82
+805CEF74:   callsa_tid [dou_normal_puka dou.o] LW(0)
+805CEF80:   loop 0
+805CEF88:     loop 0
+805CEF90:       if_int_eq GW(1) 1
+805CEF9C:         loop_break
+805CEFA0:       endif
+805CEFA4:       wait_frames 1
+805CEFAC:     end_loop
+805CEFB0:     stop_tid LW(0)
+805CEFB8:     loop 0
+805CEFC0:       if_int_eq GW(1) 2
+805CEFCC:         loop_break
+805CEFD0:       endif
+805CEFD4:       wait_frames 1
+805CEFDC:     end_loop
+805CEFE0:     callsa_tid [dou_normal_puka dou.o] LW(0)
+805CEFEC:   end_loop
+805CEFF0:   return
+805CEFF4:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [dou_puka_event_init2 dou_11.o] AT 805CEFF8 ---
+805CEFF8:   setii GW(3) 0
+805CF004:   setii GW(4) 0
+805CF010:   return
+805CF014:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [dou_puka_event_main2 dou_11.o] AT 805CF0A0 ---
+805CF0A0:   callc [evt_hit_bind_mapobj evt_hit.o] LW(1) LW(0)
+805CF0B0:   loop 0
+805CF0B8:     callc [evt_mapobj_trans evt_map.o] 1 LW(0) 0 GW(4) 0
+805CF0D4:     callc [evt_hit_bind_update evt_hit.o] LW(1)
+805CF0E0:     wait_frames 1
+805CF0E8:   end_loop
+805CF0EC:   return
+805CF0F0:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [dou_puka_event_sub2 dou_11.o] AT 805CF0F4 ---
+805CF0F4:   callc [evt_sub_random evt_sub.o] 400 LW(0)
+805CF104:   addi LW(0) 200
+805CF110:   wait_ms LW(0)
+805CF118:   setir LW(6) 0xfd050f84
+805CF124:   callsa_tid [dou_normal_puka dou.o] LW(0)
+805CF130:   loop 0
+805CF138:     loop 0
+805CF140:       if_int_eq GW(3) 1
+805CF14C:         loop_break
+805CF150:       endif
+805CF154:       wait_frames 1
+805CF15C:     end_loop
+805CF160:     stop_tid LW(0)
+805CF168:     loop 0
+805CF170:       if_int_eq GW(3) 2
+805CF17C:         loop_break
+805CF180:       endif
+805CF184:       wait_frames 1
+805CF18C:     end_loop
+805CF190:     callsa_tid [dou_normal_puka dou.o] LW(0)
+805CF19C:   end_loop
+805CF1A0:   return
+805CF1A4:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [dou_normal_puka dou.o] AT 805C1640 ---
+805C1640:   setii LW(0) 1
+805C164C:   loop 0
+805C1654:     callc [evt_dou_normal_puka dou.o] LW(1)
+805C1660:     storef_ind LW(6) LW(1)
+805C166C:     addi LW(0) 1
+805C1678:     wait_ms 130
+805C1680:   end_loop
+805C1684:   return
+805C1688:   end

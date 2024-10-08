@@ -1,0 +1,48 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [queen_attack_charge unit_boss_black_peach.o] AT 8060E6B0 ---
+8060E6B0:   callc [btlevtcmd_CheckToken battle_event_cmd.o] -2 16 LW(0)
+8060E6C4:   if_int_ne LW(0) 0
+8060E6D0:     callss [subsetevt_confuse_flustered battle_event_subset.o]
+8060E6D8:     return
+8060E6DC:   endif
+8060E6E0:   callc [btlevtcmd_PayWeaponCost battle_event_cmd.o] -2 [weapon_peach_dark_charge_attack unit_boss_black_peach.o]
+8060E6F0:   callc [evt_btl_camera_set_mode battle_camera.o] 0 7
+8060E700:   callc [evt_btl_camera_set_homing_unit battle_camera.o] 0 -2 -1
+8060E714:   callc [evt_btl_camera_set_moveSpeedLv battle_camera.o] 0 2
+8060E724:   callc [evt_btl_camera_set_zoom battle_camera.o] 0 200
+8060E734:   callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 1 ["KRT_A_2"]
+8060E748:   callc [btlevtcmd_GetPos battle_event_cmd.o] -2 LW(0) LW(1) LW(2)
+8060E760:   callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_BOSS_BPCH_HAND_UP1"] LW(0) LW(1) LW(2) 0
+8060E77C:   callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 3 ["KRT_A_1"]
+8060E790:   if_int_ne GW(8) -1
+8060E79C:     callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] GW(8) 1 ["KRT_A_3"]
+8060E7B0:   endif
+8060E7B4:   if_int_ne GW(9) -1
+8060E7C0:     callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] GW(9) 1 ["KRT_A_3"]
+8060E7D4:   endif
+8060E7D8:   wait_ms 500
+8060E7E0:   begin_thread
+8060E7E4:     callc [evt_env_blur_on evt_env.o] 0 1000
+8060E7F4:   end_thread
+8060E7F8:   callc [evt_btl_camera_set_moveSpeedLv battle_camera.o] 0 2
+8060E808:   callc [evt_btl_camera_set_zoom battle_camera.o] 0 200
+8060E818:   callc [btlevtcmd_GetPos battle_event_cmd.o] -2 LW(0) LW(1) LW(2)
+8060E830:   callc [btlevtcmd_GetHeight battle_event_cmd.o] -2 LW(5)
+8060E840:   addi LW(1) LW(5)
+8060E84C:   addi LW(2) 30
+8060E858:   callc [evt_eff evt_eff.o] [zero_las_000183fc unit_boss_black_peach.o] ["charge"] 2 LW(0) LW(1) LW(2) 3.00 60 0 0 0 0 0 0
+8060E898:   callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_BOSS_QWEN_DARK_POWER1"] LW(0) LW(1) LW(2) 0
+8060E8B4:   wait_ms 1000
+8060E8BC:   callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 3 ["KRT_S_1"]
+8060E8D0:   if_int_ne GW(8) -1
+8060E8DC:     callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] GW(8) 1 ["KRT_S_1"]
+8060E8F0:   endif
+8060E8F4:   if_int_ne GW(9) -1
+8060E900:     callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] GW(9) 1 ["KRT_S_1"]
+8060E914:   endif
+8060E918:   callc [btlevtcmd_CheckDamage battle_event_cmd.o] -2 -2 1 [weapon_peach_dark_charge_attack unit_boss_black_peach.o] 256 LW(5)
+8060E938: 99:
+8060E940:   return
+8060E944:   end

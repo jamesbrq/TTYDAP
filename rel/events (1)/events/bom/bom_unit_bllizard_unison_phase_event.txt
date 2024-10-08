@@ -1,0 +1,40 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [unison_phase_event unit_bllizard.o] AT 805CF47C ---
+805CF47C:   callc [btlevtcmd_CheckPhase battle_event_cmd.o] LW(0) 67108865
+805CF48C:   if_int_eq LW(0) 0
+805CF498:     goto 99
+805CF4A0:   endif
+805CF4A4:   callc [btlevtcmd_CheckActStatus battle_event_cmd.o] -2 LW(0)
+805CF4B4:   if_int_eq LW(0) 0
+805CF4C0:     goto 99
+805CF4C8:   endif
+805CF4CC:   callc [btlevtcmd_CheckPartsCounterAttribute battle_event_cmd.o] -2 1 64 LW(0)
+805CF4E4:   if_int_eq LW(0) 1
+805CF4F0:     goto 99
+805CF4F8:   endif
+805CF4FC:   callc [evt_sub_random evt_sub.o] 99 LW(0)
+805CF50C:   if_int_lt LW(0) 50
+805CF518:     callc [btlevtcmd_GetUnitWork battle_event_cmd.o] -2 0 LW(0)
+805CF52C:     if_int_eq LW(0) 1
+805CF538:       callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_ENM_KUMO_MOVE4"] [F1194D80] 0 [F1194D80]
+805CF554:       callc [btlevtcmd_GetPos battle_event_cmd.o] -2 LW(0) LW(1) LW(2)
+805CF56C:       setii LW(1) 40
+805CF578:       callc [btlevtcmd_DivePosition battle_event_cmd.o] -2 LW(0) LW(1) LW(2) 60 10 4 0 -1
+805CF5A4:       callc [btlevtcmd_SetHomePos battle_event_cmd.o] -2 LW(0) LW(1) LW(2)
+805CF5BC:       callc [btlevtcmd_OnPartsAttribute battle_event_cmd.o] -2 1 6291456
+805CF5D0:       callc [btlevtcmd_SetUnitWork battle_event_cmd.o] -2 0 0
+805CF5E4:     else
+805CF5E8:       callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_ENM_KUMO_MOVE5"] [F1194D80] 0 [F1194D80]
+805CF604:       callc [btlevtcmd_GetPos battle_event_cmd.o] -2 LW(0) LW(1) LW(2)
+805CF61C:       setii LW(1) 10
+805CF628:       callc [btlevtcmd_DivePosition battle_event_cmd.o] -2 LW(0) LW(1) LW(2) 60 -10 4 0 -1
+805CF654:       callc [btlevtcmd_SetHomePos battle_event_cmd.o] -2 LW(0) LW(1) LW(2)
+805CF66C:       callc [btlevtcmd_OffPartsAttribute battle_event_cmd.o] -2 1 6291456
+805CF680:       callc [btlevtcmd_SetUnitWork battle_event_cmd.o] -2 0 1
+805CF694:     endif
+805CF698:   endif
+805CF69C: 99:
+805CF6A4:   return
+805CF6A8:   end

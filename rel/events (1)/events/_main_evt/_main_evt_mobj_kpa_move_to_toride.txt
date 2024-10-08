@@ -1,0 +1,40 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [kpa_move_to_toride evt_mobj.o] AT 8030BC4C ---
+8030BC4C:   callc [evt_mario_key_onoff evt_mario.o] 0
+8030BC58:   callc [evt_mario_wait_landon evt_mario.o]
+8030BC60:   setii LSWF(5) 1
+8030BC6C:   callc [evt_sub_get_mapname evt_sub.o] LW(0)
+8030BC78:   if_string_eq LW(0) ["kpa_06"]
+8030BC84:     callc [evt_mapobj_get_position evt_map.o] ["toride"] LW(0) LW(1) LW(2)
+8030BC9C:   else
+8030BCA0:     callc [evt_mapobj_get_position evt_map.o] ["toride_"] LW(0) LW(1) LW(2)
+8030BCB8:   endif
+8030BCBC:   callc [kpa_get_level evt_mobj.o] LW(6)
+8030BCC8:   switchi LW(6)
+8030BCD0:     case_int_le 1
+8030BCD8:       addi LW(0) 100
+8030BCE4:     case_int_eq 2
+8030BCEC:       callc [kpa_get_width evt_mobj.o] LW(7)
+8030BCF8:       mulf LW(7) 1.20
+8030BD04:       subf LW(0) LW(7)
+8030BD10:     case_int_eq 3
+8030BD18:       callc [kpa_get_width evt_mobj.o] LW(7)
+8030BD24:       mulf LW(7) 1.20
+8030BD30:       subf LW(0) LW(7)
+8030BD3C:   end_switch
+8030BD40:   callc [evt_mario_get_pos evt_mario.o] 0 LW(3) LW(4) LW(5)
+8030BD58:   callc [evt_mario_mov_pos2 evt_mario.o] LW(0) LW(5) 90
+8030BD6C:   if_int_ge LW(6) 2
+8030BD78:     callc [evt_mario_get_pos evt_mario.o] 0 LW(1) LW(2) LW(3)
+8030BD90:     callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_KUPPA_STRUGGLE1"] LW(1) LW(2) LW(3) LW(10)
+8030BDAC:     callc [evt_mario_dispflag_onoff evt_mario.o] 1 2
+8030BDBC:     wait_ms 2000
+8030BDC4:     callc [evt_mario_dispflag_onoff evt_mario.o] 0 2
+8030BDD4:     callc [evt_snd_sfxoff evt_snd.o] LW(10)
+8030BDE0:     callc [kpa_chg_pose kpa_act.o] ["KPA2_S_1"]
+8030BDEC:   endif
+8030BDF0:   callc [evt_mario_key_onoff evt_mario.o] 1
+8030BDFC:   return
+8030BE00:   end

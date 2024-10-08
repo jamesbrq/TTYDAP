@@ -1,0 +1,39 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [unk_evt_tik_0002a288 unit_boss_gesso_left_arm.o] AT 805E4C28 ---
+805E4C28:   setii LW(10) -2
+805E4C34:   setii LW(11) 1
+805E4C40:   callc [btlevtcmd_OnUnitFlag battle_event_cmd.o] LW(10) 1
+805E4C50:   setii LW(14) 39
+805E4C5C:   setii LW(15) -1
+805E4C68:   callc [btlevtcmd_CheckDamagePattern battle_event_cmd.o] LW(10) 1 LW(0)
+805E4C7C:   if_int_ne LW(0) 0
+805E4C88:     setii LW(14) 38
+805E4C94:   endif
+805E4C98:   begin_child_thread
+805E4C9C:     callc [btlevtcmd_RunDataEventChild battle_event_cmd.o] LW(10) 10
+805E4CAC:   end_child_thread
+805E4CB0:   callss [subsetevt_damage battle_event_subset.o]
+805E4CB8:   callc [btlevtcmd_CheckDamageCode battle_event_cmd.o] LW(10) 1024 LW(1)
+805E4CCC:   if_int_ne LW(1) 0
+805E4CD8:     wait_frames 30
+805E4CE0:     callss [subsetevt_dead battle_event_subset.o]
+805E4CE8:     goto 99
+805E4CF0:   endif
+805E4CF4:   callc [btlevtcmd_CheckDamageCode battle_event_cmd.o] LW(10) 256 LW(1)
+805E4D08:   if_int_eq LW(1) 0
+805E4D14:     callc [btlevtcmd_WaitAttackEnd battle_event_cmd.o]
+805E4D1C:   endif
+805E4D20:   callc [btlevtcmd_ResetFaceDirection battle_event_cmd.o] LW(10)
+805E4D2C:   callc [btlevtcmd_StartWaitEvent battle_event_cmd.o] LW(10)
+805E4D38: 99:
+805E4D40:   callc [btlevtcmd_GetUnitWork battle_event_cmd.o] -2 0 LW(3)
+805E4D54:   if_int_ne LW(3) -1
+805E4D60:     callc [btlevtcmd_GetUnitWork battle_event_cmd.o] LW(3) 4 LW(0)
+805E4D74:     if_int_le LW(0) 0
+805E4D80:       callc [btlevtcmd_StartWaitEvent battle_event_cmd.o] LW(3)
+805E4D8C:     endif
+805E4D90:   endif
+805E4D94:   return
+805E4D98:   end

@@ -1,0 +1,39 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [dmg_avoid_counter_thorn_front_event unit_togedaruma.o] AT 80601AC8 ---
+80601AC8:   callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_ENM_TOGEDA_MOVE1"] [F1194D80] 0 [F1194D80]
+80601AE4:   begin_child_thread
+80601AE8:     callc [btlevtcmd_CheckStatus battle_event_cmd.o] -2 17 LW(0)
+80601AFC:     if_int_ne LW(0) 0
+80601B08:       callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 1 ["TGD_J_3"]
+80601B1C:       wait_frames 60
+80601B24:       callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 1 ["TGD_J_4"]
+80601B38:     else
+80601B3C:       callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 1 ["TGD_J_1"]
+80601B50:       wait_frames 60
+80601B58:       callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 1 ["TGD_J_2"]
+80601B6C:     endif
+80601B70:   end_child_thread
+80601B74:   wait_frames 30
+80601B7C:   callc [btlevtcmd_GetPos battle_event_cmd.o] -2 LW(0) LW(1) LW(2)
+80601B94:   callc [btlevtcmd_CheckStatus battle_event_cmd.o] -2 10 LW(3)
+80601BA8:   if_int_ne LW(3) 0
+80601BB4:     callc [btlevtcmd_FaceDirectionAdd battle_event_cmd.o] -2 LW(0) 53
+80601BC8:     addi LW(1) 26
+80601BD4:     goto 90
+80601BDC:   endif
+80601BE0:   callc [btlevtcmd_CheckStatus battle_event_cmd.o] -2 11 LW(3)
+80601BF4:   if_int_ne LW(3) 0
+80601C00:     callc [btlevtcmd_FaceDirectionAdd battle_event_cmd.o] -2 LW(0) 33
+80601C14:     addi LW(1) 16
+80601C20:     goto 90
+80601C28:   endif
+80601C2C:   callc [btlevtcmd_FaceDirectionAdd battle_event_cmd.o] -2 LW(0) 43
+80601C40:   addi LW(1) 21
+80601C4C:   goto 90
+80601C54: 90:
+80601C5C:   callc [evt_eff evt_eff.o] [zero_tou2_0000ef2c unit_togedaruma.o] ["toge_flush"] 0 LW(0) LW(1) LW(2) 60 0 0 0 0 0 0 0
+80601C9C:   wait_frames 60
+80601CA4:   return
+80601CA8:   end

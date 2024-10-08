@@ -1,0 +1,44 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [muj_gor_ship muj_00.o] AT 805D8254 ---
+805D8254:   callc [evt_npc_set_position evt_npc.o] ["コルテス"] 655 40 -542
+805D826C:   callc [evt_npc_set_ry evt_npc.o] ["コルテス"] 90
+805D827C:   callc [alpha_init_func muj_00.o]
+805D8284:   callc [evt_map_set_tevcallback evt_map.o] 1 [alpha_tev muj_00.o]
+805D8294:   callc [evt_mapobj_flag_onoff evt_map.o] 0 1 ["S_mizu_06"] 16777216
+805D82AC:   callc [evt_mapobj_flag_onoff evt_map.o] 0 0 ["S_mizu_06"] 256
+805D82C4:   callc [alpha_set_func muj_00.o] 0
+805D82D0:   setff GW(0) 685.00
+805D82DC:   setff GW(1) 0.00
+805D82E8:   setii GW(2) 0
+805D82F4:   callsa [muj_gor_ship_sub muj_00.o]
+805D82FC:   setir LW(0) 0xfd050f81
+805D8308:   setff LW(1) 1.50
+805D8314:   callsa_tid [muj_ship_puka muj.o] GW(10)
+805D8320:   return
+805D8324:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [muj_gor_ship_sub muj_00.o] AT 805D81D0 ---
+805D81D0:   loop 0
+805D81D8:     setff LW(0) GW(0)
+805D81E4:     setff LW(1) GW(1)
+805D81F0:     setff LW(2) GW(2)
+805D81FC:     callc [evt_mapobj_trans evt_map.o] 1 ["S_b"] LW(0) LW(1) -605
+805D8218:     callc [evt_mapobj_rotate evt_map.o] 1 ["S_b"] 0 LW(2) 0
+805D8234:     callc [evt_hit_bind_update evt_hit.o] ["A_b"]
+805D8240:     wait_frames 1
+805D8248:   end_loop
+805D824C:   return
+805D8250:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [muj_ship_puka muj.o] AT 805CF290 ---
+805CF290:   setii LW(10) 0
+805CF29C:   loop 0
+805CF2A4:     callc [muj_ship_puka_func muj.o] LW(10) LW(1) LW(11)
+805CF2B8:     storef_ind LW(0) LW(11)
+805CF2C4:     addi LW(10) 1
+805CF2D0:     wait_ms 130
+805CF2D8:   end_loop
+805CF2DC:   return
+805CF2E0:   end

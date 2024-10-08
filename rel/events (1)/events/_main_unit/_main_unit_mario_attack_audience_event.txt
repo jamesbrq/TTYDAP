@@ -1,0 +1,168 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [attack_audience_event unit_mario.o] AT 8037337C ---
+8037337C:   callc [evt_sub_random evt_sub.o] 1 LW(0)
+8037338C:   if_int_eq LW(0) 0
+80373398:     callss [btlataudevtMarioJump unit_mario.o]
+803733A0:   else
+803733A4:     callss [btlataudevtMarioHammer unit_mario.o]
+803733AC:   endif
+803733B0:   return
+803733B4:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [btlataudevtMarioJump unit_mario.o] AT 803733B8 ---
+803733B8:   callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 1 ["M_J_1B"]
+803733CC:   callc [_get_attack_aud_no battle_attack_audience.o] LW(3) LW(0) LW(1) LW(2)
+803733E4:   begin_child_thread
+803733E8:     wait_frames 15
+803733F0:     callc [evt_btl_camera_set_mode battle_camera.o] 0 13
+80373400:     callc [evt_btl_camera_set_homing_unit_audience battle_camera.o] 0 -2 1 LW(3)
+80373418:     callc [evt_btl_camera_set_moveSpeedLv battle_camera.o] 0 2
+80373428:     callc [evt_btl_camera_set_zoom battle_camera.o] 0 200
+80373438:   end_child_thread
+8037343C:   setii LW(5) LW(1)
+80373448:   addi LW(1) 28
+80373454:   callc [btlevtcmd_FaceDirectionSub battle_event_cmd.o] -2 LW(0) 5
+80373468:   callc [btlevtcmd_SetMoveSpeed battle_event_cmd.o] -2 6.00
+80373478:   callc [btlevtcmd_SetFallAccel battle_event_cmd.o] -2 0.60
+80373488:   callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_VOICE_MARIO_BATTLE_JUMP1"] [F1194D80] 0 [F1194D80]
+803734A4:   setii LW(6) 36
+803734B0:   callc [btlevtcmd_MarioJumpParam battle_event_cmd.o] -2 LW(0) LW(1) LW(2) LW(6)
+803734CC:   callc [btlevtcmd_MarioJumpPosition battle_event_cmd.o] -2 LW(0) LW(1) LW(2) LW(6) 0 -1
+803734F0:   callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 1 ["M_J_1D"]
+80373504:   wait_frames 3
+8037350C:   callc [_attack_aud battle_attack_audience.o] LW(3) 0
+8037351C:   callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 1 ["M_J_1B"]
+80373530:   callc [btlevtcmd_SetFallAccel battle_event_cmd.o] -2 0.60
+80373540:   callc [btlevtcmd_SetMoveSpeed battle_event_cmd.o] -2 6.00
+80373550:   callc [btlevtcmd_FaceDirectionSub battle_event_cmd.o] -2 LW(0) 40
+80373564:   setii LW(1) LW(5)
+80373570:   addi LW(2) 5
+8037357C:   callc [btlevtcmd_JumpPosition battle_event_cmd.o] -2 LW(0) LW(1) LW(2) 20 -1
+8037359C:   callc [btlevtcmd_FaceDirectionSub battle_event_cmd.o] -2 LW(0) 20
+803735B0:   callc [btlevtcmd_JumpPosition battle_event_cmd.o] -2 LW(0) LW(1) LW(2) 10 -1
+803735D0:   callc [btlevtcmd_FaceDirectionSub battle_event_cmd.o] -2 LW(0) 10
+803735E4:   callc [btlevtcmd_JumpPosition battle_event_cmd.o] -2 LW(0) LW(1) LW(2) 6 -1
+80373604:   callc [btlevtcmd_AnimeChangePoseType battle_event_cmd.o] -2 1 42
+80373618:   begin_child_thread_tid LW(15)
+80373620:     wait_ms 500
+80373628:     callc [evt_btl_camera_set_mode battle_camera.o] 0 0
+80373638:     wait_ms 1000
+80373640:   end_child_thread
+80373644:   callc [btlevtcmd_SetMoveSpeed battle_event_cmd.o] -2 8.00
+80373654:   setii LW(0) 0
+80373660:   callc [btlevtcmd_GetStageAudienceAreaSize battle_event_cmd.o] LW(4) [F1194D80] [F1194D80]
+80373674:   callc [btlevtcmd_FaceDirectionSub battle_event_cmd.o] -2 LW(0) LW(4)
+80373688:   callc [btlevtcmd_MovePosition battle_event_cmd.o] -2 LW(0) LW(1) LW(2) 0 -1 0
+803736AC:   callc [btlevtcmd_GetHomePos battle_event_cmd.o] -2 LW(0) LW(1) LW(2)
+803736C4:   setii LW(0) 0
+803736D0:   callc [btlevtcmd_GetStageSize battle_event_cmd.o] LW(4) [F1194D80] [F1194D80]
+803736E4:   callc [btlevtcmd_FaceDirectionSub battle_event_cmd.o] -2 LW(0) LW(4)
+803736F8:   callc [btlevtcmd_SetPos battle_event_cmd.o] -2 LW(0) LW(1) LW(2)
+80373710:   callc [btlevtcmd_WaitEventEnd battle_event_cmd.o] LW(15)
+8037371C:   callc [btlevtcmd_GetHomePos battle_event_cmd.o] -2 LW(0) LW(1) LW(2)
+80373734:   callc [btlevtcmd_MovePosition battle_event_cmd.o] -2 LW(0) LW(1) LW(2) 0 -1 0
+80373758:   callc [btlevtcmd_StartWaitEvent battle_event_cmd.o] -2
+80373764:   return
+80373768:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [btlataudevtMarioHammer unit_mario.o] AT 8037376C ---
+8037376C:   callc [btlevtcmd_GetPos battle_event_cmd.o] -2 LW(0) LW(1) LW(2)
+80373784:   callc [btlevtcmd_GetStageSize battle_event_cmd.o] LW(3) [F1194D80] [F1194D80]
+80373798:   callc [btlevtcmd_GetFaceDirection battle_event_cmd.o] -2 LW(4)
+803737A8:   setii LW(8) LW(3)
+803737B4:   muli LW(8) LW(4)
+803737C0:   muli LW(8) -1
+803737CC:   callc [btlevtcmd_SetMoveSpeed battle_event_cmd.o] -2 6.00
+803737DC:   callc [btlevtcmd_AnimeChangePoseType battle_event_cmd.o] -2 1 42
+803737F0:   callc [btlevtcmd_MovePosition battle_event_cmd.o] -2 LW(8) LW(1) LW(2) 0 -1 0
+80373814:   wait_frames 20
+8037381C:   callc [_get_attack_aud_no battle_attack_audience.o] LW(3) LW(0) LW(1) LW(2)
+80373834:   callc [btlevtcmd_GetStageAudienceAreaSize battle_event_cmd.o] LW(4) [F1194D80] [F1194D80]
+80373848:   callc [btlevtcmd_GetFaceDirection battle_event_cmd.o] -2 LW(5)
+80373858:   setii LW(6) LW(4)
+80373864:   muli LW(6) LW(5)
+80373870:   muli LW(6) -1
+8037387C:   callc [btlevtcmd_SetPos battle_event_cmd.o] -2 LW(6) LW(1) LW(2)
+80373894:   callc [evt_btl_camera_set_mode battle_camera.o] 0 13
+803738A4:   callc [evt_btl_camera_set_homing_unit_audience battle_camera.o] 0 -2 1 LW(3)
+803738BC:   callc [evt_btl_camera_set_moveSpeedLv battle_camera.o] 0 2
+803738CC:   callc [evt_btl_camera_set_zoom battle_camera.o] 0 100
+803738DC:   callc [btlevtcmd_FaceDirectionSub battle_event_cmd.o] -2 LW(0) 20
+803738F0:   callc [btlevtcmd_MovePosition battle_event_cmd.o] -2 LW(0) LW(1) LW(2) 0 -1 0
+80373914:   callc [evt_btl_camera_set_zoom battle_camera.o] 0 200
+80373924:   callc [_get_mario_hammer_lv unit_mario.o] LW(0)
+80373930:   switchi LW(0)
+80373938:     case_int_eq 2
+80373940:       setii LW(0) ["M_H_5A"]
+8037394C:       setii LW(1) ["M_H_5B"]
+80373958:       setii LW(2) ["M_H_14"]
+80373964:     case_int_eq 3
+8037396C:       setii LW(0) ["M_H_9A"]
+80373978:       setii LW(1) ["M_H_9B"]
+80373984:       setii LW(2) ["M_H_15"]
+80373990:     case_default
+80373994:       setii LW(0) ["M_H_1A"]
+803739A0:       setii LW(1) ["M_H_1B"]
+803739AC:       setii LW(2) ["M_H_13"]
+803739B8:   end_switch
+803739BC:   callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 1 LW(0)
+803739D0:   callc [_get_mario_hammer_lv unit_mario.o] LW(0)
+803739DC:   switchi LW(0)
+803739E4:     case_int_eq 2
+803739EC:       callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_MARIO_HAMMER_HOLD2"] [F1194D80] 0 [F1194D80]
+80373A08:     case_int_eq 1
+80373A10:       callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_MARIO_HAMMER_HOLD1"] [F1194D80] 0 [F1194D80]
+80373A2C:     case_default
+80373A30:       callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_MARIO_HAMMER_HOLD3"] [F1194D80] 0 [F1194D80]
+80373A4C:   end_switch
+80373A50:   wait_ms 500
+80373A58:   callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 1 LW(1)
+80373A6C:   wait_frames 1
+80373A74:   callc [_get_mario_hammer_lv unit_mario.o] LW(0)
+80373A80:   switchi LW(0)
+80373A88:     case_int_eq 2
+80373A90:       callc [evt_snd_sfxon evt_snd.o] ["SFX_MARIO_HAMMER_SWING2"] 0
+80373AA0:     case_int_eq 1
+80373AA8:       callc [evt_snd_sfxon evt_snd.o] ["SFX_MARIO_HAMMER_SWING1"] 0
+80373AB8:     case_default
+80373ABC:       callc [evt_snd_sfxon evt_snd.o] ["SFX_MARIO_HAMMER_SWING3"] 0
+80373ACC:   end_switch
+80373AD0:   callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 1 LW(2)
+80373AE4:   wait_frames 7
+80373AEC:   callc [_get_mario_hammer_lv unit_mario.o] LW(0)
+80373AF8:   switchi LW(0)
+80373B00:     case_int_eq 2
+80373B08:       callc [evt_snd_sfxon evt_snd.o] ["SFX_MARIO_HAMMER_HIT_GROUND3"] 0
+80373B18:     case_int_eq 1
+80373B20:       callc [evt_snd_sfxon evt_snd.o] ["SFX_MARIO_HAMMER_HIT_GROUND2"] 0
+80373B30:     case_default
+80373B34:       callc [evt_snd_sfxon evt_snd.o] ["SFX_MARIO_HAMMER_HIT_GROUND1"] 0
+80373B44:   end_switch
+80373B48:   callc [_attack_aud battle_attack_audience.o] LW(3) 0
+80373B58:   callc [evt_btl_camera_set_mode battle_camera.o] 0 3
+80373B68:   callc [evt_btl_camera_shake_h battle_camera.o] 0 2 0 10 13
+80373B84:   begin_child_thread_tid LW(15)
+80373B8C:     wait_ms 1500
+80373B94:     callc [evt_btl_camera_set_mode battle_camera.o] 0 0
+80373BA4:     wait_ms 1000
+80373BAC:   end_child_thread
+80373BB0:   wait_ms 500
+80373BB8:   callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 1 ["M_H_16"]
+80373BCC:   callc [btlevtcmd_AnimeWaitPlayComplete battle_event_cmd.o] -2 1
+80373BDC:   callc [btlevtcmd_AnimeChangePoseType battle_event_cmd.o] -2 1 42
+80373BF0:   callc [btlevtcmd_GetPos battle_event_cmd.o] -2 LW(0) LW(1) LW(2)
+80373C08:   callc [btlevtcmd_SetMoveSpeed battle_event_cmd.o] -2 8.00
+80373C18:   setii LW(0) 0
+80373C24:   callc [btlevtcmd_GetStageAudienceAreaSize battle_event_cmd.o] LW(4) [F1194D80] [F1194D80]
+80373C38:   callc [btlevtcmd_FaceDirectionSub battle_event_cmd.o] -2 LW(0) LW(4)
+80373C4C:   callc [btlevtcmd_MovePosition battle_event_cmd.o] -2 LW(0) LW(1) LW(2) 0 -1 0
+80373C70:   callc [btlevtcmd_WaitEventEnd battle_event_cmd.o] LW(15)
+80373C7C:   callc [btlevtcmd_GetHomePos battle_event_cmd.o] -2 LW(0) LW(1) LW(2)
+80373C94:   callc [btlevtcmd_SetPos battle_event_cmd.o] -2 LW(8) LW(1) LW(2)
+80373CAC:   callc [btlevtcmd_GetHomePos battle_event_cmd.o] -2 LW(0) LW(1) LW(2)
+80373CC4:   callc [btlevtcmd_MovePosition battle_event_cmd.o] -2 LW(0) LW(1) LW(2) 0 -1 0
+80373CE8:   callc [btlevtcmd_StartWaitEvent battle_event_cmd.o] -2
+80373CF4:   return
+80373CF8:   end

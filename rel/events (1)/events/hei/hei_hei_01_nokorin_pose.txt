@@ -1,0 +1,24 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [nokorin_pose hei_01.o] AT 805C82B8 ---
+805C82B8:   callc [evt_npc_get_position evt_npc.o] ["ノコリン"] LW(0) LW(1) LW(2)
+805C82D0:   callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_STG1_NOKORIN_MOVE1"] LW(0) LW(1) LW(2) LW(3)
+805C82EC:   callc [evt_npc_flag_onoff evt_npc.o] 0 ["ノコリン"] 1024
+805C8300:   callc [evt_npc_pera_onoff evt_npc.o] ["ノコリン"] 0
+805C8310:   begin_thread
+805C8314:     setii LW(0) 0
+805C8320:     loop 0
+805C8328:       callc [evt_npc_set_ry evt_npc.o] ["ノコリン"] LW(0)
+805C8338:       addi LW(0) -30
+805C8344:       if_int_lt LW(0) 0
+805C8350:         addi LW(0) 360
+805C835C:       endif
+805C8360:       wait_frames 1
+805C8368:     end_loop
+805C836C:   end_thread
+805C8370:   wait_ms 1000
+805C8378:   callc [evt_npc_set_anim evt_npc.o] ["ノコリン"] ["A_1"]
+805C8388:   callc [evt_snd_sfxoff evt_snd.o] LW(3)
+805C8394:   return
+805C8398:   end

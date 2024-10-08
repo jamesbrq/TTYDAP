@@ -1,0 +1,183 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [minigame01_main yuu_00.o] AT 805D3818 ---
+805D3818:   callc [evt_mario_key_onoff evt_mario.o] 0
+805D3824:   callss [yuu_00_kaijo_init yuu_00.o]
+805D382C:   callc [evt_yuuminigame_alloc evt_yuuminigame.o] LW(0) 0
+805D383C:   callc [yuuminigame_set_dataadr evt_yuuminigame.o] 0 LW(0)
+805D384C:   callc [evt_mario_kill_party evt_mario.o] 0
+805D3858:   callc [evt_mario_kill_party evt_mario.o] 1
+805D3864:   callss [light_sub_event yuu_00.o]
+805D386C:   callc [evt_snd_sfxon evt_snd.o] ["SFX_EVT_GAME_AUDIENCE1"] GW(10)
+805D387C:   callc [yuuminigame_get_dataadr evt_yuuminigame.o] 0 LW(0)
+805D388C:   callc [yuuminigame1_set_phase yuu_00.o] LW(0) 1
+805D389C:   return
+805D38A0:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [yuu_00_kaijo_init yuu_00.o] AT 805D2FF4 ---
+805D2FF4:   callc [evt_mario_set_pos evt_mario.o] -1550 400 0
+805D3008:   callc [evt_mario_set_dir evt_mario.o] 90 0 0
+805D301C:   return
+805D3020:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [light_sub_event yuu_00.o] AT 805D3054 ---
+805D3054:   setii GF(0) 1
+805D3060:   begin_thread
+805D3064:     setii LW(0) 96
+805D3070:     loop 0
+805D3078:       wait_frames 1
+805D3080:       if_int_ne GF(0) 1
+805D308C:         loop_break
+805D3090:       endif
+805D3094:       if_int_eq LW(0) 30
+805D30A0:         setii LW(1) 1
+805D30AC:         setii LW(2) 0
+805D30B8:         setii LW(5) 35
+805D30C4:       endif
+805D30C8:       if_int_eq LW(0) 60
+805D30D4:         setii LW(1) 2
+805D30E0:         setii LW(2) 0
+805D30EC:         setii LW(5) 35
+805D30F8:       endif
+805D30FC:       if_int_eq LW(0) 78
+805D3108:         setii LW(1) 3
+805D3114:         setii LW(2) 0
+805D3120:         setii LW(5) 0
+805D312C:       endif
+805D3130:       if_int_eq LW(0) 96
+805D313C:         setii LW(0) 0
+805D3148:         setii LW(1) 0
+805D3154:         setii LW(2) 0
+805D3160:         setii LW(5) 0
+805D316C:       endif
+805D3170:       switchi LW(1)
+805D3178:         case_int_eq 0
+805D3180:           setii LW(3) 35
+805D318C:           subi LW(3) LW(5)
+805D3198:           muli LW(3) LW(2)
+805D31A4:           divi LW(3) 30
+805D31B0:           addi LW(3) LW(5)
+805D31BC:           callc [evt_mapobj_rotate evt_map.o] 1 ["light01"] 0 0 LW(3)
+805D31D8:           callc [evt_mapobj_rotate evt_map.o] 1 ["light_b"] 0 0 LW(3)
+805D31F4:         case_int_eq 1
+805D31FC:           setii LW(3) 35
+805D3208:           callc [evt_mapobj_rotate evt_map.o] 1 ["light01"] 0 0 LW(3)
+805D3224:           callc [evt_mapobj_rotate evt_map.o] 1 ["light_b"] 0 0 LW(3)
+805D3240:         case_int_eq 2
+805D3248:           setii LW(3) 0
+805D3254:           subi LW(3) LW(5)
+805D3260:           muli LW(3) LW(2)
+805D326C:           divi LW(3) 18
+805D3278:           addi LW(3) LW(5)
+805D3284:           callc [evt_mapobj_rotate evt_map.o] 1 ["light01"] 0 0 LW(3)
+805D32A0:           callc [evt_mapobj_rotate evt_map.o] 1 ["light_b"] 0 0 LW(3)
+805D32BC:         case_int_eq 3
+805D32C4:           setii LW(3) 0
+805D32D0:           callc [evt_mapobj_rotate evt_map.o] 1 ["light01"] 0 0 LW(3)
+805D32EC:           callc [evt_mapobj_rotate evt_map.o] 1 ["light_b"] 0 0 LW(3)
+805D3308:       end_switch
+805D330C:       addi LW(0) 1
+805D3318:       addi LW(2) 1
+805D3324:     end_loop
+805D3328:     wait_ms 300
+805D3330:     setii LW(2) 0
+805D333C:     setii LW(5) LW(3)
+805D3348:     loop 0
+805D3350:       wait_frames 1
+805D3358:       if_int_eq LW(2) 18
+805D3364:         loop_break
+805D3368:       endif
+805D336C:       setii LW(3) 0
+805D3378:       subi LW(3) LW(5)
+805D3384:       muli LW(3) LW(2)
+805D3390:       divi LW(3) 18
+805D339C:       addi LW(3) LW(5)
+805D33A8:       callc [evt_mapobj_rotate evt_map.o] 1 ["light01"] 0 0 LW(3)
+805D33C4:       callc [evt_mapobj_rotate evt_map.o] 1 ["light_b"] 0 0 LW(3)
+805D33E0:       addi LW(2) 1
+805D33EC:     end_loop
+805D33F0:     setii LW(3) 0
+805D33FC:     callc [evt_mapobj_rotate evt_map.o] 1 ["light01"] 0 0 LW(3)
+805D3418:     callc [evt_mapobj_rotate evt_map.o] 1 ["light_b"] 0 0 LW(3)
+805D3434:   end_thread
+805D3438:   begin_thread
+805D343C:     setii LW(0) 30
+805D3448:     loop 0
+805D3450:       wait_frames 1
+805D3458:       if_int_ne GF(0) 1
+805D3464:         loop_break
+805D3468:       endif
+805D346C:       if_int_eq LW(0) 30
+805D3478:         setii LW(1) 1
+805D3484:         setii LW(2) 0
+805D3490:         setii LW(5) 35
+805D349C:       endif
+805D34A0:       if_int_eq LW(0) 60
+805D34AC:         setii LW(1) 2
+805D34B8:         setii LW(2) 0
+805D34C4:         setii LW(5) 35
+805D34D0:       endif
+805D34D4:       if_int_eq LW(0) 78
+805D34E0:         setii LW(1) 3
+805D34EC:         setii LW(2) 0
+805D34F8:         setii LW(5) 0
+805D3504:       endif
+805D3508:       if_int_eq LW(0) 96
+805D3514:         setii LW(0) 0
+805D3520:         setii LW(1) 0
+805D352C:         setii LW(2) 0
+805D3538:         setii LW(5) 0
+805D3544:       endif
+805D3548:       switchi LW(1)
+805D3550:         case_int_eq 0
+805D3558:           setii LW(3) 35
+805D3564:           subi LW(3) LW(5)
+805D3570:           muli LW(3) LW(2)
+805D357C:           divi LW(3) 30
+805D3588:           addi LW(3) LW(5)
+805D3594:           callc [evt_mapobj_rotate evt_map.o] 1 ["light02"] 0 0 LW(3)
+805D35B0:           callc [evt_mapobj_rotate evt_map.o] 1 ["light_c"] 0 0 LW(3)
+805D35CC:         case_int_eq 1
+805D35D4:           setii LW(3) 35
+805D35E0:           callc [evt_mapobj_rotate evt_map.o] 1 ["light02"] 0 0 LW(3)
+805D35FC:           callc [evt_mapobj_rotate evt_map.o] 1 ["light_c"] 0 0 LW(3)
+805D3618:         case_int_eq 2
+805D3620:           setii LW(3) 0
+805D362C:           subi LW(3) LW(5)
+805D3638:           muli LW(3) LW(2)
+805D3644:           divi LW(3) 18
+805D3650:           addi LW(3) LW(5)
+805D365C:           callc [evt_mapobj_rotate evt_map.o] 1 ["light02"] 0 0 LW(3)
+805D3678:           callc [evt_mapobj_rotate evt_map.o] 1 ["light_c"] 0 0 LW(3)
+805D3694:         case_int_eq 3
+805D369C:           setii LW(3) 0
+805D36A8:           callc [evt_mapobj_rotate evt_map.o] 1 ["light02"] 0 0 LW(3)
+805D36C4:           callc [evt_mapobj_rotate evt_map.o] 1 ["light_c"] 0 0 LW(3)
+805D36E0:       end_switch
+805D36E4:       addi LW(0) 1
+805D36F0:       addi LW(2) 1
+805D36FC:     end_loop
+805D3700:     wait_ms 300
+805D3708:     setii LW(2) 0
+805D3714:     setii LW(5) LW(3)
+805D3720:     loop 0
+805D3728:       wait_frames 1
+805D3730:       if_int_eq LW(2) 18
+805D373C:         loop_break
+805D3740:       endif
+805D3744:       setii LW(3) 0
+805D3750:       subi LW(3) LW(5)
+805D375C:       muli LW(3) LW(2)
+805D3768:       divi LW(3) 18
+805D3774:       addi LW(3) LW(5)
+805D3780:       callc [evt_mapobj_rotate evt_map.o] 1 ["light02"] 0 0 LW(3)
+805D379C:       callc [evt_mapobj_rotate evt_map.o] 1 ["light_c"] 0 0 LW(3)
+805D37B8:       addi LW(2) 1
+805D37C4:     end_loop
+805D37C8:     setii LW(3) 0
+805D37D4:     callc [evt_mapobj_rotate evt_map.o] 1 ["light02"] 0 0 LW(3)
+805D37F0:     callc [evt_mapobj_rotate evt_map.o] 1 ["light_c"] 0 0 LW(3)
+805D380C:   end_thread
+805D3810:   return
+805D3814:   end

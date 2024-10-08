@@ -1,0 +1,87 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [evt_nidome_bed rsh_02.o] AT 805DB71C ---
+805DB71C:   if_int_eq GSWF(3580) 1
+805DB728:     callc [evt_mario_key_onoff evt_mario.o] 0
+805DB734:     callss [evt_normal_yado rsh_02.o]
+805DB73C:     callc [evt_mario_key_onoff evt_mario.o] 1
+805DB748:     return
+805DB74C:   endif
+805DB750:   if_int_eq GSWF(3581) 1
+805DB75C:     callc [evt_mario_key_onoff evt_mario.o] 0
+805DB768:     callss [evt_normal_yado rsh_02.o]
+805DB770:     callc [evt_mario_key_onoff evt_mario.o] 1
+805DB77C:     return
+805DB780:   endif
+805DB784:   callc [evt_mario_key_onoff evt_mario.o] 0
+805DB790:   callc [evt_msg_print evt_msg.o] 0 ["stg6_yado_02"] 0 0
+805DB7A8:   callc [evt_msg_select evt_msg.o] 0 ["stg6_yado_02_yn"]
+805DB7B8:   callc [evt_msg_continue evt_msg.o]
+805DB7C0:   if_int_ne LW(0) 0
+805DB7CC:     callc [evt_mario_key_onoff evt_mario.o] 1
+805DB7D8:     return
+805DB7DC:   endif
+805DB7E0:   callc [evt_snd_bgmon evt_snd.o] 512 ["BGM_FF_GO_SLEEPING1"]
+805DB7F0:   callc [evt_snd_envoff evt_snd.o] 1024
+805DB7FC:   callc [evt_fade_set_mapchange_type evt_fade.o] 1 4 3000 -1 -1
+805DB818:   begin_thread
+805DB81C:     callc [evt_mario_get_pos evt_mario.o] 0 LW(0) LW(1) LW(2)
+805DB834:     addi LW(1) 30
+805DB840:     callc [evt_fade_set_spot_pos evt_fade.o] LW(0) LW(1) LW(2)
+805DB854:   end_thread
+805DB858:   callc [evt_pouch_mario_recovery evt_pouch.o]
+805DB860:   callc [evt_pouch_all_party_recovery evt_pouch.o]
+805DB868:   callc [bgm_wait_stop rsh_02.o]
+805DB870:   if_int_eq GSWF(3579) 1
+805DB87C:     if_int_eq GSWF(3578) 0
+805DB888:       setii GSW(870) 1
+805DB894:     else
+805DB898:       setii GSW(870) 3
+805DB8A4:     endif
+805DB8A8:     callc [evt_bero_mapchange evt_bero.o] ["hom_10"] 0
+805DB8B8:     return
+805DB8BC:   endif
+805DB8C0:   callc [evt_sub_get_mapname evt_sub.o] LW(0)
+805DB8CC:   if_string_eq LW(0) ["rsh_02_a"]
+805DB8D8:     callc [evt_bero_mapchange evt_bero.o] ["hom_11"] 0
+805DB8E8:   endif
+805DB8EC:   if_string_eq LW(0) ["rsh_02_c"]
+805DB8F8:     callc [evt_bero_mapchange evt_bero.o] ["hom_12"] 0
+805DB908:   endif
+805DB90C:   return
+805DB910:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [evt_normal_yado rsh_02.o] AT 805D7EA0 ---
+805D7EA0:   callc [evt_msg_print evt_msg.o] 0 ["stg6_yado_00"] 0 0
+805D7EB8:   callc [evt_msg_select evt_msg.o] 0 ["stg6_yado_00_yn"]
+805D7EC8:   callc [evt_msg_continue evt_msg.o]
+805D7ED0:   if_int_ne LW(0) 0
+805D7EDC:     return
+805D7EE0:   endif
+805D7EE4:   callc [evt_snd_bgmoff evt_snd.o] 1024
+805D7EF0:   callc [evt_snd_bgmon evt_snd.o] 1 ["BGM_FF_GO_SLEEPING1"]
+805D7F00:   callc [evt_snd_envoff evt_snd.o] 1024
+805D7F0C:   callc [evt_fade_entry evt_fade.o] 4 3000 0 0 0
+805D7F28:   callc [evt_mario_get_pos evt_mario.o] 0 LW(0) LW(1) LW(2)
+805D7F40:   addi LW(1) 30
+805D7F4C:   callc [evt_fade_set_spot_pos evt_fade.o] LW(0) LW(1) LW(2)
+805D7F60:   callc [evt_fade_end_wait evt_fade.o]
+805D7F68:   callc [evt_pouch_mario_recovery evt_pouch.o]
+805D7F70:   callc [evt_pouch_all_party_recovery evt_pouch.o]
+805D7F78:   callc [evt_mario_set_pos evt_mario.o] -240 0 -210
+805D7F8C:   callc [evt_party_set_pos evt_party.o] 0 -260 0 -225
+805D7FA4:   callc [evt_party_set_pos evt_party.o] 1 -250 0 -240
+805D7FBC:   callc [evt_mario_set_dir evt_mario.o] 90 0 0
+805D7FD0:   callc [evt_party_set_dir evt_party.o] 0 90 0
+805D7FE4:   callc [evt_party_set_dir evt_party.o] 1 90 0
+805D7FF8:   wait_ms 3000
+805D8000:   callc [evt_fade_entry evt_fade.o] 9 1000 0 0 0
+805D801C:   callc [evt_fade_end_wait evt_fade.o]
+805D8024:   callc [evt_msg_print evt_msg.o] 0 ["stg6_yado_01"] 0 0
+805D803C:   callc [evt_snd_bgmoff evt_snd.o] 513
+805D8048:   callc [evt_snd_bgmon evt_snd.o] 288 0
+805D8058:   callc [evt_snd_envoff evt_snd.o] 513
+805D8064:   callc [evt_snd_envon evt_snd.o] 288 0
+805D8074:   return
+805D8078:   end

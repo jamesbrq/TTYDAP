@@ -1,0 +1,76 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [iri_12_makkino_return_zonbaba jon.o] AT 80C8B094 ---
+80C8B094:   callc [evt_npc_flag_onoff evt_npc.o] 1 ["マッキノ"] 32
+80C8B0A8:   wait_ms 500
+80C8B0B0:   callc [evt_npc_move_position evt_npc.o] ["マッキノ"] -337 -124 0 120 4
+80C8B0D0:   callc [evt_msg_print evt_msg.o] 0 ["irai_12_011"] 0 ["マッキノ"]
+80C8B0E8:   callc [evt_mario_key_onoff evt_mario.o] 1
+80C8B0F4:   callc [evt_npc_move_position evt_npc.o] ["マッキノ"] -76 -310 0 180 4
+80C8B114:   callc [evt_npc_move_position evt_npc.o] ["マッキノ"] 98 -486 0 180 4
+80C8B134:   callss [iri_12_makkino_return_dokan jon.o]
+80C8B13C:   return
+80C8B140:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [iri_12_makkino_return_dokan jon.o] AT 80C8AC6C ---
+80C8AC6C:   callc [evt_npc_set_ry evt_npc.o] ["マッキノ"] 90
+80C8AC7C:   wait_frames 1
+80C8AC84:   callc [evt_npc_wait_pera evt_npc.o] ["マッキノ"]
+80C8AC90:   callc [evt_npc_flag_onoff evt_npc.o] 1 ["マッキノ"] 33816576
+80C8ACA4:   callc [evt_npc_flag_onoff evt_npc.o] 0 ["マッキノ"] 131088
+80C8ACB8:   callc [evt_paper_entry evt_paper.o] ["p_dokan_x"]
+80C8ACC4:   callc [evt_npc_set_paper evt_npc.o] ["マッキノ"] ["p_dokan_x"]
+80C8ACD4:   callc [evt_npc_set_paper_anim evt_npc.o] ["マッキノ"] ["PM_D_1A"]
+80C8ACE4:   callc [iri_12_paper_init jon.o]
+80C8ACEC:   callc [evt_npc_set_ry evt_npc.o] ["マッキノ"] 180
+80C8ACFC:   callc [evt_npc_flag_onoff evt_npc.o] 1 ["マッキノ"] 1073741824
+80C8AD10:   callc [evt_npc_get_position evt_npc.o] ["マッキノ"] LW(0) LW(1) LW(2)
+80C8AD28:   subi LW(2) 3
+80C8AD34:   callc [evt_npc_set_position evt_npc.o] ["マッキノ"] LW(0) LW(1) LW(2)
+80C8AD4C:   setii GF(0) 1
+80C8AD58:   begin_thread
+80C8AD5C:     callc [evt_npc_status_onoff evt_npc.o] 0 ["マッキノ"] 2
+80C8AD70:     callc [evt_npc_get_position evt_npc.o] ["マッキノ"] LW(0) LW(1) LW(2)
+80C8AD88:     addi LW(0) 60
+80C8AD94:     callc [evt_npc_move_position evt_npc.o] ["マッキノ"] LW(0) LW(2) 0 60 0
+80C8ADB4:     setii GF(0) 0
+80C8ADC0:   end_thread
+80C8ADC4:   wait_frames 20
+80C8ADCC:   callc [evt_npc_set_rotate_offset evt_npc.o] ["マッキノ"] 0 16 0
+80C8ADE4:   begin_child_thread
+80C8ADE8:     callc [evt_npc_get_position evt_npc.o] ["マッキノ"] LW(2) LW(3) LW(4)
+80C8AE00:     setff LW(0) 1.00
+80C8AE0C:     loop 0
+80C8AE14:       subf LW(0) 0.02
+80C8AE20:       if_float_le LW(0) 0.00
+80C8AE2C:         callc [evt_npc_set_scale evt_npc.o] ["マッキノ"] 0 0 0
+80C8AE44:         loop_break
+80C8AE48:       endif
+80C8AE4C:       callc [evt_npc_set_scale evt_npc.o] ["マッキノ"] LW(0) LW(0) LW(0)
+80C8AE64:       setff LW(1) LW(0)
+80C8AE70:       mulf LW(1) 16.00
+80C8AE7C:       callc [evt_npc_set_rotate_offset evt_npc.o] ["マッキノ"] 0 LW(1) 0
+80C8AE94:       setff LW(2) 16.00
+80C8AEA0:       subf LW(2) LW(1)
+80C8AEAC:       addf LW(2) LW(3)
+80C8AEB8:       callc [iri_12_makkino_set_y jon.o] LW(2)
+80C8AEC4:       wait_frames 1
+80C8AECC:     end_loop
+80C8AED0:   end_child_thread
+80C8AED4:   begin_child_thread
+80C8AED8:     setff LW(0) 0.00
+80C8AEE4:     setff LW(1) 30.00
+80C8AEF0:     loop 0
+80C8AEF8:       addf LW(0) LW(1)
+80C8AF04:       if_float_ge LW(0) 360.00
+80C8AF10:         subf LW(0) 360.00
+80C8AF1C:       endif
+80C8AF20:       callc [evt_npc_set_rotate evt_npc.o] ["マッキノ"] LW(0) 0 0
+80C8AF38:       wait_frames 1
+80C8AF40:     end_loop
+80C8AF44:   end_child_thread
+80C8AF48:   wait_until GF(0)
+80C8AF50:   callc [evt_npc_set_position evt_npc.o] ["マッキノ"] 0 -1000 0
+80C8AF68:   return
+80C8AF6C:   end

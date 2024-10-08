@@ -1,0 +1,160 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [boss_noko_talk nok_01.o] AT 805C10C0 ---
+805C10C0:   if_int_eq GSW(1420) 8
+805C10CC:     callc [evt_npc_flag_onoff evt_npc.o] 1 ["me"] 32
+805C10E0:     begin_thread
+805C10E4:       callc [evt_party_move_pos2 evt_party.o] 1 -250 -320 40
+805C10FC:       callc [evt_party_set_dir evt_party.o] 1 270 300
+805C1110:     end_thread
+805C1114:     begin_thread
+805C1118:       callc [evt_party_move_pos2 evt_party.o] 0 -280 -320 40
+805C1130:       callc [evt_party_set_dir evt_party.o] 0 270 300
+805C1144:     end_thread
+805C1148:     callc [evt_mario_mov_pos2 evt_mario.o] -310 -320 40
+805C115C:     callc [evt_mario_set_dir evt_mario.o] 270 300 0
+805C1170:     callc [evt_set_dir_to_target evt_npc.o] ["me"] ["mario"]
+805C1180:     wait_frames 1
+805C1188:     callc [evt_npc_wait_pera evt_npc.o] ["me"]
+805C1194:     callc [evt_npc_flag_onoff evt_npc.o] 0 ["me"] 32
+805C11A8:     setii GF(0) 1
+805C11B4:     begin_thread
+805C11B8:       wait_until GF(0)
+805C11C0:       callc [evt_mario_sleep_on evt_mario.o]
+805C11C8:     end_thread
+805C11CC:     callc [evt_msg_print evt_msg.o] 0 ["irai_08_001"] [iri_08_msg nok_01.o] ["me"]
+805C11E4:     callc [evt_mario_sleep_off evt_mario.o]
+805C11EC:     callc [evt_msg_print evt_msg.o] 0 ["irai_08_002"] 0 ["me"]
+805C1204:     callc [evt_pouch_get_haveitemcnt evt_pouch.o] LW(0)
+805C1210:     callc [evt_pouch_check_item evt_pouch.o] 1 LW(1)
+805C1220:     if_int_eq LW(1) 0
+805C122C:       setii LW(1) 10
+805C1238:     else
+805C123C:       setii LW(1) 20
+805C1248:     endif
+805C124C:     if_int_lt LW(0) LW(1)
+805C1258:       callc [evt_msg_continue evt_msg.o]
+805C1260:       callc [evt_item_entry evt_item.o] ["item_irai"] 174 0 -1000 0 17 -1 0
+805C1288:       callc [evt_item_get_item evt_item.o] ["item_irai"]
+805C1294:       setii GSWF(1629) 1
+805C12A0:     else
+805C12A4:       callc [evt_msg_print_add evt_msg.o] 0 ["irai_08_003_1"]
+805C12B4:       callc [evt_npc_get_position evt_npc.o] ["me"] LW(0) LW(1) LW(2)
+805C12CC:       callc [evt_npc_flag_onoff evt_npc.o] 1 ["me"] 1073741856
+805C12E0:       callc [evt_npc_status_onoff evt_npc.o] 1 ["me"] 2
+805C12F4:       callc [evt_npc_move_position evt_npc.o] ["me"] -317 -350 0 40 0
+805C1314:       wait_ms 300
+805C131C:       callc [evt_item_entry evt_item.o] ["iri_08"] 174 -317 128 -374 16 GSWF(1629) 0
+805C1344:       wait_ms 300
+805C134C:       callc [evt_npc_move_position evt_npc.o] ["me"] LW(0) LW(2) 0 40 0
+805C136C:       callc [evt_set_dir_to_target evt_npc.o] ["me"] ["mario"]
+805C137C:       wait_frames 1
+805C1384:       callc [evt_npc_wait_pera evt_npc.o] ["me"]
+805C1390:       callc [evt_npc_flag_onoff evt_npc.o] 0 ["me"] 1073741856
+805C13A4:     endif
+805C13A8:     callc [evt_msg_print evt_msg.o] 0 ["irai_08_004"] 0 ["me"]
+805C13C0:     setii GSW(1420) 0
+805C13CC:     setii GSWF(5382) 1
+805C13D8:     callc [evt_msg_print evt_msg.o] 0 ["sys_request_finish"] 0 0
+805C13F0:     return
+805C13F4:   endif
+805C13F8:   if_int_eq GSW(1420) 17
+805C1404:     if_int_eq GSWF(5405) 0
+805C1410:     else
+805C1414:       if_int_eq GSWF(5406) 0
+805C1420:       else
+805C1424:         if_int_eq GSWF(5407) 0
+805C1430:           callc [evt_msg_print evt_msg.o] 0 ["irai_17_00"] 0 0
+805C1448:           callc [evt_win_item_select evt_window.o] 0 [iri_17_item_tbl nok_01.o] LW(0) 0
+805C1460:           if_int_ne LW(0) -1
+805C146C:             callc [evt_pouch_remove_item evt_pouch.o] 98 LW(0)
+805C147C:             callc [evt_msg_print evt_msg.o] 0 ["irai_17_01"] 0 0
+805C1494:             callc [evt_item_entry evt_item.o] ["kairanban"] 98 0 -1000 0 17 -1 0
+805C14BC:             callc [evt_item_get_item evt_item.o] ["kairanban"]
+805C14C8:             callc [evt_item_get_item_end_wait evt_item.o] ["kairanban"]
+805C14D4:             setii GSWF(5407) 1
+805C14E0:           endif
+805C14E4:           return
+805C14E8:         else
+805C14EC:           callc [evt_msg_print evt_msg.o] 0 ["irai_17_02"] 0 0
+805C1504:           return
+805C1508:         endif
+805C150C:       endif
+805C1510:     endif
+805C1514:   endif
+805C1518:   switchi GSW(0)
+805C1520:     case_int_lt 27
+805C1528:       callss [boss_noko_open_gate nok_01.o]
+805C1530:     case_int_lt 34
+805C1538:       if_int_eq GSWF(1774) 1
+805C1544:         if_int_eq GSWF(1775) 1
+805C1550:           callc [evt_msg_print evt_msg.o] 0 ["stg1_nok_56"] 0 0
+805C1568:           return
+805C156C:         endif
+805C1570:       endif
+805C1574:       callc [evt_msg_print evt_msg.o] 0 ["stg1_nok_47"] 0 0
+805C158C:     case_int_lt 56
+805C1594:       callc [evt_msg_print evt_msg.o] 0 ["stg1_nok_56_01"] 0 0
+805C15AC:     case_int_lt 65
+805C15B4:       callc [evt_msg_print evt_msg.o] 0 ["stg1_nok_57"] 0 0
+805C15CC:     case_int_eq 354
+805C15D4:       setii GSWF(3877) 1
+805C15E0:       callc [evt_msg_print evt_msg.o] 0 ["stg1_nok_57_1_00"] 0 0
+805C15F8:     case_int_le 402
+805C1600:       callc [evt_msg_print evt_msg.o] 0 ["stg1_nok_57_1"] 0 0
+805C1618:     case_default
+805C161C:       callc [evt_msg_print evt_msg.o] 0 ["stg1_nok_57_1_1"] 0 0
+805C1634:   end_switch
+805C1638:   return
+805C163C:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [boss_noko_open_gate nok_01.o] AT 805C0DD8 ---
+805C0DD8:   callc [evt_msg_print evt_msg.o] 0 ["stg1_nok_37"] 0 ["me"]
+805C0DF0:   callc [evt_mario_dispflag_onoff evt_mario.o] 1 2
+805C0E00:   begin_thread
+805C0E04:     callc [evt_npc_flag_onoff evt_npc.o] 1 ["me"] 32
+805C0E18:     callc [evt_mario_get_pos evt_mario.o] 0 LW(0) LW(1) LW(2)
+805C0E30:     callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_VOICE_MARIO_SURPRISED1"] LW(0) LW(1) LW(2) 0
+805C0E4C:     callc [evt_mario_set_pose evt_mario.o] ["M_N_7"]
+805C0E58:     callc [evt_mario_jump_pos evt_mario.o] -310 110 -318 200 1 -1000
+805C0E78:     callc [evt_npc_flag_onoff evt_npc.o] 0 ["me"] 32
+805C0E8C:     callc [evt_mario_set_dir evt_mario.o] 270 0 0
+805C0EA0:   end_thread
+805C0EA4:   wait_ms 1000
+805C0EAC:   callc [evt_party_move_behind_mario evt_party.o] 0
+805C0EB8:   callc [evt_set_dir_to_target evt_npc.o] ["me"] ["mario"]
+805C0EC8:   callc [evt_mario_set_pose evt_mario.o] ["M_N_B"]
+805C0ED4:   wait_ms 800
+805C0EDC:   callc [evt_mario_set_pose evt_mario.o] ["M_S_1"]
+805C0EE8:   callc [evt_msg_print evt_msg.o] 0 ["stg1_nok_38"] 0 ["me"]
+805C0F00:   callc [evt_mario_set_pose evt_mario.o] ["M_I_2"]
+805C0F0C:   wait_ms 1000
+805C0F14:   callc [evt_mario_set_pose evt_mario.o] ["M_S_1"]
+805C0F20:   callc [evt_msg_print evt_msg.o] 0 ["stg1_nok_39"] 0 ["me"]
+805C0F38:   callc [evt_mario_set_pose evt_mario.o] ["M_N_2"]
+805C0F44:   wait_ms 1000
+805C0F4C:   callc [evt_mario_set_pose evt_mario.o] ["M_S_1"]
+805C0F58:   callc [evt_msg_print evt_msg.o] 0 ["stg1_nok_40"] 0 ["me"]
+805C0F70:   callc [evt_msg_select evt_msg.o] 0 ["stg1_nok_40_yn"]
+805C0F80:   callc [evt_msg_print_add evt_msg.o] 0 ["stg1_nok_41"]
+805C0F90:   callc [evt_msg_select evt_msg.o] 0 ["stg1_nok_41_yn"]
+805C0FA0:   callc [evt_msg_print_add evt_msg.o] 0 ["stg1_nok_42"]
+805C0FB0:   callc [evt_msg_select evt_msg.o] 0 ["stg1_nok_42_yn"]
+805C0FC0:   callc [evt_msg_print_add evt_msg.o] 0 ["stg1_nok_43"]
+805C0FD0:   callc [evt_mario_set_pose evt_mario.o] ["M_I_2"]
+805C0FDC:   wait_ms 1000
+805C0FE4:   callc [evt_mario_set_pose evt_mario.o] ["M_S_1"]
+805C0FF0:   callc [evt_msg_print evt_msg.o] 0 ["stg1_nok_44"] 0 ["me"]
+805C1008:   callc [evt_msg_select evt_msg.o] 0 ["stg1_nok_44_yn"]
+805C1018:   callc [evt_msg_print_add evt_msg.o] 0 ["stg1_nok_45"]
+805C1028:   callc [evt_mario_get_pos evt_mario.o] 0 LW(0) LW(1) LW(2)
+805C1040:   callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_VOICE_MARIO_NOD1_4"] LW(0) LW(1) LW(2) 0
+805C105C:   callc [evt_mario_set_pose evt_mario.o] ["M_N_2"]
+805C1068:   wait_ms 1000
+805C1070:   callc [evt_mario_set_pose evt_mario.o] ["M_S_1"]
+805C107C:   callc [evt_msg_print evt_msg.o] 0 ["stg1_nok_46"] 0 ["me"]
+805C1094:   callc [evt_mario_dispflag_onoff evt_mario.o] 0 2
+805C10A4:   setii GSW(0) 27
+805C10B0:   return
+805C10B4:   end

@@ -1,0 +1,37 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [hei_07_init_evt hei_07.o] AT 805CD8C8 ---
+805CD8C8:   setii LW(0) [bero_entry_data hei_07.o]
+805CD8D4:   callc [evt_bero_get_info evt_bero.o]
+805CD8DC:   callss [evt_bero_info_run evt_bero.o]
+805CD8E4:   setii LW(0) ["dokan"]
+805CD8F0:   callss [bero_case_switch_off evt_bero.o]
+805CD8F8:   callc [evt_snd_bgmon evt_snd.o] 512 ["BGM_STG1_HEI1"]
+805CD908:   callc [evt_bero_get_entername evt_bero.o] LW(0)
+805CD914:   if_string_eq LW(0) ["dokan"]
+805CD920:     callc [evt_snd_bgmoff evt_snd.o] 6208
+805CD92C:   else
+805CD930:     callc [evt_snd_bgmoff evt_snd.o] 6144
+805CD93C:   endif
+805CD940:   callc [evt_snd_envon evt_snd.o] 272 ["ENV_STG1_HEI4"]
+805CD950:   callc [evt_snd_set_rev_mode evt_snd.o] 1
+805CD95C:   callc [evt_map_playanim evt_map.o] ["anm_hokori"] 1 0
+805CD970:   callc [evt_mapobj_trans evt_map.o] 1 ["hei_07_2"] 0 -1000 0
+805CD98C:   callc [evt_mapobj_flag_onoff evt_map.o] 1 1 ["hei_07_2"] 1
+805CD9A4:   if_int_lt GSW(0) 31
+805CD9B0:     callc [evt_hitobj_onoff evt_hit.o] ["a_sekizou_2"] 0 0
+805CD9C4:     callc [evt_run_case_evt evt_case.o] 9 1 ["a_sekizou_1_a"] 0 [a_sekizou_1 hei_07.o] 0
+805CD9E4:     setii GW(0) 0
+805CD9F0:   else
+805CD9F4:     callc [evt_hitobj_onoff evt_hit.o] ["a_sekizou_2"] 0 1
+805CDA08:     callc [evt_hitobj_onoff evt_hit.o] ["a_sekizou_1_a"] 0 0
+805CDA1C:     callc [evt_hitobj_onoff evt_hit.o] ["a_sekizou_1_b"] 0 0
+805CDA30:     setii LW(0) ["dokan"]
+805CDA3C:     callss [bero_case_switch_on evt_bero.o]
+805CDA44:     callc [evt_map_playanim evt_map.o] ["anm_sekizou"] 2 0
+805CDA58:   endif
+805CDA5C:   callc [evt_npc_change_fbat_mode evt_npc.o] 1
+805CDA68:   callc [evt_mobj_save_blk evt_mobj.o] ["mobj_save"] -120 60 -75 0 0
+805CDA88:   return
+805CDA8C:   end

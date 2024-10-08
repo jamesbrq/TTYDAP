@@ -1,0 +1,37 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [gor_goki2_urouro gor_02.o] AT 80607614 ---
+80607614:   setii LW(4) 0
+80607620:   setii LW(5) 0
+8060762C:   loop 0
+80607634:     setii LW(0) LW(4)
+80607640:     setii LW(1) LW(5)
+8060764C:     callc [evt_npc_get_loiter_dir evt_npc.o] LW(3) 120.00 240.00
+80607660:     callc [evt_npc_add_dirdist evt_npc.o] LW(0) LW(1) LW(3) 50.00
+80607678:     callc [evt_gor_villager_urouro_check_func gor.o] LW(0) LW(1) 0 0 70.00
+80607694:     callc [evt_sub_get_dir evt_sub.o] LW(4) LW(5) LW(0) LW(1) LW(3)
+806076B0:     if_int_gt LW(3) 180
+806076BC:       setii LW(6) 0
+806076C8:     else
+806076CC:       setii LW(6) 180
+806076D8:     endif
+806076DC:     callc [evt_goki_sub_intpl_init gor.o] 13 LW(4) LW(0) LW(5) LW(1) 50
+806076FC:     loop 50
+80607704:       callc [evt_goki_sub_intpl_get_value gor.o]
+8060770C:       setii LW(2) LW(0)
+80607718:       setii LW(3) LW(1)
+80607724:       addi LW(2) -400
+80607730:       addi LW(3) 290
+8060773C:       callc [evt_mapobj_trans evt_map.o] 1 ["S_goki_02"] LW(2) 0 LW(3)
+80607758:       callc [evt_mapobj_rotate evt_map.o] 1 ["S_goki_02"] 0 LW(6) 0
+80607774:       wait_frames 1
+8060777C:     end_loop
+80607780:     setii LW(4) LW(0)
+8060778C:     setii LW(5) LW(1)
+80607798:     callc [evt_sub_random evt_sub.o] 3000 LW(2)
+806077A8:     addi LW(2) 500
+806077B4:     wait_ms LW(2)
+806077BC:   end_loop
+806077C0:   return
+806077C4:   end

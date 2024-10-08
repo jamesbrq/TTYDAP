@@ -1,0 +1,58 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [dead_event unit_boss_majolyne_las.o] AT 80631C9C ---
+80631C9C:   callc [btlevtcmd_GetHomePos battle_event_cmd.o] -2 LW(0) LW(1) LW(2)
+80631CB4:   callc [btlevtcmd_GetPos battle_event_cmd.o] -2 LW(3) LW(4) LW(5)
+80631CCC:   setii LW(6) 1
+80631CD8:   if_int_eq LW(0) LW(3)
+80631CE4:     if_int_eq LW(1) LW(4)
+80631CF0:       if_int_eq LW(2) LW(5)
+80631CFC:         setii LW(6) 0
+80631D08:       endif
+80631D0C:     endif
+80631D10:   endif
+80631D14:   if_int_eq LW(6) 1
+80631D20:     callc [btlevtcmd_SetMoveSpeed battle_event_cmd.o] -2 6.00
+80631D30:     callc [btlevtcmd_AnimeChangePoseType battle_event_cmd.o] -2 1 40
+80631D44:     callc [btlevtcmd_MovePosition battle_event_cmd.o] -2 LW(0) LW(1) LW(2) 0 -1 0
+80631D68:     callc [btlevtcmd_ResetFaceDirection battle_event_cmd.o] -2
+80631D74:   endif
+80631D78:   wait_frames 1
+80631D80:   callc [btlevtcmd_WaitAttackEnd battle_event_cmd.o]
+80631D88:   callc [btlevtcmd_StatusWindowOnOff battle_event_cmd.o] 0
+80631D94:   callss [btl_majolyne_zoom unit_boss_majolyne_las.o]
+80631D9C:   wait_ms 500
+80631DA4:   callc [btlevtcmd_SetTalkPose battle_event_cmd.o] -2 ["MJR_D_1"]
+80631DB4:   callc [btlevtcmd_SetStayPose battle_event_cmd.o] -2 ["MJR_D_1"]
+80631DC4:   if_int_ne GW(12) 0
+80631DD0:     if_int_ne GW(13) 0
+80631DDC:       callc [evt_msg_print evt_msg.o] 2 ["btl_majo3_11"] 0 -2
+80631DF4:       goto 90
+80631DFC:     endif
+80631E00:   endif
+80631E04:   callc [evt_msg_print evt_msg.o] 2 ["btl_majo3_08"] 0 -2
+80631E1C:   callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 1 ["MJR_D_3"]
+80631E30: 90:
+80631E38:   wait_ms 300
+80631E40:   callc [btlevtcmd_StatusWindowOnOff battle_event_cmd.o] 1
+80631E4C:   callc [evt_btl_camera_set_mode battle_camera.o] 0 0
+80631E5C:   setii GW(11) 2
+80631E68:   setii LW(10) -2
+80631E74:   callss [subsetevt_dead_core_nospin_norotate battle_event_subset.o]
+80631E7C:   return
+80631E80:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [btl_majolyne_zoom unit_boss_majolyne_las.o] AT 80631B74 ---
+80631B74:   setii LW(0) GW(8)
+80631B80:   callss [majo3_zoom unit_boss_majolyne_las.o]
+80631B88:   return
+80631B8C:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [majo3_zoom unit_boss_majolyne_las.o] AT 80631AD8 ---
+80631AD8:   callc [btlevtcmd_GetPos battle_event_cmd.o] LW(0) LW(0) [F1194D80] [F1194D80]
+80631AF0:   callc [evt_btl_camera_set_mode battle_camera.o] 0 3
+80631B00:   callc [evt_btl_camera_set_moveto battle_camera.o] 0 LW(0) 65 332 LW(0) 30 -340 30 11
+80631B2C:   wait_frames 37
+80631B34:   return
+80631B38:   end

@@ -1,0 +1,29 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [cortez_weapon_dead_event unit_boss_cortez_sword.o] AT 805F9094 ---
+805F9094:   callc [btlevtcmd_SetRotateOffset battle_event_cmd.o] -2 0 0 0
+805F90AC:   callc [btlevtcmd_GetPos battle_event_cmd.o] -2 LW(0) LW(1) LW(2)
+805F90C4:   callc [btlevtcmd_TransStageFloorPosition battle_event_cmd.o] LW(0) LW(1) LW(2)
+805F90D8:   addi LW(1) 1
+805F90E4:   callc [btlevtcmd_SetFallAccel battle_event_cmd.o] -2 0.40
+805F90F4:   callc [btlevtcmd_FallPosition battle_event_cmd.o] -2 LW(0) LW(1) LW(2) 30
+805F9110:   callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_BOSS_KOR_SWORD_FALL1"] [F1194D80] 0 [F1194D80]
+805F912C:   begin_child_thread
+805F9130:     callc [evt_sub_intpl_init evt_sub.o] 0 0 -90 15
+805F9148:     callc [evt_sub_intpl_get_value evt_sub.o]
+805F9150:     loop 15
+805F9158:       callc [evt_sub_intpl_get_value evt_sub.o]
+805F9160:       callc [btlevtcmd_SetRotate battle_event_cmd.o] -2 LW(0) 0 0
+805F9178:       wait_frames 1
+805F9180:     end_loop
+805F9184:   end_child_thread
+805F9188:   callc [btlevtcmd_JumpPosition battle_event_cmd.o] -2 LW(0) LW(1) LW(2) 15 -1
+805F91A8:   callc [btlevtcmd_SetHomePos battle_event_cmd.o] -2 LW(0) LW(1) LW(2)
+805F91C0:   callc [btlevtcmd_SetUnitWork battle_event_cmd.o] -2 1 2
+805F91D4:   callc [btlevtcmd_OnPartsAttribute battle_event_cmd.o] -2 1 65536
+805F91E8:   callc [btlevtcmd_AnimeSetPoseTable battle_event_cmd.o] -2 1 [pose_table_break unit_boss_cortez_sword.o]
+805F91FC:   callc [btlevtcmd_OnAttribute battle_event_cmd.o] -2 33554432
+805F920C:   callc [btlevtcmd_KillUnit battle_event_cmd.o] -2 1
+805F921C:   return
+805F9220:   end

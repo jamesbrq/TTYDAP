@@ -1,0 +1,54 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [explosion_event unit_giant_bomb.o] AT 80CE2E28 ---
+80CE2E28:   callc [btlevtcmd_GetUnitWork battle_event_cmd.o] -2 2 LW(0)
+80CE2E3C:   callc [evt_snd_sfxoff evt_snd.o] LW(0)
+80CE2E48:   callc [btlevtcmd_SetUnitWork battle_event_cmd.o] -2 2 -1
+80CE2E5C:   callc [evt_btl_camera_shake_h battle_camera.o] 0 10 0 60 4
+80CE2E78:   callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_ENM_HEAVYB_ATTACK3"] [F1194D80] 0 [F1194D80]
+80CE2E94:   callc [btlevtcmd_GetPos battle_event_cmd.o] -2 LW(0) LW(1) LW(2)
+80CE2EAC:   callc [btlevtcmd_GetHeight battle_event_cmd.o] -2 LW(5)
+80CE2EBC:   divi LW(5) 2
+80CE2EC8:   callc [btlevtcmd_GetStatusMg battle_event_cmd.o] -2 LW(6)
+80CE2ED8:   mulf LW(5) LW(6)
+80CE2EE4:   addi LW(1) LW(5)
+80CE2EF0:   callc [evt_eff evt_eff.o] 0 ["bomb"] 5 LW(0) LW(1) LW(2) 2.00 0 0 0 0 0 0 0
+80CE2F30:   callc [btlevtcmd_StageDispellFog battle_event_cmd.o]
+80CE2F38:   wait_ms 300
+80CE2F40:   callc [evt_eff evt_eff.o] 0 ["bomb"] 4 -40 30 20 2.00 0 0 0 0 0 0 0
+80CE2F80:   wait_ms 125
+80CE2F88:   callc [evt_eff evt_eff.o] 0 ["bomb"] 4 40 90 20 2.00 0 0 0 0 0 0 0
+80CE2FC8:   wait_ms 125
+80CE2FD0:   callc [evt_eff evt_eff.o] 0 ["bomb"] 4 40 30 20 2.00 0 0 0 0 0 0 0
+80CE3010:   wait_ms 125
+80CE3018:   callc [evt_eff evt_eff.o] 0 ["bomb"] 4 -40 90 20 2.00 0 0 0 0 0 0 0
+80CE3058:   wait_ms 125
+80CE3060:   callc [evt_eff evt_eff.o] 0 ["bomb"] 4 -100 60 20 2.00 0 0 0 0 0 0 0
+80CE30A0:   wait_ms 125
+80CE30A8:   callc [evt_eff evt_eff.o] 0 ["bomb"] 4 100 60 20 2.00 0 0 0 0 0 0 0
+80CE30E8:   callc [btlevtcmd_GetEnemyBelong battle_event_cmd.o] -2 LW(0)
+80CE30F8:   callc [btlevtcmd_SamplingEnemy battle_event_cmd.o] -2 LW(0) [weapon_heavy_bomb_super_explosion unit_giant_bomb.o]
+80CE310C:   callc [btlevtcmd_ChoiceSamplingEnemy battle_event_cmd.o] [weapon_heavy_bomb_super_explosion unit_giant_bomb.o] LW(3) LW(4)
+80CE3120:   if_int_eq LW(3) -1
+80CE312C:     goto 99
+80CE3134:   endif
+80CE3138:   callc [btlevtcmd_WeaponAftereffect battle_event_cmd.o] [weapon_heavy_bomb_super_explosion unit_giant_bomb.o]
+80CE3144:   callc [btlevtcmd_PayWeaponCost battle_event_cmd.o] -2 [weapon_heavy_bomb_super_explosion unit_giant_bomb.o]
+80CE3154:   setii LW(10) 0
+80CE3160: 10:
+80CE3168:   callc [btlevtcmd_PreCheckDamage battle_event_cmd.o] -2 LW(3) LW(4) [weapon_heavy_bomb_super_explosion unit_giant_bomb.o] 256 LW(5)
+80CE3188:   if_int_eq LW(5) 1
+80CE3194:     callc [btlevtcmd_CheckDamage battle_event_cmd.o] -2 LW(3) LW(4) [weapon_heavy_bomb_super_explosion unit_giant_bomb.o] 256 LW(5)
+80CE31B4:   endif
+80CE31B8:   callc [btlevtcmd_GetSelectNextEnemy battle_event_cmd.o] LW(3) LW(4)
+80CE31C8:   if_int_ne LW(3) -1
+80CE31D4:     addi LW(10) 1
+80CE31E0:     goto 10
+80CE31E8:   endif
+80CE31EC: 99:
+80CE31F4:   setii LW(10) -2
+80CE3200:   callss [subsetevt_dead_core battle_event_subset.o]
+80CE3208:   callc [btlevtcmd_KillUnit battle_event_cmd.o] -2 0
+80CE3218:   return
+80CE321C:   end

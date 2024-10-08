@@ -1,0 +1,35 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [evt_hotdog tou_01.o] AT 805D59A4 ---
+805D59A4:   callc [evt_mario_key_onoff evt_mario.o] 0
+805D59B0:   callc [evt_mario_normalize evt_mario.o]
+805D59B8:   callc [evt_set_dir_to_target evt_npc.o] ["ホットドッグ"] ["mario"]
+805D59C8:   callc [evt_mario_get_party evt_mario.o] LW(0)
+805D59D4:   if_int_eq LW(0) 4
+805D59E0:     callc [evt_msg_print evt_msg.o] 0 ["stg3_tou_13_01"] 0 ["ホットドッグ"]
+805D59F8:   else
+805D59FC:     callc [evt_msg_print evt_msg.o] 0 ["stg3_tou_13"] 0 ["ホットドッグ"]
+805D5A14:   endif
+805D5A18:   callc [evt_win_coin_on evt_window.o] 0 LW(10)
+805D5A28:   callc [evt_msg_select evt_msg.o] 0 ["stg3_tou_13_yn"]
+805D5A38:   if_int_eq LW(0) 0
+805D5A44:     callc [evt_pouch_get_coin evt_pouch.o] LW(0)
+805D5A50:     if_int_lt LW(0) 10
+805D5A5C:       callc [evt_msg_print_add evt_msg.o] 0 ["stg3_tou_15"]
+805D5A6C:     else
+805D5A70:       callc [evt_pouch_add_item evt_pouch.o] 159 LW(0)
+805D5A80:       if_int_eq LW(0) 0
+805D5A8C:         callc [evt_pouch_add_coin evt_pouch.o] -10
+805D5A98:         callc [evt_msg_print_add evt_msg.o] 0 ["stg3_tou_14"]
+805D5AA8:       else
+805D5AAC:         callc [evt_msg_print_add evt_msg.o] 0 ["stg3_shop_18"]
+805D5ABC:       endif
+805D5AC0:     endif
+805D5AC4:   else
+805D5AC8:     callc [evt_msg_print_add evt_msg.o] 0 ["stg3_tou_16"]
+805D5AD8:   endif
+805D5ADC:   callc [evt_win_coin_off evt_window.o] LW(10)
+805D5AE8:   callc [evt_mario_key_onoff evt_mario.o] 1
+805D5AF4:   return
+805D5AF8:   end

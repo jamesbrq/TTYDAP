@@ -1,0 +1,166 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [irekawatta_mario jin_04.o] AT 805C9DE8 ---
+805C9DE8:   if_int_eq LW(0) 1
+805C9DF4:     goto 100
+805C9DFC:   endif
+805C9E00:   callss [irekawatta_mario_init jin_04.o]
+805C9E08:   callc [evt_mario_set_pose evt_mario.o] ["M_S_1"]
+805C9E14:   wait_ms 100
+805C9E1C:   callc [evt_mario_set_pose evt_mario.o] ["M_D_1"]
+805C9E28:   wait_ms 250
+805C9E30:   callc [evt_mario_get_pos evt_mario.o] 0 LW(0) LW(1) LW(2)
+805C9E48:   callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_VOICE_MARIO_SURPRISED1"] LW(0) LW(1) LW(2) 0
+805C9E64:   callc [evt_sub_intpl_msec_init evt_sub.o] 11 0 1440 1200
+805C9E7C:   loop 0
+805C9E84:     callc [evt_sub_intpl_msec_get_value evt_sub.o]
+805C9E8C:     modi LW(0) 360
+805C9E98:     callc [evt_mario_set_dispdir evt_mario.o] LW(0)
+805C9EA4:     wait_frames 1
+805C9EAC:     if_int_eq LW(1) 0
+805C9EB8:       loop_break
+805C9EBC:     endif
+805C9EC0:   end_loop
+805C9EC4:   wait_ms 500
+805C9ECC:   callc [evt_mario_get_pos evt_mario.o] 0 LW(0) LW(1) LW(2)
+805C9EE4:   callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_VOICE_MARIO_DOWN1"] LW(0) LW(1) LW(2) 0
+805C9F00:   callc [evt_mario_dispflag_onoff evt_mario.o] 1 2
+805C9F10:   callc [evt_mario_set_pose evt_mario.o] ["M_D_2"]
+805C9F1C:   wait_ms 800
+805C9F24:   callc [evt_cam3d_evt_set evt_cam.o] -8 800 422 -8 730 28 2000 11
+805C9F4C:   callc [evt_item_entry evt_item.o] ["rubystar"] 117 0 -1000 0 17 -1 0
+805C9F74:   callc [evt_npc_sound_data_set evt_npc.o] ["ランペル"] 0 0 0 0 0
+805C9F94:   callc [evt_npc_set_position evt_npc.o] ["ランペル"] 85 470 51
+805C9FAC:   begin_thread
+805C9FB0:     loop 0
+805C9FB8:       callc [evt_npc_get_position evt_npc.o] ["ランペル"] LW(0) LW(1) LW(2)
+805C9FD0:       addi LW(1) 200
+805C9FDC:       addi LW(2) 10
+805C9FE8:       callc [evt_item_set_position evt_item.o] ["rubystar"] LW(0) LW(1) LW(2)
+805CA000:       if_int_le LW(0) -8
+805CA00C:         loop_break
+805CA010:       endif
+805CA014:       wait_frames 1
+805CA01C:     end_loop
+805CA020:   end_thread
+805CA024:   callc [evt_npc_jump_position_nohit evt_npc.o] ["ランペル"] 35 470 51 600 30.00
+805CA044:   callsa [starstone_jump_se jin_04.o]
+805CA04C:   callc [evt_npc_jump_position_nohit evt_npc.o] ["ランペル"] 10 470 51 300 15.00
+805CA06C:   callsa [starstone_jump_se jin_04.o]
+805CA074:   callc [evt_npc_jump_position_nohit evt_npc.o] ["ランペル"] -2 470 51 150 7.50
+805CA094:   callsa [starstone_jump_se jin_04.o]
+805CA09C:   callc [evt_npc_jump_position_nohit evt_npc.o] ["ランペル"] -8 470 51 79 3.25
+805CA0BC:   callsa [starstone_jump_se jin_04.o]
+805CA0C4:   callc [evt_npc_set_position evt_npc.o] ["ランペル"] -8 470 51
+805CA0DC:   wait_ms 300
+805CA0E4:   wait_ms 500
+805CA0EC:   setii LW(0) -1
+805CA0F8:   setii LW(1) ["rubystar"]
+805CA104:   callc [evt_snd_bgmoff_f evt_snd.o] 512 2000
+805CA114:   callss [evt_sub_starstone evt_sub.o]
+805CA11C:   wait_ms 500
+805CA124:   goto 101
+805CA12C: 100:
+805CA134:   callc [evt_party_stop evt_party.o] 0
+805CA140:   callc [evt_mario_key_onoff evt_mario.o] 0
+805CA14C:   callc [evt_kagemario_change evt_kagemario.o] 1
+805CA158:   callc [evt_npc_set_position evt_npc.o] ["ランペル"] 0 -1000 0
+805CA170:   callc [evt_npc_set_position evt_npc.o] ["にせマリオ"] -8 670 41
+805CA188:   callc [evt_npc_set_ry evt_npc.o] ["にせマリオ"] 90
+805CA198:   callc [evt_party_set_pos evt_party.o] 0 -40 670 41
+805CA1B0:   callc [evt_party_set_dir evt_party.o] 0 90 0
+805CA1C4:   callc [evt_mario_set_pos evt_mario.o] 80 670 50
+805CA1D8:   callc [evt_mario_set_dir evt_mario.o] 270 0 0
+805CA1EC:   callc [evt_cam3d_evt_set_npc_rel evt_cam.o] ["にせマリオ"] 0 50 397 0 70 25 0 11
+805CA218:   callc [evt_mario_dispflag_onoff evt_mario.o] 1 2
+805CA228:   callc [evt_mario_set_pose evt_mario.o] ["M_D_2"]
+805CA234:   callc [evt_seq_wait evt_seq.o] 2
+805CA240:   callc [evt_fade_end_wait evt_fade.o]
+805CA248: 101:
+805CA250:   callc [evt_npc_set_stay_anim evt_npc.o] ["にせマリオ"]
+805CA25C:   callc [evt_npc_set_ry evt_npc.o] ["にせマリオ"] 270
+805CA26C:   callc [evt_cam3d_evt_set evt_cam.o] 0 823 570 0 727 27 500 11
+805CA294:   wait_ms 500
+805CA29C:   wait_ms 500
+805CA2A4:   callc [evt_msg_print_party evt_msg.o] ["stg4_jin_10"]
+805CA2B0:   begin_thread
+805CA2B4:     wait_ms 300
+805CA2BC:     callc [evt_party_set_dir evt_party.o] 0 270 300
+805CA2D0:   end_thread
+805CA2D4:   callc [evt_npc_move_position evt_npc.o] ["にせマリオ"] -45 105 500 0 0
+805CA2F4:   callc [evt_npc_set_position evt_npc.o] ["ランペル"] -45 470 105
+805CA30C:   wait_ms 500
+805CA314:   begin_thread
+805CA318:     callc [evt_npc_jump_position_nohit evt_npc.o] ["ランペル"] -84 400 105 400 60.00
+805CA338:     callc [evt_npc_set_position evt_npc.o] ["ランペル"] 0 -1000 0
+805CA350:   end_thread
+805CA354:   callc [evt_npc_get_position evt_npc.o] ["にせマリオ"] LW(0) LW(1) LW(2)
+805CA36C:   callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_STG4_LANPEL_M_JUMP1"] LW(0) LW(1) LW(2) 0
+805CA388:   begin_thread
+805CA38C:     callc [evt_npc_get_position evt_npc.o] ["ランペル"] LW(0) LW(1) LW(2)
+805CA3A4:     callc [evt_npc_set_anim evt_npc.o] ["にせマリオ"] ["EM_J_1B"]
+805CA3B4:     loop 0
+805CA3BC:       setii LW(3) LW(1)
+805CA3C8:       callc [evt_npc_get_position evt_npc.o] ["ランペル"] LW(0) LW(1) LW(2)
+805CA3E0:       addi LW(1) 200
+805CA3EC:       callc [evt_npc_set_position evt_npc.o] ["にせマリオ"] LW(0) LW(1) LW(2)
+805CA404:       if_int_lt LW(1) LW(3)
+805CA410:         callc [evt_npc_set_anim evt_npc.o] ["にせマリオ"] ["EM_J_1C"]
+805CA420:       endif
+805CA424:       if_int_le LW(1) 400
+805CA430:         loop_break
+805CA434:       endif
+805CA438:       wait_frames 1
+805CA440:     end_loop
+805CA444:     callc [evt_npc_set_position evt_npc.o] ["にせマリオ"] 0 -1000 0
+805CA45C:   end_thread
+805CA460:   wait_ms 100
+805CA468:   callc [evt_party_set_dir evt_party.o] 0 270 300
+805CA47C:   callc [evt_party_move_pos2 evt_party.o] 0 -45 105 80.00
+805CA494:   callc [evt_party_jump_pos evt_party.o] 0 -92 600 105 400 0 -1000
+805CA4B8:   callc [evt_party_run evt_party.o] 0
+805CA4C4:   callc [evt_mario_kill_party evt_mario.o] 0
+805CA4D0:   callc [evt_pouch_party_left evt_pouch.o] 1
+805CA4DC:   callc [evt_pouch_party_left evt_pouch.o] 2
+805CA4E8:   callc [evt_pouch_party_left evt_pouch.o] 5
+805CA4F4:   callc [evt_pouch_party_left evt_pouch.o] 4
+805CA500:   loop 0
+805CA508:     callc [evt_key_get_buttontrg evt_sub.o] 0 LW(0)
+805CA518:     if_bits_set LW(0) 256
+805CA524:       loop_break
+805CA528:     endif
+805CA52C:     wait_frames 1
+805CA534:   end_loop
+805CA538:   callc [evt_snd_bgmon evt_snd.o] 512 ["BGM_STG4_JIN1"]
+805CA548:   callc [evt_snd_envon evt_snd.o] 272 ["ENV_STG4_JIN1"]
+805CA558:   callc [evt_cam3d_evt_off evt_cam.o] 1000 11
+805CA568:   setii GSW(0) 201
+805CA574:   setii GSWF(2081) 1
+805CA580:   callc [evt_mario_dispflag_onoff evt_mario.o] 0 2
+805CA590:   callc [evt_mario_key_onoff evt_mario.o] 1
+805CA59C:   return
+805CA5A0:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [irekawatta_mario_init jin_04.o] AT 805C9CDC ---
+805C9CDC:   callc [evt_party_stop evt_party.o] 0
+805C9CE8:   callc [evt_kagemario_change evt_kagemario.o] 1
+805C9CF4:   callc [evt_npc_set_position evt_npc.o] ["ランペル"] 0 -1000 0
+805C9D0C:   callc [evt_npc_set_position evt_npc.o] ["にせマリオ"] -8 670 41
+805C9D24:   callc [evt_npc_set_ry evt_npc.o] ["にせマリオ"] 90
+805C9D34:   callc [evt_npc_flag_onoff evt_npc.o] 1 ["にせマリオ"] 32768
+805C9D48:   callc [evt_party_set_pos evt_party.o] 0 -40 670 41
+805C9D60:   callc [evt_party_set_dir evt_party.o] 0 90 0
+805C9D74:   callc [evt_mario_set_pos evt_mario.o] 80 670 50
+805C9D88:   callc [evt_mario_set_dir evt_mario.o] 270 0 0
+805C9D9C:   callc [evt_cam3d_evt_set evt_cam.o] 75 785 422 75 715 25 0 11
+805C9DC4:   wait_frames 1
+805C9DCC:   callc [evt_npc_flag_onoff evt_npc.o] 0 ["にせマリオ"] 32768
+805C9DE0:   return
+805C9DE4:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [starstone_jump_se jin_04.o] AT 805C9CA0 ---
+805C9CA0:   callc [evt_item_get_position evt_item.o] ["rubystar"] LW(0) LW(1) LW(2)
+805C9CB8:   callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_EVT_STARSTONE_JUMP1"] LW(0) LW(1) LW(2) 0
+805C9CD4:   return
+805C9CD8:   end

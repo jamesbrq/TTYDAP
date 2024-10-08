@@ -1,0 +1,243 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [hom_10_evt_resha_left gor_04.o] AT 80616FA4 ---
+80616FA4:   callss [hom_10_evt_resha_sub gor_04.o]
+80616FAC:   callc [evt_mapobj_flag_onoff evt_map.o] 1 1 ["train_1"] 1
+80616FC4:   callc [evt_mapobj_flag_onoff evt_map.o] 1 1 ["train_6"] 1
+80616FDC:   callc [evt_mapobj_flag_onoff evt_map.o] 1 1 ["renketu_1"] 1
+80616FF4:   callc [evt_mapobj_flag_onoff evt_map.o] 1 1 ["renketu_5"] 1
+8061700C:   return
+80617010:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [hom_10_evt_resha_sub gor_04.o] AT 80616D80 ---
+80616D80:   setii GSWF(3583) 0
+80616D8C:   setff GW(0) 0.00
+80616D98:   setff GW(1) 0.00
+80616DA4:   callsa [evt_sharin gor_04.o]
+80616DAC:   callsa [evt_clank gor_04.o]
+80616DB4:   setii LF(0) 0
+80616DC0:   callc [evt_sub_get_mapname evt_sub.o] LW(0)
+80616DCC:   if_string_eq LW(0) ["hom_10"]
+80616DD8:     setii LF(0) 1
+80616DE4:   endif
+80616DE8:   if_string_eq LW(0) ["hom_11"]
+80616DF4:     setii LF(0) 1
+80616E00:   endif
+80616E04:   if_string_eq LW(0) ["hom_12"]
+80616E10:     setii LF(0) 1
+80616E1C:   endif
+80616E20:   if_string_eq LW(0) ["rsh_06_a"]
+80616E2C:     setii LF(0) 1
+80616E38:   endif
+80616E3C:   if_int_eq LF(0) 1
+80616E48:     callsa [evt_bg gor_04.o]
+80616E50:   endif
+80616E54:   callsa [evt_hoshi gor_04.o]
+80616E5C:   callsa [evt_ramp gor_04.o]
+80616E64:   callc [evt_map_set_tevcallback evt_map.o] 1 [resha_tev gor_04.o]
+80616E74:   mo_set_base_int [pika_tbl gor_04.o]
+80616E7C:   callc [evt_sub_get_mapname evt_sub.o] LW(0)
+80616E88:   if_string_eq LW(0) ["rsh_06_a"]
+80616E94:     mo_set_base_int [pika_tbl_rsh_06 gor_04.o]
+80616E9C:   endif
+80616EA0:   loop 0
+80616EA8:     mo_read_int LW(0)
+80616EB0:     if_int_eq LW(0) 0
+80616EBC:       loop_break
+80616EC0:     endif
+80616EC4:     callc [evt_mapobj_flag_onoff evt_map.o] 1 1 LW(0) 16777216
+80616EDC:     callc [evt_mapobj_flag_onoff evt_map.o] 1 0 LW(0) 256
+80616EF4:     callc [evt_mapobj_flag_onoff evt_map.o] 1 1 LW(0) 268435456
+80616F0C:   end_loop
+80616F10:   return
+80616F14:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [evt_sharin gor_04.o] AT 80615B6C ---
+80615B6C:   mo_set_base_int [sharinDt gor_04.o]
+80615B74:   loop 0
+80615B7C:     mo_read_int4 LW(0) LW(1) LW(2) LW(3)
+80615B90:     if_int_eq LW(0) 0
+80615B9C:       loop_break
+80615BA0:     endif
+80615BA4:     callsa [evt_sharin_main gor_04.o]
+80615BAC:   end_loop
+80615BB0:   return
+80615BB4:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [evt_clank gor_04.o] AT 80615E0C ---
+80615E0C:   mo_set_base_int [clankDt gor_04.o]
+80615E14:   loop 0
+80615E1C:     mo_read_int4 LW(0) LW(1) LW(2) LW(3)
+80615E30:     mo_read_int LW(4)
+80615E38:     if_int_eq LW(0) 0
+80615E44:       loop_break
+80615E48:     endif
+80615E4C:     callsa [evt_clank_main gor_04.o]
+80615E54:   end_loop
+80615E58:   return
+80615E5C:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [evt_bg gor_04.o] AT 80615E60 ---
+80615E60:   setff LW(10) 0.00
+80615E6C:   setff LW(11) 0.00
+80615E78:   loop 0
+80615E80:     setff LW(0) GW(0)
+80615E8C:     addf LW(10) LW(0)
+80615E98:     if_int_gt LW(10) 800.00
+80615EA4:       subf LW(10) 1600.00
+80615EB0:     endif
+80615EB4:     if_int_lt LW(10) -800.00
+80615EC0:       addf LW(10) 1600.00
+80615ECC:     endif
+80615ED0:     addf LW(11) LW(0)
+80615EDC:     if_int_gt LW(11) 2400.00
+80615EE8:       subf LW(11) 4800.00
+80615EF4:     endif
+80615EF8:     if_int_lt LW(11) -2400.00
+80615F04:       addf LW(11) 4800.00
+80615F10:     endif
+80615F14:     callc [evt_mapobj_trans evt_map.o] 1 ["jimen"] LW(10) 0 0
+80615F30:     callc [evt_mapobj_trans evt_map.o] 1 ["yama"] LW(10) 0 0
+80615F4C:     callc [evt_mapobj_trans evt_map.o] 1 ["iwayama"] LW(11) 0 0
+80615F68:     wait_frames 1
+80615F70:     loop 0
+80615F78:       if_int_eq GSWF(3583) 1
+80615F84:         loop_break
+80615F88:       endif
+80615F8C:       wait_frames 1
+80615F94:     end_loop
+80615F98:   end_loop
+80615F9C:   return
+80615FA0:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [evt_hoshi gor_04.o] AT 80615FA4 ---
+80615FA4:   setff LW(10) 0.00
+80615FB0:   loop 0
+80615FB8:     setff LW(9) GW(0)
+80615FC4:     divf LW(9) 30.00
+80615FD0:     mulf LW(9) 57.29
+80615FDC:     addf LW(10) LW(9)
+80615FE8:     if_int_gt LW(10) 360.00
+80615FF4:       subf LW(10) 360.00
+80616000:     endif
+80616004:     if_int_lt LW(10) 0.00
+80616010:       addf LW(10) 360.00
+8061601C:     endif
+80616020:     callc [evt_mapobj_rotate evt_map.o] 0 ["hosi_right"] LW(10) 0 0
+8061603C:     callc [evt_mapobj_rotate evt_map.o] 0 ["hosi_left"] LW(10) 0 0
+80616058:     callc [evt_mapobj_rotate evt_map.o] 0 ["hosi_center"] LW(10) 0 0
+80616074:     callc [evt_mapobj_rotate evt_map.o] 0 ["hosi_right_c"] LW(10) 0 0
+80616090:     callc [evt_mapobj_rotate evt_map.o] 0 ["hosi_left_c"] LW(10) 0 0
+806160AC:     callc [evt_mapobj_rotate evt_map.o] 0 ["hosi_center_c"] LW(10) 0 0
+806160C8:     wait_frames 1
+806160D0:     loop 0
+806160D8:       if_int_eq GSWF(3583) 1
+806160E4:         loop_break
+806160E8:       endif
+806160EC:       wait_frames 1
+806160F4:     end_loop
+806160F8:   end_loop
+806160FC:   return
+80616100:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [evt_ramp gor_04.o] AT 80616C98 ---
+80616C98:   loop 0
+80616CA0:     callc [ramp_r gor_04.o]
+80616CA8:     callc [evt_mapobj_rotate evt_map.o] 1 ["ranpu"] 0 0 LW(10)
+80616CC4:     callc [evt_mapobj_rotate evt_map.o] 1 ["ranpu_c"] 0 0 LW(10)
+80616CE0:     wait_frames 1
+80616CE8:     loop 0
+80616CF0:       if_int_eq GSWF(3583) 1
+80616CFC:         loop_break
+80616D00:       endif
+80616D04:       wait_frames 1
+80616D0C:     end_loop
+80616D10:   end_loop
+80616D14:   return
+80616D18:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [evt_sharin_main gor_04.o] AT 80615A10 ---
+80615A10:   setff LW(10) 0.00
+80615A1C:   switchi LW(1)
+80615A24:     case_int_eq 0
+80615A2C:       setff LW(11) 23.89
+80615A38:     case_int_eq 1
+80615A40:       setff LW(11) 31.14
+80615A4C:     case_int_eq 2
+80615A54:       setff LW(11) 55.02
+80615A60:   end_switch
+80615A64:   loop 0
+80615A6C:     switchi LW(2)
+80615A74:       case_int_eq 0
+80615A7C:         setff LW(9) GW(0)
+80615A88:       case_int_eq 1
+80615A90:         setff LW(9) GW(1)
+80615A9C:     end_switch
+80615AA0:     divf LW(9) LW(11)
+80615AAC:     mulf LW(9) 57.29
+80615AB8:     addf LW(10) LW(9)
+80615AC4:     if_int_gt LW(10) 360.00
+80615AD0:       subf LW(10) 360.00
+80615ADC:     endif
+80615AE0:     if_int_lt LW(10) 0.00
+80615AEC:       addf LW(10) 360.00
+80615AF8:     endif
+80615AFC:     setff LW(12) LW(10)
+80615B08:     mulf LW(12) LW(3)
+80615B14:     callc [evt_mapobj_rotate evt_map.o] 1 LW(0) 0 0 LW(12)
+80615B30:     wait_frames 1
+80615B38:     loop 0
+80615B40:       if_int_eq GSWF(3583) 1
+80615B4C:         loop_break
+80615B50:       endif
+80615B54:       wait_frames 1
+80615B5C:     end_loop
+80615B60:   end_loop
+80615B64:   return
+80615B68:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [evt_clank_main gor_04.o] AT 80615C6C ---
+80615C6C:   setff LW(10) 0.00
+80615C78:   switchi LW(1)
+80615C80:     case_int_eq 0
+80615C88:       setff LW(11) 23.89
+80615C94:     case_int_eq 1
+80615C9C:       setff LW(11) 31.14
+80615CA8:     case_int_eq 2
+80615CB0:       setff LW(11) 55.02
+80615CBC:   end_switch
+80615CC0:   loop 0
+80615CC8:     switchi LW(2)
+80615CD0:       case_int_eq 0
+80615CD8:         setff LW(9) GW(0)
+80615CE4:       case_int_eq 1
+80615CEC:         setff LW(9) GW(1)
+80615CF8:     end_switch
+80615CFC:     divf LW(9) LW(11)
+80615D08:     mulf LW(9) 57.29
+80615D14:     addf LW(10) LW(9)
+80615D20:     if_int_gt LW(10) 360.00
+80615D2C:       subf LW(10) 360.00
+80615D38:     endif
+80615D3C:     if_int_lt LW(10) 0.00
+80615D48:       addf LW(10) 360.00
+80615D54:     endif
+80615D58:     setff LW(12) LW(10)
+80615D64:     mulf LW(12) LW(4)
+80615D70:     callc [evt_sub_get_sincos evt_sub.o] LW(12) LW(13) LW(14)
+80615D84:     mulf LW(13) LW(3)
+80615D90:     mulf LW(14) LW(3)
+80615D9C:     subf LW(14) LW(3)
+80615DA8:     mulf LW(14) -1.00
+80615DB4:     callc [evt_mapobj_trans evt_map.o] 1 LW(0) LW(14) LW(13) 0.00
+80615DD0:     wait_frames 1
+80615DD8:     loop 0
+80615DE0:       if_int_eq GSWF(3583) 1
+80615DEC:         loop_break
+80615DF0:       endif
+80615DF4:       wait_frames 1
+80615DFC:     end_loop
+80615E00:   end_loop
+80615E04:   return
+80615E08:   end

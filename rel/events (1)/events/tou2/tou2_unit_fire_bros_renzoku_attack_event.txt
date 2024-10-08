@@ -1,0 +1,326 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [renzoku_attack_event unit_fire_bros.o] AT 805ED530 ---
+805ED530:   callc [btlevtcmd_GetEnemyBelong battle_event_cmd.o] -2 LW(0)
+805ED540:   callc [btlevtcmd_SamplingEnemy battle_event_cmd.o] -2 LW(0) [weapon_fire_bros_renzoku_attack unit_fire_bros.o]
+805ED554:   callc [btlevtcmd_ChoiceSamplingEnemy battle_event_cmd.o] [weapon_fire_bros_renzoku_attack unit_fire_bros.o] LW(3) LW(4)
+805ED568:   if_int_eq LW(3) -1
+805ED574:     callc [btlevtcmd_CheckToken battle_event_cmd.o] -2 16 LW(0)
+805ED588:     if_int_ne LW(0) 0
+805ED594:       callss [subsetevt_confuse_flustered battle_event_subset.o]
+805ED59C:       return
+805ED5A0:     endif
+805ED5A4:     goto 99
+805ED5AC:   endif
+805ED5B0:   callc [evt_btl_camera_set_mode battle_camera.o] 0 0
+805ED5C0:   callc [btlevtcmd_WeaponAftereffect battle_event_cmd.o] [weapon_fire_bros_renzoku_attack unit_fire_bros.o]
+805ED5CC:   callc [btlevtcmd_AttackDeclare battle_event_cmd.o] -2 LW(3) LW(4)
+805ED5E0:   callc [btlevtcmd_WaitGuardMove battle_event_cmd.o]
+805ED5E8:   callc [btlevtcmd_PayWeaponCost battle_event_cmd.o] -2 [weapon_fire_bros_renzoku_attack unit_fire_bros.o]
+805ED5F8:   callc [btlevtcmd_CalculateFaceDirection battle_event_cmd.o] -2 -1 LW(3) LW(4) 16 LW(15)
+805ED618:   callc [btlevtcmd_ChangeFaceDirection battle_event_cmd.o] -2 LW(15)
+805ED628:   callc [btlevtcmd_SetUnitWork battle_event_cmd.o] -2 1 0
+805ED63C:   callc [btlevtcmd_SetPartsWork battle_event_cmd.o] -2 2 10 0
+805ED654:   callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 1 ["BRO_A_2A"]
+805ED668:   wait_frames 20
+805ED670:   setii LW(15) 2
+805ED67C:   setii LW(14) 0
+805ED688:   setii LW(6) [weapon_fire_bros_renzoku_attack unit_fire_bros.o]
+805ED694:   setii LW(8) 0
+805ED6A0:   callsa [fire_move_event unit_fire_bros.o]
+805ED6A8:   wait_frames 12
+805ED6B0:   callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 1 ["BRO_A_2A"]
+805ED6C4:   wait_frames 20
+805ED6CC:   setii LW(15) 3
+805ED6D8:   setii LW(14) 1
+805ED6E4:   setii LW(6) [weapon_fire_bros_renzoku_attack unit_fire_bros.o]
+805ED6F0:   setii LW(8) 0
+805ED6FC:   callsa [fire_move_event unit_fire_bros.o]
+805ED704:   loop 0
+805ED70C:     wait_frames 1
+805ED714:     callc [btlevtcmd_GetUnitWork battle_event_cmd.o] -2 1 LW(0)
+805ED728:     if_int_ge LW(0) 2
+805ED734:       loop_break
+805ED738:     endif
+805ED73C:   end_loop
+805ED740:   wait_frames 20
+805ED748: 99:
+805ED750:   callc [btlevtcmd_ResetFaceDirection battle_event_cmd.o] -2
+805ED75C:   return
+805ED760:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [fire_move_event unit_fire_bros.o] AT 805EC9C8 ---
+805EC9C8:   callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_ENM_FIREB_ATTACK1"] [F1194D80] 0 [F1194D80]
+805EC9E4:   callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 LW(15) ["BRO_A_1B"]
+805EC9F8:   callc [btlevtcmd_SetPartsWork battle_event_cmd.o] -2 LW(15) 15 0
+805ECA10:   callc [btlevtcmd_GetPos battle_event_cmd.o] -2 LW(0) LW(1) LW(2)
+805ECA28:   addi LW(1) 15
+805ECA34:   callc [btlevtcmd_SetPartsPos battle_event_cmd.o] -2 LW(15) LW(0) LW(1) LW(2)
+805ECA50:   callc [btlevtcmd_SetPartsRotate battle_event_cmd.o] -2 LW(15) 0 0 -180
+805ECA6C:   callc [btlevtcmd_SetPartsRotateOffset battle_event_cmd.o] -2 LW(15) 0 0 0
+805ECA88:   callc [btlevtcmd_OffPartsAttribute battle_event_cmd.o] -2 LW(15) 16777216
+805ECA9C:   callc [btlevtcmd_OffPartsAttribute battle_event_cmd.o] -2 LW(15) 33554432
+805ECAB0:   callc [btlevtcmd_GetHitPos battle_event_cmd.o] LW(3) LW(4) LW(9) LW(10) LW(11)
+805ECACC:   subi LW(9) LW(0)
+805ECAD8:   setii LW(10) 0
+805ECAE4:   begin_child_thread
+805ECAE8:     loop 0
+805ECAF0:       wait_frames 1
+805ECAF8:       callc [btlevtcmd_GetPartsPos battle_event_cmd.o] -2 LW(15) LW(0) LW(12) LW(13)
+805ECB14:       switchi LW(10)
+805ECB1C:         case_int_eq 0
+805ECB24:           callc [btlevtcmd_GetHitPos battle_event_cmd.o] LW(3) LW(4) LW(11) LW(12) LW(13)
+805ECB40:           if_int_ge LW(9) 0
+805ECB4C:             if_int_le LW(0) LW(11)
+805ECB58:               switch_break
+805ECB5C:             endif
+805ECB60:           else
+805ECB64:             if_int_ge LW(0) LW(11)
+805ECB70:               switch_break
+805ECB74:             endif
+805ECB78:           endif
+805ECB7C:           if_int_eq LW(14) 0
+805ECB88:             callss [damage_check_no_last unit_fire_bros.o]
+805ECB90:           else
+805ECB94:             callss [damage_check_last unit_fire_bros.o]
+805ECB9C:           endif
+805ECBA0:           if_int_eq LW(0) 1
+805ECBAC:             callc [btlevtcmd_OnPartsAttribute battle_event_cmd.o] -2 LW(15) 16777216
+805ECBC0:             callc [btlevtcmd_OnPartsAttribute battle_event_cmd.o] -2 LW(15) 33554432
+805ECBD4:             setii LW(10) 2
+805ECBE0:           else
+805ECBE4:             setii LW(10) 1
+805ECBF0:           endif
+805ECBF4:           end_multi_case
+805ECBF8:         case_int_eq 1
+805ECC00:           callc [btlevtcmd_GetPartsPos battle_event_cmd.o] -2 LW(15) LW(11) LW(12) LW(13)
+805ECC1C:           if_int_ge LW(11) 250
+805ECC28:             callc [btlevtcmd_OnPartsAttribute battle_event_cmd.o] -2 LW(15) 16777216
+805ECC3C:             callc [btlevtcmd_OnPartsAttribute battle_event_cmd.o] -2 LW(15) 33554432
+805ECC50:             setii LW(10) 2
+805ECC5C:           endif
+805ECC60:           if_int_le LW(11) -250
+805ECC6C:             callc [btlevtcmd_OnPartsAttribute battle_event_cmd.o] -2 LW(15) 16777216
+805ECC80:             callc [btlevtcmd_OnPartsAttribute battle_event_cmd.o] -2 LW(15) 33554432
+805ECC94:             setii LW(10) 2
+805ECCA0:           endif
+805ECCA4:           end_multi_case
+805ECCA8:         case_int_eq 2
+805ECCB0:           callc [btlevtcmd_SetPartsWork battle_event_cmd.o] -2 LW(15) 15 1
+805ECCC8:           loop_break
+805ECCCC:           end_multi_case
+805ECCD0:       end_switch
+805ECCD4:     end_loop
+805ECCD8:   end_child_thread
+805ECCDC:   begin_child_thread
+805ECCE0:     loop 0
+805ECCE8:       wait_frames 1
+805ECCF0:       callc [btlevtcmd_AddPartsRotate battle_event_cmd.o] -2 LW(15) 0 0 16
+805ECD0C:     end_loop
+805ECD10:   end_child_thread
+805ECD14:   callc [evt_sub_random evt_sub.o] 1 LW(11)
+805ECD24:   if_int_eq LW(11) 0
+805ECD30:     callc [btlevtcmd_GetPartsPos battle_event_cmd.o] -2 LW(15) LW(0) LW(1) LW(2)
+805ECD4C:     callc [btlevtcmd_JumpPartsSetting battle_event_cmd.o] -2 LW(15) 0 6 0.60
+805ECD68:     callc [btlevtcmd_FaceDirectionAdd battle_event_cmd.o] -2 LW(0) 100
+805ECD7C:     callc [btlevtcmd_JumpPartsPosition battle_event_cmd.o] -2 LW(15) LW(0) 0 LW(2) 0 -1
+805ECDA0:     callc [btlevtcmd_GetPartsWork battle_event_cmd.o] -2 LW(15) 15 LW(10)
+805ECDB8:     if_int_eq LW(10) 1
+805ECDC4:       goto 99
+805ECDCC:     endif
+805ECDD0:     callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_ENM_FIREB_ATTACK2"] [F1194D80] 0 [F1194D80]
+805ECDEC:     callc [btlevtcmd_FaceDirectionAdd battle_event_cmd.o] -2 LW(0) 100
+805ECE00:     callc [btlevtcmd_JumpPartsPosition battle_event_cmd.o] -2 LW(15) LW(0) 0 LW(2) 0 -1
+805ECE24:     callc [btlevtcmd_GetPartsWork battle_event_cmd.o] -2 LW(15) 15 LW(10)
+805ECE3C:     if_int_eq LW(10) 1
+805ECE48:       goto 99
+805ECE50:     endif
+805ECE54:     callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_ENM_FIREB_ATTACK2"] [F1194D80] 0 [F1194D80]
+805ECE70:     callc [btlevtcmd_FaceDirectionAdd battle_event_cmd.o] -2 LW(0) 100
+805ECE84:     callc [btlevtcmd_JumpPartsPosition battle_event_cmd.o] -2 LW(15) LW(0) 0 LW(2) 0 -1
+805ECEA8:     callc [btlevtcmd_GetPartsWork battle_event_cmd.o] -2 LW(15) 15 LW(10)
+805ECEC0:     if_int_eq LW(10) 1
+805ECECC:       goto 99
+805ECED4:     endif
+805ECED8:     callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_ENM_FIREB_ATTACK2"] [F1194D80] 0 [F1194D80]
+805ECEF4:     callc [btlevtcmd_FaceDirectionAdd battle_event_cmd.o] -2 LW(0) 100
+805ECF08:     callc [btlevtcmd_JumpPartsPosition battle_event_cmd.o] -2 LW(15) LW(0) 0 LW(2) 0 -1
+805ECF2C:     callc [btlevtcmd_GetPartsWork battle_event_cmd.o] -2 LW(15) 15 LW(10)
+805ECF44:     if_int_eq LW(10) 1
+805ECF50:       goto 99
+805ECF58:     endif
+805ECF5C:     callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_ENM_FIREB_ATTACK2"] [F1194D80] 0 [F1194D80]
+805ECF78:     callc [btlevtcmd_FaceDirectionAdd battle_event_cmd.o] -2 LW(0) 100
+805ECF8C:     callc [btlevtcmd_JumpPartsPosition battle_event_cmd.o] -2 LW(15) LW(0) 0 LW(2) 0 -1
+805ECFB0:     callc [btlevtcmd_GetPartsWork battle_event_cmd.o] -2 LW(15) 15 LW(10)
+805ECFC8:     if_int_eq LW(10) 1
+805ECFD4:       goto 99
+805ECFDC:     endif
+805ECFE0:     callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_ENM_FIREB_ATTACK2"] [F1194D80] 0 [F1194D80]
+805ECFFC:   else
+805ED000:     callc [btlevtcmd_GetPartsPos battle_event_cmd.o] -2 LW(15) LW(0) LW(1) LW(2)
+805ED01C:     callc [btlevtcmd_JumpPartsSetting battle_event_cmd.o] -2 LW(15) 0 5 0.60
+805ED038:     callc [btlevtcmd_FaceDirectionAdd battle_event_cmd.o] -2 LW(0) 100
+805ED04C:     callc [btlevtcmd_JumpPartsPosition battle_event_cmd.o] -2 LW(15) LW(0) 0 LW(2) 0 -1
+805ED070:     callc [btlevtcmd_GetPartsWork battle_event_cmd.o] -2 LW(15) 15 LW(10)
+805ED088:     if_int_eq LW(10) 1
+805ED094:       goto 99
+805ED09C:     endif
+805ED0A0:     callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_ENM_FIREB_ATTACK2"] [F1194D80] 0 [F1194D80]
+805ED0BC:     callc [btlevtcmd_FaceDirectionAdd battle_event_cmd.o] -2 LW(0) 100
+805ED0D0:     callc [btlevtcmd_JumpPartsPosition battle_event_cmd.o] -2 LW(15) LW(0) 0 LW(2) 0 -1
+805ED0F4:     callc [btlevtcmd_GetPartsWork battle_event_cmd.o] -2 LW(15) 15 LW(10)
+805ED10C:     if_int_eq LW(10) 1
+805ED118:       goto 99
+805ED120:     endif
+805ED124:     callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_ENM_FIREB_ATTACK2"] [F1194D80] 0 [F1194D80]
+805ED140:     callc [btlevtcmd_FaceDirectionAdd battle_event_cmd.o] -2 LW(0) 100
+805ED154:     callc [btlevtcmd_JumpPartsPosition battle_event_cmd.o] -2 LW(15) LW(0) 0 LW(2) 0 -1
+805ED178:     callc [btlevtcmd_GetPartsWork battle_event_cmd.o] -2 LW(15) 15 LW(10)
+805ED190:     if_int_eq LW(10) 1
+805ED19C:       goto 99
+805ED1A4:     endif
+805ED1A8:     callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_ENM_FIREB_ATTACK2"] [F1194D80] 0 [F1194D80]
+805ED1C4:     if_int_eq LW(10) 2
+805ED1D0:       goto 99
+805ED1D8:     endif
+805ED1DC:     callc [btlevtcmd_FaceDirectionAdd battle_event_cmd.o] -2 LW(0) 100
+805ED1F0:     callc [btlevtcmd_JumpPartsPosition battle_event_cmd.o] -2 LW(15) LW(0) 0 LW(2) 0 -1
+805ED214:     callc [btlevtcmd_GetPartsWork battle_event_cmd.o] -2 LW(15) 15 LW(10)
+805ED22C:     if_int_eq LW(10) 1
+805ED238:       goto 99
+805ED240:     endif
+805ED244:     callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_ENM_FIREB_ATTACK2"] [F1194D80] 0 [F1194D80]
+805ED260:     callc [btlevtcmd_FaceDirectionAdd battle_event_cmd.o] -2 LW(0) 100
+805ED274:     callc [btlevtcmd_JumpPartsPosition battle_event_cmd.o] -2 LW(15) LW(0) 0 LW(2) 0 -1
+805ED298:     callc [btlevtcmd_GetPartsWork battle_event_cmd.o] -2 LW(15) 15 LW(10)
+805ED2B0:     if_int_eq LW(10) 1
+805ED2BC:       goto 99
+805ED2C4:     endif
+805ED2C8:     callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_ENM_FIREB_ATTACK2"] [F1194D80] 0 [F1194D80]
+805ED2E4:   endif
+805ED2E8: 99:
+805ED2F0:   wait_frames 6
+805ED2F8:   callc [btlevtcmd_OnPartsAttribute battle_event_cmd.o] -2 LW(15) 16777216
+805ED30C:   callc [btlevtcmd_OnPartsAttribute battle_event_cmd.o] -2 LW(15) 33554432
+805ED320:   callc [btlevtcmd_AddUnitWork battle_event_cmd.o] -2 1 1
+805ED334:   return
+805ED338:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [damage_check_no_last unit_fire_bros.o] AT 805EC7E8 ---
+805EC7E8:   setii LW(7) 0
+805EC7F4:   callss [damage_check_sub unit_fire_bros.o]
+805EC7FC:   return
+805EC800:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [damage_check_last unit_fire_bros.o] AT 805EC804 ---
+805EC804:   if_int_eq LW(6) [weapon_fire_bros_renzoku_attack unit_fire_bros.o]
+805EC810:     callc [btlevtcmd_GetPartsWork battle_event_cmd.o] -2 2 10 LW(0)
+805EC828:     if_int_eq LW(0) 1
+805EC834:       setii LW(0) 1
+805EC840:     else
+805EC844:       setii LW(0) 0
+805EC850:     endif
+805EC854:     goto 10
+805EC85C:   endif
+805EC860:   if_int_eq LW(8) 1
+805EC86C:     setii LW(13) 0
+805EC878:     setii LW(14) 5
+805EC884:     loop 0
+805EC88C:       setii LW(12) 2
+805EC898:       loop 0
+805EC8A0:         callc [btlevtcmd_GetPartsWork battle_event_cmd.o] -2 LW(12) LW(13) LW(1)
+805EC8B8:         callc [btlevtcmd_GetPartsWork battle_event_cmd.o] -2 LW(12) LW(14) LW(2)
+805EC8D0:         if_int_eq LW(3) LW(1)
+805EC8DC:           if_int_eq LW(4) LW(2)
+805EC8E8:             addi LW(13) 10
+805EC8F4:             callc [btlevtcmd_GetPartsWork battle_event_cmd.o] -2 LW(12) LW(13) LW(0)
+805EC90C:             goto 10
+805EC914:           endif
+805EC918:         endif
+805EC91C:         addi LW(12) 1
+805EC928:         if_int_gt LW(12) 7
+805EC934:           loop_break
+805EC938:         endif
+805EC93C:       end_loop
+805EC940:       addi LW(13) 1
+805EC94C:       addi LW(14) 1
+805EC958:     end_loop
+805EC95C:   endif
+805EC960: 10:
+805EC968:   if_int_eq LW(0) 1
+805EC974:     callc [btlevtcmd_ResultACDefence battle_event_cmd.o] LW(3) LW(6)
+805EC984:     callc [btlevtcmd_CheckDamage battle_event_cmd.o] -2 LW(3) LW(4) LW(6) 256 LW(5)
+805EC9A4:   else
+805EC9A8:     setii LW(7) 1
+805EC9B4:     callss [damage_check_sub unit_fire_bros.o]
+805EC9BC:   endif
+805EC9C0:   return
+805EC9C4:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [damage_check_sub unit_fire_bros.o] AT 805EC54C ---
+805EC54C:   setii LW(0) 0
+805EC558:   callc [btlevtcmd_PreCheckDamage battle_event_cmd.o] -2 LW(3) LW(4) LW(6) 0 LW(5)
+805EC578:   switchi LW(5)
+805EC580:     case_int_eq_any 4
+805EC588:       goto 90
+805EC590:       end_multi_case
+805EC594:     case_int_eq 3
+805EC59C:       callc [btlevtcmd_StartAvoid battle_event_cmd.o] LW(3) 38
+805EC5AC:       goto 90
+805EC5B4:       end_multi_case
+805EC5B8:     case_int_eq 6
+805EC5C0:       callc [btlevtcmd_StartAvoid battle_event_cmd.o] LW(3) 39
+805EC5D0:       goto 90
+805EC5D8:     case_int_eq 2
+805EC5E0:       callc [btlevtcmd_StartAvoid battle_event_cmd.o] LW(3) 40
+805EC5F0:       goto 90
+805EC5F8:     case_int_eq 1
+805EC600:       goto 91
+805EC608:       end_multi_case
+805EC60C:     case_default
+805EC610:       goto 98
+805EC618:       end_multi_case
+805EC61C:   end_switch
+805EC620: 90:
+805EC628:   goto 99
+805EC630: 91:
+805EC638:   setii LW(0) 1
+805EC644:   if_int_eq LW(6) [weapon_fire_bros_renzoku_attack unit_fire_bros.o]
+805EC650:     callc [btlevtcmd_SetPartsWork battle_event_cmd.o] -2 2 10 1
+805EC668:   endif
+805EC66C:   if_int_eq LW(8) 1
+805EC678:     setii LW(13) 0
+805EC684:     setii LW(14) 5
+805EC690:     loop 0
+805EC698:       setii LW(12) 2
+805EC6A4:       loop 0
+805EC6AC:         callc [btlevtcmd_GetPartsWork battle_event_cmd.o] -2 LW(12) LW(13) LW(1)
+805EC6C4:         callc [btlevtcmd_GetPartsWork battle_event_cmd.o] -2 LW(12) LW(14) LW(2)
+805EC6DC:         if_int_eq LW(3) LW(1)
+805EC6E8:           if_int_eq LW(4) LW(2)
+805EC6F4:             addi LW(13) 10
+805EC700:             callc [btlevtcmd_SetPartsWork battle_event_cmd.o] -2 LW(12) LW(13) 1
+805EC718:             goto 98
+805EC720:           endif
+805EC724:         endif
+805EC728:         addi LW(12) 1
+805EC734:         if_int_gt LW(12) 7
+805EC740:           loop_break
+805EC744:         endif
+805EC748:       end_loop
+805EC74C:       addi LW(13) 1
+805EC758:       addi LW(14) 1
+805EC764:     end_loop
+805EC768:   endif
+805EC76C: 98:
+805EC774:   callc [btlevtcmd_ResultACDefence battle_event_cmd.o] LW(3) LW(6)
+805EC784:   if_int_eq LW(7) 1
+805EC790:     callc [btlevtcmd_CheckDamage battle_event_cmd.o] -2 LW(3) LW(4) LW(6) 256 LW(5)
+805EC7B0:   else
+805EC7B4:     callc [btlevtcmd_CheckDamage battle_event_cmd.o] -2 LW(3) LW(4) LW(6) 0 LW(5)
+805EC7D4:   endif
+805EC7D8: 99:
+805EC7E0:   return
+805EC7E4:   end

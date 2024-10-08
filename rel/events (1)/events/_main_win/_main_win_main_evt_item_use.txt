@@ -1,0 +1,170 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [evt_item_use win_main.o] AT 803783B0 ---
+803783B0:   set_thread_type_mask 0
+803783B8:   callc [evt_mario_normalize evt_mario.o]
+803783C0:   callc [unk_8017d8f8 win_main.o]
+803783C8:   wait_frames 1
+803783D0:   callc [evt_mario_adjust_dir evt_mario.o]
+803783D8:   callc [evt_mario_set_pose evt_mario.o] ["M_S_1"]
+803783E4:   callss [unk_evt_803781d0 win_main.o]
+803783EC:   if_int_eq LW(11) 0
+803783F8:     callc [evt_mario_get_pos evt_mario.o] 0 LW(0) LW(1) LW(2)
+80378410:     addi LW(1) 50
+8037841C:     callc [evt_item_entry evt_item.o] ["menu_dummy"] LW(10) LW(0) LW(1) LW(2) 17 -1 0
+80378444:     addi LW(1) 10
+80378450:     callc [evt_eff evt_eff.o] 0 ["itemget"] 10 LW(0) LW(1) LW(2) 0 0 0 0 0 0 0 0
+80378490:     callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_ITEM_MARIO_USE1"] LW(0) LW(1) LW(2) 0
+803784AC:     callc [evt_mario_set_pose evt_mario.o] ["M_I_1"]
+803784B8:     wait_ms 1000
+803784C0:     callc [evt_item_delete evt_item.o] ["menu_dummy"]
+803784CC:     callc [evt_mario_get_pos evt_mario.o] 0 LW(0) LW(1) LW(2)
+803784E4:     callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_ITEM_RECOVERY_SHINE1"] LW(0) LW(1) LW(2) 0
+80378500:     callc [evt_eff64 evt_eff.o] 0 ["stardust2_n64"] 4 LW(0) LW(1) LW(2) 40 40 30 120 0 0 0 0
+80378540:     wait_ms 1400
+80378548:     callc [evt_mario_set_pose evt_mario.o] ["M_V_2"]
+80378554:     callc [itemUseFunc win_main.o]
+8037855C:     wait_ms 1500
+80378564:     callc [itemUseFunc2 win_main.o]
+8037856C:     callc [evt_mario_set_normal_pose evt_mario.o]
+80378574:     return
+80378578:   endif
+8037857C:   callc [evt_mario_get_party evt_mario.o] LW(0)
+80378588:   if_int_eq LW(0) LW(11)
+80378594:     callc [evt_party_get_pos evt_party.o] 0 LW(0) LW(1) LW(2)
+803785AC:     addi LW(1) 50
+803785B8:     callc [evt_item_entry evt_item.o] ["menu_dummy"] LW(10) LW(0) LW(1) LW(2) 17 -1 0
+803785E0:     addi LW(1) 10
+803785EC:     callc [evt_eff evt_eff.o] 0 ["itemget"] 10 LW(0) LW(1) LW(2) 0 0 0 0 0 0 0 0
+8037862C:     callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_ITEM_MARIO_USE1"] LW(0) LW(1) LW(2) 0
+80378648:     callc [famicom_check win_main.o] LW(0)
+80378654:     if_int_eq LW(0) 0
+80378660:       callss [kime_pose win_main.o]
+80378668:     else
+8037866C:       callss [kime_pose_famicom win_main.o]
+80378674:     endif
+80378678:     wait_ms 1000
+80378680:     callc [evt_item_delete evt_item.o] ["menu_dummy"]
+8037868C:     callc [evt_party_get_pos evt_party.o] 0 LW(0) LW(1) LW(2)
+803786A4:     callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_ITEM_RECOVERY_SHINE1"] LW(0) LW(1) LW(2) 0
+803786C0:     callc [evt_eff64 evt_eff.o] 0 ["stardust2_n64"] 4 LW(0) LW(1) LW(2) 40 40 30 120 0 0 0 0
+80378700:     wait_ms 1400
+80378708:     callc [famicom_check win_main.o] LW(0)
+80378714:     if_int_eq LW(0) 0
+80378720:       callss [kime_pose2 win_main.o]
+80378728:     else
+8037872C:       callss [kime_pose_famicom win_main.o]
+80378734:     endif
+80378738:     callc [itemUseFunc win_main.o]
+80378740:     wait_ms 1500
+80378748:     callc [itemUseFunc2 win_main.o]
+80378750:     callss [unk_evt_803781d0 win_main.o]
+80378758:     callc [evt_mario_set_normal_pose evt_mario.o]
+80378760:     return
+80378764:   endif
+80378768:   return
+8037876C:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [unk_evt_803781d0 win_main.o] AT 803781D0 ---
+803781D0:   callc [evt_party_nokotaro_get_status evt_party.o] 0 LW(0)
+803781E0:   if_int_ne LW(0) 0
+803781EC:     return
+803781F0:   endif
+803781F4:   callc [evt_party_set_breed_pose evt_party.o] 0 1
+80378204:   return
+80378208:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [kime_pose win_main.o] AT 80377FE8 ---
+80377FE8:   callc [evt_party_nokotaro_get_status evt_party.o] 0 LW(0)
+80377FF8:   if_int_ne LW(0) 0
+80378004:     return
+80378008:   endif
+8037800C:   callc [evt_mario_get_party evt_mario.o] LW(0)
+80378018:   switchi LW(0)
+80378020:     case_int_eq 0
+80378028:     case_int_eq 1
+80378030:       callc [evt_party_set_pose evt_party.o] 0 ["PKR_I_1"]
+80378040:     case_int_eq 2
+80378048:       callc [evt_party_set_pose evt_party.o] 0 ["PNK_I_1"]
+80378058:     case_int_eq 3
+80378060:       callc [evt_party_set_pose evt_party.o] 0 ["I_1"]
+80378070:     case_int_eq 4
+80378078:       callc [evt_party_set_pose evt_party.o] 0 ["PYS_I_1"]
+80378088:     case_int_eq 5
+80378090:       callc [evt_party_set_pose evt_party.o] 0 ["PWD_I_1"]
+803780A0:     case_int_eq 6
+803780A8:       callc [evt_party_set_pose evt_party.o] 0 ["PTR_I_1"]
+803780B8:     case_int_eq 7
+803780C0:       callc [evt_party_set_pose evt_party.o] 0 ["PCH_I_1"]
+803780D0:   end_switch
+803780D4:   return
+803780D8:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [kime_pose_famicom win_main.o] AT 8037820C ---
+8037820C:   callc [evt_party_nokotaro_get_status evt_party.o] 0 LW(0)
+8037821C:   if_int_ne LW(0) 0
+80378228:     return
+8037822C:   endif
+80378230:   callc [evt_mario_get_party evt_mario.o] LW(0)
+8037823C:   switchi LW(0)
+80378244:     case_int_eq 0
+8037824C:     case_int_eq 1
+80378254:       callc [evt_party_set_pose evt_party.o] 0 ["R_2"]
+80378264:     case_int_eq 2
+8037826C:       callc [evt_party_set_pose evt_party.o] 0 ["R_3"]
+8037827C:     case_int_eq 3
+80378284:       callc [evt_party_set_pose evt_party.o] 0 ["R_13"]
+80378294:     case_int_eq 4
+8037829C:       callc [party_color win_main.o] LW(0)
+803782A8:       switchi LW(0)
+803782B0:         case_int_eq 0
+803782B8:           callc [evt_party_set_pose evt_party.o] 0 ["R_5"]
+803782C8:         case_int_eq 1
+803782D0:           callc [evt_party_set_pose evt_party.o] 0 ["R_6"]
+803782E0:         case_int_eq 2
+803782E8:           callc [evt_party_set_pose evt_party.o] 0 ["R_7"]
+803782F8:         case_int_eq 3
+80378300:           callc [evt_party_set_pose evt_party.o] 0 ["R_8"]
+80378310:         case_int_eq 4
+80378318:           callc [evt_party_set_pose evt_party.o] 0 ["R_9"]
+80378328:         case_int_eq 5
+80378330:           callc [evt_party_set_pose evt_party.o] 0 ["R_10"]
+80378340:         case_int_eq 6
+80378348:           callc [evt_party_set_pose evt_party.o] 0 ["R_11"]
+80378358:       end_switch
+8037835C:     case_int_eq 5
+80378364:       callc [evt_party_set_pose evt_party.o] 0 ["R_4"]
+80378374:     case_int_eq 6
+8037837C:       callc [evt_party_set_pose evt_party.o] 0 ["R_12"]
+8037838C:     case_int_eq 7
+80378394:       callc [evt_party_set_pose evt_party.o] 0 ["R_15"]
+803783A4:   end_switch
+803783A8:   return
+803783AC:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [kime_pose2 win_main.o] AT 803780DC ---
+803780DC:   callc [evt_party_nokotaro_get_status evt_party.o] 0 LW(0)
+803780EC:   if_int_ne LW(0) 0
+803780F8:     return
+803780FC:   endif
+80378100:   callc [evt_mario_get_party evt_mario.o] LW(0)
+8037810C:   switchi LW(0)
+80378114:     case_int_eq 0
+8037811C:     case_int_eq 1
+80378124:       callc [evt_party_set_pose evt_party.o] 0 ["PKR_Y_1"]
+80378134:     case_int_eq 2
+8037813C:       callc [evt_party_set_pose evt_party.o] 0 ["PNK_Y_1"]
+8037814C:     case_int_eq 3
+80378154:       callc [evt_party_set_pose evt_party.o] 0 ["Y_1"]
+80378164:     case_int_eq 4
+8037816C:       callc [evt_party_set_pose evt_party.o] 0 ["PYS_Y_1"]
+8037817C:     case_int_eq 5
+80378184:       callc [evt_party_set_pose evt_party.o] 0 ["PWD_Y_1"]
+80378194:     case_int_eq 6
+8037819C:       callc [evt_party_set_pose evt_party.o] 0 ["PTR_Y_1"]
+803781AC:     case_int_eq 7
+803781B4:       callc [evt_party_set_pose evt_party.o] 0 ["PCH_Y_1"]
+803781C4:   end_switch
+803781C8:   return
+803781CC:   end

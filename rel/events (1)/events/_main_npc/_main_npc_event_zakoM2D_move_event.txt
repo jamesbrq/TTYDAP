@@ -1,0 +1,38 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [zakoM2D_move_event npc_event.o] AT 8034B96C ---
+8034B96C:   callc [evt_npc_set_anim evt_npc.o] ["me"] ["S_1"]
+8034B97C: 2:
+8034B984:   callc [evt_npc_status_onoff evt_npc.o] 1 ["me"] 4096
+8034B998:   callc [evt_npc_status_check evt_npc.o] ["me"] 4 LW(0)
+8034B9AC:   if_int_eq LW(0) 0
+8034B9B8:     goto 3
+8034B9C0:   endif
+8034B9C4:   wait_frames 1
+8034B9CC:   goto 2
+8034B9D4: 3:
+8034B9DC:   begin_child_thread
+8034B9E0:     loop 0
+8034B9E8:       callc [evt_npc_get_position evt_npc.o] ["me"] LW(0) LW(1) LW(2)
+8034BA00:       callc [evt_npc_move_position evt_npc.o] ["me"] LW(0) LW(2) 100 0 0
+8034BA20:       wait_frames 1
+8034BA28:     end_loop
+8034BA2C:   end_child_thread
+8034BA30: 0:
+8034BA38:   callc [evt_npc_status_onoff evt_npc.o] 1 ["me"] 4096
+8034BA4C:   callc [evt_npc_get_position evt_npc.o] ["me"] LW(0) [F1194D80] [F1194D80]
+8034BA64:   callc [camGetPos npc_event.o] LW(1)
+8034BA70:   subi LW(0) LW(1)
+8034BA7C:   if_int_le LW(0) 250
+8034BA88:     goto 1
+8034BA90:   endif
+8034BA94:   wait_frames 1
+8034BA9C:   goto 0
+8034BAA4: 1:
+8034BAAC:   callc [evt_get_target_dir evt_npc.o] ["me"] ["mario"] LW(0)
+8034BAC0:   callc [evt_npc_set_ry evt_npc.o] ["me"] LW(0)
+8034BAD0:   wait_frames 1
+8034BAD8:   goto 1
+8034BAE0:   return
+8034BAE4:   end

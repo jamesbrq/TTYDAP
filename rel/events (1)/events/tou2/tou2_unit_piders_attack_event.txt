@@ -1,0 +1,306 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [attack_event unit_piders.o] AT 805FBF24 ---
+805FBF24:   callc [btlevtcmd_SetUnitWork battle_event_cmd.o] -2 11 0
+805FBF38:   callc [btlevtcmd_SetUnitWork battle_event_cmd.o] -2 12 0
+805FBF4C:   callc [btlevtcmd_SetUnitWork battle_event_cmd.o] -2 13 0
+805FBF60:   callc [btlevtcmd_EnemyItemUseCheck battle_event_cmd.o] -2 LW(0)
+805FBF70:   if_int_ne LW(0) 0
+805FBF7C:     callss LW(0)
+805FBF84:     callc [btlevtcmd_StartWaitEvent battle_event_cmd.o] -2
+805FBF90:     return
+805FBF94:   endif
+805FBF98: 0:
+805FBFA0:   setii LW(0) 50
+805FBFAC:   addi LW(0) 50
+805FBFB8:   subi LW(0) 1
+805FBFC4:   callc [evt_sub_random evt_sub.o] LW(0) LW(1)
+805FBFD4:   if_int_lt LW(1) 50
+805FBFE0:     setii LW(9) [weapon_piders_attack unit_piders.o]
+805FBFEC:     callss [normal_attack_event unit_piders.o]
+805FBFF4:     goto 99
+805FBFFC:   endif
+805FC000:   setii LW(9) [weapon_piders_renzoku_attack unit_piders.o]
+805FC00C:   callss [renzoku_attack_event unit_piders.o]
+805FC014:   goto 99
+805FC01C: 99:
+805FC024:   callc [btlevtcmd_ResetFaceDirection battle_event_cmd.o] -2
+805FC030:   callc [btlevtcmd_StartWaitEvent battle_event_cmd.o] -2
+805FC03C:   return
+805FC040:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [normal_attack_event unit_piders.o] AT 805FC8CC ---
+805FC8CC:   callc [btlevtcmd_check_battleflag battle_event_cmd.o] LW(0) 2
+805FC8DC:   if_int_ne LW(0) 0
+805FC8E8:     goto 99
+805FC8F0:   else
+805FC8F4:     callc [btlevtcmd_GetEnemyBelong battle_event_cmd.o] -2 LW(0)
+805FC904:     callc [btlevtcmd_SamplingEnemy battle_event_cmd.o] -2 LW(0) LW(9)
+805FC918:     callc [btlevtcmd_ChoiceSamplingEnemy battle_event_cmd.o] LW(9) LW(3) LW(4)
+805FC92C:   endif
+805FC930:   if_int_eq LW(3) -1
+805FC93C:     callc [btlevtcmd_CheckToken battle_event_cmd.o] -2 16 LW(0)
+805FC950:     if_int_ne LW(0) 0
+805FC95C:       callss [subsetevt_confuse_flustered battle_event_subset.o]
+805FC964:       return
+805FC968:     endif
+805FC96C:     goto 99
+805FC974:   endif
+805FC978:   callc [btlevtcmd_WeaponAftereffect battle_event_cmd.o] LW(9)
+805FC984:   callc [btlevtcmd_AttackDeclare battle_event_cmd.o] -2 LW(3) LW(4)
+805FC998:   callc [btlevtcmd_WaitGuardMove battle_event_cmd.o]
+805FC9A0:   callc [btlevtcmd_PayWeaponCost battle_event_cmd.o] -2 LW(9)
+805FC9B0:   setii LW(7) 3
+805FC9BC:   callss [piders_attack_common_event1 unit_piders.o]
+805FC9C4:   callsa [piders_attack_common_event2 unit_piders.o]
+805FC9CC:   setii LW(8) 1
+805FC9D8:   setii LW(5) 5
+805FC9E4:   callss [piders_attack_common_event3 unit_piders.o]
+805FC9EC:   setii LW(10) 0
+805FC9F8:   callss [damage_check_event_sub unit_piders.o]
+805FCA00:   callc [evt_btl_camera_set_mode battle_camera.o] 0 0
+805FCA10:   wait_ms 500
+805FCA18: 99:
+805FCA20:   return
+805FCA24:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [renzoku_attack_event unit_piders.o] AT 805FCA28 ---
+805FCA28:   callc [btlevtcmd_GetEnemyBelong battle_event_cmd.o] -2 LW(0)
+805FCA38:   callc [btlevtcmd_SamplingEnemy battle_event_cmd.o] -2 LW(0) LW(9)
+805FCA4C:   callc [btlevtcmd_ChoiceSamplingEnemy battle_event_cmd.o] LW(9) LW(3) LW(4)
+805FCA60:   if_int_eq LW(3) -1
+805FCA6C:     callc [btlevtcmd_CheckToken battle_event_cmd.o] -2 16 LW(0)
+805FCA80:     if_int_ne LW(0) 0
+805FCA8C:       callss [subsetevt_confuse_flustered battle_event_subset.o]
+805FCA94:       return
+805FCA98:     endif
+805FCA9C:     goto 99
+805FCAA4:   endif
+805FCAA8:   callc [piders_renzoku_attack_set_target unit_piders.o] LW(0) LW(1) LW(2) LW(3) LW(4) LW(5)
+805FCAC8:   callc [btlevtcmd_SetUnitWork battle_event_cmd.o] -2 5 LW(0)
+805FCADC:   callc [btlevtcmd_SetUnitWork battle_event_cmd.o] -2 6 LW(2)
+805FCAF0:   callc [btlevtcmd_SetUnitWork battle_event_cmd.o] -2 7 LW(4)
+805FCB04:   callc [btlevtcmd_SetUnitWork battle_event_cmd.o] -2 8 LW(1)
+805FCB18:   callc [btlevtcmd_SetUnitWork battle_event_cmd.o] -2 9 LW(3)
+805FCB2C:   callc [btlevtcmd_SetUnitWork battle_event_cmd.o] -2 10 LW(5)
+805FCB40:   callc [btlevtcmd_GetUnitWork battle_event_cmd.o] -2 5 LW(3)
+805FCB54:   callc [btlevtcmd_GetUnitWork battle_event_cmd.o] -2 8 LW(4)
+805FCB68:   callc [evt_btl_camera_set_mode battle_camera.o] 0 0
+805FCB78:   callc [btlevtcmd_WeaponAftereffect battle_event_cmd.o] LW(9)
+805FCB84:   callc [btlevtcmd_AttackDeclare battle_event_cmd.o] -2 LW(3) LW(4)
+805FCB98:   callc [btlevtcmd_WaitGuardMove battle_event_cmd.o]
+805FCBA0:   callc [btlevtcmd_PayWeaponCost battle_event_cmd.o] -2 LW(9)
+805FCBB0:   setii LW(5) 5
+805FCBBC:   setii LW(6) 8
+805FCBC8:   setii LW(7) 3
+805FCBD4:   callss [piders_attack_common_event1 unit_piders.o]
+805FCBDC:   loop 3
+805FCBE4:     callc [btlevtcmd_GetUnitWork battle_event_cmd.o] -2 LW(5) LW(3)
+805FCBF8:     callc [btlevtcmd_GetUnitWork battle_event_cmd.o] -2 LW(6) LW(4)
+805FCC0C:     callss [piders_attack_common_event3 unit_piders.o]
+805FCC14:     callsa [renzoku_attack_event_sub unit_piders.o]
+805FCC1C:     addi LW(5) 1
+805FCC28:     addi LW(6) 1
+805FCC34:     addi LW(7) 1
+805FCC40:     wait_frames 30
+805FCC48:   end_loop
+805FCC4C:   callsa [piders_attack_common_event2 unit_piders.o]
+805FCC54:   callc [evt_btl_camera_set_mode battle_camera.o] 0 0
+805FCC64:   wait_ms 250
+805FCC6C: 99:
+805FCC74:   return
+805FCC78:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [piders_attack_common_event1 unit_piders.o] AT 805FC2B8 ---
+805FC2B8:   callc [btlevtcmd_CalculateFaceDirection battle_event_cmd.o] -2 -1 LW(3) LW(4) 16 LW(8)
+805FC2D8:   callc [btlevtcmd_ChangeFaceDirection battle_event_cmd.o] -2 LW(8)
+805FC2E8:   callc [btlevtcmd_GetPos battle_event_cmd.o] -2 LW(0) LW(1) LW(2)
+805FC300:   addi LW(2) 3.00
+805FC30C:   callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 1 ["PAI_A_1"]
+805FC320:   callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 2 ["PAI_A_2a"]
+805FC334:   callc [btlevtcmd_SetPartsPos battle_event_cmd.o] -2 2 LW(0) LW(1) LW(2)
+805FC350:   callc [btlevtcmd_OffPartsAttribute battle_event_cmd.o] -2 2 16777216
+805FC364:   callc [btlevtcmd_GetStatusMg battle_event_cmd.o] -2 LW(1)
+805FC374:   setff LW(0) 30.00
+805FC380:   mulf LW(0) LW(1)
+805FC38C:   callc [btlevtcmd_SetPartsRotateOffset battle_event_cmd.o] -2 2 0 LW(0) 0
+805FC3A8:   callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_ENM_PAIDA_ATTACK1"] [F1194D80] 0 [F1194D80]
+805FC3C4:   callc [evt_sub_intpl_init evt_sub.o] 4 0 110 5
+805FC3DC:   loop 5
+805FC3E4:     callc [evt_sub_intpl_get_value evt_sub.o]
+805FC3EC:     muli LW(0) LW(8)
+805FC3F8:     callc [btlevtcmd_SetPartsRotate battle_event_cmd.o] -2 2 0 0 LW(0)
+805FC414:     wait_frames 1
+805FC41C:   end_loop
+805FC420:   wait_frames 20
+805FC428:   callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_ENM_PAIDA_ATTACK1"] [F1194D80] 0 [F1194D80]
+805FC444:   callc [evt_sub_intpl_init evt_sub.o] 4 110 70 5
+805FC45C:   loop 5
+805FC464:     callc [evt_sub_intpl_get_value evt_sub.o]
+805FC46C:     muli LW(0) LW(8)
+805FC478:     callc [btlevtcmd_SetPartsRotate battle_event_cmd.o] -2 2 0 0 LW(0)
+805FC494:     wait_frames 1
+805FC49C:   end_loop
+805FC4A0:   wait_frames 15
+805FC4A8:   callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_ENM_PAIDA_ATTACK1"] [F1194D80] 0 [F1194D80]
+805FC4C4:   callc [evt_sub_intpl_init evt_sub.o] 4 70 100 5
+805FC4DC:   loop 5
+805FC4E4:     callc [evt_sub_intpl_get_value evt_sub.o]
+805FC4EC:     muli LW(0) LW(8)
+805FC4F8:     callc [btlevtcmd_SetPartsRotate battle_event_cmd.o] -2 2 0 0 LW(0)
+805FC514:     wait_frames 1
+805FC51C:   end_loop
+805FC520:   wait_frames 10
+805FC528:   callc [btlevtcmd_SetUnitWork battle_event_cmd.o] -2 4 LW(0)
+805FC53C:   return
+805FC540:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [piders_attack_common_event2 unit_piders.o] AT 805FC6F8 ---
+805FC6F8:   callc [btlevtcmd_CalculateFaceDirection battle_event_cmd.o] -2 -1 LW(3) LW(4) 16 LW(8)
+805FC718:   callc [btlevtcmd_ChangeFaceDirection battle_event_cmd.o] -2 LW(8)
+805FC728:   callc [evt_sub_intpl_init evt_sub.o] 4 100 0 15
+805FC740:   loop 15
+805FC748:     callc [evt_sub_intpl_get_value evt_sub.o]
+805FC750:     muli LW(0) LW(8)
+805FC75C:     callc [btlevtcmd_SetPartsRotate battle_event_cmd.o] -2 2 0 0 LW(0)
+805FC778:     wait_frames 1
+805FC780:   end_loop
+805FC784:   callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 1 ["PAI_S_1"]
+805FC798:   callc [btlevtcmd_OnPartsAttribute battle_event_cmd.o] -2 2 16777216
+805FC7AC:   return
+805FC7B0:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [piders_attack_common_event3 unit_piders.o] AT 805FC7B4 ---
+805FC7B4:   callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_ENM_PAIDA_ATTACK2"] [F1194D80] 0 [F1194D80]
+805FC7D0:   callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 LW(7) ["PAI_A_3a"]
+805FC7E4:   callc [btlevtcmd_GetPos battle_event_cmd.o] -2 LW(0) LW(1) LW(2)
+805FC7FC:   addi LW(1) 20
+805FC808:   callc [btlevtcmd_JumpPartsSetting battle_event_cmd.o] -2 LW(7) 0 6.00 0.25
+805FC824:   callc [btlevtcmd_SetPartsPos battle_event_cmd.o] -2 LW(7) LW(0) LW(1) LW(2)
+805FC840:   callc [btlevtcmd_OffPartsAttribute battle_event_cmd.o] -2 LW(7) 16777216
+805FC854:   callc [btlevtcmd_OffPartsAttribute battle_event_cmd.o] -2 LW(7) 33554432
+805FC868:   callc [btlevtcmd_SetPartsScale battle_event_cmd.o] -2 LW(7) 2.00 2.00 2.00
+805FC884:   callc [btlevtcmd_GetHitPos battle_event_cmd.o] LW(3) LW(4) LW(0) LW(1) LW(2)
+805FC8A0:   callc [btlevtcmd_JumpPartsPosition battle_event_cmd.o] -2 LW(7) LW(0) LW(1) LW(2) 0 -1
+805FC8C4:   return
+805FC8C8:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [damage_check_event_sub unit_piders.o] AT 805FC044 ---
+805FC044:   callc [btlevtcmd_PreCheckDamage battle_event_cmd.o] -2 LW(3) LW(4) LW(9) 0 LW(0)
+805FC064:   switchi LW(0)
+805FC06C:     case_int_eq_any 4
+805FC074:       goto 90
+805FC07C:       end_multi_case
+805FC080:     case_int_eq 3
+805FC088:       callc [btlevtcmd_StartAvoid battle_event_cmd.o] LW(3) 38
+805FC098:       goto 90
+805FC0A0:       end_multi_case
+805FC0A4:     case_int_eq 6
+805FC0AC:       callc [btlevtcmd_StartAvoid battle_event_cmd.o] LW(3) 39
+805FC0BC:       goto 90
+805FC0C4:     case_int_eq 2
+805FC0CC:       callc [btlevtcmd_StartAvoid battle_event_cmd.o] LW(3) 40
+805FC0DC:       goto 90
+805FC0E4:     case_int_eq 1
+805FC0EC:       goto 91
+805FC0F4:       end_multi_case
+805FC0F8:     case_default
+805FC0FC:       goto 99
+805FC104:       end_multi_case
+805FC108:   end_switch
+805FC10C: 90:
+805FC114:   callc [btlevtcmd_JumpPartsContinue battle_event_cmd.o] -2 LW(7)
+805FC124:   callc [btlevtcmd_OnPartsAttribute battle_event_cmd.o] -2 LW(7) 16777216
+805FC138:   callc [btlevtcmd_OnPartsAttribute battle_event_cmd.o] -2 LW(7) 33554432
+805FC14C:   goto 99
+805FC154: 91:
+805FC15C:   callc [btlevtcmd_OnPartsAttribute battle_event_cmd.o] -2 LW(7) 16777216
+805FC170:   callc [btlevtcmd_OnPartsAttribute battle_event_cmd.o] -2 LW(7) 33554432
+805FC184:   if_int_eq LW(10) 1
+805FC190:     setii LW(0) 5
+805FC19C:     setii LW(1) 8
+805FC1A8:     loop 0
+805FC1B0:       callc [btlevtcmd_GetUnitWork battle_event_cmd.o] -2 LW(0) LW(2)
+805FC1C4:       if_int_eq LW(3) LW(2)
+805FC1D0:         callc [btlevtcmd_GetUnitWork battle_event_cmd.o] -2 LW(1) LW(2)
+805FC1E4:         if_int_eq LW(4) LW(2)
+805FC1F0:           addi LW(0) 6
+805FC1FC:           callc [btlevtcmd_SetUnitWork battle_event_cmd.o] -2 LW(0) 1
+805FC210:           loop_break
+805FC214:         endif
+805FC218:       endif
+805FC21C:       addi LW(0) 1
+805FC228:       addi LW(1) 1
+805FC234:     end_loop
+805FC238:   endif
+805FC23C:   callc [btlevtcmd_ResultACDefence battle_event_cmd.o] LW(3) LW(9)
+805FC24C:   if_int_eq LW(8) 1
+805FC258:     callc [btlevtcmd_CheckDamage battle_event_cmd.o] -2 LW(3) LW(4) LW(9) 256 LW(0)
+805FC278:   else
+805FC27C:     callc [btlevtcmd_CheckDamage battle_event_cmd.o] -2 LW(3) LW(4) LW(9) 0 LW(0)
+805FC29C:   endif
+805FC2A0:   goto 99
+805FC2A8: 99:
+805FC2B0:   return
+805FC2B4:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [renzoku_attack_event_sub unit_piders.o] AT 805FCC7C ---
+805FCC7C:   setii LW(0) LW(5)
+805FCC88:   setii LW(1) LW(6)
+805FCC94:   callc [btlevtcmd_GetUnitWork battle_event_cmd.o] -2 LW(0) LW(3)
+805FCCA8:   callc [btlevtcmd_GetUnitWork battle_event_cmd.o] -2 LW(1) LW(4)
+805FCCBC:   loop 0
+805FCCC4:     if_int_ge LW(0) 7
+805FCCD0:       callss [renzoku_attack_event_sub_last unit_piders.o]
+805FCCD8:       loop_break
+805FCCDC:     endif
+805FCCE0:     addi LW(0) 1
+805FCCEC:     addi LW(1) 1
+805FCCF8:     callc [btlevtcmd_GetUnitWork battle_event_cmd.o] -2 LW(0) LW(8)
+805FCD0C:     callc [btlevtcmd_GetUnitWork battle_event_cmd.o] -2 LW(1) LW(10)
+805FCD20:     if_int_eq LW(3) LW(8)
+805FCD2C:       if_int_eq LW(4) LW(10)
+805FCD38:         callss [renzoku_attack_event_sub_no_last unit_piders.o]
+805FCD40:         loop_break
+805FCD44:       endif
+805FCD48:     endif
+805FCD4C:   end_loop
+805FCD50:   return
+805FCD54:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [renzoku_attack_event_sub_last unit_piders.o] AT 805FCD80 ---
+805FCD80:   setii LW(0) 5
+805FCD8C:   setii LW(1) 8
+805FCD98:   loop 0
+805FCDA0:     callc [btlevtcmd_GetUnitWork battle_event_cmd.o] -2 LW(0) LW(2)
+805FCDB4:     if_int_eq LW(3) LW(2)
+805FCDC0:       callc [btlevtcmd_GetUnitWork battle_event_cmd.o] -2 LW(1) LW(2)
+805FCDD4:       if_int_eq LW(4) LW(2)
+805FCDE0:         addi LW(0) 6
+805FCDEC:         callc [btlevtcmd_GetUnitWork battle_event_cmd.o] -2 LW(0) LW(2)
+805FCE00:         loop_break
+805FCE04:       endif
+805FCE08:     endif
+805FCE0C:     addi LW(0) 1
+805FCE18:     addi LW(1) 1
+805FCE24:   end_loop
+805FCE28:   if_int_eq LW(2) 1
+805FCE34:     callc [btlevtcmd_OnPartsAttribute battle_event_cmd.o] -2 LW(7) 16777216
+805FCE48:     callc [btlevtcmd_OnPartsAttribute battle_event_cmd.o] -2 LW(7) 33554432
+805FCE5C:     callc [btlevtcmd_ResultACDefence battle_event_cmd.o] LW(3) LW(9)
+805FCE6C:     callc [btlevtcmd_CheckDamage battle_event_cmd.o] -2 LW(3) LW(4) LW(9) 256 LW(0)
+805FCE8C:   else
+805FCE90:     setii LW(8) 1
+805FCE9C:     setii LW(10) 0
+805FCEA8:     callss [damage_check_event_sub unit_piders.o]
+805FCEB0:   endif
+805FCEB4:   return
+805FCEB8:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [renzoku_attack_event_sub_no_last unit_piders.o] AT 805FCD58 ---
+805FCD58:   setii LW(8) 0
+805FCD64:   setii LW(10) 1
+805FCD70:   callss [damage_check_event_sub unit_piders.o]
+805FCD78:   return
+805FCD7C:   end

@@ -1,0 +1,89 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [queen_hand_small_1000hand_attack unit_boss_black_peach.o] AT 80612408 ---
+80612408:   callc [btlevtcmd_GetEnemyBelong battle_event_cmd.o] -2 LW(0)
+80612418:   callc [btlevtcmd_SamplingEnemy battle_event_cmd.o] -2 LW(0) [weapon_peach_black_1000hand_attack unit_boss_black_peach.o]
+8061242C:   callc [btlevtcmd_ChoiceSamplingEnemy battle_event_cmd.o] [weapon_peach_black_1000hand_attack unit_boss_black_peach.o] LW(3) LW(4)
+80612440:   callc [btlevtcmd_CheckToken battle_event_cmd.o] -2 16 LW(0)
+80612454:   if_int_ne LW(0) 0
+80612460:     callss [subsetevt_confuse_flustered battle_event_subset.o]
+80612468:     return
+8061246C:   endif
+80612470:   callc [btlevtcmd_AttackDeclare battle_event_cmd.o] -2 LW(3) LW(4)
+80612484:   callc [btlevtcmd_WaitGuardMove battle_event_cmd.o]
+8061248C:   callc [btlevtcmd_PayWeaponCost battle_event_cmd.o] -2 [weapon_peach_black_1000hand_attack unit_boss_black_peach.o]
+8061249C:   callc [evt_btl_camera_shake_h battle_camera.o] 0 1 1 180 0
+806124B8:   callc [evt_eff_softdelete evt_eff.o] ["m_h_s1"]
+806124C4:   callc [evt_eff_softdelete evt_eff.o] ["m_h_s2"]
+806124D0:   callc [evt_eff_softdelete evt_eff.o] ["m_h_s3"]
+806124DC:   callc [evt_snd_sfxon evt_snd.o] ["SFX_BOSS_QWEN_HANDS_MOVE1"] 0
+806124EC:   begin_thread_tid LW(15)
+806124F4:     callc [queen_hand_small_1000hand_1_evt unit_boss_black_peach.o]
+806124FC:   end_thread
+80612500:   wait_ms 400
+80612508:   callc [btlevtcmd_PreCheckDamage battle_event_cmd.o] -2 LW(3) LW(4) [weapon_peach_dark_drag_attack unit_boss_black_peach.o] 256 LW(5)
+80612528:   switchi LW(5)
+80612530:     case_int_eq_any 4
+80612538:       goto 90
+80612540:       end_multi_case
+80612544:     case_int_eq 3
+8061254C:       goto 90
+80612554:       end_multi_case
+80612558:     case_int_eq 6
+80612560:       goto 90
+80612568:     case_int_eq 2
+80612570:       goto 90
+80612578:     case_int_eq 1
+80612580:       goto 91
+80612588:       end_multi_case
+8061258C:     case_default
+80612590:       goto 98
+80612598:       end_multi_case
+8061259C:   end_switch
+806125A0: 90:
+806125A8:   loop 4
+806125B0:     switchi LW(5)
+806125B8:       case_int_eq_any 4
+806125C0:         end_multi_case
+806125C4:       case_int_eq 3
+806125CC:         callc [btlevtcmd_StartAvoid battle_event_cmd.o] LW(3) 38
+806125DC:         end_multi_case
+806125E0:       case_int_eq 6
+806125E8:         callc [btlevtcmd_StartAvoid battle_event_cmd.o] LW(3) 39
+806125F8:       case_int_eq 2
+80612600:         callc [btlevtcmd_StartAvoid battle_event_cmd.o] LW(3) 40
+80612610:     end_switch
+80612614:     wait_ms 500
+8061261C:   end_loop
+80612620:   wait_ms 1000
+80612628:   goto 95
+80612630: 91:
+80612638:   callc [btlevtcmd_WeaponAftereffect battle_event_cmd.o] [weapon_peach_black_1000hand_attack unit_boss_black_peach.o]
+80612644:   callc [btlevtcmd_ResultACDefence battle_event_cmd.o] LW(3) [weapon_peach_black_1000hand_attack unit_boss_black_peach.o]
+80612654:   callc [btlevtcmd_CheckDamage battle_event_cmd.o] -2 LW(3) LW(4) [weapon_peach_black_1000hand_attack unit_boss_black_peach.o] 0 LW(5)
+80612674:   wait_ms 500
+8061267C:   callc [btlevtcmd_ResultACDefence battle_event_cmd.o] LW(3) [weapon_peach_black_1000hand_attack unit_boss_black_peach.o]
+8061268C:   callc [btlevtcmd_CheckDamage battle_event_cmd.o] -2 LW(3) LW(4) [weapon_peach_black_1000hand_attack unit_boss_black_peach.o] 0 LW(5)
+806126AC:   wait_ms 500
+806126B4:   callc [btlevtcmd_ResultACDefence battle_event_cmd.o] LW(3) [weapon_peach_black_1000hand_attack unit_boss_black_peach.o]
+806126C4:   callc [btlevtcmd_CheckDamage battle_event_cmd.o] -2 LW(3) LW(4) [weapon_peach_black_1000hand_attack unit_boss_black_peach.o] 0 LW(5)
+806126E4:   wait_ms 500
+806126EC:   callc [btlevtcmd_ResultACDefence battle_event_cmd.o] LW(3) [weapon_peach_black_1000hand_attack unit_boss_black_peach.o]
+806126FC:   callc [btlevtcmd_CheckDamage battle_event_cmd.o] -2 LW(3) LW(4) [weapon_peach_black_1000hand_attack unit_boss_black_peach.o] 256 LW(5)
+8061271C:   wait_ms 500
+80612724:   wait_ms 1000
+8061272C:   goto 98
+80612734: 95:
+8061273C: 98:
+80612744:   callc [evt_btl_camera_set_mode battle_camera.o] 0 0
+80612754:   callc [evt_eff evt_eff.o] ["m_h_s1"] ["mist2"] 0 100 15 0 150 0 -1 0 0 0 0 0
+80612794:   callc [evt_eff evt_eff.o] ["m_h_s2"] ["mist2"] 0 100 15 0 150 0 -1 0 0 0 0 0
+806127D4:   callc [evt_eff evt_eff.o] ["m_h_s3"] ["mist2"] 0 100 15 0 150 0 -1 0 0 0 0 0
+80612814:   if_int_ne LW(15) 0
+80612820:     callc [btlevtcmd_WaitEventEnd battle_event_cmd.o] LW(15)
+8061282C:   endif
+80612830:   callc [evt_snd_sfxon evt_snd.o] ["SFX_BOSS_QWEN_HAND_APPEAR1_2"] 0
+80612840:   callc [queen_hand_small_1000hand_2_evt unit_boss_black_peach.o]
+80612848:   return
+8061284C:   end

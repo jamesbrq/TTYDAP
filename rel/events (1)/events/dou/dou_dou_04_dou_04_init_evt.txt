@@ -1,0 +1,358 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [dou_04_init_evt dou_04.o] AT 805C5308 ---
+805C5308:   callc [evt_snd_bgmon evt_snd.o] 512 ["BGM_STG5_DOU1"]
+805C5318:   callc [evt_snd_envon evt_snd.o] 272 ["ENV_STG5_DOU6"]
+805C5328:   callc [evt_snd_set_rev_mode evt_snd.o] 2
+805C5334:   setii LW(0) [bero_entry_data dou_04.o]
+805C5340:   callc [evt_bero_get_info evt_bero.o]
+805C5348:   callss [evt_bero_info_run evt_bero.o]
+805C5350:   wait_frames 1
+805C5358:   callc [evt_npc_setup evt_npc.o] [npcEnt dou_04.o]
+805C5364:   callsa [box_event dou_04.o]
+805C536C:   callc [evt_mobj_switch_red evt_mobj.o] 0 ["mobj00"] 25 32 125 [lift_event dou_04.o] 0
+805C5390:   callsa [lift_event_init dou_04.o]
+805C5398:   callc [evt_map_playanim evt_map.o] ["nami"] 1 0
+805C53AC:   callc [evt_map_playanim evt_map.o] ["moku"] 1 0
+805C53C0:   callc [evt_item_entry evt_item.o] ["kagitsume"] 20 122 110 -118 0 GSWF(2977) 0
+805C53E8:   callc [evt_item_entry evt_item.o] ["starpice"] 125 -230 200 110 0 GSWF(5646) 0
+805C5410:   callc [evt_hit_damage_return_set evt_hit.o] [hitDmgRetPoints dou_04.o]
+805C541C:   callss [evt_gazigazi_entry evt_damage.o]
+805C5424:   callc [evt_mobj_powerupblk evt_mobj.o] ["pblk00"] -230 290 -105 0 GSWF(5555) 0
+805C5448:   if_int_eq GSWF(5395) 1
+805C5454:     callc [evt_item_entry evt_item.o] ["iri_21"] 219 -165 10 106 16 GSWF(2991) 0
+805C547C:   endif
+805C5480:   return
+805C5484:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [box_event dou_04.o] AT 805C399C ---
+805C399C:   setff GW(0) 0.00
+805C39A8:   setff GW(1) 0.00
+805C39B4:   setff GW(2) 0.00
+805C39C0:   callsa [box_trans dou_04.o]
+805C39C8:   callsa [box_pukapuka dou_04.o]
+805C39D0:   callc [evt_hit_bind_mapobj evt_hit.o] ["a04_m_hako_03"] ["s04_m_hako_a"]
+805C39E0:   loop 0
+805C39E8:     callc [evt_sub_intpl_msec_init evt_sub.o] 1 0 3 500
+805C3A00:     loop 0
+805C3A08:       callc [evt_sub_intpl_msec_get_value_para evt_sub.o] GW(0) LW(1)
+805C3A18:       if_int_eq LW(1) 0
+805C3A24:         loop_break
+805C3A28:       endif
+805C3A2C:       wait_frames 1
+805C3A34:     end_loop
+805C3A38:     callc [evt_sub_intpl_msec_init evt_sub.o] 0 3 50 3000
+805C3A50:     loop 0
+805C3A58:       callc [evt_sub_intpl_msec_get_value_para evt_sub.o] GW(0) LW(1)
+805C3A68:       if_int_eq LW(1) 0
+805C3A74:         loop_break
+805C3A78:       endif
+805C3A7C:       wait_frames 1
+805C3A84:     end_loop
+805C3A88:     callc [evt_mapobj_get_position evt_map.o] ["s04_m_hako_a"] LW(0) LW(1) LW(2)
+805C3AA0:     callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_STG5_STEP_FLOAT1"] LW(0) LW(1) LW(2) 0
+805C3ABC:     callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_STG5_STEP_FLOAT2"] LW(0) LW(1) LW(2) 0
+805C3AD8:     callc [evt_sub_intpl_msec_init evt_sub.o] 11 50 49 500
+805C3AF0:     loop 0
+805C3AF8:       callc [evt_sub_intpl_msec_get_value_para evt_sub.o] GW(0) LW(1)
+805C3B08:       if_int_eq LW(1) 0
+805C3B14:         loop_break
+805C3B18:       endif
+805C3B1C:       wait_frames 1
+805C3B24:     end_loop
+805C3B28:     callc [evt_sub_intpl_msec_init evt_sub.o] 11 49 50 500
+805C3B40:     loop 0
+805C3B48:       callc [evt_sub_intpl_msec_get_value_para evt_sub.o] GW(0) LW(1)
+805C3B58:       if_int_eq LW(1) 0
+805C3B64:         loop_break
+805C3B68:       endif
+805C3B6C:       wait_frames 1
+805C3B74:     end_loop
+805C3B78:     callc [evt_sub_intpl_msec_init evt_sub.o] 1 50 47 500
+805C3B90:     loop 0
+805C3B98:       callc [evt_sub_intpl_msec_get_value_para evt_sub.o] GW(0) LW(1)
+805C3BA8:       if_int_eq LW(1) 0
+805C3BB4:         loop_break
+805C3BB8:       endif
+805C3BBC:       wait_frames 1
+805C3BC4:     end_loop
+805C3BC8:     callc [evt_sub_intpl_msec_init evt_sub.o] 0 47 0 3000
+805C3BE0:     loop 0
+805C3BE8:       callc [evt_sub_intpl_msec_get_value_para evt_sub.o] GW(0) LW(1)
+805C3BF8:       if_int_eq LW(1) 0
+805C3C04:         loop_break
+805C3C08:       endif
+805C3C0C:       wait_frames 1
+805C3C14:     end_loop
+805C3C18:     callc [evt_mapobj_get_position evt_map.o] ["s04_m_hako_a"] LW(0) LW(1) LW(2)
+805C3C30:     callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_STG5_STEP_FLOAT1"] LW(0) LW(1) LW(2) 0
+805C3C4C:     callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_STG5_STEP_FLOAT2"] LW(0) LW(1) LW(2) 0
+805C3C68:     callc [evt_sub_intpl_msec_init evt_sub.o] 11 0 1 500
+805C3C80:     loop 0
+805C3C88:       callc [evt_sub_intpl_msec_get_value_para evt_sub.o] GW(0) LW(1)
+805C3C98:       if_int_eq LW(1) 0
+805C3CA4:         loop_break
+805C3CA8:       endif
+805C3CAC:       wait_frames 1
+805C3CB4:     end_loop
+805C3CB8:     callc [evt_sub_intpl_msec_init evt_sub.o] 11 1 0 500
+805C3CD0:     loop 0
+805C3CD8:       callc [evt_sub_intpl_msec_get_value_para evt_sub.o] GW(0) LW(1)
+805C3CE8:       if_int_eq LW(1) 0
+805C3CF4:         loop_break
+805C3CF8:       endif
+805C3CFC:       wait_frames 1
+805C3D04:     end_loop
+805C3D08:   end_loop
+805C3D0C:   return
+805C3D10:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [lift_event_init dou_04.o] AT 805C45E8 ---
+805C45E8:   callc [evt_hit_bind_mapobj evt_hit.o] ["a04_m_hako_01"] ["s04_m_ita_b"]
+805C45F8:   callc [evt_hit_bind_mapobj evt_hit.o] ["a04_m_hako_02"] ["s04_m_hako_b"]
+805C4608:   setii GF(10) 1
+805C4614:   callsa [lift_main_00 dou_04.o]
+805C461C:   callsa [lift_main_01 dou_04.o]
+805C4624:   return
+805C4628:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [box_trans dou_04.o] AT 805C3858 ---
+805C3858:   setff LW(3) 0
+805C3864:   loop 0
+805C386C:     callc [evt_mapobj_trans evt_map.o] 1 ["s04_m_hako_a"] GW(0) GW(1) GW(2)
+805C3888:     callc [evt_mapobj_trans evt_map.o] 1 ["mizuhashi"] GW(0) 0 GW(2)
+805C38A4:     callc [evt_hit_bind_update evt_hit.o] ["a04_m_hako_03"]
+805C38B0:     setff LW(4) GW(0)
+805C38BC:     subf LW(4) LW(3)
+805C38C8:     callc [evt_mario_get_name_hitobj_ride evt_mario.o] LW(2)
+805C38D4:     if_string_eq LW(2) ["a04_m_hako_03"]
+805C38E0:       callc [evt_mario_set_hosei_xyz evt_mario.o] LW(4) 0 0
+805C38F4:     endif
+805C38F8:     callc [evt_party_get_name_hitobj_ride evt_party.o] 0 LW(2)
+805C3908:     if_string_eq LW(2) ["a04_m_hako_03"]
+805C3914:       callc [evt_party_set_hosei_xyz evt_party.o] 0 LW(4) 0 0
+805C392C:     endif
+805C3930:     callc [evt_party_get_name_hitobj_ride evt_party.o] 1 LW(2)
+805C3940:     if_string_eq LW(2) ["a04_m_hako_03"]
+805C394C:       callc [evt_party_set_hosei_xyz evt_party.o] 1 LW(4) 0 0
+805C3964:     endif
+805C3968:     setff LW(3) GW(0)
+805C3974:     wait_frames 1
+805C397C:   end_loop
+805C3980:   return
+805C3984:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [box_pukapuka dou_04.o] AT 805C3988 ---
+805C3988:   callc [evt_box_pukapuka dou_04.o] GW(1)
+805C3994:   return
+805C3998:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [lift_main_00 dou_04.o] AT 805C4440 ---
+805C4440:   setii LF(10) 0
+805C444C:   loop 0
+805C4454:     wait_until GF(10)
+805C445C:     if_int_eq LF(10) 0
+805C4468:       setii LW(0) 0
+805C4474:       setff LW(3) 0.00
+805C4480:     else
+805C4484:       setii LW(0) 0
+805C4490:       setff LW(3) LW(4)
+805C449C:     endif
+805C44A0:     callss [lift_event_00 dou_04.o]
+805C44A8:     wait_ms 4000
+805C44B0:     if_int_eq LF(10) 0
+805C44BC:       setii LW(0) 1
+805C44C8:       setff LW(3) -180.00
+805C44D4:     else
+805C44D8:       setii LW(0) 1
+805C44E4:       setff LW(3) LW(4)
+805C44F0:     endif
+805C44F4:     callss [lift_event_00 dou_04.o]
+805C44FC:     setii GF(10) 1
+805C4508:   end_loop
+805C450C:   return
+805C4510:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [lift_main_01 dou_04.o] AT 805C4514 ---
+805C4514:   setii LF(10) 0
+805C4520:   loop 0
+805C4528:     wait_until GF(10)
+805C4530:     if_int_eq LF(10) 0
+805C453C:       setii LW(0) 0
+805C4548:       setff LW(3) 0.00
+805C4554:     else
+805C4558:       setii LW(0) 0
+805C4564:       setff LW(3) LW(4)
+805C4570:     endif
+805C4574:     callss [lift_event_01 dou_04.o]
+805C457C:     wait_ms 4000
+805C4584:     if_int_eq LF(10) 0
+805C4590:       setii LW(0) 1
+805C459C:       setff LW(3) 128.00
+805C45A8:     else
+805C45AC:       setii LW(0) 1
+805C45B8:       setff LW(3) LW(4)
+805C45C4:     endif
+805C45C8:     callss [lift_event_01 dou_04.o]
+805C45D0:     setii GF(10) 1
+805C45DC:   end_loop
+805C45E0:   return
+805C45E4:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [lift_event_00 dou_04.o] AT 805C3D14 ---
+805C3D14:   if_int_eq LW(0) 0
+805C3D20:     setff LW(0) LW(3)
+805C3D2C:     loop 0
+805C3D34:       callc [evt_mapobj_trans evt_map.o] 1 ["s04_m_hako_b"] 0 LW(0) 0
+805C3D50:       callc [evt_hit_bind_update evt_hit.o] ["a04_m_hako_02"]
+805C3D5C:       callc [evt_mario_get_name_hitobj_ride evt_mario.o] LW(2)
+805C3D68:       if_string_eq LW(2) ["a04_m_hako_02"]
+805C3D74:         callc [evt_mario_set_hosei_xyz evt_mario.o] 0 LW(0) 0
+805C3D88:       endif
+805C3D8C:       callc [evt_party_get_name_hitobj_ride evt_party.o] 0 LW(2)
+805C3D9C:       if_string_eq LW(2) ["a04_m_hako_02"]
+805C3DA8:         callc [evt_party_set_hosei_xyz evt_party.o] 0 0 LW(0) 0
+805C3DC0:       endif
+805C3DC4:       callc [evt_party_get_name_hitobj_ride evt_party.o] 1 LW(2)
+805C3DD4:       if_string_eq LW(2) ["a04_m_hako_02"]
+805C3DE0:         callc [evt_party_set_hosei_xyz evt_party.o] 1 0 LW(0) 0
+805C3DF8:       endif
+805C3DFC:       setii LF(10) 0
+805C3E08:       callc [evt_mario_get_name_hitobj_head evt_mario.o] LW(2)
+805C3E14:       if_string_eq LW(2) ["soko2"]
+805C3E20:         setii LF(10) 1
+805C3E2C:       endif
+805C3E30:       callc [evt_mario_check_menu dou_04.o] LF(11)
+805C3E3C:       if_int_eq LF(10) 1
+805C3E48:         loop_break
+805C3E4C:       endif
+805C3E50:       addf LW(0) -0.75
+805C3E5C:       wait_frames 1
+805C3E64:       if_float_le LW(0) -180.00
+805C3E70:         setff LW(0) -180.00
+805C3E7C:         callc [evt_mapobj_trans evt_map.o] 1 ["s04_m_hako_b"] 0 LW(0) 0
+805C3E98:         loop_break
+805C3E9C:       endif
+805C3EA0:     end_loop
+805C3EA4:     callc [evt_mapobj_get_position evt_map.o] ["s04_m_hako_b"] LW(10) LW(11) LW(12)
+805C3EBC:     callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_STG5_STEP_DOWN1"] LW(10) LW(11) LW(12) 0
+805C3ED8:     callc [evt_cam_shake evt_cam.o] 4 0.00 0.00 150
+805C3EF0:   else
+805C3EF4:     setff LW(0) LW(3)
+805C3F00:     loop 0
+805C3F08:       callc [evt_mapobj_trans evt_map.o] 1 ["s04_m_hako_b"] 0 LW(0) 0
+805C3F24:       callc [evt_hit_bind_update evt_hit.o] ["a04_m_hako_02"]
+805C3F30:       callc [evt_mario_get_name_hitobj_ride evt_mario.o] LW(2)
+805C3F3C:       if_string_eq LW(2) ["a04_m_hako_02"]
+805C3F48:         callc [evt_mario_set_hosei_xyz evt_mario.o] 0 LW(0) 0
+805C3F5C:       endif
+805C3F60:       callc [evt_party_get_name_hitobj_ride evt_party.o] 0 LW(2)
+805C3F70:       if_string_eq LW(2) ["a04_m_hako_02"]
+805C3F7C:         callc [evt_party_set_hosei_xyz evt_party.o] 0 0 LW(0) 0
+805C3F94:       endif
+805C3F98:       callc [evt_party_get_name_hitobj_ride evt_party.o] 1 LW(2)
+805C3FA8:       if_string_eq LW(2) ["a04_m_hako_02"]
+805C3FB4:         callc [evt_party_set_hosei_xyz evt_party.o] 1 0 LW(0) 0
+805C3FCC:       endif
+805C3FD0:       setii LF(10) 0
+805C3FDC:       callc [evt_mario_get_name_hitobj_head evt_mario.o] LW(2)
+805C3FE8:       if_string_eq LW(2) ["soko1"]
+805C3FF4:         setii LF(10) 1
+805C4000:       endif
+805C4004:       callc [evt_mario_check_menu dou_04.o] LF(11)
+805C4010:       if_int_eq LF(10) 1
+805C401C:         loop_break
+805C4020:       endif
+805C4024:       addf LW(0) 0.75
+805C4030:       wait_frames 1
+805C4038:       if_float_ge LW(0) 0.00
+805C4044:         setff LW(0) 0.00
+805C4050:         callc [evt_mapobj_trans evt_map.o] 1 ["s04_m_hako_b"] 0 LW(0) 0
+805C406C:         loop_break
+805C4070:       endif
+805C4074:     end_loop
+805C4078:   endif
+805C407C:   setff LW(4) LW(0)
+805C4088:   return
+805C408C:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [lift_event_01 dou_04.o] AT 805C4090 ---
+805C4090:   if_int_eq LW(0) 0
+805C409C:     callc [evt_mapobj_get_position evt_map.o] ["s04_m_ita_b"] LW(0) LW(1) LW(2)
+805C40B4:     callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_STG5_STEP_UP1"] LW(0) LW(1) LW(2) LW(9)
+805C40D0:     setff LW(0) LW(3)
+805C40DC:     loop 0
+805C40E4:       callc [evt_mapobj_trans evt_map.o] 1 ["s04_m_ita_b"] 0 LW(0) 0
+805C4100:       callc [evt_hit_bind_update evt_hit.o] ["a04_m_hako_01"]
+805C410C:       callc [evt_mario_get_name_hitobj_ride evt_mario.o] LW(2)
+805C4118:       if_string_eq LW(2) ["a04_m_hako_01"]
+805C4124:         callc [evt_mario_set_hosei_xyz evt_mario.o] 0 LW(0) 0
+805C4138:       endif
+805C413C:       callc [evt_party_get_name_hitobj_ride evt_party.o] 0 LW(2)
+805C414C:       if_string_eq LW(2) ["a04_m_hako_01"]
+805C4158:         callc [evt_party_set_hosei_xyz evt_party.o] 0 0 LW(0) 0
+805C4170:       endif
+805C4174:       callc [evt_party_get_name_hitobj_ride evt_party.o] 1 LW(2)
+805C4184:       if_string_eq LW(2) ["a04_m_hako_01"]
+805C4190:         callc [evt_party_set_hosei_xyz evt_party.o] 1 0 LW(0) 0
+805C41A8:       endif
+805C41AC:       setii LF(10) 0
+805C41B8:       callc [evt_mario_get_name_hitobj_head evt_mario.o] LW(2)
+805C41C4:       if_string_eq LW(2) ["soko2"]
+805C41D0:         setii LF(10) 1
+805C41DC:       endif
+805C41E0:       callc [evt_mario_check_menu dou_04.o] LF(11)
+805C41EC:       if_int_eq LF(10) 1
+805C41F8:         loop_break
+805C41FC:       endif
+805C4200:       addf LW(0) 0.53
+805C420C:       wait_frames 1
+805C4214:       if_float_ge LW(0) 128.00
+805C4220:         setff LW(0) 128.00
+805C422C:         callc [evt_mapobj_trans evt_map.o] 1 ["s04_m_ita_b"] 0 LW(0) 0
+805C4248:         loop_break
+805C424C:       endif
+805C4250:     end_loop
+805C4254:     callc [evt_snd_sfxoff evt_snd.o] LW(9)
+805C4260:   else
+805C4264:     callc [evt_mapobj_get_position evt_map.o] ["s04_m_ita_b"] LW(0) LW(1) LW(2)
+805C427C:     callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_STG5_STEP_FALL1"] LW(0) LW(1) LW(2) LW(9)
+805C4298:     setff LW(0) LW(3)
+805C42A4:     loop 0
+805C42AC:       callc [evt_mapobj_trans evt_map.o] 1 ["s04_m_ita_b"] 0 LW(0) 0
+805C42C8:       callc [evt_hit_bind_update evt_hit.o] ["a04_m_hako_01"]
+805C42D4:       callc [evt_mario_get_name_hitobj_ride evt_mario.o] LW(2)
+805C42E0:       if_string_eq LW(2) ["a04_m_hako_01"]
+805C42EC:         callc [evt_mario_set_hosei_xyz evt_mario.o] 0 LW(0) 0
+805C4300:       endif
+805C4304:       callc [evt_party_get_name_hitobj_ride evt_party.o] 0 LW(2)
+805C4314:       if_string_eq LW(2) ["a04_m_hako_01"]
+805C4320:         callc [evt_party_set_hosei_xyz evt_party.o] 0 0 LW(0) 0
+805C4338:       endif
+805C433C:       callc [evt_party_get_name_hitobj_ride evt_party.o] 1 LW(2)
+805C434C:       if_string_eq LW(2) ["a04_m_hako_01"]
+805C4358:         callc [evt_party_set_hosei_xyz evt_party.o] 1 0 LW(0) 0
+805C4370:       endif
+805C4374:       setii LF(10) 0
+805C4380:       callc [evt_mario_get_name_hitobj_head evt_mario.o] LW(2)
+805C438C:       if_string_eq LW(2) ["soko1"]
+805C4398:         setii LF(10) 1
+805C43A4:       endif
+805C43A8:       callc [evt_mario_check_menu dou_04.o] LF(11)
+805C43B4:       if_int_eq LF(10) 1
+805C43C0:         loop_break
+805C43C4:       endif
+805C43C8:       addf LW(0) -0.53
+805C43D4:       wait_frames 1
+805C43DC:       if_float_le LW(0) 0.00
+805C43E8:         setff LW(0) 0.00
+805C43F4:         callc [evt_mapobj_trans evt_map.o] 1 ["s04_m_ita_b"] 0 LW(0) 0
+805C4410:         loop_break
+805C4414:       endif
+805C4418:     end_loop
+805C441C:     callc [evt_snd_sfxoff evt_snd.o] LW(9)
+805C4428:   endif
+805C442C:   setff LW(4) LW(0)
+805C4438:   return
+805C443C:   end

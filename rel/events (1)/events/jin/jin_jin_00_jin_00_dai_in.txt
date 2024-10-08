@@ -1,0 +1,34 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [jin_00_dai_in jin_00.o] AT 805C50D4 ---
+805C50D4:   dbg_report ["入る"]
+805C50DC:   callsa [jin_00_dai_in_sub jin_00.o]
+805C50E4:   setii LW(0) 0
+805C50F0:   return
+805C50F4:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [jin_00_dai_in_sub jin_00.o] AT 805C4F88 ---
+805C4F88:   callc [evt_seq_wait evt_seq.o] 2
+805C4F94:   callc [evt_mario_get_pos evt_mario.o] 0 LW(0) LW(1) LW(2)
+805C4FAC:   callc [evt_mario_set_pos evt_mario.o] 390 -60 0
+805C4FC0:   callc [evt_party_set_pos evt_party.o] 0 390 -60 -10
+805C4FD8:   callc [evt_party_set_pos evt_party.o] 1 390 -60 -20
+805C4FF0:   callc [evt_mario_set_dir evt_mario.o] 270 0 0
+805C5004:   callc [evt_party_set_dir evt_party.o] 0 270 -1
+805C5018:   callc [evt_party_set_dir evt_party.o] 1 270 -1
+805C502C:   begin_thread
+805C5030:     callc [evt_mario_jump_pos evt_mario.o] 365 40 0 700 0 -1000
+805C5050:     callc [N_evt_bero_set_mario_bottomless_respawn_pos_to_current_mario_pos evt_bero.o]
+805C5058:   end_thread
+805C505C:   begin_thread
+805C5060:     wait_ms 400
+805C5068:     callc [evt_party_jump_pos evt_party.o] 0 365 40 -10 700 0 -1000
+805C508C:   end_thread
+805C5090:   begin_thread
+805C5094:     wait_ms 800
+805C509C:     callc [evt_party_jump_pos evt_party.o] 1 365 40 -20 700 0 -1000
+805C50C0:   end_thread
+805C50C4:   wait_ms 1500
+805C50CC:   return
+805C50D0:   end

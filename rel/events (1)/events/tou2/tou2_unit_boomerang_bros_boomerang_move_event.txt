@@ -1,0 +1,179 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [boomerang_move_event unit_boomerang_bros.o] AT 805E62E4 ---
+805E62E4:   callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_ENM_BOOME_ATTACK1"] [F1194D80] 0 [F1194D80]
+805E6300:   callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 LW(15) ["BRO_A_1B"]
+805E6314:   callc [btlevtcmd_GetPos battle_event_cmd.o] -2 LW(0) LW(1) LW(2)
+805E632C:   addi LW(1) 20
+805E6338:   callc [btlevtcmd_SetPartsPos battle_event_cmd.o] -2 LW(15) LW(0) LW(1) LW(2)
+805E6354:   callc [btlevtcmd_SetPartsRotate battle_event_cmd.o] -2 LW(15) 0 0 -180
+805E6370:   callc [btlevtcmd_SetPartsRotateOffset battle_event_cmd.o] -2 LW(15) 0 0 0
+805E638C:   callc [btlevtcmd_OffPartsAttribute battle_event_cmd.o] -2 LW(15) 16777216
+805E63A0:   callc [btlevtcmd_OffPartsAttribute battle_event_cmd.o] -2 LW(15) 33554432
+805E63B4:   setii LW(9) 0
+805E63C0:   begin_child_thread
+805E63C4:     loop 0
+805E63CC:       wait_frames 1
+805E63D4:       callc [btlevtcmd_GetPartsPos battle_event_cmd.o] -2 LW(15) LW(10) LW(12) LW(13)
+805E63F0:       if_int_eq LW(9) 2
+805E63FC:         callc [btlevtcmd_SetUnitWork battle_event_cmd.o] -2 7 0
+805E6410:       endif
+805E6414:       switchi LW(9)
+805E641C:         case_int_eq 0
+805E6424:           callc [btlevtcmd_GetUnitWork battle_event_cmd.o] -2 1 LW(3)
+805E6438:           callc [btlevtcmd_GetUnitWork battle_event_cmd.o] -2 3 LW(4)
+805E644C:           if_int_eq LW(3) -1
+805E6458:             setii LW(9) 1
+805E6464:             switch_break
+805E6468:           endif
+805E646C:           callc [btlevtcmd_GetHitPos battle_event_cmd.o] LW(3) LW(4) LW(11) LW(12) LW(13)
+805E6488:           if_int_ge LW(10) LW(11)
+805E6494:             switch_break
+805E6498:           endif
+805E649C:           callss [damage_check_no_last unit_boomerang_bros.o]
+805E64A4:           setii LW(9) 1
+805E64B0:           callc [btlevtcmd_SetUnitWork battle_event_cmd.o] -2 5 LW(0)
+805E64C4:           end_multi_case
+805E64C8:         case_int_eq 1
+805E64D0:           callc [btlevtcmd_GetUnitWork battle_event_cmd.o] -2 2 LW(3)
+805E64E4:           callc [btlevtcmd_GetUnitWork battle_event_cmd.o] -2 4 LW(4)
+805E64F8:           if_int_eq LW(3) -1
+805E6504:             setii LW(9) 2
+805E6510:             switch_break
+805E6514:           endif
+805E6518:           callc [btlevtcmd_GetHitPos battle_event_cmd.o] LW(3) LW(4) LW(11) LW(12) LW(13)
+805E6534:           if_int_ge LW(10) LW(11)
+805E6540:             switch_break
+805E6544:           endif
+805E6548:           callss [damage_check_no_last unit_boomerang_bros.o]
+805E6550:           setii LW(9) 2
+805E655C:           callc [btlevtcmd_SetUnitWork battle_event_cmd.o] -2 6 LW(0)
+805E6570:           end_multi_case
+805E6574:         case_int_eq 2
+805E657C:           callc [btlevtcmd_GetUnitWork battle_event_cmd.o] -2 2 LW(3)
+805E6590:           callc [btlevtcmd_GetUnitWork battle_event_cmd.o] -2 4 LW(4)
+805E65A4:           if_int_eq LW(3) -1
+805E65B0:             setii LW(9) 3
+805E65BC:             switch_break
+805E65C0:           endif
+805E65C4:           callc [btlevtcmd_GetHitPos battle_event_cmd.o] LW(3) LW(4) LW(11) LW(12) LW(13)
+805E65E0:           if_int_lt LW(10) LW(11)
+805E65EC:             switch_break
+805E65F0:           endif
+805E65F4:           callc [btlevtcmd_GetUnitWork battle_event_cmd.o] -2 6 LW(0)
+805E6608:           if_int_eq LW(14) 0
+805E6614:             callss [damage_check_no_last unit_boomerang_bros.o]
+805E661C:           else
+805E6620:             callss [damage_check_last unit_boomerang_bros.o]
+805E6628:           endif
+805E662C:           setii LW(9) 3
+805E6638:           end_multi_case
+805E663C:         case_int_eq 3
+805E6644:           callc [btlevtcmd_GetUnitWork battle_event_cmd.o] -2 1 LW(3)
+805E6658:           callc [btlevtcmd_GetUnitWork battle_event_cmd.o] -2 3 LW(4)
+805E666C:           if_int_eq LW(3) -1
+805E6678:             setii LW(9) 4
+805E6684:             switch_break
+805E6688:           endif
+805E668C:           callc [btlevtcmd_GetHitPos battle_event_cmd.o] LW(3) LW(4) LW(11) LW(12) LW(13)
+805E66A8:           if_int_lt LW(10) LW(11)
+805E66B4:             switch_break
+805E66B8:           endif
+805E66BC:           callc [btlevtcmd_GetUnitWork battle_event_cmd.o] -2 5 LW(0)
+805E66D0:           if_int_eq LW(14) 0
+805E66DC:             callss [damage_check_no_last unit_boomerang_bros.o]
+805E66E4:           else
+805E66E8:             callss [damage_check_last unit_boomerang_bros.o]
+805E66F0:           endif
+805E66F4:           setii LW(9) 4
+805E6700:           end_multi_case
+805E6704:         case_int_eq 4
+805E670C:           loop_break
+805E6710:           end_multi_case
+805E6714:       end_switch
+805E6718: 10:
+805E6720:     end_loop
+805E6724:   end_child_thread
+805E6728:   begin_child_thread
+805E672C:     loop 0
+805E6734:       wait_frames 1
+805E673C:       callc [btlevtcmd_AddPartsRotate battle_event_cmd.o] -2 LW(15) 0 0 64
+805E6758:     end_loop
+805E675C:   end_child_thread
+805E6760:   callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_ENM_BOOME_ATTACK2"] [F1194D80] 0 LW(8)
+805E677C:   callc [btlevtcmd_DivePartsPosition battle_event_cmd.o] -2 LW(15) -200 LW(1) LW(2) 40 -20.00 4 0 -1
+805E67AC:   callc [evt_snd_sfxoff evt_snd.o] LW(8)
+805E67B8:   callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_ENM_BOOME_ATTACK3"] [F1194D80] 0 LW(8)
+805E67D4:   callc [btlevtcmd_DivePartsPosition battle_event_cmd.o] -2 LW(15) LW(0) LW(1) LW(2) 40 20.00 1 0 -1
+805E6804:   callc [evt_snd_sfxoff evt_snd.o] LW(8)
+805E6810:   callc [btlevtcmd_OnPartsAttribute battle_event_cmd.o] -2 LW(15) 16777216
+805E6824:   callc [btlevtcmd_OnPartsAttribute battle_event_cmd.o] -2 LW(15) 33554432
+805E6838:   callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_ENM_BOOME_ATTACK4"] [F1194D80] 0 [F1194D80]
+805E6854:   callc [btlevtcmd_AddUnitWork battle_event_cmd.o] -2 0 1
+805E6868:   return
+805E686C:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [damage_check_no_last unit_boomerang_bros.o] AT 805E6230 ---
+805E6230:   setii LW(7) 0
+805E623C:   callss [damage_check_sub unit_boomerang_bros.o]
+805E6244:   return
+805E6248:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [damage_check_last unit_boomerang_bros.o] AT 805E624C ---
+805E624C:   if_int_eq LW(0) 1
+805E6258:     callc [btlevtcmd_GetUnitWork battle_event_cmd.o] -2 7 LW(8)
+805E626C:     if_int_eq LW(8) 0
+805E6278:       callc [btlevtcmd_ResultACDefence battle_event_cmd.o] LW(3) LW(6)
+805E6288:       callc [btlevtcmd_SetUnitWork battle_event_cmd.o] -2 7 1
+805E629C:     endif
+805E62A0:     callc [btlevtcmd_CheckDamage battle_event_cmd.o] -2 LW(3) LW(4) LW(6) 256 LW(5)
+805E62C0:   else
+805E62C4:     setii LW(7) 1
+805E62D0:     callss [damage_check_sub unit_boomerang_bros.o]
+805E62D8:   endif
+805E62DC:   return
+805E62E0:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [damage_check_sub unit_boomerang_bros.o] AT 805E6084 ---
+805E6084:   setii LW(0) 0
+805E6090:   callc [btlevtcmd_PreCheckDamage battle_event_cmd.o] -2 LW(3) LW(4) LW(6) 0 LW(5)
+805E60B0:   switchi LW(5)
+805E60B8:     case_int_eq_any 4
+805E60C0:       goto 90
+805E60C8:       end_multi_case
+805E60CC:     case_int_eq 3
+805E60D4:       callc [btlevtcmd_StartAvoid battle_event_cmd.o] LW(3) 38
+805E60E4:       goto 90
+805E60EC:       end_multi_case
+805E60F0:     case_int_eq 6
+805E60F8:       callc [btlevtcmd_StartAvoid battle_event_cmd.o] LW(3) 39
+805E6108:       goto 90
+805E6110:     case_int_eq 2
+805E6118:       callc [btlevtcmd_StartAvoid battle_event_cmd.o] LW(3) 40
+805E6128:       goto 90
+805E6130:     case_int_eq 1
+805E6138:       goto 91
+805E6140:       end_multi_case
+805E6144:     case_default
+805E6148:       goto 98
+805E6150:       end_multi_case
+805E6154:   end_switch
+805E6158: 90:
+805E6160:   goto 99
+805E6168: 91:
+805E6170:   callc [btlevtcmd_GetUnitWork battle_event_cmd.o] -2 7 LW(8)
+805E6184:   if_int_eq LW(8) 0
+805E6190:     callc [btlevtcmd_ResultACDefence battle_event_cmd.o] LW(3) LW(6)
+805E61A0:     callc [btlevtcmd_SetUnitWork battle_event_cmd.o] -2 7 1
+805E61B4:   endif
+805E61B8:   if_int_eq LW(7) 1
+805E61C4:     callc [btlevtcmd_CheckDamage battle_event_cmd.o] -2 LW(3) LW(4) LW(6) 256 LW(5)
+805E61E4:   else
+805E61E8:     callc [btlevtcmd_CheckDamage battle_event_cmd.o] -2 LW(3) LW(4) LW(6) 0 LW(5)
+805E6208:   endif
+805E620C:   setii LW(0) 1
+805E6218:   goto 99
+805E6220: 99:
+805E6228:   return
+805E622C:   end

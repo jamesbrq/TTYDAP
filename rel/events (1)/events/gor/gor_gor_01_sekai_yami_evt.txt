@@ -1,0 +1,83 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [sekai_yami_evt gor_01.o] AT 805F4EE0 ---
+805F4EE0:   callc [evt_mario_key_onoff evt_mario.o] 0
+805F4EEC:   callc [evt_mario_cont_onoff evt_mario.o] 0
+805F4EF8:   callc [evt_party_cont_onoff evt_party.o] 0 0
+805F4F08:   callc [evt_mario_set_pos evt_mario.o] 0 -1000 0
+805F4F1C:   callc [evt_party_set_pos evt_party.o] 0 0 -1000 0
+805F4F34:   callc [evt_npc_set_position evt_npc.o] ["キノじい"] 0 0 403
+805F4F4C:   callc [evt_cam3d_evt_set evt_cam.o] 0 350 1530 0 150 44 0 11
+805F4F74:   callc [evt_seq_wait evt_seq.o] 2
+805F4F80:   callc [evt_map_set_tevcallback evt_map.o] 1 [envSetYami envdrv.o]
+805F4F90:   callc [evt_mapobj_flag_onoff evt_map.o] 1 1 ["S"] 16777216
+805F4FA8:   callc [evt_mapobj_flag_onoff evt_map.o] 1 0 ["S"] 256
+805F4FC0:   callc [anim_tevcallback gor_01.o] ["キノじい"] 1
+805F4FD0:   callc [anim_tevcallback gor_01.o] ["ロテン１"] 1
+805F4FE0:   callc [anim_tevcallback gor_01.o] ["クリボー１"] 1
+805F4FF0:   callc [anim_tevcallback gor_01.o] ["クリボー２"] 1
+805F5000:   callc [anim_tevcallback gor_01.o] ["チューさん１"] 1
+805F5010:   callc [anim_tevcallback gor_01.o] ["ボッタクール"] 1
+805F5020:   callc [anim_tevcallback_mobj gor_01.o] ["mobj_save"] 1
+805F5030:   callc [anim_tevcallback_mobj gor_01.o] ["mobj_box00"] 1
+805F5040:   setii GW(0) 700
+805F504C:   setii LW(0) ["キノじい"]
+805F5058:   callsa [sekai_yami_npc gor_01.o]
+805F5060:   setii LW(0) ["ロテン１"]
+805F506C:   callsa [sekai_yami_npc gor_01.o]
+805F5074:   setii LW(0) ["クリボー１"]
+805F5080:   callsa [sekai_yami_npc gor_01.o]
+805F5088:   setii LW(0) ["チューさん１"]
+805F5094:   callsa [sekai_yami_npc gor_01.o]
+805F509C:   setii LW(0) ["ボッタクール"]
+805F50A8:   callsa [sekai_yami_npc gor_01.o]
+805F50B0:   callc [evt_snd_sfxon evt_snd.o] ["SFX_STG8_WORLD_DARK1"] 0
+805F50C0:   callc [evt_sub_intpl_msec_init evt_sub.o] 11 700 -850 5000
+805F50D8:   loop 0
+805F50E0:     callc [evt_sub_intpl_msec_get_value evt_sub.o]
+805F50E8:     callc [yami_view gor_01.o] LW(0)
+805F50F4:     setii GW(0) LW(0)
+805F5100:     wait_frames 1
+805F5108:     if_int_eq LW(1) 0
+805F5114:       loop_break
+805F5118:     endif
+805F511C:   end_loop
+805F5120:   wait_ms 1200
+805F5128:   callc [evt_sub_intpl_msec_init evt_sub.o] 11 255 64 2000
+805F5140:   loop 0
+805F5148:     callc [evt_sub_intpl_msec_get_value evt_sub.o]
+805F5150:     callc [evt_bg_set_color evt_bg.o] LW(0) LW(0) LW(0) 255
+805F5168:     wait_frames 1
+805F5170:     if_int_eq LW(1) 0
+805F517C:       loop_break
+805F5180:     endif
+805F5184:   end_loop
+805F5188:   wait_ms 2000
+805F5190:   callc [evt_fade_set_mapchange_type evt_fade.o] 1 10 300 9 300
+805F51AC:   callc [evt_bero_mapchange evt_bero.o] ["nok_01"] ["sekai_yami1"]
+805F51BC:   return
+805F51C0:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [sekai_yami_npc gor_01.o] AT 805F4DF4 ---
+805F4DF4:   loop 0
+805F4DFC:     callc [evt_npc_get_position evt_npc.o] LW(0) LW(1) LW(2) LW(3)
+805F4E14:     if_int_le GW(0) LW(3)
+805F4E20:       loop_break
+805F4E24:     endif
+805F4E28:     wait_frames 1
+805F4E30:   end_loop
+805F4E34:   callc [evt_npc_get_reglid evt_npc.o] LW(0) LW(1)
+805F4E44:   stop_tid LW(1)
+805F4E4C:   callc [evt_eff_fukidashi evt_eff.o] 1 [zero_gor_00017170 gor_01.o] LW(0) 0 0 0 0 0 0 0 48
+805F4E80:   wait_ms 1000
+805F4E88:   loop 0
+805F4E90:     callc [evt_sub_random evt_sub.o] 400 LW(1)
+805F4EA0:     addi LW(1) 100
+805F4EAC:     wait_ms LW(1)
+805F4EB4:     callc [evt_npc_reverse_ry evt_npc.o] LW(0)
+805F4EC0:     wait_frames 1
+805F4EC8:     callc [evt_npc_wait_pera evt_npc.o] LW(0)
+805F4ED4:   end_loop
+805F4ED8:   return
+805F4EDC:   end

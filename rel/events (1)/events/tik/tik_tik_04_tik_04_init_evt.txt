@@ -1,0 +1,188 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [tik_04_init_evt tik_04.o] AT 805D3228 ---
+805D3228:   callc [evt_snd_bgmon evt_snd.o] 512 ["BGM_STG0_TIK1"]
+805D3238:   callc [evt_snd_envon evt_snd.o] 272 ["ENV_STG0_TIK1"]
+805D3248:   callc [evt_snd_set_rev_mode evt_snd.o] 2
+805D3254:   setii LW(0) [bero_entry_data tik_04.o]
+805D3260:   callc [evt_bero_get_info evt_bero.o]
+805D3268:   callss [evt_bero_info_run evt_bero.o]
+805D3270:   if_int_le GSW(0) 12
+805D327C:     callsa [puni_soguu_1 tik_04.o]
+805D3284:   endif
+805D3288:   if_int_eq GSW(0) 65
+805D3294:     callsa [puni_soguu_2 tik_04.o]
+805D329C:   endif
+805D32A0:   callc [evt_map_entry_airport_harbor evt_map.o] 0 ["hikou"] ["a_hikou"]
+805D32B4:   if_int_le GSW(0) 15
+805D32C0:     if_int_eq GSWF(1339) 0
+805D32CC:       callsa [plane_tobashi_check tik_04.o]
+805D32D4:     endif
+805D32D8:   endif
+805D32DC:   if_int_eq GSWF(1336) 0
+805D32E8:     callc [evt_cloud_init evt_cloud.o]
+805D32F0:     callc [evt_cloud_ent evt_cloud.o] 0 ["win_1"] ["a_win_1"] [tik04_wall_blow_evt tik_04.o]
+805D3308:   else
+805D330C:     callc [evt_mapobj_flag_onoff evt_map.o] 1 1 ["win_1"] 1
+805D3324:     callc [evt_hitobj_onoff evt_hit.o] ["a_win_1"] 1 0
+805D3338:   endif
+805D333C:   callc [evt_mapobj_flag_onoff evt_map.o] 1 1 ["s_dai_nise"] 1
+805D3354:   callc [evt_hitobj_onoff evt_hit.o] ["a_dai_nise"] 1 0
+805D3368:   callc [evt_mapobj_flag_onoff evt_map.o] 1 1 ["dai_toreru"] 1
+805D3380:   callc [evt_mapobj_flag_onoff evt_map.o] 1 1 ["dai_6"] 1
+805D3398:   callc [evt_hitobj_onoff evt_hit.o] ["a_dai_6"] 1 0
+805D33AC:   if_int_eq GSWF(1335) 0
+805D33B8:     callc [evt_mapobj_flag_onoff evt_map.o] 1 0 ["s_dai_nise"] 1
+805D33D0:     callc [evt_hitobj_onoff evt_hit.o] ["a_dai_nise"] 1 1
+805D33E4:     callc [evt_mobj_switch_blue evt_mobj.o] 0 ["mobj_switch00"] 275 0 100 [tik_04_switch_evt tik_04.o] GSWF(1335)
+805D3408:   else
+805D340C:     callc [evt_mapobj_flag_onoff evt_map.o] 1 0 ["dai_6"] 1
+805D3424:     callc [evt_hitobj_onoff evt_hit.o] ["a_dai_6"] 1 1
+805D3438:   endif
+805D343C:   callc [evt_item_entry evt_item.o] ["blackkey"] 33 175 125 -100 16 GSWF(1337) 0
+805D3464:   callc [evt_mobj_jumpstand_blue evt_mobj.o] 0 ["mobj_jump00"] 150 -450 0 0 0 0
+805D348C:   callc [evt_mobj_lv_blk evt_mobj.o] ["block"] -425 0 0 0 GSWF(1338) ["MOBJ_Lv1BigBigBlock"]
+805D34B0:   if_int_eq GSWF(1338) 0
+805D34BC:     callc [evt_mobj_flag_onoff evt_mobj.o] 1 ["block"] 128
+805D34D0:   endif
+805D34D4:   callc [evt_mobj_itembox evt_mobj.o] ["mobj_box00"] 310 0 -25 0 0 [mobj_box00 tik_04.o] GSWF(1357)
+805D34FC:   callc [evt_mobj_brick evt_mobj.o] ["mobj_box01"] -150 60 130 301 12 0 GSWF(1358)
+805D3524:   callc [evt_item_entry evt_item.o] ["item_02"] 125 -460 25 -100 16 GSWF(5591) 0
+805D354C:   if_int_lt GSW(0) 261
+805D3558:     callc [evt_npc_check_delete evt_npc.o] ["カメック"]
+805D3564:     callc [evt_npc_check_delete evt_npc.o] ["トゲノコ"]
+805D3570:   else
+805D3574:     callc [evt_npc_check_delete evt_npc.o] ["ヒンニャー１"]
+805D3580:     callc [evt_npc_check_delete evt_npc.o] ["ヒンニャー２"]
+805D358C:   endif
+805D3590:   return
+805D3594:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [puni_soguu_1 tik_04.o] AT 805D29C4 ---
+805D29C4:   callc [evt_npc_set_position evt_npc.o] ["ガイド"] -155 25 -80
+805D29DC:   callc [evt_npc_set_ry evt_npc.o] ["ガイド"] 90
+805D29EC:   callc [evt_npc_flag_onoff evt_npc.o] 1 ["ガイド"] 1073741856
+805D2A00:   loop 0
+805D2A08:     callc [evt_mario_get_pos evt_mario.o] 0 LW(0) LW(1) LW(2)
+805D2A20:     if_int_ge LW(0) -275
+805D2A2C:       loop_break
+805D2A30:     endif
+805D2A34:     wait_frames 1
+805D2A3C:   end_loop
+805D2A40:   callc [evt_mario_key_onoff evt_mario.o] 0
+805D2A4C:   callc [evt_mario_normalize evt_mario.o]
+805D2A54:   callc [evt_party_stop evt_party.o] 0
+805D2A60:   callc [evt_npc_set_ry evt_npc.o] ["ガイド"] 270
+805D2A70:   wait_ms 200
+805D2A78:   callc [evt_eff_fukidashi evt_eff.o] 1 [zero_tik_0000995c tik_04.o] ["ガイド"] 0 0 0 0 0 0 0 30
+805D2AAC:   wait_ms 500
+805D2AB4:   begin_thread
+805D2AB8:     callc [evt_npc_set_anim evt_npc.o] ["ガイド"] ["R_1"]
+805D2AC8:     callc [evt_npc_set_ry evt_npc.o] ["ガイド"] 90
+805D2AD8:     callsa_tid [puni_walk_se tik_04.o] LW(10)
+805D2AE4:     callc [evt_npc_move_position evt_npc.o] ["ガイド"] -150 -220 0 180.00 0
+805D2B04:     stop_tid LW(10)
+805D2B0C:     callc [evt_npc_set_position evt_npc.o] ["ガイド"] 0 -1000 0
+805D2B24:   end_thread
+805D2B28:   wait_ms 500
+805D2B30:   callc [evt_party_run evt_party.o] 0
+805D2B3C:   callc [evt_mario_key_onoff evt_mario.o] 1
+805D2B48:   setii GSW(0) 13
+805D2B54:   return
+805D2B58:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [puni_soguu_2 tik_04.o] AT 805D2B5C ---
+805D2B5C:   callc [evt_npc_set_position evt_npc.o] ["ガイド"] -155 25 -80
+805D2B74:   callc [evt_npc_set_ry evt_npc.o] ["ガイド"] 90
+805D2B84:   callc [evt_npc_flag_onoff evt_npc.o] 1 ["ガイド"] 1073741856
+805D2B98:   loop 0
+805D2BA0:     callc [evt_mario_get_pos evt_mario.o] 0 LW(0) LW(1) LW(2)
+805D2BB8:     if_int_ge LW(0) -275
+805D2BC4:       loop_break
+805D2BC8:     endif
+805D2BCC:     wait_frames 1
+805D2BD4:   end_loop
+805D2BD8:   callc [evt_mario_key_onoff evt_mario.o] 0
+805D2BE4:   callc [evt_mario_normalize evt_mario.o]
+805D2BEC:   callc [evt_party_stop evt_party.o] 0
+805D2BF8:   callc [evt_npc_set_ry evt_npc.o] ["ガイド"] 270
+805D2C08:   wait_ms 200
+805D2C10:   callc [evt_eff_fukidashi evt_eff.o] 1 [zero_tik_0000995c tik_04.o] ["ガイド"] 0 0 0 0 0 0 0 30
+805D2C44:   wait_ms 500
+805D2C4C:   begin_thread
+805D2C50:     callc [evt_npc_set_anim evt_npc.o] ["ガイド"] ["R_1"]
+805D2C60:     callc [evt_npc_set_ry evt_npc.o] ["ガイド"] 90
+805D2C70:     callsa_tid [puni_walk_se tik_04.o] LW(10)
+805D2C7C:     callc [evt_npc_move_position evt_npc.o] ["ガイド"] -150 -220 0 180.00 0
+805D2C9C:     stop_tid LW(10)
+805D2CA4:     callc [evt_npc_set_position evt_npc.o] ["ガイド"] 0 -1000 0
+805D2CBC:   end_thread
+805D2CC0:   wait_ms 500
+805D2CC8:   callc [evt_mario_get_pos evt_mario.o] 0 LW(0) LW(1) LW(2)
+805D2CE0:   addi LW(0) 35
+805D2CEC:   if_int_le LW(2) -110
+805D2CF8:     addi LW(2) 10
+805D2D04:   else
+805D2D08:     addi LW(2) -10
+805D2D14:   endif
+805D2D18:   callc [evt_party_stop evt_party.o] 0
+805D2D24:   callc [evt_party_move_pos2 evt_party.o] 0 LW(0) LW(2) 120.00
+805D2D3C:   callc [evt_party_set_dir evt_party.o] 0 270 500
+805D2D50:   wait_ms 500
+805D2D58:   callc [evt_msg_print_party evt_msg.o] ["mac_1_011"]
+805D2D64:   callc [evt_mario_set_pose evt_mario.o] ["M_N_2"]
+805D2D70:   wait_ms 200
+805D2D78:   callc [evt_mario_key_onoff evt_mario.o] 1
+805D2D84:   callc [evt_party_run evt_party.o] 0
+805D2D90:   setii GSW(0) 66
+805D2D9C:   return
+805D2DA0:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [plane_tobashi_check tik_04.o] AT 805D2DA4 ---
+805D2DA4:   loop 0
+805D2DAC:     callc [evt_mario_get_motion evt_mario.o] LW(0)
+805D2DB8:     if_int_eq LW(0) 24
+805D2DC4:       loop_break
+805D2DC8:     endif
+805D2DCC:     wait_frames 1
+805D2DD4:   end_loop
+805D2DD8:   dbg_report ["飛行機でとんだ"]
+805D2DE0:   callc [evt_mario_wait_landon evt_mario.o]
+805D2DE8:   dbg_report ["飛行機で着地した"]
+805D2DF0:   callc [evt_mario_get_name_hitobj_ride evt_mario.o] LW(0)
+805D2DFC:   dbg_expr_to_string LW(0)
+805D2E04:   setii LF(0) 0
+805D2E10:   if_string_eq LW(0) ["a_dai_1"]
+805D2E1C:     setii LF(0) 1
+805D2E28:   endif
+805D2E2C:   if_string_eq LW(0) ["MOBJ_block"]
+805D2E38:     setii LF(0) 1
+805D2E44:   endif
+805D2E48:   if_int_eq LF(0) 1
+805D2E54:     setii GSWF(1339) 1
+805D2E60:     return
+805D2E64:   endif
+805D2E68:   callc [evt_mario_key_onoff evt_mario.o] 0
+805D2E74:   callc [evt_party_stop evt_party.o] 1
+805D2E80:   wait_ms 750
+805D2E88:   if_int_eq GSWF(1370) 0
+805D2E94:     callc [evt_msg_print evt_msg.o] 0 ["mac_0_094_01"] 0 ["extparty"]
+805D2EAC:     setii GSWF(1370) 1
+805D2EB8:   else
+805D2EBC:     callc [evt_msg_print evt_msg.o] 0 ["mac_0_094_01_1"] 0 ["extparty"]
+805D2ED4:   endif
+805D2ED8:   callc [evt_party_run evt_party.o] 1
+805D2EE4:   callc [evt_mario_key_onoff evt_mario.o] 1
+805D2EF0:   callsa [plane_tobashi_check tik_04.o]
+805D2EF8:   return
+805D2EFC:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [puni_walk_se tik_04.o] AT 805D2974 ---
+805D2974:   loop 0
+805D297C:     callc [evt_npc_get_position evt_npc.o] ["ガイド"] LW(0) LW(1) LW(2)
+805D2994:     callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_STG2_PUNI_MOVE2_1"] LW(0) LW(1) LW(2) 0
+805D29B0:     wait_frames 5
+805D29B8:   end_loop
+805D29BC:   return
+805D29C0:   end

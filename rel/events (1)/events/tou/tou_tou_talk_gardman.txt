@@ -1,0 +1,195 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [talk_gardman tou.o] AT 805CD2F8 ---
+805CD2F8:   if_int_eq GSWF(2451) 0
+805CD304:     if_int_eq GSWF(2450) 1
+805CD310:       callc [evt_msg_print evt_msg.o] 0 ["stg3_tou_304_01"] 0 ["ガードマン"]
+805CD328:     endif
+805CD32C:   endif
+805CD330:   if_int_ge GSW(0) 137
+805CD33C:     if_int_lt GSW(0) 138
+805CD348:       callc [chk tou.o] LW(0)
+805CD354:       if_int_eq LW(0) 0
+805CD360:         callss [evt_tamago_byebye tou.o]
+805CD368:       endif
+805CD36C:     endif
+805CD370:   endif
+805CD374:   setii LF(0) 0
+805CD380:   setii LF(1) 0
+805CD38C:   setii LF(2) 0
+805CD398:   callc [evt_sub_get_mapname evt_sub.o] LW(0)
+805CD3A4:   if_string_eq LW(0) ["tou_10"]
+805CD3B0:     setii LF(0) 1
+805CD3BC:   endif
+805CD3C0:   if_string_eq LW(0) ["tou_08"]
+805CD3CC:     setii LF(1) 1
+805CD3D8:   endif
+805CD3DC:   if_string_eq LW(0) ["tou_07"]
+805CD3E8:     setii LF(2) 1
+805CD3F4:   endif
+805CD3F8:   callc [evt_npc_flag_onoff evt_npc.o] 1 ["ガードマン"] 32
+805CD40C:   wait_frames 1
+805CD414:   callc [evt_npc_move_position evt_npc.o] ["ガードマン"] 0 -130 0 80.00 1
+805CD434:   setii LW(1) 0
+805CD440:   callsa [bero_open_door_play_se evt_bero.o]
+805CD448:   callc [evt_sub_intpl_msec_init evt_sub.o] 11 0 180 500
+805CD460:   loop 0
+805CD468:     callc [evt_sub_intpl_msec_get_value evt_sub.o]
+805CD470:     mulf LW(0) 0.44
+805CD47C:     if_int_eq LF(0) 1
+805CD488:       callc [evt_mapobj_rotate evt_map.o] 1 ["door_1"] 0 LW(0) 0
+805CD4A4:     endif
+805CD4A8:     if_int_eq LF(1) 1
+805CD4B4:       callc [evt_mapobj_rotate evt_map.o] 1 ["door_1"] 0 LW(0) 0
+805CD4D0:     endif
+805CD4D4:     if_int_eq LF(2) 1
+805CD4E0:       callc [evt_mapobj_rotate evt_map.o] 1 ["door_1"] 0 LW(0) 0
+805CD4FC:     endif
+805CD500:     wait_frames 1
+805CD508:     if_int_eq LW(1) 0
+805CD514:       loop_break
+805CD518:     endif
+805CD51C:   end_loop
+805CD520:   begin_thread
+805CD524:     callc [evt_npc_move_position evt_npc.o] ["ガードマン"] 0 -200 0 80.00 1
+805CD544:     callc [evt_npc_set_position evt_npc.o] ["ガードマン"] 0 -1000 0
+805CD55C:   end_thread
+805CD560:   wait_ms 800
+805CD568:   begin_thread
+805CD56C:     callc [evt_mario_mov_pos2 evt_mario.o] 0 -200 60
+805CD580:   end_thread
+805CD584:   wait_ms 500
+805CD58C:   if_int_eq LF(1) 1
+805CD598:     setii GSWF(2394) 1
+805CD5A4:   endif
+805CD5A8:   if_int_lt GSW(0) 172
+805CD5B4:     if_int_eq GSWF(2383) 1
+805CD5C0:       callc [evt_bero_mapchange evt_bero.o] ["tou_04"] 0
+805CD5D0:       return
+805CD5D4:     endif
+805CD5D8:   endif
+805CD5DC:   callc [evt_bero_mapchange evt_bero.o] ["tou_03"] 0
+805CD5EC:   return
+805CD5F0:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [evt_tamago_byebye tou.o] AT 805CD078 ---
+805CD078:   callc [evt_party_get_pos evt_party.o] 0 LW(0) LW(1) LW(2)
+805CD090:   callc [evt_npc_check evt_npc.o] ["たまご"] LW(10)
+805CD0A0:   if_int_eq LW(10) 0
+805CD0AC:     callc [evt_npc_entry evt_npc.o] ["たまご"] ["c_babyyoshi"]
+805CD0BC:   endif
+805CD0C0:   callc [evt_npc_set_tribe evt_npc.o] ["たまご"] ["たまご"]
+805CD0D0:   callc [evt_npc_set_anim evt_npc.o] ["たまご"] ["PYS_E_2"]
+805CD0E0:   callc [evt_npc_set_position evt_npc.o] ["たまご"] LW(0) LW(1) LW(2)
+805CD0F8:   callc [evt_party_set_pos evt_party.o] 1 0 -1000 0
+805CD110:   callc [evt_mario_kill_party evt_mario.o] 1
+805CD11C:   callc [evt_mario_set_dir_npc evt_mario.o] ["たまご"]
+805CD128:   callc [evt_party_set_dir_npc evt_party.o] 0 ["たまご"]
+805CD138:   begin_thread
+805CD13C:     loop 3
+805CD144:       callc [evt_npc_get_position evt_npc.o] ["たまご"] LW(0) LW(1) LW(2)
+805CD15C:       callc [evt_sub_random evt_sub.o] 200 LW(3)
+805CD16C:       addi LW(3) 200
+805CD178:       callc [evt_sub_random evt_sub.o] 20 LW(4)
+805CD188:       addi LW(4) 20
+805CD194:       callsa [evt_tamago_scale tou.o]
+805CD19C:       callc [evt_npc_jump_position_nohit evt_npc.o] ["たまご"] LW(0) LW(1) LW(2) LW(3) LW(4)
+805CD1BC:     end_loop
+805CD1C0:     if_int_gt LW(0) 0
+805CD1CC:       setii LW(3) 400
+805CD1D8:       callsa [evt_tamago_scale tou.o]
+805CD1E0:       callc [evt_npc_jump_position_nohit evt_npc.o] ["たまご"] 45 20 8 400 50
+805CD200:       setii LW(3) 400
+805CD20C:       callsa [evt_tamago_scale tou.o]
+805CD214:       callc [evt_npc_jump_position_nohit evt_npc.o] ["たまご"] 10 20 15 400 50
+805CD234:       setii LW(3) 400
+805CD240:       callsa [evt_tamago_scale tou.o]
+805CD248:       callc [evt_npc_jump_position_nohit evt_npc.o] ["たまご"] -30 20 30 400 50
+805CD268:     else
+805CD26C:       setii LW(3) 400
+805CD278:       callsa [evt_tamago_scale tou.o]
+805CD280:       callc [evt_npc_jump_position_nohit evt_npc.o] ["たまご"] -80 20 15 400 50
+805CD2A0:       setii LW(3) 400
+805CD2AC:       callsa [evt_tamago_scale tou.o]
+805CD2B4:       callc [evt_npc_jump_position_nohit evt_npc.o] ["たまご"] -30 20 30 400 50
+805CD2D4:     endif
+805CD2D8:     setii LW(3) 400
+805CD2E4:     callsa [evt_tamago_scale2 tou.o]
+805CD2EC:   end_thread
+805CD2F0:   return
+805CD2F4:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [evt_tamago_scale tou.o] AT 805CCDC8 ---
+805CCDC8:   setii GW(10) 1.20
+805CCDD4:   setii GW(11) 0.90
+805CCDE0:   begin_thread
+805CCDE4:     divi LW(3) 2
+805CCDF0:     addi LW(3) 1
+805CCDFC:     callc [evt_sub_intpl_msec_init evt_sub.o] 11 120 90 LW(3)
+805CCE14: 0:
+805CCE1C:     callc [evt_sub_intpl_msec_get_value evt_sub.o]
+805CCE24:     divf LW(0) 100.00
+805CCE30:     setff GW(10) LW(0)
+805CCE3C:     wait_frames 1
+805CCE44:     if_int_eq LW(1) 1
+805CCE50:       goto 0
+805CCE58:     endif
+805CCE5C:   end_thread
+805CCE60:   begin_thread
+805CCE64:     divi LW(3) 2
+805CCE70:     addi LW(3) 1
+805CCE7C:     callc [evt_sub_intpl_msec_init evt_sub.o] 11 90 110 LW(3)
+805CCE94: 0:
+805CCE9C:     callc [evt_sub_intpl_msec_get_value evt_sub.o]
+805CCEA4:     divf LW(0) 100.00
+805CCEB0:     setff GW(11) LW(0)
+805CCEBC:     wait_frames 1
+805CCEC4:     if_int_eq LW(1) 1
+805CCED0:       goto 0
+805CCED8:     endif
+805CCEDC:   end_thread
+805CCEE0:   cvt_f_ms LW(3) LW(4)
+805CCEEC:   addi LW(4) 1
+805CCEF8:   loop LW(4)
+805CCF00:     callc [evt_npc_set_scale evt_npc.o] ["たまご"] GW(10) GW(11) 1.00
+805CCF18:     wait_frames 1
+805CCF20:   end_loop
+805CCF24:   return
+805CCF28:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [evt_tamago_scale2 tou.o] AT 805CCF2C ---
+805CCF2C:   begin_thread
+805CCF30:     divi LW(3) 2
+805CCF3C:     addi LW(3) 1
+805CCF48:     callc [evt_sub_intpl_msec_init evt_sub.o] 4 90 100 LW(3)
+805CCF60: 0:
+805CCF68:     callc [evt_sub_intpl_msec_get_value evt_sub.o]
+805CCF70:     divf LW(0) 100.00
+805CCF7C:     setff GW(10) LW(0)
+805CCF88:     wait_frames 1
+805CCF90:     if_int_eq LW(1) 1
+805CCF9C:       goto 0
+805CCFA4:     endif
+805CCFA8:   end_thread
+805CCFAC:   begin_thread
+805CCFB0:     divi LW(3) 2
+805CCFBC:     addi LW(3) 1
+805CCFC8:     callc [evt_sub_intpl_msec_init evt_sub.o] 4 110 100 LW(3)
+805CCFE0: 0:
+805CCFE8:     callc [evt_sub_intpl_msec_get_value evt_sub.o]
+805CCFF0:     divf LW(0) 100.00
+805CCFFC:     setff GW(11) LW(0)
+805CD008:     wait_frames 1
+805CD010:     if_int_eq LW(1) 1
+805CD01C:       goto 0
+805CD024:     endif
+805CD028:   end_thread
+805CD02C:   cvt_f_ms LW(3) LW(4)
+805CD038:   addi LW(4) 1
+805CD044:   loop LW(4)
+805CD04C:     callc [evt_npc_set_scale evt_npc.o] ["たまご"] GW(10) GW(11) 1.00
+805CD064:     wait_frames 1
+805CD06C:   end_loop
+805CD070:   return
+805CD074:   end

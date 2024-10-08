@@ -1,0 +1,28 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [las_27_init_evt las_27.o] AT 805E938C ---
+805E938C:   callc [evt_snd_bgmoff evt_snd.o] 512
+805E9398:   callc [evt_snd_envon evt_snd.o] 272 ["ENV_STG8_LAS9"]
+805E93A8:   callc [evt_snd_set_rev_mode evt_snd.o] 2
+805E93B4:   setii LW(0) [bero_entry_data las_27.o]
+805E93C0:   callc [evt_bero_get_info evt_bero.o]
+805E93C8:   callss [evt_bero_info_run evt_bero.o]
+805E93D0:   callc [evt_mobj_save_blk evt_mobj.o] ["mobj_save"] 520 60 -150 0 0
+805E93F0:   callc [evt_mobj_recovery_blk evt_mobj.o] ["r_blk"] 10 450 60 -150 0 0
+805E9414:   callss [shan_init las_27.o]
+805E941C:   return
+805E9420:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [shan_init las_27.o] AT 805E92D4 ---
+805E92D4:   setii LW(0) 1
+805E92E0:   loop 28
+805E92E8:     callc [make_name las_27.o] LW(0) LW(1)
+805E92F8:     callc [evt_mapobj_flag_onoff evt_map.o] 1 1 LW(1) 1
+805E9310:     callc [evt_mapobj_get_position evt_map.o] LW(1) LW(2) LW(3) LW(4)
+805E9328:     subf LW(3) 9.00
+805E9334:     callc [evt_eff evt_eff.o] 0 ["fire"] 3 LW(2) LW(3) LW(4) 0.70 1000 0 0 0 0 0 0
+805E9374:     addi LW(0) 1
+805E9380:   end_loop
+805E9384:   return
+805E9388:   end

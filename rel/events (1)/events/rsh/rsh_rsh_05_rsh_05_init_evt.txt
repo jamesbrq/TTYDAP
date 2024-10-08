@@ -1,0 +1,50 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [rsh_05_init_evt rsh_05.o] AT 805E5458 ---
+805E5458:   switchi GSW(0)
+805E5460:     case_int_range 310 325
+805E546C:     case_default
+805E5470:       callc [evt_map_playanim evt_map.o] ["yure"] 1 0
+805E5484:   end_switch
+805E5488:   callss [evt_access_entry rsh_05.o]
+805E5490:   switchi GSW(0)
+805E5498:     case_int_range 284 286
+805E54A4:       callc [evt_snd_bgmon evt_snd.o] 512 ["BGM_EVT_POWAN1"]
+805E54B4:       callc [evt_snd_envon evt_snd.o] 272 ["ENV_STG6_RSH1_3"]
+805E54C4:     case_int_range 304 309
+805E54D0:       callc [evt_snd_bgmon evt_snd.o] 512 ["BGM_EVT_POWAN1"]
+805E54E0:       callc [evt_snd_envon evt_snd.o] 272 ["ENV_STG6_RSH1_3"]
+805E54F0:     case_int_range 310 325
+805E54FC:       callc [evt_snd_bgmon evt_snd.o] 512 ["BGM_STG6_HOM1"]
+805E550C:       callc [evt_snd_envoff evt_snd.o] 512
+805E5518:       callc [evt_snd_bgmoff evt_snd.o] 26624
+805E5524:     case_int_range 327 328
+805E5530:       callc [evt_snd_bgmoff evt_snd.o] 512
+805E553C:       callc [evt_snd_envon evt_snd.o] 272 ["ENV_STG6_RSH1_3"]
+805E554C:     case_int_range 329 331
+805E5558:       callc [evt_snd_bgmon evt_snd.o] 512 ["BGM_EVT_DANGER4"]
+805E5568:       callc [evt_snd_envon evt_snd.o] 272 ["ENV_STG6_RSH1_3"]
+805E5578:     case_int_range 334 344
+805E5584:       callc [evt_snd_bgmon evt_snd.o] 512 ["BGM_STG6_PIK1"]
+805E5594:       callc [evt_snd_envoff evt_snd.o] 512
+805E55A0:       callc [evt_snd_bgmoff evt_snd.o] 26624
+805E55AC:     case_default
+805E55B0:       callc [evt_snd_bgmoff evt_snd.o] 512
+805E55BC:       callc [evt_snd_envon evt_snd.o] 272 ["ENV_STG6_RSH1_3"]
+805E55CC:   end_switch
+805E55D0:   return
+805E55D4:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [evt_access_entry rsh_05.o] AT 805E53DC ---
+805E53DC:   mo_set_base_int [access_tbl rsh_05.o]
+805E53E4:   loop 0
+805E53EC:     mo_read_int2 LW(0) LW(1)
+805E53F8:     if_int_eq LW(0) 0
+805E5404:       loop_break
+805E5408:     endif
+805E540C:     callc [evt_run_case_evt evt_case.o] 9 1 LW(0) 0 [evt_access rsh_05.o] 0
+805E542C:   end_loop
+805E5430:   callc [evt_run_case_evt evt_case.o] 9 1 ["bin_2"] 0 [evt_access2 rsh_05.o] 0
+805E5450:   return
+805E5454:   end

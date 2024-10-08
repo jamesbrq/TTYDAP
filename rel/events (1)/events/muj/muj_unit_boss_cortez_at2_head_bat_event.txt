@@ -1,0 +1,73 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [at2_head_bat_event unit_boss_cortez.o] AT 805F3424 ---
+805F3424:   setii LW(12) [weapon_cortez_mode2_head_attack unit_boss_cortez.o]
+805F3430:   callc [btlevtcmd_GetEnemyBelong battle_event_cmd.o] -2 LW(0)
+805F3440:   callc [btlevtcmd_SamplingEnemy battle_event_cmd.o] -2 LW(0) LW(12)
+805F3454:   callc [btlevtcmd_ChoiceSamplingEnemy battle_event_cmd.o] LW(12) LW(3) LW(4)
+805F3468:   if_int_eq LW(3) -1
+805F3474:     goto 99
+805F347C:   endif
+805F3480:   callc [btlevtcmd_WeaponAftereffect battle_event_cmd.o] LW(12)
+805F348C:   callc [btlevtcmd_AttackDeclare battle_event_cmd.o] -2 LW(3) LW(4)
+805F34A0:   callc [btlevtcmd_WaitGuardMove battle_event_cmd.o]
+805F34A8:   callc [btlevtcmd_PayWeaponCost battle_event_cmd.o] -2 LW(12)
+805F34B8:   callc [_check_zenei_kouei unit_boss_cortez.o] LW(3) LW(13)
+805F34C8:   if_int_eq LW(13) 0
+805F34D4:     callc [btlevtcmd_GetUnitWork battle_event_cmd.o] -2 11 LW(0)
+805F34E8:     if_int_eq LW(0) 0
+805F34F4:       callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 1 ["KRT_1A_1"]
+805F3508:     else
+805F350C:       callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 1 ["KRT_1A_3"]
+805F3520:     endif
+805F3524:   else
+805F3528:     callc [btlevtcmd_GetUnitWork battle_event_cmd.o] -2 11 LW(0)
+805F353C:     if_int_eq LW(0) 0
+805F3548:       callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 1 ["KRT_1A_2"]
+805F355C:     else
+805F3560:       callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 1 ["KRT_1A_4"]
+805F3574:     endif
+805F3578:   endif
+805F357C:   begin_thread
+805F3580:     callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_BOSS_KOR_HEAD_ATTACK1"] [F1194D80] 0 LW(15)
+805F359C:     wait_ms 667
+805F35A4:     callc [evt_snd_sfxoff evt_snd.o] LW(15)
+805F35B0:   end_thread
+805F35B4:   begin_thread
+805F35B8:     callc [btlevtcmd_ftomsec battle_event_cmd.o] 50 LW(0)
+805F35C8:     wait_ms LW(0)
+805F35D0:     callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_BOSS_KOR_HEAD_ATTACK2"] [F1194D80] 0 LW(15)
+805F35EC:     callc [btlevtcmd_ftomsec battle_event_cmd.o] 18 LW(0)
+805F35FC:     wait_ms LW(0)
+805F3604:     callc [evt_snd_sfxoff evt_snd.o] LW(15)
+805F3610:   end_thread
+805F3614:   wait_ms 1116
+805F361C:   callc [btlevtcmd_PreCheckDamage battle_event_cmd.o] -2 LW(3) LW(4) LW(12) 256 LW(5)
+805F363C:   switchi LW(5)
+805F3644:     case_int_eq_any 4
+805F364C:       goto 90
+805F3654:       end_multi_case
+805F3658:     case_int_eq 3
+805F3660:       callc [btlevtcmd_StartAvoid battle_event_cmd.o] LW(3) 38
+805F3670:       goto 90
+805F3678:     case_int_eq 6
+805F3680:       callc [btlevtcmd_StartAvoid battle_event_cmd.o] LW(3) 39
+805F3690:       goto 90
+805F3698:     case_int_eq 2
+805F36A0:       callc [btlevtcmd_StartAvoid battle_event_cmd.o] LW(3) 40
+805F36B0:       goto 90
+805F36B8:     case_default
+805F36BC:       goto 91
+805F36C4:   end_switch
+805F36C8: 90:
+805F36D0:   callc [btlevtcmd_AnimeWaitPlayComplete battle_event_cmd.o] -2 1
+805F36E0:   goto 99
+805F36E8: 91:
+805F36F0:   callc [btlevtcmd_ResultACDefence battle_event_cmd.o] LW(3) LW(12)
+805F3700:   callc [btlevtcmd_CheckDamage battle_event_cmd.o] -2 LW(3) LW(4) LW(12) 256 LW(5)
+805F3720:   callc [btlevtcmd_AnimeWaitPlayComplete battle_event_cmd.o] -2 1
+805F3730: 99:
+805F3738:   callc [btlevtcmd_StartWaitEvent battle_event_cmd.o] -2
+805F3744:   return
+805F3748:   end

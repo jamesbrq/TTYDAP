@@ -1,0 +1,47 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [evt_memcard_copy evt_memcard.o] AT 803BA24C ---
+803BA24C:   setii GF(0) 0
+803BA258:   setii LW(10) LW(0)
+803BA264:   setii LW(11) LW(1)
+803BA270:   addi LW(10) 1
+803BA27C:   addi LW(11) 1
+803BA288:   callc [memcard_file_existance evt_memcard.o] LW(11) LW(0)
+803BA298:   if_int_eq LW(0) 1
+803BA2A4:     callc [evt_msg_print_insert evt_msg.o] 0 ["msg_savefile_delete_copy_point"] 0 0 LW(11)
+803BA2C0:     callc [evt_msg_select evt_msg.o] 0 ["msg_mcard_yesno2"]
+803BA2D0:     if_int_eq LW(0) 0
+803BA2DC:       callc [evt_msg_print_add evt_msg.o] 0 ["msg_savefile_copy_warnning"]
+803BA2EC:       callc [memcard_copy evt_memcard.o] LW(10) LW(11)
+803BA2FC:       callc [memcard_code evt_memcard.o] LW(0)
+803BA308:       if_int_ne LW(0) 0
+803BA314:         callc [evt_msg_print_add evt_msg.o] 0 ["msg_savefile_delete_copy_miss"]
+803BA324:       else
+803BA328:         callc [evt_msg_print_add_insert evt_msg.o] 0 ["msg_savefile_copy_finish"] LW(10) LW(11)
+803BA340:         return
+803BA344:       endif
+803BA348:     else
+803BA34C:       callc [evt_msg_continue evt_msg.o]
+803BA354:       return
+803BA358:     endif
+803BA35C:   else
+803BA360:     callc [evt_msg_print evt_msg.o] 0 ["msg_savefile_copy_warnning"] 0 0
+803BA378:     callc [memcard_copy evt_memcard.o] LW(10) LW(11)
+803BA388:     callc [memcard_code evt_memcard.o] LW(0)
+803BA394:     if_int_ne LW(0) 0
+803BA3A0:       callc [evt_msg_print_add evt_msg.o] 0 ["msg_savefile_delete_copy_miss"]
+803BA3B0:     else
+803BA3B4:       callc [evt_msg_print_add_insert evt_msg.o] 0 ["msg_savefile_copy_finish"] LW(10) LW(11)
+803BA3CC:       return
+803BA3D0:     endif
+803BA3D4:   endif
+803BA3D8:   callc [evt_fade_entry evt_fade.o] 24 0 0 0 0
+803BA3F4:   callc [evt_fade_end_wait evt_fade.o]
+803BA3FC:   callc [evt_fade_entry evt_fade.o] 26 0 0 0 0
+803BA418:   callc [evt_fade_end_wait evt_fade.o]
+803BA420:   callc [evt_msg_continue evt_msg.o]
+803BA428:   callc [unk_800f72e4 seq_load.o]
+803BA430:   setii GF(0) 1
+803BA43C:   return
+803BA440:   end

@@ -1,0 +1,58 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [ItemEvent_Stop_Watch_Core battle_item_data.o] AT 80368B6C ---
+80368B6C:   callc [evt_btl_camera_set_mode battle_camera.o] 0 0
+80368B7C:   callc [evt_btl_camera_set_moveSpeedLv battle_camera.o] 0 1
+80368B8C:   wait_frames 30
+80368B94:   callc [evt_snd_sfxon evt_snd.o] ["SFX_ITEM_STOP_WATCH1"] 0
+80368BA4:   callc [btlevtcmd_check_battleflag battle_event_cmd.o] LW(0) 256
+80368BB4:   if_int_eq LW(0) 0
+80368BC0:     callc [evt_eff64 evt_eff.o] 0 ["timestamp_n64"] 0 0 0 103 1.00 200 0 0 0 0 0 0
+80368C00:   else
+80368C04:     callc [btlevtcmd_GetPos battle_event_cmd.o] -2 LW(0) LW(1) LW(2)
+80368C1C:     addi LW(2) 30
+80368C28:     callc [evt_eff64 evt_eff.o] 0 ["timestamp_n64"] 0 0 0 LW(2) 1.00 200 0 0 0 0 0 0
+80368C68:   endif
+80368C6C:   wait_frames 200
+80368C74:   callc [btlevtcmd_GetEnemyBelong battle_event_cmd.o] -2 LW(0)
+80368C84:   callc [btlevtcmd_SamplingEnemy battle_event_cmd.o] -2 LW(0) LW(12)
+80368C98:   callc [btlevtcmd_GetSelectEnemy battle_event_cmd.o] LW(10) LW(11)
+80368CA8: 10:
+80368CB0:   if_int_eq LW(10) -1
+80368CBC:     goto 90
+80368CC4:   endif
+80368CC8:   callc [btlevtcmd_PreCheckDamage battle_event_cmd.o] -2 LW(10) LW(11) LW(12) 256 LW(5)
+80368CE8:   switchi LW(5)
+80368CF0:     case_int_eq 3
+80368CF8:       callc [btlevtcmd_StartAvoid battle_event_cmd.o] LW(10) 38
+80368D08:     case_int_eq 6
+80368D10:       callc [btlevtcmd_StartAvoid battle_event_cmd.o] LW(10) 39
+80368D20:     case_int_eq 2
+80368D28:       callc [btlevtcmd_StartAvoid battle_event_cmd.o] LW(10) 40
+80368D38:     case_int_eq 1
+80368D40:       callc [btlevtcmd_CheckDamage battle_event_cmd.o] -2 LW(10) LW(11) LW(12) 256 LW(5)
+80368D60:   end_switch
+80368D64:   callc [btlevtcmd_GetSelectNextEnemy battle_event_cmd.o] LW(10) LW(11)
+80368D74:   goto 10
+80368D7C: 90:
+80368D84:   callc [evt_audience_ap_recovery evt_audience.o]
+80368D8C:   callss [_return_home_event battle_item_data.o]
+80368D94:   callc [btlevtcmd_StartWaitEvent battle_event_cmd.o] -2
+80368DA0:   return
+80368DA4:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [_return_home_event battle_item_data.o] AT 80364998 ---
+80364998:   callc [btlevtcmd_GetHomePos battle_event_cmd.o] -2 LW(0) LW(1) LW(2)
+803649B0: 95:
+803649B8:   callc [btlevtcmd_GetPos battle_event_cmd.o] -2 LW(3) LW(4) LW(5)
+803649D0:   if_int_ne LW(0) LW(3)
+803649DC:     begin_child_thread
+803649E0:       callc [btlevtcmd_GetBodyId battle_event_cmd.o] -2 LW(0)
+803649F0:       callc [btlevtcmd_AnimeChangePoseType battle_event_cmd.o] -2 LW(0) 42
+80364A04:     end_child_thread
+80364A08:     callc [btlevtcmd_SetMoveSpeed battle_event_cmd.o] -2 5.00
+80364A18:     callc [btlevtcmd_MovePosition battle_event_cmd.o] -2 LW(0) LW(1) LW(2) 0 -1 0
+80364A3C:   endif
+80364A40:   return
+80364A44:   end

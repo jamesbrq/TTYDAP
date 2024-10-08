@@ -1,0 +1,87 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [koopa_door_evt pik_01.o] AT 805C5074 ---
+805C5074:   callc [evt_snd_bgm_scope evt_snd.o] 0 1
+805C5084:   callc [evt_mario_key_onoff evt_mario.o] 0
+805C5090:   callc [evt_mario_get_pos evt_mario.o] 0 LW(0) LW(1) LW(2)
+805C50A8:   callc [evt_mobj_get_position evt_mobj.o] ["lock"] LW(3) LW(4) LW(5)
+805C50C0:   callc [evt_sub_get_dir evt_sub.o] LW(3) LW(5) LW(0) LW(2) LW(6)
+805C50DC:   subi LW(6) 45
+805C50E8:   if_int_lt LW(6) 0
+805C50F4:     addi LW(6) 360
+805C5100:   endif
+805C5104:   if_int_lt LW(6) 180
+805C5110:     callc [evt_mario_set_dir evt_mario.o] 270 300 0
+805C5124:   else
+805C5128:     callc [evt_mario_set_dir evt_mario.o] 90 300 0
+805C513C:   endif
+805C5140:   wait_ms 300
+805C5148:   callc [evt_cam3d_evt_set evt_cam.o] -132 120 148 185 90 -170 1000 11
+805C5170:   wait_ms 1000
+805C5178:   callc [evt_msg_print evt_msg.o] 0 ["kpa_stg7_012"] 0 0
+805C5190:   callc [kpa_chg_pose kpa_act.o] ["KPA_I_2"]
+805C519C:   setii GF(0) 0
+805C51A8:   setii GF(1) 0
+805C51B4:   begin_thread
+805C51B8:     wait_ms 200
+805C51C0:     loop 0
+805C51C8:       if_int_ne GF(1) 0
+805C51D4:         loop_break
+805C51D8:       endif
+805C51DC:       callc [evt_cam_shake evt_cam.o] 4 0.00 0.01 150
+805C51F4:       wait_ms 150
+805C51FC:     end_loop
+805C5200:   end_thread
+805C5204:   begin_thread
+805C5208:     wait_ms 200
+805C5210:     loop 0
+805C5218:       if_int_ne GF(0) 0
+805C5224:         loop_break
+805C5228:       endif
+805C522C:       callc [evt_mario_get_pos evt_mario.o] 0 LW(0) LW(1) LW(2)
+805C5244:       callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_KUPPA_ANGRY1"] LW(0) LW(1) LW(2) 0
+805C5260:       callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_KUPPA_ANGRY2"] LW(0) LW(1) LW(2) 0
+805C527C:       wait_ms 300
+805C5284:     end_loop
+805C5288:   end_thread
+805C528C:   wait_ms 1000
+805C5294:   setii GF(1) 1
+805C52A0:   callc [evt_mario_dispflag_onoff evt_mario.o] 1 2
+805C52B0:   callc [evt_msg_print evt_msg.o] 0 ["kpa_stg7_012_01"] 0 ["mario"]
+805C52C8:   callc [evt_mario_dispflag_onoff evt_mario.o] 0 2
+805C52D8:   callc [evt_mobj_lock_unlock evt_mobj.o] ["lock"]
+805C52E4:   wait_ms 600
+805C52EC:   setii GF(0) 1
+805C52F8:   callc [evt_msg_print evt_msg.o] 0 ["kpa_stg7_012_02"] 0 0
+805C5310:   callc [evt_npc_set_autotalkpose evt_npc.o] ["mario"] ["KPA_S_6"] ["KPA_T_6"]
+805C5324:   callc [evt_msg_print evt_msg.o] 0 ["kpa_stg7_013"] 0 ["mario"]
+805C533C:   setii LW(1) 1
+805C5348:   callsa [bero_open_door_play_se evt_bero.o]
+805C5350:   callc [evt_sub_intpl_msec_init evt_sub.o] 11 0 180 500
+805C5368:   loop 0
+805C5370:     callc [evt_sub_intpl_msec_get_value_para evt_sub.o] LW(0) LW(10)
+805C5380:     if_int_eq LW(10) 0
+805C538C:       setff LW(0) 180.00
+805C5398:       callss [n_door_open pik_01.o]
+805C53A0:       loop_break
+805C53A4:     else
+805C53A8:       callss [n_door_open pik_01.o]
+805C53B0:     endif
+805C53B4:   end_loop
+805C53B8:   begin_thread
+805C53BC:     callc [evt_mario_mov_pos evt_mario.o] 230 -215 600
+805C53D0:   end_thread
+805C53D4:   wait_ms 300
+805C53DC:   callc [evt_bero_mapchange evt_bero.o] ["pik_02"] [zero_pik_000023bc pik_01.o]
+805C53EC:   callc [evt_mario_key_onoff evt_mario.o] 1
+805C53F8:   return
+805C53FC:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [n_door_open pik_01.o] AT 805C2EC8 ---
+805C2EC8:   mulf LW(0) -0.39
+805C2ED4:   callc [evt_mapobj_rotate evt_map.o] 1 ["door_1_b"] 0 LW(0) 0
+805C2EF0:   mulf LW(0) -1.00
+805C2EFC:   callc [evt_mapobj_rotate evt_map.o] 1 ["door_1_a"] 0 LW(0) 0
+805C2F18:   return
+805C2F1C:   end

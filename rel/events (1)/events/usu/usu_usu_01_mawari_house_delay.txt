@@ -1,0 +1,44 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [mawari_house_delay usu_01.o] AT 805CF550 ---
+805CF550:   if_int_eq GSW(0) 180
+805CF55C:     if_int_eq GSWF(1925) 1
+805CF568:       callsa [evt_monban_buta2 usu_01.o]
+805CF570:     endif
+805CF574:   endif
+805CF578:   stop_tid GW(3)
+805CF580:   callc [evt_msg_close evt_msg.o] ["stg4_usu_61_3"]
+805CF58C:   callc [evt_msg_close evt_msg.o] ["stg4_usu_61_4"]
+805CF598:   callc [evt_mapobj_flag_onoff evt_map.o] 1 1 ["S_usu01_ie3"] 1
+805CF5B0:   wait_ms 1000
+805CF5B8:   callc [evt_mapobj_flag_onoff evt_map.o] 1 0 ["S_usu01_ie3"] 1
+805CF5D0:   callc [evt_snd_bgmon evt_snd.o] 160 0
+805CF5E0:   callc [evt_snd_envon evt_snd.o] 160 0
+805CF5F0:   callc [evt_snd_env_lpf evt_snd.o] 0 0
+805CF600:   return
+805CF604:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [evt_monban_buta2 usu_01.o] AT 805D0258 ---
+805D0258:   if_int_ge GSW(0) 181
+805D0264:     return
+805D0268:   endif
+805D026C:   callc [evt_mario_key_onoff evt_mario.o] 0
+805D0278:   wait_ms 1000
+805D0280:   callss [evt_monban_buta_main usu_01.o]
+805D0288:   callc [evt_mario_key_onoff evt_mario.o] 1
+805D0294:   return
+805D0298:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [evt_monban_buta_main usu_01.o] AT 805D0188 ---
+805D0188:   callc [evt_mario_key_onoff evt_mario.o] 0
+805D0194:   callc [evt_npc_set_position evt_npc.o] ["ブタ門番"] 400 0 -55
+805D01AC:   callc [evt_npc_set_position evt_npc.o] ["門番"] 0 -2000 0
+805D01C4:   callc [evt_snd_sfxon evt_snd.o] ["SFX_STG4_TEMPLE_BELL1"] 0
+805D01D4:   wait_ms 500
+805D01DC:   callc [evt_mario_key_onoff evt_mario.o] 1
+805D01E8:   setii LW(0) ["e_bero"]
+805D01F4:   callss [bero_case_switch_on evt_bero.o]
+805D01FC:   setii GSW(0) 181
+805D0208:   return
+805D020C:   end

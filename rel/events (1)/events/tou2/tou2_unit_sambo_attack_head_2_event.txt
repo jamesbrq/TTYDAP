@@ -1,0 +1,188 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [attack_head_2_event unit_sambo.o] AT 805FEEE4 ---
+805FEEE4:   setii LW(6) LW(11)
+805FEEF0:   callc [btlevtcmd_CheckStatus battle_event_cmd.o] -2 11 LW(5)
+805FEF04:   switchi LW(10)
+805FEF0C:     case_int_eq 4
+805FEF14:       callc [btlevtcmd_GetEnemyBelong battle_event_cmd.o] -2 LW(0)
+805FEF24:       callc [btlevtcmd_SamplingEnemy battle_event_cmd.o] -2 LW(0) [weapon_sambo_head_attack_4 unit_sambo.o]
+805FEF38:       callc [btlevtcmd_ChoiceSamplingEnemy battle_event_cmd.o] [weapon_sambo_head_attack_4 unit_sambo.o] LW(3) LW(4)
+805FEF4C:     case_int_eq 3
+805FEF54:       callc [btlevtcmd_GetEnemyBelong battle_event_cmd.o] -2 LW(0)
+805FEF64:       callc [btlevtcmd_SamplingEnemy battle_event_cmd.o] -2 LW(0) [weapon_sambo_head_attack_3 unit_sambo.o]
+805FEF78:       callc [btlevtcmd_ChoiceSamplingEnemy battle_event_cmd.o] [weapon_sambo_head_attack_3 unit_sambo.o] LW(3) LW(4)
+805FEF8C:     case_int_eq 2
+805FEF94:       callc [btlevtcmd_GetEnemyBelong battle_event_cmd.o] -2 LW(0)
+805FEFA4:       callc [btlevtcmd_SamplingEnemy battle_event_cmd.o] -2 LW(0) [weapon_sambo_head_attack_2 unit_sambo.o]
+805FEFB8:       callc [btlevtcmd_ChoiceSamplingEnemy battle_event_cmd.o] [weapon_sambo_head_attack_2 unit_sambo.o] LW(3) LW(4)
+805FEFCC:   end_switch
+805FEFD0:   if_int_eq LW(3) -1
+805FEFDC:     callc [btlevtcmd_CheckToken battle_event_cmd.o] -2 16 LW(0)
+805FEFF0:     if_int_ne LW(0) 0
+805FEFFC:       callss [subsetevt_confuse_flustered battle_event_subset.o]
+805FF004:       return
+805FF008:     endif
+805FF00C:     goto 99
+805FF014:   endif
+805FF018:   callc [btlevtcmd_AttackDeclare battle_event_cmd.o] -2 LW(3) LW(4)
+805FF02C:   callc [btlevtcmd_WaitGuardMove battle_event_cmd.o]
+805FF034:   switchi LW(10)
+805FF03C:     case_int_eq 4
+805FF044:       callc [btlevtcmd_PayWeaponCost battle_event_cmd.o] -2 [weapon_sambo_head_attack_4 unit_sambo.o]
+805FF054:       callc [btlevtcmd_WeaponAftereffect battle_event_cmd.o] [weapon_sambo_head_attack_4 unit_sambo.o]
+805FF060:     case_int_eq 3
+805FF068:       callc [btlevtcmd_PayWeaponCost battle_event_cmd.o] -2 [weapon_sambo_head_attack_3 unit_sambo.o]
+805FF078:       callc [btlevtcmd_WeaponAftereffect battle_event_cmd.o] [weapon_sambo_head_attack_3 unit_sambo.o]
+805FF084:     case_int_eq 2
+805FF08C:       callc [btlevtcmd_PayWeaponCost battle_event_cmd.o] -2 [weapon_sambo_head_attack_2 unit_sambo.o]
+805FF09C:       callc [btlevtcmd_WeaponAftereffect battle_event_cmd.o] [weapon_sambo_head_attack_2 unit_sambo.o]
+805FF0A8:   end_switch
+805FF0AC:   callc [evt_btl_camera_set_mode battle_camera.o] 0 8
+805FF0BC:   callc [evt_btl_camera_set_homing_unit battle_camera.o] 0 -2 LW(3)
+805FF0D0:   callc [evt_btl_camera_set_moveSpeedLv battle_camera.o] 0 2
+805FF0E0:   callc [evt_btl_camera_set_zoom battle_camera.o] 0 200
+805FF0F0:   callc [btlevtcmd_GetHitPos battle_event_cmd.o] LW(3) LW(4) LW(0) LW(1) LW(2)
+805FF10C:   switchi LW(10)
+805FF114:     case_int_eq 4
+805FF11C:       if_int_eq LW(5) 0
+805FF128:         callc [btlevtcmd_FaceDirectionAdd battle_event_cmd.o] LW(3) LW(0) 60
+805FF13C:       else
+805FF140:         callc [btlevtcmd_FaceDirectionAdd battle_event_cmd.o] LW(3) LW(0) 42
+805FF154:       endif
+805FF158:     case_int_eq 3
+805FF160:       if_int_eq LW(5) 0
+805FF16C:         callc [btlevtcmd_FaceDirectionAdd battle_event_cmd.o] LW(3) LW(0) 40
+805FF180:       else
+805FF184:         callc [btlevtcmd_FaceDirectionAdd battle_event_cmd.o] LW(3) LW(0) 28
+805FF198:       endif
+805FF19C:     case_int_eq 2
+805FF1A4:       if_int_eq LW(5) 0
+805FF1B0:         callc [btlevtcmd_FaceDirectionAdd battle_event_cmd.o] LW(3) LW(0) 20
+805FF1C4:       else
+805FF1C8:         callc [btlevtcmd_FaceDirectionAdd battle_event_cmd.o] LW(3) LW(0) 14
+805FF1DC:       endif
+805FF1E0:   end_switch
+805FF1E4:   callc [btlevtcmd_AnimeChangePoseType battle_event_cmd.o] -2 LW(6) 40
+805FF1F8:   callc [btlevtcmd_SetMoveSpeed battle_event_cmd.o] -2 2.00
+805FF208:   callc [btlevtcmd_TransStageFloorPosition battle_event_cmd.o] LW(0) LW(1) LW(2)
+805FF21C:   callc [btlevtcmd_MovePosition battle_event_cmd.o] -2 LW(0) LW(1) LW(2) 0 -1 0
+805FF240:   callc [btlevtcmd_AnimeChangePoseType battle_event_cmd.o] -2 LW(6) 43
+805FF254:   callc [btlevtcmd_CalculateFaceDirection battle_event_cmd.o] -2 -1 LW(3) LW(4) 16 LW(15)
+805FF274:   callc [btlevtcmd_ChangeFaceDirection battle_event_cmd.o] -2 LW(15)
+805FF284:   callc [btlevtcmd_CalculateFaceDirection battle_event_cmd.o] -2 -1 LW(3) LW(4) 16 LW(15)
+805FF2A4:   setii LW(14) 40
+805FF2B0:   if_int_eq LW(15) -1
+805FF2BC:     setii LW(14) -40
+805FF2C8:   endif
+805FF2CC:   callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_ENM_SAMBO_ATTACK1"] [F1194D80] 0 [F1194D80]
+805FF2E8:   callc [btlevtcmd_SetRotateOffset battle_event_cmd.o] -2 0 0 0
+805FF300:   callc [evt_sub_intpl_init evt_sub.o] 11 0 LW(14) 40
+805FF318: 0:
+805FF320:   callc [evt_sub_intpl_get_value evt_sub.o]
+805FF328:   callc [btlevtcmd_SetRotate battle_event_cmd.o] -2 0 0 LW(0)
+805FF340:   wait_frames 1
+805FF348:   if_int_eq LW(1) 1
+805FF354:     goto 0
+805FF35C:   endif
+805FF360:   callc [btlevtcmd_CalculateFaceDirection battle_event_cmd.o] -2 -1 LW(3) LW(4) 16 LW(15)
+805FF380:   setii LW(13) 40
+805FF38C:   setii LW(14) -90
+805FF398:   if_int_eq LW(15) -1
+805FF3A4:     setii LW(13) -40
+805FF3B0:     setii LW(14) 90
+805FF3BC:   endif
+805FF3C0:   callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_ENM_SAMBO_ATTACK4"] [F1194D80] 0 [F1194D80]
+805FF3DC:   callc [evt_sub_intpl_init evt_sub.o] 1 LW(13) LW(14) 10
+805FF3F4: 3:
+805FF3FC:   callc [evt_sub_intpl_get_value evt_sub.o]
+805FF404:   callc [btlevtcmd_SetRotate battle_event_cmd.o] -2 0 0 LW(0)
+805FF41C:   wait_frames 1
+805FF424:   if_int_eq LW(1) 1
+805FF430:     goto 3
+805FF438:   endif
+805FF43C:   switchi LW(10)
+805FF444:     case_int_eq 4
+805FF44C:       callc [btlevtcmd_PreCheckDamage battle_event_cmd.o] -2 LW(3) LW(4) [weapon_sambo_head_attack_4 unit_sambo.o] 256 LW(5)
+805FF46C:     case_int_eq 3
+805FF474:       callc [btlevtcmd_PreCheckDamage battle_event_cmd.o] -2 LW(3) LW(4) [weapon_sambo_head_attack_3 unit_sambo.o] 256 LW(5)
+805FF494:     case_int_eq 2
+805FF49C:       callc [btlevtcmd_PreCheckDamage battle_event_cmd.o] -2 LW(3) LW(4) [weapon_sambo_head_attack_2 unit_sambo.o] 256 LW(5)
+805FF4BC:   end_switch
+805FF4C0:   switchi LW(5)
+805FF4C8:     case_int_eq_any 4
+805FF4D0:       goto 90
+805FF4D8:       end_multi_case
+805FF4DC:     case_int_eq 3
+805FF4E4:       callc [btlevtcmd_StartAvoid battle_event_cmd.o] LW(3) 38
+805FF4F4:       goto 90
+805FF4FC:       end_multi_case
+805FF500:     case_int_eq 6
+805FF508:       callc [btlevtcmd_StartAvoid battle_event_cmd.o] LW(3) 39
+805FF518:       goto 90
+805FF520:     case_int_eq 2
+805FF528:       callc [btlevtcmd_StartAvoid battle_event_cmd.o] LW(3) 40
+805FF538:       goto 90
+805FF540:     case_int_eq 1
+805FF548:       goto 91
+805FF550:       end_multi_case
+805FF554:     case_default
+805FF558:       goto 98
+805FF560:       end_multi_case
+805FF564:   end_switch
+805FF568: 90:
+805FF570:   callc [btlevtcmd_CalculateFaceDirection battle_event_cmd.o] -2 -1 LW(3) LW(4) 16 LW(15)
+805FF590:   setii LW(14) -90
+805FF59C:   if_int_eq LW(15) -1
+805FF5A8:     setii LW(14) 90
+805FF5B4:   endif
+805FF5B8:   callc [evt_sub_intpl_init evt_sub.o] 0 LW(14) 0 10
+805FF5D0: 4:
+805FF5D8:   callc [evt_sub_intpl_get_value evt_sub.o]
+805FF5E0:   callc [btlevtcmd_SetRotate battle_event_cmd.o] -2 0 0 LW(0)
+805FF5F8:   wait_frames 1
+805FF600:   if_int_eq LW(1) 1
+805FF60C:     goto 4
+805FF614:   endif
+805FF618:   goto 98
+805FF620: 91:
+805FF628:   callc [btlevtcmd_SetRotate battle_event_cmd.o] -2 0 0 0
+805FF640:   switchi LW(10)
+805FF648:     case_int_eq 4
+805FF650:       callc [btlevtcmd_ResultACDefence battle_event_cmd.o] LW(3) [weapon_sambo_head_attack_4 unit_sambo.o]
+805FF660:       callc [btlevtcmd_CheckDamage battle_event_cmd.o] -2 LW(3) LW(4) [weapon_sambo_head_attack_4 unit_sambo.o] 256 LW(5)
+805FF680:     case_int_eq 3
+805FF688:       callc [btlevtcmd_ResultACDefence battle_event_cmd.o] LW(3) [weapon_sambo_head_attack_3 unit_sambo.o]
+805FF698:       callc [btlevtcmd_CheckDamage battle_event_cmd.o] -2 LW(3) LW(4) [weapon_sambo_head_attack_3 unit_sambo.o] 256 LW(5)
+805FF6B8:     case_int_eq 2
+805FF6C0:       callc [btlevtcmd_ResultACDefence battle_event_cmd.o] LW(3) [weapon_sambo_head_attack_2 unit_sambo.o]
+805FF6D0:       callc [btlevtcmd_CheckDamage battle_event_cmd.o] -2 LW(3) LW(4) [weapon_sambo_head_attack_2 unit_sambo.o] 256 LW(5)
+805FF6F0:   end_switch
+805FF6F4:   callc [btlevtcmd_SetRotate battle_event_cmd.o] -2 0 0 90
+805FF70C:   callc [btlevtcmd_AnimeChangePoseType battle_event_cmd.o] -2 LW(6) 43
+805FF720:   callc [evt_btl_camera_set_mode battle_camera.o] 0 0
+805FF730:   callc [btlevtcmd_CalculateFaceDirection battle_event_cmd.o] -2 -1 LW(3) LW(4) 16 LW(15)
+805FF750:   setii LW(14) -90
+805FF75C:   if_int_eq LW(15) -1
+805FF768:     setii LW(14) 90
+805FF774:   endif
+805FF778:   callc [evt_sub_intpl_init evt_sub.o] 0 LW(14) 0 20
+805FF790: 5:
+805FF798:   callc [evt_sub_intpl_get_value evt_sub.o]
+805FF7A0:   callc [btlevtcmd_SetRotate battle_event_cmd.o] -2 0 0 LW(0)
+805FF7B8:   wait_frames 1
+805FF7C0:   if_int_eq LW(1) 1
+805FF7CC:     goto 5
+805FF7D4:   endif
+805FF7D8: 98:
+805FF7E0:   callc [evt_btl_camera_set_mode battle_camera.o] 0 0
+805FF7F0:   callc [btlevtcmd_AnimeChangePoseType battle_event_cmd.o] -2 LW(6) 41
+805FF804:   callc [btlevtcmd_SetMoveSpeed battle_event_cmd.o] -2 4.00
+805FF814:   callc [btlevtcmd_GetHomePos battle_event_cmd.o] -2 LW(0) LW(1) LW(2)
+805FF82C:   callc [btlevtcmd_MovePosition battle_event_cmd.o] -2 LW(0) LW(1) LW(2) 0 -1 0
+805FF850: 99:
+805FF858:   callc [btlevtcmd_ResetFaceDirection battle_event_cmd.o] -2
+805FF864:   callc [btlevtcmd_StartWaitEvent battle_event_cmd.o] -2
+805FF870:   return
+805FF874:   end

@@ -1,0 +1,127 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [attack_event unit_killer.o] AT 805D508C ---
+805D508C:   callc [btlevtcmd_check_battleflag battle_event_cmd.o] LW(0) 2
+805D509C:   if_int_ne LW(0) 0
+805D50A8:     wait_ms 750
+805D50B0:     callc [btlevtcmd_GetFirstAttackTarget battle_event_cmd.o] LW(3) LW(4)
+805D50C0:   else
+805D50C4:     callc [btlevtcmd_EnemyItemUseCheck battle_event_cmd.o] -2 LW(0)
+805D50D4:     if_int_ne LW(0) 0
+805D50E0:       callss LW(0)
+805D50E8:       callc [btlevtcmd_StartWaitEvent battle_event_cmd.o] -2
+805D50F4:       return
+805D50F8:     endif
+805D50FC:     callc [btlevtcmd_GetEnemyBelong battle_event_cmd.o] -2 LW(0)
+805D510C:     callc [btlevtcmd_SamplingEnemy battle_event_cmd.o] -2 LW(0) [weapon_killer_charge_attack unit_killer.o]
+805D5120:     callc [btlevtcmd_ChoiceSamplingEnemy battle_event_cmd.o] [weapon_killer_charge_attack unit_killer.o] LW(3) LW(4)
+805D5134:   endif
+805D5138:   if_int_eq LW(3) -1
+805D5144:     callc [btlevtcmd_CheckToken battle_event_cmd.o] -2 16 LW(0)
+805D5158:     if_int_ne LW(0) 0
+805D5164:       callss [subsetevt_confuse_flustered battle_event_subset.o]
+805D516C:       return
+805D5170:     endif
+805D5174:     goto 99
+805D517C:   endif
+805D5180:   callc [evt_btl_camera_set_mode battle_camera.o] 0 8
+805D5190:   callc [evt_btl_camera_set_homing_unit battle_camera.o] 0 -2 LW(3)
+805D51A4:   callc [evt_btl_camera_set_moveSpeedLv battle_camera.o] 0 1
+805D51B4:   callc [evt_btl_camera_set_zoom battle_camera.o] 0 250
+805D51C4:   callc [btlevtcmd_WeaponAftereffect battle_event_cmd.o] [weapon_killer_charge_attack unit_killer.o]
+805D51D0:   callc [btlevtcmd_AttackDeclare battle_event_cmd.o] -2 LW(3) LW(4)
+805D51E4:   callc [btlevtcmd_WaitGuardMove battle_event_cmd.o]
+805D51EC:   callc [btlevtcmd_PayWeaponCost battle_event_cmd.o] -2 [weapon_killer_charge_attack unit_killer.o]
+805D51FC:   callc [btlevtcmd_CalculateFaceDirection battle_event_cmd.o] -2 -1 LW(3) LW(4) 16 LW(15)
+805D521C:   callc [btlevtcmd_ChangeFaceDirection battle_event_cmd.o] -2 LW(15)
+805D522C:   callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_ENM_KILLER_CHARGE1"] [F1194D80] 0 [F1194D80]
+805D5248:   callc [btlevtcmd_AnimeChangePoseType battle_event_cmd.o] -2 1 50
+805D525C:   wait_frames 30
+805D5264:   callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_ENM_KILLER_MOVE1"] [F1194D80] 0 [F1194D80]
+805D5280:   callc [btlevtcmd_PreCheckDamage battle_event_cmd.o] -2 LW(3) LW(4) [weapon_killer_charge_attack unit_killer.o] 256 LW(5)
+805D52A0:   switchi LW(5)
+805D52A8:     case_int_eq_any 4
+805D52B0:       goto 90
+805D52B8:       end_multi_case
+805D52BC:     case_int_eq 3
+805D52C4:       goto 90
+805D52CC:       end_multi_case
+805D52D0:     case_int_eq 6
+805D52D8:       goto 90
+805D52E0:     case_int_eq 2
+805D52E8:       goto 90
+805D52F0:     case_int_eq 1
+805D52F8:       goto 91
+805D5300:       end_multi_case
+805D5304:     case_default
+805D5308:       goto 98
+805D5310:       end_multi_case
+805D5314:   end_switch
+805D5318: 90:
+805D5320:   callc [btlevtcmd_AnimeChangePoseType battle_event_cmd.o] -2 1 42
+805D5334:   callc [btlevtcmd_GetHitPos battle_event_cmd.o] LW(3) LW(4) LW(0) LW(1) LW(2)
+805D5350:   callc [btlevtcmd_SetMoveSpeed battle_event_cmd.o] -2 8.00
+805D5360:   callc [btlevtcmd_JumpPosition battle_event_cmd.o] -2 LW(0) 10 LW(2) 0 -1
+805D5380:   callss [start_avoid unit_killer.o]
+805D5388:   callc [evt_btl_camera_set_mode battle_camera.o] 0 3
+805D5398:   callc [btlevtcmd_FaceDirectionAdd battle_event_cmd.o] -2 LW(0) 500
+805D53AC:   callc [btlevtcmd_JumpPosition battle_event_cmd.o] -2 LW(0) 10 LW(2) 0 -1
+805D53CC:   callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_ENM_KILLER_ATTACK1"] [F1194D80] 0 [F1194D80]
+805D53E8:   callc [evt_btl_camera_shake_w battle_camera.o] 0 5 0 15 0
+805D5404:   wait_ms 300
+805D540C:   callc [btlevtcmd_OnAttribute battle_event_cmd.o] -2 16777216
+805D541C:   wait_ms 500
+805D5424:   goto 98
+805D542C: 91:
+805D5434:   callc [btlevtcmd_AnimeChangePoseType battle_event_cmd.o] -2 1 42
+805D5448:   callc [btlevtcmd_GetHitPos battle_event_cmd.o] LW(3) LW(4) LW(0) LW(1) LW(2)
+805D5464:   callc [btlevtcmd_SetMoveSpeed battle_event_cmd.o] -2 8.00
+805D5474:   callc [btlevtcmd_JumpPosition battle_event_cmd.o] -2 LW(0) 10 LW(2) 0 -1
+805D5494:   callc [evt_btl_camera_set_mode battle_camera.o] 0 3
+805D54A4:   callc [btlevtcmd_ResultACDefence battle_event_cmd.o] LW(3) [weapon_killer_charge_attack unit_killer.o]
+805D54B4:   callc [btlevtcmd_CheckDamage battle_event_cmd.o] -2 LW(3) LW(4) [weapon_killer_charge_attack unit_killer.o] 256 LW(5)
+805D54D4:   callc [evt_btl_camera_shake_w battle_camera.o] 0 5 0 15 0
+805D54F0:   callc [btlevtcmd_OnAttribute battle_event_cmd.o] -2 16777216
+805D5500:   callc [btlevtcmd_OnPartsAttribute battle_event_cmd.o] -2 1 33554432
+805D5514:   callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_ENM_KILLER_ATTACK1"] [F1194D80] 0 [F1194D80]
+805D5530:   callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_BTL_ENEMY_DIE1_2"] [F1194D80] 0 [F1194D80]
+805D554C:   callc [btlevtcmd_GetPos battle_event_cmd.o] -2 LW(0) LW(1) LW(2)
+805D5564:   addi LW(2) 10
+805D5570:   addi LW(1) 20
+805D557C:   callc [evt_eff evt_eff.o] [zero_dou_00005fe8 unit_killer.o] ["kemuri_test"] 17 LW(0) LW(1) LW(2) 1.00 0 0 0 0 0 0 0
+805D55BC:   callc [btlevtcmd_GetCoin battle_event_cmd.o] -2 LW(0)
+805D55CC:   callc [btlevtcmd_StoreCoin battle_event_cmd.o] LW(0)
+805D55D8:   callc [btlevtcmd_GetExp battle_event_cmd.o] -2 LW(0)
+805D55E8:   callc [btlevtcmd_StoreExp battle_event_cmd.o] LW(0)
+805D55F4:   callc [btlevtcmd_GetPos battle_event_cmd.o] -2 LW(3) LW(1) LW(2)
+805D560C:   addi LW(2) 10
+805D5618:   addi LW(1) 30
+805D5624:   callc [_add_star_point_disp_offset battle_event_subset.o] LW(10) LW(3) LW(1) LW(2)
+805D563C:   callc [evt_eff evt_eff.o] [zero_dou_00005fe8 unit_killer.o] ["star_point"] 0 LW(3) LW(1) LW(2) LW(0) 0 0 0 0 0 0 0
+805D567C:   if_int_ge LW(0) 1
+805D5688:     loop LW(0)
+805D5690:     end_loop
+805D5694:   endif
+805D5698:   wait_ms 500
+805D56A0:   goto 98
+805D56A8: 98:
+805D56B0:   callc [evt_btl_camera_set_mode battle_camera.o] 0 0
+805D56C0:   wait_ms 200
+805D56C8: 99:
+805D56D0:   callc [btlevtcmd_KillUnit battle_event_cmd.o] -2 0
+805D56E0:   return
+805D56E4:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [start_avoid unit_killer.o] AT 805D5024 ---
+805D5024:   if_int_eq LW(5) 3
+805D5030:     callc [btlevtcmd_StartAvoid battle_event_cmd.o] LW(3) 38
+805D5040:   endif
+805D5044:   if_int_eq LW(5) 6
+805D5050:     callc [btlevtcmd_StartAvoid battle_event_cmd.o] LW(3) 39
+805D5060:   endif
+805D5064:   if_int_eq LW(5) 2
+805D5070:     callc [btlevtcmd_StartAvoid battle_event_cmd.o] LW(3) 40
+805D5080:   endif
+805D5084:   return
+805D5088:   end

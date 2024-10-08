@@ -1,0 +1,40 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [unison_phase_event unit_monochrome_kurokumorn.o] AT 8061AFFC ---
+8061AFFC:   callc [btlevtcmd_CheckPhase battle_event_cmd.o] LW(0) 67108865
+8061B00C:   if_int_eq LW(0) 0
+8061B018:     goto 99
+8061B020:   endif
+8061B024:   callc [btlevtcmd_CheckActStatus battle_event_cmd.o] -2 LW(0)
+8061B034:   if_int_eq LW(0) 0
+8061B040:     goto 99
+8061B048:   endif
+8061B04C:   callc [btlevtcmd_CheckPartsCounterAttribute battle_event_cmd.o] -2 1 1024 LW(0)
+8061B064:   if_int_eq LW(0) 1
+8061B070:     goto 99
+8061B078:   endif
+8061B07C:   callc [evt_sub_random evt_sub.o] 99 LW(0)
+8061B08C:   if_int_lt LW(0) 50
+8061B098:     callc [btlevtcmd_GetUnitWork battle_event_cmd.o] -2 0 LW(0)
+8061B0AC:     if_int_eq LW(0) 1
+8061B0B8:       callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_ENM_KUMO_MOVE4"] [F1194D80] 0 [F1194D80]
+8061B0D4:       callc [btlevtcmd_GetPos battle_event_cmd.o] -2 LW(0) LW(1) LW(2)
+8061B0EC:       setii LW(1) 40
+8061B0F8:       callc [btlevtcmd_DivePosition battle_event_cmd.o] -2 LW(0) LW(1) LW(2) 60 10 4 0 -1
+8061B124:       callc [btlevtcmd_SetHomePos battle_event_cmd.o] -2 LW(0) LW(1) LW(2)
+8061B13C:       callc [btlevtcmd_OnPartsAttribute battle_event_cmd.o] -2 1 6291456
+8061B150:       callc [btlevtcmd_SetUnitWork battle_event_cmd.o] -2 0 0
+8061B164:     else
+8061B168:       callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_ENM_KUMO_MOVE5"] [F1194D80] 0 [F1194D80]
+8061B184:       callc [btlevtcmd_GetPos battle_event_cmd.o] -2 LW(0) LW(1) LW(2)
+8061B19C:       setii LW(1) 10
+8061B1A8:       callc [btlevtcmd_DivePosition battle_event_cmd.o] -2 LW(0) LW(1) LW(2) 60 -10 4 0 -1
+8061B1D4:       callc [btlevtcmd_SetHomePos battle_event_cmd.o] -2 LW(0) LW(1) LW(2)
+8061B1EC:       callc [btlevtcmd_OffPartsAttribute battle_event_cmd.o] -2 1 6291456
+8061B200:       callc [btlevtcmd_SetUnitWork battle_event_cmd.o] -2 0 1
+8061B214:     endif
+8061B218:   endif
+8061B21C: 99:
+8061B224:   return
+8061B228:   end

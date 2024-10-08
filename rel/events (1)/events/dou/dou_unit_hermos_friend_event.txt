@@ -1,0 +1,30 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [friend_event unit_hermos.o] AT 805D8E24 ---
+805D8E24:   callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] LW(10) LW(11) ["S_1"]
+805D8E38:   callc [btlevtcmd_GetPos battle_event_cmd.o] -2 LW(12) LW(13) LW(14)
+805D8E50:   callc [btlevtcmd_SpawnUnit battle_event_cmd.o] LW(3) [entry_bubble unit_hermos.o] 0
+805D8E64:   callc [bubble_copy_status unit_hermos.o] -2 LW(3)
+805D8E74:   callc [btlevtcmd_SetPos battle_event_cmd.o] LW(3) LW(12) LW(13) LW(14)
+805D8E8C:   callc [btlevtcmd_JumpSetting battle_event_cmd.o] LW(3) 0 10 0.50
+805D8EA4:   callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_ENM_BUBBLE_SPLIT1"] [F1194D80] 0 [F1194D80]
+805D8EC0:   begin_child_thread
+805D8EC4:     callc [btlevtcmd_SetRotateOffset battle_event_cmd.o] LW(3) 0 10 0
+805D8EDC:     setii LW(12) 0
+805D8EE8:     loop 0
+805D8EF0:       wait_frames 1
+805D8EF8:       addi LW(12) 1
+805D8F04:       if_int_ge LW(12) 30
+805D8F10:         loop_break
+805D8F14:       endif
+805D8F18:       callc [btlevtcmd_AddRotate battle_event_cmd.o] LW(3) 0 0 40
+805D8F30:     end_loop
+805D8F34:     callc [btlevtcmd_SetRotate battle_event_cmd.o] LW(3) 0 0 0
+805D8F4C:     callc [btlevtcmd_SetRotateOffset battle_event_cmd.o] LW(3) 0 0 0
+805D8F64:   end_child_thread
+805D8F68:   callc [btlevtcmd_JumpPosition battle_event_cmd.o] LW(3) LW(0) LW(1) LW(2) 30.00 -1
+805D8F88:   callc [btlevtcmd_SetHomePos battle_event_cmd.o] LW(3) LW(0) LW(1) LW(2)
+805D8FA0:   wait_ms 1000
+805D8FA8:   return
+805D8FAC:   end

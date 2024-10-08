@@ -1,0 +1,282 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [bombwall_bomb dou_11.o] AT 805CD37C ---
+805CD37C:   callc [evt_mario_key_onoff evt_mario.o] 0
+805CD388:   begin_thread
+805CD38C:     wait_ms 200
+805CD394:     callc [evt_mapobj_get_position evt_map.o] ["S_ana_before"] LW(0) LW(1) LW(2)
+805CD3AC:     callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_OFF_WALL_BREAK1"] LW(0) LW(1) LW(2) 0
+805CD3C8:   end_thread
+805CD3CC:   begin_thread
+805CD3D0:     callc [evt_mario_wait_landon evt_mario.o]
+805CD3D8:     callc [evt_mario_normalize evt_mario.o]
+805CD3E0:     callsa [unk_evt_dou_000128f4 dou_11.o]
+805CD3E8:   end_thread
+805CD3EC:   callc [evt_img_entry evt_img.o] ["capture_img"]
+805CD3F8:   callc [evt_img_set_paper evt_img.o] ["capture_img"] ["OFF_d_bom_ver2"]
+805CD408:   callc [evt_offscreen_entry evt_offscreen.o] ["offscreen"]
+805CD414:   callc [evt_mapobj_set_offscreen evt_map.o] 1 ["S_ana_before"] ["offscreen"]
+805CD428:   callc [evt_offscreen_get_boundingbox2 evt_offscreen.o] ["offscreen"] LW(10) LW(11) LW(12) LW(13)
+805CD444:   setii LF(0) 0
+805CD450:   if_int_eq LW(12) 0
+805CD45C:     if_int_eq LW(13) 0
+805CD468:       setii LF(0) 1
+805CD474:     endif
+805CD478:   endif
+805CD47C:   if_int_eq LF(0) 0
+805CD488:     callc [evt_img_alloc_capture evt_img.o] ["capture_img"] 0 ["offscreen"] 1 LW(10) LW(11) LW(12) LW(13)
+805CD4B0:     callc [evt_img_clear_virtual_point evt_img.o] ["capture_img"]
+805CD4BC:     callc [evt_img_set_paper_anim evt_img.o] ["capture_img"] ["A_1"]
+805CD4CC:     callc [evt_mapobj_flag_onoff evt_map.o] 1 1 ["S_ana_before1"] 1
+805CD4E4:     callc [evt_mapobj_flag_onoff evt_map.o] 1 1 ["S_ana_before"] 1
+805CD4FC:     callc [evt_mapobj_flag_onoff evt_map.o] 1 0 ["S_ana_after"] 1
+805CD514:     callc [evt_img_wait_animend evt_img.o] ["capture_img"]
+805CD520:   else
+805CD524:     callc [evt_mapobj_flag_onoff evt_map.o] 1 1 ["S_ana_before1"] 1
+805CD53C:     callc [evt_mapobj_flag_onoff evt_map.o] 1 1 ["S_ana_before"] 1
+805CD554:     callc [evt_mapobj_flag_onoff evt_map.o] 1 0 ["S_ana_after"] 1
+805CD56C:   endif
+805CD570:   callc [evt_mapobj_clear_offscreen evt_map.o] 1 ["S_ana_before"]
+805CD580:   callc [evt_img_free_capture evt_img.o] ["capture_img"] 0
+805CD590:   callc [evt_img_free_capture evt_img.o] ["capture_img"] 1
+805CD5A0:   callc [evt_img_onoff evt_img.o] ["capture_img"] 0
+805CD5B0:   callc [evt_img_release evt_img.o] ["capture_img"]
+805CD5BC:   callc [evt_offscreen_delete evt_offscreen.o] ["offscreen"]
+805CD5C8:   loop 0
+805CD5D0:     callc [evt_mario_party_use_check evt_mario.o] LW(0)
+805CD5DC:     wait_frames 1
+805CD5E4:     if_int_eq LW(0) 0
+805CD5F0:       loop_break
+805CD5F4:     endif
+805CD5F8:   end_loop
+805CD5FC:   callc [evt_mario_wait_landon evt_mario.o]
+805CD604:   callsa [bombwall_after dou_11.o]
+805CD60C:   setii LW(0) ["n_bero"]
+805CD618:   callss [bero_case_switch_on evt_bero.o]
+805CD620:   callc [evt_hitobj_attr_onoff evt_hit.o] 1 1 ["n_bero"] 4
+805CD638:   setii GSW(0) 256
+805CD644:   wait_frames 2
+805CD64C:   callc [evt_mario_key_onoff evt_mario.o] 1
+805CD658:   callc [evt_exit_case_evt evt_case.o]
+805CD660:   return
+805CD664:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [unk_evt_dou_000128f4 dou_11.o] AT 805CD294 ---
+805CD294:   callc [evt_npc_flag_onoff evt_npc.o] 1 ["水夫C"] 1073741856
+805CD2A8:   begin_thread
+805CD2AC:     callc [evt_party_get_pos evt_party.o] 0 LW(0) LW(1) LW(2)
+805CD2C4:     if_int_lt LW(1) 100
+805CD2D0:       return
+805CD2D4:     endif
+805CD2D8:     callc [evt_party_stop evt_party.o] 0
+805CD2E4:     callc [evt_party_move_pos2 evt_party.o] 0 712 -126 120.00
+805CD2FC:     callc [evt_party_set_dir evt_party.o] 0 90 200
+805CD310:     callc [evt_party_run evt_party.o] 0
+805CD31C:   end_thread
+805CD320:   callc [evt_mario_get_pos evt_mario.o] 0 LW(0) LW(1) LW(2)
+805CD338:   if_int_lt LW(1) 100
+805CD344:     return
+805CD348:   endif
+805CD34C:   callc [evt_mario_mov_pos2 evt_mario.o] 730 -120 120.00
+805CD360:   callc [evt_mario_set_dir evt_mario.o] 90 200 0
+805CD374:   return
+805CD378:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [bombwall_after dou_11.o] AT 805CDCEC ---
+805CDCEC:   callc [evt_mario_key_onoff evt_mario.o] 0
+805CDCF8:   callc [evt_mario_get_pos evt_mario.o] 0 LW(0) LW(1) LW(2)
+805CDD10:   if_int_le LW(0) 780
+805CDD1C:     callc [evt_mario_set_dir evt_mario.o] 90 200 0
+805CDD30:   else
+805CDD34:     callc [evt_mario_set_dir evt_mario.o] 270 200 0
+805CDD48:   endif
+805CDD4C:   callc [evt_npc_flag_onoff evt_npc.o] 1 ["水夫C"] 1073741856
+805CDD60:   callc [evt_npc_flag_onoff evt_npc.o] 1 ["水夫D"] 1073741856
+805CDD74:   callc [evt_npc_flag_onoff evt_npc.o] 1 ["水夫E"] 1073741856
+805CDD88:   callc [evt_npc_flag_onoff evt_npc.o] 1 ["モニー"] 1073741856
+805CDD9C:   callc [evt_npc_flag_onoff evt_npc.o] 1 ["ピートン"] 1073741856
+805CDDB0:   callc [evt_cam3d_evt_set evt_cam.o] 742 233 429 742 147 -63 500 11
+805CDDD8:   callc [evt_npc_move_position evt_npc.o] ["水夫C"] 780 -135 0 180.00 0
+805CDDF8:   callc [evt_set_dir_to_target evt_npc.o] ["水夫C"] ["mario"]
+805CDE08:   wait_ms 200
+805CDE10:   callc [evt_msg_print evt_msg.o] 0 ["stg5_dou_17_12"] 0 ["水夫C"]
+805CDE28:   callc [evt_npc_move_position evt_npc.o] ["水夫C"] 780 -185 0 180.00 0
+805CDE48:   callc [evt_npc_set_position evt_npc.o] ["水夫C"] 0 -1000 0
+805CDE60:   callc [evt_npc_set_ry evt_npc.o] ["水夫D"] 270
+805CDE70:   wait_ms 200
+805CDE78:   callc [evt_npc_move_position evt_npc.o] ["水夫D"] 673 -38 0 180.00 0
+805CDE98:   callc [evt_npc_set_ry evt_npc.o] ["水夫D"] 90
+805CDEA8:   wait_ms 200
+805CDEB0:   callc [evt_npc_jump_position_nohit evt_npc.o] ["水夫D"] 676 70 -110 400 50
+805CDED0:   wait_ms 200
+805CDED8:   callc [evt_npc_jump_position_nohit evt_npc.o] ["水夫D"] 780 100 -135 500 70
+805CDEF8:   callc [evt_set_dir_to_target evt_npc.o] ["水夫D"] ["mario"]
+805CDF08:   wait_ms 200
+805CDF10:   callc [evt_msg_print evt_msg.o] 0 ["stg5_dou_17_13"] 0 ["水夫D"]
+805CDF28:   callc [evt_npc_move_position evt_npc.o] ["水夫D"] 780 -185 0 180.00 0
+805CDF48:   callc [evt_npc_set_position evt_npc.o] ["水夫D"] 0 -1000 0
+805CDF60:   setii GF(0) 1
+805CDF6C:   begin_thread
+805CDF70:     callc [evt_npc_set_ry evt_npc.o] ["ピートン"] 270
+805CDF80:     wait_ms 200
+805CDF88:     callc [evt_npc_move_position evt_npc.o] ["ピートン"] 685 -48 0 180.00 0
+805CDFA8:     callc [evt_npc_set_ry evt_npc.o] ["ピートン"] 90
+805CDFB8:     wait_ms 200
+805CDFC0:     callc [evt_npc_jump_position_nohit evt_npc.o] ["ピートン"] 680 70 -110 400 50
+805CDFE0:     wait_ms 200
+805CDFE8:     callc [evt_npc_jump_position_nohit evt_npc.o] ["ピートン"] 800 100 -135 500 50
+805CE008:     callc [evt_set_dir_to_target evt_npc.o] ["ピートン"] ["mario"]
+805CE018:     setii GF(0) 0
+805CE024:   end_thread
+805CE028:   callc [evt_npc_set_ry evt_npc.o] ["モニー"] 270
+805CE038:   wait_ms 200
+805CE040:   callc [evt_npc_move_position evt_npc.o] ["モニー"] 655 -48 0 180.00 0
+805CE060:   callc [evt_npc_set_ry evt_npc.o] ["モニー"] 90
+805CE070:   wait_ms 200
+805CE078:   callc [evt_npc_jump_position_nohit evt_npc.o] ["モニー"] 650 70 -110 400 50
+805CE098:   wait_ms 200
+805CE0A0:   callc [evt_npc_jump_position_nohit evt_npc.o] ["モニー"] 770 100 -135 500 50
+805CE0C0:   callc [evt_set_dir_to_target evt_npc.o] ["モニー"] ["mario"]
+805CE0D0:   wait_ms 300
+805CE0D8:   wait_until GF(0)
+805CE0E0:   callc [evt_msg_print evt_msg.o] 0 ["stg5_dou_17_14"] 0 ["モニー"]
+805CE0F8:   callc [evt_nannpc_set_subfunc evt_nannpc.o] 2 0
+805CE108:   begin_thread
+805CE10C:     callc [evt_npc_move_position evt_npc.o] ["ピートン"] 800 -185 0 180.00 0
+805CE12C:     callc [evt_npc_set_position evt_npc.o] ["ピートン"] 0 -1000 0
+805CE144:   end_thread
+805CE148:   begin_thread
+805CE14C:     callc [evt_npc_move_position evt_npc.o] ["モニー"] 770 -185 0 180.00 0
+805CE16C:     callc [evt_npc_set_position evt_npc.o] ["モニー"] 0 -1000 0
+805CE184:   end_thread
+805CE188:   callsa [bombwall_suifuout_secheck dou_11.o]
+805CE190:   setii LW(0) 0
+805CE19C:   callc [evt_snd_sfxon evt_snd.o] ["SFX_STG5_KINOPIO_MOVE3"] 0
+805CE1AC:   loop 0
+805CE1B4:     callsa [bombwall_suifuout dou_11.o]
+805CE1BC:     addi LW(0) 1
+805CE1C8:     if_int_eq LW(0) 95
+805CE1D4:       loop_break
+805CE1D8:     endif
+805CE1DC:     wait_ms 60
+805CE1E4:     callsa [bombwall_suifuout dou_11.o]
+805CE1EC:     addi LW(0) 1
+805CE1F8:     if_int_eq LW(0) 95
+805CE204:       loop_break
+805CE208:     endif
+805CE20C:     wait_ms 60
+805CE214:   end_loop
+805CE218:   wait_ms 1000
+805CE220:   callc [evt_npc_set_ry evt_npc.o] ["水夫E"] 270
+805CE230:   wait_ms 200
+805CE238:   callc [evt_npc_move_position evt_npc.o] ["水夫E"] 673 -38 0 180.00 0
+805CE258:   callc [evt_npc_set_ry evt_npc.o] ["水夫E"] 90
+805CE268:   wait_ms 200
+805CE270:   callc [evt_npc_jump_position_nohit evt_npc.o] ["水夫E"] 676 70 -110 400 50
+805CE290:   wait_ms 200
+805CE298:   callc [evt_npc_jump_position_nohit evt_npc.o] ["水夫E"] 780 100 -135 500 70
+805CE2B8:   callc [evt_set_dir_to_target evt_npc.o] ["水夫E"] ["mario"]
+805CE2C8:   wait_ms 200
+805CE2D0:   callc [evt_msg_print evt_msg.o] 0 ["stg5_dou_17_15"] 0 ["水夫E"]
+805CE2E8:   callc [evt_npc_move_position evt_npc.o] ["水夫E"] 780 -185 0 180.00 0
+805CE308:   callc [evt_npc_set_position evt_npc.o] ["水夫E"] 0 -1000 0
+805CE320:   wait_ms 500
+805CE328:   callc [evt_cam3d_evt_off evt_cam.o] 500 11
+805CE338:   wait_ms 500
+805CE340:   callc [evt_mario_key_onoff evt_mario.o] 1
+805CE34C:   return
+805CE350:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [bombwall_suifuout_secheck dou_11.o] AT 805CD868 ---
+805CD868:   loop 0
+805CD870:     setii LW(0) 0
+805CD87C:     setii LW(11) 1
+805CD888:     setii LW(12) 1
+805CD894:     loop 0
+805CD89C:       callc [evt_nannpc_get_work evt_nannpc.o] LW(0) 0 LW(10)
+805CD8B0:       if_int_eq LW(10) 1
+805CD8BC:         setii LW(11) 1
+805CD8C8:         setii LW(14) LW(0)
+805CD8D4:       endif
+805CD8D8:       addi LW(0) 1
+805CD8E4:       if_int_eq LW(0) 95
+805CD8F0:         loop_break
+805CD8F4:       endif
+805CD8F8:     end_loop
+805CD8FC:     if_int_eq LW(11) 1
+805CD908:       if_int_eq LW(12) 0
+805CD914:         callc [evt_nannpc_get_position evt_nannpc.o] LW(14) LW(0) LW(1) LW(2)
+805CD92C:         callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_STG5_KINOPIO_MOVE1"] LW(0) LW(1) LW(2) LW(13)
+805CD948:         setii LW(12) 1
+805CD954:       endif
+805CD958:     else
+805CD95C:       if_int_eq LW(12) 1
+805CD968:         callc [evt_snd_sfxoff evt_snd.o] LW(13)
+805CD974:         setii LW(12) 0
+805CD980:       endif
+805CD984:     endif
+805CD988:     wait_frames 1
+805CD990:   end_loop
+805CD994:   return
+805CD998:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [bombwall_suifuout dou_11.o] AT 805CD99C ---
+805CD99C:   callc [evt_nannpc_set_work evt_nannpc.o] LW(0) 0 0
+805CD9B0:   callc [evt_nannpc_get_position evt_nannpc.o] LW(0) LW(1) LW(2) LW(3)
+805CD9C8:   if_int_eq LW(2) 50
+805CD9D4:     if_int_ge LW(1) 710
+805CD9E0:       goto 10
+805CD9E8:     else
+805CD9EC:       goto 20
+805CD9F4:     endif
+805CD9F8:   else
+805CD9FC:     goto 30
+805CDA04:   endif
+805CDA08: 10:
+805CDA10:   callc [evt_nannpc_set_dir evt_nannpc.o] LW(0) 270
+805CDA20:   callc [evt_nannpc_get_position evt_nannpc.o] LW(0) LW(1) LW(2) LW(3)
+805CDA38:   callc [evt_sub_random evt_sub.o] 50 LW(1)
+805CDA48:   addi LW(1) 630
+805CDA54:   callc [evt_nannpc_set_work evt_nannpc.o] LW(0) 0 1
+805CDA68:   callc [evt_nannpc_move_position2 evt_nannpc.o] LW(0) LW(1) LW(2) LW(3) 240.00
+805CDA84:   callc [evt_nannpc_set_work evt_nannpc.o] LW(0) 0 0
+805CDA98:   callc [evt_sub_random evt_sub.o] 150 LW(10)
+805CDAA8:   addi LW(10) 100
+805CDAB4:   wait_ms LW(10)
+805CDABC: 20:
+805CDAC4:   callc [evt_nannpc_set_dir evt_nannpc.o] LW(0) 90
+805CDAD4:   callc [evt_nannpc_get_position evt_nannpc.o] LW(0) LW(1) LW(2) LW(3)
+805CDAEC:   callc [evt_sub_random evt_sub.o] 25 LW(3)
+805CDAFC:   addi LW(3) -125
+805CDB08:   callc [evt_sub_random evt_sub.o] 200 LW(10)
+805CDB18:   addi LW(10) 400
+805CDB24:   callc [evt_sub_random evt_sub.o] 20 LW(11)
+805CDB34:   addi LW(11) 30
+805CDB40:   callc [evt_nannpc_jump_position evt_nannpc.o] LW(0) LW(1) 70 LW(3) LW(10) LW(11)
+805CDB60:   callc [evt_sub_random evt_sub.o] 150 LW(10)
+805CDB70:   addi LW(10) 100
+805CDB7C:   wait_ms LW(10)
+805CDB84: 30:
+805CDB8C:   callc [evt_nannpc_set_dir evt_nannpc.o] LW(0) 90
+805CDB9C:   callc [evt_nannpc_get_position evt_nannpc.o] LW(0) LW(1) LW(2) LW(3)
+805CDBB4:   callc [evt_sub_random evt_sub.o] 60 LW(1)
+805CDBC4:   addi LW(1) 750
+805CDBD0:   callc [evt_sub_random evt_sub.o] 200 LW(10)
+805CDBE0:   addi LW(10) 400
+805CDBEC:   callc [evt_sub_random evt_sub.o] 30 LW(11)
+805CDBFC:   addi LW(11) 40
+805CDC08:   callc [evt_nannpc_jump_position evt_nannpc.o] LW(0) LW(1) 100 LW(3) LW(10) LW(11)
+805CDC28:   callc [evt_sub_random evt_sub.o] 150 LW(10)
+805CDC38:   addi LW(10) 100
+805CDC44:   wait_ms LW(10)
+805CDC4C: 40:
+805CDC54:   callc [evt_nannpc_set_animtbl evt_nannpc.o] LW(0) [suifu_run_animtbl dou_11.o]
+805CDC64:   callc [evt_nannpc_get_position evt_nannpc.o] LW(0) LW(1) LW(2) LW(3)
+805CDC7C:   addi LW(3) -50
+805CDC88:   callc [evt_nannpc_set_work evt_nannpc.o] LW(0) 0 1
+805CDC9C:   callc [evt_nannpc_move_position2 evt_nannpc.o] LW(0) LW(1) LW(2) LW(3) 240.00
+805CDCB8:   callc [evt_nannpc_set_work evt_nannpc.o] LW(0) 0 0
+805CDCCC:   callc [evt_nannpc_set_position evt_nannpc.o] LW(0) 0 -1000 0
+805CDCE4:   return
+805CDCE8:   end

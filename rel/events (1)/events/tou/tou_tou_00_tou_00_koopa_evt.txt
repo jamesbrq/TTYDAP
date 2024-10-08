@@ -1,0 +1,224 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [tou_00_koopa_evt tou_00.o] AT 805D3FE0 ---
+805D3FE0:   callc [evt_mario_key_onoff evt_mario.o] 0
+805D3FEC:   callc [evt_mario_cont_onoff evt_mario.o] 0
+805D3FF8:   callc [evt_mario_kill_party evt_mario.o] 0
+805D4004:   callc [evt_npc_set_position evt_npc.o] ["飛クッパ"] -2300 -17 2
+805D401C:   callc [evt_npc_set_ry evt_npc.o] ["飛クッパ"] 90
+805D402C:   callc [evt_cam3d_evt_set evt_cam.o] -2000 186 730 -2000 55 -8 0 11
+805D4054:   callc [evt_mario_set_pos evt_mario.o] 0 -1000 0
+805D4068:   callc [evt_bg_auto_scroll_onoff evt_bg.o] 1
+805D4074:   setff GW(0) 0.00
+805D4080:   begin_thread
+805D4084:     setff LW(0) 0.00
+805D4090:     setff LW(1) 0.00
+805D409C:     loop 0
+805D40A4:       addf LW(0) GW(0)
+805D40B0:       callc [evt_bg_set_scrl_offset evt_bg.o] LW(0) LW(1)
+805D40C0:       wait_frames 1
+805D40C8:     end_loop
+805D40CC:   end_thread
+805D40D0:   setii GF(1) 0
+805D40DC:   begin_thread
+805D40E0:     setff LW(0) 0.00
+805D40EC:     setff LW(1) 0.00
+805D40F8:     loop 0
+805D4100:       if_int_ne GF(1) 0
+805D410C:         loop_break
+805D4110:       endif
+805D4114:       callc [evt_sub_get_sincos evt_sub.o] LW(0) LW(2) LW(3)
+805D4128:       mulf LW(2) 5.00
+805D4134:       setff LW(3) LW(2)
+805D4140:       subf LW(3) LW(1)
+805D414C:       callc [kpa_hikousen_yure tou_00.o] LW(3)
+805D4158:       wait_frames 1
+805D4160:       addf LW(0) 2.00
+805D416C:       setff LW(1) LW(2)
+805D4178:     end_loop
+805D417C:   end_thread
+805D4180:   callc [evt_seq_wait evt_seq.o] 2
+805D418C:   callc [evt_npc_set_anim evt_npc.o] ["飛クッパ"] ["HKPA_W_1"]
+805D419C:   callc [evt_snd_sfxon evt_snd.o] ["SFX_KUPPA_AIRSHIP_MOVE1"] GW(2)
+805D41AC:   callc [evt_sub_intpl_msec_init evt_sub.o] 0 -2300 -2000 7500
+805D41C4: 0:
+805D41CC:   callc [evt_sub_intpl_msec_get_value_para evt_sub.o] LW(0) LW(1)
+805D41DC:   callc [evt_npc_get_position evt_npc.o] ["飛クッパ"] LW(2) LW(3) LW(4)
+805D41F4:   callc [evt_npc_set_position evt_npc.o] ["飛クッパ"] LW(0) LW(3) LW(4)
+805D420C:   callc [evt_snd_sfx_pos evt_snd.o] GW(2) LW(0) LW(3) LW(4)
+805D4224:   wait_frames 1
+805D422C:   if_int_eq LW(1) 1
+805D4238:     goto 0
+805D4240:   endif
+805D4244:   wait_ms 3750
+805D424C:   setii GF(1) 1
+805D4258:   callc [evt_npc_get_position evt_npc.o] ["飛クッパ"] LW(0) LW(1) LW(2)
+805D4270:   callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_KUPPA_AIRSHIP_BREAK1"] LW(0) LW(1) LW(2) 0
+805D428C:   begin_thread
+805D4290:     setii LW(0) 32000
+805D429C:     loop 100
+805D42A4:       subi LW(0) 320
+805D42B0:       callc [evt_snd_bgm_freq evt_snd.o] 0 LW(0)
+805D42C0:       wait_ms 50
+805D42C8:     end_loop
+805D42CC:     callc [evt_snd_bgmoff_f evt_snd.o] 512 2000
+805D42DC:   end_thread
+805D42E0:   subf LW(0) 10.00
+805D42EC:   addf LW(1) 20.00
+805D42F8:   addf LW(2) 80.00
+805D4304:   callc [evt_eff64 evt_eff.o] ["kosyo1"] ["kemuri12_n64"] 0 LW(0) LW(1) LW(2) 1.00 18 0 0 0 0 0 0
+805D4344:   addf LW(0) 30.00
+805D4350:   callc [evt_eff64 evt_eff.o] ["kosyo2"] ["kemuri12_n64"] 0 LW(0) LW(1) LW(2) 1.00 18 0 0 0 0 0 0
+805D4390:   begin_thread
+805D4394:     setff LW(0) GW(0)
+805D43A0:     mulf LW(0) -1000.00
+805D43AC:     callc [kemuri_move tou_00.o] ["kosyo1"] LW(0)
+805D43BC:   end_thread
+805D43C0:   begin_thread
+805D43C4:     setff LW(0) GW(0)
+805D43D0:     mulf LW(0) -1000.00
+805D43DC:     callc [kemuri_move tou_00.o] ["kosyo2"] LW(0)
+805D43EC:   end_thread
+805D43F0:   callc [evt_npc_get_position evt_npc.o] ["飛クッパ"] LW(2) LW(3) LW(4)
+805D4408:   setii GW(1) LW(3)
+805D4414:   begin_thread
+805D4418:     callc [evt_npc_get_position evt_npc.o] ["飛クッパ"] LW(2) LW(3) LW(4)
+805D4430:     callc [evt_sub_intpl_msec_init evt_sub.o] 4 180 360 400
+805D4448: 2:
+805D4450:     callc [evt_sub_intpl_msec_get_value evt_sub.o]
+805D4458:     callc [evt_sub_get_sincos evt_sub.o] LW(0) LW(5) LW(6)
+805D446C:     mulf LW(5) 20.00
+805D4478:     addf LW(5) LW(3)
+805D4484:     setii GW(1) LW(5)
+805D4490:     wait_frames 1
+805D4498:     if_int_eq LW(1) 1
+805D44A4:       goto 2
+805D44AC:     endif
+805D44B0:   end_thread
+805D44B4:   callc [evt_snd_sfx_pit evt_snd.o] GW(2) -1365
+805D44C4:   callc [evt_sub_intpl_msec_init evt_sub.o] 0 LW(2) LW(2) 500
+805D44DC: 4:
+805D44E4:   callc [evt_sub_intpl_msec_get_value evt_sub.o]
+805D44EC:   callc [evt_npc_set_position evt_npc.o] ["飛クッパ"] LW(0) GW(1) LW(4)
+805D4504:   wait_frames 1
+805D450C:   if_int_eq LW(1) 1
+805D4518:     goto 4
+805D4520:   endif
+805D4524:   mulf GW(0) 0.50
+805D4530:   callc [evt_npc_set_anim evt_npc.o] ["飛クッパ"] ["HKPA_S_1"]
+805D4540:   wait_ms 300
+805D4548:   callc [evt_npc_reverse_ry evt_npc.o] ["飛クッパ"]
+805D4554:   wait_frames 1
+805D455C:   callc [evt_npc_wait_pera evt_npc.o] ["飛クッパ"]
+805D4568:   callc [evt_npc_reverse_ry evt_npc.o] ["飛クッパ"]
+805D4574:   wait_frames 1
+805D457C:   callc [evt_npc_wait_pera evt_npc.o] ["飛クッパ"]
+805D4588:   setii GF(0) 0
+805D4594:   begin_thread
+805D4598:     callc [evt_npc_get_position evt_npc.o] ["飛クッパ"] LW(2) LW(3) LW(4)
+805D45B0:     setff LW(5) 0.00
+805D45BC:     loop 0
+805D45C4:       if_int_ne GF(0) 0
+805D45D0:         loop_break
+805D45D4:       endif
+805D45D8:       callc [evt_sub_get_sincos evt_sub.o] LW(5) LW(6) LW(7)
+805D45EC:       setii LF(0) 0
+805D45F8:       if_int_ge LW(5) 180.00
+805D4604:         if_int_lt LW(5) 360.00
+805D4610:           setii LF(0) 1
+805D461C:         endif
+805D4620:       endif
+805D4624:       if_int_eq LF(0) 0
+805D4630:         mulf LW(6) 1.00
+805D463C:       else
+805D4640:         mulf LW(6) 5.00
+805D464C:       endif
+805D4650:       addf LW(6) LW(3)
+805D465C:       callc [evt_npc_set_position evt_npc.o] ["飛クッパ"] LW(2) LW(6) LW(4)
+805D4674:       setii LF(0) 0
+805D4680:       if_int_ge LW(5) 90.00
+805D468C:         if_int_lt LW(5) 270.00
+805D4698:           setii LF(0) 1
+805D46A4:         endif
+805D46A8:       endif
+805D46AC:       if_int_eq LF(0) 0
+805D46B8:         addf LW(5) 2.00
+805D46C4:       else
+805D46C8:         addf LW(5) 6.00
+805D46D4:       endif
+805D46D8:       if_int_ge LW(5) 360.00
+805D46E4:         subf LW(5) 360.00
+805D46F0:       endif
+805D46F4:       wait_frames 1
+805D46FC:     end_loop
+805D4700:   end_thread
+805D4704:   callc [evt_msg_print evt_msg.o] 0 ["kpa_stg4_008"] 0 ["飛クッパ"]
+805D471C:   callc [evt_npc_get_position evt_npc.o] ["飛クッパ"] LW(0) LW(1) LW(2)
+805D4734:   addi LW(2) 80
+805D4740:   mo_set_base_int [kemuri_name tou_00.o]
+805D4748:   loop 5
+805D4750:     mo_read_int LW(5)
+805D4758:     callc [evt_sub_random evt_sub.o] 40 LW(3)
+805D4768:     subi LW(3) 20
+805D4774:     addi LW(3) LW(0)
+805D4780:     callc [evt_sub_random evt_sub.o] 40 LW(4)
+805D4790:     addi LW(4) LW(1)
+805D479C:     callc [evt_eff64 evt_eff.o] LW(5) ["kemuri12_n64"] 0 LW(3) LW(4) LW(2) 1.00 18 0 0 0 0 0 0
+805D47DC:     begin_thread
+805D47E0:       setff LW(0) GW(0)
+805D47EC:       mulf LW(0) -1000.00
+805D47F8:       callc [kemuri_move tou_00.o] LW(5) LW(0)
+805D4808:     end_thread
+805D480C:     wait_ms 100
+805D4814:   end_loop
+805D4818:   begin_thread
+805D481C:     callc [evt_sub_intpl_msec_init evt_sub.o] 4 -1365 -5461 1500
+805D4834:     loop 0
+805D483C:       callc [evt_sub_intpl_msec_get_value evt_sub.o]
+805D4844:       callc [evt_snd_sfx_pit evt_snd.o] GW(2) LW(0)
+805D4854:       wait_frames 1
+805D485C:       if_int_eq LW(1) 0
+805D4868:         loop_break
+805D486C:       endif
+805D4870:     end_loop
+805D4874:     callc [evt_snd_sfxoff evt_snd.o] GW(2)
+805D4880:   end_thread
+805D4884:   callc [evt_npc_set_anim evt_npc.o] ["飛クッパ"] ["HKPA_O_1"]
+805D4894:   wait_ms 1500
+805D489C:   setff GW(0) 0.00
+805D48A8:   setii GF(0) 1
+805D48B4:   wait_ms 500
+805D48BC:   callc [evt_npc_set_anim evt_npc.o] ["飛クッパ"] ["HKPA_O_2"]
+805D48CC:   wait_ms 200
+805D48D4:   wait_ms 500
+805D48DC:   callc [evt_npc_flag_onoff evt_npc.o] 0 ["飛クッパ"] 512
+805D48F0:   begin_thread
+805D48F4:     callc [evt_msg_print evt_msg.o] 0 ["kpa_stg4_009"] 0 ["飛クッパ"]
+805D490C:   end_thread
+805D4910:   callc [evt_npc_set_anim evt_npc.o] ["飛クッパ"] ["HKPA_O_3"]
+805D4920:   wait_ms 500
+805D4928:   callc [evt_npc_set_rotate_offset evt_npc.o] ["飛クッパ"] 0 30 0
+805D4940:   callc [evt_sub_intpl_msec_init evt_sub.o] 1 0 -180 400
+805D4958: 5:
+805D4960:   callc [evt_sub_intpl_msec_get_value evt_sub.o]
+805D4968:   callc [evt_npc_set_rotate evt_npc.o] ["飛クッパ"] 0 0 LW(0)
+805D4980:   wait_frames 1
+805D4988:   if_int_eq LW(1) 1
+805D4994:     goto 5
+805D499C:   endif
+805D49A0:   callc [evt_npc_get_position evt_npc.o] ["飛クッパ"] LW(2) LW(3) LW(4)
+805D49B8:   callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_VOICE_KOOPA_VEXATIOUS2_2"] LW(2) LW(3) LW(4) 0
+805D49D4:   callc [evt_snd_sfxon evt_snd.o] ["SFX_KUPPA_AIRSHIP_FALL1"] GW(1)
+805D49E4:   callc [evt_sub_intpl_msec_init evt_sub.o] 1 LW(3) -200 800
+805D49FC: 6:
+805D4A04:   callc [evt_sub_intpl_msec_get_value evt_sub.o]
+805D4A0C:   callc [evt_npc_set_position evt_npc.o] ["飛クッパ"] LW(2) LW(0) LW(4)
+805D4A24:   wait_frames 1
+805D4A2C:   if_int_eq LW(1) 1
+805D4A38:     goto 6
+805D4A40:   endif
+805D4A44:   callc [evt_fade_set_mapchange_type evt_fade.o] 1 10 300 9 300
+805D4A60:   callc [evt_bero_mapchange evt_bero.o] ["muj_20"] [zero_tou_0000af7c tou_00.o]
+805D4A70:   return
+805D4A74:   end

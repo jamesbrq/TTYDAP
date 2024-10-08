@@ -1,0 +1,45 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [damage_event_spark unit_bomhei.o] AT 80CABD40 ---
+80CABD40:   setii LW(10) -2
+80CABD4C:   setii LW(11) 1
+80CABD58:   callc [btlevtcmd_CheckDamageCode battle_event_cmd.o] LW(10) 256 LW(0)
+80CABD6C:   if_int_eq LW(0) 1
+80CABD78:     setii LW(15) 1
+80CABD84:     callss [bomb_event unit_bomhei.o]
+80CABD8C:   else
+80CABD90:     callss [btldefaultevt_Damage battle_event_default.o]
+80CABD98:   endif
+80CABD9C:   return
+80CABDA0:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [bomb_event unit_bomhei.o] AT 80CAB1F8 ---
+80CAB1F8:   callc [evt_btl_camera_shake_w battle_camera.o] 0 5 0 15 0
+80CAB214:   callc [btlevtcmd_OnAttribute battle_event_cmd.o] -2 16777216
+80CAB224:   callc [btlevtcmd_OnPartsAttribute battle_event_cmd.o] -2 1 33554432
+80CAB238:   callc [btlevtcmd_GetUnitWork battle_event_cmd.o] -2 0 LW(0)
+80CAB24C:   if_int_ne LW(0) -1
+80CAB258:     callc [evt_snd_sfxoff evt_snd.o] LW(0)
+80CAB264:   endif
+80CAB268:   callc [btlevtcmd_SetUnitWork battle_event_cmd.o] -2 0 -1
+80CAB27C:   callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_BTL_ENEMY_DIE1_2"] [F1194D80] 0 [F1194D80]
+80CAB298:   callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_BTL_ENM_BOMB_ATTACK2"] [F1194D80] 0 [F1194D80]
+80CAB2B4:   callc [btlevtcmd_GetPos battle_event_cmd.o] -2 LW(0) LW(1) LW(2)
+80CAB2CC:   callc [evt_eff evt_eff.o] [zero_jon_00009b28 unit_bomhei.o] ["sandars"] 0 LW(0) LW(1) LW(2) 0 0 0 0 0 0 0 0
+80CAB30C:   callc [btlevtcmd_StageDispellFog battle_event_cmd.o]
+80CAB314:   callc [btlevtcmd_GetCoin battle_event_cmd.o] -2 LW(0)
+80CAB324:   callc [btlevtcmd_StoreCoin battle_event_cmd.o] LW(0)
+80CAB330:   callc [btlevtcmd_GetExp battle_event_cmd.o] -2 LW(0)
+80CAB340:   callc [btlevtcmd_StoreExp battle_event_cmd.o] LW(0)
+80CAB34C:   if_int_ge LW(0) 1
+80CAB358:     loop LW(0)
+80CAB360:     end_loop
+80CAB364:   endif
+80CAB368:   wait_ms 1000
+80CAB370:   if_int_eq LW(15) 1
+80CAB37C:     callc [btlevtcmd_WaitAttackEnd battle_event_cmd.o]
+80CAB384:   endif
+80CAB388:   callc [btlevtcmd_KillUnit battle_event_cmd.o] -2 0
+80CAB398:   return
+80CAB39C:   end

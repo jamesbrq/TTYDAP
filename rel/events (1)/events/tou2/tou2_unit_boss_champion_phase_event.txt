@@ -1,0 +1,137 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [phase_event unit_boss_champion.o] AT 805E02CC ---
+805E02CC:   callc [btlevtcmd_CheckPhase battle_event_cmd.o] LW(0) 67108867
+805E02DC:   if_int_eq LW(0) 0
+805E02E8:     goto 99
+805E02F0:   endif
+805E02F4:   callc [btlevtcmd_CheckActStatus battle_event_cmd.o] -2 LW(0)
+805E0304:   if_int_eq LW(0) 0
+805E0310:     goto 99
+805E0318:   endif
+805E031C:   callc [btlevtcmd_GetUnitWork battle_event_cmd.o] -2 0 LW(0)
+805E0330:   switchi LW(0)
+805E0338:     case_int_eq 0
+805E0340:       callc [btlevtcmd_GetMaxHp battle_event_cmd.o] -2 LW(0)
+805E0350:       dbg_expr_to_string LW(0)
+805E0358:       muli LW(0) 67
+805E0364:       dbg_expr_to_string LW(0)
+805E036C:       divi LW(0) 100
+805E0378:       dbg_expr_to_string LW(0)
+805E0380:       callc [btlevtcmd_GetHp battle_event_cmd.o] -2 LW(1)
+805E0390:       dbg_expr_to_string LW(1)
+805E0398:       if_int_le LW(1) LW(0)
+805E03A4:         callc [btlevtcmd_SetUnitWork battle_event_cmd.o] -2 0 1
+805E03B8:         if_int_eq GSWF(2514) 0
+805E03C4:           setii GSWF(2514) 1
+805E03D0:           callc [btlevtcmd_StopWaitEvent battle_event_cmd.o] -2
+805E03DC:           if_int_lt GSW(0) 158
+805E03E8:             callc [btlevtcmd_StatusWindowOnOff battle_event_cmd.o] 0
+805E03F4:             callc [evt_btl_camera_set_mode battle_camera.o] 0 3
+805E0404:             callc [evt_btl_camera_set_moveto battle_camera.o] 0 73 78 322 73 57 0 30 11
+805E0430:             wait_frames 37
+805E0438:             callc [evt_msg_print evt_msg.o] 2 ["stg3_tou_436_02"] 0 -2
+805E0450:           else
+805E0454:             callc [evt_btl_camera_set_mode battle_camera.o] 0 3
+805E0464:             callc [evt_btl_camera_set_moveto battle_camera.o] 0 73 78 322 73 57 0 30 11
+805E0490:             wait_frames 37
+805E0498:           endif
+805E049C:           callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 1 ["S_2"]
+805E04B0:           wait_ms 200
+805E04B8:           callc [evt_btl_camera_set_moveto battle_camera.o] 0 73 82 379 73 57 0 30 11
+805E04E4:           callc [evt_env_blur_on evt_env.o] 0 500
+805E04F4:           wait_frames 37
+805E04FC:           if_int_lt GSW(0) 158
+805E0508:             callc [btlevtcmd_SetTalkPose battle_event_cmd.o] -2 ["T_2"]
+805E0518:             callc [btlevtcmd_SetStayPose battle_event_cmd.o] -2 ["S_2"]
+805E0528:             callc [evt_msg_print evt_msg.o] 2 ["stg3_tou_436_03"] 0 -2
+805E0540:             callc [btlevtcmd_SetTalkPoseType battle_event_cmd.o] -2 65
+805E0550:             callc [btlevtcmd_SetStayPoseType battle_event_cmd.o] -2 43
+805E0560:             callc [btlevtcmd_StatusWindowOnOff battle_event_cmd.o] 1
+805E056C:           endif
+805E0570:           callc [evt_btl_camera_set_mode battle_camera.o] 0 0
+805E0580:         endif
+805E0584:       endif
+805E0588:     case_int_eq 2
+805E0590:       callc [btlevtcmd_GetMaxHp battle_event_cmd.o] -2 LW(0)
+805E05A0:       dbg_expr_to_string LW(0)
+805E05A8:       muli LW(0) 34
+805E05B4:       dbg_expr_to_string LW(0)
+805E05BC:       divi LW(0) 100
+805E05C8:       dbg_expr_to_string LW(0)
+805E05D0:       callc [btlevtcmd_GetHp battle_event_cmd.o] -2 LW(1)
+805E05E0:       dbg_expr_to_string LW(1)
+805E05E8:       if_int_le LW(1) LW(0)
+805E05F4:         setii LW(0) 0
+805E0600:         callc [btlevtcmd_CheckStatus battle_event_cmd.o] -2 11 LW(1)
+805E0614:         if_int_eq LW(1) 0
+805E0620:           callc [btlevtcmd_SetUnitWork battle_event_cmd.o] -2 0 3
+805E0634:           if_int_lt GSW(0) 158
+805E0640:             if_int_eq GSWF(2515) 0
+805E064C:               setii GSWF(2515) 1
+805E0658:               callc [btlevtcmd_StatusWindowOnOff battle_event_cmd.o] 0
+805E0664:               callc [evt_btl_camera_set_mode battle_camera.o] 0 3
+805E0674:               callc [evt_btl_camera_set_moveto battle_camera.o] 0 73 78 322 73 57 0 30 11
+805E06A0:               wait_frames 37
+805E06A8:               callc [evt_msg_print evt_msg.o] 2 ["stg3_tou_436_04"] 0 -2
+805E06C0:               wait_ms 300
+805E06C8:               callc [btlevtcmd_StatusWindowOnOff battle_event_cmd.o] 1
+805E06D4:               callc [evt_btl_camera_set_mode battle_camera.o] 0 0
+805E06E4:             endif
+805E06E8:           endif
+805E06EC:           callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 1 ["A_3B"]
+805E0700:           wait_ms 200
+805E0708:           callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 1 ["A_3C"]
+805E071C:           callc [btlevtcmd_SetFallAccel battle_event_cmd.o] -2 0.50
+805E072C:           callc [btlevtcmd_GetPos battle_event_cmd.o] -2 LW(0) LW(1) LW(2)
+805E0744:           callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_BOSS_BLED_JUMP1"] [F1194D80] 0 [F1194D80]
+805E0760:           callc [btlevtcmd_JumpPosition battle_event_cmd.o] -2 LW(0) LW(1) LW(2) 25 -1
+805E0780:           callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_BOSS_BLED_LANDING1"] [F1194D80] 0 [F1194D80]
+805E079C:           callc [evt_btl_camera_shake_h battle_camera.o] 0 3 0 50 13
+805E07B8:           callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 1 ["A_3B"]
+805E07CC:           begin_thread
+805E07D0:             wait_ms 600
+805E07D8:             callc [btlevtcmd_AnimeChangePoseType battle_event_cmd.o] -2 1 43
+805E07EC:           end_thread
+805E07F0:           callc [evt_snd_sfxon evt_snd.o] ["SFX_BOSS_BLED_MOVE_CAILING1"] LW(15)
+805E0800:           callc [down_ceil unit_boss_champion.o]
+805E0808:           callc [evt_snd_sfxoff evt_snd.o] LW(15)
+805E0814:           callc [btlevtcmd_SetEventCeilFall battle_event_cmd.o] -2 [ceil_fall_ready_event unit_boss_champion.o]
+805E0824:         endif
+805E0828:       endif
+805E082C:     case_int_eq 4
+805E0834:       callc [btlevtcmd_GetMaxHp battle_event_cmd.o] -2 LW(0)
+805E0844:       dbg_expr_to_string LW(0)
+805E084C:       muli LW(0) 25
+805E0858:       dbg_expr_to_string LW(0)
+805E0860:       divi LW(0) 100
+805E086C:       dbg_expr_to_string LW(0)
+805E0874:       callc [btlevtcmd_GetHp battle_event_cmd.o] -2 LW(1)
+805E0884:       dbg_expr_to_string LW(1)
+805E088C:       if_int_le LW(1) LW(0)
+805E0898:         if_int_lt GSW(0) 158
+805E08A4:           if_int_eq GSWF(2516) 0
+805E08B0:             setii GSWF(2516) 1
+805E08BC:             callc [btlevtcmd_StopWaitEvent battle_event_cmd.o] -2
+805E08C8:             callc [btlevtcmd_StatusWindowOnOff battle_event_cmd.o] 0
+805E08D4:             callc [evt_btl_camera_set_mode battle_camera.o] 0 3
+805E08E4:             callc [btlevtcmd_CheckAttribute battle_event_cmd.o] -2 2 LW(0)
+805E08F8:             if_int_eq LW(0) 0
+805E0904:               callc [evt_btl_camera_set_moveto battle_camera.o] 0 73 78 322 73 57 0 30 11
+805E0930:             else
+805E0934:               callc [evt_btl_camera_set_moveto battle_camera.o] 0 73 138 322 73 117 0 30 11
+805E0960:             endif
+805E0964:             wait_frames 37
+805E096C:             callc [evt_msg_print evt_msg.o] 2 ["stg3_tou_436_05"] 0 -2
+805E0984:             wait_ms 300
+805E098C:             callc [btlevtcmd_StatusWindowOnOff battle_event_cmd.o] 1
+805E0998:             callc [evt_btl_camera_set_mode battle_camera.o] 0 0
+805E09A8:             callc [btlevtcmd_StartWaitEvent battle_event_cmd.o] -2
+805E09B4:           endif
+805E09B8:         endif
+805E09BC:       endif
+805E09C0:   end_switch
+805E09C4: 99:
+805E09CC:   return
+805E09D0:   end

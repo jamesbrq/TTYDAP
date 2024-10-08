@@ -1,0 +1,27 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [wakeup_event unit_nokonoko_fighter.o] AT 8062186C ---
+8062186C:   setii LW(10) -2
+80621878:   setii LW(11) 1
+80621884:   callc [btlevtcmd_GetOverTurnCount battle_event_cmd.o] LW(10) LW(0)
+80621894:   subi LW(0) 1
+806218A0:   callc [btlevtcmd_SetOverTurnCount battle_event_cmd.o] LW(10) LW(0)
+806218B0:   if_int_ne LW(0) 0
+806218BC:     callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 1 ["NKT_S_3"]
+806218D0:     wait_ms 400
+806218D8:     callc [btlevtcmd_StartWaitEvent battle_event_cmd.o] -2
+806218E4:     return
+806218E8:   endif
+806218EC:   callc [btlevtcmd_SetPartsDefenceTable battle_event_cmd.o] LW(10) LW(11) [defence unit_nokonoko_fighter.o]
+80621900:   callc [btlevtcmd_OffStatusFlag battle_event_cmd.o] LW(10) 1
+80621910:   callc [btlevtcmd_AnimeSetPoseTable battle_event_cmd.o] LW(10) LW(11) [pose_table unit_nokonoko_fighter.o]
+80621924:   callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] LW(10) LW(11) ["NKT_S_1"]
+80621938:   callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_ENM_INSIDE2"] [F1194D80] 0 [F1194D80]
+80621954:   callc [btlevtcmd_SetFallAccel battle_event_cmd.o] -2 1.00
+80621964:   callc [btlevtcmd_GetPos battle_event_cmd.o] -2 LW(0) LW(1) LW(2)
+8062197C:   callc [btlevtcmd_JumpPosition battle_event_cmd.o] -2 LW(0) LW(1) LW(2) 12 -1
+8062199C:   callc [btlevtcmd_SetHitOffset battle_event_cmd.o] -2 1 0 0 0
+806219B8:   callc [btlevtcmd_StartWaitEvent battle_event_cmd.o] -2
+806219C4:   return
+806219C8:   end

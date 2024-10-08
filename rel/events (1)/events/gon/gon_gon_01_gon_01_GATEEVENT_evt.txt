@@ -1,0 +1,49 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [gon_01_GATEEVENT_evt gon_01.o] AT 805C2DC4 ---
+805C2DC4:   callc [evt_mario_key_onoff evt_mario.o] 0
+805C2DD0:   callc [evt_mario_normalize evt_mario.o]
+805C2DD8:   callc [evt_snd_bgmoff evt_snd.o] 1024
+805C2DE4:   callc [evt_snd_bgmon evt_snd.o] 1 ["BGM_EVT_CASTLE1"]
+805C2DF4:   callc [evt_snd_envoff evt_snd.o] 1024
+805C2E00:   callc [evt_cam3d_evt_set evt_cam.o] -200 525 690 350 675 37 0 11
+805C2E28:   callc [evt_seq_wait evt_seq.o] 2
+805C2E34:   begin_thread
+805C2E38:     wait_ms 3000
+805C2E40:     callc [evt_telop_entry evt_telop.o] 3
+805C2E4C:   end_thread
+805C2E50:   callc [evt_cam3d_evt_set evt_cam.o] -576 27 345 310 107 -6 6000 13
+805C2E78:   wait_ms 6700
+805C2E80:   callc [evt_mario_get_pos evt_mario.o] 0 LW(10) LW(11) LW(12)
+805C2E98:   callc [evt_mario_set_pos evt_mario.o] -380 LW(11) 0
+805C2EAC:   callc [evt_mario_get_party evt_mario.o] LW(0)
+805C2EB8:   if_int_eq LW(0) 0
+805C2EC4:     callc [evt_mario_goodbye_party evt_mario.o] 0
+805C2ED0:     callc [evt_mario_hello_party evt_mario.o] 0 1
+805C2EE0:   endif
+805C2EE4:   callc [evt_mario_set_pos evt_mario.o] -400 LW(11) 0
+805C2EF8:   callc [evt_party_set_pos evt_party.o] 0 -435 LW(11) 0
+805C2F10:   callc [evt_cam3d_evt_off evt_cam.o] 3000 4
+805C2F20:   wait_ms 3500
+805C2F28:   begin_thread
+805C2F2C:     callc [evt_party_move_pos2 evt_party.o] 0 -335 0 120.00
+805C2F44:   end_thread
+805C2F48:   callc [evt_mario_mov_pos2 evt_mario.o] -300 0 120.00
+805C2F5C:   callc [evt_party_stop evt_party.o] 0
+805C2F68:   wait_ms 500
+805C2F70:   callc [evt_mario_get_party evt_mario.o] LW(0)
+805C2F7C:   switchi LW(0)
+805C2F84:     case_int_eq 1
+805C2F8C:       callc [evt_msg_print evt_msg.o] 0 ["stg1_gon_00"] 0 ["party"]
+805C2FA4:     case_int_eq 2
+805C2FAC:       callc [evt_msg_print evt_msg.o] 0 ["stg1_gon_01"] 0 ["party"]
+805C2FC4:   end_switch
+805C2FC8:   callc [evt_snd_bgmoff evt_snd.o] 513
+805C2FD4:   callc [evt_snd_bgmon evt_snd.o] 288 0
+805C2FE4:   callc [evt_snd_envoff evt_snd.o] 513
+805C2FF0:   callc [evt_snd_envon evt_snd.o] 288 0
+805C3000:   callc [evt_party_run evt_party.o] 0
+805C300C:   callc [evt_mario_key_onoff evt_mario.o] 1
+805C3018:   return
+805C301C:   end

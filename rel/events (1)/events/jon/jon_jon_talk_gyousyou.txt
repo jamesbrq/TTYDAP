@@ -1,0 +1,80 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [talk_gyousyou jon.o] AT 80C893BC ---
+80C893BC:   callc [evt_msg_print evt_msg.o] 0 ["100kai_item_01"] 0 ["me"]
+80C893D4:   callc [evt_msg_select evt_msg.o] 0 ["100kai_item_00"]
+80C893E4:   if_int_eq LW(0) 1
+80C893F0:     callc [evt_msg_print_add evt_msg.o] 0 ["100kai_item_02"]
+80C89400:     return
+80C89404:   endif
+80C89408:   callc [evt_msg_continue evt_msg.o]
+80C89410: 0:
+80C89418:   callc [evt_win_coin_on evt_window.o] 0 LW(12)
+80C89428:   callc [evt_win_other_select evt_window.o] 15
+80C89434:   if_int_eq LW(0) 0
+80C89440:     callc [evt_win_coin_off evt_window.o] LW(12)
+80C8944C:     callc [evt_msg_print evt_msg.o] 0 ["100kai_item_10"] 0 ["me"]
+80C89464:     return
+80C89468:   endif
+80C8946C:   callc [evt_pouch_get_coin evt_pouch.o] LW(0)
+80C89478:   if_int_lt LW(0) LW(3)
+80C89484:     callc [evt_win_coin_off evt_window.o] LW(12)
+80C89490:     callc [evt_msg_print evt_msg.o] 0 ["100kai_item_03"] 0 ["me"]
+80C894A8:     goto 0
+80C894B0:   endif
+80C894B4:   if_int_ge LW(1) 240
+80C894C0:     callc [evt_sub_get_language evt_sub.o] LW(0)
+80C894CC:     switchi LW(0)
+80C894D4:       case_int_eq 0
+80C894DC:         callc [evt_msg_print_insert evt_msg.o] 0 ["100kai_item_04"] 0 ["me"] LW(2) LW(3) LW(4)
+80C89500:       case_default
+80C89504:         callc [evt_msg_print_insert evt_msg.o] 0 ["100kai_item_04"] 0 ["me"] LW(3) LW(2) LW(4)
+80C89528:     end_switch
+80C8952C:   else
+80C89530:     callc [evt_sub_get_language evt_sub.o] LW(0)
+80C8953C:     switchi LW(0)
+80C89544:       case_int_eq 0
+80C8954C:         callc [evt_msg_print_insert evt_msg.o] 0 ["100kai_item_04"] 0 ["me"] LW(2) LW(3)
+80C8956C:       case_default
+80C89570:         callc [unk_800d0998 evt_msg.o] 0 LW(14) ["100kai_item_04"] LW(3)
+80C89588:         callc [unk_800d12b0 evt_msg.o] 1 LW(14) LW(14) LW(2)
+80C895A0:         callc [evt_msg_print evt_msg.o] 1 LW(14) 0 ["me"]
+80C895B8:     end_switch
+80C895BC:   endif
+80C895C0:   callc [evt_msg_select evt_msg.o] 0 ["100kai_item_00"]
+80C895D0:   if_int_eq LW(0) 1
+80C895DC:     callc [evt_win_coin_off evt_window.o] LW(12)
+80C895E8:     callc [evt_msg_print_add evt_msg.o] 0 ["100kai_item_05"]
+80C895F8:     return
+80C895FC:   endif
+80C89600:   callc [evt_pouch_add_item evt_pouch.o] LW(1) LW(0)
+80C89610:   if_int_eq LW(0) -1
+80C8961C:     callc [evt_win_coin_off evt_window.o] LW(12)
+80C89628:     if_int_ge LW(1) 240
+80C89634:       callc [evt_msg_print_add evt_msg.o] 0 ["100kai_item_09"]
+80C89644:     else
+80C89648:       callc [evt_msg_print_add evt_msg.o] 0 ["100kai_item_09"]
+80C89658:     endif
+80C8965C:     return
+80C89660:   endif
+80C89664:   muli LW(3) -1
+80C89670:   callc [evt_pouch_add_coin evt_pouch.o] LW(3)
+80C8967C:   callc [evt_win_coin_wait evt_window.o] LW(12)
+80C89688:   wait_ms 200
+80C89690:   callc [evt_win_coin_off evt_window.o] LW(12)
+80C8969C:   callc [evt_pouch_get_coin evt_pouch.o] LW(0)
+80C896A8:   if_int_eq LW(0) 0
+80C896B4:     callc [evt_msg_print_add evt_msg.o] 0 ["100kai_item_06"]
+80C896C4:     return
+80C896C8:   endif
+80C896CC:   callc [evt_msg_print_add evt_msg.o] 0 ["100kai_item_07"]
+80C896DC:   callc [evt_msg_select evt_msg.o] 0 ["100kai_item_00"]
+80C896EC:   if_int_eq LW(0) 1
+80C896F8:     callc [evt_msg_print_add evt_msg.o] 0 ["100kai_item_08"]
+80C89708:     return
+80C8970C:   endif
+80C89710:   callc [evt_msg_continue evt_msg.o]
+80C89718:   goto 0
+80C89720:   return
+80C89724:   end

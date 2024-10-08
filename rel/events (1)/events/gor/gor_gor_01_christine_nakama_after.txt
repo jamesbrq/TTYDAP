@@ -1,0 +1,35 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [christine_nakama_after gor_01.o] AT 805F379C ---
+805F379C:   callc [evt_sub_get_system_flag evt_sub.o] LW(0)
+805F37A8:   if_bits_set LW(0) 32
+805F37B4:     return
+805F37B8:   endif
+805F37BC:   loop 0
+805F37C4:     if_int_eq GSWF(236) 1
+805F37D0:       return
+805F37D4:     endif
+805F37D8:     callc [evt_mario_get_pos evt_mario.o] 0 LW(0) LW(1) LW(2)
+805F37F0:     if_int_ge LW(0) 440
+805F37FC:       if_int_ge LW(2) -10
+805F3808:         if_int_le LW(2) 190
+805F3814:           loop_break
+805F3818:         endif
+805F381C:       endif
+805F3820:     endif
+805F3824:     wait_frames 1
+805F382C:   end_loop
+805F3830:   callc [evt_mario_key_onoff evt_mario.o] 0
+805F383C:   callc [evt_party_stop evt_party.o] 0
+805F3848:   callc [evt_eff_fukidashi evt_eff.o] 3 [zero_gor_00017170 gor_01.o] 0 0 0 0 0 0 0 0 60
+805F387C:   wait_ms 1000
+805F3884:   begin_thread
+805F3888:     callc [evt_mario_set_dir evt_mario.o] 270 200 0
+805F389C:   end_thread
+805F38A0:   callc [evt_msg_print evt_msg.o] 0 ["mac_0_061_01"] 0 ["party"]
+805F38B8:   setii GSWF(1200) 1
+805F38C4:   callc [evt_party_run evt_party.o] 0
+805F38D0:   callc [evt_mario_key_onoff evt_mario.o] 1
+805F38DC:   return
+805F38E0:   end

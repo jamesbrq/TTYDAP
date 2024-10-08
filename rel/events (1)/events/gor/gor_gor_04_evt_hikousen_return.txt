@@ -1,0 +1,142 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [evt_hikousen_return gor_04.o] AT 806193CC ---
+806193CC:   callsa [hikosenkakari_init_ship gor_04.o]
+806193D4:   callc [evt_mario_key_onoff evt_mario.o] 0
+806193E0:   callc [evt_mario_cont_onoff evt_mario.o] 0
+806193EC:   callc [evt_mario_set_pos evt_mario.o] 0 -1000 0
+80619400:   callc [evt_mario_set_dir evt_mario.o] 90 0 0
+80619414:   callc [evt_mario_bgmode_on evt_mario.o]
+8061941C:   callc [evt_mario_kill_party evt_mario.o] 0
+80619428:   callc [evt_mario_kill_party evt_mario.o] 1
+80619434:   wait_frames 1
+8061943C:   callc [evt_mapobj_flag_onoff evt_map.o] 1 1 ["gondora_1"] 1
+80619454:   callc [evt_mapobj_flag_onoff evt_map.o] 1 1 ["hako_2"] 1
+8061946C:   callc [evt_mapobj_flag_onoff evt_map.o] 1 1 ["gondora_2"] 1
+80619484:   callc [evt_cam3d_evt_set evt_cam.o] 446 181 658 446 86 -117 0 11
+806194AC:   wait_frames 1
+806194B4:   callc [evt_snd_sfxon evt_snd.o] ["SFX_STG3_AIR_SHIP_DRIVE5"] 0
+806194C4:   callc [evt_cam_letter_box_onoff evt_cam.o] 1 1
+806194D4:   callc [evt_seq_wait evt_seq.o] 2
+806194E0:   setii GF(0) 0
+806194EC:   setff GW(2) 3000.00
+806194F8:   setff GW(3) 1000.00
+80619504:   begin_thread
+80619508:     callc [evt_mapobj_get_position evt_map.o] ["hikousen"] LW(0) LW(1) LW(2)
+80619520:     callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_STG2_AIR_SHIP_DRIVE1"] LW(0) LW(1) LW(2) LW(10)
+8061953C:     wait_ms 7500
+80619544:     callc [evt_snd_sfxoff evt_snd.o] LW(10)
+80619550:   end_thread
+80619554:   begin_thread
+80619558:     callc [evt_sub_intpl_msec_init evt_sub.o] 11 4000 0 7500
+80619570: 10:
+80619578:     callc [evt_sub_intpl_msec_get_value evt_sub.o]
+80619580:     divf LW(0) 10.00
+8061958C:     setff GW(2) LW(0)
+80619598:     wait_frames 1
+806195A0:     if_int_eq LW(1) 1
+806195AC:       goto 10
+806195B4:     endif
+806195B8:     setii GF(0) 1
+806195C4:   end_thread
+806195C8:   begin_thread
+806195CC:     callc [evt_sub_intpl_msec_init evt_sub.o] 11 1000 0 7500
+806195E4: 20:
+806195EC:     callc [evt_sub_intpl_msec_get_value evt_sub.o]
+806195F4:     divf LW(0) 10.00
+80619600:     setii GW(3) LW(0)
+8061960C:     wait_frames 1
+80619614:     if_int_eq LW(1) 1
+80619620:       goto 20
+80619628:     endif
+8061962C:   end_thread
+80619630:   loop 0
+80619638:     callc [evt_mapobj_trans evt_map.o] 1 ["hikousen"] GW(2) GW(3) 0
+80619654:     callc [evt_mapobj_rotate evt_map.o] 1 ["hikousen"] 0 180 0
+80619670:     if_int_eq GF(0) 1
+8061967C:       loop_break
+80619680:     endif
+80619684:     wait_frames 1
+8061968C:   end_loop
+80619690:   callc [evt_paper_entry evt_paper.o] ["OFF_d_kaiten"]
+8061969C:   callc [evt_img_entry evt_img.o] ["img"]
+806196A8:   callc [evt_img_set_paper evt_img.o] ["img"] ["OFF_d_kaiten"]
+806196B8:   callc [evt_offscreen_entry evt_offscreen.o] ["ofs"]
+806196C4:   callc [evt_mapobj_set_offscreen evt_map.o] 1 ["hikousen"] ["ofs"]
+806196D8:   callc [evt_mapobj_clear_offscreen evt_map.o] 1 ["gondora_1"]
+806196E8:   callc [evt_mapobj_clear_offscreen evt_map.o] 1 ["gondora_2"]
+806196F8:   callc [evt_img_alloc_capture evt_img.o] ["img"] 0 ["ofs"] 0 0 0 0 0
+80619720:   callc [evt_img_alloc_capture evt_img.o] ["img"] 1 ["ofs"] 1 0 0 0 0
+80619748:   callc [evt_img_clear_virtual_point evt_img.o] ["img"]
+80619754:   callc [evt_img_set_paper_anim evt_img.o] ["img"] ["A_1"]
+80619764:   callc [evt_mapobj_flag_onoff evt_map.o] 1 1 ["hikousen"] 1
+8061977C:   callc [evt_snd_sfxon evt_snd.o] ["SFX_STG3_AIR_SHIP_REVERSE1"] 0
+8061978C:   callc [evt_img_onoff evt_img.o] ["img"] 1
+8061979C:   callc [evt_img_wait_animend evt_img.o] ["img"]
+806197A8:   callc [evt_img_onoff evt_img.o] ["img"] 0
+806197B8:   callc [evt_img_release evt_img.o] ["img"]
+806197C4:   callc [evt_offscreen_delete evt_offscreen.o] ["ofs"]
+806197D0:   callc [evt_paper_delete evt_paper.o] ["OFF_d_kaiten"]
+806197DC:   callc [evt_mapobj_clear_offscreen evt_map.o] 1 ["hikousen"]
+806197EC:   callc [evt_mapobj_flag_onoff evt_map.o] 1 0 ["hikousen"] 1
+80619804:   callc [evt_mapobj_rotate evt_map.o] 1 ["hikousen"] 0 0 0
+80619820:   callc [evt_mapobj_flag_onoff evt_map.o] 1 0 ["gondora_1"] 1
+80619838:   callc [evt_mapobj_flag_onoff evt_map.o] 1 0 ["hako_2"] 1
+80619850:   callc [evt_mapobj_flag_onoff evt_map.o] 1 1 ["bou_10"] 1
+80619868:   callc [evt_mapobj_flag_onoff evt_map.o] 1 1 ["bou_9"] 1
+80619880:   callc [evt_mapobj_flag_onoff evt_map.o] 1 1 ["bou_7"] 1
+80619898:   callc [evt_mapobj_flag_onoff evt_map.o] 1 1 ["bou_8"] 1
+806198B0:   callc [evt_mapobj_flag_onoff evt_map.o] 1 1 ["h_bou_2"] 1
+806198C8:   callc [evt_mapobj_flag_onoff evt_map.o] 1 1 ["h_bou_4"] 1
+806198E0:   callc [evt_mapobj_flag_onoff evt_map.o] 1 1 ["gondora_2"] 1
+806198F8:   callc [evt_mapobj_flag_onoff evt_map.o] 1 1 ["hako_1"] 1
+80619910:   begin_thread
+80619914:     wait_ms 800
+8061991C:     callc [evt_mapobj_flag_onoff evt_map.o] 1 0 ["h_bou_2"] 1
+80619934:     callc [evt_mapobj_flag_onoff evt_map.o] 1 0 ["h_bou_4"] 1
+8061994C:     wait_ms 700
+80619954:     callc [evt_mapobj_flag_onoff evt_map.o] 1 0 ["bou_7"] 1
+8061996C:     callc [evt_mapobj_flag_onoff evt_map.o] 1 0 ["bou_8"] 1
+80619984:     wait_ms 700
+8061998C:     callc [evt_mapobj_flag_onoff evt_map.o] 1 0 ["bou_9"] 1
+806199A4:     callc [evt_mapobj_flag_onoff evt_map.o] 1 0 ["bou_10"] 1
+806199BC:   end_thread
+806199C0:   begin_thread
+806199C4:     callc [evt_snd_bgmoff_f evt_snd.o] 512 3000
+806199D4:     wait_ms 2000
+806199DC:     callc [evt_snd_bgmon_f evt_snd.o] 768 ["BGM_STG0_GOR1"] 2000
+806199F0:   end_thread
+806199F4:   callc [evt_mario_set_pos evt_mario.o] 350 135 -352
+80619A08:   callc [evt_mario_cont_onoff evt_mario.o] 1
+80619A14:   callc [evt_mapobj_get_position evt_map.o] ["gondora_1"] LW(10) LW(11) LW(12)
+80619A2C:   callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_STG3_AIR_SHIP_GONDOLA_MOVE1"] LW(10) LW(11) LW(12) LW(6)
+80619A48:   callc [evt_hit_bind_mapobj evt_hit.o] ["A_noriba"] ["gondora_1"]
+80619A58:   callc [evt_sub_intpl_msec_init evt_sub.o] 11 900 0 3000
+80619A70: 1:
+80619A78:   callc [evt_sub_intpl_msec_get_value evt_sub.o]
+80619A80:   divf LW(0) 10.00
+80619A8C:   callc [evt_mapobj_trans evt_map.o] 1 ["gondora_1"] 0 LW(0) -2
+80619AA8:   callc [evt_hit_bind_update evt_hit.o] ["A_noriba"]
+80619AB4:   callc [evt_mapobj_get_position evt_map.o] ["gondora_1"] LW(7) LW(8) LW(9)
+80619ACC:   callc [evt_snd_sfx_pos evt_snd.o] LW(6) LW(7) LW(8) LW(9)
+80619AE4:   wait_frames 1
+80619AEC:   if_int_eq LW(1) 1
+80619AF8:     goto 1
+80619B00:   endif
+80619B04:   callc [evt_snd_sfxoff evt_snd.o] LW(6)
+80619B10:   wait_ms 300
+80619B18:   callc [evt_mario_get_pos evt_mario.o] 0 LW(0) LW(1) LW(2)
+80619B30:   addi LW(0) 30
+80619B3C:   callc [evt_mario_mov_pos2 evt_mario.o] LW(0) LW(2) 80.00
+80619B50:   callc [evt_cam3d_evt_off evt_cam.o] 500 11
+80619B60:   callc [evt_mario_key_onoff evt_mario.o] 1
+80619B6C:   return
+80619B70:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [hikosenkakari_init_ship gor_04.o] AT 8061801C ---
+8061801C:   callc [evt_npc_set_position evt_npc.o] ["飛行船係員"] 315 0 160
+80618034:   callc [evt_hitobj_onoff evt_hit.o] ["A_tousenbo"] 1 0
+80618048:   setii GF(10) 1
+80618054:   return
+80618058:   end

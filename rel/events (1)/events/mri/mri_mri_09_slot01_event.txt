@@ -1,0 +1,26 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [slot01_event mri_09.o] AT 805FE850 ---
+805FE850:   if_int_ge GSW(0) 104
+805FE85C:     return
+805FE860:   endif
+805FE864:   callc [evt_mobj_hitevt_onoff evt_mobj.o] ["me"] 0
+805FE874:   setii LW(10) GW(1)
+805FE880:   setii LW(11) GW(1)
+805FE88C:   addi LW(11) 90
+805FE898:   callc [evt_sub_intpl_msec_init evt_sub.o] 0 LW(10) LW(11) 500
+805FE8B0:   loop 0
+805FE8B8:     callc [evt_sub_intpl_msec_get_value evt_sub.o]
+805FE8C0:     setii GW(1) LW(0)
+805FE8CC:     if_int_eq LW(1) 0
+805FE8D8:       loop_break
+805FE8DC:     endif
+805FE8E0:     wait_frames 1
+805FE8E8:   end_loop
+805FE8EC:   if_int_ge GW(1) 360
+805FE8F8:     subi GW(1) 360
+805FE904:   endif
+805FE908:   callc [evt_mobj_hitevt_onoff evt_mobj.o] ["me"] 1
+805FE918:   return
+805FE91C:   end

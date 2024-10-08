@@ -1,0 +1,53 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [uranaisi_next_evt tik_00.o] AT 805C8860 ---
+805C8860:   if_int_lt GSW(0) 405
+805C886C:     callc [uranaisi_data_alloc evt_uranaisi.o] 0 ["un_next"]
+805C887C:     callc [uranaisi_next_check evt_uranaisi.o] LW(0)
+805C8888:     if_int_eq LW(0) 1
+805C8894:       callc [uranaisi_next_makelabel evt_uranaisi.o] 0 LW(1)
+805C88A4:       callc [evt_msg_print evt_msg.o] 0 LW(1) 0 ["me"]
+805C88BC:     else
+805C88C0:       if_int_eq LW(0) 0
+805C88CC:         callc [evt_win_coin_on evt_window.o] 0 LW(12)
+805C88DC:         callc [evt_osreport tik_00.o] 0 LW(1)
+805C88EC:         callc [evt_msg_print evt_msg.o] 1 ["ゆうこうな　データが\n見つかりませんでした\nメッセージを　とうろく　してください\n<key>\n<scrl_auto>\n<once_stop>\n"] 0 ["me"]
+805C8904:         callc [evt_msg_print_add_insert evt_msg.o] 1 ["げんざいの　イベントばんごうは\n『%s』\nです\n<key>"] LW(1)
+805C8918:         callc [uranaisi_ryokin evt_uranaisi.o] 0 LW(2)
+805C8928:         callc [evt_pouch_add_coin evt_pouch.o] LW(2)
+805C8934:         callc [evt_win_coin_wait evt_window.o] LW(12)
+805C8940:         wait_ms 200
+805C8948:         callc [evt_win_coin_off evt_window.o] LW(12)
+805C8954:       else
+805C8958:         callc [evt_win_coin_on evt_window.o] 0 LW(12)
+805C8968:         callc [evt_osreport tik_00.o] 0 LW(1)
+805C8978:         callc [evt_msg_print evt_msg.o] 1 ["ゆうこうな　データが\nじゅうふくして　みつかりました\nゆうこうな　メッセージは　１つにしてください\n<key>\n<scrl_auto>\n<once_stop>"] 0 ["me"]
+805C8990:         setii LW(2) 0
+805C899C:         setii LW(3) LW(0)
+805C89A8:         loop LW(0)
+805C89B0:           callc [uranaisi_next_makelabel evt_uranaisi.o] LW(2) LW(1)
+805C89C0:           callc [evt_msg_print_add_insert evt_msg.o] 1 ["『%s』\n<key>\n<scrl_auto>\n<once_stop>\n"] LW(1)
+805C89D4:           addi LW(2) 1
+805C89E0:         end_loop
+805C89E4:         callc [evt_msg_print_add_insert evt_msg.o] 1 ["いじょう　%dこが\nじゅうふくしている　メッセージです\n<key>"] LW(3)
+805C89F8:         callc [uranaisi_ryokin evt_uranaisi.o] 0 LW(2)
+805C8A08:         callc [evt_pouch_add_coin evt_pouch.o] LW(2)
+805C8A14:         callc [evt_win_coin_wait evt_window.o] LW(12)
+805C8A20:         wait_ms 200
+805C8A28:         callc [evt_win_coin_off evt_window.o] LW(12)
+805C8A34:       endif
+805C8A38:     endif
+805C8A3C:     callc [uranaisi_data_free evt_uranaisi.o]
+805C8A44:   else
+805C8A48:     callc [evt_msg_print evt_msg.o] 0 ["uranaisi_17"] 0 ["me"]
+805C8A60:     callc [evt_win_coin_on evt_window.o] 0 LW(12)
+805C8A70:     wait_ms 500
+805C8A78:     callc [uranaisi_ryokin evt_uranaisi.o] 0 LW(2)
+805C8A88:     callc [evt_pouch_add_coin evt_pouch.o] LW(2)
+805C8A94:     callc [evt_win_coin_wait evt_window.o] LW(12)
+805C8AA0:     wait_ms 500
+805C8AA8:     callc [evt_win_coin_off evt_window.o] LW(12)
+805C8AB4:   endif
+805C8AB8:   return
+805C8ABC:   end

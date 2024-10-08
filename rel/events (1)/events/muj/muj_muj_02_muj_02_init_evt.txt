@@ -1,0 +1,44 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [muj_02_init_evt muj_02.o] AT 805E02AC ---
+805E02AC:   callc [evt_snd_bgmon evt_snd.o] 512 ["BGM_STG5_MUJ1"]
+805E02BC:   callc [evt_snd_envon evt_snd.o] 272 ["ENV_STG5_MUJ4"]
+805E02CC:   setii GSWF(3152) 0
+805E02D8:   callss [evt_switch_init muj_02.o]
+805E02E0:   setii LW(0) [bero_entry_data muj_02.o]
+805E02EC:   callc [evt_bero_get_info evt_bero.o]
+805E02F4:   callss [evt_bero_info_run evt_bero.o]
+805E02FC:   callc [evt_npc_setup evt_npc.o] [npcEnt muj_02.o]
+805E0308:   callc [evt_npc_set_tribe evt_npc.o] ["ピートン"] ["ピートン（指輪）"]
+805E0318:   callc [evt_npc_check_delete evt_npc.o] ["チョロボン２"]
+805E0324:   if_int_ge GSW(0) 269
+805E0330:     callc [evt_npc_check_delete evt_npc.o] ["チョロボン１"]
+805E033C:     callc [evt_npc_check_delete evt_npc.o] ["チョロボン７"]
+805E0348:   endif
+805E034C:   callc [evt_map_playanim evt_map.o] ["mizu"] 1 0
+805E0360:   callc [evt_hit_damage_return_set evt_hit.o] [hitDmgRetPoints muj_02.o]
+805E036C:   callss [evt_gazigazi_entry evt_damage.o]
+805E0374:   callc [evt_eff64 evt_eff.o] ["sunlight"] ["sunlight_n64"] 1 0 0 0 0 0 0 0 0 0 0 0
+805E03B4:   callc [evt_mobj_badgeblk evt_mobj.o] ["mobj_badge_gat"] -200 60 -90 251 0 GSWF(3146) 1
+805E03DC:   callc [evt_mobj_badgeblk evt_mobj.o] ["mobj_hatena"] -135 0 135 143 0 GSWF(3150) 0
+805E0404:   if_int_ge GSW(0) 261
+805E0410:     setii LW(0) [unk_muj_000257f4 muj_02.o]
+805E041C:   else
+805E0420:     setii LW(0) [tree_tbl muj_02.o]
+805E042C:     setii GSWF(3152) 1
+805E0438:   endif
+805E043C:   callss [evt_sub_tree_access_entry evt_sub.o]
+805E0444:   setii LW(0) [kusa_tbl muj_02.o]
+805E0450:   callss [evt_sub_kusa_access_entry evt_sub.o]
+805E0458:   callc [evt_mapobj_flag_onoff evt_map.o] 1 0 ["S"] 2
+805E0470:   return
+805E0474:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [evt_switch_init muj_02.o] AT 805DFFB8 ---
+805DFFB8:   if_int_eq GSWF(1349) 0
+805DFFC4:     callc [evt_mapobj_flag_onoff evt_map.o] 1 1 ["S_dakan"] 1
+805DFFDC:     callc [evt_hitobj_onoff evt_hit.o] ["A_dokan"] 1 0
+805DFFF0:   endif
+805DFFF4:   return
+805DFFF8:   end

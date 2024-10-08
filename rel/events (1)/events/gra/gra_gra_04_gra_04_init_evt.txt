@@ -1,0 +1,39 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [gra_04_init_evt gra_04.o] AT 805C05E4 ---
+805C05E4:   callc [evt_snd_bgmon evt_snd.o] 512 ["BGM_STG4_GRA1"]
+805C05F4:   callc [evt_snd_envon evt_snd.o] 272 ["ENV_STG4_GRA1"]
+805C0604:   callc [evt_kagemario_init evt_kagemario.o]
+805C060C:   setii LW(0) [bero_entry_data gra_04.o]
+805C0618:   callc [evt_bero_get_info evt_bero.o]
+805C0620:   callss [evt_bero_info_run evt_bero.o]
+805C0628:   callss [evt_usu_kagemario_party_kill evt_kagemario.o]
+805C0630:   if_int_lt GSW(0) 189
+805C063C:     callc [evt_cloud_init evt_cloud.o]
+805C0644:     callc [evt_cloud_ent evt_cloud.o] 1 [fukitobashi_tbl gra_04.o] ["A_futa"] [gra_04_tree_open_evt gra_04.o]
+805C065C:     callc [evt_cloud_set_cap_size evt_cloud.o] 256 256
+805C066C:     callc [evt_hitobj_onoff evt_hit.o] ["w_bero_1"] 0 0
+805C0680:   else
+805C0684:     callc [evt_mapobj_flag_onoff evt_map.o] 1 1 ["S_futa"] 1
+805C069C:     callc [evt_hitobj_onoff evt_hit.o] ["A_futa"] 0 0
+805C06B0:   endif
+805C06B4:   callc [evt_mobj_badgeblk evt_mobj.o] ["m"] 250 60 -20 249 0 GSWF(2086) 1
+805C06DC:   return
+805C06E0:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [evt_usu_kagemario_party_kill evt_kagemario.o] AT 805C2910 ---
+805C2910:   switchi GSW(0)
+805C2918:     case_int_range 201 205
+805C2924:       callc [evt_party_stop evt_party.o] 0
+805C2930:       callc [evt_party_set_pos evt_party.o] 0 0 -1000 0
+805C2948:       callc [evt_party_cont_onoff evt_party.o] 0 0
+805C2958:       callc [evt_mario_kill_party evt_mario.o] 0
+805C2964:       callc [evt_party_stop evt_party.o] 1
+805C2970:       callc [evt_party_set_pos evt_party.o] 1 0 -1000 0
+805C2988:       callc [evt_party_cont_onoff evt_party.o] 1 0
+805C2998:       callc [evt_mario_clear_party evt_mario.o] 1
+805C29A4:       callc [test evt_kagemario.o]
+805C29AC:   end_switch
+805C29B0:   return
+805C29B4:   end

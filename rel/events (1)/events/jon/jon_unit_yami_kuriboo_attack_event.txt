@@ -1,0 +1,135 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [attack_event unit_yami_kuriboo.o] AT 80C9D5C0 ---
+80C9D5C0:   callc [btlevtcmd_check_battleflag battle_event_cmd.o] LW(0) 2
+80C9D5D0:   if_int_ne LW(0) 0
+80C9D5DC:     wait_ms 750
+80C9D5E4:     callc [btlevtcmd_GetFirstAttackTarget battle_event_cmd.o] LW(3) LW(4)
+80C9D5F4:   else
+80C9D5F8:     callc [btlevtcmd_GetEnemyBelong battle_event_cmd.o] -2 LW(0)
+80C9D608:     callc [btlevtcmd_SamplingEnemy battle_event_cmd.o] -2 LW(0) [weapon_kuriboo_attack unit_yami_kuriboo.o]
+80C9D61C:     callc [btlevtcmd_ChoiceSamplingEnemy battle_event_cmd.o] [weapon_kuriboo_attack unit_yami_kuriboo.o] LW(3) LW(4)
+80C9D630:   endif
+80C9D634:   if_int_eq LW(3) -1
+80C9D640:     callc [btlevtcmd_CheckToken battle_event_cmd.o] -2 16 LW(0)
+80C9D654:     if_int_ne LW(0) 0
+80C9D660:       callss [subsetevt_confuse_flustered battle_event_subset.o]
+80C9D668:       return
+80C9D66C:     endif
+80C9D670:     goto 99
+80C9D678:   endif
+80C9D67C:   callc [btlevtcmd_EnemyItemUseCheck battle_event_cmd.o] -2 LW(0)
+80C9D68C:   if_int_ne LW(0) 0
+80C9D698:     callss LW(0)
+80C9D6A0:     callc [btlevtcmd_StartWaitEvent battle_event_cmd.o] -2
+80C9D6AC:     return
+80C9D6B0:   endif
+80C9D6B4:   callc [btlevtcmd_JumpSetting battle_event_cmd.o] -2 20 0.00 0.60
+80C9D6CC:   callc [evt_btl_camera_set_mode battle_camera.o] 0 8
+80C9D6DC:   callc [evt_btl_camera_set_homing_unit battle_camera.o] 0 -2 LW(3)
+80C9D6F0:   callc [evt_btl_camera_set_moveSpeedLv battle_camera.o] 0 1
+80C9D700:   callc [evt_btl_camera_set_zoom battle_camera.o] 0 250
+80C9D710:   callc [btlevtcmd_WeaponAftereffect battle_event_cmd.o] [weapon_kuriboo_attack unit_yami_kuriboo.o]
+80C9D71C:   callc [btlevtcmd_AttackDeclare battle_event_cmd.o] -2 LW(3) LW(4)
+80C9D730:   callc [btlevtcmd_WaitGuardMove battle_event_cmd.o]
+80C9D738:   callc [btlevtcmd_PayWeaponCost battle_event_cmd.o] -2 [weapon_kuriboo_attack unit_yami_kuriboo.o]
+80C9D748:   callc [btlevtcmd_AnimeChangePoseType battle_event_cmd.o] -2 1 42
+80C9D75C:   callc [btlevtcmd_GetPos battle_event_cmd.o] LW(3) LW(0) LW(1) LW(2)
+80C9D774:   callc [btlevtcmd_FaceDirectionAdd battle_event_cmd.o] LW(3) LW(0) 100
+80C9D788:   callc [btlevtcmd_CalculateFaceDirection battle_event_cmd.o] -2 -1 LW(0) LW(2) 1 LW(15)
+80C9D7A8:   callc [btlevtcmd_ChangeFaceDirection battle_event_cmd.o] -2 LW(15)
+80C9D7B8:   callc [btlevtcmd_SetMoveSpeed battle_event_cmd.o] -2 4.00
+80C9D7C8:   callc [btlevtcmd_MovePosition battle_event_cmd.o] -2 LW(0) 0 LW(2) 0 -1 1
+80C9D7EC:   callc [btlevtcmd_AnimeChangePoseType battle_event_cmd.o] -2 1 43
+80C9D800:   callc [btlevtcmd_CalculateFaceDirection battle_event_cmd.o] -2 -1 LW(3) LW(4) 16 LW(15)
+80C9D820:   callc [btlevtcmd_ChangeFaceDirection battle_event_cmd.o] -2 LW(15)
+80C9D830:   wait_ms 170
+80C9D838:   callc [evt_btl_camera_set_mode battle_camera.o] 0 3
+80C9D848:   callc [evt_btl_camera_nomove_y_onoff battle_camera.o] 0 1
+80C9D858:   begin_thread
+80C9D85C:     callc [btlevtcmd_GetPosFloat battle_event_cmd.o] -2 LW(5) LW(6) LW(7)
+80C9D874:     setii LW(8) 0
+80C9D880:     loop 32
+80C9D888:       callc [btlevtcmd_GetPosFloat battle_event_cmd.o] -2 LW(9) LW(10) LW(11)
+80C9D8A0:       callc [krb_get_dir unit_yami_kuriboo.o] LW(5) LW(6) LW(9) LW(10) LW(8)
+80C9D8BC:       callc [btlevtcmd_SetRotate battle_event_cmd.o] -2 0 0 LW(8)
+80C9D8D4:       setff LW(5) LW(9)
+80C9D8E0:       setff LW(6) LW(10)
+80C9D8EC:       wait_frames 1
+80C9D8F4:     end_loop
+80C9D8F8:   end_thread
+80C9D8FC:   begin_thread
+80C9D900:     loop 12
+80C9D908:       wait_frames 1
+80C9D910:     end_loop
+80C9D914:     setii LW(15) 50
+80C9D920:     callc [btlevtcmd_AnimeChangePoseType battle_event_cmd.o] -2 1 LW(15)
+80C9D934:   end_thread
+80C9D938:   callc [btlevtcmd_GetHitPos battle_event_cmd.o] LW(3) LW(4) LW(0) LW(1) LW(2)
+80C9D954:   callc [btlevtcmd_JumpPosition battle_event_cmd.o] -2 LW(0) LW(1) LW(2) 32 -1
+80C9D974:   callc [btlevtcmd_PreCheckDamage battle_event_cmd.o] -2 LW(3) LW(4) [weapon_kuriboo_attack unit_yami_kuriboo.o] 256 LW(5)
+80C9D994:   switchi LW(5)
+80C9D99C:     case_int_eq_any 4
+80C9D9A4:       goto 90
+80C9D9AC:       end_multi_case
+80C9D9B0:     case_int_eq 3
+80C9D9B8:       callc [btlevtcmd_StartAvoid battle_event_cmd.o] LW(3) 38
+80C9D9C8:       goto 90
+80C9D9D0:       end_multi_case
+80C9D9D4:     case_int_eq 6
+80C9D9DC:       callc [btlevtcmd_StartAvoid battle_event_cmd.o] LW(3) 39
+80C9D9EC:       goto 90
+80C9D9F4:     case_int_eq 2
+80C9D9FC:       callc [btlevtcmd_StartAvoid battle_event_cmd.o] LW(3) 40
+80C9DA0C:       goto 90
+80C9DA14:     case_int_eq 1
+80C9DA1C:       goto 91
+80C9DA24:       end_multi_case
+80C9DA28:     case_default
+80C9DA2C:       goto 91
+80C9DA34:       end_multi_case
+80C9DA38:   end_switch
+80C9DA3C: 90:
+80C9DA44:   callc [btlevtcmd_JumpContinue battle_event_cmd.o] -2
+80C9DA50:   callc [btlevtcmd_SetRotate battle_event_cmd.o] -2 0 0 0
+80C9DA68:   setii LW(15) 69
+80C9DA74:   callc [btlevtcmd_AnimeChangePoseType battle_event_cmd.o] -2 1 LW(15)
+80C9DA88:   callc [btlevtcmd_GetPos battle_event_cmd.o] -2 LW(0) LW(1) LW(2)
+80C9DAA0:   callc [btlevtcmd_MoveDirectionAdd battle_event_cmd.o] -2 LW(0) 30
+80C9DAB4:   callc [btlevtcmd_JumpPosition battle_event_cmd.o] -2 LW(0) LW(1) LW(2) 20 -1
+80C9DAD4:   callc [btlevtcmd_MoveDirectionAdd battle_event_cmd.o] -2 LW(0) 20
+80C9DAE8:   callc [btlevtcmd_JumpPosition battle_event_cmd.o] -2 LW(0) LW(1) LW(2) 10 -1
+80C9DB08:   wait_ms 500
+80C9DB10:   goto 95
+80C9DB18: 91:
+80C9DB20:   callc [evt_btl_camera_shake_h battle_camera.o] 0 1 1 8 0
+80C9DB3C:   callc [evt_btl_camera_set_moveSpeedLv battle_camera.o] 0 2
+80C9DB4C:   callc [evt_btl_camera_add_zoom battle_camera.o] 0 -50
+80C9DB5C:   callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_ENM_KURI_ATTACK1"] [F1194D80] 0 [F1194D80]
+80C9DB78:   callc [btlevtcmd_ResultACDefence battle_event_cmd.o] LW(3) [weapon_kuriboo_attack unit_yami_kuriboo.o]
+80C9DB88:   callc [btlevtcmd_CheckDamage battle_event_cmd.o] -2 LW(3) LW(4) [weapon_kuriboo_attack unit_yami_kuriboo.o] 256 LW(5)
+80C9DBA8:   callc [btlevtcmd_SetRotate battle_event_cmd.o] -2 0 0 0
+80C9DBC0:   setii LW(15) 69
+80C9DBCC:   callc [btlevtcmd_AnimeChangePoseType battle_event_cmd.o] -2 1 LW(15)
+80C9DBE0:   callc [btlevtcmd_GetPos battle_event_cmd.o] -2 LW(0) LW(1) LW(2)
+80C9DBF8:   setii LW(1) 0
+80C9DC04:   callc [btlevtcmd_FaceDirectionSub battle_event_cmd.o] -2 LW(0) 40
+80C9DC18:   callc [btlevtcmd_JumpPosition battle_event_cmd.o] -2 LW(0) LW(1) LW(2) 30 -1
+80C9DC38:   callc [btlevtcmd_FaceDirectionSub battle_event_cmd.o] -2 LW(0) 20
+80C9DC4C:   callc [btlevtcmd_JumpPosition battle_event_cmd.o] -2 LW(0) LW(1) LW(2) 12 -1
+80C9DC6C:   callc [btlevtcmd_FaceDirectionSub battle_event_cmd.o] -2 LW(0) 10
+80C9DC80:   callc [btlevtcmd_JumpPosition battle_event_cmd.o] -2 LW(0) LW(1) LW(2) 6 -1
+80C9DCA0:   goto 95
+80C9DCA8: 95:
+80C9DCB0:   callc [evt_btl_camera_set_mode battle_camera.o] 0 0
+80C9DCC0:   callc [btlevtcmd_SetMoveSoundDataWork battle_event_cmd.o] -2 ["SFX_ENM_KURI_MOVE1"] ["SFX_ENM_KURI_MOVE2"] 0 3 3 0 0
+80C9DCE8:   callc [btlevtcmd_AnimeChangePoseType battle_event_cmd.o] -2 1 41
+80C9DCFC:   callc [btlevtcmd_SetMoveSpeed battle_event_cmd.o] -2 5.00
+80C9DD0C:   callc [btlevtcmd_GetHomePos battle_event_cmd.o] -2 LW(0) LW(1) LW(2)
+80C9DD24:   callc [btlevtcmd_MovePosition battle_event_cmd.o] -2 LW(0) LW(1) LW(2) 0 -2 0
+80C9DD48: 99:
+80C9DD50:   callc [btlevtcmd_ResetFaceDirection battle_event_cmd.o] -2
+80C9DD5C:   callc [btlevtcmd_StartWaitEvent battle_event_cmd.o] -2
+80C9DD68:   return
+80C9DD6C:   end

@@ -1,0 +1,36 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [move_event_sub unit_teresa.o] AT 80CAD95C ---
+80CAD95C:   callc [btlevtcmd_GetUnitId battle_event_cmd.o] -2 LW(1)
+80CAD96C:   if_int_eq LW(3) LW(1)
+80CAD978:     setii LW(0) 0
+80CAD984:     setii LW(1) 0
+80CAD990:   else
+80CAD994:     callc [evt_sub_random evt_sub.o] 20 LW(0)
+80CAD9A4:     addi LW(0) 60
+80CAD9B0:     setii LW(1) 12
+80CAD9BC:   endif
+80CAD9C0:   wait_frames LW(0)
+80CAD9C8:   callc [btlevtcmd_SetUnitWork battle_event_cmd.o] LW(3) 0 1
+80CAD9DC:   callc [btlevtcmd_OnPartsAttribute battle_event_cmd.o] LW(3) 1 6291456
+80CAD9F0:   begin_child_thread
+80CAD9F4:     loop 60
+80CAD9FC:       callc [btlevtcmd_AddRotate battle_event_cmd.o] LW(3) 0 LW(1) 0
+80CADA14:       wait_frames 1
+80CADA1C:     end_loop
+80CADA20:   end_child_thread
+80CADA24:   begin_child_thread
+80CADA28:     wait_frames 30
+80CADA30:     callc [btlevtcmd_GetUnitId battle_event_cmd.o] -2 LW(0)
+80CADA40:     if_int_eq LW(3) LW(0)
+80CADA4C:       callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 1 ["T_1"]
+80CADA60:     endif
+80CADA64:   end_child_thread
+80CADA68:   callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_ENM_TELESA_MOVE1"] [F1194D80] 0 [F1194D80]
+80CADA84:   callc [btlevtcmd_GetPartsPos battle_event_cmd.o] LW(3) 1 LW(0) LW(1) LW(2)
+80CADAA0:   setii LW(1) 40
+80CADAAC:   callc [btlevtcmd_DivePosition battle_event_cmd.o] LW(3) LW(0) LW(1) LW(2) 60 10 4 0 -1
+80CADAD8:   callc [btlevtcmd_SetHomePos battle_event_cmd.o] LW(3) LW(0) LW(1) LW(2)
+80CADAF0:   return
+80CADAF4:   end

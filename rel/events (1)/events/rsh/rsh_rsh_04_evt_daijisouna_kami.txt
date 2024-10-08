@@ -1,0 +1,56 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [evt_daijisouna_kami rsh_04.o] AT 805E0C2C ---
+805E0C2C:   callc [evt_cam3d_evt_set evt_cam.o] 220 107 165 220 45 -180 500 11
+805E0C54:   begin_thread
+805E0C58:     callc [evt_mario_get_party evt_mario.o] LW(0)
+805E0C64:     if_int_ne LW(0) 0
+805E0C70:       callc [evt_party_move_pos evt_party.o] 0 275 -160 500
+805E0C88:       callc [evt_party_set_dir_npc evt_party.o] 0 ["ポワン探偵"]
+805E0C98:     endif
+805E0C9C:   end_thread
+805E0CA0:   callc [evt_npc_flag_onoff evt_npc.o] 1 ["ポワン探偵"] 32
+805E0CB4:   callc [evt_mario_mov_pos evt_mario.o] 255 -150 500
+805E0CC8:   callc [evt_mario_set_dir_npc evt_mario.o] ["ポワン探偵"]
+805E0CD4:   callc [evt_set_dir_to_target evt_npc.o] ["サラリーマン"] ["mario"]
+805E0CE4:   callc [evt_set_dir_to_target evt_npc.o] ["me"] ["mario"]
+805E0CF4:   callc [evt_npc_flag_onoff evt_npc.o] 0 ["ポワン探偵"] 32
+805E0D08:   callc [evt_msg_print evt_msg.o] 0 ["stg6_rsh_172"] 0 ["me"]
+805E0D20:   callc [evt_win_item_select evt_window.o] 0 [item_tbl rsh_04.o] LW(1) 0
+805E0D38:   if_int_eq LW(1) -1
+805E0D44:     callc [evt_msg_print evt_msg.o] 0 ["stg6_rsh_173_2"] 0 ["me"]
+805E0D5C:     callc [evt_cam3d_evt_off evt_cam.o] 500 11
+805E0D6C:     return
+805E0D70:   endif
+805E0D74:   callc [evt_mario_set_pose evt_mario.o] ["M_C_3"]
+805E0D80:   callc [evt_mario_get_pos evt_mario.o] 0 LW(0) LW(1) LW(2)
+805E0D98:   addi LW(0) -20
+805E0DA4:   addi LW(1) 15
+805E0DB0:   callc [evt_item_entry evt_item.o] ["dummy"] 80 LW(0) LW(1) LW(2) 17 -1 0
+805E0DD8:   callc [evt_msg_print evt_msg.o] 0 ["stg6_rsh_173"] 0 ["me"]
+805E0DF0:   callc [evt_eff_fukidashi evt_eff.o] 1 ["a"] ["サラリーマン"] 0 0 0 0 0 0 0 0
+805E0E24:   wait_ms 1200
+805E0E2C:   begin_thread
+805E0E30:     wait_ms 500
+805E0E38:     callc [evt_set_dir_to_target evt_npc.o] ["ポワン探偵"] ["サラリーマン"]
+805E0E48:     callc [evt_mario_set_dir_npc evt_mario.o] ["サラリーマン"]
+805E0E54:   end_thread
+805E0E58:   callc [evt_msg_print evt_msg.o] 0 ["stg6_rsh_174"] 0 ["サラリーマン"]
+805E0E70:   callc [evt_mario_set_pose evt_mario.o] ["M_S_1"]
+805E0E7C:   callc [evt_item_delete evt_item.o] ["dummy"]
+805E0E88:   wait_ms 1000
+805E0E90:   callc [evt_msg_print evt_msg.o] 0 ["stg6_rsh_175"] 0 ["me"]
+805E0EA8:   callc [evt_mario_set_pose evt_mario.o] ["M_I_N"]
+805E0EB4:   callc [evt_set_dir_to_target evt_npc.o] ["ポワン探偵"] ["mario"]
+805E0EC4:   callc [evt_msg_print evt_msg.o] 0 ["stg6_rsh_176"] 0 ["me"]
+805E0EDC:   callc [evt_mario_get_pos evt_mario.o] 0 LW(0) LW(1) LW(2)
+805E0EF4:   callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_VOICE_MARIO_HAND_UP1_4"] LW(0) LW(1) LW(2) 0
+805E0F10:   callc [evt_mario_set_pose evt_mario.o] ["M_I_2"]
+805E0F1C:   wait_ms 2000
+805E0F24:   callc [evt_mario_set_pose evt_mario.o] ["M_S_1"]
+805E0F30:   callc [evt_msg_print evt_msg.o] 0 ["stg6_rsh_177_00"] 0 ["me"]
+805E0F48:   callc [evt_cam3d_evt_off evt_cam.o] 500 11
+805E0F58:   setii GSW(0) 306
+805E0F64:   return
+805E0F68:   end

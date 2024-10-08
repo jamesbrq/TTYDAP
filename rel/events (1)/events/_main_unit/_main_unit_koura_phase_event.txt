@@ -1,0 +1,66 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [phase_event unit_koura.o] AT 8039BE6C ---
+8039BE6C:   callc [btlevtcmd_CheckPhase battle_event_cmd.o] LW(0) 67108865
+8039BE7C:   if_int_ne LW(0) 0
+8039BE88:     callc [btlevtcmd_GetHp battle_event_cmd.o] -2 LW(0)
+8039BE98:     if_int_gt LW(0) 0
+8039BEA4:       callss [koura_open unit_koura.o]
+8039BEAC:     endif
+8039BEB0:   endif
+8039BEB4:   callc [btlevtcmd_CheckPhase battle_event_cmd.o] LW(0) 67108867
+8039BEC4:   if_int_ne LW(0) 0
+8039BED0:     callc [btlevtcmd_GetHp battle_event_cmd.o] -2 LW(0)
+8039BEE0:     if_int_gt LW(0) 0
+8039BEEC:       callss [koura_close unit_koura.o]
+8039BEF4:     endif
+8039BEF8:   endif
+8039BEFC:   return
+8039BF00:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [koura_open unit_koura.o] AT 8039BF04 ---
+8039BF04:   callc [btlevtcmd_GetUnitWork battle_event_cmd.o] -2 1 LW(0)
+8039BF18:   if_int_eq LW(0) 1
+8039BF24:     return
+8039BF28:   endif
+8039BF2C:   callc [btlevtcmd_PhaseEventStartDeclare battle_event_cmd.o] -2
+8039BF38:   callc [btlevtcmd_SetRotateOffset battle_event_cmd.o] -2 -23 0 0
+8039BF50:   callc [btlevtcmd_SetRotate battle_event_cmd.o] -2 0 0 0
+8039BF68:   callc [btlevtcmd_GetUnitWork battle_event_cmd.o] -2 0 LW(3)
+8039BF7C:   callc [btlevtcmd_OffPartsAttribute battle_event_cmd.o] LW(3) 1 16777216
+8039BF90:   loop 30
+8039BF98:     callc [btlevtcmd_AddRotate battle_event_cmd.o] -2 0 0 2
+8039BFB0:     wait_frames 1
+8039BFB8:   end_loop
+8039BFBC:   callc [btlevtcmd_SetUnitWork battle_event_cmd.o] -2 1 1
+8039BFD0:   callc [btlevtcmd_OffAttribute battle_event_cmd.o] LW(3) 64
+8039BFE0:   callc [btlevtcmd_OnPartsAttribute battle_event_cmd.o] -2 1 65536
+8039BFF4:   callc [btlevtcmd_SetUnitWork battle_event_cmd.o] -2 2 1
+8039C008:   callc [btlevtcmd_AnimeChangePoseType battle_event_cmd.o] -2 1 68
+8039C01C:   return
+8039C020:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [koura_close unit_koura.o] AT 8039C024 ---
+8039C024:   callc [btlevtcmd_GetUnitWork battle_event_cmd.o] -2 1 LW(0)
+8039C038:   if_int_eq LW(0) 0
+8039C044:     return
+8039C048:   endif
+8039C04C:   callc [btlevtcmd_PhaseEventStartDeclare battle_event_cmd.o] -2
+8039C058:   callc [btlevtcmd_SetRotateOffset battle_event_cmd.o] -2 -23 0 0
+8039C070:   callc [btlevtcmd_SetRotate battle_event_cmd.o] -2 0 0 60
+8039C088:   loop 30
+8039C090:     callc [btlevtcmd_AddRotate battle_event_cmd.o] -2 0 0 -2
+8039C0A8:     wait_frames 1
+8039C0B0:   end_loop
+8039C0B4:   callc [btlevtcmd_SetRotate battle_event_cmd.o] -2 0 0 0
+8039C0CC:   callc [btlevtcmd_SetUnitWork battle_event_cmd.o] -2 1 0
+8039C0E0:   callc [btlevtcmd_GetUnitWork battle_event_cmd.o] -2 0 LW(3)
+8039C0F4:   callc [btlevtcmd_OnAttribute battle_event_cmd.o] LW(3) 64
+8039C104:   callc [btlevtcmd_OffPartsAttribute battle_event_cmd.o] -2 1 65536
+8039C118:   callc [btlevtcmd_OnPartsAttribute battle_event_cmd.o] LW(3) 1 16777216
+8039C12C:   callc [btlevtcmd_StartWaitEvent battle_event_cmd.o] -2
+8039C138:   callc [btlevtcmd_SetUnitWork battle_event_cmd.o] -2 2 0
+8039C14C:   callc [btlevtcmd_StartWaitEvent battle_event_cmd.o] -2
+8039C158:   return
+8039C15C:   end

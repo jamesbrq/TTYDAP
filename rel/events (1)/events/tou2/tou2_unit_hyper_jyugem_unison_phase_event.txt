@@ -1,0 +1,47 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [unison_phase_event unit_hyper_jyugem.o] AT 8061A05C ---
+8061A05C:   callc [btlevtcmd_CheckPhase battle_event_cmd.o] LW(0) 67108865
+8061A06C:   if_int_eq LW(0) 0
+8061A078:     goto 99
+8061A080:   endif
+8061A084:   callc [btlevtcmd_get_turn battle_event_cmd.o] LW(0)
+8061A090:   if_int_eq LW(0) 1
+8061A09C:     goto 99
+8061A0A4:   endif
+8061A0A8:   callc [btlevtcmd_CheckStatus battle_event_cmd.o] -2 27 LW(0)
+8061A0BC:   if_int_eq LW(0) 1
+8061A0C8:     goto 99
+8061A0D0:   endif
+8061A0D4:   callc [btlevtcmd_CheckActStatus battle_event_cmd.o] -2 LW(0)
+8061A0E4:   if_int_eq LW(0) 0
+8061A0F0:     goto 99
+8061A0F8:   endif
+8061A0FC:   setii LW(15) 0
+8061A108:   callc [btlevtcmd_CheckStatus battle_event_cmd.o] -2 3 LW(14)
+8061A11C:   ori LW(15) LW(14)
+8061A128:   callc [btlevtcmd_CheckStatus battle_event_cmd.o] -2 5 LW(14)
+8061A13C:   ori LW(15) LW(14)
+8061A148:   callc [btlevtcmd_CheckStatus battle_event_cmd.o] -2 6 LW(14)
+8061A15C:   ori LW(15) LW(14)
+8061A168:   if_int_ne LW(15) 0
+8061A174:     goto 99
+8061A17C:   endif
+8061A180:   callc [evt_sub_random evt_sub.o] 99 LW(0)
+8061A190:   if_int_lt LW(0) 50
+8061A19C:     callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_ENM_JUGEM_ATTACK1"] [F1194D80] 0 [F1194D80]
+8061A1B8:     callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 1 ["JGM_A_1"]
+8061A1CC:     wait_frames 40
+8061A1D4:     callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_ENM_JUGEM_HOLD1"] [F1194D80] 0 [F1194D80]
+8061A1F0:     callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 1 ["JGM_A_2"]
+8061A204:     wait_frames 30
+8061A20C:     callc [btlevtcmd_SetUnitWork battle_event_cmd.o] -2 0 1
+8061A220:     callc [btlevtcmd_OnPartsCounterAttribute battle_event_cmd.o] -2 1 1
+8061A234:     callc [btlevtcmd_AnimeSetPoseTable battle_event_cmd.o] -2 1 [pose_table_hold unit_hyper_jyugem.o]
+8061A248:     callc [btlevtcmd_AnimeChangePoseFromTable battle_event_cmd.o] -2 1
+8061A258:     callc [btlevtcmd_SetHitOffset battle_event_cmd.o] -2 1 0 20 0
+8061A274:   endif
+8061A278: 99:
+8061A280:   return
+8061A284:   end

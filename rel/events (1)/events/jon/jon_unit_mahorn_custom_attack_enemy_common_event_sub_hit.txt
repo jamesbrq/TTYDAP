@@ -1,0 +1,95 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [attack_enemy_common_event_sub_hit unit_mahorn_custom.o] AT 80CD6D9C ---
+80CD6D9C:   if_int_eq LW(15) -1
+80CD6DA8:     return
+80CD6DAC:   endif
+80CD6DB0:   callc [btlevtcmd_GetPos battle_event_cmd.o] LW(15) LW(0) LW(1) LW(2)
+80CD6DC8:   addi LW(1) 10
+80CD6DD4:   callc [btlevtcmd_GetHitPos battle_event_cmd.o] LW(3) LW(4) LW(10) LW(11) LW(12)
+80CD6DF0:   callc [eff_magic unit_mahorn_custom.o] LW(15) LW(10) LW(11) LW(12) 20
+80CD6E0C:   callss [attack_enemy_common_event_sub2 unit_mahorn_custom.o]
+80CD6E14:   wait_frames 5
+80CD6E1C:   callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_ENM_MAHO_MAGIC1"] [F1194D80] 0 [F1194D80]
+80CD6E38:   callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_ENM_MAHO_MAGIC3"] [F1194D80] 0 [F1194D80]
+80CD6E54:   wait_frames 20
+80CD6E5C:   return
+80CD6E60:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [attack_enemy_common_event_sub2 unit_mahorn_custom.o] AT 80CD68FC ---
+80CD68FC:   if_int_eq LW(15) -1
+80CD6908:     return
+80CD690C:   endif
+80CD6910:   callc [btlevtcmd_StopWaitEvent battle_event_cmd.o] LW(15)
+80CD691C:   callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] LW(15) 1 ["MAH_A_1"]
+80CD6930:   begin_thread
+80CD6934:     loop 2
+80CD693C:       setff LW(0) -16.00
+80CD6948:       setff LW(1) 20.00
+80CD6954:       callc [btlevtcmd_GetFaceDirection battle_event_cmd.o] -2 LW(2)
+80CD6964:       mulf LW(1) LW(2)
+80CD6970:       callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] LW(15) 2 ["MAH_S_2B"]
+80CD6984:       addi LW(0) LW(1)
+80CD6990:       callc [set_hand_dest unit_mahorn_custom.o] LW(15) 2 LW(0) 29.00 -5.00
+80CD69AC:       wait_frames 20
+80CD69B4:       callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] LW(15) 2 ["MAH_S_2A"]
+80CD69C8:       subi LW(0) LW(1)
+80CD69D4:       callc [set_hand_dest unit_mahorn_custom.o] LW(15) 2 LW(0) 29.00 -5.00
+80CD69F0:       wait_frames 20
+80CD69F8:     end_loop
+80CD69FC:   end_thread
+80CD6A00:   begin_thread
+80CD6A04:     wait_frames 7
+80CD6A0C:     loop 2
+80CD6A14:       setff LW(0) 16.00
+80CD6A20:       setff LW(1) 20.00
+80CD6A2C:       callc [btlevtcmd_GetFaceDirection battle_event_cmd.o] -2 LW(2)
+80CD6A3C:       mulf LW(1) LW(2)
+80CD6A48:       callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] LW(15) 5 ["MAH_S_2B"]
+80CD6A5C:       addi LW(0) LW(1)
+80CD6A68:       callc [set_hand_dest unit_mahorn_custom.o] LW(15) 5 LW(0) 11.00 5.00
+80CD6A84:       wait_frames 20
+80CD6A8C:       callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] LW(15) 5 ["MAH_S_2A"]
+80CD6AA0:       subi LW(0) LW(1)
+80CD6AAC:       callc [set_hand_dest unit_mahorn_custom.o] LW(15) 5 LW(0) 11.00 5.00
+80CD6AC8:       wait_frames 20
+80CD6AD0:     end_loop
+80CD6AD4:   end_thread
+80CD6AD8:   begin_thread
+80CD6ADC:     wait_frames 10
+80CD6AE4:     loop 2
+80CD6AEC:       setff LW(0) -16.00
+80CD6AF8:       setff LW(1) 20.00
+80CD6B04:       callc [btlevtcmd_GetFaceDirection battle_event_cmd.o] -2 LW(2)
+80CD6B14:       mulf LW(1) LW(2)
+80CD6B20:       callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] LW(15) 4 ["MAH_S_2B"]
+80CD6B34:       addi LW(0) LW(1)
+80CD6B40:       callc [set_hand_dest unit_mahorn_custom.o] LW(15) 4 LW(0) 11.00 -5.00
+80CD6B5C:       wait_frames 20
+80CD6B64:       callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] LW(15) 4 ["MAH_S_2A"]
+80CD6B78:       subi LW(0) LW(1)
+80CD6B84:       callc [set_hand_dest unit_mahorn_custom.o] LW(15) 4 LW(0) 11.00 -5.00
+80CD6BA0:       wait_frames 20
+80CD6BA8:     end_loop
+80CD6BAC:   end_thread
+80CD6BB0:   begin_thread
+80CD6BB4:     wait_frames 15
+80CD6BBC:     loop 2
+80CD6BC4:       setff LW(0) 16.00
+80CD6BD0:       setff LW(1) 20.00
+80CD6BDC:       callc [btlevtcmd_GetFaceDirection battle_event_cmd.o] -2 LW(2)
+80CD6BEC:       mulf LW(1) LW(2)
+80CD6BF8:       callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] LW(15) 3 ["MAH_S_2B"]
+80CD6C0C:       addi LW(0) LW(1)
+80CD6C18:       callc [set_hand_dest unit_mahorn_custom.o] LW(15) 3 LW(0) 29.00 5.00
+80CD6C34:       wait_frames 20
+80CD6C3C:       callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] LW(15) 3 ["MAH_S_2A"]
+80CD6C50:       subi LW(0) LW(1)
+80CD6C5C:       callc [set_hand_dest unit_mahorn_custom.o] LW(15) 3 LW(0) 29.00 5.00
+80CD6C78:       wait_frames 20
+80CD6C80:     end_loop
+80CD6C84:   end_thread
+80CD6C88:   wait_frames 55
+80CD6C90:   return
+80CD6C94:   end

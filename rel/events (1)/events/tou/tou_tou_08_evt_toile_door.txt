@@ -1,0 +1,78 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [evt_toile_door tou_08.o] AT 805F19E0 ---
+805F19E0:   if_int_eq GSWF(2383) 0
+805F19EC:     if_int_eq GSWF(2388) 1
+805F19F8:       callc [evt_mario_key_onoff evt_mario.o] 0
+805F1A04:       callc [evt_msg_print evt_msg.o] 0 ["stg3_tou_t_00"] 0 0
+805F1A1C:       callc [evt_mario_key_onoff evt_mario.o] 1
+805F1A28:       return
+805F1A2C:     endif
+805F1A30:   endif
+805F1A34:   if_int_lt GSW(0) 157
+805F1A40:     callc [evt_mario_key_onoff evt_mario.o] 0
+805F1A4C:     callc [evt_msg_print evt_msg.o] 0 ["stg3_tou_t_00"] 0 0
+805F1A64:     callc [evt_mario_key_onoff evt_mario.o] 1
+805F1A70:     return
+805F1A74:   endif
+805F1A78:   if_int_ge GSW(0) 172
+805F1A84:     callc [evt_mario_key_onoff evt_mario.o] 0
+805F1A90:     callc [evt_msg_print evt_msg.o] 0 ["stg3_tou_t_00"] 0 0
+805F1AA8:     callc [evt_mario_key_onoff evt_mario.o] 1
+805F1AB4:     return
+805F1AB8:   endif
+805F1ABC:   if_int_eq GSWF(2399) 1
+805F1AC8:     callc [evt_mario_key_onoff evt_mario.o] 0
+805F1AD4:     callc [evt_msg_print evt_msg.o] 0 ["stg3_tou_t_00"] 0 0
+805F1AEC:     callc [evt_mario_key_onoff evt_mario.o] 1
+805F1AF8:     return
+805F1AFC:   endif
+805F1B00:   callc [evt_cam_letter_box_disable evt_cam.o] 1
+805F1B0C:   callc [evt_mario_key_onoff evt_mario.o] 0
+805F1B18:   callc [evt_party_stop evt_party.o] 0
+805F1B24:   callc [evt_hitobj_attr_onoff evt_hit.o] 0 1 ["t_door_2"] 8388608
+805F1B3C:   callc [evt_hitobj_attr_onoff evt_hit.o] 0 1 ["t_door_3"] 8388608
+805F1B54:   callc [evt_mario_adjust_dir evt_mario.o]
+805F1B5C:   wait_frames 1
+805F1B64:   callc [evt_mario_dispflag_onoff evt_mario.o] 1 256
+805F1B74:   begin_thread
+805F1B78:     callc [evt_party_move_pos2 evt_party.o] 0 -200 110 80.00
+805F1B90:     callc [evt_party_stop evt_party.o] 0
+805F1B9C:   end_thread
+805F1BA0:   callc [evt_mario_mov_pos2 evt_mario.o] -200 130 80.00
+805F1BB4:   callc [evt_mario_dispflag_onoff evt_mario.o] 0 256
+805F1BC4:   callc [evt_mario_get_pos evt_mario.o] 0 LW(0) LW(1) LW(2)
+805F1BDC:   callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_DOOR_OPEN_WOOD3"] LW(0) LW(1) LW(2) 0
+805F1BF8:   callc [evt_sub_intpl_msec_init evt_sub.o] 11 0 80 500
+805F1C10:   loop 0
+805F1C18:     callc [evt_sub_intpl_msec_get_value evt_sub.o]
+805F1C20:     callc [evt_mapobj_rotate evt_map.o] 1 ["door_2"] 0 LW(0) 0
+805F1C3C:     wait_frames 1
+805F1C44:     if_int_eq LW(1) 0
+805F1C50:       loop_break
+805F1C54:     endif
+805F1C58:   end_loop
+805F1C5C:   begin_thread
+805F1C60:     callc [evt_party_move_pos evt_party.o] 0 -270 110 700
+805F1C78:     callc [evt_party_stop evt_party.o] 0
+805F1C84:   end_thread
+805F1C88:   callc [evt_mario_mov_pos evt_mario.o] -270 130 700
+805F1C9C:   callc [evt_mario_get_pos evt_mario.o] 0 LW(0) LW(1) LW(2)
+805F1CB4:   callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_DOOR_SHUT_WOOD3"] LW(0) LW(1) LW(2) 0
+805F1CD0:   callc [evt_sub_intpl_msec_init evt_sub.o] 11 80 0 500
+805F1CE8:   loop 0
+805F1CF0:     callc [evt_sub_intpl_msec_get_value evt_sub.o]
+805F1CF8:     callc [evt_mapobj_rotate evt_map.o] 1 ["door_2"] 0 LW(0) 0
+805F1D14:     wait_frames 1
+805F1D1C:     if_int_eq LW(1) 0
+805F1D28:       loop_break
+805F1D2C:     endif
+805F1D30:   end_loop
+805F1D34:   callc [evt_hitobj_attr_onoff evt_hit.o] 0 0 ["t_door_2"] 8388608
+805F1D4C:   callc [evt_hitobj_attr_onoff evt_hit.o] 0 0 ["t_door_3"] 8388608
+805F1D64:   callc [evt_party_run evt_party.o] 0
+805F1D70:   callc [evt_mario_key_onoff evt_mario.o] 1
+805F1D7C:   callc [evt_cam_letter_box_disable evt_cam.o] 0
+805F1D88:   return
+805F1D8C:   end

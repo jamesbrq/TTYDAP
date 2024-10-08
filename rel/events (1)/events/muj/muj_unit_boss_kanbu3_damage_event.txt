@@ -1,0 +1,106 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [damage_event unit_boss_kanbu3.o] AT 805FC9E8 ---
+805FC9E8:   callc [btlevtcmd_GetUnitWork battle_event_cmd.o] -2 0 LW(0)
+805FC9FC:   if_int_eq LW(0) 2
+805FCA08:     callc [btlevtcmd_CheckDamageCode battle_event_cmd.o] -2 512 LW(0)
+805FCA1C:     if_int_ne LW(0) 0
+805FCA28:       callc [btlevtcmd_CheckDamageCode battle_event_cmd.o] -2 2048 LW(0)
+805FCA3C:       if_int_eq LW(0) 0
+805FCA48:         callc [btlevtcmd_GetDamageCode battle_event_cmd.o] -2 LW(0)
+805FCA58:         switchi LW(0)
+805FCA60:           case_int_eq 24
+805FCA68:             callc [btlevtcmd_AnimeChangePoseType battle_event_cmd.o] -2 1 29
+805FCA7C:           case_int_eq 25
+805FCA84:             callc [btlevtcmd_AnimeChangePoseType battle_event_cmd.o] -2 1 29
+805FCA98:           case_default
+805FCA9C:             callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 1 ["D_1"]
+805FCAB0:         end_switch
+805FCAB4:         callc [btlevtcmd_WaitAttackEnd battle_event_cmd.o]
+805FCABC:         wait_frames 120
+805FCAC4:         callc [check_exist_group unit_boss_kanbu3.o] LW(0)
+805FCAD0:         if_int_ne LW(0) -1
+805FCADC:           callc [evt_snd_sfxon evt_snd.o] ["SFX_BOSS_TEAM_3RD_ESCAPE1"] LW(13)
+805FCAEC:           callc [zakogun_escape3 unit_boss_gundan_zako_group3.o]
+805FCAF4:           callc [evt_snd_sfxoff evt_snd.o] LW(13)
+805FCB00:           callc [btlevtcmd_KillUnit battle_event_cmd.o] LW(0) 0
+805FCB10:         endif
+805FCB14:       endif
+805FCB18:     endif
+805FCB1C:   endif
+805FCB20:   setii LW(10) -2
+805FCB2C:   setii LW(11) 1
+805FCB38:   callss [btldefaultevt_Damage battle_event_default.o]
+805FCB40:   callc [btlevtcmd_GetUnitWork battle_event_cmd.o] -2 0 LW(0)
+805FCB54:   if_int_eq LW(0) 0
+805FCB60:     callc [btlevtcmd_GetHp battle_event_cmd.o] -2 LW(0)
+805FCB70:     if_int_le LW(0) 15
+805FCB7C:       callc [btlevtcmd_WaitAttackEnd battle_event_cmd.o]
+805FCB84:       wait_frames 90
+805FCB8C:       callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 1 ["S_1"]
+805FCBA0:       callc [check_exist_group unit_boss_kanbu3.o] LW(0)
+805FCBAC:       if_int_ne LW(0) -1
+805FCBB8:         callc [btlevtcmd_GetUnitWork battle_event_cmd.o] LW(0) 1 LW(1)
+805FCBCC:         if_int_ne LW(1) 0
+805FCBD8:           wait_frames 90
+805FCBE0:           goto 10
+805FCBE8:         endif
+805FCBEC:       else
+805FCBF0:         goto 10
+805FCBF8:       endif
+805FCBFC:       callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_BOSS_KANBU_CALL_ON1"] [F1194D80] 0 [F1194D80]
+805FCC18:       callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 1 ["C_2"]
+805FCC2C:       wait_frames 16
+805FCC34:       callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_BOSS_KANBU_CALL_ON1"] [F1194D80] 0 [F1194D80]
+805FCC50:       callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 1 ["C_2"]
+805FCC64:       wait_frames 16
+805FCC6C:       callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_BOSS_KANBU_CALL_ON1"] [F1194D80] 0 [F1194D80]
+805FCC88:       callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 1 ["C_2"]
+805FCC9C:       wait_frames 60
+805FCCA4:       callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 1 ["S_1"]
+805FCCB8:       callc [check_exist_group unit_boss_kanbu3.o] LW(0)
+805FCCC4:       if_int_ne LW(0) -1
+805FCCD0:         callc [zakogun_escape1 unit_boss_gundan_zako_group1.o]
+805FCCD8:         callc [btlevtcmd_KillUnit battle_event_cmd.o] LW(0) 0
+805FCCE8:       endif
+805FCCEC:       wait_frames 20
+805FCCF4: 10:
+805FCCFC:       wait_frames 20
+805FCD04:       callc [btlevtcmd_StatusWindowOnOff battle_event_cmd.o] 0
+805FCD10:       callc [evt_btl_camera_set_prilimit battle_camera.o] 1
+805FCD1C:       callc [evt_btl_camera_set_mode battle_camera.o] 1 3
+805FCD2C:       callc [evt_btl_camera_set_moveto battle_camera.o] 1 166 88 422 166 60 0 20 11
+805FCD58:       wait_frames 20
+805FCD60:       callc [evt_msg_print evt_msg.o] 2 ["stg5_muj_125_01"] 0 -2
+805FCD78:       callc [evt_btl_camera_set_prilimit battle_camera.o] 0
+805FCD84:       callc [evt_btl_camera_set_mode battle_camera.o] 0 0
+805FCD94:       callc [btlevtcmd_StatusWindowOnOff battle_event_cmd.o] 1
+805FCDA0:       wait_ms 500
+805FCDA8:       callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_BOSS_KANBU_CALL_ON1"] [F1194D80] 0 [F1194D80]
+805FCDC4:       callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 1 ["C_2"]
+805FCDD8:       wait_frames 16
+805FCDE0:       callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_BOSS_KANBU_CALL_ON1"] [F1194D80] 0 [F1194D80]
+805FCDFC:       callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 1 ["C_2"]
+805FCE10:       wait_frames 16
+805FCE18:       callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_BOSS_KANBU_CALL_ON1"] [F1194D80] 0 [F1194D80]
+805FCE34:       callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 1 ["C_2"]
+805FCE48:       wait_frames 60
+805FCE50:       callc [btlevtcmd_StatusWindowOnOff battle_event_cmd.o] 0
+805FCE5C:       callc [evt_msg_print evt_msg.o] 2 ["stg5_muj_125_02"] 0 -2
+805FCE74:       callc [btlevtcmd_StatusWindowOnOff battle_event_cmd.o] 1
+805FCE80:       wait_ms 500
+805FCE88:       callc [zakogun_ext_init2 unit_boss_gundan_zako_group2.o]
+805FCE90:       callc [btlevtcmd_SpawnUnit battle_event_cmd.o] LW(0) [entry_group2 unit_boss_kanbu3.o] 0
+805FCEA4:       callc [btlevtcmd_SetPos battle_event_cmd.o] LW(0) 0 80 0
+805FCEBC:       callc [btlevtcmd_SetHomePos battle_event_cmd.o] LW(0) 0 80 0
+805FCED4:       callc [down_ceil unit_boss_gundan_zako_group2.o]
+805FCEDC:       wait_frames 60
+805FCEE4:       callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 1 ["S_1"]
+805FCEF8:       callc [btlevtcmd_SetUnitWork battle_event_cmd.o] -2 0 1
+805FCF0C:     endif
+805FCF10:     goto 99
+805FCF18:   endif
+805FCF1C: 99:
+805FCF24:   return
+805FCF28:   end

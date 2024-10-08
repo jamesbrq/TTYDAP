@@ -1,0 +1,849 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [talk_soncho bom_01.o] AT 805C7028 ---
+805C7028:   switchi GSW(0)
+805C7030:     case_int_lt 357
+805C7038:       callss [evt_taihou bom_01.o]
+805C7040:     case_int_le 402
+805C7048:       callc [evt_msg_print evt_msg.o] 0 ["stg7_bom_59_04_1"] 0 ["me"]
+805C7060:     case_default
+805C7064:       callc [evt_msg_print evt_msg.o] 0 ["stg7_bom_59_04_2"] 0 ["me"]
+805C707C:   end_switch
+805C7080:   return
+805C7084:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [evt_taihou bom_01.o] AT 805C49BC ---
+805C49BC:   callc [evt_mario_key_onoff evt_mario.o] 0
+805C49C8:   callc [evt_snd_bgmoff evt_snd.o] 512
+805C49D4:   callc [evt_msg_print evt_msg.o] 0 ["stg7_bom_63"] 0 ["me"]
+805C49EC:   wait_ms 300
+805C49F4:   callc [evt_npc_flag_onoff evt_npc.o] 1 ["me"] 32
+805C4A08:   begin_thread
+805C4A0C:     callc [evt_party_move_pos evt_party.o] 0 10 0 500
+805C4A24:   end_thread
+805C4A28:   callc [evt_mario_mov_pos evt_mario.o] 0 10 500
+805C4A3C:   callc [evt_cam3d_evt_set evt_cam.o] 0 152 555 0 57 13 1000 11
+805C4A64:   wait_ms 1000
+805C4A6C:   callc [evt_mapobj_flag_onoff evt_map.o] 1 1 ["chika_off"] 1
+805C4A84:   callc [evt_mapobj_flag_onoff evt_map.o] 1 0 ["jime_ugo"] 1
+805C4A9C:   callc [evt_mapobj_flag_onoff evt_map.o] 1 1 ["S_yuka1"] 1
+805C4AB4:   callc [evt_mapobj_flag_onoff evt_map.o] 1 0 ["S_yuka2"] 1
+805C4ACC:   callc [evt_party_stop evt_party.o] 0
+805C4AD8:   callc [evt_mario_dispflag_onoff evt_mario.o] 1 2
+805C4AE8:   wait_frames 1
+805C4AF0:   callc [evt_mario_get_pos evt_mario.o] 0 LW(0) LW(1) LW(2)
+805C4B08:   callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_VOICE_MARIO_SURPRISED1"] LW(0) LW(1) LW(2) 0
+805C4B24:   callc [evt_mario_set_pose evt_mario.o] ["M_N_7"]
+805C4B30:   callss [party_damage_pose bom_01.o]
+805C4B38:   callc [evt_mario_get_pos evt_mario.o] 0 LW(10) LW(11) LW(12)
+805C4B50:   callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_STG7_FLOOR_OPEN1"] LW(10) LW(11) LW(12) LW(9)
+805C4B6C:   callc [evt_sub_intpl_msec_init evt_sub.o] 12 0 20 1000
+805C4B84: 0:
+805C4B8C:   callc [evt_sub_intpl_msec_get_value evt_sub.o]
+805C4B94:   callc [evt_mapobj_trans evt_map.o] 1 ["hiraku_ss_1_b"] LW(0) -5 0
+805C4BB0:   mulf LW(0) -1.00
+805C4BBC:   callc [evt_mapobj_trans evt_map.o] 1 ["hiraku_ss_1_a"] LW(0) -5 0
+805C4BD8:   wait_frames 1
+805C4BE0:   if_int_eq LW(1) 1
+805C4BEC:     goto 0
+805C4BF4:   endif
+805C4BF8:   callc [evt_snd_sfxoff evt_snd.o] LW(9)
+805C4C04:   wait_ms 800
+805C4C0C:   callc [evt_mario_cont_onoff evt_mario.o] 0
+805C4C18:   callc [evt_party_cont_onoff evt_party.o] 0 0
+805C4C28:   callc [evt_mario_get_pos evt_mario.o] 0 LW(3) LW(4) LW(5)
+805C4C40:   callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_STG7_MARIO_FALL1"] LW(3) LW(4) LW(5) LW(6)
+805C4C5C:   callc [evt_sub_intpl_msec_init evt_sub.o] 1 0 -100 400
+805C4C74: 1:
+805C4C7C:   callc [evt_sub_intpl_msec_get_value evt_sub.o]
+805C4C84:   callc [evt_mario_get_pos evt_mario.o] 0 LW(3) LW(4) LW(5)
+805C4C9C:   callc [evt_mario_set_pos evt_mario.o] LW(3) LW(0) LW(5)
+805C4CB0:   callc [evt_snd_sfx_pos evt_snd.o] LW(6) LW(3) LW(0) LW(5)
+805C4CC8:   callc [evt_party_get_pos evt_party.o] 0 LW(3) LW(4) LW(5)
+805C4CE0:   callc [evt_party_set_pos evt_party.o] 0 LW(3) LW(0) LW(5)
+805C4CF8:   wait_frames 1
+805C4D00:   if_int_eq LW(1) 1
+805C4D0C:     goto 1
+805C4D14:   endif
+805C4D18:   callc [evt_mario_set_pos evt_mario.o] 0 -500 0
+805C4D2C:   callc [evt_party_set_pos evt_party.o] 0 0 -500 0
+805C4D44:   callc [evt_snd_sfxoff evt_snd.o] LW(6)
+805C4D50:   callc [evt_mario_cont_onoff evt_mario.o] 1
+805C4D5C:   wait_frames 1
+805C4D64:   callc [evt_mario_set_pose evt_mario.o] ["M_N_7"]
+805C4D70:   wait_frames 1
+805C4D78:   callc [evt_mario_cont_onoff evt_mario.o] 0
+805C4D84:   dbg_report ["ビビアンしっぽ無効"]
+805C4D8C:   callc [L_evt_party_vivian_tail evt_party.o] 0 0
+805C4D9C:   callc [evt_npc_status_onoff evt_npc.o] 1 ["me"] 2
+805C4DB0:   callc [evt_npc_move_position evt_npc.o] ["me"] -50 -40 0 80.00 1
+805C4DD0:   callc [evt_npc_move_position evt_npc.o] ["me"] -55 -30 0 80.00 1
+805C4DF0:   callc [evt_npc_move_position evt_npc.o] ["me"] -45 80 0 80.00 1
+805C4E10:   setii GF(0) 0
+805C4E1C:   begin_thread
+805C4E20:     callc [evt_npc_move_position evt_npc.o] ["me"] 0 275 0 80.00 1
+805C4E40:     callc [evt_set_dir_to_target evt_npc.o] ["me"] ["mario"]
+805C4E50:     setii GF(0) 1
+805C4E5C:   end_thread
+805C4E60:   wait_ms 500
+805C4E68:   callc [evt_cam3d_evt_set evt_cam.o] 0 230 994 0 80 259 1000 11
+805C4E90:   wait_ms 1000
+805C4E98:   loop 0
+805C4EA0:     if_int_eq GF(0) 1
+805C4EAC:       loop_break
+805C4EB0:     endif
+805C4EB4:     wait_frames 1
+805C4EBC:   end_loop
+805C4EC0:   wait_ms 300
+805C4EC8:   callc [evt_npc_flag_onoff evt_npc.o] 1 ["me"] 32768
+805C4EDC:   callc [evt_npc_set_ry evt_npc.o] ["me"] 90
+805C4EEC:   callc [evt_msg_print evt_msg.o] 0 ["stg7_bom_64"] 0 ["me"]
+805C4F04:   callc [evt_msg_print evt_msg.o] 0 ["stg7_bom_64_01"] 0 ["ホワイト"]
+805C4F1C:   mo_set_base_int [oh_data bom_01.o]
+805C4F24:   loop 4
+805C4F2C:     mo_read_int2 LW(0) LW(1)
+805C4F38:     begin_thread
+805C4F3C:       callc [evt_set_dir_to_target evt_npc.o] LW(0) ["mario"]
+805C4F4C:       callc [evt_msg_print evt_msg.o] 0 LW(1) 0 LW(0)
+805C4F64:     end_thread
+805C4F68:     begin_thread
+805C4F6C:       callc [evt_npc_get_position evt_npc.o] LW(0) LW(10) LW(11) LW(12)
+805C4F84:       callc [evt_npc_jump_position_nohit evt_npc.o] LW(0) LW(10) LW(11) LW(12) 300 20.00
+805C4FA4:     end_thread
+805C4FA8:     wait_ms 300
+805C4FB0:   end_loop
+805C4FB4:   wait_ms 500
+805C4FBC:   callc [evt_msg_print evt_msg.o] 0 ["stg7_bom_66"] 0 ["me"]
+805C4FD4:   setii GF(0) 0
+805C4FE0:   callc [evt_npc_flag_onoff evt_npc.o] 0 ["ホワイト"] 512
+805C4FF4:   callc [evt_npc_flag_onoff evt_npc.o] 0 ["ペントリット"] 512
+805C5008:   callc [evt_npc_flag_onoff evt_npc.o] 0 ["スラリー"] 512
+805C501C:   begin_thread
+805C5020:     callc [evt_msg_print evt_msg.o] 0 ["stg7_bom_67"] 0 ["ホワイト"]
+805C5038:   end_thread
+805C503C:   begin_thread
+805C5040:     callc [evt_npc_get_position evt_npc.o] ["ホワイト"] LW(0) LW(1) LW(2)
+805C5058:     callc [evt_npc_jump_position_nohit evt_npc.o] ["ホワイト"] LW(0) LW(1) LW(2) 300 20.00
+805C5078:   end_thread
+805C507C:   begin_thread
+805C5080:     callc [evt_msg_print evt_msg.o] 0 ["stg7_bom_67"] 0 ["ペントリット"]
+805C5098:   end_thread
+805C509C:   begin_thread
+805C50A0:     callc [evt_npc_get_position evt_npc.o] ["ペントリット"] LW(0) LW(1) LW(2)
+805C50B8:     callc [evt_npc_jump_position_nohit evt_npc.o] ["ペントリット"] LW(0) LW(1) LW(2) 300 20.00
+805C50D8:   end_thread
+805C50DC:   begin_thread
+805C50E0:     callc [evt_npc_get_position evt_npc.o] ["スラリー"] LW(0) LW(1) LW(2)
+805C50F8:     callc [evt_npc_jump_position_nohit evt_npc.o] ["スラリー"] LW(0) LW(1) LW(2) 300 20.00
+805C5118:   end_thread
+805C511C:   begin_thread
+805C5120:     callc [evt_msg_print evt_msg.o] 0 ["stg7_bom_67"] 0 ["スラリー"]
+805C5138:     setii GF(0) 1
+805C5144:   end_thread
+805C5148:   wait_ms 1000
+805C5150:   loop 0
+805C5158:     if_int_eq GF(0) 1
+805C5164:       loop_break
+805C5168:     endif
+805C516C:     wait_frames 1
+805C5174:   end_loop
+805C5178:   setii GF(0) 0
+805C5184:   setii GF(1) 0
+805C5190:   setii GF(2) 0
+805C519C:   begin_thread
+805C51A0:     callc [evt_npc_status_onoff evt_npc.o] 1 ["ホワイト"] 2
+805C51B4:     callc [evt_npc_move_position evt_npc.o] ["ホワイト"] -50 -80 0 100.00 1
+805C51D4:     setii GF(0) 1
+805C51E0:   end_thread
+805C51E4:   wait_ms 500
+805C51EC:   begin_thread
+805C51F0:     callc [evt_npc_status_onoff evt_npc.o] 1 ["ペントリット"] 2
+805C5204:     callc [evt_npc_move_position evt_npc.o] ["ペントリット"] 0 -80 0 100.00 1
+805C5224:     setii GF(1) 1
+805C5230:   end_thread
+805C5234:   wait_ms 500
+805C523C:   begin_thread
+805C5240:     callc [evt_npc_status_onoff evt_npc.o] 1 ["スラリー"] 2
+805C5254:     callc [evt_npc_move_position evt_npc.o] ["スラリー"] 50 -80 0 100.00 1
+805C5274:     setii GF(2) 1
+805C5280:   end_thread
+805C5284: 2:
+805C528C:   if_int_eq GF(0) 0
+805C5298:     wait_frames 1
+805C52A0:     goto 2
+805C52A8:   endif
+805C52AC:   if_int_eq GF(1) 0
+805C52B8:     wait_frames 1
+805C52C0:     goto 2
+805C52C8:   endif
+805C52CC:   if_int_eq GF(2) 0
+805C52D8:     wait_frames 1
+805C52E0:     goto 2
+805C52E8:   endif
+805C52EC:   callc [evt_npc_flag_onoff evt_npc.o] 1 ["ホワイト"] 512
+805C5300:   callc [evt_npc_flag_onoff evt_npc.o] 1 ["ペントリット"] 512
+805C5314:   callc [evt_npc_flag_onoff evt_npc.o] 1 ["スラリー"] 512
+805C5328:   begin_thread
+805C532C:     callc [evt_npc_move_position evt_npc.o] ["ホワイト"] -50 -200 0 80.00 1
+805C534C:     callc [evt_npc_move_position evt_npc.o] ["ホワイト"] -35 -260 0 80.00 1
+805C536C:   end_thread
+805C5370:   wait_ms 400
+805C5378:   begin_thread
+805C537C:     callc [evt_npc_move_position evt_npc.o] ["ペントリット"] -50 -80 0 80.00 1
+805C539C:     callc [evt_npc_move_position evt_npc.o] ["ペントリット"] -55 -225 0 80.00 1
+805C53BC:   end_thread
+805C53C0:   wait_ms 400
+805C53C8:   callc [evt_npc_move_position evt_npc.o] ["スラリー"] -50 -80 0 80.00 1
+805C53E8:   callc [evt_cam3d_evt_set evt_cam.o] 0 152 108 0 57 -432 0 11
+805C5410:   begin_thread
+805C5414:     callc [evt_npc_move_position evt_npc.o] ["スラリー"] -70 -180 0 80.00 1
+805C5434:   end_thread
+805C5438:   setii GF(0) 0
+805C5444:   setii LW(0) [door bom_01.o]
+805C5450:   callsa [evt_door_open_bom_01 evt_door.o]
+805C5458:   loop 0
+805C5460:     if_int_eq GF(0) 1
+805C546C:       loop_break
+805C5470:     endif
+805C5474:     wait_frames 1
+805C547C:   end_loop
+805C5480:   begin_thread
+805C5484:     callc [evt_npc_move_position evt_npc.o] ["ホワイト"] 0 -320 0 70.00 1
+805C54A4:     callc [evt_npc_move_position evt_npc.o] ["ホワイト"] 35 -330 0 70.00 1
+805C54C4:     callc [evt_npc_move_position evt_npc.o] ["ホワイト"] 80 -380 0 70.00 1
+805C54E4:     callc [evt_npc_jump_position_nohit evt_npc.o] ["ホワイト"] 70 30 -435 300 20.00
+805C5504:     callc [evt_npc_move_position evt_npc.o] ["ホワイト"] 40 -445 0 70.00 1
+805C5524:     callc [evt_npc_jump_position_nohit evt_npc.o] ["ホワイト"] 0 40 -430 300 20.00
+805C5544:     callc [evt_npc_set_ry evt_npc.o] ["ホワイト"] 90
+805C5554:   end_thread
+805C5558:   wait_ms 400
+805C5560:   begin_thread
+805C5564:     callc [evt_npc_move_position evt_npc.o] ["ペントリット"] 0 -320 0 70.00 1
+805C5584:     callc [evt_npc_move_position evt_npc.o] ["ペントリット"] 35 -330 0 70.00 1
+805C55A4:     callc [evt_npc_move_position evt_npc.o] ["ペントリット"] 80 -380 0 70.00 1
+805C55C4:     callc [evt_npc_move_position evt_npc.o] ["ペントリット"] 80 -415 0 70.00 1
+805C55E4:     callc [evt_npc_move_position evt_npc.o] ["ペントリット"] 45 -415 0 70.00 1
+805C5604:     callc [evt_npc_jump_position_nohit evt_npc.o] ["ペントリット"] -20 15 -390 300 20.00
+805C5624:     callc [evt_npc_set_ry evt_npc.o] ["ペントリット"] 315
+805C5634:   end_thread
+805C5638:   wait_ms 400
+805C5640:   callc [evt_npc_move_position evt_npc.o] ["スラリー"] 0 -320 0 70.00 1
+805C5660:   setii GF(0) 0
+805C566C:   callc [evt_npc_move_position evt_npc.o] ["スラリー"] 35 -330 0 70.00 1
+805C568C:   callc [evt_npc_move_position evt_npc.o] ["スラリー"] 80 -380 0 70.00 1
+805C56AC:   callc [evt_npc_move_position evt_npc.o] ["スラリー"] 80 -415 0 70.00 1
+805C56CC:   callc [evt_npc_move_position evt_npc.o] ["スラリー"] 45 -415 0 70.00 1
+805C56EC:   callc [evt_npc_jump_position_nohit evt_npc.o] ["スラリー"] 20 15 -390 300 20.00
+805C570C:   callc [evt_npc_set_ry evt_npc.o] ["スラリー"] 90
+805C571C:   callc [evt_cam3d_evt_set evt_cam.o] -160 125 -100 10 55 -427 1000 11
+805C5744:   wait_ms 1000
+805C574C:   callc [evt_set_dir_to_target evt_npc.o] ["ホワイト"] ["ペントリット"]
+805C575C:   callc [evt_msg_print evt_msg.o] 0 ["stg7_bom_68"] 0 ["ホワイト"]
+805C5774:   wait_ms 300
+805C577C:   callc [evt_set_dir_to_target evt_npc.o] ["ペントリット"] ["ホワイト"]
+805C578C:   callc [evt_msg_print evt_msg.o] 0 ["stg7_bom_69"] 0 ["ペントリット"]
+805C57A4:   wait_ms 300
+805C57AC:   callc [evt_npc_reverse_ry evt_npc.o] ["ペントリット"]
+805C57B8:   callc [evt_snd_sfxon evt_snd.o] ["SFX_STG7_CANNON_SYS_ACTIVE1"] 0
+805C57C8:   callc [evt_snd_sfxon evt_snd.o] ["SFX_STG7_CANNON_SYS_ACTIVE2"] LW(10)
+805C57D8:   callc [evt_map_playanim evt_map.o] ["kikai"] 1 0
+805C57EC:   wait_ms 1000
+805C57F4:   callc [evt_set_dir_to_target evt_npc.o] ["ペントリット"] ["ホワイト"]
+805C5804:   callc [evt_msg_print evt_msg.o] 0 ["stg7_bom_70"] 0 ["ペントリット"]
+805C581C:   callc [evt_npc_set_ry evt_npc.o] ["ペントリット"] 315
+805C582C:   wait_ms 300
+805C5834:   callc [evt_set_dir_to_target evt_npc.o] ["ホワイト"] ["スラリー"]
+805C5844:   callc [evt_msg_print evt_msg.o] 0 ["stg7_bom_71"] 0 ["ホワイト"]
+805C585C:   wait_ms 300
+805C5864:   callc [evt_set_dir_to_target evt_npc.o] ["スラリー"] ["ホワイト"]
+805C5874:   callc [evt_msg_print evt_msg.o] 0 ["stg7_bom_72"] 0 ["スラリー"]
+805C588C:   wait_ms 300
+805C5894:   callc [evt_npc_reverse_ry evt_npc.o] ["スラリー"]
+805C58A0:   callc [evt_snd_sfxoff evt_snd.o] LW(10)
+805C58AC:   callc [evt_cam3d_evt_set evt_cam.o] 200 350 1224 200 125 250 0 11
+805C58D4:   callss [cam_outside bom_01.o]
+805C58DC:   callc [evt_snd_sfxon evt_snd.o] ["SFX_STG7_CANNON_SIREN1"] LW(10)
+805C58EC:   setii GF(0) 0
+805C58F8:   begin_thread
+805C58FC:     callc [evt_msg_toge evt_msg.o] 1 0 0 0
+805C5914:     callc [evt_msg_print evt_msg.o] 0 ["stg7_bom_73"] 0 ["ホワイト"]
+805C592C:     setii GF(0) 1
+805C5938:   end_thread
+805C593C:   callc [evt_cam3d_evt_set evt_cam.o] 0 350 1224 0 125 250 6000 11
+805C5964:   wait_ms 6000
+805C596C:   loop 0
+805C5974:     if_int_eq GF(0) 1
+805C5980:       loop_break
+805C5984:     endif
+805C5988:     wait_frames 1
+805C5990:   end_loop
+805C5994:   wait_ms 300
+805C599C:   callc [evt_snd_sfxoff evt_snd.o] LW(10)
+805C59A8:   callc [evt_snd_sfxon evt_snd.o] ["SFX_STG7_CANNON_SYS_ACTIVE2"] LW(10)
+805C59B8:   callss [cam_inside bom_01.o]
+805C59C0:   wait_ms 300
+805C59C8:   callc [evt_msg_print evt_msg.o] 0 ["stg7_bom_74"] 0 ["ホワイト"]
+805C59E0:   wait_ms 300
+805C59E8:   callc [evt_snd_sfxoff evt_snd.o] LW(10)
+805C59F4:   callc [evt_snd_bgmon evt_snd.o] 512 ["BGM_EVT_STG7_HUGE_GUN1"]
+805C5A04:   callc [evt_cam3d_evt_set evt_cam.o] 0 350 1224 0 125 250 0 11
+805C5A2C:   callss [cam_outside bom_01.o]
+805C5A34:   wait_ms 300
+805C5A3C:   callc [evt_cam3d_evt_set evt_cam.o] 0 283 932 0 125 250 3000 11
+805C5A64:   wait_ms 1500
+805C5A6C:   callc [evt_snd_sfxon evt_snd.o] ["SFX_STG7_FLOOR_QUAKE1"] LW(7)
+805C5A7C:   callsa_tid [gamen_shake bom_01.o] LW(9)
+805C5A88:   wait_ms 1500
+805C5A90:   callsa [effect_1 bom_01.o]
+805C5A98:   callc [evt_snd_sfxon evt_snd.o] ["SFX_STG7_FLOOR_QUAKE2"] 0
+805C5AA8:   callsa [gamen_shake2 bom_01.o]
+805C5AB0:   wait_ms 300
+805C5AB8:   callc [evt_mapobj_flag_onoff evt_map.o] 1 1 ["S_yuka2"] 1
+805C5AD0:   callc [evt_mapobj_flag_onoff evt_map.o] 1 0 ["S_yuka3"] 1
+805C5AE8:   callc [evt_mapobj_flag_onoff evt_map.o] 1 0 ["chika_off"] 1
+805C5B00:   callc [evt_mapobj_flag_onoff evt_map.o] 1 1 ["S_hikari"] 1
+805C5B18:   callc [evt_mapobj_trans evt_map.o] 1 ["chika_off"] 0 0.00 0
+805C5B34:   callc [evt_snd_sfxon evt_snd.o] ["SFX_STG7_FLOOR_DOWN1"] LW(8)
+805C5B44:   callc [evt_sub_intpl_msec_init evt_sub.o] 0 0 -20 1000
+805C5B5C: 3:
+805C5B64:   callc [evt_sub_intpl_msec_get_value evt_sub.o]
+805C5B6C:   callc [evt_mapobj_trans evt_map.o] 1 ["hiraku_l_1_a"] 0 LW(0) 0
+805C5B88:   callc [evt_mapobj_trans evt_map.o] 1 ["hiraku_l_1_b"] 0 LW(0) 0
+805C5BA4:   addi LW(0) -5
+805C5BB0:   callc [evt_mapobj_trans evt_map.o] 1 ["hiraku_ss_1_a"] -20 LW(0) 0
+805C5BCC:   callc [evt_mapobj_trans evt_map.o] 1 ["hiraku_ss_1_b"] 20 LW(0) 0
+805C5BE8:   wait_frames 1
+805C5BF0:   if_int_eq LW(1) 1
+805C5BFC:     goto 3
+805C5C04:   endif
+805C5C08:   callc [evt_snd_sfxoff evt_snd.o] LW(8)
+805C5C14:   callc [evt_snd_sfxon evt_snd.o] ["SFX_STG7_FLOOR_OPEN2"] LW(8)
+805C5C24:   callc [evt_sub_intpl_msec_init evt_sub.o] 0 0 170 3000
+805C5C3C: 4:
+805C5C44:   callc [evt_sub_intpl_msec_get_value evt_sub.o]
+805C5C4C:   callc [evt_mapobj_trans evt_map.o] 1 ["hiraku_l_1_b"] LW(0) -20 0
+805C5C68:   mulf LW(0) -1.00
+805C5C74:   callc [evt_mapobj_trans evt_map.o] 1 ["hiraku_l_1_a"] LW(0) -20 0
+805C5C90:   addi LW(0) -20
+805C5C9C:   callc [evt_mapobj_trans evt_map.o] 1 ["hiraku_ss_1_a"] LW(0) -25 0
+805C5CB8:   mulf LW(0) -1.00
+805C5CC4:   callc [evt_mapobj_trans evt_map.o] 1 ["hiraku_ss_1_b"] LW(0) -25 0
+805C5CE0:   wait_frames 1
+805C5CE8:   if_int_eq LW(1) 1
+805C5CF4:     goto 4
+805C5CFC:   endif
+805C5D00:   callc [evt_snd_sfxoff evt_snd.o] LW(8)
+805C5D0C:   callsa [gamen_shake2 bom_01.o]
+805C5D14:   wait_ms 600
+805C5D1C:   stop_tid LW(9)
+805C5D24:   callc [evt_snd_sfxoff evt_snd.o] LW(7)
+805C5D30:   callc [evt_cam_shake evt_cam.o] 4 0.00 0.00 100
+805C5D48:   callc [evt_snd_sfxon evt_snd.o] ["SFX_STG7_CANNON_SYS_ACTIVE2"] LW(8)
+805C5D58:   callss [cam_inside bom_01.o]
+805C5D60:   wait_ms 300
+805C5D68:   callc [evt_msg_print evt_msg.o] 0 ["stg7_bom_75"] 0 ["ホワイト"]
+805C5D80:   wait_ms 300
+805C5D88:   callc [evt_snd_sfxoff evt_snd.o] LW(8)
+805C5D94:   callc [evt_cam3d_evt_set evt_cam.o] 0 283 932 0 125 250 0 11
+805C5DBC:   callss [cam_outside bom_01.o]
+805C5DC4:   wait_ms 300
+805C5DCC:   callc [evt_cam3d_evt_set evt_cam.o] -200 734 684 -10 50 63 2800 11
+805C5DF4:   wait_ms 1800
+805C5DFC:   setii LW(0) ["hiraku_s_1_a"]
+805C5E08:   setii LW(1) ["hiraku_s_1_b"]
+805C5E14:   setii LW(2) 0
+805C5E20:   callsa [open_hatch bom_01.o]
+805C5E28:   wait_ms 400
+805C5E30:   setii LW(0) ["hiraku_s_2_a"]
+805C5E3C:   setii LW(1) ["hiraku_s_2_b"]
+805C5E48:   setii LW(2) 1
+805C5E54:   callsa [open_hatch bom_01.o]
+805C5E5C:   wait_ms 400
+805C5E64:   setii LW(0) ["hiraku_s_3_a"]
+805C5E70:   setii LW(1) ["hiraku_s_3_b"]
+805C5E7C:   setii LW(2) 0
+805C5E88:   callsa [open_hatch bom_01.o]
+805C5E90:   wait_ms 400
+805C5E98:   setii LW(0) ["hiraku_s_4_a"]
+805C5EA4:   setii LW(1) ["hiraku_s_4_b"]
+805C5EB0:   setii LW(2) 1
+805C5EBC:   callsa [open_hatch bom_01.o]
+805C5EC4:   wait_ms 400
+805C5ECC:   wait_ms 1000
+805C5ED4:   callc [evt_snd_sfxon evt_snd.o] ["SFX_STG7_CANNON_SYS_ACTIVE2"] LW(8)
+805C5EE4:   callss [cam_inside2 bom_01.o]
+805C5EEC:   wait_ms 300
+805C5EF4:   wait_ms 1000
+805C5EFC:   callc [evt_msg_print evt_msg.o] 0 ["stg7_bom_76"] 0 ["ホワイト"]
+805C5F14:   wait_ms 300
+805C5F1C:   callc [evt_snd_sfxoff evt_snd.o] LW(8)
+805C5F28:   callc [evt_cam3d_evt_set evt_cam.o] -230 734 684 -10 50 63 0 11
+805C5F50:   callss [cam_outside bom_01.o]
+805C5F58:   wait_ms 300
+805C5F60:   setii LW(0) 0
+805C5F6C:   loop 36
+805C5F74:     addi LW(0) 1
+805C5F80:     callc [make_name bom_01.o] LW(0) LW(1)
+805C5F90:     callc [evt_mapobj_flag_onoff evt_map.o] 1 0 LW(1) 1
+805C5FA8:     wait_ms 100
+805C5FB0:   end_loop
+805C5FB4:   begin_thread
+805C5FB8:     wait_ms 4000
+805C5FC0:     callc [evt_cam3d_evt_set evt_cam.o] -543 200 1194 -16 175 60 3000 11
+805C5FE8:     wait_ms 5500
+805C5FF0:     callc [evt_cam3d_evt_set evt_cam.o] 0 70 650 0 60 250 0 11
+805C6018:   end_thread
+805C601C:   callsa_tid [gamen_shake bom_01.o] LW(9)
+805C6028:   callc [evt_snd_sfxon evt_snd.o] ["SFX_STG7_CANNON_UP1"] LW(8)
+805C6038:   callc [evt_sub_intpl_msec_init evt_sub.o] 1 0 1600 11250
+805C6050: 5:
+805C6058:   callc [evt_sub_intpl_msec_get_value evt_sub.o]
+805C6060:   callc [evt_mapobj_trans evt_map.o] 1 ["S_dekatai"] 0 LW(0) 0
+805C607C:   wait_frames 1
+805C6084:   if_int_eq LW(1) 1
+805C6090:     goto 5
+805C6098:   endif
+805C609C:   callsa [effect_1 bom_01.o]
+805C60A4:   callc [evt_snd_sfxoff evt_snd.o] LW(8)
+805C60B0:   callc [evt_snd_sfxon evt_snd.o] ["SFX_STG7_CANNON_STOP1"] 0
+805C60C0:   stop_tid LW(9)
+805C60C8:   callsa [gamen_shake2 bom_01.o]
+805C60D0:   wait_ms 2000
+805C60D8:   callc [evt_mapobj_flag_onoff evt_map.o] 1 1 ["S_hikari"] 1
+805C60F0:   callc [evt_cam3d_evt_set evt_cam.o] 1500 100 2539 0 650 0 0 11
+805C6118:   wait_frames 1
+805C6120:   callc [evt_cam3d_evt_set evt_cam.o] -1500 100 2539 0 650 0 5000 11
+805C6148:   wait_ms 5000
+805C6150:   callc [evt_snd_sfxon evt_snd.o] ["SFX_STG7_CANNON_SYS_ACTIVE2"] LW(10)
+805C6160:   callss [cam_inside bom_01.o]
+805C6168:   wait_ms 300
+805C6170:   callc [evt_msg_print evt_msg.o] 0 ["stg7_bom_77"] 0 ["ホワイト"]
+805C6188:   wait_ms 300
+805C6190:   setii GW(5) 70
+805C619C:   callsa_tid [evt_depth bom_01.o] LW(9)
+805C61A8:   callc [sight_dir bom_01.o] 3
+805C61B4:   callss [cam_outside bom_01.o]
+805C61BC:   callc [evt_cam3d_evt_set evt_cam.o] 400 151 -171 400 62 -676 0 11
+805C61E4:   wait_frames 1
+805C61EC:   callc [evt_cam3d_evt_set evt_cam.o] 420 151 -171 420 62 -676 2000 11
+805C6214:   wait_ms 2000
+805C621C:   callc [sight_dir bom_01.o] 2
+805C6228:   callc [evt_cam3d_evt_set evt_cam.o] 400 151 -171 400 62 -676 2000 11
+805C6250:   wait_ms 2000
+805C6258:   callc [sight_dir bom_01.o] 5
+805C6264:   stop_tid LW(9)
+805C626C:   callc [evt_snd_sfxoff evt_snd.o] LW(10)
+805C6278:   callc [evt_cam3d_evt_set evt_cam.o] -1500 100 2539 0 650 0 0 11
+805C62A0:   callss [cam_outside bom_01.o]
+805C62A8:   wait_ms 300
+805C62B0:   callc [evt_snd_sfxon evt_snd.o] ["SFX_STG7_CANNON_MOVE1"] LW(8)
+805C62C0:   callsa_tid [gamen_shake bom_01.o] LW(9)
+805C62CC:   callc [evt_sub_intpl_msec_init evt_sub.o] 11 0 -500 3000
+805C62E4: 6:
+805C62EC:   callc [evt_sub_intpl_msec_get_value evt_sub.o]
+805C62F4:   divf LW(0) 10.00
+805C6300:   callc [evt_mapobj_rotate evt_map.o] 1 ["dekatai"] 0 0 LW(0)
+805C631C:   wait_frames 1
+805C6324:   if_int_eq LW(1) 1
+805C6330:     goto 6
+805C6338:   endif
+805C633C:   stop_tid LW(9)
+805C6344:   callc [evt_snd_sfxon evt_snd.o] ["SFX_STG7_CANNON_STOP2"] 0
+805C6354:   callc [evt_cam_shake evt_cam.o] 4 0.00 0.00 500
+805C636C:   callc [evt_snd_sfxoff evt_snd.o] LW(8)
+805C6378:   callc [evt_snd_sfxon evt_snd.o] ["SFX_STG7_CANNON_SYS_ACTIVE2"] LW(8)
+805C6388:   setii GW(10) 70
+805C6394:   callsa_tid [evt_depth bom_01.o] LW(9)
+805C63A0:   callc [sight_dir bom_01.o] 4
+805C63AC:   callss [cam_outside bom_01.o]
+805C63B4:   callc [evt_cam3d_evt_set evt_cam.o] 400 151 -171 400 62 -676 0 11
+805C63DC:   wait_frames 1
+805C63E4:   wait_ms 300
+805C63EC:   callc [evt_msg_toge evt_msg.o] 1 0 0 0
+805C6404:   callc [evt_msg_print evt_msg.o] 0 ["stg7_bom_78"] 0 0
+805C641C:   wait_ms 300
+805C6424:   callc [evt_mapobj_flag_onoff evt_map.o] 1 0 ["S_moon"] 1
+805C643C:   callc [evt_mapobj_trans evt_map.o] 1 ["S_moon"] 400 -738 -676
+805C6458:   callc [evt_mapobj_scale evt_map.o] 1 ["S_moon"] 0.80 0.80 0.80
+805C6474:   callc [sight_dir bom_01.o] 0
+805C6480:   callc [evt_cam3d_evt_set evt_cam.o] 400 151 -171 400 262 -676 2000 11
+805C64A8:   wait_ms 2000
+805C64B0:   callc [sight_dir bom_01.o] 4
+805C64BC:   callc [evt_sub_intpl_msec_init evt_sub.o] 11 70 0 1000
+805C64D4: 100:
+805C64DC:   callc [evt_sub_intpl_msec_get_value evt_sub.o]
+805C64E4:   setii GW(5) LW(0)
+805C64F0:   wait_frames 1
+805C64F8:   if_int_eq LW(1) 1
+805C6504:     goto 100
+805C650C:   endif
+805C6510:   stop_tid LW(9)
+805C6518:   wait_ms 2000
+805C6520:   callc [sight_dir bom_01.o] 6
+805C652C:   callc [evt_mapobj_flag_onoff evt_map.o] 1 1 ["S_moon"] 1
+805C6544:   callss [cam_inside bom_01.o]
+805C654C:   wait_ms 300
+805C6554:   callc [evt_msg_print evt_msg.o] 0 ["stg7_bom_79"] 0 ["ホワイト"]
+805C656C:   wait_ms 300
+805C6574:   callc [evt_snd_sfxoff evt_snd.o] LW(8)
+805C6580:   callc [evt_cam3d_evt_set evt_cam.o] -1500 100 2539 0 650 0 0 11
+805C65A8:   callss [cam_outside bom_01.o]
+805C65B0:   wait_ms 300
+805C65B8:   callc [evt_snd_sfxon evt_snd.o] ["SFX_STG7_CANNON_MOVE1"] LW(8)
+805C65C8:   callsa_tid [gamen_shake bom_01.o] LW(9)
+805C65D4:   callc [evt_sub_intpl_msec_init evt_sub.o] 11 -500 -400 1000
+805C65EC: 7:
+805C65F4:   callc [evt_sub_intpl_msec_get_value evt_sub.o]
+805C65FC:   divf LW(0) 10.00
+805C6608:   callc [evt_mapobj_rotate evt_map.o] 1 ["dekatai"] 0 0 LW(0)
+805C6624:   wait_frames 1
+805C662C:   if_int_eq LW(1) 1
+805C6638:     goto 7
+805C6640:   endif
+805C6644:   stop_tid LW(9)
+805C664C:   callc [evt_snd_sfxon evt_snd.o] ["SFX_STG7_CANNON_STOP2"] 0
+805C665C:   callc [evt_cam_shake evt_cam.o] 4 0.00 0.00 500
+805C6674:   callc [evt_snd_sfxoff evt_snd.o] LW(8)
+805C6680:   callc [evt_msg_toge evt_msg.o] 1 0 0 0
+805C6698:   callc [evt_msg_print evt_msg.o] 0 ["stg7_bom_80"] 0 ["ホワイト"]
+805C66B0:   wait_ms 300
+805C66B8:   callc [evt_snd_sfxon evt_snd.o] ["SFX_STG7_HATCH_OPEN1"] LW(8)
+805C66C8:   callc [evt_sub_intpl_msec_init evt_sub.o] 11 0 -1200 1000
+805C66E0: 8:
+805C66E8:   callc [evt_sub_intpl_msec_get_value evt_sub.o]
+805C66F0:   divf LW(0) 10.00
+805C66FC:   callc [evt_mapobj_rotate evt_map.o] 1 ["futa"] 0 LW(0) 0
+805C6718:   wait_frames 1
+805C6720:   if_int_eq LW(1) 1
+805C672C:     goto 8
+805C6734:   endif
+805C6738:   callc [evt_snd_sfxoff evt_snd.o] LW(8)
+805C6744:   callc [evt_cam3d_evt_set evt_cam.o] 21 175 781 9 42 265 0 11
+805C676C:   wait_frames 1
+805C6774:   callc [evt_msg_print evt_msg.o] 0 ["stg7_bom_81"] 0 ["村長"]
+805C678C:   wait_ms 300
+805C6794:   callc [evt_snd_sfxon evt_snd.o] ["SFX_STG7_BOMB_TOGETHER1"] LW(8)
+805C67A4:   callss [evt_bom1000 bom_01.o]
+805C67AC:   wait_ms 5000
+805C67B4:   callc [evt_snd_sfxoff evt_snd.o] LW(8)
+805C67C0:   callc [evt_cam3d_evt_set evt_cam.o] -120 697 788 39 556 265 0 11
+805C67E8:   wait_ms 5000
+805C67F0:   callc [evt_snd_sfxon evt_snd.o] ["SFX_STG7_CANNON_SYS_ACTIVE2"] LW(10)
+805C6800:   callc [bom_flag bom_01.o] 1 1
+805C6810:   callss [cam_inside2 bom_01.o]
+805C6818:   wait_ms 300
+805C6820:   callc [evt_msg_print evt_msg.o] 0 ["stg7_bom_85"] 0 ["ホワイト"]
+805C6838:   wait_ms 300
+805C6840:   callc [bom_flag bom_01.o] 0 1
+805C6850:   callc [evt_snd_sfxoff evt_snd.o] LW(10)
+805C685C:   callc [evt_cam3d_evt_set evt_cam.o] -120 697 788 39 556 265 0 11
+805C6884:   callss [cam_outside bom_01.o]
+805C688C:   wait_frames 1
+805C6894:   callc [evt_snd_sfxon evt_snd.o] ["SFX_STG7_BOMB_TOGETHER1_2"] LW(7)
+805C68A4:   callc [evt_msg_toge evt_msg.o] 2 180 520 100
+805C68BC:   callc [evt_msg_print evt_msg.o] 0 ["stg7_bom_85_1"] 0 0
+805C68D4:   callc [evt_msg_toge evt_msg.o] 2 100 400 95
+805C68EC:   callc [evt_msg_print evt_msg.o] 0 ["stg7_bom_85_2"] 0 0
+805C6904:   callc [evt_msg_toge evt_msg.o] 2 10 475 75
+805C691C:   callc [evt_msg_print evt_msg.o] 0 ["stg7_bom_85_3"] 0 0
+805C6934:   wait_ms 300
+805C693C:   begin_thread
+805C6940:     callc [evt_snd_sfxon evt_snd.o] ["SFX_STG7_HATCH_SHUT1"] LW(8)
+805C6950:     callc [evt_sub_intpl_msec_init evt_sub.o] 11 -1200 0 3000
+805C6968: 9:
+805C6970:     callc [evt_sub_intpl_msec_get_value evt_sub.o]
+805C6978:     divf LW(0) 10.00
+805C6984:     callc [evt_mapobj_rotate evt_map.o] 1 ["futa"] 0 LW(0) 0
+805C69A0:     wait_frames 1
+805C69A8:     if_int_eq LW(1) 1
+805C69B4:       goto 9
+805C69BC:     endif
+805C69C0:     callc [evt_snd_sfxoff evt_snd.o] LW(8)
+805C69CC:     callc [evt_snd_sfxoff evt_snd.o] LW(7)
+805C69D8:   end_thread
+805C69DC:   wait_ms 500
+805C69E4:   callc [evt_msg_toge evt_msg.o] 2 180 520 100
+805C69FC:   callc [evt_msg_print evt_msg.o] 0 ["stg7_bom_85_4"] 0 0
+805C6A14:   callc [evt_msg_toge evt_msg.o] 2 100 400 95
+805C6A2C:   callc [evt_msg_print evt_msg.o] 0 ["stg7_bom_85_5"] 0 0
+805C6A44:   callc [evt_msg_toge evt_msg.o] 2 10 475 75
+805C6A5C:   callc [evt_msg_print evt_msg.o] 0 ["stg7_bom_85_6"] 0 0
+805C6A74:   wait_ms 300
+805C6A7C:   callc [evt_npc_reverse_ry evt_npc.o] ["村長"]
+805C6A88:   callc [bom_flag bom_01.o] 1 1
+805C6A98:   callc [evt_snd_sfxon evt_snd.o] ["SFX_STG7_CANNON_SYS_ACTIVE2"] LW(10)
+805C6AA8:   callss [cam_inside bom_01.o]
+805C6AB0:   wait_ms 300
+805C6AB8:   callc [evt_msg_print evt_msg.o] 0 ["stg7_bom_86"] 0 ["ホワイト"]
+805C6AD0:   wait_ms 300
+805C6AD8:   callc [evt_snd_sfxoff evt_snd.o] LW(10)
+805C6AE4:   callc [evt_cam3d_evt_set evt_cam.o] 21 175 781 9 42 265 0 11
+805C6B0C:   callss [cam_outside bom_01.o]
+805C6B14:   wait_ms 300
+805C6B1C:   callc [evt_msg_print evt_msg.o] 0 ["stg7_bom_87"] 0 ["村長"]
+805C6B34:   wait_ms 300
+805C6B3C:   callc [evt_cam3d_evt_set evt_cam.o] 200 0 2483 200 550 0 0 11
+805C6B64:   callsa [mario_shot bom_01.o]
+805C6B6C:   wait_ms 800
+805C6B74:   callss [effect_delete bom_01.o]
+805C6B7C:   callc [evt_cam3d_evt_set evt_cam.o] 806 1189 451 600 982 69 0 11
+805C6BA4:   callsa [mario_shot bom_01.o]
+805C6BAC:   wait_ms 800
+805C6BB4:   callss [effect_delete bom_01.o]
+805C6BBC:   callc [evt_cam3d_evt_set evt_cam.o] -605 170 785 -25 334 227 0 11
+805C6BE4:   callsa [mario_shot bom_01.o]
+805C6BEC:   wait_ms 800
+805C6BF4:   callss [effect_delete bom_01.o]
+805C6BFC:   callsa_tid [mario_kemuri bom_01.o] LW(9)
+805C6C08:   callc [evt_mario_set_pos evt_mario.o] 200 0 -650
+805C6C1C:   callc [evt_party_set_pos evt_party.o] 0 200 0 -650
+805C6C34:   callc [evt_cam3d_evt_set evt_cam.o] 370 245 -173 370 62 -1205 0 11
+805C6C5C:   callc [evt_mapobj_flag_onoff evt_map.o] 1 1 ["HAIKEI"] 1
+805C6C74:   wait_frames 1
+805C6C7C:   callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_VOICE_MARIO_DAMAGED2"] 200 0 -650 0
+805C6C98:   callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_VOICE_MARIO_AC3_4"] 200 0 -650 LW(4)
+805C6CB4:   callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_STG7_MARIO_FLY1"] 200 0 -650 LW(5)
+805C6CD0:   setff LW(6) 0.00
+805C6CDC:   callc [evt_sub_spline_init evt_sub.o] 1 11 [spline_dt bom_01.o] 3 0 2000
+805C6CFC: 20:
+805C6D04:   callc [evt_sub_spline_get_value evt_sub.o] LW(0) LW(1) LW(2) LW(3)
+805C6D1C:   callc [evt_mario_set_pos evt_mario.o] LW(0) LW(1) LW(2)
+805C6D30:   callc [evt_snd_sfx_pos evt_snd.o] LW(4) LW(0) LW(1) LW(2)
+805C6D48:   callc [evt_snd_sfx_pos evt_snd.o] LW(5) LW(0) LW(1) LW(2)
+805C6D60:   addi LW(0) -20
+805C6D6C:   addi LW(1) -20
+805C6D78:   callc [evt_party_set_pos evt_party.o] 0 LW(0) LW(1) LW(2)
+805C6D90:   wait_frames 1
+805C6D98:   if_int_eq LW(3) 1
+805C6DA4:     goto 20
+805C6DAC:   endif
+805C6DB0:   stop_tid LW(9)
+805C6DB8:   callc [evt_snd_sfxoff evt_snd.o] LW(5)
+805C6DC4:   wait_frames 1
+805C6DCC:   callc [evt_mario_get_pos evt_mario.o] 0 LW(0) LW(1) LW(2)
+805C6DE4:   callc [evt_mario_set_pos evt_mario.o] 0 -1000 0
+805C6DF8:   callc [evt_party_set_pos evt_party.o] 0 0 -1000 0
+805C6E10:   wait_ms 1000
+805C6E18:   wait_ms 500
+805C6E20:   callc [evt_snd_sfxon evt_snd.o] ["SFX_STG7_MARIO_LIGHT1"] 0
+805C6E30:   callc [evt_eff64 evt_eff.o] 0 ["wangflush_n64"] 0 LW(0) LW(1) LW(2) 60 0 0 0 0 0 0 0
+805C6E70:   wait_ms 2000
+805C6E78:   begin_thread
+805C6E7C:     wait_ms 1000
+805C6E84:     callc [evt_msg_toge evt_msg.o] 2 340 200 -590
+805C6E9C:     callc [evt_msg_print evt_msg.o] 0 ["stg7_bom_88"] 0 0
+805C6EB4:     callc [evt_msg_toge evt_msg.o] 2 400 160 -590
+805C6ECC:     callc [evt_msg_print evt_msg.o] 0 ["stg7_bom_89"] 0 0
+805C6EE4:     callc [evt_msg_toge evt_msg.o] 2 373 135 -590
+805C6EFC:     callc [evt_msg_print evt_msg.o] 0 ["stg7_bom_90"] 0 0
+805C6F14:   end_thread
+805C6F18:   callc [bom_flag bom_01.o] 0 1
+805C6F28:   callc [bom_fall bom_01.o]
+805C6F30:   wait_ms 6000
+805C6F38:   callc [evt_ext_reset evt_ext.o]
+805C6F40:   callc [evt_npc_set_ry evt_npc.o] ["村長"] 90
+805C6F50:   callc [evt_npc_flag_onoff evt_npc.o] 1 ["村長"] 32768
+805C6F64:   callc [evt_cam3d_evt_set evt_cam.o] -60 26 493 22 33 257 0 11
+805C6F8C:   wait_ms 2000
+805C6F94:   callc [evt_msg_print evt_msg.o] 0 ["stg7_bom_91"] 0 ["村長"]
+805C6FAC:   callc [evt_snd_bgmoff_f evt_snd.o] 512 2000
+805C6FBC:   wait_ms 300
+805C6FC4:   wait_ms 2000
+805C6FCC:   callc [evt_pouch_remove_item evt_pouch.o] 82 LW(0)
+805C6FDC:   callc [evt_bero_mapchange evt_bero.o] ["moo_03"] 0
+805C6FEC:   return
+805C6FF0:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [party_damage_pose bom_01.o] AT 805C460C ---
+805C460C:   callc [evt_mario_get_party evt_mario.o] LW(0)
+805C4618:   switchi LW(0)
+805C4620:     case_int_eq 0
+805C4628:     case_int_eq 1
+805C4630:       callc [evt_party_set_pose evt_party.o] 0 ["PKR_D_1"]
+805C4640:     case_int_eq 2
+805C4648:       callc [evt_party_set_pose evt_party.o] 0 ["PNK_D_1"]
+805C4658:     case_int_eq 3
+805C4660:       callc [evt_party_set_pose evt_party.o] 0 ["D_1"]
+805C4670:     case_int_eq 4
+805C4678:       callc [evt_party_set_pose evt_party.o] 0 ["PYS_D_1"]
+805C4688:     case_int_eq 5
+805C4690:       callc [evt_party_set_pose evt_party.o] 0 ["PWD_D_1"]
+805C46A0:     case_int_eq 6
+805C46A8:       callc [evt_party_set_pose evt_party.o] 0 ["PTR_D_1"]
+805C46B8:     case_int_eq 7
+805C46C0:       callc [evt_party_set_pose evt_party.o] 0 ["PCH_D_1"]
+805C46D0:   end_switch
+805C46D4:   return
+805C46D8:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [cam_outside bom_01.o] AT 805C43AC ---
+805C43AC:   callc [evt_map_set_blend evt_map.o] 0 255 255 255 255
+805C43C8:   callc [evt_map_set_blend evt_map.o] 1 255 255 255 255
+805C43E4:   callc [evt_map_blend_off evt_map.o] 0
+805C43F0:   callc [evt_map_blend_off evt_map.o] 1
+805C43FC:   callc [evt_mapobj_rotate evt_map.o] 1 ["s_ie_door"] 0 0 0
+805C4418:   callc [evt_mapobj_rotate evt_map.o] 1 ["s_ie_kai"] 0 0 0
+805C4434:   callc [evt_mapobj_flag_onoff evt_map.o] 1 1 ["S_ie_naka"] 1
+805C444C:   callc [evt_mapobj_flag_onoff evt_map.o] 1 0 ["s_ie_kai"] 1
+805C4464:   return
+805C4468:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [cam_inside bom_01.o] AT 805C446C ---
+805C446C:   callc [evt_cam3d_evt_set evt_cam.o] -160 125 -100 10 55 -427 0 11
+805C4494:   callc [evt_map_set_blend evt_map.o] 0 0 0 0 0
+805C44B0:   callc [evt_map_set_blend evt_map.o] 1 0 0 0 0
+805C44CC:   callc [evt_mapobj_rotate evt_map.o] 1 ["s_ie_door"] 90 0 0
+805C44E8:   callc [evt_mapobj_rotate evt_map.o] 1 ["s_ie_kai"] 0 -90 0
+805C4504:   callc [evt_mapobj_flag_onoff evt_map.o] 1 0 ["S_ie_naka"] 1
+805C451C:   callc [evt_mapobj_flag_onoff evt_map.o] 1 1 ["s_ie_kai"] 1
+805C4534:   return
+805C4538:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [gamen_shake bom_01.o] AT 805C3F1C ---
+805C3F1C:   callc [evt_cam_shake evt_cam.o] 4 0.00 0.00 0
+805C3F34:   return
+805C3F38:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [effect_1 bom_01.o] AT 805C46DC ---
+805C46DC:   setii LW(0) -220
+805C46E8:   loop 22
+805C46F0:     callc [evt_eff evt_eff.o] 0 ["kemuri_test"] 2 LW(0) 5 -220 1.00 0 0 0 0 0 0 0
+805C4730:     callc [evt_eff evt_eff.o] 0 ["kemuri_test"] 2 LW(0) 5 220 1.00 0 0 0 0 0 0 0
+805C4770:     addi LW(0) 20
+805C477C:   end_loop
+805C4780:   setii LW(0) -220
+805C478C:   loop 22
+805C4794:     callc [evt_eff evt_eff.o] 0 ["kemuri_test"] 2 -220 5 LW(0) 1.00 0 0 0 0 0 0 0
+805C47D4:     callc [evt_eff evt_eff.o] 0 ["kemuri_test"] 2 220 5 LW(0) 1.00 0 0 0 0 0 0 0
+805C4814:     addi LW(0) 20
+805C4820:   end_loop
+805C4824:   return
+805C4828:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [gamen_shake2 bom_01.o] AT 805C3F3C ---
+805C3F3C:   callc [evt_cam_shake evt_cam.o] 4 0.02 0.00 100
+805C3F54:   callc [evt_cam_shake evt_cam.o] 4 0.01 0.00 100
+805C3F6C:   callc [evt_cam_shake evt_cam.o] 4 0.00 0.00 100
+805C3F84:   callc [evt_cam_shake evt_cam.o] 4 0.00 0.00 100
+805C3F9C:   return
+805C3FA0:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [open_hatch bom_01.o] AT 805C482C ---
+805C482C:   callc [evt_mapobj_get_position evt_map.o] LW(1) LW(10) LW(11) LW(12)
+805C4844:   callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_STG7_SHUTTER_OPEN1"] LW(10) LW(11) LW(12) 0
+805C4860:   setii LW(8) LW(0)
+805C486C:   setii LW(9) LW(1)
+805C4878:   setii LW(7) LW(2)
+805C4884:   callc [evt_sub_intpl_msec_init evt_sub.o] 1 0 180 500
+805C489C: 0:
+805C48A4:   callc [evt_sub_intpl_msec_get_value evt_sub.o]
+805C48AC:   if_int_eq LW(7) 0
+805C48B8:     callc [evt_mapobj_trans evt_map.o] 1 LW(9) 0 0 LW(0)
+805C48D4:     mulf LW(0) -1.00
+805C48E0:     callc [evt_mapobj_trans evt_map.o] 1 LW(8) 0 0 LW(0)
+805C48FC:   else
+805C4900:     callc [evt_mapobj_trans evt_map.o] 1 LW(9) LW(0) 0 0
+805C491C:     mulf LW(0) -1.00
+805C4928:     callc [evt_mapobj_trans evt_map.o] 1 LW(8) LW(0) 0 0
+805C4944:   endif
+805C4948:   wait_frames 1
+805C4950:   if_int_eq LW(1) 1
+805C495C:     goto 0
+805C4964:   endif
+805C4968:   callsa [gamen_shake2 bom_01.o]
+805C4970:   return
+805C4974:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [cam_inside2 bom_01.o] AT 805C453C ---
+805C453C:   callc [evt_cam3d_evt_set evt_cam.o] -93 104 -250 9 62 -447 0 11
+805C4564:   callc [evt_map_set_blend evt_map.o] 0 0 0 0 0
+805C4580:   callc [evt_map_set_blend evt_map.o] 1 0 0 0 0
+805C459C:   callc [evt_mapobj_rotate evt_map.o] 1 ["s_ie_door"] 90 0 0
+805C45B8:   callc [evt_mapobj_rotate evt_map.o] 1 ["s_ie_kai"] 0 -90 0
+805C45D4:   callc [evt_mapobj_flag_onoff evt_map.o] 1 0 ["S_ie_naka"] 1
+805C45EC:   callc [evt_mapobj_flag_onoff evt_map.o] 1 1 ["s_ie_kai"] 1
+805C4604:   return
+805C4608:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [evt_depth bom_01.o] AT 805C439C ---
+805C439C:   callc [depth bom_01.o]
+805C43A4:   return
+805C43A8:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [evt_bom1000 bom_01.o] AT 805C3EE0 ---
+805C3EE0:   callc [make_ext_table bom_01.o]
+805C3EE8:   callc [evt_npc_entry evt_npc.o] ["dummy"] ["c_bom_sen"]
+805C3EF8:   callc [evt_ext_entry evt_ext.o] 1000 [ext_data bom_01.o] [ext_init bom_01.o] [ext_main bom_01.o] [ext_dispent bom_01.o]
+805C3F14:   return
+805C3F18:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [mario_shot bom_01.o] AT 805C407C ---
+805C407C:   callsa [mario_tobideru bom_01.o]
+805C4084:   callc [evt_snd_sfxon evt_snd.o] ["SFX_STG7_CANNON_DISCHARGE1"] 0
+805C4094:   callc [evt_sub_intpl_msec_init evt_sub.o] 2 0 -50 150
+805C40AC: 0:
+805C40B4:   callc [evt_sub_intpl_msec_get_value evt_sub.o]
+805C40BC:   callc [evt_mapobj_rotate evt_map.o] 1 ["dekatai"] 0 0 -40
+805C40D8:   callc [evt_mapobj_trans evt_map.o] 1 ["dekatai"] 0 LW(0) 0
+805C40F4:   wait_frames 1
+805C40FC:   if_int_eq LW(1) 1
+805C4108:     goto 0
+805C4110:   endif
+805C4114:   callsa [gamen_shake2 bom_01.o]
+805C411C:   callc [evt_eff evt_eff.o] ["kemuri"] ["kemuri_test"] 11 570 950 0 3.00 0 0 0 0 0 0 0
+805C415C:   callc [evt_eff64 evt_eff.o] ["ripple"] ["ripple_n64"] 2 570 950 0 0 0 0 0 0 0 0 0
+805C419C:   callc [evt_eff evt_eff.o] ["particle"] ["particle"] 0 520 900 0 1 1 0 100 0 0 0 0
+805C41DC:   callc [taihou_r bom_01.o]
+805C41E4:   begin_thread
+805C41E8:     callc [evt_eff evt_eff.o] 0 ["hit"] 1 570 950 0 3.00 4 0 0 0 0 0 0
+805C4228:     wait_ms 200
+805C4230:     callc [evt_eff evt_eff.o] 0 ["hit"] 1 570 950 0 3.00 4 0 0 0 0 0 0
+805C4270:   end_thread
+805C4274:   callc [evt_sub_intpl_msec_init evt_sub.o] 5 -50 0 150
+805C428C: 1:
+805C4294:   callc [evt_sub_intpl_msec_get_value evt_sub.o]
+805C429C:   callc [evt_mapobj_rotate evt_map.o] 1 ["dekatai"] 0 0 -40
+805C42B8:   callc [evt_mapobj_trans evt_map.o] 1 ["dekatai"] 0 LW(0) 0
+805C42D4:   wait_frames 1
+805C42DC:   if_int_eq LW(1) 1
+805C42E8:     goto 1
+805C42F0:   endif
+805C42F4:   return
+805C42F8:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [effect_delete bom_01.o] AT 805C42FC ---
+805C42FC:   callc [evt_eff_delete evt_eff.o] ["kemuri"]
+805C4308:   callc [evt_eff_delete evt_eff.o] ["ripple"]
+805C4314:   callc [evt_eff_delete evt_eff.o] ["particle"]
+805C4320:   return
+805C4324:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [mario_kemuri bom_01.o] AT 805C4328 ---
+805C4328:   loop 0
+805C4330:     callc [evt_mario_get_pos evt_mario.o] 0 LW(0) LW(1) LW(2)
+805C4348:     callc [evt_eff evt_eff.o] 0 ["kemuri_test"] 12 LW(0) LW(1) LW(2) 1.00 0 0 0 0 0 0 0
+805C4388:     wait_frames 2
+805C4390:   end_loop
+805C4394:   return
+805C4398:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [mario_tobideru bom_01.o] AT 805C3FA4 ---
+805C3FA4:   callc [evt_mario_set_pos evt_mario.o] 400 780 0
+805C3FB8:   callc [evt_sub_intpl_msec_init evt_sub.o] 2 0 400 300
+805C3FD0: 0:
+805C3FD8:   callc [evt_sub_intpl_msec_get_value evt_sub.o]
+805C3FE0:   setii LW(2) 400
+805C3FEC:   setii LW(3) 780
+805C3FF8:   addi LW(2) LW(0)
+805C4004:   addi LW(3) LW(0)
+805C4010:   callc [evt_mario_set_pos evt_mario.o] LW(2) LW(3) 0
+805C4024:   subi LW(2) 30
+805C4030:   subi LW(3) 30
+805C403C:   callc [evt_party_set_pos evt_party.o] 0 LW(2) LW(3) 0
+805C4054:   wait_frames 1
+805C405C:   if_int_eq LW(1) 1
+805C4068:     goto 0
+805C4070:   endif
+805C4074:   return
+805C4078:   end

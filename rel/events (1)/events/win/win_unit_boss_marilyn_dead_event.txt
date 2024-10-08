@@ -1,0 +1,73 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [dead_event unit_boss_marilyn.o] AT 805D52F4 ---
+805D52F4:   callc [btlevtcmd_GetHomePos battle_event_cmd.o] -2 LW(0) LW(1) LW(2)
+805D530C:   callc [btlevtcmd_GetPos battle_event_cmd.o] -2 LW(3) LW(4) LW(5)
+805D5324:   setii LW(6) 1
+805D5330:   if_int_eq LW(0) LW(3)
+805D533C:     if_int_eq LW(1) LW(4)
+805D5348:       if_int_eq LW(2) LW(5)
+805D5354:         setii LW(6) 0
+805D5360:       endif
+805D5364:     endif
+805D5368:   endif
+805D536C:   if_int_eq LW(6) 1
+805D5378:     callc [btlevtcmd_SetMoveSpeed battle_event_cmd.o] -2 6.00
+805D5388:     callc [btlevtcmd_AnimeChangePoseType battle_event_cmd.o] -2 1 40
+805D539C:     callc [btlevtcmd_MovePosition battle_event_cmd.o] -2 LW(0) LW(1) LW(2) 0 -1 0
+805D53C0:     callc [btlevtcmd_ResetFaceDirection battle_event_cmd.o] -2
+805D53CC:   endif
+805D53D0:   wait_frames 1
+805D53D8:   callc [btlevtcmd_WaitAttackEnd battle_event_cmd.o]
+805D53E0:   switchi GW(11)
+805D53E8:     case_int_eq 0
+805D53F0:     case_int_eq 1
+805D53F8:       loop 0
+805D5400:         if_int_eq GW(11) 2
+805D540C:           loop_break
+805D5410:         endif
+805D5414:         wait_frames 1
+805D541C:       end_loop
+805D5420:       goto 99
+805D5428:     case_int_eq 2
+805D5430:       switchi GW(13)
+805D5438:         case_int_eq 0
+805D5440:         case_default
+805D5444:           callc [btlevtcmd_StatusWindowOnOff battle_event_cmd.o] 0
+805D5450:           callss [btl_marilyn_zoom unit_boss_majolyne.o]
+805D5458:           callc [btlevtcmd_SetTalkPose battle_event_cmd.o] -2 ["MRR_D_1"]
+805D5468:           callc [btlevtcmd_SetStayPose battle_event_cmd.o] -2 ["MRR_D_1"]
+805D5478:           callc [evt_msg_print evt_msg.o] 2 ["btl_majo3_12"] 0 -2
+805D5490:           goto 90
+805D5498:       end_switch
+805D549C:   end_switch
+805D54A0:   callc [btlevtcmd_StatusWindowOnOff battle_event_cmd.o] 0
+805D54AC:   callss [btl_marilyn_zoom unit_boss_majolyne.o]
+805D54B4:   callc [btlevtcmd_SetTalkPose battle_event_cmd.o] -2 ["MRR_D_1"]
+805D54C4:   callc [btlevtcmd_SetStayPose battle_event_cmd.o] -2 ["MRR_D_1"]
+805D54D4:   callc [evt_msg_print evt_msg.o] 2 ["btl_majo3_09"] 0 -2
+805D54EC: 90:
+805D54F4:   callc [btlevtcmd_StatusWindowOnOff battle_event_cmd.o] 1
+805D5500:   callc [evt_btl_camera_set_mode battle_camera.o] 0 0
+805D5510: 99:
+805D5518:   callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 1 ["MRR_D_3"]
+805D552C:   setii GW(12) 2
+805D5538:   setii LW(10) -2
+805D5544:   callss [subsetevt_dead_core_nospin_norotate battle_event_subset.o]
+805D554C:   return
+805D5550:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [btl_marilyn_zoom unit_boss_majolyne.o] AT 805D3000 ---
+805D3000:   setii LW(0) GW(9)
+805D300C:   callss [majo3_zoom unit_boss_majolyne.o]
+805D3014:   return
+805D3018:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [majo3_zoom unit_boss_majolyne.o] AT 805D2F80 ---
+805D2F80:   callc [btlevtcmd_GetPos battle_event_cmd.o] LW(0) LW(0) [F1194D80] [F1194D80]
+805D2F98:   callc [evt_btl_camera_set_mode battle_camera.o] 0 3
+805D2FA8:   callc [evt_btl_camera_set_moveto battle_camera.o] 0 LW(0) 65 332 LW(0) 30 -340 30 11
+805D2FD4:   wait_frames 37
+805D2FDC:   return
+805D2FE0:   end

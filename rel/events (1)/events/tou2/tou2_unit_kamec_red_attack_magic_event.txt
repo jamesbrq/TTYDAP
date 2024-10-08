@@ -1,0 +1,407 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [attack_magic_event unit_kamec_red.o] AT 80610A68 ---
+80610A68:   callc [btlevtcmd_check_battleflag battle_event_cmd.o] LW(0) 2
+80610A78:   if_int_ne LW(0) 0
+80610A84:     callc [btlevtcmd_GetFirstAttackTarget battle_event_cmd.o] LW(3) LW(4)
+80610A94:   else
+80610A98:     callc [btlevtcmd_GetEnemyBelong battle_event_cmd.o] -2 LW(0)
+80610AA8:     callc [btlevtcmd_SamplingEnemy battle_event_cmd.o] -2 LW(0) LW(9)
+80610ABC:     callc [btlevtcmd_ChoiceSamplingEnemy battle_event_cmd.o] LW(9) LW(3) LW(4)
+80610AD0:   endif
+80610AD4:   if_int_eq LW(3) -1
+80610AE0:     callc [btlevtcmd_CheckToken battle_event_cmd.o] -2 16 LW(0)
+80610AF4:     if_int_ne LW(0) 0
+80610B00:       callss [subsetevt_confuse_flustered battle_event_subset.o]
+80610B08:       return
+80610B0C:     endif
+80610B10:     goto 99
+80610B18:   endif
+80610B1C:   callc [btlevtcmd_WeaponAftereffect battle_event_cmd.o] LW(9)
+80610B28:   callc [btlevtcmd_AttackDeclare battle_event_cmd.o] -2 LW(3) LW(4)
+80610B3C:   callc [btlevtcmd_WaitGuardMove battle_event_cmd.o]
+80610B44:   callc [btlevtcmd_PayWeaponCost battle_event_cmd.o] -2 LW(9)
+80610B54:   callc [btlevtcmd_CalculateFaceDirection battle_event_cmd.o] -2 -1 LW(3) LW(4) 16 LW(15)
+80610B74:   callc [btlevtcmd_ChangeFaceDirection battle_event_cmd.o] -2 LW(15)
+80610B84:   setii LW(15) 0
+80610B90:   callss [magic_common_event1 unit_kamec_red.o]
+80610B98:   callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_ENM_KAMEKU_MAGIC3_2"] [F1194D80] 0 [F1194D80]
+80610BB4:   callc [evt_btl_camera_set_mode battle_camera.o] 0 0
+80610BC4:   callc [btlevtcmd_PreCheckDamage battle_event_cmd.o] -2 LW(3) LW(4) LW(9) 0 LW(5)
+80610BE4:   switchi LW(5)
+80610BEC:     case_int_eq_any 4
+80610BF4:       goto 90
+80610BFC:       end_multi_case
+80610C00:     case_int_eq 3
+80610C08:       goto 90
+80610C10:       end_multi_case
+80610C14:     case_int_eq 6
+80610C1C:       goto 90
+80610C24:     case_int_eq 2
+80610C2C:       goto 90
+80610C34:     case_int_eq 1
+80610C3C:       goto 91
+80610C44:       end_multi_case
+80610C48:     case_default
+80610C4C:       goto 98
+80610C54:       end_multi_case
+80610C58: 90:
+80610C60:       begin_child_thread
+80610C64:         wait_frames 1
+80610C6C:         loop 0
+80610C74:           callc [btlevtcmd_GetFaceDirection battle_event_cmd.o] -2 LW(0)
+80610C84:           if_int_eq LW(0) -1
+80610C90:             callc [eff_magic_get_posX unit_kamec_red.o] -2 LW(0)
+80610CA0:             callc [btlevtcmd_GetHitPos battle_event_cmd.o] LW(3) LW(4) LW(6) LW(7) LW(8)
+80610CBC:             if_int_le LW(0) LW(6)
+80610CC8:               callss [start_avoid unit_kamec_red.o]
+80610CD0:               loop_break
+80610CD4:             endif
+80610CD8:           else
+80610CDC:             callc [eff_magic_get_posX unit_kamec_red.o] -2 LW(0)
+80610CEC:             callc [btlevtcmd_GetHitPos battle_event_cmd.o] LW(3) LW(4) LW(6) LW(7) LW(8)
+80610D08:             if_int_ge LW(0) LW(6)
+80610D14:               callss [start_avoid unit_kamec_red.o]
+80610D1C:               loop_break
+80610D20:             endif
+80610D24:           endif
+80610D28:           wait_frames 1
+80610D30:         end_loop
+80610D34:       end_child_thread
+80610D38:       callc [kamec_get_bunsin unit_kamec_red.o] LW(6) LW(7) LW(8) LW(13) LW(0)
+80610D54:       setii LW(14) -2
+80610D60:       callss [attack_magic_event_sub_no_hit unit_kamec_red.o]
+80610D68:       setii LW(14) LW(6)
+80610D74:       callss [attack_magic_event_sub_no_hit unit_kamec_red.o]
+80610D7C:       setii LW(14) LW(7)
+80610D88:       callss [attack_magic_event_sub_no_hit unit_kamec_red.o]
+80610D90:       setii LW(14) LW(8)
+80610D9C:       callss [attack_magic_event_sub_no_hit unit_kamec_red.o]
+80610DA4:       setii LW(14) LW(13)
+80610DB0:       callss [attack_magic_event_sub_no_hit unit_kamec_red.o]
+80610DB8:       wait_frames 60
+80610DC0:       goto 98
+80610DC8: 91:
+80610DD0:       callc [kamec_get_bunsin unit_kamec_red.o] LW(6) LW(7) LW(8) LW(13) LW(0)
+80610DEC:       setii LW(14) -2
+80610DF8:       callss [attack_magic_event_sub_hit unit_kamec_red.o]
+80610E00:       setii LW(14) LW(6)
+80610E0C:       callss [attack_magic_event_sub_hit unit_kamec_red.o]
+80610E14:       setii LW(14) LW(7)
+80610E20:       callss [attack_magic_event_sub_hit unit_kamec_red.o]
+80610E28:       setii LW(14) LW(8)
+80610E34:       callss [attack_magic_event_sub_hit unit_kamec_red.o]
+80610E3C:       setii LW(14) LW(13)
+80610E48:       callss [attack_magic_event_sub_hit unit_kamec_red.o]
+80610E50:       wait_frames 45
+80610E58:       callc [btlevtcmd_ResultACDefence battle_event_cmd.o] LW(3) LW(9)
+80610E68:       callc [btlevtcmd_CheckDamage battle_event_cmd.o] -2 LW(3) LW(4) LW(9) 256 LW(5)
+80610E88:       goto 98
+80610E90: 98:
+80610E98:       wait_frames 30
+80610EA0:       callc [kamec_get_bunsin unit_kamec_red.o] LW(6) LW(7) LW(8) LW(9) LW(0)
+80610EBC:       callc [btlevtcmd_AnimeChangePoseType battle_event_cmd.o] -2 1 43
+80610ED0:       if_int_ne LW(6) -1
+80610EDC:         callc [btlevtcmd_AnimeChangePoseType battle_event_cmd.o] LW(6) 1 43
+80610EF0:       endif
+80610EF4:       if_int_ne LW(7) -1
+80610F00:         callc [btlevtcmd_AnimeChangePoseType battle_event_cmd.o] LW(7) 1 43
+80610F14:       endif
+80610F18:       if_int_ne LW(8) -1
+80610F24:         callc [btlevtcmd_AnimeChangePoseType battle_event_cmd.o] LW(8) 1 43
+80610F38:       endif
+80610F3C:       if_int_ne LW(9) -1
+80610F48:         callc [btlevtcmd_AnimeChangePoseType battle_event_cmd.o] LW(9) 1 43
+80610F5C:       endif
+80610F60: 99:
+80610F68:       callc [btlevtcmd_ResetFaceDirection battle_event_cmd.o] -2
+80610F74:       return
+80610F78:       end
+
+--- START OF DISASSEMBLY FOR FUNCTION [magic_common_event1 unit_kamec_red.o] AT 80610954 ---
+80610954:   callc [btlevtcmd_GetUnitWork battle_event_cmd.o] -2 0 LW(0)
+80610968:   if_int_eq LW(0) 0
+80610974:     callc [btlevtcmd_GetUnitId battle_event_cmd.o] -2 LW(13)
+80610984:     if_int_ne LW(3) LW(13)
+80610990:       callss [ground_magic_common_event1 unit_kamec_red.o]
+80610998:     else
+8061099C:       callss [ground_magic_common_event2 unit_kamec_red.o]
+806109A4:     endif
+806109A8:   else
+806109AC:     callss [sky_magic_common_event unit_kamec_red.o]
+806109B4:   endif
+806109B8:   return
+806109BC:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [start_avoid unit_kamec_red.o] AT 80610A00 ---
+80610A00:   if_int_eq LW(5) 3
+80610A0C:     callc [btlevtcmd_StartAvoid battle_event_cmd.o] LW(3) 38
+80610A1C:   endif
+80610A20:   if_int_eq LW(5) 6
+80610A2C:     callc [btlevtcmd_StartAvoid battle_event_cmd.o] LW(3) 39
+80610A3C:   endif
+80610A40:   if_int_eq LW(5) 2
+80610A4C:     callc [btlevtcmd_StartAvoid battle_event_cmd.o] LW(3) 40
+80610A5C:   endif
+80610A60:   return
+80610A64:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [attack_magic_event_sub_no_hit unit_kamec_red.o] AT 80610F7C ---
+80610F7C:   if_int_eq LW(14) -1
+80610F88:     return
+80610F8C:   endif
+80610F90:   callc [btlevtcmd_GetPos battle_event_cmd.o] LW(14) LW(0) LW(1) LW(2)
+80610FA8:   addi LW(1) 10
+80610FB4:   callc [btlevtcmd_GetHitPos battle_event_cmd.o] LW(3) LW(4) LW(10) LW(11) LW(12)
+80610FD0:   callc [btlevtcmd_GetStageSize battle_event_cmd.o] LW(10) [F1194D80] [F1194D80]
+80610FE4:   callc [btlevtcmd_GetFaceDirection battle_event_cmd.o] LW(14) LW(0)
+80610FF4:   muli LW(10) LW(0)
+80611000:   subi LW(11) 5
+8061100C:   callc [eff_magic unit_kamec_red.o] LW(14) LW(10) LW(11) LW(12) 60
+80611028:   return
+8061102C:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [attack_magic_event_sub_hit unit_kamec_red.o] AT 80611030 ---
+80611030:   if_int_eq LW(14) -1
+8061103C:     return
+80611040:   endif
+80611044:   callc [btlevtcmd_GetPos battle_event_cmd.o] LW(14) LW(0) LW(1) LW(2)
+8061105C:   addi LW(1) 10
+80611068:   callc [btlevtcmd_GetHitPos battle_event_cmd.o] LW(3) LW(4) LW(10) LW(11) LW(12)
+80611084:   callc [eff_magic unit_kamec_red.o] LW(14) LW(10) LW(11) LW(12) 45
+806110A0:   return
+806110A4:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [ground_magic_common_event1 unit_kamec_red.o] AT 8060FF94 ---
+8060FF94:   begin_child_thread
+8060FF98:     loop 2
+8060FFA0:       callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_ENM_KAMEKU_MAGIC1"] [F1194D80] 0 [F1194D80]
+8060FFBC:       wait_frames 40
+8060FFC4:     end_loop
+8060FFC8:   end_child_thread
+8060FFCC:   callc [kamec_get_bunsin unit_kamec_red.o] LW(11) LW(12) LW(13) LW(14) LW(0)
+8060FFE8:   if_int_eq LW(15) 0
+8060FFF4:     begin_child_thread
+8060FFF8:       callc [eff_staff1 unit_kamec_red.o] -2
+80610004:     end_child_thread
+80610008:     begin_child_thread
+8061000C:       if_int_ne LW(11) -1
+80610018:         callc [eff_staff1 unit_kamec_red.o] LW(11)
+80610024:       endif
+80610028:     end_child_thread
+8061002C:     begin_child_thread
+80610030:       if_int_ne LW(12) -1
+8061003C:         callc [eff_staff1 unit_kamec_red.o] LW(12)
+80610048:       endif
+8061004C:     end_child_thread
+80610050:     begin_child_thread
+80610054:       if_int_ne LW(13) -1
+80610060:         callc [eff_staff1 unit_kamec_red.o] LW(13)
+8061006C:       endif
+80610070:     end_child_thread
+80610074:     begin_child_thread
+80610078:       if_int_ne LW(14) -1
+80610084:         callc [eff_staff1 unit_kamec_red.o] LW(14)
+80610090:       endif
+80610094:     end_child_thread
+80610098:   else
+8061009C:     begin_child_thread
+806100A0:       callc [eff_staff2 unit_kamec_red.o] -2
+806100AC:     end_child_thread
+806100B0:   endif
+806100B4:   callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 1 ["KMR_A_1A"]
+806100C8:   if_int_ne LW(11) -1
+806100D4:     callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] LW(11) 1 ["KMR_A_1A"]
+806100E8:   endif
+806100EC:   if_int_ne LW(12) -1
+806100F8:     callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] LW(12) 1 ["KMR_A_1A"]
+8061010C:   endif
+80610110:   if_int_ne LW(13) -1
+8061011C:     callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] LW(13) 1 ["KMR_A_1A"]
+80610130:   endif
+80610134:   if_int_ne LW(14) -1
+80610140:     callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] LW(14) 1 ["KMR_A_1A"]
+80610154:   endif
+80610158:   wait_frames 60
+80610160:   callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_ENM_KAMEKU_MAGIC4"] [F1194D80] 0 [F1194D80]
+8061017C:   callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 1 ["KMR_A_1B"]
+80610190:   if_int_ne LW(11) -1
+8061019C:     callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] LW(11) 1 ["KMR_A_1B"]
+806101B0:   endif
+806101B4:   if_int_ne LW(12) -1
+806101C0:     callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] LW(12) 1 ["KMR_A_1B"]
+806101D4:   endif
+806101D8:   if_int_ne LW(13) -1
+806101E4:     callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] LW(13) 1 ["KMR_A_1B"]
+806101F8:   endif
+806101FC:   if_int_ne LW(14) -1
+80610208:     callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] LW(14) 1 ["KMR_A_1B"]
+8061021C:   endif
+80610220:   wait_frames 20
+80610228:   callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 1 ["KMR_A_1C"]
+8061023C:   if_int_ne LW(11) -1
+80610248:     callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] LW(11) 1 ["KMR_A_1C"]
+8061025C:   endif
+80610260:   if_int_ne LW(12) -1
+8061026C:     callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] LW(12) 1 ["KMR_A_1C"]
+80610280:   endif
+80610284:   if_int_ne LW(13) -1
+80610290:     callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] LW(13) 1 ["KMR_A_1C"]
+806102A4:   endif
+806102A8:   if_int_ne LW(14) -1
+806102B4:     callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] LW(14) 1 ["KMR_A_1C"]
+806102C8:   endif
+806102CC:   wait_frames 30
+806102D4:   begin_child_thread
+806102D8:     wait_frames 10
+806102E0:     callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_ENM_KAMEKU_MAGIC8"] [F1194D80] 0 [F1194D80]
+806102FC:   end_child_thread
+80610300:   callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 1 ["KMR_A_1D"]
+80610314:   if_int_ne LW(11) -1
+80610320:     callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] LW(11) 1 ["KMR_A_1D"]
+80610334:   endif
+80610338:   if_int_ne LW(12) -1
+80610344:     callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] LW(12) 1 ["KMR_A_1D"]
+80610358:   endif
+8061035C:   if_int_ne LW(13) -1
+80610368:     callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] LW(13) 1 ["KMR_A_1D"]
+8061037C:   endif
+80610380:   if_int_ne LW(14) -1
+8061038C:     callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] LW(14) 1 ["KMR_A_1D"]
+806103A0:   endif
+806103A4:   wait_frames 20
+806103AC:   callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 1 ["KMR_A_1E"]
+806103C0:   if_int_ne LW(11) -1
+806103CC:     callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] LW(11) 1 ["KMR_A_1E"]
+806103E0:   endif
+806103E4:   if_int_ne LW(12) -1
+806103F0:     callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] LW(12) 1 ["KMR_A_1E"]
+80610404:   endif
+80610408:   if_int_ne LW(13) -1
+80610414:     callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] LW(13) 1 ["KMR_A_1E"]
+80610428:   endif
+8061042C:   if_int_ne LW(14) -1
+80610438:     callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] LW(14) 1 ["KMR_A_1E"]
+8061044C:   endif
+80610450:   return
+80610454:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [ground_magic_common_event2 unit_kamec_red.o] AT 80610458 ---
+80610458:   begin_child_thread
+8061045C:     loop 2
+80610464:       callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_ENM_KAMEKU_MAGIC1"] [F1194D80] 0 [F1194D80]
+80610480:       wait_frames 40
+80610488:     end_loop
+8061048C:   end_child_thread
+80610490:   begin_child_thread
+80610494:     callc [eff_staff1 unit_kamec_red.o] -2
+806104A0:   end_child_thread
+806104A4:   callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 1 ["KMR_A_1A"]
+806104B8:   wait_frames 60
+806104C0:   callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_ENM_KAMEKU_MAGIC6"] [F1194D80] 0 [F1194D80]
+806104DC:   callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 1 ["KMR_A_2A"]
+806104F0:   wait_frames 40
+806104F8:   callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_ENM_KAMEKU_MAGIC7"] [F1194D80] 0 [F1194D80]
+80610514:   callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 1 ["KMR_A_2B"]
+80610528:   wait_frames 20
+80610530:   callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 1 ["KMR_A_2C"]
+80610544:   return
+80610548:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [sky_magic_common_event unit_kamec_red.o] AT 8061054C ---
+8061054C:   begin_child_thread
+80610550:     loop 2
+80610558:       callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_ENM_KAMEKU_MAGIC1"] [F1194D80] 0 [F1194D80]
+80610574:       wait_frames 40
+8061057C:     end_loop
+80610580:   end_child_thread
+80610584:   callc [kamec_get_bunsin unit_kamec_red.o] LW(11) LW(12) LW(13) LW(14) LW(0)
+806105A0:   if_int_eq LW(15) 0
+806105AC:     begin_child_thread
+806105B0:       callc [eff_staff1 unit_kamec_red.o] -2
+806105BC:     end_child_thread
+806105C0:     begin_child_thread
+806105C4:       if_int_ne LW(11) -1
+806105D0:         callc [eff_staff1 unit_kamec_red.o] LW(11)
+806105DC:       endif
+806105E0:     end_child_thread
+806105E4:     begin_child_thread
+806105E8:       if_int_ne LW(12) -1
+806105F4:         callc [eff_staff1 unit_kamec_red.o] LW(12)
+80610600:       endif
+80610604:     end_child_thread
+80610608:     begin_child_thread
+8061060C:       if_int_ne LW(13) -1
+80610618:         callc [eff_staff1 unit_kamec_red.o] LW(13)
+80610624:       endif
+80610628:     end_child_thread
+8061062C:     begin_child_thread
+80610630:       if_int_ne LW(14) -1
+8061063C:         callc [eff_staff1 unit_kamec_red.o] LW(14)
+80610648:       endif
+8061064C:     end_child_thread
+80610650:   else
+80610654:     begin_child_thread
+80610658:       callc [eff_staff2 unit_kamec_red.o] -2
+80610664:     end_child_thread
+80610668:   endif
+8061066C:   callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 1 ["KMR_A_3A"]
+80610680:   if_int_ne LW(11) -1
+8061068C:     callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] LW(11) 1 ["KMR_A_3A"]
+806106A0:   endif
+806106A4:   if_int_ne LW(12) -1
+806106B0:     callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] LW(12) 1 ["KMR_A_3A"]
+806106C4:   endif
+806106C8:   if_int_ne LW(13) -1
+806106D4:     callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] LW(13) 1 ["KMR_A_3A"]
+806106E8:   endif
+806106EC:   if_int_ne LW(14) -1
+806106F8:     callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] LW(14) 1 ["KMR_A_3A"]
+8061070C:   endif
+80610710:   wait_frames 60
+80610718:   callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_ENM_KAMEKU_MAGIC8"] [F1194D80] 0 [F1194D80]
+80610734:   callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 1 ["KMR_A_3B"]
+80610748:   if_int_ne LW(11) -1
+80610754:     callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] LW(11) 1 ["KMR_A_3B"]
+80610768:   endif
+8061076C:   if_int_ne LW(12) -1
+80610778:     callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] LW(12) 1 ["KMR_A_3B"]
+8061078C:   endif
+80610790:   if_int_ne LW(13) -1
+8061079C:     callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] LW(13) 1 ["KMR_A_3B"]
+806107B0:   endif
+806107B4:   if_int_ne LW(14) -1
+806107C0:     callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] LW(14) 1 ["KMR_A_3B"]
+806107D4:   endif
+806107D8:   wait_frames 35
+806107E0:   callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_ENM_KAMEKU_MAGIC7"] [F1194D80] 0 [F1194D80]
+806107FC:   callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 1 ["KMR_A_3C"]
+80610810:   if_int_ne LW(11) -1
+8061081C:     callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] LW(11) 1 ["KMR_A_3C"]
+80610830:   endif
+80610834:   if_int_ne LW(12) -1
+80610840:     callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] LW(12) 1 ["KMR_A_3C"]
+80610854:   endif
+80610858:   if_int_ne LW(13) -1
+80610864:     callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] LW(13) 1 ["KMR_A_3C"]
+80610878:   endif
+8061087C:   if_int_ne LW(14) -1
+80610888:     callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] LW(14) 1 ["KMR_A_3C"]
+8061089C:   endif
+806108A0:   wait_frames 15
+806108A8:   callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 1 ["KMR_A_3D"]
+806108BC:   if_int_ne LW(11) -1
+806108C8:     callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] LW(11) 1 ["KMR_A_3D"]
+806108DC:   endif
+806108E0:   if_int_ne LW(12) -1
+806108EC:     callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] LW(12) 1 ["KMR_A_3D"]
+80610900:   endif
+80610904:   if_int_ne LW(13) -1
+80610910:     callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] LW(13) 1 ["KMR_A_3D"]
+80610924:   endif
+80610928:   if_int_ne LW(14) -1
+80610934:     callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] LW(14) 1 ["KMR_A_3D"]
+80610948:   endif
+8061094C:   return
+80610950:   end

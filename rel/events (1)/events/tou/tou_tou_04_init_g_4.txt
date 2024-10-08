@@ -1,0 +1,54 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [init_g_4 tou_04.o] AT 805E3A4C ---
+805E3A4C:   if_int_lt GSW(0) 172
+805E3A58:     callc [evt_npc_set_position evt_npc.o] ["me"] -350 0 -530
+805E3A70:   else
+805E3A74:     setii LF(0) 0
+805E3A80:     setii LF(1) 0
+805E3A8C:     setii LF(2) 0
+805E3A98:     switchi GSW(1420)
+805E3AA0:       case_int_eq 13
+805E3AA8:         setii LF(0) 1
+805E3AB4:       case_int_eq 23
+805E3ABC:         setii LF(0) 1
+805E3AC8:     end_switch
+805E3ACC:     if_int_eq LF(0) 1
+805E3AD8:       setii LF(1) GSWF(2499)
+805E3AE4:     else
+805E3AE8:       if_int_eq GSWF(2500) 0
+805E3AF4:         setii LF(1) GSWF(2498)
+805E3B00:       else
+805E3B04:         callc [evt_bero_get_entername evt_bero.o] LW(0)
+805E3B10:         if_string_eq LW(0) ["s_bero_5"]
+805E3B1C:           setii LF(1) 1
+805E3B28:           setii LF(2) 1
+805E3B34:         else
+805E3B38:           setii LF(1) 0
+805E3B44:         endif
+805E3B48:       endif
+805E3B4C:     endif
+805E3B50:     if_int_eq LF(1) 0
+805E3B5C:       callc [evt_npc_set_position evt_npc.o] ["me"] -350 0 -530
+805E3B74:     else
+805E3B78:       callc [evt_npc_set_position evt_npc.o] ["me"] -300 0 -530
+805E3B90:       if_int_eq LF(2) 1
+805E3B9C:         callsa [move_g_4_dokimasen tou_04.o]
+805E3BA4:       endif
+805E3BA8:     endif
+805E3BAC:   endif
+805E3BB0:   return
+805E3BB4:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [move_g_4_dokimasen tou_04.o] AT 805E39BC ---
+805E39BC:   callc [evt_npc_set_position evt_npc.o] ["me"] -300 0 -530
+805E39D4:   callc [evt_bero_exec_wait evt_bero.o] 65536
+805E39E0:   callc [evt_mario_key_onoff evt_mario.o] 0
+805E39EC:   callc [evt_npc_move_position evt_npc.o] ["me"] -350 -530 0 80.00 1
+805E3A0C:   callc [evt_npc_set_position evt_npc.o] ["me"] -350 0 -530
+805E3A24:   setii LW(0) 5
+805E3A30:   callss [bero_case_switch_off evt_bero.o]
+805E3A38:   callc [evt_mario_key_onoff evt_mario.o] 1
+805E3A44:   return
+805E3A48:   end

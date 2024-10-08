@@ -1,0 +1,44 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [killer_cannon_move_event npc_event.o] AT 80343CA0 ---
+80343CA0:   callss [enemy_common_flag_init_event npc_event.o]
+80343CA8:   callc [evt_npc_get_unitwork evt_npc.o] ["me"] 0 LW(0)
+80343CBC:   callc [evt_npc_set_ry evt_npc.o] ["me"] LW(0)
+80343CCC:   callc [evt_npc_set_anim evt_npc.o] ["me"] ["KTA_S_1"]
+80343CDC:   setii LW(10) 0
+80343CE8: 0:
+80343CF0:   wait_ms 3000
+80343CF8: 1:
+80343D00:   wait_ms 100
+80343D08:   addi LW(10) 1
+80343D14:   if_int_eq LW(10) 2
+80343D20:     setii LW(10) 0
+80343D2C:   endif
+80343D30:   callc [evt_npc_set_anim evt_npc.o] ["me"] ["KTA_A_1"]
+80343D40:   wait_ms 200
+80343D48:   callc [evt_npc_get_position evt_npc.o] ["me"] LW(2) LW(3) LW(4)
+80343D60:   callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_FLD_ENM_KILLER_CANNON1"] LW(2) LW(3) LW(4) 0
+80343D7C:   wait_ms 200
+80343D84:   callc [evt_npc_get_dir evt_npc.o] ["me"] LW(1)
+80343D94:   callc [evt_npc_get_position evt_npc.o] ["me"] LW(2) LW(3) LW(4)
+80343DAC:   callc [evt_npc_add_dirdist evt_npc.o] LW(2) LW(4) LW(1) 30
+80343DC4:   addi LW(3) 30
+80343DD0:   callc [evt_eff evt_eff.o] [zero_80421f3c npc_event.o] ["kemuri_test"] 18 LW(2) LW(3) LW(4) 1.50 0 0 0 0 0 0 0
+80343E10:   callc [evt_npc_get_dir evt_npc.o] ["me"] LW(1)
+80343E20:   callc [killer_make_name npc_event.o] LW(10) LW(0)
+80343E30:   callc [evt_npc_set_ry evt_npc.o] LW(0) LW(1)
+80343E40:   callc [evt_npc_get_position evt_npc.o] ["me"] LW(2) LW(3) LW(4)
+80343E58:   callc [evt_npc_add_dirdist evt_npc.o] LW(2) LW(4) LW(1) 30
+80343E70:   addi LW(3) 11
+80343E7C:   callc [killer_make_name npc_event.o] LW(10) LW(0)
+80343E8C:   callc [evt_npc_set_position evt_npc.o] LW(0) LW(2) LW(3) LW(4)
+80343EA4:   callc [killer_make_name npc_event.o] LW(10) LW(0)
+80343EB4:   callc [evt_npc_set_anim evt_npc.o] LW(0) ["KIL_S_1"]
+80343EC4:   callc [killer_make_name npc_event.o] LW(10) LW(0)
+80343ED4:   callc [evt_npc_change_interrupt evt_npc.o] LW(0) 1 [killer_move_event npc_event.o]
+80343EE8:   callc [killer_make_name npc_event.o] LW(10) LW(0)
+80343EF8:   callc [evt_npc_restart_regular_event evt_npc.o] LW(0)
+80343F04:   goto 0
+80343F0C:   return
+80343F10:   end

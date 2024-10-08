@@ -1,0 +1,128 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [dokuroiwa_bomb muj_05.o] AT 805E4CC0 ---
+805E4CC0:   callc [evt_mario_key_onoff evt_mario.o] 0
+805E4CCC:   callc [evt_hitobj_onoff evt_hit.o] ["e_bero"] 1 1
+805E4CE0:   callc [evt_mapobj_get_position evt_map.o] ["S_dokuro_iwa"] LW(0) LW(1) LW(2)
+805E4CF8:   callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_STG5_OBJ_ROCK_BREAK1"] LW(0) LW(1) LW(2) 0
+805E4D14:   begin_thread
+805E4D18:     callc [evt_snd_bgmoff evt_snd.o] 1024
+805E4D24:     callc [evt_snd_bgmon evt_snd.o] 1 ["BGM_FF_ENV_SUCCESS1"]
+805E4D34:     wait_ms 2000
+805E4D3C:     callc [evt_snd_bgmoff evt_snd.o] 513
+805E4D48:     callc [evt_snd_bgmon evt_snd.o] 288 0
+805E4D58:   end_thread
+805E4D5C:   begin_thread
+805E4D60:     callc [evt_cam_shake evt_cam.o] 4 0.03 0.00 1000
+805E4D78:   end_thread
+805E4D7C:   callss [bombwall_bomb muj_05.o]
+805E4D84:   callc [evt_hitobj_onoff evt_hit.o] ["A_dkr_iwa_futa02"] 1 0
+805E4D98:   if_int_eq GSWF(3141) 0
+805E4DA4:     stop_tid GW(2)
+805E4DAC:     callc [evt_msg_close evt_msg.o] ["stg5_muj_93_02_00"]
+805E4DB8:   endif
+805E4DBC:   callc [evt_npc_set_ry evt_npc.o] ["マルコ"] 90
+805E4DCC:   callc [evt_cam3d_evt_set evt_cam.o] 280 115 333 280 55 -11 500 11
+805E4DF4:   wait_ms 500
+805E4DFC:   callc [evt_npc_flag_onoff evt_npc.o] 1 ["マルコ"] 32
+805E4E10:   callc [evt_npc_get_position evt_npc.o] ["マルコ"] LW(0) LW(1) LW(2)
+805E4E28:   callc [evt_npc_jump_position_nohit evt_npc.o] ["マルコ"] LW(0) LW(1) LW(2) 225 30
+805E4E48:   callc [evt_npc_jump_position_nohit evt_npc.o] ["マルコ"] LW(0) LW(1) LW(2) 225 30
+805E4E68:   callc [evt_msg_print evt_msg.o] 0 ["stg5_muj_93_08"] 0 ["マルコ"]
+805E4E80:   callc [evt_item_entry evt_item.o] ["jewel00"] 71 225 200 -25 13 -1 0
+805E4EA8:   setii LW(8) ["jewel00"]
+805E4EB4:   callc [evt_item_flag_on evt_item.o] LW(8) 16
+805E4EC4:   callc [evt_item_set_gravity evt_item.o] LW(8) 1.00
+805E4ED4:   callc [evt_item_set_bound_rate evt_item.o] LW(8) 0.70
+805E4EE4:   callc [evt_item_set_jump_power evt_item.o] LW(8) 0.00
+805E4EF4:   callc [evt_item_set_bound_limit evt_item.o] LW(8) 0
+805E4F04:   addi LW(0) 35
+805E4F10:   callc [evt_item_set_bound_next_speed evt_item.o] LW(8) LW(0)
+805E4F20:   begin_thread
+805E4F24:     callc [evt_item_get_position evt_item.o] ["jewel00"] LW(0) LW(1) LW(2)
+805E4F3C:     callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_STG5_JUWEL_FALL1"] LW(0) LW(1) LW(2) LW(10)
+805E4F58:     loop 0
+805E4F60:       callc [evt_item_get_position evt_item.o] ["jewel00"] LW(0) LW(1) LW(2)
+805E4F78:       if_int_le LW(1) 0
+805E4F84:         loop_break
+805E4F88:       endif
+805E4F8C:       wait_frames 1
+805E4F94:     end_loop
+805E4F98:     callc [evt_snd_sfxoff evt_snd.o] LW(10)
+805E4FA4:     callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_STG5_JUWEL_LANDING1"] LW(0) LW(1) LW(2) 0
+805E4FC0:   end_thread
+805E4FC4:   wait_ms 1000
+805E4FCC:   callc [evt_npc_set_ry evt_npc.o] ["マルコ"] 270
+805E4FDC:   wait_ms 1500
+805E4FE4:   callc [evt_cam3d_evt_set evt_cam.o] 225 115 333 225 55 -11 500 11
+805E500C:   callc [evt_npc_move_position evt_npc.o] ["マルコ"] 225 -50 0 120.00 0
+805E502C:   wait_ms 500
+805E5034:   callc [evt_msg_print evt_msg.o] 0 ["stg5_muj_93_08_01"] 0 ["マルコ"]
+805E504C:   callc [evt_item_set_position evt_item.o] ["jewel00"] 0 -1000 0
+805E5064:   wait_ms 500
+805E506C:   callc [evt_npc_set_ry evt_npc.o] ["マルコ"] 90
+805E507C:   wait_ms 500
+805E5084:   callc [evt_npc_set_ry evt_npc.o] ["マルコ"] 270
+805E5094:   wait_ms 1000
+805E509C:   callc [evt_npc_set_ry evt_npc.o] ["マルコ"] 90
+805E50AC:   wait_ms 1000
+805E50B4:   callc [evt_npc_move_position evt_npc.o] ["マルコ"] 240 -50 0 60.00 0
+805E50D4:   callc [evt_msg_print evt_msg.o] 0 ["stg5_muj_93_08_02"] 0 ["マルコ"]
+805E50EC:   callc [evt_mario_set_dir evt_mario.o] 270 0 0
+805E5100:   callc [evt_party_set_dir evt_party.o] 0 270 0
+805E5114:   callc [evt_npc_set_ry evt_npc.o] ["マルコ"] 270
+805E5124:   callc [evt_npc_move_position evt_npc.o] ["マルコ"] 100 -50 0 120.00 0
+805E5144:   callc [evt_npc_set_position evt_npc.o] ["マルコ"] 0 -1000 0
+805E515C:   callc [evt_cam3d_evt_off evt_cam.o] 500 11
+805E516C:   wait_ms 500
+805E5174:   setii GSW(0) 242
+805E5180:   callc [evt_mario_key_onoff evt_mario.o] 1
+805E518C:   return
+805E5190:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [bombwall_bomb muj_05.o] AT 805E4A84 ---
+805E4A84:   callc [evt_mario_key_onoff evt_mario.o] 0
+805E4A90:   begin_thread
+805E4A94:     wait_ms 200
+805E4A9C:     callc [evt_mapobj_get_position evt_map.o] ["S_dokuro_iwa"] LW(0) LW(1) LW(2)
+805E4AB4:     callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_OFF_WALL_BREAK1"] LW(0) LW(1) LW(2) 0
+805E4AD0:   end_thread
+805E4AD4:   callc [evt_img_entry evt_img.o] ["capture_img"]
+805E4AE0:   callc [evt_img_set_paper evt_img.o] ["capture_img"] ["OFF_d_bom_ver2"]
+805E4AF0:   callc [evt_offscreen_entry evt_offscreen.o] ["offscreen"]
+805E4AFC:   callc [evt_mapobj_set_offscreen evt_map.o] 1 ["S_dokuro_iwa"] ["offscreen"]
+805E4B10:   callc [evt_offscreen_get_boundingbox2 evt_offscreen.o] ["offscreen"] LW(10) LW(11) LW(12) LW(13)
+805E4B2C:   setii LF(0) 0
+805E4B38:   if_int_eq LW(12) 0
+805E4B44:     if_int_eq LW(13) 0
+805E4B50:       setii LF(0) 1
+805E4B5C:     endif
+805E4B60:   endif
+805E4B64:   if_int_eq LF(0) 0
+805E4B70:     callc [evt_img_alloc_capture evt_img.o] ["capture_img"] 0 ["offscreen"] 1 LW(10) LW(11) LW(12) LW(13)
+805E4B98:     callc [evt_img_clear_virtual_point evt_img.o] ["capture_img"]
+805E4BA4:     callc [evt_img_set_paper_anim evt_img.o] ["capture_img"] ["A_1"]
+805E4BB4:     callc [evt_mapobj_flag_onoff evt_map.o] 1 1 ["S_dokuro_iwa"] 1
+805E4BCC:     callc [evt_hitobj_onoff evt_hit.o] ["A_dokuro_iwa"] 1 0
+805E4BE0:     callc [evt_img_wait_animend evt_img.o] ["capture_img"]
+805E4BEC:   else
+805E4BF0:     callc [evt_mapobj_flag_onoff evt_map.o] 1 1 ["S_dokuro_iwa"] 1
+805E4C08:     callc [evt_hitobj_onoff evt_hit.o] ["A_dokuro_iwa"] 1 0
+805E4C1C:   endif
+805E4C20:   callc [evt_mapobj_clear_offscreen evt_map.o] 1 ["S_dokuro_iwa"]
+805E4C30:   callc [evt_img_free_capture evt_img.o] ["capture_img"] 0
+805E4C40:   callc [evt_img_free_capture evt_img.o] ["capture_img"] 1
+805E4C50:   callc [evt_img_onoff evt_img.o] ["capture_img"] 0
+805E4C60:   callc [evt_img_release evt_img.o] ["capture_img"]
+805E4C6C:   callc [evt_offscreen_delete evt_offscreen.o] ["offscreen"]
+805E4C78:   loop 0
+805E4C80:     callc [evt_mario_party_use_check evt_mario.o] LW(0)
+805E4C8C:     wait_frames 1
+805E4C94:     if_int_eq LW(0) 0
+805E4CA0:       loop_break
+805E4CA4:     endif
+805E4CA8:   end_loop
+805E4CAC:   callc [evt_mario_key_onoff evt_mario.o] 1
+805E4CB8:   return
+805E4CBC:   end

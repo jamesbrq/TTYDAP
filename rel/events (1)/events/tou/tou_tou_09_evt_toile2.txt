@@ -1,0 +1,43 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [evt_toile2 tou_09.o] AT 805F3944 ---
+805F3944:   callc [evt_cam_letter_box_disable evt_cam.o] 1
+805F3950:   callc [evt_mario_key_onoff evt_mario.o] 0
+805F395C:   callc [evt_party_stop evt_party.o] 0
+805F3968:   callc [evt_hitobj_attr_onoff evt_hit.o] 0 1 ["t_door_2"] 8388608
+805F3980:   callc [evt_hitobj_attr_onoff evt_hit.o] 0 1 ["t_door_3"] 8388608
+805F3998:   callc [evt_mario_get_pos evt_mario.o] 0 LW(0) LW(1) LW(2)
+805F39B0:   callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_DOOR_OPEN_WOOD3"] LW(0) LW(1) LW(2) 0
+805F39CC:   callc [evt_sub_intpl_msec_init evt_sub.o] 11 0 -80 500
+805F39E4:   loop 0
+805F39EC:     callc [evt_sub_intpl_msec_get_value evt_sub.o]
+805F39F4:     callc [evt_mapobj_rotate evt_map.o] 1 ["door_2"] 0 LW(0) 0
+805F3A10:     wait_frames 1
+805F3A18:     if_int_eq LW(1) 0
+805F3A24:       loop_break
+805F3A28:     endif
+805F3A2C:   end_loop
+805F3A30:   begin_thread
+805F3A34:     callc [evt_party_move_pos2 evt_party.o] 0 200 110 80.00
+805F3A4C:     callc [evt_party_stop evt_party.o] 0
+805F3A58:   end_thread
+805F3A5C:   callc [evt_mario_mov_pos2 evt_mario.o] 200 130 80.00
+805F3A70:   callc [evt_mario_get_pos evt_mario.o] 0 LW(0) LW(1) LW(2)
+805F3A88:   callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_DOOR_SHUT_WOOD3"] LW(0) LW(1) LW(2) 0
+805F3AA4:   callc [evt_sub_intpl_msec_init evt_sub.o] 11 -80 0 500
+805F3ABC:   loop 0
+805F3AC4:     callc [evt_sub_intpl_msec_get_value evt_sub.o]
+805F3ACC:     callc [evt_mapobj_rotate evt_map.o] 1 ["door_2"] 0 LW(0) 0
+805F3AE8:     wait_frames 1
+805F3AF0:     if_int_eq LW(1) 0
+805F3AFC:       loop_break
+805F3B00:     endif
+805F3B04:   end_loop
+805F3B08:   callc [evt_hitobj_attr_onoff evt_hit.o] 0 0 ["t_door_2"] 8388608
+805F3B20:   callc [evt_hitobj_attr_onoff evt_hit.o] 0 0 ["t_door_3"] 8388608
+805F3B38:   callc [evt_party_run evt_party.o] 0
+805F3B44:   callc [evt_mario_key_onoff evt_mario.o] 1
+805F3B50:   callc [evt_cam_letter_box_disable evt_cam.o] 0
+805F3B5C:   return
+805F3B60:   end

@@ -1,0 +1,40 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [unison_phase_event unit_monochrome_kurokumorn.o] AT 806277EC ---
+806277EC:   callc [btlevtcmd_CheckPhase battle_event_cmd.o] LW(0) 67108865
+806277FC:   if_int_eq LW(0) 0
+80627808:     goto 99
+80627810:   endif
+80627814:   callc [btlevtcmd_CheckActStatus battle_event_cmd.o] -2 LW(0)
+80627824:   if_int_eq LW(0) 0
+80627830:     goto 99
+80627838:   endif
+8062783C:   callc [btlevtcmd_CheckPartsCounterAttribute battle_event_cmd.o] -2 1 1024 LW(0)
+80627854:   if_int_eq LW(0) 1
+80627860:     goto 99
+80627868:   endif
+8062786C:   callc [evt_sub_random evt_sub.o] 99 LW(0)
+8062787C:   if_int_lt LW(0) 50
+80627888:     callc [btlevtcmd_GetUnitWork battle_event_cmd.o] -2 0 LW(0)
+8062789C:     if_int_eq LW(0) 1
+806278A8:       callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_ENM_KUMO_MOVE4"] [F1194D80] 0 [F1194D80]
+806278C4:       callc [btlevtcmd_GetPos battle_event_cmd.o] -2 LW(0) LW(1) LW(2)
+806278DC:       setii LW(1) 40
+806278E8:       callc [btlevtcmd_DivePosition battle_event_cmd.o] -2 LW(0) LW(1) LW(2) 60 10 4 0 -1
+80627914:       callc [btlevtcmd_SetHomePos battle_event_cmd.o] -2 LW(0) LW(1) LW(2)
+8062792C:       callc [btlevtcmd_OnPartsAttribute battle_event_cmd.o] -2 1 6291456
+80627940:       callc [btlevtcmd_SetUnitWork battle_event_cmd.o] -2 0 0
+80627954:     else
+80627958:       callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_ENM_KUMO_MOVE5"] [F1194D80] 0 [F1194D80]
+80627974:       callc [btlevtcmd_GetPos battle_event_cmd.o] -2 LW(0) LW(1) LW(2)
+8062798C:       setii LW(1) 10
+80627998:       callc [btlevtcmd_DivePosition battle_event_cmd.o] -2 LW(0) LW(1) LW(2) 60 -10 4 0 -1
+806279C4:       callc [btlevtcmd_SetHomePos battle_event_cmd.o] -2 LW(0) LW(1) LW(2)
+806279DC:       callc [btlevtcmd_OffPartsAttribute battle_event_cmd.o] -2 1 6291456
+806279F0:       callc [btlevtcmd_SetUnitWork battle_event_cmd.o] -2 0 1
+80627A04:     endif
+80627A08:   endif
+80627A0C: 99:
+80627A14:   return
+80627A18:   end

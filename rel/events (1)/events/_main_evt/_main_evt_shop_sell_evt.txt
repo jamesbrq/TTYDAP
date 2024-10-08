@@ -1,0 +1,68 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [sell_evt evt_shop.o] AT 8033D760 ---
+8033D760:   callc [sell_pouchcheck_func evt_shop.o]
+8033D768:   if_int_eq LW(0) 0
+8033D774:     callc [get_msg evt_shop.o] LW(10) 6 LW(14)
+8033D788:     callc [evt_msg_print_add evt_msg.o] 0 LW(14)
+8033D798:     return
+8033D79C:   endif
+8033D7A0:   callc [get_msg evt_shop.o] LW(10) 7 LW(14)
+8033D7B4:   callc [evt_msg_print_add evt_msg.o] 0 LW(14)
+8033D7C4:   callc [evt_win_coin_on evt_window.o] 0 LW(8)
+8033D7D4: 0:
+8033D7DC:   callc [item_data_db_arrange evt_shop.o]
+8033D7E4:   callc [evt_win_item_select evt_window.o] 1 3 LW(1) LW(4)
+8033D7FC:   callc [item_data_db_restore evt_shop.o]
+8033D804:   if_int_le LW(1) 0
+8033D810:     callc [get_msg evt_shop.o] LW(10) 22 LW(14)
+8033D824:     callc [evt_msg_print evt_msg.o] 0 LW(14) 0 ["me"]
+8033D83C:     callc [evt_win_coin_off evt_window.o] LW(8)
+8033D848:     return
+8033D84C:   endif
+8033D850:   callc [item_data_db_arrange evt_shop.o]
+8033D858:   callc [name_price evt_shop.o] LW(1) LW(2) LW(3)
+8033D86C:   callc [item_data_db_restore evt_shop.o]
+8033D874:   callc [get_msg evt_shop.o] LW(10) 8 LW(14)
+8033D888:   callc [evt_sub_get_language evt_sub.o] LW(0)
+8033D894:   switchi LW(0)
+8033D89C:     case_int_eq 0
+8033D8A4:       callc [evt_msg_print_insert evt_msg.o] 0 LW(14) 0 ["me"] LW(2) LW(3)
+8033D8C4:     case_default
+8033D8C8:       callc [unk_800d0998 evt_msg.o] 0 LW(14) LW(14) LW(3)
+8033D8E0:       callc [unk_800d12b0 evt_msg.o] 1 LW(14) LW(14) LW(2)
+8033D8F8:       callc [evt_msg_print evt_msg.o] 1 LW(14) 0 ["me"]
+8033D910:   end_switch
+8033D914:   callc [get_msg evt_shop.o] LW(10) 24 LW(14)
+8033D928:   callc [evt_msg_select evt_msg.o] 0 LW(14)
+8033D938:   if_int_eq LW(0) 1
+8033D944:     callc [get_msg evt_shop.o] LW(10) 9 LW(14)
+8033D958:     callc [evt_msg_print_add evt_msg.o] 0 LW(14)
+8033D968:     goto 0
+8033D970:   endif
+8033D974:   callc [N_evt_pouch_remove_item_index evt_pouch.o] LW(1) LW(4) LW(0)
+8033D988:   callc [evt_pouch_add_coin evt_pouch.o] LW(3)
+8033D994:   callc [evt_win_coin_wait evt_window.o] LW(8)
+8033D9A0:   wait_ms 200
+8033D9A8:   callc [evt_win_coin_off evt_window.o] LW(8)
+8033D9B4:   callc [sell_pouchcheck_func evt_shop.o]
+8033D9BC:   if_int_eq LW(0) 0
+8033D9C8:     callc [get_msg evt_shop.o] LW(10) 11 LW(14)
+8033D9DC:     callc [evt_msg_print_add evt_msg.o] 0 LW(14)
+8033D9EC:     return
+8033D9F0:   endif
+8033D9F4:   callc [get_msg evt_shop.o] LW(10) 10 LW(14)
+8033DA08:   callc [evt_msg_print_add evt_msg.o] 0 LW(14)
+8033DA18:   callc [get_msg evt_shop.o] LW(10) 24 LW(14)
+8033DA2C:   callc [evt_msg_select evt_msg.o] 0 LW(14)
+8033DA3C:   if_int_eq LW(0) 1
+8033DA48:     callc [get_msg evt_shop.o] LW(10) 22 LW(14)
+8033DA5C:     callc [evt_msg_print_add evt_msg.o] 0 LW(14)
+8033DA6C:     return
+8033DA70:   endif
+8033DA74:   callc [evt_msg_continue evt_msg.o]
+8033DA7C:   callc [evt_win_coin_on evt_window.o] 0 LW(8)
+8033DA8C:   goto 0
+8033DA94:   return
+8033DA98:   end

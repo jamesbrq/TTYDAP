@@ -1,0 +1,54 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [evt_mail_1 tou.o] AT 805D064C ---
+805D064C:   wait_ms 1000
+805D0654:   begin_thread_tid LW(11)
+805D065C:     callc [evt_mario_get_pos evt_mario.o] 0 LW(0) LW(1) LW(2)
+805D0674:     callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_VOICE_MARIO_FIND1_3"] LW(0) LW(1) LW(2) 0
+805D0690:     callc [evt_eff_fukidashi evt_eff.o] 0 0 0 0 0 0 0 0 0 0 0
+805D06C4:     wait_ms 1500
+805D06CC:   end_thread
+805D06D0:   callc [evt_snd_bgmoff evt_snd.o] 1024
+805D06DC:   callc [evt_snd_bgmon evt_snd.o] 1 ["BGM_FF_MAIL_RECEPTION2"]
+805D06EC:   callsa_tid [evt_sub_mail_vibration evt_sub.o] LW(10)
+805D06F8:   wait_ms 500
+805D0700:   callc [evt_msg_print_party evt_msg.o] ["stg3_tou_297_03"]
+805D070C:   loop 0
+805D0714:     check_thread_running LW(11) LW(12)
+805D0720:     if_int_eq LW(12) 0
+805D072C:       loop_break
+805D0730:     endif
+805D0734:     wait_frames 1
+805D073C:   end_loop
+805D0740:   callc [evt_mario_balloon_bikkuri evt_mario.o]
+805D0748:   loop 0
+805D0750:     callc [evt_key_get_buttontrg evt_sub.o] 0 LW(0)
+805D0760:     if_int_eq LW(0) 256
+805D076C:       loop_break
+805D0770:     endif
+805D0774:     wait_frames 1
+805D077C:   end_loop
+805D0780:   callc [evt_mario_balloon_off evt_mario.o]
+805D0788:   callc [evt_snd_bgmoff evt_snd.o] 513
+805D0794:   callc [evt_snd_bgmon evt_snd.o] 288 0
+805D07A4:   callc [evt_mario_get_pos evt_mario.o] 0 LW(0) LW(1) LW(2)
+805D07BC:   callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_MAIL_RECEPTION1"] LW(0) LW(1) LW(2) 0
+805D07D8:   stop_tid LW(10)
+805D07E0:   wait_frames 1
+805D07E8:   callc [evt_sub_rumble_onoff evt_sub.o] 1 0
+805D07F8:   callc [evt_mario_set_pose evt_mario.o] ["M_N_9"]
+805D0804:   wait_ms 500
+805D080C:   callc [evt_mario_get_pos evt_mario.o] 0 LW(0) LW(1) LW(2)
+805D0824:   callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_MAIL_RECEPTION2"] LW(0) LW(1) LW(2) 0
+805D0840:   callc [evt_mario_set_pose evt_mario.o] ["M_N_10"]
+805D084C:   wait_ms 500
+805D0854:   callc [evt_msg_print evt_msg.o] 0 ["stg3_tou_297_04"] 0 0
+805D086C:   callc [evt_mario_set_pose evt_mario.o] ["M_S_1"]
+805D0878:   callc [evt_msg_print_party evt_msg.o] ["stg3_tou_297_05"]
+805D0884:   callc [evt_pouch_receive_mail evt_pouch.o] 7
+805D0890:   callc [evt_pouch_open_mail evt_pouch.o] 7
+805D089C:   callc [evt_snd_bgmon evt_snd.o] 512 ["BGM_STG3_TOU1"]
+805D08AC:   setii GSW(0) 139
+805D08B8:   return
+805D08BC:   end

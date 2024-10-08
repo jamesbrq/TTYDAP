@@ -1,0 +1,43 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [_shot_bomb_event unit_party_sanders.o] AT 8038ADB8 ---
+8038ADB8:   callc [_shot_move unit_party_sanders.o] LW(3) LW(0) LW(1) LW(0) LW(1) LW(2) LW(5)
+8038ADDC:   callc [btlevtcmd_GetPos battle_event_cmd.o] LW(3) LW(0) LW(1) LW(2)
+8038ADF4:   setff LW(6) LW(5)
+8038AE00:   mulf LW(6) 6.40
+8038AE0C:   callc [btlevtcmd_FaceDirectionAdd battle_event_cmd.o] LW(3) LW(0) LW(6)
+8038AE20:   callc [btlevtcmd_SetFallAccel battle_event_cmd.o] LW(3) 0.50
+8038AE30:   callc [btlevtcmd_JumpPosition battle_event_cmd.o] LW(3) LW(0) LW(1) LW(2) 16 -1
+8038AE50:   setff LW(6) LW(5)
+8038AE5C:   mulf LW(6) 3.60
+8038AE68:   callc [btlevtcmd_FaceDirectionAdd battle_event_cmd.o] LW(3) LW(0) LW(6)
+8038AE7C:   callc [btlevtcmd_JumpPosition battle_event_cmd.o] LW(3) LW(0) LW(1) LW(2) 12 -1
+8038AE9C:   setff LW(6) LW(5)
+8038AEA8:   mulf LW(6) 4.00
+8038AEB4:   callc [btlevtcmd_FaceDirectionAdd battle_event_cmd.o] LW(3) LW(0) LW(6)
+8038AEC8:   begin_child_thread
+8038AECC:     callc [btlevtcmd_GetFaceDirection battle_event_cmd.o] LW(3) LW(0)
+8038AEDC:     muli LW(0) -18
+8038AEE8:     callc [btlevtcmd_SetRotateOffset battle_event_cmd.o] LW(3) 0 7 0
+8038AF00:     loop 20
+8038AF08:       callc [btlevtcmd_AddRotate battle_event_cmd.o] LW(3) 0 0 LW(0)
+8038AF20:       wait_frames 1
+8038AF28:     end_loop
+8038AF2C:     callc [btlevtcmd_SetRotate battle_event_cmd.o] LW(3) 0 0 0
+8038AF44:   end_child_thread
+8038AF48:   callc [btlevtcmd_MovePosition battle_event_cmd.o] LW(3) LW(0) LW(1) LW(2) 20 -1 0
+8038AF6C:   callc [_judge_on_stage unit_party_sanders.o] LW(3) LW(5)
+8038AF7C:   if_int_eq LW(5) 0
+8038AF88:     callc [btlevtcmd_KillUnit battle_event_cmd.o] LW(3) 0
+8038AF98:     return
+8038AF9C:   endif
+8038AFA0:   callc [btlevtcmd_GetPos battle_event_cmd.o] LW(3) LW(0) LW(1) LW(2)
+8038AFB8:   callc [btlevtcmd_SetHomePos battle_event_cmd.o] LW(3) LW(0) LW(1) LW(2)
+8038AFD0:   callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] LW(3) 1 ["B_2"]
+8038AFE4:   callc [evt_snd_sfxon evt_snd.o] ["SFX_BTL_THUNDERS_BOMB1"] LW(0)
+8038AFF4:   callc [btlevtcmd_SetUnitWork battle_event_cmd.o] LW(3) 1 LW(0)
+8038B008:   wait_ms 400
+8038B010:   callc [btlevtcmd_StartWaitEvent battle_event_cmd.o] LW(3)
+8038B01C:   return
+8038B020:   end

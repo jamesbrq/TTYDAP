@@ -1,0 +1,173 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [mri_puni_init mri_puni.o] AT 80607A24 ---
+80607A24:   callss [mri_puni_init_dvd mri_puni.o]
+80607A2C:   switchi GSW(0)
+80607A34:     case_int_lt 88
+80607A3C:       return
+80607A40:     case_int_ge 403
+80607A48:       return
+80607A4C:     case_int_eq 400
+80607A54:       callc [evt_sub_get_mapname evt_sub.o] LW(0)
+80607A60:       if_string_ne LW(0) ["mri_00"]
+80607A6C:         return
+80607A70:       endif
+80607A74:       setii LF(0) 0
+80607A80:       callc [evt_bero_get_entername evt_bero.o] LW(0)
+80607A8C:       if_string_eq LW(0) ["sekai_yami1"]
+80607A98:         setii LF(0) 1
+80607AA4:       endif
+80607AA8:       if_string_eq LW(0) ["minnnanokoe"]
+80607AB4:         setii LF(0) 1
+80607AC0:       endif
+80607AC4:       if_int_eq LF(0) 0
+80607AD0:         return
+80607AD4:       endif
+80607AD8:     case_int_range 118 399
+80607AE4:       callc [evt_sub_get_mapname evt_sub.o] LW(0)
+80607AF0:       if_string_ne LW(0) ["mri_00"]
+80607AFC:         return
+80607B00:       endif
+80607B04:       if_int_eq GSWF(2884) 1
+80607B10:         return
+80607B14:       endif
+80607B18:     case_default
+80607B1C:   end_switch
+80607B20:   callc [evt_make_texbuf mri_puni.o]
+80607B28:   callc [evt_puni_init mri_puni.o] 210 [puni_puni_init mri_puni.o] [puni_puni_main mri_puni.o] [puni_puni_dispent mri_puni.o]
+80607B40:   callc [evt_puni_set_maze mri_puni.o]
+80607B48:   callsa [mri_puni_position_init mri_puni.o]
+80607B50:   callsa [mri_puni_main mri_puni.o]
+80607B58:   return
+80607B5C:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [mri_puni_init_dvd mri_puni.o] AT 80607854 ---
+80607854:   callc [evt_npc_entry evt_npc.o] ["プニsp"] ["c_puni"]
+80607864:   callc [evt_npc_set_tribe evt_npc.o] ["プニsp"] ["プニ族"]
+80607874:   callc [evt_npc_entry evt_npc.o] ["トゲsp"] ["c_toge"]
+80607884:   callc [evt_npc_set_tribe evt_npc.o] ["トゲsp"] ["トゲ族"]
+80607894:   callc [evt_npc_entry evt_npc.o] ["ガイドsp"] ["c_pguide"]
+806078A4:   callc [evt_npc_set_tribe evt_npc.o] ["ガイドsp"] ["ガイド"]
+806078B4:   callc [evt_npc_entry evt_npc.o] ["ガイド妹sp"] ["c_psister"]
+806078C4:   callc [evt_npc_set_tribe evt_npc.o] ["ガイド妹sp"] ["ガイド妹"]
+806078D4:   callc [evt_npc_entry evt_npc.o] ["ちびトゲsp"] ["c_tchibi"]
+806078E4:   callc [evt_npc_set_tribe evt_npc.o] ["ちびトゲsp"] ["ちびトゲ"]
+806078F4:   callc [evt_npc_entry evt_npc.o] ["ライバルsp"] ["c_prival"]
+80607904:   callc [evt_npc_set_tribe evt_npc.o] ["ライバルsp"] ["ライバル"]
+80607914:   callc [evt_npc_set_position evt_npc.o] ["プニsp"] 0 -1000 0
+8060792C:   callc [evt_npc_set_position evt_npc.o] ["トゲsp"] 0 -1000 0
+80607944:   callc [evt_npc_set_position evt_npc.o] ["ガイドsp"] 0 -1000 0
+8060795C:   callc [evt_npc_set_position evt_npc.o] ["ガイド妹sp"] 0 -1000 0
+80607974:   callc [evt_npc_set_position evt_npc.o] ["ちびトゲsp"] 0 -1000 0
+8060798C:   callc [evt_npc_set_position evt_npc.o] ["ライバルsp"] 0 -1000 0
+806079A4:   callc [evt_npc_flag_onoff evt_npc.o] 1 ["プニsp"] 1074266144
+806079B8:   callc [evt_npc_flag_onoff evt_npc.o] 1 ["トゲsp"] 1074266144
+806079CC:   callc [evt_npc_flag_onoff evt_npc.o] 1 ["ガイドsp"] 1074266144
+806079E0:   callc [evt_npc_flag_onoff evt_npc.o] 1 ["ガイド妹sp"] 1074266144
+806079F4:   callc [evt_npc_flag_onoff evt_npc.o] 1 ["ちびトゲsp"] 1074266144
+80607A08:   callc [evt_npc_flag_onoff evt_npc.o] 1 ["ライバルsp"] 1074266144
+80607A1C:   return
+80607A20:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [mri_puni_position_init mri_puni.o] AT 80607570 ---
+80607570:   callc [evt_puni_set_systemmode mri_puni.o] 0
+8060757C:   begin_thread
+80607580:     callc [evt_puni_puninum_alpha mri_puni.o] 0
+8060758C:     wait_frames 2
+80607594:     callc [evt_bero_get_now_number evt_bero.o] LW(10)
+806075A0:     callc [evt_bero_get_info_kinddir evt_bero.o] LW(10) LW(0) LW(1) LW(2)
+806075B8:     callc [evt_bero_get_info_nextarea evt_bero.o] LW(10) LW(3) LW(4)
+806075CC:     setii LF(0) 0
+806075D8:     if_int_eq LW(0) 2
+806075E4:       if_int_ne LW(3) 0
+806075F0:         setii LF(0) 1
+806075FC:       endif
+80607600:     endif
+80607604:     if_int_eq LF(0) 0
+80607610:       callc [evt_puni_puninum_alpha mri_puni.o] 255
+8060761C:     endif
+80607620:   end_thread
+80607624:   dbg_report ["プニ関係：初期の実行中待ち"]
+8060762C:   callc [evt_bero_exec_wait evt_bero.o] 1
+80607638:   loop 0
+80607640:     callc [evt_puni_set_systemmode mri_puni.o] 1
+8060764C:     dbg_report ["プニ関係：座標セット待ち"]
+80607654:     callc [evt_bero_exec_wait evt_bero.o] 2
+80607660:     dbg_report ["プニ関係：小動物関係初期化"]
+80607668:     dbg_expr_to_string GSW(665)
+80607670:     dbg_expr_to_string GSW(666)
+80607678:     callc [evt_bero_get_now_number evt_bero.o] LW(10)
+80607684:     callc [evt_bero_get_info_kinddir evt_bero.o] LW(10) LW(0) LW(1) LW(2)
+8060769C:     callc [evt_bero_get_info_nextarea evt_bero.o] LW(10) LW(3) LW(4)
+806076B0:     if_int_eq LW(0) 2
+806076BC:       if_int_ne LW(3) 0
+806076C8:         callsa [mri_puninum_fadein mri_puni.o]
+806076D0:       endif
+806076D4:     endif
+806076D8:     callc [evt_puni_setup mri_puni.o] LW(0) LW(1) LW(2)
+806076EC:     callc [evt_toge_setup mri_puni.o] LW(6) LW(7) LW(8) LW(9)
+80607704:     callc [evt_puni_set_systemmode mri_puni.o] 2
+80607710:     dbg_report ["プニ関係：終了待ち"]
+80607718:     callc [evt_bero_exec_wait evt_bero.o] 65536
+80607724:     callc [evt_puni_set_systemmode mri_puni.o] 3
+80607730:     dbg_report ["プニ関係：次の実行中待ち"]
+80607738:     callc [evt_bero_exec_wait evt_bero.o] 1
+80607744:     setii GSW(666) GSW(665)
+80607750:     callc [evt_bero_get_now_number evt_bero.o] LW(10)
+8060775C:     callc [evt_bero_get_info_kinddir evt_bero.o] LW(10) LW(0) LW(1) LW(2)
+80607774:     callc [evt_bero_get_info_nextarea evt_bero.o] LW(10) LW(3) LW(4)
+80607788:     if_int_eq LW(0) 1
+80607794:       dbg_report ["プニ関係：扉待ち"]
+8060779C:       callc [evt_bero_exec_wait evt_bero.o] 268435456
+806077A8:       dbg_report ["プニ関係：扉待ち終わり"]
+806077B0:       callc [evt_bero_exec_onoff evt_bero.o] 1 268435456
+806077C0:     endif
+806077C4:     if_int_eq LW(0) 2
+806077D0:       if_int_ne LW(3) 0
+806077DC:         callsa [mri_puninum_fadeout mri_puni.o]
+806077E4:       endif
+806077E8:     endif
+806077EC:     begin_thread
+806077F0:       dbg_report ["プニ関係：エリアチェンジ直前待ち"]
+806077F8:       callc [evt_bero_exec_wait evt_bero.o] 8
+80607804:       dbg_report ["プニ関係：プニ族トゲ族SE強制オフ"]
+8060780C:       callc [evt_puni_force_se_off mri_puni.o]
+80607814:     end_thread
+80607818:     callc [evt_puni_exit mri_puni.o] LW(0) LW(1) LW(2) LW(3)
+80607830:   end_loop
+80607834:   return
+80607838:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [mri_puni_main mri_puni.o] AT 8060783C ---
+8060783C:   set_thread_type_mask 0
+80607844:   callc [evt_puni_main mri_puni.o]
+8060784C:   return
+80607850:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [mri_puninum_fadein mri_puni.o] AT 80607514 ---
+80607514:   callc [evt_sub_intpl_msec_init evt_sub.o] 11 0 255 500
+8060752C:   loop 0
+80607534:     callc [evt_sub_intpl_msec_get_value evt_sub.o]
+8060753C:     callc [evt_puni_puninum_alpha mri_puni.o] LW(0)
+80607548:     wait_frames 1
+80607550:     if_int_eq LW(1) 0
+8060755C:       loop_break
+80607560:     endif
+80607564:   end_loop
+80607568:   return
+8060756C:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [mri_puninum_fadeout mri_puni.o] AT 806074B0 ---
+806074B0:   wait_ms 1200
+806074B8:   callc [evt_sub_intpl_msec_init evt_sub.o] 11 255 0 500
+806074D0:   loop 0
+806074D8:     callc [evt_sub_intpl_msec_get_value evt_sub.o]
+806074E0:     callc [evt_puni_puninum_alpha mri_puni.o] LW(0)
+806074EC:     wait_frames 1
+806074F4:     if_int_eq LW(1) 0
+80607500:       loop_break
+80607504:     endif
+80607508:   end_loop
+8060750C:   return
+80607510:   end

@@ -1,0 +1,287 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [blue_jail_open mri_03.o] AT 805F4FFC ---
+805F4FFC:   setii GSWF(2835) 1
+805F5008:   wait_ms 1000
+805F5010:   callc [evt_mapobj_get_position evt_map.o] ["S_hako_l_doa"] LW(0) LW(1) LW(2)
+805F5028:   callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_STG2_DOOR_GRID_OPEN1"] LW(0) LW(1) LW(2) 0
+805F5044:   callc [evt_sub_intpl_msec_init evt_sub.o] 11 0 85 500
+805F505C:   loop 0
+805F5064:     callc [evt_sub_intpl_msec_get_value evt_sub.o]
+805F506C:     callc [evt_mapobj_rotate evt_map.o] 1 ["S_hako_l_doa"] 0 LW(0) 0
+805F5088:     if_int_eq LW(1) 0
+805F5094:       loop_break
+805F5098:     endif
+805F509C:     wait_frames 1
+805F50A4:   end_loop
+805F50A8:   callc [evt_hitobj_onoff evt_hit.o] ["A_hako_l_01"] 1 0
+805F50BC:   callc [evt_hitobj_onoff evt_hit.o] ["S_hako_l1"] 1 0
+805F50D0:   callss [guide_sister mri_03.o]
+805F50D8:   callc [evt_mario_key_onoff evt_mario.o] 1
+805F50E4:   return
+805F50E8:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [guide_sister mri_03.o] AT 805F5B38 ---
+805F5B38:   setii LW(10) 14
+805F5B44:   setii LW(11) 0
+805F5B50:   setii LW(12) 0
+805F5B5C:   loop 0
+805F5B64:     callc [puni_parent mri_03.o] LW(10)
+805F5B70:     addi LW(10) 1
+805F5B7C:     if_int_eq LW(10) 103
+805F5B88:       loop_break
+805F5B8C:     endif
+805F5B90:   end_loop
+805F5B94:   callc [evt_puni_set_mode mri_puni.o] 4 14
+805F5BA4:   callc [evt_puni_set_anim mri_puni.o] 4 0
+805F5BB4:   callc [evt_puni_flag_onoff mri_puni.o] 4 0 1048576
+805F5BC8:   callc [evt_puni_set_mode mri_puni.o] 3 14
+805F5BD8:   callc [evt_puni_set_anim mri_puni.o] 3 0
+805F5BE8:   callc [evt_puni_flag_onoff mri_puni.o] 3 0 1048576
+805F5BFC:   setii LW(10) 5
+805F5C08:   loop 9
+805F5C10:     callc [evt_puni_set_mode mri_puni.o] LW(10) 14
+805F5C20:     callc [evt_puni_set_anim mri_puni.o] LW(10) 0
+805F5C30:     callc [evt_puni_flag_onoff mri_puni.o] LW(10) 0 1048576
+805F5C44:     addi LW(10) 1
+805F5C50:   end_loop
+805F5C54:   callsa [mario_kirimomi_event mri_03.o]
+805F5C5C:   callsa [party_kirimomi_event mri_03.o]
+805F5C64:   callc [evt_snd_bgmon evt_snd.o] 512 ["BGM_EVT_NOKO_SAIKAI1"]
+805F5C74:   callc [evt_npc_flag_onoff evt_npc.o] 1 ["ガイド"] 1073741856
+805F5C88:   callc [evt_npc_flag_onoff evt_npc.o] 1 ["ガイド妹"] 1073741856
+805F5C9C:   wait_ms 2000
+805F5CA4:   callc [evt_npc_get_reglid evt_npc.o] ["ガイド妹"] LW(0)
+805F5CB4:   stop_tid LW(0)
+805F5CBC:   callc [evt_npc_set_ry evt_npc.o] ["ガイド妹"] 270
+805F5CCC:   setii LW(0) ["ガイド妹"]
+805F5CD8:   callsa_tid [mri_puni_walk_se mri.o] LW(9)
+805F5CE4:   callc [evt_npc_move_position evt_npc.o] ["ガイド妹"] -245 -108 0 180.00 0
+805F5D04:   stop_tid LW(9)
+805F5D0C:   callc [evt_npc_set_ry evt_npc.o] ["ガイド妹"] 90
+805F5D1C:   setii LW(0) ["ガイド妹"]
+805F5D28:   callsa_tid [mri_puni_walk_se mri.o] LW(9)
+805F5D34:   callc [evt_npc_move_position evt_npc.o] ["ガイド妹"] -180 40 0 180.00 0
+805F5D54:   stop_tid LW(9)
+805F5D5C:   callc [evt_msg_print evt_msg.o] 0 ["stg2_mri_e20_00"] 0 ["ガイド妹"]
+805F5D74:   begin_thread
+805F5D78:     callc [evt_mario_mov_pos2 evt_mario.o] -230 -45 120.00
+805F5D8C:     wait_frames 1
+805F5D94:     callc [evt_mario_set_dir evt_mario.o] 90 200 0
+805F5DA8:   end_thread
+805F5DAC:   begin_thread
+805F5DB0:     callc [evt_party_move_pos2 evt_party.o] 0 -250 -40 120.00
+805F5DC8:     wait_frames 1
+805F5DD0:     callc [evt_party_set_dir evt_party.o] 0 90 -1
+805F5DE4:   end_thread
+805F5DE8:   begin_thread
+805F5DEC:     callc [evt_eff_fukidashi evt_eff.o] 1 [zero_mri_00022a5c mri_03.o] ["ガイド"] 0 0 0 0 0 0 0 60
+805F5E20:     wait_ms 1000
+805F5E28:     setii LW(0) ["ガイド"]
+805F5E34:     callsa_tid [mri_puni_walk_se mri.o] LW(9)
+805F5E40:     callc [evt_npc_move_position evt_npc.o] ["ガイド"] -140 40 0 180.00 0
+805F5E60:     stop_tid LW(9)
+805F5E68:     callc [evt_npc_set_ry evt_npc.o] ["ガイド"] 270
+805F5E78:   end_thread
+805F5E7C:   wait_ms 1000
+805F5E84:   setii LW(10) 14
+805F5E90:   loop 0
+805F5E98:     callc [puni_away mri_03.o] LW(10)
+805F5EA4:     addi LW(10) 1
+805F5EB0:     if_int_eq LW(10) 103
+805F5EBC:       loop_break
+805F5EC0:     endif
+805F5EC4:   end_loop
+805F5EC8:   callc [evt_cam3d_evt_set evt_cam.o] -160 90 352 -160 30 7 500 11
+805F5EF0:   wait_ms 1500
+805F5EF8:   setii LW(10) ["ガイド"]
+805F5F04:   setii LW(11) ["ガイド妹"]
+805F5F10:   callc [evt_npc_get_position evt_npc.o] LW(10) LW(0) LW(1) LW(2)
+805F5F28:   begin_thread
+805F5F2C:     callc [evt_npc_get_position evt_npc.o] LW(10) LW(10) LW(11) LW(12)
+805F5F44:     callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_STG2_PUNI_JUMP1"] LW(10) LW(11) LW(12) 0
+805F5F60:   end_thread
+805F5F64:   callc [evt_npc_jump_position_nohit evt_npc.o] LW(10) LW(0) LW(1) LW(2) 200 18
+805F5F84:   begin_thread
+805F5F88:     callc [evt_npc_get_position evt_npc.o] LW(10) LW(10) LW(11) LW(12)
+805F5FA0:     callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_STG2_PUNI_JUMP1"] LW(10) LW(11) LW(12) 0
+805F5FBC:   end_thread
+805F5FC0:   callc [evt_npc_jump_position_nohit evt_npc.o] LW(10) LW(0) LW(1) LW(2) 200 18
+805F5FE0:   callc [evt_msg_print evt_msg.o] 0 ["stg2_mri_e20_01"] 0 LW(10)
+805F5FF8:   callc [evt_npc_get_position evt_npc.o] LW(11) LW(0) LW(1) LW(2)
+805F6010:   begin_thread
+805F6014:     callc [evt_npc_get_position evt_npc.o] LW(11) LW(10) LW(11) LW(12)
+805F602C:     callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_STG2_PUNI_JUMP1"] LW(10) LW(11) LW(12) 0
+805F6048:   end_thread
+805F604C:   callc [evt_npc_jump_position_nohit evt_npc.o] LW(11) LW(0) LW(1) LW(2) 200 18
+805F606C:   begin_thread
+805F6070:     callc [evt_npc_get_position evt_npc.o] LW(11) LW(10) LW(11) LW(12)
+805F6088:     callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_STG2_PUNI_JUMP1"] LW(10) LW(11) LW(12) 0
+805F60A4:   end_thread
+805F60A8:   callc [evt_npc_jump_position_nohit evt_npc.o] LW(11) LW(0) LW(1) LW(2) 200 18
+805F60C8:   callc [evt_msg_togelr evt_msg.o] 0
+805F60D4:   callc [evt_msg_print evt_msg.o] 0 ["stg2_mri_e20_02"] 0 LW(11)
+805F60EC:   callc [evt_msg_print evt_msg.o] 0 ["stg2_mri_e20_03"] 0 LW(10)
+805F6104:   callc [evt_msg_togelr evt_msg.o] 0
+805F6110:   callc [evt_msg_print evt_msg.o] 0 ["stg2_mri_e20_04"] 0 LW(11)
+805F6128:   callc [evt_npc_set_ry evt_npc.o] LW(11) 270
+805F6138:   wait_ms 200
+805F6140:   callc [evt_msg_print evt_msg.o] 0 ["stg2_mri_e20_05"] 0 LW(11)
+805F6158:   callc [evt_npc_set_ry evt_npc.o] LW(11) 90
+805F6168:   wait_ms 200
+805F6170:   callc [evt_npc_get_position evt_npc.o] LW(11) LW(0) LW(1) LW(2)
+805F6188:   callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_STG2_PUNIKO_KINOKO1"] LW(0) LW(1) LW(2) 0
+805F61A4:   callc [evt_item_entry evt_item.o] ["item00"] 152 LW(0) LW(1) LW(2) 16 -1 0
+805F61CC:   callc [evt_item_flag_on evt_item.o] ["item00"] 2
+805F61DC:   addi LW(0) 20
+805F61E8:   callc [evt_item_move_3d_position evt_item.o] ["item00"] LW(0) LW(1) LW(2) 500 0
+805F6208:   callc [evt_msg_togelr evt_msg.o] 0
+805F6214:   callc [evt_msg_print evt_msg.o] 0 ["stg2_mri_e20_06"] 0 LW(11)
+805F622C:   callc [evt_cam3d_evt_set evt_cam.o] -150 73 278 -150 25 7 500 11
+805F6254:   setii LW(0) LW(10)
+805F6260:   callsa_tid [mri_puni_walk_se mri.o] LW(9)
+805F626C:   callc [evt_npc_move_position evt_npc.o] LW(10) -150 40 0 60.00 0
+805F628C:   stop_tid LW(9)
+805F6294:   callc [evt_npc_set_autotalkpose evt_npc.o] LW(10) ["T_1"] ["T_1"]
+805F62A8:   wait_frames 1
+805F62B0:   begin_thread_tid LW(9)
+805F62B8:     loop 0
+805F62C0:       callc [evt_npc_get_position evt_npc.o] LW(10) LW(0) LW(1) LW(2)
+805F62D8:       callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_STG2_PUNI_EAT1"] LW(0) LW(1) LW(2) 0
+805F62F4:       wait_frames 30
+805F62FC:     end_loop
+805F6300:   end_thread
+805F6304:   callc [evt_npc_set_anim evt_npc.o] LW(10) ["T_1"]
+805F6314:   wait_ms 2000
+805F631C:   callsa [kinoko_small mri_03.o]
+805F6324:   callc [evt_msg_print evt_msg.o] 0 ["stg2_mri_e20_07"] 0 LW(10)
+805F633C:   wait_frames 1
+805F6344:   stop_tid LW(9)
+805F634C:   callc [evt_npc_set_anim evt_npc.o] LW(10) ["S_1"]
+805F635C:   callc [evt_npc_set_autotalkpose evt_npc.o] LW(10) ["S_1"] ["T_1"]
+805F6370:   callc [evt_msg_togelr evt_msg.o] 0
+805F637C:   callc [evt_msg_print evt_msg.o] 0 ["stg2_mri_e20_08"] 0 LW(11)
+805F6394:   callc [evt_msg_print evt_msg.o] 0 ["stg2_mri_e20_09"] 0 LW(10)
+805F63AC:   callc [evt_eff_fukidashi evt_eff.o] 1 [zero_mri_00022a5c mri_03.o] LW(11) 1 0 0 0 0 0 0 60
+805F63E0:   wait_ms 1000
+805F63E8:   callc [evt_msg_togelr evt_msg.o] 0
+805F63F4:   callc [evt_msg_print evt_msg.o] 0 ["stg2_mri_e20_10"] 0 LW(11)
+805F640C:   callc [evt_msg_print evt_msg.o] 0 ["stg2_mri_e20_11"] 0 LW(10)
+805F6424:   callc [evt_npc_get_position evt_npc.o] LW(10) LW(0) LW(1) LW(2)
+805F643C:   addi LW(0) -20
+805F6448:   callc [evt_cam3d_evt_set evt_cam.o] -175 73 278 -175 25 7 500 11
+805F6470:   begin_thread
+805F6474:     callc [evt_npc_get_position evt_npc.o] LW(10) LW(10) LW(11) LW(12)
+805F648C:     callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_STG2_PUNI_JUMP1"] LW(10) LW(11) LW(12) 0
+805F64A8:   end_thread
+805F64AC:   callc [evt_npc_jump_position_nohit evt_npc.o] LW(10) LW(0) LW(1) LW(2) 200 18
+805F64CC:   callc [evt_msg_togelr evt_msg.o] 0
+805F64D8:   callc [evt_msg_print evt_msg.o] 0 ["stg2_mri_e20_12"] 0 LW(11)
+805F64F0:   callc [evt_msg_print evt_msg.o] 0 ["stg2_mri_e20_13"] 0 LW(10)
+805F6508:   wait_ms 2000
+805F6510:   callc [evt_msg_togelr evt_msg.o] 0
+805F651C:   callc [evt_msg_print evt_msg.o] 0 ["stg2_mri_e20_14"] 0 LW(11)
+805F6534:   callc [evt_cam3d_evt_off evt_cam.o] 500 11
+805F6544:   wait_ms 500
+805F654C:   setii GSWF(2836) 0
+805F6558:   setii GSWF(2877) 1
+805F6564:   setii GSW(651) 98
+805F6570:   callc [evt_npc_get_position evt_npc.o] ["ガイド"] LW(0) LW(1) LW(2)
+805F6588:   callc [evt_npc_set_position evt_npc.o] ["ガイド"] 0 -1000 0
+805F65A0:   callc [evt_puni_init_puni mri_puni.o] 1 1 LW(0) LW(1) LW(2) 0
+805F65C0:   callc [evt_npc_get_position evt_npc.o] ["ガイド妹"] LW(0) LW(1) LW(2)
+805F65D8:   callc [evt_npc_set_position evt_npc.o] ["ガイド妹"] 0 -1000 0
+805F65F0:   callc [evt_puni_init_puni mri_puni.o] 2 1 LW(0) LW(1) LW(2) 0
+805F6610:   setii LW(10) 1
+805F661C:   loop 0
+805F6624:     callc [evt_puni_set_mode mri_puni.o] LW(10) 1
+805F6634:     callc [evt_puni_flag_onoff mri_puni.o] LW(10) 1 8388608
+805F6648:     addi LW(10) 1
+805F6654:     if_int_eq LW(10) 103
+805F6660:       loop_break
+805F6664:     endif
+805F6668:   end_loop
+805F666C:   wait_ms 2000
+805F6674:   begin_thread
+805F6678:     callc [evt_snd_bgmoff evt_snd.o] 1024
+805F6684:     callc [evt_snd_bgmon evt_snd.o] 1 ["BGM_FF_GET_PARTY1"]
+805F6694:     wait_ms 2000
+805F669C:     callc [evt_snd_bgmoff evt_snd.o] 513
+805F66A8:     callc [evt_snd_bgmon evt_snd.o] 288 0
+805F66B8:   end_thread
+805F66BC:   callc [evt_msg_toge evt_msg.o] 1 0 0 0
+805F66D4:   if_int_eq GSWF(2878) 0
+805F66E0:     callc [evt_msg_print evt_msg.o] 0 ["stg2_mri_e20_16"] 0 0
+805F66F8:   else
+805F66FC:     callc [evt_msg_print evt_msg.o] 0 ["stg2_mri_e20_16_1"] 0 0
+805F6714:   endif
+805F6718:   setii GSW(0) 101
+805F6724:   callc [evt_snd_bgmon evt_snd.o] 512 ["BGM_STG2_MRI1"]
+805F6734:   return
+805F6738:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [mario_kirimomi_event mri_03.o] AT 805F5890 ---
+805F5890:   wait_ms 300
+805F5898:   callc [evt_mario_dispflag_onoff evt_mario.o] 1 256
+805F58A8:   callc [evt_mario_get_dispdir evt_mario.o] LW(8)
+805F58B4:   setii LW(9) 1980
+805F58C0:   addi LW(9) LW(8)
+805F58CC:   callc [evt_sub_intpl_msec_init evt_sub.o] 11 LW(8) LW(9) 2000
+805F58E4:   loop 0
+805F58EC:     callc [evt_sub_intpl_msec_get_value evt_sub.o]
+805F58F4:     callc [evt_mario_set_dispdir evt_mario.o] LW(0)
+805F5900:     if_int_eq LW(1) 0
+805F590C:       loop_break
+805F5910:     endif
+805F5914:     wait_frames 1
+805F591C:   end_loop
+805F5920:   callc [evt_mario_dispflag_onoff evt_mario.o] 0 256
+805F5930:   callc [evt_mario_set_dir evt_mario.o] 90 0 0
+805F5944:   callc [evt_party_run evt_party.o] 0
+805F5950:   return
+805F5954:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [party_kirimomi_event mri_03.o] AT 805F5958 ---
+805F5958:   wait_ms 500
+805F5960:   callc [evt_party_stop evt_party.o] 0
+805F596C:   callc [evt_party_dispflg_onoff evt_party.o] 0 16 1
+805F5980:   callc [evt_party_get_dispdir evt_party.o] 0 LW(8)
+805F5990:   setii LW(9) 1980
+805F599C:   addi LW(9) LW(8)
+805F59A8:   callc [evt_sub_intpl_msec_init evt_sub.o] 11 LW(8) LW(9) 2000
+805F59C0:   loop 0
+805F59C8:     callc [evt_sub_intpl_msec_get_value evt_sub.o]
+805F59D0:     callc [evt_party_set_dispdir evt_party.o] 0 LW(0)
+805F59E0:     if_int_eq LW(1) 0
+805F59EC:       loop_break
+805F59F0:     endif
+805F59F4:     wait_frames 1
+805F59FC:   end_loop
+805F5A00:   callc [evt_party_dispflg_onoff evt_party.o] 0 16 0
+805F5A14:   callc [evt_party_set_dir evt_party.o] 0 90 0
+805F5A28:   callc [evt_party_run evt_party.o] 0
+805F5A34:   return
+805F5A38:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [mri_puni_walk_se mri.o] AT 805E3DE8 ---
+805E3DE8:   loop 0
+805E3DF0:     callc [evt_npc_get_position evt_npc.o] LW(0) LW(10) LW(11) LW(12)
+805E3E08:     callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_STG2_PUNI_MOVE2_1"] LW(10) LW(11) LW(12) 0
+805E3E24:     wait_frames 5
+805E3E2C:   end_loop
+805E3E30:   return
+805E3E34:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [kinoko_small mri_03.o] AT 805F5AAC ---
+805F5AAC:   callc [evt_item_get_position evt_item.o] LW(10) LW(0) LW(1) LW(2)
+805F5AC4:   setii LW(10) ["item00"]
+805F5AD0:   setff LW(11) 0.70
+805F5ADC:   callc [evt_item_set_scale evt_item.o] LW(10) LW(11)
+805F5AEC:   wait_ms 750
+805F5AF4:   setff LW(11) 0.35
+805F5B00:   callc [evt_item_set_scale evt_item.o] LW(10) LW(11)
+805F5B10:   wait_ms 750
+805F5B18:   callc [evt_item_set_position evt_item.o] ["item00"] 0 -1000 0
+805F5B30:   return
+805F5B34:   end

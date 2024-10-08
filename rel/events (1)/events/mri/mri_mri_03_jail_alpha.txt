@@ -1,0 +1,83 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [jail_alpha mri_03.o] AT 805F35A0 ---
+805F35A0:   callc [evt_mapobj_flag_onoff evt_map.o] 1 1 ["S"] 2048
+805F35B8:   callc [evt_mapobj_flag_onoff evt_map.o] 1 0 ["S_hako_l_saku"] 2048
+805F35D0:   callc [evt_mapobj_flag_onoff evt_map.o] 1 0 ["S_hako_l_doa"] 2048
+805F35E8:   callc [evt_mapobj_flag_onoff evt_map.o] 1 0 ["S_hako_l_01"] 2048
+805F3600:   callc [evt_mapobj_flag_onoff evt_map.o] 1 0 ["S_hako_r_saku"] 2048
+805F3618:   callc [evt_mapobj_flag_onoff evt_map.o] 1 0 ["S_hako_r_doa"] 2048
+805F3630:   callc [evt_mapobj_flag_onoff evt_map.o] 1 0 ["S_hako_r_01"] 2048
+805F3648:   callc [evt_map_blend_set_flag evt_map.o] 1 ["mario"] 2048
+805F365C:   callc [evt_map_blend_set_flag evt_map.o] 1 ["party"] 2048
+805F3670:   callc [evt_map_blend_set_flag evt_map.o] 1 ["プニ族長老"] 2048
+805F3684:   callc [evt_map_blend_set_flag evt_map.o] 1 ["ガイド妹"] 2048
+805F3698:   callc [evt_map_blend_set_flag evt_map.o] 1 ["ガイド"] 2048
+805F36AC:   callc [evt_map_blend_set_flag evt_map.o] 1 ["プニ族"] 2048
+805F36C0:   callc [evt_map_blend_set_flag evt_map.o] 1 ["プニ族３"] 2048
+805F36D4:   callc [evt_map_blend_set_flag evt_map.o] 1 ["ガイドsp"] 2048
+805F36E8:   callc [evt_map_blend_set_flag evt_map.o] 1 ["ガイド妹sp"] 2048
+805F36FC:   callc [evt_map_blend_set_flag evt_map.o] 1 ["ちびトゲsp"] 2048
+805F3710:   callc [evt_map_blend_set_flag evt_map.o] 1 ["ライバルsp"] 2048
+805F3724:   if_int_eq GSWF(2832) 0
+805F3730:     callc [evt_map_blend_set_mobj_flag evt_map.o] 1 ["mobj_lock00"] 2048
+805F3744:   endif
+805F3748:   if_int_eq GSWF(2834) 0
+805F3754:     callc [evt_map_blend_set_mobj_flag evt_map.o] 1 ["mobj_lock01"] 2048
+805F3768:   endif
+805F376C:   if_int_eq GSWF(5613) 0
+805F3778:     callc [evt_map_blend_set_mobj_flag evt_map.o] 1 ["kururin1"] 2048
+805F378C:   endif
+805F3790:   callsa [jail_alpha_mario_check mri_03.o]
+805F3798:   setii LW(10) 255
+805F37A4:   setii GW(2) 255
+805F37B0:   setii GW(3) 255
+805F37BC:   setii GF(2) 0
+805F37C8:   loop 0
+805F37D0:     if_int_eq GF(2) 0
+805F37DC:       if_int_lt GW(2) LW(10)
+805F37E8:         addi LW(10) -5
+805F37F4:         if_int_gt GW(2) LW(10)
+805F3800:           setii LW(10) GW(2)
+805F380C:         endif
+805F3810:       endif
+805F3814:       if_int_gt GW(2) LW(10)
+805F3820:         addi LW(10) 5
+805F382C:         if_int_lt GW(2) LW(10)
+805F3838:           setii LW(10) GW(2)
+805F3844:         endif
+805F3848:       endif
+805F384C:       callc [evt_map_set_blend evt_map.o] 0 255 255 255 LW(10)
+805F3868:     else
+805F386C:       if_int_lt GW(3) LW(10)
+805F3878:         addi LW(10) -5
+805F3884:         if_int_gt GW(3) LW(10)
+805F3890:           setii LW(10) GW(3)
+805F389C:         endif
+805F38A0:       endif
+805F38A4:       if_int_gt GW(3) LW(10)
+805F38B0:         addi LW(10) 5
+805F38BC:         if_int_lt GW(3) LW(10)
+805F38C8:           setii LW(10) GW(3)
+805F38D4:         endif
+805F38D8:       endif
+805F38DC:       callc [evt_map_set_blend evt_map.o] 0 255 255 255 LW(10)
+805F38F8:     endif
+805F38FC:     wait_frames 1
+805F3904:   end_loop
+805F3908:   return
+805F390C:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [jail_alpha_mario_check mri_03.o] AT 805F3540 ---
+805F3540:   loop 0
+805F3548:     callc [evt_mario_get_pos evt_mario.o] 0 LW(0) LW(1) LW(2)
+805F3560:     if_int_le LW(2) -81
+805F356C:       setii GW(2) 80
+805F3578:     else
+805F357C:       setii GW(2) 255
+805F3588:     endif
+805F358C:     wait_frames 1
+805F3594:   end_loop
+805F3598:   return
+805F359C:   end

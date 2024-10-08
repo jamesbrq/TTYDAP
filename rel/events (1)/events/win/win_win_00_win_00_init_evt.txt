@@ -1,0 +1,689 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [win_00_init_evt win_00.o] AT 805C4144 ---
+805C4144:   setii LW(0) [bero_entry_data win_00.o]
+805C4150:   callc [evt_bero_get_info evt_bero.o]
+805C4158:   callss [evt_bero_info_run evt_bero.o]
+805C4160:   callc [evt_snd_bgmon evt_snd.o] 512 ["BGM_STG2_WIN1"]
+805C4170:   callc [evt_snd_envon evt_snd.o] 272 ["ENV_STG2_WIN1"]
+805C4180:   callc [evt_npc_setup evt_npc.o] [npcEnt win_00.o]
+805C418C:   if_int_eq GSWF(2675) 1
+805C4198:     if_int_le GSW(0) 112
+805C41A4:       callss [kizayarou_init win_00.o]
+805C41AC:     endif
+805C41B0:   endif
+805C41B4:   setii LW(0) [tree_access_data win_00.o]
+805C41C0:   callss [evt_sub_tree_access_entry evt_sub.o]
+805C41C8:   if_int_le GSW(0) 71
+805C41D4:     callsa [witchtrio_momeru win_00.o]
+805C41DC:   endif
+805C41E0:   if_int_eq GSW(0) 83
+805C41EC:     callsa [witchtrio_picture win_00.o]
+805C41F4:   endif
+805C41F8:   if_int_eq GSW(0) 84
+805C4204:     callsa [mario_vs_witchtrio win_00.o]
+805C420C:   endif
+805C4210:   if_int_eq GSW(0) 85
+805C421C:     callsa [witchtrio_lose win_00.o]
+805C4224:   endif
+805C4228:   if_int_eq GSW(0) 86
+805C4234:     callc [evt_item_entry evt_item.o] ["necklace"] 63 -361 0 -22 16 GSWF(2675) [get_necklace win_00.o]
+805C425C:   endif
+805C4260:   callc [evt_item_entry evt_item.o] ["i"] 154 385 0 -115 0 GSWF(2676) 0
+805C4288:   callss [iri_28_init win_00.o]
+805C4290:   return
+805C4294:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [kizayarou_init win_00.o] AT 805C0F34 ---
+805C0F34:   setii LW(0) ["キザ野郎"]
+805C0F40:   callc [evt_npc_entry evt_npc.o] LW(0) ["c_kiza"]
+805C0F50:   callc [evt_npc_set_tribe evt_npc.o] LW(0) ["キザ野郎"]
+805C0F60:   callc [evt_npc_change_interrupt evt_npc.o] LW(0) 6 [kizayarou_talk win_00.o]
+805C0F74:   callc [evt_npc_change_interrupt evt_npc.o] LW(0) 1 [kizayarou_regl win_00.o]
+805C0F88:   callc [evt_npc_set_position evt_npc.o] LW(0) -450 0 -25
+805C0FA0:   callc [evt_npc_set_ry evt_npc.o] LW(0) 270
+805C0FB0:   callc [evt_npc_flag_onoff evt_npc.o] 1 LW(0) 1536
+805C0FC4:   return
+805C0FC8:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [witchtrio_momeru win_00.o] AT 805C124C ---
+805C124C:   callc [evt_npc_set_position evt_npc.o] ["ビビアン"] -535 0 -30
+805C1264:   callc [evt_npc_set_position evt_npc.o] ["マリリン"] -495 0 -60
+805C127C:   callc [evt_npc_set_position evt_npc.o] ["マジョリン"] -455 0 -30
+805C1294:   callc [evt_npc_set_ry evt_npc.o] ["ビビアン"] 90
+805C12A4:   callc [evt_npc_set_ry evt_npc.o] ["マリリン"] 90
+805C12B4:   callc [evt_npc_set_ry evt_npc.o] ["マジョリン"] 270
+805C12C4:   callc [evt_npc_flag_onoff evt_npc.o] 1 ["ビビアン"] 1073741856
+805C12D8:   callc [evt_npc_flag_onoff evt_npc.o] 1 ["マリリン"] 1073741856
+805C12EC:   callc [evt_npc_flag_onoff evt_npc.o] 1 ["マジョリン"] 1073741856
+805C1300:   callc [evt_mario_key_onoff evt_mario.o] 0
+805C130C:   callc [evt_bero_exec_wait evt_bero.o] 65536
+805C1318:   callc [evt_mario_normalize evt_mario.o]
+805C1320:   callc [evt_npc_change_fbat_mode evt_npc.o] 7
+805C132C:   callc [evt_npc_stop_for_event evt_npc.o]
+805C1334:   setii GF(0) 1
+805C1340:   setii GF(1) 1
+805C134C:   begin_thread
+805C1350:     callc [evt_party_move_pos2 evt_party.o] 0 -761 -35 120.00
+805C1368:     setii GF(0) 0
+805C1374:   end_thread
+805C1378:   begin_thread
+805C137C:     callc [evt_party_move_pos2 evt_party.o] 1 -785 18 120.00
+805C1394:     setii GF(1) 0
+805C13A0:   end_thread
+805C13A4:   callc [evt_mario_mov_pos2 evt_mario.o] -733 0 120.00
+805C13B8:   wait_until GF(0)
+805C13C0:   wait_until GF(1)
+805C13C8:   begin_thread
+805C13CC:     callc [evt_mario_get_pos evt_mario.o] 0 LW(0) LW(1) LW(2)
+805C13E4:     callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_VOICE_MARIO_FIND1"] LW(0) LW(1) LW(2) 0
+805C1400:   end_thread
+805C1404:   callc [evt_eff_fukidashi evt_eff.o] 0 [zero_win_00003830 win_00.o] 0 0 0 0 0 0 0 0 60
+805C1438:   callc [evt_eff_fukidashi evt_eff.o] 3 [zero_win_00003830 win_00.o] 0 0 0 0 0 0 0 0 60
+805C146C:   callc [evt_eff_fukidashi evt_eff.o] 4 [zero_win_00003830 win_00.o] 0 0 0 0 0 0 0 0 60
+805C14A0:   wait_ms 500
+805C14A8:   callc [evt_cam3d_evt_set evt_cam.o] -497.50 115 325.80 -497.50 45 -68 500 11
+805C14D0:   callc [evt_snd_bgmoff evt_snd.o] 1024
+805C14DC:   wait_ms 1000
+805C14E4:   callc [evt_snd_bgmoff evt_snd.o] 1024
+805C14F0:   callc [evt_snd_bgmon evt_snd.o] 1 ["BGM_EVT_WITCH1"]
+805C1500:   callc [evt_msg_print evt_msg.o] 0 ["stg2_win_e01_00"] 0 ["マジョリン"]
+805C1518:   wait_ms 200
+805C1520:   callc [evt_npc_set_ry evt_npc.o] ["マリリン"] 270
+805C1530:   wait_ms 300
+805C1538:   callc [evt_msg_print evt_msg.o] 0 ["stg2_win_e01_01"] 0 ["ビビアン"]
+805C1550:   wait_ms 200
+805C1558:   callc [evt_npc_set_ry evt_npc.o] ["マリリン"] 90
+805C1568:   wait_ms 300
+805C1570:   callc [evt_msg_print evt_msg.o] 0 ["stg2_win_e01_02"] 0 ["マジョリン"]
+805C1588:   wait_ms 200
+805C1590:   callc [evt_cam3d_evt_set evt_cam.o] -465 85 227 -465 37 -68 500 0
+805C15B8:   wait_ms 1000
+805C15C0:   callc [evt_msg_print evt_msg.o] 0 ["stg2_win_e01_02_01"] 0 ["マジョリン"]
+805C15D8:   wait_ms 200
+805C15E0:   callc [evt_cam3d_evt_set evt_cam.o] -520 85 227 -520 37 -68 500 11
+805C1608:   wait_ms 1000
+805C1610:   callc [evt_npc_set_ry evt_npc.o] ["マリリン"] 270
+805C1620:   wait_ms 300
+805C1628:   callc [evt_npc_set_anim evt_npc.o] ["ビビアン"] ["PTR_U_1"]
+805C1638:   wait_ms 150
+805C1640:   callc [evt_npc_get_position evt_npc.o] ["ビビアン"] LW(0) LW(1) LW(2)
+805C1658:   callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_STG2_VIVI_NECKLACE1"] LW(0) LW(1) LW(2) 0
+805C1674:   addi LW(0) 17
+805C1680:   addi LW(1) 11
+805C168C:   addi LW(2) 5
+805C1698:   callc [evt_item_entry evt_item.o] ["necklace"] 63 LW(0) LW(1) LW(2) 16 -1 0
+805C16C0:   callc [evt_item_flag_on evt_item.o] ["necklace"] 2
+805C16D0:   wait_ms 300
+805C16D8:   callc [evt_npc_set_autotalkpose evt_npc.o] ["ビビアン"] ["PTR_S_5"] ["PTR_T_6"]
+805C16EC:   wait_frames 1
+805C16F4:   callc [evt_msg_print evt_msg.o] 0 ["stg2_win_e01_03"] 0 ["ビビアン"]
+805C170C:   wait_ms 200
+805C1714:   callc [evt_cam3d_evt_set evt_cam.o] -497.50 115 325.80 -497.50 45 -68 500 11
+805C173C:   wait_ms 500
+805C1744:   callc [evt_item_set_position evt_item.o] ["necklace"] 0 -1000 0
+805C175C:   callc [evt_npc_set_anim evt_npc.o] ["ビビアン"] ["PTR_S_1"]
+805C176C:   wait_ms 300
+805C1774:   callc [evt_npc_set_ry evt_npc.o] ["マリリン"] 90
+805C1784:   wait_ms 300
+805C178C:   callc [evt_msg_print evt_msg.o] 0 ["stg2_win_e01_04"] 0 ["マジョリン"]
+805C17A4:   wait_ms 200
+805C17AC:   callc [evt_npc_get_position evt_npc.o] ["ビビアン"] LW(0) LW(1) LW(2)
+805C17C4:   callc [evt_npc_jump_position_nohit evt_npc.o] ["ビビアン"] LW(0) LW(1) LW(2) 225 30
+805C17E4:   callc [evt_npc_set_anim evt_npc.o] ["ビビアン"] ["PTR_H_1"]
+805C17F4:   callc [evt_npc_set_autotalkpose evt_npc.o] ["ビビアン"] ["PTR_H_1"] ["PTR_T_2"]
+805C1808:   callc [evt_npc_set_ry evt_npc.o] ["マリリン"] 270
+805C1818:   wait_ms 300
+805C1820:   callc [evt_msg_print evt_msg.o] 0 ["stg2_win_e01_06"] 0 ["ビビアン"]
+805C1838:   wait_ms 200
+805C1840:   callc [evt_npc_set_ry evt_npc.o] ["マリリン"] 90
+805C1850:   wait_ms 300
+805C1858:   callc [evt_npc_get_position evt_npc.o] ["マジョリン"] LW(0) LW(1) LW(2)
+805C1870:   callc [evt_npc_jump_position_nohit evt_npc.o] ["マジョリン"] LW(0) LW(1) LW(2) 225 30
+805C1890:   callc [evt_npc_jump_position_nohit evt_npc.o] ["マジョリン"] LW(0) LW(1) LW(2) 225 30
+805C18B0:   wait_ms 300
+805C18B8:   callc [evt_msg_print evt_msg.o] 0 ["stg2_win_e01_07"] 0 ["マジョリン"]
+805C18D0:   wait_ms 200
+805C18D8:   callc [evt_npc_set_ry evt_npc.o] ["マリリン"] 270
+805C18E8:   wait_ms 300
+805C18F0:   callc [evt_msg_print evt_msg.o] 0 ["stg2_win_e01_08"] 0 ["ビビアン"]
+805C1908:   wait_ms 200
+805C1910:   callc [evt_eff_fukidashi evt_eff.o] 1 [zero_win_00003830 win_00.o] ["マリリン"] 0 0 0 0 0 0 0 60
+805C1944:   wait_ms 1000
+805C194C:   callc [evt_cam3d_evt_set_rel evt_cam.o] 0 70 393 0 45 -20.80 500 11
+805C1974:   wait_ms 1000
+805C197C:   begin_thread
+805C1980:     callc [evt_mario_get_pos evt_mario.o] 0 LW(0) LW(1) LW(2)
+805C1998:     callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_VOICE_MARIO_QUESTION1"] LW(0) LW(1) LW(2) 0
+805C19B4:   end_thread
+805C19B8:   callc [evt_eff_fukidashi evt_eff.o] 0 [zero_win_00003830 win_00.o] 0 1 0 0 0 0 0 0 60
+805C19EC:   wait_ms 1000
+805C19F4:   callc [evt_cam3d_evt_set evt_cam.o] -497.50 100 227.40 -497.50 47.60 -68 0 11
+805C1A1C:   wait_ms 300
+805C1A24:   callc [evt_npc_set_ry evt_npc.o] ["マリリン"] 90
+805C1A34:   wait_ms 300
+805C1A3C:   callc [evt_npc_get_position evt_npc.o] ["マリリン"] LW(0) LW(1) LW(2)
+805C1A54:   callc [evt_npc_jump_position_nohit evt_npc.o] ["マリリン"] LW(0) LW(1) LW(2) 225 30
+805C1A74:   callc [evt_npc_jump_position_nohit evt_npc.o] ["マリリン"] LW(0) LW(1) LW(2) 225 30
+805C1A94:   wait_ms 100
+805C1A9C:   callc [evt_msg_print evt_msg.o] 0 ["stg2_win_e01_09"] 0 ["マリリン"]
+805C1AB4:   wait_ms 200
+805C1ABC:   callc [evt_cam3d_evt_set evt_cam.o] -465 85 227 -465 37 -68 500 11
+805C1AE4:   wait_ms 1000
+805C1AEC:   callc [evt_msg_print evt_msg.o] 0 ["stg2_win_e01_10"] 0 ["マジョリン"]
+805C1B04:   wait_ms 200
+805C1B0C:   callc [evt_cam3d_evt_set evt_cam.o] -497.50 115 325.80 -497.50 45 -68 500 11
+805C1B34:   wait_ms 800
+805C1B3C:   callc [evt_npc_get_position evt_npc.o] ["マジョリン"] LW(0) LW(1) LW(2)
+805C1B54:   subi LW(0) 25
+805C1B60:   callc [evt_npc_move_position evt_npc.o] ["マジョリン"] LW(0) LW(2) 0 80.00 0
+805C1B80:   wait_ms 300
+805C1B88:   callc [evt_msg_print evt_msg.o] 0 ["stg2_win_e01_11"] 0 ["マジョリン"]
+805C1BA0:   wait_ms 200
+805C1BA8:   callc [evt_npc_set_ry evt_npc.o] ["マリリン"] 270
+805C1BB8:   wait_ms 300
+805C1BC0:   callc [evt_msg_print evt_msg.o] 0 ["stg2_win_e01_12"] 0 ["ビビアン"]
+805C1BD8:   wait_ms 200
+805C1BE0:   callc [evt_npc_set_ry evt_npc.o] ["マリリン"] 90
+805C1BF0:   wait_ms 300
+805C1BF8:   callc [evt_msg_print evt_msg.o] 0 ["stg2_win_e01_13"] 0 ["マジョリン"]
+805C1C10:   wait_ms 200
+805C1C18:   callc [evt_npc_set_anim evt_npc.o] ["マジョリン"] ["MJR_I_1"]
+805C1C28:   callc [evt_npc_get_position evt_npc.o] ["マジョリン"] LW(3) LW(4) LW(5)
+805C1C40:   callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_STG2_MAJO_NECKLACE_STEAL2"] LW(3) LW(4) LW(5) 0
+805C1C5C:   wait_ms 300
+805C1C64:   callc [evt_npc_set_anim evt_npc.o] ["ビビアン"] ["PTR_H_1"]
+805C1C74:   callc [evt_npc_get_position evt_npc.o] ["ビビアン"] LW(0) LW(1) LW(2)
+805C1C8C:   callc [evt_npc_get_position evt_npc.o] ["マジョリン"] LW(3) LW(4) LW(5)
+805C1CA4:   callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_STG2_MAJO_NECKLACE_STEAL1"] LW(0) LW(1) LW(2) LW(10)
+805C1CC0:   addi LW(0) 5
+805C1CCC:   addi LW(3) -5
+805C1CD8:   addi LW(1) 12
+805C1CE4:   addi LW(4) 8
+805C1CF0:   callc [evt_item_set_position evt_item.o] ["necklace"] LW(0) LW(1) LW(2)
+805C1D08:   callc [evt_eff64 evt_eff.o] [zero_win_00003830 win_00.o] ["stardust_n64"] 1 LW(0) LW(1) LW(2) 20.00 0 0 0 0 0 0 0
+805C1D48:   begin_thread
+805C1D4C:     callc [evt_sub_intpl_msec_init evt_sub.o] 4 0 30 375
+805C1D64:     loop 0
+805C1D6C:       callc [evt_sub_intpl_msec_get_value_para evt_sub.o] GW(10) LW(1)
+805C1D7C:       if_int_eq LW(1) 0
+805C1D88:         loop_break
+805C1D8C:       endif
+805C1D90:       wait_frames 1
+805C1D98:     end_loop
+805C1D9C:     callc [evt_sub_intpl_msec_init evt_sub.o] 1 30 10 375
+805C1DB4:     loop 0
+805C1DBC:       callc [evt_sub_intpl_msec_get_value_para evt_sub.o] GW(10) LW(1)
+805C1DCC:       if_int_eq LW(1) 0
+805C1DD8:         loop_break
+805C1DDC:       endif
+805C1DE0:       wait_frames 1
+805C1DE8:     end_loop
+805C1DEC:   end_thread
+805C1DF0:   callc [win_item_move_3d_position win_00.o] ["necklace"] LW(3) LW(4) LW(5) 750 0 GW(10)
+805C1E14:   callc [evt_snd_sfxoff evt_snd.o] LW(10)
+805C1E20:   callc [evt_npc_set_anim evt_npc.o] ["マジョリン"] ["MJR_S_1"]
+805C1E30:   callc [evt_npc_set_anim evt_npc.o] ["ビビアン"] ["PTR_S_4"]
+805C1E40:   callc [evt_item_set_position evt_item.o] ["necklace"] 0 -1000 0
+805C1E58:   wait_ms 500
+805C1E60:   callc [evt_npc_get_position evt_npc.o] ["マジョリン"] LW(0) LW(1) LW(2)
+805C1E78:   addi LW(0) 25
+805C1E84:   callc [evt_npc_move_position evt_npc.o] ["マジョリン"] LW(0) LW(2) 500 0 0
+805C1EA4:   wait_ms 300
+805C1EAC:   callc [evt_msg_print evt_msg.o] 0 ["stg2_win_e01_13_01"] 0 ["マジョリン"]
+805C1EC4:   callc [evt_npc_set_anim evt_npc.o] ["ビビアン"] ["PTR_S_3"]
+805C1ED4:   callc [evt_npc_set_autotalkpose evt_npc.o] ["ビビアン"] ["PTR_S_3"] ["PTR_T_3"]
+805C1EE8:   callc [evt_npc_set_force_regl_anim evt_npc.o] ["ビビアン"] ["PTR_S_3"]
+805C1EF8:   wait_ms 200
+805C1F00:   callc [evt_npc_set_ry evt_npc.o] ["マリリン"] 270
+805C1F10:   wait_ms 400
+805C1F18:   wait_ms 500
+805C1F20:   callc [evt_msg_print evt_msg.o] 0 ["stg2_win_e01_14"] 0 ["ビビアン"]
+805C1F38:   wait_ms 200
+805C1F40:   callc [evt_npc_set_ry evt_npc.o] ["マリリン"] 90
+805C1F50:   wait_ms 300
+805C1F58:   callc [evt_snd_bgmoff evt_snd.o] 513
+805C1F64:   callc [evt_snd_bgmon evt_snd.o] 288 0
+805C1F74:   callc [evt_npc_flag_onoff evt_npc.o] 0 ["ビビアン"] 1073741856
+805C1F88:   callc [evt_npc_flag_onoff evt_npc.o] 0 ["マリリン"] 1073741856
+805C1F9C:   callc [evt_npc_flag_onoff evt_npc.o] 0 ["マジョリン"] 1073741856
+805C1FB0:   callc [evt_cam3d_evt_off evt_cam.o] 500 11
+805C1FC0:   setii GSW(0) 72
+805C1FCC:   callc [evt_party_run evt_party.o] 0
+805C1FD8:   callc [evt_party_run evt_party.o] 1
+805C1FE4:   callc [evt_mario_key_onoff evt_mario.o] 1
+805C1FF0:   callc [evt_npc_change_fbat_mode evt_npc.o] 1
+805C1FFC:   callc [evt_npc_start_for_event evt_npc.o]
+805C2004:   return
+805C2008:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [witchtrio_picture win_00.o] AT 805C2070 ---
+805C2070:   callc [evt_mario_key_onoff evt_mario.o] 0
+805C207C:   callc [evt_cam3d_evt_set evt_cam.o] -495 165 582 -495 45 -108 0 11
+805C20A4:   callc [evt_mario_cont_onoff evt_mario.o] 0
+805C20B0:   callc [evt_party_cont_onoff evt_party.o] 0 0
+805C20C0:   callc [evt_party_cont_onoff evt_party.o] 1 0
+805C20D0:   callc [evt_mario_set_pos evt_mario.o] 0 -1000 0
+805C20E4:   callc [evt_party_set_pos evt_party.o] 0 0 -1000 0
+805C20FC:   callc [evt_party_set_pos evt_party.o] 1 0 -1000 0
+805C2114:   callc [evt_npc_set_position evt_npc.o] ["ビビアン"] -535 0 -30
+805C212C:   callc [evt_npc_set_position evt_npc.o] ["マリリン"] -495 0 -60
+805C2144:   callc [evt_npc_set_position evt_npc.o] ["マジョリン"] -455 0 -30
+805C215C:   callc [evt_npc_set_ry evt_npc.o] ["ビビアン"] 90
+805C216C:   callc [evt_npc_set_ry evt_npc.o] ["マリリン"] 270
+805C217C:   callc [evt_npc_set_ry evt_npc.o] ["マジョリン"] 270
+805C218C:   callc [evt_npc_flag_onoff evt_npc.o] 1 ["ビビアン"] 1140850720
+805C21A0:   callc [evt_npc_flag_onoff evt_npc.o] 1 ["マリリン"] 1140850720
+805C21B4:   callc [evt_npc_flag_onoff evt_npc.o] 1 ["マジョリン"] 1140850720
+805C21C8:   callc [evt_seq_wait evt_seq.o] 2
+805C21D4:   wait_ms 1000
+805C21DC:   callc [evt_npc_change_fbat_mode evt_npc.o] 7
+805C21E8:   callc [evt_npc_stop_for_event evt_npc.o]
+805C21F0:   callc [evt_snd_bgmon evt_snd.o] 512 ["BGM_EVT_WITCH1"]
+805C2200:   callc [evt_npc_get_position evt_npc.o] ["ビビアン"] LW(0) LW(1) LW(2)
+805C2218:   callc [evt_npc_jump_position_nohit evt_npc.o] ["ビビアン"] LW(0) LW(1) LW(2) 225 30
+805C2238:   callc [evt_npc_jump_position_nohit evt_npc.o] ["ビビアン"] LW(0) LW(1) LW(2) 225 30
+805C2258:   callc [evt_npc_set_autotalkpose evt_npc.o] ["ビビアン"] ["PTR_S_4"] ["PTR_T_5"]
+805C226C:   wait_frames 1
+805C2274:   callc [evt_msg_print evt_msg.o] 0 ["stg2_win_e06_00"] 0 ["ビビアン"]
+805C228C:   callc [evt_cam3d_evt_set evt_cam.o] -460 90 237 -460 30 -108 500 11
+805C22B4:   wait_ms 500
+805C22BC:   callc [evt_npc_set_ry evt_npc.o] ["マリリン"] 90
+805C22CC:   callc [evt_npc_get_position evt_npc.o] ["マジョリン"] LW(0) LW(1) LW(2)
+805C22E4:   callc [evt_npc_jump_position_nohit evt_npc.o] ["マジョリン"] LW(0) LW(1) LW(2) 225 30
+805C2304:   callc [evt_msg_print evt_msg.o] 0 ["stg2_win_e06_01"] 0 ["マジョリン"]
+805C231C:   callc [evt_cam3d_evt_set evt_cam.o] -495 90 237 -495 30 -108 500 11
+805C2344:   wait_ms 500
+805C234C:   callc [evt_msg_print evt_msg.o] 0 ["stg2_win_e06_02"] 0 ["マリリン"]
+805C2364:   callc [evt_item_entry evt_item.o] ["picture"] 90 0 -1000 0 16 -1 0
+805C238C:   callc [evt_item_flag_on evt_item.o] ["picture"] 2
+805C239C:   callsa_tid [majorin_have_picture win_00.o] LW(10)
+805C23A8:   callc [evt_npc_set_anim evt_npc.o] ["マジョリン"] ["MJR_I_1"]
+805C23B8:   wait_ms 500
+805C23C0:   stop_tid LW(10)
+805C23C8:   wait_ms 500
+805C23D0:   callc [evt_npc_set_anim evt_npc.o] ["マジョリン"] ["MJR_S_1"]
+805C23E0:   callc [evt_npc_get_position evt_npc.o] ["マジョリン"] LW(0) LW(1) LW(2)
+805C23F8:   addi LW(0) -20
+805C2404:   callc [evt_item_set_position evt_item.o] ["picture"] LW(0) LW(1) LW(2)
+805C241C:   wait_ms 500
+805C2424:   begin_thread
+805C2428:     callc [evt_npc_get_position evt_npc.o] ["ビビアン"] LW(0) LW(1) LW(2)
+805C2440:     callc [evt_npc_jump_position_nohit evt_npc.o] ["ビビアン"] LW(0) LW(1) LW(2) 225 30
+805C2460:   end_thread
+805C2464:   begin_thread
+805C2468:     callc [evt_npc_get_position evt_npc.o] ["マリリン"] LW(0) LW(1) LW(2)
+805C2480:     callc [evt_npc_jump_position_nohit evt_npc.o] ["マリリン"] LW(0) LW(1) LW(2) 225 30
+805C24A0:   end_thread
+805C24A4:   callc [evt_npc_get_position evt_npc.o] ["マジョリン"] LW(0) LW(1) LW(2)
+805C24BC:   callc [evt_npc_jump_position_nohit evt_npc.o] ["マジョリン"] LW(0) LW(1) LW(2) 225 30
+805C24DC:   callc [evt_eff_fukidashi evt_eff.o] 1 [zero_win_00003830 win_00.o] ["マリリン"] 0 0 0 0 0 0 0 60
+805C2510:   callc [evt_eff_fukidashi evt_eff.o] 1 [zero_win_00003830 win_00.o] ["ビビアン"] 0 0 0 0 0 0 0 60
+805C2544:   callc [evt_eff_fukidashi evt_eff.o] 1 [zero_win_00003830 win_00.o] ["マジョリン"] 0 0 0 0 0 0 0 60
+805C2578:   wait_ms 1000
+805C2580:   callc [evt_msg_print evt_msg.o] 0 ["stg2_win_e06_03"] 0 ["マジョリン"]
+805C2598:   begin_thread
+805C259C:     callc [evt_npc_get_position evt_npc.o] ["マリリン"] LW(0) LW(1) LW(2)
+805C25B4:     callc [evt_npc_jump_position_nohit evt_npc.o] ["マリリン"] LW(0) LW(1) LW(2) 225 30
+805C25D4:     callc [evt_npc_jump_position_nohit evt_npc.o] ["マリリン"] LW(0) LW(1) LW(2) 225 30
+805C25F4:   end_thread
+805C25F8:   wait_frames 1
+805C2600:   callc [evt_msg_print evt_msg.o] 0 ["stg2_win_e06_04"] 0 ["マリリン"]
+805C2618:   callc [evt_item_set_position evt_item.o] ["picture"] 0 -1000 0
+805C2630:   wait_frames 1
+805C2638:   callc [evt_msg_print evt_msg.o] 0 ["stg2_win_e06_05"] 0 ["マジョリン"]
+805C2650:   callc [evt_cam3d_evt_set evt_cam.o] -525 90 237 -525 30 -108 500 11
+805C2678:   wait_ms 500
+805C2680:   callc [evt_npc_set_ry evt_npc.o] ["マリリン"] 270
+805C2690:   callc [evt_npc_get_position evt_npc.o] ["ビビアン"] LW(0) LW(1) LW(2)
+805C26A8:   callc [evt_npc_jump_position_nohit evt_npc.o] ["ビビアン"] LW(0) LW(1) LW(2) 225 30
+805C26C8:   callc [evt_npc_jump_position_nohit evt_npc.o] ["ビビアン"] LW(0) LW(1) LW(2) 225 30
+805C26E8:   wait_frames 1
+805C26F0:   callc [evt_msg_print evt_msg.o] 0 ["stg2_win_e06_06"] 0 ["ビビアン"]
+805C2708:   callc [evt_cam3d_evt_set evt_cam.o] -460 90 237 -460 30 -108 500 11
+805C2730:   callc [evt_npc_set_ry evt_npc.o] ["マリリン"] 90
+805C2740:   wait_ms 500
+805C2748:   callc [evt_msg_print evt_msg.o] 0 ["stg2_win_e06_07"] 0 ["マジョリン"]
+805C2760:   callc [evt_cam3d_evt_set evt_cam.o] -495 90 237 -495 30 -108 500 11
+805C2788:   wait_ms 500
+805C2790:   callc [evt_npc_set_ry evt_npc.o] ["マリリン"] 270
+805C27A0:   callc [evt_msg_print evt_msg.o] 0 ["stg2_win_e06_08"] 0 ["ビビアン"]
+805C27B8:   callc [evt_npc_set_ry evt_npc.o] ["マリリン"] 90
+805C27C8:   callc [evt_msg_print evt_msg.o] 0 ["stg2_win_e06_09"] 0 ["マジョリン"]
+805C27E0:   callc [evt_npc_set_autotalkpose evt_npc.o] ["ビビアン"] ["PTR_S_3"] ["PTR_T_3"]
+805C27F4:   wait_frames 1
+805C27FC:   callc [evt_msg_print evt_msg.o] 0 ["stg2_win_e06_10"] 0 ["ビビアン"]
+805C2814:   callc [evt_msg_print evt_msg.o] 0 ["stg2_win_e06_11"] 0 ["マジョリン"]
+805C282C:   callc [evt_msg_print evt_msg.o] 0 ["stg2_win_e06_12"] 0 ["マリリン"]
+805C2844:   callc [evt_cam3d_evt_set evt_cam.o] -495 165 582 -495 45 -108 1500 11
+805C286C:   wait_ms 1200
+805C2874:   setii GSW(0) 84
+805C2880:   callc [evt_snd_bgmoff_f evt_snd.o] 512 1000
+805C2890:   callc [evt_fade_set_mapchange_type evt_fade.o] 0 2 500 1 500
+805C28AC:   callc [evt_bero_mapchange evt_bero.o] ["win_03"] ["n_bero"]
+805C28BC:   return
+805C28C0:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [mario_vs_witchtrio win_00.o] AT 805C28C4 ---
+805C28C4:   callc [evt_npc_set_ry evt_npc.o] ["マジョリン"] 270
+805C28D4:   callc [evt_npc_flag_onoff evt_npc.o] 1 ["ビビアン"] 1073741856
+805C28E8:   callc [evt_npc_flag_onoff evt_npc.o] 1 ["マリリン"] 1073741856
+805C28FC:   callc [evt_npc_flag_onoff evt_npc.o] 1 ["マジョリン"] 1073741920
+805C2910:   loop 0
+805C2918:     callc [evt_mario_get_pos evt_mario.o] 0 LW(0) LW(1) LW(2)
+805C2930:     if_int_le LW(0) -325
+805C293C:       loop_break
+805C2940:     endif
+805C2944:     wait_frames 1
+805C294C:   end_loop
+805C2950:   callc [evt_npc_change_fbat_mode evt_npc.o] 7
+805C295C:   callc [evt_npc_stop_for_event evt_npc.o]
+805C2964:   callc [evt_mario_key_onoff evt_mario.o] 0
+805C2970:   callc [evt_mario_normalize evt_mario.o]
+805C2978:   callc [evt_party_stop evt_party.o] 0
+805C2984:   callc [evt_party_stop evt_party.o] 1
+805C2990:   callc [evt_mario_dispflag_onoff evt_mario.o] 1 4
+805C29A0:   callc [evt_mario_set_dir evt_mario.o] 270 200 0
+805C29B4:   callc [evt_mario_dispflag_onoff evt_mario.o] 0 4
+805C29C4:   callc [evt_mario_adjust_dir evt_mario.o]
+805C29CC:   begin_thread
+805C29D0:     callc [evt_party_set_dir evt_party.o] 0 270 200
+805C29E4:   end_thread
+805C29E8:   begin_thread
+805C29EC:     callc [evt_party_set_dir evt_party.o] 1 270 200
+805C2A00:   end_thread
+805C2A04:   callc [evt_eff_fukidashi evt_eff.o] 1 [zero_win_00003830 win_00.o] ["マジョリン"] 0 0 0 0 0 0 0 60
+805C2A38:   callc [evt_eff_fukidashi evt_eff.o] 1 [zero_win_00003830 win_00.o] ["マリリン"] 0 0 0 0 0 0 0 60
+805C2A6C:   callc [evt_eff_fukidashi evt_eff.o] 1 [zero_win_00003830 win_00.o] ["ビビアン"] 0 0 0 0 0 0 0 60
+805C2AA0:   wait_ms 500
+805C2AA8:   callc [evt_npc_set_ry evt_npc.o] ["マジョリン"] 90
+805C2AB8:   wait_ms 500
+805C2AC0:   callc [evt_cam3d_evt_set evt_cam.o] -495 93 252 -495 45 -19 500 11
+805C2AE8:   wait_ms 600
+805C2AF0:   callc [evt_snd_bgmon evt_snd.o] 512 ["BGM_EVT_WITCH1"]
+805C2B00:   callc [evt_msg_print evt_msg.o] 0 ["stg2_win_e07_00"] 0 ["マジョリン"]
+805C2B18:   callc [evt_mario_set_pos evt_mario.o] -325 0 -10
+805C2B2C:   callc [evt_party_set_pos evt_party.o] 0 -277 0 -10
+805C2B44:   callc [evt_party_set_pos evt_party.o] 1 -300 0 0
+805C2B5C:   wait_ms 200
+805C2B64:   callc [evt_cam3d_evt_set evt_cam.o] -307 86.40 226.20 -307 42.00 -19.00 0 11
+805C2B8C:   wait_ms 500
+805C2B94:   callc [evt_msg_print_party evt_msg.o] ["stg2_win_e07_01"]
+805C2BA0:   wait_ms 200
+805C2BA8:   callc [evt_cam3d_evt_set evt_cam.o] -400 155 572 -400 50 -19 0 11
+805C2BD0:   wait_ms 500
+805C2BD8:   callc [evt_msg_print evt_msg.o] 0 ["stg2_win_e07_02"] 0 ["マジョリン"]
+805C2BF0:   wait_ms 200
+805C2BF8:   callc [evt_npc_set_autotalkpose evt_npc.o] ["ビビアン"] ["PTR_S_1"] ["PTR_T_1"]
+805C2C0C:   wait_frames 1
+805C2C14:   callc [evt_msg_print_party evt_msg.o] ["stg2_win_e07_02_01"]
+805C2C20:   wait_ms 200
+805C2C28:   callc [evt_cam3d_evt_set evt_cam.o] -451 88.60 274.00 -451 35.50 -19.00 0 0
+805C2C50:   wait_ms 300
+805C2C58:   callc [evt_msg_print evt_msg.o] 0 ["stg2_win_e07_02_02"] 0 ["マジョリン"]
+805C2C70:   wait_ms 200
+805C2C78:   callc [evt_cam3d_evt_set evt_cam.o] -495 105.10 274.90 -495 52.70 -19.30 200 11
+805C2CA0:   wait_ms 300
+805C2CA8:   callc [evt_msg_print evt_msg.o] 0 ["stg2_win_e07_02_03"] 0 ["マリリン"]
+805C2CC0:   wait_ms 200
+805C2CC8:   callc [evt_cam3d_evt_set evt_cam.o] -528 95.50 274.90 -528 42.50 -19.30 200 11
+805C2CF0:   wait_ms 300
+805C2CF8:   callc [evt_mario_cont_onoff evt_mario.o] 0
+805C2D04:   callc [evt_mario_set_pose evt_mario.o] ["M_I_Y"]
+805C2D10:   callc [evt_msg_print evt_msg.o] 0 ["stg2_win_e07_02_04"] 0 ["ビビアン"]
+805C2D28:   wait_ms 200
+805C2D30:   callc [evt_cam3d_evt_set evt_cam.o] -307 86.40 226.20 -307 42.00 -19.00 0 0
+805C2D58:   wait_ms 300
+805C2D60:   callc [evt_msg_print_party evt_msg.o] ["stg2_win_e07_02_05"]
+805C2D6C:   wait_ms 500
+805C2D74:   callc [evt_npc_set_ry evt_npc.o] ["マジョリン"] 270
+805C2D84:   wait_ms 300
+805C2D8C:   callc [evt_mario_get_pos evt_mario.o] 0 LW(0) LW(1) LW(2)
+805C2DA4:   callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_VOICE_MARIO_FIND1"] LW(0) LW(1) LW(2) 0
+805C2DC0:   callc [evt_mario_set_pose evt_mario.o] ["M_I_N"]
+805C2DCC:   callc [evt_msg_print evt_msg.o] 0 ["stg2_win_e07_02_06"] 0 ["マジョリン"]
+805C2DE4:   callc [evt_npc_set_anim evt_npc.o] ["ビビアン"] ["PTR_H_1"]
+805C2DF4:   wait_ms 200
+805C2DFC:   callc [evt_cam3d_evt_set evt_cam.o] -495 103 276 -495 50 -19 500 11
+805C2E24:   wait_ms 300
+805C2E2C:   callc [evt_msg_print evt_msg.o] 0 ["stg2_win_e07_02_07"] 0 ["マジョリン"]
+805C2E44:   wait_ms 200
+805C2E4C:   callc [evt_npc_set_autotalkpose evt_npc.o] ["ビビアン"] ["PTR_S_3"] ["PTR_T_3"]
+805C2E60:   wait_frames 1
+805C2E68:   callc [evt_msg_print evt_msg.o] 0 ["stg2_win_e07_02_08"] 0 ["ビビアン"]
+805C2E80:   wait_ms 200
+805C2E88:   callc [evt_msg_print evt_msg.o] 0 ["stg2_win_e07_02_09"] 0 ["マジョリン"]
+805C2EA0:   wait_ms 200
+805C2EA8:   callc [evt_npc_set_anim evt_npc.o] ["ビビアン"] ["PTR_B_1"]
+805C2EB8:   wait_ms 200
+805C2EC0:   callc [evt_npc_set_anim evt_npc.o] ["ビビアン"] ["PTR_B_2"]
+805C2ED0:   callc [evt_npc_set_autotalkpose evt_npc.o] ["ビビアン"] ["PTR_B_2"] ["PTR_T_4"]
+805C2EE4:   wait_ms 500
+805C2EEC:   callc [evt_msg_print evt_msg.o] 0 ["stg2_win_e07_02_10"] 0 ["ビビアン"]
+805C2F04:   wait_ms 200
+805C2F0C:   callc [evt_npc_set_ry evt_npc.o] ["マジョリン"] 90
+805C2F1C:   wait_ms 300
+805C2F24:   callc [evt_msg_print evt_msg.o] 0 ["stg2_win_e07_06"] 0 ["マジョリン"]
+805C2F3C:   wait_ms 200
+805C2F44:   wait_frames 1
+805C2F4C:   begin_thread
+805C2F50:     callc [evt_msg_print evt_msg.o] 0 ["stg2_win_e07_08"] 0 ["ビビアン"]
+805C2F68:   end_thread
+805C2F6C:   wait_ms 500
+805C2F74:   callc [evt_msg_print evt_msg.o] 0 ["stg2_win_e07_07"] 0 ["マリリン"]
+805C2F8C:   wait_ms 200
+805C2F94:   callc [evt_mario_set_pose evt_mario.o] ["M_I_Y"]
+805C2FA0:   begin_thread_tid LW(10)
+805C2FA8:     wait_ms 400
+805C2FB0:     callc [evt_npc_get_position evt_npc.o] ["マジョリン"] LW(0) LW(1) LW(2)
+805C2FC8:     addi LW(0) 160
+805C2FD4:     callc [evt_npc_move_position evt_npc.o] ["マジョリン"] LW(0) LW(2) 0 200 0
+805C2FF4:   end_thread
+805C2FF8:   begin_thread_tid LW(11)
+805C3000:     wait_ms 200
+805C3008:     callc [evt_npc_get_position evt_npc.o] ["マリリン"] LW(0) LW(1) LW(2)
+805C3020:     addi LW(0) 160
+805C302C:     callc [evt_npc_move_position evt_npc.o] ["マリリン"] LW(0) LW(2) 0 200 0
+805C304C:   end_thread
+805C3050:   begin_thread_tid LW(12)
+805C3058:     callc [evt_npc_flag_onoff evt_npc.o] 0 ["ビビアン"] 1024
+805C306C:     wait_frames 1
+805C3074:     callc [evt_npc_set_anim evt_npc.o] ["ビビアン"] ["PTR_R_3"]
+805C3084:     callc [evt_npc_get_position evt_npc.o] ["ビビアン"] LW(0) LW(1) LW(2)
+805C309C:     addi LW(0) 160
+805C30A8:     callc [evt_npc_move_position evt_npc.o] ["ビビアン"] LW(0) LW(2) 0 200 0
+805C30C8:   end_thread
+805C30CC:   callc [evt_cam3d_evt_set evt_cam.o] -375 144 533 -375 40 -58 750 11
+805C30F4:   wait_ms 600
+805C30FC:   callc [evt_npc_set_battle_info evt_npc.o] ["マジョリン"] 4
+805C310C:   callc [evt_npc_battle_start evt_npc.o] ["マジョリン"]
+805C3118:   callc [evt_npc_wait_battle_end evt_npc.o]
+805C3120:   stop_tid LW(10)
+805C3128:   stop_tid LW(11)
+805C3130:   stop_tid LW(12)
+805C3138:   callc [evt_mario_cont_onoff evt_mario.o] 1
+805C3144:   callc [evt_mario_key_onoff evt_mario.o] 1
+805C3150:   setii GSW(0) 85
+805C315C:   callsa [witchtrio_lose win_00.o]
+805C3164:   return
+805C3168:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [witchtrio_lose win_00.o] AT 805C33C4 ---
+805C33C4:   callc [evt_mario_key_onoff evt_mario.o] 0
+805C33D0:   callc [evt_npc_set_position evt_npc.o] ["ビビアン"] -438 0 -10
+805C33E8:   callc [evt_npc_set_position evt_npc.o] ["マリリン"] -425 0 -60
+805C3400:   callc [evt_npc_set_position evt_npc.o] ["マジョリン"] -387 0 -30
+805C3418:   callc [evt_npc_set_ry evt_npc.o] ["ビビアン"] 90
+805C3428:   callc [evt_npc_set_ry evt_npc.o] ["マリリン"] 90
+805C3438:   callc [evt_npc_set_ry evt_npc.o] ["マジョリン"] 90
+805C3448:   callc [evt_npc_flag_onoff evt_npc.o] 1 ["ビビアン"] 1073741856
+805C345C:   callc [evt_npc_flag_onoff evt_npc.o] 1 ["マリリン"] 1073741856
+805C3470:   callc [evt_npc_flag_onoff evt_npc.o] 1 ["マジョリン"] 1073741856
+805C3484:   callc [evt_mario_set_pos evt_mario.o] -335 0 -50
+805C3498:   callc [evt_party_set_pos evt_party.o] 0 -287 0 -50
+805C34B0:   callc [evt_party_set_pos evt_party.o] 1 -310 0 -40
+805C34C8:   callc [evt_mario_set_dir evt_mario.o] 270 0 0
+805C34DC:   callc [evt_party_set_dir evt_party.o] 0 270 -1
+805C34F0:   callc [evt_party_set_dir evt_party.o] 1 270 -1
+805C3504:   callc [evt_npc_entry evt_npc.o] ["ダミー"] ["c_majyorin"]
+805C3514:   callc [evt_npc_set_position evt_npc.o] ["ダミー"] 0 -1000 0
+805C352C:   callc [evt_npc_flag_onoff evt_npc.o] 1 ["ダミー"] 1073741856
+805C3540:   callc [evt_npc_flag_onoff evt_npc.o] 1 ["ダミー"] 128
+805C3554:   callc [evt_npc_set_autotalkpose evt_npc.o] ["ビビアン"] ["PTR_S_4"] ["PTR_T_4"]
+805C3568:   callc [evt_snd_bgmon evt_snd.o] 512 ["BGM_EVT_WITCH1"]
+805C3578:   callc [evt_cam3d_evt_set evt_cam.o] -375 144 533 -375 40 -58 0 11
+805C35A0:   callc [evt_item_entry evt_item.o] ["necklace"] 63 0 -1000 0 16 GSWF(2675) [get_necklace win_00.o]
+805C35C8:   callc [evt_item_flag_on evt_item.o] ["necklace"] 2
+805C35D8:   callc [evt_npc_get_position evt_npc.o] ["マリリン"] LW(0) LW(1) LW(2)
+805C35F0:   callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_GURUGURU_MARK1"] LW(0) LW(1) LW(2) 0
+805C360C:   callc [evt_eff_fukidashi evt_eff.o] 1 ["effmaririn"] ["マリリン"] 2 0 0 0 0 0 0 -1
+805C3640:   callc [evt_npc_get_position evt_npc.o] ["ビビアン"] LW(0) LW(1) LW(2)
+805C3658:   callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_GURUGURU_MARK1"] LW(0) LW(1) LW(2) 0
+805C3674:   callc [evt_eff_fukidashi evt_eff.o] 1 ["effvivian"] ["ビビアン"] 2 0 0 0 0 0 0 -1
+805C36A8:   callc [evt_seq_wait evt_seq.o] 2
+805C36B4:   wait_ms 500
+805C36BC:   callc [evt_npc_get_position evt_npc.o] ["マジョリン"] LW(0) LW(1) LW(2)
+805C36D4:   callc [evt_npc_jump_position_nohit evt_npc.o] ["マジョリン"] LW(0) LW(1) LW(2) 225 30
+805C36F4:   callc [evt_msg_print evt_msg.o] 0 ["stg2_win_e08_00"] 0 ["マジョリン"]
+805C370C:   begin_thread
+805C3710:     callc [evt_npc_set_ry evt_npc.o] ["マジョリン"] 270
+805C3720:     callc [evt_npc_get_position evt_npc.o] ["マジョリン"] LW(0) LW(1) LW(2)
+805C3738:     callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_STG2_SISTERS_ESCAPE1"] LW(0) LW(1) LW(2) 0
+805C3754:     addi LW(0) -100
+805C3760:     callc [evt_npc_move_position evt_npc.o] ["マジョリン"] LW(0) LW(2) 0 240.00 0
+805C3780:     callc [evt_npc_set_position evt_npc.o] ["マジョリン"] 0 -1000 0
+805C3798:   end_thread
+805C379C:   begin_thread
+805C37A0:     callc [evt_npc_get_position evt_npc.o] ["マジョリン"] LW(0) LW(1) LW(2)
+805C37B8:     setii LW(10) -361
+805C37C4:     subi LW(10) LW(0)
+805C37D0:     divi LW(10) 10
+805C37DC:     setii LW(11) LW(10)
+805C37E8:     muli LW(11) 5
+805C37F4:     addi LW(11) LW(0)
+805C3800:     setii LW(12) LW(10)
+805C380C:     muli LW(12) 7
+805C3818:     addi LW(12) LW(0)
+805C3824:     setii LW(13) LW(10)
+805C3830:     muli LW(13) 9
+805C383C:     addi LW(13) LW(0)
+805C3848:     callc [evt_npc_set_position evt_npc.o] ["ダミー"] LW(0) LW(1) LW(2)
+805C3860:     callsa_tid [witchtrio_lose_item win_00.o] LW(15)
+805C386C:     callc [evt_npc_jump_position_nohit evt_npc.o] ["ダミー"] LW(11) 0 LW(2) 625 30.00
+805C388C:     callc [evt_npc_jump_position_nohit evt_npc.o] ["ダミー"] LW(12) 0 LW(2) 250 15.00
+805C38AC:     callc [evt_npc_jump_position_nohit evt_npc.o] ["ダミー"] LW(13) 0 LW(2) 250 7.50
+805C38CC:     stop_tid LW(15)
+805C38D4:     callc [evt_npc_set_position evt_npc.o] ["ダミー"] 0 -1000 0
+805C38EC:     callc [evt_item_flag_off evt_item.o] ["necklace"] 2
+805C38FC:     callc [evt_item_set_position evt_item.o] ["necklace"] LW(13) 0 LW(2)
+805C3914:   end_thread
+805C3918:   begin_thread
+805C391C:     callc [evt_eff_softdelete evt_eff.o] ["effmaririn"]
+805C3928:     callc [evt_npc_get_position evt_npc.o] ["マリリン"] LW(0) LW(1) LW(2)
+805C3940:     callc [evt_npc_jump_position_nohit evt_npc.o] ["マリリン"] LW(0) LW(1) LW(2) 225 30
+805C3960:     callsa [witchtrio_mess_mari win_00.o]
+805C3968:     callc [evt_npc_set_ry evt_npc.o] ["マリリン"] 270
+805C3978:     callc [evt_npc_get_position evt_npc.o] ["マリリン"] LW(0) LW(1) LW(2)
+805C3990:     callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_STG2_SISTERS_ESCAPE1"] LW(0) LW(1) LW(2) 0
+805C39AC:     addi LW(0) -100
+805C39B8:     callc [evt_npc_move_position evt_npc.o] ["マリリン"] LW(0) LW(2) 0 240.00 0
+805C39D8:     callc [evt_npc_set_position evt_npc.o] ["マリリン"] 0 -1000 0
+805C39F0:   end_thread
+805C39F4:   wait_ms 425
+805C39FC:   setii GF(0) 1
+805C3A08:   begin_thread
+805C3A0C:     callc [evt_eff_softdelete evt_eff.o] ["effvivian"]
+805C3A18:     callc [evt_npc_get_position evt_npc.o] ["ビビアン"] LW(0) LW(1) LW(2)
+805C3A30:     callc [evt_npc_jump_position_nohit evt_npc.o] ["ビビアン"] LW(0) LW(1) LW(2) 225 30
+805C3A50:     callsa [witchtrio_mess_vivi win_00.o]
+805C3A58:     wait_ms 500
+805C3A60:     callc [evt_npc_set_ry evt_npc.o] ["ビビアン"] 270
+805C3A70:     callc [evt_npc_get_position evt_npc.o] ["ビビアン"] LW(0) LW(1) LW(2)
+805C3A88:     callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_STG2_SISTERS_ESCAPE1"] LW(0) LW(1) LW(2) 0
+805C3AA4:     addi LW(0) -25
+805C3AB0:     callc [evt_npc_move_position evt_npc.o] ["ビビアン"] LW(0) LW(2) 0 240.00 0
+805C3AD0:     callc [evt_npc_get_position evt_npc.o] ["ビビアン"] LW(0) LW(1) LW(2)
+805C3AE8:     callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_STG2_SISTERS_ESCAPE2"] LW(0) LW(1) LW(2) 0
+805C3B04:     callc [evt_npc_set_anim evt_npc.o] ["ビビアン"] ["PTR_F_1"]
+805C3B14:     wait_ms 500
+805C3B1C:     callc [evt_npc_set_anim evt_npc.o] ["ビビアン"] ["PTR_S_4"]
+805C3B2C:     callc [evt_npc_set_ry evt_npc.o] ["ビビアン"] 90
+805C3B3C:     wait_ms 200
+805C3B44:     callc [evt_npc_get_position evt_npc.o] ["ビビアン"] LW(0) LW(1) LW(2)
+805C3B5C:     callc [evt_npc_jump_position_nohit evt_npc.o] ["ビビアン"] LW(0) LW(1) LW(2) 225 30
+805C3B7C:     callc [evt_npc_set_ry evt_npc.o] ["ビビアン"] 270
+805C3B8C:     wait_ms 500
+805C3B94:     callc [evt_npc_get_position evt_npc.o] ["ビビアン"] LW(0) LW(1) LW(2)
+805C3BAC:     callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_STG2_SISTERS_ESCAPE1"] LW(0) LW(1) LW(2) 0
+805C3BC8:     addi LW(0) -100
+805C3BD4:     callc [evt_npc_move_position evt_npc.o] ["ビビアン"] LW(0) LW(2) 0 240.00 0
+805C3BF4:     callc [evt_npc_set_position evt_npc.o] ["ビビアン"] 0 -1000 0
+805C3C0C:     setii GF(0) 0
+805C3C18:   end_thread
+805C3C1C:   wait_until GF(0)
+805C3C24:   callc [evt_snd_bgmon evt_snd.o] 512 ["BGM_STG2_WIN1"]
+805C3C34:   setii GSW(0) 86
+805C3C40:   callc [evt_cam3d_evt_off evt_cam.o] 500 11
+805C3C50:   callc [evt_party_run evt_party.o] 0
+805C3C5C:   callc [evt_party_run evt_party.o] 1
+805C3C68:   callc [evt_mario_key_onoff evt_mario.o] 1
+805C3C74:   callc [evt_npc_change_fbat_mode evt_npc.o] 1
+805C3C80:   callc [evt_npc_start_for_event evt_npc.o]
+805C3C88:   return
+805C3C8C:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [iri_28_init win_00.o] AT 805C4054 ---
+805C4054:   if_int_eq GSW(1420) 28
+805C4060:     setii GSW(1469) 0
+805C406C:     callc [evt_npc_check evt_npc.o] ["パックン１"] LW(0)
+805C407C:     if_int_eq LW(0) 1
+805C4088:       callc [evt_npc_change_interrupt evt_npc.o] ["パックン１"] 8 [iri_28_enemy_dead win_00.o]
+805C409C:     else
+805C40A0:       addi GSW(1469) 1
+805C40AC:     endif
+805C40B0:     callc [evt_npc_check evt_npc.o] ["シンエモン"] LW(0)
+805C40C0:     if_int_eq LW(0) 1
+805C40CC:       callc [evt_npc_change_interrupt evt_npc.o] ["シンエモン"] 8 [iri_28_enemy_dead win_00.o]
+805C40E0:     else
+805C40E4:       addi GSW(1469) 1
+805C40F0:     endif
+805C40F4:     callc [evt_npc_check evt_npc.o] ["パックン２"] LW(0)
+805C4104:     if_int_eq LW(0) 1
+805C4110:       callc [evt_npc_change_interrupt evt_npc.o] ["パックン２"] 8 [iri_28_enemy_dead win_00.o]
+805C4124:     else
+805C4128:       addi GSW(1469) 1
+805C4134:     endif
+805C4138:   endif
+805C413C:   return
+805C4140:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [majorin_have_picture win_00.o] AT 805C200C ---
+805C200C:   loop 0
+805C2014:     callc [evt_npc_get_position evt_npc.o] ["マジョリン"] LW(0) LW(1) LW(2)
+805C202C:     addi LW(1) 20
+805C2038:     addi LW(2) 5
+805C2044:     callc [evt_item_set_position evt_item.o] ["picture"] LW(0) LW(1) LW(2)
+805C205C:     wait_frames 1
+805C2064:   end_loop
+805C2068:   return
+805C206C:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [witchtrio_lose_item win_00.o] AT 805C3338 ---
+805C3338:   loop 0
+805C3340:     callc [evt_npc_get_position evt_npc.o] ["ダミー"] LW(0) LW(1) LW(2)
+805C3358:     callc [evt_item_set_position evt_item.o] ["necklace"] LW(0) LW(1) LW(2)
+805C3370:     wait_frames 1
+805C3378:   end_loop
+805C337C:   return
+805C3380:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [witchtrio_mess_mari win_00.o] AT 805C33A4 ---
+805C33A4:   callc [evt_msg_print evt_msg.o] 0 ["stg2_win_e08_01"] 0 ["マリリン"]
+805C33BC:   return
+805C33C0:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [witchtrio_mess_vivi win_00.o] AT 805C3384 ---
+805C3384:   callc [evt_msg_print evt_msg.o] 0 ["stg2_win_e08_02"] 0 ["ビビアン"]
+805C339C:   return
+805C33A0:   end

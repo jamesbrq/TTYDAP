@@ -1,0 +1,657 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [unk_evt_dou_000117d0 dou_11.o] AT 805CC170 ---
+805CC170:   setii GSWF(2984) 1
+805CC17C:   setii LW(0) GSWF(2983)
+805CC188:   addi LW(0) GSWF(2984)
+805CC194:   if_int_eq LW(0) 1
+805CC1A0:     callsa [ukishima_part1 dou_11.o]
+805CC1A8:   endif
+805CC1AC:   if_int_eq LW(0) 2
+805CC1B8:     callsa [ukishima_part2 dou_11.o]
+805CC1C0:   endif
+805CC1C4:   return
+805CC1C8:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [ukishima_part1 dou_11.o] AT 805CBEFC ---
+805CBEFC:   callc [evt_mario_key_onoff evt_mario.o] 0
+805CBF08:   wait_ms 500
+805CBF10:   callc [evt_cam3d_evt_set evt_cam.o] 280 174 527 280 79 -14 500 11
+805CBF38:   wait_ms 1000
+805CBF40:   setii LW(2) ["S_taru_n01"]
+805CBF4C:   setii LW(3) ["A_taru_n01"]
+805CBF58:   callsa [ukishima_apper dou_11.o]
+805CBF60:   begin_thread
+805CBF64:     wait_ms 700
+805CBF6C:     setii LW(2) ["S_taru_n02"]
+805CBF78:     setii LW(3) ["A_taru_n02"]
+805CBF84:     callsa [ukishima_apper dou_11.o]
+805CBF8C:   end_thread
+805CBF90:   wait_ms 2500
+805CBF98:   callsa [pukapuka_watari_init01 dou_11.o]
+805CBFA0:   wait_ms 1000
+805CBFA8:   callss [ukishima_check dou_11.o]
+805CBFB0:   callc [evt_mario_key_onoff evt_mario.o] 1
+805CBFBC:   return
+805CBFC0:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [ukishima_part2 dou_11.o] AT 805CC04C ---
+805CC04C:   callc [evt_mario_key_onoff evt_mario.o] 0
+805CC058:   wait_ms 500
+805CC060:   callc [evt_cam3d_evt_set evt_cam.o] 525 174 527 525 79 -14 500 11
+805CC088:   wait_ms 1000
+805CC090:   setii LW(2) ["S_taru_n03"]
+805CC09C:   setii LW(3) ["A_taru_n03"]
+805CC0A8:   callsa [ukishima_apper dou_11.o]
+805CC0B0:   begin_thread
+805CC0B4:     wait_ms 700
+805CC0BC:     setii LW(2) ["S_taru_n04"]
+805CC0C8:     setii LW(3) ["A_taru_n04"]
+805CC0D4:     callss [ukishima_apper dou_11.o]
+805CC0DC:   end_thread
+805CC0E0:   wait_ms 2500
+805CC0E8:   callsa [pukapuka_watari_init02 dou_11.o]
+805CC0F0:   wait_ms 1000
+805CC0F8:   callss [ukishima_check dou_11.o]
+805CC100:   callc [evt_mario_key_onoff evt_mario.o] 1
+805CC10C:   return
+805CC110:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [ukishima_apper dou_11.o] AT 805CB9FC ---
+805CB9FC:   begin_thread
+805CBA00:     wait_ms 500
+805CBA08:     callc [evt_mapobj_get_position evt_map.o] LW(2) LW(10) LW(11) LW(12)
+805CBA20:     callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_STG5_BARREL_APPEAR1"] LW(10) LW(11) LW(12) 0
+805CBA3C:   end_thread
+805CBA40:   begin_thread
+805CBA44:     callc [evt_mapobj_get_position evt_map.o] LW(2) LW(10) LW(11) LW(12)
+805CBA5C:     callc [evt_eff64 evt_eff.o] [zero_dou_0000525c dou_11.o] ["ripple_n64"] 0 LW(10) 5 LW(12) 0 0 0 0 0 0 0 0
+805CBA9C:     wait_ms 400
+805CBAA4:     callc [evt_eff64 evt_eff.o] [zero_dou_0000525c dou_11.o] ["ripple_n64"] 0 LW(10) 5 LW(12) 0 0 0 0 0 0 0 0
+805CBAE4:   end_thread
+805CBAE8:   callc [evt_mapobj_flag_onoff evt_map.o] 1 0 LW(2) 1
+805CBB00:   callc [evt_hitobj_onoff evt_hit.o] LW(3) 1 1
+805CBB14:   callc [evt_hit_bind_mapobj evt_hit.o] LW(3) LW(2)
+805CBB24:   callc [evt_sub_intpl_msec_init evt_sub.o] 1 -100 0 800
+805CBB3C:   loop 0
+805CBB44:     callc [evt_sub_intpl_msec_get_value_para evt_sub.o] LW(0) LW(1)
+805CBB54:     callc [evt_mapobj_trans evt_map.o] 1 LW(2) 0 LW(0) 0
+805CBB70:     callc [evt_hit_bind_update evt_hit.o] LW(3)
+805CBB7C:     wait_frames 1
+805CBB84:     if_int_eq LW(1) 0
+805CBB90:       loop_break
+805CBB94:     endif
+805CBB98:   end_loop
+805CBB9C:   callc [evt_sub_intpl_msec_init evt_sub.o] 11 0 -10 300
+805CBBB4:   loop 0
+805CBBBC:     callc [evt_sub_intpl_msec_get_value_para evt_sub.o] LW(0) LW(1)
+805CBBCC:     callc [evt_mapobj_trans evt_map.o] 1 LW(2) 0 LW(0) 0
+805CBBE8:     callc [evt_hit_bind_update evt_hit.o] LW(3)
+805CBBF4:     wait_frames 1
+805CBBFC:     if_int_eq LW(1) 0
+805CBC08:       loop_break
+805CBC0C:     endif
+805CBC10:   end_loop
+805CBC14:   callc [evt_sub_intpl_msec_init evt_sub.o] 11 -10 0 300
+805CBC2C:   loop 0
+805CBC34:     callc [evt_sub_intpl_msec_get_value_para evt_sub.o] LW(0) LW(1)
+805CBC44:     callc [evt_mapobj_trans evt_map.o] 1 LW(2) 0 LW(0) 0
+805CBC60:     callc [evt_hit_bind_update evt_hit.o] LW(3)
+805CBC6C:     wait_frames 1
+805CBC74:     if_int_eq LW(1) 0
+805CBC80:       loop_break
+805CBC84:     endif
+805CBC88:   end_loop
+805CBC8C:   callc [evt_sub_intpl_msec_init evt_sub.o] 11 0 -5 200
+805CBCA4:   loop 0
+805CBCAC:     callc [evt_sub_intpl_msec_get_value_para evt_sub.o] LW(0) LW(1)
+805CBCBC:     callc [evt_mapobj_trans evt_map.o] 1 LW(2) 0 LW(0) 0
+805CBCD8:     callc [evt_hit_bind_update evt_hit.o] LW(3)
+805CBCE4:     wait_frames 1
+805CBCEC:     if_int_eq LW(1) 0
+805CBCF8:       loop_break
+805CBCFC:     endif
+805CBD00:   end_loop
+805CBD04:   callc [evt_sub_intpl_msec_init evt_sub.o] 11 -5 0 200
+805CBD1C:   loop 0
+805CBD24:     callc [evt_sub_intpl_msec_get_value_para evt_sub.o] LW(0) LW(1)
+805CBD34:     callc [evt_mapobj_trans evt_map.o] 1 LW(2) 0 LW(0) 0
+805CBD50:     callc [evt_hit_bind_update evt_hit.o] LW(3)
+805CBD5C:     wait_frames 1
+805CBD64:     if_int_eq LW(1) 0
+805CBD70:       loop_break
+805CBD74:     endif
+805CBD78:   end_loop
+805CBD7C:   callc [evt_sub_intpl_msec_init evt_sub.o] 11 0 -1 100
+805CBD94:   loop 0
+805CBD9C:     callc [evt_sub_intpl_msec_get_value_para evt_sub.o] LW(0) LW(1)
+805CBDAC:     callc [evt_mapobj_trans evt_map.o] 1 LW(2) 0 LW(0) 0
+805CBDC8:     callc [evt_hit_bind_update evt_hit.o] LW(3)
+805CBDD4:     wait_frames 1
+805CBDDC:     if_int_eq LW(1) 0
+805CBDE8:       loop_break
+805CBDEC:     endif
+805CBDF0:   end_loop
+805CBDF4:   callc [evt_sub_intpl_msec_init evt_sub.o] 11 -1 0 100
+805CBE0C:   loop 0
+805CBE14:     callc [evt_sub_intpl_msec_get_value_para evt_sub.o] LW(0) LW(1)
+805CBE24:     callc [evt_mapobj_trans evt_map.o] 1 LW(2) 0 LW(0) 0
+805CBE40:     callc [evt_hit_bind_update evt_hit.o] LW(3)
+805CBE4C:     wait_frames 1
+805CBE54:     if_int_eq LW(1) 0
+805CBE60:       loop_break
+805CBE64:     endif
+805CBE68:   end_loop
+805CBE6C:   return
+805CBE70:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [pukapuka_watari_init01 dou_11.o] AT 805CF508 ---
+805CF508:   setii LW(0) ["S_taru_n01"]
+805CF514:   setii LW(1) ["A_taru_n01"]
+805CF520:   setii LW(2) ["A_taru_n01"]
+805CF52C:   setii LW(3) [evt_ride_taru dou_11.o]
+805CF538:   callss [dou_puka_event_init1 dou_11.o]
+805CF540:   callsa [dou_puka_event_main1 dou_11.o]
+805CF548:   callsa [dou_puka_event_sub1 dou_11.o]
+805CF550:   callc [evt_run_case_evt evt_case.o] 0 1 ["A_taru_n01"] 0 [dou_puka_event_1 dou_11.o] 0
+805CF570:   callc [evt_run_case_evt evt_case.o] 1 1 ["A_taru_n01"] 0 [dou_puka_event_rev_1 dou_11.o] 0
+805CF590:   setii LW(0) ["S_taru_n02"]
+805CF59C:   setii LW(1) ["A_taru_n02"]
+805CF5A8:   setii LW(2) ["A_taru_n02"]
+805CF5B4:   setii LW(3) [evt_ride_taru dou_11.o]
+805CF5C0:   callss [dou_puka_event_init2 dou_11.o]
+805CF5C8:   callsa [dou_puka_event_main2 dou_11.o]
+805CF5D0:   callsa [dou_puka_event_sub2 dou_11.o]
+805CF5D8:   callc [evt_run_case_evt evt_case.o] 0 1 ["A_taru_n02"] 0 [dou_puka_event_2 dou_11.o] 0
+805CF5F8:   callc [evt_run_case_evt evt_case.o] 1 1 ["A_taru_n02"] 0 [dou_puka_event_rev_2 dou_11.o] 0
+805CF618:   return
+805CF61C:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [ukishima_check dou_11.o] AT 805CB95C ---
+805CB95C:   setii LW(0) GSWF(2983)
+805CB968:   addi LW(0) GSWF(2984)
+805CB974:   if_int_ne LW(0) 2
+805CB980:     callc [evt_cam3d_evt_off evt_cam.o] 500 11
+805CB990:     wait_ms 1000
+805CB998:   else
+805CB99C:     callc [evt_mario_key_onoff evt_mario.o] 0
+805CB9A8:     callc [evt_snd_bgmoff evt_snd.o] 1024
+805CB9B4:     callc [evt_snd_bgmon evt_snd.o] 1 ["BGM_FF_ENV_SUCCESS1"]
+805CB9C4:     wait_ms 2000
+805CB9CC:     callc [evt_snd_bgmoff evt_snd.o] 513
+805CB9D8:     callc [evt_snd_bgmon evt_snd.o] 288 0
+805CB9E8:     callsa [ukishima_watari dou_11.o]
+805CB9F0:   endif
+805CB9F4:   return
+805CB9F8:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [pukapuka_watari_init02 dou_11.o] AT 805CF620 ---
+805CF620:   setii LW(0) ["S_taru_n03"]
+805CF62C:   setii LW(1) ["A_taru_n03"]
+805CF638:   setii LW(2) ["A_taru_n03"]
+805CF644:   setii LW(3) [evt_ride_taru dou_11.o]
+805CF650:   callss [dou_puka_event_init3 dou_11.o]
+805CF658:   callsa [dou_puka_event_main3 dou_11.o]
+805CF660:   callsa [dou_puka_event_sub3 dou_11.o]
+805CF668:   callc [evt_run_case_evt evt_case.o] 0 1 ["A_taru_n03"] 0 [dou_puka_event_3 dou_11.o] 0
+805CF688:   callc [evt_run_case_evt evt_case.o] 1 1 ["A_taru_n03"] 0 [dou_puka_event_rev_3 dou_11.o] 0
+805CF6A8:   setii LW(0) ["S_taru_n04"]
+805CF6B4:   setii LW(1) ["A_taru_n04"]
+805CF6C0:   setii LW(2) ["A_taru_n04"]
+805CF6CC:   setii LW(3) [evt_ride_taru dou_11.o]
+805CF6D8:   callss [dou_puka_event_init4 dou_11.o]
+805CF6E0:   callsa [dou_puka_event_main4 dou_11.o]
+805CF6E8:   callsa [dou_puka_event_sub4 dou_11.o]
+805CF6F0:   callc [evt_run_case_evt evt_case.o] 0 1 ["A_taru_n04"] 0 [dou_puka_event_4 dou_11.o] 0
+805CF710:   callc [evt_run_case_evt evt_case.o] 1 1 ["A_taru_n04"] 0 [dou_puka_event_rev_4 dou_11.o] 0
+805CF730:   return
+805CF734:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [dou_puka_event_init1 dou_11.o] AT 805CEE48 ---
+805CEE48:   setii GW(1) 0
+805CEE54:   setii GW(2) 0
+805CEE60:   return
+805CEE64:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [dou_puka_event_main1 dou_11.o] AT 805CEEF0 ---
+805CEEF0:   callc [evt_hit_bind_mapobj evt_hit.o] LW(1) LW(0)
+805CEF00:   loop 0
+805CEF08:     callc [evt_mapobj_trans evt_map.o] 1 LW(0) 0 GW(2) 0
+805CEF24:     callc [evt_hit_bind_update evt_hit.o] LW(1)
+805CEF30:     wait_frames 1
+805CEF38:   end_loop
+805CEF3C:   return
+805CEF40:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [dou_puka_event_sub1 dou_11.o] AT 805CEF44 ---
+805CEF44:   callc [evt_sub_random evt_sub.o] 400 LW(0)
+805CEF54:   addi LW(0) 200
+805CEF60:   wait_ms LW(0)
+805CEF68:   setir LW(6) 0xfd050f82
+805CEF74:   callsa_tid [dou_normal_puka dou.o] LW(0)
+805CEF80:   loop 0
+805CEF88:     loop 0
+805CEF90:       if_int_eq GW(1) 1
+805CEF9C:         loop_break
+805CEFA0:       endif
+805CEFA4:       wait_frames 1
+805CEFAC:     end_loop
+805CEFB0:     stop_tid LW(0)
+805CEFB8:     loop 0
+805CEFC0:       if_int_eq GW(1) 2
+805CEFCC:         loop_break
+805CEFD0:       endif
+805CEFD4:       wait_frames 1
+805CEFDC:     end_loop
+805CEFE0:     callsa_tid [dou_normal_puka dou.o] LW(0)
+805CEFEC:   end_loop
+805CEFF0:   return
+805CEFF4:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [dou_puka_event_init2 dou_11.o] AT 805CEFF8 ---
+805CEFF8:   setii GW(3) 0
+805CF004:   setii GW(4) 0
+805CF010:   return
+805CF014:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [dou_puka_event_main2 dou_11.o] AT 805CF0A0 ---
+805CF0A0:   callc [evt_hit_bind_mapobj evt_hit.o] LW(1) LW(0)
+805CF0B0:   loop 0
+805CF0B8:     callc [evt_mapobj_trans evt_map.o] 1 LW(0) 0 GW(4) 0
+805CF0D4:     callc [evt_hit_bind_update evt_hit.o] LW(1)
+805CF0E0:     wait_frames 1
+805CF0E8:   end_loop
+805CF0EC:   return
+805CF0F0:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [dou_puka_event_sub2 dou_11.o] AT 805CF0F4 ---
+805CF0F4:   callc [evt_sub_random evt_sub.o] 400 LW(0)
+805CF104:   addi LW(0) 200
+805CF110:   wait_ms LW(0)
+805CF118:   setir LW(6) 0xfd050f84
+805CF124:   callsa_tid [dou_normal_puka dou.o] LW(0)
+805CF130:   loop 0
+805CF138:     loop 0
+805CF140:       if_int_eq GW(3) 1
+805CF14C:         loop_break
+805CF150:       endif
+805CF154:       wait_frames 1
+805CF15C:     end_loop
+805CF160:     stop_tid LW(0)
+805CF168:     loop 0
+805CF170:       if_int_eq GW(3) 2
+805CF17C:         loop_break
+805CF180:       endif
+805CF184:       wait_frames 1
+805CF18C:     end_loop
+805CF190:     callsa_tid [dou_normal_puka dou.o] LW(0)
+805CF19C:   end_loop
+805CF1A0:   return
+805CF1A4:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [ukishima_watari dou_11.o] AT 805CB674 ---
+805CB674:   callc [evt_cam3d_evt_set evt_cam.o] 160 174 527 160 79 -14 500 11
+805CB69C:   wait_ms 1000
+805CB6A4:   callc [evt_nannpc_get_position evt_nannpc.o] 99 LW(1) LW(2) LW(3)
+805CB6BC:   callc [evt_nannpc_set_dir evt_nannpc.o] 99 90
+805CB6CC:   callc [evt_msg_toge evt_msg.o] 2 LW(1) LW(2) LW(3)
+805CB6E4:   callc [evt_msg_print evt_msg.o] 0 ["stg5_dou_14"] 0 0
+805CB6FC:   setii LW(0) 0
+805CB708:   loop 100
+805CB710:     callc [evt_nannpc_set_dir evt_nannpc.o] LW(0) 90
+805CB720:     addi LW(0) 1
+805CB72C:   end_loop
+805CB730:   callc [evt_nannpc_get_position evt_nannpc.o] 98 LW(1) LW(2) LW(3)
+805CB748:   callc [evt_nannpc_set_dir evt_nannpc.o] 98 90
+805CB758:   callc [evt_msg_toge evt_msg.o] 2 LW(1) LW(2) LW(3)
+805CB770:   callc [evt_msg_print evt_msg.o] 0 ["stg5_dou_15"] 0 0
+805CB788:   callc [evt_snd_sfxon evt_snd.o] ["SFX_STG5_KINOPIO_MOVE1_2"] 0
+805CB798:   setii LW(5) 0
+805CB7A4:   setii LW(6) 110
+805CB7B0:   loop 0
+805CB7B8:     setii LW(0) 0
+805CB7C4:     loop 100
+805CB7CC:       callc [evt_nannpc_get_work evt_nannpc.o] LW(0) 1 LW(4)
+805CB7E0:       callc [evt_nannpc_get_position evt_nannpc.o] LW(0) LW(10) LW(11) LW(12)
+805CB7F8:       if_int_ge LW(11) LW(6)
+805CB804:         if_int_eq LW(4) 0
+805CB810:           callc [evt_nannpc_set_work evt_nannpc.o] LW(0) 1 1
+805CB824:           callc [evt_sub_random evt_sub.o] 50 LW(10)
+805CB834:           addi LW(10) 100
+805CB840:           wait_ms LW(10)
+805CB848:           callsa [ukishima_watari_run dou_11.o]
+805CB850:           addi LW(5) 1
+805CB85C:         endif
+805CB860:       endif
+805CB864:       if_int_eq LW(5) 100
+805CB870:         goto 100
+805CB878:       endif
+805CB87C:       addi LW(0) 1
+805CB888:     end_loop
+805CB88C:     addi LW(6) -10
+805CB898:   end_loop
+805CB89C: 100:
+805CB8A4:   wait_ms 1500
+805CB8AC:   callc [evt_nannpc_set_subfunc evt_nannpc.o] 2 [nanNPCOption evt_nannpc.o]
+805CB8BC:   setii LW(0) 0
+805CB8C8:   loop 95
+805CB8D0:     callc [evt_nannpc_flag_onoff evt_nannpc.o] LW(0) 0 4
+805CB8E4:     callc [evt_nannpc_set_size evt_nannpc.o] LW(0) 30 8
+805CB8F8:     addi LW(0) 1
+805CB904:   end_loop
+805CB908:   callc [evt_cam3d_evt_off evt_cam.o] 500 11
+805CB918:   wait_ms 500
+805CB920:   setii GSWF(2992) 1
+805CB92C:   callc [evt_hitobj_onoff evt_hit.o] ["fune_atari"] 1 0
+805CB940:   callc [evt_mario_key_onoff evt_mario.o] 1
+805CB94C:   callsa [suifu_orei dou_11.o]
+805CB954:   return
+805CB958:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [dou_puka_event_init3 dou_11.o] AT 805CF1A8 ---
+805CF1A8:   setii GW(5) 0
+805CF1B4:   setii GW(6) 0
+805CF1C0:   return
+805CF1C4:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [dou_puka_event_main3 dou_11.o] AT 805CF250 ---
+805CF250:   callc [evt_hit_bind_mapobj evt_hit.o] LW(1) LW(0)
+805CF260:   loop 0
+805CF268:     callc [evt_mapobj_trans evt_map.o] 1 LW(0) 0 GW(6) 0
+805CF284:     callc [evt_hit_bind_update evt_hit.o] LW(1)
+805CF290:     wait_frames 1
+805CF298:   end_loop
+805CF29C:   return
+805CF2A0:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [dou_puka_event_sub3 dou_11.o] AT 805CF2A4 ---
+805CF2A4:   callc [evt_sub_random evt_sub.o] 400 LW(0)
+805CF2B4:   addi LW(0) 200
+805CF2C0:   wait_ms LW(0)
+805CF2C8:   setir LW(6) 0xfd050f86
+805CF2D4:   callsa_tid [dou_normal_puka dou.o] LW(0)
+805CF2E0:   loop 0
+805CF2E8:     loop 0
+805CF2F0:       if_int_eq GW(5) 1
+805CF2FC:         loop_break
+805CF300:       endif
+805CF304:       wait_frames 1
+805CF30C:     end_loop
+805CF310:     stop_tid LW(0)
+805CF318:     loop 0
+805CF320:       if_int_eq GW(5) 2
+805CF32C:         loop_break
+805CF330:       endif
+805CF334:       wait_frames 1
+805CF33C:     end_loop
+805CF340:     callsa_tid [dou_normal_puka dou.o] LW(0)
+805CF34C:   end_loop
+805CF350:   return
+805CF354:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [dou_puka_event_init4 dou_11.o] AT 805CF358 ---
+805CF358:   setii GW(7) 0
+805CF364:   setii GW(8) 0
+805CF370:   return
+805CF374:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [dou_puka_event_main4 dou_11.o] AT 805CF400 ---
+805CF400:   callc [evt_hit_bind_mapobj evt_hit.o] LW(1) LW(0)
+805CF410:   loop 0
+805CF418:     callc [evt_mapobj_trans evt_map.o] 1 LW(0) 0 GW(8) 0
+805CF434:     callc [evt_hit_bind_update evt_hit.o] LW(1)
+805CF440:     wait_frames 1
+805CF448:   end_loop
+805CF44C:   return
+805CF450:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [dou_puka_event_sub4 dou_11.o] AT 805CF454 ---
+805CF454:   callc [evt_sub_random evt_sub.o] 400 LW(0)
+805CF464:   addi LW(0) 200
+805CF470:   wait_ms LW(0)
+805CF478:   setir LW(6) 0xfd050f88
+805CF484:   callsa_tid [dou_normal_puka dou.o] LW(0)
+805CF490:   loop 0
+805CF498:     loop 0
+805CF4A0:       if_int_eq GW(7) 1
+805CF4AC:         loop_break
+805CF4B0:       endif
+805CF4B4:       wait_frames 1
+805CF4BC:     end_loop
+805CF4C0:     stop_tid LW(0)
+805CF4C8:     loop 0
+805CF4D0:       if_int_eq GW(7) 2
+805CF4DC:         loop_break
+805CF4E0:       endif
+805CF4E4:       wait_frames 1
+805CF4EC:     end_loop
+805CF4F0:     callsa_tid [dou_normal_puka dou.o] LW(0)
+805CF4FC:   end_loop
+805CF500:   return
+805CF504:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [dou_normal_puka dou.o] AT 805C1640 ---
+805C1640:   setii LW(0) 1
+805C164C:   loop 0
+805C1654:     callc [evt_dou_normal_puka dou.o] LW(1)
+805C1660:     storef_ind LW(6) LW(1)
+805C166C:     addi LW(0) 1
+805C1678:     wait_ms 130
+805C1680:   end_loop
+805C1684:   return
+805C1688:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [ukishima_watari_run dou_11.o] AT 805CAF4C ---
+805CAF4C:   callc [evt_nannpc_set_work evt_nannpc.o] LW(0) 0 0
+805CAF60:   callc [evt_nannpc_set_dir evt_nannpc.o] LW(0) 90
+805CAF70:   callc [evt_sub_random evt_sub.o] 20 LW(10)
+805CAF80:   addi LW(10) 160
+805CAF8C:   callc [evt_sub_random evt_sub.o] 10 LW(12)
+805CAF9C:   addi LW(12) -10
+805CAFA8:   callc [evt_sub_random evt_sub.o] 30 LW(13)
+805CAFB8:   addi LW(13) 30
+805CAFC4:   callc [evt_sub_random evt_sub.o] 300 LW(14)
+805CAFD4:   addi LW(14) 300
+805CAFE0:   callc [evt_nannpc_get_position evt_nannpc.o] LW(0) LW(7) LW(8) LW(9)
+805CAFF8:   callc [evt_nannpc_jump_position evt_nannpc.o] LW(0) LW(10) 37 LW(12) LW(14) LW(13)
+805CB018:   callc [evt_sub_random evt_sub.o] 30 LW(10)
+805CB028:   addi LW(10) 50
+805CB034:   wait_ms LW(10)
+805CB03C:   callc [evt_sub_random evt_sub.o] 15 LW(10)
+805CB04C:   addi LW(10) 250
+805CB058:   callc [evt_sub_random evt_sub.o] 20 LW(12)
+805CB068:   addi LW(12) -10
+805CB074:   callc [evt_sub_random evt_sub.o] 30 LW(13)
+805CB084:   addi LW(13) 30
+805CB090:   callc [evt_sub_random evt_sub.o] 300 LW(14)
+805CB0A0:   addi LW(14) 300
+805CB0AC:   callc [evt_nannpc_get_position evt_nannpc.o] LW(0) LW(7) LW(8) LW(9)
+805CB0C4:   callc [evt_nannpc_jump_position evt_nannpc.o] LW(0) LW(10) 25 LW(12) LW(14) LW(13)
+805CB0E4:   callc [evt_sub_random evt_sub.o] 30 LW(10)
+805CB0F4:   addi LW(10) 50
+805CB100:   wait_ms LW(10)
+805CB108:   callc [evt_sub_random evt_sub.o] 15 LW(10)
+805CB118:   addi LW(10) 300
+805CB124:   callc [evt_sub_random evt_sub.o] 20 LW(12)
+805CB134:   addi LW(12) -10
+805CB140:   callc [evt_sub_random evt_sub.o] 30 LW(13)
+805CB150:   addi LW(13) 30
+805CB15C:   callc [evt_sub_random evt_sub.o] 300 LW(14)
+805CB16C:   addi LW(14) 300
+805CB178:   callc [evt_nannpc_get_position evt_nannpc.o] LW(0) LW(7) LW(8) LW(9)
+805CB190:   callc [evt_nannpc_jump_position evt_nannpc.o] LW(0) LW(10) 25 LW(12) LW(14) LW(13)
+805CB1B0:   callc [evt_sub_random evt_sub.o] 30 LW(10)
+805CB1C0:   addi LW(10) 50
+805CB1CC:   wait_ms LW(10)
+805CB1D4:   callc [evt_sub_random evt_sub.o] 15 LW(10)
+805CB1E4:   addi LW(10) 395
+805CB1F0:   callc [evt_sub_random evt_sub.o] 20 LW(12)
+805CB200:   addi LW(12) -10
+805CB20C:   callc [evt_sub_random evt_sub.o] 30 LW(13)
+805CB21C:   addi LW(13) 30
+805CB228:   callc [evt_sub_random evt_sub.o] 300 LW(14)
+805CB238:   addi LW(14) 300
+805CB244:   callc [evt_nannpc_get_position evt_nannpc.o] LW(0) LW(7) LW(8) LW(9)
+805CB25C:   callc [evt_nannpc_jump_position evt_nannpc.o] LW(0) LW(10) 25 LW(12) LW(14) LW(13)
+805CB27C:   callc [evt_sub_random evt_sub.o] 30 LW(10)
+805CB28C:   addi LW(10) 50
+805CB298:   wait_ms LW(10)
+805CB2A0:   callc [evt_sub_random evt_sub.o] 20 LW(10)
+805CB2B0:   addi LW(10) 490
+805CB2BC:   callc [evt_sub_random evt_sub.o] 20 LW(12)
+805CB2CC:   addi LW(12) -10
+805CB2D8:   callc [evt_sub_random evt_sub.o] 30 LW(13)
+805CB2E8:   addi LW(13) 30
+805CB2F4:   callc [evt_sub_random evt_sub.o] 300 LW(14)
+805CB304:   addi LW(14) 300
+805CB310:   callc [evt_nannpc_get_position evt_nannpc.o] LW(0) LW(7) LW(8) LW(9)
+805CB328:   callc [evt_nannpc_jump_position evt_nannpc.o] LW(0) LW(10) 25 LW(12) LW(14) LW(13)
+805CB348:   callc [evt_sub_random evt_sub.o] 30 LW(10)
+805CB358:   addi LW(10) 50
+805CB364:   wait_ms LW(10)
+805CB36C:   callc [evt_sub_random evt_sub.o] 15 LW(10)
+805CB37C:   addi LW(10) 550
+805CB388:   callc [evt_sub_random evt_sub.o] 20 LW(12)
+805CB398:   addi LW(12) -10
+805CB3A4:   callc [evt_sub_random evt_sub.o] 30 LW(13)
+805CB3B4:   addi LW(13) 30
+805CB3C0:   callc [evt_sub_random evt_sub.o] 300 LW(14)
+805CB3D0:   addi LW(14) 300
+805CB3DC:   callc [evt_nannpc_get_position evt_nannpc.o] LW(0) LW(7) LW(8) LW(9)
+805CB3F4:   callc [evt_nannpc_jump_position evt_nannpc.o] LW(0) LW(10) 25 LW(12) LW(14) LW(13)
+805CB414:   callc [evt_sub_random evt_sub.o] 30 LW(10)
+805CB424:   addi LW(10) 50
+805CB430:   wait_ms LW(10)
+805CB438:   callc [evt_nannpc_get_position evt_nannpc.o] LW(0) LW(7) LW(8) LW(9)
+805CB450:   callc [evt_nannpc_jump_position evt_nannpc.o] LW(0) 625 50 0 250 50
+805CB470:   switchi LW(0)
+805CB478:     case_int_eq 97
+805CB480:       callc [evt_nannpc_set_position evt_nannpc.o] 97 0 -1000 0
+805CB498:       callc [evt_nannpc_ppflag_onoff evt_nannpc.o] 97 0 4
+805CB4AC:       callc [evt_npc_set_position evt_npc.o] ["水夫C"] 825 100 -125
+805CB4C4:       callc [evt_npc_set_ry evt_npc.o] ["水夫C"] 270
+805CB4D4:       callc [evt_npc_flag_onoff evt_npc.o] 0 ["水夫C"] 1073741856
+805CB4E8:     case_int_eq 98
+805CB4F0:       callc [evt_nannpc_set_position evt_nannpc.o] 98 0 -1000 0
+805CB508:       callc [evt_nannpc_ppflag_onoff evt_nannpc.o] 98 0 4
+805CB51C:       callc [evt_npc_set_position evt_npc.o] ["水夫D"] 775 50 50
+805CB534:       callc [evt_npc_set_ry evt_npc.o] ["水夫D"] 270
+805CB544:       callc [evt_npc_flag_onoff evt_npc.o] 0 ["水夫D"] 1073741856
+805CB558:     case_int_eq 99
+805CB560:       callc [evt_nannpc_set_position evt_nannpc.o] 99 0 -1000 0
+805CB578:       callc [evt_nannpc_ppflag_onoff evt_nannpc.o] 99 0 4
+805CB58C:       callc [evt_npc_set_position evt_npc.o] ["水夫E"] 736 50 113
+805CB5A4:       callc [evt_npc_set_ry evt_npc.o] ["水夫E"] 270
+805CB5B4:       callc [evt_npc_flag_onoff evt_npc.o] 0 ["水夫E"] 1073741856
+805CB5C8:     case_default
+805CB5CC:       mo_set_base_int [suifudata_after dou_11.o]
+805CB5D4:       setii LW(10) LW(0)
+805CB5E0:       muli LW(10) 4
+805CB5EC:       mo_read_int_indexed LW(1) LW(10)
+805CB5F8:       addi LW(10) 1
+805CB604:       mo_read_int_indexed LW(2) LW(10)
+805CB610:       addi LW(10) 1
+805CB61C:       mo_read_int_indexed LW(3) LW(10)
+805CB628:       addi LW(10) 1
+805CB634:       mo_read_int_indexed LW(4) LW(10)
+805CB640:       callc [evt_nannpc_set_position evt_nannpc.o] LW(0) LW(1) LW(2) LW(3)
+805CB658:       callc [evt_nannpc_set_dir evt_nannpc.o] LW(0) LW(4)
+805CB668:   end_switch
+805CB66C:   return
+805CB670:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [suifu_orei dou_11.o] AT 805CCBC0 ---
+805CCBC0:   callc [evt_npc_set_position evt_npc.o] ["水夫C"] 825 100 -125
+805CCBD8:   callc [evt_npc_set_ry evt_npc.o] ["水夫C"] 270
+805CCBE8:   callc [evt_npc_set_position evt_npc.o] ["水夫D"] 775 50 50
+805CCC00:   callc [evt_npc_set_ry evt_npc.o] ["水夫D"] 270
+805CCC10:   callc [evt_npc_set_position evt_npc.o] ["水夫E"] 736 50 113
+805CCC28:   callc [evt_npc_set_ry evt_npc.o] ["水夫E"] 270
+805CCC38:   loop 0
+805CCC40:     callc [evt_mario_get_pos evt_mario.o] 0 LW(0) LW(1) LW(2)
+805CCC58:     callc [evt_mario_get_name_hitobj_ride evt_mario.o] LW(4)
+805CCC64:     if_string_eq LW(4) ["mod_01"]
+805CCC70:       if_int_ge LW(0) 630
+805CCC7C:         loop_break
+805CCC80:       endif
+805CCC84:       if_int_le LW(2) -20
+805CCC90:         if_int_ge LW(2) -140
+805CCC9C:           loop_break
+805CCCA0:         endif
+805CCCA4:       endif
+805CCCA8:     endif
+805CCCAC:     wait_frames 1
+805CCCB4:   end_loop
+805CCCB8:   stop_tid GW(10)
+805CCCC0:   callc [evt_mario_key_onoff evt_mario.o] 0
+805CCCCC:   callc [evt_mario_normalize evt_mario.o]
+805CCCD4:   callc [evt_npc_flag_onoff evt_npc.o] 1 ["モニー"] 1073741856
+805CCCE8:   callc [evt_npc_flag_onoff evt_npc.o] 1 ["ピートン"] 1073741856
+805CCCFC:   begin_thread
+805CCD00:     callc [evt_mario_set_dir evt_mario.o] 90 200 0
+805CCD14:   end_thread
+805CCD18:   begin_thread
+805CCD1C:     callc [evt_party_wait_landon evt_party.o] 0
+805CCD28:     callc [evt_party_stop evt_party.o] 0
+805CCD34:     callc [evt_party_set_dir evt_party.o] 0 90 200
+805CCD48:   end_thread
+805CCD4C:   callc [evt_snd_bgmoff_f evt_snd.o] 512 3000
+805CCD5C:   callc [evt_set_dir_to_target evt_npc.o] ["水夫D"] ["mario"]
+805CCD6C:   callc [evt_msg_print evt_msg.o] 0 ["stg5_dou_16"] 0 ["水夫D"]
+805CCD84:   callc [evt_set_dir_to_target evt_npc.o] ["水夫E"] ["mario"]
+805CCD94:   callc [evt_msg_print evt_msg.o] 0 ["stg5_dou_16_01"] 0 ["水夫E"]
+805CCDAC:   mo_set_base_int [suifudata_after dou_11.o]
+805CCDB4:   setii LW(10) 95
+805CCDC0:   muli LW(10) 4
+805CCDCC:   mo_read_int_indexed LW(1) LW(10)
+805CCDD8:   addi LW(10) 1
+805CCDE4:   mo_read_int_indexed LW(2) LW(10)
+805CCDF0:   addi LW(10) 1
+805CCDFC:   mo_read_int_indexed LW(3) LW(10)
+805CCE08:   addi LW(10) 1
+805CCE14:   mo_read_int_indexed LW(4) LW(10)
+805CCE20:   callc [evt_npc_set_position evt_npc.o] ["モニー"] LW(1) LW(2) LW(3)
+805CCE38:   callc [evt_eff_fukidashi evt_eff.o] 1 [zero_dou_0000525c dou_11.o] ["モニー"] 0 0 0 0 0 0 0 60
+805CCE6C:   wait_ms 1000
+805CCE74:   callc [evt_msg_print evt_msg.o] 0 ["stg5_dou_16_02"] 0 ["モニー"]
+805CCE8C:   callc [evt_npc_move_position evt_npc.o] ["モニー"] 700 0 0 180.00 0
+805CCEAC:   callc [evt_npc_set_ry evt_npc.o] ["モニー"] 270
+805CCEBC:   callc [evt_msg_print evt_msg.o] 0 ["stg5_dou_16_03"] 0 ["モニー"]
+805CCED4:   mo_set_base_int [suifudata_after dou_11.o]
+805CCEDC:   setii LW(10) 96
+805CCEE8:   muli LW(10) 4
+805CCEF4:   mo_read_int_indexed LW(1) LW(10)
+805CCF00:   addi LW(10) 1
+805CCF0C:   mo_read_int_indexed LW(2) LW(10)
+805CCF18:   addi LW(10) 1
+805CCF24:   mo_read_int_indexed LW(3) LW(10)
+805CCF30:   addi LW(10) 1
+805CCF3C:   mo_read_int_indexed LW(4) LW(10)
+805CCF48:   callc [evt_npc_set_position evt_npc.o] ["ピートン"] LW(1) LW(2) LW(3)
+805CCF60:   callc [evt_npc_move_position evt_npc.o] ["ピートン"] 750 0 0 180.00 0
+805CCF80:   callc [evt_npc_set_ry evt_npc.o] ["ピートン"] 270
+805CCF90:   callc [evt_msg_print evt_msg.o] 0 ["stg5_dou_16_04"] 0 ["モニー"]
+805CCFA8:   callc [evt_mario_set_pose evt_mario.o] ["M_I_2"]
+805CCFB4:   wait_ms 1000
+805CCFBC:   callc [evt_msg_print evt_msg.o] 0 ["stg5_dou_16_05"] 0 ["モニー"]
+805CCFD4:   callc [evt_mario_get_pos evt_mario.o] 0 LW(0) LW(1) LW(2)
+805CCFEC:   callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_VOICE_MARIO_NO1"] LW(0) LW(1) LW(2) 0
+805CD008:   callc [evt_mario_set_pose evt_mario.o] ["M_N_B"]
+805CD014:   wait_ms 1000
+805CD01C:   callc [evt_mario_set_pose evt_mario.o] ["M_S_1"]
+805CD028:   wait_ms 500
+805CD030:   callc [evt_mario_get_pos evt_mario.o] 0 LW(0) LW(1) LW(2)
+805CD048:   callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_VOICE_MARIO_HAND_UP1_3"] LW(0) LW(1) LW(2) 0
+805CD064:   callc [evt_mario_set_pose evt_mario.o] ["M_I_2"]
+805CD070:   wait_ms 1000
+805CD078:   callc [evt_msg_print evt_msg.o] 0 ["stg5_dou_16_06"] 0 ["モニー"]
+805CD090:   callc [evt_npc_flag_onoff evt_npc.o] 0 ["モニー"] 1073741856
+805CD0A4:   callc [evt_npc_change_interrupt evt_npc.o] ["モニー"] 6 [mony_talk dou_11.o]
+805CD0B8:   callc [evt_npc_flag_onoff evt_npc.o] 0 ["ピートン"] 1073741856
+805CD0CC:   callc [evt_npc_change_interrupt evt_npc.o] ["ピートン"] 6 [peton_talk dou_11.o]
+805CD0E0:   setii GSW(0) 250
+805CD0EC:   callc [evt_party_run evt_party.o] 0
+805CD0F8:   callc [evt_mario_key_onoff evt_mario.o] 1
+805CD104:   return
+805CD108:   end

@@ -1,0 +1,66 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [flame_attack_event unit_boss_vivian.o] AT 805D26A0 ---
+805D26A0:   callc [btlevtcmd_GetEnemyBelong battle_event_cmd.o] -2 LW(0)
+805D26B0:   callc [btlevtcmd_SamplingEnemy battle_event_cmd.o] -2 LW(0) LW(9)
+805D26C4:   callc [btlevtcmd_ChoiceSamplingEnemy battle_event_cmd.o] LW(9) LW(3) LW(4)
+805D26D8:   if_int_eq LW(3) -1
+805D26E4:     callc [btlevtcmd_CheckToken battle_event_cmd.o] -2 16 LW(0)
+805D26F8:     if_int_ne LW(0) 0
+805D2704:       callss [subsetevt_confuse_flustered battle_event_subset.o]
+805D270C:     endif
+805D2710:     return
+805D2714:   endif
+805D2718:   callc [btlevtcmd_WeaponAftereffect battle_event_cmd.o] LW(9)
+805D2724:   callc [btlevtcmd_AttackDeclareAll battle_event_cmd.o] -2
+805D2730:   callc [btlevtcmd_WaitGuardMove battle_event_cmd.o]
+805D2738:   callc [btlevtcmd_PayWeaponCost battle_event_cmd.o] -2 LW(9)
+805D2748:   callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 1 ["PTR_A3_1"]
+805D275C:   callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_BOSS_VIVI_MAGIC1"] [F1194D80] 0 [F1194D80]
+805D2778:   wait_ms 1000
+805D2780:   callc [btlevtcmd_GetSelectEnemy battle_event_cmd.o] LW(3) LW(4)
+805D2790:   setii LW(10) 0
+805D279C: 10:
+805D27A4:   callc [btlevtcmd_GetHitPos battle_event_cmd.o] LW(3) LW(4) LW(0) LW(1) LW(2)
+805D27C0:   callc [evt_eff evt_eff.o] [zero_win_00005734 unit_boss_vivian.o] ["kemuri_test"] 6 LW(0) LW(1) LW(2) 1.00 0 0 0 0 0 0 0
+805D2800:   callc [btlevtcmd_PreCheckDamage battle_event_cmd.o] -2 LW(3) LW(4) LW(9) 256 LW(5)
+805D2820:   switchi LW(5)
+805D2828:     case_int_eq_any 4
+805D2830:       goto 90
+805D2838:       end_multi_case
+805D283C:     case_int_eq 3
+805D2844:       callc [btlevtcmd_StartAvoid battle_event_cmd.o] LW(3) 38
+805D2854:       goto 90
+805D285C:       end_multi_case
+805D2860:     case_int_eq 6
+805D2868:       callc [btlevtcmd_StartAvoid battle_event_cmd.o] LW(3) 39
+805D2878:       goto 90
+805D2880:     case_int_eq 2
+805D2888:       callc [btlevtcmd_StartAvoid battle_event_cmd.o] LW(3) 40
+805D2898:       goto 90
+805D28A0:     case_int_eq 1
+805D28A8:       goto 91
+805D28B0:       end_multi_case
+805D28B4:     case_default
+805D28B8:       goto 98
+805D28C0:       end_multi_case
+805D28C4:   end_switch
+805D28C8: 90:
+805D28D0:   goto 97
+805D28D8: 91:
+805D28E0:   if_int_eq LW(10) 0
+805D28EC:     callc [btlevtcmd_ResultACDefence battle_event_cmd.o] LW(3) LW(9)
+805D28FC:   endif
+805D2900:   callc [btlevtcmd_CheckDamage battle_event_cmd.o] -2 LW(3) LW(4) LW(9) 256 LW(5)
+805D2920: 97:
+805D2928:   callc [btlevtcmd_GetSelectNextEnemy battle_event_cmd.o] LW(3) LW(4)
+805D2938:   if_int_ne LW(3) -1
+805D2944:     addi LW(10) 1
+805D2950:     goto 10
+805D2958:   endif
+805D295C: 98:
+805D2964:   callc [evt_btl_camera_set_mode battle_camera.o] 0 0
+805D2974:   wait_ms 1000
+805D297C:   return
+805D2980:   end

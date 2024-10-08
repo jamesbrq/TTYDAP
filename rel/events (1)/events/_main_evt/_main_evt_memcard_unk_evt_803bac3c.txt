@@ -1,0 +1,211 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [unk_evt_803bac3c evt_memcard.o] AT 803BAC3C ---
+803BAC3C:   if_int_eq LW(0) 0
+803BAC48:     callss [evt_memcard_save evt_memcard.o]
+803BAC50:   else
+803BAC54:     callss [evt_memcard_save evt_memcard.o]
+803BAC5C:     wait_ms 1000
+803BAC64:   endif
+803BAC68:   return
+803BAC6C:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [evt_memcard_save evt_memcard.o] AT 803BA444 ---
+803BA444:   setii LW(10) LW(0)
+803BA450:   if_int_eq LW(10) 23
+803BA45C:     goto 1
+803BA464:   endif
+803BA468: 0:
+803BA470:   if_int_eq LF(10) 1
+803BA47C:     callc [evt_msg_print_add evt_msg.o] 1 ["<scrl_auto><once_stop>"]
+803BA48C:     callc [evt_msg_print_add evt_msg.o] 0 ["msg_mcard_save_select"]
+803BA49C:     setii LF(10) 0
+803BA4A8:   else
+803BA4AC:     callc [evt_msg_print evt_msg.o] 0 ["msg_mcard_save_select"] 0 0
+803BA4C4:   endif
+803BA4C8:   if_int_eq LW(10) 21
+803BA4D4:     callc [evt_msg_select evt_msg.o] 0 ["msg_mcard_yesno_ending"]
+803BA4E4:   else
+803BA4E8:     callc [evt_msg_select evt_msg.o] 0 ["msg_mcard_yesno"]
+803BA4F8:   endif
+803BA4FC:   if_int_ne LW(0) 0
+803BA508:     callc [evt_msg_continue evt_msg.o]
+803BA510:     return
+803BA514:   endif
+803BA518: 1:
+803BA520:   setii GSW(4) LW(10)
+803BA52C:   if_int_eq LW(10) 23
+803BA538:     callc [evt_msg_print evt_msg.o] 0 ["msg_savefile_first_warnning"] 0 0
+803BA550:   else
+803BA554:     callc [evt_msg_print_add evt_msg.o] 0 ["msg_mcard_save_warnning"]
+803BA564:   endif
+803BA568:   goto 3
+803BA570: 2:
+803BA578:   callc [evt_msg_print_add evt_msg.o] 1 ["<scrl_auto><once_stop>"]
+803BA588:   callc [evt_msg_print_add evt_msg.o] 0 ["msg_savefile_first_warnning"]
+803BA598: 3:
+803BA5A0:   callc [memcard_header_write evt_memcard.o]
+803BA5A8:   callc [memcard_write evt_memcard.o]
+803BA5B0: 4:
+803BA5B8:   setii LF(11) 0
+803BA5C4:   callc [memcard_code evt_memcard.o] LW(0)
+803BA5D0:   switchi LW(0)
+803BA5D8:     case_int_eq 0
+803BA5E0:       callc [evt_msg_print_add evt_msg.o] 0 ["msg_mcard_save_finish"]
+803BA5F0:       return
+803BA5F4:     case_int_eq -3
+803BA5FC:       callc [evt_msg_print_add evt_msg.o] 1 ["<scrl_auto><once_stop>"]
+803BA60C:       callc [evt_msg_print_add evt_msg.o] 0 ["msg_mcard_nocard"]
+803BA61C:       callc [evt_msg_print_add evt_msg.o] 0 ["msg_mcard_save_miss"]
+803BA62C:     case_int_eq -2
+803BA634:       callc [evt_msg_print_add evt_msg.o] 1 ["<scrl_auto><once_stop>"]
+803BA644:       callc [evt_msg_print_add evt_msg.o] 0 ["msg_mcard_different_card"]
+803BA654:       callc [evt_msg_print_add evt_msg.o] 0 ["msg_mcard_save_miss"]
+803BA664:     case_int_eq_any -13
+803BA66C:     case_int_eq_any -6
+803BA674:       callc [unk_8025c40c evt_memcard.o]
+803BA67C:       callc [evt_msg_print_add evt_msg.o] 1 ["<scrl_auto><once_stop>"]
+803BA68C:       callc [evt_msg_print_add evt_msg.o] 0 ["msg_mcard_format"]
+803BA69C:       callc [evt_msg_select evt_msg.o] 0 ["msg_mcard_yesno2"]
+803BA6AC:       if_int_eq LW(0) 0
+803BA6B8:         callc [evt_msg_print_add evt_msg.o] 0 ["msg_mcard_format_alldelete"]
+803BA6C8:         callc [evt_msg_select evt_msg.o] 0 ["msg_mcard_yesno2"]
+803BA6D8:         if_int_eq LW(0) 0
+803BA6E4:           callc [unk_8025c3a4 evt_memcard.o] LW(0)
+803BA6F0:           if_int_eq LW(0) 1
+803BA6FC:             callc [evt_msg_print_add evt_msg.o] 0 ["msg_out_mcard_warnning"]
+803BA70C:             switch_break
+803BA710:           endif
+803BA714:           callc [evt_msg_print_add evt_msg.o] 0 ["msg_mcard_format_warning"]
+803BA724:           callc [memcard_format evt_memcard.o]
+803BA72C:           callc [memcard_code evt_memcard.o] LW(0)
+803BA738:           if_int_ne LW(0) 0
+803BA744:             callc [evt_msg_print_add evt_msg.o] 0 ["msg_mcard_format_miss"]
+803BA754:             setii LF(11) 1
+803BA760:           else
+803BA764:             callc [evt_msg_print_add evt_msg.o] 0 ["msg_mcard_format_finish"]
+803BA774:             callc [evt_msg_print_add evt_msg.o] 0 ["msg_mcard_make_data"]
+803BA784:             callc [evt_msg_select evt_msg.o] 0 ["msg_mcard_yesno"]
+803BA794:             if_int_eq LW(0) 0
+803BA7A0:               callc [evt_msg_print_add evt_msg.o] 0 ["msg_mcard_make_data_warning"]
+803BA7B0:               callc [unk_8025c3a4 evt_memcard.o] LW(0)
+803BA7BC:               if_int_eq LW(0) 1
+803BA7C8:                 callc [evt_msg_print_add evt_msg.o] 0 ["msg_out_mcard_warnning"]
+803BA7D8:                 switch_break
+803BA7DC:               endif
+803BA7E0:               callc [memcard_create evt_memcard.o]
+803BA7E8:               callc [memcard_code evt_memcard.o] LW(0)
+803BA7F4:               if_int_ne LW(0) 0
+803BA800:                 callc [evt_msg_print_add evt_msg.o] 0 ["msg_mcard_make_data_miss"]
+803BA810:                 setii LF(11) 1
+803BA81C:               else
+803BA820:                 callc [evt_msg_print_add evt_msg.o] 0 ["msg_mcard_make_data_finish"]
+803BA830:                 callc [evt_msg_print_add evt_msg.o] 0 ["msg_mcard_save_warnning"]
+803BA840:                 callc [memcard_write evt_memcard.o]
+803BA848:                 callc [memcard_code evt_memcard.o] LW(0)
+803BA854:                 if_int_eq LW(0) 0
+803BA860:                   callc [evt_msg_print_add evt_msg.o] 0 ["msg_mcard_save_finish"]
+803BA870:                   return
+803BA874:                 else
+803BA878:                   setii LF(11) 1
+803BA884:                 endif
+803BA888:               endif
+803BA88C:             else
+803BA890:               callc [evt_msg_print_add evt_msg.o] 0 ["msg_mcard_save_miss"]
+803BA8A0:             endif
+803BA8A4:           endif
+803BA8A8:         else
+803BA8AC:           callc [evt_msg_print_add evt_msg.o] 0 ["msg_mcard_save_miss"]
+803BA8BC:         endif
+803BA8C0:       else
+803BA8C4:         callc [evt_msg_print_add evt_msg.o] 0 ["msg_mcard_save_miss"]
+803BA8D4:       endif
+803BA8D8:       end_multi_case
+803BA8DC:     case_int_eq -4
+803BA8E4:       callc [unk_8025c40c evt_memcard.o]
+803BA8EC:       callc [evt_msg_print_add evt_msg.o] 0 ["msg_mcard_make_data"]
+803BA8FC:       callc [evt_msg_select evt_msg.o] 0 ["msg_mcard_yesno"]
+803BA90C:       if_int_eq LW(0) 0
+803BA918:         callc [evt_msg_print_add evt_msg.o] 0 ["msg_mcard_make_data_warning"]
+803BA928:         callc [unk_8025c3a4 evt_memcard.o] LW(0)
+803BA934:         if_int_eq LW(0) 1
+803BA940:           callc [evt_msg_print_add evt_msg.o] 0 ["msg_out_mcard_warnning"]
+803BA950:           switch_break
+803BA954:         endif
+803BA958:         callc [memcard_create evt_memcard.o]
+803BA960:         callc [memcard_code evt_memcard.o] LW(0)
+803BA96C:         if_int_ne LW(0) 0
+803BA978:           callc [evt_msg_print_add evt_msg.o] 0 ["msg_mcard_make_data_miss"]
+803BA988:           setii LF(11) 1
+803BA994:         else
+803BA998:           callc [evt_msg_print_add evt_msg.o] 0 ["msg_mcard_make_data_finish"]
+803BA9A8:           callc [evt_msg_print_add evt_msg.o] 0 ["msg_mcard_save_warnning"]
+803BA9B8:           callc [memcard_write evt_memcard.o]
+803BA9C0:           callc [memcard_code evt_memcard.o] LW(0)
+803BA9CC:           if_int_eq LW(0) 0
+803BA9D8:             callc [evt_msg_print_add evt_msg.o] 0 ["msg_mcard_save_finish"]
+803BA9E8:             return
+803BA9EC:           else
+803BA9F0:             setii LF(11) 1
+803BA9FC:           endif
+803BAA00:         endif
+803BAA04:       else
+803BAA08:         callc [evt_msg_print_add evt_msg.o] 0 ["msg_mcard_save_miss"]
+803BAA18:       endif
+803BAA1C:     case_int_eq -10
+803BAA24:       callc [evt_msg_print_add evt_msg.o] 0 ["msg_mcard_different_savedata"]
+803BAA34:       callc [evt_msg_print_add evt_msg.o] 0 ["msg_mcard_save_miss"]
+803BAA44:     case_int_eq_any -8
+803BAA4C:     case_int_eq_any -9
+803BAA54:       callc [evt_msg_print_add evt_msg.o] 1 ["<scrl_auto><once_stop>"]
+803BAA64:       callc [evt_msg_print_add evt_msg.o] 0 ["msg_mcard_nospace"]
+803BAA74:       if_int_eq LW(10) 23
+803BAA80:         callc [evt_msg_print_add evt_msg.o] 0 ["msg_gc_mcard_open"]
+803BAA90:         callc [evt_msg_select evt_msg.o] 0 ["msg_mcard_yesno2"]
+803BAAA0:         if_int_ne LW(0) 0
+803BAAAC:           callc [evt_msg_print_add evt_msg.o] 0 ["msg_mcard_save_miss"]
+803BAABC:         else
+803BAAC0:           callc [evt_msg_print_add evt_msg.o] 0 ["msg_gc_mcard_nosave"]
+803BAAD0:           callc [evt_msg_select evt_msg.o] 0 ["msg_mcard_yesno2"]
+803BAAE0:           if_int_ne LW(0) 0
+803BAAEC:             callc [evt_msg_print_add evt_msg.o] 0 ["msg_mcard_save_miss"]
+803BAAFC:           else
+803BAB00:             callc [memcard_ipl evt_memcard.o]
+803BAB08:           endif
+803BAB0C:         else
+803BAB10:           callc [evt_msg_print_add evt_msg.o] 0 ["msg_mcard_save_miss"]
+803BAB20:         endif
+803BAB24:       else
+803BAB28:         callc [evt_msg_print_add evt_msg.o] 0 ["msg_mcard_save_miss"]
+803BAB38:       endif
+803BAB3C:       end_multi_case
+803BAB40:     case_default
+803BAB44:       callc [evt_msg_print_add evt_msg.o] 0 ["msg_mcard_damage"]
+803BAB54:       callc [evt_msg_print_add evt_msg.o] 0 ["msg_mcard_save_miss"]
+803BAB64:   end_switch
+803BAB68:   callc [unk_8025c380 evt_memcard.o]
+803BAB70:   if_int_eq LF(11) 1
+803BAB7C:     goto 4
+803BAB84:   endif
+803BAB88:   if_int_eq LW(10) 0
+803BAB94:     callc [evt_msg_continue evt_msg.o]
+803BAB9C:     return
+803BABA0:   endif
+803BABA4:   callc [evt_msg_continue evt_msg.o]
+803BABAC:   callc [evt_msg_print evt_msg.o] 0 ["msg_savefile_nosave_warnning"] 0 0
+803BABC4:   if_int_eq LW(10) 21
+803BABD0:     callc [evt_msg_select evt_msg.o] 0 ["msg_mcard_yesno_ending"]
+803BABE0:   else
+803BABE4:     callc [evt_msg_select evt_msg.o] 0 ["msg_mcard_yesno3"]
+803BABF4:   endif
+803BABF8:   if_int_eq LW(0) 0
+803BAC04:     if_int_eq LW(10) 23
+803BAC10:       goto 2
+803BAC18:     else
+803BAC1C:       goto 1
+803BAC24:     endif
+803BAC28:   endif
+803BAC2C:   callc [evt_msg_continue evt_msg.o]
+803BAC34:   return
+803BAC38:   end

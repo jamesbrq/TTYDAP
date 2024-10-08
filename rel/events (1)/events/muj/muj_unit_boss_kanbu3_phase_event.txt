@@ -1,0 +1,120 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [phase_event unit_boss_kanbu3.o] AT 805FD574 ---
+805FD574:   callc [btlevtcmd_CheckPhase battle_event_cmd.o] LW(0) 67108865
+805FD584:   if_int_eq LW(0) 0
+805FD590:     goto 99
+805FD598:   endif
+805FD59C:   callc [btlevtcmd_get_turn battle_event_cmd.o] LW(0)
+805FD5A8:   if_int_eq LW(0) 1
+805FD5B4:     goto 99
+805FD5BC:   endif
+805FD5C0:   callc [btlevtcmd_CheckStatus battle_event_cmd.o] -2 27 LW(0)
+805FD5D4:   if_int_eq LW(0) 1
+805FD5E0:     goto 99
+805FD5E8:   endif
+805FD5EC:   callc [btlevtcmd_CheckActStatus battle_event_cmd.o] -2 LW(0)
+805FD5FC:   if_int_eq LW(0) 0
+805FD608:     goto 99
+805FD610:   endif
+805FD614:   callc [btlevtcmd_GetUnitWork battle_event_cmd.o] -2 0 LW(0)
+805FD628:   if_int_eq LW(0) 2
+805FD634:     callss [call_event unit_boss_kanbu3.o]
+805FD63C:   endif
+805FD640: 99:
+805FD648:   return
+805FD64C:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [call_event unit_boss_kanbu3.o] AT 805FD650 ---
+805FD650:   callc [check_exist_group unit_boss_kanbu3.o] LW(15)
+805FD65C:   callc [btlevtcmd_GetUnitWork battle_event_cmd.o] -2 0 LW(0)
+805FD670:   switchi LW(0)
+805FD678:     case_int_eq 0
+805FD680:       if_int_eq LW(15) -1
+805FD68C:         goto 10
+805FD694:       endif
+805FD698:       end_multi_case
+805FD69C:     case_int_eq 1
+805FD6A4:       if_int_eq LW(15) -1
+805FD6B0:         goto 10
+805FD6B8:       endif
+805FD6BC:       end_multi_case
+805FD6C0:     case_int_eq 2
+805FD6C8:       if_int_eq LW(15) -1
+805FD6D4:         goto 10
+805FD6DC:       endif
+805FD6E0:       end_multi_case
+805FD6E4:   end_switch
+805FD6E8:   setii LW(0) 0
+805FD6F4:   goto 99
+805FD6FC: 10:
+805FD704:   callc [btlevtcmd_GetUnitWork battle_event_cmd.o] -2 0 LW(0)
+805FD718:   switchi LW(0)
+805FD720:     case_int_eq 0
+805FD728:       callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_BOSS_KANBU_CALL_BACK1"] [F1194D80] 0 [F1194D80]
+805FD744:       callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 1 ["C_1"]
+805FD758:       wait_frames 16
+805FD760:       callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_BOSS_KANBU_CALL_BACK1"] [F1194D80] 0 [F1194D80]
+805FD77C:       callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 1 ["C_1"]
+805FD790:       end_multi_case
+805FD794:     case_int_eq 1
+805FD79C:       callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_BOSS_KANBU_CALL_ON1"] [F1194D80] 0 [F1194D80]
+805FD7B8:       callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 1 ["C_2"]
+805FD7CC:       wait_frames 16
+805FD7D4:       callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_BOSS_KANBU_CALL_ON1"] [F1194D80] 0 [F1194D80]
+805FD7F0:       callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 1 ["C_2"]
+805FD804:       wait_frames 16
+805FD80C:       callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_BOSS_KANBU_CALL_ON1"] [F1194D80] 0 [F1194D80]
+805FD828:       callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 1 ["C_2"]
+805FD83C:       end_multi_case
+805FD840:     case_int_eq 2
+805FD848:       callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_BOSS_KANBU_CALL_BACK1"] [F1194D80] 0 [F1194D80]
+805FD864:       callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 1 ["C_1"]
+805FD878:       wait_frames 16
+805FD880:       callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_BOSS_KANBU_CALL_BACK1"] [F1194D80] 0 [F1194D80]
+805FD89C:       callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 1 ["C_1"]
+805FD8B0:       end_multi_case
+805FD8B4:   end_switch
+805FD8B8:   begin_thread
+805FD8BC:     wait_frames 100
+805FD8C4:     callc [btlevtcmd_AnimeChangePoseType battle_event_cmd.o] -2 1 69
+805FD8D8:   end_thread
+805FD8DC:   if_int_eq LW(15) -1
+805FD8E8:     callc [btlevtcmd_GetUnitWork battle_event_cmd.o] -2 0 LW(0)
+805FD8FC:     switchi LW(0)
+805FD904:       case_int_eq 0
+805FD90C:         callc [btlevtcmd_GetHomePos battle_event_cmd.o] -2 LW(0) LW(1) LW(2)
+805FD924:         subi LW(0) 80
+805FD930:         subi LW(2) 20
+805FD93C:         callc [btlevtcmd_SpawnUnit battle_event_cmd.o] LW(3) [entry_group1 unit_boss_kanbu3.o] 0
+805FD950:         callc [btlevtcmd_SetPos battle_event_cmd.o] LW(3) LW(0) LW(1) LW(2)
+805FD968:         callc [btlevtcmd_SetHomePos battle_event_cmd.o] LW(3) LW(0) LW(1) LW(2)
+805FD980:         callc [zakogun_ext_init1 unit_boss_gundan_zako_group1.o]
+805FD988:         wait_frames 120
+805FD990:         end_multi_case
+805FD994:       case_int_eq 1
+805FD99C:         callc [zakogun_ext_init2 unit_boss_gundan_zako_group2.o]
+805FD9A4:         callc [btlevtcmd_SpawnUnit battle_event_cmd.o] LW(0) [entry_group2 unit_boss_kanbu3.o] 0
+805FD9B8:         callc [btlevtcmd_SetPos battle_event_cmd.o] LW(0) 0 80 0
+805FD9D0:         callc [btlevtcmd_SetHomePos battle_event_cmd.o] LW(0) 0 80 0
+805FD9E8:         callc [down_ceil unit_boss_gundan_zako_group2.o]
+805FD9F0:         wait_frames 60
+805FD9F8:         end_multi_case
+805FD9FC:       case_int_eq 2
+805FDA04:         callc [btlevtcmd_GetHomePos battle_event_cmd.o] -2 LW(0) LW(1) LW(2)
+805FDA1C:         subi LW(0) 80
+805FDA28:         subi LW(2) 20
+805FDA34:         callc [btlevtcmd_SpawnUnit battle_event_cmd.o] LW(3) [entry_group3 unit_boss_kanbu3.o] 0
+805FDA48:         callc [btlevtcmd_SetPos battle_event_cmd.o] LW(3) LW(0) LW(1) LW(2)
+805FDA60:         callc [btlevtcmd_SetHomePos battle_event_cmd.o] LW(3) LW(0) LW(1) LW(2)
+805FDA78:         callc [evt_snd_sfxon evt_snd.o] ["SFX_BOSS_TEAM_3RD_MOVE2"] 0
+805FDA88:         callc [zakogun_ext_init3 unit_boss_gundan_zako_group3.o]
+805FDA90:         wait_frames 120
+805FDA98:         end_multi_case
+805FDA9C:     end_switch
+805FDAA0:   endif
+805FDAA4:   setii LW(0) 1
+805FDAB0: 99:
+805FDAB8:   return
+805FDABC:   end

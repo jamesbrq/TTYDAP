@@ -1,0 +1,36 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [evt_in tou_09.o] AT 805F3420 ---
+805F3420:   callc [evt_mario_set_pos evt_mario.o] -235 12 135
+805F3434:   callc [evt_party_set_pos evt_party.o] 0 -235 12 120
+805F344C:   callc [evt_party_set_dir evt_party.o] 0 90 0
+805F3460:   setff LW(0) 180.00
+805F346C:   callss [w_door_close tou_09.o]
+805F3474:   begin_thread
+805F3478:     wait_ms 500
+805F3480:     setii LW(0) 2
+805F348C:     callsa [bero_close_door_play_se evt_bero.o]
+805F3494:     callc [evt_sub_intpl_msec_init evt_sub.o] 11 180 0 500
+805F34AC:     loop 0
+805F34B4:       callc [evt_sub_intpl_msec_get_value evt_sub.o]
+805F34BC:       callss [w_door_close tou_09.o]
+805F34C4:       if_int_eq LW(1) 0
+805F34D0:         loop_break
+805F34D4:       endif
+805F34D8:     end_loop
+805F34DC:   end_thread
+805F34E0:   begin_thread
+805F34E4:     callc [evt_mario_mov_pos2 evt_mario.o] -160 130 150.00
+805F34F8:   end_thread
+805F34FC:   wait_ms 300
+805F3504:   callc [evt_party_move_pos2 evt_party.o] 0 -180 120 150.00
+805F351C:   setii LW(0) 1
+805F3528:   return
+805F352C:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [w_door_close tou_09.o] AT 805F33F0 ---
+805F33F0:   mulf LW(0) 0.44
+805F33FC:   callc [evt_mapobj_rotate evt_map.o] 1 ["R_door_9"] 0 LW(0) 0
+805F3418:   return
+805F341C:   end

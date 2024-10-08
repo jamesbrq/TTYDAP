@@ -1,0 +1,146 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [attack_event unit_togedaruma.o] AT 806020F8 ---
+806020F8:   callc [btlevtcmd_GetOverTurnCount battle_event_cmd.o] -2 LW(0)
+80602108:   if_int_ge LW(0) 1
+80602114:     callss [wakeup_event unit_togedaruma.o]
+8060211C:     return
+80602120:   endif
+80602124:   callc [btlevtcmd_check_battleflag battle_event_cmd.o] LW(0) 2
+80602134:   if_int_ne LW(0) 0
+80602140:     wait_ms 750
+80602148:     callc [btlevtcmd_GetFirstAttackTarget battle_event_cmd.o] LW(3) LW(4)
+80602158:   else
+8060215C:     callc [btlevtcmd_EnemyItemUseCheck battle_event_cmd.o] -2 LW(0)
+8060216C:     if_int_ne LW(0) 0
+80602178:       callss LW(0)
+80602180:       callc [btlevtcmd_StartWaitEvent battle_event_cmd.o] -2
+8060218C:       return
+80602190:     endif
+80602194:     callc [btlevtcmd_GetEnemyBelong battle_event_cmd.o] -2 LW(0)
+806021A4:     callc [btlevtcmd_SamplingEnemy battle_event_cmd.o] -2 LW(0) [weapon_togedaruma_attack unit_togedaruma.o]
+806021B8:     callc [btlevtcmd_ChoiceSamplingEnemy battle_event_cmd.o] [weapon_togedaruma_attack unit_togedaruma.o] LW(3) LW(4)
+806021CC:   endif
+806021D0:   if_int_eq LW(3) -1
+806021DC:     callc [btlevtcmd_CheckToken battle_event_cmd.o] -2 16 LW(0)
+806021F0:     if_int_ne LW(0) 0
+806021FC:       callss [subsetevt_confuse_flustered battle_event_subset.o]
+80602204:       return
+80602208:     endif
+8060220C:     goto 99
+80602214:   endif
+80602218:   callc [btlevtcmd_WeaponAftereffect battle_event_cmd.o] [weapon_togedaruma_attack unit_togedaruma.o]
+80602224:   callc [btlevtcmd_AttackDeclare battle_event_cmd.o] -2 LW(3) LW(4)
+80602238:   callc [btlevtcmd_WaitGuardMove battle_event_cmd.o]
+80602240:   callc [btlevtcmd_PayWeaponCost battle_event_cmd.o] -2 [weapon_togedaruma_attack unit_togedaruma.o]
+80602250:   callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_ENM_TOGEDA_MOVE1"] [F1194D80] 0 [F1194D80]
+8060226C:   callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 1 ["TGD_J_1"]
+80602280:   wait_frames 10
+80602288:   callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_ENM_TOGEDA_MOVE2"] [F1194D80] 0 LW(15)
+806022A4:   callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 1 ["TGD_A_1"]
+806022B8:   wait_ms 400
+806022C0:   callc [evt_btl_camera_set_mode battle_camera.o] 0 8
+806022D0:   callc [evt_btl_camera_set_homing_unit battle_camera.o] 0 -2 LW(3)
+806022E4:   callc [evt_btl_camera_set_moveSpeedLv battle_camera.o] 0 1
+806022F4:   callc [evt_btl_camera_set_zoom battle_camera.o] 0 250
+80602304:   callc [btlevtcmd_GetHitPos battle_event_cmd.o] LW(3) LW(4) LW(0) LW(1) LW(2)
+80602320:   callc [btlevtcmd_SetMoveSpeed battle_event_cmd.o] -2 7.00
+80602330:   callc [btlevtcmd_MovePosition battle_event_cmd.o] -2 LW(0) LW(1) LW(2) 0 -1 0
+80602354:   callc [btlevtcmd_PreCheckDamage battle_event_cmd.o] -2 LW(3) LW(4) [weapon_togedaruma_attack unit_togedaruma.o] 256 LW(5)
+80602374:   switchi LW(5)
+8060237C:     case_int_eq_any 4
+80602384:       goto 90
+8060238C:       end_multi_case
+80602390:     case_int_eq 3
+80602398:       callc [btlevtcmd_StartAvoid battle_event_cmd.o] LW(3) 38
+806023A8:       goto 90
+806023B0:       end_multi_case
+806023B4:     case_int_eq 6
+806023BC:       callc [btlevtcmd_StartAvoid battle_event_cmd.o] LW(3) 39
+806023CC:       goto 90
+806023D4:     case_int_eq 2
+806023DC:       callc [btlevtcmd_StartAvoid battle_event_cmd.o] LW(3) 40
+806023EC:       goto 90
+806023F4:     case_int_eq 1
+806023FC:       goto 91
+80602404:       end_multi_case
+80602408:     case_default
+8060240C:       goto 98
+80602414:       end_multi_case
+80602418:   end_switch
+8060241C: 90:
+80602424:   callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 1 ["TGD_A_1"]
+80602438:   callc [btlevtcmd_GetHitPos battle_event_cmd.o] LW(3) LW(4) LW(0) LW(1) LW(2)
+80602454:   addi LW(2) 5
+80602460:   callc [evt_snd_sfxoff evt_snd.o] LW(15)
+8060246C:   callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_ENM_TOGEDA_MOVE3"] [F1194D80] 0 [F1194D80]
+80602488:   callc [btlevtcmd_JumpSetting battle_event_cmd.o] -2 0 0 0.10
+806024A0:   callc [btlevtcmd_JumpPosition battle_event_cmd.o] -2 LW(0) 0 LW(2) 60.00 -1
+806024C0:   callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_ENM_TOGEDA_MOVE4"] [F1194D80] 0 [F1194D80]
+806024DC:   callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 1 ["TGD_N_1"]
+806024F0:   wait_ms 1500
+806024F8:   callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 1 ["TGD_J_1"]
+8060250C:   callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_ENM_TOGEDA_MOVE5"] [F1194D80] 0 [F1194D80]
+80602528:   goto 98
+80602530: 91:
+80602538:   callc [evt_btl_camera_shake_h battle_camera.o] 0 1 1 8 0
+80602554:   callc [evt_btl_camera_set_moveSpeedLv battle_camera.o] 0 2
+80602564:   callc [evt_btl_camera_add_zoom battle_camera.o] 0 -50
+80602574:   callc [btlevtcmd_ResultACDefence battle_event_cmd.o] LW(3) [weapon_togedaruma_attack unit_togedaruma.o]
+80602584:   callc [btlevtcmd_CheckDamage battle_event_cmd.o] -2 LW(3) LW(4) [weapon_togedaruma_attack unit_togedaruma.o] 256 LW(5)
+806025A4:   callc [evt_snd_sfxoff evt_snd.o] LW(15)
+806025B0:   callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_ENM_TOGEDA_MOVE3"] [F1194D80] 0 [F1194D80]
+806025CC:   goto 98
+806025D4: 98:
+806025DC:   callc [evt_btl_camera_set_mode battle_camera.o] 0 0
+806025EC:   callc [btlevtcmd_GetHomePos battle_event_cmd.o] -2 LW(0) LW(1) LW(2)
+80602604:   callc [btlevtcmd_JumpSetting battle_event_cmd.o] -2 0 5.00 0.20
+8060261C:   callc [btlevtcmd_JumpPosition battle_event_cmd.o] -2 LW(0) LW(1) LW(2) 0 -1
+8060263C:   callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 1 ["TGD_J_2"]
+80602650:   wait_frames 15
+80602658:   callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 1 ["TGD_S_4"]
+8060266C:   wait_ms 400
+80602674: 99:
+8060267C:   callc [btlevtcmd_StartWaitEvent battle_event_cmd.o] -2
+80602688:   return
+8060268C:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [wakeup_event unit_togedaruma.o] AT 80601EE0 ---
+80601EE0:   setii LW(10) -2
+80601EEC:   setii LW(11) 1
+80601EF8:   callc [btlevtcmd_GetOverTurnCount battle_event_cmd.o] LW(10) LW(0)
+80601F08:   subi LW(0) 1
+80601F14:   callc [btlevtcmd_SetOverTurnCount battle_event_cmd.o] LW(10) LW(0)
+80601F24:   if_int_ne LW(0) 0
+80601F30:     callc [btlevtcmd_StartWaitEvent battle_event_cmd.o] -2
+80601F3C:     return
+80601F40:   endif
+80601F44:   callc [btlevtcmd_SetPartsDefenceTable battle_event_cmd.o] LW(10) LW(11) [defence unit_togedaruma.o]
+80601F58:   callc [btlevtcmd_OffStatusFlag battle_event_cmd.o] LW(10) 1
+80601F68:   callc [btlevtcmd_AnimeSetPoseTable battle_event_cmd.o] LW(10) LW(11) [pose_table unit_togedaruma.o]
+80601F7C:   setii LW(12) 0
+80601F88:   callc [btlevtcmd_SetRotateOffset battle_event_cmd.o] -2 0 10 0
+80601FA0:   begin_child_thread
+80601FA4:     loop 0
+80601FAC:       if_int_ge LW(12) 10
+80601FB8:         loop_break
+80601FBC:       endif
+80601FC0:       addi LW(12) 1
+80601FCC:       wait_frames 1
+80601FD4:       callc [btlevtcmd_AddRotate battle_event_cmd.o] -2 0 0 -18
+80601FEC:     end_loop
+80601FF0:   end_child_thread
+80601FF4:   callc [btlevtcmd_snd_se battle_event_cmd.o] LW(10) ["SFX_ENM_TOGEDA_MOVE6"] [F1194D80] 0 [F1194D80]
+80602010:   callc [btlevtcmd_SetFallAccel battle_event_cmd.o] -2 1.00
+80602020:   callc [btlevtcmd_GetPos battle_event_cmd.o] -2 LW(0) LW(1) LW(2)
+80602038:   callc [btlevtcmd_JumpPosition battle_event_cmd.o] -2 LW(0) LW(1) LW(2) 18 -1
+80602058:   callc [btlevtcmd_SetRotate battle_event_cmd.o] -2 0 0 0
+80602070:   callc [btlevtcmd_SetRotateOffset battle_event_cmd.o] -2 0 0 0
+80602088:   callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] LW(10) LW(11) ["TGD_S_4"]
+8060209C:   callc [btlevtcmd_GetPos battle_event_cmd.o] -2 LW(0) LW(1) LW(2)
+806020B4:   callc [btlevtcmd_SetPos battle_event_cmd.o] -2 LW(0) 0 LW(2)
+806020CC:   callc [btlevtcmd_SetHomePos battle_event_cmd.o] -2 LW(0) 0 LW(2)
+806020E4:   callc [btlevtcmd_StartWaitEvent battle_event_cmd.o] -2
+806020F0:   return
+806020F4:   end

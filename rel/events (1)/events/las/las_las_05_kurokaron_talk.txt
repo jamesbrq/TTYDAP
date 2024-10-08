@@ -1,0 +1,336 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [kurokaron_talk las_05.o] AT 805D8F24 ---
+805D8F24:   callsa [senkaron_event las_05.o]
+805D8F2C:   if_int_eq GSW(0) 382
+805D8F38:     callc [evt_npc_change_interrupt evt_npc.o] ["me"] 6 0
+805D8F4C:   endif
+805D8F50:   return
+805D8F54:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [senkaron_event las_05.o] AT 805D805C ---
+805D805C:   if_int_eq GSW(0) 382
+805D8068:     callc [evt_mario_key_onoff evt_mario.o] 0
+805D8074:     begin_thread
+805D8078:       loop 10
+805D8080:         callc [evt_npc_get_position evt_npc.o] ["黒カロン"] LW(0) LW(1) LW(2)
+805D8098:         callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_STG8_KARON_APPEAR1"] LW(0) LW(1) LW(2) 0
+805D80B4:         wait_ms 200
+805D80BC:       end_loop
+805D80C0:     end_thread
+805D80C4:     callc [evt_npc_set_anim evt_npc.o] ["黒カロン"] ["KRN_D_3"]
+805D80D4:     wait_ms 300
+805D80DC:     callc [evt_cam3d_evt_set evt_cam.o] 550 80 310 550 30 -90 300 0
+805D8104:     wait_ms 300
+805D810C:     callc [evt_msg_toge evt_msg.o] 1 0 0 0
+805D8124:     callc [evt_msg_print evt_msg.o] 0 ["stg8_las_02"] 0 ["黒カロン"]
+805D813C:     callc [evt_ext_entry evt_ext.o] 1000 [senkaron_ext_entry_data las_05.o] [senkaron_ext_init las_05.o] [senkaron_ext_main las_05.o] [senkaron_ext_dispent las_05.o]
+805D8158:     callc [senkaronFlagOffMesPushing las_05.o]
+805D8160:     callc [evt_mario_dispflag_onoff evt_mario.o] 1 2
+805D8170:     callc [evt_mario_adjust_dir evt_mario.o]
+805D8178:     callc [evt_mario_set_pose evt_mario.o] ["M_S_1"]
+805D8184:     callc [evt_mario_get_pos evt_mario.o] 0 LW(0) LW(1) LW(2)
+805D819C:     callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_VOICE_MARIO_FIND1_3"] LW(0) LW(1) LW(2) 0
+805D81B8:     callc [evt_eff_fukidashi evt_eff.o] 0 ["fukidashi"] 0 0 0 0 0 0 0 0 0
+805D81EC:     callc [evt_snd_bgmon evt_snd.o] 512 ["BGM_EVT_DANGER4"]
+805D81FC:     wait_ms 1000
+805D8204:     begin_thread
+805D8208:       callc [evt_mario_set_pose evt_mario.o] ["M_N_5B"]
+805D8214:       wait_ms 500
+805D821C:       callc [evt_mario_set_pose evt_mario.o] ["M_I_Y"]
+805D8228:     end_thread
+805D822C:     callc [evt_npc_set_anim evt_npc.o] ["黒カロン"] ["KRN_D_4"]
+805D823C:     setff LW(10) 0.00
+805D8248:     setff LW(11) 10.00
+805D8254:     setff LW(12) -1.00
+805D8260:     loop 0
+805D8268:       wait_frames 1
+805D8270:       callc [evt_npc_get_position evt_npc.o] ["黒カロン"] LW(13) LW(10) LW(14)
+805D8288:       addf LW(10) LW(11)
+805D8294:       addf LW(11) LW(12)
+805D82A0:       if_int_le LW(10) 0
+805D82AC:         setff LW(10) 0.00
+805D82B8:         callc [evt_npc_set_position evt_npc.o] ["黒カロン"] LW(13) LW(10) LW(14)
+805D82D0:         loop_break
+805D82D4:       endif
+805D82D8:       callc [evt_npc_set_position evt_npc.o] ["黒カロン"] LW(13) LW(10) LW(14)
+805D82F0:     end_loop
+805D82F4:     callc [evt_npc_set_anim evt_npc.o] ["黒カロン"] ["KRN_R_1"]
+805D8304:     callc [evt_cam3d_evt_off evt_cam.o] 300 0
+805D8314:     callc [senkaronAttackStart las_05.o]
+805D831C:     callc [senkaronFlagOnMesPushing las_05.o]
+805D8324:     begin_thread
+805D8328:       wait_ms 600
+805D8330:       callc [evt_snd_sfxon evt_snd.o] ["SFX_STG8_KARON_DOWN1"] 0
+805D8340:       callc [evt_snd_sfxon evt_snd.o] ["SFX_STG8_KARON_MOVE1"] GW(13)
+805D8350:     end_thread
+805D8354:     begin_thread
+805D8358:       wait_ms 400
+805D8360:       callc [evt_cam_shake evt_cam.o] 4 0.00 0.00 3500
+805D8378:     end_thread
+805D837C:     setii GF(0) 0
+805D8388:     begin_thread
+805D838C:       wait_ms 500
+805D8394:       callc [evt_npc_flag_onoff evt_npc.o] 1 ["黒カロン"] 32
+805D83A8:       callc [kurokaron_get_move_pos las_05.o] LW(0) LW(1)
+805D83B8:       callc [evt_npc_move_position evt_npc.o] ["黒カロン"] LW(0) LW(1) 0 80.00 0
+805D83D8:       wait_frames 1
+805D83E0:       callc [evt_npc_flag_onoff evt_npc.o] 0 ["黒カロン"] 32
+805D83F4:       setii GF(0) 1
+805D8400:     end_thread
+805D8404:     begin_thread
+805D8408:       wait_ms 500
+805D8410:       callc [evt_mario_set_dir evt_mario.o] 270 300 0
+805D8424:     end_thread
+805D8428:     wait_ms 1000
+805D8430:     callc [evt_msg_print_party evt_msg.o] ["stg8_las_03"]
+805D843C:     loop 0
+805D8444:       if_int_ne GF(0) 0
+805D8450:         loop_break
+805D8454:       endif
+805D8458:       wait_frames 1
+805D8460:     end_loop
+805D8464:     callc [evt_msg_print evt_msg.o] 0 ["stg8_las_04"] 0 ["黒カロン"]
+805D847C:     setff LW(3) -1.50
+805D8488:     setff LW(4) 0.00
+805D8494:     setii LW(5) 270
+805D84A0:     callc [evt_mario_set_pose evt_mario.o] ["M_I_O"]
+805D84AC:     loop 0
+805D84B4:       wait_frames 1
+805D84BC:       callc [evt_mario_get_pos evt_mario.o] 0 LW(0) LW(1) LW(2)
+805D84D4:       if_int_le LW(0) 370
+805D84E0:         loop_break
+805D84E4:       endif
+805D84E8:       addf LW(0) LW(3)
+805D84F4:       addf LW(3) LW(4)
+805D8500:       if_int_ge LW(3) 0
+805D850C:         setff LW(3) -0.10
+805D8518:       endif
+805D851C:       callc [evt_mario_set_pos evt_mario.o] LW(0) LW(1) LW(2)
+805D8530:       addi LW(5) 10
+805D853C:       if_int_ge LW(5) 360
+805D8548:         subi LW(5) 360
+805D8554:       endif
+805D8558:       callc [evt_mario_set_dispdir evt_mario.o] LW(5)
+805D8564:     end_loop
+805D8568:     callc [senkaronFlagOffMesPushing las_05.o]
+805D8570:     callc [evt_npc_flag_onoff evt_npc.o] 1 ["黒カロン"] 32
+805D8584:     callc [evt_npc_change_interrupt evt_npc.o] ["黒カロン"] 1 [kurokaron_move las_05.o]
+805D8598:     callc [evt_npc_restart_regular_event evt_npc.o] ["黒カロン"]
+805D85A4:     callc [evt_mario_dispflag_onoff evt_mario.o] 0 2
+805D85B4:     callc [evt_mario_key_onoff evt_mario.o] 1
+805D85C0:     setii LW(0) ["w_bero"]
+805D85CC:     callss [bero_case_switch_off evt_bero.o]
+805D85D4:     setii GF(0) 0
+805D85E0:     begin_thread
+805D85E4:       setii LW(7) 0
+805D85F0:       loop 0
+805D85F8:         if_int_ne GF(0) 0
+805D8604:           loop_break
+805D8608:         endif
+805D860C:         callc [senkaronGetMarioPushedFlag las_05.o] LW(6)
+805D8618:         if_int_ne LW(6) 0
+805D8624:           setii LW(7) 18
+805D8630:         endif
+805D8634:         callc [evt_mario_party_use_check evt_mario.o] LW(6)
+805D8640:         if_int_ne LW(6) 0
+805D864C:           setii LW(7) 0
+805D8658:         endif
+805D865C:         if_int_gt LW(7) 0
+805D8668:           callc [evt_mario_get_motion evt_mario.o] LW(8)
+805D8674:           if_int_eq LW(8) 0
+805D8680:             callc [evt_mario_get_pose evt_mario.o] LW(9)
+805D868C:             if_string_ne LW(9) ["M_I_O"]
+805D8698:               callc [evt_mario_set_pose evt_mario.o] ["M_I_O"]
+805D86A4:             endif
+805D86A8:             callc [evt_mario_get_dispdir evt_mario.o] LW(5)
+805D86B4:             addi LW(5) 10
+805D86C0:             if_int_ge LW(5) 360
+805D86CC:               subi LW(5) 360
+805D86D8:             endif
+805D86DC:             callc [evt_mario_set_dispdir evt_mario.o] LW(5)
+805D86E8:             callc [evt_party_set_dispdir evt_party.o] 0 LW(5)
+805D86F8:             subi LW(7) 1
+805D8704:             if_int_eq LW(7) 0
+805D8710:               callc [evt_mario_set_pose evt_mario.o] ["M_S_1"]
+805D871C:             endif
+805D8720:           else
+805D8724:             setii LW(7) 0
+805D8730:           endif
+805D8734:         else
+805D8738:           callc [evt_mario_get_motion evt_mario.o] LW(8)
+805D8744:           if_int_eq LW(8) 0
+805D8750:             callc [evt_mario_get_dispdir evt_mario.o] LW(5)
+805D875C:             setii LF(1) 0
+805D8768:             if_int_ge LW(5) 90
+805D8774:               if_int_lt LW(5) 270
+805D8780:                 setii LF(1) 1
+805D878C:               endif
+805D8790:             endif
+805D8794:             if_int_eq LF(1) 0
+805D87A0:               callc [evt_mario_set_dispdir evt_mario.o] 0
+805D87AC:             else
+805D87B0:               callc [evt_mario_set_dispdir evt_mario.o] 180
+805D87BC:             endif
+805D87C0:           endif
+805D87C4:         endif
+805D87C8:         wait_frames 1
+805D87D0:       end_loop
+805D87D4:     end_thread
+805D87D8:     begin_thread
+805D87DC:       setii LF(0) 0
+805D87E8:       setii LW(15) 0
+805D87F4:       loop 0
+805D87FC:         if_int_ne GF(0) 0
+805D8808:           callc [evt_cam_letter_box_disable evt_cam.o] 0
+805D8814:           loop_break
+805D8818:         endif
+805D881C:         setii LW(5) 0
+805D8828:         callc [evt_mario_get_pos evt_mario.o] 0 LW(0) LW(1) LW(2)
+805D8840:         callc [evt_sub_area_check evt_sub.o] 0 0 0 5 LW(0) LW(2) LW(3)
+805D8864:         addi LW(5) LW(3)
+805D8870:         callc [evt_key_get_dir evt_sub.o] 0 LW(0)
+805D8880:         callc [evt_key_get_button evt_sub.o] 0 LW(1)
+805D8890:         addi LW(0) LW(1)
+805D889C:         if_int_eq LW(0) 0
+805D88A8:           addi LW(5) 1
+805D88B4:         endif
+805D88B8:         setii LW(2) 0
+805D88C4:         callc [evt_mario_party_use_check evt_mario.o] LW(2)
+805D88D0:         switchi LW(2)
+805D88D8:           case_int_eq 0
+805D88E0:             addi LW(5) 1
+805D88EC:           case_int_eq 4
+805D88F4:             addi LW(5) 1
+805D8900:         end_switch
+805D8904:         callc [evt_mario_get_motion evt_mario.o] LW(4)
+805D8910:         switchi LW(4)
+805D8918:           case_int_eq 0
+805D8920:             addi LW(5) 1
+805D892C:           case_int_eq 22
+805D8934:             addi LW(5) 1
+805D8940:           case_int_eq 26
+805D8948:             addi LW(5) 1
+805D8954:         end_switch
+805D8958:         if_int_eq LW(5) 4
+805D8964:           if_int_eq LF(0) 0
+805D8970:             callsa_tid [evt_sub_stopwatch evt_sub.o] LW(14)
+805D897C:             setii LF(0) 1
+805D8988:           else
+805D898C:             callc [evt_sub_get_stopwatch evt_sub.o] LW(14) LW(0)
+805D899C:             switchi LW(15)
+805D89A4:               case_int_eq 0
+805D89AC:                 if_int_ge LW(0) 1000
+805D89B8:                   callc [evt_cam_letter_box_onoff evt_cam.o] 1 0
+805D89C8:                   callc [evt_cam_letter_box_disable evt_cam.o] 1
+805D89D4:                   callc [evt_mario_cont_onoff evt_mario.o] 0
+805D89E0:                   callc [evt_party_cont_onoff evt_party.o] 0 0
+805D89F0:                   callc [evt_mario_cam_off evt_mario.o]
+805D89F8:                   addi LW(15) 1
+805D8A04:                 endif
+805D8A08:               case_int_eq 1
+805D8A10:                 if_int_ge LW(0) 2000
+805D8A1C:                   callc [evt_msg_print_party evt_msg.o] ["stg8_las_05"]
+805D8A28:                   callsa_tid [evt_sub_stopwatch evt_sub.o] LW(14)
+805D8A34:                   addi LW(15) 1
+805D8A40:                 endif
+805D8A44:               case_int_eq 2
+805D8A4C:                 if_int_ge LW(0) 3000
+805D8A58:                   callc [evt_msg_print_party evt_msg.o] ["stg8_las_06"]
+805D8A64:                   callc [evt_seq_set_seq evt_seq.o] 5 0 0
+805D8A78:                 endif
+805D8A7C:             end_switch
+805D8A80:             if_int_gt LW(15) 0
+805D8A8C:               callc [get_mario_y_pos las_05.o] LW(0)
+805D8A98:               callc [get_party_y_pos las_05.o] LW(1)
+805D8AA4:               addf LW(0) -0.17
+805D8AB0:               addf LW(1) -0.17
+805D8ABC:               callc [set_mario_y_pos las_05.o] LW(0)
+805D8AC8:               callc [set_party_y_pos las_05.o] LW(1)
+805D8AD4:             endif
+805D8AD8:           endif
+805D8ADC:         else
+805D8AE0:           callc [mario_land_on las_05.o]
+805D8AE8:           callc [party_land_on las_05.o]
+805D8AF0:           callc [chk_mario_ctrloff las_05.o] LW(0)
+805D8AFC:           if_int_ne LW(0) 0
+805D8B08:             callc [evt_mario_cont_onoff evt_mario.o] 1
+805D8B14:             callc [evt_mario_cam_on evt_mario.o]
+805D8B1C:             callc [evt_party_cont_onoff evt_party.o] 0 1
+805D8B2C:             callc [evt_cam_letter_box_disable evt_cam.o] 0
+805D8B38:           endif
+805D8B3C:           setii LF(0) 0
+805D8B48:           setii LW(15) 0
+805D8B54:         endif
+805D8B58:         wait_frames 1
+805D8B60:       end_loop
+805D8B64:     end_thread
+805D8B68:     loop 0
+805D8B70:       wait_frames 1
+805D8B78:       callc [party_hit las_05.o] LW(0)
+805D8B84:       if_int_eq LW(0) 1
+805D8B90:         loop_break
+805D8B94:       endif
+805D8B98:       setii LF(0) 0
+805D8BA4:       callc [evt_party_get_status evt_party.o] 6 LW(0)
+805D8BB4:       if_int_eq LW(0) 1
+805D8BC0:         setii LF(0) 1
+805D8BCC:       endif
+805D8BD0:       if_int_eq LW(0) 2
+805D8BDC:         setii LF(0) 1
+805D8BE8:       endif
+805D8BEC:       if_int_eq LW(0) 3
+805D8BF8:         setii LF(0) 1
+805D8C04:       endif
+805D8C08:       if_int_eq LF(0) 0
+805D8C14:         callc [evt_mario_get_pos evt_mario.o] 0 LW(0) LW(1) LW(2)
+805D8C2C:         callc [evt_npc_get_position evt_npc.o] ["黒カロン"] LW(3) LW(4) LW(5)
+805D8C44:         callc [evt_sub_get_dist evt_sub.o] LW(0) LW(2) LW(3) LW(5) LW(6)
+805D8C60:         if_int_le LW(6) 30
+805D8C6C:           loop_break
+805D8C70:         endif
+805D8C74:       endif
+805D8C78:     end_loop
+805D8C7C:     setii GF(0) 1
+805D8C88:     wait_frames 1
+805D8C90:     callc [mario_land_on las_05.o]
+805D8C98:     callc [party_land_on las_05.o]
+805D8CA0:     callc [evt_mario_adjust_dir evt_mario.o]
+805D8CA8:     callc [evt_mario_set_motion evt_mario.o] 0
+805D8CB4:     callc [chk_mario_ctrloff las_05.o] LW(0)
+805D8CC0:     if_int_ne LW(0) 0
+805D8CCC:       callc [evt_mario_cont_onoff evt_mario.o] 1
+805D8CD8:       callc [evt_mario_cam_on evt_mario.o]
+805D8CE0:       callc [evt_party_cont_onoff evt_party.o] 0 1
+805D8CF0:     endif
+805D8CF4:     callc [evt_npc_get_reglid evt_npc.o] ["黒カロン"] LW(0)
+805D8D04:     stop_tid LW(0)
+805D8D0C:     callc [evt_npc_change_interrupt evt_npc.o] ["黒カロン"] 1 0
+805D8D20:     callc [evt_npc_set_stay_anim evt_npc.o] ["黒カロン"]
+805D8D2C:     callc [senkaronFlagOnMesPushing las_05.o]
+805D8D34:     callc [evt_snd_sfxoff evt_snd.o] GW(13)
+805D8D40:     wait_frames 1
+805D8D48:     callc [evt_npc_set_battle_info evt_npc.o] ["黒カロン"] 7
+805D8D58:     callc [evt_npc_battle_start evt_npc.o] ["黒カロン"]
+805D8D64:     callc [evt_npc_wait_battle_end evt_npc.o]
+805D8D6C:     callc [evt_snd_bgmon evt_snd.o] 512 ["BGM_STG8_LST1"]
+805D8D7C:     callc [senkaronToEscape las_05.o]
+805D8D84:     setii GSW(0) 383
+805D8D90:     setii LW(0) ["w_bero"]
+805D8D9C:     callss [bero_case_switch_on evt_bero.o]
+805D8DA4:     callc [evt_npc_get_position evt_npc.o] ["黒カロン"] LW(0) LW(1) LW(2)
+805D8DBC:     callc [evt_mario_get_pos evt_mario.o] 0 LW(3) LW(4) LW(5)
+805D8DD4:     callc [evt_sub_get_dir evt_sub.o] LW(3) LW(5) LW(0) LW(2) LW(6)
+805D8DF0:     callc [evt_item_entry evt_item.o] ["key"] 46 LW(0) LW(1) LW(2) 4 -1 [key_evt las_05.o]
+805D8E18:     callc [evt_item_set_move_dir_speed evt_item.o] ["key"] LW(6) 45.00
+805D8E2C:     callc [evt_item_set_jump_power evt_item.o] ["key"] 500.00
+805D8E3C:     callc [evt_item_set_gravity evt_item.o] ["key"] 1.00
+805D8E4C:     callc [evt_item_set_bound_rate evt_item.o] ["key"] 1.00
+805D8E5C:     callc [evt_item_set_bound_limit evt_item.o] ["key"] 0
+805D8E6C:     callc [evt_item_status_on evt_item.o] ["key"] 4
+805D8E7C:     callc [evt_item_status_on evt_item.o] ["key"] 16
+805D8E8C:     callc [evt_npc_set_position evt_npc.o] ["黒カロン"] 0 -1000 0
+805D8EA4:   endif
+805D8EA8:   return
+805D8EAC:   end

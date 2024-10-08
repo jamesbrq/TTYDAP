@@ -1,0 +1,42 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [yari_trap_sub dou_10.o] AT 805C9178 ---
+805C9178:   if_int_ne GW(15) 0
+805C9184:     return
+805C9188:   endif
+805C918C:   setii GW(15) 1
+805C9198:   loop 0
+805C91A0:     callc [evt_mapobj_get_position evt_map.o] ["S_yari"] LW(0) LW(1) LW(2)
+805C91B8:     callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_MOBJ_FLOOR_TRAP1"] LW(0) LW(1) LW(2) 0
+805C91D4:     callc [evt_sub_intpl_msec_init evt_sub.o] 1 0 150 150
+805C91EC:     loop 0
+805C91F4:       callc [evt_sub_intpl_msec_get_value evt_sub.o]
+805C91FC:       callc [evt_mapobj_trans evt_map.o] 1 ["S_yari"] 0 0 LW(0)
+805C9218:       callc [evt_hit_bind_update evt_hit.o] ["A_yari"]
+805C9224:       if_int_eq LW(1) 0
+805C9230:         loop_break
+805C9234:       endif
+805C9238:       wait_frames 1
+805C9240:     end_loop
+805C9244:     wait_ms 1000
+805C924C:     callc [evt_mapobj_get_position evt_map.o] ["S_yari"] LW(0) LW(1) LW(2)
+805C9264:     callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_MOBJ_FLOOR_TRAP2"] LW(0) LW(1) LW(2) 0
+805C9280:     callc [evt_sub_intpl_msec_init evt_sub.o] 4 150 0 500
+805C9298:     loop 0
+805C92A0:       callc [evt_sub_intpl_msec_get_value evt_sub.o]
+805C92A8:       callc [evt_mapobj_trans evt_map.o] 1 ["S_yari"] 0 0 LW(0)
+805C92C4:       callc [evt_hit_bind_update evt_hit.o] ["A_yari"]
+805C92D0:       if_int_eq LW(1) 0
+805C92DC:         loop_break
+805C92E0:       endif
+805C92E4:       wait_frames 1
+805C92EC:     end_loop
+805C92F0:     wait_ms 1000
+805C92F8:     if_int_eq GW(15) 2
+805C9304:       loop_break
+805C9308:     endif
+805C930C:   end_loop
+805C9310:   setii GW(15) 0
+805C931C:   return
+805C9320:   end

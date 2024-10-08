@@ -1,0 +1,721 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [kaizoku_vs_dai3 muj_00.o] AT 805D5988 ---
+805D5988:   callc [evt_mario_key_onoff evt_mario.o] 0
+805D5994:   callc [evt_party_stop evt_party.o] 0
+805D59A0:   callc [evt_mario_cont_onoff evt_mario.o] 0
+805D59AC:   callc [evt_party_cont_onoff evt_party.o] 0 0
+805D59BC:   callc [evt_mario_clear_party evt_mario.o] 1
+805D59C8:   callc [evt_mario_set_pos evt_mario.o] 0 -1000 0
+805D59DC:   callc [evt_party_set_pos evt_party.o] 0 0 -1000 0
+805D59F4:   callc [evt_npc_set_position evt_npc.o] ["コルテス"] 20 40 -1800
+805D5A0C:   callc [evt_npc_set_ry evt_npc.o] ["コルテス"] 0
+805D5A1C:   callc [evt_npc_flag_onoff evt_npc.o] 0 ["コルテス"] 1024
+805D5A30:   callc [evt_npc_set_position evt_npc.o] ["第三勢力幹部"] -945 150 -5
+805D5A48:   callc [evt_npc_set_ry evt_npc.o] ["第三勢力幹部"] 90
+805D5A58:   callc [evt_npc_flag_onoff evt_npc.o] 1 ["第三勢力幹部"] 1073774624
+805D5A6C:   callc [evt_npc_flag_onoff evt_npc.o] 0 ["第三勢力幹部"] 1024
+805D5A80:   callc [evt_npc_flag_onoff evt_npc.o] 0 ["モニー"] 1024
+805D5A94:   callc [evt_npc_flag_onoff evt_npc.o] 0 ["ピートン"] 1024
+805D5AA8:   callc [evt_npc_flag_onoff evt_npc.o] 0 ["ガラの悪い水夫"] 1024
+805D5ABC:   setii GW(1) 0
+805D5AC8:   setii GW(2) -1200
+805D5AD4:   setii GW(3) 0
+805D5AE0:   callsa_tid [dai3_move_every muj_00.o] LW(10)
+805D5AEC:   setii GW(4) 0
+805D5AF8:   setii GW(5) 0
+805D5B04:   setii GW(6) -2000
+805D5B10:   callsa_tid [kaizoku_move_every muj_00.o] LW(11)
+805D5B1C:   callc [evt_mapobj_flag_onoff evt_map.o] 1 1 ["S_hai"] 1
+805D5B34:   callc [evt_cam3d_evt_set evt_cam.o] -847 334 977 -847 78 -475 0 11
+805D5B5C:   callc [evt_seq_wait evt_seq.o] 2
+805D5B68:   callc [evt_msg_print evt_msg.o] 0 ["stg5_muj_118"] 0 ["第三勢力幹部"]
+805D5B80:   stop_tid GW(8)
+805D5B88:   callc [evt_cam3d_evt_set evt_cam.o] 0 470 -91 0 400 -383 500 11
+805D5BB0:   wait_ms 600
+805D5BB8:   callc [evt_npc_flag_onoff evt_npc.o] 0 ["第三勢力幹部"] 32768
+805D5BCC:   callc [evt_npc_set_position evt_npc.o] ["第三勢力幹部"] -1105 60 30
+805D5BE4:   callsa [dai3_butai_setup muj_00.o]
+805D5BEC:   wait_frames 2
+805D5BF4:   callsa_tid [dai3_butai_main muj_00.o] LW(12)
+805D5C00:   callsa_tid [dai3_kanbu_main muj_00.o] LW(13)
+805D5C0C:   callsa [kaizoku_setup muj_00.o]
+805D5C14:   wait_frames 2
+805D5C1C:   callsa_tid [kaizoku_main muj_00.o] LW(14)
+805D5C28:   callsa_tid [mario_main muj_00.o] LW(15)
+805D5C34:   wait_ms 400
+805D5C3C:   callc [evt_npc_flag_onoff evt_npc.o] 1 ["コルテス"] 33554432
+805D5C50:   callc [evt_npc_pera_onoff evt_npc.o] ["コルテス"] 0
+805D5C60:   callc [evt_snd_bgmoff_f evt_snd.o] 512 2000
+805D5C70:   callc [evt_msg_print evt_msg.o] 0 ["stg5_muj_119"] 0 ["コルテス"]
+805D5C88:   callc [evt_msg_continue evt_msg.o]
+805D5C90:   setii GF(0) 1
+805D5C9C:   setii GF(1) 1
+805D5CA8:   begin_thread
+805D5CAC:     setii GF(10) 1
+805D5CB8:     callsa [kaizoku_move_trace_se muj_00.o]
+805D5CC0:     setii LW(0) 20000
+805D5CCC:     callss [kaizoku_move_trace muj_00.o]
+805D5CD4:     setii GF(10) 0
+805D5CE0:   end_thread
+805D5CE4:   begin_thread
+805D5CE8:     setii GF(11) 1
+805D5CF4:     callsa [dai3_move_trace_se muj_00.o]
+805D5CFC:     setii LW(0) 15000
+805D5D08:     callss [dai3_move_trace muj_00.o]
+805D5D10:     setii GF(11) 0
+805D5D1C:     callss [dai3_kurukuru muj_00.o]
+805D5D24:     setii GF(1) 0
+805D5D30:   end_thread
+805D5D34:   begin_thread
+805D5D38:     wait_ms 4000
+805D5D40:     callc [evt_msg_print evt_msg.o] 0 ["stg5_muj_120"] 0 ["第三勢力幹部"]
+805D5D58:     callc [evt_msg_continue evt_msg.o]
+805D5D60:   end_thread
+805D5D64:   begin_thread
+805D5D68:     wait_ms 500
+805D5D70:     callss [iwapera_offscreen muj_00.o]
+805D5D78:     callc [evt_mapobj_get_position evt_map.o] ["S_iwa_before"] LW(0) LW(1) LW(2)
+805D5D90:     callc [evt_snd_sfxon evt_snd.o] ["SFX_OFF5_SHIP_APPEAR1"] 0
+805D5DA0:     callc [evt_snd_bgmon evt_snd.o] 512 ["BGM_BOSS_STG5_KORTESS1"]
+805D5DB0:     wait_ms 3500
+805D5DB8:     callc [evt_cam3d_evt_set evt_cam.o] 0 2650 2025 0 250 225 500 11
+805D5DE0:     callss [iwapera_offscreen_end muj_00.o]
+805D5DE8:     wait_ms 4000
+805D5DF0:     callsa_tid [cam_dai3_vs_kaizoku muj_00.o] LW(10)
+805D5DFC:     wait_ms 9500
+805D5E04:     stop_tid LW(10)
+805D5E0C:     callc [evt_cam3d_evt_set evt_cam.o] -205 528 672 -205 108 -278 0 11
+805D5E34:     wait_ms 1400
+805D5E3C:     callc [evt_cam3d_evt_set evt_cam.o] -700 290 74 -374 80 -316 0 11
+805D5E64:     wait_ms 200
+805D5E6C:     setii GF(0) 0
+805D5E78:   end_thread
+805D5E7C:   wait_until GF(0)
+805D5E84:   wait_until GF(1)
+805D5E8C:   stop_tid LW(10)
+805D5E94:   stop_tid LW(11)
+805D5E9C:   stop_tid LW(12)
+805D5EA4:   stop_tid LW(13)
+805D5EAC:   stop_tid LW(14)
+805D5EB4:   stop_tid LW(15)
+805D5EBC:   callc [evt_msg_print evt_msg.o] 0 ["stg5_muj_121"] 0 ["第三勢力幹部"]
+805D5ED4:   callc [evt_mario_cont_onoff evt_mario.o] 1
+805D5EE0:   callc [evt_party_cont_onoff evt_party.o] 0 1
+805D5EF0:   wait_ms 1000
+805D5EF8:   callc [evt_cam3d_evt_set evt_cam.o] -120 320 259 -163 115 -249 0 11
+805D5F20:   wait_ms 500
+805D5F28:   callc [evt_msg_print evt_msg.o] 0 ["stg5_muj_122"] 0 ["コルテス"]
+805D5F40:   wait_ms 500
+805D5F48:   callc [evt_cam3d_evt_set evt_cam.o] -436 595 725 -226 120 -460 500 11
+805D5F70:   wait_ms 1000
+805D5F78:   callc [tobikakaru_init muj_00.o]
+805D5F80:   callsa_tid [tobikakari_kemuri muj_00.o] LW(15)
+805D5F8C:   callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_STG5_ELM_VS_3RD1"] -226 120 -460 LW(9)
+805D5FA8:   callc [evt_snd_sfx_dist evt_snd.o] LW(9) 30
+805D5FB8:   wait_ms 2500
+805D5FC0:   callc [evt_cam3d_evt_set evt_cam.o] -369 245 -37 0 67 -303 0 11
+805D5FE8:   callc [evt_npc_flag_onoff evt_npc.o] 1 ["コルテス"] 128
+805D5FFC:   callc [evt_mario_set_dir evt_mario.o] 90 200 0
+805D6010:   wait_ms 500
+805D6018:   callc [evt_msg_print evt_msg.o] 0 ["stg5_muj_123"] 0 ["マルコ"]
+805D6030:   callc [evt_cam3d_evt_set evt_cam.o] -436 595 725 -226 120 -460 0 11
+805D6058:   callc [evt_npc_flag_onoff evt_npc.o] 0 ["コルテス"] 128
+805D606C:   wait_ms 500
+805D6074:   callc [evt_party_run evt_party.o] 0
+805D6080:   begin_thread_tid LW(3)
+805D6088:     callc [evt_party_set_dir evt_party.o] 0 270 200
+805D609C:     callc [evt_party_jump_pos evt_party.o] 0 -405 60 -237 1000 0 80
+805D60C0:   end_thread
+805D60C4:   callc [evt_mario_set_dir evt_mario.o] 270 200 0
+805D60D8:   callc [evt_mario_get_pos evt_mario.o] 0 LW(0) LW(1) LW(2)
+805D60F0:   callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_VOICE_MARIO_FLD_JUMP3"] LW(0) LW(1) LW(2) 0
+805D610C:   callc [evt_mario_jump_pos evt_mario.o] -430 60 -212 1000 0 80
+805D612C:   callc [evt_snd_sfxoff evt_snd.o] LW(9)
+805D6138:   loop 0
+805D6140:     check_thread_running LW(3) LW(0)
+805D614C:     if_int_eq LW(0) 0
+805D6158:       loop_break
+805D615C:     endif
+805D6160:     wait_frames 1
+805D6168:   end_loop
+805D616C:   callc [evt_npc_release_filednpc evt_npc.o] 1
+805D6178:   callc [evt_npc_set_battle_info evt_npc.o] ["第三勢力幹部"] 5
+805D6188:   callc [evt_npc_battle_start evt_npc.o] ["第三勢力幹部"]
+805D6194:   callc [evt_npc_wait_battle_end evt_npc.o]
+805D619C:   stop_tid LW(15)
+805D61A4:   callc [tobikakaru_end muj_00.o]
+805D61AC:   setii GSW(0) 260
+805D61B8:   setii LW(0) 0
+805D61C4:   callss [dai3_beat_back muj_00.o]
+805D61CC:   return
+805D61D0:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [dai3_move_every muj_00.o] AT 805D510C ---
+805D510C:   loop 0
+805D5114:     callc [evt_mapobj_trans evt_map.o] 1 ["S_c"] GW(2) 0 GW(3)
+805D5130:     callc [evt_mapobj_rotate evt_map.o] 1 ["S_c"] 0 GW(1) 0
+805D514C:     setff GW(13) GW(2)
+805D5158:     setff GW(14) 0
+805D5164:     setff GW(15) GW(3)
+805D5170:     callc [evt_hit_bind_update evt_hit.o] ["A_c"]
+805D517C:     wait_frames 1
+805D5184:   end_loop
+805D5188:   return
+805D518C:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [kaizoku_move_every muj_00.o] AT 805D50AC ---
+805D50AC:   loop 0
+805D50B4:     callc [evt_mapobj_trans evt_map.o] 1 ["S_b"] GW(5) 0 GW(6)
+805D50D0:     callc [evt_mapobj_rotate evt_map.o] 1 ["S_b"] 0 GW(4) 0
+805D50EC:     callc [evt_hit_bind_update evt_hit.o] ["A_b"]
+805D50F8:     wait_frames 1
+805D5100:   end_loop
+805D5104:   return
+805D5108:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [dai3_butai_setup muj_00.o] AT 805D4898 ---
+805D4898:   setii LW(0) 205
+805D48A4:   mo_set_base_int [kaizoku_vs_dai3_dai3pos muj_00.o]
+805D48AC:   loop 100
+805D48B4:     callc [evt_nannpc_set_dir evt_nannpc.o] LW(0) 90
+805D48C4:     mo_read_int3 LW(1) LW(2) LW(3)
+805D48D4:     addi LW(1) GW(2)
+805D48E0:     addi LW(3) GW(3)
+805D48EC:     callc [evt_nannpc_set_position evt_nannpc.o] LW(0) LW(1) LW(2) LW(3)
+805D4904:     setii LW(12) 0
+805D4910:     subi LW(12) GW(3)
+805D491C:     setii LW(13) 0
+805D4928:     subi LW(13) LW(3)
+805D4934:     callc [evt_sub_get_dir evt_sub.o] GW(2) LW(12) LW(1) LW(13) LW(10)
+805D4950:     callc [evt_sub_get_dist evt_sub.o] GW(2) LW(12) LW(1) LW(13) LW(11)
+805D496C:     callc [evt_nannpc_set_work evt_nannpc.o] LW(0) 0 LW(10)
+805D4980:     callc [evt_nannpc_set_work evt_nannpc.o] LW(0) 1 LW(11)
+805D4994:     addi LW(0) 1
+805D49A0:   end_loop
+805D49A4:   return
+805D49A8:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [dai3_butai_main muj_00.o] AT 805D49AC ---
+805D49AC:   setii LW(10) GW(1)
+805D49B8:   loop 0
+805D49C0:     callc [dai3_butai_main_func muj_00.o] LW(10) GW(1) GW(2) GW(3)
+805D49D8:     setii LW(10) GW(1)
+805D49E4:     wait_frames 1
+805D49EC:   end_loop
+805D49F0:   return
+805D49F4:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [dai3_kanbu_main muj_00.o] AT 805D4A00 ---
+805D4A00:   callc [evt_npc_get_position evt_npc.o] ["第三勢力幹部"] LW(1) LW(2) LW(3)
+805D4A18:   callc [evt_sub_get_dir evt_sub.o] GW(2) GW(3) LW(1) LW(3) GW(10)
+805D4A34:   callc [evt_sub_get_dist evt_sub.o] GW(2) GW(3) LW(1) LW(3) GW(11)
+805D4A50:   setii LW(10) GW(1)
+805D4A5C:   loop 0
+805D4A64:     setii LW(11) GW(1)
+805D4A70:     subi LW(11) LW(10)
+805D4A7C:     subi GW(10) LW(11)
+805D4A88:     setii LW(0) 0
+805D4A94:     subi LW(0) GW(10)
+805D4AA0:     addi LW(0) 180
+805D4AAC:     callc [evt_sub_get_sincos evt_sub.o] LW(0) LW(14) LW(15)
+805D4AC0:     mulf LW(14) GW(11)
+805D4ACC:     mulf LW(15) GW(11)
+805D4AD8:     addf LW(14) GW(2)
+805D4AE4:     addf LW(15) GW(3)
+805D4AF0:     callc [evt_npc_get_position evt_npc.o] ["第三勢力幹部"] LW(1) LW(2) LW(3)
+805D4B08:     callc [evt_npc_set_position evt_npc.o] ["第三勢力幹部"] LW(14) LW(2) LW(15)
+805D4B20:     setii LW(10) GW(1)
+805D4B2C:     wait_frames 1
+805D4B34:   end_loop
+805D4B38:   return
+805D4B3C:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [kaizoku_setup muj_00.o] AT 805D4B40 ---
+805D4B40:   callc [evt_mario_set_dir evt_mario.o] 270 0 0
+805D4B54:   callc [evt_party_set_dir evt_party.o] 0 270 -1
+805D4B68:   callc [evt_party_set_dir evt_party.o] 1 270 -1
+805D4B7C:   setii LW(0) 10
+805D4B88:   mo_set_base_int [kaizoku_vs_dai3_suifupos muj_00.o]
+805D4B90:   loop 95
+805D4B98:     mo_read_int3 LW(1) LW(2) LW(3)
+805D4BA8:     addi LW(1) GW(5)
+805D4BB4:     addi LW(3) GW(6)
+805D4BC0:     callc [evt_nannpc_set_position evt_nannpc.o] LW(0) LW(1) LW(2) LW(3)
+805D4BD8:     mo_read_int LW(4)
+805D4BE0:     callc [evt_nannpc_set_dir evt_nannpc.o] LW(0) LW(4)
+805D4BF0:     setii LW(12) 0
+805D4BFC:     subi LW(12) GW(6)
+805D4C08:     setii LW(13) 0
+805D4C14:     subi LW(13) LW(3)
+805D4C20:     callc [evt_sub_get_dir evt_sub.o] GW(5) LW(12) LW(1) LW(13) LW(10)
+805D4C3C:     callc [evt_sub_get_dist evt_sub.o] GW(5) LW(12) LW(1) LW(13) LW(11)
+805D4C58:     callc [evt_nannpc_set_work evt_nannpc.o] LW(0) 0 LW(10)
+805D4C6C:     callc [evt_nannpc_set_work evt_nannpc.o] LW(0) 1 LW(11)
+805D4C80:     addi LW(0) 1
+805D4C8C:   end_loop
+805D4C90:   setii LW(0) 105
+805D4C9C:   mo_set_base_int [kaizoku_vs_dai3_elmospos muj_00.o]
+805D4CA4:   loop 100
+805D4CAC:     mo_read_int3 LW(1) LW(2) LW(3)
+805D4CBC:     addi LW(1) GW(5)
+805D4CC8:     addi LW(3) GW(6)
+805D4CD4:     callc [evt_nannpc_set_position evt_nannpc.o] LW(0) LW(1) LW(2) LW(3)
+805D4CEC:     mo_read_int LW(4)
+805D4CF4:     callc [evt_nannpc_set_dir evt_nannpc.o] LW(0) LW(4)
+805D4D04:     setii LW(12) 0
+805D4D10:     subi LW(12) GW(6)
+805D4D1C:     setii LW(13) 0
+805D4D28:     subi LW(13) LW(3)
+805D4D34:     callc [evt_sub_get_dir evt_sub.o] GW(5) LW(12) LW(1) LW(13) LW(10)
+805D4D50:     callc [evt_sub_get_dist evt_sub.o] GW(5) LW(12) LW(1) LW(13) LW(11)
+805D4D6C:     callc [evt_nannpc_set_work evt_nannpc.o] LW(0) 0 LW(10)
+805D4D80:     callc [evt_nannpc_set_work evt_nannpc.o] LW(0) 1 LW(11)
+805D4D94:     callc [evt_nannpc_ppflag_onoff evt_nannpc.o] LW(0) 0 4
+805D4DA8:     addi LW(0) 1
+805D4DB4:   end_loop
+805D4DB8:   return
+805D4DBC:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [kaizoku_main muj_00.o] AT 805D4DC0 ---
+805D4DC0:   setii LW(10) GW(4)
+805D4DCC:   loop 0
+805D4DD4:     callc [kaizoku_main_func muj_00.o] LW(10) GW(4) GW(5) GW(6)
+805D4DEC:     setii LW(10) GW(4)
+805D4DF8:     wait_frames 1
+805D4E00:   end_loop
+805D4E04:   return
+805D4E08:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [mario_main muj_00.o] AT 805D4E1C ---
+805D4E1C:   callc [evt_mario_set_pos evt_mario.o] 20 40 10
+805D4E30:   callc [evt_party_set_pos evt_party.o] 0 10 40 -65
+805D4E48:   callc [evt_npc_set_position evt_npc.o] ["マルコ"] 20 40 -35
+805D4E60:   callc [evt_npc_set_position evt_npc.o] ["コルテス"] 126 75 -30
+805D4E78:   callc [evt_npc_set_position evt_npc.o] ["ガラの悪い水夫"] 32 40 35
+805D4E90:   callc [evt_npc_set_position evt_npc.o] ["モニー"] 10 40 36
+805D4EA8:   callc [evt_npc_set_ry evt_npc.o] ["モニー"] 270
+805D4EB8:   callc [evt_npc_set_position evt_npc.o] ["ピートン"] 15 40 72
+805D4ED0:   callc [evt_npc_set_ry evt_npc.o] ["ピートン"] 270
+805D4EE0:   callc [evt_npc_set_position evt_npc.o] ["オドオド水夫"] -6 40 -88
+805D4EF8:   callc [evt_npc_set_ry evt_npc.o] ["オドオド水夫"] 270
+805D4F08:   callc [mario_main_setup_func muj_00.o] GW(5) GW(6)
+805D4F18:   setii LW(10) GW(4)
+805D4F24:   loop 0
+805D4F2C:     callc [mario_main_func muj_00.o] LW(10) GW(4) GW(5) GW(6)
+805D4F44:     setii LW(10) GW(4)
+805D4F50:     wait_frames 1
+805D4F58:   end_loop
+805D4F5C:   return
+805D4F60:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [kaizoku_move_trace_se muj_00.o] AT 805D5274 ---
+805D5274:   callc [evt_mapobj_get_position evt_map.o] ["S_b"] LW(10) LW(11) LW(12)
+805D528C:   callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_STG5_KOR_SHIP_MOVE1"] LW(10) LW(11) LW(12) LW(13)
+805D52A8:   callc [evt_snd_sfx_dist evt_snd.o] LW(13) 30
+805D52B8:   begin_thread_tid LW(14)
+805D52C0:     loop 0
+805D52C8:       callc [evt_mapobj_get_position evt_map.o] ["S_b"] LW(10) LW(11) LW(12)
+805D52E0:       callc [evt_snd_sfx_pos evt_snd.o] LW(13) LW(10) LW(11) LW(12)
+805D52F8:       wait_frames 1
+805D5300:     end_loop
+805D5304:   end_thread
+805D5308:   wait_until GF(10)
+805D5310:   callc [evt_snd_sfxoff evt_snd.o] LW(13)
+805D531C:   stop_tid LW(14)
+805D5324:   return
+805D5328:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [kaizoku_move_trace muj_00.o] AT 805D532C ---
+805D532C:   setff LW(5) GW(5)
+805D5338:   setff LW(6) GW(6)
+805D5344:   setii LW(8) 0
+805D5350:   setii LW(9) LW(0)
+805D535C:   muli LW(9) 100
+805D5368:   callc [evt_sub_spline_init evt_sub.o] 1 0 [kaizoku_spline_dt muj_00.o] 10 0 LW(0)
+805D5388:   loop 0
+805D5390:     setii LW(10) LW(8)
+805D539C:     divi LW(10) 100
+805D53A8:     callc [evt_sub_spline_get_value_manual evt_sub.o] LW(10) LW(0) LW(1) LW(2)
+805D53C0:     switchi LW(8)
+805D53C8:       case_int_lt 200000
+805D53D0:         setii LW(7) 600
+805D53DC:       case_int_lt 300000
+805D53E4:         setii LW(7) 1000
+805D53F0:       case_int_lt 400000
+805D53F8:         setii LW(7) 1300
+805D5404:       case_int_lt 600000
+805D540C:         setii LW(7) 1600
+805D5418:       case_int_lt 800000
+805D5420:         setii LW(7) 2000
+805D542C:     end_switch
+805D5430:     addi LW(8) LW(7)
+805D543C:     setii LW(3) 1
+805D5448:     if_int_ge LW(8) LW(9)
+805D5454:       setii LW(3) 0
+805D5460:     endif
+805D5464:     setff GW(5) LW(0)
+805D5470:     setff GW(6) LW(2)
+805D547C:     setii LF(0) 1
+805D5488:     if_float_eq GW(5) LW(5)
+805D5494:       if_float_eq GW(6) LW(6)
+805D54A0:         setii LF(0) 0
+805D54AC:       endif
+805D54B0:     endif
+805D54B4:     if_int_eq LF(0) 1
+805D54C0:       callc [ship_rotate muj_00.o] LW(5) LW(6) GW(5) GW(6) GW(4)
+805D54DC:     endif
+805D54E0:     if_int_eq LW(3) 0
+805D54EC:       loop_break
+805D54F0:     endif
+805D54F4:     wait_frames 1
+805D54FC:     setff LW(5) GW(5)
+805D5508:     setff LW(6) GW(6)
+805D5514:   end_loop
+805D5518:   callc [evt_sub_spline_free evt_sub.o]
+805D5520:   setii GF(10) 0
+805D552C:   return
+805D5530:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [dai3_move_trace_se muj_00.o] AT 805D5534 ---
+805D5534:   callc [evt_mapobj_get_position evt_map.o] ["S_c"] LW(10) LW(11) LW(12)
+805D554C:   callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_STG5_3RD_SHIP_MOVE1"] LW(10) LW(11) LW(12) LW(13)
+805D5568:   callc [evt_snd_sfx_dist evt_snd.o] LW(13) 30
+805D5578:   begin_thread_tid LW(14)
+805D5580:     loop 0
+805D5588:       callc [evt_mapobj_get_position evt_map.o] ["S_b"] LW(10) LW(11) LW(12)
+805D55A0:       callc [evt_snd_sfx_pos evt_snd.o] LW(13) LW(10) LW(11) LW(12)
+805D55B8:       wait_frames 1
+805D55C0:     end_loop
+805D55C4:   end_thread
+805D55C8:   wait_until GF(11)
+805D55D0:   callc [evt_snd_sfxoff evt_snd.o] LW(13)
+805D55DC:   stop_tid LW(14)
+805D55E4:   return
+805D55E8:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [dai3_move_trace muj_00.o] AT 805D55EC ---
+805D55EC:   setff LW(5) GW(2)
+805D55F8:   setff LW(6) GW(3)
+805D5604:   setii LW(8) 0
+805D5610:   setii LW(9) LW(0)
+805D561C:   muli LW(9) 100
+805D5628:   callc [evt_sub_spline_init evt_sub.o] 1 0 [dai3_spline_dt muj_00.o] 9 0 LW(0)
+805D5648:   loop 0
+805D5650:     setii LW(10) LW(8)
+805D565C:     divi LW(10) 100
+805D5668:     callc [evt_sub_spline_get_value_manual evt_sub.o] LW(10) LW(0) LW(1) LW(2)
+805D5680:     addi LW(8) 1115
+805D568C:     setii LW(3) 1
+805D5698:     if_int_ge LW(8) LW(9)
+805D56A4:       setii LW(3) 0
+805D56B0:     endif
+805D56B4:     setff GW(2) LW(0)
+805D56C0:     setff GW(3) LW(2)
+805D56CC:     setii LF(0) 1
+805D56D8:     if_float_eq GW(2) LW(5)
+805D56E4:       if_float_eq GW(3) LW(6)
+805D56F0:         setii LF(0) 0
+805D56FC:       endif
+805D5700:     endif
+805D5704:     if_int_eq LF(0) 1
+805D5710:       callc [ship_rotate muj_00.o] LW(5) LW(6) GW(2) GW(3) GW(1)
+805D572C:     endif
+805D5730:     if_int_eq LW(3) 0
+805D573C:       loop_break
+805D5740:     endif
+805D5744:     wait_frames 1
+805D574C:     setff LW(5) GW(2)
+805D5758:     setff LW(6) GW(3)
+805D5764:   end_loop
+805D5768:   callc [evt_sub_spline_free evt_sub.o]
+805D5770:   return
+805D5774:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [dai3_kurukuru muj_00.o] AT 805D42A8 ---
+805D42A8:   callc [evt_snd_sfxon evt_snd.o] ["SFX_STG5_SHIP_IMPACT1"] 0
+805D42B8:   begin_thread
+805D42BC:     callc [evt_cam_shake evt_cam.o] 4 0.02 0.00 500
+805D42D4:   end_thread
+805D42D8:   begin_thread
+805D42DC:     setii LW(0) GW(1)
+805D42E8:     setii LW(1) LW(0)
+805D42F4:     addi LW(1) 15
+805D4300:     callc [evt_sub_intpl_msec_init evt_sub.o] 4 LW(0) LW(1) 1000
+805D4318:     loop 0
+805D4320:       callc [evt_sub_intpl_msec_get_value evt_sub.o]
+805D4328:       setii GW(1) LW(0)
+805D4334:       if_int_eq LW(1) 0
+805D4340:         loop_break
+805D4344:       endif
+805D4348:       wait_frames 1
+805D4350:     end_loop
+805D4354:   end_thread
+805D4358:   begin_thread
+805D435C:     setii LW(0) GW(2)
+805D4368:     setii LW(1) LW(0)
+805D4374:     addi LW(1) -80
+805D4380:     callc [evt_sub_intpl_msec_init evt_sub.o] 4 LW(0) LW(1) 1000
+805D4398:     loop 0
+805D43A0:       callc [evt_sub_intpl_msec_get_value evt_sub.o]
+805D43A8:       setii GW(2) LW(0)
+805D43B4:       if_int_eq LW(1) 0
+805D43C0:         loop_break
+805D43C4:       endif
+805D43C8:       wait_frames 1
+805D43D0:     end_loop
+805D43D4:   end_thread
+805D43D8:   wait_ms 1000
+805D43E0:   return
+805D43E4:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [iwapera_offscreen muj_00.o] AT 805D4154 ---
+805D4154:   callc [evt_img_entry evt_img.o] ["capture_img"]
+805D4160:   callc [evt_img_set_paper evt_img.o] ["capture_img"] ["OFF_d_yabu"]
+805D4170:   callc [evt_offscreen_entry evt_offscreen.o] ["offscreen"]
+805D417C:   callc [evt_mapobj_set_offscreen evt_map.o] 1 ["S_iwa_before"] ["offscreen"]
+805D4190:   callc [evt_offscreen_get_boundingbox evt_offscreen.o] ["offscreen"] LW(10) LW(11) LW(12) LW(13)
+805D41AC:   callc [evt_img_alloc_capture evt_img.o] ["capture_img"] 0 0 1 LW(10) LW(11) LW(12) LW(13)
+805D41D4:   callc [evt_img_alloc_capture evt_img.o] ["capture_img"] 2 ["offscreen"] 1 LW(10) LW(11) LW(12) LW(13)
+805D41FC:   wait_ms 1500
+805D4204:   callc [evt_mapobj_flag_onoff evt_map.o] 1 1 ["S_iwa_before"] 1
+805D421C:   callc [evt_img_set_paper_anim evt_img.o] ["capture_img"] ["A_1"]
+805D422C:   return
+805D4230:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [iwapera_offscreen_end muj_00.o] AT 805D4234 ---
+805D4234:   callc [evt_img_wait_animend evt_img.o] ["capture_img"]
+805D4240:   callc [evt_img_free_capture evt_img.o] ["capture_img"] 0
+805D4250:   callc [evt_img_onoff evt_img.o] ["capture_img"] 0
+805D4260:   callc [evt_img_release evt_img.o] ["capture_img"]
+805D426C:   callc [evt_mapobj_clear_offscreen evt_map.o] 1 ["S_iwa_before"]
+805D427C:   callc [evt_offscreen_delete evt_offscreen.o] ["offscreen"]
+805D4288:   callc [evt_mapobj_flag_onoff evt_map.o] 1 0 ["S_iwa_after"] 1
+805D42A0:   return
+805D42A4:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [cam_dai3_vs_kaizoku muj_00.o] AT 805D58A0 ---
+805D58A0:   setii LW(0) 70
+805D58AC:   setii LW(1) 1400
+805D58B8:   callc [cam_test_init_func muj_00.o] LW(0) LW(1) LW(2) LW(3)
+805D58D0:   addf LW(2) -120.00
+805D58DC:   callc [evt_cam3d_evt_set evt_cam.o] LW(0) 110 LW(1) 70 90 0 0 11
+805D5904:   loop 0
+805D590C:     callc [cam_test_func muj_00.o] LW(0) LW(1) LW(2) LW(3)
+805D5924:     callc [evt_cam3d_evt_set evt_cam.o] LW(0) 110 LW(1) 70 90 0 0 11
+805D594C:     addf LW(2) 0.27
+805D5958:     if_int_ge LW(2) 360.00
+805D5964:       subf LW(2) 360.00
+805D5970:     endif
+805D5974:     wait_frames 1
+805D597C:   end_loop
+805D5980:   return
+805D5984:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [tobikakari_kemuri muj_00.o] AT 805D5858 ---
+805D5858:   loop 0
+805D5860:     callsa [_kemuri_sub muj_00.o]
+805D5868:     callsa [_kemuri_sub muj_00.o]
+805D5870:     callc [evt_sub_random evt_sub.o] 200 LW(0)
+805D5880:     addi LW(0) 200
+805D588C:     wait_ms LW(0)
+805D5894:   end_loop
+805D5898:   return
+805D589C:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [dai3_beat_back muj_00.o] AT 805D66F8 ---
+805D66F8:   callc [evt_mario_key_onoff evt_mario.o] 0
+805D6704:   callc [evt_mario_set_pose evt_mario.o] ["M_S_1"]
+805D6710:   callc [evt_party_stop evt_party.o] 0
+805D671C:   callc [evt_party_set_pos evt_party.o] 0 -71 45 -240
+805D6734:   callc [evt_npc_set_position evt_npc.o] ["第三勢力幹部"] -448 60 -236
+805D674C:   callc [evt_cam3d_evt_set evt_cam.o] -436 595 725 -226 120 -460 0 11
+805D6774:   setff GW(1) 0.00
+805D6780:   setii GW(2) -416
+805D678C:   setii GW(3) -334
+805D6798:   setff GW(4) 0.00
+805D67A4:   setii GW(5) -78
+805D67B0:   setii GW(6) -267
+805D67BC:   callsa_tid [dai3_move_every muj_00.o] LW(10)
+805D67C8:   callsa_tid [kaizoku_move_every muj_00.o] LW(11)
+805D67D4:   callsa [dai3_butai_setup muj_00.o]
+805D67DC:   callsa [kaizoku_setup muj_00.o]
+805D67E4:   wait_frames 1
+805D67EC:   callsa_tid [dai3_butai_main muj_00.o] LW(12)
+805D67F8:   callsa_tid [dai3_kanbu_main muj_00.o] LW(13)
+805D6804:   callsa_tid [kaizoku_main muj_00.o] LW(14)
+805D6810:   callsa_tid [mario_main2 muj_00.o] LW(15)
+805D681C:   wait_frames 2
+805D6824:   setii GW(1) 273
+805D6830:   setii GW(4) 215
+805D683C:   if_int_eq LW(0) 0
+805D6848:   else
+805D684C:     callc [evt_seq_wait evt_seq.o] 2
+805D6858:   endif
+805D685C:   setff GW(7) GW(1)
+805D6868:   callsa_tid [nameraka_rotate muj_00.o] LW(9)
+805D6874:   wait_ms 1000
+805D687C:   callc [evt_msg_print evt_msg.o] 0 ["stg5_muj_125"] 0 ["第三勢力幹部"]
+805D6894:   setii GF(11) 1
+805D68A0:   callsa [dai3_move_trace_se muj_00.o]
+805D68A8:   setii LW(0) 3500
+805D68B4:   callsa [dai3_taisan_move_trace01 muj_00.o]
+805D68BC:   wait_ms 3500
+805D68C4:   setii GF(11) 0
+805D68D0:   stop_tid LW(9)
+805D68D8:   callc [evt_cam3d_evt_set evt_cam.o] -141 262 147 -45 43 -397 500 11
+805D6900:   wait_ms 500
+805D6908:   begin_thread
+805D690C:     callc [evt_mario_set_dir evt_mario.o] 90 200 0
+805D6920:   end_thread
+805D6924:   callc [evt_msg_print_party evt_msg.o] ["stg5_muj_126"]
+805D6930:   callsa_tid [senin_kansei muj_00.o] LW(10)
+805D693C:   wait_ms 3000
+805D6944:   setii GSW(0) 261
+805D6950:   stop_tid LW(10)
+805D6958:   callc [evt_fade_entry evt_fade.o] 6 1000 0 0 0
+805D6974:   callc [evt_fade_end_wait evt_fade.o]
+805D697C:   wait_ms 1500
+805D6984:   setii LF(10) 0
+805D6990:   setii LW(0) 24
+805D699C:   callss [unk_evt_803bac3c evt_memcard.o]
+805D69A4:   callc [evt_snd_bgmoff_f evt_snd.o] 512 2000
+805D69B4:   callc [evt_snd_envoff_f evt_snd.o] 512 2000
+805D69C4:   callc [evt_snd_sfx_all_stop evt_snd.o]
+805D69CC:   callc [evt_fade_set_mapchange_type evt_fade.o] 1 55 0 54 0
+805D69E8:   callc [evt_bero_mapchange evt_bero.o] ["aji_10"] [zero_muj_0000e2b8 muj_00.o]
+805D69F8:   return
+805D69FC:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [_kemuri_sub muj_00.o] AT 805D5778 ---
+805D5778:   callc [evt_sub_random evt_sub.o] 300 LW(0)
+805D5788:   addi LW(0) -400
+805D5794:   callc [evt_sub_random evt_sub.o] 150 LW(1)
+805D57A4:   addi LW(1) 150
+805D57B0:   callc [evt_sub_random evt_sub.o] 50 LW(2)
+805D57C0:   addi LW(2) -300
+805D57CC:   callc [evt_sub_random evt_sub.o] 100 LW(3)
+805D57DC:   addf LW(3) 50.00
+805D57E8:   divf LW(3) 100.00
+805D57F4:   callc [evt_eff evt_eff.o] 0 ["kemuri_test"] 2 LW(0) LW(1) LW(2) LW(3) 0 0 0 0 0 0 0
+805D5834:   callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_STG0_3RD_ATTACK3"] LW(0) LW(1) LW(2) 0
+805D5850:   return
+805D5854:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [mario_main2 muj_00.o] AT 805D4F64 ---
+805D4F64:   callc [evt_mario_set_pos evt_mario.o] 20 40 10
+805D4F78:   callc [evt_party_set_pos evt_party.o] 0 10 40 -25
+805D4F90:   callc [evt_npc_set_position evt_npc.o] ["マルコ"] -3 40 -69
+805D4FA8:   callc [evt_npc_set_position evt_npc.o] ["コルテス"] 126 75 -30
+805D4FC0:   callc [evt_npc_set_position evt_npc.o] ["ガラの悪い水夫"] 32 40 35
+805D4FD8:   callc [evt_npc_set_position evt_npc.o] ["モニー"] 10 40 36
+805D4FF0:   callc [evt_npc_set_ry evt_npc.o] ["モニー"] 270
+805D5000:   callc [evt_npc_set_position evt_npc.o] ["ピートン"] 15 40 72
+805D5018:   callc [evt_npc_set_ry evt_npc.o] ["ピートン"] 270
+805D5028:   callc [evt_npc_set_position evt_npc.o] ["オドオド水夫"] -6 40 -88
+805D5040:   callc [evt_npc_set_ry evt_npc.o] ["オドオド水夫"] 270
+805D5050:   callc [mario_main_setup_func muj_00.o] GW(5) GW(6)
+805D5060:   setii LW(10) GW(4)
+805D506C:   loop 0
+805D5074:     callc [mario_main_func muj_00.o] LW(10) GW(4) GW(5) GW(6)
+805D508C:     setii LW(10) GW(4)
+805D5098:     wait_frames 1
+805D50A0:   end_loop
+805D50A4:   return
+805D50A8:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [nameraka_rotate muj_00.o] AT 805D6410 ---
+805D6410:   loop 0
+805D6418:     if_float_ne GW(1) GW(7)
+805D6424:       if_float_ge GW(1) GW(7)
+805D6430:         setff LW(0) GW(1)
+805D643C:         subf LW(0) 1.00
+805D6448:         setff GW(1) LW(0)
+805D6454:         if_float_le GW(1) GW(7)
+805D6460:           setff GW(1) GW(7)
+805D646C:         endif
+805D6470:       else
+805D6474:         setff LW(0) GW(1)
+805D6480:         addf LW(0) 1.00
+805D648C:         setff GW(1) LW(0)
+805D6498:         if_float_ge GW(1) GW(7)
+805D64A4:           setff GW(1) GW(7)
+805D64B0:         endif
+805D64B4:       endif
+805D64B8:     endif
+805D64BC:     wait_frames 1
+805D64C4:   end_loop
+805D64C8:   return
+805D64CC:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [dai3_taisan_move_trace01 muj_00.o] AT 805D65E4 ---
+805D65E4:   setff LW(5) GW(2)
+805D65F0:   setff LW(6) GW(3)
+805D65FC:   callc [evt_sub_spline_init evt_sub.o] 1 0 [dai3_taisan_spline_dt01 muj_00.o] 3 0 LW(0)
+805D661C:   loop 0
+805D6624:     callc [evt_sub_spline_get_value evt_sub.o] LW(0) LW(1) LW(2) LW(3)
+805D663C:     setff GW(2) LW(0)
+805D6648:     setff GW(3) LW(2)
+805D6654:     setii LF(0) 1
+805D6660:     if_float_eq GW(2) LW(5)
+805D666C:       if_float_eq GW(3) LW(6)
+805D6678:         setii LF(0) 0
+805D6684:       endif
+805D6688:     endif
+805D668C:     if_int_eq LF(0) 1
+805D6698:       callc [ship_rotate muj_00.o] LW(5) LW(6) GW(2) GW(3) GW(7)
+805D66B4:     endif
+805D66B8:     setff LW(5) GW(2)
+805D66C4:     setff LW(6) GW(3)
+805D66D0:     if_int_eq LW(3) 0
+805D66DC:       loop_break
+805D66E0:     endif
+805D66E4:     wait_frames 1
+805D66EC:   end_loop
+805D66F0:   return
+805D66F4:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [senin_kansei muj_00.o] AT 805D61D4 ---
+805D61D4:   loop 0
+805D61DC:     wait_ms 400
+805D61E4:     setii LW(0) GW(5)
+805D61F0:     setii LW(2) GW(6)
+805D61FC:     begin_thread
+805D6200:       addi LW(0) -30
+805D620C:       callc [evt_msg_toge evt_msg.o] 2 LW(0) 200 LW(2)
+805D6224:       callc [evt_msg_print evt_msg.o] 0 ["stg5_muj_127"] 0 0
+805D623C:     end_thread
+805D6240:     wait_ms 300
+805D6248:     begin_thread
+805D624C:       addi LW(0) -32
+805D6258:       callc [evt_msg_toge evt_msg.o] 2 LW(0) 100 LW(2)
+805D6270:       callc [evt_msg_print evt_msg.o] 0 ["stg5_muj_128"] 0 0
+805D6288:     end_thread
+805D628C:     wait_ms 200
+805D6294:     begin_thread
+805D6298:       addi LW(0) 100
+805D62A4:       callc [evt_msg_toge evt_msg.o] 2 LW(0) 155 LW(2)
+805D62BC:       callc [evt_msg_print evt_msg.o] 0 ["stg5_muj_129"] 0 0
+805D62D4:     end_thread
+805D62D8:     wait_ms 300
+805D62E0:     begin_thread
+805D62E4:       addi LW(0) -40
+805D62F0:       callc [evt_msg_toge evt_msg.o] 2 LW(0) 150 LW(2)
+805D6308:       callc [evt_msg_print evt_msg.o] 0 ["stg5_muj_130"] 0 0
+805D6320:     end_thread
+805D6324:     wait_ms 400
+805D632C:     begin_thread
+805D6330:       addi LW(0) 80
+805D633C:       callc [evt_msg_toge evt_msg.o] 2 LW(0) 107 LW(2)
+805D6354:       callc [evt_msg_print evt_msg.o] 0 ["stg5_muj_131"] 0 0
+805D636C:     end_thread
+805D6370:     wait_ms 200
+805D6378:     begin_thread
+805D637C:       addi LW(0) 65
+805D6388:       callc [evt_msg_toge evt_msg.o] 2 LW(0) 205 LW(2)
+805D63A0:       callc [evt_msg_print evt_msg.o] 0 ["stg5_muj_132"] 0 0
+805D63B8:     end_thread
+805D63BC:   end_loop
+805D63C0:   return
+805D63C4:   end

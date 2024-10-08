@@ -1,0 +1,145 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [unison_phase_event unit_boss_vivian.o] AT 805D2090 ---
+805D2090:   callc [btlevtcmd_CheckPhase battle_event_cmd.o] LW(0) 67108867
+805D20A0:   if_int_ne LW(0) 0
+805D20AC:     callss [majo_unison_phase_event unit_boss_majolyne.o]
+805D20B4:     callc [btlevtcmd_GetUnitWork battle_event_cmd.o] -2 4 LW(3)
+805D20C8:     callc [btlevtcmd_GetUnitWork battle_event_cmd.o] -2 5 LW(4)
+805D20DC:     if_int_ne LW(3) LW(4)
+805D20E8:       callc [btlevtcmd_SetUnitWork battle_event_cmd.o] -2 4 LW(4)
+805D20FC:       callc [btlevtcmd_StartWaitEvent battle_event_cmd.o] -2
+805D2108:       callss [vivian_down unit_boss_vivian.o]
+805D2110:       wait_ms 500
+805D2118:       switchi LW(4)
+805D2120:         case_int_eq 0
+805D2128:           setii LW(0) 55
+805D2134:           setii LW(2) 0
+805D2140:         case_int_eq 1
+805D2148:           setii LW(0) 105
+805D2154:           setii LW(2) 10
+805D2160:         case_int_eq 2
+805D2168:           setii LW(0) 155
+805D2174:           setii LW(2) 20
+805D2180:       end_switch
+805D2184:       setii LW(1) 0
+805D2190:       callc [btlevtcmd_SetHomePos battle_event_cmd.o] -2 LW(0) LW(1) LW(2)
+805D21A8:       callss [vivian_up unit_boss_vivian.o]
+805D21B0:       callc [btlevtcmd_SortPhaseMoveTable battle_event_cmd.o]
+805D21B8:       callc [btlevtcmd_StartWaitEvent battle_event_cmd.o] -2
+805D21C4:     endif
+805D21C8:   endif
+805D21CC:   return
+805D21D0:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [majo_unison_phase_event unit_boss_majolyne.o] AT 805D332C ---
+805D332C:   setii LW(0) -1
+805D3338:   setii LW(1) -1
+805D3344:   setii LW(2) -1
+805D3350:   if_int_eq GW(13) 0
+805D335C:     callc [btlevtcmd_GetUnitWork battle_event_cmd.o] GW(10) 5 LW(6)
+805D3370:     switchi LW(6)
+805D3378:       case_int_eq 0
+805D3380:         callc [btlevtcmd_GetHp battle_event_cmd.o] GW(10) LW(0)
+805D3390:         setii LW(3) 1
+805D339C:       case_int_eq 1
+805D33A4:         callc [btlevtcmd_GetHp battle_event_cmd.o] GW(10) LW(1)
+805D33B4:         setii LW(4) 1
+805D33C0:       case_int_eq 2
+805D33C8:         callc [btlevtcmd_GetHp battle_event_cmd.o] GW(10) LW(2)
+805D33D8:         setii LW(5) 1
+805D33E4:     end_switch
+805D33E8:   endif
+805D33EC:   if_int_eq GW(12) 0
+805D33F8:     callc [btlevtcmd_GetUnitWork battle_event_cmd.o] GW(9) 5 LW(6)
+805D340C:     switchi LW(6)
+805D3414:       case_int_eq 0
+805D341C:         callc [btlevtcmd_GetHp battle_event_cmd.o] GW(9) LW(0)
+805D342C:         setii LW(3) 2
+805D3438:       case_int_eq 1
+805D3440:         callc [btlevtcmd_GetHp battle_event_cmd.o] GW(9) LW(1)
+805D3450:         setii LW(4) 2
+805D345C:       case_int_eq 2
+805D3464:         callc [btlevtcmd_GetHp battle_event_cmd.o] GW(9) LW(2)
+805D3474:         setii LW(5) 2
+805D3480:     end_switch
+805D3484:   endif
+805D3488:   if_int_eq GW(11) 0
+805D3494:     callc [btlevtcmd_GetUnitWork battle_event_cmd.o] GW(8) 5 LW(6)
+805D34A8:     switchi LW(6)
+805D34B0:       case_int_eq 0
+805D34B8:         callc [btlevtcmd_GetHp battle_event_cmd.o] GW(8) LW(0)
+805D34C8:         setii LW(3) 3
+805D34D4:       case_int_eq 1
+805D34DC:         callc [btlevtcmd_GetHp battle_event_cmd.o] GW(8) LW(1)
+805D34EC:         setii LW(4) 3
+805D34F8:       case_int_eq 2
+805D3500:         callc [btlevtcmd_GetHp battle_event_cmd.o] GW(8) LW(2)
+805D3510:         setii LW(5) 3
+805D351C:     end_switch
+805D3520:   endif
+805D3524:   callc [majo3_sort unit_boss_majolyne.o]
+805D352C:   switchi LW(0)
+805D3534:     case_int_eq 1
+805D353C:       if_int_eq GW(13) 0
+805D3548:         callc [btlevtcmd_SetUnitWork battle_event_cmd.o] GW(10) 5 0
+805D355C:       endif
+805D3560:     case_int_eq 2
+805D3568:       if_int_eq GW(12) 0
+805D3574:         callc [btlevtcmd_SetUnitWork battle_event_cmd.o] GW(9) 5 0
+805D3588:       endif
+805D358C:     case_int_eq 3
+805D3594:       if_int_eq GW(11) 0
+805D35A0:         callc [btlevtcmd_SetUnitWork battle_event_cmd.o] GW(8) 5 0
+805D35B4:       endif
+805D35B8:   end_switch
+805D35BC:   switchi LW(1)
+805D35C4:     case_int_eq 1
+805D35CC:       if_int_eq GW(13) 0
+805D35D8:         callc [btlevtcmd_SetUnitWork battle_event_cmd.o] GW(10) 5 1
+805D35EC:       endif
+805D35F0:     case_int_eq 2
+805D35F8:       if_int_eq GW(12) 0
+805D3604:         callc [btlevtcmd_SetUnitWork battle_event_cmd.o] GW(9) 5 1
+805D3618:       endif
+805D361C:     case_int_eq 3
+805D3624:       if_int_eq GW(11) 0
+805D3630:         callc [btlevtcmd_SetUnitWork battle_event_cmd.o] GW(8) 5 1
+805D3644:       endif
+805D3648:   end_switch
+805D364C:   switchi LW(2)
+805D3654:     case_int_eq 1
+805D365C:       if_int_eq GW(13) 0
+805D3668:         callc [btlevtcmd_SetUnitWork battle_event_cmd.o] GW(10) 5 2
+805D367C:       endif
+805D3680:     case_int_eq 2
+805D3688:       if_int_eq GW(12) 0
+805D3694:         callc [btlevtcmd_SetUnitWork battle_event_cmd.o] GW(9) 5 2
+805D36A8:       endif
+805D36AC:     case_int_eq 3
+805D36B4:       if_int_eq GW(11) 0
+805D36C0:         callc [btlevtcmd_SetUnitWork battle_event_cmd.o] GW(8) 5 2
+805D36D4:       endif
+805D36D8:   end_switch
+805D36DC:   return
+805D36E0:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [vivian_down unit_boss_vivian.o] AT 805D1908 ---
+805D1908:   begin_thread
+805D190C:     wait_ms 250
+805D1914:     callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_BOSS_VIVI_SHADOW1"] [F1194D80] 0 [F1194D80]
+805D1930:   end_thread
+805D1934:   callc [battle_evt_majo_disp_off unit_party_vivian.o] -2 1 0 0
+805D194C:   return
+805D1950:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [vivian_up unit_boss_vivian.o] AT 805D1954 ---
+805D1954:   begin_thread
+805D1958:     wait_ms 250
+805D1960:     callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_BOSS_VIVI_SHADOW2"] [F1194D80] 0 [F1194D80]
+805D197C:   end_thread
+805D1980:   callc [battle_evt_majo_disp_on unit_party_vivian.o] -2 1 LW(0) LW(1) LW(2) 0
+805D19A0:   callc [btlevtcmd_SetPos battle_event_cmd.o] -2 LW(0) LW(1) LW(2)
+805D19B8:   return
+805D19BC:   end

@@ -1,0 +1,97 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [ItemEvent_Recovery battle_item_data.o] AT 80364D2C ---
+80364D2C:   callc [btlevtcmd_CommandGetWeaponAddress battle_event_cmd.o] -2 LW(8)
+80364D3C:   callc [btlevtcmd_WeaponAftereffect battle_event_cmd.o] LW(8)
+80364D48:   callc [btlevtcmd_CheckCommandUnit battle_event_cmd.o] -2 LW(0)
+80364D58:   if_int_ne LW(0) 0
+80364D64:     callc [btlevtcmd_GetSelectEnemy battle_event_cmd.o] LW(10) LW(11)
+80364D74:   else
+80364D78:     callc [btlevtcmd_GetEnemyBelong battle_event_cmd.o] -2 LW(0)
+80364D88:     callc [btlevtcmd_SamplingEnemy battle_event_cmd.o] -2 LW(0) LW(8)
+80364D9C:     callc [btlevtcmd_ChoiceSamplingEnemy battle_event_cmd.o] LW(8) LW(10) LW(11)
+80364DB0:   endif
+80364DB4:   callc [evt_btl_camera_set_mode battle_camera.o] 0 7
+80364DC4:   callc [evt_btl_camera_set_homing_unit battle_camera.o] 0 -2 -1
+80364DD8:   callc [evt_btl_camera_set_moveSpeedLv battle_camera.o] 0 1
+80364DE8:   callc [evt_btl_camera_set_zoom battle_camera.o] 0 200
+80364DF8:   wait_ms 1000
+80364E00:   callc [btlevtcmd_GetFriendBelong battle_event_cmd.o] -2 LW(0)
+80364E10:   if_int_eq LW(0) 0
+80364E1C:     callc [btlevtcmd_GetPos battle_event_cmd.o] -2 LW(0) LW(1) LW(2)
+80364E34:     callc [btlevtcmd_GetBodyId battle_event_cmd.o] -2 LW(9)
+80364E44:     callc [btlevtcmd_AnimeChangePoseType battle_event_cmd.o] -2 LW(9) 40
+80364E58:     callc [btlevtcmd_SetMoveSpeed battle_event_cmd.o] -2 3.00
+80364E68:     callc [btlevtcmd_MovePosition battle_event_cmd.o] -2 -60 LW(1) LW(2) 0 -1 0
+80364E8C:   endif
+80364E90:   callc [btlevtcmd_GetBodyId battle_event_cmd.o] -2 LW(9)
+80364EA0:   callc [btlevtcmd_AnimeChangePoseType battle_event_cmd.o] -2 LW(9) 52
+80364EB4:   callc [btlevtcmd_CommandFlyItem battle_event_cmd.o] -2 60
+80364EC4:   callc [btlevtcmd_AnimeChangePoseType battle_event_cmd.o] -2 LW(9) 69
+80364ED8:   callc [btlevtcmd_ConsumeItem battle_event_cmd.o] -2
+80364EE4:   callc [btlevtcmd_CommandGetWeaponItemId battle_event_cmd.o] LW(9) LW(8)
+80364EF4:   if_int_eq LW(9) 0
+80364F00:     callc [btlevtcmd_GetConsumeItem battle_event_cmd.o] LW(9)
+80364F0C:   endif
+80364F10:   callss [ItemEvent_Recovery_Core battle_item_data.o]
+80364F18:   return
+80364F1C:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [ItemEvent_Recovery_Core battle_item_data.o] AT 80364CD4 ---
+80364CD4:   callss [ItemEvent_Recovery_Core_Effect battle_item_data.o]
+80364CDC:   callc [evt_btl_camera_set_mode battle_camera.o] 0 0
+80364CEC:   callc [evt_btl_camera_set_moveSpeedLv battle_camera.o] 0 1
+80364CFC:   wait_frames 60
+80364D04:   callss [_return_home_event battle_item_data.o]
+80364D0C:   callc [btlevtcmd_StartWaitEvent battle_event_cmd.o] LW(10)
+80364D18:   callc [btlevtcmd_StartWaitEvent battle_event_cmd.o] -2
+80364D24:   return
+80364D28:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [ItemEvent_Recovery_Core_Effect battle_item_data.o] AT 80364AE0 ---
+80364AE0:   callc [evt_btl_camera_set_homing_unit battle_camera.o] 0 LW(10) -1
+80364AF4:   callc [evt_btl_camera_set_moveSpeedLv battle_camera.o] 0 1
+80364B04:   callc [evt_btl_camera_set_zoom battle_camera.o] 0 200
+80364B14:   callc [btlevtcmd_GetItemRecoverParam battle_event_cmd.o] LW(9) LW(5) LW(6) LW(7)
+80364B2C:   if_int_ge LW(5) 1
+80364B38:     callc [btlevtcmd_GetPartsPos battle_event_cmd.o] LW(10) LW(11) LW(12) LW(13) LW(14)
+80364B54:     callc [btlevtcmd_GetStatusMg battle_event_cmd.o] LW(10) LW(0)
+80364B64:     callc [btlevtcmd_GetHeight battle_event_cmd.o] LW(10) LW(1)
+80364B74:     mulf LW(0) LW(1)
+80364B80:     addi LW(13) LW(0)
+80364B8C:     callc [evt_eff evt_eff.o] 0 ["recovery"] 0 LW(12) LW(13) LW(14) LW(5) 0 0 0 0 0 0 0
+80364BCC:     wait_frames 120
+80364BD4:     callc [btlevtcmd_RecoverHp battle_event_cmd.o] LW(10) LW(11) LW(5)
+80364BE8:     wait_frames 60
+80364BF0:   endif
+80364BF4:   if_int_ge LW(6) 1
+80364C00:     callc [btlevtcmd_GetPartsPos battle_event_cmd.o] LW(10) LW(11) LW(12) LW(13) LW(14)
+80364C1C:     callc [btlevtcmd_GetStatusMg battle_event_cmd.o] LW(10) LW(0)
+80364C2C:     callc [btlevtcmd_GetHeight battle_event_cmd.o] LW(10) LW(1)
+80364C3C:     mulf LW(0) LW(1)
+80364C48:     addi LW(13) LW(0)
+80364C54:     callc [evt_eff evt_eff.o] 0 ["recovery"] 1 LW(12) LW(13) LW(14) LW(6) 0 0 0 0 0 0 0
+80364C94:     wait_frames 120
+80364C9C:     callc [btlevtcmd_RecoverFp battle_event_cmd.o] LW(10) LW(11) LW(6)
+80364CB0:     wait_frames 60
+80364CB8:   endif
+80364CBC:   if_int_ge LW(7) 1
+80364CC8:   endif
+80364CCC:   return
+80364CD0:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [_return_home_event battle_item_data.o] AT 80364998 ---
+80364998:   callc [btlevtcmd_GetHomePos battle_event_cmd.o] -2 LW(0) LW(1) LW(2)
+803649B0: 95:
+803649B8:   callc [btlevtcmd_GetPos battle_event_cmd.o] -2 LW(3) LW(4) LW(5)
+803649D0:   if_int_ne LW(0) LW(3)
+803649DC:     begin_child_thread
+803649E0:       callc [btlevtcmd_GetBodyId battle_event_cmd.o] -2 LW(0)
+803649F0:       callc [btlevtcmd_AnimeChangePoseType battle_event_cmd.o] -2 LW(0) 42
+80364A04:     end_child_thread
+80364A08:     callc [btlevtcmd_SetMoveSpeed battle_event_cmd.o] -2 5.00
+80364A18:     callc [btlevtcmd_MovePosition battle_event_cmd.o] -2 LW(0) LW(1) LW(2) 0 -1 0
+80364A3C:   endif
+80364A40:   return
+80364A44:   end

@@ -1,0 +1,125 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [attack_event unit_hannya.o] AT 80C9A4C4 ---
+80C9A4C4:   callc [btlevtcmd_check_battleflag battle_event_cmd.o] LW(0) 2
+80C9A4D4:   if_int_ne LW(0) 0
+80C9A4E0:     wait_frames 30
+80C9A4E8:     callc [btlevtcmd_GetFirstAttackTarget battle_event_cmd.o] LW(3) LW(4)
+80C9A4F8:   else
+80C9A4FC:     callc [btlevtcmd_EnemyItemUseCheck battle_event_cmd.o] -2 LW(0)
+80C9A50C:     if_int_ne LW(0) 0
+80C9A518:       callss LW(0)
+80C9A520:       callc [btlevtcmd_StartWaitEvent battle_event_cmd.o] -2
+80C9A52C:       return
+80C9A530:     endif
+80C9A534:     callc [btlevtcmd_GetEnemyBelong battle_event_cmd.o] -2 LW(0)
+80C9A544:     callc [btlevtcmd_SamplingEnemy battle_event_cmd.o] -2 LW(0) [weapon_hannya_attack unit_hannya.o]
+80C9A558:     callc [btlevtcmd_ChoiceSamplingEnemy battle_event_cmd.o] [weapon_hannya_attack unit_hannya.o] LW(3) LW(4)
+80C9A56C:   endif
+80C9A570:   if_int_eq LW(3) -1
+80C9A57C:     callc [btlevtcmd_CheckToken battle_event_cmd.o] -2 16 LW(0)
+80C9A590:     if_int_ne LW(0) 0
+80C9A59C:       callss [subsetevt_confuse_flustered battle_event_subset.o]
+80C9A5A4:       return
+80C9A5A8:     endif
+80C9A5AC:     goto 99
+80C9A5B4:   endif
+80C9A5B8:   callc [evt_btl_camera_set_mode battle_camera.o] 0 8
+80C9A5C8:   callc [evt_btl_camera_set_homing_unit battle_camera.o] 0 -2 LW(3)
+80C9A5DC:   callc [evt_btl_camera_set_moveSpeedLv battle_camera.o] 0 1
+80C9A5EC:   callc [evt_btl_camera_set_zoom battle_camera.o] 0 250
+80C9A5FC:   callc [btlevtcmd_WeaponAftereffect battle_event_cmd.o] [weapon_hannya_attack unit_hannya.o]
+80C9A608:   callc [btlevtcmd_AttackDeclare battle_event_cmd.o] -2 LW(3) LW(4)
+80C9A61C:   callc [btlevtcmd_WaitGuardMove battle_event_cmd.o]
+80C9A624:   callc [btlevtcmd_PayWeaponCost battle_event_cmd.o] -2 [weapon_hannya_attack unit_hannya.o]
+80C9A634:   callc [btlevtcmd_CalculateFaceDirection battle_event_cmd.o] -2 -1 LW(3) LW(4) 16 LW(14)
+80C9A654:   callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_ENM_HANNYA_CHARGE1"] [F1194D80] 0 [F1194D80]
+80C9A670:   callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 1 ["A_1"]
+80C9A684:   setii LW(15) 0
+80C9A690:   loop 0
+80C9A698:     wait_frames 2
+80C9A6A0:     callc [btlevtcmd_AddPos battle_event_cmd.o] -2 1 0 0
+80C9A6B8:     wait_frames 2
+80C9A6C0:     callc [btlevtcmd_AddPos battle_event_cmd.o] -2 -1 0 0
+80C9A6D8:     addi LW(15) 1
+80C9A6E4:     if_int_ge LW(15) 10
+80C9A6F0:       loop_break
+80C9A6F4:     endif
+80C9A6F8:   end_loop
+80C9A6FC:   callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_ENM_HANNYA_MOVE1"] [F1194D80] 0 LW(15)
+80C9A718:   callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 1 ["A_3"]
+80C9A72C:   callc [btlevtcmd_GetPos battle_event_cmd.o] LW(3) LW(0) LW(1) LW(2)
+80C9A744:   callc [btlevtcmd_SetMoveSpeed battle_event_cmd.o] -2 10.00
+80C9A754:   callc [btlevtcmd_MovePosition battle_event_cmd.o] -2 LW(0) 0 LW(2) 0 -1 0
+80C9A778:   callc [evt_btl_camera_set_mode battle_camera.o] 0 3
+80C9A788:   callc [btlevtcmd_PreCheckDamage battle_event_cmd.o] -2 LW(3) LW(4) [weapon_hannya_attack unit_hannya.o] 256 LW(5)
+80C9A7A8:   switchi LW(5)
+80C9A7B0:     case_int_eq_any 4
+80C9A7B8:       goto 90
+80C9A7C0:       end_multi_case
+80C9A7C4:     case_int_eq 3
+80C9A7CC:       callc [btlevtcmd_StartAvoid battle_event_cmd.o] LW(3) 38
+80C9A7DC:       goto 90
+80C9A7E4:       end_multi_case
+80C9A7E8:     case_int_eq 6
+80C9A7F0:       callc [btlevtcmd_StartAvoid battle_event_cmd.o] LW(3) 39
+80C9A800:       goto 90
+80C9A808:     case_int_eq 2
+80C9A810:       callc [btlevtcmd_StartAvoid battle_event_cmd.o] LW(3) 40
+80C9A820:       goto 90
+80C9A828:     case_int_eq 1
+80C9A830:       goto 91
+80C9A838:       end_multi_case
+80C9A83C:     case_default
+80C9A840:       goto 98
+80C9A848:       end_multi_case
+80C9A84C:   end_switch
+80C9A850: 90:
+80C9A858:   callc [btlevtcmd_GetPos battle_event_cmd.o] LW(3) LW(0) LW(1) LW(2)
+80C9A870:   muli LW(14) 500
+80C9A87C:   addi LW(0) LW(14)
+80C9A888:   callc [btlevtcmd_SetMoveSpeed battle_event_cmd.o] -2 10.00
+80C9A898:   callc [btlevtcmd_MovePosition battle_event_cmd.o] -2 LW(0) 0 LW(2) 0 -1 0
+80C9A8BC:   goto 98
+80C9A8C4: 91:
+80C9A8CC:   callc [evt_btl_camera_shake_h battle_camera.o] 0 1 1 8 0
+80C9A8E8:   callc [evt_btl_camera_set_moveSpeedLv battle_camera.o] 0 2
+80C9A8F8:   callc [evt_btl_camera_add_zoom battle_camera.o] 0 -50
+80C9A908:   callc [btlevtcmd_ResultACDefence battle_event_cmd.o] LW(3) [weapon_hannya_attack unit_hannya.o]
+80C9A918:   callc [btlevtcmd_CheckDamage battle_event_cmd.o] -2 LW(3) LW(4) [weapon_hannya_attack unit_hannya.o] 256 LW(5)
+80C9A938:   callc [btlevtcmd_GetPos battle_event_cmd.o] LW(3) LW(0) LW(1) LW(2)
+80C9A950:   muli LW(14) 500
+80C9A95C:   addi LW(0) LW(14)
+80C9A968:   callc [btlevtcmd_SetMoveSpeed battle_event_cmd.o] -2 10.00
+80C9A978:   callc [btlevtcmd_MovePosition battle_event_cmd.o] -2 LW(0) 0 LW(2) 0 -1 0
+80C9A99C:   goto 98
+80C9A9A4: 98:
+80C9A9AC:   callc [evt_btl_camera_set_mode battle_camera.o] 0 0
+80C9A9BC:   callc [evt_snd_sfxoff evt_snd.o] LW(15)
+80C9A9C8:   callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_ENM_HANNYA_MOVE2"] [F1194D80] 0 [F1194D80]
+80C9A9E4:   callc [btlevtcmd_GetPos battle_event_cmd.o] -2 LW(0) LW(1) LW(2)
+80C9A9FC:   callc [btlevtcmd_SetPos battle_event_cmd.o] -2 300 LW(1) LW(2)
+80C9AA14:   callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 1 ["A_3"]
+80C9AA28:   callc [btlevtcmd_GetHomePos battle_event_cmd.o] -2 LW(0) LW(1) LW(2)
+80C9AA40:   callc [btlevtcmd_SetMoveSpeed battle_event_cmd.o] -2 10.00
+80C9AA50:   callc [btlevtcmd_FaceDirectionSub battle_event_cmd.o] LW(3) LW(0) 50
+80C9AA64:   callc [btlevtcmd_MovePosition battle_event_cmd.o] -2 LW(0) LW(1) LW(2) 0 -1 0
+80C9AA88:   callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_ENM_HANNYA_MOVE3"] [F1194D80] 0 [F1194D80]
+80C9AAA4:   callc [btlevtcmd_GetHomePos battle_event_cmd.o] -2 LW(0) LW(1) LW(2)
+80C9AABC:   callc [btlevtcmd_SetMoveSpeed battle_event_cmd.o] -2 5.00
+80C9AACC:   callc [btlevtcmd_FaceDirectionSub battle_event_cmd.o] LW(3) LW(0) 30
+80C9AAE0:   callc [btlevtcmd_MovePosition battle_event_cmd.o] -2 LW(0) LW(1) LW(2) 0 -1 0
+80C9AB04:   callc [btlevtcmd_GetHomePos battle_event_cmd.o] -2 LW(0) LW(1) LW(2)
+80C9AB1C:   callc [btlevtcmd_SetMoveSpeed battle_event_cmd.o] -2 2.00
+80C9AB2C:   callc [btlevtcmd_FaceDirectionSub battle_event_cmd.o] LW(3) LW(0) 10
+80C9AB40:   callc [btlevtcmd_MovePosition battle_event_cmd.o] -2 LW(0) LW(1) LW(2) 0 -1 0
+80C9AB64:   callc [btlevtcmd_GetHomePos battle_event_cmd.o] -2 LW(0) LW(1) LW(2)
+80C9AB7C:   callc [btlevtcmd_SetMoveSpeed battle_event_cmd.o] -2 1.00
+80C9AB8C:   callc [btlevtcmd_MovePosition battle_event_cmd.o] -2 LW(0) LW(1) LW(2) 0 -1 0
+80C9ABB0:   wait_ms 300
+80C9ABB8: 99:
+80C9ABC0:   callc [btlevtcmd_ResetFaceDirection battle_event_cmd.o] -2
+80C9ABCC:   callc [btlevtcmd_StartWaitEvent battle_event_cmd.o] -2
+80C9ABD8:   return
+80C9ABDC:   end

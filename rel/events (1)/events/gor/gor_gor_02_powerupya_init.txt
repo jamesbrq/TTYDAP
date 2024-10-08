@@ -1,0 +1,23 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [powerupya_init gor_02.o] AT 805FB6DC ---
+805FB6DC:   callc [evt_run_case_evt evt_case.o] 9 1 ["A_power_up"] 0 [powerupya_table_talk gor_02.o] 0
+805FB6FC:   if_int_eq GSWF(1203) 1
+805FB708:     if_int_eq GSWF(1204) 0
+805FB714:       callc [evt_npc_set_position evt_npc.o] ["パワーアップ屋"] -320 0 -10
+805FB72C:       setii LW(0) [door_data_01 gor_02.o]
+805FB738:       callc [evt_door_param evt_door.o] LW(0) 3 LW(1) LW(2)
+805FB750:       if_int_ne LW(1) 0
+805FB75C:         callc [evt_mapobj_flag_onoff evt_map.o] 1 1 LW(1) 1
+805FB774:       endif
+805FB778:       if_int_ne LW(2) 0
+805FB784:         callc [evt_hitobj_onoff evt_hit.o] LW(2) 1 0
+805FB798:       endif
+805FB79C:       return
+805FB7A0:     endif
+805FB7A4:   endif
+805FB7A8:   setii LW(0) [door_data_01 gor_02.o]
+805FB7B4:   callss [evt_door_entry evt_door.o]
+805FB7BC:   return
+805FB7C0:   end

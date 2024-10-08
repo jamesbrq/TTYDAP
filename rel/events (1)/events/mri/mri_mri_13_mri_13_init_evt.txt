@@ -1,0 +1,604 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [mri_13_init_evt mri_13.o] AT 806024EC ---
+806024EC:   callc [evt_puni_mem_init mri_puni.o]
+806024F4:   callc [evt_puni_set_yuka mri_puni.o] 13 0 -310 -1000 -1000 0 0
+80602518:   callc [evt_puni_set_hamari mri_puni.o] -250 0 60 2 -2 -306 -312
+8060253C:   setii LW(6) 0
+80602548:   setii LW(7) 0
+80602554:   setii LW(8) 0
+80602560:   setii LW(9) 0
+8060256C:   callss [mri_puni_init mri_puni.o]
+80602574:   setii LW(0) [bero_entry_data mri_13.o]
+80602580:   callc [evt_bero_get_info evt_bero.o]
+80602588:   callss [evt_bero_info_run evt_bero.o]
+80602590:   callsa [puni_disp_info mri_puni.o]
+80602598:   callsa [mri_countdown mri.o]
+806025A0:   setii LW(0) [ueki_access_data mri_13.o]
+806025AC:   callss [evt_sub_kusa_access_entry evt_sub.o]
+806025B4:   switchi GSW(0)
+806025BC:     case_int_range 109 110
+806025C8:       callc [evt_snd_bgmon evt_snd.o] 512 ["BGM_EVT_DANGER4"]
+806025D8:       callc [evt_snd_envon evt_snd.o] 272 ["ENV_STG2_MRI9"]
+806025E8:     case_default
+806025EC:       callc [evt_snd_bgmon evt_snd.o] 512 ["BGM_STG2_MRI1"]
+806025FC:       callc [evt_snd_envon evt_snd.o] 272 ["ENV_STG2_MRI1"]
+8060260C:   end_switch
+80602610:   callc [evt_map_playanim evt_map.o] ["mizu_01"] 1 0
+80602624:   callc [evt_map_playanim evt_map.o] ["mizu_02"] 1 0
+80602638:   callc [evt_map_playanim evt_map.o] ["awa_01"] 1 0
+8060264C:   callc [evt_map_playanim evt_map.o] ["awa_02"] 1 0
+80602660:   callc [evt_map_playanim evt_map.o] ["sui_hikari"] 1 0
+80602674:   callc [evt_mobj_save_blk evt_mobj.o] ["mobj_save"] -150 -249 0 [mri_puni_save mri.o] 0
+80602694:   callc [evt_mobj_recovery_blk evt_mobj.o] ["mobj_recover"] 8 -200 -249 0 0 0
+806026B8:   setii GW(0) 101
+806026C4:   if_int_lt GSW(0) 107
+806026D0:     callc [evt_hitobj_onoff evt_hit.o] ["A_f2_rak"] 1 0
+806026E4:     callsa_tid [yuka_slot mri_13.o] GW(1)
+806026F0:     callsa_tid [yuka_check mri_13.o] GW(2)
+806026FC:     callsa [yuka_event mri_13.o]
+80602704:     callc [evt_puni_set_hamari mri_puni.o] -250 0 60 2 -2 -306 -312
+80602728:   else
+8060272C:     callsa [yuka_init mri_13.o]
+80602734:     callsa [yuka_check mri_13.o]
+8060273C:     callc [evt_puni_set_hamari mri_puni.o] -180 -310 60 2 -2 -306 -312
+80602760:   endif
+80602764:   setii LW(0) ["S_sui_l"]
+80602770:   setir LW(1) 0xfd050f80
+8060277C:   setii LW(2) 100
+80602788:   callsa [mri_hikari_color mri.o]
+80602790:   setii LW(10) ["punipuni"]
+8060279C:   setii LW(11) 0
+806027A8:   callsa [punipuni_ball00_init mri_13.o]
+806027B0:   callc [evt_run_case_evt evt_case.o] 9 1 ["A_dai"] 0 [punipuni_ball00 mri_13.o] 0
+806027D0:   if_int_lt GSW(0) 108
+806027DC:     setii LW(0) ["e_bero"]
+806027E8:     callss [bero_case_switch_off evt_bero.o]
+806027F0:     callc [evt_bero_overwrite evt_bero.o] ["e_bero"] [bero_dai3_kanbu mri_13.o]
+80602800:     setii LW(0) ["e_bero"]
+8060280C:     callss [bero_case_switch_on evt_bero.o]
+80602814:   endif
+80602818:   return
+8060281C:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [mri_puni_init mri_puni.o] AT 80607A24 ---
+80607A24:   callss [mri_puni_init_dvd mri_puni.o]
+80607A2C:   switchi GSW(0)
+80607A34:     case_int_lt 88
+80607A3C:       return
+80607A40:     case_int_ge 403
+80607A48:       return
+80607A4C:     case_int_eq 400
+80607A54:       callc [evt_sub_get_mapname evt_sub.o] LW(0)
+80607A60:       if_string_ne LW(0) ["mri_00"]
+80607A6C:         return
+80607A70:       endif
+80607A74:       setii LF(0) 0
+80607A80:       callc [evt_bero_get_entername evt_bero.o] LW(0)
+80607A8C:       if_string_eq LW(0) ["sekai_yami1"]
+80607A98:         setii LF(0) 1
+80607AA4:       endif
+80607AA8:       if_string_eq LW(0) ["minnnanokoe"]
+80607AB4:         setii LF(0) 1
+80607AC0:       endif
+80607AC4:       if_int_eq LF(0) 0
+80607AD0:         return
+80607AD4:       endif
+80607AD8:     case_int_range 118 399
+80607AE4:       callc [evt_sub_get_mapname evt_sub.o] LW(0)
+80607AF0:       if_string_ne LW(0) ["mri_00"]
+80607AFC:         return
+80607B00:       endif
+80607B04:       if_int_eq GSWF(2884) 1
+80607B10:         return
+80607B14:       endif
+80607B18:     case_default
+80607B1C:   end_switch
+80607B20:   callc [evt_make_texbuf mri_puni.o]
+80607B28:   callc [evt_puni_init mri_puni.o] 210 [puni_puni_init mri_puni.o] [puni_puni_main mri_puni.o] [puni_puni_dispent mri_puni.o]
+80607B40:   callc [evt_puni_set_maze mri_puni.o]
+80607B48:   callsa [mri_puni_position_init mri_puni.o]
+80607B50:   callsa [mri_puni_main mri_puni.o]
+80607B58:   return
+80607B5C:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [puni_disp_info mri_puni.o] AT 80607470 ---
+80607470:   if_int_ge GSW(0) 118
+8060747C:     return
+80607480:   endif
+80607484:   loop 0
+8060748C:     callc [puni_disp_info_sub mri_puni.o] LW(0) LW(1)
+8060749C:     wait_frames 1
+806074A4:   end_loop
+806074A8:   return
+806074AC:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [mri_countdown mri.o] AT 805E38FC ---
+805E38FC:   if_int_ge GSW(0) 118
+805E3908:     return
+805E390C:   endif
+805E3910:   if_int_eq GSWF(2880) 1
+805E391C:     callc [evt_sub_countdown_start evt_sub.o] 300000 300000
+805E392C:     setii GSWF(2880) 0
+805E3938:   endif
+805E393C:   callc [evt_sub_get_mapname evt_sub.o] LW(0)
+805E3948:   if_string_eq LW(0) ["mri_13"]
+805E3954:     callc [evt_sub_countdown_set_restart_time evt_sub.o] 300000
+805E3960:   endif
+805E3964:   if_string_eq LW(0) ["mri_06"]
+805E3970:     callc [evt_sub_countdown_set_restart_time evt_sub.o] 250000
+805E397C:   endif
+805E3980:   if_string_eq LW(0) ["mri_01"]
+805E398C:     callc [evt_sub_countdown_set_restart_time evt_sub.o] 100000
+805E3998:   endif
+805E399C:   wait_frames 5
+805E39A4:   loop 0
+805E39AC:     callc [evt_sub_countdown_get_status evt_sub.o] LW(0)
+805E39B8:     callc [evt_bero_exec_get evt_bero.o] LW(1)
+805E39C4:     if_int_eq LW(0) 1
+805E39D0:       if_bits_clear LW(1) 1
+805E39DC:         loop_break
+805E39E0:       endif
+805E39E4:     endif
+805E39E8:     wait_frames 1
+805E39F0:   end_loop
+805E39F4:   suspend_types_other 4
+805E39FC:   callc [evt_mario_key_onoff evt_mario.o] 0
+805E3A08:   wait_frames 5
+805E3A10:   if_bits_set LW(1) 1
+805E3A1C:     callc [evt_mario_key_onoff evt_mario.o] 1
+805E3A28:     resume_types_other 4
+805E3A30:     return
+805E3A34:   endif
+805E3A38:   setii GSW(0) 127
+805E3A44:   callc [evt_snd_bgmoff_f evt_snd.o] 512 500
+805E3A54:   callc [evt_snd_envoff_f evt_snd.o] 512 500
+805E3A64:   callc [evt_snd_sfxon evt_snd.o] ["SFX_STG2_QUAKE1"] 0
+805E3A74:   callc [evt_cam_shake evt_cam.o] 4 0.00 0.00 500
+805E3A8C:   callc [evt_cam_shake evt_cam.o] 4 0.01 0.00 500
+805E3AA4:   callc [evt_cam_shake evt_cam.o] 4 0.01 0.00 500
+805E3ABC:   begin_thread
+805E3AC0:     callc [evt_cam_shake evt_cam.o] 4 0.02 0.00 10000
+805E3AD8:   end_thread
+805E3ADC:   begin_thread
+805E3AE0:     callc [evt_mario_get_pos evt_mario.o] 0 LW(0) LW(1) LW(2)
+805E3AF8:     addi LW(1) 150
+805E3B04:     callc [evt_cam_get_pos evt_cam.o] 4 LW(10) LW(11) LW(12)
+805E3B1C:     loop 0
+805E3B24:       callc [evt_eff64 evt_eff.o] [zero_mri_00020864 mri.o] ["hokori_n64"] 0 LW(10) LW(1) LW(2) 60 0 0 0 0 0 0 0
+805E3B64:       wait_ms 300
+805E3B6C:     end_loop
+805E3B70:   end_thread
+805E3B74:   wait_ms 2000
+805E3B7C:   callc [evt_fade_entry evt_fade.o] 17 4000 0 0 0
+805E3B98:   wait_ms 4000
+805E3BA0:   callc [evt_seq_set_seq evt_seq.o] 5 1 0
+805E3BB4:   return
+805E3BB8:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [yuka_slot mri_13.o] AT 80601884 ---
+80601884:   callc [evt_mapobj_flag_onoff evt_map.o] 1 1 ["S_isk_02_c"] 1
+8060189C:   callc [evt_mapobj_flag_onoff evt_map.o] 1 1 ["S_isk_03_c"] 1
+806018B4:   setii LW(13) GW(0)
+806018C0:   loop 0
+806018C8:     setii LW(2) GW(0)
+806018D4:     divi LW(2) 100
+806018E0:     setii LW(1) GW(0)
+806018EC:     modi LW(1) 100
+806018F8:     divi LW(1) 10
+80601904:     setii LW(0) GW(0)
+80601910:     modi LW(0) 10
+8060191C:     setii LW(12) LW(2)
+80601928:     muli LW(12) 36
+80601934:     setii LW(11) LW(1)
+80601940:     muli LW(11) 36
+8060194C:     setii LW(10) LW(0)
+80601958:     muli LW(10) 36
+80601964:     callc [evt_mapobj_rotate evt_map.o] 1 ["S_isk_02"] LW(10) 0 0
+80601980:     callc [evt_mapobj_rotate evt_map.o] 1 ["S_isk_03"] LW(11) 0 0
+8060199C:     callc [evt_mapobj_rotate evt_map.o] 1 ["S_isk_04"] LW(12) 0 0
+806019B8:     if_int_ge GW(0) 10
+806019C4:       callc [evt_mapobj_flag_onoff evt_map.o] 1 1 ["S_isk_03_c"] 1
+806019DC:     else
+806019E0:       callc [evt_mapobj_flag_onoff evt_map.o] 1 0 ["S_isk_03_c"] 1
+806019F8:     endif
+806019FC:     if_int_ne GW(0) LW(13)
+80601A08:       callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_STG2_SWITCH_COUNTER1"] -150 0 -20 0
+80601A24:     endif
+80601A28:     setii LW(13) GW(0)
+80601A34:     wait_frames 1
+80601A3C:   end_loop
+80601A40:   return
+80601A44:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [yuka_check mri_13.o] AT 80601B84 ---
+80601B84:   loop 0
+80601B8C:     setii LW(10) 1
+80601B98:     setii LW(11) 0
+80601BA4:     loop 0
+80601BAC:       callc [evt_puni_get_flag mri_puni.o] LW(10) LW(0)
+80601BBC:       callc [evt_puni_get_flag mri_puni.o] LW(10) LW(1)
+80601BCC:       andi LW(0) 0x400
+80601BD8:       andi LW(1) 0x80
+80601BE4:       callc [evt_puni_get_mode mri_puni.o] LW(10) LW(2)
+80601BF4:       if_int_ne LW(0) 0
+80601C00:         if_int_eq LW(1) 0
+80601C0C:           if_int_ne LW(2) 13
+80601C18:             callc [evt_puni_get_position mri_puni.o] LW(10) LW(0) LW(1) LW(2)
+80601C30:             if_int_lt GSW(0) 107
+80601C3C:               if_int_ge LW(1) -20
+80601C48:                 if_int_le LW(1) 20
+80601C54:                   callc [evt_sub_area_check evt_sub.o] 0 -50 60 50 LW(0) LW(2) LW(15)
+80601C78:                   if_int_eq LW(15) 1
+80601C84:                     addi LW(11) 1
+80601C90:                   endif
+80601C94:                 endif
+80601C98:               endif
+80601C9C:             else
+80601CA0:               if_int_ge LW(1) -329
+80601CAC:                 if_int_le LW(1) -289
+80601CB8:                   callc [evt_sub_area_check evt_sub.o] 0 -50 60 50 LW(0) LW(2) LW(15)
+80601CDC:                   if_int_eq LW(15) 1
+80601CE8:                     addi LW(11) 1
+80601CF4:                   endif
+80601CF8:                 endif
+80601CFC:               endif
+80601D00:             endif
+80601D04:           endif
+80601D08:         endif
+80601D0C:       endif
+80601D10:       addi LW(10) 1
+80601D1C:       if_int_eq LW(10) 103
+80601D28:         loop_break
+80601D2C:       endif
+80601D30:     end_loop
+80601D34:     setii GW(0) 101
+80601D40:     subi GW(0) LW(11)
+80601D4C:     if_int_ge GW(0) 101
+80601D58:       setii GW(0) 101
+80601D64:     endif
+80601D68:     if_int_le GW(0) 0
+80601D74:       setii GW(0) 0
+80601D80:     endif
+80601D84:     wait_frames 1
+80601D8C:   end_loop
+80601D90:   return
+80601D94:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [yuka_event mri_13.o] AT 80601D98 ---
+80601D98:   loop 0
+80601DA0:     callc [evt_mario_get_pos evt_mario.o] 0 LW(0) LW(1) LW(2)
+80601DB8:     callc [evt_sub_area_check evt_sub.o] 1 -50 60 60 LW(0) LW(2) LW(14)
+80601DDC:     callc [evt_party_get_pos evt_party.o] 0 LW(0) LW(1) LW(2)
+80601DF4:     callc [evt_sub_area_check evt_sub.o] 1 -50 60 60 LW(0) LW(2) LW(15)
+80601E18:     if_int_eq GSWF(2861) 1
+80601E24:       if_int_eq GW(0) 0
+80601E30:         if_int_eq GF(0) 0
+80601E3C:           if_int_eq LW(14) 1
+80601E48:             if_int_eq LW(15) 1
+80601E54:               loop_break
+80601E58:             endif
+80601E5C:           endif
+80601E60:         endif
+80601E64:       endif
+80601E68:     endif
+80601E6C:     wait_frames 1
+80601E74:   end_loop
+80601E78:   callc [evt_mario_key_onoff evt_mario.o] 0
+80601E84:   callc [evt_mario_normalize evt_mario.o]
+80601E8C:   callc [evt_puni_winddisable_onoff mri_puni.o] 1
+80601E98:   callc [evt_target_flag_onoff mri_puni.o] 0 1 1
+80601EAC:   setii LW(10) 1
+80601EB8:   loop 0
+80601EC0:     callc [evt_puni_set_mode mri_puni.o] LW(10) 30
+80601ED0:     callc [evt_puni_set_anim mri_puni.o] LW(10) 0
+80601EE0:     callc [evt_puni_force_pose mri_13.o] LW(10)
+80601EEC:     addi LW(10) 1
+80601EF8:     if_int_eq LW(10) 103
+80601F04:       loop_break
+80601F08:     endif
+80601F0C:   end_loop
+80601F10:   wait_frames 2
+80601F18:   callc [evt_mario_mov_pos2 evt_mario.o] -50 60 120.00
+80601F2C:   callc [evt_mapobj_scale evt_map.o] 1 ["S_sui_kage"] 0.50 0.50 0.50
+80601F48:   stop_tid GW(1)
+80601F50:   stop_tid GW(2)
+80601F58:   wait_ms 1000
+80601F60:   callc [evt_snd_sfxon evt_snd.o] ["SFX_STG2_QUAKE1"] GW(4)
+80601F70:   callsa_tid [yuka_shake mri_13.o] LW(10)
+80601F7C:   callc [evt_puni_flag_onoff mri_puni.o] 1 0 262144
+80601F90:   callc [evt_puni_set_mode mri_puni.o] 1 30
+80601FA0:   callc [evt_npc_flag_onoff evt_npc.o] 1 ["ガイドsp"] 1536
+80601FB4:   callc [evt_msg_print evt_msg.o] 0 ["stg2_mri_e21_00"] 0 ["ガイドsp"]
+80601FCC:   callc [evt_puni_flag_onoff mri_puni.o] 1 1 262144
+80601FE0:   callc [evt_puni_set_mode mri_puni.o] 1 30
+80601FF0:   callc [evt_cam3d_evt_set evt_cam.o] 330 -240 404 -50 -60 50 0 11
+80602018:   wait_ms 1000
+80602020:   callc [evt_cam3d_evt_set evt_cam.o] -225 -80 355 -50 -270 50 9000 11
+80602048:   callc [evt_snd_sfxoff evt_snd.o] GW(4)
+80602054:   stop_tid LW(10)
+8060205C:   callc [evt_snd_sfxon evt_snd.o] ["SFX_STG2_QUAKE1"] GW(3)
+8060206C:   callsa [yuka_shake2 mri_13.o]
+80602074:   callc [evt_hit_bind_mapobj evt_hit.o] ["A_sui_l1"] ["S_sui_l"]
+80602084:   callc [evt_hit_bind_mapobj evt_hit.o] ["A_dai"] ["S_dai"]
+80602094:   callc [evt_hit_bind_mapobj evt_hit.o] ["A_dai_02"] ["S_dai"]
+806020A4:   callc [evt_snd_sfxon evt_snd.o] ["SFX_STG2_FLOOR_MOVE1"] GW(2)
+806020B4:   callc [evt_item_get_position evt_item.o] ["punipuni"] LW(3) LW(4) LW(5)
+806020CC:   begin_thread
+806020D0:     callc [evt_sub_intpl_msec_init evt_sub.o] 0 0.50 1.00 10000
+806020E8:     loop 0
+806020F0:       callc [evt_sub_intpl_msec_get_value_para evt_sub.o] LW(0) LW(1)
+80602100:       callc [evt_mapobj_scale evt_map.o] 1 ["S_sui_kage"] LW(0) LW(0) LW(0)
+8060211C:       if_int_eq LW(1) 0
+80602128:         loop_break
+8060212C:       endif
+80602130:       wait_frames 1
+80602138:     end_loop
+8060213C:     callc [evt_mapobj_flag_onoff evt_map.o] 1 1 ["S_sui_kage"] 1
+80602154:   end_thread
+80602158:   callc [evt_sub_intpl_msec_init evt_sub.o] 0 0 -30950 10000
+80602170:   loop 0
+80602178:     callc [evt_sub_intpl_msec_get_value_para evt_sub.o] LW(0) LW(1)
+80602188:     divf LW(0) 100.00
+80602194:     setff LW(6) LW(4)
+806021A0:     addf LW(6) LW(0)
+806021AC:     callc [evt_item_set_position evt_item.o] ["punipuni"] LW(3) LW(6) LW(5)
+806021C4:     callc [evt_mapobj_trans evt_map.o] 1 ["S_sui_l"] 0 LW(0) 0
+806021E0:     callc [evt_hit_bind_update evt_hit.o] ["A_sui_l1"]
+806021EC:     callc [evt_mapobj_trans evt_map.o] 1 ["S_dai"] 0 LW(0) 0
+80602208:     callc [evt_hit_bind_update evt_hit.o] ["A_dai"]
+80602214:     callc [evt_hit_bind_update evt_hit.o] ["A_dai_02"]
+80602220:     callc [evt_mapobj_trans evt_map.o] 1 ["S_sui_hikari"] 0 LW(0) 0
+8060223C:     callc [yuka_fall_check mri_13.o]
+80602244:     if_int_eq LW(1) 0
+80602250:       loop_break
+80602254:     endif
+80602258:     wait_frames 1
+80602260:   end_loop
+80602264:   callc [evt_snd_sfxoff evt_snd.o] GW(2)
+80602270:   callc [evt_snd_sfxoff evt_snd.o] GW(3)
+8060227C:   callc [evt_snd_sfxon evt_snd.o] ["SFX_STG2_FLOOR_STOP1"] 0
+8060228C:   wait_ms 1000
+80602294:   callc [evt_puni_flag_onoff mri_puni.o] 1 0 262144
+806022A8:   callc [evt_puni_set_mode mri_puni.o] 1 30
+806022B8:   callc [evt_npc_get_position evt_npc.o] ["ガイドsp"] LW(0) LW(1) LW(2)
+806022D0:   addi LW(1) 20
+806022DC:   callc [evt_msg_toge evt_msg.o] 2 LW(0) LW(1) LW(2)
+806022F4:   callc [evt_msg_print evt_msg.o] 0 ["stg2_mri_e21_00_01"] 0 ["ガイドsp"]
+8060230C:   callc [evt_puni_flag_onoff mri_puni.o] 1 1 262144
+80602320:   setii LW(10) 1
+8060232C:   loop 0
+80602334:     callc [evt_puni_set_mode mri_puni.o] LW(10) 1
+80602344:     callc [evt_puni_flag_onoff mri_puni.o] LW(10) 0 32768
+80602358:     addi LW(10) 1
+80602364:     if_int_eq LW(10) 103
+80602370:       loop_break
+80602374:     endif
+80602378:   end_loop
+8060237C:   callc [evt_hitobj_onoff evt_hit.o] ["A_sui_l1"] 1 0
+80602390:   callc [evt_cam3d_evt_off evt_cam.o] 500 11
+806023A0:   wait_ms 500
+806023A8:   callsa [yuka_check mri_13.o]
+806023B0:   callc [evt_target_flag_onoff mri_puni.o] 0 0 1
+806023C4:   callc [evt_target_set_position mri_puni.o] 0 -55 -309 50
+806023DC:   setii GSW(0) 107
+806023E8:   callc [evt_puni_set_hamari mri_puni.o] -180 -310 60 2 -2 -306 -312
+8060240C:   callc [evt_puni_winddisable_onoff mri_puni.o] 0
+80602418:   callc [evt_mario_key_onoff evt_mario.o] 1
+80602424:   return
+80602428:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [yuka_init mri_13.o] AT 806017C4 ---
+806017C4:   callc [evt_hit_bind_mapobj evt_hit.o] ["A_dai"] ["S_dai"]
+806017D4:   callc [evt_hit_bind_mapobj evt_hit.o] ["A_dai_02"] ["S_dai"]
+806017E4:   callc [evt_mapobj_trans evt_map.o] 1 ["S_dai"] 0 -309.00 0
+80601800:   callc [evt_hit_bind_update evt_hit.o] ["A_dai"]
+8060180C:   callc [evt_hit_bind_update evt_hit.o] ["A_dai_02"]
+80601818:   callc [evt_mapobj_trans evt_map.o] 1 ["S_sui_l"] 0 -309 0
+80601834:   callc [evt_mapobj_trans evt_map.o] 1 ["S_sui_hikari"] 0 -309 0
+80601850:   callc [evt_hitobj_onoff evt_hit.o] ["A_sui_l1"] 1 0
+80601864:   callc [evt_mapobj_flag_onoff evt_map.o] 1 1 ["S_sui_kage"] 1
+8060187C:   return
+80601880:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [mri_hikari_color mri.o] AT 805E37F4 ---
+805E37F4:   callc [evt_mapobj_flag_onoff evt_map.o] 0 0 LW(0) 256
+805E380C:   loadi_ind LW(1) LW(11)
+805E3818:   loop 0
+805E3820:     loadi_ind LW(1) LW(10)
+805E382C:     if_int_le LW(10) LW(2)
+805E3838:       if_int_gt LW(11) LW(2)
+805E3844:         callc [evt_mapobj_get_position evt_map.o] LW(0) LW(4) LW(5) LW(6)
+805E385C:         callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_STG2_PUNISWITCH_RIDE1"] LW(4) LW(5) LW(6) 0
+805E3878:       endif
+805E387C:     else
+805E3880:       if_int_le LW(11) LW(2)
+805E388C:         callc [evt_mapobj_get_position evt_map.o] LW(0) LW(4) LW(5) LW(6)
+805E38A4:         callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_STG2_PUNISWITCH_RIDE1"] LW(4) LW(5) LW(6) 0
+805E38C0:       endif
+805E38C4:     endif
+805E38C8:     setii LW(11) LW(10)
+805E38D4:     callc [hakari_color mri.o] LW(0) LW(10) LW(2)
+805E38E8:     wait_frames 1
+805E38F0:   end_loop
+805E38F4:   return
+805E38F8:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [punipuni_ball00_init mri_13.o] AT 806015DC ---
+806015DC:   callss [mri_punipuni_setup mri.o]
+806015E4:   if_int_eq GSWF(2861) 1
+806015F0:     if_int_lt GSW(0) 107
+806015FC:       callc [evt_item_set_position evt_item.o] LW(10) -55 30 0
+80601614:     else
+80601618:       callc [evt_item_set_position evt_item.o] LW(10) -55 -279 0
+80601630:     endif
+80601634:     callc [evt_target_flag_onoff mri_puni.o] LW(11) 0 3
+80601648:   else
+8060164C:     callc [evt_mapobj_flag_onoff evt_map.o] 1 1 ["S_sui_hikari"] 1
+80601664:   endif
+80601668:   if_int_lt GSW(0) 107
+80601674:     callc [evt_target_set_position mri_puni.o] LW(11) -55 0 50
+8060168C:   else
+80601690:     callc [evt_target_set_position mri_puni.o] LW(11) -55 -309 50
+806016A8:   endif
+806016AC:   return
+806016B0:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [mri_puni_init_dvd mri_puni.o] AT 80607854 ---
+80607854:   callc [evt_npc_entry evt_npc.o] ["プニsp"] ["c_puni"]
+80607864:   callc [evt_npc_set_tribe evt_npc.o] ["プニsp"] ["プニ族"]
+80607874:   callc [evt_npc_entry evt_npc.o] ["トゲsp"] ["c_toge"]
+80607884:   callc [evt_npc_set_tribe evt_npc.o] ["トゲsp"] ["トゲ族"]
+80607894:   callc [evt_npc_entry evt_npc.o] ["ガイドsp"] ["c_pguide"]
+806078A4:   callc [evt_npc_set_tribe evt_npc.o] ["ガイドsp"] ["ガイド"]
+806078B4:   callc [evt_npc_entry evt_npc.o] ["ガイド妹sp"] ["c_psister"]
+806078C4:   callc [evt_npc_set_tribe evt_npc.o] ["ガイド妹sp"] ["ガイド妹"]
+806078D4:   callc [evt_npc_entry evt_npc.o] ["ちびトゲsp"] ["c_tchibi"]
+806078E4:   callc [evt_npc_set_tribe evt_npc.o] ["ちびトゲsp"] ["ちびトゲ"]
+806078F4:   callc [evt_npc_entry evt_npc.o] ["ライバルsp"] ["c_prival"]
+80607904:   callc [evt_npc_set_tribe evt_npc.o] ["ライバルsp"] ["ライバル"]
+80607914:   callc [evt_npc_set_position evt_npc.o] ["プニsp"] 0 -1000 0
+8060792C:   callc [evt_npc_set_position evt_npc.o] ["トゲsp"] 0 -1000 0
+80607944:   callc [evt_npc_set_position evt_npc.o] ["ガイドsp"] 0 -1000 0
+8060795C:   callc [evt_npc_set_position evt_npc.o] ["ガイド妹sp"] 0 -1000 0
+80607974:   callc [evt_npc_set_position evt_npc.o] ["ちびトゲsp"] 0 -1000 0
+8060798C:   callc [evt_npc_set_position evt_npc.o] ["ライバルsp"] 0 -1000 0
+806079A4:   callc [evt_npc_flag_onoff evt_npc.o] 1 ["プニsp"] 1074266144
+806079B8:   callc [evt_npc_flag_onoff evt_npc.o] 1 ["トゲsp"] 1074266144
+806079CC:   callc [evt_npc_flag_onoff evt_npc.o] 1 ["ガイドsp"] 1074266144
+806079E0:   callc [evt_npc_flag_onoff evt_npc.o] 1 ["ガイド妹sp"] 1074266144
+806079F4:   callc [evt_npc_flag_onoff evt_npc.o] 1 ["ちびトゲsp"] 1074266144
+80607A08:   callc [evt_npc_flag_onoff evt_npc.o] 1 ["ライバルsp"] 1074266144
+80607A1C:   return
+80607A20:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [mri_puni_position_init mri_puni.o] AT 80607570 ---
+80607570:   callc [evt_puni_set_systemmode mri_puni.o] 0
+8060757C:   begin_thread
+80607580:     callc [evt_puni_puninum_alpha mri_puni.o] 0
+8060758C:     wait_frames 2
+80607594:     callc [evt_bero_get_now_number evt_bero.o] LW(10)
+806075A0:     callc [evt_bero_get_info_kinddir evt_bero.o] LW(10) LW(0) LW(1) LW(2)
+806075B8:     callc [evt_bero_get_info_nextarea evt_bero.o] LW(10) LW(3) LW(4)
+806075CC:     setii LF(0) 0
+806075D8:     if_int_eq LW(0) 2
+806075E4:       if_int_ne LW(3) 0
+806075F0:         setii LF(0) 1
+806075FC:       endif
+80607600:     endif
+80607604:     if_int_eq LF(0) 0
+80607610:       callc [evt_puni_puninum_alpha mri_puni.o] 255
+8060761C:     endif
+80607620:   end_thread
+80607624:   dbg_report ["プニ関係：初期の実行中待ち"]
+8060762C:   callc [evt_bero_exec_wait evt_bero.o] 1
+80607638:   loop 0
+80607640:     callc [evt_puni_set_systemmode mri_puni.o] 1
+8060764C:     dbg_report ["プニ関係：座標セット待ち"]
+80607654:     callc [evt_bero_exec_wait evt_bero.o] 2
+80607660:     dbg_report ["プニ関係：小動物関係初期化"]
+80607668:     dbg_expr_to_string GSW(665)
+80607670:     dbg_expr_to_string GSW(666)
+80607678:     callc [evt_bero_get_now_number evt_bero.o] LW(10)
+80607684:     callc [evt_bero_get_info_kinddir evt_bero.o] LW(10) LW(0) LW(1) LW(2)
+8060769C:     callc [evt_bero_get_info_nextarea evt_bero.o] LW(10) LW(3) LW(4)
+806076B0:     if_int_eq LW(0) 2
+806076BC:       if_int_ne LW(3) 0
+806076C8:         callsa [mri_puninum_fadein mri_puni.o]
+806076D0:       endif
+806076D4:     endif
+806076D8:     callc [evt_puni_setup mri_puni.o] LW(0) LW(1) LW(2)
+806076EC:     callc [evt_toge_setup mri_puni.o] LW(6) LW(7) LW(8) LW(9)
+80607704:     callc [evt_puni_set_systemmode mri_puni.o] 2
+80607710:     dbg_report ["プニ関係：終了待ち"]
+80607718:     callc [evt_bero_exec_wait evt_bero.o] 65536
+80607724:     callc [evt_puni_set_systemmode mri_puni.o] 3
+80607730:     dbg_report ["プニ関係：次の実行中待ち"]
+80607738:     callc [evt_bero_exec_wait evt_bero.o] 1
+80607744:     setii GSW(666) GSW(665)
+80607750:     callc [evt_bero_get_now_number evt_bero.o] LW(10)
+8060775C:     callc [evt_bero_get_info_kinddir evt_bero.o] LW(10) LW(0) LW(1) LW(2)
+80607774:     callc [evt_bero_get_info_nextarea evt_bero.o] LW(10) LW(3) LW(4)
+80607788:     if_int_eq LW(0) 1
+80607794:       dbg_report ["プニ関係：扉待ち"]
+8060779C:       callc [evt_bero_exec_wait evt_bero.o] 268435456
+806077A8:       dbg_report ["プニ関係：扉待ち終わり"]
+806077B0:       callc [evt_bero_exec_onoff evt_bero.o] 1 268435456
+806077C0:     endif
+806077C4:     if_int_eq LW(0) 2
+806077D0:       if_int_ne LW(3) 0
+806077DC:         callsa [mri_puninum_fadeout mri_puni.o]
+806077E4:       endif
+806077E8:     endif
+806077EC:     begin_thread
+806077F0:       dbg_report ["プニ関係：エリアチェンジ直前待ち"]
+806077F8:       callc [evt_bero_exec_wait evt_bero.o] 8
+80607804:       dbg_report ["プニ関係：プニ族トゲ族SE強制オフ"]
+8060780C:       callc [evt_puni_force_se_off mri_puni.o]
+80607814:     end_thread
+80607818:     callc [evt_puni_exit mri_puni.o] LW(0) LW(1) LW(2) LW(3)
+80607830:   end_loop
+80607834:   return
+80607838:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [mri_puni_main mri_puni.o] AT 8060783C ---
+8060783C:   set_thread_type_mask 0
+80607844:   callc [evt_puni_main mri_puni.o]
+8060784C:   return
+80607850:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [yuka_shake mri_13.o] AT 80601A48 ---
+80601A48:   loop 5
+80601A50:     callc [evt_cam_shake evt_cam.o] 4 0.00 0.01 1000
+80601A68:   end_loop
+80601A6C:   return
+80601A70:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [yuka_shake2 mri_13.o] AT 80601A74 ---
+80601A74:   callc [evt_cam_shake evt_cam.o] 4 0.00 0.01 500
+80601A8C:   callc [evt_cam_shake evt_cam.o] 4 0.00 0.01 1000
+80601AA4:   callc [evt_cam_shake evt_cam.o] 4 0.00 0.01 1000
+80601ABC:   callc [evt_cam_shake evt_cam.o] 4 0.00 0.01 1000
+80601AD4:   callc [evt_cam_shake evt_cam.o] 4 0.00 0.01 1000
+80601AEC:   callc [evt_cam_shake evt_cam.o] 4 0.00 0.00 1000
+80601B04:   callc [evt_cam_shake evt_cam.o] 4 0.00 0.00 1000
+80601B1C:   callc [evt_cam_shake evt_cam.o] 4 0.00 0.00 1000
+80601B34:   callc [evt_cam_shake evt_cam.o] 4 0.00 0.00 1000
+80601B4C:   callc [evt_cam_shake evt_cam.o] 4 0.00 0.00 1000
+80601B64:   callc [evt_cam_shake evt_cam.o] 4 0.00 0.01 1000
+80601B7C:   return
+80601B80:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [mri_punipuni_setup mri.o] AT 805E3610 ---
+805E3610:   callc [evt_item_entry evt_item.o] LW(10) 64 0 -20000 0 16 -1 0
+805E3638:   callc [evt_item_flag_on evt_item.o] LW(10) 2
+805E3648:   return
+805E364C:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [mri_puninum_fadein mri_puni.o] AT 80607514 ---
+80607514:   callc [evt_sub_intpl_msec_init evt_sub.o] 11 0 255 500
+8060752C:   loop 0
+80607534:     callc [evt_sub_intpl_msec_get_value evt_sub.o]
+8060753C:     callc [evt_puni_puninum_alpha mri_puni.o] LW(0)
+80607548:     wait_frames 1
+80607550:     if_int_eq LW(1) 0
+8060755C:       loop_break
+80607560:     endif
+80607564:   end_loop
+80607568:   return
+8060756C:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [mri_puninum_fadeout mri_puni.o] AT 806074B0 ---
+806074B0:   wait_ms 1200
+806074B8:   callc [evt_sub_intpl_msec_init evt_sub.o] 11 255 0 500
+806074D0:   loop 0
+806074D8:     callc [evt_sub_intpl_msec_get_value evt_sub.o]
+806074E0:     callc [evt_puni_puninum_alpha mri_puni.o] LW(0)
+806074EC:     wait_frames 1
+806074F4:     if_int_eq LW(1) 0
+80607500:       loop_break
+80607504:     endif
+80607508:   end_loop
+8060750C:   return
+80607510:   end

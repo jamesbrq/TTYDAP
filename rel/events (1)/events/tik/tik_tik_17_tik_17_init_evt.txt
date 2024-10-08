@@ -1,0 +1,73 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [tik_17_init_evt tik_17.o] AT 805E71D4 ---
+805E71D4:   callc [evt_snd_bgmon evt_snd.o] 512 ["BGM_STG0_TIK1"]
+805E71E4:   callc [evt_snd_envon evt_snd.o] 272 ["ENV_STG0_TIK7"]
+805E71F4:   callc [evt_snd_set_rev_mode evt_snd.o] 2
+805E7200:   callss [evt_switch_00_init tik_17.o]
+805E7208:   callss [evt_switch_01_init tik_17.o]
+805E7210:   setii LW(0) [bero_entry_data tik_17.o]
+805E721C:   callc [evt_bero_get_info evt_bero.o]
+805E7224:   callss [evt_bero_info_run evt_bero.o]
+805E722C:   callss [evt_switch_00_after tik_17.o]
+805E7234:   callss [evt_switch_01_after tik_17.o]
+805E723C:   callc [evt_hit_damage_return_set evt_hit.o] [hitDmgRetPoints tik_17.o]
+805E7248:   callss [evt_gazigazi_entry evt_damage.o]
+805E7250:   callc [evt_map_playanim evt_map.o] ["anm_mizu"] 1 0
+805E7264:   callc [evt_mobj_lv_blk evt_mobj.o] ["block"] 0 0 0 0 GSWF(1350) ["MOBJ_Lv2BigBigBlock"]
+805E7288:   if_int_eq GSWF(1350) 0
+805E7294:     callc [evt_mobj_flag_onoff evt_mobj.o] 1 ["block"] 128
+805E72A8:   endif
+805E72AC:   callc [evt_mobj_itembox evt_mobj.o] ["mobj_box01"] -125 100 -110 0 0 [mobj_box01 tik_17.o] GSWF(1364)
+805E72D4:   setii LW(0) ["dai_3"]
+805E72E0:   setii LW(1) ["a_dai_3"]
+805E72EC:   setii LW(2) 0
+805E72F8:   setii LW(3) -75
+805E7304:   setii LW(4) 2000
+805E7310:   setii LW(5) 500
+805E731C:   setii LW(6) 1
+805E7328:   setii LW(7) 0
+805E7334:   setii LW(11) 0
+805E7340:   setii LW(12) 0
+805E734C:   callsa [moving_floor evt_movefloor.o]
+805E7354:   callc [evt_mobj_tornadoswitch_blue evt_mobj.o] 0 ["switch00"] -125 0 0 [evt_switch_00 tik_17.o] GSWF(1348)
+805E7378:   callc [evt_mobj_tornadoswitch_blue evt_mobj.o] 0 ["switch01"] 125 0 0 [evt_switch_01 tik_17.o] GSWF(1349)
+805E739C:   return
+805E73A0:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [evt_switch_00_init tik_17.o] AT 805E6E64 ---
+805E6E64:   callc [evt_hit_bind_mapobj evt_hit.o] ["a_dokan_1"] ["S_dakan_1"]
+805E6E74:   if_int_eq GSWF(1348) 1
+805E6E80:     callc [evt_mapobj_trans evt_map.o] 1 ["S_dakan_1"] 0 30 0
+805E6E9C:     callc [evt_hit_bind_update evt_hit.o] ["a_dokan_1"]
+805E6EA8:     callc [evt_mapobj_flag_onoff evt_map.o] 1 1 ["dokan_1_k"] 1
+805E6EC0:   endif
+805E6EC4:   return
+805E6EC8:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [evt_switch_01_init tik_17.o] AT 805E6FD8 ---
+805E6FD8:   callc [evt_hit_bind_mapobj evt_hit.o] ["a_dokan_2"] ["S_dakan_2"]
+805E6FE8:   if_int_eq GSWF(1349) 1
+805E6FF4:     callc [evt_mapobj_trans evt_map.o] 1 ["S_dakan_2"] 0 30 0
+805E7010:     callc [evt_hit_bind_update evt_hit.o] ["a_dokan_2"]
+805E701C:     callc [evt_mapobj_flag_onoff evt_map.o] 1 1 ["dokan_2_k"] 1
+805E7034:   endif
+805E7038:   return
+805E703C:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [evt_switch_00_after tik_17.o] AT 805E6ECC ---
+805E6ECC:   if_int_eq GSWF(1348) 0
+805E6ED8:     setii LW(0) ["dokan_1"]
+805E6EE4:     callss [bero_case_switch_off evt_bero.o]
+805E6EEC:   endif
+805E6EF0:   return
+805E6EF4:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [evt_switch_01_after tik_17.o] AT 805E7040 ---
+805E7040:   if_int_eq GSWF(1349) 0
+805E704C:     setii LW(0) ["dokan_2"]
+805E7058:     callss [bero_case_switch_off evt_bero.o]
+805E7060:   endif
+805E7064:   return
+805E7068:   end

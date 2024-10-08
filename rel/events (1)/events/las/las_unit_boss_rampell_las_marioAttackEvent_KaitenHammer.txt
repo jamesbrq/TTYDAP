@@ -1,0 +1,87 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [marioAttackEvent_KaitenHammer unit_boss_rampell_las.o] AT 80602B3C ---
+80602B3C:   callc [btlevtcmd_GetEnemyBelong battle_event_cmd.o] -2 LW(0)
+80602B4C:   callc [btlevtcmd_SamplingEnemy battle_event_cmd.o] -2 LW(0) LW(9)
+80602B60:   callc [btlevtcmd_ChoiceSamplingEnemy battle_event_cmd.o] LW(9) LW(3) LW(4)
+80602B74:   if_int_eq LW(3) -1
+80602B80:     callc [btlevtcmd_CheckToken battle_event_cmd.o] -2 16 LW(0)
+80602B94:     if_int_ne LW(0) 0
+80602BA0:       callss [subsetevt_confuse_flustered battle_event_subset.o]
+80602BA8:     endif
+80602BAC:     return
+80602BB0:   endif
+80602BB4:   callc [btlevtcmd_WeaponAftereffect battle_event_cmd.o] LW(9)
+80602BC0:   callc [btlevtcmd_AttackDeclare battle_event_cmd.o] -2 LW(3) LW(4)
+80602BD4:   callc [btlevtcmd_WaitGuardMove battle_event_cmd.o]
+80602BDC:   callc [btlevtcmd_PayWeaponCost battle_event_cmd.o] -2 LW(9)
+80602BEC:   callc [evt_btl_camera_set_mode battle_camera.o] 0 11
+80602BFC:   callc [evt_btl_camera_set_homing_unitparts battle_camera.o] 0 -2 1 LW(3) LW(4)
+80602C18:   callc [evt_btl_camera_set_moveSpeedLv battle_camera.o] 0 1
+80602C28:   callc [evt_btl_camera_set_zoom battle_camera.o] 0 100
+80602C38:   callc [btlevtcmd_AnimeChangePoseType battle_event_cmd.o] -2 1 42
+80602C4C:   callc [btlevtcmd_GetHitPos battle_event_cmd.o] LW(3) LW(4) LW(0) LW(1) LW(2)
+80602C68:   callc [btlevtcmd_GetPos battle_event_cmd.o] -2 [F1194D80] LW(1) [F1194D80]
+80602C80:   callc [btlevtcmd_FaceDirectionAdd battle_event_cmd.o] LW(3) LW(0) 24
+80602C94:   callc [btlevtcmd_SetMoveSpeed battle_event_cmd.o] -2 3.00
+80602CA4:   addi LW(2) 5
+80602CB0:   callc [btlevtcmd_CalculateFaceDirection battle_event_cmd.o] -2 -1 LW(0) LW(2) 1 LW(15)
+80602CD0:   callc [btlevtcmd_ChangeFaceDirection battle_event_cmd.o] -2 LW(15)
+80602CE0:   callc [btlevtcmd_MovePosition battle_event_cmd.o] -2 LW(0) LW(1) LW(2) 0 -1 0
+80602D04:   callc [btlevtcmd_CalculateFaceDirection battle_event_cmd.o] -2 -1 LW(3) LW(4) 16 LW(15)
+80602D24:   callc [btlevtcmd_ChangeFaceDirection battle_event_cmd.o] -2 LW(15)
+80602D34:   callc [evt_btl_camera_set_moveSpeedLv battle_camera.o] 0 2
+80602D44:   callc [evt_btl_camera_set_zoom battle_camera.o] 0 200
+80602D54:   callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 1 ["EM_A_1A"]
+80602D68:   wait_ms 66
+80602D70:   callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_BOSS_NM_HAMMER_FURU2"] [F1194D80] 0 [F1194D80]
+80602D8C:   wait_ms 233
+80602D94:   callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 1 ["EM_A_1B"]
+80602DA8:   wait_ms 500
+80602DB0:   callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 1 ["EM_A_1C"]
+80602DC4:   wait_ms 50
+80602DCC:   callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_BOSS_NM_HAMMER_DON2"] [F1194D80] 0 [F1194D80]
+80602DE8:   wait_ms 100
+80602DF0:   callc [btlevtcmd_PreCheckDamage battle_event_cmd.o] -2 LW(3) LW(4) LW(9) 256 LW(5)
+80602E10:   switchi LW(5)
+80602E18:     case_int_eq_any 4
+80602E20:       goto 90
+80602E28:       end_multi_case
+80602E2C:     case_int_eq 3
+80602E34:       callc [btlevtcmd_StartAvoid battle_event_cmd.o] LW(3) 38
+80602E44:       goto 90
+80602E4C:       end_multi_case
+80602E50:     case_int_eq 6
+80602E58:       callc [btlevtcmd_StartAvoid battle_event_cmd.o] LW(3) 39
+80602E68:       goto 90
+80602E70:     case_int_eq 2
+80602E78:       callc [btlevtcmd_StartAvoid battle_event_cmd.o] LW(3) 40
+80602E88:       goto 90
+80602E90:     case_int_eq 1
+80602E98:       goto 91
+80602EA0:       end_multi_case
+80602EA4:     case_default
+80602EA8:       goto 98
+80602EB0:       end_multi_case
+80602EB4:   end_switch
+80602EB8: 90:
+80602EC0:   goto 98
+80602EC8: 91:
+80602ED0:   callc [btlevtcmd_ResultACDefence battle_event_cmd.o] LW(3) LW(9)
+80602EE0:   callc [btlevtcmd_CheckDamage battle_event_cmd.o] -2 LW(3) LW(4) LW(9) 256 LW(5)
+80602F00: 98:
+80602F08:   wait_ms 700
+80602F10:   callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 1 ["EM_S_1"]
+80602F24:   wait_ms 200
+80602F2C:   callc [evt_btl_camera_set_mode battle_camera.o] 0 0
+80602F3C:   callc [btlevtcmd_SetRotate battle_event_cmd.o] -2 0 0 0
+80602F54:   callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 1 ["EM_W_1"]
+80602F68:   callc [btlevtcmd_SetMoveSpeed battle_event_cmd.o] -2 6.00
+80602F78:   callc [btlevtcmd_AnimeChangePoseType battle_event_cmd.o] -2 1 40
+80602F8C:   callc [btlevtcmd_GetHomePos battle_event_cmd.o] -2 LW(0) LW(1) LW(2)
+80602FA4:   callc [btlevtcmd_MovePosition battle_event_cmd.o] -2 LW(0) LW(1) LW(2) 0 -1 0
+80602FC8:   callc [btlevtcmd_ResetFaceDirection battle_event_cmd.o] -2
+80602FD4:   callc [btlevtcmd_StartWaitEvent battle_event_cmd.o] -2
+80602FE0:   return
+80602FE4:   end

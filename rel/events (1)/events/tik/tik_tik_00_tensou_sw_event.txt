@@ -1,0 +1,40 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [tensou_sw_event tik_00.o] AT 805CD1D0 ---
+805CD1D0:   callc [evt_snd_sfxon evt_snd.o] ["SFX_STG7_SWITCH_WARP1"] 0
+805CD1E0:   if_int_lt GSW(0) 377
+805CD1EC:     callc [evt_mapobj_flag_onoff evt_map.o] 1 1 ["sui__1"] 1
+805CD204:     callc [evt_mapobj_flag_onoff evt_map.o] 1 0 ["sui__2"] 1
+805CD21C:     callc [evt_mapobj_flag_onoff evt_map.o] 1 0 ["wa_pu"] 1
+805CD234:     callsa [tensou_anim_event tik_00.o]
+805CD23C:     callc [evt_run_case_evt evt_case.o] 0 1 ["tensou"] 0 [tensou_event tik_00.o] 0
+805CD25C:     callc [evt_exit_case_evt evt_case.o]
+805CD264:   else
+805CD268:     if_int_ge GSW(0) 403
+805CD274:       callc [evt_mapobj_flag_onoff evt_map.o] 1 1 ["sui__1"] 1
+805CD28C:       callc [evt_mapobj_flag_onoff evt_map.o] 1 0 ["sui__2"] 1
+805CD2A4:       callc [evt_mapobj_flag_onoff evt_map.o] 1 0 ["wa_pu"] 1
+805CD2BC:       callsa [tensou_anim_event tik_00.o]
+805CD2C4:       callc [evt_run_case_evt evt_case.o] 0 1 ["tensou"] 0 [tensou_event tik_00.o] 0
+805CD2E4:       callc [evt_exit_case_evt evt_case.o]
+805CD2EC:     else
+805CD2F0:       callc [evt_mario_key_onoff evt_mario.o] 0
+805CD2FC:       callc [evt_msg_toge evt_msg.o] 1 0 0 0
+805CD314:       callc [evt_msg_print evt_msg.o] 0 ["stg7_tik_01_01"] 0 0
+805CD32C:       callc [evt_mario_key_onoff evt_mario.o] 1
+805CD338:     endif
+805CD33C:   endif
+805CD340:   return
+805CD344:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [tensou_anim_event tik_00.o] AT 805CD158 ---
+805CD158:   setii GW(10) 1
+805CD164:   callc [evt_map_playanim evt_map.o] ["anm_saisho"] 0 0
+805CD178:   wait_frames 1
+805CD180:   callc [evt_mapobj_flag_onoff evt_map.o] 1 0 ["hikari"] 1
+805CD198:   callc [evt_map_checkanim evt_map.o] ["anm_saisho"] LW(1) LW(2)
+805CD1AC:   wait_ms LW(2)
+805CD1B4:   callc [evt_map_playanim evt_map.o] ["anm_wa-p"] 1 0
+805CD1C8:   return
+805CD1CC:   end

@@ -1,0 +1,53 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [evt_kaidan_pera_anime gon_04.o] AT 805C65C0 ---
+805C65C0:   callc [evt_img_entry evt_img.o] ["img"]
+805C65CC:   callc [evt_img_set_paper evt_img.o] ["img"] ["OFF_gon_04_2"]
+805C65DC:   callc [evt_offscreen_entry evt_offscreen.o] ["offscreen"]
+805C65E8:   if_int_eq LW(0) 0
+805C65F4:     callc [evt_mapobj_set_offscreen evt_map.o] 0 ["neta_02"] ["offscreen"]
+805C6608:     callc [evt_img_set_paper_anim evt_img.o] ["img"] ["A_2"]
+805C6618:     callc [evt_img_alloc_capture evt_img.o] ["img"] 0 ["offscreen"] 0 0 0 608 480
+805C6640:     callc [evt_img_alloc_capture evt_img.o] ["img"] 1 ["offscreen"] 0 0 0 608 480
+805C6668:     callc [evt_mapobj_flag_onoff evt_map.o] 0 1 ["neta_01"] 1
+805C6680:     callc [evt_hitobj_onoff evt_hit.o] ["a_neta_01"] 0 0
+805C6694:     callc [evt_snd_sfxon evt_snd.o] ["SFX_STG1_PERA_STEP1"] 0
+805C66A4:   else
+805C66A8:     callc [evt_mapobj_set_offscreen evt_map.o] 0 ["neta_02"] ["offscreen"]
+805C66BC:     callc [evt_img_set_paper_anim evt_img.o] ["img"] ["A_1"]
+805C66CC:     callc [evt_img_alloc_capture evt_img.o] ["img"] 0 ["offscreen"] 0 0 0 608 480
+805C66F4:     callc [evt_img_alloc_capture evt_img.o] ["img"] 1 ["offscreen"] 0 0 0 608 480
+805C671C:     callc [evt_mapobj_flag_onoff evt_map.o] 0 1 ["neta_02"] 1
+805C6734:     callc [evt_hitobj_onoff evt_hit.o] ["a_neta_02"] 0 0
+805C6748:     callc [evt_snd_sfxon evt_snd.o] ["SFX_STG1_PERA_STEP2"] 0
+805C6758:   endif
+805C675C:   callc [evt_img_wait_animend evt_img.o] ["img"]
+805C6768:   callc [evt_snd_sfxon evt_snd.o] ["SFX_STG1_QUAK_PERA1"] 0
+805C6778:   begin_thread
+805C677C:     callc [evt_cam_shake evt_cam.o] 4 0.02 0.00 250
+805C6794:   end_thread
+805C6798:   if_int_eq LW(0) 0
+805C67A4:     callc [evt_mapobj_flag_onoff evt_map.o] 1 0 ["neta_02"] 1
+805C67BC:     callc [evt_hitobj_onoff evt_hit.o] ["a_neta_02"] 0 1
+805C67D0:     mo_set_base_int [kemuri_pos1 gon_04.o]
+805C67D8:   else
+805C67DC:     callc [evt_mapobj_flag_onoff evt_map.o] 1 0 ["neta_01"] 1
+805C67F4:     callc [evt_hitobj_onoff evt_hit.o] ["a_neta_01"] 0 1
+805C6808:     mo_set_base_int [kemuri_pos2 gon_04.o]
+805C6810:   endif
+805C6814:   loop 5
+805C681C:     mo_read_int2 LW(0) LW(1)
+805C6828:     callc [evt_sub_random evt_sub.o] 10 LW(2)
+805C6838:     subi LW(2) 5
+805C6844:     addi LW(2) LW(0)
+805C6850:     callc [evt_sub_random evt_sub.o] 20 LW(3)
+805C6860:     subi LW(3) 10
+805C686C:     addi LW(3) LW(1)
+805C6878:     callc [evt_eff evt_eff.o] [zero_gon_00004854 gon_04.o] ["kemuri_test"] 0 LW(2) LW(3) 60 1.60 0 0 0 0 0 0 0
+805C68B8:   end_loop
+805C68BC:   callc [evt_img_release evt_img.o] ["img"]
+805C68C8:   callc [evt_offscreen_delete evt_offscreen.o] ["offscreen"]
+805C68D4:   callc [evt_mapobj_clear_offscreen evt_map.o] 0 ["neta_02"]
+805C68E4:   return
+805C68E8:   end

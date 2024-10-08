@@ -1,0 +1,250 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [hammer_lv2_juyoitem_lecture evt_lect_tou.o] AT 805FBE1C ---
+805FBE1C:   begin_child_thread
+805FBE20:     callc [lecture_button_rtn evt_lect_tou.o]
+805FBE28:   end_child_thread
+805FBE2C:   callc [evt_npc_set_camid evt_npc.o] ["キノピコ"] 7
+805FBE3C:   wait_frames 1
+805FBE44:   callc [lecture_button_set_pos evt_lect_tou.o] 0 -200.00 -25.00 0.00
+805FBE5C:   callc [lecture_button_set_pos evt_lect_tou.o] 1 -140.00 -25.00 0.00
+805FBE74:   callc [evt_npc_get_position evt_npc.o] ["キノピコ"] LW(0) LW(1) LW(2)
+805FBE8C:   subi LW(0) 85
+805FBE98:   callc [evt_npc_move_position evt_npc.o] ["キノピコ"] LW(0) LW(2) 0 80.00 0
+805FBEB8:   callc [evt_msg_print evt_msg.o] 0 ["lecture_s_hammer_04"] 0 ["キノピコ"]
+805FBED0:   callc [evt_msg_print_add evt_msg.o] 0 ["lecture_s_hammer_05"]
+805FBEE0:   loop 0
+805FBEE8:     callc [evt_msg_toge evt_msg.o] 1 0 0 0
+805FBF00:     callc [evt_msg_print evt_msg.o] 0 ["lecture_s_hammer_06"] 0 0
+805FBF18:     callc [x_flag_set evt_lect_tou.o] 1 1
+805FBF28:     begin_thread
+805FBF2C:       callc [evt_npc_set_autotalkpose evt_npc.o] ["キノピコ"] ["S_3"] ["T_3"]
+805FBF40:       callc [evt_npc_set_anim evt_npc.o] ["キノピコ"] ["S_3"]
+805FBF50:       loop 0
+805FBF58:         callc [evt_sub_random evt_sub.o] 2 LW(1)
+805FBF68:         addi LW(1) 4
+805FBF74:         muli LW(1) 2
+805FBF80:         loop LW(1)
+805FBF88:           wait_ms 500
+805FBF90:           callc [x_flag_get evt_lect_tou.o] 1 LW(0)
+805FBFA0:           if_int_eq LW(0) 2
+805FBFAC:             loop_break
+805FBFB0:           endif
+805FBFB4:         end_loop
+805FBFB8:         callc [x_flag_get evt_lect_tou.o] 1 LW(0)
+805FBFC8:         if_int_eq LW(0) 2
+805FBFD4:           loop_break
+805FBFD8:         endif
+805FBFDC:         callc [evt_npc_set_anim evt_npc.o] ["キノピコ"] ["T_3"]
+805FBFEC:         callc [evt_msg_print evt_msg.o] 0 ["lecture_s_hammer_07"] 0 ["キノピコ"]
+805FC004:         callc [evt_npc_set_anim evt_npc.o] ["キノピコ"] ["S_3"]
+805FC014:       end_loop
+805FC018:       callc [evt_npc_set_autotalkpose evt_npc.o] ["キノピコ"] ["S_1"] ["T_1"]
+805FC02C:       callc [evt_npc_set_anim evt_npc.o] ["キノピコ"] ["S_1"]
+805FC03C:     end_thread
+805FC040:     callc [evt_cam3d_evt_set_rel evt_cam.o] 0.00 85.00 520.00 0.00 40.00 -100.00 1000 11
+805FC068:     wait_ms 1000
+805FC070:     callc [lecture_button_flag_on_off evt_lect_tou.o] 0 2 1
+805FC084:     callc [lecture_button_set_icon_id evt_lect_tou.o] 0 110
+805FC094:     callc [lecture_button_set_seq evt_lect_tou.o] 0 2
+805FC0A4:     callc [lecture_button_flag_on_off evt_lect_tou.o] 1 2 1
+805FC0B8:     callc [lecture_button_set_icon_id evt_lect_tou.o] 1 129
+805FC0C8:     callc [lecture_button_set_seq evt_lect_tou.o] 1 2
+805FC0D8:     callc [lecture_button_seq_wait evt_lect_tou.o] 0 1
+805FC0E8:     callc [lecture_button_seq_wait evt_lect_tou.o] 1 1
+805FC0F8:     callsa_tid [hammer_lv2_juyoitem_lecture_sub01 evt_lect_tou.o] LW(11)
+805FC104:     setii LW(7) 0
+805FC110:     callc [evt_mario_get_pos evt_mario.o] 0 LW(0) LW(1) LW(2)
+805FC128:     setii LW(7) 0
+805FC134:     setii LW(12) 0
+805FC140:     callc [mainwindow_opendisable evt_window.o]
+805FC148:     callc [evt_mario_trigflag_onoff evt_mario.o] 1 67108864
+805FC158:     callc [evt_mario_set_enable_key evt_mario.o] 512
+805FC164:     callc [evt_mario_key_onoff evt_mario.o] 1
+805FC170:     callc [evt_mario_key_onoff evt_mario.o] 1
+805FC17C:     loop 0
+805FC184:       callc [lect_status_off evt_lect_tou.o]
+805FC18C:       callc [evt_mario_get_pos evt_mario.o] 0 LW(5) LW(1) LW(6)
+805FC1A4:       callc [evt_mario_set_pos evt_mario.o] LW(0) LW(1) LW(2)
+805FC1B8:       callc [evt_mario_get_motion evt_mario.o] LW(3)
+805FC1C4:       if_int_eq LW(12) 0
+805FC1D0:         if_int_eq LW(3) 19
+805FC1DC:           addi LW(12) 1
+805FC1E8:         endif
+805FC1EC:       else
+805FC1F0:         if_int_eq LW(12) 1
+805FC1FC:           if_int_ne LW(3) 19
+805FC208:             callc [x_flag_set evt_lect_tou.o] 1 2
+805FC218:             loop_break
+805FC21C:           endif
+805FC220:         endif
+805FC224:       endif
+805FC228:       if_int_eq LW(12) 0
+805FC234:         switchi LW(7)
+805FC23C:           case_int_eq 0
+805FC244:             callc [lect_push_b_check evt_lect_tou.o] LW(7)
+805FC250:             if_int_ne LW(7) 0
+805FC25C:               stop_tid LW(11)
+805FC264:               callsa_tid [hammer_lv2_juyoitem_lecture_sub02 evt_lect_tou.o] LW(11)
+805FC270:             endif
+805FC274:           case_int_eq 1
+805FC27C:             callc [lect_push_b_check evt_lect_tou.o] LW(7)
+805FC288:             if_int_eq LW(7) 0
+805FC294:               stop_tid LW(11)
+805FC29C:               callsa_tid [hammer_lv2_juyoitem_lecture_sub01 evt_lect_tou.o] LW(11)
+805FC2A8:             endif
+805FC2AC:         end_switch
+805FC2B0:       else
+805FC2B4:         if_int_le LW(7) 1
+805FC2C0:           setii LW(7) 2
+805FC2CC:           callc [lecture_button_set_seq evt_lect_tou.o] 0 3
+805FC2DC:           callc [lecture_button_set_seq evt_lect_tou.o] 1 3
+805FC2EC:         endif
+805FC2F0:       endif
+805FC2F4:       wait_frames 1
+805FC2FC:     end_loop
+805FC300:     callc [evt_mario_key_onoff evt_mario.o] 0
+805FC30C:     callc [evt_mario_key_onoff evt_mario.o] 0
+805FC318:     callc [lect_status_on evt_lect_tou.o]
+805FC320:     callc [evt_mario_trigflag_onoff evt_mario.o] 0 67108864
+805FC330:     callc [evt_mario_set_enable_key evt_mario.o] 0
+805FC33C:     callc [mainwindow_openenable evt_window.o]
+805FC344:     stop_tid LW(11)
+805FC34C:     callc [lecture_button_set_seq evt_lect_tou.o] 0 3
+805FC35C:     callc [lecture_button_set_seq evt_lect_tou.o] 1 3
+805FC36C:     callc [evt_msg_continue evt_msg.o]
+805FC374:     callc [evt_mario_set_pose evt_mario.o] ["M_V_2"]
+805FC380:     wait_ms 500
+805FC388:     callc [lecture_button_seq_wait evt_lect_tou.o] 0 1
+805FC398:     callc [lecture_button_seq_wait evt_lect_tou.o] 1 1
+805FC3A8:     wait_ms 300
+805FC3B0:     callc [evt_mario_set_pose evt_mario.o] ["M_S_1"]
+805FC3BC:     callc [evt_mario_adjust_dir evt_mario.o]
+805FC3C4:     callc [evt_mario_set_dir evt_mario.o] 90 150 0
+805FC3D8:     callc [evt_cam3d_evt_set_rel evt_cam.o] 0.00 80.00 455.00 26.00 30.00 -100.00 1000 11
+805FC400:     wait_ms 1000
+805FC408:     callc [evt_npc_set_autotalkpose evt_npc.o] ["キノピコ"] ["S_2"] ["T_2"]
+805FC41C:     callc [evt_msg_print evt_msg.o] 0 ["lecture_s_hammer_08"] 0 ["キノピコ"]
+805FC434:     callc [evt_msg_select evt_msg.o] 0 ["lecture_s_hammer_09"]
+805FC444:     callc [evt_npc_set_autotalkpose evt_npc.o] ["キノピコ"] ["S_1"] ["T_1"]
+805FC458:     if_int_eq LW(0) 0
+805FC464:       callc [evt_msg_print_add evt_msg.o] 0 ["lecture_s_hammer_10"]
+805FC474:     else
+805FC478:       loop_break
+805FC47C:     endif
+805FC480:   end_loop
+805FC484:   callc [evt_msg_print_add evt_msg.o] 0 ["lecture_s_hammer_11"]
+805FC494:   callc [evt_cam3d_evt_set_rel evt_cam.o] 0.00 80.00 455.00 52.00 30.00 -100.00 1000 11
+805FC4BC:   callc [evt_npc_get_position evt_npc.o] ["キノピコ"] LW(0) LW(1) LW(2)
+805FC4D4:   addi LW(0) 35
+805FC4E0:   callc [evt_npc_set_ry evt_npc.o] ["キノピコ"] 90
+805FC4F0:   wait_ms 300
+805FC4F8:   callc [evt_npc_move_position evt_npc.o] ["キノピコ"] LW(0) LW(2) 0 80.00 0
+805FC518:   callc [evt_npc_set_ry evt_npc.o] ["キノピコ"] 270
+805FC528:   wait_ms 300
+805FC530:   callc [evt_npc_set_anim evt_npc.o] ["キノピコ"] ["A_1"]
+805FC540:   wait_ms 200
+805FC548:   setii LW(1) ["TESTMOBJ"]
+805FC554:   callc [evt_mobj_entry evt_mobj.o] LW(1) ["MOBJ_Lv1BigBigBlock"]
+805FC564:   callc [lect_mobj_hit_nasi evt_lect_tou.o] LW(1)
+805FC570:   callc [lect_mobj_set_nosysblend evt_lect_tou.o] LW(1)
+805FC57C:   callc [evt_mobj_set_camid evt_mobj.o] LW(1) 7
+805FC58C:   callc [evt_mario_get_pos evt_mario.o] 0 LW(2) LW(3) LW(4)
+805FC5A4:   addi LW(2) 50
+805FC5B0:   addi LW(3) 150
+805FC5BC:   subi LW(4) 70
+805FC5C8:   callc [evt_mobj_flag_onoff evt_mobj.o] 1 LW(1) 64
+805FC5DC:   callc [evt_mobj_set_position evt_mobj.o] LW(1) LW(2) LW(3) LW(4)
+805FC5F4:   callc [evt_mobj_set_gravity_bound evt_mobj.o] LW(1) 0.17 1.00
+805FC608:   callc [evt_snd_sfxon evt_snd.o] ["SFX_EVT_LECTURE_BLOCK_FALL1"] LW(7)
+805FC618:   begin_thread
+805FC61C:     loop 0
+805FC624:       callc [evt_mobj_get_position evt_mobj.o] LW(1) LW(2) LW(3) LW(4)
+805FC63C:       if_int_le LW(3) 10
+805FC648:         loop_break
+805FC64C:       endif
+805FC650:       wait_frames 1
+805FC658:     end_loop
+805FC65C:     callc [evt_snd_sfxon evt_snd.o] ["SFX_EVT_LECTURE_BLOCK_DOWN1"] 0
+805FC66C:     callc [evt_snd_sfxoff evt_snd.o] LW(7)
+805FC678:     callc [evt_cam_shake evt_cam.o] 4 0.00 0.01 300
+805FC690:   end_thread
+805FC694:   setii LW(0) 0.00
+805FC6A0:   loop 0
+805FC6A8:     callc [evt_mobj_get_position evt_mobj.o] LW(1) LW(2) LW(3) LW(4)
+805FC6C0:     addf LW(0) 5.00
+805FC6CC:     subf LW(3) LW(0)
+805FC6D8:     if_int_le LW(3) 0.00
+805FC6E4:       setff LW(3) 0.00
+805FC6F0:       callc [evt_mobj_set_position evt_mobj.o] LW(1) LW(2) LW(3) LW(4)
+805FC708:       loop_break
+805FC70C:     else
+805FC710:       callc [evt_mobj_set_position evt_mobj.o] LW(1) LW(2) LW(3) LW(4)
+805FC728:     endif
+805FC72C:     wait_frames 1
+805FC734:   end_loop
+805FC738:   wait_ms 300
+805FC740:   callc [evt_npc_set_anim evt_npc.o] ["キノピコ"] ["A_2"]
+805FC750:   wait_ms 170
+805FC758:   callc [evt_cam3d_evt_set_rel evt_cam.o] 0.00 80.00 455.00 52.00 55.00 -100.00 1000 11
+805FC780:   wait_ms 1000
+805FC788:   callc [evt_msg_print evt_msg.o] 0 ["lecture_s_hammer_12"] 0 ["キノピコ"]
+805FC7A0:   wait_ms 300
+805FC7A8:   loop 6
+805FC7B0:     callc [evt_mobj_flag_onoff evt_mobj.o] 1 LW(1) 16384
+805FC7C4:     wait_ms 100
+805FC7CC:     callc [evt_mobj_flag_onoff evt_mobj.o] 0 LW(1) 16384
+805FC7E0:     wait_ms 100
+805FC7E8:   end_loop
+805FC7EC:   callc [evt_mobj_delete evt_mobj.o] LW(1)
+805FC7F8:   wait_ms 300
+805FC800:   callc [evt_cam3d_evt_set_rel evt_cam.o] 0.00 80.00 455.00 52.00 30.00 -100.00 1000 11
+805FC828:   wait_ms 1000
+805FC830:   callc [evt_msg_print evt_msg.o] 0 ["lecture_s_hammer_13"] 0 ["キノピコ"]
+805FC848:   callc [evt_npc_get_position evt_npc.o] ["キノピコ"] LW(0) LW(1) LW(2)
+805FC860:   addi LW(0) 100
+805FC86C:   callc [evt_npc_set_ry evt_npc.o] ["キノピコ"] 90
+805FC87C:   wait_ms 300
+805FC884:   callc [evt_npc_move_position evt_npc.o] ["キノピコ"] LW(0) LW(2) 0 80.00 0
+805FC8A4:   callc [evt_npc_set_position evt_npc.o] ["キノピコ"] 0 -1000 0
+805FC8BC:   return
+805FC8C0:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [hammer_lv2_juyoitem_lecture_sub01 evt_lect_tou.o] AT 805FBCA4 ---
+805FBCA4:   callc [lecture_button_set_alpha evt_lect_tou.o] 0 255
+805FBCB4:   callc [lecture_button_set_alpha evt_lect_tou.o] 1 128
+805FBCC4:   callc [lecture_button_set_icon_id evt_lect_tou.o] 1 129
+805FBCD4:   loop 0
+805FBCDC:     callc [lecture_button_set_icon_id evt_lect_tou.o] 0 111
+805FBCEC:     wait_ms 300
+805FBCF4:     callc [lecture_button_set_icon_id evt_lect_tou.o] 0 110
+805FBD04:     wait_ms 300
+805FBD0C:   end_loop
+805FBD10:   return
+805FBD14:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [hammer_lv2_juyoitem_lecture_sub02 evt_lect_tou.o] AT 805FBD18 ---
+805FBD18:   callc [lecture_button_set_alpha evt_lect_tou.o] 0 128
+805FBD28:   callc [lecture_button_set_alpha evt_lect_tou.o] 1 255
+805FBD38:   callc [lecture_button_set_icon_id evt_lect_tou.o] 0 111
+805FBD48:   loop 0
+805FBD50:     callc [lecture_button_set_icon_id evt_lect_tou.o] 1 128
+805FBD60:     wait_ms 15
+805FBD68:     callc [lecture_button_set_icon_id evt_lect_tou.o] 1 131
+805FBD78:     wait_ms 15
+805FBD80:     callc [lecture_button_set_icon_id evt_lect_tou.o] 1 132
+805FBD90:     wait_ms 15
+805FBD98:     callc [lecture_button_set_icon_id evt_lect_tou.o] 1 133
+805FBDA8:     wait_ms 15
+805FBDB0:     callc [lecture_button_set_icon_id evt_lect_tou.o] 1 130
+805FBDC0:     wait_ms 15
+805FBDC8:     callc [lecture_button_set_icon_id evt_lect_tou.o] 1 127
+805FBDD8:     wait_ms 15
+805FBDE0:     callc [lecture_button_set_icon_id evt_lect_tou.o] 1 126
+805FBDF0:     wait_ms 15
+805FBDF8:     callc [lecture_button_set_icon_id evt_lect_tou.o] 1 125
+805FBE08:     wait_ms 15
+805FBE10:   end_loop
+805FBE14:   return
+805FBE18:   end

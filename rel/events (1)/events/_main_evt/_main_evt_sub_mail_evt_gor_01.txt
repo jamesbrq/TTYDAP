@@ -1,0 +1,71 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [mail_evt_gor_01 evt_sub.o] AT 8030874C ---
+8030874C:   if_int_eq GSWF(10) 1
+80308758:     return
+8030875C:   endif
+80308760:   callc [evt_mario_get_pos evt_mario.o] 0 LW(0) LW(1) LW(2)
+80308778:   loop 0
+80308780:     setii LW(10) LW(0)
+8030878C:     setii LW(11) LW(1)
+80308798:     setii LW(12) LW(2)
+803087A4:     callc [evt_mario_get_pos evt_mario.o] 0 LW(0) LW(1) LW(2)
+803087BC:     callc [evt_sub_check_intersect evt_sub.o] LW(0) LW(2) LW(10) LW(12) 350 -2000 350 2000 LW(5)
+803087E8:     if_int_eq GSW(0) 228
+803087F4:       if_int_eq LW(5) 1
+80308800:         loop_break
+80308804:       endif
+80308808:     endif
+8030880C:     wait_frames 1
+80308814:   end_loop
+80308818:   setii GSWF(10) 1
+80308824:   callc [evt_pouch_receive_mail evt_pouch.o] 19
+80308830:   callss [mail_evt evt_sub.o]
+80308838:   return
+8030883C:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [mail_evt evt_sub.o] AT 80308254 ---
+80308254:   callc [evt_cam_letter_box_disable evt_cam.o] 1
+80308260:   callc [evt_mario_key_onoff evt_mario.o] 0
+8030826C:   callc [evt_mario_normalize evt_mario.o]
+80308274:   callc [evt_party_yoshi_ride evt_party.o] 0 0
+80308284:   callc [evt_mario_wait_rideon evt_mario.o]
+8030828C:   callc [evt_mario_balloon_bikkuri evt_mario.o]
+80308294:   callc [evt_snd_bgmoff evt_snd.o] 1024
+803082A0:   callc [evt_snd_bgmon evt_snd.o] 1 ["BGM_FF_MAIL_RECEPTION3"]
+803082B0:   callsa_tid [evt_sub_mail_vibration evt_sub.o] LW(10)
+803082BC:   wait_ms 500
+803082C4:   callc [evt_win_one_message evt_window.o] 0
+803082D0:   stop_tid LW(10)
+803082D8:   wait_frames 1
+803082E0:   callc [evt_sub_rumble_onoff evt_sub.o] 1 0
+803082F0:   callc [evt_mario_balloon_off evt_mario.o]
+803082F8:   callc [evt_snd_bgmoff evt_snd.o] 513
+80308304:   callc [evt_snd_bgmon evt_snd.o] 288 0
+80308314:   if_int_eq GSWF(37) 0
+80308320:     setii GSWF(37) 1
+8030832C:     callc [evt_msg_print evt_msg.o] 0 ["mail_first_hit"] 0 0
+80308344:   else
+80308348:     if_int_eq GSWF(38) 0
+80308354:       callc [evt_msg_print evt_msg.o] 0 ["mail_first_hit"] 0 0
+8030836C:     endif
+80308370:   endif
+80308374:   callc [evt_mario_key_onoff evt_mario.o] 1
+80308380:   callc [evt_cam_letter_box_disable evt_cam.o] 0
+8030838C:   return
+80308390:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [evt_sub_mail_vibration evt_sub.o] AT 803081EC ---
+803081EC:   loop 10
+803081F4:     loop 10
+803081FC:       callc [evt_sub_rumble_onoff evt_sub.o] 0 0
+8030820C:       wait_ms 50
+80308214:       callc [evt_sub_rumble_onoff evt_sub.o] 1 0
+80308224:       wait_ms 50
+8030822C:     end_loop
+80308230:     callc [evt_sub_rumble_onoff evt_sub.o] 2 0
+80308240:     wait_ms 2000
+80308248:   end_loop
+8030824C:   return
+80308250:   end

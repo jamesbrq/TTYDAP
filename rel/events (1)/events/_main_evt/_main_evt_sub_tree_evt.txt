@@ -1,0 +1,58 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [tree_evt evt_sub.o] AT 80306B8C ---
+80306B8C:   set_thread_type_mask 0
+80306B94:   setii LF(0) 0
+80306BA0:   if_int_ne LW(3) 0
+80306BAC:     setii LF(0) 1
+80306BB8:   endif
+80306BBC:   if_int_ne LW(4) 0
+80306BC8:     setii LF(0) 1
+80306BD4:   endif
+80306BD8:   if_int_eq LF(0) 1
+80306BE4:     callc [evt_mapobj_get_position evt_map.o] LW(2) LW(13) LW(14) LW(15)
+80306BFC:     callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_HIT_TREE1"] LW(13) LW(14) LW(15) 0
+80306C18:     callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_HIT_TREE1_LEAVES1"] LW(13) LW(14) LW(15) 0
+80306C34:     callc [evt_mapobj_get_position evt_map.o] LW(2) LW(13) LW(14) LW(15)
+80306C4C:     callc [evt_mapobj_get_position evt_map.o] LW(3) LW(10) LW(11) LW(12)
+80306C64:     setii LW(14) LW(11)
+80306C70:     callc [evt_mario_get_pos evt_mario.o] 0 LW(10) LW(11) LW(12)
+80306C88:     setii LW(15) LW(12)
+80306C94:     subi LW(14) 25
+80306CA0:     switchi LW(0)
+80306CA8:       case_int_eq 0
+80306CB0:         callc [evt_eff64 evt_eff.o] 0 ["fall_leaf_n64"] 0 LW(13) LW(14) LW(15) 60 0 0 0 0 0 0 0
+80306CF0:       case_int_eq 1
+80306CF8:         callc [evt_eff64 evt_eff.o] 0 ["fall_leaf_n64"] 3 LW(13) LW(14) LW(15) 60 0 0 0 0 0 0 0
+80306D38:       case_int_eq 2
+80306D40:         callc [evt_eff64 evt_eff.o] 0 ["fall_leaf_n64"] 4 LW(13) LW(14) LW(15) 60 0 0 0 0 0 0 0
+80306D80:       case_int_eq 3
+80306D88:         callc [evt_eff64 evt_eff.o] 0 ["fall_leaf_n64"] 4 LW(13) LW(14) LW(15) 60 0 0 0 0 0 0 0
+80306DC8:       case_int_eq 4
+80306DD0:         callc [evt_eff64 evt_eff.o] 0 ["fall_leaf_n64"] 3 LW(13) LW(14) LW(15) 60 0 0 0 0 0 0 0
+80306E10:       case_int_eq 5
+80306E18:         callc [evt_eff64 evt_eff.o] 0 ["fall_leaf_n64"] 2 LW(13) LW(14) LW(15) 60 0 0 0 0 0 0 0
+80306E58:       case_int_eq 6
+80306E60:         callc [evt_eff64 evt_eff.o] 0 ["fall_leaf_n64"] 2 LW(13) LW(14) LW(15) 60 0 0 0 0 0 0 0
+80306EA0:     end_switch
+80306EA4:   endif
+80306EA8:   if_int_ne LW(5) 0
+80306EB4:     callsa LW(5)
+80306EBC:   endif
+80306EC0:   mo_set_base_int [tree_data evt_sub.o]
+80306EC8:   loop 25
+80306ED0:     mo_read_int3 LW(10) LW(11) LW(12)
+80306EE0:     if_int_ne LW(2) 0
+80306EEC:       callc [evt_mapobj_rotate evt_map.o] 1 LW(2) 0.00 0.00 LW(10)
+80306F08:     endif
+80306F0C:     if_int_ne LW(3) 0
+80306F18:       callc [evt_mapobj_trans evt_map.o] 1 LW(3) LW(11) 0.00 0.00
+80306F34:     endif
+80306F38:     if_int_ne LW(4) 0
+80306F44:       callc [evt_mapobj_trans evt_map.o] 1 LW(4) LW(12) 0.00 0.00
+80306F60:     endif
+80306F64:     wait_frames 1
+80306F6C:   end_loop
+80306F70:   return
+80306F74:   end

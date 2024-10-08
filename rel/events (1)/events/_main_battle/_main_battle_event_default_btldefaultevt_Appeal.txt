@@ -1,0 +1,47 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [btldefaultevt_Appeal battle_event_default.o] AT 8034E41C ---
+8034E41C:   callc [btlevtcmd_GetBodyId battle_event_cmd.o] -2 LW(0)
+8034E42C:   callc [btlevtcmd_AnimeChangePoseType battle_event_cmd.o] -2 LW(0) 43
+8034E440:   callc [btlevtcmd_CheckStatus battle_event_cmd.o] -2 10 LW(0)
+8034E454:   if_int_eq LW(0) 0
+8034E460:     callc [btlevtcmd_GetPos battle_event_cmd.o] -2 LW(0) LW(1) LW(2)
+8034E478:     setii LW(3) LW(1)
+8034E484:     addi LW(1) 53
+8034E490:     addi LW(3) 35
+8034E49C:     setii LW(4) LW(2)
+8034E4A8:     addi LW(2) 250
+8034E4B4:   else
+8034E4B8:     callc [btlevtcmd_GetPos battle_event_cmd.o] -2 LW(0) LW(1) LW(2)
+8034E4D0:     setii LW(3) LW(1)
+8034E4DC:     addi LW(1) 150
+8034E4E8:     addi LW(3) 80
+8034E4F4:     setii LW(4) LW(2)
+8034E500:     addi LW(2) 400
+8034E50C:   endif
+8034E510:   callc [evt_btl_camera_set_mode battle_camera.o] 0 3
+8034E520:   callc [evt_btl_camera_set_moveto battle_camera.o] 0 LW(0) LW(1) LW(2) LW(0) LW(3) LW(4) 30 11
+8034E54C:   callc [evt_batstage_light_set_player_on evt_batstage.o] 0
+8034E558:   wait_frames 30
+8034E560:   callc [btlevtcmd_CheckDataOfDataTable battle_event_cmd.o] -2 LW(0) 5
+8034E574:   if_int_ne LW(0) 0
+8034E580:     callc [btlevtcmd_RunDataEventChild battle_event_cmd.o] -2 5
+8034E590:     callc [evt_btl_camera_set_mode battle_camera.o] 0 0
+8034E5A0:     callc [evt_btl_camera_set_moveSpeedLv battle_camera.o] 0 2
+8034E5B0:     callc [evt_batstage_light_set_player_off evt_batstage.o]
+8034E5B8:     wait_frames 60
+8034E5C0:     return
+8034E5C4:   endif
+8034E5C8:   callc [btlevtcmd_GetBodyId battle_event_cmd.o] -2 LW(0)
+8034E5D8:   callc [btlevtcmd_AnimeChangePoseType battle_event_cmd.o] -2 LW(0) 66
+8034E5EC:   callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_MARIO_APPEAL1"] [F1194D80] 0 [F1194D80]
+8034E608:   wait_frames 60
+8034E610:   callc [evt_btl_camera_set_mode battle_camera.o] 0 0
+8034E620:   callc [evt_btl_camera_set_moveSpeedLv battle_camera.o] 0 2
+8034E630:   callc [btlevtcmd_AudienceAppeal battle_event_cmd.o] -2
+8034E63C:   callc [evt_batstage_light_set_player_off evt_batstage.o]
+8034E644:   wait_frames 60
+8034E64C:   callc [btlevtcmd_StartWaitEvent battle_event_cmd.o] LW(10)
+8034E658:   return
+8034E65C:   end

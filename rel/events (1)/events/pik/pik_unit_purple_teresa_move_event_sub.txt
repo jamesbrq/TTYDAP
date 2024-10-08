@@ -1,0 +1,36 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [move_event_sub unit_purple_teresa.o] AT 805CE2A4 ---
+805CE2A4:   callc [btlevtcmd_GetUnitId battle_event_cmd.o] -2 LW(1)
+805CE2B4:   if_int_eq LW(3) LW(1)
+805CE2C0:     setii LW(0) 0
+805CE2CC:     setii LW(1) 0
+805CE2D8:   else
+805CE2DC:     callc [evt_sub_random evt_sub.o] 20 LW(0)
+805CE2EC:     addi LW(0) 60
+805CE2F8:     setii LW(1) 12
+805CE304:   endif
+805CE308:   wait_frames LW(0)
+805CE310:   callc [btlevtcmd_SetUnitWork battle_event_cmd.o] LW(3) 0 1
+805CE324:   callc [btlevtcmd_OnPartsAttribute battle_event_cmd.o] LW(3) 1 6291456
+805CE338:   begin_child_thread
+805CE33C:     loop 60
+805CE344:       callc [btlevtcmd_AddRotate battle_event_cmd.o] LW(3) 0 LW(1) 0
+805CE35C:       wait_frames 1
+805CE364:     end_loop
+805CE368:   end_child_thread
+805CE36C:   begin_child_thread
+805CE370:     wait_frames 30
+805CE378:     callc [btlevtcmd_GetUnitId battle_event_cmd.o] -2 LW(0)
+805CE388:     if_int_eq LW(3) LW(0)
+805CE394:       callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 1 ["T_1"]
+805CE3A8:     endif
+805CE3AC:   end_child_thread
+805CE3B0:   callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_ENM_TELESA_MOVE1"] [F1194D80] 0 [F1194D80]
+805CE3CC:   callc [btlevtcmd_GetPartsPos battle_event_cmd.o] LW(3) 1 LW(0) LW(1) LW(2)
+805CE3E8:   setii LW(1) 40
+805CE3F4:   callc [btlevtcmd_DivePosition battle_event_cmd.o] LW(3) LW(0) LW(1) LW(2) 60 10 4 0 -1
+805CE420:   callc [btlevtcmd_SetHomePos battle_event_cmd.o] LW(3) LW(0) LW(1) LW(2)
+805CE438:   return
+805CE43C:   end

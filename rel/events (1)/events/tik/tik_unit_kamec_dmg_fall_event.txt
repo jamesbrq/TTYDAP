@@ -1,0 +1,70 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [dmg_fall_event unit_kamec.o] AT 805EF53C ---
+805EF53C:   setii LW(10) -2
+805EF548:   setii LW(11) 1
+805EF554:   callc [btlevtcmd_OffAttribute battle_event_cmd.o] -2 4
+805EF564:   callc [btlevtcmd_OffPartsAttribute battle_event_cmd.o] -2 1 2048
+805EF578:   callc [btlevtcmd_OffPartsAttribute battle_event_cmd.o] -2 1 2097152
+805EF58C:   callc [btlevtcmd_OffPartsAttribute battle_event_cmd.o] -2 1 4194304
+805EF5A0:   callc [btlevtcmd_AnimeChangePoseType battle_event_cmd.o] -2 1 39
+805EF5B4:   wait_ms 500
+805EF5BC:   callc [btlevtcmd_AnimeSetPoseTable battle_event_cmd.o] -2 1 [pose_table unit_kamec.o]
+805EF5D0:   callc [btlevtcmd_GetUnitWork battle_event_cmd.o] -2 1 LW(0)
+805EF5E4:   if_int_eq LW(0) 0
+805EF5F0:     callc [btlevtcmd_ChangeDataTable battle_event_cmd.o] -2 [data_table unit_kamec.o]
+805EF600:   else
+805EF604:     callc [btlevtcmd_ChangeDataTable battle_event_cmd.o] -2 [data_table_bunsin unit_kamec.o]
+805EF614:   endif
+805EF618:   callc [btlevtcmd_AnimeChangePoseType battle_event_cmd.o] -2 1 39
+805EF62C:   begin_thread
+805EF630:     callc [btlevtcmd_GetPos battle_event_cmd.o] -2 LW(0) LW(1) LW(2)
+805EF648:     callc [btlevtcmd_SetPartsPos battle_event_cmd.o] -2 2 LW(0) LW(1) LW(2)
+805EF664:     callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 2 ["KMK_H_1"]
+805EF678:     callc [btlevtcmd_OffPartsAttribute battle_event_cmd.o] -2 2 16777216
+805EF68C:     wait_frames 20
+805EF694:     callc [evt_sub_intpl_init evt_sub.o] 0 255 0 30
+805EF6AC:     loop 30
+805EF6B4:       callc [evt_sub_intpl_get_value_para evt_sub.o] LW(1) LW(2)
+805EF6C4:       callc [btlevtcmd_SetAlpha battle_event_cmd.o] -2 2 LW(1)
+805EF6D8:       wait_frames 1
+805EF6E0:     end_loop
+805EF6E4:     callc [btlevtcmd_OnPartsAttribute battle_event_cmd.o] -2 2 16777216
+805EF6F8:   end_thread
+805EF6FC:   callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_ENM_FALL1"] [F1194D80] 0 [F1194D80]
+805EF718:   callc [btlevtcmd_GetPos battle_event_cmd.o] -2 LW(0) LW(1) LW(2)
+805EF730:   callc [btlevtcmd_SetFallAccel battle_event_cmd.o] -2 1.00
+805EF740:   callc [btlevtcmd_JumpPosition battle_event_cmd.o] -2 LW(0) 0 LW(2) 10 -1
+805EF760:   callc [btlevtcmd_SetHomePos battle_event_cmd.o] -2 LW(0) 0 LW(2)
+805EF778:   wait_ms 500
+805EF780:   callc [btlevtcmd_SetUnitWork battle_event_cmd.o] -2 0 0
+805EF794:   callss [init_event2 unit_kamec.o]
+805EF79C:   callc [btlevtcmd_AnimeChangePoseType battle_event_cmd.o] -2 1 39
+805EF7B0:   return
+805EF7B4:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [init_event2 unit_kamec.o] AT 805EEAB8 ---
+805EEAB8:   callc [btlevtcmd_SetEventWait battle_event_cmd.o] -2 [wait_event unit_kamec.o]
+805EEAC8:   callc [btlevtcmd_SetEventAttack battle_event_cmd.o] -2 [attack_event unit_kamec.o]
+805EEAD8:   callc [btlevtcmd_SetEventDamage battle_event_cmd.o] -2 [damage_event unit_kamec.o]
+805EEAE8:   callc [btlevtcmd_SetEventConfusion battle_event_cmd.o] -2 [attack_event unit_kamec.o]
+805EEAF8:   callc [btlevtcmd_GetUnitWork battle_event_cmd.o] -2 0 LW(0)
+805EEB0C:   if_int_ne LW(0) 0
+805EEB18:     callc [btlevtcmd_AnimeSetPoseTable battle_event_cmd.o] -2 1 [pose_table_sky unit_kamec.o]
+805EEB2C:     callc [btlevtcmd_GetUnitWork battle_event_cmd.o] -2 1 LW(0)
+805EEB40:     if_int_eq LW(0) 0
+805EEB4C:       callc [btlevtcmd_ChangeDataTable battle_event_cmd.o] -2 [data_table_sky unit_kamec.o]
+805EEB5C:     else
+805EEB60:       callc [btlevtcmd_ChangeDataTable battle_event_cmd.o] -2 [data_table_sky_bunsin unit_kamec.o]
+805EEB70:     endif
+805EEB74:     callc [btlevtcmd_OnAttribute battle_event_cmd.o] -2 4
+805EEB84:     callc [btlevtcmd_OnPartsAttribute battle_event_cmd.o] -2 1 2097152
+805EEB98:     callc [btlevtcmd_OnPartsAttribute battle_event_cmd.o] -2 1 2048
+805EEBAC:     callc [btlevtcmd_OnPartsAttribute battle_event_cmd.o] -2 1 4194304
+805EEBC0:     callc [btlevtcmd_GetPos battle_event_cmd.o] -2 LW(0) LW(1) LW(2)
+805EEBD8:     callc [btlevtcmd_SetPos battle_event_cmd.o] -2 LW(0) 40 LW(2)
+805EEBF0:     callc [btlevtcmd_SetHomePos battle_event_cmd.o] -2 LW(0) 40 LW(2)
+805EEC08:   endif
+805EEC0C:   return
+805EEC10:   end

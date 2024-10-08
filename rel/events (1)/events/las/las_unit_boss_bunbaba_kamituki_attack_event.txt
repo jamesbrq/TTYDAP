@@ -1,0 +1,53 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [kamituki_attack_event unit_boss_bunbaba.o] AT 8061EDB4 ---
+8061EDB4:   callc [btlevtcmd_GetEnemyBelong battle_event_cmd.o] -2 LW(0)
+8061EDC4:   callc [btlevtcmd_SamplingEnemy battle_event_cmd.o] -2 LW(0) LW(9)
+8061EDD8:   callc [btlevtcmd_ChoiceSamplingEnemy battle_event_cmd.o] LW(9) LW(3) LW(4)
+8061EDEC:   if_int_eq LW(3) -1
+8061EDF8:     goto 99
+8061EE00:   endif
+8061EE04:   callc [btlevtcmd_AttackDeclare battle_event_cmd.o] -2 LW(3) LW(4)
+8061EE18:   callc [btlevtcmd_WaitGuardMove battle_event_cmd.o]
+8061EE20:   callc [btlevtcmd_PayWeaponCost battle_event_cmd.o] -2 LW(9)
+8061EE30:   begin_thread
+8061EE34:     callc [btlevtcmd_snd_se_offset battle_event_cmd.o] -2 ["SFX_BOSS_GNB_BITE1"] [F1194D80] 0 -220 80 0 [F1194D80]
+8061EE5C:     wait_ms 250
+8061EE64:     callc [btlevtcmd_snd_se_offset battle_event_cmd.o] -2 ["SFX_BOSS_GNB_BITE2"] [F1194D80] 0 -260 40 0 [F1194D80]
+8061EE8C:   end_thread
+8061EE90:   callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 1 [dat_las_00019670 unit_boss_bunbaba.o]
+8061EEA4:   wait_ms 333
+8061EEAC:   callc [btlevtcmd_PreCheckDamage battle_event_cmd.o] -2 LW(3) LW(4) LW(9) 256 LW(5)
+8061EECC:   switchi LW(5)
+8061EED4:     case_int_eq_any 4
+8061EEDC:       goto 90
+8061EEE4:       end_multi_case
+8061EEE8:     case_int_eq 3
+8061EEF0:       callc [btlevtcmd_StartAvoid battle_event_cmd.o] LW(3) 38
+8061EF00:       goto 90
+8061EF08:       end_multi_case
+8061EF0C:     case_int_eq 6
+8061EF14:       callc [btlevtcmd_StartAvoid battle_event_cmd.o] LW(3) 39
+8061EF24:       goto 90
+8061EF2C:     case_int_eq 2
+8061EF34:       callc [btlevtcmd_StartAvoid battle_event_cmd.o] LW(3) 40
+8061EF44:       goto 90
+8061EF4C:     case_int_eq 1
+8061EF54:       goto 91
+8061EF5C:       end_multi_case
+8061EF60:     case_default
+8061EF64:       goto 99
+8061EF6C:       end_multi_case
+8061EF70:   end_switch
+8061EF74: 90:
+8061EF7C:   goto 97
+8061EF84: 91:
+8061EF8C:   callc [btlevtcmd_ResultACDefence battle_event_cmd.o] LW(3) LW(9)
+8061EF9C:   callc [btlevtcmd_CheckDamage battle_event_cmd.o] -2 LW(3) LW(4) LW(9) 256 LW(5)
+8061EFBC: 97:
+8061EFC4:   callc [btlevtcmd_WeaponAftereffect battle_event_cmd.o] LW(9)
+8061EFD0: 99:
+8061EFD8:   wait_ms 333
+8061EFE0:   return
+8061EFE4:   end

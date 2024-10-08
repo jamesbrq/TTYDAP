@@ -1,0 +1,78 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [dou_08_init_evt dou_08.o] AT 805C71B4 ---
+805C71B4:   callc [evt_snd_bgmon evt_snd.o] 512 ["BGM_STG5_DOU1"]
+805C71C4:   callc [evt_snd_envon evt_snd.o] 272 ["ENV_STG5_DOU8"]
+805C71D4:   callc [evt_snd_set_rev_mode evt_snd.o] 2
+805C71E0:   setii LW(0) [bero_entry_data dou_08.o]
+805C71EC:   callc [evt_bero_get_info evt_bero.o]
+805C71F4:   callss [evt_bero_info_run evt_bero.o]
+805C71FC:   wait_frames 1
+805C7204:   callc [evt_map_playanim evt_map.o] ["nami"] 1 0
+805C7218:   callc [evt_map_playanim evt_map.o] ["moku"] 1 0
+805C722C:   callc [evt_map_playanim evt_map.o] ["tubo"] 1 0
+805C7240:   callc [evt_hit_damage_return_set evt_hit.o] [hitDmgRetPoints dou_08.o]
+805C724C:   callss [evt_gazigazi_entry evt_damage.o]
+805C7254:   setii LW(0) ["s08_bin"]
+805C7260:   setii LW(1) 0
+805C726C:   callsa_tid [dou_puka_event_main0 dou_08.o] LW(10)
+805C7278:   setii LW(0) ["s08_taru"]
+805C7284:   setii LW(1) 0
+805C7290:   callsa_tid [dou_puka_event_main1 dou_08.o] LW(10)
+805C729C:   callc [evt_mapobj_flag_onoff evt_map.o] 1 1 ["S_ana_before"] 1
+805C72B4:   callc [evt_mapobj_flag_onoff evt_map.o] 1 1 ["S_ana_hibi"] 1
+805C72CC:   callc [evt_map_entry_airport_harbor evt_map.o] 1 ["S_Ship_Change_01"] ["Ship_Change_01"]
+805C72E0:   callc [evt_map_entry_airport_harbor evt_map.o] 1 ["S_Ship_Change_02"] ["Ship_Change_02"]
+805C72F4:   return
+805C72F8:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [dou_puka_event_main0 dou_08.o] AT 805C6F34 ---
+805C6F34:   if_int_ne LW(1) 0
+805C6F40:     callc [evt_hit_bind_mapobj evt_hit.o] LW(1) LW(0)
+805C6F50:   endif
+805C6F54:   setii LW(10) LW(0)
+805C6F60:   callc [evt_sub_random evt_sub.o] 400 LW(0)
+805C6F70:   addi LW(0) 200
+805C6F7C:   wait_ms LW(0)
+805C6F84:   setii LW(0) 0
+805C6F90:   loop 0
+805C6F98:     callc [evt_dou_normal_puka dou.o] LW(11)
+805C6FA4:     callc [evt_mapobj_trans evt_map.o] 1 LW(10) 0 LW(11) 0
+805C6FC0:     setir LW(12) 0x0
+805C6FCC:     if_int_ne LW(12) 0
+805C6FD8:       setii 0 LW(11)
+805C6FE4:     endif
+805C6FE8:     if_int_ne LW(1) 0
+805C6FF4:       callc [evt_hit_bind_update evt_hit.o] LW(1)
+805C7000:     endif
+805C7004:     addi LW(0) 1
+805C7010:     wait_ms 130
+805C7018:   end_loop
+805C701C:   return
+805C7020:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [dou_puka_event_main1 dou_08.o] AT 805C7024 ---
+805C7024:   if_int_ne LW(1) 0
+805C7030:     callc [evt_hit_bind_mapobj evt_hit.o] LW(1) LW(0)
+805C7040:   endif
+805C7044:   setii LW(10) LW(0)
+805C7050:   callc [evt_sub_random evt_sub.o] 400 LW(0)
+805C7060:   addi LW(0) 200
+805C706C:   wait_ms LW(0)
+805C7074:   setii LW(0) 0
+805C7080:   loop 0
+805C7088:     callc [evt_dou_normal_puka dou.o] LW(11)
+805C7094:     callc [evt_mapobj_trans evt_map.o] 1 LW(10) 0 LW(11) 0
+805C70B0:     setir LW(12) 0x0
+805C70BC:     if_int_ne LW(12) 0
+805C70C8:       setii 0 LW(11)
+805C70D4:     endif
+805C70D8:     if_int_ne LW(1) 0
+805C70E4:       callc [evt_hit_bind_update evt_hit.o] LW(1)
+805C70F0:     endif
+805C70F4:     addi LW(0) 1
+805C7100:     wait_ms 130
+805C7108:   end_loop
+805C710C:   return
+805C7110:   end

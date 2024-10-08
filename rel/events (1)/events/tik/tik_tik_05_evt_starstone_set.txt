@@ -1,0 +1,39 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [evt_starstone_set tik_05.o] AT 805D59B8 ---
+805D59B8:   wait_ms 7000
+805D59C0:   setii LW(0) GW(15)
+805D59CC:   subi LW(0) 1
+805D59D8:   callc [evt_eff evt_eff.o] ["stone"] ["starstone"] LW(0) 0 -1000 0 1.00 0 0 0 0 0 0 0
+805D5A18:   callc [starstone_setting tik_05.o] ["stone"] LW(0)
+805D5A28:   callc [eff_starstone_sound_off tik_05.o] ["stone"]
+805D5A34:   callc [evt_mario_get_pos evt_mario.o] 0 LW(0) LW(1) LW(2)
+805D5A4C:   callc [starstone_circle_link_func tik_05.o] ["stone"] GW(15) LW(0) 50 LW(2) 0 140.00
+805D5A70:   callc [starstone_set_alpha tik_05.o] ["stone"] 0
+805D5A80:   begin_thread
+805D5A84:     callc [evt_sub_intpl_msec_init evt_sub.o] 11 0 255 1000
+805D5A9C:     loop 0
+805D5AA4:       callc [evt_sub_intpl_msec_get_value evt_sub.o]
+805D5AAC:       callc [starstone_set_alpha tik_05.o] ["stone"] LW(0)
+805D5ABC:       if_int_eq LW(1) 0
+805D5AC8:         loop_break
+805D5ACC:       endif
+805D5AD0:       wait_frames 1
+805D5AD8:     end_loop
+805D5ADC:   end_thread
+805D5AE0:   setff LW(0) 0.00
+805D5AEC:   loop 0
+805D5AF4:     callc [starstone_set_ry tik_05.o] ["stone"] LW(0)
+805D5B04:     addf LW(0) 4.00
+805D5B10:     if_float_gt LW(0) 360.00
+805D5B1C:       subf LW(0) 360.00
+805D5B28:     endif
+805D5B2C:     if_int_eq GF(11) 1
+805D5B38:       loop_break
+805D5B3C:     endif
+805D5B40:     wait_frames 1
+805D5B48:   end_loop
+805D5B4C:   callc [evt_eff_softdelete evt_eff.o] ["stone"]
+805D5B58:   return
+805D5B5C:   end

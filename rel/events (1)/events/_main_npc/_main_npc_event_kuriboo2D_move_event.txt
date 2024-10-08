@@ -1,0 +1,27 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [kuriboo2D_move_event npc_event.o] AT 8034AF5C ---
+8034AF5C:   callc [evt_npc_set_anim evt_npc.o] ["me"] ["S_1"]
+8034AF6C: 0:
+8034AF74:   callc [evt_npc_status_onoff evt_npc.o] 1 ["me"] 4096
+8034AF88:   callc [evt_npc_get_position evt_npc.o] ["me"] LW(0) [F1194D80] [F1194D80]
+8034AFA0:   callc [camGetPos npc_event.o] LW(1)
+8034AFAC:   subi LW(0) LW(1)
+8034AFB8:   if_int_le LW(0) 250
+8034AFC4:     goto 1
+8034AFCC:   endif
+8034AFD0:   wait_frames 1
+8034AFD8:   goto 0
+8034AFE0: 1:
+8034AFE8:   callc [evt_npc_set_anim evt_npc.o] ["me"] ["W_1"]
+8034AFF8: 2:
+8034B000:   callc [evt_npc_get_position evt_npc.o] ["me"] LW(0) LW(1) LW(2)
+8034B018:   callc [evt_npc_facedirection_add evt_npc.o] ["me"] LW(0) 1000
+8034B02C:   callc [getSpdWalk npc_event.o] LW(3)
+8034B038:   callc [evt_npc_move_position evt_npc.o] ["me"] LW(0) LW(2) 0 LW(3) 4
+8034B058:   callc [evt_npc_reverse_ry evt_npc.o] ["me"]
+8034B064:   wait_frames 1
+8034B06C:   goto 2
+8034B074:   return
+8034B078:   end

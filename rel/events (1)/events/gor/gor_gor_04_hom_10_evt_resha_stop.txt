@@ -1,0 +1,90 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [hom_10_evt_resha_stop gor_04.o] AT 80616C08 ---
+80616C08:   callc [evt_sub_get_mapname evt_sub.o] LW(0)
+80616C14:   if_string_eq LW(0) ["pik_00"]
+80616C20:     callsa [stop_1 gor_04.o]
+80616C28:   endif
+80616C2C:   callc [evt_sub_get_mapname evt_sub.o] LW(0)
+80616C38:   if_string_eq LW(0) ["gor_04"]
+80616C44:     callsa [stop_2 gor_04.o]
+80616C4C:   endif
+80616C50:   callc [evt_sub_get_mapname evt_sub.o] LW(0)
+80616C5C:   if_string_eq LW(0) ["hom_00"]
+80616C68:     if_int_eq GSWF(3578) 0
+80616C74:       callsa [stop_1 gor_04.o]
+80616C7C:     else
+80616C80:       callsa [stop_2 gor_04.o]
+80616C88:     endif
+80616C8C:   endif
+80616C90:   return
+80616C94:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [stop_1 gor_04.o] AT 80616938 ---
+80616938:   setii GSWF(3583) 1
+80616944:   setff GW(0) 0.00
+80616950:   setff GW(1) 0.00
+8061695C:   setff LW(2) 3000.00
+80616968:   callc [evt_sub_get_mapname evt_sub.o] LW(0)
+80616974:   if_string_eq LW(0) ["gor_04"]
+80616980:     callc [evt_snd_sfxon evt_snd.o] ["SFX_STG6_TRAIN_MOVE2"] 0
+80616990:   endif
+80616994:   if_string_eq LW(0) ["hom_00"]
+806169A0:     callc [evt_snd_sfxon evt_snd.o] ["SFX_STG6_TRAIN_MOVE2_2"] 0
+806169B0:   endif
+806169B4:   if_string_eq LW(0) ["pik_00"]
+806169C0:     callc [evt_snd_sfxon evt_snd.o] ["SFX_STG6_TRAIN_MOVE2_3"] 0
+806169D0:   endif
+806169D4:   callc [evt_sub_intpl_msec_init evt_sub.o] 11 3000 0 10000
+806169EC: 0:
+806169F4:   callc [evt_sub_intpl_msec_get_value evt_sub.o]
+806169FC:   mulf LW(0) 1.00
+80616A08:   callc [evt_mapobj_trans evt_map.o] 1 ["train"] LW(0) 0 0
+80616A24:   subf LW(2) LW(0)
+80616A30:   setff GW(0) LW(2)
+80616A3C:   setff GW(1) LW(2)
+80616A48:   mulf GW(0) -1.00
+80616A54:   mulf GW(1) -1.00
+80616A60:   setff LW(2) LW(0)
+80616A6C:   wait_frames 1
+80616A74:   if_int_eq LW(1) 1
+80616A80:     goto 0
+80616A88:   endif
+80616A8C:   setii GSWF(3583) 0
+80616A98:   return
+80616A9C:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [stop_2 gor_04.o] AT 80616AA0 ---
+80616AA0:   setii GSWF(3583) 1
+80616AAC:   setff GW(0) 0.00
+80616AB8:   setff GW(1) 0.00
+80616AC4:   setff LW(2) -3000.00
+80616AD0:   callc [evt_sub_get_mapname evt_sub.o] LW(0)
+80616ADC:   if_string_eq LW(0) ["gor_04"]
+80616AE8:     callc [evt_snd_sfxon evt_snd.o] ["SFX_STG6_TRAIN_MOVE2"] 0
+80616AF8:   endif
+80616AFC:   if_string_eq LW(0) ["hom_00"]
+80616B08:     callc [evt_snd_sfxon evt_snd.o] ["SFX_STG6_TRAIN_MOVE2_2_2"] 0
+80616B18:   endif
+80616B1C:   if_string_eq LW(0) ["pik_00"]
+80616B28:     callc [evt_snd_sfxon evt_snd.o] ["SFX_STG6_TRAIN_MOVE2_3"] 0
+80616B38:   endif
+80616B3C:   callc [evt_sub_intpl_msec_init evt_sub.o] 11 -3000 0 10000
+80616B54: 0:
+80616B5C:   callc [evt_sub_intpl_msec_get_value evt_sub.o]
+80616B64:   mulf LW(0) 1.00
+80616B70:   callc [evt_mapobj_trans evt_map.o] 1 ["train"] LW(0) 0 0
+80616B8C:   subf LW(2) LW(0)
+80616B98:   setff GW(0) LW(2)
+80616BA4:   setff GW(1) LW(2)
+80616BB0:   mulf GW(0) -1.00
+80616BBC:   mulf GW(1) -1.00
+80616BC8:   setff LW(2) LW(0)
+80616BD4:   wait_frames 1
+80616BDC:   if_int_eq LW(1) 1
+80616BE8:     goto 0
+80616BF0:   endif
+80616BF4:   setii GSWF(3583) 0
+80616C00:   return
+80616C04:   end

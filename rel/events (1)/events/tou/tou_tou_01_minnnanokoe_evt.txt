@@ -1,0 +1,123 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [minnnanokoe_evt tou_01.o] AT 805DB6D0 ---
+805DB6D0:   callc [evt_mario_key_onoff evt_mario.o] 0
+805DB6DC:   callc [evt_mario_cont_onoff evt_mario.o] 0
+805DB6E8:   callc [evt_party_cont_onoff evt_party.o] 0 0
+805DB6F8:   callc [evt_cam3d_evt_set evt_cam.o] 0 132 888 0 65 342 0 11
+805DB720:   callc [evt_mario_set_pos evt_mario.o] 0 -1000 0
+805DB734:   callc [evt_party_set_pos evt_party.o] 0 0 -1000 0
+805DB74C:   callc [evt_npc_set_position evt_npc.o] ["酒場店主"] 50 0 450
+805DB764:   callc [evt_npc_set_ry evt_npc.o] ["酒場店主"] 90
+805DB774:   callc [evt_npc_set_position evt_npc.o] ["キノピオ1"] -150 0 60
+805DB78C:   callc [evt_npc_set_ry evt_npc.o] ["キノピオ1"] 90
+805DB79C:   callc [evt_npc_set_position evt_npc.o] ["キノピオ2"] -270 0 361
+805DB7B4:   callc [evt_npc_set_ry evt_npc.o] ["キノピオ2"] 90
+805DB7C4:   callc [evt_map_set_tevcallback evt_map.o] 1 [envSetYami envdrv.o]
+805DB7D4:   callc [evt_mapobj_flag_onoff evt_map.o] 1 1 ["S"] 16777216
+805DB7EC:   callc [evt_mapobj_flag_onoff evt_map.o] 1 0 ["S"] 256
+805DB804:   callc [anim_tevcallback tou_01.o] ["キノシコワ"] 1
+805DB814:   callc [anim_tevcallback tou_01.o] ["ブレッドハート"] 1
+805DB824:   callc [anim_tevcallback tou_01.o] ["シンエモンＡ"] 1
+805DB834:   callc [anim_tevcallback tou_01.o] ["シンエモンＢ"] 1
+805DB844:   callc [anim_tevcallback tou_01.o] ["酒場店主"] 1
+805DB854:   callc [anim_tevcallback tou_01.o] ["レポーター"] 1
+805DB864:   callc [anim_tevcallback tou_01.o] ["カメラマン"] 1
+805DB874:   callc [anim_tevcallback tou_01.o] ["ウラノコ"] 1
+805DB884:   callc [anim_tevcallback tou_01.o] ["キノピオ1"] 1
+805DB894:   callc [anim_tevcallback tou_01.o] ["キノピオ2"] 1
+805DB8A4:   callc [anim_tevcallback_mobj tou_01.o] ["mobj_save"] 1
+805DB8B4:   callc [anim_tevcallback_mobj tou_01.o] ["pblk01"] 1
+805DB8C4:   callc [anim_tevcallback_mobj tou_01.o] ["hblk01"] 1
+805DB8D4:   callc [yami_view tou_01.o] 700
+805DB8E0:   callc [evt_bg_set_color evt_bg.o] 64 64 64 255
+805DB8F8:   callc [evt_mapobj_flag_onoff evt_map.o] 1 0 ["tou_jimenn"] 1024
+805DB910:   callc [evt_mapobj_flag_onoff evt_map.o] 1 0 ["gondora"] 1024
+805DB928:   callc [evt_mapobj_flag_onoff evt_map.o] 1 0 ["den"] 1024
+805DB940:   callc [starstone_entry tou_01.o] ["starstone"] 0 60 415
+805DB958:   setii GW(0) 60
+805DB964:   begin_thread
+805DB968:     loop 0
+805DB970:       callc [starstone_set_pos tou_01.o] ["starstone"] 0 GW(0) 415
+805DB988:       wait_frames 1
+805DB990:     end_loop
+805DB994:   end_thread
+805DB998:   begin_thread
+805DB99C:     setff LW(0) 0.00
+805DB9A8:     loop 0
+805DB9B0:       callc [starstone_set_ry tou_01.o] ["starstone"] LW(0)
+805DB9C0:       subf LW(0) 3.00
+805DB9CC:       if_int_le LW(0) 0.00
+805DB9D8:         addf LW(0) 360.00
+805DB9E4:       endif
+805DB9E8:       wait_frames 1
+805DB9F0:     end_loop
+805DB9F4:   end_thread
+805DB9F8:   begin_thread
+805DB9FC:     loop 0
+805DBA04:       callc [evt_sub_intpl_msec_init evt_sub.o] 11 6000 6500 500
+805DBA1C: 1:
+805DBA24:       callc [evt_sub_intpl_msec_get_value evt_sub.o]
+805DBA2C:       divf LW(0) 100.00
+805DBA38:       setff GW(0) LW(0)
+805DBA44:       wait_frames 1
+805DBA4C:       if_int_eq LW(1) 1
+805DBA58:         goto 1
+805DBA60:       endif
+805DBA64:       callc [evt_sub_intpl_msec_init evt_sub.o] 11 6500 6000 500
+805DBA7C: 2:
+805DBA84:       callc [evt_sub_intpl_msec_get_value evt_sub.o]
+805DBA8C:       divf LW(0) 100.00
+805DBA98:       setff GW(0) LW(0)
+805DBAA4:       wait_frames 1
+805DBAAC:       if_int_eq LW(1) 1
+805DBAB8:         goto 2
+805DBAC0:       endif
+805DBAC4:     end_loop
+805DBAC8:   end_thread
+805DBACC:   callc [evt_seq_wait evt_seq.o] 2
+805DBAD8:   wait_ms 1000
+805DBAE0:   callc [evt_msg_print evt_msg.o] 0 ["stg8_las_148_18"] 0 ["キノシコワ"]
+805DBAF8:   wait_ms 300
+805DBB00:   callc [evt_npc_set_anim evt_npc.o] ["キノシコワ"] ["M_1"]
+805DBB10:   wait_ms 300
+805DBB18:   callc [evt_npc_set_stay_anim evt_npc.o] ["キノシコワ"]
+805DBB24:   callc [evt_cam3d_evt_set evt_cam.o] 500 60 1278 0 140 415 0 11
+805DBB4C:   wait_frames 1
+805DBB54:   wait_ms 500
+805DBB5C:   callc [evt_msg_print evt_msg.o] 0 ["stg8_las_148_19"] 0 ["キノシコワ"]
+805DBB74:   callc [evt_cam3d_evt_set evt_cam.o] 0 101 763 0 60 415 0 11
+805DBB9C:   wait_frames 1
+805DBBA4:   wait_ms 500
+805DBBAC:   callc [evt_msg_print evt_msg.o] 0 ["stg8_las_148_20"] 0 ["キノシコワ"]
+805DBBC4:   callc [evt_npc_set_anim evt_npc.o] ["キノシコワ"] ["M_1"]
+805DBBD4:   wait_ms 300
+805DBBDC:   callc [evt_npc_set_stay_anim evt_npc.o] ["キノシコワ"]
+805DBBE8:   callc [evt_msg_print evt_msg.o] 0 ["stg8_las_148_21"] 0 ["ブレッドハート"]
+805DBC00:   callc [evt_npc_set_anim evt_npc.o] ["ブレッドハート"] ["H_3"]
+805DBC10:   wait_ms 200
+805DBC18:   callc [evt_npc_set_autotalkpose evt_npc.o] ["ブレッドハート"] ["S_5"] ["T_5"]
+805DBC2C:   callc [evt_msg_print evt_msg.o] 0 ["stg8_las_148_22"] 0 ["ブレッドハート"]
+805DBC44:   callc [evt_npc_set_stay_anim evt_npc.o] ["ブレッドハート"]
+805DBC50:   callc [evt_npc_get_position evt_npc.o] ["シンエモンＡ"] LW(0) LW(1) LW(2)
+805DBC68:   callc [evt_npc_jump_position_nohit evt_npc.o] ["シンエモンＡ"] LW(0) LW(1) LW(2) 300 10
+805DBC88:   wait_frames 1
+805DBC90:   callc [evt_msg_print evt_msg.o] 0 ["stg8_las_148_23"] 0 ["シンエモンＡ"]
+805DBCA8:   callc [evt_npc_get_position evt_npc.o] ["シンエモンＢ"] LW(0) LW(1) LW(2)
+805DBCC0:   callc [evt_npc_jump_position_nohit evt_npc.o] ["シンエモンＢ"] LW(0) LW(1) LW(2) 300 10
+805DBCE0:   wait_frames 1
+805DBCE8:   callc [evt_msg_print evt_msg.o] 0 ["stg8_las_148_24"] 0 ["シンエモンＢ"]
+805DBD00:   callc [evt_msg_print evt_msg.o] 0 ["stg8_las_148_24_01"] 0 ["ウラノコ"]
+805DBD18:   callc [evt_cam3d_evt_set evt_cam.o] 500 60 1278 0 140 415 0 11
+805DBD40:   wait_frames 1
+805DBD48:   wait_ms 2000
+805DBD50:   callc [evt_msg_print evt_msg.o] 0 ["stg8_las_148_25"] 0 ["キノシコワ"]
+805DBD68:   callc [evt_npc_set_anim evt_npc.o] ["キノシコワ"] ["M_1"]
+805DBD78:   wait_ms 300
+805DBD80:   callc [evt_npc_set_stay_anim evt_npc.o] ["キノシコワ"]
+805DBD8C:   wait_ms 2000
+805DBD94:   callc [evt_fade_set_mapchange_type evt_fade.o] 1 10 300 9 300
+805DBDB0:   callc [evt_bero_mapchange evt_bero.o] ["usu_00"] ["minnnanokoe"]
+805DBDC0:   return
+805DBDC4:   end

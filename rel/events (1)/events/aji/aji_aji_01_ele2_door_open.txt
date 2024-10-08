@@ -1,0 +1,50 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [ele2_door_open aji_01.o] AT 805D5790 ---
+805D5790:   switchi LW(0)
+805D5798:     case_int_eq 2
+805D57A0:       setii LW(6) ["e2_4_door1"]
+805D57AC:       setii LW(7) ["e2_4_door2"]
+805D57B8:     case_int_eq 3
+805D57C0:       setii LW(6) ["e2_5_door1"]
+805D57CC:       setii LW(7) ["e2_5_door2"]
+805D57D8:     case_int_eq 4
+805D57E0:       setii LW(6) ["e2_6_door1"]
+805D57EC:       setii LW(7) ["e2_6_door2"]
+805D57F8:   end_switch
+805D57FC:   begin_thread
+805D5800:     callc [evt_mapobj_get_position evt_map.o] LW(6) LW(10) LW(11) LW(12)
+805D5818:     callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_STG7_ELEVATOR_OPEN1"] LW(10) LW(11) LW(12) 0
+805D5834:   end_thread
+805D5838:   begin_thread
+805D583C:     callc [evt_sub_intpl_msec_init evt_sub.o] 11 0 -9000 500
+805D5854: 1:
+805D585C:     callc [evt_sub_intpl_msec_get_value evt_sub.o]
+805D5864:     divf LW(0) 100.00
+805D5870:     callc [evt_mapobj_rotate evt_map.o] 1 LW(6) 0 LW(0) 0
+805D588C:     mulf LW(0) -1.00
+805D5898:     callc [evt_mapobj_rotate evt_map.o] 1 LW(7) 0 LW(0) 0
+805D58B4:     wait_frames 1
+805D58BC:     if_int_eq LW(1) 1
+805D58C8:       goto 1
+805D58D0:     endif
+805D58D4:   end_thread
+805D58D8:   wait_ms 300
+805D58E0:   begin_thread
+805D58E4:     callc [evt_mapobj_get_position evt_map.o] ["ee2_door1"] LW(10) LW(11) LW(12)
+805D58FC:     callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_STG7_ELEVATOR_OPEN2"] LW(10) LW(11) LW(12) 0
+805D5918:   end_thread
+805D591C:   callc [evt_sub_intpl_msec_init evt_sub.o] 11 0 -9000 500
+805D5934: 2:
+805D593C:   callc [evt_sub_intpl_msec_get_value evt_sub.o]
+805D5944:   divf LW(0) 100.00
+805D5950:   callc [evt_mapobj_rotate evt_map.o] 1 ["ee2_door1"] 0 LW(0) 0
+805D596C:   mulf LW(0) -1.00
+805D5978:   callc [evt_mapobj_rotate evt_map.o] 1 ["ee2_door2"] 0 LW(0) 0
+805D5994:   wait_frames 1
+805D599C:   if_int_eq LW(1) 1
+805D59A8:     goto 2
+805D59B0:   endif
+805D59B4:   return
+805D59B8:   end

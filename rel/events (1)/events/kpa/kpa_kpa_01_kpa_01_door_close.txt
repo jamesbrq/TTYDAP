@@ -1,0 +1,87 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [kpa_01_door_close kpa_01.o] AT 805BEDE4 ---
+805BEDE4:   setff GW(0) 0
+805BEDF0:   setii GW(1) 1
+805BEDFC:   begin_thread
+805BEE00:     callc [evt_sub_intpl_msec_init evt_sub.o] 2 180 0 2000
+805BEE18: 0:
+805BEE20:     callc [evt_sub_intpl_msec_get_value evt_sub.o]
+805BEE28:     mulf LW(0) 0.55
+805BEE34:     setff GW(0) LW(0)
+805BEE40:     setii GW(1) LW(1)
+805BEE4C:     wait_frames 1
+805BEE54:     if_int_eq LW(1) 1
+805BEE60:       goto 0
+805BEE68:     endif
+805BEE6C:   end_thread
+805BEE70:   begin_thread
+805BEE74:     loop 0
+805BEE7C:       if_int_ne GW(1) 1
+805BEE88:         loop_break
+805BEE8C:       endif
+805BEE90:       setff LW(2) GW(0)
+805BEE9C:       callc [evt_mapobj_rotate evt_map.o] 0 ["door_1"] 0 LW(2) 0
+805BEEB8:       mulf LW(2) -1.00
+805BEEC4:       callc [evt_mapobj_rotate evt_map.o] 0 ["door_2"] 0 LW(2) 0
+805BEEE0:       wait_frames 1
+805BEEE8:     end_loop
+805BEEEC:     callc [evt_mapobj_rotate evt_map.o] 0 ["door_1"] 0 0 0
+805BEF08:     callc [evt_mapobj_rotate evt_map.o] 0 ["door_2"] 0 0 0
+805BEF24:   end_thread
+805BEF28:   begin_thread
+805BEF2C:     callc [evt_npc_set_anim evt_npc.o] ["トゲノコＡ"] ["W_3"]
+805BEF3C:     loop 0
+805BEF44:       if_int_ne GW(1) 1
+805BEF50:         loop_break
+805BEF54:       endif
+805BEF58:       setff LW(2) GW(0)
+805BEF64:       addf LW(2) 25.00
+805BEF70:       callc [get_togenoko_pos kpa_01.o] -750.00 -50.00 -750.00 -7.50 LW(2) LW(3) LW(4)
+805BEF94:       callc [evt_npc_set_position evt_npc.o] ["トゲノコＡ"] LW(3) 0 LW(4)
+805BEFAC:       if_int_le LW(2) 90
+805BEFB8:         callc [evt_npc_set_ry evt_npc.o] ["トゲノコＡ"] 270
+805BEFC8:       endif
+805BEFCC:       wait_frames 1
+805BEFD4:     end_loop
+805BEFD8:     callc [evt_npc_set_stop_anim evt_npc.o] ["トゲノコＡ"]
+805BEFE4:   end_thread
+805BEFE8:   begin_thread
+805BEFEC:     callc [evt_npc_set_anim evt_npc.o] ["トゲノコＢ"] ["W_3"]
+805BEFFC:     loop 0
+805BF004:       if_int_ne GW(1) 1
+805BF010:         loop_break
+805BF014:       endif
+805BF018:       setff LW(5) GW(0)
+805BF024:       addf LW(5) 25.00
+805BF030:       mulf LW(5) -1.00
+805BF03C:       callc [get_togenoko_pos kpa_01.o] -750.00 50.00 -750.00 7.50 LW(5) LW(6) LW(7)
+805BF060:       callc [evt_npc_set_position evt_npc.o] ["トゲノコＢ"] LW(6) 0 LW(7)
+805BF078:       if_int_ge LW(5) -90
+805BF084:         callc [evt_npc_set_ry evt_npc.o] ["トゲノコＢ"] 270
+805BF094:       endif
+805BF098:       wait_frames 1
+805BF0A0:     end_loop
+805BF0A4:     callc [evt_npc_set_walk_anim evt_npc.o] ["トゲノコＢ"]
+805BF0B0:   end_thread
+805BF0B4:   begin_thread
+805BF0B8:     wait_ms 1500
+805BF0C0:     callc [evt_mapobj_get_position evt_map.o] ["door"] LW(0) LW(1) LW(2)
+805BF0D8:     callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_DOOR_SHUT_CASTLE1"] LW(0) LW(1) LW(2) 0
+805BF0F4:   end_thread
+805BF0F8:   loop 0
+805BF100:     if_int_ne GW(1) 1
+805BF10C:       loop_break
+805BF110:     endif
+805BF114:     wait_frames 1
+805BF11C:   end_loop
+805BF120:   wait_ms 500
+805BF128:   begin_thread
+805BF12C:     callc [evt_npc_set_ry evt_npc.o] ["トゲノコＡ"] 90
+805BF13C:     callc [evt_npc_move_position evt_npc.o] ["トゲノコＡ"] -730 -60 1000 0 0
+805BF15C:   end_thread
+805BF160:   callc [evt_npc_set_ry evt_npc.o] ["トゲノコＢ"] 90
+805BF170:   callc [evt_npc_move_position evt_npc.o] ["トゲノコＢ"] -730 60 1000 0 0
+805BF190:   return
+805BF194:   end

@@ -1,0 +1,106 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [breath_event unit_atmic_teresa.o] AT 805DAF44 ---
+805DAF44:   callc [btlevtcmd_GetEnemyBelong battle_event_cmd.o] -2 LW(0)
+805DAF54:   callc [btlevtcmd_SamplingEnemy battle_event_cmd.o] -2 LW(0) [weapon_atmic_teresa_breath unit_atmic_teresa.o]
+805DAF68:   callc [btlevtcmd_ChoiceSamplingEnemy battle_event_cmd.o] [weapon_atmic_teresa_breath unit_atmic_teresa.o] LW(3) LW(4)
+805DAF7C:   if_int_eq LW(3) -1
+805DAF88:     callc [btlevtcmd_CheckToken battle_event_cmd.o] -2 16 LW(0)
+805DAF9C:     if_int_ne LW(0) 0
+805DAFA8:       callss [subsetevt_confuse_flustered battle_event_subset.o]
+805DAFB0:       return
+805DAFB4:     endif
+805DAFB8:     goto 99
+805DAFC0:   endif
+805DAFC4:   callc [target_id_set unit_atmic_teresa.o] LW(3) LW(4)
+805DAFD4:   callc [btlevtcmd_WeaponAftereffect battle_event_cmd.o] [weapon_atmic_teresa_breath unit_atmic_teresa.o]
+805DAFE0:   callc [btlevtcmd_AttackDeclare battle_event_cmd.o] -2 LW(3) LW(4)
+805DAFF4:   callc [btlevtcmd_WaitGuardMove battle_event_cmd.o]
+805DAFFC:   callc [btlevtcmd_PayWeaponCost battle_event_cmd.o] -2 [weapon_atmic_teresa_breath unit_atmic_teresa.o]
+805DB00C:   callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_BOSS_ATMTLSA_FACE_HIDE1"] [F1194D80] 0 [F1194D80]
+805DB028:   callc [btlevtcmd_AnimeChangePoseType battle_event_cmd.o] -2 1 40
+805DB03C:   callc [btlevtcmd_SetPartsRotate battle_event_cmd.o] -2 1 0 180 0
+805DB058:   callc [btlevtcmd_GetPos battle_event_cmd.o] -2 LW(0) LW(1) LW(2)
+805DB070:   callc [btlevtcmd_FaceDirectionSub battle_event_cmd.o] -2 LW(0) 30
+805DB084:   subi LW(1) 10
+805DB090:   callc [btlevtcmd_DivePosition battle_event_cmd.o] -2 LW(0) LW(1) LW(2) 60 10 4 0 -1
+805DB0BC:   callc [evt_btl_camera_set_mode battle_camera.o] 0 0
+805DB0CC:   callc [btlevtcmd_SetUnitWork battle_event_cmd.o] -2 0 0
+805DB0E0:   callc [btlevtcmd_AnimeSetPoseTable battle_event_cmd.o] -2 1 [pose_table unit_atmic_teresa.o]
+805DB0F4:   callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 1 ["A_3"]
+805DB108:   callc [btlevtcmd_SetPartsRotate battle_event_cmd.o] -2 1 0 0 0
+805DB124:   callc [btlevtcmd_GetHomePos battle_event_cmd.o] -2 LW(0) LW(1) LW(2)
+805DB13C:   callc [btlevtcmd_DivePosition battle_event_cmd.o] -2 LW(0) LW(1) LW(2) 10 0 5 0 -1
+805DB168:   callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_BOSS_ATMTLSA_BLOW2"] [F1194D80] 0 LW(15)
+805DB184:   callc [teresa_appear_breath unit_atmic_teresa.o] 0
+805DB190:   callc [btlevtcmd_GetSelectEnemy battle_event_cmd.o] LW(3) LW(4)
+805DB1A0: 10:
+805DB1A8:   if_int_eq LW(3) -1
+805DB1B4:     goto 20
+805DB1BC:   endif
+805DB1C0:   callsa [breath_event_sub unit_atmic_teresa.o]
+805DB1C8:   callc [btlevtcmd_GetSelectNextEnemy battle_event_cmd.o] LW(3) LW(4)
+805DB1D8:   goto 10
+805DB1E0: 20:
+805DB1E8:   wait_frames 120
+805DB1F0:   callc [evt_btl_camera_set_mode battle_camera.o] 0 0
+805DB200:   callc [teresa_wait_breath unit_atmic_teresa.o]
+805DB208:   callc [evt_snd_sfxoff evt_snd.o] LW(15)
+805DB214:   callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_BOSS_ATMTLSA_WHISTLE1"] [F1194D80] 0 [F1194D80]
+805DB230:   callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 1 ["A_4"]
+805DB244:   wait_frames 30
+805DB24C:   callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 1 ["S_1"]
+805DB260:   callc [teresa_wait_breath2 unit_atmic_teresa.o]
+805DB268:   callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_BOSS_ATMTLSA_UNION1"] [F1194D80] 0 LW(15)
+805DB284:   loop 3
+805DB28C:     callc [btlevtcmd_GetPos battle_event_cmd.o] -2 LW(0) LW(1) LW(2)
+805DB2A4:     addi LW(1) 40
+805DB2B0:     addi LW(2) 1
+805DB2BC:     callc [evt_eff evt_eff.o] [zero_jin_00009488 unit_atmic_teresa.o] ["kemuri_test"] 8 LW(0) LW(1) LW(2) 1.25 0 0 0 0 0 0 0
+805DB2FC:     wait_frames 30
+805DB304:   end_loop
+805DB308:   callc [evt_snd_sfxoff evt_snd.o] LW(15)
+805DB314:   wait_ms 1500
+805DB31C:   callc [btlevtcmd_SetScale battle_event_cmd.o] -2 1.00 1.00 1.00
+805DB334:   return
+805DB338:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [breath_event_sub unit_atmic_teresa.o] AT 805DB33C ---
+805DB33C:   callc [btlevtcmd_PreCheckDamage battle_event_cmd.o] -2 LW(3) LW(4) [weapon_atmic_teresa_breath unit_atmic_teresa.o] 0 LW(5)
+805DB35C:   switchi LW(5)
+805DB364:     case_int_eq_any 4
+805DB36C:       goto 90
+805DB374:       end_multi_case
+805DB378:     case_int_eq 3
+805DB380:       callc [btlevtcmd_StartAvoid battle_event_cmd.o] LW(3) 38
+805DB390:       goto 90
+805DB398:       end_multi_case
+805DB39C:     case_int_eq 6
+805DB3A4:       callc [btlevtcmd_StartAvoid battle_event_cmd.o] LW(3) 39
+805DB3B4:       goto 90
+805DB3BC:     case_int_eq 2
+805DB3C4:       callc [btlevtcmd_StartAvoid battle_event_cmd.o] LW(3) 40
+805DB3D4:       goto 90
+805DB3DC:     case_int_eq 1
+805DB3E4:       goto 91
+805DB3EC:       end_multi_case
+805DB3F0:     case_default
+805DB3F4:       goto 98
+805DB3FC:       end_multi_case
+805DB400:   end_switch
+805DB404: 90:
+805DB40C:   goto 99
+805DB414: 91:
+805DB41C:   wait_frames 15
+805DB424:   callc [btlevtcmd_ResultACDefence battle_event_cmd.o] LW(3) [weapon_atmic_teresa_breath unit_atmic_teresa.o]
+805DB434:   callc [btlevtcmd_CheckDamage battle_event_cmd.o] -2 LW(3) LW(4) [weapon_atmic_teresa_breath unit_atmic_teresa.o] 0 LW(5)
+805DB454:   wait_frames 30
+805DB45C:   callc [btlevtcmd_ResultACDefence battle_event_cmd.o] LW(3) [weapon_atmic_teresa_breath unit_atmic_teresa.o]
+805DB46C:   callc [btlevtcmd_CheckDamage battle_event_cmd.o] -2 LW(3) LW(4) [weapon_atmic_teresa_breath unit_atmic_teresa.o] 0 LW(5)
+805DB48C:   wait_frames 30
+805DB494:   callc [btlevtcmd_ResultACDefence battle_event_cmd.o] LW(3) [weapon_atmic_teresa_breath unit_atmic_teresa.o]
+805DB4A4:   callc [btlevtcmd_CheckDamage battle_event_cmd.o] -2 LW(3) LW(4) [weapon_atmic_teresa_breath unit_atmic_teresa.o] 256 LW(5)
+805DB4C4: 99:
+805DB4CC:   return
+805DB4D0:   end

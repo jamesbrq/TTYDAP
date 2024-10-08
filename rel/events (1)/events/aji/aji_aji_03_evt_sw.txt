@@ -1,0 +1,118 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [evt_sw aji_03.o] AT 805DB77C ---
+805DB77C:   if_int_eq GSWF(4188) 0
+805DB788:     return
+805DB78C:   endif
+805DB790:   if_int_eq GSWF(4189) 0
+805DB79C:     return
+805DB7A0:   endif
+805DB7A4:   if_int_eq GSWF(4190) 0
+805DB7B0:     return
+805DB7B4:   endif
+805DB7B8:   if_int_eq GSWF(4197) 0
+805DB7C4:     setii GSWF(4197) 1
+805DB7D0:     callc [evt_mario_key_onoff evt_mario.o] 0
+805DB7DC:     wait_ms 1000
+805DB7E4:     callc [evt_cam3d_evt_set evt_cam.o] 20 125 394 20 55 0 1000 11
+805DB80C:     wait_ms 1500
+805DB814:     begin_thread
+805DB818:       callc [evt_mapobj_get_position evt_map.o] ["S_pato4"] LW(0) LW(1) LW(2)
+805DB830:       callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_STG7_CRANE_SIREN1"] LW(0) LW(1) LW(2) LW(3)
+805DB84C:       wait_ms 3000
+805DB854:       callc [evt_snd_sfxoff evt_snd.o] LW(3)
+805DB860:     end_thread
+805DB864:     setii LW(10) ["S_pato4"]
+805DB870:     callsa [evt_kaitentou aji_03.o]
+805DB878:     callc [evt_mapobj_flag_onoff evt_map.o] 1 1 ["meta_1_1"] 1
+805DB890:     callc [evt_mapobj_flag_onoff evt_map.o] 1 1 ["meta_2_1"] 1
+805DB8A8:     callc [evt_mapobj_flag_onoff evt_map.o] 1 1 ["meta_3_1"] 1
+805DB8C0:     callc [evt_mapobj_flag_onoff evt_map.o] 1 0 ["meta_1_2"] 1
+805DB8D8:     callc [evt_mapobj_flag_onoff evt_map.o] 1 0 ["meta_2_2"] 1
+805DB8F0:     callc [evt_mapobj_flag_onoff evt_map.o] 1 0 ["meta_3_2"] 1
+805DB908:     setii LW(8) -1
+805DB914:     setii LW(9) -1
+805DB920:     setii LW(10) ["S_hari01"]
+805DB92C:     callsa [evt_hari aji_03.o]
+805DB934:     setii LW(8) -1
+805DB940:     setii LW(9) -1
+805DB94C:     setii LW(10) ["S_hari02"]
+805DB958:     callsa [evt_hari aji_03.o]
+805DB960:     wait_ms 500
+805DB968:     callc [evt_run_case_evt evt_case.o] 9 1 ["A_sui_01"] 0 [evt_ufo_sousaban aji_03.o] 0
+805DB988:     callc [evt_cam3d_evt_off evt_cam.o] 500 11
+805DB998:     callc [evt_mario_key_onoff evt_mario.o] 1
+805DB9A4:   endif
+805DB9A8:   return
+805DB9AC:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [evt_kaitentou aji_03.o] AT 805D9CB8 ---
+805D9CB8:   callc [evt_mapobj_flag_onoff evt_map.o] 1 0 LW(10) 1
+805D9CD0:   setff LW(0) 0.00
+805D9CDC:   loop 0
+805D9CE4:     callc [evt_mapobj_rotate evt_map.o] 1 LW(10) 0 LW(0) 0
+805D9D00:     addf LW(0) 5.00
+805D9D0C:     if_float_gt LW(0) 360.00
+805D9D18:       subf LW(0) 360.00
+805D9D24:     endif
+805D9D28:     wait_frames 1
+805D9D30:     if_int_eq GF(15) 1
+805D9D3C:       loop_break
+805D9D40:     endif
+805D9D44:   end_loop
+805D9D48:   callc [evt_mapobj_flag_onoff evt_map.o] 1 1 LW(10) 1
+805D9D60:   return
+805D9D64:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [evt_hari aji_03.o] AT 805D9E18 ---
+805D9E18:   setii LW(6) LW(8)
+805D9E24:   setii LW(7) LW(9)
+805D9E30:   setii LW(8) LW(10)
+805D9E3C:   if_int_ne LW(6) -1
+805D9E48:   endif
+805D9E4C:   setii LW(2) 0
+805D9E58:   setii LF(0) 0
+805D9E64:   loop 0
+805D9E6C:     callc [evt_sub_random evt_sub.o] 900 LW(3)
+805D9E7C:     if_int_eq LF(0) 0
+805D9E88:       muli LW(3) -1
+805D9E94:       setii LF(0) 1
+805D9EA0:     else
+805D9EA4:       setii LF(0) 0
+805D9EB0:     endif
+805D9EB4:     callc [evt_sub_random evt_sub.o] 1500 LW(9)
+805D9EC4:     addi LW(9) 1500
+805D9ED0:     callc [evt_sub_intpl_msec_init evt_sub.o] 11 LW(2) LW(3) LW(9)
+805D9EE8:     loop 0
+805D9EF0:       callc [evt_sub_intpl_msec_get_value evt_sub.o]
+805D9EF8:       divf LW(0) 10.00
+805D9F04:       callc [evt_mapobj_rotate evt_map.o] 1 LW(8) 0 0 LW(0)
+805D9F20:       wait_frames 1
+805D9F28:       if_int_eq GF(15) 1
+805D9F34:         setii LW(3) LW(0)
+805D9F40:         loop_break
+805D9F44:       endif
+805D9F48:       if_int_eq LW(1) 0
+805D9F54:         loop_break
+805D9F58:       endif
+805D9F5C:     end_loop
+805D9F60:     setii LW(2) LW(3)
+805D9F6C:     if_int_eq GF(15) 1
+805D9F78:       loop_break
+805D9F7C:     endif
+805D9F80:   end_loop
+805D9F84:   if_int_ne LW(6) -1
+805D9F90:   endif
+805D9F94:   callc [evt_sub_intpl_msec_init evt_sub.o] 11 LW(2) 0 1000
+805D9FAC:   loop 0
+805D9FB4:     callc [evt_sub_intpl_msec_get_value evt_sub.o]
+805D9FBC:     divf LW(0) 10.00
+805D9FC8:     callc [evt_mapobj_rotate evt_map.o] 1 LW(8) 0 0 LW(0)
+805D9FE4:     wait_frames 1
+805D9FEC:     if_int_eq LW(1) 0
+805D9FF8:       loop_break
+805D9FFC:     endif
+805DA000:   end_loop
+805DA004:   return
+805DA008:   end

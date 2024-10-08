@@ -1,0 +1,75 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [evt_kinoshikowa3 tou_04.o] AT 805E5804 ---
+805E5804:   callc [evt_mario_key_onoff evt_mario.o] 0
+805E5810:   callc [evt_mario_set_pos evt_mario.o] -625 0 -300
+805E5824:   callc [evt_npc_set_position evt_npc.o] ["キノシコワ"] -620 0 -300
+805E583C:   callc [evt_npc_set_ry evt_npc.o] ["キノシコワ"] 270
+805E584C:   callc [evt_mario_set_dir evt_mario.o] 270 0 0
+805E5860:   callc [evt_party_set_dir evt_party.o] 0 270 0
+805E5874:   callc [evt_seq_wait evt_seq.o] 2
+805E5880:   setii LW(1) 6
+805E588C:   callsa [bero_open_door_play_se evt_bero.o]
+805E5894:   callc [evt_sub_intpl_msec_init evt_sub.o] 11 0 -180 500
+805E58AC:   loop 0
+805E58B4:     callc [evt_sub_intpl_msec_get_value evt_sub.o]
+805E58BC:     callss [_6_door_open tou_04.o]
+805E58C4:     if_int_eq LW(1) 0
+805E58D0:       loop_break
+805E58D4:     endif
+805E58D8:   end_loop
+805E58DC:   begin_thread
+805E58E0:     wait_ms 2000
+805E58E8:     setii LW(1) 6
+805E58F4:     callsa [bero_close_door_play_se evt_bero.o]
+805E58FC:     callc [evt_sub_intpl_msec_init evt_sub.o] 11 -180 0 500
+805E5914:     loop 0
+805E591C:       callc [evt_sub_intpl_msec_get_value evt_sub.o]
+805E5924:       callss [_6_door_open tou_04.o]
+805E592C:       if_int_eq LW(1) 0
+805E5938:         loop_break
+805E593C:       endif
+805E5940:     end_loop
+805E5944:   end_thread
+805E5948:   begin_thread
+805E594C:     wait_ms 1000
+805E5954:     callc [evt_mario_mov_pos2 evt_mario.o] -550 -301 75.00
+805E5968:     callc [evt_mario_mov_pos2 evt_mario.o] -550 -500 75.00
+805E597C:     callc [evt_mario_mov_pos2 evt_mario.o] 300 -500 75.00
+805E5990:   end_thread
+805E5994:   begin_thread
+805E5998:     wait_ms 1500
+805E59A0:     callc [evt_party_move_pos2 evt_party.o] 0 -550 -301 75.00
+805E59B8:   end_thread
+805E59BC:   callc [evt_npc_status_onoff evt_npc.o] 1 ["キノシコワ"] 2
+805E59D0:   callc [evt_npc_move_position evt_npc.o] ["キノシコワ"] -550 -301 0 75.00 1
+805E59F0:   callc [evt_npc_move_position evt_npc.o] ["キノシコワ"] -550 -500 0 75.00 1
+805E5A10:   callc [evt_npc_move_position evt_npc.o] ["キノシコワ"] 340 -500 0 75.00 1
+805E5A30:   callc [evt_npc_move_position evt_npc.o] ["キノシコワ"] 340 -530 0 75.00 1
+805E5A50:   setii LW(1) 3
+805E5A5C:   callsa [bero_open_door_play_se evt_bero.o]
+805E5A64:   callc [evt_sub_intpl_msec_init evt_sub.o] 11 0 180 500
+805E5A7C:   loop 0
+805E5A84:     callc [evt_sub_intpl_msec_get_value evt_sub.o]
+805E5A8C:     callss [_3_door_open tou_04.o]
+805E5A94:     if_int_eq LW(1) 0
+805E5AA0:       loop_break
+805E5AA4:     endif
+805E5AA8:   end_loop
+805E5AAC:   setii GSWF(2378) 0
+805E5AB8:   callc [evt_bero_mapchange evt_bero.o] ["tou_07"] 0
+805E5AC8:   return
+805E5ACC:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [_6_door_open tou_04.o] AT 805E2898 ---
+805E2898:   mulf LW(0) -0.44
+805E28A4:   callc [evt_mapobj_rotate evt_map.o] 1 ["door_6"] 0 LW(0) 0
+805E28C0:   return
+805E28C4:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [_3_door_open tou_04.o] AT 805E2778 ---
+805E2778:   mulf LW(0) -0.44
+805E2784:   callc [evt_mapobj_rotate evt_map.o] 1 ["door_3"] 0 LW(0) 0
+805E27A0:   return
+805E27A4:   end

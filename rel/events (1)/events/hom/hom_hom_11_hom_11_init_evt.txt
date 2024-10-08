@@ -1,0 +1,307 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [hom_11_init_evt hom_11.o] AT 805BF6F0 ---
+805BF6F0:   callc [evt_snd_bgmoff evt_snd.o] 512
+805BF6FC:   callc [evt_snd_envon evt_snd.o] 272 ["ENV_STG6_RSH2"]
+805BF70C:   callc [evt_mario_cont_onoff evt_mario.o] 0
+805BF718:   callc [evt_party_cont_onoff evt_party.o] 0 0
+805BF728:   callc [evt_party_cont_onoff evt_party.o] 1 0
+805BF738:   callc [evt_mario_set_pos evt_mario.o] 0 -1000 0
+805BF74C:   callc [evt_party_set_pos evt_party.o] 0 0 -1000 0
+805BF764:   callc [evt_party_set_pos evt_party.o] 1 0 -1000 0
+805BF77C:   if_int_eq GSWF(3578) 0
+805BF788:     callss [hom_10_evt_resha_right hom_10.o]
+805BF790:     callss [hom_10_evt_resha_start3 hom_10.o]
+805BF798:     setii LW(0) 500
+805BF7A4:     setii LW(1) -500
+805BF7B0:     callc [evt_mapobj_flag_onoff evt_map.o] 1 1 ["renketu"] 1
+805BF7C8:     callc [evt_mapobj_flag_onoff evt_map.o] 1 0 ["renketu_1"] 1
+805BF7E0:     callc [evt_mapobj_flag_onoff evt_map.o] 1 0 ["renketu_2"] 1
+805BF7F8:     callc [evt_mapobj_flag_onoff evt_map.o] 1 0 ["renketu_3"] 1
+805BF810:     callc [evt_mapobj_flag_onoff evt_map.o] 1 0 ["renketu_4"] 1
+805BF828:     callc [evt_mapobj_flag_onoff evt_map.o] 1 0 ["renketu_5"] 1
+805BF840:   else
+805BF844:     callss [hom_10_evt_resha_left hom_10.o]
+805BF84C:     callss [hom_10_evt_resha_start4 hom_10.o]
+805BF854:     setii LW(0) 0
+805BF860:     setii LW(1) 1000
+805BF86C:     callc [evt_mapobj_trans evt_map.o] 1 ["train"] -1500 0 0
+805BF888:   endif
+805BF88C:   callc [evt_cam_letter_box_onoff evt_cam.o] 1 1
+805BF89C:   callc [evt_cam3d_evt_set evt_cam.o] LW(0) 300 1400 LW(0) 125 0 0 11
+805BF8C4:   begin_thread
+805BF8C8:     callc [evt_seq_wait evt_seq.o] 2
+805BF8D4:     callc [evt_cam3d_evt_set evt_cam.o] LW(1) 300 1400 LW(1) 125 0 8000 0
+805BF8FC:     wait_ms 4000
+805BF904:     callc [evt_bero_mapchange evt_bero.o] ["rsh_02_b"] ["nidome"]
+805BF914:   end_thread
+805BF918:   return
+805BF91C:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [hom_10_evt_resha_right hom_10.o] AT 805BF370 ---
+805BF370:   callss [hom_10_evt_resha_sub hom_10.o]
+805BF378:   callc [evt_sub_get_mapname evt_sub.o] LW(0)
+805BF384:   if_string_ne LW(0) ["rsh_06_a"]
+805BF390:     callc [evt_mapobj_flag_onoff evt_map.o] 1 1 ["train_7"] 1
+805BF3A8:     callc [evt_mapobj_flag_onoff evt_map.o] 1 1 ["train_8"] 1
+805BF3C0:     callc [evt_mapobj_flag_onoff evt_map.o] 1 1 ["renketu_6"] 1
+805BF3D8:     callc [evt_mapobj_flag_onoff evt_map.o] 1 1 ["renketu_7"] 1
+805BF3F0:   endif
+805BF3F4:   return
+805BF3F8:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [hom_10_evt_resha_start3 hom_10.o] AT 805BED38 ---
+805BED38:   setii GSWF(3583) 1
+805BED44:   setff GW(0) -15.00
+805BED50:   setff GW(1) -15.00
+805BED5C:   return
+805BED60:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [hom_10_evt_resha_left hom_10.o] AT 805BF3FC ---
+805BF3FC:   callss [hom_10_evt_resha_sub hom_10.o]
+805BF404:   callc [evt_mapobj_flag_onoff evt_map.o] 1 1 ["train_1"] 1
+805BF41C:   callc [evt_mapobj_flag_onoff evt_map.o] 1 1 ["train_6"] 1
+805BF434:   callc [evt_mapobj_flag_onoff evt_map.o] 1 1 ["renketu_1"] 1
+805BF44C:   callc [evt_mapobj_flag_onoff evt_map.o] 1 1 ["renketu_5"] 1
+805BF464:   return
+805BF468:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [hom_10_evt_resha_start4 hom_10.o] AT 805BED64 ---
+805BED64:   setii GSWF(3583) 1
+805BED70:   setff GW(0) 15.00
+805BED7C:   setff GW(1) 15.00
+805BED88:   return
+805BED8C:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [hom_10_evt_resha_sub hom_10.o] AT 805BF1D8 ---
+805BF1D8:   setii GSWF(3583) 0
+805BF1E4:   setff GW(0) 0.00
+805BF1F0:   setff GW(1) 0.00
+805BF1FC:   callsa [evt_sharin hom_10.o]
+805BF204:   callsa [evt_clank hom_10.o]
+805BF20C:   setii LF(0) 0
+805BF218:   callc [evt_sub_get_mapname evt_sub.o] LW(0)
+805BF224:   if_string_eq LW(0) ["hom_10"]
+805BF230:     setii LF(0) 1
+805BF23C:   endif
+805BF240:   if_string_eq LW(0) ["hom_11"]
+805BF24C:     setii LF(0) 1
+805BF258:   endif
+805BF25C:   if_string_eq LW(0) ["hom_12"]
+805BF268:     setii LF(0) 1
+805BF274:   endif
+805BF278:   if_string_eq LW(0) ["rsh_06_a"]
+805BF284:     setii LF(0) 1
+805BF290:   endif
+805BF294:   if_int_eq LF(0) 1
+805BF2A0:     callsa [evt_bg hom_10.o]
+805BF2A8:   endif
+805BF2AC:   callsa [evt_hoshi hom_10.o]
+805BF2B4:   callsa [evt_ramp hom_10.o]
+805BF2BC:   callc [evt_map_set_tevcallback evt_map.o] 1 [resha_tev hom_10.o]
+805BF2CC:   mo_set_base_int [pika_tbl hom_10.o]
+805BF2D4:   callc [evt_sub_get_mapname evt_sub.o] LW(0)
+805BF2E0:   if_string_eq LW(0) ["rsh_06_a"]
+805BF2EC:     mo_set_base_int [pika_tbl_rsh_06 hom_10.o]
+805BF2F4:   endif
+805BF2F8:   loop 0
+805BF300:     mo_read_int LW(0)
+805BF308:     if_int_eq LW(0) 0
+805BF314:       loop_break
+805BF318:     endif
+805BF31C:     callc [evt_mapobj_flag_onoff evt_map.o] 1 1 LW(0) 16777216
+805BF334:     callc [evt_mapobj_flag_onoff evt_map.o] 1 0 LW(0) 256
+805BF34C:     callc [evt_mapobj_flag_onoff evt_map.o] 1 1 LW(0) 268435456
+805BF364:   end_loop
+805BF368:   return
+805BF36C:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [evt_sharin hom_10.o] AT 805BDFC4 ---
+805BDFC4:   mo_set_base_int [sharinDt hom_10.o]
+805BDFCC:   loop 0
+805BDFD4:     mo_read_int4 LW(0) LW(1) LW(2) LW(3)
+805BDFE8:     if_int_eq LW(0) 0
+805BDFF4:       loop_break
+805BDFF8:     endif
+805BDFFC:     callsa [evt_sharin_main hom_10.o]
+805BE004:   end_loop
+805BE008:   return
+805BE00C:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [evt_clank hom_10.o] AT 805BE264 ---
+805BE264:   mo_set_base_int [clankDt hom_10.o]
+805BE26C:   loop 0
+805BE274:     mo_read_int4 LW(0) LW(1) LW(2) LW(3)
+805BE288:     mo_read_int LW(4)
+805BE290:     if_int_eq LW(0) 0
+805BE29C:       loop_break
+805BE2A0:     endif
+805BE2A4:     callsa [evt_clank_main hom_10.o]
+805BE2AC:   end_loop
+805BE2B0:   return
+805BE2B4:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [evt_bg hom_10.o] AT 805BE2B8 ---
+805BE2B8:   setff LW(10) 0.00
+805BE2C4:   setff LW(11) 0.00
+805BE2D0:   loop 0
+805BE2D8:     setff LW(0) GW(0)
+805BE2E4:     addf LW(10) LW(0)
+805BE2F0:     if_int_gt LW(10) 800.00
+805BE2FC:       subf LW(10) 1600.00
+805BE308:     endif
+805BE30C:     if_int_lt LW(10) -800.00
+805BE318:       addf LW(10) 1600.00
+805BE324:     endif
+805BE328:     addf LW(11) LW(0)
+805BE334:     if_int_gt LW(11) 2400.00
+805BE340:       subf LW(11) 4800.00
+805BE34C:     endif
+805BE350:     if_int_lt LW(11) -2400.00
+805BE35C:       addf LW(11) 4800.00
+805BE368:     endif
+805BE36C:     callc [evt_mapobj_trans evt_map.o] 1 ["jimen"] LW(10) 0 0
+805BE388:     callc [evt_mapobj_trans evt_map.o] 1 ["yama"] LW(10) 0 0
+805BE3A4:     callc [evt_mapobj_trans evt_map.o] 1 ["iwayama"] LW(11) 0 0
+805BE3C0:     wait_frames 1
+805BE3C8:     loop 0
+805BE3D0:       if_int_eq GSWF(3583) 1
+805BE3DC:         loop_break
+805BE3E0:       endif
+805BE3E4:       wait_frames 1
+805BE3EC:     end_loop
+805BE3F0:   end_loop
+805BE3F4:   return
+805BE3F8:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [evt_hoshi hom_10.o] AT 805BE3FC ---
+805BE3FC:   setff LW(10) 0.00
+805BE408:   loop 0
+805BE410:     setff LW(9) GW(0)
+805BE41C:     divf LW(9) 30.00
+805BE428:     mulf LW(9) 57.29
+805BE434:     addf LW(10) LW(9)
+805BE440:     if_int_gt LW(10) 360.00
+805BE44C:       subf LW(10) 360.00
+805BE458:     endif
+805BE45C:     if_int_lt LW(10) 0.00
+805BE468:       addf LW(10) 360.00
+805BE474:     endif
+805BE478:     callc [evt_mapobj_rotate evt_map.o] 0 ["hosi_right"] LW(10) 0 0
+805BE494:     callc [evt_mapobj_rotate evt_map.o] 0 ["hosi_left"] LW(10) 0 0
+805BE4B0:     callc [evt_mapobj_rotate evt_map.o] 0 ["hosi_center"] LW(10) 0 0
+805BE4CC:     callc [evt_mapobj_rotate evt_map.o] 0 ["hosi_right_c"] LW(10) 0 0
+805BE4E8:     callc [evt_mapobj_rotate evt_map.o] 0 ["hosi_left_c"] LW(10) 0 0
+805BE504:     callc [evt_mapobj_rotate evt_map.o] 0 ["hosi_center_c"] LW(10) 0 0
+805BE520:     wait_frames 1
+805BE528:     loop 0
+805BE530:       if_int_eq GSWF(3583) 1
+805BE53C:         loop_break
+805BE540:       endif
+805BE544:       wait_frames 1
+805BE54C:     end_loop
+805BE550:   end_loop
+805BE554:   return
+805BE558:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [evt_ramp hom_10.o] AT 805BF0F0 ---
+805BF0F0:   loop 0
+805BF0F8:     callc [ramp_r hom_10.o]
+805BF100:     callc [evt_mapobj_rotate evt_map.o] 1 ["ranpu"] 0 0 LW(10)
+805BF11C:     callc [evt_mapobj_rotate evt_map.o] 1 ["ranpu_c"] 0 0 LW(10)
+805BF138:     wait_frames 1
+805BF140:     loop 0
+805BF148:       if_int_eq GSWF(3583) 1
+805BF154:         loop_break
+805BF158:       endif
+805BF15C:       wait_frames 1
+805BF164:     end_loop
+805BF168:   end_loop
+805BF16C:   return
+805BF170:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [evt_sharin_main hom_10.o] AT 805BDE68 ---
+805BDE68:   setff LW(10) 0.00
+805BDE74:   switchi LW(1)
+805BDE7C:     case_int_eq 0
+805BDE84:       setff LW(11) 23.89
+805BDE90:     case_int_eq 1
+805BDE98:       setff LW(11) 31.14
+805BDEA4:     case_int_eq 2
+805BDEAC:       setff LW(11) 55.02
+805BDEB8:   end_switch
+805BDEBC:   loop 0
+805BDEC4:     switchi LW(2)
+805BDECC:       case_int_eq 0
+805BDED4:         setff LW(9) GW(0)
+805BDEE0:       case_int_eq 1
+805BDEE8:         setff LW(9) GW(1)
+805BDEF4:     end_switch
+805BDEF8:     divf LW(9) LW(11)
+805BDF04:     mulf LW(9) 57.29
+805BDF10:     addf LW(10) LW(9)
+805BDF1C:     if_int_gt LW(10) 360.00
+805BDF28:       subf LW(10) 360.00
+805BDF34:     endif
+805BDF38:     if_int_lt LW(10) 0.00
+805BDF44:       addf LW(10) 360.00
+805BDF50:     endif
+805BDF54:     setff LW(12) LW(10)
+805BDF60:     mulf LW(12) LW(3)
+805BDF6C:     callc [evt_mapobj_rotate evt_map.o] 1 LW(0) 0 0 LW(12)
+805BDF88:     wait_frames 1
+805BDF90:     loop 0
+805BDF98:       if_int_eq GSWF(3583) 1
+805BDFA4:         loop_break
+805BDFA8:       endif
+805BDFAC:       wait_frames 1
+805BDFB4:     end_loop
+805BDFB8:   end_loop
+805BDFBC:   return
+805BDFC0:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [evt_clank_main hom_10.o] AT 805BE0C4 ---
+805BE0C4:   setff LW(10) 0.00
+805BE0D0:   switchi LW(1)
+805BE0D8:     case_int_eq 0
+805BE0E0:       setff LW(11) 23.89
+805BE0EC:     case_int_eq 1
+805BE0F4:       setff LW(11) 31.14
+805BE100:     case_int_eq 2
+805BE108:       setff LW(11) 55.02
+805BE114:   end_switch
+805BE118:   loop 0
+805BE120:     switchi LW(2)
+805BE128:       case_int_eq 0
+805BE130:         setff LW(9) GW(0)
+805BE13C:       case_int_eq 1
+805BE144:         setff LW(9) GW(1)
+805BE150:     end_switch
+805BE154:     divf LW(9) LW(11)
+805BE160:     mulf LW(9) 57.29
+805BE16C:     addf LW(10) LW(9)
+805BE178:     if_int_gt LW(10) 360.00
+805BE184:       subf LW(10) 360.00
+805BE190:     endif
+805BE194:     if_int_lt LW(10) 0.00
+805BE1A0:       addf LW(10) 360.00
+805BE1AC:     endif
+805BE1B0:     setff LW(12) LW(10)
+805BE1BC:     mulf LW(12) LW(4)
+805BE1C8:     callc [evt_sub_get_sincos evt_sub.o] LW(12) LW(13) LW(14)
+805BE1DC:     mulf LW(13) LW(3)
+805BE1E8:     mulf LW(14) LW(3)
+805BE1F4:     subf LW(14) LW(3)
+805BE200:     mulf LW(14) -1.00
+805BE20C:     callc [evt_mapobj_trans evt_map.o] 1 LW(0) LW(14) LW(13) 0.00
+805BE228:     wait_frames 1
+805BE230:     loop 0
+805BE238:       if_int_eq GSWF(3583) 1
+805BE244:         loop_break
+805BE248:       endif
+805BE24C:       wait_frames 1
+805BE254:     end_loop
+805BE258:   end_loop
+805BE25C:   return
+805BE260:   end

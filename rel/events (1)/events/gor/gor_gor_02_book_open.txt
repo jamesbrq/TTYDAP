@@ -1,0 +1,18 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [book_open gor_02.o] AT 80604950 ---
+80604950:   callc [evt_mapobj_get_position evt_map.o] ["S_open_book_r"] LW(0) LW(1) LW(2)
+80604968:   callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_STG0_OPEN_BOOK1"] LW(0) LW(1) LW(2) 0
+80604984:   callc [evt_sub_intpl_msec_init evt_sub.o] 11 360 180 500
+8060499C:   loop 0
+806049A4:     callc [evt_sub_intpl_msec_get_value evt_sub.o]
+806049AC:     callc [evt_mapobj_rotate evt_map.o] 1 ["S_open_book_r"] 0 0 LW(0)
+806049C8:     if_int_eq LW(1) 0
+806049D4:       loop_break
+806049D8:     endif
+806049DC:     wait_frames 1
+806049E4:   end_loop
+806049E8:   wait_ms 500
+806049F0:   return
+806049F4:   end

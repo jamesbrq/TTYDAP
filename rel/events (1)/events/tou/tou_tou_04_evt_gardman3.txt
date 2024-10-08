@@ -1,0 +1,112 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [evt_gardman3 tou_04.o] AT 805E6014 ---
+805E6014:   callc [evt_mario_key_onoff evt_mario.o] 0
+805E6020:   callc [evt_seq_wait evt_seq.o] 2
+805E602C:   setii LW(1) 6
+805E6038:   callsa [bero_open_door_play_se evt_bero.o]
+805E6040:   callc [evt_sub_intpl_msec_init evt_sub.o] 11 0 -180 500
+805E6058:   loop 0
+805E6060:     callc [evt_sub_intpl_msec_get_value evt_sub.o]
+805E6068:     callss [_6_door_open tou_04.o]
+805E6070:     if_int_eq LW(1) 0
+805E607C:       loop_break
+805E6080:     endif
+805E6084:   end_loop
+805E6088:   begin_thread
+805E608C:     callc [evt_npc_status_onoff evt_npc.o] 1 ["ガードマン３"] 2
+805E60A0:     callc [evt_npc_move_position evt_npc.o] ["ガードマン３"] -550 -300 0 60.00 1
+805E60C0:     callc [evt_npc_move_position evt_npc.o] ["ガードマン３"] -550 -400 0 60.00 1
+805E60E0:   end_thread
+805E60E4:   wait_ms 1000
+805E60EC:   begin_thread
+805E60F0:     callc [evt_mario_mov_pos2 evt_mario.o] -550 -300 60.00
+805E6104:     callc [evt_mario_set_dir_npc evt_mario.o] ["ガードマン３"]
+805E6110:   end_thread
+805E6114:   wait_ms 500
+805E611C:   callc [evt_party_move_pos2 evt_party.o] 0 -550 -300 60.00
+805E6134:   callc [evt_party_move_pos2 evt_party.o] 0 -550 -270 60.00
+805E614C:   callc [evt_party_set_dir_npc evt_party.o] 0 ["ガードマン３"]
+805E615C:   setii LW(1) 6
+805E6168:   callsa [bero_close_door_play_se evt_bero.o]
+805E6170:   callc [evt_sub_intpl_msec_init evt_sub.o] 11 -180 0 500
+805E6188:   loop 0
+805E6190:     callc [evt_sub_intpl_msec_get_value evt_sub.o]
+805E6198:     callss [_6_door_open tou_04.o]
+805E61A0:     if_int_eq LW(1) 0
+805E61AC:       loop_break
+805E61B0:     endif
+805E61B4:   end_loop
+805E61B8:   callc [evt_party_stop evt_party.o] 0
+805E61C4:   wait_ms 300
+805E61CC:   callc [evt_msg_print_party evt_msg.o] ["stg3_tou_407"]
+805E61D8:   wait_ms 300
+805E61E0:   callc [evt_party_run evt_party.o] 0
+805E61EC:   callc [evt_set_dir_to_target evt_npc.o] ["ガードマン３"] ["mario"]
+805E61FC:   callc [evt_msg_print evt_msg.o] 0 ["stg3_tou_408"] 0 ["ガードマン３"]
+805E6214:   wait_ms 300
+805E621C:   callc [evt_npc_flag_onoff evt_npc.o] 1 ["ガードマン４"] 32
+805E6230:   callc [evt_npc_flag_onoff evt_npc.o] 1 ["ガードマン５"] 32
+805E6244:   callc [evt_npc_flag_onoff evt_npc.o] 1 ["ガードマン６"] 32
+805E6258:   callc [evt_npc_flag_onoff evt_npc.o] 1 ["ガードマン７"] 32
+805E626C:   callc [evt_npc_flag_onoff evt_npc.o] 1 ["ガードマン８"] 32
+805E6280:   callc [evt_npc_flag_onoff evt_npc.o] 1 ["ガードマン９"] 32
+805E6294:   setii GF(0) 0
+805E62A0:   begin_thread
+805E62A4:     loop 0
+805E62AC:       callc [evt_party_get_pos evt_party.o] 0 LW(0) LW(1) LW(2)
+805E62C4:       callc [evt_sub_get_dist evt_sub.o] LW(0) LW(2) 0 -500 LW(10)
+805E62E0:       if_int_lt LW(10) 100
+805E62EC:         loop_break
+805E62F0:       endif
+805E62F4:       wait_frames 1
+805E62FC:     end_loop
+805E6300:     callc [evt_msg_toge evt_msg.o] 1 0 0 0
+805E6318:     callc [evt_msg_print_party evt_msg.o] ["stg3_tou_408_01"]
+805E6324:     setii GF(0) 1
+805E6330:   end_thread
+805E6334:   begin_thread
+805E6338:     callc [evt_npc_move_position evt_npc.o] ["ガードマン３"] -550 -520 0 90.00 1
+805E6358:     callc [evt_npc_move_position evt_npc.o] ["ガードマン３"] 550 -520 0 90.00 1
+805E6378:     callc [evt_npc_move_position evt_npc.o] ["ガードマン３"] 570 280 0 90.00 1
+805E6398:   end_thread
+805E639C:   callc [evt_mario_mov_pos2 evt_mario.o] -550 -515 90.00
+805E63B0:   callc [evt_mario_mov_pos2 evt_mario.o] 550 -515 90.00
+805E63C4:   callc [evt_mario_mov_pos2 evt_mario.o] 570 250 90.00
+805E63D8:   loop 0
+805E63E0:     if_int_eq GF(0) 1
+805E63EC:       loop_break
+805E63F0:     endif
+805E63F4:     wait_frames 1
+805E63FC:   end_loop
+805E6400:   setii LW(1) 1
+805E640C:   callsa [bero_open_door_play_se evt_bero.o]
+805E6414:   callc [evt_sub_intpl_msec_init evt_sub.o] 11 0 180 500
+805E642C:   loop 0
+805E6434:     callc [evt_sub_intpl_msec_get_value evt_sub.o]
+805E643C:     callss [_1_door_open tou_04.o]
+805E6444:     if_int_eq LW(1) 0
+805E6450:       loop_break
+805E6454:     endif
+805E6458:   end_loop
+805E645C:   begin_thread
+805E6460:     callc [evt_npc_move_position evt_npc.o] ["ガードマン３"] 590 300 0 60.00 1
+805E6480:     callc [evt_mario_mov_pos2 evt_mario.o] 590 300 90.00
+805E6494:   end_thread
+805E6498:   setii GSWF(2381) 0
+805E64A4:   callc [evt_bero_mapchange evt_bero.o] ["tou_11"] 0
+805E64B4:   return
+805E64B8:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [_6_door_open tou_04.o] AT 805E2898 ---
+805E2898:   mulf LW(0) -0.44
+805E28A4:   callc [evt_mapobj_rotate evt_map.o] 1 ["door_6"] 0 LW(0) 0
+805E28C0:   return
+805E28C4:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [_1_door_open tou_04.o] AT 805E26B8 ---
+805E26B8:   mulf LW(0) -0.44
+805E26C4:   callc [evt_mapobj_rotate evt_map.o] 1 ["door_1"] 0 LW(0) 0
+805E26E0:   return
+805E26E4:   end

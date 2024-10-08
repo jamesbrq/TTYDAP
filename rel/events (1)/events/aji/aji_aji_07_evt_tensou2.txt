@@ -1,0 +1,73 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [evt_tensou2 aji_07.o] AT 805E3E44 ---
+805E3E44:   callc [evt_map_playanim evt_map.o] ["anm_wa-p"] 1 0
+805E3E58:   callc [evt_mapobj_flag_onoff evt_map.o] 1 0 ["wa_pu"] 1
+805E3E70:   callc [evt_hit_get_position evt_hit.o] ["A_tensou"] LW(0) LW(1) LW(2)
+805E3E88:   callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_STG7_WARP_LIGHT1"] LW(0) LW(1) LW(2) LW(9)
+805E3EA4:   begin_thread
+805E3EA8:     callc [evt_sub_intpl_msec_init evt_sub.o] 5 0 5760 4000
+805E3EC0:     loop 0
+805E3EC8:       callc [evt_sub_intpl_msec_get_value evt_sub.o]
+805E3ED0:       modi LW(0) 360
+805E3EDC:       callc [evt_party_set_dispdir evt_party.o] 0 LW(0)
+805E3EEC:       addi LW(0) 180
+805E3EF8:       modi LW(0) 360
+805E3F04:       callc [evt_mario_set_dispdir evt_mario.o] LW(0)
+805E3F10:       wait_frames 1
+805E3F18:       if_int_eq LW(1) 0
+805E3F24:         loop_break
+805E3F28:       endif
+805E3F2C:     end_loop
+805E3F30:   end_thread
+805E3F34:   begin_thread
+805E3F38:     callc [evt_sub_intpl_msec_init evt_sub.o] 12 0 100 800
+805E3F50:     loop 0
+805E3F58:       callc [evt_sub_intpl_msec_get_value evt_sub.o]
+805E3F60:       divf LW(0) 100.00
+805E3F6C:       callc [scale_func aji_07.o] LW(0)
+805E3F78:       wait_frames 1
+805E3F80:       if_int_eq LW(1) 0
+805E3F8C:         loop_break
+805E3F90:       endif
+805E3F94:     end_loop
+805E3F98:   end_thread
+805E3F9C:   callc [evt_mario_get_pos evt_mario.o] 0 LW(2) LW(3) LW(4)
+805E3FB4:   callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_STG7_WARP1_2"] LW(2) LW(3) LW(4) 0
+805E3FD0:   callc [evt_mario_get_pos evt_mario.o] 0 LW(2) LW(3) LW(4)
+805E3FE8:   callc [evt_party_get_pos evt_party.o] 0 LW(5) LW(6) LW(7)
+805E4000:   callc [evt_sub_intpl_msec_init evt_sub.o] 12 70 0 1000
+805E4018:   loop 0
+805E4020:     callc [evt_sub_intpl_msec_get_value evt_sub.o]
+805E4028:     setii LW(8) LW(0)
+805E4034:     addi LW(0) LW(3)
+805E4040:     callc [evt_mario_set_pos evt_mario.o] LW(2) LW(0) LW(4)
+805E4054:     addi LW(8) LW(6)
+805E4060:     callc [evt_party_set_pos evt_party.o] 0 LW(5) LW(8) LW(7)
+805E4078:     if_int_eq LW(1) 0
+805E4084:       loop_break
+805E4088:     endif
+805E408C:     wait_frames 1
+805E4094:   end_loop
+805E4098:   wait_ms 3000
+805E40A0:   callc [evt_snd_sfxoff evt_snd.o] LW(9)
+805E40AC:   callc [evt_sub_intpl_msec_init evt_sub.o] 11 255 0 1000
+805E40C4:   loop 0
+805E40CC:     callc [evt_sub_intpl_msec_get_value evt_sub.o]
+805E40D4:     callc [evt_mapobj_color evt_map.o] 1 ["wa_pu"] 255 255 255 LW(0)
+805E40F4:     wait_frames 1
+805E40FC:     if_int_eq LW(1) 0
+805E4108:       loop_break
+805E410C:     endif
+805E4110:   end_loop
+805E4114:   callc [evt_mapobj_flag_onoff evt_map.o] 1 1 ["wa_pu"] 1
+805E412C:   callc [evt_mapobj_color evt_map.o] 1 ["wa_pu"] 255 255 255 255
+805E414C:   callc [evt_mario_cont_onoff evt_mario.o] 1
+805E4158:   callc [evt_party_cont_onoff evt_party.o] 0 1
+805E4168:   callc [evt_party_cont_onoff evt_party.o] 1 1
+805E4178:   callc [evt_mario_key_onoff evt_mario.o] 1
+805E4184:   callc [evt_party_run evt_party.o] 0
+805E4190:   callc [evt_party_run evt_party.o] 1
+805E419C:   return
+805E41A0:   end

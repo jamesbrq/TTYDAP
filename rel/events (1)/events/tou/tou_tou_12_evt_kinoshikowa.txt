@@ -1,0 +1,36 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [evt_kinoshikowa tou_12.o] AT 805F94D8 ---
+805F94D8:   callc [evt_npc_set_position evt_npc.o] ["キノシコワ"] -200 0 10
+805F94F0:   callc [evt_mapobj_rotate evt_map.o] 1 ["door_1"] 0 30 0
+805F950C:   loop 0
+805F9514:     callc [evt_mario_get_pos evt_mario.o] 0 LW(0) LW(1) LW(2)
+805F952C:     if_int_lt LW(0) -55
+805F9538:       loop_break
+805F953C:     endif
+805F9540:     wait_frames 1
+805F9548:   end_loop
+805F954C:   callc [evt_mario_key_onoff evt_mario.o] 0
+805F9558:   callc [evt_mario_normalize evt_mario.o]
+805F9560:   callc [evt_eff_fukidashi evt_eff.o] 1 0 ["キノシコワ"] 0 0 0 0 0 0 0 0
+805F9594:   wait_ms 500
+805F959C:   begin_thread
+805F95A0:     callc [evt_npc_status_onoff evt_npc.o] 1 ["キノシコワ"] 2
+805F95B4:     callc [evt_npc_move_position evt_npc.o] ["キノシコワ"] -250 10 0 80.00 1
+805F95D4:   end_thread
+805F95D8:   callc [evt_mapobj_get_position evt_map.o] ["door_1"] LW(0) LW(1) LW(2)
+805F95F0:   callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_DOOR_SHUT_WOOD2"] LW(0) LW(1) LW(2) 0
+805F960C:   setii LW(0) 30
+805F9618:   loop 10
+805F9620:     subi LW(0) 3
+805F962C:     callc [evt_mapobj_rotate evt_map.o] 1 ["door_1"] 0 LW(0) 0
+805F9648:     wait_frames 1
+805F9650:   end_loop
+805F9654:   callc [evt_party_stop evt_party.o] 0
+805F9660:   wait_ms 300
+805F9668:   callc [evt_msg_print_party evt_msg.o] ["stg3_tou_307_13_00"]
+805F9674:   callc [evt_mario_key_onoff evt_mario.o] 1
+805F9680:   callc [evt_party_run evt_party.o] 0
+805F968C:   return
+805F9690:   end

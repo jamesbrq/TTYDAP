@@ -1,0 +1,44 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [dmg_avoid_counter_thorn_head_event unit_yami_togekuri.o] AT 80CA6740 ---
+80CA6740:   wait_frames 30
+80CA6748:   callc [btlevtcmd_GetPos battle_event_cmd.o] -2 LW(0) LW(1) LW(2)
+80CA6760:   callc [btlevtcmd_CheckStatus battle_event_cmd.o] -2 10 LW(3)
+80CA6774:   if_int_ne LW(3) 0
+80CA6780:     addi LW(1) 50
+80CA678C:     goto 90
+80CA6794:   endif
+80CA6798:   callc [btlevtcmd_CheckStatus battle_event_cmd.o] -2 11 LW(3)
+80CA67AC:   if_int_ne LW(3) 0
+80CA67B8:     addi LW(1) 30
+80CA67C4:     goto 90
+80CA67CC:   endif
+80CA67D0:   addi LW(1) 40
+80CA67DC:   goto 90
+80CA67E4: 90:
+80CA67EC:   callc [evt_eff evt_eff.o] [zero_jon_0000959c unit_yami_togekuri.o] ["toge_flush"] 0 LW(0) LW(1) LW(2) 60 0 0 0 0 0 0 0
+80CA682C:   callc [btlevtcmd_GetUnitId battle_event_cmd.o] -6 LW(0)
+80CA683C:   if_int_ne LW(0) -1
+80CA6848:     callc [btlevtcmd_GetUnitWork battle_event_cmd.o] -6 0 LW(0)
+80CA685C:     if_int_eq LW(0) 0
+80CA6868:       callc [get_attacker unit_yami_togekuri.o] LW(0)
+80CA6874:       if_int_eq LW(0) 2
+80CA6880:         return
+80CA6884:       endif
+80CA6888:       wait_ms 2500
+80CA6890:       callc [btlevtcmd_StatusWindowOnOff battle_event_cmd.o] 0
+80CA689C:       callc [btlevtcmd_ChangeFaceDirection battle_event_cmd.o] -6 -1
+80CA68AC:       callc [get_attacker unit_yami_togekuri.o] LW(0)
+80CA68B8:       if_int_eq LW(0) 0
+80CA68C4:         callc [evt_msg_print evt_msg.o] 2 ["mac_0_092_06"] 0 -6
+80CA68DC:       else
+80CA68E0:         callc [evt_msg_print evt_msg.o] 2 ["mac_0_092_07"] 0 -6
+80CA68F8:       endif
+80CA68FC:       callc [btlevtcmd_SetUnitWork battle_event_cmd.o] -6 0 1
+80CA6910:       callc [btlevtcmd_ChangeFaceDirection battle_event_cmd.o] -6 1
+80CA6920:       callc [btlevtcmd_StatusWindowOnOff battle_event_cmd.o] 1
+80CA692C:     endif
+80CA6930:   endif
+80CA6934:   return
+80CA6938:   end

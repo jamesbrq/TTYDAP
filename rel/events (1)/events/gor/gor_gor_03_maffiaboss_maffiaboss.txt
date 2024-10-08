@@ -1,0 +1,124 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [maffiaboss_maffiaboss gor_03.o] AT 80608FDC ---
+80608FDC:   loop 0
+80608FE4:     callc [evt_mario_get_pos evt_mario.o] 0 LW(0) LW(1) LW(2)
+80608FFC:     if_int_ge LW(0) -296
+80609008:       if_int_le LW(0) -104
+80609014:         if_int_ge LW(1) 155
+80609020:           if_int_ge LW(2) -180
+8060902C:             if_int_le LW(2) -53
+80609038:               loop_break
+8060903C:             endif
+80609040:           endif
+80609044:         endif
+80609048:       endif
+8060904C:     endif
+80609050:     wait_frames 1
+80609058:   end_loop
+8060905C:   callc [evt_mario_key_onoff evt_mario.o] 0
+80609068:   callc [evt_mario_normalize evt_mario.o]
+80609070:   setii LSWF(3) 1
+8060907C:   callc [evt_npc_flag_onoff evt_npc.o] 1 ["マフィア１"] 1073741856
+80609090:   callc [evt_npc_flag_onoff evt_npc.o] 1 ["マフィア２"] 1073741856
+806090A4:   setii GF(0) 1
+806090B0:   begin_thread
+806090B4:     callc [evt_mario_mov_pos2 evt_mario.o] -210 -165 120.00
+806090C8:     callc [evt_mario_set_dir evt_mario.o] 90 200 0
+806090DC:     setii GF(0) 0
+806090E8:   end_thread
+806090EC:   begin_thread
+806090F0:     callc [evt_party_stop evt_party.o] 0
+806090FC:     callc [evt_party_move_pos2 evt_party.o] 0 -180 -180 120.00
+80609114:     callc [evt_party_set_dir evt_party.o] 0 90 200
+80609128:   end_thread
+8060912C:   callc [evt_msg_print evt_msg.o] 0 ["mac_2_045"] 0 ["マフィアボス"]
+80609144:   wait_until GF(0)
+8060914C:   callc [evt_mario_get_pos evt_mario.o] 0 LW(0) LW(1) LW(2)
+80609164:   callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_VOICE_MARIO_NOD1_2"] LW(0) LW(1) LW(2) 0
+80609180:   callc [evt_mario_set_pose evt_mario.o] ["M_I_2"]
+8060918C:   wait_ms 500
+80609194:   callc [evt_cam3d_evt_set evt_cam.o] -485 250 -95 -188 205 -95 500 11
+806091BC:   wait_ms 500
+806091C4:   callc [evt_msg_print evt_msg.o] 0 ["mac_2_046"] 0 ["マフィアボス"]
+806091DC:   callc [evt_cam3d_evt_set evt_cam.o] -683 289 -160 -189 215 -160 0 11
+80609204:   callc [evt_npc_get_position evt_npc.o] ["マフィア１"] LW(0) LW(1) LW(2)
+8060921C:   setii LW(10) LW(0)
+80609228:   addi LW(10) -20
+80609234:   callc [evt_npc_move_position evt_npc.o] ["マフィア１"] LW(10) LW(2) 0 60.00 0
+80609254:   callc [evt_msg_print evt_msg.o] 0 ["mac_2_047"] 0 ["マフィア１"]
+8060926C:   begin_thread
+80609270:     callc [evt_npc_move_position evt_npc.o] ["マフィア１"] LW(0) LW(2) 0 60.00 0
+80609290:   end_thread
+80609294:   callc [evt_npc_get_position evt_npc.o] ["マフィア２"] LW(0) LW(1) LW(2)
+806092AC:   setii LW(10) LW(0)
+806092B8:   addi LW(10) -20
+806092C4:   callc [evt_npc_move_position evt_npc.o] ["マフィア２"] LW(10) LW(2) 0 60.00 0
+806092E4:   callc [evt_msg_print evt_msg.o] 0 ["mac_2_048"] 0 ["マフィア２"]
+806092FC:   callc [evt_npc_move_position evt_npc.o] ["マフィア２"] LW(0) LW(2) 0 60.00 0
+8060931C:   callc [evt_msg_print evt_msg.o] 0 ["mac_2_049"] 0 ["マフィアボス"]
+80609334:   begin_thread
+80609338:     callc [evt_mario_get_pos evt_mario.o] 0 LW(0) LW(1) LW(2)
+80609350:     callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_VOICE_MARIO_NOD1_2"] LW(0) LW(1) LW(2) 0
+8060936C:   end_thread
+80609370:   callc [evt_mario_set_pose evt_mario.o] ["M_I_2"]
+8060937C:   wait_ms 1000
+80609384:   callc [evt_mario_set_pose evt_mario.o] ["M_S_1"]
+80609390:   wait_ms 500
+80609398:   callc [evt_msg_print evt_msg.o] 0 ["mac_2_050"] 0 ["マフィアボス"]
+806093B0:   callc [evt_mario_set_pose evt_mario.o] ["M_N_2"]
+806093BC:   wait_ms 500
+806093C4:   callc [evt_mario_set_pose evt_mario.o] ["M_S_1"]
+806093D0:   callc [evt_msg_print evt_msg.o] 0 ["mac_2_051"] 0 ["マフィア１"]
+806093E8:   callc [evt_msg_print evt_msg.o] 0 ["mac_2_052"] 0 ["マフィア２"]
+80609400:   callc [evt_party_move_pos2 evt_party.o] 0 -170 -175 120.00
+80609418:   callc [evt_msg_print_party evt_msg.o] ["mac_2_053"]
+80609424:   callc [evt_cam3d_evt_set evt_cam.o] -509 252 -125 -188 202 -125 500 11
+8060944C:   wait_ms 800
+80609454:   callc [evt_msg_print evt_msg.o] 0 ["mac_2_056"] 0 ["マフィアボス"]
+8060946C:   wait_ms 250
+80609474:   callc [evt_msg_print_party evt_msg.o] ["mac_2_057"]
+80609480:   wait_ms 333
+80609488:   callc [evt_msg_print evt_msg.o] 0 ["mac_2_060"] 0 ["マフィアボス"]
+806094A0:   callc [evt_cam3d_evt_set evt_cam.o] -509 252 -230 -188 202 -230 500 11
+806094C8:   wait_ms 800
+806094D0:   callc [evt_npc_get_position evt_npc.o] ["マフィア１"] LW(0) LW(1) LW(2)
+806094E8:   setii LW(10) LW(0)
+806094F4:   addi LW(10) -20
+80609500:   callc [evt_npc_move_position evt_npc.o] ["マフィア１"] LW(10) LW(2) 0 60.00 0
+80609520:   callc [evt_msg_print evt_msg.o] 0 ["mac_2_061"] 0 ["マフィア１"]
+80609538:   begin_thread
+8060953C:     callc [evt_npc_move_position evt_npc.o] ["マフィア１"] LW(0) LW(2) 0 60.00 0
+8060955C:   end_thread
+80609560:   callc [evt_npc_get_position evt_npc.o] ["マフィア２"] LW(0) LW(1) LW(2)
+80609578:   setii LW(10) LW(0)
+80609584:   addi LW(10) -20
+80609590:   callc [evt_npc_move_position evt_npc.o] ["マフィア２"] LW(10) LW(2) 0 60.00 0
+806095B0:   callc [evt_msg_print evt_msg.o] 0 ["mac_2_062"] 0 ["マフィア２"]
+806095C8:   callc [evt_npc_move_position evt_npc.o] ["マフィア２"] LW(0) LW(2) 0 60.00 0
+806095E8:   callc [evt_msg_print evt_msg.o] 0 ["mac_2_063"] 0 ["マフィアボス"]
+80609600:   callc [evt_cam3d_evt_set evt_cam.o] -683 289 -160 -189 215 -160 0 11
+80609628:   wait_ms 333
+80609630:   callc [evt_msg_print evt_msg.o] 0 ["mac_2_064"] 0 ["マフィア１"]
+80609648:   callc [evt_msg_print evt_msg.o] 0 ["mac_2_065"] 0 ["マフィア２"]
+80609660:   wait_ms 500
+80609668:   callc [evt_msg_print evt_msg.o] 0 ["mac_2_066"] 0 ["マフィアボス"]
+80609680:   callc [evt_cam3d_evt_set evt_cam.o] -509 252 -125 -188 202 -125 500 11
+806096A8:   wait_ms 800
+806096B0:   callc [evt_msg_print evt_msg.o] 0 ["mac_2_067"] 0 ["マフィアボス"]
+806096C8:   callc [evt_cam3d_evt_set evt_cam.o] -385 230 -83 -187 200 -83 500 11
+806096F0:   begin_thread
+806096F4:     callc [evt_env_blur_on evt_env.o] 1 500
+80609704:   end_thread
+80609708:   wait_ms 800
+80609710:   callc [evt_msg_print evt_msg.o] 0 ["mac_2_068"] 0 ["マフィアボス"]
+80609728:   callc [evt_cam3d_evt_off evt_cam.o] 500 11
+80609738:   callc [evt_npc_flag_onoff evt_npc.o] 0 ["マフィア１"] 1073741856
+8060974C:   callc [evt_npc_flag_onoff evt_npc.o] 0 ["マフィア２"] 1073741856
+80609760:   setii GSW(0) 122
+8060976C:   setii LSWF(3) 0
+80609778:   callc [evt_party_run evt_party.o] 0
+80609784:   callc [evt_mario_key_onoff evt_mario.o] 1
+80609790:   return
+80609794:   end

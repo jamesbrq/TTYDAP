@@ -1,0 +1,50 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [bigdoor_event dou_05.o] AT 805C5714 ---
+805C5714:   callc [evt_mario_key_onoff evt_mario.o] 0
+805C5720:   begin_thread
+805C5724:     callc [evt_mario_wait_landon evt_mario.o]
+805C572C:     callc [evt_mario_set_mov_spd evt_mario.o] 0.00
+805C5738:   end_thread
+805C573C:   callc [evt_cam3d_evt_set evt_cam.o] 150 432 40 0 337 -480 500 11
+805C5764:   wait_ms 1000
+805C576C:   begin_thread
+805C5770:     callc [evt_cam_shake evt_cam.o] 4 0.00 0.00 200
+805C5788:     wait_ms 200
+805C5790:     callc [evt_cam_shake evt_cam.o] 4 0.00 0.00 200
+805C57A8:     wait_ms 200
+805C57B0:     callc [evt_cam_shake evt_cam.o] 4 0.00 0.00 200
+805C57C8:     wait_ms 200
+805C57D0:     callc [evt_cam_shake evt_cam.o] 4 0.00 0.00 200
+805C57E8:     wait_ms 200
+805C57F0:     callc [evt_cam_shake evt_cam.o] 4 0.00 0.00 400
+805C5808:   end_thread
+805C580C:   callc [evt_snd_sfxon evt_snd.o] ["SFX_SLIDE_DOOR1_UP"] LW(10)
+805C581C:   callc [evt_sub_intpl_msec_init evt_sub.o] 0 0 100 2000
+805C5834:   setff LW(3) 0.00
+805C5840:   loop 0
+805C5848:     callc [evt_sub_intpl_msec_get_value_para evt_sub.o] LW(0) LW(1)
+805C5858:     if_int_eq LW(1) 0
+805C5864:       loop_break
+805C5868:     endif
+805C586C:     callc [evt_mapobj_trans evt_map.o] 0 ["tetu"] 1 LW(0) 0
+805C5888:     wait_frames 1
+805C5890:   end_loop
+805C5894:   callc [evt_snd_sfxoff evt_snd.o] LW(10)
+805C58A0:   callc [evt_snd_sfxon evt_snd.o] ["SFX_SLIDE_DOOR1_DOWN"] 0
+805C58B0:   begin_thread
+805C58B4:     callc [evt_cam_shake evt_cam.o] 4 0.01 0.00 250
+805C58CC:   end_thread
+805C58D0:   wait_ms 1500
+805C58D8:   callc [evt_msg_toge evt_msg.o] 1 0 0 0
+805C58F0:   callc [evt_snd_sfxon evt_snd.o] ["SFX_STG5_ELMOS_VOICE1"] 0
+805C5900:   callc [evt_msg_print evt_msg.o] 0 ["stg5_dou_10"] 0 0
+805C5918:   setii LW(0) ["w_bero_3"]
+805C5924:   callss [bero_case_switch_on evt_bero.o]
+805C592C:   callc [evt_hitobj_attr_onoff evt_hit.o] 1 1 ["w_bero_3"] 4
+805C5944:   setii GSW(0) 245
+805C5950:   callc [evt_cam3d_evt_off evt_cam.o] 500 11
+805C5960:   callc [evt_mario_key_onoff evt_mario.o] 1
+805C596C:   return
+805C5970:   end

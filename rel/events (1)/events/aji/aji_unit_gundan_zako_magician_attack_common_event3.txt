@@ -1,0 +1,76 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [attack_common_event3 unit_gundan_zako_magician.o] AT 80608CC8 ---
+80608CC8:   if_int_eq LW(9) [weapon_gundan_zako_magician_yokeyoke_bottle unit_gundan_zako_magician.o]
+80608CD4:     callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 2 ["B_1D"]
+80608CE8:   endif
+80608CEC:   if_int_eq LW(9) [weapon_gundan_zako_magician_ziwaziwa_bottle unit_gundan_zako_magician.o]
+80608CF8:     callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 2 ["B_1C"]
+80608D0C:   endif
+80608D10:   callc [btlevtcmd_GetPos battle_event_cmd.o] -2 LW(0) LW(1) LW(2)
+80608D28:   callc [btlevtcmd_FaceDirectionAdd battle_event_cmd.o] -2 LW(0) 10
+80608D3C:   addi LW(1) 20
+80608D48:   callc [btlevtcmd_SetPartsPos battle_event_cmd.o] -2 2 LW(0) LW(1) LW(2)
+80608D64:   callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_ENM_3RD2_ATTACK3"] [F1194D80] 0 [F1194D80]
+80608D80:   if_int_eq LW(9) [weapon_gundan_zako_magician_yokeyoke_bottle unit_gundan_zako_magician.o]
+80608D8C:     callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 1 ["A_5C"]
+80608DA0:   endif
+80608DA4:   if_int_eq LW(9) [weapon_gundan_zako_magician_ziwaziwa_bottle unit_gundan_zako_magician.o]
+80608DB0:     callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 1 ["A_4C"]
+80608DC4:   endif
+80608DC8:   wait_frames 24
+80608DD0:   callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_ENM_3RD2_ATTACK4"] [F1194D80] 0 [F1194D80]
+80608DEC:   begin_child_thread
+80608DF0:     wait_frames 24
+80608DF8:     callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 1 ["S_1"]
+80608E0C:   end_child_thread
+80608E10:   callc [btlevtcmd_OffPartsAttribute battle_event_cmd.o] -2 2 16777216
+80608E24:   callc [btlevtcmd_OffPartsAttribute battle_event_cmd.o] -2 2 33554432
+80608E38:   callc [btlevtcmd_GetHitPos battle_event_cmd.o] LW(3) LW(4) LW(0) LW(1) LW(2)
+80608E54:   callc [btlevtcmd_JumpPartsSetting battle_event_cmd.o] -2 2 0 1.00 0.50
+80608E70:   callc [btlevtcmd_JumpPartsPosition battle_event_cmd.o] -2 2 LW(0) 0 LW(2) 0 -1
+80608E94:   callc [btlevtcmd_GetHitPos battle_event_cmd.o] LW(3) LW(4) LW(0) LW(1) LW(2)
+80608EB0:   loop 12
+80608EB8:     callc [evt_eff64 evt_eff.o] [zero_aji_00017840 unit_gundan_zako_magician.o] ["glass_n64"] 0 LW(0) 0 LW(2) 1.00 30 0 0 0 0 0 0
+80608EF8:   end_loop
+80608EFC:   callc [btlevtcmd_PreCheckDamage battle_event_cmd.o] -2 LW(3) LW(4) LW(9) 0 LW(5)
+80608F1C:   switchi LW(5)
+80608F24:     case_int_eq_any 4
+80608F2C:       goto 90
+80608F34:       end_multi_case
+80608F38:     case_int_eq 3
+80608F40:       callc [btlevtcmd_StartAvoid battle_event_cmd.o] LW(3) 38
+80608F50:       goto 90
+80608F58:       end_multi_case
+80608F5C:     case_int_eq 6
+80608F64:       callc [btlevtcmd_StartAvoid battle_event_cmd.o] LW(3) 39
+80608F74:       goto 90
+80608F7C:     case_int_eq 2
+80608F84:       callc [btlevtcmd_StartAvoid battle_event_cmd.o] LW(3) 40
+80608F94:       goto 90
+80608F9C:     case_int_eq 1
+80608FA4:       goto 91
+80608FAC:       end_multi_case
+80608FB0:     case_default
+80608FB4:       goto 98
+80608FBC:       end_multi_case
+80608FC0: 90:
+80608FC8:       goto 98
+80608FD0: 91:
+80608FD8:       callc [btlevtcmd_ResultACDefence battle_event_cmd.o] LW(3) LW(9)
+80608FE8:       callc [btlevtcmd_CheckDamage battle_event_cmd.o] -2 LW(3) LW(4) LW(9) 256 LW(5)
+80609008:       goto 98
+80609010: 98:
+80609018:       callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_ENM_3RD2_CRASH1"] [F1194D80] 0 [F1194D80]
+80609034:       callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 2 ["B_2"]
+80609048:       wait_frames 8
+80609050:       callc [btlevtcmd_OnPartsAttribute battle_event_cmd.o] -2 2 16777216
+80609064:       callc [btlevtcmd_OnPartsAttribute battle_event_cmd.o] -2 2 33554432
+80609078:       wait_frames 10
+80609080:       callc [evt_btl_camera_set_mode battle_camera.o] 0 0
+80609090:       wait_frames 30
+80609098: 99:
+806090A0:       callc [btlevtcmd_ResetFaceDirection battle_event_cmd.o] -2
+806090AC:       return
+806090B0:       end

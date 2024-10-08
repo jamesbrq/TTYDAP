@@ -1,0 +1,50 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [pakkun_find_event npc_event.o] AT 80345D00 ---
+80345D00:   callc [evt_npc_flag_onoff evt_npc.o] 0 ["me"] 2097152
+80345D14:   callc [evt_npc_get_position evt_npc.o] ["me"] LW(0) LW(1) LW(2)
+80345D2C:   callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_FLD_ENM_PAKKUN_MOVE1"] LW(0) LW(1) LW(2) 0
+80345D48:   callc [evt_npc_flag_onoff evt_npc.o] 1 ["me"] 32
+80345D5C:   callc [evt_npc_set_anim evt_npc.o] ["me"] ["PKF_E_2"]
+80345D6C:   wait_frames 10
+80345D74:   callc [evt_mario_get_pos evt_mario.o] 0 LW(0) LW(1) LW(2)
+80345D8C:   callc [evt_sub_random evt_sub.o] 10 LW(3)
+80345D9C:   callc [evt_mario_get_mov_spd evt_mario.o] LW(4)
+80345DA8:   mulf LW(4) 0.50
+80345DB4:   addf LW(3) LW(4)
+80345DC0:   addf LW(3) 30
+80345DCC:   callc [evt_npc_facedirection_add evt_npc.o] ["mario"] LW(0) LW(3)
+80345DE0:   callc [evt_npc_move_position evt_npc.o] ["me"] LW(0) LW(2) 200 0 4
+80345E00:   callc [evt_get_target_dir evt_npc.o] ["me"] ["mario"] LW(0)
+80345E14:   callc [evt_npc_set_ry evt_npc.o] ["me"] LW(0)
+80345E24:   callc [evt_npc_get_position evt_npc.o] ["me"] LW(0) LW(1) LW(2)
+80345E3C:   callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_FLD_ENM_PAKKUN_MOVE2"] LW(0) LW(1) LW(2) 0
+80345E58:   callc [evt_npc_set_anim evt_npc.o] ["me"] ["PKF_E_1"]
+80345E68:   wait_frames 10
+80345E70:   callc [evt_npc_flag_onoff evt_npc.o] 0 ["me"] 32
+80345E84:   wait_frames 20
+80345E8C:   callss [pakkun_attack_event npc_event.o]
+80345E94:   callc [evt_npc_return_interrupt evt_npc.o] ["me"]
+80345EA0:   return
+80345EA4:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [pakkun_attack_event npc_event.o] AT 80345B0C ---
+80345B0C:   callc [evt_npc_get_position evt_npc.o] ["me"] LW(0) LW(1) LW(2)
+80345B24:   callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_FLD_ENM_PAKKUN_ATTACK1"] LW(0) LW(1) LW(2) 0
+80345B40:   callc [evt_npc_set_anim evt_npc.o] ["me"] ["PKF_A_1A"]
+80345B50:   wait_ms 200
+80345B58:   callc [evt_npc_set_anim evt_npc.o] ["me"] ["PKF_A_1B"]
+80345B68:   callc [evt_npc_flag_onoff evt_npc.o] 0 ["slave_0"] 32
+80345B7C:   callc [evt_npc_set_attack_mode evt_npc.o] ["slave_0"] 18
+80345B8C:   callc [evt_npc_get_position evt_npc.o] ["me"] LW(0) LW(1) LW(2)
+80345BA4:   callc [evt_npc_facedirection_add evt_npc.o] ["me"] LW(0) 30
+80345BB8:   callc [evt_npc_set_position evt_npc.o] ["slave_0"] LW(0) LW(1) LW(2)
+80345BD0:   wait_ms 200
+80345BD8:   callc [evt_npc_set_anim evt_npc.o] ["me"] ["PKF_A_1C"]
+80345BE8:   callc [evt_npc_flag_onoff evt_npc.o] 1 ["slave_0"] 32
+80345BFC:   callc [evt_npc_set_attack_mode evt_npc.o] ["slave_0"] 0
+80345C0C:   callc [evt_npc_set_position evt_npc.o] ["slave_0"] 0 -1000 0
+80345C24:   wait_ms 200
+80345C2C:   return
+80345C30:   end

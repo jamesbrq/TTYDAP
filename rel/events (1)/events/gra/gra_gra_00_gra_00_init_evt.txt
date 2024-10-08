@@ -1,0 +1,509 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [gra_00_init_evt gra_00.o] AT 805BF320 ---
+805BF320:   setii GSWF(256) 1
+805BF32C:   callc [evt_snd_bgmon evt_snd.o] 512 ["BGM_STG4_GRA1"]
+805BF33C:   callc [evt_snd_envon evt_snd.o] 272 ["ENV_STG4_USU1"]
+805BF34C:   callc [evt_kagemario_init evt_kagemario.o]
+805BF354:   setii LW(0) [bero_entry_data gra_00.o]
+805BF360:   callc [evt_bero_get_info evt_bero.o]
+805BF368:   callss [evt_bero_info_run evt_bero.o]
+805BF370:   callss [evt_usu_kagemario_party_kill evt_kagemario.o]
+805BF378:   callc [evt_npc_setup evt_npc.o] [npcEnt gra_00.o]
+805BF384:   setii LW(0) [tree_tbl gra_00.o]
+805BF390:   callss [evt_sub_tree_access_entry evt_sub.o]
+805BF398:   callc [evt_mobj_brick evt_mobj.o] ["blk01"] 250 15 100 0 0 0 LSWF(1)
+805BF3C0:   callc [evt_mobj_brick evt_mobj.o] ["blk02"] -265 60 -85 0 3 0 GSWF(2089)
+805BF3E8:   if_int_eq GSWF(2091) 0
+805BF3F4:     callc [evt_item_entry evt_item.o] ["majin_key"] 35 -258 0 -85 16 -1 [evt_majin_key gra_00.o]
+805BF41C:   endif
+805BF420:   switchi GSW(0)
+805BF428:     case_int_range 202 209
+805BF434:       callsa [evt_machibuse gra_00.o]
+805BF43C:   end_switch
+805BF440:   return
+805BF444:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [evt_usu_kagemario_party_kill evt_kagemario.o] AT 805C2910 ---
+805C2910:   switchi GSW(0)
+805C2918:     case_int_range 201 205
+805C2924:       callc [evt_party_stop evt_party.o] 0
+805C2930:       callc [evt_party_set_pos evt_party.o] 0 0 -1000 0
+805C2948:       callc [evt_party_cont_onoff evt_party.o] 0 0
+805C2958:       callc [evt_mario_kill_party evt_mario.o] 0
+805C2964:       callc [evt_party_stop evt_party.o] 1
+805C2970:       callc [evt_party_set_pos evt_party.o] 1 0 -1000 0
+805C2988:       callc [evt_party_cont_onoff evt_party.o] 1 0
+805C2998:       callc [evt_mario_clear_party evt_mario.o] 1
+805C29A4:       callc [test evt_kagemario.o]
+805C29AC:   end_switch
+805C29B0:   return
+805C29B4:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [evt_machibuse gra_00.o] AT 805BE698 ---
+805BE698:   setii LF(0) 0
+805BE6A4:   loop 0
+805BE6AC:     callc [evt_mario_get_pos evt_mario.o] 0 LW(0) LW(1) LW(2)
+805BE6C4:     if_int_le LW(0) 30
+805BE6D0:       if_int_ge LW(0) -126
+805BE6DC:         loop_break
+805BE6E0:       endif
+805BE6E4:     endif
+805BE6E8:     wait_frames 1
+805BE6F0:   end_loop
+805BE6F4:   callc [evt_snd_bgmoff_f evt_snd.o] 512 120
+805BE704:   begin_thread
+805BE708:     wait_ms 200
+805BE710:     callc [evt_mario_key_onoff evt_mario.o] 0
+805BE71C:     callc [evt_mario_normalize evt_mario.o]
+805BE724:     callc [evt_mario_get_pos evt_mario.o] 0 LW(0) LW(1) LW(2)
+805BE73C:     if_int_lt LW(0) -48
+805BE748:       callc [evt_mario_set_dir evt_mario.o] 90 200 0
+805BE75C:       callc [evt_party_set_dir evt_party.o] 0 90 200
+805BE770:     else
+805BE774:       callc [evt_mario_set_dir evt_mario.o] 270 200 0
+805BE788:       callc [evt_party_set_dir evt_party.o] 0 270 200
+805BE79C:     endif
+805BE7A0:     callc [evt_mario_set_pose evt_mario.o] ["M_N_3"]
+805BE7AC:   end_thread
+805BE7B0:   callc [evt_npc_set_position evt_npc.o] ["にせマリオ"] -125 240 -25
+805BE7C8:   if_int_eq GSW(0) 206
+805BE7D4:     callc [evt_msg_print evt_msg.o] 0 ["stg4_gra_05"] 0 ["にせマリオ"]
+805BE7EC:   else
+805BE7F0:     callc [evt_msg_print evt_msg.o] 0 ["stg4_gra_00"] 0 ["にせマリオ"]
+805BE808:   endif
+805BE80C:   callc [evt_npc_set_position evt_npc.o] ["にせマリオ"] 0 -1000 0
+805BE824:   callc [evt_cam3d_evt_set evt_cam.o] -88 352 517 -88 257 -25 800 11
+805BE84C:   wait_ms 800
+805BE854:   callc [evt_mario_set_pose evt_mario.o] ["M_S_1"]
+805BE860:   callc [evt_snd_bgmon evt_snd.o] 512 ["BGM_FF_ENV_RPL_APPEAR1"]
+805BE870:   callc [evt_snd_envoff evt_snd.o] 1024
+805BE87C:   callss [evt_yabure_on gra_00.o]
+805BE884:   if_int_lt LW(0) -48
+805BE890:     setii LF(0) 1
+805BE89C:   else
+805BE8A0:     setii LF(0) 0
+805BE8AC:   endif
+805BE8B0:   if_int_eq LF(0) 1
+805BE8BC:     callc [evt_mario_set_pos evt_mario.o] -100 0 0
+805BE8D0:   else
+805BE8D4:     callc [evt_mario_set_pos evt_mario.o] 0 0 0
+805BE8E8:   endif
+805BE8EC:   callc [evt_mario_get_pos evt_mario.o] 0 LW(0) LW(1) LW(2)
+805BE904:   if_int_eq LF(0) 1
+805BE910:     addi LW(0) -40
+805BE91C:   else
+805BE920:     addi LW(0) 40
+805BE92C:   endif
+805BE930:   callc [evt_party_set_pos evt_party.o] 0 LW(0) LW(1) LW(2)
+805BE948:   callc [evt_mario_get_pos evt_mario.o] 0 LW(0) LW(1) LW(2)
+805BE960:   if_int_eq LF(0) 1
+805BE96C:     addi LW(0) 75
+805BE978:   else
+805BE97C:     addi LW(0) -75
+805BE988:   endif
+805BE98C:   wait_ms 200
+805BE994:   begin_thread
+805BE998:     callc [evt_npc_set_position evt_npc.o] ["にせマリオ"] -145 270 -25
+805BE9B0:     callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_STG4_LANPEL_M_FALL1"] -145 270 -25 LW(10)
+805BE9CC:     callc [evt_npc_jump_position_nohit evt_npc.o] ["にせマリオ"] LW(0) LW(1) LW(2) 700 130.00
+805BE9EC:     callc [evt_snd_sfxoff evt_snd.o] LW(10)
+805BE9F8:     callc [evt_set_dir_to_target evt_npc.o] ["にせマリオ"] ["mario"]
+805BEA08:   end_thread
+805BEA0C:   wait_ms 500
+805BEA14:   callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_VOICE_NM_HAPPY1"] -145 270 -25 0
+805BEA30:   callss [evt_yabure_off gra_00.o]
+805BEA38:   callc [evt_gra_vivian_pose_set gra.o] 1 ["PTR_S_4"]
+805BEA48:   callc [evt_gra_vivian_pose_set gra.o] 2 ["PTR_S_4"]
+805BEA58:   callc [evt_gra_vivian_pose_set gra.o] 3 ["PTR_S_4"]
+805BEA68:   callc [evt_gra_vivian_pose_set gra.o] 7 ["PTR_T_5"]
+805BEA78:   callc [evt_mario_get_pos evt_mario.o] 0 LW(0) LW(1) LW(2)
+805BEA90:   callc [evt_npc_get_position evt_npc.o] ["にせマリオ"] LW(3) LW(4) LW(5)
+805BEAA8:   addi LW(0) LW(3)
+805BEAB4:   divi LW(0) 2
+805BEAC0:   addi LW(2) LW(5)
+805BEACC:   divi LW(2) 2
+805BEAD8:   setii LW(3) LW(2)
+805BEAE4:   addi LW(3) 542
+805BEAF0:   callc [evt_cam3d_evt_set evt_cam.o] LW(0) 137 LW(3) LW(0) 30 LW(2) 0 11
+805BEB18:   wait_frames 1
+805BEB20:   if_int_lt GSW(0) 203
+805BEB2C:     wait_ms 500
+805BEB34:     callc [evt_msg_print evt_msg.o] 0 ["stg4_gra_01"] 0 ["にせマリオ"]
+805BEB4C:     callc [zoom gra_00.o] LW(0) LW(1) LW(2) LW(3) LW(4) LW(5)
+805BEB6C:     callc [evt_cam3d_evt_set evt_cam.o] LW(0) LW(1) LW(2) LW(3) LW(4) LW(5) 900 11
+805BEB94:     wait_ms 900
+805BEB9C:     callc [evt_msg_print evt_msg.o] 0 ["stg4_gra_02"] 0 ["にせマリオ"]
+805BEBB4:   else
+805BEBB8:     callc [zoom gra_00.o] LW(0) LW(1) LW(2) LW(3) LW(4) LW(5)
+805BEBD8:     callc [evt_cam3d_evt_set evt_cam.o] LW(0) LW(1) LW(2) LW(3) LW(4) LW(5) 1200 11
+805BEC00:     wait_ms 200
+805BEC08:   endif
+805BEC0C:   callc [evt_mario_dispflag_onoff evt_mario.o] 1 2
+805BEC1C:   callc [evt_mario_set_pose evt_mario.o] ["M_I_Y"]
+805BEC28:   wait_ms 1000
+805BEC30:   switchi GSW(0)
+805BEC38:     case_int_lt 203
+805BEC40:       callc [evt_msg_print evt_msg.o] 0 ["stg4_gra_03"] 0 ["にせマリオ"]
+805BEC58:     case_int_lt 206
+805BEC60:       callc [evt_msg_print evt_msg.o] 0 ["stg4_gra_09"] 0 ["にせマリオ"]
+805BEC78:     case_int_lt 207
+805BEC80:       callc [evt_mario_get_pos evt_mario.o] 0 LW(0) LW(1) LW(2)
+805BEC98:       subi LW(0) 15
+805BECA4:       addi LW(2) 30
+805BECB0:       callc [evt_party_move_pos2 evt_party.o] 0 LW(0) LW(2) 70.00
+805BECC8:       wait_ms 500
+805BECD0:       callc [evt_party_stop evt_party.o] 0
+805BECDC:       wait_ms 300
+805BECE4:       callc [evt_msg_print_party evt_msg.o] ["stg4_gra_06"]
+805BECF0:       callc [evt_msg_print evt_msg.o] 0 ["stg4_gra_07"] 0 ["にせマリオ"]
+805BED08:       callc [evt_party_run evt_party.o] 0
+805BED14:     case_default
+805BED18:       callc [evt_msg_print evt_msg.o] 0 ["stg4_gra_09"] 0 ["にせマリオ"]
+805BED30:   end_switch
+805BED34:   switchi GSW(0)
+805BED3C:     case_int_lt 209
+805BED44:       setii LW(0) 2
+805BED50:       callss [evt_nameent gra_00.o]
+805BED58:       wait_ms 300
+805BED60:     case_default
+805BED64:       setii LW(0) 3
+805BED70:       callss [evt_nameent gra_00.o]
+805BED78:       wait_ms 300
+805BED80:       callc [evt_sub_get_language evt_sub.o] LW(1)
+805BED8C:       switchi LW(1)
+805BED94:         case_int_eq 0
+805BED9C:           setii LW(2) ["ランペル"]
+805BEDA8:         case_int_eq_any 1
+805BEDB0:         case_int_eq_any 6
+805BEDB8:           setii LW(2) ["Doopliss"]
+805BEDC4:           end_multi_case
+805BEDC8:         case_int_eq 5
+805BEDD0:           setii LW(2) ["Rampel"]
+805BEDDC:         case_default
+805BEDE0:           setii LW(2) ["Rumpel"]
+805BEDEC:       end_switch
+805BEDF0:       if_string_eq LW(0) LW(2)
+805BEDFC:         callss [name_seikai gra_00.o]
+805BEE04:         setii GSW(0) 210
+805BEE10:         callc [evt_pouch_remove_item evt_pouch.o] 68 LW(0)
+805BEE20:         callc [evt_snd_bgmon evt_snd.o] 512 ["BGM_STG4_GRA1"]
+805BEE30:         callc [evt_snd_envoff evt_snd.o] 513
+805BEE3C:         callc [evt_snd_envon evt_snd.o] 288 0
+805BEE4C:         callc [evt_gra_vivian_pose_set gra.o] 1 ["PTR_S_1"]
+805BEE5C:         callc [evt_gra_vivian_pose_set gra.o] 2 ["PTR_W_1"]
+805BEE6C:         callc [evt_gra_vivian_pose_set gra.o] 3 ["PTR_R_1"]
+805BEE7C:         callc [evt_gra_vivian_pose_set gra.o] 7 ["PTR_T_1"]
+805BEE8C:         callc [evt_mario_dispflag_onoff evt_mario.o] 0 2
+805BEE9C:         callc [evt_mario_key_onoff evt_mario.o] 1
+805BEEA8:         callc [evt_party_run evt_party.o] 0
+805BEEB4:         return
+805BEEB8:       endif
+805BEEBC:   end_switch
+805BEEC0:   callc [evt_msg_print evt_msg.o] 0 ["stg4_gra_04"] 0 ["にせマリオ"]
+805BEED8:   callc [evt_npc_set_battle_info evt_npc.o] ["にせマリオ"] 2
+805BEEE8:   callc [evt_npc_battle_start evt_npc.o] ["にせマリオ"]
+805BEEF4:   callc [evt_npc_wait_battle_end evt_npc.o]
+805BEEFC:   switchi GSW(0)
+805BEF04:     case_int_lt 203
+805BEF0C:       setii GSW(0) 203
+805BEF18:     case_int_lt 206
+805BEF20:     case_int_lt 207
+805BEF28:       setii GSW(0) 207
+805BEF34:   end_switch
+805BEF38:   callc [evt_mario_dispflag_onoff evt_mario.o] 0 2
+805BEF48:   callc [evt_gra_vivian_pose_set gra.o] 1 ["PTR_S_4"]
+805BEF58:   callc [evt_gra_vivian_pose_set gra.o] 7 ["PTR_T_5"]
+805BEF68:   callc [evt_mario_get_pos evt_mario.o] 0 LW(0) LW(1) LW(2)
+805BEF80:   callc [evt_npc_get_position evt_npc.o] ["にせマリオ"] LW(10) LW(11) LW(12)
+805BEF98:   callc [evt_mario_set_pos evt_mario.o] LW(10) LW(1) LW(2)
+805BEFAC:   callc [evt_npc_set_position evt_npc.o] ["にせマリオ"] LW(0) LW(11) LW(12)
+805BEFC4:   callc [evt_set_dir_to_target evt_npc.o] ["にせマリオ"] ["mario"]
+805BEFD4:   if_int_lt LW(10) LW(0)
+805BEFE0:     callc [evt_cam3d_evt_set evt_cam.o] -225 134 534 -225 39 -8 0 11
+805BF008:     wait_frames 1
+805BF010:     callc [evt_npc_flag_onoff evt_npc.o] 1 ["にせマリオ"] 32
+805BF024:     begin_thread
+805BF028:       callc [evt_mario_mov_pos2 evt_mario.o] -385 0 200.00
+805BF03C:     end_thread
+805BF040:     wait_ms 1100
+805BF048:     callc [evt_cam3d_evt_set evt_cam.o] -88 137 517 -88 42 -25 800 11
+805BF070:     wait_ms 800
+805BF078:     callc [evt_msg_print evt_msg.o] 0 ["stg4_gra_11"] 0 ["にせマリオ"]
+805BF090:     callc [evt_bero_mapchange evt_bero.o] ["usu_01"] ["e_bero"]
+805BF0A0:   else
+805BF0A4:     callc [evt_cam3d_evt_set evt_cam.o] 186 149 534 186 54 -8 0 11
+805BF0CC:     wait_frames 1
+805BF0D4:     callc [evt_npc_flag_onoff evt_npc.o] 1 ["にせマリオ"] 32
+805BF0E8:     begin_thread
+805BF0EC:       callc [evt_mario_mov_pos2 evt_mario.o] 385 0 200.00
+805BF100:     end_thread
+805BF104:     wait_ms 1250
+805BF10C:     callc [evt_cam3d_evt_set evt_cam.o] -20 137 517 -20 42 -25 800 11
+805BF134:     wait_ms 850
+805BF13C:     callc [evt_msg_print evt_msg.o] 0 ["stg4_gra_11"] 0 ["にせマリオ"]
+805BF154:     callc [evt_bero_mapchange evt_bero.o] ["gra_01"] ["w_bero1"]
+805BF164:   endif
+805BF168:   return
+805BF16C:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [evt_yabure_on gra_00.o] AT 805BD948 ---
+805BD948:   callc [evt_paper_entry evt_paper.o] ["OFF_d_yabu_small"]
+805BD954:   callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_OFF4_LANPEL_APPEAR1"] -145 270 -25 0
+805BD970:   begin_thread
+805BD974:     callc [camera_yure gra_00.o] 20
+805BD980:   end_thread
+805BD984:   callc [evt_img_entry evt_img.o] ["img"]
+805BD990:   callc [evt_img_set_paper evt_img.o] ["img"] ["OFF_d_yabu_small"]
+805BD9A0:   callc [evt_img_alloc_capture evt_img.o] ["img"] 0 0 1 100 100 202 160
+805BD9C8:   callc [evt_img_clear_virtual_point evt_img.o] ["img"]
+805BD9D4:   callc [evt_img_set_position evt_img.o] ["img"] -460 -261
+805BD9E8:   callc [evt_img_set_virtual_point evt_img.o] ["img"] 0 0 -78
+805BDA00:   callc [evt_img_onoff evt_img.o] ["img"] 1
+805BDA10:   callc [evt_img_set_paper_anim evt_img.o] ["img"] ["A_1"]
+805BDA20:   return
+805BDA24:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [evt_yabure_off gra_00.o] AT 805BDA28 ---
+805BDA28:   callc [evt_img_release evt_img.o] ["img"]
+805BDA34:   return
+805BDA38:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [evt_nameent gra_00.o] AT 805BDA3C ---
+805BDA3C:   callc [evt_paper_entry evt_paper.o] ["OFF_d_roll"]
+805BDA48:   callc [evt_img_entry evt_img.o] ["img"]
+805BDA54:   callc [evt_img_set_paper evt_img.o] ["img"] ["OFF_d_roll"]
+805BDA64:   callc [evt_img_set_paper_anim evt_img.o] ["img"] ["Z_1"]
+805BDA74:   callc [evt_img_alloc_capture evt_img.o] ["img"] 0 0 1 0 0 608 480
+805BDA9C:   callc [evt_img_clear_virtual_point evt_img.o] ["img"]
+805BDAA8:   callc [evt_img_onoff evt_img.o] ["img"] 1
+805BDAB8:   wait_frames 1
+805BDAC0:   callc [evt_cam_letter_box_disable evt_cam.o] 1
+805BDACC:   callc [evt_cam_letter_box_onoff evt_cam.o] 0 0
+805BDADC:   callc [evt_win_nameent_on evt_window.o] LW(0)
+805BDAE8:   begin_thread
+805BDAEC:     wait_ms 300
+805BDAF4:     callc [evt_mario_get_pos evt_mario.o] 0 LW(0) LW(1) LW(2)
+805BDB0C:     callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_OFF4_NAME_ENTRY1"] LW(0) LW(1) LW(2) 0
+805BDB28:   end_thread
+805BDB2C:   callc [evt_img_set_paper_anim evt_img.o] ["img"] ["A_2"]
+805BDB3C:   callc [evt_img_wait_animend evt_img.o] ["img"]
+805BDB48:   callc [evt_win_nameent_wait evt_window.o]
+805BDB50:   callc [evt_win_nameent_name evt_window.o] LW(0)
+805BDB5C:   begin_thread
+805BDB60:     wait_ms 300
+805BDB68:     callc [evt_mario_get_pos evt_mario.o] 0 LW(0) LW(1) LW(2)
+805BDB80:     callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_OFF4_NAME_ENTRY2"] LW(0) LW(1) LW(2) 0
+805BDB9C:   end_thread
+805BDBA0:   callc [evt_img_set_paper_anim evt_img.o] ["img"] ["A_1"]
+805BDBB0:   callc [evt_img_wait_animend evt_img.o] ["img"]
+805BDBBC:   callc [evt_win_nameent_off evt_window.o]
+805BDBC4:   callc [evt_img_release evt_img.o] ["img"]
+805BDBD0:   callc [evt_paper_delete evt_paper.o] ["OFF_d_roll"]
+805BDBDC:   callc [evt_cam_letter_box_disable evt_cam.o] 0
+805BDBE8:   return
+805BDBEC:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [name_seikai gra_00.o] AT 805BDBF0 ---
+805BDBF0:   callc [evt_npc_get_position evt_npc.o] ["にせマリオ"] LW(0) LW(1) LW(2)
+805BDC08:   callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_VOICE_NM_SURPRISED2_3"] LW(0) LW(1) LW(2) 0
+805BDC24:   callc [evt_npc_set_anim evt_npc.o] ["にせマリオ"] ["EM_O_2"]
+805BDC34:   callc [evt_npc_set_autotalkpose evt_npc.o] ["にせマリオ"] ["EM_Z_3"] ["EM_T_4"]
+805BDC48:   callc [evt_mario_get_pos evt_mario.o] 0 LW(0) LW(1) LW(2)
+805BDC60:   callc [evt_npc_get_position evt_npc.o] ["にせマリオ"] LW(10) LW(11) LW(12)
+805BDC78:   addi LW(2) LW(12)
+805BDC84:   divi LW(2) 2
+805BDC90:   addi LW(2) 542
+805BDC9C:   setii LW(15) LW(2)
+805BDCA8:   setii LW(14) LW(12)
+805BDCB4:   subi LW(14) LW(15)
+805BDCC0:   mulf LW(14) 0.60
+805BDCCC:   setii LW(13) LW(2)
+805BDCD8:   addi LW(13) LW(14)
+805BDCE4:   callc [evt_cam3d_evt_set evt_cam.o] LW(10) 73 LW(13) LW(10) 30 LW(12) 500 11
+805BDD0C:   wait_ms 600
+805BDD14:   callc [evt_msg_print evt_msg.o] 0 ["stg4_gra_12"] 0 ["にせマリオ"]
+805BDD2C:   setii LW(15) LW(2)
+805BDD38:   setii LW(14) LW(12)
+805BDD44:   subi LW(14) LW(15)
+805BDD50:   mulf LW(14) 0.79
+805BDD5C:   setii LW(13) LW(2)
+805BDD68:   addi LW(13) LW(14)
+805BDD74:   callc [evt_cam3d_evt_set evt_cam.o] LW(10) 53 LW(13) LW(10) 30 LW(12) 500 11
+805BDD9C:   wait_ms 600
+805BDDA4:   callc [evt_msg_print evt_msg.o] 0 ["stg4_gra_13"] 0 ["にせマリオ"]
+805BDDBC:   setii LW(15) LW(2)
+805BDDC8:   setii LW(14) LW(12)
+805BDDD4:   subi LW(14) LW(15)
+805BDDE0:   mulf LW(14) 0.88
+805BDDEC:   setii LW(13) LW(2)
+805BDDF8:   addi LW(13) LW(14)
+805BDE04:   callc [evt_cam3d_evt_set evt_cam.o] LW(10) 43 LW(13) LW(10) 30 LW(12) 500 11
+805BDE2C:   wait_ms 600
+805BDE34:   callc [evt_msg_print evt_msg.o] 0 ["stg4_gra_14"] 0 ["にせマリオ"]
+805BDE4C:   callc [evt_mario_set_pose evt_mario.o] ["M_S_1"]
+805BDE58:   setii GF(0) 0
+805BDE64:   begin_thread
+805BDE68:     callc [evt_msg_toge evt_msg.o] 1 0 0 0
+805BDE80:     callc [evt_msg_print evt_msg.o] 0 ["stg4_gra_15"] 0 ["にせマリオ"]
+805BDE98:     callc [evt_msg_continue evt_msg.o]
+805BDEA0:     setii GF(0) 1
+805BDEAC:   end_thread
+805BDEB0:   callc [evt_npc_get_position evt_npc.o] ["にせマリオ"] LW(0) LW(1) LW(2)
+805BDEC8:   callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_STG4_LANPEL_SHOCK1"] LW(0) LW(1) LW(2) LW(10)
+805BDEE4:   setii LW(5) 0
+805BDEF0:   setii LW(6) 8
+805BDEFC:   if_int_lt LW(0) LW(10)
+805BDF08:     muli LW(6) -1
+805BDF14:   endif
+805BDF18:   loop 0
+805BDF20:     addi LW(5) LW(6)
+805BDF2C:     if_int_lt LW(5) 0
+805BDF38:       addi LW(5) 360
+805BDF44:     endif
+805BDF48:     if_int_gt LW(5) 360
+805BDF54:       subi LW(5) 360
+805BDF60:     endif
+805BDF64:     callc [cam_r gra_00.o] LW(5)
+805BDF70:     if_int_eq GF(0) 1
+805BDF7C:       loop_break
+805BDF80:     endif
+805BDF84:     wait_frames 1
+805BDF8C:   end_loop
+805BDF90:   callc [cam_r gra_00.o] 0
+805BDF9C:   callc [evt_snd_sfxoff evt_snd.o] LW(10)
+805BDFA8:   callc [evt_mario_get_pos evt_mario.o] 0 LW(0) LW(1) LW(2)
+805BDFC0:   callc [evt_npc_get_position evt_npc.o] ["にせマリオ"] LW(3) LW(4) LW(5)
+805BDFD8:   addi LW(0) LW(3)
+805BDFE4:   divi LW(0) 2
+805BDFF0:   addi LW(2) LW(5)
+805BDFFC:   divi LW(2) 2
+805BE008:   setii LW(3) LW(2)
+805BE014:   addi LW(3) 542
+805BE020:   callc [evt_cam3d_evt_set evt_cam.o] LW(0) 82 LW(3) LW(0) 30 LW(2) 0 11
+805BE048:   wait_frames 1
+805BE050:   wait_ms 200
+805BE058:   callc [evt_npc_set_anim evt_npc.o] ["にせマリオ"] ["EM_J_2"]
+805BE068:   wait_ms 500
+805BE070:   callc [evt_npc_set_anim evt_npc.o] ["にせマリオ"] ["EM_J_2"]
+805BE080:   wait_ms 500
+805BE088:   begin_thread
+805BE08C:     loop 0
+805BE094:       loop 0
+805BE09C:         callc [evt_npc_get_position evt_npc.o] ["にせマリオ"] LW(0) LW(1) LW(2)
+805BE0B4:         callc [evt_mario_get_pos evt_mario.o] 0 LW(3) LW(4) LW(5)
+805BE0CC:         callc [evt_sub_get_dist evt_sub.o] LW(0) LW(2) LW(3) LW(5) LW(10)
+805BE0E8:         if_int_lt LW(10) 20
+805BE0F4:           loop_break
+805BE0F8:         endif
+805BE0FC:         wait_frames 1
+805BE104:       end_loop
+805BE108:       callc [evt_mario_get_pos evt_mario.o] 0 LW(0) LW(1) LW(2)
+805BE120:       callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_STG4_MARIO_ROUND1"] LW(0) LW(1) LW(2) 0
+805BE13C:       callc [evt_mario_set_pose evt_mario.o] ["M_D_1"]
+805BE148:       callc [evt_sub_intpl_msec_init evt_sub.o] 5 0 3600 2000
+805BE160:       loop 0
+805BE168:         callc [evt_sub_intpl_msec_get_value evt_sub.o]
+805BE170:         callc [evt_mario_set_dispdir evt_mario.o] LW(0)
+805BE17C:         wait_frames 1
+805BE184:         if_int_eq LW(1) 0
+805BE190:           loop_break
+805BE194:         endif
+805BE198:       end_loop
+805BE19C:       callc [evt_mario_set_pose evt_mario.o] ["M_S_1"]
+805BE1A8:       if_int_eq GF(0) 1
+805BE1B4:         setii GF(1) 1
+805BE1C0:         loop_break
+805BE1C4:       endif
+805BE1C8:     end_loop
+805BE1CC:   end_thread
+805BE1D0:   begin_thread
+805BE1D4:     callc [evt_party_stop evt_party.o] 0
+805BE1E0:     loop 0
+805BE1E8:       loop 0
+805BE1F0:         callc [evt_npc_get_position evt_npc.o] ["にせマリオ"] LW(0) LW(1) LW(2)
+805BE208:         callc [evt_party_get_pos evt_party.o] 0 LW(3) LW(4) LW(5)
+805BE220:         callc [evt_sub_get_dist evt_sub.o] LW(0) LW(2) LW(3) LW(5) LW(10)
+805BE23C:         if_int_lt LW(10) 20
+805BE248:           loop_break
+805BE24C:         endif
+805BE250:         wait_frames 1
+805BE258:       end_loop
+805BE25C:       callc [evt_gra_vivian_pose_set gra.o] 1 ["PTR_S_4"]
+805BE26C:       callc [evt_gra_vivian_pose_set gra.o] 7 ["PTR_T_5"]
+805BE27C:       callc [evt_party_set_pose evt_party.o] 0 ["PTR_D_1"]
+805BE28C:       callc [evt_sub_intpl_msec_init evt_sub.o] 5 0 3600 2000
+805BE2A4:       loop 0
+805BE2AC:         callc [evt_sub_intpl_msec_get_value evt_sub.o]
+805BE2B4:         callc [evt_party_set_dispdir evt_party.o] 0 LW(0)
+805BE2C4:         wait_frames 1
+805BE2CC:         if_int_eq LW(1) 0
+805BE2D8:           loop_break
+805BE2DC:         endif
+805BE2E0:       end_loop
+805BE2E4:       callc [evt_party_set_pose evt_party.o] 0 ["PTR_S_1"]
+805BE2F4:       if_int_eq GF(0) 1
+805BE300:         setii GF(2) 1
+805BE30C:         loop_break
+805BE310:       endif
+805BE314:     end_loop
+805BE318:     callc [evt_party_run evt_party.o] 0
+805BE324:   end_thread
+805BE328:   setii GF(0) 0
+805BE334:   setii GF(1) 0
+805BE340:   setii GF(2) 0
+805BE34C:   callc [evt_npc_flag_onoff evt_npc.o] 1 ["にせマリオ"] 1073741856
+805BE360:   callc [evt_npc_flag_onoff evt_npc.o] 0 ["にせマリオ"] 1024
+805BE374:   callc [evt_npc_status_onoff evt_npc.o] 1 ["にせマリオ"] 2
+805BE388:   callc [evt_npc_set_anim evt_npc.o] ["にせマリオ"] ["EM_R_3"]
+805BE398:   callc [evt_npc_get_position evt_npc.o] ["にせマリオ"] LW(0) LW(1) LW(2)
+805BE3B0:   callc [evt_mario_get_pos evt_mario.o] 0 LW(3) LW(4) LW(5)
+805BE3C8:   if_int_lt LW(0) LW(3)
+805BE3D4:     callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_VOICE_NM_SURPRISED1"] LW(0) LW(1) LW(2) 0
+805BE3F0:   else
+805BE3F4:     callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_VOICE_NM_SURPRISED1_2"] LW(0) LW(1) LW(2) 0
+805BE410:   endif
+805BE414:   callc [evt_npc_get_position evt_npc.o] ["にせマリオ"] LW(0) LW(1) LW(2)
+805BE42C:   callc [evt_npc_move_position evt_npc.o] ["にせマリオ"] -300 LW(2) 0 300.00 0
+805BE44C:   wait_ms 1000
+805BE454:   callc [evt_npc_get_position evt_npc.o] ["にせマリオ"] LW(0) LW(1) LW(2)
+805BE46C:   callc [evt_mario_get_pos evt_mario.o] 0 LW(3) LW(4) LW(5)
+805BE484:   if_int_lt LW(0) LW(3)
+805BE490:     callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_VOICE_NM_SURPRISED1_2"] LW(0) LW(1) LW(2) 0
+805BE4AC:   else
+805BE4B0:     callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_VOICE_NM_SURPRISED1"] LW(0) LW(1) LW(2) 0
+805BE4CC:   endif
+805BE4D0:   callc [evt_npc_get_position evt_npc.o] ["にせマリオ"] LW(0) LW(1) LW(2)
+805BE4E8:   callc [evt_npc_move_position evt_npc.o] ["にせマリオ"] 200 LW(2) 0 300.00 0
+805BE508:   callc [evt_npc_set_position evt_npc.o] ["にせマリオ"] 0 -1000 0
+805BE520:   setii GF(0) 1
+805BE52C:   callc [zoom gra_00.o] LW(0) LW(1) LW(2) LW(3) LW(4) LW(5)
+805BE54C:   callc [evt_mario_get_pos evt_mario.o] 0 LW(10) LW(11) LW(12)
+805BE564:   callc [evt_party_get_pos evt_party.o] 0 LW(13) LW(14) LW(15)
+805BE57C:   addi LW(10) LW(13)
+805BE588:   divi LW(10) 2
+805BE594:   callc [evt_cam3d_evt_set evt_cam.o] LW(10) LW(1) LW(2) LW(10) LW(4) LW(5) 800 11
+805BE5BC:   loop 0
+805BE5C4:     if_int_eq GF(1) 1
+805BE5D0:       if_int_eq GF(2) 1
+805BE5DC:         loop_break
+805BE5E0:       endif
+805BE5E4:     endif
+805BE5E8:     wait_frames 1
+805BE5F0:   end_loop
+805BE5F4:   begin_thread
+805BE5F8:     callc [evt_mario_set_dir evt_mario.o] 90 300 0
+805BE60C:   end_thread
+805BE610:   callc [evt_party_set_dir evt_party.o] 0 90 300
+805BE624:   wait_ms 500
+805BE62C:   callc [evt_party_stop evt_party.o] 0
+805BE638:   wait_ms 300
+805BE640:   callc [evt_gra_vivian_pose_set gra.o] 1 ["PTR_S_1"]
+805BE650:   callc [evt_gra_vivian_pose_set gra.o] 7 ["PTR_T_1"]
+805BE660:   callc [evt_msg_print_party evt_msg.o] ["stg4_gra_16"]
+805BE66C:   callc [evt_party_run evt_party.o] 0
+805BE678:   callc [evt_cam_shift_reset evt_cam.o]
+805BE680:   callc [evt_cam3d_evt_off evt_cam.o] 500 11
+805BE690:   return
+805BE694:   end

@@ -1,0 +1,48 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [dai_evt las_24.o] AT 805E6DA4 ---
+805E6DA4:   setii LW(0) ["S_move_dai"]
+805E6DB0:   setii LW(1) ["A_move_dai"]
+805E6DBC:   setii LW(2) 7200
+805E6DC8:   callc [unk_las_00005de4 las_24.o] LW(2) LW(2)
+805E6DD8:   callss [move_dai las.o]
+805E6DE0:   return
+805E6DE4:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [move_dai las.o] AT 805D5C74 ---
+805D5C74:   setii LW(7) LW(0)
+805D5C80:   setii LW(8) LW(1)
+805D5C8C:   setii LW(9) LW(2)
+805D5C98:   callc [evt_mapobj_trans evt_map.o] 1 LW(7) 0 0 -100
+805D5CB4:   callc [evt_mapobj_flag_onoff evt_map.o] 1 0 LW(7) 1
+805D5CCC:   callc [evt_hitobj_onoff evt_hit.o] LW(8) 0 1
+805D5CE0:   callc [evt_mapobj_get_position evt_map.o] LW(7) LW(0) LW(1) LW(2)
+805D5CF8:   callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_STG8_FLOOR_MOVE1"] LW(0) LW(1) LW(2) LW(6)
+805D5D14:   callc [evt_sub_intpl_msec_init evt_sub.o] 11 -100 0 1000
+805D5D2C: 0:
+805D5D34:   callc [evt_sub_intpl_msec_get_value evt_sub.o]
+805D5D3C:   callc [evt_mapobj_trans evt_map.o] 1 LW(7) 0 0 LW(0)
+805D5D58:   callc [evt_hit_bind_update evt_hit.o] LW(8)
+805D5D64:   wait_frames 1
+805D5D6C:   if_int_eq LW(1) 1
+805D5D78:     goto 0
+805D5D80:   endif
+805D5D84:   callc [evt_snd_sfxoff evt_snd.o] LW(6)
+805D5D90:   wait_ms LW(9)
+805D5D98:   callc [evt_mapobj_get_position evt_map.o] LW(7) LW(0) LW(1) LW(2)
+805D5DB0:   callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_STG8_FLOOR_MOVE1"] LW(0) LW(1) LW(2) LW(6)
+805D5DCC:   callc [evt_sub_intpl_msec_init evt_sub.o] 11 0 -100 1000
+805D5DE4: 1:
+805D5DEC:   callc [evt_sub_intpl_msec_get_value evt_sub.o]
+805D5DF4:   callc [evt_mapobj_trans evt_map.o] 1 LW(7) 0 0 LW(0)
+805D5E10:   callc [evt_hit_bind_update evt_hit.o] LW(8)
+805D5E1C:   wait_frames 1
+805D5E24:   if_int_eq LW(1) 1
+805D5E30:     goto 1
+805D5E38:   endif
+805D5E3C:   callc [evt_snd_sfxoff evt_snd.o] LW(6)
+805D5E48:   callc [evt_mapobj_flag_onoff evt_map.o] 1 1 LW(7) 1
+805D5E60:   callc [evt_hitobj_onoff evt_hit.o] LW(8) 0 0
+805D5E74:   return
+805D5E78:   end

@@ -1,0 +1,365 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [attack_event unit_teresa.o] AT 80CAC88C ---
+80CAC88C:   callc [btlevtcmd_check_battleflag battle_event_cmd.o] LW(0) 2
+80CAC89C:   if_int_ne LW(0) 0
+80CAC8A8:     callss [normal_attack_event unit_teresa.o]
+80CAC8B0:     goto 99
+80CAC8B8:   endif
+80CAC8BC:   callc [btlevtcmd_EnemyItemUseCheck battle_event_cmd.o] -2 LW(0)
+80CAC8CC:   if_int_ne LW(0) 0
+80CAC8D8:     callss LW(0)
+80CAC8E0:     callc [btlevtcmd_StartWaitEvent battle_event_cmd.o] -2
+80CAC8EC:     return
+80CAC8F0:   endif
+80CAC8F4:   callc [btlevtcmd_CheckStatus battle_event_cmd.o] -2 18 LW(0)
+80CAC908:   if_int_ne LW(0) 0
+80CAC914:     setii LW(13) 0
+80CAC920:   else
+80CAC924:     setii LW(13) 1
+80CAC930:   endif
+80CAC934:   callc [btlevtcmd_CheckStatus battle_event_cmd.o] -2 5 LW(0)
+80CAC948:   if_int_ne LW(0) 0
+80CAC954:     setii LW(14) 0
+80CAC960:   else
+80CAC964:     callc [teresa_check_trans unit_teresa.o] -2 LW(14)
+80CAC974:   endif
+80CAC978:   callc [btlevtcmd_CheckStatus battle_event_cmd.o] -2 5 LW(0)
+80CAC98C:   if_int_ne LW(0) 0
+80CAC998:     setii LW(15) 0
+80CAC9A4:   else
+80CAC9A8:     callc [teresa_check_move unit_teresa.o] LW(15)
+80CAC9B4:   endif
+80CAC9B8:   setii LW(0) 0
+80CAC9C4:   addi LW(0) 50
+80CAC9D0:   addi LW(0) 25
+80CAC9DC:   addi LW(0) 25
+80CAC9E8:   addi LW(0) 15
+80CAC9F4:   subi LW(0) 1
+80CACA00:   callc [evt_sub_random evt_sub.o] LW(0) LW(1)
+80CACA10:   setii LW(0) 25
+80CACA1C:   if_int_lt LW(1) LW(0)
+80CACA28:     if_int_eq LW(13) 1
+80CACA34:       callss [trans_myself_event unit_teresa.o]
+80CACA3C:       goto 99
+80CACA44:     endif
+80CACA48:   endif
+80CACA4C:   addi LW(0) 25
+80CACA58:   if_int_lt LW(1) LW(0)
+80CACA64:     if_int_eq LW(14) 1
+80CACA70:       callss [trans_event unit_teresa.o]
+80CACA78:       goto 99
+80CACA80:     endif
+80CACA84:   endif
+80CACA88:   addi LW(0) 15
+80CACA94:   if_int_lt LW(1) LW(0)
+80CACAA0:     if_int_eq LW(15) 1
+80CACAAC:       callss [move_event unit_teresa.o]
+80CACAB4:       goto 99
+80CACABC:     endif
+80CACAC0:   endif
+80CACAC4:   callss [normal_attack_event unit_teresa.o]
+80CACACC:   goto 99
+80CACAD4: 99:
+80CACADC:   callc [btlevtcmd_StartWaitEvent battle_event_cmd.o] -2
+80CACAE8:   return
+80CACAEC:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [normal_attack_event unit_teresa.o] AT 80CACAF0 ---
+80CACAF0:   callc [btlevtcmd_check_battleflag battle_event_cmd.o] LW(0) 2
+80CACB00:   if_int_ne LW(0) 0
+80CACB0C:     callc [btlevtcmd_GetFirstAttackTarget battle_event_cmd.o] LW(3) LW(4)
+80CACB1C:   else
+80CACB20:     callc [btlevtcmd_GetEnemyBelong battle_event_cmd.o] -2 LW(0)
+80CACB30:     callc [btlevtcmd_SamplingEnemy battle_event_cmd.o] -2 LW(0) [weapon_teresa_attack unit_teresa.o]
+80CACB44:     callc [btlevtcmd_ChoiceSamplingEnemy battle_event_cmd.o] [weapon_teresa_attack unit_teresa.o] LW(3) LW(4)
+80CACB58:   endif
+80CACB5C:   if_int_eq LW(3) -1
+80CACB68:     callc [btlevtcmd_CheckToken battle_event_cmd.o] -2 16 LW(0)
+80CACB7C:     if_int_ne LW(0) 0
+80CACB88:       callss [subsetevt_confuse_flustered battle_event_subset.o]
+80CACB90:       return
+80CACB94:     endif
+80CACB98:     goto 99
+80CACBA0:   endif
+80CACBA4:   callc [btlevtcmd_WeaponAftereffect battle_event_cmd.o] [weapon_teresa_attack unit_teresa.o]
+80CACBB0:   callc [btlevtcmd_AttackDeclare battle_event_cmd.o] -2 LW(3) LW(4)
+80CACBC4:   callc [btlevtcmd_WaitGuardMove battle_event_cmd.o]
+80CACBCC:   callc [btlevtcmd_PayWeaponCost battle_event_cmd.o] -2 [weapon_teresa_attack unit_teresa.o]
+80CACBDC:   callc [evt_btl_camera_set_mode battle_camera.o] 0 8
+80CACBEC:   callc [evt_btl_camera_set_homing_unit battle_camera.o] 0 -2 LW(3)
+80CACC00:   callc [evt_btl_camera_set_moveSpeedLv battle_camera.o] 0 1
+80CACC10:   callc [evt_btl_camera_set_zoom battle_camera.o] 0 250
+80CACC20:   callc [btlevtcmd_AnimeChangePoseType battle_event_cmd.o] -2 1 42
+80CACC34:   callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_ENM_TELESA_MOVE3"] [F1194D80] 0 [F1194D80]
+80CACC50:   begin_child_thread
+80CACC54:     callc [btlevtcmd_SetAlpha battle_event_cmd.o] -2 1 255
+80CACC68:     setii LW(7) 256
+80CACC74:     loop 16
+80CACC7C:       wait_frames 1
+80CACC84:       subi LW(7) 16
+80CACC90:       callc [btlevtcmd_SetAlpha battle_event_cmd.o] -2 1 LW(7)
+80CACCA4:     end_loop
+80CACCA8:     wait_frames 20
+80CACCB0:     callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_ENM_TELESA_MOVE4"] [F1194D80] 0 [F1194D80]
+80CACCCC:     callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 1 ["A_1"]
+80CACCE0:     callc [btlevtcmd_SetAlpha battle_event_cmd.o] -2 1 0
+80CACCF4:     setii LW(7) -1
+80CACD00:     loop 8
+80CACD08:       wait_frames 1
+80CACD10:       addi LW(7) 32
+80CACD1C:       callc [btlevtcmd_SetAlpha battle_event_cmd.o] -2 1 LW(7)
+80CACD30:     end_loop
+80CACD34:   end_child_thread
+80CACD38:   callc [btlevtcmd_GetHitPos battle_event_cmd.o] LW(3) LW(4) LW(0) LW(1) LW(2)
+80CACD54:   callc [btlevtcmd_FaceDirectionAdd battle_event_cmd.o] LW(3) LW(0) 15
+80CACD68:   addi LW(2) 5
+80CACD74:   subi LW(1) 10
+80CACD80:   callc [btlevtcmd_DivePosition battle_event_cmd.o] -2 LW(0) LW(1) LW(2) 60 -5 4 0 -1
+80CACDAC:   callc [btlevtcmd_CalculateFaceDirection battle_event_cmd.o] -2 -1 LW(3) LW(4) 16 LW(15)
+80CACDCC:   callc [btlevtcmd_ChangeFaceDirection battle_event_cmd.o] -2 LW(15)
+80CACDDC:   callc [btlevtcmd_SetAlpha battle_event_cmd.o] -2 1 255
+80CACDF0:   wait_frames 15
+80CACDF8:   begin_child_thread
+80CACDFC:     wait_frames 9
+80CACE04:     callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_ENM_TELESA_ATTACK1"] [F1194D80] 0 [F1194D80]
+80CACE20:   end_child_thread
+80CACE24:   callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 1 ["A_2"]
+80CACE38:   wait_frames 15
+80CACE40:   callc [btlevtcmd_PreCheckDamage battle_event_cmd.o] -2 LW(3) LW(4) [weapon_teresa_attack unit_teresa.o] 0 LW(5)
+80CACE60:   switchi LW(5)
+80CACE68:     case_int_eq_any 4
+80CACE70:       goto 90
+80CACE78:       end_multi_case
+80CACE7C:     case_int_eq 3
+80CACE84:       callc [btlevtcmd_StartAvoid battle_event_cmd.o] LW(3) 38
+80CACE94:       goto 90
+80CACE9C:       end_multi_case
+80CACEA0:     case_int_eq 6
+80CACEA8:       callc [btlevtcmd_StartAvoid battle_event_cmd.o] LW(3) 39
+80CACEB8:       goto 90
+80CACEC0:     case_int_eq 2
+80CACEC8:       callc [btlevtcmd_StartAvoid battle_event_cmd.o] LW(3) 40
+80CACED8:       goto 90
+80CACEE0:     case_int_eq 1
+80CACEE8:       goto 91
+80CACEF0:       end_multi_case
+80CACEF4:     case_default
+80CACEF8:       goto 98
+80CACF00:       end_multi_case
+80CACF04: 90:
+80CACF0C:       wait_frames 30
+80CACF14:       callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 1 ["X_1"]
+80CACF28:       wait_frames 60
+80CACF30:       goto 98
+80CACF38: 91:
+80CACF40:       callc [evt_btl_camera_shake_h battle_camera.o] 0 1 1 8 0
+80CACF5C:       callc [evt_btl_camera_set_moveSpeedLv battle_camera.o] 0 2
+80CACF6C:       callc [evt_btl_camera_add_zoom battle_camera.o] 0 -50
+80CACF7C:       callc [btlevtcmd_ResultACDefence battle_event_cmd.o] LW(3) [weapon_teresa_attack unit_teresa.o]
+80CACF8C:       callc [btlevtcmd_CheckDamage battle_event_cmd.o] -2 LW(3) LW(4) [weapon_teresa_attack unit_teresa.o] 256 LW(5)
+80CACFAC:       wait_frames 30
+80CACFB4:       goto 98
+80CACFBC: 98:
+80CACFC4:       callc [evt_btl_camera_set_mode battle_camera.o] 0 0
+80CACFD4:       callc [btlevtcmd_AnimeChangePoseType battle_event_cmd.o] -2 1 42
+80CACFE8:       callc [btlevtcmd_AddPartsRotate battle_event_cmd.o] -2 1 0 180 0
+80CAD004:       callc [btlevtcmd_GetHomePos battle_event_cmd.o] -2 LW(0) LW(1) LW(2)
+80CAD01C:       callc [btlevtcmd_DivePosition battle_event_cmd.o] -2 LW(0) LW(1) LW(2) 40 0 4 0 -1
+80CAD048:       callc [btlevtcmd_SetPartsRotate battle_event_cmd.o] -2 1 0 0 0
+80CAD064:       callc [btlevtcmd_ResetFaceDirection battle_event_cmd.o] -2
+80CAD070:       return
+80CAD074:       end
+
+--- START OF DISASSEMBLY FOR FUNCTION [trans_myself_event unit_teresa.o] AT 80CAD078 ---
+80CAD078:   setii LW(3) -2
+80CAD084:   setii LW(4) 1
+80CAD090:   callc [btlevtcmd_CheckStatus battle_event_cmd.o] -2 18 LW(8)
+80CAD0A4:   callc [btlevtcmd_WeaponAftereffect battle_event_cmd.o] [weapon_teresa_trans_myself unit_teresa.o]
+80CAD0B0:   callc [btlevtcmd_AttackDeclare battle_event_cmd.o] -2 LW(3) LW(4)
+80CAD0C4:   callc [btlevtcmd_PayWeaponCost battle_event_cmd.o] -2 [weapon_teresa_trans_myself unit_teresa.o]
+80CAD0D4:   callc [evt_btl_camera_set_mode battle_camera.o] 0 7
+80CAD0E4:   callc [evt_btl_camera_set_homing_unit battle_camera.o] 0 -2 -1
+80CAD0F8:   callc [evt_btl_camera_set_moveSpeedLv battle_camera.o] 0 2
+80CAD108:   callc [evt_btl_camera_set_zoom battle_camera.o] 0 300
+80CAD118:   callc [btlevtcmd_AnimeChangePoseType battle_event_cmd.o] -2 1 40
+80CAD12C:   callc [btlevtcmd_GetPos battle_event_cmd.o] -2 LW(0) LW(1) LW(2)
+80CAD144:   callc [btlevtcmd_FaceDirectionAdd battle_event_cmd.o] -2 LW(0) 30
+80CAD158:   subi LW(1) 10
+80CAD164:   callc [btlevtcmd_DivePosition battle_event_cmd.o] -2 LW(0) LW(1) LW(2) 30 10 4 0 -1
+80CAD190:   wait_frames 30
+80CAD198:   callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_ENM_TELESA_MOVE2"] [F1194D80] 0 [F1194D80]
+80CAD1B4:   if_int_eq LW(8) 0
+80CAD1C0:     callc [btlevtcmd_SetAlpha battle_event_cmd.o] -2 1 255
+80CAD1D4:     setii LW(7) 256
+80CAD1E0:     begin_child_thread
+80CAD1E4:       loop 16
+80CAD1EC:         wait_frames 1
+80CAD1F4:         subi LW(7) 8
+80CAD200:         callc [btlevtcmd_SetAlpha battle_event_cmd.o] -2 1 LW(7)
+80CAD214:       end_loop
+80CAD218:     end_child_thread
+80CAD21C:   endif
+80CAD220:   callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 1 ["A_1"]
+80CAD234:   callc [btlevtcmd_SetPartsRotate battle_event_cmd.o] -2 1 0 180 0
+80CAD250:   callc [btlevtcmd_GetHomePos battle_event_cmd.o] -2 LW(0) LW(1) LW(2)
+80CAD268:   callc [btlevtcmd_DivePosition battle_event_cmd.o] -2 LW(0) LW(1) LW(2) 10 0 5 0 -1
+80CAD294:   wait_frames 10
+80CAD29C:   loop 6
+80CAD2A4:     wait_frames 1
+80CAD2AC:     callc [btlevtcmd_AddPartsRotate battle_event_cmd.o] -2 1 0 15 0
+80CAD2C8:   end_loop
+80CAD2CC:   callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 1 ["S_1"]
+80CAD2E0:   loop 6
+80CAD2E8:     wait_frames 1
+80CAD2F0:     callc [btlevtcmd_AddPartsRotate battle_event_cmd.o] -2 1 0 15 0
+80CAD30C:   end_loop
+80CAD310:   wait_frames 12
+80CAD318:   callc [evt_btl_camera_set_mode battle_camera.o] 0 0
+80CAD328:   callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 1 ["S_1"]
+80CAD33C:   callc [btlevtcmd_SetAlpha battle_event_cmd.o] -2 1 255
+80CAD350:   callc [btlevtcmd_ResultACDefence battle_event_cmd.o] LW(3) [weapon_teresa_trans_myself unit_teresa.o]
+80CAD360:   callc [btlevtcmd_CheckDamage battle_event_cmd.o] -2 LW(3) LW(4) [weapon_teresa_trans_myself unit_teresa.o] 256 LW(5)
+80CAD380:   return
+80CAD384:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [trans_event unit_teresa.o] AT 80CAD388 ---
+80CAD388: 0:
+80CAD390:   callc [btlevtcmd_GetEnemyBelong battle_event_cmd.o] -2 LW(0)
+80CAD3A0:   callc [btlevtcmd_SamplingEnemy battle_event_cmd.o] -2 LW(0) [weapon_teresa_trans unit_teresa.o]
+80CAD3B4:   callc [btlevtcmd_ChoiceSamplingEnemy battle_event_cmd.o] [weapon_teresa_trans unit_teresa.o] LW(3) LW(4)
+80CAD3C8:   if_int_eq LW(3) -1
+80CAD3D4:     goto 99
+80CAD3DC:   endif
+80CAD3E0:   callc [teresa_check_teresa unit_teresa.o] LW(3) LW(0)
+80CAD3F0:   if_int_eq LW(0) 1
+80CAD3FC:     callc [btlevtcmd_CheckStatus battle_event_cmd.o] LW(3) 18 LW(0)
+80CAD410:     if_int_eq LW(0) 0
+80CAD41C:       goto 1
+80CAD424:     endif
+80CAD428:   endif
+80CAD42C:   goto 0
+80CAD434: 1:
+80CAD43C:   callc [btlevtcmd_WeaponAftereffect battle_event_cmd.o] [weapon_teresa_trans unit_teresa.o]
+80CAD448:   callc [btlevtcmd_AttackDeclare battle_event_cmd.o] -2 LW(3) LW(4)
+80CAD45C:   callc [btlevtcmd_PayWeaponCost battle_event_cmd.o] -2 [weapon_teresa_trans unit_teresa.o]
+80CAD46C:   callc [evt_btl_camera_set_mode battle_camera.o] 0 7
+80CAD47C:   callc [evt_btl_camera_set_homing_unit battle_camera.o] 0 -2 -1
+80CAD490:   callc [evt_btl_camera_set_moveSpeedLv battle_camera.o] 0 2
+80CAD4A0:   callc [evt_btl_camera_set_zoom battle_camera.o] 0 300
+80CAD4B0:   callc [btlevtcmd_GetHitPos battle_event_cmd.o] LW(3) LW(4) LW(0) LW(1) LW(2)
+80CAD4CC:   callc [btlevtcmd_GetPos battle_event_cmd.o] -2 LW(10) LW(11) LW(12)
+80CAD4E4:   if_int_le LW(0) LW(10)
+80CAD4F0:     callc [btlevtcmd_SetPartsRotate battle_event_cmd.o] -2 1 0 0 0
+80CAD50C:   else
+80CAD510:     callc [btlevtcmd_SetPartsRotate battle_event_cmd.o] -2 1 0 180 0
+80CAD52C:   endif
+80CAD530:   callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_ENM_TELESA_MOVE3"] [F1194D80] 0 [F1194D80]
+80CAD54C:   callc [btlevtcmd_SetAlpha battle_event_cmd.o] -2 1 255
+80CAD560:   setii LW(7) 256
+80CAD56C:   begin_child_thread
+80CAD570:     loop 16
+80CAD578:       wait_frames 1
+80CAD580:       subi LW(7) 16
+80CAD58C:       callc [btlevtcmd_SetAlpha battle_event_cmd.o] -2 1 LW(7)
+80CAD5A0:     end_loop
+80CAD5A4:   end_child_thread
+80CAD5A8:   callc [btlevtcmd_AnimeChangePoseType battle_event_cmd.o] -2 1 40
+80CAD5BC:   callc [btlevtcmd_GetHitPos battle_event_cmd.o] LW(3) LW(4) LW(0) LW(1) LW(2)
+80CAD5D8:   callc [btlevtcmd_FaceDirectionSub battle_event_cmd.o] LW(3) LW(0) 40
+80CAD5EC:   subi LW(1) 10
+80CAD5F8:   callc [btlevtcmd_DivePosition battle_event_cmd.o] -2 LW(0) LW(1) LW(2) 60 -5 4 0 -1
+80CAD624:   callc [btlevtcmd_SetPartsRotate battle_event_cmd.o] -2 1 0 0 0
+80CAD640:   callc [btlevtcmd_CalculateFaceDirection battle_event_cmd.o] -2 -1 LW(3) LW(4) 16 LW(15)
+80CAD660:   callc [btlevtcmd_ChangeFaceDirection battle_event_cmd.o] -2 LW(15)
+80CAD670:   callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_ENM_TELESA_MOVE4"] [F1194D80] 0 [F1194D80]
+80CAD68C:   callc [btlevtcmd_SetAlpha battle_event_cmd.o] -2 1 0
+80CAD6A0:   setii LW(7) -1
+80CAD6AC:   loop 16
+80CAD6B4:     wait_frames 1
+80CAD6BC:     addi LW(7) 16
+80CAD6C8:     callc [btlevtcmd_SetAlpha battle_event_cmd.o] -2 1 LW(7)
+80CAD6DC:   end_loop
+80CAD6E0:   callc [btlevtcmd_SetAlpha battle_event_cmd.o] -2 1 255
+80CAD6F4:   callc [btlevtcmd_FaceDirectionAdd battle_event_cmd.o] -2 LW(0) 20
+80CAD708:   callc [btlevtcmd_DivePosition battle_event_cmd.o] -2 LW(0) LW(1) LW(2) 40 0 0 0 -1
+80CAD734:   callc [btlevtcmd_ResultACDefence battle_event_cmd.o] LW(3) [weapon_teresa_trans_myself unit_teresa.o]
+80CAD744:   callc [btlevtcmd_CheckDamage battle_event_cmd.o] -2 LW(3) LW(4) [weapon_teresa_trans_myself unit_teresa.o] 256 LW(5)
+80CAD764:   callc [btlevtcmd_GetHomePos battle_event_cmd.o] -2 LW(0) LW(1) LW(2)
+80CAD77C:   callc [btlevtcmd_DivePosition battle_event_cmd.o] -2 LW(0) LW(1) LW(2) 30 -5 4 0 -1
+80CAD7A8:   callc [btlevtcmd_SetPartsRotate battle_event_cmd.o] -2 1 0 0 0
+80CAD7C4:   callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 1 ["S_1"]
+80CAD7D8:   callc [evt_btl_camera_set_mode battle_camera.o] 0 0
+80CAD7E8:   wait_frames 20
+80CAD7F0:   callc [btlevtcmd_ResetFaceDirection battle_event_cmd.o] -2
+80CAD7FC: 99:
+80CAD804:   return
+80CAD808:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [move_event unit_teresa.o] AT 80CAD80C ---
+80CAD80C:   callc [btlevtcmd_GetEnemyBelong battle_event_cmd.o] -2 LW(0)
+80CAD81C:   callc [btlevtcmd_SamplingEnemy battle_event_cmd.o] -2 LW(0) [weapon_teresa_move unit_teresa.o]
+80CAD830:   callc [btlevtcmd_ChoiceSamplingEnemy battle_event_cmd.o] [weapon_teresa_move unit_teresa.o] LW(3) LW(4)
+80CAD844:   if_int_eq LW(3) -1
+80CAD850:     callc [btlevtcmd_CheckToken battle_event_cmd.o] -2 16 LW(0)
+80CAD864:     if_int_ne LW(0) 0
+80CAD870:       callss [subsetevt_confuse_flustered battle_event_subset.o]
+80CAD878:       return
+80CAD87C:     endif
+80CAD880:     goto 99
+80CAD888:   endif
+80CAD88C:   callc [evt_btl_camera_set_mode battle_camera.o] 0 0
+80CAD89C:   wait_frames 30
+80CAD8A4:   setii LW(12) 80
+80CAD8B0: 0:
+80CAD8B8:   callc [teresa_check_teresa unit_teresa.o] LW(3) LW(5)
+80CAD8C8:   if_int_eq LW(5) 1
+80CAD8D4:     callc [btlevtcmd_GetUnitWork battle_event_cmd.o] LW(3) 0 LW(6)
+80CAD8E8:     if_int_eq LW(6) 0
+80CAD8F4:       callsa [move_event_sub unit_teresa.o]
+80CAD8FC:       addi LW(12) 20
+80CAD908:     endif
+80CAD90C:   endif
+80CAD910:   callc [btlevtcmd_GetSelectNextEnemy battle_event_cmd.o] LW(3) LW(4)
+80CAD920:   if_int_ne LW(3) -1
+80CAD92C:     goto 0
+80CAD934:   endif
+80CAD938:   wait_frames LW(12)
+80CAD940:   callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 1 ["S_1"]
+80CAD954:   return
+80CAD958:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [move_event_sub unit_teresa.o] AT 80CAD95C ---
+80CAD95C:   callc [btlevtcmd_GetUnitId battle_event_cmd.o] -2 LW(1)
+80CAD96C:   if_int_eq LW(3) LW(1)
+80CAD978:     setii LW(0) 0
+80CAD984:     setii LW(1) 0
+80CAD990:   else
+80CAD994:     callc [evt_sub_random evt_sub.o] 20 LW(0)
+80CAD9A4:     addi LW(0) 60
+80CAD9B0:     setii LW(1) 12
+80CAD9BC:   endif
+80CAD9C0:   wait_frames LW(0)
+80CAD9C8:   callc [btlevtcmd_SetUnitWork battle_event_cmd.o] LW(3) 0 1
+80CAD9DC:   callc [btlevtcmd_OnPartsAttribute battle_event_cmd.o] LW(3) 1 6291456
+80CAD9F0:   begin_child_thread
+80CAD9F4:     loop 60
+80CAD9FC:       callc [btlevtcmd_AddRotate battle_event_cmd.o] LW(3) 0 LW(1) 0
+80CADA14:       wait_frames 1
+80CADA1C:     end_loop
+80CADA20:   end_child_thread
+80CADA24:   begin_child_thread
+80CADA28:     wait_frames 30
+80CADA30:     callc [btlevtcmd_GetUnitId battle_event_cmd.o] -2 LW(0)
+80CADA40:     if_int_eq LW(3) LW(0)
+80CADA4C:       callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 1 ["T_1"]
+80CADA60:     endif
+80CADA64:   end_child_thread
+80CADA68:   callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_ENM_TELESA_MOVE1"] [F1194D80] 0 [F1194D80]
+80CADA84:   callc [btlevtcmd_GetPartsPos battle_event_cmd.o] LW(3) 1 LW(0) LW(1) LW(2)
+80CADAA0:   setii LW(1) 40
+80CADAAC:   callc [btlevtcmd_DivePosition battle_event_cmd.o] LW(3) LW(0) LW(1) LW(2) 60 10 4 0 -1
+80CADAD8:   callc [btlevtcmd_SetHomePos battle_event_cmd.o] LW(3) LW(0) LW(1) LW(2)
+80CADAF0:   return
+80CADAF4:   end

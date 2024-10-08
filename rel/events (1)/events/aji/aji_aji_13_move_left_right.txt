@@ -1,0 +1,56 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [move_left_right aji_13.o] AT 805EC320 ---
+805EC320:   setii LW(5) LW(0)
+805EC32C:   setii LW(6) LW(1)
+805EC338:   setii LW(7) LW(2)
+805EC344:   setii LW(8) LW(3)
+805EC350:   setii LW(9) LW(4)
+805EC35C:   if_int_ne LW(5) 0
+805EC368:     callc [evt_hit_bind_mapobj evt_hit.o] LW(5) LW(6)
+805EC378:   endif
+805EC37C:   muli LW(7) 100
+805EC388:   muli LW(8) 100
+805EC394:   loop 0
+805EC39C:     callc [evt_sub_intpl_msec_init evt_sub.o] 11 LW(7) LW(8) LW(9)
+805EC3B4: 0:
+805EC3BC:     callc [evt_sub_intpl_msec_get_value evt_sub.o]
+805EC3C4:     divf LW(0) 100.00
+805EC3D0:     callc [evt_mapobj_trans evt_map.o] 1 LW(6) LW(0) 0 0
+805EC3EC:     if_int_ne LW(5) 0
+805EC3F8:       callc [evt_hit_bind_update evt_hit.o] LW(5)
+805EC404:     endif
+805EC408:     wait_frames 1
+805EC410:     if_int_eq LW(1) 1
+805EC41C:       goto 0
+805EC424:     endif
+805EC428:     wait_ms 300
+805EC430:     loop 0
+805EC438:       if_int_eq GF(0) 0
+805EC444:         loop_break
+805EC448:       endif
+805EC44C:       wait_frames 1
+805EC454:     end_loop
+805EC458:     callc [evt_sub_intpl_msec_init evt_sub.o] 11 LW(8) LW(7) LW(9)
+805EC470: 1:
+805EC478:     callc [evt_sub_intpl_msec_get_value evt_sub.o]
+805EC480:     divf LW(0) 100.00
+805EC48C:     callc [evt_mapobj_trans evt_map.o] 1 LW(6) LW(0) 0 0
+805EC4A8:     if_int_ne LW(5) 0
+805EC4B4:       callc [evt_hit_bind_update evt_hit.o] LW(5)
+805EC4C0:     endif
+805EC4C4:     wait_frames 1
+805EC4CC:     if_int_eq LW(1) 1
+805EC4D8:       goto 1
+805EC4E0:     endif
+805EC4E4:     wait_ms 300
+805EC4EC:     loop 0
+805EC4F4:       if_int_eq GF(0) 0
+805EC500:         loop_break
+805EC504:       endif
+805EC508:       wait_frames 1
+805EC510:     end_loop
+805EC514:   end_loop
+805EC518:   return
+805EC51C:   end

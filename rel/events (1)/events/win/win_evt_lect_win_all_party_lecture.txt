@@ -1,0 +1,189 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [all_party_lecture evt_lect_win.o] AT 805D9F24 ---
+805D9F24:   callc [evt_mario_normalize evt_mario.o]
+805D9F2C:   if_int_ne LW(9) 1
+805D9F38:     if_int_ne LW(9) 5
+805D9F44:       callc [evt_mario_goodbye_party evt_mario.o] 0
+805D9F50:     else
+805D9F54:       callc [evt_mario_kill_party evt_mario.o] 0
+805D9F60:     endif
+805D9F64:     wait_ms 500
+805D9F6C:     callc [evt_npc_get_position evt_npc.o] LW(8) LW(0) LW(1) LW(2)
+805D9F84:     callc [evt_npc_get_dir evt_npc.o] LW(8) LW(3)
+805D9F94:     callc [evt_npc_set_position evt_npc.o] LW(8) 0 -1000 0
+805D9FAC:     callc [evt_pouch_party_join evt_pouch.o] LW(9)
+805D9FB8:     callc [evt_mario_set_party_pos evt_mario.o] 0 LW(9) LW(0) LW(1) LW(2)
+805D9FD4:     callc [set_dir evt_lect_win.o] LW(3)
+805D9FE0:   else
+805D9FE4:     callc [evt_party_get_pos evt_party.o] 0 LW(0) LW(1) LW(2)
+805D9FFC:   endif
+805DA000:   callc [evt_party_set_camid evt_party.o] 0 7
+805DA010:   callsa_tid [all_party_lecture_otosub evt_lect_win.o] LW(11)
+805DA01C:   callc [lect_itemget_kesan evt_lect_win.o] 0 600.00 LW(0) LW(1) LW(2)
+805DA038:   callc [evt_eff evt_eff.o] ["sub_bg"] ["itemget"] 1 LW(0) LW(1) LW(2) 0 0 0 0 0 0 0 0
+805DA078:   callc [effitemgetchange_cam evt_lect_win.o] ["sub_bg"] 5
+805DA088:   callc [evt_msg_toge evt_msg.o] 1 0 0 0
+805DA0A0:   switchi LW(9)
+805DA0A8:     case_int_eq 1
+805DA0B0:       callc [evt_msg_print evt_msg.o] 0 ["lecture_friends_00"] 0 0
+805DA0C8:     case_int_eq 2
+805DA0D0:       callc [evt_msg_print evt_msg.o] 0 ["lecture_friends_04"] 0 0
+805DA0E8:     case_int_eq 5
+805DA0F0:       callc [evt_msg_print evt_msg.o] 0 ["lecture_friends_07"] 0 0
+805DA108:     case_int_eq 4
+805DA110:       callc [evt_pouch_get_yoshiname evt_pouch.o] LW(0)
+805DA11C:       callc [evt_msg_print_insert evt_msg.o] 0 ["lecture_friends_09"] 0 0 LW(0)
+805DA138:     case_int_eq 6
+805DA140:       callc [evt_msg_print evt_msg.o] 0 ["lecture_friends_12"] 0 0
+805DA158:     case_int_eq 3
+805DA160:       callc [evt_msg_print evt_msg.o] 0 ["lecture_friends_15"] 0 0
+805DA178:       callc [evt_eff_softdelete evt_eff.o] ["sunlight"]
+805DA184:     case_int_eq 7
+805DA18C:       callc [evt_msg_print evt_msg.o] 0 ["lecture_friends_17"] 0 0
+805DA1A4:   end_switch
+805DA1A8:   check_thread_running LW(11) LW(12)
+805DA1B4:   if_int_eq LW(12) 1
+805DA1C0:     stop_tid LW(11)
+805DA1C8:     callc [evt_snd_bgmoff evt_snd.o] 513
+805DA1D4:     callc [evt_snd_bgmon evt_snd.o] 288 0
+805DA1E4:   endif
+805DA1E8:   callc [evt_mario_dispflag_onoff evt_mario.o] 1 1
+805DA1F8:   callc [evt_mario_set_camid evt_mario.o] 7
+805DA204:   callc [effitemget_open evt_lect_win.o] ["sub_bg"]
+805DA210:   callc [evt_party_get_pos evt_party.o] 0 LW(0) LW(1) LW(2)
+805DA228:   callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_OFF_PARTY_LECTURE1_1"] LW(0) LW(1) LW(2) 0
+805DA244:   callc [evt_npc_stop_for_event evt_npc.o]
+805DA24C:   wait_ms 1000
+805DA254:   callc [evt_snd_bgmoff evt_snd.o] 1024
+805DA260:   callc [evt_snd_bgmon evt_snd.o] 1 ["BGM_EVT_LECTURE1"]
+805DA270:   callc [evt_snd_envoff evt_snd.o] 1024
+805DA27C:   callc [lect_cam_save evt_lecture.o]
+805DA284:   callc [effitemget_busaiku evt_lect_win.o] 1
+805DA290:   wait_frames 1
+805DA298:   callc [evt_party_cont_onoff evt_party.o] 0 0
+805DA2A8:   callc [evt_party_get_pos evt_party.o] 0 LW(0) LW(1) LW(2)
+805DA2C0:   setii LW(3) LW(1)
+805DA2CC:   addi LW(3) 2016
+805DA2D8:   callc [evt_party_set_pos evt_party.o] 0 LW(0) LW(3) LW(2)
+805DA2F0:   callc [effitemgetchange_cam evt_lect_win.o] ["sub_bg"] 4
+805DA300:   callc [evt_paper_entry evt_paper.o] ["OFF_d_seal_upper_right"]
+805DA30C:   callc [evt_img_entry evt_img.o] ["img"]
+805DA318:   callc [evt_img_set_paper evt_img.o] ["img"] ["OFF_d_seal_upper_right"]
+805DA328:   callc [evt_img_free_capture evt_img.o] ["img"] 0
+805DA338:   callc [evt_img_alloc_capture evt_img.o] ["img"] 0 0 1 0 0 608 480
+805DA360:   callc [evt_img_clear_virtual_point evt_img.o] ["img"]
+805DA36C:   callc [evt_img_set_paper_anim evt_img.o] ["img"] ["Z_1"]
+805DA37C:   callc [evt_img_onoff evt_img.o] ["img"] 1
+805DA38C:   wait_frames 1
+805DA394:   callc [effitemget_busaiku evt_lect_win.o] 0
+805DA3A0:   callc [evt_eff_softdelete evt_eff.o] ["sub_bg"]
+805DA3AC:   wait_frames 1
+805DA3B4:   callc [evt_party_set_pos evt_party.o] 0 LW(0) LW(1) LW(2)
+805DA3CC:   callc [evt_party_cont_onoff evt_party.o] 0 1
+805DA3DC:   callc [lect_test_systemlevel evt_lecture.o]
+805DA3E4:   switchi LW(9)
+805DA3EC:     case_int_eq 5
+805DA3F4:       callss [cloud_party_lecture_init evt_lect_win.o]
+805DA3FC:   end_switch
+805DA400:   loop 6
+805DA408:     callc [evt_mario_get_pos evt_mario.o] 0 LW(0) LW(1) LW(2)
+805DA420:     callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_EVT_LECTUREN_BLINKING1"] LW(0) LW(1) LW(2) 0
+805DA43C:     callc [evt_mario_dispflag_onoff evt_mario.o] 0 1
+805DA44C:     wait_ms 100
+805DA454:     callc [evt_mario_dispflag_onoff evt_mario.o] 1 1
+805DA464:     wait_ms 100
+805DA46C:   end_loop
+805DA470:   callc [evt_mario_get_pos evt_mario.o] 0 LW(0) LW(1) LW(2)
+805DA488:   callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_EVT_LECTUREN_BLINKING1"] LW(0) LW(1) LW(2) 0
+805DA4A4:   callc [evt_mario_dispflag_onoff evt_mario.o] 0 1
+805DA4B4:   switchi LW(9)
+805DA4BC:     case_int_eq 5
+805DA4C4:       callss [cloud_party_lecture evt_lect_win.o]
+805DA4CC:   end_switch
+805DA4D0:   loop 6
+805DA4D8:     callc [evt_mario_dispflag_onoff evt_mario.o] 1 1
+805DA4E8:     callc [evt_party_dispflg_onoff evt_party.o] 0 1 1
+805DA4FC:     wait_ms 100
+805DA504:     callc [evt_mario_get_pos evt_mario.o] 0 LW(0) LW(1) LW(2)
+805DA51C:     callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_EVT_LECTUREN_BLINKING1"] LW(0) LW(1) LW(2) 0
+805DA538:     callc [evt_mario_dispflag_onoff evt_mario.o] 0 1
+805DA548:     callc [evt_party_dispflg_onoff evt_party.o] 0 1 0
+805DA55C:     wait_ms 100
+805DA564:   end_loop
+805DA568:   callc [evt_mario_dispflag_onoff evt_mario.o] 1 1
+805DA578:   callc [evt_party_dispflg_onoff evt_party.o] 0 1 1
+805DA58C:   callc [evt_mario_init_camid evt_mario.o]
+805DA594:   callc [evt_party_init_camid evt_party.o] 0
+805DA5A0:   callc [lect_cam_load evt_lecture.o] 0
+805DA5AC:   callc [evt_mario_dispflag_onoff evt_mario.o] 0 1
+805DA5BC:   callc [evt_party_dispflg_onoff evt_party.o] 0 1 0
+805DA5D0:   callc [evt_snd_bgmoff evt_snd.o] 513
+805DA5DC:   callc [evt_snd_bgmon evt_snd.o] 288 0
+805DA5EC:   callc [evt_snd_envoff evt_snd.o] 513
+805DA5F8:   callc [evt_snd_envon evt_snd.o] 288 0
+805DA608:   callc [evt_mario_get_pos evt_mario.o] 0 LW(0) LW(1) LW(2)
+805DA620:   callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_OFF_PARTY_LECTURE1"] LW(0) LW(1) LW(2) 0
+805DA63C:   callc [evt_img_set_paper_anim evt_img.o] ["img"] ["A_1"]
+805DA64C:   callc [evt_img_wait_animend evt_img.o] ["img"]
+805DA658:   callc [evt_img_release evt_img.o] ["img"]
+805DA664:   callc [evt_paper_delete evt_paper.o] ["OFF_d_seal_upper_right"]
+805DA670:   callc [evt_npc_start_for_event evt_npc.o]
+805DA678:   switchi LW(9)
+805DA680:   end_switch
+805DA684:   return
+805DA688:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [all_party_lecture_otosub evt_lect_win.o] AT 805D9EF8 ---
+805D9EF8:   callc [evt_snd_bgmoff evt_snd.o] 1024
+805D9F04:   callc [evt_snd_bgmon evt_snd.o] 1 ["BGM_FF_GET_PARTY1"]
+805D9F14:   wait_ms 2000
+805D9F1C:   return
+805D9F20:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [cloud_party_lecture_init evt_lect_win.o] AT 805D9C78 ---
+805D9C78:   callc [evt_mario_set_dir evt_mario.o] 90 0 0
+805D9C8C:   callc [evt_mario_get_pos evt_mario.o] 0 LW(0) LW(1) LW(2)
+805D9CA4:   subi LW(0) 40
+805D9CB0:   callc [evt_cam3d_evt_set_rel evt_cam.o] 0.00 80.00 455.00 -20.00 35.00 -100.00 1000 0
+805D9CD8:   callc [evt_party_cont_onoff evt_party.o] 0 0
+805D9CE8:   callc [lect_party_ido_sum evt_lect_win.o] 0 1000
+805D9CF8:   callc [evt_party_cont_onoff evt_party.o] 0 1
+805D9D08:   callc [evt_party_set_dir evt_party.o] 0 90 300
+805D9D1C:   return
+805D9D20:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [cloud_party_lecture evt_lect_win.o] AT 805D9D24 ---
+805D9D24:   callc [evt_msg_print evt_msg.o] 0 ["lecture_friends_07_0_1"] 0 0
+805D9D3C:   callc [evt_msg_print evt_msg.o] 0 ["lecture_friends_07_1"] 0 0
+805D9D54:   callc [evt_cam3d_evt_set_rel evt_cam.o] 0.00 90.00 505.00 10.00 35.00 -115.00 1000 0
+805D9D7C:   wait_ms 1000
+805D9D84:   wait_ms 300
+805D9D8C:   callc [evt_cam_letter_box_disable evt_cam.o] 1
+805D9D98:   callc [evt_party_cloud_breathout evt_party.o] 0 1000
+805D9DA8:   wait_ms 1000
+805D9DB0:   callc [evt_party_cloud_breathout evt_party.o] 0 1000
+805D9DC0:   wait_ms 1000
+805D9DC8:   callc [evt_party_cloud_breathout evt_party.o] 0 3000
+805D9DD8:   callc [evt_cam_letter_box_disable evt_cam.o] 0
+805D9DE4:   wait_ms 300
+805D9DEC:   callc [x_flag_set evt_lect_win.o] 0 1
+805D9DFC:   begin_thread
+805D9E00:     callc [evt_party_stop evt_party.o] 0
+805D9E0C:     wait_frames 16
+805D9E14:     callc [evt_mario_get_pos evt_mario.o] 0 LW(0) LW(1) LW(2)
+805D9E2C:     subi LW(0) 40
+805D9E38:     callc [evt_party_move_pos2 evt_party.o] 0 LW(0) LW(2) 80.00
+805D9E50:     callc [evt_party_set_dir evt_party.o] 0 90 300
+805D9E64:     callc [x_flag_set evt_lect_win.o] 0 0
+805D9E74:   end_thread
+805D9E78:   callc [evt_cam3d_evt_set_rel evt_cam.o] 0.00 80.00 455.00 -20.00 35.00 -100.00 1000 0
+805D9EA0:   wait_ms 1000
+805D9EA8:   callc [evt_msg_print_add evt_msg.o] 0 ["lecture_friends_08"]
+805D9EB8:   callc [x_flag_wait evt_lect_win.o] 0 0
+805D9EC8:   callc [evt_party_set_pose evt_party.o] 0 ["PWD_O_1"]
+805D9ED8:   wait_ms 1000
+805D9EE0:   callc [evt_party_set_pose evt_party.o] 0 ["PWD_S_1"]
+805D9EF0:   return
+805D9EF4:   end

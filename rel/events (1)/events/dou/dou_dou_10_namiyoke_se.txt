@@ -1,0 +1,40 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [namiyoke_se dou_10.o] AT 805C8F60 ---
+805C8F60:   setii LW(12) 0
+805C8F6C:   loop 0
+805C8F74:     setii LW(10) 0
+805C8F80:     setii LW(11) 0
+805C8F8C:     setii LW(6) 0
+805C8F98:     setii LW(7) 100000000
+805C8FA4:     loop 0
+805C8FAC:       callc [evt_sub_entrymgr_check dou_10.o] LW(9) LW(10) LW(0)
+805C8FC0:       if_int_ne LW(0) 0
+805C8FCC:         setii LW(11) 1
+805C8FD8:         callc [evt_sub_entrymgr_getreg dou_10.o] LW(9) LW(10) LW(0) LW(1) LW(2)
+805C8FF4:         callc [namiyoke_se_check dou_10.o] LW(0) LW(1) LW(2)
+805C9008:       endif
+805C900C:       addi LW(10) 1
+805C9018:       if_int_eq LW(10) 15
+805C9024:         loop_break
+805C9028:       endif
+805C902C:     end_loop
+805C9030:     if_int_eq LW(11) 1
+805C903C:       callc [evt_sub_entrymgr_getreg dou_10.o] LW(9) LW(6) LW(3) LW(4) LW(5)
+805C9058:       if_int_eq LW(12) 0
+805C9064:         callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_STG5_MINIGAME_WAVE1"] LW(3) LW(4) LW(3) LW(13)
+805C9080:         setii LW(12) 1
+805C908C:       else
+805C9090:         callc [evt_snd_sfx_pos evt_snd.o] LW(13) LW(3) LW(4) LW(5)
+805C90A8:       endif
+805C90AC:     else
+805C90B0:       if_int_eq LW(12) 1
+805C90BC:         callc [evt_snd_sfxoff evt_snd.o] LW(13)
+805C90C8:         setii LW(12) 0
+805C90D4:       endif
+805C90D8:     endif
+805C90DC:     wait_frames 1
+805C90E4:   end_loop
+805C90E8:   return
+805C90EC:   end

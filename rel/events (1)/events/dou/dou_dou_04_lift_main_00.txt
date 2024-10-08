@@ -1,0 +1,105 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [lift_main_00 dou_04.o] AT 805C4440 ---
+805C4440:   setii LF(10) 0
+805C444C:   loop 0
+805C4454:     wait_until GF(10)
+805C445C:     if_int_eq LF(10) 0
+805C4468:       setii LW(0) 0
+805C4474:       setff LW(3) 0.00
+805C4480:     else
+805C4484:       setii LW(0) 0
+805C4490:       setff LW(3) LW(4)
+805C449C:     endif
+805C44A0:     callss [lift_event_00 dou_04.o]
+805C44A8:     wait_ms 4000
+805C44B0:     if_int_eq LF(10) 0
+805C44BC:       setii LW(0) 1
+805C44C8:       setff LW(3) -180.00
+805C44D4:     else
+805C44D8:       setii LW(0) 1
+805C44E4:       setff LW(3) LW(4)
+805C44F0:     endif
+805C44F4:     callss [lift_event_00 dou_04.o]
+805C44FC:     setii GF(10) 1
+805C4508:   end_loop
+805C450C:   return
+805C4510:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [lift_event_00 dou_04.o] AT 805C3D14 ---
+805C3D14:   if_int_eq LW(0) 0
+805C3D20:     setff LW(0) LW(3)
+805C3D2C:     loop 0
+805C3D34:       callc [evt_mapobj_trans evt_map.o] 1 ["s04_m_hako_b"] 0 LW(0) 0
+805C3D50:       callc [evt_hit_bind_update evt_hit.o] ["a04_m_hako_02"]
+805C3D5C:       callc [evt_mario_get_name_hitobj_ride evt_mario.o] LW(2)
+805C3D68:       if_string_eq LW(2) ["a04_m_hako_02"]
+805C3D74:         callc [evt_mario_set_hosei_xyz evt_mario.o] 0 LW(0) 0
+805C3D88:       endif
+805C3D8C:       callc [evt_party_get_name_hitobj_ride evt_party.o] 0 LW(2)
+805C3D9C:       if_string_eq LW(2) ["a04_m_hako_02"]
+805C3DA8:         callc [evt_party_set_hosei_xyz evt_party.o] 0 0 LW(0) 0
+805C3DC0:       endif
+805C3DC4:       callc [evt_party_get_name_hitobj_ride evt_party.o] 1 LW(2)
+805C3DD4:       if_string_eq LW(2) ["a04_m_hako_02"]
+805C3DE0:         callc [evt_party_set_hosei_xyz evt_party.o] 1 0 LW(0) 0
+805C3DF8:       endif
+805C3DFC:       setii LF(10) 0
+805C3E08:       callc [evt_mario_get_name_hitobj_head evt_mario.o] LW(2)
+805C3E14:       if_string_eq LW(2) ["soko2"]
+805C3E20:         setii LF(10) 1
+805C3E2C:       endif
+805C3E30:       callc [evt_mario_check_menu dou_04.o] LF(11)
+805C3E3C:       if_int_eq LF(10) 1
+805C3E48:         loop_break
+805C3E4C:       endif
+805C3E50:       addf LW(0) -0.75
+805C3E5C:       wait_frames 1
+805C3E64:       if_float_le LW(0) -180.00
+805C3E70:         setff LW(0) -180.00
+805C3E7C:         callc [evt_mapobj_trans evt_map.o] 1 ["s04_m_hako_b"] 0 LW(0) 0
+805C3E98:         loop_break
+805C3E9C:       endif
+805C3EA0:     end_loop
+805C3EA4:     callc [evt_mapobj_get_position evt_map.o] ["s04_m_hako_b"] LW(10) LW(11) LW(12)
+805C3EBC:     callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_STG5_STEP_DOWN1"] LW(10) LW(11) LW(12) 0
+805C3ED8:     callc [evt_cam_shake evt_cam.o] 4 0.00 0.00 150
+805C3EF0:   else
+805C3EF4:     setff LW(0) LW(3)
+805C3F00:     loop 0
+805C3F08:       callc [evt_mapobj_trans evt_map.o] 1 ["s04_m_hako_b"] 0 LW(0) 0
+805C3F24:       callc [evt_hit_bind_update evt_hit.o] ["a04_m_hako_02"]
+805C3F30:       callc [evt_mario_get_name_hitobj_ride evt_mario.o] LW(2)
+805C3F3C:       if_string_eq LW(2) ["a04_m_hako_02"]
+805C3F48:         callc [evt_mario_set_hosei_xyz evt_mario.o] 0 LW(0) 0
+805C3F5C:       endif
+805C3F60:       callc [evt_party_get_name_hitobj_ride evt_party.o] 0 LW(2)
+805C3F70:       if_string_eq LW(2) ["a04_m_hako_02"]
+805C3F7C:         callc [evt_party_set_hosei_xyz evt_party.o] 0 0 LW(0) 0
+805C3F94:       endif
+805C3F98:       callc [evt_party_get_name_hitobj_ride evt_party.o] 1 LW(2)
+805C3FA8:       if_string_eq LW(2) ["a04_m_hako_02"]
+805C3FB4:         callc [evt_party_set_hosei_xyz evt_party.o] 1 0 LW(0) 0
+805C3FCC:       endif
+805C3FD0:       setii LF(10) 0
+805C3FDC:       callc [evt_mario_get_name_hitobj_head evt_mario.o] LW(2)
+805C3FE8:       if_string_eq LW(2) ["soko1"]
+805C3FF4:         setii LF(10) 1
+805C4000:       endif
+805C4004:       callc [evt_mario_check_menu dou_04.o] LF(11)
+805C4010:       if_int_eq LF(10) 1
+805C401C:         loop_break
+805C4020:       endif
+805C4024:       addf LW(0) 0.75
+805C4030:       wait_frames 1
+805C4038:       if_float_ge LW(0) 0.00
+805C4044:         setff LW(0) 0.00
+805C4050:         callc [evt_mapobj_trans evt_map.o] 1 ["s04_m_hako_b"] 0 LW(0) 0
+805C406C:         loop_break
+805C4070:       endif
+805C4074:     end_loop
+805C4078:   endif
+805C407C:   setff LW(4) LW(0)
+805C4088:   return
+805C408C:   end

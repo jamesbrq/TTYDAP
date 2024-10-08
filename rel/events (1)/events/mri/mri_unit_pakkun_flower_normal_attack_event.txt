@@ -1,0 +1,167 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [normal_attack_event unit_pakkun_flower.o] AT 806160E0 ---
+806160E0:   callc [btlevtcmd_check_battleflag battle_event_cmd.o] LW(0) 2
+806160F0:   if_int_ne LW(0) 0
+806160FC:     wait_ms 750
+80616104:     callc [btlevtcmd_GetFirstAttackTarget battle_event_cmd.o] LW(3) LW(4)
+80616114:   else
+80616118:     callc [btlevtcmd_GetEnemyBelong battle_event_cmd.o] -2 LW(0)
+80616128:     callc [btlevtcmd_SamplingEnemy battle_event_cmd.o] -2 LW(0) LW(9)
+8061613C:     callc [btlevtcmd_ChoiceSamplingEnemy battle_event_cmd.o] LW(9) LW(3) LW(4)
+80616150:   endif
+80616154:   if_int_eq LW(3) -1
+80616160:     callc [btlevtcmd_CheckToken battle_event_cmd.o] -2 16 LW(0)
+80616174:     if_int_ne LW(0) 0
+80616180:       callss [subsetevt_confuse_flustered battle_event_subset.o]
+80616188:       return
+8061618C:     endif
+80616190:     goto 99
+80616198:   endif
+8061619C:   callc [btlevtcmd_WeaponAftereffect battle_event_cmd.o] LW(9)
+806161A8:   callc [btlevtcmd_AttackDeclare battle_event_cmd.o] -2 LW(3) LW(4)
+806161BC:   callc [btlevtcmd_WaitGuardMove battle_event_cmd.o]
+806161C4:   callc [btlevtcmd_PayWeaponCost battle_event_cmd.o] -2 LW(9)
+806161D4:   callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_ENM_PAKKUN_MOVE1"] [F1194D80] 0 [F1194D80]
+806161F0:   begin_child_thread
+806161F4:     callc [shadow_scale_small unit_pakkun_flower.o] -2
+80616200:   end_child_thread
+80616204:   callc [btlevtcmd_CheckAttribute battle_event_cmd.o] -2 2 LW(15)
+80616218:   if_int_eq LW(15) 0
+80616224:     callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 1 ["PKF_E_2"]
+80616238:   else
+8061623C:     callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 1 ["PKF_E_4"]
+80616250:   endif
+80616254:   wait_ms 300
+8061625C:   callc [btlevtcmd_OnAttribute battle_event_cmd.o] -2 16777216
+8061626C:   callc [btlevtcmd_OnPartsAttribute battle_event_cmd.o] -2 1 33554432
+80616280:   callc [btlevtcmd_GetPos battle_event_cmd.o] LW(3) LW(0) LW(1) LW(2)
+80616298:   callc [btlevtcmd_FaceDirectionAdd battle_event_cmd.o] LW(3) LW(0) 45
+806162AC:   callc [btlevtcmd_SetPos battle_event_cmd.o] -2 LW(0) 0 LW(2)
+806162C4:   callc [btlevtcmd_CalculateFaceDirection battle_event_cmd.o] -2 -1 LW(3) LW(4) 16 LW(15)
+806162E4:   callc [btlevtcmd_ChangeFaceDirection battle_event_cmd.o] -2 LW(15)
+806162F4:   wait_ms 500
+806162FC:   callc [evt_btl_camera_set_mode battle_camera.o] 0 8
+8061630C:   callc [evt_btl_camera_set_homing_unit battle_camera.o] 0 -2 LW(3)
+80616320:   callc [evt_btl_camera_set_moveSpeedLv battle_camera.o] 0 1
+80616330:   callc [evt_btl_camera_set_zoom battle_camera.o] 0 250
+80616340:   callc [btlevtcmd_SetHitOffset battle_event_cmd.o] -2 1 0 0 0
+8061635C:   callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_ENM_PAKKUN_MOVE2"] [F1194D80] 0 [F1194D80]
+80616378:   begin_child_thread
+8061637C:     callc [shadow_scale_return unit_pakkun_flower.o] -2
+80616388:   end_child_thread
+8061638C:   callc [btlevtcmd_OffAttribute battle_event_cmd.o] -2 16777216
+8061639C:   callc [btlevtcmd_OffPartsAttribute battle_event_cmd.o] -2 1 33554432
+806163B0:   callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 1 ["PKF_E_1"]
+806163C4:   wait_ms 150
+806163CC:   callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 1 ["PKF_A_1A"]
+806163E0:   wait_ms 200
+806163E8:   callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_ENM_PAKKUN_ATTACK1"] [F1194D80] 0 [F1194D80]
+80616404:   callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 1 ["PKF_A_1B"]
+80616418:   wait_ms 200
+80616420:   callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 1 ["PKF_A_1C"]
+80616434:   callc [btlevtcmd_PreCheckDamage battle_event_cmd.o] -2 LW(3) LW(4) LW(9) 256 LW(5)
+80616454:   switchi LW(5)
+8061645C:     case_int_eq_any 4
+80616464:       goto 90
+8061646C:       end_multi_case
+80616470:     case_int_eq 3
+80616478:       callc [btlevtcmd_StartAvoid battle_event_cmd.o] LW(3) 38
+80616488:       goto 90
+80616490:       end_multi_case
+80616494:     case_int_eq 6
+8061649C:       callc [btlevtcmd_StartAvoid battle_event_cmd.o] LW(3) 39
+806164AC:       goto 90
+806164B4:     case_int_eq 2
+806164BC:       callc [btlevtcmd_StartAvoid battle_event_cmd.o] LW(3) 40
+806164CC:       goto 90
+806164D4:     case_int_eq 1
+806164DC:       goto 91
+806164E4:       end_multi_case
+806164E8:     case_default
+806164EC:       goto 98
+806164F4:       end_multi_case
+806164F8:   end_switch
+806164FC: 90:
+80616504:   goto 98
+8061650C: 91:
+80616514:   callc [evt_btl_camera_shake_h battle_camera.o] 0 1 1 8 0
+80616530:   callc [evt_btl_camera_set_moveSpeedLv battle_camera.o] 0 2
+80616540:   callc [evt_btl_camera_add_zoom battle_camera.o] 0 -50
+80616550:   callc [btlevtcmd_ResultACDefence battle_event_cmd.o] LW(3) LW(9)
+80616560:   callc [btlevtcmd_CheckDamage battle_event_cmd.o] -2 LW(3) LW(4) LW(9) 256 LW(5)
+80616580:   goto 98
+80616588: 98:
+80616590:   wait_ms 500
+80616598:   callss [return_event unit_pakkun_flower.o]
+806165A0: 99:
+806165A8:   callc [btlevtcmd_ResetFaceDirection battle_event_cmd.o] -2
+806165B4:   return
+806165B8:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [return_event unit_pakkun_flower.o] AT 80615CE0 ---
+80615CE0:   callc [evt_btl_camera_set_mode battle_camera.o] 0 0
+80615CF0:   callc [pakkun_ceil_exist unit_pakkun_flower.o] LW(0)
+80615CFC:   if_int_eq LW(0) 1
+80615D08:     callc [evt_sub_random evt_sub.o] 1 LW(15)
+80615D18:   else
+80615D1C:     setii LW(15) 0
+80615D28:   endif
+80615D2C:   callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_ENM_PAKKUN_MOVE1"] [F1194D80] 0 [F1194D80]
+80615D48:   begin_child_thread
+80615D4C:     callc [shadow_scale_small unit_pakkun_flower.o] -2
+80615D58:   end_child_thread
+80615D5C:   callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 1 ["PKF_E_2"]
+80615D70:   wait_ms 300
+80615D78:   callc [btlevtcmd_OnAttribute battle_event_cmd.o] -2 16777216
+80615D88:   callc [btlevtcmd_OnPartsAttribute battle_event_cmd.o] -2 1 33554432
+80615D9C:   if_int_eq LW(15) 0
+80615DA8:     callc [btlevtcmd_SetEventCeilFall battle_event_cmd.o] -2 0
+80615DB8:     callc [btlevtcmd_GetHomePos battle_event_cmd.o] -2 LW(0) LW(1) LW(2)
+80615DD0:     callc [btlevtcmd_SetPos battle_event_cmd.o] -2 LW(0) 0 LW(2)
+80615DE8:     callc [btlevtcmd_SetHomePos battle_event_cmd.o] -2 LW(0) 0 LW(2)
+80615E00:     wait_ms 500
+80615E08:     callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_ENM_PAKKUN_MOVE2"] [F1194D80] 0 [F1194D80]
+80615E24:     begin_child_thread
+80615E28:       callc [shadow_scale_return unit_pakkun_flower.o] -2
+80615E34:     end_child_thread
+80615E38:     callc [btlevtcmd_OffAttribute battle_event_cmd.o] -2 16777216
+80615E48:     callc [btlevtcmd_OffPartsAttribute battle_event_cmd.o] -2 1 33554432
+80615E5C:     callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 1 ["PKF_E_1"]
+80615E70:     callc [btlevtcmd_SetHitOffset battle_event_cmd.o] -2 1 0 0 0
+80615E8C:     callc [btlevtcmd_SetHitCursorOffset battle_event_cmd.o] -2 1 0 50 0
+80615EA8:     callc [btlevtcmd_SetStatusIconOffset battle_event_cmd.o] -2 4 48
+80615EBC:     callc [btlevtcmd_SetKissHitOffset battle_event_cmd.o] -2 16 32 0
+80615ED4:     callc [btlevtcmd_OffAttribute battle_event_cmd.o] -2 2
+80615EE4:     callc [btlevtcmd_OffPartsAttribute battle_event_cmd.o] -2 1 4194304
+80615EF8:     callc [btlevtcmd_OffPartsAttribute battle_event_cmd.o] -2 1 2097152
+80615F0C:     callc [btlevtcmd_AnimeSetPoseTable battle_event_cmd.o] -2 1 [pose_table unit_pakkun_flower.o]
+80615F20:     wait_ms 500
+80615F28:     callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 1 ["PKF_S_1"]
+80615F3C:   else
+80615F40:     callc [btlevtcmd_SetEventCeilFall battle_event_cmd.o] -2 [ceil_fall_ready_event unit_pakkun_flower.o]
+80615F50:     callc [btlevtcmd_GetHomePos battle_event_cmd.o] -2 LW(0) LW(1) LW(2)
+80615F68:     callc [btlevtcmd_SetPos battle_event_cmd.o] -2 LW(0) 130 LW(2)
+80615F80:     callc [btlevtcmd_SetHomePos battle_event_cmd.o] -2 LW(0) 130 LW(2)
+80615F98:     wait_ms 500
+80615FA0:     callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_ENM_PAKKUN_MOVE2"] [F1194D80] 0 [F1194D80]
+80615FBC:     begin_child_thread
+80615FC0:       callc [shadow_scale_return unit_pakkun_flower.o] -2
+80615FCC:     end_child_thread
+80615FD0:     callc [btlevtcmd_OffAttribute battle_event_cmd.o] -2 16777216
+80615FE0:     callc [btlevtcmd_OffPartsAttribute battle_event_cmd.o] -2 1 33554432
+80615FF4:     callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 1 ["PKF_E_3"]
+80616008:     callc [btlevtcmd_SetHitOffset battle_event_cmd.o] -2 1 0 -80 0
+80616024:     callc [btlevtcmd_SetHitCursorOffset battle_event_cmd.o] -2 1 0 -50 0
+80616040:     callc [btlevtcmd_SetStatusIconOffset battle_event_cmd.o] -2 4 10
+80616054:     callc [btlevtcmd_SetKissHitOffset battle_event_cmd.o] -2 16 -32 0
+8061606C:     callc [btlevtcmd_OnAttribute battle_event_cmd.o] -2 2
+8061607C:     callc [btlevtcmd_OnPartsAttribute battle_event_cmd.o] -2 1 4194304
+80616090:     callc [btlevtcmd_OnPartsAttribute battle_event_cmd.o] -2 1 2097152
+806160A4:     callc [btlevtcmd_AnimeSetPoseTable battle_event_cmd.o] -2 1 [pose_table_ceil unit_pakkun_flower.o]
+806160B8:     wait_ms 500
+806160C0:     callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 1 ["PKF_S_3"]
+806160D4:   endif
+806160D8:   return
+806160DC:   end

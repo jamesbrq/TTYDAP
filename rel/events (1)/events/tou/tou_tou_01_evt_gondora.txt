@@ -1,0 +1,177 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [evt_gondora tou_01.o] AT 805DA320 ---
+805DA320:   callc [evt_mario_key_onoff evt_mario.o] 0
+805DA32C:   callc [evt_mario_normalize evt_mario.o]
+805DA334:   callc [evt_party_stop evt_party.o] 0
+805DA340:   callc [evt_party_stop evt_party.o] 1
+805DA34C:   callc [evt_mario_set_pos evt_mario.o] -20 315 410
+805DA360:   callc [evt_party_set_pos evt_party.o] 0 20 315 410
+805DA378:   callc [evt_party_set_pos evt_party.o] 1 0 315 400
+805DA390:   callc [evt_mario_set_dir evt_mario.o] 90 0 0
+805DA3A4:   callc [evt_party_set_dir evt_party.o] 0 270 0
+805DA3B8:   callc [evt_cam3d_evt_set evt_cam.o] 0 473 1000 0 400 403 0 11
+805DA3E0:   callc [evt_mapobj_flag_onoff evt_map.o] 1 0 ["gondora"] 1
+805DA3F8:   callc [evt_hit_bind_mapobj evt_hit.o] ["a_gondora"] ["gondora"]
+805DA408:   callc [evt_mapobj_trans evt_map.o] 1 ["gondora"] 0 300 0
+805DA424:   callc [evt_hit_bind_update evt_hit.o] ["a_gondora"]
+805DA430:   callc [evt_seq_wait evt_seq.o] 2
+805DA43C:   callc [evt_cam3d_evt_set evt_cam.o] 0 115 1000 0 42 403 4000 0
+805DA464:   setii LW(0) 300
+805DA470:   setii LW(1) 0
+805DA47C:   setii LW(2) 1
+805DA488:   callss [evt_gondora_updown tou_01.o]
+805DA490:   setii LW(0) 0
+805DA49C:   setii LW(1) 120
+805DA4A8:   callss [evt_gondora_mon tou_01.o]
+805DA4B0:   callc [evt_party_move_pos2 evt_party.o] 0 20 500 60.00
+805DA4C8:   callc [evt_party_stop evt_party.o] 0
+805DA4D4:   callc [evt_mario_mov_pos2 evt_mario.o] 20 410 60.00
+805DA4E8:   callc [evt_mario_mov_pos2 evt_mario.o] 20 490 60.00
+805DA4FC:   callc [evt_mario_mov_pos2 evt_mario.o] -20 500 60.00
+805DA510:   callc [evt_mario_set_dir_npc evt_mario.o] ["飛空船"]
+805DA51C:   callc [evt_party_run evt_party.o] 0
+805DA528:   callc [evt_party_run evt_party.o] 1
+805DA534:   setii LW(0) 120
+805DA540:   setii LW(1) 0
+805DA54C:   callss [evt_gondora_mon tou_01.o]
+805DA554:   setii LW(0) 0
+805DA560:   setii LW(1) 800
+805DA56C:   setii LW(2) 0
+805DA578:   callsa [evt_gondora_updown tou_01.o]
+805DA580:   callc [evt_cam3d_evt_off evt_cam.o] 1000 11
+805DA590:   wait_ms 1500
+805DA598:   if_int_lt GSW(0) 127
+805DA5A4:     callss [evt_uron tou_01.o]
+805DA5AC:   endif
+805DA5B0:   callc [evt_mario_key_onoff evt_mario.o] 1
+805DA5BC:   return
+805DA5C0:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [evt_gondora_updown tou_01.o] AT 805D9FEC ---
+805D9FEC:   setii LW(3) LW(0)
+805D9FF8:   setii LW(4) LW(1)
+805DA004:   if_int_eq LW(2) 1
+805DA010:     setii LF(0) 1
+805DA01C:   else
+805DA020:     setii LF(0) 0
+805DA02C:   endif
+805DA030:   callc [evt_mapobj_get_position evt_map.o] ["gondora"] LW(10) LW(11) LW(12)
+805DA048:   callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_STG3_AIR_SHIP_GONDOLA_MOVE1"] LW(10) LW(11) LW(12) LW(5)
+805DA064:   callc [evt_mapobj_flag_onoff evt_map.o] 1 0 ["gondora"] 1
+805DA07C:   callc [evt_hit_bind_mapobj evt_hit.o] ["a_gondora"] ["gondora"]
+805DA08C:   mulf LW(3) 10.00
+805DA098:   mulf LW(4) 10.00
+805DA0A4:   callc [evt_sub_intpl_msec_init evt_sub.o] 0 LW(3) LW(4) 4000
+805DA0BC: 0:
+805DA0C4:   callc [evt_sub_intpl_msec_get_value evt_sub.o]
+805DA0CC:   divf LW(0) 10.00
+805DA0D8:   callc [evt_mapobj_trans evt_map.o] 1 ["gondora"] 0 LW(0) 0
+805DA0F4:   callc [evt_hit_bind_update evt_hit.o] ["a_gondora"]
+805DA100:   callc [evt_mapobj_get_position evt_map.o] ["gondora"] LW(7) LW(8) LW(9)
+805DA118:   callc [evt_snd_sfx_pos evt_snd.o] LW(5) LW(7) LW(8) LW(9)
+805DA130:   if_int_eq LF(0) 1
+805DA13C:     callc [evt_mario_get_pos evt_mario.o] 0 LW(7) LW(8) LW(9)
+805DA154:     setii LW(6) LW(0)
+805DA160:     addi LW(6) 9
+805DA16C:     callc [evt_mario_set_pos evt_mario.o] LW(7) LW(6) LW(9)
+805DA180:     callc [evt_party_get_pos evt_party.o] 0 LW(7) LW(8) LW(9)
+805DA198:     setii LW(6) LW(0)
+805DA1A4:     addi LW(6) 9
+805DA1B0:     callc [evt_party_set_pos evt_party.o] 0 LW(7) LW(6) LW(9)
+805DA1C8:   endif
+805DA1CC:   wait_frames 1
+805DA1D4:   if_int_eq LW(1) 1
+805DA1E0:     goto 0
+805DA1E8:   endif
+805DA1EC:   if_int_gt LW(4) 0
+805DA1F8:     callc [evt_mapobj_flag_onoff evt_map.o] 1 1 ["gondora"] 1
+805DA210:   endif
+805DA214:   callc [evt_snd_sfxoff evt_snd.o] LW(5)
+805DA220:   return
+805DA224:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [evt_gondora_mon tou_01.o] AT 805DA228 ---
+805DA228:   setii LW(3) LW(0)
+805DA234:   setii LW(4) LW(1)
+805DA240:   callc [evt_mapobj_get_position evt_map.o] ["g_mon"] LW(10) LW(11) LW(12)
+805DA258:   callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_STG3_AIR_SHIP_GONDOLA_DOOR1"] LW(10) LW(11) LW(12) 0
+805DA274:   callc [evt_hit_bind_mapobj evt_hit.o] ["a_g_mon"] ["g_mon"]
+805DA284:   mulf LW(3) 10.00
+805DA290:   mulf LW(4) 10.00
+805DA29C:   callc [evt_sub_intpl_msec_init evt_sub.o] 11 LW(3) LW(4) 800
+805DA2B4: 0:
+805DA2BC:   callc [evt_sub_intpl_msec_get_value evt_sub.o]
+805DA2C4:   divf LW(0) 10.00
+805DA2D0:   callc [evt_mapobj_rotate evt_map.o] 1 ["g_mon"] 0 LW(0) 0
+805DA2EC:   callc [evt_hit_bind_update evt_hit.o] ["a_g_mon"]
+805DA2F8:   wait_frames 1
+805DA300:   if_int_eq LW(1) 1
+805DA30C:     goto 0
+805DA314:   endif
+805DA318:   return
+805DA31C:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [evt_uron tou_01.o] AT 805D8B1C ---
+805D8B1C:   callc [evt_mario_key_onoff evt_mario.o] 0
+805D8B28:   callc [evt_mario_normalize evt_mario.o]
+805D8B30:   callc [evt_party_stop evt_party.o] 0
+805D8B3C:   callc [evt_snd_bgm_scope evt_snd.o] 0 1
+805D8B4C:   begin_thread
+805D8B50:     callc [evt_telop_entry evt_telop.o] 6
+805D8B5C:   end_thread
+805D8B60:   callc [evt_cam3d_evt_set evt_cam.o] 0 600 2150 0 200 394 2000 11
+805D8B88:   begin_thread
+805D8B8C:     callc [evt_mario_mov_pos2 evt_mario.o] -25 400 60.00
+805D8BA0:   end_thread
+805D8BA4:   callc [evt_party_move_pos2 evt_party.o] 0 25 400 60.00
+805D8BBC:   wait_ms 500
+805D8BC4:   callc [evt_msg_print_party evt_msg.o] ["stg3_tou_03"]
+805D8BD0:   wait_ms 300
+805D8BD8:   begin_thread_tid LW(10)
+805D8BE0:     loop 0
+805D8BE8:       callc [evt_mario_set_dir evt_mario.o] 90 300 0
+805D8BFC:       callc [evt_sub_random evt_sub.o] 1000 LW(0)
+805D8C0C:       addi LW(0) 500
+805D8C18:       wait_ms LW(0)
+805D8C20:       callc [evt_mario_set_dir evt_mario.o] 270 300 0
+805D8C34:       callc [evt_sub_random evt_sub.o] 1000 LW(0)
+805D8C44:       addi LW(0) 500
+805D8C50:       wait_ms LW(0)
+805D8C58:     end_loop
+805D8C5C:   end_thread
+805D8C60:   begin_thread_tid LW(11)
+805D8C68:     loop 0
+805D8C70:       callc [evt_sub_random evt_sub.o] 500 LW(0)
+805D8C80:       addi LW(0) 1000
+805D8C8C:       wait_ms LW(0)
+805D8C94:       callc [evt_party_set_dir evt_party.o] 0 90 300
+805D8CA8:       callc [evt_sub_random evt_sub.o] 1000 LW(0)
+805D8CB8:       addi LW(0) 500
+805D8CC4:       wait_ms LW(0)
+805D8CCC:       callc [evt_party_set_dir evt_party.o] 0 270 300
+805D8CE0:     end_loop
+805D8CE4:   end_thread
+805D8CE8:   callc [evt_cam3d_evt_set evt_cam.o] -88 40 1216 -500 135 453 0 11
+805D8D10:   wait_frames 1
+805D8D18:   callc [evt_cam3d_evt_set evt_cam.o] 730 40 774 318 135 11 10000 0
+805D8D40:   wait_ms 10000
+805D8D48:   stop_tid LW(10)
+805D8D50:   stop_tid LW(11)
+805D8D58:   wait_frames 1
+805D8D60:   callc [evt_mario_set_dir evt_mario.o] 90 0 0
+805D8D74:   callc [evt_party_set_dir evt_party.o] 0 270 0
+805D8D88:   callc [evt_mario_adjust_dir evt_mario.o]
+805D8D90:   callc [evt_cam3d_evt_set evt_cam.o] 0 10 740 0 60 393 0 0
+805D8DB8:   wait_ms 300
+805D8DC0:   callc [evt_msg_print_party evt_msg.o] ["stg3_tou_04"]
+805D8DCC:   wait_ms 300
+805D8DD4:   callc [evt_cam3d_evt_off evt_cam.o] 500 11
+805D8DE4:   callc [N_evt_bero_set_mario_bottomless_respawn_pos_to_current_mario_pos evt_bero.o]
+805D8DEC:   callc [evt_mario_key_onoff evt_mario.o] 1
+805D8DF8:   callc [evt_party_run evt_party.o] 0
+805D8E04:   callc [evt_snd_bgm_scope evt_snd.o] 0 0
+805D8E14:   setii GSW(0) 127
+805D8E20:   return
+805D8E24:   end

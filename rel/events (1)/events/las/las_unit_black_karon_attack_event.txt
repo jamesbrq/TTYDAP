@@ -1,0 +1,490 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [attack_event unit_black_karon.o] AT 8061371C ---
+8061371C:   callc [btlevtcmd_check_battleflag battle_event_cmd.o] LW(0) 2
+8061372C:   if_int_ne LW(0) 0
+80613738:     callss [normal_attack_event unit_black_karon.o]
+80613740:     goto 99
+80613748:   endif
+8061374C:   callc [btlevtcmd_GetUnitWork battle_event_cmd.o] -2 2 LW(0)
+80613760:   if_int_ge LW(0) 1
+8061376C:     callss [rebirth_event unit_black_karon.o]
+80613774:     goto 99
+8061377C:   endif
+80613780:   callc [btlevtcmd_EnemyItemUseCheck battle_event_cmd.o] -2 LW(0)
+80613790:   if_int_ne LW(0) 0
+8061379C:     callss LW(0)
+806137A4:     callc [btlevtcmd_StartWaitEvent battle_event_cmd.o] -2
+806137B0:     return
+806137B4:   endif
+806137B8: 0:
+806137C0:   setii LW(0) 50
+806137CC:   addi LW(0) 30
+806137D8:   addi LW(0) 20
+806137E4:   subi LW(0) 1
+806137F0:   callc [evt_sub_random evt_sub.o] LW(0) LW(1)
+80613800:   setii LW(0) 50
+8061380C:   if_int_lt LW(1) LW(0)
+80613818:     callss [normal_attack_event unit_black_karon.o]
+80613820:     goto 99
+80613828:   endif
+8061382C:   addi LW(0) 30
+80613838:   if_int_lt LW(1) LW(0)
+80613844:     callss [link_attack_event unit_black_karon.o]
+8061384C:     goto 99
+80613854:   endif
+80613858:   callc [btlevtcmd_GetPos battle_event_cmd.o] -2 LW(0) LW(1) LW(2)
+80613870:   loop 0
+80613878:     callc [btlevtcmd_FaceDirectionAdd battle_event_cmd.o] -2 LW(0) 40
+8061388C:     setii LW(4) LW(0)
+80613898:     callc [btlevtcmd_GetFaceDirection battle_event_cmd.o] -2 LW(5)
+806138A8:     muli LW(4) LW(5)
+806138B4:     if_int_lt LW(4) 0
+806138C0:       subi LW(2) 10
+806138CC:       callc [btlevtcmd_CheckSpace battle_event_cmd.o] LW(3) LW(0) LW(1) LW(2) 40 0 0 0
+806138F4:       if_int_eq LW(3) -1
+80613900:         callss [call_friend_event unit_black_karon.o]
+80613908:         wait_ms 500
+80613910:         goto 99
+80613918:       endif
+8061391C:     else
+80613920:       loop_break
+80613924:     endif
+80613928:   end_loop
+8061392C:   callc [btlevtcmd_GetPos battle_event_cmd.o] -2 LW(0) LW(1) LW(2)
+80613944:   loop 0
+8061394C:     callc [btlevtcmd_FaceDirectionSub battle_event_cmd.o] -2 LW(0) 40
+80613960:     if_int_le LW(0) 170
+8061396C:       addi LW(2) 10
+80613978:       callc [btlevtcmd_CheckSpace battle_event_cmd.o] LW(3) LW(0) LW(1) LW(2) 40 0 0 0
+806139A0:       if_int_eq LW(3) -1
+806139AC:         callc [btlevtcmd_SetRotate battle_event_cmd.o] -2 0 180 0
+806139C4:         callss [call_friend_event unit_black_karon.o]
+806139CC:         callc [btlevtcmd_SetRotate battle_event_cmd.o] -2 0 0 0
+806139E4:         wait_ms 500
+806139EC:         goto 99
+806139F4:       endif
+806139F8:     else
+806139FC:       loop_break
+80613A00:     endif
+80613A04:   end_loop
+80613A08:   goto 0
+80613A10: 99:
+80613A18:   callc [btlevtcmd_StartWaitEvent battle_event_cmd.o] -2
+80613A24:   return
+80613A28:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [normal_attack_event unit_black_karon.o] AT 80613A94 ---
+80613A94:   callc [btlevtcmd_check_battleflag battle_event_cmd.o] LW(0) 2
+80613AA4:   if_int_ne LW(0) 0
+80613AB0:     wait_ms 750
+80613AB8:     callc [btlevtcmd_GetFirstAttackTarget battle_event_cmd.o] LW(3) LW(4)
+80613AC8:   else
+80613ACC:     callc [btlevtcmd_GetEnemyBelong battle_event_cmd.o] -2 LW(0)
+80613ADC:     callc [btlevtcmd_SamplingEnemy battle_event_cmd.o] -2 LW(0) [weapon_honenoko_attack unit_black_karon.o]
+80613AF0:     callc [btlevtcmd_ChoiceSamplingEnemy battle_event_cmd.o] [weapon_honenoko_attack unit_black_karon.o] LW(3) LW(4)
+80613B04:   endif
+80613B08:   if_int_eq LW(3) -1
+80613B14:     callc [btlevtcmd_CheckToken battle_event_cmd.o] -2 16 LW(0)
+80613B28:     if_int_ne LW(0) 0
+80613B34:       callss [subsetevt_confuse_flustered battle_event_subset.o]
+80613B3C:       return
+80613B40:     endif
+80613B44:     goto 99
+80613B4C:   endif
+80613B50:   callc [btlevtcmd_WeaponAftereffect battle_event_cmd.o] [weapon_honenoko_attack unit_black_karon.o]
+80613B5C:   callc [btlevtcmd_AttackDeclare battle_event_cmd.o] -2 LW(3) LW(4)
+80613B70:   callc [btlevtcmd_WaitGuardMove battle_event_cmd.o]
+80613B78:   callc [btlevtcmd_PayWeaponCost battle_event_cmd.o] -2 [weapon_honenoko_attack unit_black_karon.o]
+80613B88:   callc [btlevtcmd_CalculateFaceDirection battle_event_cmd.o] -2 -1 LW(3) LW(4) 16 LW(15)
+80613BA8:   callc [btlevtcmd_ChangeFaceDirection battle_event_cmd.o] -2 LW(15)
+80613BB8:   wait_ms 500
+80613BC0:   callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 1 ["KRN_A_1"]
+80613BD4:   wait_ms 250
+80613BDC:   callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 1 ["KRN_A_2"]
+80613BF0:   wait_ms 250
+80613BF8:   callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_ENM_HONENOKO_SEND_GROUP1"] [F1194D80] 0 [F1194D80]
+80613C14:   callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_ENM_HONENOKO_BONE_THROW2"] [F1194D80] 0 LW(15)
+80613C30:   callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 2 ["KRN_H_1"]
+80613C44:   callc [btlevtcmd_OffPartsAttribute battle_event_cmd.o] -2 2 16777216
+80613C58:   callc [btlevtcmd_OffPartsAttribute battle_event_cmd.o] -2 2 33554432
+80613C6C:   callc [btlevtcmd_GetPartsPos battle_event_cmd.o] -2 1 LW(0) LW(1) LW(2)
+80613C88:   begin_child_thread
+80613C8C:     callc [btlevtcmd_SetUnitWork battle_event_cmd.o] -2 0 0
+80613CA0:     loop 0
+80613CA8:       callc [btlevtcmd_GetUnitWork battle_event_cmd.o] -2 0 LW(14)
+80613CBC:       if_int_eq LW(14) 1
+80613CC8:         loop_break
+80613CCC:       endif
+80613CD0:       callc [btlevtcmd_AddPartsRotate battle_event_cmd.o] -2 2 0 0 25
+80613CEC:       wait_frames 1
+80613CF4:     end_loop
+80613CF8:   end_child_thread
+80613CFC:   callc [btlevtcmd_PreCheckDamage battle_event_cmd.o] -2 LW(3) LW(4) [weapon_honenoko_attack unit_black_karon.o] 256 LW(5)
+80613D1C:   switchi LW(5)
+80613D24:     case_int_eq_any 4
+80613D2C:       goto 90
+80613D34:       end_multi_case
+80613D38:     case_int_eq 3
+80613D40:       goto 90
+80613D48:       end_multi_case
+80613D4C:     case_int_eq 6
+80613D54:       goto 90
+80613D5C:     case_int_eq 2
+80613D64:       goto 90
+80613D6C:     case_int_eq 1
+80613D74:       goto 91
+80613D7C:       end_multi_case
+80613D80:     case_default
+80613D84:       goto 98
+80613D8C:       end_multi_case
+80613D90:   end_switch
+80613D94: 90:
+80613D9C:   begin_child_thread
+80613DA0:     loop 0
+80613DA8:       callc [btlevtcmd_GetFaceDirection battle_event_cmd.o] -2 LW(0)
+80613DB8:       if_int_eq LW(0) -1
+80613DC4:         callc [btlevtcmd_GetPartsPos battle_event_cmd.o] -2 2 LW(0) LW(1) LW(2)
+80613DE0:         callc [btlevtcmd_GetHitPos battle_event_cmd.o] LW(3) LW(4) LW(6) LW(7) LW(8)
+80613DFC:         if_int_le LW(0) LW(6)
+80613E08:           callss [start_avoid unit_black_karon.o]
+80613E10:           loop_break
+80613E14:         endif
+80613E18:       else
+80613E1C:         callc [btlevtcmd_GetPartsPos battle_event_cmd.o] -2 2 LW(0) LW(1) LW(2)
+80613E38:         callc [btlevtcmd_GetHitPos battle_event_cmd.o] LW(3) LW(4) LW(6) LW(7) LW(8)
+80613E54:         if_int_ge LW(0) LW(6)
+80613E60:           callss [start_avoid unit_black_karon.o]
+80613E68:           loop_break
+80613E6C:         endif
+80613E70:       endif
+80613E74:       wait_frames 1
+80613E7C:     end_loop
+80613E80:   end_child_thread
+80613E84:   callc [btlevtcmd_FaceDirectionAdd battle_event_cmd.o] -2 LW(0) 15
+80613E98:   addi LW(1) 14
+80613EA4:   callc [btlevtcmd_SetPartsPos battle_event_cmd.o] -2 2 LW(0) LW(1) LW(2)
+80613EC0:   callc [btlevtcmd_GetHitPos battle_event_cmd.o] LW(3) LW(4) LW(0) LW(1) LW(2)
+80613EDC:   callc [btlevtcmd_GetStageSize battle_event_cmd.o] LW(0) [F1194D80] [F1194D80]
+80613EF0:   callc [btlevtcmd_GetFaceDirection battle_event_cmd.o] -2 LW(9)
+80613F00:   muli LW(0) LW(9)
+80613F0C:   callc [btlevtcmd_JumpPartsSetting battle_event_cmd.o] -2 2 0 8.00 0.05
+80613F28:   callc [btlevtcmd_JumpPartsPosition battle_event_cmd.o] -2 2 LW(0) LW(1) LW(2) 0 0
+80613F4C:   callc [evt_snd_sfxoff evt_snd.o] LW(15)
+80613F58:   goto 98
+80613F60: 91:
+80613F68:   callc [btlevtcmd_FaceDirectionAdd battle_event_cmd.o] -2 LW(0) 15
+80613F7C:   addi LW(1) 14
+80613F88:   callc [btlevtcmd_SetPartsPos battle_event_cmd.o] -2 2 LW(0) LW(1) LW(2)
+80613FA4:   callc [btlevtcmd_GetHitPos battle_event_cmd.o] LW(3) LW(4) LW(0) LW(1) LW(2)
+80613FC0:   callc [btlevtcmd_JumpPartsSetting battle_event_cmd.o] -2 2 0 8.00 0.20
+80613FDC:   callc [btlevtcmd_JumpPartsPosition battle_event_cmd.o] -2 2 LW(0) LW(1) LW(2) 0 0
+80614000:   callc [evt_snd_sfxoff evt_snd.o] LW(15)
+8061400C:   callc [evt_btl_camera_set_mode battle_camera.o] 0 0
+8061401C:   callc [btlevtcmd_ResultACDefence battle_event_cmd.o] LW(3) [weapon_honenoko_attack unit_black_karon.o]
+8061402C:   callc [btlevtcmd_CheckDamage battle_event_cmd.o] -2 LW(3) LW(4) [weapon_honenoko_attack unit_black_karon.o] 256 LW(5)
+8061404C:   callc [btlevtcmd_GetPos battle_event_cmd.o] LW(3) LW(0) LW(1) LW(2)
+80614064:   callc [btlevtcmd_FaceDirectionAdd battle_event_cmd.o] -2 LW(0) -50
+80614078:   callc [btlevtcmd_JumpPartsSetting battle_event_cmd.o] -2 2 0 2.00 0.30
+80614094:   callc [btlevtcmd_JumpPartsPosition battle_event_cmd.o] -2 2 LW(0) LW(1) LW(2) 0 0
+806140B8:   goto 98
+806140C0: 98:
+806140C8:   callc [evt_btl_camera_set_mode battle_camera.o] 0 0
+806140D8:   callc [btlevtcmd_SetUnitWork battle_event_cmd.o] -2 0 1
+806140EC:   callc [btlevtcmd_OnPartsAttribute battle_event_cmd.o] -2 2 16777216
+80614100:   callc [btlevtcmd_OnPartsAttribute battle_event_cmd.o] -2 2 33554432
+80614114:   wait_frames 10
+8061411C: 99:
+80614124:   callc [btlevtcmd_ResetFaceDirection battle_event_cmd.o] -2
+80614130:   callc [btlevtcmd_StartWaitEvent battle_event_cmd.o] -2
+8061413C:   return
+80614140:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [rebirth_event unit_black_karon.o] AT 80613610 ---
+80613610:   callc [btlevtcmd_GetUnitWork battle_event_cmd.o] -2 2 LW(0)
+80613624:   subi LW(0) 1
+80613630:   callc [btlevtcmd_SetUnitWork battle_event_cmd.o] -2 2 LW(0)
+80613644:   if_int_ge LW(0) 1
+80613650:     return
+80613654:   endif
+80613658:   callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 1 ["KRN_D_3"]
+8061366C:   callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_ENM_HONENOKO_UNITE1"] [F1194D80] 0 [F1194D80]
+80613688:   wait_frames 60
+80613690:   callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 1 ["KRN_D_4"]
+806136A4:   callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_ENM_HONENOKO_UNITE2"] [F1194D80] 0 [F1194D80]
+806136C0:   wait_frames 30
+806136C8:   callc [btlevtcmd_OffAttribute battle_event_cmd.o] -2 131072
+806136D8:   callc [btlevtcmd_GetMaxHp battle_event_cmd.o] -2 LW(0)
+806136E8:   callc [btlevtcmd_SetHp battle_event_cmd.o] -2 LW(0)
+806136F8:   callc [btlevtcmd_SetHitOffset battle_event_cmd.o] -2 1 0 0 0
+80613714:   return
+80613718:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [link_attack_event unit_black_karon.o] AT 806141AC ---
+806141AC:   callc [btlevtcmd_SetUnitWork battle_event_cmd.o] -2 3 0
+806141C0:   callc [btlevtcmd_GetEnemyBelong battle_event_cmd.o] -2 LW(0)
+806141D0:   callc [btlevtcmd_SamplingEnemy battle_event_cmd.o] -2 LW(0) [weapon_honenoko_link_attack unit_black_karon.o]
+806141E4:   callc [btlevtcmd_ChoiceSamplingEnemy battle_event_cmd.o] [weapon_honenoko_link_attack unit_black_karon.o] LW(3) LW(4)
+806141F8:   if_int_eq LW(3) -1
+80614204:     callc [btlevtcmd_CheckToken battle_event_cmd.o] -2 16 LW(0)
+80614218:     if_int_ne LW(0) 0
+80614224:       callss [subsetevt_confuse_flustered battle_event_subset.o]
+8061422C:       return
+80614230:     endif
+80614234:     goto 99
+8061423C:   endif
+80614240:   callc [btlevtcmd_SetUnitWork battle_event_cmd.o] -2 4 0
+80614254:   callc [btlevtcmd_WeaponAftereffect battle_event_cmd.o] [weapon_honenoko_link_attack unit_black_karon.o]
+80614260:   callc [btlevtcmd_AttackDeclare battle_event_cmd.o] -2 LW(3) LW(4)
+80614274:   callc [btlevtcmd_WaitGuardMove battle_event_cmd.o]
+8061427C:   callc [btlevtcmd_PayWeaponCost battle_event_cmd.o] -2 [weapon_honenoko_link_attack unit_black_karon.o]
+8061428C:   callc [btlevtcmd_CalculateFaceDirection battle_event_cmd.o] -2 -1 LW(3) LW(4) 16 LW(15)
+806142AC:   callc [btlevtcmd_ChangeFaceDirection battle_event_cmd.o] -2 LW(15)
+806142BC:   setii LW(12) 2
+806142C8:   callsa [link_attack_event_sub unit_black_karon.o]
+806142D0:   wait_frames 40
+806142D8:   setii LW(12) 3
+806142E4:   callsa [link_attack_event_sub unit_black_karon.o]
+806142EC:   wait_frames 35
+806142F4:   setii LW(12) 4
+80614300:   callsa [link_attack_event_sub unit_black_karon.o]
+80614308:   loop 0
+80614310:     callc [btlevtcmd_GetUnitWork battle_event_cmd.o] -2 4 LW(0)
+80614324:     if_int_eq LW(0) -1
+80614330:       loop_break
+80614334:     endif
+80614338:     wait_frames 1
+80614340:   end_loop
+80614344: 99:
+8061434C:   callc [btlevtcmd_ResetFaceDirection battle_event_cmd.o] -2
+80614358:   wait_ms 300
+80614360:   return
+80614364:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [call_friend_event unit_black_karon.o] AT 806149B0 ---
+806149B0:   callc [evt_btl_camera_set_mode battle_camera.o] 0 7
+806149C0:   callc [evt_btl_camera_set_homing_unit battle_camera.o] 0 -2 -1
+806149D4:   callc [evt_btl_camera_set_moveSpeedLv battle_camera.o] 0 2
+806149E4:   callc [evt_btl_camera_set_zoom battle_camera.o] 0 200
+806149F4:   setii LW(10) 0
+80614A00:   loop 6
+80614A08:     callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 1 ["KRN_A_3"]
+80614A1C:     wait_frames 5
+80614A24:     callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 1 ["KRN_A_4"]
+80614A38:     wait_frames 15
+80614A40:     callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_ENM_HONENOKO_SEND_GROUP1"] [F1194D80] 0 [F1194D80]
+80614A5C:     switchi LW(10)
+80614A64:       case_int_eq 0
+80614A6C:         callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 5 ["KRN_H_4"]
+80614A80:       case_int_eq 1
+80614A88:         callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 5 ["KRN_H_5"]
+80614A9C:       case_int_eq 2
+80614AA4:         callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 5 ["KRN_H_5"]
+80614AB8:       case_int_eq 3
+80614AC0:         callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 5 ["KRN_H_3"]
+80614AD4:       case_int_eq 4
+80614ADC:         callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 5 ["KRN_H_3"]
+80614AF0:       case_default
+80614AF4:         callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 5 ["KRN_H_2"]
+80614B08:     end_switch
+80614B0C:     callc [btlevtcmd_OffPartsAttribute battle_event_cmd.o] -2 5 50331648
+80614B20:     callc [btlevtcmd_GetPartsPos battle_event_cmd.o] -2 1 LW(4) LW(5) LW(6)
+80614B3C:     callc [btlevtcmd_FaceDirectionAdd battle_event_cmd.o] -2 LW(4) 15
+80614B50:     addi LW(5) 14
+80614B5C:     callc [btlevtcmd_SetPartsPos battle_event_cmd.o] -2 5 LW(4) LW(5) LW(6)
+80614B78:     begin_child_thread
+80614B7C:       callc [btlevtcmd_SetUnitWork battle_event_cmd.o] -2 0 0
+80614B90:       setii LW(15) 0
+80614B9C:       loop 0
+80614BA4:         callc [btlevtcmd_GetUnitWork battle_event_cmd.o] -2 0 LW(14)
+80614BB8:         if_int_eq LW(14) 1
+80614BC4:           loop_break
+80614BC8:         endif
+80614BCC:         callc [btlevtcmd_SetPartsRotate battle_event_cmd.o] -2 5 0 0 LW(15)
+80614BE8:         addi LW(15) 25
+80614BF4:         wait_frames 1
+80614BFC:       end_loop
+80614C00:     end_child_thread
+80614C04:     callc [btlevtcmd_JumpPartsSetting battle_event_cmd.o] -2 5 0 6.00 1.00
+80614C20:     callc [btlevtcmd_JumpPartsPosition battle_event_cmd.o] -2 5 LW(0) LW(1) LW(2) 20 0
+80614C44:     callc [btlevtcmd_GetPartsPos battle_event_cmd.o] -2 5 LW(0) LW(1) LW(2)
+80614C60:     callc [btlevtcmd_SetPartsPos battle_event_cmd.o] -2 6 LW(0) LW(1) LW(2)
+80614C7C:     callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_ENM_HONENOKO_SEND_GROUP2"] [F1194D80] 0 [F1194D80]
+80614C98:     switchi LW(10)
+80614CA0:       case_int_eq 0
+80614CA8:         callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 6 ["KRN_C_5"]
+80614CBC:         callc [btlevtcmd_OffPartsAttribute battle_event_cmd.o] -2 6 50331648
+80614CD0:       case_int_eq 1
+80614CD8:         callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 6 ["KRN_C_4"]
+80614CEC:       case_int_eq 2
+80614CF4:         callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 6 ["KRN_C_3"]
+80614D08:       case_int_eq 3
+80614D10:         callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 6 ["KRN_C_2"]
+80614D24:       case_int_eq 4
+80614D2C:         callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 6 ["KRN_C_1"]
+80614D40:       case_default
+80614D44:         callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 6 ["KRN_Z_2"]
+80614D58:     end_switch
+80614D5C:     callc [btlevtcmd_OnPartsAttribute battle_event_cmd.o] -2 5 50331648
+80614D70:     addi LW(10) 1
+80614D7C:   end_loop
+80614D80:   wait_frames 15
+80614D88:   callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 6 ["KRN_D_3"]
+80614D9C:   callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_ENM_HONENOKO_UNITE1"] [F1194D80] 0 [F1194D80]
+80614DB8:   wait_frames 60
+80614DC0:   callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 6 ["KRN_D_4"]
+80614DD4:   callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_ENM_HONENOKO_UNITE2"] [F1194D80] 0 [F1194D80]
+80614DF0:   wait_frames 30
+80614DF8:   callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 1 ["KRN_S_1"]
+80614E0C:   callc [btlevtcmd_SpawnUnit battle_event_cmd.o] LW(3) [entry_honenoko unit_black_karon.o] 0
+80614E20:   callc [btlevtcmd_OnPartsAttribute battle_event_cmd.o] -2 6 50331648
+80614E34:   callc [btlevtcmd_SetPos battle_event_cmd.o] LW(3) LW(0) LW(1) LW(2)
+80614E4C:   callc [btlevtcmd_SetHomePos battle_event_cmd.o] LW(3) LW(0) LW(1) LW(2)
+80614E64:   callc [honenoko_copy_status unit_black_karon.o] -2 LW(3)
+80614E74:   callc [evt_btl_camera_set_mode battle_camera.o] 0 0
+80614E84:   return
+80614E88:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [start_avoid unit_black_karon.o] AT 80613A2C ---
+80613A2C:   if_int_eq LW(5) 3
+80613A38:     callc [btlevtcmd_StartAvoid battle_event_cmd.o] LW(3) 38
+80613A48:   endif
+80613A4C:   if_int_eq LW(5) 6
+80613A58:     callc [btlevtcmd_StartAvoid battle_event_cmd.o] LW(3) 39
+80613A68:   endif
+80613A6C:   if_int_eq LW(5) 2
+80613A78:     callc [btlevtcmd_StartAvoid battle_event_cmd.o] LW(3) 40
+80613A88:   endif
+80613A8C:   return
+80613A90:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [link_attack_event_sub unit_black_karon.o] AT 80614368 ---
+80614368:   callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 1 ["KRN_A_1"]
+8061437C:   wait_ms 250
+80614384:   callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 1 ["KRN_A_2"]
+80614398:   wait_ms 250
+806143A0:   callc [btlevtcmd_AddUnitWork battle_event_cmd.o] -2 4 1
+806143B4:   callc [btlevtcmd_GetUnitWork battle_event_cmd.o] -2 4 LW(13)
+806143C8:   callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_ENM_HONENOKO_SEND_GROUP1"] [F1194D80] 0 [F1194D80]
+806143E4:   callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_ENM_HONENOKO_BONE_THROW3"] [F1194D80] 0 LW(15)
+80614400:   callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 LW(12) ["KRN_H_1"]
+80614414:   callc [btlevtcmd_OffPartsAttribute battle_event_cmd.o] -2 LW(12) 16777216
+80614428:   callc [btlevtcmd_OffPartsAttribute battle_event_cmd.o] -2 LW(12) 33554432
+8061443C:   callc [btlevtcmd_GetPartsPos battle_event_cmd.o] -2 1 LW(0) LW(1) LW(2)
+80614458:   begin_child_thread
+8061445C:     callc [btlevtcmd_SetUnitWork battle_event_cmd.o] -2 0 0
+80614470:     loop 0
+80614478:       callc [btlevtcmd_GetUnitWork battle_event_cmd.o] -2 0 LW(14)
+8061448C:       if_int_eq LW(14) 1
+80614498:         loop_break
+8061449C:       endif
+806144A0:       callc [btlevtcmd_AddPartsRotate battle_event_cmd.o] -2 LW(12) 0 0 25
+806144BC:       wait_frames 1
+806144C4:     end_loop
+806144C8:   end_child_thread
+806144CC:   if_int_eq LW(13) 3
+806144D8:     callc [btlevtcmd_PreCheckDamage battle_event_cmd.o] -2 LW(3) LW(4) [weapon_honenoko_link_attack unit_black_karon.o] 256 LW(11)
+806144F8:   else
+806144FC:     callc [btlevtcmd_PreCheckDamage battle_event_cmd.o] -2 LW(3) LW(4) [weapon_honenoko_link_attack unit_black_karon.o] 256 LW(11)
+8061451C:   endif
+80614520:   if_int_eq LW(13) 3
+8061452C:     callc [btlevtcmd_GetUnitWork battle_event_cmd.o] -2 3 LW(14)
+80614540:     if_int_eq LW(14) 1
+8061454C:       goto 91
+80614554:     endif
+80614558:   endif
+8061455C:   switchi LW(11)
+80614564:     case_int_eq_any 4
+8061456C:       goto 90
+80614574:       end_multi_case
+80614578:     case_int_eq 3
+80614580:       goto 90
+80614588:       end_multi_case
+8061458C:     case_int_eq 6
+80614594:       goto 90
+8061459C:     case_int_eq 2
+806145A4:       goto 90
+806145AC:     case_int_eq 1
+806145B4:       goto 91
+806145BC:       end_multi_case
+806145C0:     case_default
+806145C4:       goto 98
+806145CC:       end_multi_case
+806145D0:   end_switch
+806145D4: 90:
+806145DC:   begin_child_thread
+806145E0:     loop 0
+806145E8:       callc [btlevtcmd_GetFaceDirection battle_event_cmd.o] -2 LW(0)
+806145F8:       if_int_eq LW(0) -1
+80614604:         callc [btlevtcmd_GetPartsPos battle_event_cmd.o] -2 LW(12) LW(0) LW(1) LW(2)
+80614620:         callc [btlevtcmd_GetHitPos battle_event_cmd.o] LW(3) LW(4) LW(6) LW(7) LW(8)
+8061463C:         if_int_le LW(0) LW(6)
+80614648:           callss [start_avoid2 unit_black_karon.o]
+80614650:           loop_break
+80614654:         endif
+80614658:       else
+8061465C:         callc [btlevtcmd_GetPartsPos battle_event_cmd.o] -2 LW(12) LW(0) LW(1) LW(2)
+80614678:         callc [btlevtcmd_GetHitPos battle_event_cmd.o] LW(3) LW(4) LW(6) LW(7) LW(8)
+80614694:         if_int_ge LW(0) LW(6)
+806146A0:           callss [start_avoid2 unit_black_karon.o]
+806146A8:           loop_break
+806146AC:         endif
+806146B0:       endif
+806146B4:       wait_frames 1
+806146BC:     end_loop
+806146C0:   end_child_thread
+806146C4:   callc [btlevtcmd_FaceDirectionAdd battle_event_cmd.o] -2 LW(0) 15
+806146D8:   addi LW(1) 14
+806146E4:   callc [btlevtcmd_SetPartsPos battle_event_cmd.o] -2 LW(12) LW(0) LW(1) LW(2)
+80614700:   callc [btlevtcmd_GetHitPos battle_event_cmd.o] LW(3) LW(4) LW(0) LW(1) LW(2)
+8061471C:   callc [btlevtcmd_GetStageSize battle_event_cmd.o] LW(0) [F1194D80] [F1194D80]
+80614730:   callc [btlevtcmd_GetFaceDirection battle_event_cmd.o] -2 LW(9)
+80614740:   muli LW(0) LW(9)
+8061474C:   callc [btlevtcmd_JumpPartsSetting battle_event_cmd.o] -2 LW(12) 0 8.00 0.05
+80614768:   callc [btlevtcmd_JumpPartsPosition battle_event_cmd.o] -2 LW(12) LW(0) LW(1) LW(2) 0 0
+8061478C:   callc [evt_snd_sfxoff evt_snd.o] LW(15)
+80614798:   goto 98
+806147A0: 91:
+806147A8:   callc [btlevtcmd_SetUnitWork battle_event_cmd.o] -2 3 1
+806147BC:   callc [btlevtcmd_FaceDirectionAdd battle_event_cmd.o] -2 LW(0) 15
+806147D0:   addi LW(1) 14
+806147DC:   callc [btlevtcmd_SetPartsPos battle_event_cmd.o] -2 LW(12) LW(0) LW(1) LW(2)
+806147F8:   callc [btlevtcmd_GetHitPos battle_event_cmd.o] LW(3) LW(4) LW(0) LW(1) LW(2)
+80614814:   callc [btlevtcmd_JumpPartsSetting battle_event_cmd.o] -2 LW(12) 0 8.00 0.20
+80614830:   callc [btlevtcmd_JumpPartsPosition battle_event_cmd.o] -2 LW(12) LW(0) LW(1) LW(2) 0 0
+80614854:   callc [evt_snd_sfxoff evt_snd.o] LW(15)
+80614860:   callc [btlevtcmd_ResultACDefence battle_event_cmd.o] LW(3) [weapon_honenoko_link_attack unit_black_karon.o]
+80614870:   if_int_eq LW(13) 3
+8061487C:     callc [btlevtcmd_CheckDamage battle_event_cmd.o] -2 LW(3) LW(4) [weapon_honenoko_link_attack unit_black_karon.o] 256 LW(5)
+8061489C:   else
+806148A0:     callc [btlevtcmd_CheckDamage battle_event_cmd.o] -2 LW(3) LW(4) [weapon_honenoko_link_attack unit_black_karon.o] 0 LW(5)
+806148C0:   endif
+806148C4:   callc [btlevtcmd_GetPos battle_event_cmd.o] LW(3) LW(0) LW(1) LW(2)
+806148DC:   callc [btlevtcmd_FaceDirectionAdd battle_event_cmd.o] -2 LW(0) -50
+806148F0:   callc [btlevtcmd_JumpPartsSetting battle_event_cmd.o] -2 LW(12) 0 2.00 0.30
+8061490C:   callc [btlevtcmd_JumpPartsPosition battle_event_cmd.o] -2 LW(12) LW(0) LW(1) LW(2) 0 0
+80614930:   goto 98
+80614938: 98:
+80614940:   if_int_eq LW(13) 3
+8061494C:     callc [btlevtcmd_SetUnitWork battle_event_cmd.o] -2 0 1
+80614960:     callc [btlevtcmd_SetUnitWork battle_event_cmd.o] -2 4 -1
+80614974:   endif
+80614978:   callc [btlevtcmd_OnPartsAttribute battle_event_cmd.o] -2 LW(12) 16777216
+8061498C:   callc [btlevtcmd_OnPartsAttribute battle_event_cmd.o] -2 LW(12) 33554432
+806149A0: 99:
+806149A8:   return
+806149AC:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [start_avoid2 unit_black_karon.o] AT 80614144 ---
+80614144:   if_int_eq LW(11) 3
+80614150:     callc [btlevtcmd_StartAvoid battle_event_cmd.o] LW(3) 38
+80614160:   endif
+80614164:   if_int_eq LW(11) 6
+80614170:     callc [btlevtcmd_StartAvoid battle_event_cmd.o] LW(3) 39
+80614180:   endif
+80614184:   if_int_eq LW(11) 2
+80614190:     callc [btlevtcmd_StartAvoid battle_event_cmd.o] LW(3) 40
+806141A0:   endif
+806141A4:   return
+806141A8:   end

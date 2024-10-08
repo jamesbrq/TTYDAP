@@ -1,0 +1,51 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [yari_trap dou_02.o] AT 805C218C ---
+805C218C:   callc [evt_hit_bind_mapobj evt_hit.o] ["a02_yari"] ["s02_yari"]
+805C219C:   setii GW(15) 0
+805C21A8:   callsa [yari_trap_sub dou_02.o]
+805C21B0:   return
+805C21B4:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [yari_trap_sub dou_02.o] AT 805C1FB0 ---
+805C1FB0:   if_int_ne GW(15) 0
+805C1FBC:     return
+805C1FC0:   endif
+805C1FC4:   setii GW(15) 1
+805C1FD0:   loop 0
+805C1FD8:     callc [evt_hitobj_attr_onoff evt_hit.o] 1 1 ["bb"] 2048
+805C1FF0:     callc [evt_mapobj_get_position evt_map.o] ["s02_yari"] LW(0) LW(1) LW(2)
+805C2008:     callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_MOBJ_FLOOR_TRAP1"] LW(0) LW(1) LW(2) 0
+805C2024:     callc [evt_sub_intpl_msec_init evt_sub.o] 1 0 50 150
+805C203C:     loop 0
+805C2044:       callc [evt_sub_intpl_msec_get_value evt_sub.o]
+805C204C:       callc [evt_mapobj_trans evt_map.o] 1 ["s02_yari"] 0 LW(0) 0
+805C2068:       callc [evt_hit_bind_update evt_hit.o] ["a02_yari"]
+805C2074:       if_int_eq LW(1) 0
+805C2080:         loop_break
+805C2084:       endif
+805C2088:       wait_frames 1
+805C2090:     end_loop
+805C2094:     wait_ms 1000
+805C209C:     callc [evt_mapobj_get_position evt_map.o] ["s02_yari"] LW(0) LW(1) LW(2)
+805C20B4:     callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_MOBJ_FLOOR_TRAP2"] LW(0) LW(1) LW(2) 0
+805C20D0:     callc [evt_sub_intpl_msec_init evt_sub.o] 4 50 0 300
+805C20E8:     loop 0
+805C20F0:       callc [evt_sub_intpl_msec_get_value evt_sub.o]
+805C20F8:       callc [evt_mapobj_trans evt_map.o] 1 ["s02_yari"] 0 LW(0) 0
+805C2114:       callc [evt_hit_bind_update evt_hit.o] ["a02_yari"]
+805C2120:       if_int_eq LW(1) 0
+805C212C:         loop_break
+805C2130:       endif
+805C2134:       wait_frames 1
+805C213C:     end_loop
+805C2140:     callc [evt_hitobj_attr_onoff evt_hit.o] 1 0 ["bb"] 2048
+805C2158:     wait_ms 2500
+805C2160:     if_int_eq GW(15) 2
+805C216C:       loop_break
+805C2170:     endif
+805C2174:   end_loop
+805C2178:   setii GW(15) 0
+805C2184:   return
+805C2188:   end

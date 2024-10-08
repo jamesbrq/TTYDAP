@@ -1,0 +1,108 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [attack_event unit_iron_sinemon.o] AT 805F6C9C ---
+805F6C9C:   callc [btlevtcmd_EnemyItemUseCheck battle_event_cmd.o] -2 LW(0)
+805F6CAC:   if_int_ne LW(0) 0
+805F6CB8:     callss LW(0)
+805F6CC0:     callc [btlevtcmd_StartWaitEvent battle_event_cmd.o] -2
+805F6CCC:     return
+805F6CD0:   endif
+805F6CD4:   callc [btlevtcmd_GetEnemyBelong battle_event_cmd.o] -2 LW(0)
+805F6CE4:   callc [btlevtcmd_SamplingEnemy battle_event_cmd.o] -2 LW(0) [weapon_iron_sinemon_attack unit_iron_sinemon.o]
+805F6CF8:   callc [btlevtcmd_ChoiceSamplingEnemy battle_event_cmd.o] [weapon_iron_sinemon_attack unit_iron_sinemon.o] LW(3) LW(4)
+805F6D0C:   if_int_eq LW(3) -1
+805F6D18:     callc [btlevtcmd_CheckToken battle_event_cmd.o] -2 16 LW(0)
+805F6D2C:     if_int_ne LW(0) 0
+805F6D38:       callss [subsetevt_confuse_flustered battle_event_subset.o]
+805F6D40:       return
+805F6D44:     endif
+805F6D48:     goto 99
+805F6D50:   endif
+805F6D54:   callc [evt_btl_camera_set_mode battle_camera.o] 0 8
+805F6D64:   callc [evt_btl_camera_set_homing_unit battle_camera.o] 0 -2 LW(3)
+805F6D78:   callc [evt_btl_camera_set_moveSpeedLv battle_camera.o] 0 2
+805F6D88:   callc [evt_btl_camera_set_zoom battle_camera.o] 0 200
+805F6D98:   callc [btlevtcmd_WeaponAftereffect battle_event_cmd.o] [weapon_iron_sinemon_attack unit_iron_sinemon.o]
+805F6DA4:   callc [btlevtcmd_AttackDeclare battle_event_cmd.o] -2 LW(3) LW(4)
+805F6DB8:   callc [btlevtcmd_WaitGuardMove battle_event_cmd.o]
+805F6DC0:   callc [btlevtcmd_PayWeaponCost battle_event_cmd.o] -2 [weapon_iron_sinemon_attack unit_iron_sinemon.o]
+805F6DD0:   callc [btlevtcmd_CalculateFaceDirection battle_event_cmd.o] -2 -1 LW(3) LW(4) 16 LW(15)
+805F6DF0:   callc [btlevtcmd_ChangeFaceDirection battle_event_cmd.o] -2 LW(15)
+805F6E00:   begin_child_thread_tid LW(14)
+805F6E08:     loop 0
+805F6E10:       callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_BOSS_ISIN_MOVE1"] [F1194D80] 0 [F1194D80]
+805F6E2C:       wait_frames 7
+805F6E34:       callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_BOSS_ISIN_MOVE2"] [F1194D80] 0 [F1194D80]
+805F6E50:       wait_frames 7
+805F6E58:     end_loop
+805F6E5C:   end_child_thread
+805F6E60:   callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_BOSS_ISIN_MOVE3"] [F1194D80] 0 [F1194D80]
+805F6E7C:   callc [btlevtcmd_AnimeChangePoseType battle_event_cmd.o] -2 1 50
+805F6E90:   callc [evt_btl_camera_set_zoom battle_camera.o] 0 300
+805F6EA0:   wait_ms 750
+805F6EA8:   stop_tid LW(14)
+805F6EB0:   callc [btlevtcmd_SetMoveSpeed battle_event_cmd.o] -2 3.00
+805F6EC0:   callc [btlevtcmd_GetPos battle_event_cmd.o] LW(3) LW(0) LW(1) LW(2)
+805F6ED8:   subi LW(2) 30.00
+805F6EE4:   callc [btlevtcmd_FaceDirectionAdd battle_event_cmd.o] LW(3) LW(0) 25
+805F6EF8:   callc [btlevtcmd_MovePosition battle_event_cmd.o] -2 LW(0) 0 LW(2) 0 -1 0
+805F6F1C:   callc [btlevtcmd_PreCheckDamage battle_event_cmd.o] -2 LW(3) LW(4) [weapon_iron_sinemon_attack unit_iron_sinemon.o] 256 LW(5)
+805F6F3C:   switchi LW(5)
+805F6F44:     case_int_eq_any 4
+805F6F4C:       goto 90
+805F6F54:       end_multi_case
+805F6F58:     case_int_eq 3
+805F6F60:       callc [btlevtcmd_StartAvoid battle_event_cmd.o] LW(3) 38
+805F6F70:       goto 90
+805F6F78:       end_multi_case
+805F6F7C:     case_int_eq 6
+805F6F84:       callc [btlevtcmd_StartAvoid battle_event_cmd.o] LW(3) 39
+805F6F94:       goto 90
+805F6F9C:     case_int_eq 2
+805F6FA4:       callc [btlevtcmd_StartAvoid battle_event_cmd.o] LW(3) 40
+805F6FB4:       goto 90
+805F6FBC:     case_int_eq 1
+805F6FC4:       goto 91
+805F6FCC:       end_multi_case
+805F6FD0:     case_default
+805F6FD4:       goto 98
+805F6FDC:       end_multi_case
+805F6FE0:   end_switch
+805F6FE4: 90:
+805F6FEC:   callc [btlevtcmd_FaceDirectionSub battle_event_cmd.o] LW(3) LW(0) 75
+805F7000:   callc [btlevtcmd_MovePosition battle_event_cmd.o] -2 LW(0) 0 LW(2) 0 -1 0
+805F7024:   wait_ms 500
+805F702C:   goto 98
+805F7034: 91:
+805F703C:   callc [evt_btl_camera_noshake battle_camera.o] 0
+805F7048:   callc [evt_btl_camera_shake_h battle_camera.o] 0 1 1 8 0
+805F7064:   callc [evt_btl_camera_set_moveSpeedLv battle_camera.o] 0 2
+805F7074:   callc [evt_btl_camera_add_zoom battle_camera.o] 0 -50
+805F7084:   callc [btlevtcmd_ResultACDefence battle_event_cmd.o] LW(3) [weapon_iron_sinemon_attack unit_iron_sinemon.o]
+805F7094:   callc [btlevtcmd_CheckDamage battle_event_cmd.o] -2 LW(3) LW(4) [weapon_iron_sinemon_attack unit_iron_sinemon.o] 256 LW(5)
+805F70B4:   callc [btlevtcmd_JumpSetting battle_event_cmd.o] -2 20 1.00 0.40
+805F70CC:   callc [btlevtcmd_GetPos battle_event_cmd.o] LW(3) LW(0) LW(1) LW(2)
+805F70E4:   callc [btlevtcmd_FaceDirectionAdd battle_event_cmd.o] LW(3) LW(0) 75
+805F70F8:   callc [btlevtcmd_JumpPosition battle_event_cmd.o] -2 LW(0) 0 LW(2) 20 -1
+805F7118:   callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_BOSS_ISIN_MOVE1"] [F1194D80] 0 [F1194D80]
+805F7134:   callc [evt_btl_camera_shake_h battle_camera.o] 0 5 0 20 0
+805F7150:   callc [btlevtcmd_JumpSetting battle_event_cmd.o] -2 20 0.50 0.40
+805F7168:   callc [btlevtcmd_GetPos battle_event_cmd.o] LW(3) LW(0) LW(1) LW(2)
+805F7180:   callc [btlevtcmd_FaceDirectionAdd battle_event_cmd.o] LW(3) LW(0) 100
+805F7194:   callc [btlevtcmd_JumpPosition battle_event_cmd.o] -2 LW(0) 0 LW(2) 20 -1
+805F71B4:   callc [evt_btl_camera_shake_h battle_camera.o] 0 5 0 20 0
+805F71D0:   callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_BOSS_ISIN_MOVE1"] [F1194D80] 0 [F1194D80]
+805F71EC:   goto 98
+805F71F4: 98:
+805F71FC:   callc [evt_btl_camera_set_mode battle_camera.o] 0 0
+805F720C:   callc [btlevtcmd_AnimeChangePoseType battle_event_cmd.o] -2 1 42
+805F7220:   callc [btlevtcmd_SetMoveSpeed battle_event_cmd.o] -2 4.00
+805F7230:   callc [btlevtcmd_GetHomePos battle_event_cmd.o] -2 LW(0) LW(1) LW(2)
+805F7248:   callc [btlevtcmd_MovePosition battle_event_cmd.o] -2 LW(0) LW(1) LW(2) 0 -1 0
+805F726C:   callc [evt_btl_camera_noshake battle_camera.o] 0
+805F7278: 99:
+805F7280:   callc [btlevtcmd_ResetFaceDirection battle_event_cmd.o] -2
+805F728C:   callc [btlevtcmd_StartWaitEvent battle_event_cmd.o] -2
+805F7298:   return
+805F729C:   end

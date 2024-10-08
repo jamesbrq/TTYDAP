@@ -1,0 +1,64 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [party_change_event unit_faker_mario.o] AT 805D9550 ---
+805D9550:   addi GW(18) 1
+805D955C:   if_int_gt GW(18) 4
+805D9568:     return
+805D956C:   endif
+805D9570:   switchi GW(18)
+805D9578:     case_int_eq 0
+805D9580:       setii LW(12) [entry_gullible_christine unit_faker_mario.o]
+805D958C:     case_int_eq 1
+805D9594:       setii LW(12) [entry_gullible_nokotarou unit_faker_mario.o]
+805D95A0:     case_int_eq 2
+805D95A8:       setii LW(12) [entry_gullible_clauda unit_faker_mario.o]
+805D95B4:     case_int_eq 3
+805D95BC:       setii LW(12) [entry_gullible_yoshi unit_faker_mario.o]
+805D95C8:     case_default
+805D95CC:       return
+805D95D0:   end_switch
+805D95D4:   setii GW(20) 0
+805D95E0:   setii LW(3) GW(17)
+805D95EC:   callc [btlevtcmd_SpawnUnit battle_event_cmd.o] LW(9) LW(12) 0
+805D9600:   setii GW(17) LW(9)
+805D960C:   callc [_anime_load unit_faker_mario.o] LW(9)
+805D9618:   callc [btlevtcmd_GetBodyId battle_event_cmd.o] LW(3) LW(4)
+805D9628:   callc [btlevtcmd_SetFallAccel battle_event_cmd.o] LW(3) 0.70
+805D9638:   callc [btlevtcmd_GetPos battle_event_cmd.o] LW(3) LW(0) LW(1) LW(2)
+805D9650:   callc [btlevtcmd_SetHomePos battle_event_cmd.o] LW(9) LW(0) LW(1) LW(2)
+805D9668:   callc [btlevtcmd_GetPos battle_event_cmd.o] -2 LW(5) LW(6) LW(7)
+805D9680:   begin_child_thread
+805D9684:     callc [btlevtcmd_SetScale battle_event_cmd.o] LW(3) 1.00 1.00 1.00
+805D969C:     loop 18
+805D96A4:       callc [btlevtcmd_AddScale battle_event_cmd.o] LW(3) -0.05 -0.05 -0.05
+805D96BC:       wait_frames 1
+805D96C4:     end_loop
+805D96C8:   end_child_thread
+805D96CC:   callc [evt_snd_sfxon evt_snd.o] ["SFX_PARTY_IN1"] 0
+805D96DC:   callc [btlevtcmd_JumpPosition battle_event_cmd.o] LW(3) LW(5) LW(6) LW(7) 20 0
+805D96FC:   callc [_anime_load_wait unit_faker_mario.o] LW(9)
+805D9708:   callc [_save_param unit_faker_mario.o] -2 LW(3)
+805D9718:   callc [_load_param unit_faker_mario.o] -2 LW(9)
+805D9728:   callc [btlevtcmd_SetPos battle_event_cmd.o] LW(9) LW(5) LW(6) LW(7)
+805D9740:   callc [btlevtcmd_SetFallAccel battle_event_cmd.o] LW(9) 0.70
+805D9750:   callc [btlevtcmd_CheckDataOfDataTable battle_event_cmd.o] LW(9) LW(0) 4
+805D9764:   if_int_ne LW(0) 0
+805D9770:     callc [btlevtcmd_RunDataEventChild battle_event_cmd.o] LW(9) 4
+805D9780:   endif
+805D9784:   callc [evt_snd_sfxon evt_snd.o] ["SFX_PARTY_CHANGE1"] 0
+805D9794:   begin_child_thread
+805D9798:     callc [btlevtcmd_SetScale battle_event_cmd.o] LW(9) 0.10 0.10 0.10
+805D97B0:     loop 18
+805D97B8:       callc [btlevtcmd_AddScale battle_event_cmd.o] LW(9) 0.05 0.05 0.05
+805D97D0:       wait_frames 1
+805D97D8:     end_loop
+805D97DC:     callc [btlevtcmd_SetScale battle_event_cmd.o] LW(9) 1.00 1.00 1.00
+805D97F4:   end_child_thread
+805D97F8:   callc [btlevtcmd_GetHomePos battle_event_cmd.o] LW(9) LW(0) LW(1) LW(2)
+805D9810:   callc [evt_snd_sfxon evt_snd.o] ["SFX_PARTY_OUT1"] 0
+805D9820:   callc [btlevtcmd_JumpPosition battle_event_cmd.o] LW(9) LW(0) LW(1) LW(2) 20 0
+805D9840:   callc [btlevtcmd_KillUnit battle_event_cmd.o] LW(3) 0
+805D9850:   callc [btlevtcmd_SortPhaseMoveTable battle_event_cmd.o]
+805D9858:   return
+805D985C:   end

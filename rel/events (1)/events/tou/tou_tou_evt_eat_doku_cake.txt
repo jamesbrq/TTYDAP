@@ -1,0 +1,133 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [evt_eat_doku_cake tou.o] AT 805CE68C ---
+805CE68C:   callc [evt_mario_key_onoff evt_mario.o] 0
+805CE698:   callc [evt_party_stop evt_party.o] 0
+805CE6A4:   callc [evt_mario_get_pos evt_mario.o] 0 LW(0) LW(1) LW(2)
+805CE6BC:   callc [evt_party_get_pos evt_party.o] 0 LW(3) LW(4) LW(5)
+805CE6D4:   callc [evt_sub_get_dist evt_sub.o] LW(0) LW(2) LW(3) LW(5) LW(10)
+805CE6F0:   if_int_gt LW(10) 100
+805CE6FC:     callc [evt_party_set_pos evt_party.o] 0 LW(0) LW(1) LW(2)
+805CE714:     callc [evt_party_set_dir_pos evt_party.o] 0 20 -20
+805CE728:   endif
+805CE72C:   wait_ms 200
+805CE734:   callc [evt_msg_print_party evt_msg.o] ["stg3_tou_296_doku"]
+805CE740:   callc [evt_msg_print evt_msg.o] 0 ["stg3_tou_297_doku"] 0 0
+805CE758:   callc [evt_msg_select evt_msg.o] 0 ["stg3_tou_297_yn_doku"]
+805CE768:   callc [evt_msg_continue evt_msg.o]
+805CE770:   if_int_ne LW(0) 0
+805CE77C:     callc [evt_msg_print_party evt_msg.o] ["stg3_tou_298_doku"]
+805CE788:     callc [evt_mario_key_onoff evt_mario.o] 1
+805CE794:     callc [evt_party_run evt_party.o] 0
+805CE7A0:     return
+805CE7A4:   endif
+805CE7A8:   callc [evt_party_flg_onoff evt_party.o] 0 16777216 1
+805CE7BC:   callc [evt_mario_get_pos evt_mario.o] 0 LW(0) LW(1) LW(2)
+805CE7D4:   begin_thread
+805CE7D8:     subi LW(2) 30
+805CE7E4:     callc [evt_mario_mov_pos2 evt_mario.o] LW(0) LW(2) 80.00
+805CE7F8:     callc [evt_mario_adjust_dir evt_mario.o]
+805CE800:   end_thread
+805CE804:   callc [evt_party_move_pos2 evt_party.o] 0 LW(0) LW(2) 80.00
+805CE81C:   callc [evt_msg_print_party evt_msg.o] ["stg3_tou_299_doku"]
+805CE828:   callc [evt_item_delete evt_item.o] ["doku_cake"]
+805CE834:   callc [evt_party_set_breed_pose evt_party.o] 0 7
+805CE844:   begin_thread_tid LW(0)
+805CE84C:     loop 0
+805CE854:       callc [evt_mario_get_pos evt_mario.o] 0 LW(0) LW(1) LW(2)
+805CE86C:       callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_STG3_EAT_CAKE1"] LW(0) LW(1) LW(2) 0
+805CE888:       wait_ms 500
+805CE890:     end_loop
+805CE894:   end_thread
+805CE898:   wait_ms 1000
+805CE8A0:   stop_tid LW(0)
+805CE8A8:   callc [evt_msg_print_party evt_msg.o] ["stg3_tou_300"]
+805CE8B4:   wait_ms 300
+805CE8BC:   callc [evt_snd_bgmoff evt_snd.o] 512
+805CE8C8:   callc [evt_snd_envoff evt_snd.o] 512
+805CE8D4:   callc [evt_eff_fukidashi evt_eff.o] 3 0 0 0 0 0 0 0 0 0 0
+805CE908:   wait_ms 1000
+805CE910:   begin_thread
+805CE914:     callc [evt_snd_bgmoff evt_snd.o] 1024
+805CE920:     callc [evt_snd_bgmon evt_snd.o] 1 ["BGM_FF_ENV_SURPRISED2"]
+805CE930:     wait_ms 1000
+805CE938:     callc [evt_snd_bgmoff evt_snd.o] 513
+805CE944:     callc [evt_snd_bgmon evt_snd.o] 288 0
+805CE954:   end_thread
+805CE958:   callss [party_npc_replace tou.o]
+805CE960:   wait_ms 300
+805CE968:   callc [evt_mario_get_party evt_mario.o] LW(3)
+805CE974:   switchi LW(3)
+805CE97C:     case_int_eq 1
+805CE984:       callc [evt_msg_print evt_msg.o] 0 ["stg3_tou_301_kur"] 0 ["dummy_party"]
+805CE99C:     case_int_eq 2
+805CE9A4:       callc [evt_msg_print evt_msg.o] 0 ["stg3_tou_301_nok"] 0 ["dummy_party"]
+805CE9BC:     case_int_eq 5
+805CE9C4:       callc [evt_msg_print evt_msg.o] 0 ["stg3_tou_301_win"] 0 ["dummy_party"]
+805CE9DC:     case_int_eq 4
+805CE9E4:       callc [evt_msg_print evt_msg.o] 0 ["stg3_tou_301_yos"] 0 ["dummy_party"]
+805CE9FC:   end_switch
+805CEA00:   wait_ms 300
+805CEA08:   setii GSWF(2449) 0
+805CEA14:   setii GSWF(2450) 1
+805CEA20:   callc [evt_party_flg_onoff evt_party.o] 0 16777216 0
+805CEA34:   callc [evt_party_stop evt_party.o] 0
+805CEA40:   callc [evt_mario_kill_party evt_mario.o] 0
+805CEA4C:   callc [evt_pouch_party_left evt_pouch.o] 1
+805CEA58:   callc [evt_pouch_party_left evt_pouch.o] 2
+805CEA64:   callc [evt_pouch_party_left evt_pouch.o] 5
+805CEA70:   callc [evt_pouch_party_left evt_pouch.o] 4
+805CEA7C:   callc [evt_snd_bgmon evt_snd.o] 512 ["BGM_STG3_TOU1"]
+805CEA8C:   callc [evt_snd_bgmoff evt_snd.o] 26624
+805CEA98:   callc [evt_snd_envon evt_snd.o] 272 ["ENV_STG3_TOU6"]
+805CEAA8:   callc [evt_mario_key_onoff evt_mario.o] 1
+805CEAB4:   callc [evt_exit_case_evt evt_case.o]
+805CEABC:   return
+805CEAC0:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [party_npc_replace tou.o] AT 805CCB9C ---
+805CCB9C:   callc [evt_party_get_pos evt_party.o] 0 LW(0) LW(1) LW(2)
+805CCBB4:   callc [evt_mario_get_party evt_mario.o] LW(3)
+805CCBC0:   switchi LW(3)
+805CCBC8:     case_int_eq 1
+805CCBD0:       callc [evt_npc_entry evt_npc.o] ["dummy_party"] ["c_pkr"]
+805CCBE0:       callc [evt_npc_set_anim evt_npc.o] ["dummy_party"] ["PKR_D_3"]
+805CCBF0:       callc [evt_npc_change_interrupt evt_npc.o] ["dummy_party"] 6 [dummy_party_msg_pkr tou.o]
+805CCC04:     case_int_eq 2
+805CCC0C:       callc [evt_npc_entry evt_npc.o] ["dummy_party"] ["c_pnk"]
+805CCC1C:       callc [evt_npc_set_anim evt_npc.o] ["dummy_party"] ["PNK_D_3"]
+805CCC2C:       callc [evt_npc_change_interrupt evt_npc.o] ["dummy_party"] 6 [dummy_party_msg_pnk tou.o]
+805CCC40:     case_int_eq 4
+805CCC48:       callc [getYoshiColor tou.o] LW(5)
+805CCC54:       switchi LW(5)
+805CCC5C:         case_int_eq 0
+805CCC64:           setii LW(5) ["c_babyyoshi"]
+805CCC70:         case_int_eq 1
+805CCC78:           setii LW(5) ["c_babyyoshi2"]
+805CCC84:         case_int_eq 2
+805CCC8C:           setii LW(5) ["c_babyyoshi3"]
+805CCC98:         case_int_eq 3
+805CCCA0:           setii LW(5) ["c_babyyoshi4"]
+805CCCAC:         case_int_eq 4
+805CCCB4:           setii LW(5) ["c_babyyoshi5"]
+805CCCC0:         case_int_eq 5
+805CCCC8:           setii LW(5) ["c_babyyoshi6"]
+805CCCD4:         case_int_eq 6
+805CCCDC:           setii LW(5) ["c_babyyoshi7"]
+805CCCE8:       end_switch
+805CCCEC:       callc [evt_npc_entry evt_npc.o] ["dummy_party"] LW(5)
+805CCCFC:       callc [evt_npc_set_anim evt_npc.o] ["dummy_party"] ["PYS_D_3"]
+805CCD0C:       callc [evt_npc_change_interrupt evt_npc.o] ["dummy_party"] 6 [dummy_party_msg_yos tou.o]
+805CCD20:     case_int_eq 5
+805CCD28:       callc [evt_npc_entry evt_npc.o] ["dummy_party"] ["c_windy"]
+805CCD38:       callc [evt_npc_set_anim evt_npc.o] ["dummy_party"] ["PWD_D_3"]
+805CCD48:       callc [evt_npc_change_interrupt evt_npc.o] ["dummy_party"] 6 [dummy_party_msg_win tou.o]
+805CCD5C:   end_switch
+805CCD60:   callc [evt_npc_flag_onoff evt_npc.o] 1 ["dummy_party"] 16777216
+805CCD74:   callc [evt_npc_set_position evt_npc.o] ["dummy_party"] LW(0) LW(1) LW(2)
+805CCD8C:   callc [evt_party_set_pos evt_party.o] 0 0 -1000 0
+805CCDA4:   callc [evt_party_stop evt_party.o] 0
+805CCDB0:   callc [evt_party_cont_onoff evt_party.o] 0 0
+805CCDC0:   return
+805CCDC4:   end

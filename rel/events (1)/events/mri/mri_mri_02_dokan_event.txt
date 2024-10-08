@@ -1,0 +1,45 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [dokan_event mri_02.o] AT 805F2B90 ---
+805F2B90:   wait_until GF(15)
+805F2B98:   callc [evt_mario_key_onoff evt_mario.o] 0
+805F2BA4:   wait_ms 500
+805F2BAC:   begin_thread
+805F2BB0:     callc [evt_cam_shake evt_cam.o] 4 0.00 0.01 4500
+805F2BC8:   end_thread
+805F2BCC:   begin_thread
+805F2BD0:     callc [evt_mapobj_get_position evt_map.o] ["S_dokan2"] LW(0) LW(1) LW(2)
+805F2BE8:     callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_STG2_DOKAN_QUAKE1"] LW(0) LW(1) LW(2) LW(10)
+805F2C04:     wait_ms 4500
+805F2C0C:     callc [evt_snd_sfxoff evt_snd.o] LW(10)
+805F2C18:   end_thread
+805F2C1C:   wait_ms 500
+805F2C24:   callc [evt_cam3d_evt_set evt_cam.o] 60 126 363 60 62 -3 500 11
+805F2C4C:   wait_ms 1000
+805F2C54:   begin_thread
+805F2C58:     wait_ms 1500
+805F2C60:     callc [evt_mapobj_get_position evt_map.o] ["S_dokan2"] LW(0) LW(1) LW(2)
+805F2C78:     callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_STG2_DOKAN_APPEAR1"] LW(0) LW(1) LW(2) 0
+805F2C94:   end_thread
+805F2C98:   callc [evt_sub_intpl_msec_init evt_sub.o] 11 -50 0 3000
+805F2CB0:   loop 0
+805F2CB8:     callc [evt_sub_intpl_msec_get_value evt_sub.o]
+805F2CC0:     callc [evt_mapobj_trans evt_map.o] 1 ["S_dokan2"] 0 LW(0) 0
+805F2CDC:     callc [evt_hit_bind_update evt_hit.o] ["A_dokan2"]
+805F2CE8:     if_int_eq LW(1) 0
+805F2CF4:       loop_break
+805F2CF8:     endif
+805F2CFC:     wait_frames 1
+805F2D04:   end_loop
+805F2D08:   wait_ms 1000
+805F2D10:   callc [evt_party_stop evt_party.o] 0
+805F2D1C:   callc [evt_msg_print_party evt_msg.o] ["stg2_mri_e16_00"]
+805F2D28:   callc [evt_cam3d_evt_off evt_cam.o] 500 11
+805F2D38:   wait_ms 500
+805F2D40:   setii GSW(0) 96
+805F2D4C:   callc [evt_puni_dokan_onoff mri_puni.o] ["dokan2"] 0
+805F2D5C:   callc [evt_party_run evt_party.o] 0
+805F2D68:   callc [evt_mario_key_onoff evt_mario.o] 1
+805F2D74:   return
+805F2D78:   end

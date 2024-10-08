@@ -1,0 +1,136 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [phase_event unit_boss_majolyne_las.o] AT 80632388 ---
+80632388:   callc [btlevtcmd_CheckPhase battle_event_cmd.o] LW(0) 67108867
+80632398:   if_int_ne LW(0) 0
+806323A4:     callc [btlevtcmd_GetUnitWork battle_event_cmd.o] -2 9 LW(0)
+806323B8:     if_int_ne LW(0) 0
+806323C4:       subi LW(0) 1
+806323D0:       callc [btlevtcmd_SetUnitWork battle_event_cmd.o] -2 9 LW(0)
+806323E4:     endif
+806323E8:     callc [btlevtcmd_CheckActStatus battle_event_cmd.o] -2 LW(0)
+806323F8:     if_int_eq LW(0) 0
+80632404:       goto 90
+8063240C:     endif
+80632410:     callc [btlevtcmd_GetUnitWork battle_event_cmd.o] -2 6 LW(0)
+80632424:     if_int_eq LW(0) 0
+80632430:       callc [btlevtcmd_GetMaxHp battle_event_cmd.o] -2 LW(0)
+80632440:       dbg_expr_to_string LW(0)
+80632448:       muli LW(0) 66
+80632454:       dbg_expr_to_string LW(0)
+8063245C:       divi LW(0) 100
+80632468:       dbg_expr_to_string LW(0)
+80632470:       callc [btlevtcmd_GetHp battle_event_cmd.o] -2 LW(1)
+80632480:       dbg_expr_to_string LW(1)
+80632488:       if_int_lt LW(1) LW(0)
+80632494:         callc [btlevtcmd_SetUnitWork battle_event_cmd.o] -2 6 1
+806324A8:         callc [btlevtcmd_StatusWindowOnOff battle_event_cmd.o] 0
+806324B4:         callss [btl_majolyne_zoom unit_boss_majolyne_las.o]
+806324BC:         callc [evt_msg_print evt_msg.o] 2 ["btl_majo3_03"] 0 -2
+806324D4:         wait_ms 200
+806324DC:         callc [btlevtcmd_GetUnitWork battle_event_cmd.o] -2 7 LW(0)
+806324F0:         if_int_eq LW(0) 0
+806324FC:           callc [btlevtcmd_SetUnitWork battle_event_cmd.o] -2 7 1
+80632510:         endif
+80632514:         if_int_eq GW(12) 0
+80632520:           callc [btlevtcmd_SetUnitWork battle_event_cmd.o] GW(9) 7 1
+80632534:         endif
+80632538:         if_int_eq GW(13) 0
+80632544:           callc [btlevtcmd_SetUnitWork battle_event_cmd.o] GW(10) 7 1
+80632558:         endif
+8063255C:         callc [btlevtcmd_StatusWindowOnOff battle_event_cmd.o] 1
+80632568:         callc [evt_btl_camera_set_mode battle_camera.o] 0 0
+80632578:         callc [btlevtcmd_StartWaitEvent battle_event_cmd.o] -2
+80632584:       endif
+80632588:     endif
+8063258C:     if_int_eq GW(12) 0
+80632598:       callc [btlevtcmd_GetUnitWork battle_event_cmd.o] GW(9) 6 LW(0)
+806325AC:       if_int_eq LW(0) 0
+806325B8:         callc [btlevtcmd_GetMaxHp battle_event_cmd.o] GW(9) LW(0)
+806325C8:         muli LW(0) 50
+806325D4:         divi LW(0) 100
+806325E0:         callc [btlevtcmd_GetHp battle_event_cmd.o] GW(9) LW(1)
+806325F0:         if_int_lt LW(1) LW(0)
+806325FC:           callc [btlevtcmd_SetUnitWork battle_event_cmd.o] GW(9) 6 1
+80632610:           callc [btlevtcmd_StatusWindowOnOff battle_event_cmd.o] 0
+8063261C:           callss [btl_majolyne_zoom unit_boss_majolyne_las.o]
+80632624:           callc [btlevtcmd_CalculateFaceDirection battle_event_cmd.o] -2 -1 GW(9) -1 16 LW(15)
+80632644:           callc [btlevtcmd_ChangeFaceDirection battle_event_cmd.o] -2 LW(15)
+80632654:           wait_ms 200
+8063265C:           callc [evt_msg_print evt_msg.o] 2 ["btl_majo3_04"] 0 -2
+80632674:           wait_ms 200
+8063267C:           callc [btlevtcmd_SetUnitWork battle_event_cmd.o] GW(9) 7 1
+80632690:           callc [btlevtcmd_CheckActStatus battle_event_cmd.o] GW(9) LW(0)
+806326A0:           if_int_ne LW(0) 0
+806326AC:             callss [btl_marilyn_zoom unit_boss_majolyne_las.o]
+806326B4:             callc [evt_msg_print evt_msg.o] 2 ["btl_majo3_05"] 0 GW(9)
+806326CC:             wait_ms 200
+806326D4:           endif
+806326D8:           callc [btlevtcmd_ResetFaceDirection battle_event_cmd.o] -2
+806326E4:           callc [btlevtcmd_StatusWindowOnOff battle_event_cmd.o] 1
+806326F0:           callc [evt_btl_camera_set_mode battle_camera.o] 0 0
+80632700:           callc [btlevtcmd_StartWaitEvent battle_event_cmd.o] -2
+8063270C:         endif
+80632710:       endif
+80632714:     endif
+80632718:     if_int_eq GW(13) 0
+80632724:       callc [btlevtcmd_GetUnitWork battle_event_cmd.o] GW(10) 6 LW(0)
+80632738:       if_int_eq LW(0) 0
+80632744:         callc [btlevtcmd_GetMaxHp battle_event_cmd.o] GW(10) LW(0)
+80632754:         muli LW(0) 50
+80632760:         divi LW(0) 100
+8063276C:         callc [btlevtcmd_GetHp battle_event_cmd.o] GW(10) LW(1)
+8063277C:         if_int_lt LW(1) LW(0)
+80632788:           callc [btlevtcmd_SetUnitWork battle_event_cmd.o] GW(10) 6 1
+8063279C:           callc [btlevtcmd_StatusWindowOnOff battle_event_cmd.o] 0
+806327A8:           callss [btl_majolyne_zoom unit_boss_majolyne_las.o]
+806327B0:           callc [btlevtcmd_CalculateFaceDirection battle_event_cmd.o] -2 -1 GW(10) -1 16 LW(15)
+806327D0:           callc [btlevtcmd_ChangeFaceDirection battle_event_cmd.o] -2 LW(15)
+806327E0:           wait_ms 200
+806327E8:           callc [evt_msg_print evt_msg.o] 2 ["btl_majo3_06"] 0 -2
+80632800:           wait_ms 200
+80632808:           callc [btlevtcmd_SetUnitWork battle_event_cmd.o] GW(10) 7 1
+8063281C:           callc [btlevtcmd_CheckActStatus battle_event_cmd.o] GW(10) LW(0)
+8063282C:           if_int_ne LW(0) 0
+80632838:             callss [btl_vivian_zoom unit_boss_majolyne_las.o]
+80632840:             callc [evt_msg_print evt_msg.o] 2 ["btl_majo3_07"] 0 GW(10)
+80632858:             wait_ms 200
+80632860:           endif
+80632864:           callc [btlevtcmd_ResetFaceDirection battle_event_cmd.o] -2
+80632870:           callc [btlevtcmd_StatusWindowOnOff battle_event_cmd.o] 1
+8063287C:           callc [evt_btl_camera_set_mode battle_camera.o] 0 0
+8063288C:           callc [btlevtcmd_StartWaitEvent battle_event_cmd.o] -2
+80632898:         endif
+8063289C:       endif
+806328A0:     endif
+806328A4:   endif
+806328A8: 90:
+806328B0:   return
+806328B4:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [btl_majolyne_zoom unit_boss_majolyne_las.o] AT 80631B74 ---
+80631B74:   setii LW(0) GW(8)
+80631B80:   callss [majo3_zoom unit_boss_majolyne_las.o]
+80631B88:   return
+80631B8C:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [btl_marilyn_zoom unit_boss_majolyne_las.o] AT 80631B58 ---
+80631B58:   setii LW(0) GW(9)
+80631B64:   callss [majo3_zoom unit_boss_majolyne_las.o]
+80631B6C:   return
+80631B70:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [btl_vivian_zoom unit_boss_majolyne_las.o] AT 80631B3C ---
+80631B3C:   setii LW(0) GW(10)
+80631B48:   callss [majo3_zoom unit_boss_majolyne_las.o]
+80631B50:   return
+80631B54:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [majo3_zoom unit_boss_majolyne_las.o] AT 80631AD8 ---
+80631AD8:   callc [btlevtcmd_GetPos battle_event_cmd.o] LW(0) LW(0) [F1194D80] [F1194D80]
+80631AF0:   callc [evt_btl_camera_set_mode battle_camera.o] 0 3
+80631B00:   callc [evt_btl_camera_set_moveto battle_camera.o] 0 LW(0) 65 332 LW(0) 30 -340 30 11
+80631B2C:   wait_frames 37
+80631B34:   return
+80631B38:   end

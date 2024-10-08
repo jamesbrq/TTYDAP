@@ -1,0 +1,80 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [welcome_wonderforest win_06.o] AT 805D0FA4 ---
+805D0FA4:   callc [evt_mario_key_onoff evt_mario.o] 0
+805D0FB0:   callc [evt_mario_cont_onoff evt_mario.o] 0
+805D0FBC:   callc [evt_party_cont_onoff evt_party.o] 0 0
+805D0FCC:   callc [evt_party_cont_onoff evt_party.o] 1 0
+805D0FDC:   callc [evt_snd_bgm_scope evt_snd.o] 0 1
+805D0FEC:   begin_thread
+805D0FF0:     wait_ms 5000
+805D0FF8:     callc [evt_telop_entry evt_telop.o] 4
+805D1004:   end_thread
+805D1008:   callc [camps30 win_06.o]
+805D1010:   callc [cam_kaiten_init win_06.o] -350 16 276 0 75 0 255 16 366 0 75 0
+805D1048:   begin_thread_tid LW(7)
+805D1050:     loop 0
+805D1058:       callc [cam_kaiten_set_direct win_06.o]
+805D1060:       wait_frames 1
+805D1068:     end_loop
+805D106C:   end_thread
+805D1070:   begin_thread
+805D1074:     callc [cam_kaiten_get_para win_06.o] 0 LF(0) LF(1) LF(2) LF(3) LF(4) LF(5) LW(0) LF(7)
+805D10A0:     addf LW(0) 360.00
+805D10AC:     callc [cam_kaiten_get_para win_06.o] 1 LF(0) LF(1) LF(2) LF(3) LF(4) LF(5) LW(1) LF(7)
+805D10D8:     mulf LW(0) 10.00
+805D10E4:     mulf LW(1) 10.00
+805D10F0:     callc [evt_sub_intpl_msec_init evt_sub.o] 11 LW(0) LW(1) 7500
+805D1108:     loop 0
+805D1110:       callc [cam_kaiten_get_para win_06.o] 2 LW(0) LW(1) LW(2) LW(3) LW(4) LW(5) LW(6) LW(7)
+805D113C:       callc [evt_sub_intpl_msec_get_value_para evt_sub.o] LW(6) LW(9)
+805D114C:       divf LW(6) 10.00
+805D1158:       callc [cam_kaiten_set_para win_06.o] 2 LW(0) LW(1) LW(2) LW(3) LW(4) LW(5) LW(6) LW(7)
+805D1184:       if_int_eq LW(9) 0
+805D1190:         loop_break
+805D1194:       endif
+805D1198:       wait_frames 1
+805D11A0:     end_loop
+805D11A4:   end_thread
+805D11A8:   wait_ms 8000
+805D11B0:   stop_tid LW(7)
+805D11B8:   callc [evt_mario_cont_onoff evt_mario.o] 1
+805D11C4:   callc [evt_party_cont_onoff evt_party.o] 0 1
+805D11D4:   callc [evt_party_cont_onoff evt_party.o] 1 1
+805D11E4:   setii GF(0) 0
+805D11F0:   callc [evt_bero_exec_wait evt_bero.o] 65536
+805D11FC:   callc [evt_party_stop evt_party.o] 0
+805D1208:   callc [evt_party_stop evt_party.o] 1
+805D1214:   wait_ms 500
+805D121C:   begin_thread
+805D1220:     callc [evt_party_set_dir evt_party.o] 1 90 200
+805D1234:   end_thread
+805D1238:   begin_thread
+805D123C:     callc [evt_mario_mov_pos2 evt_mario.o] 20 50 125
+805D1250:     callc [evt_mario_set_dir evt_mario.o] 270 200 0
+805D1264:   end_thread
+805D1268:   begin_thread
+805D126C:     callc [evt_party_move_pos2 evt_party.o] 0 -20 40 125
+805D1284:     callc [evt_party_set_dir evt_party.o] 0 90 200
+805D1298:   end_thread
+805D129C:   callc [camps25 win_06.o]
+805D12A4:   callc [evt_cam3d_evt_set evt_cam.o] 0 92.50 336.70 0 32.50 -8 0 0
+805D12CC:   wait_ms 1000
+805D12D4:   callc [evt_msg_print_party evt_msg.o] ["stg2_win_e01_00_00"]
+805D12E0:   wait_ms 300
+805D12E8:   callc [evt_party_get_pos evt_party.o] 1 LW(0) LW(1) LW(2)
+805D1300:   addi LW(0) 1
+805D130C:   callc [evt_party_move_pos2 evt_party.o] 1 LW(0) 85 125
+805D1324:   wait_ms 200
+805D132C:   callc [evt_msg_print evt_msg.o] 0 ["stg2_win_e00_00"] 0 ["extparty"]
+805D1344:   callc [evt_cam3d_evt_off evt_cam.o] 500 11
+805D1354:   wait_ms 500
+805D135C:   setii GSW(0) 71
+805D1368:   callc [evt_snd_bgm_scope evt_snd.o] 0 0
+805D1378:   callc [evt_party_run evt_party.o] 0
+805D1384:   callc [evt_party_run evt_party.o] 1
+805D1390:   callc [evt_mario_key_onoff evt_mario.o] 1
+805D139C:   callc [evt_cam_letter_box_onoff evt_cam.o] 0 0
+805D13AC:   return
+805D13B0:   end

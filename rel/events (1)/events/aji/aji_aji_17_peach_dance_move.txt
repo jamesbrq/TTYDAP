@@ -1,0 +1,53 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [peach_dance_move aji_17.o] AT 805F3680 ---
+805F3680:   callc [get_center aji_17.o] LW(2) LW(3)
+805F3690:   callc [compute_move_pos aji_17.o] LW(4) LW(5)
+805F36A0:   begin_thread
+805F36A4:     callc [move_center aji_17.o] LW(2) LW(3) LW(4) LW(5) 600
+805F36C0:   end_thread
+805F36C4:   setii LW(6) LW(5)
+805F36D0:   addi LW(5) 323
+805F36DC:   addi LW(6) 27
+805F36E8:   callc [evt_cam3d_evt_set evt_cam.o] LW(4) 95 LW(5) LW(4) 45 LW(6) 600 11
+805F3710:   wait_frames 1
+805F3718:   callsa [peach_dance_pose aji_17.o]
+805F3720:   loop 0
+805F3728:     callc [dance_flag_check aji_17.o] 4 LW(0)
+805F3738:     if_int_eq LW(0) 0
+805F3744:       loop_break
+805F3748:     endif
+805F374C:     callc [get_center aji_17.o] LW(0) LW(1)
+805F375C:     callc [evt_mario_get_pos evt_mario.o] 0 LW(2) LW(4) LW(3)
+805F3774:     callc [compute_peach_pos aji_17.o] LW(0) LW(1) LW(2) LW(3)
+805F378C:     callc [evt_mario_set_pos evt_mario.o] LW(2) LW(4) LW(3)
+805F37A0:     callc [compute_horogram_pos aji_17.o] LW(0) LW(1) LW(2) LW(3)
+805F37B8:     callc [set_npc_pos aji_17.o] ["ホログラム"] LW(2) 0.00 LW(3)
+805F37D0:     callc [set_npc_pos aji_17.o] ["ダミー"] LW(0) 5.00 LW(1)
+805F37E8:     wait_frames 1
+805F37F0:   end_loop
+805F37F4:   return
+805F37F8:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [peach_dance_pose aji_17.o] AT 805F37FC ---
+805F37FC:   callc [dance_flag_check aji_17.o] 8 LW(0)
+805F380C:   if_int_eq LW(0) 1
+805F3818:     return
+805F381C:   endif
+805F3820:   callc [dance_get_step aji_17.o] LW(0)
+805F382C:   switchi LW(0)
+805F3834:     case_int_eq 0
+805F383C:       callc [peach_set_pose aji_17.o] ["P_O_F_1"]
+805F3848:       callc [horogram_set_pose aji_17.o] ["P_O_F_2"]
+805F3854:     case_int_eq 1
+805F385C:       callc [peach_set_pose aji_17.o] ["P_O_R_1"]
+805F3868:       callc [horogram_set_pose aji_17.o] ["P_O_R_2"]
+805F3874:     case_int_eq 2
+805F387C:       callc [peach_set_pose aji_17.o] ["P_O_N_1"]
+805F3888:       callc [horogram_set_pose aji_17.o] ["P_O_N_2"]
+805F3894:     case_default
+805F3898:       dbg_report ["dance_dt.step error"]
+805F38A0:   end_switch
+805F38A4:   return
+805F38A8:   end

@@ -1,0 +1,85 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [torinoko_suifu_init dou_11.o] AT 805CC610 ---
+805CC610:   callc [evt_npc_flag_onoff evt_npc.o] 1 ["水夫C"] 1073741856
+805CC624:   callc [evt_npc_flag_onoff evt_npc.o] 1 ["水夫D"] 1073741856
+805CC638:   callc [evt_npc_flag_onoff evt_npc.o] 1 ["水夫E"] 1073741856
+805CC64C:   callc [evt_npc_flag_onoff evt_npc.o] 1 ["モニー"] 1073741856
+805CC660:   callc [evt_npc_change_interrupt evt_npc.o] ["モニー"] 6 0
+805CC674:   callc [evt_npc_flag_onoff evt_npc.o] 1 ["ピートン"] 1073741856
+805CC688:   callc [evt_npc_change_interrupt evt_npc.o] ["ピートン"] 6 0
+805CC69C:   callc [evt_nannpc_init evt_nannpc.o] [ext_entry_data dou_11.o] 0 0 0 101
+805CC6B8:   callc [evt_nannpc_set_subfunc evt_nannpc.o] 1 [nannpc_ext_main_sub_fast evt_nannpc.o]
+805CC6C8:   callsa [torinoko_suifu_pukapuka dou_11.o]
+805CC6D0:   mo_set_base_int [suifudata dou_11.o]
+805CC6D8:   setii LW(0) 0
+805CC6E4:   loop 100
+805CC6EC:     mo_read_int3 LW(1) LW(2) LW(3)
+805CC6FC:     mo_read_int LW(4)
+805CC704:     callc [evt_nannpc_entry evt_nannpc.o] LW(0)
+805CC710:     callc [evt_nannpc_set_func evt_nannpc.o] LW(0) 0
+805CC720:     callc [evt_nannpc_set_position evt_nannpc.o] LW(0) LW(1) LW(2) LW(3)
+805CC738:     switchi LW(0)
+805CC740:       case_int_eq 96
+805CC748:         callc [evt_nannpc_flag_onoff evt_nannpc.o] LW(0) 0 2
+805CC75C:         callc [evt_nannpc_ppflag_onoff evt_nannpc.o] LW(0) 0 4
+805CC770:       case_int_eq 95
+805CC778:         callc [evt_nannpc_flag_onoff evt_nannpc.o] LW(0) 0 2
+805CC78C:         callc [evt_nannpc_ppflag_onoff evt_nannpc.o] LW(0) 0 4
+805CC7A0:     end_switch
+805CC7A4:     callc [evt_nannpc_set_animtbl evt_nannpc.o] LW(0) [suifu_animtbl dou_11.o]
+805CC7B4:     callc [evt_nannpc_set_dir evt_nannpc.o] LW(0) LW(4)
+805CC7C4:     callc [evt_nannpc_set_work evt_nannpc.o] LW(0) 0 1
+805CC7D8:     callc [evt_nannpc_set_work evt_nannpc.o] LW(0) 1 0
+805CC7EC:     addi LW(0) 1
+805CC7F8:   end_loop
+805CC7FC:   begin_thread
+805CC800:     setii LW(0) 100
+805CC80C:     callc [evt_nannpc_entry evt_nannpc.o] LW(0)
+805CC818:     callc [evt_nannpc_flag_onoff evt_nannpc.o] LW(0) 0 6
+805CC82C:     callc [evt_nannpc_set_size evt_nannpc.o] LW(0) 30 15
+805CC840:     loop 0
+805CC848:       callc [evt_mario_get_pos evt_mario.o] 0 LW(1) LW(2) LW(3)
+805CC860:       callc [evt_nannpc_set_position evt_nannpc.o] LW(0) LW(1) LW(2) LW(3)
+805CC878:       wait_frames 1
+805CC880:     end_loop
+805CC884:   end_thread
+805CC888:   begin_thread_tid GW(10)
+805CC890:     loop 0
+805CC898:       callc [evt_nannpc_get_position evt_nannpc.o] 96 LW(1) LW(2) LW(3)
+805CC8B0:       callc [evt_npc_set_position evt_npc.o] ["ピートン"] LW(1) LW(2) LW(3)
+805CC8C8:       callc [evt_nannpc_get_position evt_nannpc.o] 95 LW(1) LW(2) LW(3)
+805CC8E0:       callc [evt_npc_set_position evt_npc.o] ["モニー"] LW(1) LW(2) LW(3)
+805CC8F8:       wait_frames 1
+805CC900:     end_loop
+805CC904:   end_thread
+805CC908:   return
+805CC90C:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [torinoko_suifu_pukapuka dou_11.o] AT 805CC1CC ---
+805CC1CC:   loop 0
+805CC1D4:     setii LW(0) 0
+805CC1E0:     loop 100
+805CC1E8:       callc [evt_nannpc_get_work evt_nannpc.o] LW(0) 0 LW(10)
+805CC1FC:       if_int_eq LW(10) 1
+805CC208:         setff LW(10) GW(0)
+805CC214:         callc [evt_nannpc_set_hosei_position evt_nannpc.o] LW(0) 0 LW(10) 0
+805CC22C:         callc [evt_nannpc_get_position evt_nannpc.o] LW(0) LW(1) LW(2) LW(3)
+805CC244:         if_int_le LW(3) 0
+805CC250:           setff LW(1) 39.00
+805CC25C:         else
+805CC260:           setff LW(1) 26.00
+805CC26C:         endif
+805CC270:         addf LW(1) LW(10)
+805CC27C:         callc [evt_nannpc_set_shadow_position evt_nannpc.o] LW(0) LW(1)
+805CC28C:       else
+805CC290:         callc [evt_nannpc_get_position evt_nannpc.o] LW(0) LW(1) LW(2) LW(3)
+805CC2A8:         callc [evt_nannpc_set_shadow_position evt_nannpc.o] LW(0) LW(2)
+805CC2B8:       endif
+805CC2BC:       addi LW(0) 1
+805CC2C8:     end_loop
+805CC2CC:     wait_frames 1
+805CC2D4:   end_loop
+805CC2D8:   return
+805CC2DC:   end

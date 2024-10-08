@@ -1,0 +1,309 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [powerdownya_party_lank_rtn tik_11.o] AT 805DC6FC ---
+805DC6FC:   callc [evt_pouch_get_coin evt_pouch.o] LW(0)
+805DC708:   if_int_lt LW(0) 39
+805DC714:     callc [evt_msg_print_add evt_msg.o] 0 ["powerdown_04"]
+805DC724:     return
+805DC728:   endif
+805DC72C:   callc [unk_8023f79c winmgr.o] LW(0)
+805DC738:   if_int_eq LW(0) 0
+805DC744:     callc [evt_msg_print_add evt_msg.o] 0 ["powerdown_07"]
+805DC754:     return
+805DC758:   endif
+805DC75C:   callc [evt_msg_continue evt_msg.o]
+805DC764:   callc [evt_win_coin_on evt_window.o] 0 LW(12)
+805DC774:   loop 0
+805DC77C:     callc [evt_win_other_select evt_window.o] 7
+805DC788:     if_int_eq LW(0) 0
+805DC794:       callc [evt_win_coin_off evt_window.o] LW(12)
+805DC7A0:       callc [evt_msg_print evt_msg.o] 0 ["powerdown_03_01"] 0 ["me"]
+805DC7B8:       return
+805DC7BC:     endif
+805DC7C0:     wait_ms 240
+805DC7C8:     setii GW(1) LW(1)
+805DC7D4:     callc [evt_win_other_select evt_window.o] 8
+805DC7E0:     if_int_eq LW(0) 0
+805DC7EC:       wait_ms 240
+805DC7F4:       loop_continue
+805DC7F8:     endif
+805DC7FC:     callc [evt_sub_get_language evt_sub.o] LW(15)
+805DC808:     switchi LW(15)
+805DC810:       case_int_eq 0
+805DC818:         callc [evt_msg_print_insert evt_msg.o] 0 ["powerdown_08"] 0 ["me"] LW(3) LW(4) 39
+805DC83C:       case_default
+805DC840:         callc [unk_800d0998 evt_msg.o] 0 LW(14) ["powerdown_08"] 39
+805DC858:         callc [evt_msg_print_insert evt_msg.o] 1 LW(14) 0 ["me"] LW(3) LW(4)
+805DC878:     end_switch
+805DC87C:     callc [evt_msg_select evt_msg.o] 0 ["powerdown_09"]
+805DC88C:     if_int_eq LW(0) 0
+805DC898:       loop_break
+805DC89C:     endif
+805DC8A0:     callc [evt_msg_continue evt_msg.o]
+805DC8A8:   end_loop
+805DC8AC:   callc [evt_pouch_get_coin evt_pouch.o] LW(0)
+805DC8B8:   subi LW(0) 39
+805DC8C4:   callc [evt_pouch_set_coin evt_pouch.o] LW(0)
+805DC8D0:   callc [evt_win_coin_wait evt_window.o] LW(12)
+805DC8DC:   wait_ms 500
+805DC8E4:   callc [evt_win_coin_off evt_window.o] LW(12)
+805DC8F0:   callc [enzan_lw_save tik_11.o]
+805DC8F8:   callc [evt_mario_get_party evt_mario.o] LW(0)
+805DC904:   if_int_ne LW(1) LW(0)
+805DC910:     callc [evt_mario_goodbye_party evt_mario.o] 0
+805DC91C:     callc [evt_mario_hello_party evt_mario.o] 0 LW(1)
+805DC92C:   endif
+805DC930:   callc [evt_msg_print_add evt_msg.o] 0 ["powerdown_11"]
+805DC940:   callc [bgScrollControll tik_11.o] 0
+805DC94C:   callc [evt_mario_goodbye_party evt_mario.o] 0
+805DC958:   callc [evt_mario_hello_party evt_mario.o] 0 LW(2)
+805DC968:   callc [evt_party_stop evt_party.o] 0
+805DC974:   callc [evt_sub_intpl_msec_init evt_sub.o] 11 0 -20 500
+805DC98C:   loop 0
+805DC994:     callc [evt_sub_intpl_msec_get_value_para evt_sub.o] LW(0) LW(5)
+805DC9A4:     callc [evt_mapobj_trans evt_map.o] 1 ["down_pira"] 0 LW(0) 0
+805DC9C0:     wait_frames 1
+805DC9C8:     if_int_eq LW(5) 0
+805DC9D4:       loop_break
+805DC9D8:     endif
+805DC9DC:   end_loop
+805DC9E0:   wait_ms 500
+805DC9E8:   callc [evt_snd_bgmoff evt_snd.o] 1024
+805DC9F4:   callc [evt_snd_bgmon evt_snd.o] 1 ["BGM_FF_POWERDOWN1"]
+805DCA04:   callc [bgm_start_wait tik_11.o]
+805DCA0C:   callc [evt_eff64 evt_eff.o] ["aaax"] ["lensflare_n64"] 0 -9 49 0 1.00 -1 0 0 0 0 0 0
+805DCA4C:   wait_ms 500
+805DCA54:   callc [evt_mapobj_flag_onoff evt_map.o] 1 1 ["down_pira"] 1
+805DCA6C:   callsa_tid [unk_evt_tik_00021320 tik_11.o] GW(1)
+805DCA78:   callc [evt_msg_print evt_msg.o] 0 ["powerdown_12"] 0 ["me"]
+805DCA90:   begin_thread
+805DCA94:     callc [evt_sub_intpl_msec_init evt_sub.o] 0 255 0 1200
+805DCAAC:     loop 0
+805DCAB4:       callc [evt_sub_intpl_msec_get_value evt_sub.o]
+805DCABC:       callc [evt_mapobj_color evt_map.o] 1 ["S"] 255 255 255 LW(0)
+805DCADC:       callc [evt_mapobj_color evt_map.o] 1 ["down_pira"] 255 255 255 255
+805DCAFC:       callc [evt_mapobj_color evt_map.o] 1 ["ie_naka"] 255 255 255 255
+805DCB1C:       wait_frames 1
+805DCB24:       if_int_eq LW(1) 0
+805DCB30:         loop_break
+805DCB34:       endif
+805DCB38:     end_loop
+805DCB3C:   end_thread
+805DCB40:   begin_thread
+805DCB44:     callc [evt_sub_intpl_msec_init evt_sub.o] 0 0 90 1600
+805DCB5C:     loop 0
+805DCB64:       callc [evt_sub_intpl_msec_get_value_para evt_sub.o] LW(0) LW(1)
+805DCB74:       callc [evt_mapobj_rotate evt_map.o] 1 ["ie_l"] 0 0 LW(0)
+805DCB90:       muli LW(0) -1
+805DCB9C:       callc [evt_mapobj_rotate evt_map.o] 1 ["ie_o"] LW(0) 0 0
+805DCBB8:       callc [evt_mapobj_rotate evt_map.o] 1 ["ie_r"] 0 0 LW(0)
+805DCBD4:       wait_frames 1
+805DCBDC:       if_int_eq LW(1) 0
+805DCBE8:         loop_break
+805DCBEC:       endif
+805DCBF0:     end_loop
+805DCBF4:   end_thread
+805DCBF8:   begin_thread
+805DCBFC:     callc [evt_cam_shake evt_cam.o] 4 0.01 0.00 1600
+805DCC14:   end_thread
+805DCC18:   callc [evt_cam3d_evt_set evt_cam.o] -9 212 886 -9 56 0 1600 11
+805DCC40:   wait_ms 1600
+805DCC48:   begin_thread
+805DCC4C:     callc [evt_sub_intpl_msec_init evt_sub.o] 11 0 100 7000
+805DCC64:     loop 0
+805DCC6C:       callc [evt_sub_intpl_msec_get_value_para evt_sub.o] LW(0) LW(1)
+805DCC7C:       callc [enzan_cam_turn_keisan_f tik_11.o] LW(0)
+805DCC88:       wait_frames 1
+805DCC90:       if_int_eq LW(1) 0
+805DCC9C:         loop_break
+805DCCA0:       endif
+805DCCA4:     end_loop
+805DCCA8:   end_thread
+805DCCAC:   begin_thread
+805DCCB0:     setii LW(6) 7000
+805DCCBC:     divi LW(6) 1000
+805DCCC8:     addi LW(6) 1
+805DCCD4:     loop LW(6)
+805DCCDC:       callc [evt_eff64 evt_eff.o] 0 ["crystal_n64"] 3 -9 49 0 1.00 60 0 0 0 0 0 0
+805DCD1C:       wait_ms 1000
+805DCD24:     end_loop
+805DCD28:   end_thread
+805DCD2C:   begin_thread
+805DCD30:     callc [evt_mario_get_party evt_mario.o] LW(0)
+805DCD3C:     switchi LW(0)
+805DCD44:       case_int_eq 1
+805DCD4C:         callc [evt_party_set_pose evt_party.o] 0 ["PKR_I_1"]
+805DCD5C:       case_int_eq 2
+805DCD64:         callc [evt_party_set_pose evt_party.o] 0 ["PNK_I_1"]
+805DCD74:       case_int_eq 3
+805DCD7C:         callc [evt_party_set_pose evt_party.o] 0 ["I_1"]
+805DCD8C:       case_int_eq 4
+805DCD94:         callc [evt_party_set_pose evt_party.o] 0 ["PYS_I_1"]
+805DCDA4:       case_int_eq 5
+805DCDAC:         callc [evt_party_set_pose evt_party.o] 0 ["PWD_I_1"]
+805DCDBC:       case_int_eq 6
+805DCDC4:         callc [evt_party_set_pose evt_party.o] 0 ["PTR_I_1"]
+805DCDD4:       case_int_eq 7
+805DCDDC:         callc [evt_party_set_pose evt_party.o] 0 ["PCH_I_1"]
+805DCDEC:     end_switch
+805DCDF0:     wait_ms 500
+805DCDF8:     stop_tid GW(1)
+805DCE00:     callc [evt_party_dispflg_onoff evt_party.o] 0 16 1
+805DCE14:     callc [evt_party_get_pos evt_party.o] 0 LW(3) LW(4) LW(5)
+805DCE2C:     callc [effect_stardust tik_11.o] 4 LW(3) LW(4) LW(5) 50.00 50.00 14 60
+805DCE54:     callc [evt_party_get_dispdir evt_party.o] 0 LW(9)
+805DCE64:     setff LW(10) LW(9)
+805DCE70:     addf LW(10) 1440
+805DCE7C:     callc [evt_party_flg_onoff evt_party.o] 0 33554432 1
+805DCE90:     setii LW(6) 60
+805DCE9C:     loop LW(6)
+805DCEA4:       callc [wariai_enzan_1f tik_11.o] LW(6) 60 0 40 LW(7)
+805DCEC0:       callc [wariai_enzan_1f tik_11.o] LW(6) 60 LW(9) LW(10) LW(8)
+805DCEDC:       addf LW(7) LW(4)
+805DCEE8:       callc [evt_party_set_pos evt_party.o] 0 LW(3) LW(7) LW(5)
+805DCF00:       callc [evt_party_set_dispdir evt_party.o] 0 LW(8)
+805DCF10:       wait_frames 1
+805DCF18:     end_loop
+805DCF1C:     callc [evt_party_dispflg_onoff evt_party.o] 0 16 0
+805DCF30:     callc [evt_party_flg_onoff evt_party.o] 0 33554432 0
+805DCF44:     callc [evt_mario_goodbye_party evt_mario.o] 0
+805DCF50:     callc [evt_mario_hello_party evt_mario.o] 0 LW(1)
+805DCF60:     wait_ms 500
+805DCF68:     callc [evt_party_stop evt_party.o] 0
+805DCF74:     callsa_tid [unk_evt_tik_00021320 tik_11.o] GW(1)
+805DCF80:     callc [evt_mario_get_party evt_mario.o] LW(1)
+805DCF8C:     switchi LW(1)
+805DCF94:       case_int_eq 1
+805DCF9C:         callc [evt_party_set_pose evt_party.o] 0 ["PKR_C_1"]
+805DCFAC:       case_int_eq 2
+805DCFB4:         callc [evt_party_set_pose evt_party.o] 0 ["PNK_C_1"]
+805DCFC4:       case_int_eq 3
+805DCFCC:         callc [evt_party_set_pose evt_party.o] 0 ["C_1"]
+805DCFDC:       case_int_eq 4
+805DCFE4:         callc [evt_party_set_pose evt_party.o] 0 ["PYS_C_1"]
+805DCFF4:       case_int_eq 5
+805DCFFC:         callc [evt_party_set_pose evt_party.o] 0 ["PWD_C_1"]
+805DD00C:       case_int_eq 6
+805DD014:         callc [evt_party_set_pose evt_party.o] 0 ["PTR_C_1"]
+805DD024:       case_int_eq 7
+805DD02C:         callc [evt_party_set_pose evt_party.o] 0 ["PCH_C_1"]
+805DD03C:     end_switch
+805DD040:     callc [evt_party_get_pos evt_party.o] 0 LW(3) LW(4) LW(5)
+805DD058:     setff LW(7) LW(4)
+805DD064:     addf LW(7) 18.00
+805DD070:     callc [evt_eff64 evt_eff.o] ["cccx"] ["pokopi_pcharge_n64"] 2 LW(3) LW(7) LW(5) 1 -1 0 0 0 0 0 0
+805DD0B0:     wait_ms 2000
+805DD0B8:     callc [evt_party_set_breed_pose evt_party.o] 0 1
+805DD0C8:   end_thread
+805DD0CC:   wait_ms 7000
+805DD0D4:   callc [evt_eff_softdelete evt_eff.o] ["aaax"]
+805DD0E0:   callc [evt_mapobj_flag_onoff evt_map.o] 1 0 ["down_pira"] 1
+805DD0F8:   wait_ms 500
+805DD100:   callc [evt_eff64 evt_eff.o] ["dddx"] ["release_n64"] 65283 -9 49 0 1.00 200 0 0 0 0 0 0
+805DD140:   wait_ms 1500
+805DD148:   callc [evt_eff_softdelete evt_eff.o] ["cccx"]
+805DD154:   callc [evt_mario_get_party evt_mario.o] LW(0)
+805DD160:   switchi LW(0)
+805DD168:     case_int_eq 1
+805DD170:       callc [evt_party_set_pose evt_party.o] 0 ["PKR_I_1"]
+805DD180:     case_int_eq 2
+805DD188:       callc [evt_party_set_pose evt_party.o] 0 ["PNK_I_1"]
+805DD198:     case_int_eq 3
+805DD1A0:       callc [evt_party_set_pose evt_party.o] 0 ["I_1"]
+805DD1B0:     case_int_eq 4
+805DD1B8:       callc [evt_party_set_pose evt_party.o] 0 ["PYS_I_1"]
+805DD1C8:     case_int_eq 5
+805DD1D0:       callc [evt_party_set_pose evt_party.o] 0 ["PWD_I_1"]
+805DD1E0:     case_int_eq 6
+805DD1E8:       callc [evt_party_set_pose evt_party.o] 0 ["PTR_I_1"]
+805DD1F8:     case_int_eq 7
+805DD200:       callc [evt_party_set_pose evt_party.o] 0 ["PCH_I_1"]
+805DD210:   end_switch
+805DD214:   callc [evt_party_get_pos evt_party.o] 0 LW(3) LW(4) LW(5)
+805DD22C:   setff LW(7) LW(4)
+805DD238:   addf LW(7) 18.00
+805DD244:   callc [effect_stardust tik_11.o] 0 LW(3) LW(7) LW(5) 50.00 50.00 20 120
+805DD26C:   begin_thread
+805DD270:     wait_ms 400
+805DD278:     callc [evt_sub_intpl_msec_init evt_sub.o] 0 0 255 1200
+805DD290:     loop 0
+805DD298:       callc [evt_sub_intpl_msec_get_value evt_sub.o]
+805DD2A0:       callc [evt_mapobj_color evt_map.o] 1 ["S"] 255 255 255 LW(0)
+805DD2C0:       callc [evt_mapobj_color evt_map.o] 1 ["down_pira"] 255 255 255 255
+805DD2E0:       callc [evt_mapobj_color evt_map.o] 1 ["ie_naka"] 255 255 255 255
+805DD300:       wait_frames 1
+805DD308:       if_int_eq LW(1) 0
+805DD314:         loop_break
+805DD318:       endif
+805DD31C:     end_loop
+805DD320:   end_thread
+805DD324:   begin_thread
+805DD328:     callc [evt_sub_intpl_msec_init evt_sub.o] 0 90 0 1600
+805DD340:     loop 0
+805DD348:       callc [evt_sub_intpl_msec_get_value_para evt_sub.o] LW(0) LW(1)
+805DD358:       callc [evt_mapobj_rotate evt_map.o] 1 ["ie_l"] 0 0 LW(0)
+805DD374:       muli LW(0) -1
+805DD380:       callc [evt_mapobj_rotate evt_map.o] 1 ["ie_o"] LW(0) 0 0
+805DD39C:       callc [evt_mapobj_rotate evt_map.o] 1 ["ie_r"] 0 0 LW(0)
+805DD3B8:       wait_frames 1
+805DD3C0:       if_int_eq LW(1) 0
+805DD3CC:         loop_break
+805DD3D0:       endif
+805DD3D4:     end_loop
+805DD3D8:     callc [bgScrollControll tik_11.o] 1
+805DD3E4:   end_thread
+805DD3E8:   callc [evt_cam3d_evt_off evt_cam.o] 1600 11
+805DD3F8:   wait_ms 1400
+805DD400:   callc [evt_party_set_breed_pose evt_party.o] 0 1
+805DD410:   callc [evt_sub_intpl_msec_init evt_sub.o] 11 -20 0 500
+805DD428:   loop 0
+805DD430:     callc [evt_sub_intpl_msec_get_value_para evt_sub.o] LW(0) LW(5)
+805DD440:     callc [evt_mapobj_trans evt_map.o] 1 ["down_pira"] 0 LW(0) 0
+805DD45C:     wait_frames 1
+805DD464:     if_int_eq LW(5) 0
+805DD470:       loop_break
+805DD474:     endif
+805DD478:   end_loop
+805DD47C:   callc [evt_mario_get_party evt_mario.o] LW(0)
+805DD488:   switchi LW(0)
+805DD490:     case_int_eq 1
+805DD498:       callc [evt_party_set_pose evt_party.o] 0 ["PKR_Y_1"]
+805DD4A8:     case_int_eq 2
+805DD4B0:       callc [evt_party_set_pose evt_party.o] 0 ["PNK_Y_1"]
+805DD4C0:     case_int_eq 3
+805DD4C8:       callc [evt_party_set_pose evt_party.o] 0 ["Y_1"]
+805DD4D8:     case_int_eq 4
+805DD4E0:       callc [evt_party_set_pose evt_party.o] 0 ["PYS_Y_1"]
+805DD4F0:     case_int_eq 5
+805DD4F8:       callc [evt_party_set_pose evt_party.o] 0 ["PWD_Y_1"]
+805DD508:     case_int_eq 6
+805DD510:       callc [evt_party_set_pose evt_party.o] 0 ["PTR_Y_1"]
+805DD520:     case_int_eq 7
+805DD528:       callc [evt_party_set_pose evt_party.o] 0 ["PCH_Y_1"]
+805DD538:   end_switch
+805DD53C:   wait_ms 1500
+805DD544:   callc [evt_party_set_breed_pose evt_party.o] 0 1
+805DD554:   callc [evt_mario_dispflag_onoff evt_mario.o] 0 4
+805DD564:   stop_tid GW(1)
+805DD56C:   callc [enzan_lw_load tik_11.o]
+805DD574:   callc [evt_snd_bgmoff evt_snd.o] 513
+805DD580:   callc [evt_snd_bgmon evt_snd.o] 288 0
+805DD590:   callc [unitwin_getpartylank evt_win.o] LW(1) LW(0)
+805DD5A0:   addi LW(0) 1
+805DD5AC:   callc [unitwin_setpartylank evt_win.o] LW(1) LW(0)
+805DD5BC:   callc [unitwin_getpartylank evt_win.o] LW(2) LW(0)
+805DD5CC:   subi LW(0) 1
+805DD5D8:   callc [unitwin_setpartylank evt_win.o] LW(2) LW(0)
+805DD5E8:   callc [evt_msg_print evt_msg.o] 0 ["powerdown_13"] 0 ["me"]
+805DD600:   return
+805DD604:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [unk_evt_tik_00021320 tik_11.o] AT 805DBCC0 ---
+805DBCC0:   loop 0
+805DBCC8:     callc [evt_party_set_dir_pos evt_party.o] 0 -9 0
+805DBCDC:     callc [unk_800e6b1c evt_mario.o] -9 0
+805DBCEC:     wait_frames 1
+805DBCF4:   end_loop
+805DBCF8:   return
+805DBCFC:   end

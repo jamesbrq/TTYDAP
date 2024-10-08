@@ -1,0 +1,56 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [phase_event unit_boss_bunbaba.o] AT 8061E5A4 ---
+8061E5A4:   callc [btlevtcmd_CheckPhase battle_event_cmd.o] LW(0) 67108867
+8061E5B4:   if_int_eq LW(0) 0
+8061E5C0:     goto 99
+8061E5C8:   endif
+8061E5CC:   callc [btlevtcmd_CheckActStatus battle_event_cmd.o] -2 LW(0)
+8061E5DC:   if_int_eq LW(0) 0
+8061E5E8:     goto 99
+8061E5F0:   endif
+8061E5F4:   callc [btlevtcmd_GetUnitWork battle_event_cmd.o] -2 0 LW(0)
+8061E608:   switchi LW(0)
+8061E610:     case_int_eq 1
+8061E618:       callc [btlevtcmd_GetMaxHp battle_event_cmd.o] -2 LW(0)
+8061E628:       muli LW(0) 60
+8061E634:       divi LW(0) 100
+8061E640:       callc [btlevtcmd_GetHp battle_event_cmd.o] -2 LW(1)
+8061E650:       if_int_le LW(1) LW(0)
+8061E65C:         callc [btlevtcmd_StatusWindowOnOff battle_event_cmd.o] 0
+8061E668:         callc [btlevtcmd_SetUnitWork battle_event_cmd.o] -2 0 2
+8061E67C:         callc [evt_msg_print evt_msg.o] 2 ["stg8_las_49_03"] 0 -2
+8061E694:         callc [btlevtcmd_StatusWindowOnOff battle_event_cmd.o] 1
+8061E6A0:       endif
+8061E6A4:     case_int_eq 3
+8061E6AC:       callc [btlevtcmd_GetMaxHp battle_event_cmd.o] -2 LW(0)
+8061E6BC:       muli LW(0) 40
+8061E6C8:       divi LW(0) 100
+8061E6D4:       callc [btlevtcmd_GetHp battle_event_cmd.o] -2 LW(1)
+8061E6E4:       if_int_le LW(1) LW(0)
+8061E6F0:         callc [btlevtcmd_StatusWindowOnOff battle_event_cmd.o] 0
+8061E6FC:         callc [btlevtcmd_SetUnitWork battle_event_cmd.o] -2 0 4
+8061E710:         callc [evt_msg_print evt_msg.o] 2 ["stg8_las_49_04"] 0 -2
+8061E728:         callc [btlevtcmd_StatusWindowOnOff battle_event_cmd.o] 1
+8061E734:       endif
+8061E738:     case_int_eq 5
+8061E740:       callc [evt_msg_print evt_msg.o] 2 ["stg8_las_49_05"] 0 -2
+8061E758:     case_int_ge 6
+8061E760:       callc [btlevtcmd_GetUnitWork battle_event_cmd.o] -2 1 LW(0)
+8061E774:       if_int_eq LW(0) 0
+8061E780:         callc [btlevtcmd_GetMaxHp battle_event_cmd.o] -2 LW(0)
+8061E790:         muli LW(0) 20
+8061E79C:         divi LW(0) 100
+8061E7A8:         callc [btlevtcmd_GetHp battle_event_cmd.o] -2 LW(1)
+8061E7B8:         if_int_le LW(1) LW(0)
+8061E7C4:           callc [btlevtcmd_StatusWindowOnOff battle_event_cmd.o] 0
+8061E7D0:           callc [btlevtcmd_SetUnitWork battle_event_cmd.o] -2 1 1
+8061E7E4:           callc [evt_msg_print evt_msg.o] 2 ["stg8_las_49_07"] 0 -2
+8061E7FC:           callc [btlevtcmd_StatusWindowOnOff battle_event_cmd.o] 1
+8061E808:         endif
+8061E80C:       endif
+8061E810:   end_switch
+8061E814: 99:
+8061E81C:   return
+8061E820:   end

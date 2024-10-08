@@ -1,0 +1,104 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [minigame04_end yuu_03.o] AT 805D2794 ---
+805D2794:   callc [evt_cam_letter_box_onoff evt_cam.o] 1 0
+805D27A4:   callc [evt_cam_letter_box_disable evt_cam.o] 0
+805D27B0:   callc [evt_cam3d_evt_set_now evt_cam.o]
+805D27B8:   callc [evt_mario_set_enable_key evt_mario.o] 0
+805D27C4:   callc [evt_snd_sfxon evt_snd.o] ["SFX_EVT_GAME_AUDIENCE2"] 0
+805D27D4:   setii GW(0) 1
+805D27E0:   setii GF(0) 1
+805D27EC:   setii LW(3) 1
+805D27F8:   begin_thread
+805D27FC:     if_int_lt LW(0) 701
+805D2808:       loop 0
+805D2810:         callc [evt_mario_get_name_hitobj_ride evt_mario.o] LW(0)
+805D281C:         if_string_ne LW(0) 0
+805D2828:           loop_break
+805D282C:         endif
+805D2830:         if_int_eq GF(0) 0
+805D283C:           loop_break
+805D2840:         endif
+805D2844:         wait_frames 1
+805D284C:       end_loop
+805D2850:       callc [evt_mario_get_pos evt_mario.o] 0 LW(0) LW(1) LW(2)
+805D2868:       if_int_gt LW(1) -100
+805D2874:         if_int_ne GF(0) 0
+805D2880:           callc [evt_mario_get_pos evt_mario.o] 0 LW(0) LW(1) LW(2)
+805D2898:           if_int_lt LW(0) 1650
+805D28A4:             callc [evt_mario_normalize evt_mario.o]
+805D28AC:             callc [evt_mario_mov_pos2 evt_mario.o] 1650 LW(2) 120
+805D28C0:           endif
+805D28C4:         endif
+805D28C8:       else
+805D28CC:         callc [evt_mario_wait_rideon evt_mario.o]
+805D28D4:         callc [evt_mario_normalize evt_mario.o]
+805D28DC:       endif
+805D28E0:     else
+805D28E4:       callc [evt_mario_wait_rideon evt_mario.o]
+805D28EC:       callc [evt_mario_normalize evt_mario.o]
+805D28F4:     endif
+805D28F8:   end_thread
+805D28FC:   if_int_ge LW(0) 701
+805D2908:     callc [eff_call_minigame evt_yuuminigame.o] 2 0 0 500
+805D2920:     wait_ms 4000
+805D2928:   else
+805D292C:     callc [eff_call_minigame evt_yuuminigame.o] 1 0 0 500
+805D2944:     wait_ms 4000
+805D294C:   endif
+805D2950:   callc [evt_yuucounter_free evt_yuucounter.o]
+805D2958:   callc [yuugijou_montemedal_disp_onoff evt_yuugijou.o] 1
+805D2964:   callc [evt_yuuranking_alloc evt_yuuranking.o] 0 0 1 0 LW(0) 0 LW(1) 701
+805D298C:   wait_frames 1
+805D2994:   callc [yuuranking_wait_button evt_yuuranking.o]
+805D299C:   callc [yuuranking_get_monte evt_yuuranking.o] LW(3)
+805D29A8:   callc [yuugijou_add_montemedal evt_yuugijou.o] 0 LW(3)
+805D29B8:   callc [yuugijou_montemedal_wait evt_yuugijou.o]
+805D29C0:   callc [evt_yuuranking_free evt_yuuranking.o]
+805D29C8:   wait_ms 200
+805D29D0:   callc [evt_yuuranking_alloc evt_yuuranking.o] 0 0 1 1 LW(0) 0 LW(1) 701
+805D29F8:   wait_frames 1
+805D2A00:   callc [yuuranking_wait_button evt_yuuranking.o]
+805D2A08:   callc [evt_yuuranking_free evt_yuuranking.o]
+805D2A10:   setii LW(1) 10
+805D2A1C:   callc [yuugijou_get_montemedal evt_yuugijou.o] LW(0)
+805D2A28:   if_int_lt LW(0) LW(1)
+805D2A34:     setii LW(0) 1
+805D2A40:   else
+805D2A44:     callc [evt_msg_select evt_msg.o] 0 ["sysyuu_03_00"]
+805D2A54:   endif
+805D2A58:   if_int_ne LW(0) 0
+805D2A64:     setii GSWF(1229) 1
+805D2A70:     callc [evt_mario_set_prev_party_pos evt_mario.o] 0 0 -1000 0
+805D2A88:     callc [evt_mario_set_prev_party_pos evt_mario.o] 1 0 -1000 0
+805D2AA0:     callc [evt_snd_bgmoff evt_snd.o] 512
+805D2AAC:     callc [evt_bero_mapchange evt_bero.o] ["gor_03"] ["A_dokan_02"]
+805D2ABC:     return
+805D2AC0:   endif
+805D2AC4:   muli LW(1) -1
+805D2AD0:   callc [yuugijou_add_montemedal evt_yuugijou.o] 0 LW(1)
+805D2AE0:   callc [yuugijou_montemedal_wait evt_yuugijou.o]
+805D2AE8:   wait_ms 200
+805D2AF0:   callc [yuugijou_montemedal_disp_onoff evt_yuugijou.o] 0
+805D2AFC:   callc [evt_snd_bgmoff evt_snd.o] 512
+805D2B08:   callc [evt_snd_sfxoff evt_snd.o] GW(10)
+805D2B14:   callc [evt_fade_out evt_fade.o] 1000
+805D2B20:   callc [evt_cam3d_evt_off evt_cam.o] 0 11
+805D2B30:   setii GF(0) 0
+805D2B3C:   callc [evt_mario_set_pose evt_mario.o] ["M_S_1"]
+805D2B48:   callss [yuu_03_kaijo_init2 yuu_03.o]
+805D2B50:   callc [evt_cam_road_reset evt_cam.o]
+805D2B58:   callc [unk_yuu_0000376c yuu_03.o]
+805D2B60:   wait_ms 500
+805D2B68:   callc [re_init_yuunpc yuu_03.o]
+805D2B70:   callc [evt_snd_sfxon evt_snd.o] ["SFX_EVT_GAME_AUDIENCE1"] GW(10)
+805D2B80:   callc [evt_fade_in evt_fade.o] 1000
+805D2B8C:   return
+805D2B90:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [yuu_03_kaijo_init2 yuu_03.o] AT 805D2484 ---
+805D2484:   callc [evt_mario_set_pos evt_mario.o] -1520 0 0
+805D2498:   callc [evt_mario_set_dir evt_mario.o] 90 0 0
+805D24AC:   return
+805D24B0:   end

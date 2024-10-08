@@ -1,0 +1,164 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [house_in evt_door.o] AT 8032ED20 ---
+8032ED20:   loadi LW(0) [DoorFLAG evt_door.o]
+8032ED2C:   if_int_eq LW(0) 1
+8032ED38:     return
+8032ED3C:   endif
+8032ED40:   storei 1 [DoorFLAG evt_door.o]
+8032ED4C:   callc [evt_snd_bgmoff evt_snd.o] 18432
+8032ED58:   callc [evt_snd_envoff evt_snd.o] 18432
+8032ED64:   callc [evt_snd_env_lpf evt_snd.o] 0 800
+8032ED74:   callc [evt_mario_key_onoff evt_mario.o] 0
+8032ED80:   callc [evt_cam_letter_box_disable evt_cam.o] 1
+8032ED8C:   begin_thread
+8032ED90:     callc [evt_mario_get_pos evt_mario.o] 0 LW(0) LW(1) LW(2)
+8032EDA8:     callc [in_pos evt_door.o] LW(10) LW(0) LW(2)
+8032EDBC:     addi LW(1) 1
+8032EDC8:     callc [evt_cam3d_evt_set_xyz evt_cam.o] LW(0) LW(1) LW(2) 0 150 11
+8032EDE8:   end_thread
+8032EDEC:   setii LW(0) 0
+8032EDF8:   loop 0
+8032EE00:     callc [get_noclip_map evt_door.o] LW(10) LW(0) LW(1)
+8032EE14:     if_int_eq LW(1) -1
+8032EE20:       loop_break
+8032EE24:     endif
+8032EE28:     callc [evt_mapobj_flag_onoff evt_map.o] 1 0 LW(1) 2
+8032EE40:     addi LW(0) 1
+8032EE4C:   end_loop
+8032EE50:   callc [outside_group evt_door.o] LW(10) LW(0)
+8032EE60:   callc [evt_mapobj_flag_onoff evt_map.o] 1 1 LW(0) 2048
+8032EE78:   callc [door_group evt_door.o] LW(10) LW(0)
+8032EE88:   callc [evt_mapobj_flag_onoff evt_map.o] 1 1 LW(0) 2048
+8032EEA0:   callc [evt_mapobj_flag_onoff evt_map.o] 1 1 LW(0) 4096
+8032EEB8:   callc [inside_group evt_door.o] LW(10) LW(0) LW(1)
+8032EECC:   callc [evt_mapobj_flag_onoff evt_map.o] 1 0 LW(0) 1
+8032EEE4:   callc [evt_hitobj_onoff evt_hit.o] LW(1) 1 1
+8032EEF8:   callc [evt_mapobj_flag_onoff evt_map.o] 1 1 LW(0) 2048
+8032EF10:   callc [evt_mapobj_flag_onoff evt_map.o] 1 1 LW(0) 4096
+8032EF28:   callc [N_evt_mario_party_door_halve_hitbox evt_mario.o]
+8032EF30:   callc [evt_mario_get_pos evt_mario.o] 0 LW(0) LW(1) LW(2)
+8032EF48:   callc [out_pos evt_door.o] LW(10) LW(0) LW(2)
+8032EF5C:   callc [evt_mario_mov_pos2 evt_mario.o] LW(0) LW(2) 135.00
+8032EF70:   callc [evt_party_move_beside_mario evt_party.o] 0
+8032EF7C:   callc [evt_party_move_beside_mario evt_party.o] 1
+8032EF88:   callsa_tid [in_dooranim evt_door.o] LW(15)
+8032EF94:   begin_thread
+8032EF98:     callc [npc_dark evt_door.o] LW(10)
+8032EFA4:     callss [in_houseanim evt_door.o]
+8032EFAC:     callsa [evt_dark2 evt_door.o]
+8032EFB4:   end_thread
+8032EFB8:   wait_ms 300
+8032EFC0:   callsa [evt_dark evt_door.o]
+8032EFC8:   callc [evt_mario_get_pos evt_mario.o] 0 LW(0) LW(1) LW(2)
+8032EFE0:   callc [in_pos evt_door.o] LW(10) LW(0) LW(2)
+8032EFF4:   callc [evt_mario_party_door_move evt_mario.o] LW(0) LW(2) 135.00
+8032F008:   callc [evt_cam3d_evt_xyz_off evt_cam.o] 0 11
+8032F018:   callc [evt_mario_key_onoff evt_mario.o] 1
+8032F024:   callc [evt_cam_letter_box_disable evt_cam.o] 0
+8032F030:   loop 0
+8032F038:     check_thread_running LW(15) LW(0)
+8032F044:     if_int_eq LW(0) 0
+8032F050:       loop_break
+8032F054:     endif
+8032F058:     wait_frames 1
+8032F060:   end_loop
+8032F064:   callc [?snd_door_in evt_door.o]
+8032F06C:   storei 0 [DoorFLAG evt_door.o]
+8032F078:   return
+8032F07C:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [in_dooranim evt_door.o] AT 8032E924 ---
+8032E924:   callc [door_group evt_door.o] LW(10) LW(9)
+8032E934:   begin_thread
+8032E938:     callc [evt_mapobj_get_position evt_map.o] LW(9) LW(2) LW(3) LW(4)
+8032E950:     callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_DOOR_OPEN1"] LW(2) LW(3) LW(4) 0
+8032E96C:     wait_ms 1500
+8032E974:     callc [evt_mapobj_get_position evt_map.o] LW(9) LW(2) LW(3) LW(4)
+8032E98C:     callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_DOOR_SHUT1"] LW(2) LW(3) LW(4) 0
+8032E9A8:     wait_ms 500
+8032E9B0:     callc [evt_mapobj_get_position evt_map.o] LW(9) LW(2) LW(3) LW(4)
+8032E9C8:     callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_DOOR_FALL1"] LW(2) LW(3) LW(4) 0
+8032E9E4:   end_thread
+8032E9E8:   callc [evt_sub_intpl_msec_init evt_sub.o] 5 0 80 500
+8032EA00: 0:
+8032EA08:   callc [evt_sub_intpl_msec_get_value_para evt_sub.o] LW(0) LW(1)
+8032EA18:   callc [evt_mapobj_rotate evt_map.o] 1 LW(9) 0 LW(0) 0
+8032EA34:   wait_frames 1
+8032EA3C:   if_int_eq LW(1) 1
+8032EA48:     goto 0
+8032EA50:   endif
+8032EA54:   wait_ms 500
+8032EA5C:   callc [evt_sub_intpl_msec_init evt_sub.o] 2 80 0 500
+8032EA74: 1:
+8032EA7C:   callc [evt_sub_intpl_msec_get_value_para evt_sub.o] LW(0) LW(1)
+8032EA8C:   callc [evt_mapobj_rotate evt_map.o] 1 LW(9) 0 LW(0) 0
+8032EAA8:   wait_frames 1
+8032EAB0:   if_int_eq LW(1) 1
+8032EABC:     goto 1
+8032EAC4:   endif
+8032EAC8:   callc [evt_sub_intpl_msec_init evt_sub.o] 2 0 90 500
+8032EAE0: 2:
+8032EAE8:   callc [evt_sub_intpl_msec_get_value_para evt_sub.o] LW(0) LW(1)
+8032EAF8:   callc [evt_mapobj_rotate evt_map.o] 1 LW(9) LW(0) 0 0
+8032EB14:   wait_frames 1
+8032EB1C:   if_int_eq LW(1) 1
+8032EB28:     goto 2
+8032EB30:   endif
+8032EB34:   return
+8032EB38:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [in_houseanim evt_door.o] AT 8032E6C4 ---
+8032E6C4:   wait_ms 500
+8032E6CC:   callc [animation evt_door.o] LW(10) LW(0) LW(1) LW(2) LW(3)
+8032E6E8:   if_int_ne LW(0) 0
+8032E6F4:     begin_thread
+8032E6F8:       if_string_eq LW(0) ["S_mise_open"]
+8032E704:         callc [door_group evt_door.o] LW(10) LW(0)
+8032E714:         callc [evt_mapobj_get_position evt_map.o] LW(0) LW(2) LW(3) LW(4)
+8032E72C:         callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_HOUSE_OPEN1"] LW(2) LW(3) LW(4) 0
+8032E748:         loop 4
+8032E750:           wait_ms 166
+8032E758:           callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_HOUSE_DOWN1"] LW(2) LW(3) LW(4) 0
+8032E774:         end_loop
+8032E778:       else
+8032E77C:         callc [door_group evt_door.o] LW(10) LW(0)
+8032E78C:         callc [evt_mapobj_get_position evt_map.o] LW(0) LW(2) LW(3) LW(4)
+8032E7A4:         callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_HOUSE_OPEN1"] LW(2) LW(3) LW(4) 0
+8032E7C0:       endif
+8032E7C4:     end_thread
+8032E7C8:     callc [evt_map_playanim evt_map.o] LW(0) 0 0
+8032E7DC:     callc [evt_map_checkanim evt_map.o] LW(0) LW(4) LW(5)
+8032E7F0:     wait_ms LW(5)
+8032E7F8:   endif
+8032E7FC:   return
+8032E800:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [evt_dark2 evt_door.o] AT 8032E54C ---
+8032E54C:   callc [evt_sub_intpl_msec_init evt_sub.o] 11 255 0 300
+8032E564:   loop 0
+8032E56C:     callc [evt_sub_intpl_msec_get_value evt_sub.o]
+8032E574:     callc [evt_map_set_blend evt_map.o] 1 LW(0) LW(0) LW(0) 255
+8032E590:     if_int_eq LW(1) 0
+8032E59C:       loop_break
+8032E5A0:     endif
+8032E5A4:     wait_frames 1
+8032E5AC:   end_loop
+8032E5B0:   callc [evt_map_set_blend evt_map.o] 1 LW(0) LW(0) LW(0) 0
+8032E5CC:   return
+8032E5D0:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [evt_dark evt_door.o] AT 8032E4C4 ---
+8032E4C4:   callc [evt_sub_intpl_msec_init evt_sub.o] 11 255 0 300
+8032E4DC:   loop 0
+8032E4E4:     callc [evt_sub_intpl_msec_get_value evt_sub.o]
+8032E4EC:     callc [evt_map_set_blend evt_map.o] 0 LW(0) LW(0) LW(0) 255
+8032E508:     if_int_eq LW(1) 0
+8032E514:       loop_break
+8032E518:     endif
+8032E51C:     wait_frames 1
+8032E524:   end_loop
+8032E528:   callc [evt_map_set_blend evt_map.o] 0 LW(0) LW(0) LW(0) 0
+8032E544:   return
+8032E548:   end

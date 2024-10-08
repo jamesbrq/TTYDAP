@@ -1,0 +1,81 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [talk_madam pik_00.o] AT 805C19B4 ---
+805C19B4:   if_int_eq GSW(1420) 23
+805C19C0:     callc [evt_pouch_check_item evt_pouch.o] 99 LW(0)
+805C19D0:     if_int_gt LW(0) 0
+805C19DC:       callc [evt_msg_print evt_msg.o] 0 ["irai_23_01"] 0 0
+805C19F4:       callc [evt_win_item_select evt_window.o] 0 [iri_23_item_tbl pik_00.o] LW(0) 0
+805C1A0C:       if_int_ne LW(0) -1
+805C1A18:         callc [evt_pouch_remove_item evt_pouch.o] 99 LW(0)
+805C1A28:         callc [evt_msg_print evt_msg.o] 0 ["irai_23_02"] 0 0
+805C1A40:         callc [evt_item_entry evt_item.o] ["mg2"] 92 0 -1000 0 17 -1 0
+805C1A68:         callc [evt_item_get_item evt_item.o] ["mg2"]
+805C1A74:         callc [evt_item_get_item_end_wait evt_item.o] ["mg2"]
+805C1A80:         callc [evt_msg_print evt_msg.o] 0 ["irai_23_03"] 0 0
+805C1A98:         setii GSW(1420) 0
+805C1AA4:         setii GSWF(5397) 1
+805C1AB0:         callc [evt_msg_print evt_msg.o] 0 ["sys_request_finish"] 0 0
+805C1AC8:       endif
+805C1ACC:     else
+805C1AD0:       callc [evt_msg_print evt_msg.o] 0 ["irai_23_00"] 0 0
+805C1AE8:     endif
+805C1AEC:     return
+805C1AF0:   endif
+805C1AF4:   if_int_eq GSWF(3430) 0
+805C1B00:     callc [evt_snd_bgmoff evt_snd.o] 18432
+805C1B0C:     if_int_eq GSWF(3429) 0
+805C1B18:       setii GSWF(3429) 1
+805C1B24:       callc [evt_msg_print evt_msg.o] 0 ["stg6_pik_04_01"] 0 0
+805C1B3C:     else
+805C1B40:       callc [evt_msg_print evt_msg.o] 0 ["stg6_pik_04_04"] 0 0
+805C1B58:     endif
+805C1B5C:     callc [evt_msg_select evt_msg.o] 0 ["stg6_pik_04_05"]
+805C1B6C:     if_int_eq LW(0) 0
+805C1B78:       callc [evt_msg_print_add evt_msg.o] 0 ["stg6_pik_04_02"]
+805C1B88:       setii GSWF(3430) 1
+805C1B94:     else
+805C1B98:       callc [evt_msg_print_add evt_msg.o] 0 ["stg6_pik_04_03"]
+805C1BA8:     endif
+805C1BAC:     callc [evt_snd_bgmon evt_snd.o] 160 0
+805C1BBC:     return
+805C1BC0:   endif
+805C1BC4:   callc [evt_pouch_check_item evt_pouch.o] 75 LW(0)
+805C1BD4:   if_int_ge LW(0) 1
+805C1BE0:     callss [talk_madam_ring_return pik_00.o]
+805C1BE8:     return
+805C1BEC:   endif
+805C1BF0:   switchi GSW(0)
+805C1BF8:     case_int_lt 347
+805C1C00:       callc [evt_msg_print evt_msg.o] 0 ["stg6_pik_04"] 0 0
+805C1C18:     case_default
+805C1C1C:       if_int_eq GSWF(3275) 0
+805C1C28:         callc [evt_msg_print evt_msg.o] 0 ["stg6_pik_04"] 0 0
+805C1C40:       else
+805C1C44:         if_int_le GSW(0) 402
+805C1C50:           callc [evt_msg_print evt_msg.o] 0 ["stg7_pik_clear_01"] 0 0
+805C1C68:         else
+805C1C6C:           callc [evt_msg_print evt_msg.o] 0 ["stg7_pik_clear_01_1"] 0 0
+805C1C84:         endif
+805C1C88:       endif
+805C1C8C:   end_switch
+805C1C90:   return
+805C1C94:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [talk_madam_ring_return pik_00.o] AT 805C18D4 ---
+805C18D4:   callc [evt_snd_bgmoff evt_snd.o] 18432
+805C18E0:   callc [evt_msg_print evt_msg.o] 0 ["stg6_pik_04_06"] 0 ["マダム"]
+805C18F8:   callc [evt_win_item_select evt_window.o] 0 [item_tbl_madam pik_00.o] LW(1) 0
+805C1910:   if_int_ne LW(1) -1
+805C191C:     callc [evt_msg_print evt_msg.o] 0 ["stg6_pik_04_07"] 0 ["マダム"]
+805C1934:     callc [evt_sub_get_coin evt_sub.o] 30
+805C1940:     callc [evt_msg_print evt_msg.o] 0 ["stg6_pik_04_08"] 0 ["マダム"]
+805C1958:     callc [evt_pouch_remove_item evt_pouch.o] 75 LW(0)
+805C1968:     setii GSWF(3275) 1
+805C1974:   else
+805C1978:     callc [evt_msg_print evt_msg.o] 0 ["stg6_pik_04_10"] 0 ["マダム"]
+805C1990:   endif
+805C1994:   callc [evt_snd_bgmon evt_snd.o] 160 0
+805C19A4:   return
+805C19A8:   end

@@ -1,0 +1,97 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [attack_event_pata unit_patatogemet.o] AT 805D5AEC ---
+805D5AEC:   callc [btlevtcmd_check_battleflag battle_event_cmd.o] LW(0) 2
+805D5AFC:   if_int_ne LW(0) 0
+805D5B08:     callc [btlevtcmd_GetFirstAttackTarget battle_event_cmd.o] LW(3) LW(4)
+805D5B18:   else
+805D5B1C:     callc [btlevtcmd_EnemyItemUseCheck battle_event_cmd.o] -2 LW(0)
+805D5B2C:     if_int_ne LW(0) 0
+805D5B38:       callss LW(0)
+805D5B40:       callc [btlevtcmd_StartWaitEvent battle_event_cmd.o] -2
+805D5B4C:       return
+805D5B50:     endif
+805D5B54:     callc [btlevtcmd_GetEnemyBelong battle_event_cmd.o] -2 LW(0)
+805D5B64:     callc [btlevtcmd_SamplingEnemy battle_event_cmd.o] -2 LW(0) [weapon_patamet_attack unit_patatogemet.o]
+805D5B78:     callc [btlevtcmd_ChoiceSamplingEnemy battle_event_cmd.o] [weapon_patamet_attack unit_patatogemet.o] LW(3) LW(4)
+805D5B8C:   endif
+805D5B90:   if_int_eq LW(3) -1
+805D5B9C:     callc [btlevtcmd_CheckToken battle_event_cmd.o] -2 16 LW(0)
+805D5BB0:     if_int_ne LW(0) 0
+805D5BBC:       callss [subsetevt_confuse_flustered battle_event_subset.o]
+805D5BC4:       return
+805D5BC8:     endif
+805D5BCC:     goto 99
+805D5BD4:   endif
+805D5BD8:   callc [evt_btl_camera_set_mode battle_camera.o] 0 8
+805D5BE8:   callc [evt_btl_camera_set_homing_unit battle_camera.o] 0 -2 LW(3)
+805D5BFC:   callc [evt_btl_camera_set_moveSpeedLv battle_camera.o] 0 1
+805D5C0C:   callc [evt_btl_camera_set_zoom battle_camera.o] 0 250
+805D5C1C:   callc [btlevtcmd_WeaponAftereffect battle_event_cmd.o] [weapon_patamet_attack unit_patatogemet.o]
+805D5C28:   callc [btlevtcmd_AttackDeclare battle_event_cmd.o] -2 LW(3) LW(4)
+805D5C3C:   callc [btlevtcmd_WaitGuardMove battle_event_cmd.o]
+805D5C44:   callc [btlevtcmd_PayWeaponCost battle_event_cmd.o] -2 [weapon_patamet_attack unit_patatogemet.o]
+805D5C54:   callc [btlevtcmd_CalculateFaceDirection battle_event_cmd.o] -2 -1 LW(3) LW(4) 16 LW(15)
+805D5C74:   callc [btlevtcmd_ChangeFaceDirection battle_event_cmd.o] -2 LW(15)
+805D5C84:   callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_ENM_PATAMET_MOVE1"] [F1194D80] 0 LW(15)
+805D5CA0:   callc [btlevtcmd_AnimeChangePoseType battle_event_cmd.o] -2 1 42
+805D5CB4:   callc [btlevtcmd_GetPos battle_event_cmd.o] -2 LW(0) LW(1) LW(2)
+805D5CCC:   addi LW(1) 40
+805D5CD8:   callc [btlevtcmd_DivePosition battle_event_cmd.o] -2 LW(0) LW(1) LW(2) 30 1.00 0 0 -1
+805D5D04:   wait_ms 250
+805D5D0C:   callc [evt_snd_sfxoff evt_snd.o] LW(15)
+805D5D18:   callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_ENM_PATAMET_MOVE2"] [F1194D80] 0 [F1194D80]
+805D5D34:   callc [btlevtcmd_SetMoveSpeed battle_event_cmd.o] -2 9.00
+805D5D44:   callc [btlevtcmd_AnimeChangePoseType battle_event_cmd.o] -2 1 50
+805D5D58:   callc [btlevtcmd_GetHitPos battle_event_cmd.o] LW(3) LW(4) LW(0) LW(1) LW(2)
+805D5D74:   callc [btlevtcmd_FaceDirectionAdd battle_event_cmd.o] LW(3) LW(0) 10
+805D5D88:   subi LW(1) 30
+805D5D94:   callc [btlevtcmd_DivePosition battle_event_cmd.o] -2 LW(0) LW(1) LW(2) 0 -10 0 0 -1
+805D5DC0:   callc [btlevtcmd_PreCheckDamage battle_event_cmd.o] -2 LW(3) LW(4) [weapon_patamet_attack unit_patatogemet.o] 256 LW(5)
+805D5DE0:   switchi LW(5)
+805D5DE8:     case_int_eq_any 4
+805D5DF0:       goto 90
+805D5DF8:       end_multi_case
+805D5DFC:     case_int_eq 3
+805D5E04:       callc [btlevtcmd_StartAvoid battle_event_cmd.o] LW(3) 38
+805D5E14:       goto 90
+805D5E1C:       end_multi_case
+805D5E20:     case_int_eq 6
+805D5E28:       callc [btlevtcmd_StartAvoid battle_event_cmd.o] LW(3) 39
+805D5E38:       goto 90
+805D5E40:     case_int_eq 2
+805D5E48:       callc [btlevtcmd_StartAvoid battle_event_cmd.o] LW(3) 40
+805D5E58:       goto 90
+805D5E60:     case_int_eq 1
+805D5E68:       goto 91
+805D5E70:       end_multi_case
+805D5E74:     case_default
+805D5E78:       goto 98
+805D5E80:       end_multi_case
+805D5E84:   end_switch
+805D5E88: 90:
+805D5E90:   callc [btlevtcmd_SetMoveSpeed battle_event_cmd.o] -2 6.00
+805D5EA0:   callc [btlevtcmd_GetHitPos battle_event_cmd.o] LW(3) LW(4) LW(0) LW(1) LW(2)
+805D5EBC:   callc [btlevtcmd_GetPos battle_event_cmd.o] LW(3) [F1194D80] LW(5) [F1194D80]
+805D5ED4:   callc [btlevtcmd_FaceDirectionAdd battle_event_cmd.o] -2 LW(0) 75
+805D5EE8:   callc [btlevtcmd_DivePosition battle_event_cmd.o] -2 LW(0) LW(5) LW(2) 0 0 0 0 -1
+805D5F14:   wait_ms 300
+805D5F1C:   goto 98
+805D5F24: 91:
+805D5F2C:   callc [btlevtcmd_ResultACDefence battle_event_cmd.o] LW(3) [weapon_patamet_attack unit_patatogemet.o]
+805D5F3C:   callc [btlevtcmd_CheckDamage battle_event_cmd.o] -2 LW(3) LW(4) [weapon_patamet_attack unit_patatogemet.o] 256 LW(5)
+805D5F5C:   callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_ENM_PATAMET_ATTACK1"] [F1194D80] 0 [F1194D80]
+805D5F78:   goto 98
+805D5F80: 98:
+805D5F88:   callc [evt_btl_camera_set_moveSpeedLv battle_camera.o] 0 2
+805D5F98:   callc [evt_btl_camera_add_zoom battle_camera.o] 0 -50
+805D5FA8:   callc [btlevtcmd_AnimeChangePoseType battle_event_cmd.o] -2 1 42
+805D5FBC:   callc [btlevtcmd_SetMoveSpeed battle_event_cmd.o] -2 6.00
+805D5FCC:   callc [btlevtcmd_GetHomePos battle_event_cmd.o] -2 LW(0) LW(1) LW(2)
+805D5FE4:   callc [btlevtcmd_DivePosition battle_event_cmd.o] -2 LW(0) LW(1) LW(2) 0 -10 0 0 -1
+805D6010: 99:
+805D6018:   callc [btlevtcmd_ResetFaceDirection battle_event_cmd.o] -2
+805D6024:   callc [btlevtcmd_StartWaitEvent battle_event_cmd.o] -2
+805D6030:   return
+805D6034:   end

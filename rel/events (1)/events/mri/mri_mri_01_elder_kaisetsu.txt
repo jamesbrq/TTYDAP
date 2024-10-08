@@ -1,0 +1,66 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [elder_kaisetsu mri_01.o] AT 805ED3E0 ---
+805ED3E0:   loop 0
+805ED3E8:     callc [evt_mario_get_pos evt_mario.o] 0 LW(0) LW(1) LW(2)
+805ED400:     if_int_ge LW(0) 25
+805ED40C:       loop_break
+805ED410:     endif
+805ED414:     wait_frames 1
+805ED41C:   end_loop
+805ED420:   callc [evt_mario_key_onoff evt_mario.o] 0
+805ED42C:   callc [evt_mario_normalize evt_mario.o]
+805ED434:   callc [evt_party_stop evt_party.o] 0
+805ED440:   setii GF(0) 1
+805ED44C:   begin_thread
+805ED450:     callc [evt_npc_set_ry evt_npc.o] ["プニ族長老"] 90
+805ED460:     callc [evt_msg_print evt_msg.o] 0 ["stg2_mri_e15_19"] 0 ["プニ族長老"]
+805ED478:     setii GF(0) 0
+805ED484:   end_thread
+805ED488:   callc [evt_mario_get_pos evt_mario.o] 0 LW(0) LW(1) LW(2)
+805ED4A0:   callc [evt_mario_get_mov_spd evt_mario.o] LW(10)
+805ED4AC:   setff LW(11) LW(10)
+805ED4B8:   mulf LW(11) 0.30
+805ED4C4:   addf LW(0) LW(11)
+805ED4D0:   if_int_le LW(2) -15
+805ED4DC:     setii LW(2) -10
+805ED4E8:   endif
+805ED4EC:   if_int_ge LW(2) 110
+805ED4F8:     setii LW(2) 105
+805ED504:   endif
+805ED508:   callc [evt_mario_mov_pos2 evt_mario.o] LW(0) LW(2) LW(10)
+805ED51C:   callc [evt_mario_dispflag_onoff evt_mario.o] 1 2
+805ED52C:   begin_thread
+805ED530:     callc [evt_mario_get_pos evt_mario.o] 0 LW(0) LW(1) LW(2)
+805ED548:     callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_VOICE_MARIO_LAND_DAMAGE1"] LW(0) LW(1) LW(2) 0
+805ED564:   end_thread
+805ED568:   begin_thread
+805ED56C:     callc [evt_cam_shake evt_cam.o] 4 0.00 0.01 500
+805ED584:   end_thread
+805ED588:   callc [evt_mario_get_pos evt_mario.o] 0 LW(0) LW(1) LW(2)
+805ED5A0:   callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_MARIO_FALL_CRUSH1"] LW(0) LW(1) LW(2) 0
+805ED5BC:   callc [evt_mario_set_pose evt_mario.o] ["M_D_8"]
+805ED5C8:   wait_ms 1500
+805ED5D0:   callc [evt_mario_set_pose evt_mario.o] ["M_U_3"]
+805ED5DC:   wait_ms 500
+805ED5E4:   callc [evt_mario_set_dir evt_mario.o] 270 200 0
+805ED5F8:   wait_ms 500
+805ED600:   wait_until GF(0)
+805ED608:   callc [evt_cam3d_evt_set evt_cam.o] -25 152 548 -25 57 7 500 11
+805ED630:   begin_thread
+805ED634:     callc [evt_party_move_pos2 evt_party.o] 0 50 -15 120.00
+805ED64C:     callc [evt_party_set_dir evt_party.o] 0 270 200
+805ED660:   end_thread
+805ED664:   wait_ms 1000
+805ED66C:   callc [evt_msg_print evt_msg.o] 0 ["stg2_mri_e15_20"] 0 ["プニ族長老"]
+805ED684:   callc [evt_cam3d_evt_set evt_cam.o] -75 77 303 -75 25 7 500 11
+805ED6AC:   wait_ms 1000
+805ED6B4:   callc [evt_msg_print evt_msg.o] 0 ["stg2_mri_e15_21"] 0 ["プニ族長老"]
+805ED6CC:   callc [evt_cam3d_evt_off evt_cam.o] 500 11
+805ED6DC:   callc [evt_mario_dispflag_onoff evt_mario.o] 0 2
+805ED6EC:   callc [evt_party_run evt_party.o] 0
+805ED6F8:   callc [evt_mario_key_onoff evt_mario.o] 1
+805ED704:   setii GSWF(2829) 1
+805ED710:   return
+805ED714:   end

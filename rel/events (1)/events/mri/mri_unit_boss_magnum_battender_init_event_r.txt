@@ -1,0 +1,89 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [init_event_r unit_boss_magnum_battender.o] AT 8060C730 ---
+8060C730:   callc [btlevtcmd_OnUnitFlag battle_event_cmd.o] -2 16777216
+8060C740:   callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 1 ["MGN_A1_4"]
+8060C754:   callc [btlevtcmd_SetEventWait battle_event_cmd.o] -2 [wait_event_r unit_boss_magnum_battender.o]
+8060C764:   callc [btlevtcmd_SetEventAttack battle_event_cmd.o] -2 [attack_event_r unit_boss_magnum_battender.o]
+8060C774:   callc [btlevtcmd_SetEventDamage battle_event_cmd.o] -2 [damage_event_r unit_boss_magnum_battender.o]
+8060C784:   callc [btlevtcmd_SetEventConfusion battle_event_cmd.o] -2 [btldefaultevt_Confuse battle_event_default.o]
+8060C794:   callc [btlevtcmd_SetBaseRotate battle_event_cmd.o] -2 0 -90 0
+8060C7AC:   callc [btlevtcmd_GetUnitWork battle_event_cmd.o] -2 0 LW(0)
+8060C7C0:   if_int_eq LW(0) 0
+8060C7CC:     callc [arm_init2 unit_boss_magnum_battender.o] 0
+8060C7D8:   endif
+8060C7DC:   if_int_eq LW(0) 2
+8060C7E8:     callc [arm_init2 unit_boss_magnum_battender.o] 0
+8060C7F4:   endif
+8060C7F8:   if_int_eq LW(0) 1
+8060C804:     callc [arm_init2 unit_boss_magnum_battender.o] 1
+8060C810:   endif
+8060C814:   if_int_eq LW(0) 3
+8060C820:     callc [arm_init2 unit_boss_magnum_battender.o] 1
+8060C82C:   endif
+8060C830:   callsa [arm_event unit_boss_magnum_battender.o]
+8060C838:   callc [btlevtcmd_GetUnitWork battle_event_cmd.o] -2 0 LW(0)
+8060C84C:   if_int_eq LW(0) 0
+8060C858:     callc [btlevtcmd_SetPos battle_event_cmd.o] -2 30 100 -40
+8060C870:     callc [btlevtcmd_DivePosition battle_event_cmd.o] -2 -100 150 -60 20 0 4 0 -1
+8060C89C:     callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_BOSS_MBTN_PUNCH_FLY1"] [F1194D80] 0 [F1194D80]
+8060C8B8:     callc [btlevtcmd_DivePosition battle_event_cmd.o] -2 350 110 -80 30 50 0 0 -1
+8060C8E4:     callc [btlevtcmd_DivePosition battle_event_cmd.o] -2 30 60 -40 25 -30 4 0 -1
+8060C910:     callc [btlevtcmd_SetHomePos battle_event_cmd.o] -2 30 60 -40
+8060C928:     callc [btlevtcmd_StartWaitEvent battle_event_cmd.o] -2
+8060C934:   endif
+8060C938:   if_int_eq LW(0) 1
+8060C944:     callc [btlevtcmd_SetPos battle_event_cmd.o] -2 80 100 40
+8060C95C:     callc [btlevtcmd_DivePosition battle_event_cmd.o] -2 -50 150 60 20 0 4 0 -1
+8060C988:     callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_BOSS_MBTN_PUNCH_FLY1"] [F1194D80] 0 [F1194D80]
+8060C9A4:     callc [btlevtcmd_DivePosition battle_event_cmd.o] -2 300 120 80 30 50 0 0 -1
+8060C9D0:     callc [btlevtcmd_DivePosition battle_event_cmd.o] -2 80 60 40 30 -30 4 0 -1
+8060C9FC:     callc [btlevtcmd_SetHomePos battle_event_cmd.o] -2 80 60 40
+8060CA14:     callc [btlevtcmd_StartWaitEvent battle_event_cmd.o] -2
+8060CA20:   endif
+8060CA24:   return
+8060CA28:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [arm_event unit_boss_magnum_battender.o] AT 8060CA2C ---
+8060CA2C: 0:
+8060CA34:   wait_frames 1
+8060CA3C:   callc [btlevtcmd_GetUnitId battle_event_cmd.o] -2 LW(0)
+8060CA4C:   if_int_eq LW(0) -1
+8060CA58:     callss [arm_event_end unit_boss_magnum_battender.o]
+8060CA60:     goto 99
+8060CA68:   endif
+8060CA6C:   callc [btlevtcmd_GetUnitWork battle_event_cmd.o] -2 0 LW(0)
+8060CA80:   if_int_eq LW(0) 0
+8060CA8C:     callc [arm_main unit_boss_magnum_battender.o] -2 0
+8060CA9C:   endif
+8060CAA0:   if_int_eq LW(0) 2
+8060CAAC:     callc [arm_main unit_boss_magnum_battender.o] -2 0
+8060CABC:   endif
+8060CAC0:   if_int_eq LW(0) 1
+8060CACC:     callc [arm_main unit_boss_magnum_battender.o] -2 1
+8060CADC:   endif
+8060CAE0:   if_int_eq LW(0) 3
+8060CAEC:     callc [arm_main unit_boss_magnum_battender.o] -2 1
+8060CAFC:   endif
+8060CB00:   goto 0
+8060CB08: 99:
+8060CB10:   return
+8060CB14:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [arm_event_end unit_boss_magnum_battender.o] AT 8060CB18 ---
+8060CB18:   callc [btlevtcmd_GetUnitWork battle_event_cmd.o] -2 0 LW(0)
+8060CB2C:   if_int_eq LW(0) 0
+8060CB38:     callc [arm_end unit_boss_magnum_battender.o] 0
+8060CB44:   endif
+8060CB48:   if_int_eq LW(0) 2
+8060CB54:     callc [arm_end unit_boss_magnum_battender.o] 0
+8060CB60:   endif
+8060CB64:   if_int_eq LW(0) 1
+8060CB70:     callc [arm_end unit_boss_magnum_battender.o] 1
+8060CB7C:   endif
+8060CB80:   if_int_eq LW(0) 3
+8060CB8C:     callc [arm_end unit_boss_magnum_battender.o] 1
+8060CB98:   endif
+8060CB9C:   return
+8060CBA0:   end

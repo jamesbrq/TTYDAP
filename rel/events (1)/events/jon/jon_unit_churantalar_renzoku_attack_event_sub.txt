@@ -1,0 +1,121 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [renzoku_attack_event_sub unit_churantalar.o] AT 80CF2F24 ---
+80CF2F24:   setii LW(0) LW(5)
+80CF2F30:   setii LW(1) LW(6)
+80CF2F3C:   callc [btlevtcmd_GetUnitWork battle_event_cmd.o] -2 LW(0) LW(3)
+80CF2F50:   callc [btlevtcmd_GetUnitWork battle_event_cmd.o] -2 LW(1) LW(4)
+80CF2F64:   loop 0
+80CF2F6C:     if_int_ge LW(0) 7
+80CF2F78:       callss [renzoku_attack_event_sub_last unit_churantalar.o]
+80CF2F80:       loop_break
+80CF2F84:     endif
+80CF2F88:     addi LW(0) 1
+80CF2F94:     addi LW(1) 1
+80CF2FA0:     callc [btlevtcmd_GetUnitWork battle_event_cmd.o] -2 LW(0) LW(8)
+80CF2FB4:     callc [btlevtcmd_GetUnitWork battle_event_cmd.o] -2 LW(1) LW(10)
+80CF2FC8:     if_int_eq LW(3) LW(8)
+80CF2FD4:       if_int_eq LW(4) LW(10)
+80CF2FE0:         callss [renzoku_attack_event_sub_no_last unit_churantalar.o]
+80CF2FE8:         loop_break
+80CF2FEC:       endif
+80CF2FF0:     endif
+80CF2FF4:   end_loop
+80CF2FF8:   return
+80CF2FFC:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [renzoku_attack_event_sub_last unit_churantalar.o] AT 80CF3028 ---
+80CF3028:   setii LW(0) 5
+80CF3034:   setii LW(1) 8
+80CF3040:   loop 0
+80CF3048:     callc [btlevtcmd_GetUnitWork battle_event_cmd.o] -2 LW(0) LW(2)
+80CF305C:     if_int_eq LW(3) LW(2)
+80CF3068:       callc [btlevtcmd_GetUnitWork battle_event_cmd.o] -2 LW(1) LW(2)
+80CF307C:       if_int_eq LW(4) LW(2)
+80CF3088:         addi LW(0) 6
+80CF3094:         callc [btlevtcmd_GetUnitWork battle_event_cmd.o] -2 LW(0) LW(2)
+80CF30A8:         loop_break
+80CF30AC:       endif
+80CF30B0:     endif
+80CF30B4:     addi LW(0) 1
+80CF30C0:     addi LW(1) 1
+80CF30CC:   end_loop
+80CF30D0:   if_int_eq LW(2) 1
+80CF30DC:     callc [btlevtcmd_OnPartsAttribute battle_event_cmd.o] -2 LW(7) 16777216
+80CF30F0:     callc [btlevtcmd_OnPartsAttribute battle_event_cmd.o] -2 LW(7) 33554432
+80CF3104:     callc [btlevtcmd_ResultACDefence battle_event_cmd.o] LW(3) LW(9)
+80CF3114:     callc [btlevtcmd_CheckDamage battle_event_cmd.o] -2 LW(3) LW(4) LW(9) 256 LW(0)
+80CF3134:   else
+80CF3138:     setii LW(8) 1
+80CF3144:     setii LW(10) 0
+80CF3150:     callss [damage_check_event_sub unit_churantalar.o]
+80CF3158:   endif
+80CF315C:   return
+80CF3160:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [renzoku_attack_event_sub_no_last unit_churantalar.o] AT 80CF3000 ---
+80CF3000:   setii LW(8) 0
+80CF300C:   setii LW(10) 1
+80CF3018:   callss [damage_check_event_sub unit_churantalar.o]
+80CF3020:   return
+80CF3024:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [damage_check_event_sub unit_churantalar.o] AT 80CF1F94 ---
+80CF1F94:   callc [btlevtcmd_PreCheckDamage battle_event_cmd.o] -2 LW(3) LW(4) LW(9) 0 LW(0)
+80CF1FB4:   switchi LW(0)
+80CF1FBC:     case_int_eq_any 4
+80CF1FC4:       goto 90
+80CF1FCC:       end_multi_case
+80CF1FD0:     case_int_eq 3
+80CF1FD8:       callc [btlevtcmd_StartAvoid battle_event_cmd.o] LW(3) 38
+80CF1FE8:       goto 90
+80CF1FF0:       end_multi_case
+80CF1FF4:     case_int_eq 6
+80CF1FFC:       callc [btlevtcmd_StartAvoid battle_event_cmd.o] LW(3) 39
+80CF200C:       goto 90
+80CF2014:     case_int_eq 2
+80CF201C:       callc [btlevtcmd_StartAvoid battle_event_cmd.o] LW(3) 40
+80CF202C:       goto 90
+80CF2034:     case_int_eq 1
+80CF203C:       goto 91
+80CF2044:       end_multi_case
+80CF2048:     case_default
+80CF204C:       goto 99
+80CF2054:       end_multi_case
+80CF2058:   end_switch
+80CF205C: 90:
+80CF2064:   callc [btlevtcmd_JumpPartsContinue battle_event_cmd.o] -2 LW(7)
+80CF2074:   callc [btlevtcmd_OnPartsAttribute battle_event_cmd.o] -2 LW(7) 16777216
+80CF2088:   callc [btlevtcmd_OnPartsAttribute battle_event_cmd.o] -2 LW(7) 33554432
+80CF209C:   goto 99
+80CF20A4: 91:
+80CF20AC:   callc [btlevtcmd_OnPartsAttribute battle_event_cmd.o] -2 LW(7) 16777216
+80CF20C0:   callc [btlevtcmd_OnPartsAttribute battle_event_cmd.o] -2 LW(7) 33554432
+80CF20D4:   if_int_eq LW(10) 1
+80CF20E0:     setii LW(0) 5
+80CF20EC:     setii LW(1) 8
+80CF20F8:     loop 0
+80CF2100:       callc [btlevtcmd_GetUnitWork battle_event_cmd.o] -2 LW(0) LW(2)
+80CF2114:       if_int_eq LW(3) LW(2)
+80CF2120:         callc [btlevtcmd_GetUnitWork battle_event_cmd.o] -2 LW(1) LW(2)
+80CF2134:         if_int_eq LW(4) LW(2)
+80CF2140:           addi LW(0) 6
+80CF214C:           callc [btlevtcmd_SetUnitWork battle_event_cmd.o] -2 LW(0) 1
+80CF2160:           loop_break
+80CF2164:         endif
+80CF2168:       endif
+80CF216C:       addi LW(0) 1
+80CF2178:       addi LW(1) 1
+80CF2184:     end_loop
+80CF2188:   endif
+80CF218C:   callc [btlevtcmd_ResultACDefence battle_event_cmd.o] LW(3) LW(9)
+80CF219C:   if_int_eq LW(8) 1
+80CF21A8:     callc [btlevtcmd_CheckDamage battle_event_cmd.o] -2 LW(3) LW(4) LW(9) 256 LW(0)
+80CF21C8:   else
+80CF21CC:     callc [btlevtcmd_CheckDamage battle_event_cmd.o] -2 LW(3) LW(4) LW(9) 0 LW(0)
+80CF21EC:   endif
+80CF21F0:   goto 99
+80CF21F8: 99:
+80CF2200:   return
+80CF2204:   end

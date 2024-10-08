@@ -1,0 +1,47 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [evt_clank_main gor_04.o] AT 80615C6C ---
+80615C6C:   setff LW(10) 0.00
+80615C78:   switchi LW(1)
+80615C80:     case_int_eq 0
+80615C88:       setff LW(11) 23.89
+80615C94:     case_int_eq 1
+80615C9C:       setff LW(11) 31.14
+80615CA8:     case_int_eq 2
+80615CB0:       setff LW(11) 55.02
+80615CBC:   end_switch
+80615CC0:   loop 0
+80615CC8:     switchi LW(2)
+80615CD0:       case_int_eq 0
+80615CD8:         setff LW(9) GW(0)
+80615CE4:       case_int_eq 1
+80615CEC:         setff LW(9) GW(1)
+80615CF8:     end_switch
+80615CFC:     divf LW(9) LW(11)
+80615D08:     mulf LW(9) 57.29
+80615D14:     addf LW(10) LW(9)
+80615D20:     if_int_gt LW(10) 360.00
+80615D2C:       subf LW(10) 360.00
+80615D38:     endif
+80615D3C:     if_int_lt LW(10) 0.00
+80615D48:       addf LW(10) 360.00
+80615D54:     endif
+80615D58:     setff LW(12) LW(10)
+80615D64:     mulf LW(12) LW(4)
+80615D70:     callc [evt_sub_get_sincos evt_sub.o] LW(12) LW(13) LW(14)
+80615D84:     mulf LW(13) LW(3)
+80615D90:     mulf LW(14) LW(3)
+80615D9C:     subf LW(14) LW(3)
+80615DA8:     mulf LW(14) -1.00
+80615DB4:     callc [evt_mapobj_trans evt_map.o] 1 LW(0) LW(14) LW(13) 0.00
+80615DD0:     wait_frames 1
+80615DD8:     loop 0
+80615DE0:       if_int_eq GSWF(3583) 1
+80615DEC:         loop_break
+80615DF0:       endif
+80615DF4:       wait_frames 1
+80615DFC:     end_loop
+80615E00:   end_loop
+80615E04:   return
+80615E08:   end

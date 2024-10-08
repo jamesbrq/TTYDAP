@@ -1,0 +1,473 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [evt_bero_info_run evt_bero.o] AT 8030EC7C ---
+8030EC7C:   callc [evt_bero_get_into_info evt_bero.o]
+8030EC84:   callc [evt_bero_set_now_number evt_bero.o] LW(1)
+8030EC90:   callc [evt_bero_read_mario_pera evt_bero.o]
+8030EC98:   callc [evt_sub_get_system_flag evt_sub.o] LW(0)
+8030ECA4:   if_bits_set LW(0) 1
+8030ECB0:     dbg_report ["セーブブロックからのロード時の処理"]
+8030ECB8:     callc [evt_bero_exec_onoff evt_bero.o] 0 1
+8030ECC8:     wait_frames 1
+8030ECD0:     callc [evt_bero_exec_get evt_bero.o] LW(0)
+8030ECDC:     if_bits_clear LW(0) 4
+8030ECE8:       callc [evt_bero_exec_onoff evt_bero.o] 0 2
+8030ECF8:     endif
+8030ECFC:     wait_frames 1
+8030ED04:     callc [evt_bero_exec_get evt_bero.o] LW(0)
+8030ED10:     if_bits_clear LW(0) 4
+8030ED1C:       callc [evt_bero_exec_onoff evt_bero.o] 1 2
+8030ED2C:     endif
+8030ED30:     callc [evt_npc_change_fbat_mode evt_npc.o] 1
+8030ED3C:     callc [evt_npc_start_for_event evt_npc.o]
+8030ED44:     callc [evt_bero_exec_onoff evt_bero.o] 1 1
+8030ED54:     callc [evt_bero_exec_onoff evt_bero.o] 0 65536
+8030ED64:     callss [bero_case_entry evt_bero.o]
+8030ED6C:     return
+8030ED70:   endif
+8030ED74:   callc [evt_bero_exec_get evt_bero.o] LW(0)
+8030ED80:   if_int_eq LW(0) 1
+8030ED8C:     return
+8030ED90:   endif
+8030ED94:   callc [evt_bero_exec_onoff evt_bero.o] 0 1
+8030EDA4:   callc [evt_mario_key_onoff evt_mario.o] 0
+8030EDB0:   setii LW(0) LW(4)
+8030EDBC:   andr LW(0) 0x1000
+8030EDC8:   if_int_ne LW(0) 0
+8030EDD4:     dbg_report ["背景に入るときのマリオの初期処理"]
+8030EDDC:     callc [evt_mario_bgmode_on evt_mario.o]
+8030EDE4:     callc [evt_mario_kill_party evt_mario.o] 0
+8030EDF0:     callc [evt_mario_kill_party evt_mario.o] 1
+8030EDFC:     callc [evt_mario_cam_y_off evt_mario.o]
+8030EE04:   else
+8030EE08:     dbg_report ["普通に入るときのマリオの初期処理"]
+8030EE10:     callc [evt_mario_bgmode_off evt_mario.o]
+8030EE18:     setii LW(0) LW(4)
+8030EE24:     andr LW(0) 0xFFF
+8030EE30:     if_int_eq LW(0) 2
+8030EE3C:       callc [evt_mario_set_prev_party_dokan evt_mario.o] 0
+8030EE48:       callc [evt_mario_set_prev_party_dokan evt_mario.o] 1
+8030EE54:     else
+8030EE58:       callc [evt_mario_set_prev_party evt_mario.o] 0
+8030EE64:       callc [evt_mario_set_prev_party evt_mario.o] 1
+8030EE70:     endif
+8030EE74:   endif
+8030EE78:   setii LW(0) LW(4)
+8030EE84:   andr LW(0) 0xFFF
+8030EE90:   if_int_eq LW(0) 2
+8030EE9C:     switchi LW(5)
+8030EEA4:       case_int_eq 6
+8030EEAC:         callc [evt_mario_dokan_prepare evt_mario.o] 4
+8030EEB8:       case_int_eq 2
+8030EEC0:         callc [evt_mario_dokan_prepare evt_mario.o] 4
+8030EECC:       case_int_eq 9
+8030EED4:         callc [evt_mario_dokan_prepare evt_mario.o] 1
+8030EEE0:       case_int_eq 8
+8030EEE8:         callc [evt_mario_dokan_prepare evt_mario.o] 0
+8030EEF4:     end_switch
+8030EEF8:   endif
+8030EEFC:   callss [evt_bero_initial_pos evt_bero.o]
+8030EF04:   if_bits_clear LW(4) 8192
+8030EF10:     setii LW(0) LW(4)
+8030EF1C:     andr LW(0) 0xFFF
+8030EF28:     if_int_eq LW(0) 2
+8030EF34:       switchi LW(5)
+8030EF3C:         case_int_eq 6
+8030EF44:           callc [evt_fade_set_mapchange_type evt_fade.o] 1 -1 -1 46 0
+8030EF60:           callc [evt_fade_set_mapchange_type evt_fade.o] 0 -1 -1 46 0
+8030EF7C:         case_int_eq 2
+8030EF84:           callc [evt_fade_set_mapchange_type evt_fade.o] 1 -1 -1 48 0
+8030EFA0:           callc [evt_fade_set_mapchange_type evt_fade.o] 0 -1 -1 48 0
+8030EFBC:         case_int_eq 8
+8030EFC4:           callc [evt_fade_set_mapchange_type evt_fade.o] 1 -1 -1 42 0
+8030EFE0:           callc [evt_fade_set_mapchange_type evt_fade.o] 0 -1 -1 42 0
+8030EFFC:         case_int_eq 9
+8030F004:           callc [evt_fade_set_mapchange_type evt_fade.o] 1 -1 -1 44 0
+8030F020:           callc [evt_fade_set_mapchange_type evt_fade.o] 0 -1 -1 44 0
+8030F03C:       end_switch
+8030F040:     endif
+8030F044:   endif
+8030F048:   dbg_report ["ほかの初期設定開始"]
+8030F050:   callsa [evt_bero_mario_enter evt_bero.o]
+8030F058:   return
+8030F05C:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [bero_case_entry evt_bero.o] AT 8030E608 ---
+8030E608:   loadi LW(2) [BeroNUM evt_bero.o]
+8030E614:   setii LW(1) 0
+8030E620:   loop 0
+8030E628:     callc [evt_bero_get_info_num evt_bero.o] LW(1)
+8030E634:     if_int_eq LW(9) -1
+8030E640:       setii LW(0) LW(4)
+8030E64C:       andr LW(0) 0xFFF
+8030E658:       switchi LW(0)
+8030E660:         case_int_eq 3840
+8030E668:           callc [evt_run_case_evt_bero evt_case.o] LW(10) 1 LW(3) 0 [bero_case_exec_none evt_bero.o] LW(15)
+8030E688:         case_int_eq 0
+8030E690:           callc [evt_hitobj_attr_onoff evt_hit.o] 0 1 LW(3) 8388608
+8030E6A8:           callc [evt_run_case_evt_bero evt_case.o] LW(10) 1 LW(3) 0 [bero_case_exec_road evt_bero.o] LW(15)
+8030E6C8:         case_int_eq 1
+8030E6D0:           callc [evt_run_case_evt_bero evt_case.o] LW(10) 1 LW(3) 0 [bero_case_exec_door evt_bero.o] LW(15)
+8030E6F0:         case_int_eq 2
+8030E6F8:           callc [evt_run_case_evt_bero evt_case.o] LW(10) 1 LW(3) 0 [bero_case_exec_pipe evt_bero.o] LW(15)
+8030E718:         case_int_eq 3
+8030E720:           callc [evt_run_case_evt_bero evt_case.o] LW(10) 1 LW(3) 0 [bero_case_exec_gate evt_bero.o] LW(15)
+8030E740:       end_switch
+8030E744:       callc [evt_bero_case_id_save evt_bero.o] LW(1) LW(15)
+8030E754:       begin_thread
+8030E758:         callc [evt_bero_switch_on evt_bero.o] LW(1)
+8030E764:       end_thread
+8030E768:     endif
+8030E76C:     addi LW(1) 1
+8030E778:     if_int_eq LW(1) LW(2)
+8030E784:       loop_break
+8030E788:     endif
+8030E78C:   end_loop
+8030E790:   return
+8030E794:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [evt_bero_initial_pos evt_bero.o] AT 8030F060 ---
+8030F060:   callc [evt_bero_get_into_info evt_bero.o]
+8030F068:   setii LW(0) LW(4)
+8030F074:   andr LW(0) 0xFFF
+8030F080:   switchi LW(0)
+8030F088:     case_int_eq 3840
+8030F090:     case_int_eq 3
+8030F098:       callc [bero_get_position_normal evt_bero.o] 0 0.00
+8030F0A8:       loadf LW(10) [BeroSX evt_bero.o]
+8030F0B4:       loadf LW(11) [BeroSY evt_bero.o]
+8030F0C0:       loadf LW(12) [BeroSZ evt_bero.o]
+8030F0CC:       callc [evt_mario_set_pos evt_mario.o] LW(10) LW(11) LW(12)
+8030F0E0:       callc [evt_party_set_pos evt_party.o] 0 LW(10) LW(11) LW(12)
+8030F0F8:       callc [evt_party_set_pos evt_party.o] 1 LW(10) LW(11) LW(12)
+8030F110:       end_multi_case
+8030F114:     case_int_eq 0
+8030F11C:       callc [evt_bero_get_info_length evt_bero.o] LW(1) LW(10)
+8030F12C:       callc [bero_get_position_normal evt_bero.o] 1 LW(10)
+8030F13C:       loadf LW(10) [BeroSX evt_bero.o]
+8030F148:       loadf LW(11) [BeroSY evt_bero.o]
+8030F154:       loadf LW(12) [BeroSZ evt_bero.o]
+8030F160:       callc [evt_mario_set_pos evt_mario.o] LW(10) LW(11) LW(12)
+8030F174:       callc [evt_party_set_pos evt_party.o] 0 LW(10) LW(11) LW(12)
+8030F18C:       callc [evt_party_set_pos evt_party.o] 1 LW(10) LW(11) LW(12)
+8030F1A4:     case_int_eq 1
+8030F1AC:       callc [evt_bero_get_info_length evt_bero.o] LW(1) LW(10)
+8030F1BC:       callc [bero_get_position_normal evt_bero.o] 1 LW(10)
+8030F1CC:       loadf LW(10) [BeroSX evt_bero.o]
+8030F1D8:       loadf LW(11) [BeroSY evt_bero.o]
+8030F1E4:       loadf LW(12) [BeroSZ evt_bero.o]
+8030F1F0:       callc [evt_mario_set_pos evt_mario.o] LW(10) LW(11) LW(12)
+8030F204:       callc [evt_party_set_pos evt_party.o] 0 LW(10) LW(11) LW(12)
+8030F21C:       callc [evt_party_set_pos evt_party.o] 1 LW(10) LW(11) LW(12)
+8030F234:     case_int_eq 2
+8030F23C:       callc [evt_bero_get_info_length evt_bero.o] LW(1) LW(10)
+8030F24C:       callc [bero_get_position_pipe_pure evt_bero.o] 1 LW(10)
+8030F25C:       loadf LW(10) [BeroSX evt_bero.o]
+8030F268:       loadf LW(11) [BeroSY evt_bero.o]
+8030F274:       loadf LW(12) [BeroSZ evt_bero.o]
+8030F280:       callc [evt_mario_set_pos evt_mario.o] LW(10) LW(11) LW(12)
+8030F294:       callc [evt_party_set_pos evt_party.o] 0 LW(10) LW(11) LW(12)
+8030F2AC:       callc [evt_party_set_pos evt_party.o] 1 LW(10) LW(11) LW(12)
+8030F2C4:   end_switch
+8030F2C8:   callc [evt_cam_road_reset evt_cam.o]
+8030F2D0:   return
+8030F2D4:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [evt_bero_mario_enter evt_bero.o] AT 8030F2D8 ---
+8030F2D8:   callc [evt_seq_wait evt_seq.o] 2
+8030F2E4:   callc [evt_npc_change_fbat_mode evt_npc.o] 7
+8030F2F0:   callc [evt_npc_stop_for_event evt_npc.o]
+8030F2F8:   callss LW(7)
+8030F300:   if_int_eq LW(0) 1
+8030F30C:     callc [evt_mario_key_onoff evt_mario.o] 1
+8030F318:     goto 100
+8030F320:   endif
+8030F324:   callc [evt_bero_exec_get evt_bero.o] LW(0)
+8030F330:   if_bits_clear LW(0) 4
+8030F33C:     callc [evt_bero_exec_onoff evt_bero.o] 0 2
+8030F34C:   endif
+8030F350:   callc [evt_bero_get_into_info evt_bero.o]
+8030F358:   setii LW(0) LW(4)
+8030F364:   andr LW(0) 0xFFF
+8030F370:   switchi LW(0)
+8030F378:     case_int_eq 3840
+8030F380:       callss [evt_bero_info_run_none evt_bero.o]
+8030F388:     case_int_eq 0
+8030F390:       callss [evt_bero_info_run_road evt_bero.o]
+8030F398:     case_int_eq 1
+8030F3A0:       callss [evt_bero_info_run_door evt_bero.o]
+8030F3A8:     case_int_eq 2
+8030F3B0:       callss [evt_bero_info_run_pipe evt_bero.o]
+8030F3B8:     case_int_eq 3
+8030F3C0:       callss [evt_bero_info_run_gate evt_bero.o]
+8030F3C8:     case_default
+8030F3CC:       callc [evt_mario_key_onoff evt_mario.o] 1
+8030F3D8:   end_switch
+8030F3DC:   callc [evt_bero_exec_get evt_bero.o] LW(0)
+8030F3E8:   if_bits_clear LW(0) 4
+8030F3F4:     callc [evt_bero_exec_onoff evt_bero.o] 1 2
+8030F404:   endif
+8030F408: 100:
+8030F410:   callc [evt_npc_change_fbat_mode evt_npc.o] 1
+8030F41C:   callc [evt_npc_start_for_event evt_npc.o]
+8030F424:   callss [bero_case_entry evt_bero.o]
+8030F42C:   callc [evt_bero_exec_onoff evt_bero.o] 1 1
+8030F43C:   callc [evt_bero_exec_onoff evt_bero.o] 0 65536
+8030F44C:   return
+8030F450:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [evt_bero_info_run_road evt_bero.o] AT 8030E97C ---
+8030E97C:   loadf LW(13) [BeroEX evt_bero.o]
+8030E988:   loadf LW(14) [BeroEY evt_bero.o]
+8030E994:   loadf LW(15) [BeroEZ evt_bero.o]
+8030E9A0:   callc [evt_party_set_homing_dist evt_party.o] 0 20.00
+8030E9B0:   callc [evt_party_set_homing_dist evt_party.o] 1 20.00
+8030E9C0:   callc [evt_mario_mov_pos2 evt_mario.o] LW(13) LW(15) 150.00
+8030E9D4:   callc [evt_mario_key_onoff evt_mario.o] 1
+8030E9E0:   callc [evt_party_run evt_party.o] 0
+8030E9EC:   callc [evt_party_run evt_party.o] 1
+8030E9F8:   callc [evt_party_set_homing_dist evt_party.o] 0 50.00
+8030EA08:   callc [evt_party_set_homing_dist evt_party.o] 1 50.00
+8030EA18:   return
+8030EA1C:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [evt_bero_info_run_door evt_bero.o] AT 8030EA20 ---
+8030EA20:   callc [evt_bero_mario_go_init evt_bero.o]
+8030EA28:   callsa [bero_play_enter_anime evt_bero.o]
+8030EA30:   callc [evt_bero_mario_go_wait evt_bero.o]
+8030EA38:   loadf LW(13) [BeroEX evt_bero.o]
+8030EA44:   loadf LW(14) [BeroEY evt_bero.o]
+8030EA50:   loadf LW(15) [BeroEZ evt_bero.o]
+8030EA5C:   callc [evt_party_set_homing_dist evt_party.o] 0 20.00
+8030EA6C:   callc [evt_party_set_homing_dist evt_party.o] 1 20.00
+8030EA7C:   callc [evt_mario_party_bero_move evt_mario.o] LW(13) LW(15) 150.00
+8030EA90:   callc [evt_mario_key_onoff evt_mario.o] 1
+8030EA9C:   callc [evt_party_run evt_party.o] 0
+8030EAA8:   callc [evt_party_run evt_party.o] 1
+8030EAB4:   callc [evt_party_set_homing_dist evt_party.o] 0 50.00
+8030EAC4:   callc [evt_party_set_homing_dist evt_party.o] 1 50.00
+8030EAD4:   return
+8030EAD8:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [evt_bero_info_run_pipe evt_bero.o] AT 8030EBA8 ---
+8030EBA8:   loadf LW(0) [BeroEX evt_bero.o]
+8030EBB4:   loadf LW(1) [BeroEY evt_bero.o]
+8030EBC0:   loadf LW(2) [BeroEZ evt_bero.o]
+8030EBCC:   callc [evt_cam_road_reset2 evt_cam.o] LW(0) LW(1) LW(2)
+8030EBE0:   callc [evt_mario_cam_off evt_mario.o]
+8030EBE8:   callc [evt_mario_cont_onoff evt_mario.o] 0
+8030EBF4:   callc [evt_fade_end_wait evt_fade.o]
+8030EBFC:   callc [evt_mario_get_pos evt_mario.o] 0 LW(0) LW(1) LW(2)
+8030EC14:   callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_MARIO_DOKAN1"] LW(0) LW(1) LW(2) 0
+8030EC30:   callss [evt_bero_info_run_pipe_sub00 evt_bero.o]
+8030EC38:   callc [evt_mario_cont_onoff evt_mario.o] 1
+8030EC44:   setii LW(0) LW(3)
+8030EC50:   callss [bero_case_switch_off evt_bero.o]
+8030EC58:   callsa [evt_bero_nonride_check evt_bero.o]
+8030EC60:   callc [evt_mario_cam_on evt_mario.o]
+8030EC68:   callc [evt_mario_key_onoff evt_mario.o] 1
+8030EC74:   return
+8030EC78:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [bero_play_enter_anime evt_bero.o] AT 8030D428 ---
+8030D428:   callc [evt_bero_get_info_anime evt_bero.o] LW(1) LW(10) LW(11) LW(12) LW(13)
+8030D444:   switchi LW(10)
+8030D44C:     case_int_eq 0
+8030D454:     case_int_eq 1
+8030D45C:       begin_thread
+8030D460:         wait_ms 200
+8030D468:         callc [evt_bero_mario_go evt_bero.o]
+8030D470:       end_thread
+8030D474:       if_int_ne LW(12) 0
+8030D480:         callc [evt_map_playanim evt_map.o] LW(12) 0 0
+8030D494:         callc [evt_map_pauseanim evt_map.o] 0 LW(12)
+8030D4A4:         wait_ms 700
+8030D4AC:         callsa [bero_close_door_play_se evt_bero.o]
+8030D4B4:         callc [evt_map_replayanim evt_map.o] 0 LW(12)
+8030D4C4:       endif
+8030D4C8:     case_int_eq 2
+8030D4D0:       if_int_eq LW(12) 0
+8030D4DC:         switch_break
+8030D4E0:       endif
+8030D4E4:       setii LW(8) LW(12)
+8030D4F0:       callc [evt_mapobj_rotate evt_map.o] 1 LW(8) 0 -80 0
+8030D50C:       callc [evt_bero_mario_go evt_bero.o]
+8030D514:       wait_ms 500
+8030D51C:       callsa [bero_close_door_play_se evt_bero.o]
+8030D524:       callc [evt_sub_intpl_msec_init evt_sub.o] 11 -80 0 500
+8030D53C:       loop 0
+8030D544:         callc [evt_sub_intpl_msec_get_value_para evt_sub.o] LW(0) LW(1)
+8030D554:         callc [evt_mapobj_rotate evt_map.o] 1 LW(8) 0 LW(0) 0
+8030D570:         if_int_eq LW(1) 0
+8030D57C:           loop_break
+8030D580:         endif
+8030D584:         wait_frames 1
+8030D58C:       end_loop
+8030D590:     case_int_eq 4
+8030D598:       if_int_ne LW(12) 0
+8030D5A4:         callsa LW(12)
+8030D5AC:       endif
+8030D5B0:     case_int_eq 5
+8030D5B8:       if_int_ne LW(12) 0
+8030D5C4:         setff LW(0) 180.00
+8030D5D0:         callss LW(12)
+8030D5D8:         callc [evt_bero_mario_go evt_bero.o]
+8030D5E0:         wait_ms 500
+8030D5E8:         callsa [bero_close_door_play_se evt_bero.o]
+8030D5F0:         setii LW(9) LW(12)
+8030D5FC:         callc [evt_sub_intpl_msec_init evt_sub.o] 11 180 0 500
+8030D614:         loop 0
+8030D61C:           callc [evt_sub_intpl_msec_get_value_para evt_sub.o] LW(0) LW(10)
+8030D62C:           if_int_eq LW(10) 0
+8030D638:             setff LW(0) 0.00
+8030D644:             callss LW(9)
+8030D64C:             loop_break
+8030D650:           else
+8030D654:             callss LW(9)
+8030D65C:           endif
+8030D660:         end_loop
+8030D664:       endif
+8030D668:   end_switch
+8030D66C:   return
+8030D670:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [evt_bero_info_run_pipe_sub00 evt_bero.o] AT 8030EADC ---
+8030EADC:   callc [evt_party_stop evt_party.o] 0
+8030EAE8:   callc [evt_party_stop evt_party.o] 1
+8030EAF4:   switchi LW(5)
+8030EAFC:     case_int_eq 6
+8030EB04:       callc [evt_mario_set_dispdir evt_mario.o] 180
+8030EB10:       callc [evt_mario_paper_pose_dokan evt_mario.o] 4
+8030EB1C:       callc [evt_bero_move_mario_speed evt_bero.o] 60.00
+8030EB28:     case_int_eq 2
+8030EB30:       callc [evt_mario_set_dispdir evt_mario.o] 0
+8030EB3C:       callc [evt_mario_paper_pose_dokan evt_mario.o] 4
+8030EB48:       callc [evt_bero_move_mario_speed evt_bero.o] 60.00
+8030EB54:     case_int_eq 9
+8030EB5C:       callc [evt_mario_paper_pose_dokan evt_mario.o] 1
+8030EB68:       callc [evt_bero_move_mario_speed evt_bero.o] 60.00
+8030EB74:     case_int_eq 8
+8030EB7C:       callc [evt_mario_paper_pose_dokan evt_mario.o] 0
+8030EB88:       callc [evt_bero_move_mario_speed evt_bero.o] 60.00
+8030EB94:   end_switch
+8030EB98:   callc [evt_mario_dokan_end evt_mario.o]
+8030EBA0:   return
+8030EBA4:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [bero_case_switch_off evt_bero.o] AT 8030E900 ---
+8030E900:   callc [evt_bero_switch_off evt_bero.o] LW(0)
+8030E90C:   callc [evt_bero_get_info_num evt_bero.o] LW(1)
+8030E918:   if_int_eq LW(0) 0
+8030E924:     dbg_report ["ベロ削除しました"]
+8030E92C:     callc [evt_bero_case_id_load evt_bero.o] LW(1) LW(15)
+8030E93C:     callc [evt_del_case_evt evt_case.o] 0 LW(15)
+8030E94C:     callc [evt_hitobj_attr_onoff evt_hit.o] 0 0 LW(3) 8388608
+8030E964:   else
+8030E968:     dbg_report ["ベロの削除予約もしくはベロの出て行くデータの二重削除防止です"]
+8030E970:   endif
+8030E974:   return
+8030E978:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [evt_bero_nonride_check evt_bero.o] AT 8030CDB4 ---
+8030CDB4:   if_int_ne LW(10) 6
+8030CDC0:     setii LW(0) LW(3)
+8030CDCC:     callss [bero_case_switch_on evt_bero.o]
+8030CDD4:     return
+8030CDD8:   endif
+8030CDDC:   loop 0
+8030CDE4:     callc [evt_mario_get_motion evt_mario.o] LW(0)
+8030CDF0:     if_int_eq LW(0) 3
+8030CDFC:       loop_break
+8030CE00:     endif
+8030CE04:     if_int_eq LW(0) 10
+8030CE10:       loop_break
+8030CE14:     endif
+8030CE18:     wait_frames 1
+8030CE20:   end_loop
+8030CE24:   dbg_report ["土管から降りた"]
+8030CE2C:   setii LW(0) LW(3)
+8030CE38:   callss [bero_case_switch_on evt_bero.o]
+8030CE40:   return
+8030CE44:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [bero_close_door_play_se evt_bero.o] AT 8030D138 ---
+8030D138:   callc [evt_bero_get_info_num evt_bero.o] LW(1)
+8030D144:   setii LW(4) 0
+8030D150:   setii LW(5) 0
+8030D15C:   setii LW(6) 0
+8030D168:   if_int_ne LW(3) 0
+8030D174:     callc [evt_hit_get_position evt_hit.o] LW(3) LW(4) LW(5) LW(6)
+8030D18C:   endif
+8030D190:   callc [evt_bero_get_info_kinddir evt_bero.o] LW(1) LW(10) LW(11) LW(12)
+8030D1A8:   switchi LW(11)
+8030D1B0:     case_int_eq 0
+8030D1B8:     case_int_eq 1
+8030D1C0:       callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_DOOR_SHUT1"] LW(4) LW(5) LW(6) 0
+8030D1DC:     case_int_eq 2
+8030D1E4:       callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_DOOR_SHUT_WOOD1"] LW(4) LW(5) LW(6) 0
+8030D200:     case_int_eq 3
+8030D208:       callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_DOOR_SHUT_WOOD2"] LW(4) LW(5) LW(6) 0
+8030D224:     case_int_eq 4
+8030D22C:       callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_DOOR_SHUT_WOOD2"] LW(4) LW(5) LW(6) 0
+8030D248:     case_int_eq 5
+8030D250:       callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_DOOR_SHUT_IRON1"] LW(4) LW(5) LW(6) 0
+8030D26C:     case_int_eq 6
+8030D274:       callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_DOOR_SHUT_IRON2"] LW(4) LW(5) LW(6) 0
+8030D290:     case_int_eq 7
+8030D298:       callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_DOOR_SHUT_GRILLE1"] LW(4) LW(5) LW(6) 0
+8030D2B4:     case_int_eq 8
+8030D2BC:       callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_DOOR_SHUT_SLIDE1"] LW(4) LW(5) LW(6) 0
+8030D2D8:     case_int_eq 9
+8030D2E0:       callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_DOOR_SHUT_TURN1"] LW(4) LW(5) LW(6) 0
+8030D2FC:     case_int_eq 10
+8030D304:       callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_DOOR_SHUT_ELEC1"] LW(4) LW(5) LW(6) 0
+8030D320:     case_int_eq 11
+8030D328:       callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_DOOR_OPEN_STONE1"] LW(4) LW(5) LW(6) 0
+8030D344:     case_int_eq 12
+8030D34C:       callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_DOOR_SHUT_CASTLE1"] LW(4) LW(5) LW(6) 0
+8030D368:     case_int_eq 13
+8030D370:       callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_DOOR_SHUT_CASTLE2"] LW(4) LW(5) LW(6) 0
+8030D38C:     case_int_eq 14
+8030D394:       callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_DOOR_SHUT_METAL1"] LW(4) LW(5) LW(6) 0
+8030D3B0:     case_int_eq 15
+8030D3B8:       callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_STG3_AUTO_DOOR1"] LW(4) LW(5) LW(6) 0
+8030D3D4:     case_int_eq 16
+8030D3DC:       callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_STG3_LOCKER_CLOSE1"] LW(4) LW(5) LW(6) 0
+8030D3F8:     case_int_eq 17
+8030D400:       callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_DOOR_SHUT_SLIDE1_3"] LW(4) LW(5) LW(6) 0
+8030D41C:   end_switch
+8030D420:   return
+8030D424:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [bero_case_switch_on evt_bero.o] AT 8030E8B4 ---
+8030E8B4:   callc [evt_bero_switch_on evt_bero.o] LW(0)
+8030E8C0:   callc [evt_bero_get_info_num evt_bero.o] LW(1)
+8030E8CC:   if_int_eq LW(0) 0
+8030E8D8:     dbg_report ["ベロ登録"]
+8030E8E0:     callss [bero_case_entry_sub evt_bero.o]
+8030E8E8:   else
+8030E8EC:     dbg_report ["ベロの出て行くデータの二重登録防止をしています"]
+8030E8F4:   endif
+8030E8F8:   return
+8030E8FC:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [bero_case_entry_sub evt_bero.o] AT 8030E798 ---
+8030E798:   setii LW(0) LW(4)
+8030E7A4:   andr LW(0) 0xFFF
+8030E7B0:   switchi LW(0)
+8030E7B8:     case_int_eq 3840
+8030E7C0:       callc [evt_run_case_evt_bero evt_case.o] LW(10) 1 LW(3) 0 [bero_case_exec_none evt_bero.o] LW(15)
+8030E7E0:     case_int_eq 0
+8030E7E8:       callc [evt_hitobj_attr_onoff evt_hit.o] 0 1 LW(3) 8388608
+8030E800:       callc [evt_run_case_evt_bero evt_case.o] LW(10) 1 LW(3) 0 [bero_case_exec_road evt_bero.o] LW(15)
+8030E820:     case_int_eq 1
+8030E828:       callc [evt_run_case_evt_bero evt_case.o] LW(10) 1 LW(3) 0 [bero_case_exec_door evt_bero.o] LW(15)
+8030E848:     case_int_eq 2
+8030E850:       callc [evt_run_case_evt_bero evt_case.o] LW(10) 1 LW(3) 0 [bero_case_exec_pipe evt_bero.o] LW(15)
+8030E870:     case_int_eq 3
+8030E878:       callc [evt_run_case_evt_bero evt_case.o] LW(10) 1 LW(3) 0 [bero_case_exec_gate evt_bero.o] LW(15)
+8030E898:   end_switch
+8030E89C:   callc [evt_bero_case_id_save evt_bero.o] LW(1) LW(15)
+8030E8AC:   return
+8030E8B0:   end

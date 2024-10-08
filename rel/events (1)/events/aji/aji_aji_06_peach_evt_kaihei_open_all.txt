@@ -1,0 +1,39 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [peach_evt_kaihei_open_all aji_06.o] AT 805DF050 ---
+805DF050:   begin_thread
+805DF054:     setii LW(0) ["S_kaihei1"]
+805DF060:     callss [peach_evt_kaihei_open aji_06.o]
+805DF068:   end_thread
+805DF06C:   begin_thread
+805DF070:     setii LW(0) ["S_kaihei2"]
+805DF07C:     callss [peach_evt_kaihei_open aji_06.o]
+805DF084:   end_thread
+805DF088:   begin_thread
+805DF08C:     setii LW(0) ["S_kaihei3"]
+805DF098:     callss [peach_evt_kaihei_open aji_06.o]
+805DF0A0:   end_thread
+805DF0A4:   setii LW(0) ["S_kaihei4"]
+805DF0B0:   callss [peach_evt_kaihei_open aji_06.o]
+805DF0B8:   return
+805DF0BC:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [peach_evt_kaihei_open aji_06.o] AT 805DEF84 ---
+805DEF84:   setii LW(5) LW(0)
+805DEF90:   callc [evt_mapobj_get_position evt_map.o] LW(5) LW(0) LW(1) LW(2)
+805DEFA8:   if_int_lt LW(1) 45
+805DEFB4:     return
+805DEFB8:   endif
+805DEFBC:   callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_PEACH_MACHINE_OPEN1"] LW(0) LW(1) LW(2) LW(3)
+805DEFD8:   callc [evt_sub_intpl_msec_init evt_sub.o] 11 0 -25 800
+805DEFF0: 0:
+805DEFF8:   callc [evt_sub_intpl_msec_get_value evt_sub.o]
+805DF000:   callc [evt_mapobj_trans evt_map.o] 0 LW(5) 0 LW(0) 0
+805DF01C:   wait_frames 1
+805DF024:   if_int_eq LW(1) 1
+805DF030:     goto 0
+805DF038:   endif
+805DF03C:   callc [evt_snd_sfxoff evt_snd.o] LW(3)
+805DF048:   return
+805DF04C:   end

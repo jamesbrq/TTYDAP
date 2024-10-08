@@ -1,0 +1,35 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [pik_03_init_evt pik_03.o] AT 805C9750 ---
+805C9750:   setii LW(0) [bero_data pik_03.o]
+805C975C:   callc [evt_bero_get_info evt_bero.o]
+805C9764:   callss [evt_bero_info_run evt_bero.o]
+805C976C:   callc [evt_snd_bgmon evt_snd.o] 512 ["BGM_STG6_PIK2"]
+805C977C:   callc [evt_snd_envon evt_snd.o] 272 ["ENV_STG6_PIK3"]
+805C978C:   callc [evt_snd_set_rev_mode evt_snd.o] 2
+805C9798:   if_int_lt GSW(0) 338
+805C97A4:     callc [evt_item_entry evt_item.o] ["star"] 119 0 45 -950 17 -1 0
+805C97CC:   endif
+805C97D0:   if_int_lt GSW(0) 338
+805C97DC:     callc [evt_run_case_evt evt_case.o] 9 1 ["dai_a"] 0 [evt_daiza pik_03.o] 0
+805C97FC:   endif
+805C9800:   callc [evt_item_entry evt_item.o] ["item01"] 327 -305 330 -990 16 GSWF(3277) 0
+805C9828:   callc [evt_mobj_powerupblk evt_mobj.o] ["pblk00"] -265 290 550 0 GSWF(5564) 0
+805C984C:   callc [evt_map_entry_airport_harbor evt_map.o] 0 ["hikou"] ["a_hi1"]
+805C9860:   callc [evt_bero_get_entername evt_bero.o] LW(0)
+805C986C:   if_string_eq LW(0) ["next"]
+805C9878:     callc [evt_mario_set_pos evt_mario.o] -25 9 -925
+805C988C:     callc [evt_party_set_pos evt_party.o] 0 25 9 -925
+805C98A4:     callc [evt_mario_set_dir evt_mario.o] 90 0 0
+805C98B8:     callc [evt_party_set_dir evt_party.o] 0 270 0
+805C98CC:     callc [evt_cam_road_reset evt_cam.o]
+805C98D4:     callc [evt_mario_key_onoff evt_mario.o] 0
+805C98E0:     begin_thread
+805C98E4:       callc [evt_seq_wait evt_seq.o] 2
+805C98F0:       callc [evt_fade_end_wait evt_fade.o]
+805C98F8:       callc [evt_mario_key_onoff evt_mario.o] 1
+805C9904:     end_thread
+805C9908:   endif
+805C990C:   return
+805C9910:   end

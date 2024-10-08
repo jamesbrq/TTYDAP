@@ -1,0 +1,110 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [gor_irai_tenshu_main gor_irai.o] AT 80620C38 ---
+80620C38:   setii LW(0) GSWF(5375)
+80620C44:   addi LW(0) GSWF(5376)
+80620C50:   addi LW(0) GSWF(5377)
+80620C5C:   addi LW(0) GSWF(5378)
+80620C68:   addi LW(0) GSWF(5379)
+80620C74:   addi LW(0) GSWF(5380)
+80620C80:   addi LW(0) GSWF(5381)
+80620C8C:   addi LW(0) GSWF(5382)
+80620C98:   addi LW(0) GSWF(5383)
+80620CA4:   addi LW(0) GSWF(5384)
+80620CB0:   addi LW(0) GSWF(5385)
+80620CBC:   addi LW(0) GSWF(5386)
+80620CC8:   addi LW(0) GSWF(5387)
+80620CD4:   addi LW(0) GSWF(5388)
+80620CE0:   addi LW(0) GSWF(5389)
+80620CEC:   addi LW(0) GSWF(5390)
+80620CF8:   addi LW(0) GSWF(5391)
+80620D04:   addi LW(0) GSWF(5392)
+80620D10:   addi LW(0) GSWF(5393)
+80620D1C:   addi LW(0) GSWF(5394)
+80620D28:   addi LW(0) GSWF(5395)
+80620D34:   addi LW(0) GSWF(5396)
+80620D40:   addi LW(0) GSWF(5397)
+80620D4C:   addi LW(0) GSWF(5398)
+80620D58:   addi LW(0) GSWF(5399)
+80620D64:   addi LW(0) GSWF(5400)
+80620D70:   addi LW(0) GSWF(5401)
+80620D7C:   addi LW(0) GSWF(5402)
+80620D88:   addi LW(0) GSWF(5403)
+80620D94:   addi LW(0) GSWF(5404)
+80620DA0:   if_int_eq LW(0) 30
+80620DAC:     callc [evt_mario_key_onoff evt_mario.o] 0
+80620DB8:     callc [evt_msg_toge evt_msg.o] 2 150 12 -156
+80620DD0:     callc [evt_msg_print evt_msg.o] 0 ["irai_74"] 0 0
+80620DE8:     callc [evt_mario_key_onoff evt_mario.o] 1
+80620DF4:     return
+80620DF8:   endif
+80620DFC:   if_int_eq GSWF(5374) 0
+80620E08:     callss [gor_irai_lecture gor_irai.o]
+80620E10:     return
+80620E14:   endif
+80620E18:   callc [evt_mario_key_onoff evt_mario.o] 0
+80620E24:   if_int_eq GSW(1420) 0
+80620E30:     callc [evt_msg_toge evt_msg.o] 2 150 12 -156
+80620E48:     callc [evt_msg_print evt_msg.o] 0 ["irai_06"] 0 0
+80620E60:   else
+80620E64:     callc [evt_msg_toge evt_msg.o] 2 150 12 -156
+80620E7C:     callc [evt_msg_print evt_msg.o] 0 ["irai_07"] 0 0
+80620E94:     callc [evt_msg_select evt_msg.o] 0 ["irai_08"]
+80620EA4:     if_int_eq LW(0) -1
+80620EB0:       callc [evt_msg_continue evt_msg.o]
+80620EB8:       dbg_report ["依頼メニューキャンセル"]
+80620EC0:     endif
+80620EC4:     if_int_eq LW(0) 0
+80620ED0:       setii LW(10) GSW(1420)
+80620EDC:       mo_set_base_int [irai_msg_hikiukechu gor_irai.o]
+80620EE4:       addi LW(10) -1
+80620EF0:       mo_read_int_indexed LW(11) LW(10)
+80620EFC:       callc [evt_msg_print_add evt_msg.o] 0 LW(11)
+80620F0C:     endif
+80620F10:     if_int_eq LW(0) 1
+80620F1C:       callc [evt_msg_print_add evt_msg.o] 0 ["irai_09"]
+80620F2C:       callc [evt_msg_select evt_msg.o] 0 ["irai_01"]
+80620F3C:       if_int_eq LW(0) 0
+80620F48:         callc [evt_pouch_get_coin evt_pouch.o] LW(10)
+80620F54:         if_int_ge LW(10) 30
+80620F60:           callc [evt_msg_print_add evt_msg.o] 0 ["irai_10"]
+80620F70:           callc [evt_pouch_add_coin evt_pouch.o] -30
+80620F7C:           setii LW(11) GSW(1420)
+80620F88:           callc [irai_cancel_func gor_irai.o] GSW(1420)
+80620F94:           setii GSW(1420) 0
+80620FA0:           mo_set_base_int [irai_end_event gor_irai.o]
+80620FA8:           setii LW(0) LW(11)
+80620FB4:           addi LW(0) -1
+80620FC0:           mo_read_int_indexed LW(1) LW(0)
+80620FCC:           callsa LW(1)
+80620FD4:         else
+80620FD8:           callc [evt_msg_print_add evt_msg.o] 0 ["irai_11"]
+80620FE8:         endif
+80620FEC:       else
+80620FF0:         callc [evt_msg_print_add evt_msg.o] 0 ["irai_12"]
+80621000:       endif
+80621004:       setii LW(0) 1
+80621010:     endif
+80621014:     if_int_eq LW(0) 2
+80621020:       callc [evt_msg_print_add evt_msg.o] 0 ["irai_04"]
+80621030:     endif
+80621034:   endif
+80621038:   callc [evt_mario_key_onoff evt_mario.o] 1
+80621044:   return
+80621048:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [gor_irai_lecture gor_irai.o] AT 806209A0 ---
+806209A0:   callc [evt_mario_key_onoff evt_mario.o] 0
+806209AC:   callc [evt_msg_toge evt_msg.o] 2 150 12 -156
+806209C4:   callc [evt_msg_print evt_msg.o] 0 ["irai_00"] 0 0
+806209DC:   callc [evt_msg_select evt_msg.o] 0 ["irai_01"]
+806209EC:   if_int_eq LW(0) 0
+806209F8:     callc [evt_msg_print_add evt_msg.o] 0 ["irai_03"]
+80620A08:     setii GSWF(5374) 1
+80620A14:   else
+80620A18:     callc [evt_msg_print_add evt_msg.o] 0 ["irai_02"]
+80620A28:   endif
+80620A2C:   callc [evt_mario_key_onoff evt_mario.o] 1
+80620A38:   return
+80620A3C:   end

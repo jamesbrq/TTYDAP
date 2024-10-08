@@ -1,0 +1,122 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [marioAttackEvent_ZubaStar sac_zubastar.o] AT 803B5A40 ---
+803B5A40:   callc [zubastar_init sac_zubastar.o]
+803B5A48:   begin_child_thread
+803B5A4C:     callc [main_star sac_zubastar.o]
+803B5A54:   end_child_thread
+803B5A58:   callss [sac_start_camera_evt sac_common.o]
+803B5A60:   wait_ms 500
+803B5A68:   callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_BTL_SAC_START1"] [F1194D80] 0 [F1194D80]
+803B5A84:   callss [sac_mario_item_on_evt sac_common.o]
+803B5A8C:   wait_ms 500
+803B5A94:   callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_BTL_SAC_START2"] [F1194D80] 0 LW(11)
+803B5AB0:   callc [star_stone_appear sac_zubastar.o]
+803B5AB8:   begin_child_thread
+803B5ABC:     callss [sac_start_stardust sac_common.o]
+803B5AC4:   end_child_thread
+803B5AC8:   wait_frames 100
+803B5AD0:   callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_BTL_SAC_START3"] [F1194D80] 0 [F1194D80]
+803B5AEC:   callc [evt_snd_sfxoff evt_snd.o] LW(11)
+803B5AF8:   callc [evt_btl_camera_set_mode battle_camera.o] 0 0
+803B5B08:   wait_frames 40
+803B5B10:   callss [sac_mario_item_on_end_evt sac_common.o]
+803B5B18:   callss [sac_mario_back_home sac_common.o]
+803B5B20:   callc [wait_star_stone_up sac_zubastar.o]
+803B5B28:   callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 1 ["M_I_Y"]
+803B5B3C:   wait_ms 500
+803B5B44:   begin_child_thread
+803B5B48:     callc [sac_handbeat sac_common.o]
+803B5B50:   end_child_thread
+803B5B54:   callc [sac_ac_help_on sac_common.o]
+803B5B5C:   callc [zubastar_main sac_zubastar.o]
+803B5B64:   callc [sac_ac_help_off sac_common.o]
+803B5B6C:   callc [sac_handbeat_end sac_common.o]
+803B5B74:   begin_child_thread
+803B5B78:     callc [evt_fade_entry evt_fade.o] 17 1 255 255 255
+803B5B94:     wait_ms 100
+803B5B9C:     callc [evt_fade_entry evt_fade.o] 16 250 255 255 255
+803B5BB8:   end_child_thread
+803B5BBC:   begin_thread
+803B5BC0:     callc [evt_btl_camera_shake_h battle_camera.o] 0 10 0 60 0
+803B5BDC:     loop 6
+803B5BE4:       callc [evt_btl_camera_shake_w battle_camera.o] 0 10 0 10 0
+803B5C00:       wait_frames 10
+803B5C08:     end_loop
+803B5C0C:   end_thread
+803B5C10:   callc [btlevtcmd_WaitGuardMove battle_event_cmd.o]
+803B5C18:   callc [btlevtcmd_CommandPayWeaponCost battle_event_cmd.o] -2
+803B5C24:   callc [btlevtcmd_CommandGetWeaponAddress battle_event_cmd.o] -2 LW(0)
+803B5C34:   callc [btlevtcmd_WeaponAftereffect battle_event_cmd.o] LW(0)
+803B5C40:   callc [btlevtcmd_GetSelectEnemy battle_event_cmd.o] LW(3) LW(4)
+803B5C50: 95:
+803B5C58:   if_int_eq LW(3) -1
+803B5C64:     goto 97
+803B5C6C:   endif
+803B5C70:   callc [btlevtcmd_CheckPartsAttribute battle_event_cmd.o] LW(3) LW(4) 16384 LW(0)
+803B5C88:   if_int_eq LW(0) 0
+803B5C94:     callc [btlevtcmd_CheckDamage battle_event_cmd.o] -2 LW(3) LW(4) [weapon_zubastar sac_zubastar.o] 256 LW(5)
+803B5CB4:   endif
+803B5CB8:   callc [btlevtcmd_GetSelectNextEnemy battle_event_cmd.o] LW(3) LW(4)
+803B5CC8:   goto 95
+803B5CD0: 97:
+803B5CD8:   callc [zubastar_bomb sac_zubastar.o]
+803B5CE0:   callc [zubastar_end sac_zubastar.o]
+803B5CE8: 99:
+803B5CF0:   callc [btlevtcmd_StartWaitEvent battle_event_cmd.o] -2
+803B5CFC:   return
+803B5D00:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [sac_start_camera_evt sac_common.o] AT 803B7160 ---
+803B7160:   callc [evt_btl_camera_set_mode battle_camera.o] 0 7
+803B7170:   callc [evt_btl_camera_set_homing_unit battle_camera.o] 0 -2 -1
+803B7184:   callc [btlevtcmd_CheckStatus battle_event_cmd.o] -2 10 LW(0)
+803B7198:   if_int_eq LW(0) 1
+803B71A4:     callc [evt_btl_camera_set_zoom battle_camera.o] 0 100
+803B71B4:   else
+803B71B8:     callc [evt_btl_camera_set_zoom battle_camera.o] 0 300
+803B71C8:   endif
+803B71CC:   callc [evt_btl_camera_set_moveSpeedLv battle_camera.o] 0 2
+803B71DC:   callc [evt_btl_camera_set_zoomSpeedLv battle_camera.o] 0 2
+803B71EC:   return
+803B71F0:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [sac_mario_item_on_evt sac_common.o] AT 803B71F4 ---
+803B71F4:   callc [btlevtcmd_AnimeChangePoseType battle_event_cmd.o] -2 1 40
+803B7208:   callc [btlevtcmd_GetPos battle_event_cmd.o] -2 LW(0) LW(1) LW(2)
+803B7220:   callc [btlevtcmd_FaceDirectionAdd battle_event_cmd.o] -2 LW(0) 15
+803B7234:   callc [btlevtcmd_MovePosition battle_event_cmd.o] -2 LW(0) LW(1) LW(2) 5 -1 0
+803B7258:   callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_VOICE_MARIO_HAPPY1"] [F1194D80] 0 [F1194D80]
+803B7274:   callc [evt_audience_sound_cheer evt_audience.o] 180 60
+803B7284:   callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 1 ["M_P_2"]
+803B7298:   callc [btlevtcmd_GetPartsPos battle_event_cmd.o] -2 1 LW(0) LW(1) LW(2)
+803B72B4:   callc [btlevtcmd_GetHeight battle_event_cmd.o] -2 LW(5)
+803B72C4:   callc [btlevtcmd_GetStatusMg battle_event_cmd.o] -2 LW(6)
+803B72D4:   mulf LW(5) LW(6)
+803B72E0:   addi LW(1) LW(5)
+803B72EC:   addi LW(1) 35
+803B72F8:   addi LW(2) -5
+803B7304:   callc [evt_eff evt_eff.o] ["sac_treasure"] ["treasure_map"] 0 LW(0) LW(1) LW(2) 0 0 0 0 0 0 0 0
+803B7344:   addi LW(1) 2
+803B7350:   addi LW(2) -7
+803B735C:   callc [evt_eff evt_eff.o] ["sac_itemget"] ["itemget"] 9 LW(0) LW(1) LW(2) 0 0 0 0 0 0 0 0
+803B739C:   return
+803B73A0:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [sac_start_stardust sac_common.o] AT 803B73A4 ---
+803B73A4:   loop 6
+803B73AC:     callc [btlevtcmd_GetPos battle_event_cmd.o] -2 LW(0) LW(1) LW(2)
+803B73C4:     addi LW(1) 50
+803B73D0:     callc [evt_eff evt_eff.o] [zero_804283d0 sac_common.o] ["stardust"] 5 LW(0) LW(1) LW(2) 30 30 10 30 0 0 0 0
+803B7410:     wait_frames 10
+803B7418:   end_loop
+803B741C:   return
+803B7420:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [sac_mario_back_home sac_common.o] AT 803B7424 ---
+803B7424:   callc [btlevtcmd_AnimeChangePoseType battle_event_cmd.o] -2 1 40
+803B7438:   callc [btlevtcmd_GetHomePos battle_event_cmd.o] -2 LW(0) LW(1) LW(2)
+803B7450:   callc [btlevtcmd_MovePosition battle_event_cmd.o] -2 LW(0) LW(1) LW(2) 5 -1 0
+803B7474:   return
+803B7478:   end

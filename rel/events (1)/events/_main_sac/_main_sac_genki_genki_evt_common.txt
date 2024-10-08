@@ -1,0 +1,193 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [genki_evt_common sac_genki.o] AT 803B68B8 ---
+803B68B8:   callc [btlevtcmd_GetUnitId battle_event_cmd.o] -4 LW(13)
+803B68C8:   callc [btlevtcmd_GetBodyId battle_event_cmd.o] LW(13) LW(14)
+803B68D8:   callc [btlevtcmd_CheckStatus battle_event_cmd.o] LW(13) 27 LW(0)
+803B68EC:   if_int_ne LW(0) 0
+803B68F8:     setii LW(13) -1
+803B6904:   endif
+803B6908:   callc [btlevtcmd_reset_move_color_lv_all battle_event_cmd.o]
+803B6910:   callc [btlevtcmd_CommandPayWeaponCost battle_event_cmd.o] -2
+803B691C:   begin_child_thread
+803B6920:     callc [main_genki sac_genki.o] LW(13) LW(15)
+803B6930:   end_child_thread
+803B6934:   callss [sac_start_camera_evt sac_common.o]
+803B693C:   wait_ms 500
+803B6944:   callc [sac_enemy_slide_go sac_common.o]
+803B694C:   callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_BTL_SAC_START1"] [F1194D80] 0 [F1194D80]
+803B6968:   callss [sac_mario_item_on_evt sac_common.o]
+803B6970:   wait_ms 500
+803B6978:   callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_BTL_SAC_START2"] [F1194D80] 0 LW(11)
+803B6994:   if_int_eq LW(15) 0
+803B69A0:     callc [star_appear sac_genki.o]
+803B69A8:   else
+803B69AC:     callc [star_stone_appear sac_genki.o]
+803B69B4:   endif
+803B69B8:   begin_child_thread
+803B69BC:     callss [sac_start_stardust sac_common.o]
+803B69C4:   end_child_thread
+803B69C8:   wait_frames 100
+803B69D0:   callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_BTL_SAC_HEART_SHOOT1"] [F1194D80] 0 LW(10)
+803B69EC:   callc [evt_snd_sfxoff evt_snd.o] LW(11)
+803B69F8:   callc [evt_btl_camera_set_mode battle_camera.o] 0 0
+803B6A08:   wait_frames 40
+803B6A10:   callss [sac_mario_item_on_end_evt sac_common.o]
+803B6A18:   callc [btlevtcmd_AnimeChangePoseType battle_event_cmd.o] -2 1 42
+803B6A2C:   callc [btlevtcmd_SetMoveSpeed battle_event_cmd.o] -2 3.00
+803B6A3C:   callc [btlevtcmd_GetPos battle_event_cmd.o] -2 LW(0) LW(1) LW(2)
+803B6A54:   callc [btlevtcmd_MovePosition battle_event_cmd.o] -2 -75 LW(1) LW(2) 0 -1 0
+803B6A78:   callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 1 ["M_I_Y"]
+803B6A8C:   wait_frames 40
+803B6A94:   callc [evt_snd_sfxoff evt_snd.o] LW(10)
+803B6AA0:   callc [sac_ac_help_on sac_common.o]
+803B6AA8:   callc [start_game sac_genki.o]
+803B6AB0:   callc [wait_game_end sac_genki.o]
+803B6AB8:   callc [sac_ac_help_off sac_common.o]
+803B6AC0:   callc [get_score sac_genki.o] LW(10) LW(11) LW(12)
+803B6AD4:   wait_frames 70
+803B6ADC:   callc [btlevtcmd_AnimeChangePoseType battle_event_cmd.o] -2 1 42
+803B6AF0:   callc [btlevtcmd_GetHomePos battle_event_cmd.o] -2 LW(0) LW(1) LW(2)
+803B6B08:   callc [btlevtcmd_SetMoveSpeed battle_event_cmd.o] -2 3.00
+803B6B18:   callc [btlevtcmd_MovePosition battle_event_cmd.o] -2 LW(0) LW(1) LW(2) 0 -1 0
+803B6B3C:   callc [btlevtcmd_AnimeChangePoseType battle_event_cmd.o] -2 1 43
+803B6B50:   callc [status_on sac_genki.o]
+803B6B58:   callc [evt_btl_camera_set_mode battle_camera.o] 0 7
+803B6B68:   callc [evt_btl_camera_set_homing_unit battle_camera.o] 0 -2 -1
+803B6B7C:   callc [evt_btl_camera_set_zoom battle_camera.o] 0 200
+803B6B8C:   callc [evt_btl_camera_set_moveSpeedLv battle_camera.o] 0 2
+803B6B9C:   callc [evt_btl_camera_set_zoomSpeedLv battle_camera.o] 0 2
+803B6BAC:   setii LW(15) LW(10)
+803B6BB8:   addi LW(15) LW(11)
+803B6BC4:   addi LW(15) LW(12)
+803B6BD0:   if_int_ge LW(15) 1
+803B6BDC:     callc [sac_wao sac_common.o]
+803B6BE4:   endif
+803B6BE8:   if_int_ne LW(13) -1
+803B6BF4:     callc [evt_snd_sfxon evt_snd.o] ["SFX_HP_RECOVER_SHINE2"] 0
+803B6C04:     setii LW(9) -2
+803B6C10:     callss [status_recover_evt sac_genki.o]
+803B6C18:     callc [btlevtcmd_RecoverHp battle_event_cmd.o] -2 1 LW(10)
+803B6C2C:     callc [btlevtcmd_GetPos battle_event_cmd.o] -2 LW(0) LW(1) LW(2)
+803B6C44:     callc [evt_eff evt_eff.o] [float_0_804282dc sac_genki.o] ["stardust"] 2 LW(0) LW(1) LW(2) 50 50 50 100 0 0 0 0
+803B6C84:     setii LW(9) LW(13)
+803B6C90:     callss [status_recover_evt sac_genki.o]
+803B6C98:     callc [btlevtcmd_StartWaitEvent battle_event_cmd.o] LW(13)
+803B6CA4:     callc [btlevtcmd_RecoverHp battle_event_cmd.o] LW(13) LW(14) LW(11)
+803B6CB8:     callc [btlevtcmd_GetPos battle_event_cmd.o] LW(13) LW(0) LW(1) LW(2)
+803B6CD0:     callc [evt_eff evt_eff.o] [float_0_804282dc sac_genki.o] ["stardust"] 2 LW(0) LW(1) LW(2) 50 50 50 100 0 0 0 0
+803B6D10:     callc [btlevtcmd_RecoverFp battle_event_cmd.o] -2 1 LW(12)
+803B6D24:   else
+803B6D28:     callc [evt_snd_sfxon evt_snd.o] ["SFX_HP_RECOVER_SHINE2"] 0
+803B6D38:     setii LW(9) -2
+803B6D44:     callss [status_recover_evt sac_genki.o]
+803B6D4C:     callc [btlevtcmd_RecoverHp battle_event_cmd.o] -2 1 LW(10)
+803B6D60:     callc [btlevtcmd_GetPos battle_event_cmd.o] -2 LW(0) LW(1) LW(2)
+803B6D78:     callc [evt_eff evt_eff.o] [float_0_804282dc sac_genki.o] ["stardust"] 2 LW(0) LW(1) LW(2) 50 50 50 100 0 0 0 0
+803B6DB8:     callc [btlevtcmd_RecoverFp battle_event_cmd.o] -2 1 LW(12)
+803B6DCC:   endif
+803B6DD0:   wait_ms 1000
+803B6DD8:   callc [sac_enemy_slide_return sac_common.o]
+803B6DE0:   wait_ms 1000
+803B6DE8:   callc [evt_btl_camera_set_mode battle_camera.o] 0 0
+803B6DF8:   wait_ms 1000
+803B6E00:   callc [end_genki sac_genki.o]
+803B6E08:   callc [btlevtcmd_StartWaitEvent battle_event_cmd.o] -2
+803B6E14:   return
+803B6E18:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [sac_start_camera_evt sac_common.o] AT 803B7160 ---
+803B7160:   callc [evt_btl_camera_set_mode battle_camera.o] 0 7
+803B7170:   callc [evt_btl_camera_set_homing_unit battle_camera.o] 0 -2 -1
+803B7184:   callc [btlevtcmd_CheckStatus battle_event_cmd.o] -2 10 LW(0)
+803B7198:   if_int_eq LW(0) 1
+803B71A4:     callc [evt_btl_camera_set_zoom battle_camera.o] 0 100
+803B71B4:   else
+803B71B8:     callc [evt_btl_camera_set_zoom battle_camera.o] 0 300
+803B71C8:   endif
+803B71CC:   callc [evt_btl_camera_set_moveSpeedLv battle_camera.o] 0 2
+803B71DC:   callc [evt_btl_camera_set_zoomSpeedLv battle_camera.o] 0 2
+803B71EC:   return
+803B71F0:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [sac_mario_item_on_evt sac_common.o] AT 803B71F4 ---
+803B71F4:   callc [btlevtcmd_AnimeChangePoseType battle_event_cmd.o] -2 1 40
+803B7208:   callc [btlevtcmd_GetPos battle_event_cmd.o] -2 LW(0) LW(1) LW(2)
+803B7220:   callc [btlevtcmd_FaceDirectionAdd battle_event_cmd.o] -2 LW(0) 15
+803B7234:   callc [btlevtcmd_MovePosition battle_event_cmd.o] -2 LW(0) LW(1) LW(2) 5 -1 0
+803B7258:   callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_VOICE_MARIO_HAPPY1"] [F1194D80] 0 [F1194D80]
+803B7274:   callc [evt_audience_sound_cheer evt_audience.o] 180 60
+803B7284:   callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 1 ["M_P_2"]
+803B7298:   callc [btlevtcmd_GetPartsPos battle_event_cmd.o] -2 1 LW(0) LW(1) LW(2)
+803B72B4:   callc [btlevtcmd_GetHeight battle_event_cmd.o] -2 LW(5)
+803B72C4:   callc [btlevtcmd_GetStatusMg battle_event_cmd.o] -2 LW(6)
+803B72D4:   mulf LW(5) LW(6)
+803B72E0:   addi LW(1) LW(5)
+803B72EC:   addi LW(1) 35
+803B72F8:   addi LW(2) -5
+803B7304:   callc [evt_eff evt_eff.o] ["sac_treasure"] ["treasure_map"] 0 LW(0) LW(1) LW(2) 0 0 0 0 0 0 0 0
+803B7344:   addi LW(1) 2
+803B7350:   addi LW(2) -7
+803B735C:   callc [evt_eff evt_eff.o] ["sac_itemget"] ["itemget"] 9 LW(0) LW(1) LW(2) 0 0 0 0 0 0 0 0
+803B739C:   return
+803B73A0:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [sac_start_stardust sac_common.o] AT 803B73A4 ---
+803B73A4:   loop 6
+803B73AC:     callc [btlevtcmd_GetPos battle_event_cmd.o] -2 LW(0) LW(1) LW(2)
+803B73C4:     addi LW(1) 50
+803B73D0:     callc [evt_eff evt_eff.o] [zero_804283d0 sac_common.o] ["stardust"] 5 LW(0) LW(1) LW(2) 30 30 10 30 0 0 0 0
+803B7410:     wait_frames 10
+803B7418:   end_loop
+803B741C:   return
+803B7420:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [status_recover_evt sac_genki.o] AT 803B6E1C ---
+803B6E1C:   callc [btlevtcmd_CheckStatus battle_event_cmd.o] LW(9) 1 LW(0)
+803B6E30:   if_int_ne LW(0) 0
+803B6E3C:     callc [btlevtcmd_OnOffStatus battle_event_cmd.o] LW(9) 1 0 0 0
+803B6E58:   endif
+803B6E5C:   callc [btlevtcmd_CheckStatus battle_event_cmd.o] LW(9) 2 LW(0)
+803B6E70:   if_int_ne LW(0) 0
+803B6E7C:     callc [btlevtcmd_OnOffStatus battle_event_cmd.o] LW(9) 2 0 0 0
+803B6E98:   endif
+803B6E9C:   callc [btlevtcmd_CheckStatus battle_event_cmd.o] LW(9) 3 LW(0)
+803B6EB0:   if_int_ne LW(0) 0
+803B6EBC:     callc [btlevtcmd_OnOffStatus battle_event_cmd.o] LW(9) 3 0 0 0
+803B6ED8:   endif
+803B6EDC:   callc [btlevtcmd_CheckStatus battle_event_cmd.o] LW(9) 4 LW(0)
+803B6EF0:   if_int_ne LW(0) 0
+803B6EFC:     callc [btlevtcmd_OnOffStatus battle_event_cmd.o] LW(9) 4 0 0 0
+803B6F18:   endif
+803B6F1C:   callc [btlevtcmd_CheckStatus battle_event_cmd.o] LW(9) 5 LW(0)
+803B6F30:   if_int_ne LW(0) 0
+803B6F3C:     callc [btlevtcmd_OnOffStatus battle_event_cmd.o] LW(9) 5 0 0 0
+803B6F58:   endif
+803B6F5C:   callc [btlevtcmd_CheckStatus battle_event_cmd.o] LW(9) 8 LW(0)
+803B6F70:   if_int_ne LW(0) 0
+803B6F7C:     callc [btlevtcmd_OnOffStatus battle_event_cmd.o] LW(9) 8 0 0 0
+803B6F98:   endif
+803B6F9C:   callc [btlevtcmd_CheckStatus battle_event_cmd.o] LW(9) 9 LW(0)
+803B6FB0:   if_int_ne LW(0) 0
+803B6FBC:     callc [btlevtcmd_OnOffStatus battle_event_cmd.o] LW(9) 9 0 0 0
+803B6FD8:   endif
+803B6FDC:   callc [btlevtcmd_CheckStatus battle_event_cmd.o] LW(9) 13 LW(0)
+803B6FF0:   if_int_ne LW(0) 0
+803B6FFC:     callc [btlevtcmd_OnOffStatus battle_event_cmd.o] LW(9) 13 0 0 0
+803B7018:   endif
+803B701C:   callc [btlevtcmd_CheckStatus battle_event_cmd.o] LW(9) 11 LW(0)
+803B7030:   if_int_ne LW(0) 0
+803B703C:     callc [btlevtcmd_OnOffStatus battle_event_cmd.o] LW(9) 11 0 0 0
+803B7058:   endif
+803B705C:   callc [btlevtcmd_CheckStatus battle_event_cmd.o] LW(9) 15 LW(0)
+803B7070:   if_int_ne LW(0) 0
+803B707C:     callc [btlevtcmd_OnOffStatus battle_event_cmd.o] LW(9) 15 0 0 0
+803B7098:   endif
+803B709C:   callc [btlevtcmd_CheckStatus battle_event_cmd.o] LW(9) 20 LW(0)
+803B70B0:   if_int_ne LW(0) 0
+803B70BC:     callc [btlevtcmd_OnOffStatus battle_event_cmd.o] LW(9) 20 0 0 0
+803B70D8:   endif
+803B70DC:   callc [recover_cmd_disable sac_genki.o]
+803B70E4:   return
+803B70E8:   end

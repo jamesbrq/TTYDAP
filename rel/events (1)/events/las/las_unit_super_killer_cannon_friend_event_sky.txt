@@ -1,0 +1,77 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [friend_event_sky unit_super_killer_cannon.o] AT 80621D44 ---
+80621D44:   callc [btlevtcmd_GetPos battle_event_cmd.o] -2 LW(7) LW(8) LW(9)
+80621D5C:   callc [evt_sub_get_dir evt_sub.o] LW(7) LW(8) LW(0) 40 LW(10)
+80621D78:   callc [killer_get_angle unit_super_killer_cannon.o] LW(7) LW(8) LW(0) 40 LW(10)
+80621D94:   callc [btlevtcmd_GetPartsRotate battle_event_cmd.o] -2 2 LW(5) LW(6) LW(11)
+80621DB0:   loop 0
+80621DB8:     if_int_gt LW(11) 0
+80621DC4:       loop_break
+80621DC8:     endif
+80621DCC:     if_int_le LW(11) LW(10)
+80621DD8:       loop_break
+80621DDC:     endif
+80621DE0:     subi LW(11) 2
+80621DEC:     callc [btlevtcmd_SetPartsRotate battle_event_cmd.o] -2 2 0 0 LW(11)
+80621E08:     wait_frames 1
+80621E10:   end_loop
+80621E14:   if_int_eq LW(12) 1
+80621E20:     callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_ENM_KILLER_CANNON_CHARGE1"] [F1194D80] 0 [F1194D80]
+80621E3C:     callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 2 ["KTA_A_3A"]
+80621E50:     wait_frames 10
+80621E58:     callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 2 ["KTA_Z_3"]
+80621E6C:     wait_frames 10
+80621E74:     callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 2 ["KTA_A_3A"]
+80621E88:     wait_frames 10
+80621E90:     callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 2 ["KTA_Z_3"]
+80621EA4:     wait_frames 10
+80621EAC:   endif
+80621EB0:   callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 2 ["KTA_A_3"]
+80621EC4:   wait_frames 40
+80621ECC:   if_int_eq LW(12) 1
+80621ED8:     callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_ENM_KILLER_CANNON4"] [F1194D80] 0 [F1194D80]
+80621EF4:   else
+80621EF8:     callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_ENM_KILLER_CANNON2"] [F1194D80] 0 [F1194D80]
+80621F14:   endif
+80621F18:   callc [btlevtcmd_CheckStatus battle_event_cmd.o] -2 10 LW(5)
+80621F2C:   if_int_ne LW(5) 0
+80621F38:     callc [btlevtcmd_GetPos battle_event_cmd.o] -2 LW(7) LW(8) LW(9)
+80621F50:     callc [btlevtcmd_FaceDirectionAdd battle_event_cmd.o] -2 LW(7) 60
+80621F64:     addi LW(9) 10
+80621F70:     callc [evt_eff evt_eff.o] [zero_las_000199e4 unit_super_killer_cannon.o] ["kemuri_test"] 18 LW(7) 75 LW(9) 1.50 0 0 0 0 0 0 0
+80621FB0:     goto 10
+80621FB8:   endif
+80621FBC:   callc [btlevtcmd_CheckStatus battle_event_cmd.o] -2 11 LW(5)
+80621FD0:   if_int_ne LW(5) 0
+80621FDC:     callc [btlevtcmd_GetPos battle_event_cmd.o] -2 LW(7) LW(8) LW(9)
+80621FF4:     callc [btlevtcmd_FaceDirectionAdd battle_event_cmd.o] -2 LW(7) 28
+80622008:     addi LW(9) 10
+80622014:     callc [evt_eff evt_eff.o] [zero_las_000199e4 unit_super_killer_cannon.o] ["kemuri_test"] 18 LW(7) 20 LW(9) 0.50 0 0 0 0 0 0 0
+80622054:     goto 10
+8062205C:   endif
+80622060:   callc [btlevtcmd_GetPos battle_event_cmd.o] -2 LW(7) LW(8) LW(9)
+80622078:   callc [btlevtcmd_FaceDirectionAdd battle_event_cmd.o] -2 LW(7) 40
+8062208C:   addi LW(9) 10
+80622098:   callc [evt_eff evt_eff.o] [zero_las_000199e4 unit_super_killer_cannon.o] ["kemuri_test"] 18 LW(7) 38 LW(9) 1.00 0 0 0 0 0 0 0
+806220D8:   goto 10
+806220E0: 10:
+806220E8:   callc [evt_btl_camera_shake_w battle_camera.o] 0 5 0 20 0
+80622104:   callc [btlevtcmd_SpawnUnit battle_event_cmd.o] LW(3) [entry_killer unit_super_killer_cannon.o] 0
+80622118:   callc [killer_copy_status unit_super_killer_cannon.o] -2 LW(3)
+80622128:   callc [btlevtcmd_GetBodyId battle_event_cmd.o] LW(3) LW(4)
+80622138:   callc [btlevtcmd_SetPos battle_event_cmd.o] LW(3) LW(7) 10 LW(2)
+80622150:   callc [btlevtcmd_SetPartsRotate battle_event_cmd.o] LW(3) LW(4) 0 0 LW(10)
+8062216C:   callc [btlevtcmd_SetFallAccel battle_event_cmd.o] LW(3) 0
+8062217C:   callc [btlevtcmd_SetJumpSpeed battle_event_cmd.o] LW(3) 0
+8062218C:   callc [btlevtcmd_JumpPosition battle_event_cmd.o] LW(3) LW(0) 40 LW(2) 7.00 -1
+806221AC:   callc [btlevtcmd_SetPartsRotate battle_event_cmd.o] LW(3) LW(4) 0 0 0
+806221C8:   callc [btlevtcmd_SetHomePos battle_event_cmd.o] LW(3) LW(0) 40 LW(2)
+806221E0:   if_int_eq LW(12) 1
+806221EC:     callc [btlevtcmd_OnOffStatus battle_event_cmd.o] LW(3) 16 1 1 1
+80622208:   endif
+8062220C:   callc [btlevtcmd_OnPartsAttribute battle_event_cmd.o] LW(3) LW(4) 4194304
+80622220:   callc [btlevtcmd_OnPartsAttribute battle_event_cmd.o] LW(3) LW(4) 2097152
+80622234:   return
+80622238:   end

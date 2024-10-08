@@ -1,0 +1,54 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [dead_event unit_honenoko.o] AT 805D70A0 ---
+805D70A0:   setii LW(10) -2
+805D70AC:   setii LW(0) 48
+805D70B8:   callc [btlevtcmd_snd_se battle_event_cmd.o] LW(10) ["SFX_BTL_ENEMY_DIE1_1"] [F1194D80] 0 [F1194D80]
+805D70D4: 10:
+805D70DC:   wait_frames 1
+805D70E4:   callc [btlevtcmd_AddRotate battle_event_cmd.o] LW(10) 0 -15 0
+805D70FC:   subi LW(0) 1
+805D7108:   if_int_gt LW(0) 0
+805D7114:     goto 10
+805D711C:   endif
+805D7120:   callc [btlevtcmd_SetRotate battle_event_cmd.o] LW(10) 0 0 0
+805D7138:   callc [btlevtcmd_snd_se battle_event_cmd.o] LW(10) ["SFX_BTL_ENEMY_DIE1_2"] [F1194D80] 0 [F1194D80]
+805D7154:   callc [btlevtcmd_GetPos battle_event_cmd.o] LW(10) LW(0) LW(1) LW(2)
+805D716C:   addi LW(2) 10
+805D7178:   callc [evt_eff evt_eff.o] 0 ["kemuri_test"] 4 LW(0) LW(1) LW(2) 0.80 0 0 0 0 0 0 0
+805D71B8:   callc [btlevtcmd_GetUnitWork battle_event_cmd.o] -2 1 LW(0)
+805D71CC:   if_int_eq LW(0) 0
+805D71D8:     callc [btlevtcmd_SetUnitWork battle_event_cmd.o] -2 1 1
+805D71EC:     callc [btlevtcmd_GetCoin battle_event_cmd.o] LW(10) LW(0)
+805D71FC:     callc [btlevtcmd_StoreCoin battle_event_cmd.o] LW(0)
+805D7208:     callc [btlevtcmd_GetExp battle_event_cmd.o] LW(10) LW(0)
+805D7218:     callc [btlevtcmd_StoreExp battle_event_cmd.o] LW(0)
+805D7224:     callc [btlevtcmd_GetPos battle_event_cmd.o] LW(10) LW(3) LW(1) LW(2)
+805D723C:     addi LW(2) 10
+805D7248:     addi LW(1) 30
+805D7254:     callc [_add_star_point_disp_offset battle_event_subset.o] LW(10) LW(3) LW(1) LW(2)
+805D726C:     callc [evt_eff evt_eff.o] [zero_gon_00006834 unit_honenoko.o] ["star_point"] 0 LW(3) LW(1) LW(2) LW(0) 0 0 0 0 0 0 0
+805D72AC:     if_int_ge LW(0) 1
+805D72B8:       loop LW(0)
+805D72C0:       end_loop
+805D72C4:     endif
+805D72C8:   endif
+805D72CC:   callc [btlevtcmd_SetRotateOffset battle_event_cmd.o] LW(10) 0 0 0
+805D72E4:   setii LW(0) 30
+805D72F0: 20:
+805D72F8:   wait_frames 1
+805D7300:   callc [btlevtcmd_AddRotate battle_event_cmd.o] LW(10) 3 0 0
+805D7318:   subi LW(0) 1
+805D7324:   if_int_gt LW(0) 0
+805D7330:     goto 20
+805D7338:   endif
+805D733C:   callc [btlevtcmd_GetBackItem battle_event_cmd.o] LW(10)
+805D7348:   callc [btlevtcmd_CheckDamageCode battle_event_cmd.o] LW(10) 1024 LW(0)
+805D735C:   if_int_ne LW(0) 0
+805D7368:     callc [btlevtcmd_KillUnit battle_event_cmd.o] LW(10) 0
+805D7378:   else
+805D737C:     callc [btlevtcmd_KillUnit battle_event_cmd.o] LW(10) 2
+805D738C:   endif
+805D7390:   return
+805D7394:   end

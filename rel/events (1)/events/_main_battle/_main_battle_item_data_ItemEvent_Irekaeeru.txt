@@ -1,0 +1,114 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [ItemEvent_Irekaeeru battle_item_data.o] AT 8036A0B8 ---
+8036A0B8:   setii LW(12) [ItemWeaponData_Irekaeeru battle_item_data.o]
+8036A0C4:   callss [ItemEvent_GetTarget battle_item_data.o]
+8036A0CC:   callc [btlevtcmd_WeaponAftereffect battle_event_cmd.o] LW(12)
+8036A0D8:   callss [ItemEvent_Support_Sub_UseDeclere battle_item_data.o]
+8036A0E0:   wait_frames 30
+8036A0E8:   callc [_hpfp_change_declare_1 battle_item_data.o] LW(10)
+8036A0F4:   callc [btlevtcmd_GetHitPos battle_event_cmd.o] LW(10) LW(11) LW(0) LW(1) LW(2)
+8036A110:   addi LW(1) 20
+8036A11C:   addi LW(2) 5
+8036A128:   callc [evt_eff evt_eff.o] [zero_804227c0 battle_item_data.o] ["irekae"] 0 LW(0) LW(1) LW(2) 0 0 0 0 0 0 0 0
+8036A168:   callc [btlevtcmd_snd_se battle_event_cmd.o] LW(10) ["SFX_ITEM_HP_FP_CHANGE1"] [F1194D80] 0 [F1194D80]
+8036A184:   wait_frames 120
+8036A18C:   callc [btlevtcmd_CheckAttribute battle_event_cmd.o] LW(10) 1048576 LW(0)
+8036A1A0:   if_int_eq LW(0) 0
+8036A1AC:     callc [btlevtcmd_GetMaxHp battle_event_cmd.o] LW(10) LW(5)
+8036A1BC:     callc [btlevtcmd_GetHp battle_event_cmd.o] LW(10) LW(6)
+8036A1CC:     callc [btlevtcmd_GetMaxFp battle_event_cmd.o] LW(10) LW(7)
+8036A1DC:     callc [btlevtcmd_GetFp battle_event_cmd.o] LW(10) LW(8)
+8036A1EC:     if_int_gt LW(8) LW(5)
+8036A1F8:       setii LW(8) LW(5)
+8036A204:     endif
+8036A208:     callc [btlevtcmd_SetHp battle_event_cmd.o] LW(10) LW(8)
+8036A218:     if_int_gt LW(6) LW(7)
+8036A224:       setii LW(6) LW(7)
+8036A230:     endif
+8036A234:     callc [btlevtcmd_SetFp battle_event_cmd.o] LW(10) LW(6)
+8036A244:     callc [_hpfp_change_declare_2 battle_item_data.o] LW(10)
+8036A250:     if_int_eq LW(8) 0
+8036A25C:       callc [btlevtcmd_PreCheckDamage battle_event_cmd.o] -2 LW(10) LW(11) LW(12) 256 LW(5)
+8036A27C:       switchi LW(5)
+8036A284:         case_int_eq 3
+8036A28C:           callc [btlevtcmd_StartAvoid battle_event_cmd.o] LW(10) 38
+8036A29C:         case_int_eq 6
+8036A2A4:           callc [btlevtcmd_StartAvoid battle_event_cmd.o] LW(10) 39
+8036A2B4:         case_int_eq 2
+8036A2BC:           callc [btlevtcmd_StartAvoid battle_event_cmd.o] LW(10) 40
+8036A2CC:         case_int_eq 1
+8036A2D4:           callc [btlevtcmd_CheckDamage battle_event_cmd.o] -2 LW(10) LW(11) LW(12) 256 LW(5)
+8036A2F4:       end_switch
+8036A2F8:     endif
+8036A2FC:   endif
+8036A300:   callc [evt_audience_ap_recovery evt_audience.o]
+8036A308:   wait_frames 30
+8036A310:   callss [_return_home_event battle_item_data.o]
+8036A318:   callc [btlevtcmd_StartWaitEvent battle_event_cmd.o] -2
+8036A324:   return
+8036A328:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [ItemEvent_GetTarget battle_item_data.o] AT 80365078 ---
+80365078:   callc [btlevtcmd_CheckCommandUnit battle_event_cmd.o] -2 LW(0)
+80365088:   if_int_ne LW(0) 0
+80365094:     callc [btlevtcmd_CheckWeaponPluralTarget battle_event_cmd.o] LW(12) LW(0)
+803650A4:     if_int_ne LW(0) 0
+803650B0:       callc [btlevtcmd_GetEnemyBelong battle_event_cmd.o] -2 LW(0)
+803650C0:       callc [btlevtcmd_SamplingEnemy battle_event_cmd.o] -2 LW(0) LW(12)
+803650D4:     endif
+803650D8:     callc [btlevtcmd_GetSelectEnemy battle_event_cmd.o] LW(10) LW(11)
+803650E8:   else
+803650EC:     callc [btlevtcmd_CheckWeaponPluralTarget battle_event_cmd.o] LW(12) LW(0)
+803650FC:     if_int_ne LW(0) 0
+80365108:       callc [btlevtcmd_GetEnemyBelong battle_event_cmd.o] -2 LW(0)
+80365118:       callc [btlevtcmd_SamplingEnemy battle_event_cmd.o] -2 LW(0) LW(12)
+8036512C:       callc [btlevtcmd_GetSelectEnemy battle_event_cmd.o] LW(10) LW(11)
+8036513C:     else
+80365140:       callc [btlevtcmd_GetEnemyBelong battle_event_cmd.o] -2 LW(0)
+80365150:       callc [btlevtcmd_SamplingEnemy battle_event_cmd.o] -2 LW(0) LW(12)
+80365164:       callc [btlevtcmd_ChoiceSamplingEnemy battle_event_cmd.o] LW(12) LW(10) LW(11)
+80365178:     endif
+8036517C:   endif
+80365180:   return
+80365184:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [ItemEvent_Support_Sub_UseDeclere battle_item_data.o] AT 80364F20 ---
+80364F20:   callc [evt_btl_camera_set_mode battle_camera.o] 0 7
+80364F30:   callc [evt_btl_camera_set_homing_unit battle_camera.o] 0 -2 -1
+80364F44:   callc [evt_btl_camera_set_moveSpeedLv battle_camera.o] 0 1
+80364F54:   callc [evt_btl_camera_set_zoom battle_camera.o] 0 200
+80364F64:   wait_ms 600
+80364F6C:   callc [btlevtcmd_GetBodyId battle_event_cmd.o] -2 LW(9)
+80364F7C:   callc [btlevtcmd_GetFriendBelong battle_event_cmd.o] -2 LW(0)
+80364F8C:   if_int_eq LW(0) 0
+80364F98:     callc [btlevtcmd_GetPos battle_event_cmd.o] -2 LW(0) LW(1) LW(2)
+80364FB0:     callc [btlevtcmd_GetBodyId battle_event_cmd.o] -2 LW(9)
+80364FC0:     callc [btlevtcmd_AnimeChangePoseType battle_event_cmd.o] -2 LW(9) 40
+80364FD4:     callc [btlevtcmd_SetMoveSpeed battle_event_cmd.o] -2 3.00
+80364FE4:     callc [btlevtcmd_MovePosition battle_event_cmd.o] -2 -60 LW(1) LW(2) 0 -1 0
+80365008:   endif
+8036500C:   callc [btlevtcmd_AnimeChangePoseType battle_event_cmd.o] -2 LW(9) 52
+80365020:   callc [btlevtcmd_CommandFlyItem battle_event_cmd.o] -2 40
+80365030:   callc [btlevtcmd_AnimeChangePoseType battle_event_cmd.o] -2 LW(9) 69
+80365044:   callc [btlevtcmd_ConsumeItem battle_event_cmd.o] -2
+80365050:   callc [evt_btl_camera_set_mode battle_camera.o] 0 0
+80365060:   callc [evt_btl_camera_set_moveSpeedLv battle_camera.o] 0 1
+80365070:   return
+80365074:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [_return_home_event battle_item_data.o] AT 80364998 ---
+80364998:   callc [btlevtcmd_GetHomePos battle_event_cmd.o] -2 LW(0) LW(1) LW(2)
+803649B0: 95:
+803649B8:   callc [btlevtcmd_GetPos battle_event_cmd.o] -2 LW(3) LW(4) LW(5)
+803649D0:   if_int_ne LW(0) LW(3)
+803649DC:     begin_child_thread
+803649E0:       callc [btlevtcmd_GetBodyId battle_event_cmd.o] -2 LW(0)
+803649F0:       callc [btlevtcmd_AnimeChangePoseType battle_event_cmd.o] -2 LW(0) 42
+80364A04:     end_child_thread
+80364A08:     callc [btlevtcmd_SetMoveSpeed battle_event_cmd.o] -2 5.00
+80364A18:     callc [btlevtcmd_MovePosition battle_event_cmd.o] -2 LW(0) LW(1) LW(2) 0 -1 0
+80364A3C:   endif
+80364A40:   return
+80364A44:   end

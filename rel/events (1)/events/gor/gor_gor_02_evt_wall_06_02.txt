@@ -1,0 +1,28 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [evt_wall_06_02 gor_02.o] AT 80601898 ---
+80601898:   begin_thread
+8060189C:     if_int_eq LW(1) 0
+806018A8:       wait_ms 200
+806018B0:     else
+806018B4:     endif
+806018B8:     callc [evt_mapobj_get_position evt_map.o] ["S_i06oB"] LW(0) LW(1) LW(2)
+806018D0:     callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_HOUSE_DOWN1"] LW(0) LW(1) LW(2) 0
+806018EC:   end_thread
+806018F0:   if_int_eq LW(1) 0
+806018FC:     wait_ms 200
+80601904:     callc [evt_sub_intpl_msec_init evt_sub.o] 2 0 -180 500
+8060191C:   else
+80601920:     callc [evt_sub_intpl_msec_init evt_sub.o] 2 -180 0 500
+80601938:   endif
+8060193C:   loop 0
+80601944:     callc [evt_sub_intpl_msec_get_value evt_sub.o]
+8060194C:     callc [evt_mapobj_rotate evt_map.o] 1 ["S_i06oB"] 0 0 LW(0)
+80601968:     if_int_eq LW(1) 0
+80601974:       loop_break
+80601978:     endif
+8060197C:     wait_frames 1
+80601984:   end_loop
+80601988:   return
+8060198C:   end

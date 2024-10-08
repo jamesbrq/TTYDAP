@@ -1,0 +1,112 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [kpa_fall kpa_06.o] AT 805C1D58 ---
+805C1D58:   setii LF(0) 0
+805C1D64:   loop 0
+805C1D6C:     callc [evt_koopa_chk_dead evt_mario.o] LW(0)
+805C1D78:     if_int_ne LW(0) 0
+805C1D84:       setii LF(0) 1
+805C1D90:       loop_break
+805C1D94:     endif
+805C1D98:     callc [evt_mario_get_pos evt_mario.o] 0 LW(0) LW(1) LW(2)
+805C1DB0:     if_int_lt LW(1) -20
+805C1DBC:       loop_break
+805C1DC0:     endif
+805C1DC4:     wait_frames 1
+805C1DCC:   end_loop
+805C1DD0:   if_int_eq LF(0) 0
+805C1DDC:     callss [kpa_fall_sub kpa.o]
+805C1DE4:   else
+805C1DE8:     callss [kpa_dead kpa.o]
+805C1DF0:   endif
+805C1DF4:   return
+805C1DF8:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [kpa_fall_sub kpa.o] AT 805BD934 ---
+805BD934:   callc [evt_cam_letter_box_disable evt_cam.o] 1
+805BD940:   callc [evt_cam_letter_box_onoff evt_cam.o] 0 0
+805BD950:   callc [evt_mario_key_onoff evt_mario.o] 0
+805BD95C:   callc [evt_cam_ctrl_onoff evt_cam.o] 4 0
+805BD96C:   callc [evt_mario_get_pos evt_mario.o] 0 LW(13) LW(14) LW(15)
+805BD984:   loop 0
+805BD98C:     callc [evt_mario_get_name_hitobj_ride evt_mario.o] LW(0)
+805BD998:     if_string_ne LW(0) [zero_kpa_0000151c kpa.o]
+805BD9A4:       loop_break
+805BD9A8:     endif
+805BD9AC:     wait_frames 1
+805BD9B4:   end_loop
+805BD9B8:   callss [kpa_dead kpa.o]
+805BD9C0:   return
+805BD9C4:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [kpa_dead kpa.o] AT 805BD694 ---
+805BD694:   if_int_eq LSWF(3) 1
+805BD6A0:     return
+805BD6A4:   endif
+805BD6A8:   setii LSWF(3) 1
+805BD6B4:   callc [evt_cam_letter_box_disable evt_cam.o] 1
+805BD6C0:   callc [evt_cam_letter_box_onoff evt_cam.o] 0 0
+805BD6D0:   callc [unk_kpa_00000a54 kpa.o]
+805BD6D8:   callc [evt_mario_key_onoff evt_mario.o] 0
+805BD6E4:   callc [evt_mario_cont_onoff evt_mario.o] 0
+805BD6F0:   callc [evt_mario_adjust_dir evt_mario.o]
+805BD6F8:   callc [kpa_nohitenemy_ct_clear kpa.o]
+805BD700:   callc [evt_cam_ctrl_onoff evt_cam.o] 4 0
+805BD710:   callc [evt_mario_set_motion evt_mario.o] 0
+805BD71C:   callc [kpa_chg_pose kpa_act.o] ["KPA2_D_4"]
+805BD728:   setii LSWF(4) 1
+805BD734:   wait_ms 500
+805BD73C:   callc [evt_mario_get_pos evt_mario.o] 0 LW(4) LW(5) LW(6)
+805BD754:   setff LW(3) LW(5)
+805BD760:   setff LW(0) LW(3)
+805BD76C:   setff LW(1) 8.00
+805BD778:   setff LW(2) -0.14
+805BD784:   callc [evt_koopa_chk_dead evt_mario.o] LW(7)
+805BD790:   if_int_eq LW(7) 1
+805BD79C:     mulf LW(1) 0.70
+805BD7A8:   endif
+805BD7AC:   subf LW(3) 200.00
+805BD7B8:   callc [evt_sub_get_mapname evt_sub.o] LW(15)
+805BD7C4:   if_string_eq LW(15) ["kpa_03"]
+805BD7D0:     setii LW(5) 150
+805BD7DC:   else
+805BD7E0:     setii LW(5) 155
+805BD7EC:   endif
+805BD7F0:   loop 0
+805BD7F8:     if_int_ge LW(1) 0
+805BD804:       setff LF(0) 0
+805BD810:     else
+805BD814:       setff LF(0) 1
+805BD820:     endif
+805BD824:     addf LW(0) LW(1)
+805BD830:     addf LW(1) LW(2)
+805BD83C:     if_int_lt LW(1) 0
+805BD848:       if_int_eq LF(0) 0
+805BD854:       endif
+805BD858:     endif
+805BD85C:     if_int_lt LW(0) LW(3)
+805BD868:       loop_break
+805BD86C:     endif
+805BD870:     callc [evt_mario_set_pos evt_mario.o] LW(4) LW(0) LW(5)
+805BD884:     wait_frames 1
+805BD88C:   end_loop
+805BD890:   if_int_lt GSW(1221) 99
+805BD89C:     addi GSW(1221) 1
+805BD8A8:   endif
+805BD8AC:   callc [kpa_status_get_stage kpa.o] LW(0)
+805BD8B8:   switchi LW(0)
+805BD8C0:     case_int_eq 1
+805BD8C8:       setii LW(1) ["kpa_02"]
+805BD8D4:     case_int_eq 2
+805BD8DC:       setii LW(1) ["kpa_03"]
+805BD8E8:     case_int_eq 3
+805BD8F0:       setii LW(1) ["kpa_05"]
+805BD8FC:   end_switch
+805BD900:   begin_thread
+805BD904:     wait_ms 500
+805BD90C:     callc [evt_cam_letter_box_disable evt_cam.o] 0
+805BD918:   end_thread
+805BD91C:   callc [evt_bero_mapchange evt_bero.o] LW(1) ["kpa_replay"]
+805BD92C:   return
+805BD930:   end

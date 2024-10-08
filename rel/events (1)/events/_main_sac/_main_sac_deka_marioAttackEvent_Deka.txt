@@ -1,0 +1,227 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [marioAttackEvent_Deka sac_deka.o] AT 803B7530 ---
+803B7530:   callc [btlevtcmd_GetUnitId battle_event_cmd.o] -4 LW(14)
+803B7540:   callc [btlevtcmd_GetBodyId battle_event_cmd.o] LW(14) LW(15)
+803B7550:   callc [btlevtcmd_CheckActStatus battle_event_cmd.o] LW(14) LW(0)
+803B7560:   if_int_eq LW(0) 0
+803B756C:     setii LW(14) -1
+803B7578:   endif
+803B757C:   callc [btlevtcmd_GetSelectEnemy battle_event_cmd.o] LW(3) LW(4)
+803B758C:   if_int_eq LW(3) -1
+803B7598:     goto 99
+803B75A0:   endif
+803B75A4:   callc [btlevtcmd_AttackDeclare battle_event_cmd.o] -2 LW(3) LW(4)
+803B75B8:   callc [btlevtcmd_WaitGuardMove battle_event_cmd.o]
+803B75C0:   callc [btlevtcmd_CommandPayWeaponCost battle_event_cmd.o] -2
+803B75CC:   callc [btlevtcmd_CommandGetWeaponAddress battle_event_cmd.o] -2 LW(0)
+803B75DC:   callc [btlevtcmd_WeaponAftereffect battle_event_cmd.o] LW(0)
+803B75E8:   callc [btlevtcmd_reset_move_color_lv_all battle_event_cmd.o]
+803B75F0:   begin_child_thread
+803B75F4:     callc [main_deka sac_deka.o] LW(14)
+803B7600:   end_child_thread
+803B7604:   callss [sac_start_camera_evt sac_common.o]
+803B760C:   wait_ms 500
+803B7614:   callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_BTL_SAC_START1"] [F1194D80] 0 [F1194D80]
+803B7630:   callss [sac_mario_item_on_evt sac_common.o]
+803B7638:   wait_ms 500
+803B7640:   callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_BTL_SAC_START2"] [F1194D80] 0 LW(11)
+803B765C:   callc [star_stone_appear sac_deka.o]
+803B7664:   begin_child_thread
+803B7668:     callss [sac_start_stardust sac_common.o]
+803B7670:   end_child_thread
+803B7674:   wait_frames 100
+803B767C:   callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_BTL_SAC_START3"] [F1194D80] 0 [F1194D80]
+803B7698:   callc [evt_snd_sfxoff evt_snd.o] LW(11)
+803B76A4:   callc [evt_btl_camera_set_mode battle_camera.o] 0 0
+803B76B4:   wait_frames 40
+803B76BC:   callss [sac_mario_item_on_end_evt sac_common.o]
+803B76C4:   callc [btlevtcmd_SacBgsetMove battle_event_cmd.o] 0
+803B76D0:   callss [sac_mario_back_home sac_common.o]
+803B76D8:   callc [wait_star_stone_take_on sac_deka.o]
+803B76E0:   begin_child_thread
+803B76E4:     callc [btlevtcmd_AnimeChangePoseType battle_event_cmd.o] -2 1 44
+803B76F8:     callc [get_ride_pos sac_deka.o] 0 LW(0) LW(1) LW(2)
+803B7710:     callc [btlevtcmd_JumpSetting battle_event_cmd.o] -2 30 0 0.40
+803B7728:     callc [btlevtcmd_JumpPosition battle_event_cmd.o] -2 LW(0) LW(1) LW(2) 30 -1
+803B7748:     callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 1 ["M_I_Y"]
+803B775C:   end_child_thread
+803B7760:   begin_child_thread
+803B7764:     if_int_ne LW(14) -1
+803B7770:       callc [btlevtcmd_GetUnitKind battle_event_cmd.o] -4 LW(0)
+803B7780:       if_int_eq LW(0) 228
+803B778C:         loop 0
+803B7794:           callc [btlevtcmd_SetUnitWork battle_event_cmd.o] LW(14) 3 1
+803B77A8:           callc [btlevtcmd_GetPos battle_event_cmd.o] LW(14) LW(0) LW(1) LW(2)
+803B77C0:           callc [btlevtcmd_SetUnitWork battle_event_cmd.o] LW(14) 0 LW(0)
+803B77D4:           callc [btlevtcmd_SetUnitWork battle_event_cmd.o] LW(14) 1 LW(1)
+803B77E8:           callc [btlevtcmd_SetUnitWork battle_event_cmd.o] LW(14) 2 LW(2)
+803B77FC:           wait_frames 1
+803B7804:         end_loop
+803B7808:       endif
+803B780C:     endif
+803B7810:   end_child_thread
+803B7814:   begin_child_thread
+803B7818:     if_int_ne LW(14) -1
+803B7824:       callc [btlevtcmd_AnimeChangePoseType battle_event_cmd.o] LW(14) LW(15) 44
+803B7838:       callc [get_ride_pos sac_deka.o] 1 LW(0) LW(1) LW(2)
+803B7850:       callc [btlevtcmd_JumpSetting battle_event_cmd.o] LW(14) 30 0 0.40
+803B7868:       callc [btlevtcmd_JumpPosition battle_event_cmd.o] LW(14) LW(0) LW(1) LW(2) 30 -1
+803B7888:       callc [btlevtcmd_AnimeChangePoseType battle_event_cmd.o] LW(14) LW(15) 43
+803B789C:     endif
+803B78A0:   end_child_thread
+803B78A4:   wait_frames 30
+803B78AC:   begin_child_thread_tid LW(13)
+803B78B4:     loop 0
+803B78BC:       wait_frames 1
+803B78C4:       callc [get_ride_pos sac_deka.o] 0 LW(0) LW(1) LW(2)
+803B78DC:       addi LW(2) 5.00
+803B78E8:       callc [btlevtcmd_SetPos battle_event_cmd.o] -2 LW(0) LW(1) LW(2)
+803B7900:       if_int_ne LW(14) -1
+803B790C:         callc [get_ride_pos sac_deka.o] 1 LW(0) LW(1) LW(2)
+803B7924:         callc [btlevtcmd_SetPos battle_event_cmd.o] LW(14) LW(0) LW(1) LW(2)
+803B793C:       endif
+803B7940:     end_loop
+803B7944:   end_child_thread
+803B7948:   begin_child_thread
+803B794C:     callc [sac_cheer sac_common.o] 0
+803B7958:   end_child_thread
+803B795C:   callc [sac_ac_help_on sac_common.o]
+803B7964:   callc [start_game sac_deka.o]
+803B796C:   callc [wait_game_end sac_deka.o]
+803B7974:   callc [sac_ac_help_off sac_common.o]
+803B797C:   callc [sac_cheer_end sac_common.o]
+803B7984:   wait_ms 1000
+803B798C:   callc [star_stone_attack sac_deka.o]
+803B7994: 90:
+803B799C:   stop_tid LW(13)
+803B79A4:   begin_thread
+803B79A8:     wait_ms 1000
+803B79B0:     callss [dmg_evt sac_deka.o]
+803B79B8:   end_thread
+803B79BC:   wait_ms 500
+803B79C4:   begin_child_thread
+803B79C8:     callc [btlevtcmd_AnimeChangePoseType battle_event_cmd.o] -2 1 44
+803B79DC:     callc [btlevtcmd_GetHomePos battle_event_cmd.o] -2 LW(0) LW(1) LW(2)
+803B79F4:     callc [btlevtcmd_JumpSetting battle_event_cmd.o] -2 30 0 0.40
+803B7A0C:     callc [btlevtcmd_JumpPosition battle_event_cmd.o] -2 LW(0) LW(1) LW(2) 30 -1
+803B7A2C:     callc [btlevtcmd_AnimeChangePoseType battle_event_cmd.o] -2 1 43
+803B7A40:   end_child_thread
+803B7A44:   begin_child_thread
+803B7A48:     if_int_ne LW(14) -1
+803B7A54:       callc [btlevtcmd_AnimeChangePoseType battle_event_cmd.o] LW(14) LW(15) 44
+803B7A68:       callc [btlevtcmd_GetHomePos battle_event_cmd.o] LW(14) LW(0) LW(1) LW(2)
+803B7A80:       callc [btlevtcmd_JumpSetting battle_event_cmd.o] LW(14) 30 0 0.40
+803B7A98:       callc [btlevtcmd_JumpPosition battle_event_cmd.o] LW(14) LW(0) LW(1) LW(2) 30 -1
+803B7AB8:       callc [btlevtcmd_StartWaitEvent battle_event_cmd.o] LW(14)
+803B7AC4:     endif
+803B7AC8:   end_child_thread
+803B7ACC:   wait_frames 30
+803B7AD4:   callc [evt_btl_camera_set_mode battle_camera.o] 0 0
+803B7AE4:   callc [btlevtcmd_SacBgsetMove battle_event_cmd.o] 1
+803B7AF0:   if_int_ne LW(14) -1
+803B7AFC:     callc [btlevtcmd_GetUnitKind battle_event_cmd.o] -4 LW(0)
+803B7B0C:     if_int_eq LW(0) 228
+803B7B18:       callc [btlevtcmd_SetUnitWork battle_event_cmd.o] LW(14) 3 0
+803B7B2C:     endif
+803B7B30:   endif
+803B7B34:   callc [yuka_end sac_deka.o]
+803B7B3C:   callc [end_deka sac_deka.o]
+803B7B44: 99:
+803B7B4C:   callc [btlevtcmd_StartWaitEvent battle_event_cmd.o] -2
+803B7B58:   return
+803B7B5C:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [sac_start_camera_evt sac_common.o] AT 803B7160 ---
+803B7160:   callc [evt_btl_camera_set_mode battle_camera.o] 0 7
+803B7170:   callc [evt_btl_camera_set_homing_unit battle_camera.o] 0 -2 -1
+803B7184:   callc [btlevtcmd_CheckStatus battle_event_cmd.o] -2 10 LW(0)
+803B7198:   if_int_eq LW(0) 1
+803B71A4:     callc [evt_btl_camera_set_zoom battle_camera.o] 0 100
+803B71B4:   else
+803B71B8:     callc [evt_btl_camera_set_zoom battle_camera.o] 0 300
+803B71C8:   endif
+803B71CC:   callc [evt_btl_camera_set_moveSpeedLv battle_camera.o] 0 2
+803B71DC:   callc [evt_btl_camera_set_zoomSpeedLv battle_camera.o] 0 2
+803B71EC:   return
+803B71F0:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [sac_mario_item_on_evt sac_common.o] AT 803B71F4 ---
+803B71F4:   callc [btlevtcmd_AnimeChangePoseType battle_event_cmd.o] -2 1 40
+803B7208:   callc [btlevtcmd_GetPos battle_event_cmd.o] -2 LW(0) LW(1) LW(2)
+803B7220:   callc [btlevtcmd_FaceDirectionAdd battle_event_cmd.o] -2 LW(0) 15
+803B7234:   callc [btlevtcmd_MovePosition battle_event_cmd.o] -2 LW(0) LW(1) LW(2) 5 -1 0
+803B7258:   callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_VOICE_MARIO_HAPPY1"] [F1194D80] 0 [F1194D80]
+803B7274:   callc [evt_audience_sound_cheer evt_audience.o] 180 60
+803B7284:   callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 1 ["M_P_2"]
+803B7298:   callc [btlevtcmd_GetPartsPos battle_event_cmd.o] -2 1 LW(0) LW(1) LW(2)
+803B72B4:   callc [btlevtcmd_GetHeight battle_event_cmd.o] -2 LW(5)
+803B72C4:   callc [btlevtcmd_GetStatusMg battle_event_cmd.o] -2 LW(6)
+803B72D4:   mulf LW(5) LW(6)
+803B72E0:   addi LW(1) LW(5)
+803B72EC:   addi LW(1) 35
+803B72F8:   addi LW(2) -5
+803B7304:   callc [evt_eff evt_eff.o] ["sac_treasure"] ["treasure_map"] 0 LW(0) LW(1) LW(2) 0 0 0 0 0 0 0 0
+803B7344:   addi LW(1) 2
+803B7350:   addi LW(2) -7
+803B735C:   callc [evt_eff evt_eff.o] ["sac_itemget"] ["itemget"] 9 LW(0) LW(1) LW(2) 0 0 0 0 0 0 0 0
+803B739C:   return
+803B73A0:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [sac_start_stardust sac_common.o] AT 803B73A4 ---
+803B73A4:   loop 6
+803B73AC:     callc [btlevtcmd_GetPos battle_event_cmd.o] -2 LW(0) LW(1) LW(2)
+803B73C4:     addi LW(1) 50
+803B73D0:     callc [evt_eff evt_eff.o] [zero_804283d0 sac_common.o] ["stardust"] 5 LW(0) LW(1) LW(2) 30 30 10 30 0 0 0 0
+803B7410:     wait_frames 10
+803B7418:   end_loop
+803B741C:   return
+803B7420:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [sac_mario_back_home sac_common.o] AT 803B7424 ---
+803B7424:   callc [btlevtcmd_AnimeChangePoseType battle_event_cmd.o] -2 1 40
+803B7438:   callc [btlevtcmd_GetHomePos battle_event_cmd.o] -2 LW(0) LW(1) LW(2)
+803B7450:   callc [btlevtcmd_MovePosition battle_event_cmd.o] -2 LW(0) LW(1) LW(2) 5 -1 0
+803B7474:   return
+803B7478:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [dmg_evt sac_deka.o] AT 803B7B60 ---
+803B7B60:   callc [get_result sac_deka.o] LW(10)
+803B7B6C:   callc [btlevtcmd_GetSelectEnemy battle_event_cmd.o] LW(3) LW(4)
+803B7B7C: 10:
+803B7B84:   if_int_eq LW(3) -1
+803B7B90:     return
+803B7B94:   endif
+803B7B98:   if_int_le LW(10) 1
+803B7BA4:     callc [btlevtcmd_CheckAttribute battle_event_cmd.o] LW(3) 2 LW(0)
+803B7BB8:     if_int_ne LW(0) 0
+803B7BC4:       goto 30
+803B7BCC:     endif
+803B7BD0:     callc [btlevtcmd_CheckAttribute battle_event_cmd.o] LW(3) 4 LW(0)
+803B7BE4:     if_int_ne LW(0) 0
+803B7BF0:       callc [btlevtcmd_CheckPartsAttribute battle_event_cmd.o] LW(3) LW(4) 2097152 LW(0)
+803B7C08:       if_int_ne LW(0) 0
+803B7C14:         goto 30
+803B7C1C:       endif
+803B7C20:     endif
+803B7C24:     goto 20
+803B7C2C:   endif
+803B7C30:   if_int_le LW(10) 3
+803B7C3C:     callc [btlevtcmd_CheckAttribute battle_event_cmd.o] LW(3) 2 LW(0)
+803B7C50:     if_int_ne LW(0) 0
+803B7C5C:       goto 30
+803B7C64:     endif
+803B7C68:     goto 20
+803B7C70:   endif
+803B7C74:   goto 20
+803B7C7C: 20:
+803B7C84:   callc [btlevtcmd_CheckPartsAttribute battle_event_cmd.o] LW(3) LW(4) 16384 LW(0)
+803B7C9C:   if_int_eq LW(0) 0
+803B7CA8:     callc [btlevtcmd_CommandCheckDamage battle_event_cmd.o] -3 LW(3) LW(4) 256 LW(5)
+803B7CC4:   endif
+803B7CC8: 30:
+803B7CD0:   callc [btlevtcmd_GetSelectNextEnemy battle_event_cmd.o] LW(3) LW(4)
+803B7CE0:   goto 10
+803B7CE8:   return
+803B7CEC:   end

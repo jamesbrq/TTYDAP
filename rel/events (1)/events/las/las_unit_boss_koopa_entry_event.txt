@@ -1,0 +1,41 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [entry_event unit_boss_koopa.o] AT 805FABFC ---
+805FABFC:   callc [btlevtcmd_StatusWindowOnOff battle_event_cmd.o] 0
+805FAC08:   wait_frames 60
+805FAC10:   callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 1 ["KPA_S_1"]
+805FAC24:   wait_frames 60
+805FAC2C:   callss [koopa_zoom unit_boss_koopa.o]
+805FAC34:   callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_VOICE_KOOPA_LAUGH2_1"] [F1194D80] 0 [F1194D80]
+805FAC50:   callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 1 ["KPA_Y_2"]
+805FAC64:   wait_ms 1000
+805FAC6C:   callc [evt_msg_print evt_msg.o] 2 ["stg8_las_96"] 0 -2
+805FAC84:   wait_ms 300
+805FAC8C:   callss [kamec_obaba_zoom unit_boss_koopa.o]
+805FAC94:   callc [evt_msg_print evt_msg.o] 2 ["stg8_las_97"] 0 GW(9)
+805FACAC:   wait_ms 300
+805FACB4:   callc [btlevtcmd_StatusWindowOnOff battle_event_cmd.o] 1
+805FACC0:   callc [evt_btl_camera_set_mode battle_camera.o] 0 0
+805FACD0:   return
+805FACD4:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [koopa_zoom unit_boss_koopa.o] AT 805FA908 ---
+805FA908:   callc [evt_btl_camera_set_mode battle_camera.o] 0 3
+805FA918:   callc [btlevtcmd_GetPos battle_event_cmd.o] -2 LW(0) LW(1) LW(2)
+805FA930:   callc [evt_btl_camera_set_moveto battle_camera.o] 0 LW(0) 95 350 LW(0) 45 -300 30 11
+805FA95C:   wait_frames 37
+805FA964:   return
+805FA968:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [kamec_obaba_zoom unit_boss_koopa.o] AT 805FA96C ---
+805FA96C:   callc [btlevtcmd_GetUnitWork battle_event_cmd.o] GW(9) 0 LW(1)
+805FA980:   callc [evt_btl_camera_set_mode battle_camera.o] 0 3
+805FA990:   if_int_eq LW(1) 1
+805FA99C:     callc [evt_btl_camera_set_moveto battle_camera.o] 0 135 106 296 135 55 -402 30 11
+805FA9C8:   else
+805FA9CC:     callc [evt_btl_camera_set_moveto battle_camera.o] 0 140 34 296 140 50 -402 30 11
+805FA9F8:   endif
+805FA9FC:   wait_frames 37
+805FAA04:   return
+805FAA08:   end

@@ -1,0 +1,188 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [evt_kinopio_from_bed pik_04.o] AT 805CB784 ---
+805CB784:   callc [evt_party_run evt_party.o] 0
+805CB790:   callc [evt_mario_mov_pos2 evt_mario.o] 220 -15 70.00
+805CB7A4:   callc [evt_mario_mov_pos2 evt_mario.o] 285 -80 70.00
+805CB7B8:   callc [evt_mario_mov_pos2 evt_mario.o] 360 -10 70.00
+805CB7CC:   callss [evt_down pik_04.o]
+805CB7D4:   callc [evt_mario_mov_pos2 evt_mario.o] 300 -20 70.00
+805CB7E8:   return
+805CB7EC:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [evt_down pik_04.o] AT 805CA8AC ---
+805CA8AC:   callc [evt_mario_key_onoff evt_mario.o] 0
+805CA8B8:   callc [evt_mario_get_pos evt_mario.o] 0 LW(0) LW(1) LW(2)
+805CA8D0:   callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_STG6_PIK_ELEVATOR_DOOR1"] LW(0) LW(1) LW(2) LW(9)
+805CA8EC:   callc [evt_sub_intpl_msec_init evt_sub.o] 11 0 4000 1000
+805CA904:   loop 0
+805CA90C:     callc [evt_sub_intpl_msec_get_value evt_sub.o]
+805CA914:     divf LW(0) 100.00
+805CA920:     callc [evt_mapobj_trans evt_map.o] 1 ["door_3_b"] 0 0 LW(0)
+805CA93C:     mulf LW(0) -1.00
+805CA948:     callc [evt_mapobj_trans evt_map.o] 1 ["door_3_a"] 0 0 LW(0)
+805CA964:     wait_frames 1
+805CA96C:     if_int_eq LW(1) 0
+805CA978:       loop_break
+805CA97C:     endif
+805CA980:   end_loop
+805CA984:   callc [evt_snd_sfxoff evt_snd.o] LW(9)
+805CA990:   callc [evt_hitobj_onoff evt_hit.o] ["a_door_3"] 1 0
+805CA9A4:   callc [evt_cam3d_evt_set evt_cam.o] -78.00 1463.00 -450.00 307.00 1386.50 -65.00 800 11
+805CA9CC:   begin_thread
+805CA9D0:     callc [evt_mario_mov_pos2 evt_mario.o] 435 45 80.00
+805CA9E4:     callc [evt_mario_set_dir evt_mario.o] 90 200 0
+805CA9F8:   end_thread
+805CA9FC:   callc [evt_party_stop evt_party.o] 0
+805CAA08:   callc [evt_party_move_pos2 evt_party.o] 0 410 67 80.00
+805CAA20:   callc [evt_party_set_dir evt_party.o] 0 270 200
+805CAA34:   callc [evt_mario_get_pos evt_mario.o] 0 LW(0) LW(1) LW(2)
+805CAA4C:   callc [evt_party_set_pos evt_party.o] 0 410 LW(1) 67
+805CAA64:   callc [evt_party_set_dir evt_party.o] 0 270 200
+805CAA78:   callc [evt_party_stop evt_party.o] 0
+805CAA84:   callsa [imgstart pik_04.o]
+805CAA8C:   callc [evt_mario_get_pos evt_mario.o] 0 LW(0) LW(1) LW(2)
+805CAAA4:   callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_STG6_PIK_ELEVATOR_DOOR1"] LW(0) LW(1) LW(2) LW(9)
+805CAAC0:   callc [evt_sub_intpl_msec_init evt_sub.o] 11 4000 0 1000
+805CAAD8:   loop 0
+805CAAE0:     callc [evt_sub_intpl_msec_get_value evt_sub.o]
+805CAAE8:     divf LW(0) 100.00
+805CAAF4:     callc [evt_mapobj_trans evt_map.o] 1 ["door_3_b"] 0 0 LW(0)
+805CAB10:     mulf LW(0) -1.00
+805CAB1C:     callc [evt_mapobj_trans evt_map.o] 1 ["door_3_a"] 0 0 LW(0)
+805CAB38:     wait_frames 1
+805CAB40:     if_int_eq LW(1) 0
+805CAB4C:       loop_break
+805CAB50:     endif
+805CAB54:   end_loop
+805CAB58:   callc [evt_snd_sfxoff evt_snd.o] LW(9)
+805CAB64:   callc [evt_hitobj_onoff evt_hit.o] ["a_door_3"] 1 1
+805CAB78:   callc [evt_cam3d_evt_set evt_cam.o] -78.00 133.00 -450.00 307.00 56.50 -65.00 10000 11
+805CABA0:   callc [evt_mario_cont_onoff evt_mario.o] 0
+805CABAC:   callc [evt_party_cont_onoff evt_party.o] 0 0
+805CABBC:   callc [evt_hit_bind_mapobj evt_hit.o] ["a_hako"] ["hako"]
+805CABCC:   callc [evt_snd_sfxon evt_snd.o] ["SFX_STG6_PIK_ELEVATOR_MOVE1"] LW(9)
+805CABDC:   callc [evt_sub_intpl_msec_init evt_sub.o] 11 13250 0 10000
+805CABF4:   loop 0
+805CABFC:     callc [evt_sub_intpl_msec_get_value evt_sub.o]
+805CAC04:     divf LW(0) 10.00
+805CAC10:     callc [evt_mapobj_trans evt_map.o] 1 ["hako"] 0 LW(0) 0
+805CAC2C:     callc [evt_hit_bind_update evt_hit.o] ["a_hako"]
+805CAC38:     addf LW(0) 4.00
+805CAC44:     callc [evt_mario_get_pos evt_mario.o] 0 LW(2) LW(3) LW(4)
+805CAC5C:     callc [evt_mario_set_pos evt_mario.o] LW(2) LW(0) LW(4)
+805CAC70:     callc [evt_party_get_pos evt_party.o] 0 LW(2) LW(3) LW(4)
+805CAC88:     callc [evt_party_set_pos evt_party.o] 0 LW(2) LW(0) LW(4)
+805CACA0:     wait_frames 1
+805CACA8:     if_int_eq LW(1) 0
+805CACB4:       loop_break
+805CACB8:     endif
+805CACBC:   end_loop
+805CACC0:   callc [evt_snd_sfxoff evt_snd.o] LW(9)
+805CACCC:   callc [evt_mario_cont_onoff evt_mario.o] 1
+805CACD8:   callc [evt_party_cont_onoff evt_party.o] 0 1
+805CACE8:   callsa [imgend pik_04.o]
+805CACF0:   callc [evt_mario_get_pos evt_mario.o] 0 LW(0) LW(1) LW(2)
+805CAD08:   callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_STG6_PIK_ELEVATOR_DOOR1"] LW(0) LW(1) LW(2) LW(9)
+805CAD24:   callc [evt_sub_intpl_msec_init evt_sub.o] 11 0 4000 1000
+805CAD3C:   loop 0
+805CAD44:     callc [evt_sub_intpl_msec_get_value evt_sub.o]
+805CAD4C:     divf LW(0) 100.00
+805CAD58:     callc [evt_mapobj_trans evt_map.o] 1 ["door_2_b"] 0 0 LW(0)
+805CAD74:     mulf LW(0) -1.00
+805CAD80:     callc [evt_mapobj_trans evt_map.o] 1 ["door_2_a"] 0 0 LW(0)
+805CAD9C:     wait_frames 1
+805CADA4:     if_int_eq LW(1) 0
+805CADB0:       loop_break
+805CADB4:     endif
+805CADB8:   end_loop
+805CADBC:   callc [evt_snd_sfxoff evt_snd.o] LW(9)
+805CADC8:   callc [evt_cam3d_evt_off evt_cam.o] 800 11
+805CADD8:   callc [evt_mario_mov_pos2 evt_mario.o] 383 -10 80.00
+805CADEC:   callc [evt_party_move_pos2 evt_party.o] 0 360 10 80.00
+805CAE04:   callc [evt_mario_get_pos evt_mario.o] 0 LW(0) LW(1) LW(2)
+805CAE1C:   callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_STG6_PIK_ELEVATOR_DOOR1"] LW(0) LW(1) LW(2) LW(9)
+805CAE38:   callc [evt_sub_intpl_msec_init evt_sub.o] 11 4000 0 1000
+805CAE50:   loop 0
+805CAE58:     callc [evt_sub_intpl_msec_get_value evt_sub.o]
+805CAE60:     divf LW(0) 100.00
+805CAE6C:     callc [evt_mapobj_trans evt_map.o] 1 ["door_2_b"] 0 0 LW(0)
+805CAE88:     mulf LW(0) -1.00
+805CAE94:     callc [evt_mapobj_trans evt_map.o] 1 ["door_2_a"] 0 0 LW(0)
+805CAEB0:     wait_frames 1
+805CAEB8:     if_int_eq LW(1) 0
+805CAEC4:       loop_break
+805CAEC8:     endif
+805CAECC:   end_loop
+805CAED0:   callc [evt_snd_sfxoff evt_snd.o] LW(9)
+805CAEDC:   callc [evt_party_run evt_party.o] 0
+805CAEE8:   callc [evt_mario_key_onoff evt_mario.o] 1
+805CAEF4:   return
+805CAEF8:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [imgstart pik_04.o] AT 805C9EB4 ---
+805C9EB4:   callc [evt_mapobj_set_offscreen evt_map.o] 1 ["hotel_naka"] ["offscreen"]
+805C9EC8:   callc [evt_mapobj_set_offscreen evt_map.o] 1 ["door_h"] ["offscreen"]
+805C9EDC:   callc [evt_mapobj_clear_offscreen evt_map.o] 1 ["ERE"]
+805C9EEC:   callc [evt_mapobj_flag_onoff evt_map.o] 1 1 ["hotel_naka"] 1
+805C9F04:   callc [evt_mapobj_flag_onoff evt_map.o] 1 1 ["door_h"] 1
+805C9F1C:   callc [evt_mapobj_flag_onoff evt_map.o] 1 0 ["ERE"] 1
+805C9F34:   callc [evt_npc_set_offscreen evt_npc.o] ["店員女"] ["offscreen"]
+805C9F44:   callc [evt_npc_set_offscreen evt_npc.o] ["キザ野郎"] ["offscreen"]
+805C9F54:   callc [evt_npc_flag_onoff evt_npc.o] 1 ["店員女"] 128
+805C9F68:   callc [evt_npc_flag_onoff evt_npc.o] 1 ["キザ野郎"] 128
+805C9F7C:   callc [evt_img_onoff evt_img.o] ["capture_img"] 1
+805C9F8C:   wait_frames 1
+805C9F94:   callc [evt_sub_intpl_msec_init evt_sub.o] 11 255 0 1000
+805C9FAC:   loop 0
+805C9FB4:     callc [evt_sub_intpl_msec_get_value evt_sub.o]
+805C9FBC:     callc [evt_img_set_color evt_img.o] ["capture_img"] 255 255 255 LW(0)
+805C9FD8:     callc [evt_item_set_alpha evt_item.o] ["breakfast"] LW(0)
+805C9FE8:     wait_frames 1
+805C9FF0:     if_int_eq LW(1) 0
+805C9FFC:       loop_break
+805CA000:     endif
+805CA004:   end_loop
+805CA008:   callc [evt_img_onoff evt_img.o] ["capture_img"] 0
+805CA018:   callc [evt_mapobj_clear_offscreen evt_map.o] 1 ["hotel_naka"]
+805CA028:   callc [evt_mapobj_clear_offscreen evt_map.o] 1 ["door_h"]
+805CA038:   callc [evt_npc_set_offscreen evt_npc.o] ["店員女"] 0
+805CA048:   callc [evt_npc_set_offscreen evt_npc.o] ["キザ野郎"] 0
+805CA058:   return
+805CA05C:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [imgend pik_04.o] AT 805CA060 ---
+805CA060:   callc [evt_mapobj_set_offscreen evt_map.o] 1 ["hotel_naka"] ["offscreen"]
+805CA074:   callc [evt_mapobj_set_offscreen evt_map.o] 1 ["door_h"] ["offscreen"]
+805CA088:   callc [evt_mapobj_clear_offscreen evt_map.o] 1 ["ERE"]
+805CA098:   callc [evt_mapobj_flag_onoff evt_map.o] 1 1 ["hotel_naka"] 1
+805CA0B0:   callc [evt_mapobj_flag_onoff evt_map.o] 1 1 ["door_h"] 1
+805CA0C8:   callc [evt_mapobj_flag_onoff evt_map.o] 1 0 ["ERE"] 1
+805CA0E0:   callc [evt_npc_set_offscreen evt_npc.o] ["店員女"] ["offscreen"]
+805CA0F0:   callc [evt_npc_set_offscreen evt_npc.o] ["キザ野郎"] ["offscreen"]
+805CA100:   callc [evt_npc_flag_onoff evt_npc.o] 1 ["店員女"] 128
+805CA114:   callc [evt_npc_flag_onoff evt_npc.o] 1 ["キザ野郎"] 128
+805CA128:   callc [evt_img_onoff evt_img.o] ["capture_img"] 1
+805CA138:   wait_frames 1
+805CA140:   callc [evt_sub_intpl_msec_init evt_sub.o] 11 0 255 1000
+805CA158:   loop 0
+805CA160:     callc [evt_sub_intpl_msec_get_value evt_sub.o]
+805CA168:     callc [evt_img_set_color evt_img.o] ["capture_img"] 255 255 255 LW(0)
+805CA184:     callc [evt_item_set_alpha evt_item.o] ["breakfast"] LW(0)
+805CA194:     wait_frames 1
+805CA19C:     if_int_eq LW(1) 0
+805CA1A8:       loop_break
+805CA1AC:     endif
+805CA1B0:   end_loop
+805CA1B4:   callc [evt_img_onoff evt_img.o] ["capture_img"] 0
+805CA1C4:   callc [evt_mapobj_clear_offscreen evt_map.o] 1 ["hotel_naka"]
+805CA1D4:   callc [evt_mapobj_clear_offscreen evt_map.o] 1 ["door_h"]
+805CA1E4:   callc [evt_mapobj_flag_onoff evt_map.o] 1 0 ["hotel_naka"] 1
+805CA1FC:   callc [evt_mapobj_flag_onoff evt_map.o] 1 0 ["door_h"] 1
+805CA214:   callc [evt_npc_set_offscreen evt_npc.o] ["店員女"] 0
+805CA224:   callc [evt_npc_set_offscreen evt_npc.o] ["キザ野郎"] 0
+805CA234:   callc [evt_npc_flag_onoff evt_npc.o] 0 ["店員女"] 128
+805CA248:   callc [evt_npc_flag_onoff evt_npc.o] 0 ["キザ野郎"] 128
+805CA25C:   return
+805CA260:   end

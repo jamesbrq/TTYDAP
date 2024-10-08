@@ -1,0 +1,78 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [marioAttackEvent_HammerNageru_object battle_mario.o] AT 80361BA4 ---
+80361BA4:   callc [btlevtcmd_GetPos battle_event_cmd.o] -2 LW(0) LW(1) LW(2)
+80361BBC:   addi LW(1) 25
+80361BC8:   callc [btlevtcmd_SetPartsPos battle_event_cmd.o] -2 3 LW(0) LW(1) LW(2)
+80361BE4:   callc [btlevtcmd_OffPartsAttribute battle_event_cmd.o] -2 3 16777216
+80361BF8:   setii LW(0) -25
+80361C04:   callc [btlevtcmd_SetPartsRotate battle_event_cmd.o] -2 3 0 0 0
+80361C20:   callsa_tid [marioAttackEvent_HammerRotate battle_mario.o] LW(13)
+80361C2C:   callc [btlevtcmd_JumpPartsSetting battle_event_cmd.o] -2 3 0 6.00 0.35
+80361C48:   callc [btlevtcmd_GetHitPos battle_event_cmd.o] LW(3) LW(4) LW(0) LW(1) LW(2)
+80361C64:   callc [btlevtcmd_JumpPartsPosition battle_event_cmd.o] -2 3 LW(0) LW(1) LW(2) 0 -1
+80361C88:   if_int_ne LW(6) 1
+80361C94:     if_int_eq LW(6) 3
+80361CA0:       callc [btlevtcmd_StartAvoid battle_event_cmd.o] LW(3) 38
+80361CB0:     endif
+80361CB4:     if_int_eq LW(6) 6
+80361CC0:       callc [btlevtcmd_StartAvoid battle_event_cmd.o] LW(3) 39
+80361CD0:     endif
+80361CD4:     if_int_eq LW(6) 2
+80361CE0:       callc [btlevtcmd_StartAvoid battle_event_cmd.o] LW(3) 40
+80361CF0:     endif
+80361CF4:     callc [btlevtcmd_JumpPartsContinue battle_event_cmd.o] -2 3
+80361D04:     callc [btlevtcmd_WeaponAftereffect battle_event_cmd.o] LW(12)
+80361D10:     callc [btlevtcmd_GetPartsPos battle_event_cmd.o] -2 3 LW(0) LW(1) LW(2)
+80361D2C:     callc [btlevtcmd_FaceDirectionAdd battle_event_cmd.o] LW(3) LW(0) -30
+80361D40:     callc [btlevtcmd_JumpPartsPosition battle_event_cmd.o] -2 3 LW(0) LW(1) LW(2) 20 -1
+80361D64:     callc [btlevtcmd_FaceDirectionAdd battle_event_cmd.o] LW(3) LW(0) -15
+80361D78:     callc [btlevtcmd_JumpPartsPosition battle_event_cmd.o] -2 3 LW(0) LW(1) LW(2) 12 -1
+80361D9C:     stop_tid LW(13)
+80361DA4:     wait_frames 30
+80361DAC:     callc [btlevtcmd_OnPartsAttribute battle_event_cmd.o] -2 3 16777216
+80361DC0:     goto 90
+80361DC8:   endif
+80361DCC:   begin_thread
+80361DD0:     callc [evt_btl_camera_set_mode battle_camera.o] 0 1
+80361DE0:     callc [evt_btl_camera_set_moveSpeedLv battle_camera.o] 0 4
+80361DF0:     callc [evt_btl_camera_set_zoom battle_camera.o] 0 0
+80361E00:     callc [evt_btl_camera_off_posoffset_manual battle_camera.o] 0
+80361E0C:   end_thread
+80361E10:   callc [btlevtcmd_WeaponAftereffect battle_event_cmd.o] LW(12)
+80361E1C:   callc [btlevtcmd_GetResultAC battle_event_cmd.o] LW(0)
+80361E28:   if_bits_set LW(0) 2
+80361E34:     callc [btlevtcmd_CommandCheckDamage battle_event_cmd.o] -2 LW(3) LW(4) 131328 LW(5)
+80361E50:     callc [btlevtcmd_GetResultPrizeLv battle_event_cmd.o] LW(3) 0 LW(6)
+80361E64:     callc [btlevtcmd_GetHitPos battle_event_cmd.o] LW(3) LW(4) LW(0) LW(1) LW(2)
+80361E80:     callc [btlevtcmd_ACSuccessEffect battle_event_cmd.o] LW(6) LW(0) LW(1) LW(2)
+80361E98:     callc [btlevtcmd_CommandGetWeaponAddress battle_event_cmd.o] -2 LW(0)
+80361EA8:     callc [btlevtcmd_AudienceDeclareACResult battle_event_cmd.o] LW(0) LW(6)
+80361EB8:   else
+80361EBC:     callc [btlevtcmd_CommandCheckDamage battle_event_cmd.o] -2 LW(3) LW(4) 256 LW(5)
+80361ED8:     callc [btlevtcmd_CommandGetWeaponAddress battle_event_cmd.o] -2 LW(0)
+80361EE8:     callc [btlevtcmd_AudienceDeclareACResult battle_event_cmd.o] LW(0) -1
+80361EF8:   endif
+80361EFC:   callc [btlevtcmd_GetDamage battle_event_cmd.o] LW(3) LW(0)
+80361F0C:   if_int_ge LW(0) 10
+80361F18:     setii LW(0) 9
+80361F24:   endif
+80361F28:   callc [evt_btl_camera_shake_h battle_camera.o] 0 LW(0) 0 10 13
+80361F44:   stop_tid LW(13)
+80361F4C:   callc [btlevtcmd_OnPartsAttribute battle_event_cmd.o] -2 3 16777216
+80361F60:   wait_frames 20
+80361F68: 90:
+80361F70:   callc [btlevtcmd_StopAC battle_event_cmd.o]
+80361F78:   return
+80361F7C:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [marioAttackEvent_HammerRotate battle_mario.o] AT 8036141C ---
+8036141C:   setii LW(0) -25
+80361428:   callc [btlevtcmd_SetPartsRotateOffset battle_event_cmd.o] -2 3 0 12 0
+80361444: 0:
+8036144C:   callc [btlevtcmd_AddPartsRotate battle_event_cmd.o] -2 3 0 0 LW(0)
+80361468:   wait_frames 1
+80361470:   goto 0
+80361478:   return
+8036147C:   end

@@ -1,0 +1,47 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [unk_evt_end_00004718 end_unknown.o] AT 805BF0B8 ---
+805BF0B8:   callc [evt_mario_cont_onoff evt_mario.o] 0
+805BF0C4:   callc [evt_party_cont_onoff evt_party.o] 0 0
+805BF0D4:   callc [evt_mario_set_pos evt_mario.o] 0 -1000 0
+805BF0E8:   callc [evt_party_set_pos evt_party.o] 0 0 -1000 0
+805BF100:   callc [evt_cam_letter_box_disable evt_cam.o] 1
+805BF10C:   callc [evt_cam3d_evt_set evt_cam.o] 0 0 545 0 0 0 0 11
+805BF134:   callc [evt_mapobj_flag_onoff evt_map.o] 1 1 ["pPlane1"] 1
+805BF14C:   callc [evt_bg_set_color evt_bg.o] 0 0 0 255
+805BF164:   setii GF(10) 0
+805BF170:   callc [unk_end_00000a78 end_unknown.o]
+805BF178:   callsa [unk_evt_end_000040b4 end_unknown.o]
+805BF180:   begin_thread
+805BF184:     callc [unk_end_00000bb4 end_unknown.o]
+805BF18C:   end_thread
+805BF190:   callc [evt_snd_bgmon evt_snd.o] 512 ["BGM_STAFF_ROLL1"]
+805BF1A0:   setii GSW(0) 404
+805BF1AC:   return
+805BF1B0:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [unk_evt_end_000040b4 end_unknown.o] AT 805BEA54 ---
+805BEA54:   setii LW(0) 0
+805BEA60:   loop 0
+805BEA68:     callc [unk_end_000022ec end_unknown.o] LW(0) LW(1)
+805BEA78:     begin_thread
+805BEA7C:       callc [unk_end_00001d94 end_unknown.o] LW(0)
+805BEA88:     end_thread
+805BEA8C:     if_int_eq LW(1) 1
+805BEA98:       wait_ms 1920
+805BEAA0:     endif
+805BEAA4:     if_int_eq LW(1) 2
+805BEAB0:       wait_ms 6000
+805BEAB8:     endif
+805BEABC:     addi LW(0) 1
+805BEAC8:     if_int_ge LW(0) 152
+805BEAD4:       dbg_report ["あにめおわり"]
+805BEADC:       loop_break
+805BEAE0:     endif
+805BEAE4:     if_int_eq GF(10) 1
+805BEAF0:       return
+805BEAF4:     endif
+805BEAF8:   end_loop
+805BEAFC:   return
+805BEB00:   end

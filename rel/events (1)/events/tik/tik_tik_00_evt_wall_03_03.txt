@@ -1,0 +1,28 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [evt_wall_03_03 tik_00.o] AT 805CBEE0 ---
+805CBEE0:   begin_thread
+805CBEE4:     if_int_eq LW(1) 0
+805CBEF0:       wait_ms 300
+805CBEF8:     else
+805CBEFC:     endif
+805CBF00:     callc [evt_mapobj_get_position evt_map.o] ["ie_3_4"] LW(0) LW(1) LW(2)
+805CBF18:     callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_HOUSE_DOWN1"] LW(0) LW(1) LW(2) 0
+805CBF34:   end_thread
+805CBF38:   if_int_eq LW(1) 0
+805CBF44:     wait_ms 300
+805CBF4C:     callc [evt_sub_intpl_msec_init evt_sub.o] 2 0 180 500
+805CBF64:   else
+805CBF68:     callc [evt_sub_intpl_msec_init evt_sub.o] 2 180 0 500
+805CBF80:   endif
+805CBF84:   loop 0
+805CBF8C:     callc [evt_sub_intpl_msec_get_value evt_sub.o]
+805CBF94:     callc [evt_mapobj_rotate evt_map.o] 1 ["ie_3_4"] 0 0 LW(0)
+805CBFB0:     if_int_eq LW(1) 0
+805CBFBC:       loop_break
+805CBFC0:     endif
+805CBFC4:     wait_frames 1
+805CBFCC:   end_loop
+805CBFD0:   return
+805CBFD4:   end

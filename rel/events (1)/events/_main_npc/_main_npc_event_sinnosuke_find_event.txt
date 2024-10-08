@@ -1,0 +1,45 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [sinnosuke_find_event npc_event.o] AT 8034417C ---
+8034417C:   callc [evt_npc_flag_onoff evt_npc.o] 0 ["me"] 1024
+80344190:   callc [evt_npc_set_anim evt_npc.o] ["me"] ["SIS_Z_3"]
+803441A0:   callc [evt_eff_fukidashi evt_eff.o] 1 0 ["me"] 0 0 0 0 0 0 0 30
+803441D4:   callc [evt_npc_set_rotate evt_npc.o] ["me"] 0 0 0
+803441EC:   setii LW(15) 0
+803441F8:   loop 0
+80344200:     wait_frames 1
+80344208:     addi LW(15) 30
+80344214:     callc [evt_npc_set_rotate evt_npc.o] ["me"] 0 LW(15) 0
+8034422C:     if_int_ge LW(15) 270
+80344238:       loop_break
+8034423C:     endif
+80344240:   end_loop
+80344244:   callc [evt_npc_set_anim evt_npc.o] ["me"] ["SIS_S_1"]
+80344254:   callc [evt_npc_set_rotate evt_npc.o] ["me"] 0 270 0
+8034426C:   loop 0
+80344274:     wait_frames 1
+8034427C:     addi LW(15) 30
+80344288:     callc [evt_npc_set_rotate evt_npc.o] ["me"] 0 LW(15) 0
+803442A0:     if_int_ge LW(15) 360
+803442AC:       loop_break
+803442B0:     endif
+803442B4:   end_loop
+803442B8:   callc [evt_npc_set_rotate evt_npc.o] ["me"] 0 0 0
+803442D0:   loop 0
+803442D8:     callc [evt_npc_set_anim evt_npc.o] ["me"] ["SIS_A_1a"]
+803442E8:     wait_ms 300
+803442F0:     callc [evt_npc_set_attack_mode evt_npc.o] ["me"] 13
+80344300:     callc [evt_get_target_dir evt_npc.o] ["me"] ["mario"] LW(3)
+80344314:     callc [evt_npc_set_ry evt_npc.o] ["me"] LW(3)
+80344324:     callc [evt_npc_get_position evt_npc.o] ["me"] LW(0) LW(1) LW(2)
+8034433C:     callc [evt_npc_add_dirdist evt_npc.o] LW(0) LW(2) LW(3) 100.00
+80344354:     callc [evt_npc_move_position evt_npc.o] ["me"] LW(0) LW(2) 0 200.00 6
+80344374:     callc [evt_npc_set_anim evt_npc.o] ["me"] ["SIS_S_1"]
+80344384:     callc [evt_npc_set_attack_mode evt_npc.o] ["me"] 0
+80344394:     wait_ms 200
+8034439C:   end_loop
+803443A0:   callc [evt_npc_set_attack_mode evt_npc.o] ["me"] 0
+803443B0:   callc [evt_npc_return_interrupt evt_npc.o] ["me"]
+803443BC:   return
+803443C0:   end

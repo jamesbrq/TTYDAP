@@ -1,0 +1,49 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [epilogue_evt gor_02.o] AT 80607C00 ---
+80607C00:   callc [evt_snd_bgmon evt_snd.o] 512 ["BGM_STG0_GOR1"]
+80607C10:   callc [evt_snd_envoff evt_snd.o] 512
+80607C1C:   callc [evt_snd_bgm_scope evt_snd.o] 0 1
+80607C2C:   callc [evt_mario_key_onoff evt_mario.o] 0
+80607C38:   callc [evt_mario_dispflag_onoff evt_mario.o] 1 1
+80607C48:   callc [evt_mapobj_flag_onoff evt_map.o] 1 0 ["S_open_book"] 1
+80607C60:   callc [evt_mapobj_flag_onoff evt_map.o] 1 1 ["S_tizu_on"] 1
+80607C78:   callc [evt_npc_set_position evt_npc.o] ["クリハカセ"] -140 0 -225
+80607C90:   callc [evt_npc_flag_onoff evt_npc.o] 1 ["クリハカセ"] 32768
+80607CA4:   callc [evt_npc_set_ry evt_npc.o] ["クリハカセ"] 90
+80607CB4:   callc [evt_seq_wait evt_seq.o] 2
+80607CC0:   setii LW(0) [door_data_02 gor_02.o]
+80607CCC:   callss [evt_door_open_quick evt_door.o]
+80607CD4:   callc [evt_cam3d_evt_set evt_cam.o] -185 90 78 -185 40 -218 0 11
+80607CFC:   callc [evt_npc_flag_onoff evt_npc.o] 0 ["クリハカセ"] 32768
+80607D10:   callsa [epilogue_evt_sub gor_02.o]
+80607D18:   callc [evt_fade_end_wait evt_fade.o]
+80607D20:   callc [evt_msg_print evt_msg.o] 0 ["ep_36"] 0 0
+80607D38:   wait_ms 1000
+80607D40:   callc [evt_snd_bgmoff_f evt_snd.o] 512 3000
+80607D50:   callc [evt_snd_envoff_f evt_snd.o] 512 3000
+80607D60:   callc [evt_fade_set_mapchange_type evt_fade.o] 1 10 900 9 900
+80607D7C:   callc [evt_bero_mapchange evt_bero.o] ["hei_00"] [zero_gor_00018790 gor_02.o]
+80607D8C:   return
+80607D90:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [epilogue_evt_sub gor_02.o] AT 80607B20 ---
+80607B20:   wait_ms 2000
+80607B28:   loop 0
+80607B30:     callc [evt_npc_move_position evt_npc.o] ["クリスチーヌ"] -170 -225 0 60 0
+80607B50:     callc [evt_npc_set_ry evt_npc.o] ["クリハカセ"] 270
+80607B60:     wait_frames 1
+80607B68:     callc [evt_npc_wait_pera evt_npc.o] ["クリハカセ"]
+80607B74:     callc [evt_npc_set_anim evt_npc.o] ["クリスチーヌ"] ["PKR_T_1"]
+80607B84:     wait_ms 1500
+80607B8C:     callc [evt_npc_set_anim evt_npc.o] ["クリスチーヌ"] ["PKR_S_1"]
+80607B9C:     wait_ms 500
+80607BA4:     callc [evt_npc_set_anim evt_npc.o] ["クリハカセ"] ["T_1"]
+80607BB4:     wait_ms 1500
+80607BBC:     callc [evt_npc_set_anim evt_npc.o] ["クリハカセ"] ["S_1"]
+80607BCC:     callc [evt_npc_move_position evt_npc.o] ["クリスチーヌ"] -240 -260 0 60 0
+80607BEC:     wait_ms 4000
+80607BF4:   end_loop
+80607BF8:   return
+80607BFC:   end

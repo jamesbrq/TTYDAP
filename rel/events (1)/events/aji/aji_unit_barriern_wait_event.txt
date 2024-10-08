@@ -1,0 +1,47 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [wait_event unit_barriern.o] AT 80610644 ---
+80610644:   callc [_check_satellite unit_barriern.o]
+8061064C:   callc [btlevtcmd_AnimeChangePoseFromTable battle_event_cmd.o] -2 1
+8061065C:   setii LW(11) 4
+80610668:   loop 0
+80610670:     if_int_ge LW(11) 6
+8061067C:       loop_break
+80610680:     endif
+80610684:     callc [btlevtcmd_GetUnitWork battle_event_cmd.o] -2 LW(11) LW(12)
+80610698:     if_int_ne LW(12) -1
+806106A4:       callc [btlevtcmd_SetUnitWork battle_event_cmd.o] LW(12) 1 1
+806106B8:     endif
+806106BC:     addi LW(11) 1
+806106C8:   end_loop
+806106CC:   begin_child_thread
+806106D0:     setii LW(1) 255
+806106DC:     setii LW(2) 255
+806106E8:     setii LW(3) 255
+806106F4:     setii LW(4) -8
+80610700: 0:
+80610708:     callc [_check_satellite unit_barriern.o] LW(0)
+80610714:     wait_frames 1
+8061071C:     goto 0
+80610724:   end_child_thread
+80610728: 1:
+80610730:   callc [evt_sub_random evt_sub.o] 120 LW(0)
+80610740:   addi LW(0) 30
+8061074C:   wait_frames LW(0)
+80610754:   callc [btlevtcmd_CheckActStatus battle_event_cmd.o] -2 LW(0)
+80610764:   if_int_ne LW(0) 0
+80610770:     callc [btlevtcmd_CheckStatus battle_event_cmd.o] -2 5 LW(0)
+80610784:     callc [btlevtcmd_CheckStatus battle_event_cmd.o] -2 3 LW(1)
+80610798:     callc [btlevtcmd_CheckStatus battle_event_cmd.o] -2 4 LW(2)
+806107AC:     ori LW(0) LW(1)
+806107B8:     ori LW(0) LW(2)
+806107C4:     if_int_eq LW(0) 0
+806107D0:       callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 1 ["S_3"]
+806107E4:       wait_frames 180
+806107EC:       callc [btlevtcmd_AnimeChangePoseFromTable battle_event_cmd.o] -2 1
+806107FC:     endif
+80610800:   endif
+80610804:   goto 1
+8061080C:   return
+80610810:   end

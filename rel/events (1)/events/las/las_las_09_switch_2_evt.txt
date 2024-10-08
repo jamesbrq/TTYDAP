@@ -1,0 +1,98 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [switch_2_evt las_09.o] AT 805DB7F0 ---
+805DB7F0:   callc [evt_mario_key_onoff evt_mario.o] 0
+805DB7FC:   callc [evt_cam3d_evt_set evt_cam.o] 0 450 45 0 -75 -558 1000 11
+805DB824:   wait_ms 1000
+805DB82C:   wait_ms 500
+805DB834:   callc [evt_snd_sfxon evt_snd.o] ["SFX_STG8_QUAKE2"] LW(10)
+805DB844:   callc [evt_cam_shake evt_cam.o] 4 0.00 0.00 1500
+805DB85C:   callc [evt_snd_sfxoff evt_snd.o] LW(10)
+805DB868:   begin_thread
+805DB86C:     callc [evt_mapobj_get_position evt_map.o] ["S_daizadai2_3"] LW(0) LW(1) LW(2)
+805DB884:     callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_STG8_PORT_APPEAR1"] LW(0) LW(1) LW(2) 0
+805DB8A0:     begin_child_thread
+805DB8A4:       callc [evt_sub_intpl_msec_init evt_sub.o] 1 255 50 500
+805DB8BC:       loop 0
+805DB8C4:         callc [evt_sub_intpl_msec_get_value evt_sub.o]
+805DB8CC:         callc [evt_mapobj_color evt_map.o] 1 ["S_daizadai2_3"] 255 255 255 LW(0)
+805DB8EC:         wait_frames 1
+805DB8F4:         if_int_eq LW(1) 0
+805DB900:           loop_break
+805DB904:         endif
+805DB908:       end_loop
+805DB90C:     end_child_thread
+805DB910:     callc [evt_sub_intpl_msec_init evt_sub.o] 11 0 180 1000
+805DB928:     loop 0
+805DB930:       callc [evt_sub_intpl_msec_get_value evt_sub.o]
+805DB938:       callc [evt_mapobj_rotate evt_map.o] 1 ["S_daizadai2_3"] 0 0 LW(0)
+805DB954:       wait_frames 1
+805DB95C:       if_int_eq LW(1) 0
+805DB968:         loop_break
+805DB96C:       endif
+805DB970:     end_loop
+805DB974:   end_thread
+805DB978:   begin_thread
+805DB97C:     wait_ms 300
+805DB984:     callc [evt_mapobj_get_position evt_map.o] ["S_daizadai2_2"] LW(0) LW(1) LW(2)
+805DB99C:     callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_STG8_PORT_APPEAR1"] LW(0) LW(1) LW(2) 0
+805DB9B8:     begin_child_thread
+805DB9BC:       callc [evt_sub_intpl_msec_init evt_sub.o] 1 255 50 500
+805DB9D4:       loop 0
+805DB9DC:         callc [evt_sub_intpl_msec_get_value evt_sub.o]
+805DB9E4:         callc [evt_mapobj_color evt_map.o] 1 ["S_daizadai2_2"] 255 255 255 LW(0)
+805DBA04:         wait_frames 1
+805DBA0C:         if_int_eq LW(1) 0
+805DBA18:           loop_break
+805DBA1C:         endif
+805DBA20:       end_loop
+805DBA24:     end_child_thread
+805DBA28:     callc [evt_sub_intpl_msec_init evt_sub.o] 11 0 -180 1000
+805DBA40:     loop 0
+805DBA48:       callc [evt_sub_intpl_msec_get_value evt_sub.o]
+805DBA50:       callc [evt_mapobj_rotate evt_map.o] 1 ["S_daizadai2_2"] 0 0 LW(0)
+805DBA6C:       wait_frames 1
+805DBA74:       if_int_eq LW(1) 0
+805DBA80:         loop_break
+805DBA84:       endif
+805DBA88:     end_loop
+805DBA8C:   end_thread
+805DBA90:   wait_ms 600
+805DBA98:   callc [evt_mapobj_get_position evt_map.o] ["S_daizadai2_1"] LW(0) LW(1) LW(2)
+805DBAB0:   callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_STG8_PORT_APPEAR2"] LW(0) LW(1) LW(2) 0
+805DBACC:   begin_thread
+805DBAD0:     callc [evt_sub_intpl_msec_init evt_sub.o] 1 255 50 500
+805DBAE8:     loop 0
+805DBAF0:       callc [evt_sub_intpl_msec_get_value evt_sub.o]
+805DBAF8:       callc [evt_mapobj_color evt_map.o] 1 ["S_daizadai2_1"] 255 255 255 LW(0)
+805DBB18:       wait_frames 1
+805DBB20:       if_int_eq LW(1) 0
+805DBB2C:         loop_break
+805DBB30:       endif
+805DBB34:     end_loop
+805DBB38:   end_thread
+805DBB3C:   callc [evt_sub_intpl_msec_init evt_sub.o] 11 0 180 1000
+805DBB54:   loop 0
+805DBB5C:     callc [evt_sub_intpl_msec_get_value evt_sub.o]
+805DBB64:     callc [evt_mapobj_rotate evt_map.o] 1 ["S_daizadai2_1"] LW(0) 0 0
+805DBB80:     wait_frames 1
+805DBB88:     if_int_eq LW(1) 0
+805DBB94:       loop_break
+805DBB98:     endif
+805DBB9C:   end_loop
+805DBBA0:   if_int_eq GSWF(4328) 1
+805DBBAC:     callc [evt_snd_bgmoff evt_snd.o] 1024
+805DBBB8:     callc [evt_snd_bgmon evt_snd.o] 1 ["BGM_FF_ENV_SUCCESS1"]
+805DBBC8:     wait_ms 2000
+805DBBD0:     callc [evt_snd_bgmoff evt_snd.o] 513
+805DBBDC:     callc [evt_snd_bgmon evt_snd.o] 288 0
+805DBBEC:   endif
+805DBBF0:   callc [evt_map_entry_airport_harbor evt_map.o] 1 ["S_Ship_Change1"] ["Ship_Change1"]
+805DBC04:   callc [evt_hitobj_attr_onoff evt_hit.o] 0 1 ["Ship_Change1"] 32768
+805DBC1C:   wait_ms 1000
+805DBC24:   callc [evt_cam3d_evt_off evt_cam.o] 1000 11
+805DBC34:   wait_ms 1000
+805DBC3C:   callc [evt_mario_key_onoff evt_mario.o] 1
+805DBC48:   return
+805DBC4C:   end

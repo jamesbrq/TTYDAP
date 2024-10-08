@@ -1,0 +1,32 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [bar_door_anime gor_01.o] AT 805F1B84 ---
+805F1B84:   callc [evt_mapobj_flag_onoff evt_map.o] 1 0 ["S_ie_03_naka"] 1
+805F1B9C:   callc [evt_mapobj_get_position evt_map.o] ["S_ie_03_f1_doa"] LW(0) LW(1) LW(2)
+805F1BB4:   callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_DOOR_OPEN1"] LW(0) LW(1) LW(2) 0
+805F1BD0:   callc [evt_sub_intpl_msec_init evt_sub.o] 11 0 108 500
+805F1BE8:   loop 0
+805F1BF0:     callc [evt_sub_intpl_msec_get_value_para evt_sub.o] LW(0) LW(1)
+805F1C00:     callc [evt_mapobj_rotate evt_map.o] 1 ["S_ie_03_f1_doa"] 0 LW(0) 0
+805F1C1C:     if_int_eq LW(1) 0
+805F1C28:       loop_break
+805F1C2C:     endif
+805F1C30:     wait_frames 1
+805F1C38:   end_loop
+805F1C3C:   wait_ms 500
+805F1C44:   callc [evt_sub_intpl_msec_init evt_sub.o] 11 108 0 500
+805F1C5C:   loop 0
+805F1C64:     callc [evt_sub_intpl_msec_get_value_para evt_sub.o] LW(0) LW(1)
+805F1C74:     callc [evt_mapobj_rotate evt_map.o] 1 ["S_ie_03_f1_doa"] 0 LW(0) 0
+805F1C90:     if_int_eq LW(1) 0
+805F1C9C:       loop_break
+805F1CA0:     endif
+805F1CA4:     wait_frames 1
+805F1CAC:   end_loop
+805F1CB0:   callc [evt_mapobj_get_position evt_map.o] ["S_ie_03_f1_doa"] LW(0) LW(1) LW(2)
+805F1CC8:   callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_DOOR_SHUT1"] LW(0) LW(1) LW(2) 0
+805F1CE4:   callc [evt_mapobj_flag_onoff evt_map.o] 1 1 ["S_ie_03_naka"] 1
+805F1CFC:   setii GF(0) 0
+805F1D08:   return
+805F1D0C:   end

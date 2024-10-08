@@ -1,0 +1,177 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [evt_attack unit_boss_moamoa_tentacle_c.o] AT 805ED984 ---
+805ED984:   callc [btlevtcmd_GetEnemyBelong battle_event_cmd.o] -2 LW(0)
+805ED994:   callc [btlevtcmd_SamplingEnemy battle_event_cmd.o] -2 LW(0) [weapon_moamoa_attack unit_boss_moamoa_tentacle_c.o]
+805ED9A8:   callc [btlevtcmd_ChoiceSamplingEnemy battle_event_cmd.o] [weapon_moamoa_attack unit_boss_moamoa_tentacle_c.o] LW(3) LW(4)
+805ED9BC:   if_int_eq LW(3) -1
+805ED9C8:     callc [btlevtcmd_CheckToken battle_event_cmd.o] -2 16 LW(0)
+805ED9DC:     if_int_ne LW(0) 0
+805ED9E8:       callss [subsetevt_confuse_flustered battle_event_subset.o]
+805ED9F0:       return
+805ED9F4:     endif
+805ED9F8:     return
+805ED9FC:   endif
+805EDA00:   callc [evt_btl_camera_set_mode battle_camera.o] 0 8
+805EDA10:   callc [evt_btl_camera_set_homing_unit battle_camera.o] 0 -2 LW(3)
+805EDA24:   callc [evt_btl_camera_set_moveSpeedLv battle_camera.o] 0 2
+805EDA34:   callc [evt_btl_camera_set_zoom battle_camera.o] 0 100
+805EDA44:   callc [btlevtcmd_WeaponAftereffect battle_event_cmd.o] [weapon_moamoa_attack unit_boss_moamoa_tentacle_c.o]
+805EDA50:   callc [btlevtcmd_AttackDeclare battle_event_cmd.o] -2 LW(3) LW(4)
+805EDA64:   callc [btlevtcmd_WaitGuardMove battle_event_cmd.o]
+805EDA6C:   callc [btlevtcmd_PayWeaponCost battle_event_cmd.o] -2 [weapon_moamoa_attack unit_boss_moamoa_tentacle_c.o]
+805EDA7C:   callc [boss_moamoa_check_zenei_kouei unit_boss_moamoa.o] LW(3) LW(1)
+805EDA8C:   if_int_eq LW(1) 0
+805EDA98:     setii LF(0) 0
+805EDAA4:   else
+805EDAA8:     setii LF(0) 1
+805EDAB4:   endif
+805EDAB8:   callc [btlevtcmd_GetUnitWork battle_event_cmd.o] -2 0 LW(6)
+805EDACC:   callc [btlevtcmd_SetUnitWork battle_event_cmd.o] LW(6) 0 0
+805EDAE0:   callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] LW(6) 1 ["S_1_1"]
+805EDAF4:   setii LW(15) 0
+805EDB00:   callc [btlevtcmd_GetUnitWork battle_event_cmd.o] LW(6) 5 LW(0)
+805EDB14:   if_int_ne LW(0) -1
+805EDB20:     setii LW(1) [A_of_C_Attack unit_boss_moamoa_tentacle_c.o]
+805EDB2C:     setii LW(5) 1
+805EDB38:     callsa [evt_attack_other_arm unit_boss_moamoa_tentacle_c.o]
+805EDB40:   endif
+805EDB44:   callc [btlevtcmd_GetUnitWork battle_event_cmd.o] LW(6) 4 LW(0)
+805EDB58:   if_int_ne LW(0) -1
+805EDB64:     setii LW(1) [B_of_C_Attack unit_boss_moamoa_tentacle_c.o]
+805EDB70:     setii LW(5) 1
+805EDB7C:     callsa [evt_attack_other_arm unit_boss_moamoa_tentacle_c.o]
+805EDB84:   endif
+805EDB88:   if_int_eq LF(0) 0
+805EDB94:     mo_set_base_int [C_of_C_Attack_front unit_boss_moamoa_tentacle_c.o]
+805EDB9C:     setii LW(15) 1
+805EDBA8:     begin_child_thread
+805EDBAC:       callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_BOSS_MOA_G_ARM_MOVE1"] [F1194D80] 0 LW(14)
+805EDBC8:       wait_ms 600
+805EDBD0:       callc [evt_snd_sfxoff evt_snd.o] LW(14)
+805EDBDC:       callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_BOSS_MOA_G_ARM_MOVE2"] [F1194D80] 0 [F1194D80]
+805EDBF8:     end_child_thread
+805EDBFC:   else
+805EDC00:     mo_set_base_int [C_of_C_Attack_back unit_boss_moamoa_tentacle_c.o]
+805EDC08:     begin_child_thread
+805EDC0C:       callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_BOSS_MOA_G_ARM_MOVE1"] [F1194D80] 0 LW(14)
+805EDC28:       wait_ms 900
+805EDC30:       callc [evt_snd_sfxoff evt_snd.o] LW(14)
+805EDC3C:       callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_BOSS_MOA_G_ARM_MOVE2_2"] [F1194D80] 0 [F1194D80]
+805EDC58:     end_child_thread
+805EDC5C:   endif
+805EDC60:   loop 0
+805EDC68:     mo_read_int LW(2)
+805EDC70:     if_int_eq LW(2) 0
+805EDC7C:       loop_break
+805EDC80:     endif
+805EDC84:     callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 1 LW(2)
+805EDC98:     wait_frames 1
+805EDCA0:     callc [btlevtcmd_AnimeWaitPlayComplete battle_event_cmd.o] -2 1
+805EDCB0:   end_loop
+805EDCB4:   wait_ms 1000
+805EDCBC:   if_int_eq LF(0) 0
+805EDCC8:     callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_BOSS_MOA_G_ARM_MOVE3"] [F1194D80] 0 [F1194D80]
+805EDCE4:   else
+805EDCE8:     callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_BOSS_MOA_G_ARM_MOVE3_2"] [F1194D80] 0 [F1194D80]
+805EDD04:   endif
+805EDD08:   if_int_eq LW(15) 0
+805EDD14:     loop 0
+805EDD1C:       mo_read_int LW(2)
+805EDD24:       if_int_eq LW(2) 0
+805EDD30:         loop_break
+805EDD34:       endif
+805EDD38:       callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 1 LW(2)
+805EDD4C:       wait_frames 1
+805EDD54:       callc [btlevtcmd_AnimeWaitPlayComplete battle_event_cmd.o] -2 1
+805EDD64:     end_loop
+805EDD68:   else
+805EDD6C:     begin_child_thread
+805EDD70:       loop 0
+805EDD78:         mo_read_int LW(2)
+805EDD80:         if_int_eq LW(2) 0
+805EDD8C:           loop_break
+805EDD90:         endif
+805EDD94:         callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 1 LW(2)
+805EDDA8:         wait_frames 1
+805EDDB0:         callc [btlevtcmd_AnimeWaitPlayComplete battle_event_cmd.o] -2 1
+805EDDC0:       end_loop
+805EDDC4:       loop 0
+805EDDCC:         mo_read_int LW(2)
+805EDDD4:         if_int_eq LW(2) 0
+805EDDE0:           loop_break
+805EDDE4:         endif
+805EDDE8:         callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 1 LW(2)
+805EDDFC:         wait_frames 1
+805EDE04:         callc [btlevtcmd_AnimeWaitPlayComplete battle_event_cmd.o] -2 1
+805EDE14:       end_loop
+805EDE18:       setii GF(9) 0
+805EDE24:     end_child_thread
+805EDE28:     wait_ms 70
+805EDE30:   endif
+805EDE34:   callc [btlevtcmd_PreCheckDamage battle_event_cmd.o] -2 LW(3) LW(4) [weapon_moamoa_attack unit_boss_moamoa_tentacle_c.o] 256 LW(5)
+805EDE54:   switchi LW(5)
+805EDE5C:     case_int_eq 1
+805EDE64:       callc [btlevtcmd_ResultACDefence battle_event_cmd.o] LW(3) [weapon_moamoa_attack unit_boss_moamoa_tentacle_c.o]
+805EDE74:       callc [btlevtcmd_CheckDamage battle_event_cmd.o] -2 LW(3) LW(4) [weapon_moamoa_attack unit_boss_moamoa_tentacle_c.o] 256 LW(5)
+805EDE94:     case_int_eq 4
+805EDE9C:     case_int_eq 3
+805EDEA4:       callc [btlevtcmd_StartAvoid battle_event_cmd.o] LW(3) 38
+805EDEB4:     case_int_eq 6
+805EDEBC:       callc [btlevtcmd_StartAvoid battle_event_cmd.o] LW(3) 39
+805EDECC:     case_int_eq 2
+805EDED4:       callc [btlevtcmd_StartAvoid battle_event_cmd.o] LW(3) 40
+805EDEE4:   end_switch
+805EDEE8:   callc [btlevtcmd_SetUnitWork battle_event_cmd.o] LW(6) 0 1
+805EDEFC:   callc [evt_btl_camera_set_mode battle_camera.o] 0 0
+805EDF0C:   if_int_eq LW(15) 0
+805EDF18:     loop 0
+805EDF20:       mo_read_int LW(2)
+805EDF28:       if_int_eq LW(2) 0
+805EDF34:         loop_break
+805EDF38:       endif
+805EDF3C:       callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 1 LW(2)
+805EDF50:       wait_frames 1
+805EDF58:       callc [btlevtcmd_AnimeWaitPlayComplete battle_event_cmd.o] -2 1
+805EDF68:     end_loop
+805EDF6C:   else
+805EDF70:     setii GF(9) 1
+805EDF7C:     wait_until GF(9)
+805EDF84:   endif
+805EDF88:   return
+805EDF8C:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [evt_attack_other_arm unit_boss_moamoa_tentacle_c.o] AT 805ED7E8 ---
+805ED7E8:   mo_set_base_int LW(1)
+805ED7F0:   callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_BOSS_MOA_G_ARM_MOVE1"] [F1194D80] 0 LW(15)
+805ED80C:   loop 0
+805ED814:     mo_read_int LW(2)
+805ED81C:     if_int_eq LW(2) 0
+805ED828:       loop_break
+805ED82C:     endif
+805ED830:     callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] LW(0) LW(5) LW(2)
+805ED844:     wait_frames 1
+805ED84C:     callc [btlevtcmd_AnimeWaitPlayComplete battle_event_cmd.o] LW(0) LW(5)
+805ED85C:   end_loop
+805ED860:   callc [evt_snd_sfxoff evt_snd.o] LW(15)
+805ED86C:   loop 0
+805ED874:     callc [btlevtcmd_GetUnitWork battle_event_cmd.o] LW(6) 0 LW(10)
+805ED888:     if_int_ne LW(10) 0
+805ED894:       loop_break
+805ED898:     endif
+805ED89C:     wait_frames 1
+805ED8A4:   end_loop
+805ED8A8:   callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_BOSS_MOA_G_ARM_MOVE1"] [F1194D80] 0 LW(15)
+805ED8C4:   loop 0
+805ED8CC:     mo_read_int LW(2)
+805ED8D4:     if_int_eq LW(2) 0
+805ED8E0:       loop_break
+805ED8E4:     endif
+805ED8E8:     callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] LW(0) LW(5) LW(2)
+805ED8FC:     wait_frames 1
+805ED904:     callc [btlevtcmd_AnimeWaitPlayComplete battle_event_cmd.o] LW(0) LW(5)
+805ED914:   end_loop
+805ED918:   callc [evt_snd_sfxoff evt_snd.o] LW(15)
+805ED924:   return
+805ED928:   end

@@ -1,0 +1,70 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [johoyaketi_talk tik_00.o] AT 805CA1EC ---
+805CA1EC:   if_int_eq GSWF(3) 0
+805CA1F8:     callc [evt_msg_print evt_msg.o] 0 ["johoyaketi_00"] 0 ["me"]
+805CA210:     setii GSWF(3) 1
+805CA21C:     return
+805CA220:   endif
+805CA224:   callc [johoya_keti_newjoho_check evt_johoya.o] LW(1)
+805CA230:   if_int_eq LW(1) 0
+805CA23C:     callc [johoya_keti_oldspeak_check evt_johoya.o] LW(0)
+805CA248:     if_int_eq LW(0) 0
+805CA254:       callc [evt_msg_print evt_msg.o] 0 ["johoyaketi_08"] 0 ["me"]
+805CA26C:     else
+805CA270:       callc [evt_msg_print evt_msg.o] 0 ["johoyaketi_06"] 0 ["me"]
+805CA288:       subi LW(0) 1
+805CA294:       callc [evt_sub_random evt_sub.o] LW(0) LW(0)
+805CA2A4:       callc [johoya_keti_oldspeak_makelabel evt_johoya.o] LW(0) LW(0) LW(3) LW(4) LW(5)
+805CA2C0:       callc [evt_msg_print_add evt_msg.o] 0 LW(0)
+805CA2D0:       callc [johoya_keti_oldspeak_setreadflag evt_johoya.o]
+805CA2D8:       callc [evt_msg_print_add evt_msg.o] 0 ["johoyaketi_07"]
+805CA2E8:     endif
+805CA2EC:   else
+805CA2F0:     subi LW(1) 1
+805CA2FC:     callc [evt_sub_random evt_sub.o] LW(1) LW(0)
+805CA30C:     callc [johoya_keti_newjoho_makelabel evt_johoya.o] LW(0) LW(2) LW(3) LW(4) LW(5)
+805CA328:     callc [evt_sub_get_language evt_sub.o] LW(0)
+805CA334:     switchi LW(0)
+805CA33C:       case_int_eq 0
+805CA344:         callc [evt_msg_print_insert evt_msg.o] 0 ["johoyaketi_01"] 0 ["me"] LW(5) LW(4) LW(3)
+805CA368:       case_default
+805CA36C:         callc [unk_800d0998 evt_msg.o] 0 LW(14) ["johoyaketi_01"] LW(5)
+805CA384:         callc [evt_msg_print_insert evt_msg.o] 1 LW(14) 0 ["me"] LW(4) LW(3)
+805CA3A4:     end_switch
+805CA3A8:     callc [evt_win_coin_on evt_window.o] 0 LW(12)
+805CA3B8:     callc [evt_msg_select evt_msg.o] 0 ["johoyaketi_02"]
+805CA3C8:     if_int_eq LW(0) 0
+805CA3D4:       callc [evt_pouch_get_coin evt_pouch.o] LW(0)
+805CA3E0:       if_int_lt LW(0) LW(5)
+805CA3EC:         callc [evt_msg_print_add evt_msg.o] 0 ["johoyaketi_09"]
+805CA3FC:         callc [evt_win_coin_off evt_window.o] LW(12)
+805CA408:         return
+805CA40C:       endif
+805CA410:       muli LW(5) -1
+805CA41C:       callc [evt_pouch_add_coin evt_pouch.o] LW(5)
+805CA428:       callc [evt_win_coin_wait evt_window.o] LW(12)
+805CA434:       wait_ms 500
+805CA43C:       callc [evt_win_coin_off evt_window.o] LW(12)
+805CA448:       callc [evt_msg_print_add evt_msg.o] 0 LW(2)
+805CA458:       callc [johoya_keti_newjoho_setreadflag evt_johoya.o]
+805CA460:       callc [evt_msg_print_add evt_msg.o] 0 ["johoyaketi_07"]
+805CA470:     else
+805CA474:       callc [evt_win_coin_off evt_window.o] LW(12)
+805CA480:       callc [johoya_keti_oldspeak_check evt_johoya.o] LW(0)
+805CA48C:       if_int_eq LW(0) 0
+805CA498:         callc [evt_msg_print_add evt_msg.o] 0 ["johoyaketi_04"]
+805CA4A8:       else
+805CA4AC:         callc [evt_msg_print_add evt_msg.o] 0 ["johoyaketi_05"]
+805CA4BC:         subi LW(0) 1
+805CA4C8:         callc [evt_sub_random evt_sub.o] LW(0) LW(0)
+805CA4D8:         callc [johoya_keti_oldspeak_makelabel evt_johoya.o] LW(0) LW(0) LW(3) LW(4) LW(5)
+805CA4F4:         callc [evt_msg_print_add evt_msg.o] 0 LW(0)
+805CA504:         callc [johoya_keti_oldspeak_setreadflag evt_johoya.o]
+805CA50C:         callc [evt_msg_print_add evt_msg.o] 0 ["johoyaketi_07"]
+805CA51C:       endif
+805CA520:     endif
+805CA524:   endif
+805CA528:   return
+805CA52C:   end

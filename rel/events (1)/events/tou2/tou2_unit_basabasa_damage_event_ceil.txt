@@ -1,0 +1,47 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [damage_event_ceil unit_basabasa.o] AT 805E3D04 ---
+805E3D04:   setii LW(10) -2
+805E3D10:   setii LW(11) 1
+805E3D1C:   callss [btldefaultevt_Damage battle_event_default.o]
+805E3D24:   callc [btlevtcmd_CheckDamageCode battle_event_cmd.o] -2 512 LW(0)
+805E3D38:   if_int_ne LW(0) 0
+805E3D44:     callc [btlevtcmd_CheckDamageCode battle_event_cmd.o] -2 2048 LW(0)
+805E3D58:     if_int_eq LW(0) 0
+805E3D64:       return
+805E3D68:     endif
+805E3D6C:   endif
+805E3D70:   callc [btlevtcmd_GetTotalDamage battle_event_cmd.o] LW(10) LW(12)
+805E3D80:   if_int_eq LW(12) 0
+805E3D8C:     return
+805E3D90:   endif
+805E3D94:   callss [ceil_sky_event unit_basabasa.o]
+805E3D9C:   callc [btlevtcmd_DivePosition battle_event_cmd.o] -2 LW(0) LW(1) LW(2) 60 0 0 0 -1
+805E3DC8:   return
+805E3DCC:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [ceil_sky_event unit_basabasa.o] AT 805E39EC ---
+805E39EC:   callc [btlevtcmd_CheckAttribute battle_event_cmd.o] -2 2 LW(0)
+805E3A00:   if_int_eq LW(0) 0
+805E3A0C:     goto 99
+805E3A14:   endif
+805E3A18:   callc [btlevtcmd_OffAttribute battle_event_cmd.o] -2 2
+805E3A28:   callc [btlevtcmd_OnAttribute battle_event_cmd.o] -2 4
+805E3A38:   callc [btlevtcmd_SetPossessionItemOffset battle_event_cmd.o] -2 0 0 0
+805E3A50:   callc [btlevtcmd_SetEventCeilFall battle_event_cmd.o] -2 0
+805E3A60:   callc [btlevtcmd_AnimeSetPoseTable battle_event_cmd.o] -2 1 [pose_table unit_basabasa.o]
+805E3A74:   callc [btlevtcmd_AnimeChangePoseType battle_event_cmd.o] -2 1 40
+805E3A88:   wait_frames 1
+805E3A90:   callc [btlevtcmd_AddPos battle_event_cmd.o] -2 0 -30 0
+805E3AA8:   callc [btlevtcmd_AddHomePos battle_event_cmd.o] -2 0 -30 0
+805E3AC0:   callc [btlevtcmd_SetEventDamage battle_event_cmd.o] -2 [damage_event unit_basabasa.o]
+805E3AD0:   callc [btlevtcmd_SetHitOffset battle_event_cmd.o] -2 1 0 0 0
+805E3AEC:   callc [btlevtcmd_SetHitCursorOffset battle_event_cmd.o] -2 1 0 30 0
+805E3B08:   callc [btlevtcmd_SetKissHitOffset battle_event_cmd.o] -2 16 21 0
+805E3B20:   callc [btlevtcmd_SetStatusIconOffset battle_event_cmd.o] -2 6 32
+805E3B34:   callc [btlevtcmd_AddHomePos battle_event_cmd.o] -2 0 -40 0
+805E3B4C: 99:
+805E3B54:   callc [btlevtcmd_GetHomePos battle_event_cmd.o] -2 LW(0) LW(1) LW(2)
+805E3B6C:   return
+805E3B70:   end

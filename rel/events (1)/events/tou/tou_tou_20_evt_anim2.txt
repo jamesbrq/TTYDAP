@@ -1,0 +1,51 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [evt_anim2 tou_20.o] AT 805FA870 ---
+805FA870:   callc [evt_mario_dispflag_onoff evt_mario.o] 1 1
+805FA880:   callc [evt_party_dispflg_onoff evt_party.o] 0 1 1
+805FA894:   callc [evt_mapobj_flag_onoff evt_map.o] 1 1 ["Hikousen"] 1
+805FA8AC:   callc [evt_mapobj_trans evt_map.o] 1 ["Hikousen"] -808.00 971.00 4897.00
+805FA8C8:   wait_ms 2000
+805FA8D0:   callc [evt_mapobj_flag_onoff evt_map.o] 1 0 ["Hikousen"] 1
+805FA8E8:   setff GW(0) 0.00
+805FA8F4:   setff GW(1) 0.00
+805FA900:   setff GW(2) 0.00
+805FA90C:   setff GW(3) 0.00
+805FA918:   begin_thread
+805FA91C:     wait_ms 20000
+805FA924:     callc [evt_snd_sfxoff evt_snd.o] GW(10)
+805FA930:     callc [evt_snd_sfxoff evt_snd.o] GW(11)
+805FA93C:     callc [evt_bero_mapchange evt_bero.o] ["tou_00"] 0
+805FA94C:   end_thread
+805FA950:   begin_thread
+805FA954:     setii LW(0) 0
+805FA960:     loop 0
+805FA968:       callc [evt_sub_get_sincos evt_sub.o] LW(0) LW(1) LW(2)
+805FA97C:       addi LW(0) 1
+805FA988:       modi LW(0) 360
+805FA994:       if_int_eq GF(0) 0
+805FA9A0:         mulf LW(1) 50.00
+805FA9AC:       else
+805FA9B0:         mulf LW(1) 40.00
+805FA9BC:       endif
+805FA9C0:       setff GW(3) LW(1)
+805FA9CC:       wait_frames 1
+805FA9D4:     end_loop
+805FA9D8:   end_thread
+805FA9DC:   callc [evt_sub_spline_init evt_sub.o] 1 11 [spline_dt tou_20.o] 3 0 10000
+805FA9FC:   setii LW(3) 1
+805FAA08:   loop 0
+805FAA10:     if_int_eq LW(3) 1
+805FAA1C:       callc [evt_sub_spline_get_value evt_sub.o] GW(0) GW(1) GW(2) LW(3)
+805FAA34:     else
+805FAA38:     endif
+805FAA3C:     setff LW(4) GW(1)
+805FAA48:     addf LW(4) GW(3)
+805FAA54:     callc [evt_mapobj_trans evt_map.o] 1 ["Hikousen"] GW(0) LW(4) GW(2)
+805FAA70:     callc [evt_mapobj_rotate evt_map.o] 1 ["Hikousen"] -10 0 0
+805FAA8C:     callc [evt_mapobj_rotate evt_map.o] 1 ["Hikousen"] 0 -100 0
+805FAAA8:     wait_frames 1
+805FAAB0:   end_loop
+805FAAB4:   return
+805FAAB8:   end

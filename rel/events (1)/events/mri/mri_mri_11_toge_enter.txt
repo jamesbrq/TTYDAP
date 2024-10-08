@@ -1,0 +1,40 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [toge_enter mri_11.o] AT 806005AC ---
+806005AC:   setii LW(10) 110
+806005B8:   setii LW(11) 10
+806005C4:   loop 0
+806005CC:     wait_ms 500
+806005D4:     setii LW(12) 14
+806005E0:     muli LW(12) LW(11)
+806005EC:     callsa [toge_enter_sub mri_11.o]
+806005F4:     addi LW(10) 5
+80600600:     wait_ms 500
+80600608:     setii LW(12) -14
+80600614:     muli LW(12) LW(11)
+80600620:     subi LW(12) -14
+8060062C:     callsa [toge_enter_sub mri_11.o]
+80600634:     addi LW(10) 5
+80600640:     addi LW(11) -1
+8060064C:     if_int_eq LW(11) 0
+80600658:       loop_break
+8060065C:     endif
+80600660:   end_loop
+80600664:   wait_ms 3000
+8060066C:   return
+80600670:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [toge_enter_sub mri_11.o] AT 806004E0 ---
+806004E0:   setii LW(13) LW(10)
+806004EC:   addi LW(13) 1
+806004F8:   setii LW(14) LW(10)
+80600504:   addi LW(14) 4
+80600510:   callc [evt_mri_toge_make_retsu mri.o] -450 0 0 LW(10) LW(13) LW(14)
+80600530:   callc [evt_puni_set_position mri_puni.o] LW(10) -450 0 0
+80600548:   callc [evt_puni_move_position2 mri_puni.o] LW(10) -330 0 100.00
+80600560:   callc [evt_puni_move_position2 mri_puni.o] LW(10) -300 LW(12) 100.00
+80600578:   callc [evt_puni_move_position2 mri_puni.o] LW(10) -200 LW(12) 100.00
+80600590:   callc [evt_mri_toge_retsu_stop mri.o] LW(10) LW(13) LW(14)
+806005A4:   return
+806005A8:   end

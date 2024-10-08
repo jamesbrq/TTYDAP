@@ -1,0 +1,102 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [minnnanokoe_evt usu_00.o] AT 805C90D0 ---
+805C90D0:   callc [evt_mario_key_onoff evt_mario.o] 0
+805C90DC:   callc [evt_mario_cont_onoff evt_mario.o] 0
+805C90E8:   callc [evt_party_cont_onoff evt_party.o] 0 0
+805C90F8:   callc [evt_mario_set_pos evt_mario.o] 0 -1000 0
+805C910C:   callc [evt_party_set_pos evt_party.o] 0 0 -1000 0
+805C9124:   callc [evt_npc_set_position evt_npc.o] ["村長"] -60 0 -75
+805C913C:   callc [evt_npc_set_ry evt_npc.o] ["村長"] 270
+805C914C:   callc [evt_npc_set_position evt_npc.o] ["村人Ａ"] 0 0 -100
+805C9164:   callc [evt_npc_set_ry evt_npc.o] ["村人Ａ"] 270
+805C9174:   callc [evt_npc_set_position evt_npc.o] ["村人Ｃ"] 0 -1000 0
+805C918C:   callc [evt_npc_set_position evt_npc.o] ["村人Ｄ"] 0 -1000 0
+805C91A4:   callc [evt_npc_set_position evt_npc.o] ["村人Ｅ"] 0 -1000 0
+805C91BC:   callc [evt_npc_set_position evt_npc.o] ["村人Ｋ"] 0 -1000 0
+805C91D4:   callc [evt_npc_set_position evt_npc.o] ["カラスＣ"] 1000 -1000 0
+805C91EC:   callc [evt_npc_set_position evt_npc.o] ["カラスＤ"] 1000 -1000 0
+805C9204:   callc [evt_npc_set_position evt_npc.o] ["カラスＥ"] 1000 -1000 0
+805C921C:   callc [evt_map_set_tevcallback evt_map.o] 1 [envSetYami envdrv.o]
+805C922C:   callc [evt_mapobj_flag_onoff evt_map.o] 1 1 ["S_usu00"] 16777216
+805C9244:   callc [evt_mapobj_flag_onoff evt_map.o] 1 0 ["S_usu00"] 256
+805C925C:   callc [anim_tevcallback usu_00.o] ["おばさん"] 1
+805C926C:   callc [anim_tevcallback usu_00.o] ["子供１"] 1
+805C927C:   callc [anim_tevcallback usu_00.o] ["子供２"] 1
+805C928C:   callc [anim_tevcallback usu_00.o] ["子供３"] 1
+805C929C:   callc [anim_tevcallback usu_00.o] ["村人Ａ"] 1
+805C92AC:   callc [anim_tevcallback usu_00.o] ["村長"] 1
+805C92BC:   callc [yami_view usu_00.o] -800
+805C92C8:   callc [evt_bg_set_color evt_bg.o] 64 64 64 255
+805C92E0:   callc [evt_cam3d_evt_set evt_cam.o] -350 90 737 -76 70 0 0 11
+805C9308:   callc [starstone_entry usu_00.o] ["starstone"] -75 60 0
+805C9320:   setii GW(3) 60
+805C932C:   begin_thread
+805C9330:     loop 0
+805C9338:       callc [starstone_set_pos usu_00.o] ["starstone"] -75 GW(3) 0
+805C9350:       wait_frames 1
+805C9358:     end_loop
+805C935C:   end_thread
+805C9360:   begin_thread
+805C9364:     setff LW(0) 0.00
+805C9370:     loop 0
+805C9378:       callc [starstone_set_ry usu_00.o] ["starstone"] LW(0)
+805C9388:       subf LW(0) 3.00
+805C9394:       if_int_le LW(0) 0.00
+805C93A0:         addf LW(0) 360.00
+805C93AC:       endif
+805C93B0:       wait_frames 1
+805C93B8:     end_loop
+805C93BC:   end_thread
+805C93C0:   begin_thread
+805C93C4:     loop 0
+805C93CC:       callc [evt_sub_intpl_msec_init evt_sub.o] 11 6000 6500 500
+805C93E4: 1:
+805C93EC:       callc [evt_sub_intpl_msec_get_value evt_sub.o]
+805C93F4:       divf LW(0) 100.00
+805C9400:       setff GW(3) LW(0)
+805C940C:       wait_frames 1
+805C9414:       if_int_eq LW(1) 1
+805C9420:         goto 1
+805C9428:       endif
+805C942C:       callc [evt_sub_intpl_msec_init evt_sub.o] 11 6500 6000 500
+805C9444: 2:
+805C944C:       callc [evt_sub_intpl_msec_get_value evt_sub.o]
+805C9454:       divf LW(0) 100.00
+805C9460:       setff GW(3) LW(0)
+805C946C:       wait_frames 1
+805C9474:       if_int_eq LW(1) 1
+805C9480:         goto 2
+805C9488:       endif
+805C948C:     end_loop
+805C9490:   end_thread
+805C9494:   callc [evt_seq_wait evt_seq.o] 2
+805C94A0:   wait_ms 500
+805C94A8:   callc [evt_msg_print evt_msg.o] 0 ["stg8_las_148_26"] 0 ["子供１"]
+805C94C0:   callc [evt_msg_print evt_msg.o] 0 ["stg8_las_148_27"] 0 ["子供２"]
+805C94D8:   callc [evt_msg_print evt_msg.o] 0 ["stg8_las_148_28"] 0 ["子供３"]
+805C94F0:   callc [evt_msg_print evt_msg.o] 0 ["stg8_las_148_29"] 0 ["子供１"]
+805C9508:   callc [evt_msg_print evt_msg.o] 0 ["stg8_las_148_30"] 0 ["子供２"]
+805C9520:   callc [evt_msg_print evt_msg.o] 0 ["stg8_las_148_31"] 0 ["子供３"]
+805C9538:   callc [evt_npc_flag_onoff evt_npc.o] 1 ["子供１"] 32768
+805C954C:   callc [evt_npc_flag_onoff evt_npc.o] 1 ["子供２"] 32768
+805C9560:   callc [evt_npc_flag_onoff evt_npc.o] 1 ["子供３"] 32768
+805C9574:   callc [evt_npc_flag_onoff evt_npc.o] 1 ["おばさん"] 32768
+805C9588:   callc [evt_cam3d_evt_set evt_cam.o] -75 92 313 -75 52 -35 0 11
+805C95B0:   wait_frames 1
+805C95B8:   wait_ms 1000
+805C95C0:   callc [evt_msg_print evt_msg.o] 0 ["stg8_las_148_32"] 0 ["村人Ａ"]
+805C95D8:   wait_ms 500
+805C95E0:   callc [evt_msg_print evt_msg.o] 0 ["stg8_las_148_33"] 0 ["おばさん"]
+805C95F8:   wait_ms 1000
+805C9600:   callc [evt_msg_print evt_msg.o] 0 ["stg8_las_148_34"] 0 ["村長"]
+805C9618:   callc [evt_cam3d_evt_set evt_cam.o] -185 70 858 -91 111 -36 0 11
+805C9640:   wait_frames 1
+805C9648:   callc [evt_msg_print evt_msg.o] 0 ["stg8_las_148_35"] 0 ["子供１"]
+805C9660:   callc [evt_msg_print evt_msg.o] 0 ["stg8_las_148_36"] 0 ["子供２"]
+805C9678:   callc [evt_msg_print evt_msg.o] 0 ["stg8_las_148_37"] 0 ["子供３"]
+805C9690:   callc [evt_fade_set_mapchange_type evt_fade.o] 1 10 300 9 300
+805C96AC:   callc [evt_bero_mapchange evt_bero.o] ["muj_01"] ["minnnanokoe"]
+805C96BC:   return
+805C96C0:   end

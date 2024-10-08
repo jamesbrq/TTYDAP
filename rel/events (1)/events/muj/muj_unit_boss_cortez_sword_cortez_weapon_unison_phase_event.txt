@@ -1,0 +1,101 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [cortez_weapon_unison_phase_event unit_boss_cortez_sword.o] AT 805F7DBC ---
+805F7DBC:   callc [btlevtcmd_CheckPhase battle_event_cmd.o] LW(0) 67108865
+805F7DCC:   if_int_ne LW(0) 0
+805F7DD8:     callc [btlevtcmd_GetUnitWork battle_event_cmd.o] -2 0 LW(0)
+805F7DEC:     if_int_eq LW(0) -1
+805F7DF8:       return
+805F7DFC:     endif
+805F7E00:     callc [btlevtcmd_GetUnitWork battle_event_cmd.o] LW(0) 5 LW(1)
+805F7E14:     if_int_ge LW(1) 4
+805F7E20:       callc [btlevtcmd_GetUnitWork battle_event_cmd.o] -2 1 LW(0)
+805F7E34:       if_int_eq LW(0) 0
+805F7E40:         callc [btlevtcmd_GetUnitId battle_event_cmd.o] -2 LW(9)
+805F7E50:         if_int_eq LW(9) -1
+805F7E5C:           return
+805F7E60:         endif
+805F7E64:         callss [cortez_weapon_get_home_height unit_boss_cortez_sword.o]
+805F7E6C:         if_int_ne LW(1) LW(5)
+805F7E78:           callc [btlevtcmd_PhaseEventStartDeclare battle_event_cmd.o] -2
+805F7E84:           callc [btlevtcmd_DivePosition battle_event_cmd.o] -2 LW(0) LW(5) LW(2) 60 0 4 0 -1
+805F7EB0:           callc [btlevtcmd_SetHomePos battle_event_cmd.o] -2 LW(0) LW(5) LW(2)
+805F7EC8:           callss [cortez_weapon_set_formation_attribute unit_boss_cortez_sword.o]
+805F7ED0:           callc [btlevtcmd_StartWaitEvent battle_event_cmd.o] -2
+805F7EDC:           return
+805F7EE0:         endif
+805F7EE4:       endif
+805F7EE8:     endif
+805F7EEC:   endif
+805F7EF0:   return
+805F7EF4:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [cortez_weapon_get_home_height unit_boss_cortez_sword.o] AT 805F7B10 ---
+805F7B10:   setii LW(5) 0
+805F7B1C:   callc [btlevtcmd_GetPos battle_event_cmd.o] LW(9) LW(0) LW(1) LW(2)
+805F7B34:   callc [btlevtcmd_GetUnitWork battle_event_cmd.o] LW(9) 0 LW(3)
+805F7B48:   callc [btlevtcmd_GetUnitWork battle_event_cmd.o] LW(3) 8 LW(4)
+805F7B5C:   switchi LW(4)
+805F7B64:     case_int_eq 0
+805F7B6C:       callc [btlevtcmd_GetUnitWork battle_event_cmd.o] LW(9) 2 LW(6)
+805F7B80:       switchi LW(6)
+805F7B88:         case_int_eq 0
+805F7B90:           addi LW(5) 20
+805F7B9C:         case_int_eq 1
+805F7BA4:           addi LW(5) 60
+805F7BB0:         case_int_eq 2
+805F7BB8:           addi LW(5) 60
+805F7BC4:         case_int_eq 3
+805F7BCC:           addi LW(5) 20
+805F7BD8:       end_switch
+805F7BDC:     case_int_eq 1
+805F7BE4:       callc [btlevtcmd_GetUnitWork battle_event_cmd.o] LW(9) 2 LW(6)
+805F7BF8:       switchi LW(6)
+805F7C00:         case_int_eq 0
+805F7C08:           addi LW(5) 20
+805F7C14:         case_int_eq 1
+805F7C1C:           addi LW(5) 20
+805F7C28:         case_int_eq 2
+805F7C30:           addi LW(5) 60
+805F7C3C:         case_int_eq 3
+805F7C44:           addi LW(5) 60
+805F7C50:       end_switch
+805F7C54:     case_int_eq 2
+805F7C5C:       callc [btlevtcmd_GetUnitWork battle_event_cmd.o] LW(9) 2 LW(6)
+805F7C70:       switchi LW(6)
+805F7C78:         case_int_eq 0
+805F7C80:           addi LW(5) 60
+805F7C8C:         case_int_eq 1
+805F7C94:           addi LW(5) 20
+805F7CA0:         case_int_eq 2
+805F7CA8:           addi LW(5) 60
+805F7CB4:         case_int_eq 3
+805F7CBC:           addi LW(5) 20
+805F7CC8:       end_switch
+805F7CCC:     case_int_eq 3
+805F7CD4:       callc [btlevtcmd_GetUnitWork battle_event_cmd.o] LW(9) 2 LW(6)
+805F7CE8:       switchi LW(6)
+805F7CF0:         case_int_eq 0
+805F7CF8:           addi LW(5) 60
+805F7D04:         case_int_eq 1
+805F7D0C:           addi LW(5) 20
+805F7D18:         case_int_eq 2
+805F7D20:           addi LW(5) 20
+805F7D2C:         case_int_eq 3
+805F7D34:           addi LW(5) 60
+805F7D40:       end_switch
+805F7D44:   end_switch
+805F7D48:   return
+805F7D4C:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [cortez_weapon_set_formation_attribute unit_boss_cortez_sword.o] AT 805F7D50 ---
+805F7D50:   callc [btlevtcmd_GetBodyId battle_event_cmd.o] LW(9) LW(0)
+805F7D60:   callc [btlevtcmd_GetHomePos battle_event_cmd.o] LW(9) [F1194D80] LW(1) [F1194D80]
+805F7D78:   if_int_ge LW(1) 40
+805F7D84:     callc [btlevtcmd_OnPartsAttribute battle_event_cmd.o] LW(9) LW(0) 6291456
+805F7D98:   else
+805F7D9C:     callc [btlevtcmd_OffPartsAttribute battle_event_cmd.o] LW(9) LW(0) 6291456
+805F7DB0:   endif
+805F7DB4:   return
+805F7DB8:   end

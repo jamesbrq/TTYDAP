@@ -1,0 +1,60 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [damage_check_last unit_boomerang_bros.o] AT 805E624C ---
+805E624C:   if_int_eq LW(0) 1
+805E6258:     callc [btlevtcmd_GetUnitWork battle_event_cmd.o] -2 7 LW(8)
+805E626C:     if_int_eq LW(8) 0
+805E6278:       callc [btlevtcmd_ResultACDefence battle_event_cmd.o] LW(3) LW(6)
+805E6288:       callc [btlevtcmd_SetUnitWork battle_event_cmd.o] -2 7 1
+805E629C:     endif
+805E62A0:     callc [btlevtcmd_CheckDamage battle_event_cmd.o] -2 LW(3) LW(4) LW(6) 256 LW(5)
+805E62C0:   else
+805E62C4:     setii LW(7) 1
+805E62D0:     callss [damage_check_sub unit_boomerang_bros.o]
+805E62D8:   endif
+805E62DC:   return
+805E62E0:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [damage_check_sub unit_boomerang_bros.o] AT 805E6084 ---
+805E6084:   setii LW(0) 0
+805E6090:   callc [btlevtcmd_PreCheckDamage battle_event_cmd.o] -2 LW(3) LW(4) LW(6) 0 LW(5)
+805E60B0:   switchi LW(5)
+805E60B8:     case_int_eq_any 4
+805E60C0:       goto 90
+805E60C8:       end_multi_case
+805E60CC:     case_int_eq 3
+805E60D4:       callc [btlevtcmd_StartAvoid battle_event_cmd.o] LW(3) 38
+805E60E4:       goto 90
+805E60EC:       end_multi_case
+805E60F0:     case_int_eq 6
+805E60F8:       callc [btlevtcmd_StartAvoid battle_event_cmd.o] LW(3) 39
+805E6108:       goto 90
+805E6110:     case_int_eq 2
+805E6118:       callc [btlevtcmd_StartAvoid battle_event_cmd.o] LW(3) 40
+805E6128:       goto 90
+805E6130:     case_int_eq 1
+805E6138:       goto 91
+805E6140:       end_multi_case
+805E6144:     case_default
+805E6148:       goto 98
+805E6150:       end_multi_case
+805E6154:   end_switch
+805E6158: 90:
+805E6160:   goto 99
+805E6168: 91:
+805E6170:   callc [btlevtcmd_GetUnitWork battle_event_cmd.o] -2 7 LW(8)
+805E6184:   if_int_eq LW(8) 0
+805E6190:     callc [btlevtcmd_ResultACDefence battle_event_cmd.o] LW(3) LW(6)
+805E61A0:     callc [btlevtcmd_SetUnitWork battle_event_cmd.o] -2 7 1
+805E61B4:   endif
+805E61B8:   if_int_eq LW(7) 1
+805E61C4:     callc [btlevtcmd_CheckDamage battle_event_cmd.o] -2 LW(3) LW(4) LW(6) 256 LW(5)
+805E61E4:   else
+805E61E8:     callc [btlevtcmd_CheckDamage battle_event_cmd.o] -2 LW(3) LW(4) LW(6) 0 LW(5)
+805E6208:   endif
+805E620C:   setii LW(0) 1
+805E6218:   goto 99
+805E6220: 99:
+805E6228:   return
+805E622C:   end

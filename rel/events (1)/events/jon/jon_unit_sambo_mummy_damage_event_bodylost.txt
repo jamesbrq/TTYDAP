@@ -1,0 +1,138 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [damage_event_bodylost unit_sambo_mummy.o] AT 80CBE214 ---
+80CBE214:   callc [btlevtcmd_GetUnitWork battle_event_cmd.o] -2 0 LW(0)
+80CBE228:   if_int_eq LW(0) 1
+80CBE234:     callc [btlevtcmd_GetDamage battle_event_cmd.o] LW(10) LW(0)
+80CBE244:     if_int_ge LW(0) 1
+80CBE250:       callc [btlevtcmd_AnimeChangePoseType battle_event_cmd.o] LW(10) LW(11) LW(14)
+80CBE264:       wait_frames 30
+80CBE26C:       if_int_ne LW(15) -1
+80CBE278:         callc [btlevtcmd_AnimeChangePoseType battle_event_cmd.o] LW(10) LW(11) LW(15)
+80CBE28C:         wait_frames 30
+80CBE294:       endif
+80CBE298:     else
+80CBE29C:       callss [subsetevt_nodamage_motion battle_event_subset.o]
+80CBE2A4:     endif
+80CBE2A8:   else
+80CBE2AC:     setii LW(12) LW(11)
+80CBE2B8:     callc [btlevtcmd_GetUnitWork battle_event_cmd.o] LW(10) 0 LW(0)
+80CBE2CC:     subi LW(0) 1
+80CBE2D8:     callc [btlevtcmd_SetUnitWork battle_event_cmd.o] LW(10) 0 LW(0)
+80CBE2EC:     callss [_body_param_set unit_sambo_mummy.o]
+80CBE2F4:     switchi LW(0)
+80CBE2FC:       case_int_eq 1
+80CBE304:         setii LW(11) 4
+80CBE310:         callc [btlevtcmd_SetSwallowParam battle_event_cmd.o] -2 50
+80CBE320:         callc [btlevtcmd_SetSwallowAttribute battle_event_cmd.o] -2 2
+80CBE330:         callc [btlevtcmd_SetStatusIconOffset battle_event_cmd.o] -2 14 20
+80CBE344:         callc [btlevtcmd_SetCutBaseOffset battle_event_cmd.o] -2 0 10 0
+80CBE35C:         callc [btlevtcmd_SetKissHitOffset battle_event_cmd.o] -2 10 16 0
+80CBE374:       case_int_eq 2
+80CBE37C:         setii LW(11) 3
+80CBE388:         callc [btlevtcmd_SetStatusIconOffset battle_event_cmd.o] -2 14 40
+80CBE39C:         callc [btlevtcmd_SetCutBaseOffset battle_event_cmd.o] -2 0 20 0
+80CBE3B4:         callc [btlevtcmd_SetKissHitOffset battle_event_cmd.o] -2 10 26 0
+80CBE3CC:       case_int_eq 3
+80CBE3D4:         setii LW(11) 2
+80CBE3E0:         callc [btlevtcmd_SetStatusIconOffset battle_event_cmd.o] -2 14 60
+80CBE3F4:         callc [btlevtcmd_SetCutBaseOffset battle_event_cmd.o] -2 0 30 0
+80CBE40C:         callc [btlevtcmd_SetKissHitOffset battle_event_cmd.o] -2 10 36 0
+80CBE424:       case_default
+80CBE428:         setii LW(11) 1
+80CBE434:         callc [btlevtcmd_SetStatusIconOffset battle_event_cmd.o] -2 14 80
+80CBE448:         callc [btlevtcmd_SetCutBaseOffset battle_event_cmd.o] -2 0 40 0
+80CBE460:         callc [btlevtcmd_SetKissHitOffset battle_event_cmd.o] -2 10 52 0
+80CBE478:     end_switch
+80CBE47C:     callc [btlevtcmd_OffPartsAttribute battle_event_cmd.o] LW(10) LW(12) 9
+80CBE490:     callc [btlevtcmd_OnPartsAttribute battle_event_cmd.o] LW(10) LW(12) 50397184
+80CBE4A4:     callc [btlevtcmd_OnPartsAttribute battle_event_cmd.o] LW(10) LW(11) 9
+80CBE4B8:     callc [btlevtcmd_OffPartsAttribute battle_event_cmd.o] LW(10) LW(11) 16842752
+80CBE4CC:     callc [btlevtcmd_GetPos battle_event_cmd.o] LW(10) LW(0) LW(1) LW(2)
+80CBE4E4:     begin_child_thread
+80CBE4E8:       wait_frames 4
+80CBE4F0:       callss [subset_dmg_sambo_fall unit_sambo_mummy.o]
+80CBE4F8:     end_child_thread
+80CBE4FC:     callc [btlevtcmd_GetPos battle_event_cmd.o] LW(10) LW(0) LW(1) LW(2)
+80CBE514:     callc [btlevtcmd_SetPartsPos battle_event_cmd.o] LW(10) 5 LW(0) LW(1) LW(2)
+80CBE530:     callc [btlevtcmd_OffPartsAttribute battle_event_cmd.o] LW(10) 5 16777216
+80CBE544:     callc [btlevtcmd_SetPartsFallAccel battle_event_cmd.o] LW(10) 5 0.40
+80CBE558:     callc [btlevtcmd_GetPos battle_event_cmd.o] LW(10) LW(0) LW(1) LW(2)
+80CBE570:     callc [btlevtcmd_FaceDirectionSub battle_event_cmd.o] LW(10) LW(0) 25
+80CBE584:     callc [btlevtcmd_TransStageFloorPosition battle_event_cmd.o] LW(0) LW(1) LW(2)
+80CBE598:     callc [btlevtcmd_JumpPartsPosition battle_event_cmd.o] LW(10) 5 LW(0) LW(1) LW(2) 16 -1
+80CBE5BC:     callc [btlevtcmd_FaceDirectionSub battle_event_cmd.o] LW(10) LW(0) 16
+80CBE5D0:     callc [btlevtcmd_JumpPartsPosition battle_event_cmd.o] LW(10) 5 LW(0) LW(1) LW(2) 12 -1
+80CBE5F4:     loop 40
+80CBE5FC:       callc [btlevtcmd_OnPartsAttribute battle_event_cmd.o] LW(10) 5 16777216
+80CBE610:       wait_frames 1
+80CBE618:       callc [btlevtcmd_OffPartsAttribute battle_event_cmd.o] LW(10) 5 16777216
+80CBE62C:       wait_frames 1
+80CBE634:     end_loop
+80CBE638:     callc [btlevtcmd_OnPartsAttribute battle_event_cmd.o] LW(10) 5 16777216
+80CBE64C:   endif
+80CBE650:   return
+80CBE654:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [_body_param_set unit_sambo_mummy.o] AT 80CC1B7C ---
+80CC1B7C:   callc [btlevtcmd_GetUnitWork battle_event_cmd.o] -2 0 LW(0)
+80CC1B90:   switchi LW(0)
+80CC1B98:     case_int_eq 1
+80CC1BA0:       callc [btlevtcmd_SetHeight battle_event_cmd.o] -2 20
+80CC1BB0:       callc [btlevtcmd_SetCutHeight battle_event_cmd.o] -2 20
+80CC1BC0:     case_int_eq 2
+80CC1BC8:       callc [btlevtcmd_SetHeight battle_event_cmd.o] -2 40
+80CC1BD8:       callc [btlevtcmd_SetCutHeight battle_event_cmd.o] -2 40
+80CC1BE8:     case_int_eq 3
+80CC1BF0:       callc [btlevtcmd_SetHeight battle_event_cmd.o] -2 60
+80CC1C00:       callc [btlevtcmd_SetCutHeight battle_event_cmd.o] -2 60
+80CC1C10:     case_default
+80CC1C14:       callc [btlevtcmd_SetHeight battle_event_cmd.o] -2 80
+80CC1C24:       callc [btlevtcmd_SetCutHeight battle_event_cmd.o] -2 80
+80CC1C34:   end_switch
+80CC1C38:   return
+80CC1C3C:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [subset_dmg_sambo_fall unit_sambo_mummy.o] AT 80CBE658 ---
+80CBE658:   callc [btlevtcmd_AnimeChangePoseType battle_event_cmd.o] LW(10) LW(11) LW(14)
+80CBE66C:   callc [btlevtcmd_GetPos battle_event_cmd.o] LW(10) LW(0) LW(1) LW(2)
+80CBE684:   addi LW(1) 18
+80CBE690:   callc [btlevtcmd_SetPos battle_event_cmd.o] LW(10) LW(0) LW(1) LW(2)
+80CBE6A8:   callc [btlevtcmd_GetPos battle_event_cmd.o] LW(10) LW(0) LW(1) LW(2)
+80CBE6C0:   setii LW(3) LW(1)
+80CBE6CC:   wait_frames 2
+80CBE6D4:   subi LW(3) 1
+80CBE6E0:   callc [btlevtcmd_SetPos battle_event_cmd.o] LW(10) LW(0) LW(3) LW(2)
+80CBE6F8:   wait_frames 3
+80CBE700:   subi LW(3) 2
+80CBE70C:   callc [btlevtcmd_SetPos battle_event_cmd.o] LW(10) LW(0) LW(3) LW(2)
+80CBE724:   wait_frames 2
+80CBE72C:   subi LW(3) 3
+80CBE738:   callc [btlevtcmd_SetPos battle_event_cmd.o] LW(10) LW(0) LW(3) LW(2)
+80CBE750:   wait_frames 1
+80CBE758:   subi LW(3) 5
+80CBE764:   callc [btlevtcmd_SetPos battle_event_cmd.o] LW(10) LW(0) LW(3) LW(2)
+80CBE77C:   wait_frames 1
+80CBE784:   subi LW(3) 7
+80CBE790:   callc [btlevtcmd_SetPos battle_event_cmd.o] LW(10) LW(0) LW(3) LW(2)
+80CBE7A8:   wait_frames 1
+80CBE7B0:   addi LW(3) 2
+80CBE7BC:   callc [btlevtcmd_SetPos battle_event_cmd.o] LW(10) LW(0) LW(3) LW(2)
+80CBE7D4:   wait_frames 1
+80CBE7DC:   addi LW(3) 3
+80CBE7E8:   callc [btlevtcmd_SetPos battle_event_cmd.o] LW(10) LW(0) LW(3) LW(2)
+80CBE800:   wait_frames 1
+80CBE808:   addi LW(3) 3
+80CBE814:   callc [btlevtcmd_SetPos battle_event_cmd.o] LW(10) LW(0) LW(3) LW(2)
+80CBE82C:   wait_frames 1
+80CBE834:   subi LW(3) 3
+80CBE840:   callc [btlevtcmd_SetPos battle_event_cmd.o] LW(10) LW(0) LW(3) LW(2)
+80CBE858:   wait_frames 1
+80CBE860:   subi LW(3) 3
+80CBE86C:   callc [btlevtcmd_SetPos battle_event_cmd.o] LW(10) LW(0) LW(3) LW(2)
+80CBE884:   wait_frames 1
+80CBE88C:   subi LW(3) 2
+80CBE898:   callc [btlevtcmd_SetPos battle_event_cmd.o] LW(10) LW(0) LW(3) LW(2)
+80CBE8B0:   return
+80CBE8B4:   end

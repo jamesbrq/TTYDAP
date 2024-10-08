@@ -1,0 +1,91 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [evt_haguruma aji_03.o] AT 805DBE78 ---
+805DBE78:   callc [evt_mario_key_onoff evt_mario.o] 0
+805DBE84:   callc [evt_pouch_check_item evt_pouch.o] 85 LW(0)
+805DBE94:   if_int_lt LW(0) 1
+805DBEA0:     callc [evt_msg_print evt_msg.o] 0 ["stg7_aji_00_00"] 0 0
+805DBEB8:     callc [evt_mario_key_onoff evt_mario.o] 1
+805DBEC4:     return
+805DBEC8:   endif
+805DBECC:   callc [evt_win_item_select evt_window.o] 0 [haguruma_tbl aji_03.o] LW(0) 0
+805DBEE4:   if_int_ne LW(0) -1
+805DBEF0:     begin_thread
+805DBEF4:       callc [evt_snd_bgmoff evt_snd.o] 1024
+805DBF00:       callc [evt_snd_bgmon evt_snd.o] 1 ["BGM_FF_ENV_SUCCESS1"]
+805DBF10:       wait_ms 2000
+805DBF18:       callc [evt_snd_bgmoff evt_snd.o] 513
+805DBF24:       callc [evt_snd_bgmon evt_snd.o] 288 0
+805DBF34:     end_thread
+805DBF38:     callc [evt_mapobj_flag_onoff evt_map.o] 1 1 ["S_zenmais_nashi"] 1
+805DBF50:     callc [evt_mapobj_flag_onoff evt_map.o] 1 0 ["S_zenmais_ari"] 1
+805DBF68:     callsa [evt_zenmai aji_03.o]
+805DBF70:     callc [evt_pouch_remove_item evt_pouch.o] LW(0) LW(1)
+805DBF80:     setii GSWF(4196) 1
+805DBF8C:     callc [evt_run_case_evt evt_case.o] 9 1 ["A_sui1"] 0 [evt_sw0 aji_03.o] 0
+805DBFAC:     callc [evt_run_case_evt evt_case.o] 9 1 ["A_sui2"] 0 [evt_sw1 aji_03.o] 0
+805DBFCC:     callc [evt_run_case_evt evt_case.o] 9 1 ["A_sui3"] 0 [evt_sw2 aji_03.o] 0
+805DBFEC:     setii LW(0) ["sui__1"]
+805DBFF8:     setii LW(1) ["sui__2"]
+805DC004:     callsa_tid [blink_sw aji_03.o] GW(13)
+805DC010:     setii LW(0) ["sui_2_1"]
+805DC01C:     setii LW(1) ["sui_2_2"]
+805DC028:     callsa_tid [blink_sw aji_03.o] GW(14)
+805DC034:     setii LW(0) ["sui_3_1"]
+805DC040:     setii LW(1) ["sui_3_2"]
+805DC04C:     callsa_tid [blink_sw aji_03.o] GW(15)
+805DC058:     callc [evt_mario_key_onoff evt_mario.o] 1
+805DC064:     callc [evt_exit_case_evt evt_case.o]
+805DC06C:     return
+805DC070:   endif
+805DC074:   callc [evt_mario_key_onoff evt_mario.o] 1
+805DC080:   return
+805DC084:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [evt_zenmai aji_03.o] AT 805DB068 ---
+805DB068:   callc [evt_snd_sfxon evt_snd.o] ["SFX_STG7_AMB_GEAR1"] 0
+805DB078:   loop 0
+805DB080:     if_int_lt GSW(0) 372
+805DB08C:       callc [evt_sub_intpl_msec_init evt_sub.o] 0 0 36000 2000
+805DB0A4:     else
+805DB0A8:       callc [evt_sub_intpl_msec_init evt_sub.o] 0 0 36000 1000
+805DB0C0:     endif
+805DB0C4: 0:
+805DB0CC:     callc [evt_sub_intpl_msec_get_value evt_sub.o]
+805DB0D4:     divf LW(0) 100.00
+805DB0E0:     setff LW(2) LW(0)
+805DB0EC:     setff LW(3) LW(0)
+805DB0F8:     mulf LW(3) -1.00
+805DB104:     callc [evt_mapobj_rotate evt_map.o] 1 ["S_zenmai1"] 0 0 LW(3)
+805DB120:     callc [evt_mapobj_rotate evt_map.o] 1 ["S_zenmai2"] 0 0 LW(2)
+805DB13C:     callc [evt_mapobj_rotate evt_map.o] 1 ["S_zenmai3"] 0 0 LW(2)
+805DB158:     callc [evt_mapobj_rotate evt_map.o] 1 ["S_zenmai4"] 0 0 LW(2)
+805DB174:     callc [evt_mapobj_rotate evt_map.o] 1 ["S_zenmai5"] 0 0 LW(3)
+805DB190:     callc [evt_mapobj_rotate evt_map.o] 1 ["S_zenmai6"] 0 0 LW(2)
+805DB1AC:     callc [evt_mapobj_rotate evt_map.o] 1 ["S_zenmais1"] 0 0 LW(3)
+805DB1C8:     callc [evt_mapobj_rotate evt_map.o] 1 ["S_zenmais2"] 0 0 LW(2)
+805DB1E4:     callc [evt_mapobj_rotate evt_map.o] 1 ["S_zenmais3"] 0 0 LW(2)
+805DB200:     callc [evt_mapobj_rotate evt_map.o] 1 ["S_zenmais4"] 0 0 LW(2)
+805DB21C:     callc [evt_mapobj_rotate evt_map.o] 1 ["S_zenmais5"] 0 0 LW(3)
+805DB238:     callc [evt_mapobj_rotate evt_map.o] 1 ["S_zenmais6"] 0 0 LW(2)
+805DB254:     callc [evt_mapobj_rotate evt_map.o] 1 ["S_zenmais_ari"] 0 0 LW(2)
+805DB270:     wait_frames 1
+805DB278:     if_int_eq LW(1) 1
+805DB284:       goto 0
+805DB28C:     endif
+805DB290:   end_loop
+805DB294:   return
+805DB298:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [blink_sw aji_03.o] AT 805DB29C ---
+805DB29C:   loop 0
+805DB2A4:     callc [evt_mapobj_flag_onoff evt_map.o] 1 0 LW(0) 1
+805DB2BC:     callc [evt_mapobj_flag_onoff evt_map.o] 1 1 LW(1) 1
+805DB2D4:     wait_ms 600
+805DB2DC:     callc [evt_mapobj_flag_onoff evt_map.o] 1 1 LW(0) 1
+805DB2F4:     callc [evt_mapobj_flag_onoff evt_map.o] 1 0 LW(1) 1
+805DB30C:     wait_ms 600
+805DB314:   end_loop
+805DB318:   return
+805DB31C:   end

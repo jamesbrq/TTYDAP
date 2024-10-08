@@ -1,0 +1,37 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [evt_michel_3_sub tou.o] AT 805CEFB0 ---
+805CEFB0:   setii LW(3) LW(0)
+805CEFBC:   callc [evt_npc_move_position evt_npc.o] LW(3) 0 -130 0 80.00 1
+805CEFDC:   setii LW(1) 0
+805CEFE8:   callsa [bero_open_door_play_se evt_bero.o]
+805CEFF0:   callc [evt_sub_intpl_msec_init evt_sub.o] 11 0 180 500
+805CF008:   loop 0
+805CF010:     callc [evt_sub_intpl_msec_get_value evt_sub.o]
+805CF018:     mulf LW(0) 0.44
+805CF024:     callc [evt_mapobj_rotate evt_map.o] 1 ["door_1"] 0 LW(0) 0
+805CF040:     if_int_eq LW(1) 0
+805CF04C:       loop_break
+805CF050:     endif
+805CF054:     wait_frames 1
+805CF05C:   end_loop
+805CF060:   begin_thread
+805CF064:     callc [evt_npc_move_position evt_npc.o] LW(3) 0 -200 0 80.00 1
+805CF084:     callc [evt_npc_set_position evt_npc.o] LW(3) 0 -1000 0
+805CF09C:   end_thread
+805CF0A0:   wait_ms 800
+805CF0A8:   setii LW(1) 0
+805CF0B4:   callsa [bero_close_door_play_se evt_bero.o]
+805CF0BC:   callc [evt_sub_intpl_msec_init evt_sub.o] 11 180 0 500
+805CF0D4:   loop 0
+805CF0DC:     callc [evt_sub_intpl_msec_get_value evt_sub.o]
+805CF0E4:     mulf LW(0) 0.44
+805CF0F0:     callc [evt_mapobj_rotate evt_map.o] 1 ["door_1"] 0 LW(0) 0
+805CF10C:     if_int_eq LW(1) 0
+805CF118:       loop_break
+805CF11C:     endif
+805CF120:     wait_frames 1
+805CF128:   end_loop
+805CF12C:   return
+805CF130:   end

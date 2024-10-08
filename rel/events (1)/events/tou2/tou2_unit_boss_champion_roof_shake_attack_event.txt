@@ -1,0 +1,108 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [roof_shake_attack_event unit_boss_champion.o] AT 805E2638 ---
+805E2638:   setii LW(15) 0
+805E2644:   callc [btlevtcmd_SetPartsWork battle_event_cmd.o] -2 1 0 0
+805E265C:   callc [btlevtcmd_SetPartsWork battle_event_cmd.o] -2 1 1 0
+805E2674:   callc [btlevtcmd_SetPartsWork battle_event_cmd.o] -2 1 2 0
+805E268C:   callc [btlevtcmd_SetPartsWork battle_event_cmd.o] -2 1 3 0
+805E26A4:   callc [btlevtcmd_SetPartsWork battle_event_cmd.o] -2 1 4 0
+805E26BC:   callc [btlevtcmd_SetPartsWork battle_event_cmd.o] -2 1 5 0
+805E26D4:   callc [btlevtcmd_SetPartsWork battle_event_cmd.o] -2 1 6 0
+805E26EC:   callc [btlevtcmd_SetPartsWork battle_event_cmd.o] -2 1 7 0
+805E2704:   callc [btlevtcmd_SetPartsWork battle_event_cmd.o] -2 1 8 0
+805E271C:   callc [btlevtcmd_SetPartsWork battle_event_cmd.o] -2 1 9 0
+805E2734:   setii LW(13) 0
+805E2740:   loop 10
+805E2748:     setii LW(0) 0
+805E2754:     addi LW(0) LW(13)
+805E2760:     callc [btlevtcmd_SetPartsWork battle_event_cmd.o] -2 1 LW(0) 0
+805E2778:     callc [btlevtcmd_GetEnemyBelong battle_event_cmd.o] -2 LW(0)
+805E2788:     callc [btlevtcmd_SamplingEnemy battle_event_cmd.o] -2 LW(0) LW(9)
+805E279C:     callc [btlevtcmd_ChoiceSamplingEnemy battle_event_cmd.o] LW(9) LW(3) LW(4)
+805E27B0:     if_int_eq LW(3) -1
+805E27BC:       callc [btlevtcmd_CheckToken battle_event_cmd.o] -2 16 LW(0)
+805E27D0:       if_int_ne LW(0) 0
+805E27DC:         callss [subsetevt_confuse_flustered battle_event_subset.o]
+805E27E4:       endif
+805E27E8:       return
+805E27EC:     endif
+805E27F0:     callc [btlevtcmd_WeaponAftereffect battle_event_cmd.o] LW(9)
+805E27FC:     callc [btlevtcmd_AttackDeclare battle_event_cmd.o] -2 LW(3) LW(4)
+805E2810:     callc [btlevtcmd_WaitGuardMove battle_event_cmd.o]
+805E2818:     callc [btlevtcmd_PayWeaponCost battle_event_cmd.o] -2 LW(9)
+805E2828:     callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 1 ["A_4"]
+805E283C:     wait_frames 16
+805E2844:     callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_BOSS_BLED_SHAKE_CAILING1"] [F1194D80] 0 [F1194D80]
+805E2860:     callc [evt_btl_camera_shake_h battle_camera.o] 0 2 0 10 13
+805E287C:     callc [btlevtcmd_GetHitPos battle_event_cmd.o] LW(3) LW(4) LW(0) LW(1) LW(2)
+805E2898:     addi LW(2) 10
+805E28A4:     setii LW(8) LW(1)
+805E28B0:     callc [btlevtcmd_TransStageFloorPosition battle_event_cmd.o] LW(0) LW(1) LW(2)
+805E28C4:     callc [btlevtcmd_PreCheckDamage battle_event_cmd.o] -2 LW(3) LW(4) LW(9) 0 LW(5)
+805E28E4:     if_int_ne LW(5) 1
+805E28F0:       setii LW(8) 0
+805E28FC:     endif
+805E2900:     callc [evt_sub_random evt_sub.o] 2 LW(6)
+805E2910:     switchi LW(6)
+805E2918:       case_int_eq 0
+805E2920:         callc [unk_tou2_000027f8 unit_boss_champion.o] LW(14) 4 LW(0) LW(1) LW(2) 20 LW(8) 0 1 60
+805E2950:       case_int_eq 1
+805E2958:         callc [unk_tou2_000027f8 unit_boss_champion.o] LW(14) 5 LW(0) LW(1) LW(2) 20 LW(8) 0 1 60
+805E2988:       case_int_eq 2
+805E2990:         callc [unk_tou2_000027f8 unit_boss_champion.o] LW(14) 8 LW(0) LW(1) LW(2) 20 LW(8) 0 1 60
+805E29C0:     end_switch
+805E29C4:     begin_thread_tid LW(15)
+805E29CC:       switchi LW(5)
+805E29D4:         case_int_eq 1
+805E29DC:           callc [unk_tou2_000027b0 unit_boss_champion.o] LW(14)
+805E29E8:           callc [btlevtcmd_ResultACDefence battle_event_cmd.o] LW(3) LW(9)
+805E29F8:           callc [btlevtcmd_CheckDamage battle_event_cmd.o] -2 LW(3) LW(4) LW(9) 0 LW(5)
+805E2A18:         case_int_eq 3
+805E2A20:           callc [unk_tou2_000027b0 unit_boss_champion.o] LW(14)
+805E2A2C:           callc [btlevtcmd_StartAvoid battle_event_cmd.o] LW(3) 38
+805E2A3C:         case_int_eq 6
+805E2A44:           wait_frames 10
+805E2A4C:           callc [btlevtcmd_StartAvoid battle_event_cmd.o] LW(3) 39
+805E2A5C:         case_int_eq 2
+805E2A64:           callc [unk_tou2_000027b0 unit_boss_champion.o] LW(14)
+805E2A70:           callc [btlevtcmd_StartAvoid battle_event_cmd.o] LW(3) 40
+805E2A80:         case_default
+805E2A84:           callc [unk_tou2_000027b0 unit_boss_champion.o] LW(14)
+805E2A90:       end_switch
+805E2A94:     end_thread
+805E2A98:     setii LW(0) 0
+805E2AA4:     addi LW(0) LW(13)
+805E2AB0:     callc [btlevtcmd_SetPartsWork battle_event_cmd.o] -2 1 LW(0) LW(15)
+805E2AC8:     wait_frames 4
+805E2AD0: 90:
+805E2AD8:     addi LW(13) 1
+805E2AE4:   end_loop
+805E2AE8:   wait_frames 10
+805E2AF0: 92:
+805E2AF8:   wait_frames 1
+805E2B00:   setii LW(13) 0
+805E2B0C: 93:
+805E2B14:   setii LW(0) 0
+805E2B20:   addi LW(0) LW(13)
+805E2B2C:   callc [btlevtcmd_GetPartsWork battle_event_cmd.o] -2 1 LW(0) LW(15)
+805E2B44:   if_int_ne LW(15) 0
+805E2B50:     callc [btlevtcmd_WaitEventEnd battle_event_cmd.o] LW(15)
+805E2B5C:     callc [btlevtcmd_SetPartsWork battle_event_cmd.o] -2 1 LW(0) 0
+805E2B74:     goto 92
+805E2B7C:   endif
+805E2B80:   addi LW(13) 1
+805E2B8C:   if_int_lt LW(13) 10
+805E2B98:     goto 93
+805E2BA0:   endif
+805E2BA4:   callc [btlevtcmd_GetGuardKouraId battle_event_cmd.o] -3 LW(0)
+805E2BB4:   if_int_ne LW(0) -1
+805E2BC0:     callc [btlevtcmd_CheckDamage battle_event_cmd.o] -2 LW(0) 1 [weapon_champion_roof_shake_last_attack unit_boss_champion.o] 256 LW(5)
+805E2BE0:   else
+805E2BE4:     callc [btlevtcmd_CheckDamage battle_event_cmd.o] -2 -3 1 [weapon_champion_roof_shake_last_attack unit_boss_champion.o] 256 LW(5)
+805E2C04:   endif
+805E2C08:   callc [btlevtcmd_CheckDamage battle_event_cmd.o] -2 -4 1 [weapon_champion_roof_shake_last_attack unit_boss_champion.o] 256 LW(5)
+805E2C28:   callc [evt_btl_camera_set_mode battle_camera.o] 0 0
+805E2C38:   return
+805E2C3C:   end

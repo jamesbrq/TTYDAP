@@ -1,0 +1,45 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [sinemon_find_event npc_event.o] AT 8034469C ---
+8034469C:   callc [evt_npc_flag_onoff evt_npc.o] 0 ["me"] 1024
+803446B0:   callc [evt_npc_set_anim evt_npc.o] ["me"] ["SIN_Z_3"]
+803446C0:   callc [evt_eff_fukidashi evt_eff.o] 1 0 ["me"] 0 0 0 0 0 0 0 30
+803446F4:   callc [evt_npc_set_rotate evt_npc.o] ["me"] 0 0 0
+8034470C:   setii LW(15) 0
+80344718:   loop 0
+80344720:     wait_frames 1
+80344728:     addi LW(15) 30
+80344734:     callc [evt_npc_set_rotate evt_npc.o] ["me"] 0 LW(15) 0
+8034474C:     if_int_ge LW(15) 270
+80344758:       loop_break
+8034475C:     endif
+80344760:   end_loop
+80344764:   callc [evt_npc_set_anim evt_npc.o] ["me"] ["SIN_S_1"]
+80344774:   callc [evt_npc_set_rotate evt_npc.o] ["me"] 0 270 0
+8034478C:   loop 0
+80344794:     wait_frames 1
+8034479C:     addi LW(15) 30
+803447A8:     callc [evt_npc_set_rotate evt_npc.o] ["me"] 0 LW(15) 0
+803447C0:     if_int_ge LW(15) 360
+803447CC:       loop_break
+803447D0:     endif
+803447D4:   end_loop
+803447D8:   callc [evt_npc_set_rotate evt_npc.o] ["me"] 0 0 0
+803447F0:   loop 0
+803447F8:     callc [evt_npc_set_anim evt_npc.o] ["me"] ["SIN_A_1a"]
+80344808:     wait_ms 300
+80344810:     callc [evt_npc_set_attack_mode evt_npc.o] ["me"] 14
+80344820:     callc [evt_get_target_dir evt_npc.o] ["me"] ["mario"] LW(3)
+80344834:     callc [evt_npc_set_ry evt_npc.o] ["me"] LW(3)
+80344844:     callc [evt_npc_get_position evt_npc.o] ["me"] LW(0) LW(1) LW(2)
+8034485C:     callc [evt_npc_add_dirdist evt_npc.o] LW(0) LW(2) LW(3) 100.00
+80344874:     callc [evt_npc_move_position evt_npc.o] ["me"] LW(0) LW(2) 0 200.00 6
+80344894:     callc [evt_npc_set_anim evt_npc.o] ["me"] ["SIN_S_1"]
+803448A4:     callc [evt_npc_set_attack_mode evt_npc.o] ["me"] 0
+803448B4:     wait_ms 200
+803448BC:   end_loop
+803448C0:   callc [evt_npc_set_attack_mode evt_npc.o] ["me"] 0
+803448D0:   callc [evt_npc_return_interrupt evt_npc.o] ["me"]
+803448DC:   return
+803448E0:   end

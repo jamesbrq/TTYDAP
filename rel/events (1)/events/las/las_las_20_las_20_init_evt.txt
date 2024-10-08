@@ -1,0 +1,125 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [las_20_init_evt las_20.o] AT 805E40F0 ---
+805E40F0:   callc [evt_snd_bgmon evt_snd.o] 512 ["BGM_STG8_LST3"]
+805E4100:   callc [evt_snd_envon evt_snd.o] 272 ["ENV_STG8_LAS5"]
+805E4110:   callc [evt_snd_set_rev_mode evt_snd.o] 2
+805E411C:   setii LW(0) [bero_entry_data las_20.o]
+805E4128:   callc [evt_bero_get_info evt_bero.o]
+805E4130:   callss [evt_bero_info_run evt_bero.o]
+805E4138:   callc [evt_mapobj_flag_onoff evt_map.o] 0 0 ["S_hgm_01a"] 2
+805E4150:   callc [evt_mapobj_flag_onoff evt_map.o] 0 0 ["S_hgm_08a"] 2
+805E4168:   callc [evt_mapobj_flag_onoff evt_map.o] 0 0 ["S_hgm_09a"] 2
+805E4180:   callc [evt_mapobj_flag_onoff evt_map.o] 0 0 ["S_hgm_12a"] 2
+805E4198:   callc [evt_mapobj_flag_onoff evt_map.o] 0 0 ["S_hgm_19a"] 2
+805E41B0:   callsa [haguruma_evt las_20.o]
+805E41B8:   callc [evt_map_playanim evt_map.o] ["kusari"] 1 0
+805E41CC:   callc [evt_hit_bind_mapobj evt_hit.o] ["A_move_dai"] ["S_move_dai"]
+805E41DC:   callc [evt_mapobj_flag_onoff evt_map.o] 1 1 ["S_move_dai"] 1
+805E41F4:   callc [evt_hitobj_onoff evt_hit.o] ["A_move_dai"] 0 0
+805E4208:   callc [evt_mobj_switch_red evt_mobj.o] 0 ["dai_switch"] -250 -290 100 [dai_evt las_20.o] 0
+805E422C:   callsa [hosi_init las_20.o]
+805E4234:   callc [evt_mobj_badgeblk evt_mobj.o] ["mobj_item00"] 295 -440 -15 136 0 GSWF(4388) 0
+805E425C:   callc [evt_mobj_badgeblk evt_mobj.o] ["mobj_item01"] 640 -320 -135 151 0 GSWF(4389) 0
+805E4284:   return
+805E4288:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [haguruma_evt las_20.o] AT 805E334C ---
+805E334C:   setff LW(0) 0.00
+805E3358:   setff LW(1) 0.00
+805E3364:   setff LW(2) 0.00
+805E3370:   setff LW(3) 0.00
+805E337C:   setff LW(4) 0.00
+805E3388:   loop 0
+805E3390:     mo_set_base_int [haguruma_hontai las_20.o]
+805E3398:     loop 14
+805E33A0:       mo_read_int LW(5)
+805E33A8:       callc [evt_mapobj_rotate evt_map.o] 0 LW(5) 0 0 LW(0)
+805E33C4:     end_loop
+805E33C8:     mo_set_base_int [haguruma_kage las_20.o]
+805E33D0:     loop 12
+805E33D8:       mo_read_int LW(5)
+805E33E0:       callc [evt_mapobj_rotate evt_map.o] 0 LW(5) 0 0 LW(0)
+805E33FC:     end_loop
+805E3400:     mo_set_base_int [haguruma_hontai2 las_20.o]
+805E3408:     loop 6
+805E3410:       mo_read_int LW(5)
+805E3418:       callc [evt_mapobj_rotate evt_map.o] 0 LW(5) 0 0 LW(1)
+805E3434:     end_loop
+805E3438:     mo_set_base_int [haguruma_kage2 las_20.o]
+805E3440:     loop 5
+805E3448:       mo_read_int LW(5)
+805E3450:       callc [evt_mapobj_rotate evt_map.o] 0 LW(5) 0 0 LW(1)
+805E346C:     end_loop
+805E3470:     callc [evt_sub_get_sincos evt_sub.o] LW(2) LW(5) LW(6)
+805E3484:     mulf LW(5) 41.00
+805E3490:     callc [evt_mapobj_rotate evt_map.o] 0 ["S_hgm_21a"] 0 0 LW(5)
+805E34AC:     callc [evt_mapobj_rotate evt_map.o] 0 ["S_hgm_21b"] 0 0 LW(5)
+805E34C8:     callc [evt_sub_get_sincos evt_sub.o] LW(3) LW(5) LW(6)
+805E34DC:     mulf LW(5) 22.00
+805E34E8:     callc [evt_mapobj_rotate evt_map.o] 0 ["S_hgm_22a"] 0 0 LW(5)
+805E3504:     callc [evt_mapobj_rotate evt_map.o] 0 ["S_hgm_22b"] 0 0 LW(5)
+805E3520:     callc [evt_sub_get_sincos evt_sub.o] LW(4) LW(5) LW(6)
+805E3534:     mulf LW(5) 110.00
+805E3540:     callc [evt_mapobj_rotate evt_map.o] 0 ["S_hgm_23a"] 0 0 LW(5)
+805E355C:     callc [evt_mapobj_rotate evt_map.o] 0 ["S_hgm_23b"] 0 0 LW(5)
+805E3578:     addf LW(0) 1.00
+805E3584:     if_int_ge LW(0) 360
+805E3590:       subf LW(0) 360.00
+805E359C:     endif
+805E35A0:     addf LW(1) -1.00
+805E35AC:     if_int_le LW(1) -360
+805E35B8:       addf LW(1) 360.00
+805E35C4:     endif
+805E35C8:     addf LW(2) 0.90
+805E35D4:     if_int_ge LW(2) 360
+805E35E0:       subf LW(2) 360.00
+805E35EC:     endif
+805E35F0:     addf LW(3) 0.90
+805E35FC:     if_int_ge LW(3) 360
+805E3608:       subf LW(3) 360.00
+805E3614:     endif
+805E3618:     addf LW(4) 1.00
+805E3624:     if_int_ge LW(4) 360
+805E3630:       subf LW(4) 360.00
+805E363C:     endif
+805E3640:     wait_frames 1
+805E3648:   end_loop
+805E364C:   return
+805E3650:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [hosi_init las_20.o] AT 805E3E34 ---
+805E3E34:   if_int_lt GSW(0) 395
+805E3E40:     callc [evt_mapobj_flag_onoff evt_map.o] 1 1 ["S_hosi_02a"] 1
+805E3E58:     callc [evt_mapobj_flag_onoff evt_map.o] 1 1 ["S_hosi_03a"] 1
+805E3E70:     callc [evt_mapobj_flag_onoff evt_map.o] 1 1 ["S_hosi_04a"] 1
+805E3E88:     callc [evt_mapobj_flag_onoff evt_map.o] 1 1 ["S_hosi_05a"] 1
+805E3EA0:     callc [evt_mapobj_flag_onoff evt_map.o] 1 1 ["S_hosi_06a"] 1
+805E3EB8:     callc [evt_mapobj_flag_onoff evt_map.o] 1 1 ["S_hosi_07a"] 1
+805E3ED0:     callc [evt_mapobj_flag_onoff evt_map.o] 1 1 ["S_hosi_08a"] 1
+805E3EE8:     setii LSWF(1) 0
+805E3EF4:     setii LSWF(2) 0
+805E3F00:     setii LSWF(3) 0
+805E3F0C:     setii LSWF(4) 0
+805E3F18:     setii LSWF(5) 0
+805E3F24:     setii LSWF(6) 0
+805E3F30:     setii LSWF(7) 0
+805E3F3C:     callc [evt_mobj_floatswitch_red evt_mobj.o] 0 ["hosi_02_sw"] -545 -50 -120 [hosi_02_sw_evt las_20.o] 0
+805E3F60:     callc [evt_mobj_floatswitch_red evt_mobj.o] 0 ["hosi_03_sw"] -460 -50 -120 [hosi_03_sw_evt las_20.o] 0
+805E3F84:     callc [evt_mobj_floatswitch_red evt_mobj.o] 0 ["hosi_04_sw"] -376 -50 -120 [hosi_04_sw_evt las_20.o] 0
+805E3FA8:     callc [evt_mobj_floatswitch_red evt_mobj.o] 0 ["hosi_05_sw"] -289 -50 -120 [hosi_05_sw_evt las_20.o] 0
+805E3FCC:     callc [evt_mobj_floatswitch_red evt_mobj.o] 0 ["hosi_06_sw"] -205 -50 -120 [hosi_06_sw_evt las_20.o] 0
+805E3FF0:     callc [evt_mobj_floatswitch_red evt_mobj.o] 0 ["hosi_07_sw"] -121 -50 -120 [hosi_07_sw_evt las_20.o] 0
+805E4014:     callc [evt_mobj_floatswitch_red evt_mobj.o] 0 ["hosi_08_sw"] -37 -50 -120 [hosi_08_sw_evt las_20.o] 0
+805E4038:   else
+805E403C:     callc [evt_mapobj_flag_onoff evt_map.o] 1 1 ["S_hosi_02b"] 1
+805E4054:     callc [evt_mapobj_flag_onoff evt_map.o] 1 1 ["S_hosi_03b"] 1
+805E406C:     callc [evt_mapobj_flag_onoff evt_map.o] 1 1 ["S_hosi_04b"] 1
+805E4084:     callc [evt_mapobj_flag_onoff evt_map.o] 1 1 ["S_hosi_05b"] 1
+805E409C:     callc [evt_mapobj_flag_onoff evt_map.o] 1 1 ["S_hosi_06b"] 1
+805E40B4:     callc [evt_mapobj_flag_onoff evt_map.o] 1 1 ["S_hosi_07b"] 1
+805E40CC:     callc [evt_mapobj_flag_onoff evt_map.o] 1 1 ["S_hosi_08b"] 1
+805E40E4:   endif
+805E40E8:   return
+805E40EC:   end

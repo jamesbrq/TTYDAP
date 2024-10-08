@@ -1,0 +1,76 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [evt_ie2_door2_1 usu_01.o] AT 805CF6AC ---
+805CF6AC:   callc [evt_cam_letter_box_disable evt_cam.o] 1
+805CF6B8:   callc [evt_mario_key_onoff evt_mario.o] 0
+805CF6C4:   callc [evt_mapobj_flag_onoff evt_map.o] 1 1 ["S_usu01_ie2_naka2"] 2048
+805CF6DC:   callc [evt_mapobj_flag_onoff evt_map.o] 1 1 ["S_usu01_ie2_naka2"] 4096
+805CF6F4:   callc [evt_item_delete_check evt_item.o] ["item_05"] LW(0)
+805CF704:   if_int_eq LW(0) 0
+805CF710:     callc [evt_item_get_position evt_item.o] ["item_05"] LW(0) LW(1) LW(2)
+805CF728:     callc [evt_item_set_position evt_item.o] ["item_05"] LW(0) -1000 LW(2)
+805CF740:   endif
+805CF744:   callc [evt_mario_mov_pos2 evt_mario.o] -213 -471 135.00
+805CF758:   callc [evt_party_set_homing_dist evt_party.o] 0 20.00
+805CF768:   callc [evt_mario_get_pos evt_mario.o] 0 LW(0) LW(1) LW(2)
+805CF780:   callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_DOOR_OPEN_WOOD1"] LW(0) LW(1) LW(2) 0
+805CF79C:   callc [evt_sub_intpl_msec_init evt_sub.o] 11 0 180 500
+805CF7B4:   loop 0
+805CF7BC:     callc [evt_sub_intpl_msec_get_value evt_sub.o]
+805CF7C4:     mulf LW(0) 0.44
+805CF7D0:     callc [evt_mapobj_rotate evt_map.o] 1 ["S_usu01_ie2_door3"] 0 LW(0) 0
+805CF7EC:     if_int_eq LW(1) 0
+805CF7F8:       loop_break
+805CF7FC:     endif
+805CF800:     wait_frames 1
+805CF808:   end_loop
+805CF80C:   callc [evt_mario_party_door_move evt_mario.o] -297 -416 135.00
+805CF820:   callc [evt_party_move_behind_mario evt_party.o] 0
+805CF82C:   callc [evt_party_set_homing_dist evt_party.o] 0 50.00
+805CF83C:   callc [evt_mario_get_pos evt_mario.o] 0 LW(0) LW(1) LW(2)
+805CF854:   callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_DOOR_SHUT_WOOD1"] LW(0) LW(1) LW(2) 0
+805CF870:   callc [evt_sub_intpl_msec_init evt_sub.o] 11 180 0 500
+805CF888:   loop 0
+805CF890:     callc [evt_sub_intpl_msec_get_value evt_sub.o]
+805CF898:     mulf LW(0) 0.44
+805CF8A4:     callc [evt_mapobj_rotate evt_map.o] 1 ["S_usu01_ie2_door3"] 0 LW(0) 0
+805CF8C0:     if_int_eq LW(1) 0
+805CF8CC:       loop_break
+805CF8D0:     endif
+805CF8D4:     wait_frames 1
+805CF8DC:   end_loop
+805CF8E0:   stop_tid GW(3)
+805CF8E8:   callc [evt_msg_close evt_msg.o] ["stg4_usu_61_3"]
+805CF8F4:   callc [evt_msg_close evt_msg.o] ["stg4_usu_61_4"]
+805CF900:   if_int_ge GSW(0) 185
+805CF90C:     callc [shop_item_disp_off usu_01.o]
+805CF914:   endif
+805CF918:   callc [ie2_npc_disp_off usu_01.o]
+805CF920:   callc [evt_mario_get_pos evt_mario.o] 0 LW(0) LW(1) LW(2)
+805CF938:   callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_WALL_MOVE1"] LW(0) LW(1) LW(2) 0
+805CF954:   callc [evt_sub_intpl_msec_init evt_sub.o] 11 0 300 500
+805CF96C:   loop 0
+805CF974:     callc [evt_sub_intpl_msec_get_value evt_sub.o]
+805CF97C:     callc [evt_mapobj_trans evt_map.o] 1 ["S_usu01_ie2_mkabe"] 0 0 LW(0)
+805CF998:     if_int_eq LW(1) 0
+805CF9A4:       loop_break
+805CF9A8:     endif
+805CF9AC:     wait_frames 1
+805CF9B4:   end_loop
+805CF9B8:   callc [evt_sub_intpl_msec_init evt_sub.o] 2 0 180 500
+805CF9D0:   loop 0
+805CF9D8:     callc [evt_sub_intpl_msec_get_value evt_sub.o]
+805CF9E0:     mulf LW(0) 0.50
+805CF9EC:     callc [evt_mapobj_rotate evt_map.o] 1 ["S_usu01_ie2_door3"] LW(0) 0 0
+805CFA08:     if_int_eq LW(1) 0
+805CFA14:       loop_break
+805CFA18:     endif
+805CFA1C:     wait_frames 1
+805CFA24:   end_loop
+805CFA28:   callc [evt_mario_get_pos evt_mario.o] 0 LW(0) LW(1) LW(2)
+805CFA40:   callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_DOOR_FALL1"] LW(0) LW(1) LW(2) 0
+805CFA5C:   callc [evt_mario_key_onoff evt_mario.o] 1
+805CFA68:   callc [evt_cam_letter_box_disable evt_cam.o] 0
+805CFA74:   return
+805CFA78:   end

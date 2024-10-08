@@ -1,0 +1,36 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [open_hatch bom_01.o] AT 805C482C ---
+805C482C:   callc [evt_mapobj_get_position evt_map.o] LW(1) LW(10) LW(11) LW(12)
+805C4844:   callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_STG7_SHUTTER_OPEN1"] LW(10) LW(11) LW(12) 0
+805C4860:   setii LW(8) LW(0)
+805C486C:   setii LW(9) LW(1)
+805C4878:   setii LW(7) LW(2)
+805C4884:   callc [evt_sub_intpl_msec_init evt_sub.o] 1 0 180 500
+805C489C: 0:
+805C48A4:   callc [evt_sub_intpl_msec_get_value evt_sub.o]
+805C48AC:   if_int_eq LW(7) 0
+805C48B8:     callc [evt_mapobj_trans evt_map.o] 1 LW(9) 0 0 LW(0)
+805C48D4:     mulf LW(0) -1.00
+805C48E0:     callc [evt_mapobj_trans evt_map.o] 1 LW(8) 0 0 LW(0)
+805C48FC:   else
+805C4900:     callc [evt_mapobj_trans evt_map.o] 1 LW(9) LW(0) 0 0
+805C491C:     mulf LW(0) -1.00
+805C4928:     callc [evt_mapobj_trans evt_map.o] 1 LW(8) LW(0) 0 0
+805C4944:   endif
+805C4948:   wait_frames 1
+805C4950:   if_int_eq LW(1) 1
+805C495C:     goto 0
+805C4964:   endif
+805C4968:   callsa [gamen_shake2 bom_01.o]
+805C4970:   return
+805C4974:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [gamen_shake2 bom_01.o] AT 805C3F3C ---
+805C3F3C:   callc [evt_cam_shake evt_cam.o] 4 0.02 0.00 100
+805C3F54:   callc [evt_cam_shake evt_cam.o] 4 0.01 0.00 100
+805C3F6C:   callc [evt_cam_shake evt_cam.o] 4 0.00 0.00 100
+805C3F84:   callc [evt_cam_shake evt_cam.o] 4 0.00 0.00 100
+805C3F9C:   return
+805C3FA0:   end

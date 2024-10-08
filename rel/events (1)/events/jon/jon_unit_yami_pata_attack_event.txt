@@ -1,0 +1,173 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [attack_event unit_yami_pata.o] AT 80CB9ABC ---
+80CB9ABC:   callc [btlevtcmd_GetOverTurnCount battle_event_cmd.o] -2 LW(0)
+80CB9ACC:   if_int_ge LW(0) 1
+80CB9AD8:     callss [wakeup_event unit_yami_pata.o]
+80CB9AE0:     return
+80CB9AE4:   endif
+80CB9AE8:   callc [btlevtcmd_check_battleflag battle_event_cmd.o] LW(0) 2
+80CB9AF8:   if_int_ne LW(0) 0
+80CB9B04:     callc [btlevtcmd_GetFirstAttackTarget battle_event_cmd.o] LW(3) LW(4)
+80CB9B14:     wait_frames 30
+80CB9B1C:   else
+80CB9B20:     callc [btlevtcmd_EnemyItemUseCheck battle_event_cmd.o] -2 LW(0)
+80CB9B30:     if_int_ne LW(0) 0
+80CB9B3C:       callss LW(0)
+80CB9B44:       callc [btlevtcmd_StartWaitEvent battle_event_cmd.o] -2
+80CB9B50:       return
+80CB9B54:     endif
+80CB9B58:     callc [btlevtcmd_GetEnemyBelong battle_event_cmd.o] -2 LW(0)
+80CB9B68:     callc [btlevtcmd_SamplingEnemy battle_event_cmd.o] -2 LW(0) [weapon_nokonoko_attack unit_yami_pata.o]
+80CB9B7C:     callc [btlevtcmd_ChoiceSamplingEnemy battle_event_cmd.o] [weapon_nokonoko_attack unit_yami_pata.o] LW(3) LW(4)
+80CB9B90:   endif
+80CB9B94:   if_int_eq LW(3) -1
+80CB9BA0:     callc [btlevtcmd_CheckToken battle_event_cmd.o] -2 16 LW(0)
+80CB9BB4:     if_int_ne LW(0) 0
+80CB9BC0:       callss [subsetevt_confuse_flustered battle_event_subset.o]
+80CB9BC8:       return
+80CB9BCC:     endif
+80CB9BD0:     goto 99
+80CB9BD8:   endif
+80CB9BDC:   callc [evt_btl_camera_set_mode battle_camera.o] 0 8
+80CB9BEC:   callc [evt_btl_camera_set_homing_unit battle_camera.o] 0 -2 LW(3)
+80CB9C00:   callc [evt_btl_camera_set_moveSpeedLv battle_camera.o] 0 1
+80CB9C10:   callc [evt_btl_camera_set_zoom battle_camera.o] 0 200
+80CB9C20:   callc [btlevtcmd_WeaponAftereffect battle_event_cmd.o] [weapon_nokonoko_attack unit_yami_pata.o]
+80CB9C2C:   callc [btlevtcmd_AttackDeclare battle_event_cmd.o] -2 LW(3) LW(4)
+80CB9C40:   callc [btlevtcmd_WaitGuardMove battle_event_cmd.o]
+80CB9C48:   callc [btlevtcmd_PayWeaponCost battle_event_cmd.o] -2 [weapon_nokonoko_attack unit_yami_pata.o]
+80CB9C58:   callc [btlevtcmd_CalculateFaceDirection battle_event_cmd.o] -2 -1 LW(3) LW(4) 16 LW(15)
+80CB9C78:   callc [btlevtcmd_ChangeFaceDirection battle_event_cmd.o] -2 LW(15)
+80CB9C88:   wait_ms 100
+80CB9C90:   callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_ENM_NOKO_JUMP1"] [F1194D80] 0 [F1194D80]
+80CB9CAC:   callc [btlevtcmd_JumpSetting battle_event_cmd.o] -2 20 0.00 0.70
+80CB9CC4:   callc [btlevtcmd_GetPos battle_event_cmd.o] -2 LW(0) LW(1) LW(2)
+80CB9CDC:   callc [btlevtcmd_JumpPosition battle_event_cmd.o] -2 LW(0) LW(1) LW(2) 0 -1
+80CB9CFC:   callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_ENM_NOKO_SHELL1"] [F1194D80] 0 [F1194D80]
+80CB9D18:   callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 1 ["NKT_A_1"]
+80CB9D2C:   callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_ENM_NOKO_MOVE1"] [F1194D80] 0 [F1194D80]
+80CB9D48:   callc [btlevtcmd_SetUnitWork battle_event_cmd.o] -2 0 0
+80CB9D5C:   callc [btlevtcmd_SetUnitWork battle_event_cmd.o] -2 1 0
+80CB9D70:   begin_child_thread
+80CB9D74:     loop 0
+80CB9D7C:       callc [btlevtcmd_GetUnitWork battle_event_cmd.o] -2 0 LW(15)
+80CB9D90:       if_int_eq LW(15) 1
+80CB9D9C:         callc [btlevtcmd_SetRotate battle_event_cmd.o] -2 0 0 0
+80CB9DB4:         loop_break
+80CB9DB8:       endif
+80CB9DBC:       wait_frames 1
+80CB9DC4:       callc [btlevtcmd_GetUnitWork battle_event_cmd.o] -2 1 LW(14)
+80CB9DD8:       callc [btlevtcmd_AddRotate battle_event_cmd.o] -2 0 LW(14) 0
+80CB9DF0:     end_loop
+80CB9DF4:   end_child_thread
+80CB9DF8:   wait_ms 100
+80CB9E00:   callc [btlevtcmd_SetUnitWork battle_event_cmd.o] -2 1 20
+80CB9E14:   wait_ms 100
+80CB9E1C:   callc [btlevtcmd_SetUnitWork battle_event_cmd.o] -2 1 40
+80CB9E30:   wait_ms 100
+80CB9E38:   begin_child_thread_tid LW(13)
+80CB9E40:     loop 0
+80CB9E48:       callc [btlevtcmd_GetPos battle_event_cmd.o] -2 LW(0) LW(1) LW(2)
+80CB9E60:       addi LW(1) 10
+80CB9E6C:       callc [evt_eff evt_eff.o] [zero_jon_0000ac3c unit_yami_pata.o] ["kemuri_test"] 0 LW(0) LW(1) LW(2) 0.30 0 0 0 0 0 0 0
+80CB9EAC:       wait_frames 3
+80CB9EB4:     end_loop
+80CB9EB8:   end_child_thread
+80CB9EBC:   callc [btlevtcmd_SetMoveSpeed battle_event_cmd.o] -2 8.00
+80CB9ECC:   callc [btlevtcmd_GetHitPos battle_event_cmd.o] LW(3) LW(4) LW(0) LW(1) LW(2)
+80CB9EE8:   callc [btlevtcmd_GetPos battle_event_cmd.o] -2 [F1194D80] LW(5) [F1194D80]
+80CB9F00:   callc [btlevtcmd_MovePosition battle_event_cmd.o] -2 LW(0) LW(5) LW(2) 0 0 1
+80CB9F24:   stop_tid LW(13)
+80CB9F2C:   callc [btlevtcmd_PreCheckDamage battle_event_cmd.o] -2 LW(3) LW(4) [weapon_nokonoko_attack unit_yami_pata.o] 256 LW(5)
+80CB9F4C:   switchi LW(5)
+80CB9F54:     case_int_eq_any 4
+80CB9F5C:       goto 90
+80CB9F64:       end_multi_case
+80CB9F68:     case_int_eq 3
+80CB9F70:       callc [btlevtcmd_StartAvoid battle_event_cmd.o] LW(3) 38
+80CB9F80:       goto 90
+80CB9F88:       end_multi_case
+80CB9F8C:     case_int_eq 6
+80CB9F94:       callc [btlevtcmd_StartAvoid battle_event_cmd.o] LW(3) 39
+80CB9FA4:       goto 90
+80CB9FAC:     case_int_eq 2
+80CB9FB4:       callc [btlevtcmd_StartAvoid battle_event_cmd.o] LW(3) 40
+80CB9FC4:       goto 90
+80CB9FCC:     case_int_eq 1
+80CB9FD4:       goto 91
+80CB9FDC:       end_multi_case
+80CB9FE0:     case_default
+80CB9FE4:       goto 98
+80CB9FEC:       end_multi_case
+80CB9FF0:   end_switch
+80CB9FF4: 90:
+80CB9FFC:   callc [btlevtcmd_FaceDirectionAdd battle_event_cmd.o] -2 LW(0) 100
+80CBA010:   callc [btlevtcmd_MovePosition battle_event_cmd.o] -2 LW(0) 0 LW(2) 0 0 1
+80CBA034:   wait_ms 250
+80CBA03C:   callc [btlevtcmd_SetUnitWork battle_event_cmd.o] -2 1 10
+80CBA050:   wait_ms 250
+80CBA058:   callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_ENM_NOKO_JUMP1"] [F1194D80] 0 [F1194D80]
+80CBA074:   callc [btlevtcmd_SetUnitWork battle_event_cmd.o] -2 0 1
+80CBA088:   callc [btlevtcmd_AnimeChangePoseType battle_event_cmd.o] -2 1 69
+80CBA09C:   callc [btlevtcmd_JumpSetting battle_event_cmd.o] -2 20 10.00 0.40
+80CBA0B4:   callc [btlevtcmd_GetPos battle_event_cmd.o] -2 LW(0) LW(1) LW(2)
+80CBA0CC:   callc [btlevtcmd_FaceDirectionSub battle_event_cmd.o] -2 LW(0) 40
+80CBA0E0:   callc [btlevtcmd_JumpPosition battle_event_cmd.o] -2 LW(0) 0 LW(2) 20 -1
+80CBA100:   goto 98
+80CBA108: 91:
+80CBA110:   callc [evt_btl_camera_shake_h battle_camera.o] 0 1 1 8 0
+80CBA12C:   callc [evt_btl_camera_set_moveSpeedLv battle_camera.o] 0 2
+80CBA13C:   callc [evt_btl_camera_add_zoom battle_camera.o] 0 -50
+80CBA14C:   callc [btlevtcmd_ResultACDefence battle_event_cmd.o] LW(3) [weapon_nokonoko_attack unit_yami_pata.o]
+80CBA15C:   callc [btlevtcmd_CheckDamage battle_event_cmd.o] -2 LW(3) LW(4) [weapon_nokonoko_attack unit_yami_pata.o] 256 LW(5)
+80CBA17C:   callc [btlevtcmd_SetUnitWork battle_event_cmd.o] -2 1 10
+80CBA190:   callc [btlevtcmd_JumpSetting battle_event_cmd.o] -2 20 3.00 0.20
+80CBA1A8:   callc [btlevtcmd_GetPos battle_event_cmd.o] LW(3) LW(0) LW(1) LW(2)
+80CBA1C0:   callc [btlevtcmd_FaceDirectionSub battle_event_cmd.o] -2 LW(0) 50
+80CBA1D4:   callc [btlevtcmd_JumpPosition battle_event_cmd.o] -2 LW(0) 0 LW(2) 20 -1
+80CBA1F4:   callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_ENM_NOKO_MOVE2"] [F1194D80] 0 [F1194D80]
+80CBA210:   callc [btlevtcmd_JumpSetting battle_event_cmd.o] -2 20 0.50 0.20
+80CBA228:   callc [btlevtcmd_GetPos battle_event_cmd.o] LW(3) LW(0) LW(1) LW(2)
+80CBA240:   callc [btlevtcmd_FaceDirectionSub battle_event_cmd.o] -2 LW(0) 75
+80CBA254:   callc [btlevtcmd_JumpPosition battle_event_cmd.o] -2 LW(0) 0 LW(2) 20 -1
+80CBA274:   callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_ENM_NOKO_MOVE2"] [F1194D80] 0 [F1194D80]
+80CBA290:   callc [btlevtcmd_SetUnitWork battle_event_cmd.o] -2 0 1
+80CBA2A4:   goto 98
+80CBA2AC: 98:
+80CBA2B4:   callc [evt_btl_camera_set_mode battle_camera.o] 0 0
+80CBA2C4:   callc [btlevtcmd_AnimeChangePoseType battle_event_cmd.o] -2 1 42
+80CBA2D8:   callc [btlevtcmd_SetMoveSpeed battle_event_cmd.o] -2 4.00
+80CBA2E8:   callc [btlevtcmd_GetHomePos battle_event_cmd.o] -2 LW(0) LW(1) LW(2)
+80CBA300:   callc [btlevtcmd_MovePosition battle_event_cmd.o] -2 LW(0) LW(1) LW(2) 0 -1 0
+80CBA324: 99:
+80CBA32C:   callc [btlevtcmd_ResetFaceDirection battle_event_cmd.o] -2
+80CBA338:   callc [btlevtcmd_StartWaitEvent battle_event_cmd.o] -2
+80CBA344:   return
+80CBA348:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [wakeup_event unit_yami_pata.o] AT 80CB94A4 ---
+80CB94A4:   setii LW(10) -2
+80CB94B0:   setii LW(11) 1
+80CB94BC:   callc [btlevtcmd_GetOverTurnCount battle_event_cmd.o] LW(10) LW(0)
+80CB94CC:   subi LW(0) 1
+80CB94D8:   callc [btlevtcmd_SetOverTurnCount battle_event_cmd.o] LW(10) LW(0)
+80CB94E8:   if_int_ne LW(0) 0
+80CB94F4:     callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 1 ["NKT_S_3"]
+80CB9508:     wait_ms 400
+80CB9510:     callc [btlevtcmd_StartWaitEvent battle_event_cmd.o] -2
+80CB951C:     return
+80CB9520:   endif
+80CB9524:   callc [btlevtcmd_SetPartsDefenceTable battle_event_cmd.o] LW(10) LW(11) [defence unit_yami_pata.o]
+80CB9538:   callc [btlevtcmd_OffStatusFlag battle_event_cmd.o] LW(10) 1
+80CB9548:   callc [btlevtcmd_AnimeSetPoseTable battle_event_cmd.o] LW(10) LW(11) [pose_table unit_yami_pata.o]
+80CB955C:   callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] LW(10) LW(11) ["NKT_S_1"]
+80CB9570:   callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_ENM_INSIDE2"] [F1194D80] 0 [F1194D80]
+80CB958C:   callc [btlevtcmd_SetFallAccel battle_event_cmd.o] -2 1.00
+80CB959C:   callc [btlevtcmd_GetPos battle_event_cmd.o] -2 LW(0) LW(1) LW(2)
+80CB95B4:   callc [btlevtcmd_JumpPosition battle_event_cmd.o] -2 LW(0) LW(1) LW(2) 12 -1
+80CB95D4:   callc [btlevtcmd_SetHitOffset battle_event_cmd.o] -2 1 0 0 0
+80CB95F0:   callc [btlevtcmd_StartWaitEvent battle_event_cmd.o] -2
+80CB95FC:   return
+80CB9600:   end

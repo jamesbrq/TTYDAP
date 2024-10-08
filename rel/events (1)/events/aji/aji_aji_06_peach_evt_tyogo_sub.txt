@@ -1,0 +1,255 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [peach_evt_tyogo_sub aji_06.o] AT 805E1138 ---
+805E1138:   callc [evt_mario_key_onoff evt_mario.o] 0
+805E1144:   callc [evt_map_pauseanim evt_map.o] 0 ["yuka"]
+805E1154:   callc [evt_snd_sfxoff evt_snd.o] GW(3)
+805E1160:   callss [peach_evt_wait_memo aji_06.o]
+805E1168:   callc [evt_msg_print evt_msg.o] 0 ["peach_aji_230"] 0 0
+805E1180:   setii LW(0) ["S_pato2"]
+805E118C:   callsa_tid [peach_evt_pato_on aji_06.o] GW(0)
+805E1198:   setff GW(10) 0.00
+805E11A4:   setii GW(11) 0
+805E11B0:   setii GW(12) 0
+805E11BC:   setii GW(13) 0
+805E11C8:   setii LSWF(8) 0
+805E11D4:   setii LSWF(7) 0
+805E11E0:   callc [kusuri_color_init aji_06.o]
+805E11E8:   callc [evt_mario_key_onoff evt_mario.o] 1
+805E11F4:   mo_set_base_int [peach_evt_bika_move_data aji_06.o]
+805E11FC:   mo_read_int LW(2)
+805E1204:   loop 0
+805E120C:     mo_read_int4 LW(3) LW(4) GW(12) LW(5)
+805E1220:     begin_thread
+805E1224:       setii LW(6) LW(4)
+805E1230:       subi LW(6) 400
+805E123C:       wait_ms LW(6)
+805E1244:       setii LSWF(8) 1
+805E1250:     end_thread
+805E1254:     if_int_eq LW(5) 0
+805E1260:       callc [evt_map_replayanim evt_map.o] 0 ["yuka"]
+805E1270:     else
+805E1274:       begin_thread
+805E1278:         callc [yuka_anim_reverse_play aji_06.o]
+805E1280:       end_thread
+805E1284:     endif
+805E1288:     callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_PEACH_MACHINE_MOVE1"] 0 0 -100 GW(3)
+805E12A4:     callc [evt_sub_intpl_msec_init evt_sub.o] 0 LW(2) LW(3) LW(4)
+805E12BC: 0:
+805E12C4:     callc [evt_sub_intpl_msec_get_value evt_sub.o]
+805E12CC:     callc [evt_mapobj_trans evt_map.o] 1 ["S_bika"] LW(0) 48 -152
+805E12E8:     wait_frames 1
+805E12F0:     if_int_eq LW(1) 1
+805E12FC:       goto 0
+805E1304:     endif
+805E1308:     if_int_eq LW(5) 0
+805E1314:       callc [evt_map_pauseanim evt_map.o] 0 ["yuka"]
+805E1324:     else
+805E1328:       callc [yuka_anim_reverse_end aji_06.o]
+805E1330:       wait_frames 1
+805E1338:     endif
+805E133C:     callc [evt_snd_sfxoff evt_snd.o] GW(3)
+805E1348:     callsa_tid [evt_sub_stopwatch evt_sub.o] LW(0)
+805E1354:     loop 0
+805E135C:       callc [evt_sub_get_stopwatch evt_sub.o] LW(0) LW(1)
+805E136C:       if_int_ge LW(1) 3000
+805E1378:         loop_break
+805E137C:       endif
+805E1380:       if_int_eq LSWF(7) 1
+805E138C:         loop 0
+805E1394:           if_int_eq LSWF(7) 0
+805E13A0:             loop_break
+805E13A4:           endif
+805E13A8:           wait_frames 1
+805E13B0:         end_loop
+805E13B4:         loop_break
+805E13B8:       endif
+805E13BC:       wait_frames 1
+805E13C4:     end_loop
+805E13C8:     setii LSWF(8) 0
+805E13D4:     addi GW(11) 1
+805E13E0:     if_int_eq GW(11) 8
+805E13EC:       setii GW(12) 4
+805E13F8:       loop_break
+805E13FC:     endif
+805E1400:     setii LW(2) LW(3)
+805E140C:   end_loop
+805E1410:   callc [evt_map_replayanim evt_map.o] 0 ["yuka"]
+805E1420:   callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_PEACH_MACHINE_MOVE1"] 0 0 -100 GW(3)
+805E143C:   callc [evt_sub_intpl_msec_init evt_sub.o] 0 266 345 2370
+805E1454: 10:
+805E145C:   callc [evt_sub_intpl_msec_get_value evt_sub.o]
+805E1464:   callc [evt_mapobj_trans evt_map.o] 1 ["S_bika"] LW(0) 48 -152
+805E1480:   wait_frames 1
+805E1488:   if_int_eq LW(1) 1
+805E1494:     goto 10
+805E149C:   endif
+805E14A0:   callc [evt_mario_key_onoff evt_mario.o] 0
+805E14AC:   callc [evt_map_pauseanim evt_map.o] 0 ["yuka"]
+805E14BC:   callc [evt_snd_sfxoff evt_snd.o] GW(3)
+805E14C8:   stop_tid GW(0)
+805E14D0:   setii LW(0) ["S_pato2"]
+805E14DC:   callss [peach_evt_pato_off aji_06.o]
+805E14E4:   callss [peach_evt_wait_memo aji_06.o]
+805E14EC:   callc [evt_msg_print evt_msg.o] 0 ["peach_aji_230_01"] 0 0
+805E1504:   setii LW(0) ["S_pato3"]
+805E1510:   callsa_tid [peach_evt_pato_on aji_06.o] GW(0)
+805E151C:   callc [evt_run_case_evt evt_case.o] 9 1 ["A_sui6"] 0 [peach_evt_stop_renji aji_06.o] 0
+805E153C:   callsa_tid [evt_sub_stopwatch evt_sub.o] LW(0)
+805E1548:   callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_PEACH_MACHINE_HOT1"] 104 0 -100 LW(3)
+805E1564:   callc [evt_map_playanim evt_map.o] ["ren1"] 0 0
+805E1578:   callc [evt_map_checkanim evt_map.o] ["ren1"] LW(1) LW(2)
+805E158C:   wait_ms LW(2)
+805E1594:   callc [evt_mario_key_onoff evt_mario.o] 1
+805E15A0:   callc [evt_map_playanim evt_map.o] ["ren2"] 1 0
+805E15B4:   setii LSWF(8) 1
+805E15C0:   setii LSWF(7) 0
+805E15CC:   loop 0
+805E15D4:     if_int_eq LSWF(7) 1
+805E15E0:       loop_break
+805E15E4:     endif
+805E15E8:     wait_frames 1
+805E15F0:   end_loop
+805E15F4:   callc [evt_sub_get_stopwatch evt_sub.o] LW(0) LW(1)
+805E1604:   callc [evt_cam_letter_box_disable evt_cam.o] 1
+805E1610:   callc [evt_mario_key_onoff evt_mario.o] 0
+805E161C:   callc [evt_snd_sfxoff evt_snd.o] LW(3)
+805E1628:   callc [evt_map_playanim evt_map.o] ["ren2"] 2 0
+805E163C:   wait_frames 1
+805E1644:   callc [evt_map_playanim evt_map.o] ["ren3"] 0 0
+805E1658:   callc [evt_map_checkanim evt_map.o] ["ren3"] LW(2) LW(3)
+805E166C:   wait_ms LW(3)
+805E1674:   stop_tid GW(0)
+805E167C:   setii LW(0) ["S_pato3"]
+805E1688:   callss [peach_evt_pato_off aji_06.o]
+805E1690:   if_int_gt LW(1) 25000
+805E169C:     if_int_lt LW(1) 35000
+805E16A8:       dbg_report ["ほどよい　かねつじかん"]
+805E16B0:       addi GW(13) 1
+805E16BC:     else
+805E16C0:       dbg_report ["かねつしすぎ"]
+805E16C8:       divi LW(1) 1000
+805E16D4:       dbg_expr_to_string LW(1)
+805E16DC:     endif
+805E16E0:   else
+805E16E4:     dbg_report ["かねつぶそく"]
+805E16EC:     divi LW(1) 1000
+805E16F8:     dbg_expr_to_string LW(1)
+805E1700:   endif
+805E1704:   if_int_ge GW(13) 9
+805E1710:     callsa_tid [kusuri_color_seiko aji_06.o] GW(2)
+805E171C:   else
+805E1720:     callsa_tid [kusuri_color_sippai aji_06.o] GW(2)
+805E172C:   endif
+805E1730:   callc [evt_mario_key_onoff evt_mario.o] 1
+805E173C:   callc [evt_cam_letter_box_disable evt_cam.o] 0
+805E1748:   callc [evt_map_replayanim evt_map.o] 0 ["yuka"]
+805E1758:   callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_PEACH_MACHINE_MOVE1"] 0 0 -100 GW(3)
+805E1774:   callc [evt_sub_intpl_msec_init evt_sub.o] 0 345 439 2820
+805E178C: 11:
+805E1794:   callc [evt_sub_intpl_msec_get_value evt_sub.o]
+805E179C:   callc [evt_mapobj_trans evt_map.o] 1 ["S_bika"] LW(0) 48 -152
+805E17B8:   wait_frames 1
+805E17C0:   if_int_eq LW(1) 1
+805E17CC:     goto 11
+805E17D4:   endif
+805E17D8:   setii LSWF(8) 0
+805E17E4:   setii LSWF(7) 0
+805E17F0:   return
+805E17F4:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [peach_evt_wait_memo aji_06.o] AT 805E21F4 ---
+805E21F4:   loop 0
+805E21FC:     if_int_eq LSWF(11) 0
+805E2208:       wait_frames 1
+805E2210:       if_int_eq LSWF(11) 0
+805E221C:         loop_break
+805E2220:       endif
+805E2224:     endif
+805E2228:     wait_frames 1
+805E2230:   end_loop
+805E2234:   return
+805E2238:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [peach_evt_pato_on aji_06.o] AT 805E0354 ---
+805E0354:   setii LW(15) LW(0)
+805E0360:   callc [evt_mapobj_get_position evt_map.o] LW(15) LW(0) LW(1) LW(2)
+805E0378:   callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_PEACH_MACHINE_SIREN1"] LW(0) LW(1) LW(2) GW(4)
+805E0394:   callc [evt_mapobj_flag_onoff evt_map.o] 0 0 LW(15) 1
+805E03AC:   loop 0
+805E03B4:     callc [evt_mapobj_rotate evt_map.o] 0 LW(15) 0 LW(0) 0
+805E03D0:     addi LW(0) 12
+805E03DC:     if_int_ge LW(0) 360
+805E03E8:       subi LW(0) 360
+805E03F4:     endif
+805E03F8:     wait_ms 30
+805E0400:   end_loop
+805E0404:   return
+805E0408:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [peach_evt_pato_off aji_06.o] AT 805E040C ---
+805E040C:   callc [evt_mapobj_flag_onoff evt_map.o] 0 1 LW(0) 1
+805E0424:   callc [evt_mapobj_rotate evt_map.o] 0 LW(0) 0 0 0
+805E0440:   callc [evt_snd_sfxoff evt_snd.o] GW(4)
+805E044C:   return
+805E0450:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [kusuri_color_seiko aji_06.o] AT 805E0E70 ---
+805E0E70:   setii LW(0) 0
+805E0E7C:   setii LW(1) 255
+805E0E88:   setii LW(2) 0
+805E0E94:   setii LW(3) 64
+805E0EA0:   divf LW(3) 100.00
+805E0EAC:   loop 0
+805E0EB4:     loop 100
+805E0EBC:       subf LW(1) LW(3)
+805E0EC8:       addf LW(2) LW(3)
+805E0ED4:       callc [kusuri_color_set_rgb aji_06.o] LW(0) LW(1) LW(2)
+805E0EE8:       wait_frames 1
+805E0EF0:     end_loop
+805E0EF4:     loop 100
+805E0EFC:       addf LW(1) LW(3)
+805E0F08:       subf LW(2) LW(3)
+805E0F14:       callc [kusuri_color_set_rgb aji_06.o] LW(0) LW(1) LW(2)
+805E0F28:       wait_frames 1
+805E0F30:     end_loop
+805E0F34:   end_loop
+805E0F38:   return
+805E0F3C:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [kusuri_color_sippai aji_06.o] AT 805E0F40 ---
+805E0F40:   callc [kusuri_color_get aji_06.o] LW(0) LW(1) LW(2)
+805E0F54:   setii LW(3) LW(0)
+805E0F60:   setii LW(4) LW(1)
+805E0F6C:   setii LW(5) LW(2)
+805E0F78:   mulf LW(0) 0.70
+805E0F84:   mulf LW(1) 0.70
+805E0F90:   mulf LW(2) 0.70
+805E0F9C:   mulf LW(3) 0.30
+805E0FA8:   mulf LW(4) 0.30
+805E0FB4:   mulf LW(5) 0.30
+805E0FC0:   subf LW(3) LW(0)
+805E0FCC:   subf LW(4) LW(1)
+805E0FD8:   subf LW(5) LW(2)
+805E0FE4:   divf LW(3) 100.00
+805E0FF0:   divf LW(4) 100.00
+805E0FFC:   divf LW(5) 100.00
+805E1008:   loop 0
+805E1010:     loop 100
+805E1018:       addf LW(0) LW(3)
+805E1024:       addf LW(1) LW(4)
+805E1030:       addf LW(2) LW(5)
+805E103C:       callc [kusuri_color_set_rgb aji_06.o] LW(0) LW(1) LW(2)
+805E1050:       wait_frames 1
+805E1058:     end_loop
+805E105C:     loop 100
+805E1064:       subf LW(0) LW(3)
+805E1070:       subf LW(1) LW(4)
+805E107C:       subf LW(2) LW(5)
+805E1088:       callc [kusuri_color_set_rgb aji_06.o] LW(0) LW(1) LW(2)
+805E109C:       wait_frames 1
+805E10A4:     end_loop
+805E10A8:   end_loop
+805E10AC:   return
+805E10B0:   end

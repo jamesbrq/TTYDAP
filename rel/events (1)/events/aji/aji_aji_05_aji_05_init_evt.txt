@@ -1,0 +1,67 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [aji_05_init_evt aji_05.o] AT 805DEBC4 ---
+805DEBC4:   callc [evt_snd_bgmon evt_snd.o] 512 ["BGM_STG7_DUN2"]
+805DEBD4:   callc [evt_snd_envon evt_snd.o] 272 ["ENV_STG7_AJI1"]
+805DEBE4:   callc [evt_snd_set_rev_mode evt_snd.o] 1
+805DEBF0:   setii LW(0) [bero_entry_data aji_05.o]
+805DEBFC:   callc [evt_bero_get_info evt_bero.o]
+805DEC04:   callss [evt_bero_info_run evt_bero.o]
+805DEC0C:   callc [evt_mapobj_flag_onoff evt_map.o] 1 1 ["no1"] 1
+805DEC24:   if_int_eq GSWF(4182) 0
+805DEC30:     callss [hikaru_yuka_init aji_05.o]
+805DEC38:     callc [evt_mapobj_flag_onoff evt_map.o] 1 1 ["ato"] 1
+805DEC50:   else
+805DEC54:     callss [hikaru_off aji_05.o]
+805DEC5C:     callc [evt_hitobj_attr_onoff evt_hit.o] 1 0 ["A_no1"] 2048
+805DEC74:     callc [evt_mapobj_flag_onoff evt_map.o] 1 1 ["yukayu1"] 1
+805DEC8C:     callc [evt_mapobj_flag_onoff evt_map.o] 1 0 ["yukayu2"] 1
+805DECA4:     callc [evt_mapobj_flag_onoff evt_map.o] 1 0 ["ato"] 1
+805DECBC:   endif
+805DECC0:   callc [evt_mobj_badgeblk evt_mobj.o] ["mobj00"] -75 60 -125 138 0 GSWF(4212) 0
+805DECE8:   callsa [evt_emergency aji_17.o]
+805DECF0:   return
+805DECF4:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [hikaru_yuka_init aji_05.o] AT 805DEB04 ---
+805DEB04:   callss [hikaru_off aji_05.o]
+805DEB0C:   callc [evt_hitobj_attr_onoff evt_hit.o] 1 1 ["A_no1"] 2048
+805DEB24:   callc [evt_mobj_itembox evt_mobj.o] ["box"] -255 10 -10 2 0 [evt_box aji_05.o] GSWF(4178)
+805DEB4C:   callc [evt_hit_damage_return_set evt_hit.o] [dmgReturnPt aji_05.o]
+805DEB58:   begin_thread
+805DEB5C:     callc [ride_chk aji_05.o]
+805DEB64:   end_thread
+805DEB68:   begin_thread
+805DEB6C:     callc [thunder_main aji_05.o]
+805DEB74:   end_thread
+805DEB78:   callc [evt_mapobj_flag_onoff evt_map.o] 1 0 ["yukayu1"] 1
+805DEB90:   callc [evt_mapobj_flag_onoff evt_map.o] 1 1 ["yukayu2"] 1
+805DEBA8:   callc [evt_map_playanim evt_map.o] ["denyuka"] 1 0
+805DEBBC:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [hikaru_off aji_05.o] AT 805DEAD4 ---
+805DEAD4:   callc [_hikaru_off aji_05.o]
+805DEADC:   return
+805DEAE0:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [evt_emergency aji_17.o] AT 805F1150 ---
+805F1150:   if_int_ne GSW(0) 376
+805F115C:     loop 0
+805F1164:       if_int_eq GSW(0) 376
+805F1170:         loop_break
+805F1174:       endif
+805F1178:       wait_frames 1
+805F1180:     end_loop
+805F1184:     callc [evt_sub_intpl_msec_init evt_sub.o] 11 255 96 1000
+805F119C: 0:
+805F11A4:     callc [evt_sub_intpl_msec_get_value evt_sub.o]
+805F11AC:     callc [evt_map_set_blend evt_map.o] 0 255 LW(0) LW(0) 255
+805F11C8:     wait_frames 1
+805F11D0:     if_int_eq LW(1) 1
+805F11DC:       goto 0
+805F11E4:     endif
+805F11E8:   endif
+805F11EC:   callc [evt_map_set_blend evt_map.o] 0 255 96 96 255
+805F1208:   return
+805F120C:   end

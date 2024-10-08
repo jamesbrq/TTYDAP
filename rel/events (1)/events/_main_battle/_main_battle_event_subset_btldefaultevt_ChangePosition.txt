@@ -1,0 +1,54 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [btldefaultevt_ChangePosition battle_event_subset.o] AT 80351754 ---
+80351754:   callc [btlevtcmd_GetGuardKouraId battle_event_cmd.o] -3 LW(10)
+80351764:   if_int_ne LW(10) -1
+80351770:     callc [btlevtcmd_RunDataEventChild battle_event_cmd.o] LW(10) 60
+80351780:     callc [btlevtcmd_OffPartsAttribute battle_event_cmd.o] -3 1 16777216
+80351794:     callc [btlevtcmd_SetUnitWork battle_event_cmd.o] LW(10) 2 2
+803517A8:   endif
+803517AC:   callc [evt_snd_sfxon evt_snd.o] ["SFX_BTL_POS_CHANGE1"] 0
+803517BC:   callc [btlevtcmd_GetPartnerId battle_event_cmd.o] -2 LW(3)
+803517CC:   callc [btlevtcmd_GetBodyId battle_event_cmd.o] -2 LW(5)
+803517DC:   callc [btlevtcmd_CheckStatus battle_event_cmd.o] -2 27 LW(0)
+803517F0:   if_int_eq LW(0) 0
+803517FC:     callc [btlevtcmd_AnimeChangePoseType battle_event_cmd.o] -2 LW(5) 42
+80351810:   endif
+80351814:   callc [btlevtcmd_GetBodyId battle_event_cmd.o] LW(3) LW(5)
+80351824:   callc [btlevtcmd_CheckStatus battle_event_cmd.o] LW(3) 27 LW(0)
+80351838:   if_int_eq LW(0) 0
+80351844:     callc [btlevtcmd_AnimeChangePoseType battle_event_cmd.o] LW(3) LW(5) 42
+80351858:   endif
+8035185C:   begin_thread
+80351860:     callc [btlevtcmd_GetHomePos battle_event_cmd.o] LW(3) LW(5) LW(6) LW(7)
+80351878:     callc [btlevtcmd_GetHomePos battle_event_cmd.o] -2 LW(5) LW(8) LW(7)
+80351890:     callc [btlevtcmd_EllipseMovePosition battle_event_cmd.o] LW(3) LW(5) LW(6) LW(7) 20 15 0
+803518B4:     callc [btlevtcmd_SetHomePos battle_event_cmd.o] LW(3) LW(5) LW(6) LW(7)
+803518CC:   end_thread
+803518D0:   callc [btlevtcmd_GetHomePos battle_event_cmd.o] -2 LW(0) LW(1) LW(2)
+803518E8:   callc [btlevtcmd_GetHomePos battle_event_cmd.o] LW(3) LW(0) LW(4) LW(2)
+80351900:   callc [btlevtcmd_EllipseMovePosition battle_event_cmd.o] -2 LW(0) LW(1) LW(2) 20 15 0
+80351924:   callc [btlevtcmd_SetHomePos battle_event_cmd.o] -2 LW(0) LW(1) LW(2)
+8035193C:   wait_frames 2
+80351944:   callc [btlevtcmd_GetGuardKouraId battle_event_cmd.o] -3 LW(10)
+80351954:   if_int_ne LW(10) -1
+80351960:     callc [btlevtcmd_SetUnitWork battle_event_cmd.o] LW(10) 2 3
+80351974: 10:
+8035197C:     callc [btlevtcmd_GetUnitWork battle_event_cmd.o] LW(10) 2 LW(0)
+80351990:     if_int_eq LW(0) 3
+8035199C:       wait_frames 1
+803519A4:       goto 10
+803519AC:     endif
+803519B0:     callc [btlevtcmd_GetHp battle_event_cmd.o] LW(10) LW(0)
+803519C0:     if_int_gt LW(0) 0
+803519CC:       callc [btlevtcmd_RunDataEventChild battle_event_cmd.o] LW(10) 59
+803519DC:       callc [btlevtcmd_GetPos battle_event_cmd.o] LW(10) LW(0) LW(1) LW(2)
+803519F4:       callc [btlevtcmd_SetHomePos battle_event_cmd.o] LW(10) LW(0) LW(1) LW(2)
+80351A0C:     endif
+80351A10:   endif
+80351A14:   callc [btlevtcmd_SortPhaseMoveTable battle_event_cmd.o]
+80351A1C:   callc [btlevtcmd_StartWaitEvent battle_event_cmd.o] -3
+80351A28:   callc [btlevtcmd_StartWaitEvent battle_event_cmd.o] -4
+80351A34:   return
+80351A38:   end

@@ -1,0 +1,92 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [attack_event unit_boss_gesso_right_arm.o] AT 805E3EC4 ---
+805E3EC4:   callc [btlevtcmd_EnemyItemUseCheck battle_event_cmd.o] -2 LW(0)
+805E3ED4:   if_int_ne LW(0) 0
+805E3EE0:     callss LW(0)
+805E3EE8:     callc [btlevtcmd_StartWaitEvent battle_event_cmd.o] -2
+805E3EF4:     return
+805E3EF8:   endif
+805E3EFC:   callc [evt_sub_random evt_sub.o] 1 LW(0)
+805E3F0C:   if_int_eq LW(0) 0
+805E3F18:     setii LW(12) [weapon_gesso_right_arm_front_attack unit_boss_gesso_right_arm.o]
+805E3F24:   else
+805E3F28:     setii LW(12) [weapon_gesso_right_arm_rear_attack unit_boss_gesso_right_arm.o]
+805E3F34:   endif
+805E3F38:   callc [btlevtcmd_GetEnemyBelong battle_event_cmd.o] -2 LW(0)
+805E3F48:   callc [btlevtcmd_SamplingEnemy battle_event_cmd.o] -2 LW(0) LW(12)
+805E3F5C:   callc [btlevtcmd_ChoiceSamplingEnemy battle_event_cmd.o] LW(12) LW(3) LW(4)
+805E3F70:   if_int_eq LW(3) -1
+805E3F7C:     goto 99
+805E3F84:   endif
+805E3F88:   callc [btlevtcmd_WeaponAftereffect battle_event_cmd.o] LW(12)
+805E3F94:   callc [btlevtcmd_AttackDeclare battle_event_cmd.o] -2 LW(3) LW(4)
+805E3FA8:   callc [btlevtcmd_WaitGuardMove battle_event_cmd.o]
+805E3FB0:   callc [btlevtcmd_PayWeaponCost battle_event_cmd.o] -2 LW(12)
+805E3FC0:   setii LW(11) 0
+805E3FCC:   callc [btlevtcmd_GetUnitKind battle_event_cmd.o] LW(3) LW(0)
+805E3FDC:   if_int_eq LW(0) 222
+805E3FE8:     callc [btlevtcmd_GetUnitWork battle_event_cmd.o] -2 0 LW(9)
+805E3FFC:     callc [btlevtcmd_GetUnitWork battle_event_cmd.o] LW(9) 5 LW(0)
+805E4010:     if_int_eq LW(0) 0
+805E401C:       setii LW(11) 1
+805E4028:       callc [btlevtcmd_SetUnitWork battle_event_cmd.o] LW(9) 5 1
+805E403C:     endif
+805E4040:   endif
+805E4044:   if_int_ne LW(11) 0
+805E4050:     callc [btlevtcmd_StatusWindowOnOff battle_event_cmd.o] 0
+805E405C:     callc [btlevtcmd_GetUnitWork battle_event_cmd.o] -2 0 LW(9)
+805E4070:     callc [evt_msg_print evt_msg.o] 2 ["tik_02_gs_04_1"] 0 LW(9)
+805E4088:     callc [evt_msg_print evt_msg.o] 2 ["tik_02_gs_04_2"] 0 LW(9)
+805E40A0:     callc [evt_msg_select evt_msg.o] 0 ["tik_02_gs_04_3"]
+805E40B0:     callc [evt_msg_continue evt_msg.o]
+805E40B8:     if_int_eq LW(0) 0
+805E40C4:       begin_thread
+805E40C8:         callc [evt_msg_print evt_msg.o] 2 ["tik_02_gs_04_3_y"] 0 LW(9)
+805E40E0:         callc [btlevtcmd_StatusWindowOnOff battle_event_cmd.o] 1
+805E40EC:       end_thread
+805E40F0:     else
+805E40F4:       begin_thread
+805E40F8:         callc [evt_msg_toge evt_msg.o] 2 110 120 30
+805E4110:         callc [evt_msg_print evt_msg.o] 2 ["tik_02_gs_04_3_n"] 0 LW(9)
+805E4128:         callc [btlevtcmd_StatusWindowOnOff battle_event_cmd.o] 1
+805E4134:       end_thread
+805E4138:     endif
+805E413C:   endif
+805E4140:   callc [_check_zenei_kouei unit_boss_gesso_right_arm.o] LW(3) LW(13)
+805E4150:   if_int_eq LW(13) 0
+805E415C:     callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 1 ["GSO_A1_1"]
+805E4170:   else
+805E4174:     callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 1 ["GSO_A1_3"]
+805E4188:   endif
+805E418C:   begin_child_thread
+805E4190:     callc [btlevtcmd_ftof battle_event_cmd.o] 32 LW(0)
+805E41A0:     wait_frames LW(0)
+805E41A8:     callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_BOSS_GESSO_ARM_MOVE1"] [F1194D80] 0 [F1194D80]
+805E41C4:     callc [btlevtcmd_ftof battle_event_cmd.o] 55 LW(0)
+805E41D4:     wait_frames LW(0)
+805E41DC:     callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_BOSS_GESSO_ATTACK1"] [F1194D80] 0 [F1194D80]
+805E41F8:   end_child_thread
+805E41FC:   callc [btlevtcmd_ftof battle_event_cmd.o] 97 LW(0)
+805E420C:   wait_frames LW(0)
+805E4214:   callc [btlevtcmd_PreCheckDamage battle_event_cmd.o] -2 LW(3) LW(4) LW(12) 256 LW(5)
+805E4234:   if_int_ne LW(5) 1
+805E4240:     switchi LW(5)
+805E4248:       case_int_eq 3
+805E4250:         callc [btlevtcmd_StartAvoid battle_event_cmd.o] LW(3) 38
+805E4260:       case_int_eq 6
+805E4268:         callc [btlevtcmd_StartAvoid battle_event_cmd.o] LW(3) 39
+805E4278:       case_int_eq 2
+805E4280:         callc [btlevtcmd_StartAvoid battle_event_cmd.o] LW(3) 40
+805E4290:     end_switch
+805E4294:   else
+805E4298:     callc [btlevtcmd_ResultACDefence battle_event_cmd.o] LW(3) LW(12)
+805E42A8:     callc [btlevtcmd_CheckDamage battle_event_cmd.o] -2 LW(3) LW(4) LW(12) 256 LW(5)
+805E42C8:   endif
+805E42CC:   callc [btlevtcmd_AnimeWaitPlayComplete battle_event_cmd.o] -2 1
+805E42DC: 99:
+805E42E4:   callc [evt_btl_camera_set_mode battle_camera.o] 0 0
+805E42F4:   callc [btlevtcmd_StartWaitEvent battle_event_cmd.o] -2
+805E4300:   return
+805E4304:   end

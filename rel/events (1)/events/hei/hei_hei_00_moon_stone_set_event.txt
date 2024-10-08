@@ -1,0 +1,112 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [moon_stone_set_event hei_00.o] AT 805C66A4 ---
+805C66A4:   if_int_eq GSWF(1777) 0
+805C66B0:     callc [evt_mario_key_onoff evt_mario.o] 0
+805C66BC:     callc [evt_win_item_select evt_window.o] 0 [itemsel_table01 hei_00.o] LW(0) 0
+805C66D4:     if_int_eq LW(0) -1
+805C66E0:       callc [evt_mario_key_onoff evt_mario.o] 1
+805C66EC:       return
+805C66F0:     endif
+805C66F4:     setii GSWF(1777) 1
+805C6700:     callc [evt_pouch_remove_item evt_pouch.o] 61 LW(0)
+805C6710:     callc [evt_mapobj_flag_onoff evt_map.o] 1 1 ["tuki_ana"] 1
+805C6728:     callc [evt_mapobj_flag_onoff evt_map.o] 1 0 ["tukinoisi"] 1
+805C6740:     callc [evt_mapobj_get_position evt_map.o] ["tukinoisi"] LW(0) LW(1) LW(2)
+805C6758:     callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_STG1_STONE_SET1"] LW(0) LW(1) LW(2) 0
+805C6774:     callc [evt_msg_print evt_msg.o] 0 ["stg1_hei_00_moon"] 0 0
+805C678C:     callss [switch_evt hei_00.o]
+805C6794:     callc [evt_mario_key_onoff evt_mario.o] 1
+805C67A0:   endif
+805C67A4:   callc [evt_exit_case_evt evt_case.o]
+805C67AC:   return
+805C67B0:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [switch_evt hei_00.o] AT 805C5A0C ---
+805C5A0C:   if_int_eq GSWF(1776) 0
+805C5A18:     return
+805C5A1C:   endif
+805C5A20:   if_int_eq GSWF(1777) 0
+805C5A2C:     return
+805C5A30:   endif
+805C5A34:   callc [evt_mario_key_onoff evt_mario.o] 0
+805C5A40:   callc [evt_party_stop evt_party.o] 0
+805C5A4C:   begin_thread
+805C5A50:     callc [evt_mario_get_pos evt_mario.o] 0 LW(0) LW(1) LW(2)
+805C5A68:     if_int_lt LW(2) 0
+805C5A74:       addi LW(2) -50
+805C5A80:     else
+805C5A84:       addi LW(2) 50
+805C5A90:     endif
+805C5A94:     callc [evt_mario_mov_pos2 evt_mario.o] LW(0) LW(2) 80.00
+805C5AA8:     callc [evt_mario_adjust_dir evt_mario.o]
+805C5AB0:   end_thread
+805C5AB4:   begin_thread
+805C5AB8:     callc [evt_party_get_pos evt_party.o] 0 LW(0) LW(1) LW(2)
+805C5AD0:     if_int_lt LW(2) 0
+805C5ADC:       addi LW(2) -50
+805C5AE8:     else
+805C5AEC:       addi LW(2) 50
+805C5AF8:     endif
+805C5AFC:     callc [evt_party_move_pos2 evt_party.o] 0 LW(0) LW(2) 80.00
+805C5B14:   end_thread
+805C5B18:   callc [evt_snd_sfxon evt_snd.o] ["SFX_STG1ROCK_QUAKE1"] LW(10)
+805C5B28:   callc [evt_cam_shake evt_cam.o] 4 0.00 0.01 1500
+805C5B40:   callc [evt_snd_sfxoff evt_snd.o] LW(10)
+805C5B4C:   wait_ms 200
+805C5B54:   callc [evt_snd_sfxon evt_snd.o] ["SFX_STG1_ROCK_MOVE1"] LW(10)
+805C5B64:   callc [evt_sub_intpl_msec_init evt_sub.o] 11 0 1000 3000
+805C5B7C:   loop 0
+805C5B84:     callc [evt_sub_intpl_msec_get_value evt_sub.o]
+805C5B8C:     divf LW(0) 1000.00
+805C5B98:     setff LW(2) LW(0)
+805C5BA4:     mulf LW(2) 80.00
+805C5BB0:     callc [evt_mapobj_trans evt_map.o] 1 ["isi_3"] LW(2) 0 0
+805C5BCC:     callc [evt_mapobj_trans evt_map.o] 1 ["tuki_ana"] LW(2) 0 0
+805C5BE8:     callc [evt_mapobj_trans evt_map.o] 1 ["tukinoisi"] LW(2) 0 0
+805C5C04:     mulf LW(2) -1.00
+805C5C10:     callc [evt_mapobj_trans evt_map.o] 1 ["isi_4"] LW(2) 0 0
+805C5C2C:     callc [evt_mapobj_trans evt_map.o] 1 ["taiyou_ana"] LW(2) 0 0
+805C5C48:     callc [evt_mapobj_trans evt_map.o] 1 ["taiyounoisi"] LW(2) 0 0
+805C5C64:     setff LW(3) LW(0)
+805C5C70:     mulf LW(3) 1080.00
+805C5C7C:     callc [evt_mapobj_rotate evt_map.o] 1 ["isi_3"] 0 LW(3) 0
+805C5C98:     callc [evt_mapobj_rotate evt_map.o] 1 ["tuki_ana"] 0 LW(3) 0
+805C5CB4:     callc [evt_mapobj_rotate evt_map.o] 1 ["tukinoisi"] 0 LW(3) 0
+805C5CD0:     mulf LW(3) -1.00
+805C5CDC:     callc [evt_mapobj_rotate evt_map.o] 1 ["isi_4"] 0 LW(3) 0
+805C5CF8:     callc [evt_mapobj_rotate evt_map.o] 1 ["taiyou_ana"] 0 LW(3) 0
+805C5D14:     callc [evt_mapobj_rotate evt_map.o] 1 ["taiyounoisi"] 0 LW(3) 0
+805C5D30:     if_int_eq LW(1) 0
+805C5D3C:       loop_break
+805C5D40:     endif
+805C5D44:     wait_frames 1
+805C5D4C:   end_loop
+805C5D50:   callc [evt_snd_sfxoff evt_snd.o] LW(10)
+805C5D5C:   callc [evt_hit_bind_mapobj evt_hit.o] ["a_isi_3"] ["isi_3"]
+805C5D6C:   callc [evt_hit_bind_mapobj evt_hit.o] ["a_isi_4"] ["isi_4"]
+805C5D7C:   callc [evt_hit_bind_update evt_hit.o] ["a_isi_3"]
+805C5D88:   callc [evt_hit_bind_update evt_hit.o] ["a_isi_4"]
+805C5D94:   callc [evt_cam3d_evt_set evt_cam.o] 146 127 328 146 75 33 1000 11
+805C5DBC:   wait_ms 1000
+805C5DC4:   callc [evt_mapobj_flag_onoff evt_map.o] 1 0 ["s_moji"] 1
+805C5DDC:   callc [evt_hitobj_onoff evt_hit.o] ["a_moji"] 1 1
+805C5DF0:   callc [evt_run_case_evt evt_case.o] 9 1 ["a_moji"] 0 [moji_msg hei_00.o] 0
+805C5E10:   callc [evt_snd_sfxon evt_snd.o] ["SFX_STG1ROCK_FONT_APPEAR1"] 0
+805C5E20:   callc [evt_sub_intpl_msec_init evt_sub.o] 11 0 255 1000
+805C5E38:   loop 0
+805C5E40:     callc [evt_sub_intpl_msec_get_value evt_sub.o]
+805C5E48:     callc [evt_mapobj_color evt_map.o] 1 ["s_moji"] 255 255 255 LW(0)
+805C5E68:     wait_frames 1
+805C5E70:     if_int_eq LW(1) 0
+805C5E7C:       loop_break
+805C5E80:     endif
+805C5E84:   end_loop
+805C5E88:   wait_ms 1000
+805C5E90:   callc [evt_cam3d_evt_off evt_cam.o] 0 11
+805C5EA0:   wait_frames 1
+805C5EA8:   callc [evt_mario_key_onoff evt_mario.o] 1
+805C5EB4:   callc [evt_party_run evt_party.o] 0
+805C5EC0:   return
+805C5EC4:   end

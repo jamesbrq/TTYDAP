@@ -1,0 +1,79 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [dead_event unit_boss_kanbu1.o] AT 8061F7F8 ---
+8061F7F8:   callc [btlevtcmd_CheckDataOfDataTable battle_event_cmd.o] LW(10) LW(0) 50
+8061F80C:   if_int_ne LW(0) 0
+8061F818:     callc [btlevtcmd_RunDataEventChild battle_event_cmd.o] LW(10) 50
+8061F828:   endif
+8061F82C:   setii LW(0) 48
+8061F838:   callc [btlevtcmd_snd_se battle_event_cmd.o] LW(10) ["SFX_BTL_ENEMY_DIE1_1"] [F1194D80] 0 [F1194D80]
+8061F854: 10:
+8061F85C:   wait_frames 1
+8061F864:   callc [btlevtcmd_AddRotate battle_event_cmd.o] LW(10) 0 -15 0
+8061F87C:   subi LW(0) 1
+8061F888:   if_int_gt LW(0) 0
+8061F894:     goto 10
+8061F89C:   endif
+8061F8A0:   callc [btlevtcmd_SetRotate battle_event_cmd.o] LW(10) 0 0 0
+8061F8B8:   callc [btlevtcmd_snd_se battle_event_cmd.o] LW(10) ["SFX_BTL_ENEMY_DIE1_2"] [F1194D80] 0 [F1194D80]
+8061F8D4:   callc [btlevtcmd_GetPos battle_event_cmd.o] LW(10) LW(0) LW(1) LW(2)
+8061F8EC:   addi LW(2) 10
+8061F8F8:   callc [evt_eff evt_eff.o] 0 ["kemuri_test"] 4 LW(0) LW(1) LW(2) 0.80 0 0 0 0 0 0 0
+8061F938:   callc [btlevtcmd_GetCoin battle_event_cmd.o] LW(10) LW(0)
+8061F948:   callc [btlevtcmd_StoreCoin battle_event_cmd.o] LW(0)
+8061F954:   callc [btlevtcmd_GetExp battle_event_cmd.o] LW(10) LW(0)
+8061F964:   callc [btlevtcmd_StoreExp battle_event_cmd.o] LW(0)
+8061F970:   callc [btlevtcmd_GetPos battle_event_cmd.o] LW(10) LW(3) LW(1) LW(2)
+8061F988:   addi LW(2) 10
+8061F994:   addi LW(1) 30
+8061F9A0:   callc [_add_star_point_disp_offset battle_event_subset.o] LW(10) LW(3) LW(1) LW(2)
+8061F9B8:   callc [evt_eff evt_eff.o] [zero_gor_0001e358 unit_boss_kanbu1.o] ["star_point"] 0 LW(3) LW(1) LW(2) LW(0) 0 0 0 0 0 0 0
+8061F9F8:   if_int_ge LW(0) 1
+8061FA04:     loop LW(0)
+8061FA0C:     end_loop
+8061FA10:   endif
+8061FA14:   callc [btlevtcmd_SetRotateOffset battle_event_cmd.o] LW(10) 0 0 0
+8061FA2C:   setii LW(0) 30
+8061FA38: 20:
+8061FA40:   wait_frames 1
+8061FA48:   callc [btlevtcmd_AddRotate battle_event_cmd.o] LW(10) 3 0 0
+8061FA60:   subi LW(0) 1
+8061FA6C:   if_int_gt LW(0) 0
+8061FA78:     goto 20
+8061FA80:   endif
+8061FA84:   callc [btlevtcmd_GetBackItem battle_event_cmd.o] LW(10)
+8061FA90:   callc [btlevtcmd_OnPartsAttribute battle_event_cmd.o] LW(10) 1 50331648
+8061FAA4:   callc [btlevtcmd_WaitAttackEnd battle_event_cmd.o]
+8061FAAC:   callc [btlevtcmd_StopWaitEvent battle_event_cmd.o] -3
+8061FAB8:   callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -3 1 ["M_S_1"]
+8061FACC:   begin_child_thread_tid LW(5)
+8061FAD4:     callc [evt_sub_intpl_init evt_sub.o] 0 0 180 15
+8061FAEC:     loop 16
+8061FAF4:       callc [evt_sub_intpl_get_value evt_sub.o]
+8061FAFC:       callc [btlevtcmd_SetRotate battle_event_cmd.o] -3 0 LW(0) 0
+8061FB14:       wait_frames 1
+8061FB1C:     end_loop
+8061FB20:   end_child_thread
+8061FB24:   callc [btlevtcmd_WaitEventEnd battle_event_cmd.o] LW(5)
+8061FB30:   callc [btlevtcmd_StatusWindowOnOff battle_event_cmd.o] 0
+8061FB3C:   callc [btlevtcmd_GetUnitWork battle_event_cmd.o] -2 0 LW(3)
+8061FB50:   callc [btlevtcmd_SetTalkPose battle_event_cmd.o] LW(3) ["PKR_T_1"]
+8061FB60:   callc [btlevtcmd_SetStayPose battle_event_cmd.o] LW(3) ["PKR_S_1"]
+8061FB70:   callc [evt_msg_print evt_msg.o] 2 ["mac_0_b_t1_004"] 0 LW(3)
+8061FB88:   callc [evt_btl_camera_set_mode battle_camera.o] 0 17
+8061FB98:   callc [evt_btl_camera_set_moveSpeedLv battle_camera.o] 0 2
+8061FBA8:   callc [evt_msg_print evt_msg.o] 2 ["mac_0_b_t1_005"] 0 LW(3)
+8061FBC0:   callc [btlevtcmd_StatusWindowOnOff battle_event_cmd.o] 1
+8061FBCC:   begin_child_thread_tid LW(5)
+8061FBD4:     callc [evt_sub_intpl_init evt_sub.o] 0 180 0 15
+8061FBEC:     loop 16
+8061FBF4:       callc [evt_sub_intpl_get_value evt_sub.o]
+8061FBFC:       callc [btlevtcmd_SetRotate battle_event_cmd.o] -3 0 LW(0) 0
+8061FC14:       wait_frames 1
+8061FC1C:     end_loop
+8061FC20:   end_child_thread
+8061FC24:   callc [btlevtcmd_WaitEventEnd battle_event_cmd.o] LW(5)
+8061FC30:   callc [btlevtcmd_KillUnit battle_event_cmd.o] LW(10) 0
+8061FC40:   return
+8061FC44:   end

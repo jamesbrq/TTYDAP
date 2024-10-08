@@ -1,0 +1,81 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [thunder_attack_event unit_boss_marilyn_las.o] AT 80630E08 ---
+80630E08:   callc [btlevtcmd_GetEnemyBelong battle_event_cmd.o] -2 LW(0)
+80630E18:   callc [btlevtcmd_SamplingEnemy battle_event_cmd.o] -2 LW(0) LW(9)
+80630E2C:   callc [btlevtcmd_ChoiceSamplingEnemy battle_event_cmd.o] LW(9) LW(3) LW(4)
+80630E40:   if_int_eq LW(3) -1
+80630E4C:     callc [btlevtcmd_CheckToken battle_event_cmd.o] -2 16 LW(0)
+80630E60:     if_int_ne LW(0) 0
+80630E6C:       callss [subsetevt_confuse_flustered battle_event_subset.o]
+80630E74:     endif
+80630E78:     return
+80630E7C:   endif
+80630E80:   callc [btlevtcmd_WeaponAftereffect battle_event_cmd.o] LW(9)
+80630E8C:   callc [btlevtcmd_AttackDeclareAll battle_event_cmd.o] -2
+80630E98:   callc [btlevtcmd_WaitGuardMove battle_event_cmd.o]
+80630EA0:   callc [btlevtcmd_PayWeaponCost battle_event_cmd.o] -2 LW(9)
+80630EB0:   callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_BOSS_MARI_POWER1"] [F1194D80] 0 LW(15)
+80630ECC:   callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 1 ["MRR_A3_1"]
+80630EE0:   wait_ms 800
+80630EE8:   callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 1 ["MRR_A3_2"]
+80630EFC:   wait_ms 150
+80630F04:   callc [evt_snd_sfxoff evt_snd.o] LW(15)
+80630F10:   callc [btlevtcmd_GetSelectEnemy battle_event_cmd.o] LW(3) LW(4)
+80630F20:   setii LW(10) 0
+80630F2C: 10:
+80630F34:   callc [evt_sub_random evt_sub.o] 2 LW(7)
+80630F44:   addi LW(7) 3
+80630F50:   callc [btlevtcmd_GetHitPos battle_event_cmd.o] LW(3) LW(4) LW(0) LW(1) LW(2)
+80630F6C:   callc [btlevtcmd_GetWidth battle_event_cmd.o] LW(3) LW(5)
+80630F7C:   callc [btlevtcmd_GetHeight battle_event_cmd.o] LW(3) LW(6)
+80630F8C:   callc [evt_eff64 evt_eff.o] [zero_las_0001ad4c unit_boss_marilyn_las.o] ["thunder_n64"] LW(7) LW(0) LW(1) LW(2) LW(5) LW(6) 0 0 0 0 0 0
+80630FCC:   callc [evt_snd_sfxon evt_snd.o] ["SFX_BOSS_MARI_ATTACK_THUNDER1"] 0
+80630FDC:   callc [evt_btl_camera_shake_h battle_camera.o] 0 3 0 25 13
+80630FF8:   begin_thread
+80630FFC:     callc [evt_sub_rumble_onoff evt_sub.o] 0 0
+8063100C:     wait_ms 300
+80631014:     callc [evt_sub_rumble_onoff evt_sub.o] 1 0
+80631024:   end_thread
+80631028:   wait_ms 83
+80631030:   callc [btlevtcmd_PreCheckDamage battle_event_cmd.o] -2 LW(3) LW(4) LW(9) 256 LW(5)
+80631050:   switchi LW(5)
+80631058:     case_int_eq_any 4
+80631060:       goto 90
+80631068:       end_multi_case
+8063106C:     case_int_eq 3
+80631074:       callc [btlevtcmd_StartAvoid battle_event_cmd.o] LW(3) 38
+80631084:       goto 90
+8063108C:       end_multi_case
+80631090:     case_int_eq 6
+80631098:       callc [btlevtcmd_StartAvoid battle_event_cmd.o] LW(3) 39
+806310A8:       goto 90
+806310B0:     case_int_eq 2
+806310B8:       callc [btlevtcmd_StartAvoid battle_event_cmd.o] LW(3) 40
+806310C8:       goto 90
+806310D0:     case_int_eq 1
+806310D8:       goto 91
+806310E0:       end_multi_case
+806310E4:     case_default
+806310E8:       goto 98
+806310F0:       end_multi_case
+806310F4:   end_switch
+806310F8: 90:
+80631100:   goto 97
+80631108: 91:
+80631110:   if_int_eq LW(10) 0
+8063111C:     callc [btlevtcmd_ResultACDefence battle_event_cmd.o] LW(3) LW(9)
+8063112C:   endif
+80631130:   callc [btlevtcmd_CheckDamage battle_event_cmd.o] -2 LW(3) LW(4) LW(9) 256 LW(5)
+80631150: 97:
+80631158:   callc [btlevtcmd_GetSelectNextEnemy battle_event_cmd.o] LW(3) LW(4)
+80631168:   if_int_ne LW(3) -1
+80631174:     addi LW(10) 1
+80631180:     goto 10
+80631188:   endif
+8063118C: 98:
+80631194:   callc [evt_btl_camera_set_mode battle_camera.o] 0 0
+806311A4:   wait_ms 1000
+806311AC:   return
+806311B0:   end

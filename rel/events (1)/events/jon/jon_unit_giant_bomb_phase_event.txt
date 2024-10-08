@@ -1,0 +1,45 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [phase_event unit_giant_bomb.o] AT 80CE288C ---
+80CE288C:   callc [btlevtcmd_CheckPhase battle_event_cmd.o] LW(0) 67108867
+80CE289C:   if_int_ne LW(0) 0
+80CE28A8:     callc [btlevtcmd_GetUnitWork battle_event_cmd.o] -2 0 LW(0)
+80CE28BC:     if_int_ne LW(0) 0
+80CE28C8:       callc [btlevtcmd_PhaseEventStartDeclare battle_event_cmd.o] -2
+80CE28D4:       callc [btlevtcmd_GetUnitWork battle_event_cmd.o] -2 1 LW(0)
+80CE28E8:       if_int_eq LW(0) 0
+80CE28F4:         callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 1 ["K_4"]
+80CE2908:         callc [btlevtcmd_AfterReactionEntry battle_event_cmd.o] -2 52
+80CE2918:         return
+80CE291C:       endif
+80CE2920:       callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_ENM_HEAVYB_WAIT2"] [F1194D80] 0 [F1194D80]
+80CE293C:       callc [btlevtcmd_GetUnitWork battle_event_cmd.o] -2 1 LW(0)
+80CE2950:       switchi LW(0)
+80CE2958:         case_int_eq 3
+80CE2960:           callc [btlevtcmd_AnimeSetPoseTable battle_event_cmd.o] -2 1 [pose_table_3_to_2 unit_giant_bomb.o]
+80CE2974:         case_int_eq 2
+80CE297C:           callc [btlevtcmd_AnimeSetPoseTable battle_event_cmd.o] -2 1 [pose_table_2_to_1 unit_giant_bomb.o]
+80CE2990:         case_int_eq 1
+80CE2998:           callc [btlevtcmd_AnimeSetPoseTable battle_event_cmd.o] -2 1 [pose_table_1_to_0 unit_giant_bomb.o]
+80CE29AC:       end_switch
+80CE29B0:       callc [btlevtcmd_AnimeChangePoseFromTable battle_event_cmd.o] -2 1
+80CE29C0:       wait_frames 40
+80CE29C8:       callc [btlevtcmd_GetUnitWork battle_event_cmd.o] -2 1 LW(0)
+80CE29DC:       subi LW(0) 1
+80CE29E8:       callc [btlevtcmd_SetUnitWork battle_event_cmd.o] -2 1 LW(0)
+80CE29FC:       switchi LW(0)
+80CE2A04:         case_int_eq 2
+80CE2A0C:           callc [btlevtcmd_AnimeSetPoseTable battle_event_cmd.o] -2 1 [pose_table_2_fire unit_giant_bomb.o]
+80CE2A20:         case_int_eq 1
+80CE2A28:           callc [btlevtcmd_AnimeSetPoseTable battle_event_cmd.o] -2 1 [pose_table_1_fire unit_giant_bomb.o]
+80CE2A3C:         case_int_eq 0
+80CE2A44:           callc [btlevtcmd_AnimeSetPoseTable battle_event_cmd.o] -2 1 [pose_table_0_fire unit_giant_bomb.o]
+80CE2A58:       end_switch
+80CE2A5C:       callc [btlevtcmd_StartWaitEvent battle_event_cmd.o] -2
+80CE2A68:       return
+80CE2A6C:     endif
+80CE2A70:   endif
+80CE2A74: 99:
+80CE2A7C:   return
+80CE2A80:   end

@@ -1,0 +1,151 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [namiyoke_atari_check dou_10.o] AT 805C8B6C ---
+805C8B6C:   setii GW(0) 0
+805C8B78:   loop 0
+805C8B80:     if_int_eq GW(0) 1
+805C8B8C:       dbg_report ["マリオと波の接触"]
+805C8B94:       callss [namiyoke_fail dou_10.o]
+805C8B9C:       setii GW(0) 0
+805C8BA8:     endif
+805C8BAC:     wait_frames 1
+805C8BB4:   end_loop
+805C8BB8:   return
+805C8BBC:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [namiyoke_fail dou_10.o] AT 805C8934 ---
+805C8934:   callc [evt_cam_letter_box_disable evt_cam.o] 1
+805C8940:   callc [evt_mario_key_onoff evt_mario.o] 0
+805C894C:   callc [namiyoke_fail_stop dou_10.o]
+805C8954:   callc [evt_mario_dispflag_onoff evt_mario.o] 1 256
+805C8964:   callc [evt_mario_get_pos evt_mario.o] 0 LW(0) LW(1) LW(2)
+805C897C:   callc [evt_cam3d_get_shift evt_cam.o] LW(0) LW(1) LW(2) LW(3)
+805C8994:   callc [evt_cam3d_event_from_road evt_cam.o] LW(0) LW(1) LW(2) LW(3) LW(4) LW(5) LW(6) LW(7) LW(8) LW(9)
+805C89C4:   callc [evt_cam3d_evt_set evt_cam.o] LW(4) LW(5) LW(6) LW(7) LW(8) LW(9) 0 11
+805C89EC:   callsa_tid [namiyoke_fail_kaiten dou_10.o] LW(10)
+805C89F8:   callsa_tid [namiyoke_fail_shizumu dou_10.o] LW(11)
+805C8A04:   wait_ms 2000
+805C8A0C:   stop_tid LW(10)
+805C8A14:   stop_tid LW(11)
+805C8A1C:   callc [evt_mario_set_pos evt_mario.o] -660 -100 100
+805C8A30:   callc [evt_cam3d_evt_set evt_cam.o] -630 152 578 -630 57 37 500 11
+805C8A58:   wait_ms 1000
+805C8A60:   begin_thread
+805C8A64:     wait_ms 400
+805C8A6C:     callc [evt_mario_get_pos evt_mario.o] 0 LW(0) LW(1) LW(2)
+805C8A84:     callc [evt_eff64 evt_eff.o] [zero_dou_00004eb8 dou_10.o] ["ripple_n64"] 0 LW(0) 5 LW(2) 0 0 0 0 0 0 0 0
+805C8AC4:     wait_ms 400
+805C8ACC:     callc [evt_eff64 evt_eff.o] [zero_dou_00004eb8 dou_10.o] ["ripple_n64"] 0 LW(0) 5 LW(2) 0 0 0 0 0 0 0 0
+805C8B0C:   end_thread
+805C8B10:   callss [namiyoke_fail_recover dou_10.o]
+805C8B18:   callc [evt_cam_road_reset evt_cam.o]
+805C8B20:   callc [evt_cam3d_evt_off evt_cam.o] 500 11
+805C8B30:   callc [evt_mario_cont_onoff evt_mario.o] 1
+805C8B3C:   callc [evt_mario_dispflag_onoff evt_mario.o] 0 256
+805C8B4C:   callc [evt_mario_key_onoff evt_mario.o] 1
+805C8B58:   callc [evt_cam_letter_box_disable evt_cam.o] 0
+805C8B64:   return
+805C8B68:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [namiyoke_fail_kaiten dou_10.o] AT 805C84F0 ---
+805C84F0:   callc [evt_mario_get_dispdir evt_mario.o] LW(0)
+805C84FC:   setii LW(1) LW(0)
+805C8508:   addi LW(1) 1080
+805C8514:   callc [evt_sub_intpl_msec_init evt_sub.o] 0 LW(0) LW(1) 1000
+805C852C:   loop 0
+805C8534:     callc [evt_sub_intpl_msec_get_value_para evt_sub.o] LW(0) LW(1)
+805C8544:     callc [evt_mario_set_dispdir evt_mario.o] LW(0)
+805C8550:     if_int_eq LW(1) 0
+805C855C:       loop_break
+805C8560:     endif
+805C8564:     wait_frames 1
+805C856C:   end_loop
+805C8570:   return
+805C8574:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [namiyoke_fail_shizumu dou_10.o] AT 805C8578 ---
+805C8578:   callc [evt_mario_cont_onoff evt_mario.o] 0
+805C8584:   callc [evt_mario_get_pos evt_mario.o] 0 LW(0) LW(1) LW(2)
+805C859C:   callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_STG5_MINIGAME_SHIP_SINK1"] LW(0) LW(1) LW(2) 0
+805C85B8:   callc [evt_sub_intpl_msec_init evt_sub.o] 0 0 -100 4000
+805C85D0:   loop 0
+805C85D8:     callc [evt_sub_intpl_msec_get_value_para evt_sub.o] LW(0) LW(1)
+805C85E8:     callc [evt_mario_get_pos evt_mario.o] 0 LW(7) LW(8) LW(9)
+805C8600:     callc [evt_mario_set_pos evt_mario.o] LW(7) LW(0) LW(9)
+805C8614:     if_int_eq LW(1) 0
+805C8620:       loop_break
+805C8624:     endif
+805C8628:     wait_frames 1
+805C8630:   end_loop
+805C8634:   return
+805C8638:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [namiyoke_fail_recover dou_10.o] AT 805C863C ---
+805C863C:   callc [evt_mario_get_pos evt_mario.o] 0 LW(0) LW(1) LW(2)
+805C8654:   callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_STG5_MINIGAME_SHIP_FLOAT1"] LW(0) LW(1) LW(2) 0
+805C8670:   callc [evt_sub_intpl_msec_init evt_sub.o] 1 -100 0 800
+805C8688:   loop 0
+805C8690:     callc [evt_sub_intpl_msec_get_value_para evt_sub.o] LW(0) LW(1)
+805C86A0:     callc [evt_mario_set_pos evt_mario.o] -660 LW(0) 100
+805C86B4:     wait_frames 1
+805C86BC:     if_int_eq LW(1) 0
+805C86C8:       loop_break
+805C86CC:     endif
+805C86D0:   end_loop
+805C86D4:   callc [evt_sub_intpl_msec_init evt_sub.o] 11 0 -10 300
+805C86EC:   loop 0
+805C86F4:     callc [evt_sub_intpl_msec_get_value_para evt_sub.o] LW(0) LW(1)
+805C8704:     callc [evt_mario_set_pos evt_mario.o] -660 LW(0) 100
+805C8718:     wait_frames 1
+805C8720:     if_int_eq LW(1) 0
+805C872C:       loop_break
+805C8730:     endif
+805C8734:   end_loop
+805C8738:   callc [evt_sub_intpl_msec_init evt_sub.o] 11 -10 0 300
+805C8750:   loop 0
+805C8758:     callc [evt_sub_intpl_msec_get_value_para evt_sub.o] LW(0) LW(1)
+805C8768:     callc [evt_mario_set_pos evt_mario.o] -660 LW(0) 100
+805C877C:     wait_frames 1
+805C8784:     if_int_eq LW(1) 0
+805C8790:       loop_break
+805C8794:     endif
+805C8798:   end_loop
+805C879C:   callc [evt_sub_intpl_msec_init evt_sub.o] 11 0 -5 200
+805C87B4:   loop 0
+805C87BC:     callc [evt_sub_intpl_msec_get_value_para evt_sub.o] LW(0) LW(1)
+805C87CC:     callc [evt_mario_set_pos evt_mario.o] -660 LW(0) 100
+805C87E0:     wait_frames 1
+805C87E8:     if_int_eq LW(1) 0
+805C87F4:       loop_break
+805C87F8:     endif
+805C87FC:   end_loop
+805C8800:   callc [evt_sub_intpl_msec_init evt_sub.o] 11 -5 0 200
+805C8818:   loop 0
+805C8820:     callc [evt_sub_intpl_msec_get_value_para evt_sub.o] LW(0) LW(1)
+805C8830:     callc [evt_mario_set_pos evt_mario.o] -660 LW(0) 100
+805C8844:     wait_frames 1
+805C884C:     if_int_eq LW(1) 0
+805C8858:       loop_break
+805C885C:     endif
+805C8860:   end_loop
+805C8864:   callc [evt_sub_intpl_msec_init evt_sub.o] 11 0 -1 100
+805C887C:   loop 0
+805C8884:     callc [evt_sub_intpl_msec_get_value_para evt_sub.o] LW(0) LW(1)
+805C8894:     callc [evt_mario_set_pos evt_mario.o] -660 LW(0) 100
+805C88A8:     wait_frames 1
+805C88B0:     if_int_eq LW(1) 0
+805C88BC:       loop_break
+805C88C0:     endif
+805C88C4:   end_loop
+805C88C8:   callc [evt_sub_intpl_msec_init evt_sub.o] 11 -1 0 100
+805C88E0:   loop 0
+805C88E8:     callc [evt_sub_intpl_msec_get_value_para evt_sub.o] LW(0) LW(1)
+805C88F8:     callc [evt_mario_set_pos evt_mario.o] -660 LW(0) 100
+805C890C:     wait_frames 1
+805C8914:     if_int_eq LW(1) 0
+805C8920:       loop_break
+805C8924:     endif
+805C8928:   end_loop
+805C892C:   return
+805C8930:   end

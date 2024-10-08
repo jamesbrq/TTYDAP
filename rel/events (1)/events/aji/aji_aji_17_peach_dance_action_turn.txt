@@ -1,0 +1,49 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [peach_dance_action_turn aji_17.o] AT 805F3A64 ---
+805F3A64:   callc [dance_flag_onoff aji_17.o] 2 1
+805F3A74:   callss [dance_action_turn_sub aji_17.o]
+805F3A7C:   callc [dance_flag_onoff aji_17.o] 2 0
+805F3A8C:   return
+805F3A90:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [dance_action_turn_sub aji_17.o] AT 805F38B4 ---
+805F38B4:   callc [evt_mario_get_dispdir evt_mario.o] LW(6)
+805F38C0:   if_int_eq LW(6) 0
+805F38CC:     setii LW(6) 360
+805F38D8:   endif
+805F38DC:   setii LW(7) LW(6)
+805F38E8:   subi LW(7) 180
+805F38F4:   callc [get_local_rotate aji_17.o] LW(8)
+805F3900:   setff LW(9) LW(8)
+805F390C:   addf LW(9) 3.14
+805F3918:   mulf LW(8) 1000.00
+805F3924:   mulf LW(9) 1000.00
+805F3930:   callc [evt_npc_get_position evt_npc.o] ["ホログラム"] LW(2) LW(0) LW(3)
+805F3948:   callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_PEACH_DANCE_TURN1"] LW(2) 0 LW(3) 0
+805F3964:   begin_thread
+805F3968:     callc [evt_sub_intpl_msec_init evt_sub.o] 11 LW(6) LW(7) 400
+805F3980: 0:
+805F3988:     callc [evt_sub_intpl_msec_get_value evt_sub.o]
+805F3990:     setii LW(2) 360
+805F399C:     subi LW(2) LW(0)
+805F39A8:     callc [evt_npc_set_ry evt_npc.o] ["ホログラム"] LW(2)
+805F39B8:     callc [evt_mario_set_dir evt_mario.o] LW(0) 0 0
+805F39CC:     callc [evt_mario_set_dispdir evt_mario.o] LW(0)
+805F39D8:     wait_frames 1
+805F39E0:     if_int_eq LW(1) 1
+805F39EC:       goto 0
+805F39F4:     endif
+805F39F8:   end_thread
+805F39FC:   callc [evt_sub_intpl_msec_init evt_sub.o] 11 LW(8) LW(9) 400
+805F3A14: 1:
+805F3A1C:   callc [evt_sub_intpl_msec_get_value evt_sub.o]
+805F3A24:   divf LW(0) 1000.00
+805F3A30:   callc [set_local_rotate aji_17.o] LW(0)
+805F3A3C:   wait_frames 1
+805F3A44:   if_int_eq LW(1) 1
+805F3A50:     goto 1
+805F3A58:   endif
+805F3A5C:   return
+805F3A60:   end

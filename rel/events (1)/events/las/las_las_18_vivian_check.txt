@@ -1,0 +1,43 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [vivian_check las_18.o] AT 805E1FE8 ---
+805E1FE8:   callc [evt_seq_wait evt_seq.o] 2
+805E1FF4:   setii LW(15) 0
+805E2000:   loop 0
+805E2008:     callc [get_mobj_seq las_18.o] ["switch"] LW(0)
+805E2018:     if_int_gt LW(0) 0
+805E2024:       loop_break
+805E2028:     endif
+805E202C:     callc [evt_mario_get_party evt_mario.o] LW(0)
+805E2038:     if_int_eq LW(0) 6
+805E2044:       callc [evt_party_get_status evt_party.o] 6 LW(0)
+805E2054:       if_int_eq LW(0) 2
+805E2060:         addi LW(15) 4
+805E206C:       else
+805E2070:         subi LW(15) 4
+805E207C:       endif
+805E2080:     else
+805E2084:       subi LW(15) 4
+805E2090:     endif
+805E2094:     if_int_gt LW(15) 160
+805E20A0:       setii LW(15) 160
+805E20AC:     endif
+805E20B0:     if_int_lt LW(15) 0
+805E20BC:       setii LW(15) 0
+805E20C8:     endif
+805E20CC:     callc [switch_set_alpha las_18.o] LW(15)
+805E20D8:     if_int_eq LW(15) 160
+805E20E4:       if_int_eq GSWF(4382) 0
+805E20F0:         setii GSWF(4382) 1
+805E20FC:         callc [evt_snd_bgmoff evt_snd.o] 1024
+805E2108:         callc [evt_snd_bgmon evt_snd.o] 1 ["BGM_FF_ENV_SUCCESS1"]
+805E2118:         wait_ms 2000
+805E2120:         callc [evt_snd_bgmoff evt_snd.o] 513
+805E212C:         callc [evt_snd_bgmon evt_snd.o] 288 0
+805E213C:       endif
+805E2140:     endif
+805E2144:     wait_frames 1
+805E214C:   end_loop
+805E2150:   return
+805E2154:   end

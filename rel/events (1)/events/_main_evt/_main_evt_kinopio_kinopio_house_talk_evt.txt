@@ -1,0 +1,286 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [kinopio_house_talk_evt evt_kinopio.o] AT 8033E010 ---
+8033E010:   callc [evt_mario_key_onoff evt_mario.o] 0
+8033E01C:   callc [get_ryoukin evt_kinopio.o] LW(10)
+8033E028:   callc [get_npcname evt_kinopio.o] LW(11)
+8033E034:   callc [evt_win_coin_on evt_window.o] 0 LW(12)
+8033E044:   callc [msg_no evt_kinopio.o] 0 LW(0)
+8033E054:   callc [evt_msg_print_insert evt_msg.o] 0 LW(0) 0 LW(11) LW(10)
+8033E070:   callc [msg_no evt_kinopio.o] 6 LW(0)
+8033E080:   callc [evt_msg_select evt_msg.o] 0 LW(0)
+8033E090:   if_int_eq LW(0) 1
+8033E09C:     callc [msg_no evt_kinopio.o] 2 LW(0)
+8033E0AC:     callc [evt_msg_print_add evt_msg.o] 0 LW(0)
+8033E0BC:     callc [evt_mario_key_onoff evt_mario.o] 1
+8033E0C8:     callc [evt_win_coin_off evt_window.o] LW(12)
+8033E0D4:     return
+8033E0D8:   endif
+8033E0DC:   callc [power_chk evt_kinopio.o] LW(0)
+8033E0E8:   if_int_eq LW(0) 1
+8033E0F4:     callc [msg_no evt_kinopio.o] 1 LW(0)
+8033E104:     callc [evt_msg_print_add evt_msg.o] 0 LW(0)
+8033E114:     callc [msg_no evt_kinopio.o] 6 LW(0)
+8033E124:     callc [evt_msg_select evt_msg.o] 0 LW(0)
+8033E134:     if_int_eq LW(0) 1
+8033E140:       callc [msg_no evt_kinopio.o] 2 LW(0)
+8033E150:       callc [evt_msg_print_add evt_msg.o] 0 LW(0)
+8033E160:       callc [evt_mario_key_onoff evt_mario.o] 1
+8033E16C:       callc [evt_win_coin_off evt_window.o] LW(12)
+8033E178:       return
+8033E17C:     endif
+8033E180:   endif
+8033E184:   setii LF(0) 0
+8033E190:   callc [evt_pouch_check_item evt_pouch.o] 164 LW(0)
+8033E1A0:   if_int_gt LW(0) 0
+8033E1AC:     callc [msg_no evt_kinopio.o] 7 LW(0)
+8033E1BC:     callc [evt_msg_print_add evt_msg.o] 0 LW(0)
+8033E1CC:     callc [msg_no evt_kinopio.o] 8 LW(0)
+8033E1DC:     callc [evt_msg_select evt_msg.o] 0 LW(0)
+8033E1EC:     if_int_eq LW(0) 0
+8033E1F8:       setii LF(0) 1
+8033E204:       callc [evt_pouch_remove_item evt_pouch.o] 164 LW(0)
+8033E214:     endif
+8033E218:   endif
+8033E21C:   if_int_eq LF(0) 0
+8033E228:     callc [coin_chk evt_kinopio.o] LW(0)
+8033E234:     if_int_eq LW(0) 1
+8033E240:       callc [msg_no evt_kinopio.o] 4 LW(0)
+8033E250:       callc [evt_msg_print_add evt_msg.o] 0 LW(0)
+8033E260:       callc [evt_mario_key_onoff evt_mario.o] 1
+8033E26C:       callc [evt_win_coin_off evt_window.o] LW(12)
+8033E278:       return
+8033E27C:     endif
+8033E280:     callc [get_ryoukin evt_kinopio.o] LW(10)
+8033E28C:     muli LW(10) -1
+8033E298:     callc [evt_pouch_add_coin evt_pouch.o] LW(10)
+8033E2A4:     wait_ms 1000
+8033E2AC:   endif
+8033E2B0:   callc [evt_win_coin_off evt_window.o] LW(12)
+8033E2BC:   callc [msg_no evt_kinopio.o] 3 LW(0)
+8033E2CC:   callc [evt_msg_print_add evt_msg.o] 0 LW(0)
+8033E2DC:   callc [get_npcname evt_kinopio.o] LW(0)
+8033E2E8:   callc [evt_npc_flag_onoff evt_npc.o] 1 LW(0) 32
+8033E2FC:   callc [evt_mario_get_party evt_mario.o] LW(11)
+8033E308:   callc [evt_mario_get_exparty evt_mario.o] LW(12)
+8033E314:   callc [evt_mario_get_pos evt_mario.o] 0 LW(13) LW(14) LW(15)
+8033E32C:   callc [evt_mario_goodbye_party evt_mario.o] 1
+8033E338:   callc [evt_mario_goodbye_party evt_mario.o] 0
+8033E344:   callc [get_to_bed_evt evt_kinopio.o] LW(0)
+8033E350:   if_int_eq LW(0) 0
+8033E35C:     begin_thread
+8033E360:       wait_ms 1000
+8033E368:       callc [get_cam evt_kinopio.o] LW(0) LW(1) LW(2) LW(3) LW(4) LW(5)
+8033E388:       callc [evt_cam3d_evt_set evt_cam.o] LW(0) LW(1) LW(2) LW(3) LW(4) LW(5) 0 11
+8033E3B0:     end_thread
+8033E3B4:     callc [get_bedside evt_kinopio.o] LW(0) LW(1) LW(2)
+8033E3C8:     callc [evt_mario_mov_pos2 evt_mario.o] LW(0) LW(2) 90.00
+8033E3DC:   else
+8033E3E0:     begin_thread_tid LW(0)
+8033E3E8:       callss LW(0)
+8033E3F0:     end_thread
+8033E3F4:     loop 0
+8033E3FC:       check_thread_running LW(0) LW(1)
+8033E408:       if_int_eq LW(1) 0
+8033E414:         loop_break
+8033E418:       endif
+8033E41C:       wait_frames 1
+8033E424:     end_loop
+8033E428:     callc [get_cam evt_kinopio.o] LW(0) LW(1) LW(2) LW(3) LW(4) LW(5)
+8033E448:     callc [evt_cam3d_evt_set evt_cam.o] LW(0) LW(1) LW(2) LW(3) LW(4) LW(5) 0 11
+8033E470:     wait_ms 500
+8033E478:   endif
+8033E47C:   callc [evt_mario_get_pos evt_mario.o] 0 LW(0) LW(1) LW(2)
+8033E494:   callc [evt_snd_sfxon_3d evt_snd.o] 131230 LW(0) LW(1) LW(2) 0
+8033E4B0:   callc [evt_mario_flag_onoff evt_mario.o] 1 1792
+8033E4C0:   callc [get_bed evt_kinopio.o] LW(0) LW(1) LW(2)
+8033E4D4:   callc [evt_mario_jump_pos evt_mario.o] LW(0) LW(1) LW(2) 400.00 0 -1000
+8033E4F4:   callc [evt_mario_set_pos evt_mario.o] LW(0) LW(1) LW(2)
+8033E508:   callc [evt_mario_adjust_dir evt_mario.o]
+8033E510:   wait_ms 200
+8033E518:   callc [evt_mario_dispflag_onoff evt_mario.o] 1 4096
+8033E528:   begin_thread_tid LW(10)
+8033E530:     callc [get_beddeg evt_kinopio.o] LW(0)
+8033E53C:     callc [paper_on evt_kinopio.o] LW(0)
+8033E548:   end_thread
+8033E54C:   begin_thread
+8033E550:     callc [evt_mario_get_pos evt_mario.o] 0 LW(0) LW(1) LW(2)
+8033E568:     callc [evt_snd_sfxon_3d evt_snd.o] 132026 LW(0) LW(1) LW(2) 0
+8033E584:     wait_ms 200
+8033E58C:     callc [evt_snd_sfxon_3d evt_snd.o] 132027 LW(0) LW(1) LW(2) 0
+8033E5A8:   end_thread
+8033E5AC:   callc [snd_off evt_kinopio.o]
+8033E5B4:   callc [evt_snd_bgmoff evt_snd.o] 1024
+8033E5C0:   callc [evt_snd_bgmon evt_snd.o] 1 ["BGM_FF_GO_SLEEPING1"]
+8033E5D0:   callc [evt_fade_entry evt_fade.o] 4 6000 0 0 0
+8033E5EC:   callc [evt_mario_get_pos evt_mario.o] 0 LW(0) LW(1) LW(2)
+8033E604:   callc [evt_fade_set_spot_pos evt_fade.o] LW(0) LW(1) LW(2)
+8033E618:   callc [evt_fade_end_wait evt_fade.o]
+8033E620:   callc [evt_fade_entry evt_fade.o] 12 0 0 0 0
+8033E63C:   callc [evt_fade_end_wait evt_fade.o]
+8033E644:   callc [evt_pouch_mario_recovery evt_pouch.o]
+8033E64C:   callc [evt_pouch_all_party_recovery evt_pouch.o]
+8033E654:   callc [breakfast evt_kinopio.o]
+8033E65C:   wait_ms 3000
+8033E664:   stop_tid LW(10)
+8033E66C:   callc [paper_off evt_kinopio.o]
+8033E674:   callc [evt_mario_dispflag_onoff evt_mario.o] 0 4096
+8033E684:   if_int_ne LW(11) 0
+8033E690:     callc [get_bed evt_kinopio.o] LW(0) LW(1) LW(2)
+8033E6A4:     callc [evt_mario_set_party_pos evt_mario.o] 0 LW(11) LW(0) LW(1) LW(2)
+8033E6C0:   endif
+8033E6C4:   if_int_ne LW(12) 0
+8033E6D0:     callc [get_bed evt_kinopio.o] LW(0) LW(1) LW(2)
+8033E6E4:     callc [offset evt_kinopio.o] 30.00 LW(3) LW(4)
+8033E6F8:     addf LW(0) LW(3)
+8033E704:     addf LW(2) LW(4)
+8033E710:     callc [evt_mario_set_party_pos evt_mario.o] 1 LW(12) LW(0) LW(1) LW(2)
+8033E72C:   endif
+8033E730:   callc [evt_mario_flag_onoff evt_mario.o] 0 1792
+8033E740:   callc [get_bedside evt_kinopio.o] LW(0) LW(1) LW(2)
+8033E754:   callc [evt_mario_set_pos evt_mario.o] LW(0) LW(1) LW(2)
+8033E768:   callc [get_npcname evt_kinopio.o] LW(0)
+8033E774:   callc [evt_set_dir_to_target evt_npc.o] LW(0) ["mario"]
+8033E784:   callc [evt_mario_set_dir_npc evt_mario.o] LW(0)
+8033E790:   callc [evt_party_set_dir_npc evt_party.o] 0 LW(0)
+8033E7A0:   callc [evt_party_set_dir_npc evt_party.o] 1 LW(0)
+8033E7B0:   callc [evt_npc_flag_onoff evt_npc.o] 1 LW(0) 32768
+8033E7C4:   callc [evt_cam3d_evt_off evt_cam.o] 0 11
+8033E7D4:   wait_frames 1
+8033E7DC:   callc [evt_npc_flag_onoff evt_npc.o] 0 LW(0) 32768
+8033E7F0:   callc [evt_snd_bgmoff evt_snd.o] 513
+8033E7FC:   callc [evt_snd_bgmon evt_snd.o] 288 0
+8033E80C:   callc [snd_on evt_kinopio.o]
+8033E814:   addi GSW(1) 1
+8033E820:   if_int_gt GSW(1) 100
+8033E82C:     setii GSW(1) 100
+8033E838:   endif
+8033E83C:   if_int_eq GSW(1) 50
+8033E848:     callss [evt_50 evt_kinopio.o]
+8033E850:     callc [get_npcname evt_kinopio.o] LW(0)
+8033E85C:     callc [evt_npc_flag_onoff evt_npc.o] 0 LW(0) 32
+8033E870:     return
+8033E874:   endif
+8033E878:   callc [evt_mario_adjust_dir evt_mario.o]
+8033E880:   callc [evt_fade_entry evt_fade.o] 11 1000 0 0 0
+8033E89C:   callc [evt_fade_end_wait evt_fade.o]
+8033E8A4:   callc [get_from_bed_evt evt_kinopio.o] LW(0)
+8033E8B0:   if_int_ne LW(0) 0
+8033E8BC:     begin_thread_tid LW(10)
+8033E8C4:       callss LW(0)
+8033E8CC:     end_thread
+8033E8D0:     loop 0
+8033E8D8:       check_thread_running LW(10) LW(11)
+8033E8E4:       if_int_eq LW(11) 0
+8033E8F0:         loop_break
+8033E8F4:       endif
+8033E8F8:       wait_frames 1
+8033E900:     end_loop
+8033E904:   endif
+8033E908:   callc [evt_party_run evt_party.o] 0
+8033E914:   callc [evt_party_run evt_party.o] 1
+8033E920:   callc [get_npctalk evt_kinopio.o] LW(0) LW(1) LW(2)
+8033E934:   callc [evt_mario_mov_pos2 evt_mario.o] LW(0) LW(2) 90.00
+8033E948:   callc [evt_fade_end_wait evt_fade.o]
+8033E950:   callc [get_npcname evt_kinopio.o] LW(11)
+8033E95C:   callc [evt_mario_set_dir_npc evt_mario.o] LW(11)
+8033E968:   callc [evt_party_set_dir_npc evt_party.o] 0 LW(11)
+8033E978:   callc [get_npcname evt_kinopio.o] LW(11)
+8033E984:   callc [msg_no evt_kinopio.o] 5 LW(0)
+8033E994:   callc [evt_msg_print evt_msg.o] 0 LW(0) 0 LW(11)
+8033E9AC:   callc [get_npcname evt_kinopio.o] LW(0)
+8033E9B8:   callc [evt_npc_flag_onoff evt_npc.o] 0 LW(0) 32
+8033E9CC:   callc [evt_mario_key_onoff evt_mario.o] 1
+8033E9D8:   return
+8033E9DC:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [evt_50 evt_kinopio.o] AT 8033E9E0 ---
+8033E9E0:   callc [get_npcname evt_kinopio.o] LW(10)
+8033E9EC:   callc [evt_npc_get_position evt_npc.o] LW(10) LW(13) LW(14) LW(15)
+8033EA04:   callc [evt_npc_entry evt_npc.o] ["宿屋のカメラマン"] ["c_jugem_c"]
+8033EA14:   callc [evt_npc_set_tribe evt_npc.o] ["宿屋のカメラマン"] ["カメラマン"]
+8033EA24:   callc [N_cameraman_on evt_kinopio.o]
+8033EA2C:   callc [evt_npc_flag_onoff evt_npc.o] 1 ["宿屋のカメラマン"] 32768
+8033EA40:   callc [evt_sub_get_mapname evt_sub.o] LW(0)
+8033EA4C:   if_string_eq LW(0) ["bom_02"]
+8033EA58:     callc [evt_npc_set_position evt_npc.o] ["宿屋のカメラマン"] -365 30 -170
+8033EA70:   endif
+8033EA74:   if_string_eq LW(0) ["gor_01"]
+8033EA80:     callc [evt_npc_set_position evt_npc.o] ["宿屋のカメラマン"] 168 154 -229
+8033EA98:   endif
+8033EA9C:   if_string_eq LW(0) ["muj_01"]
+8033EAA8:     callc [evt_npc_set_position evt_npc.o] ["宿屋のカメラマン"] 270 20 -145
+8033EAC0:   endif
+8033EAC4:   if_string_eq LW(0) ["nok_00"]
+8033EAD0:     callc [evt_npc_set_position evt_npc.o] ["宿屋のカメラマン"] -385 25 -145
+8033EAE8:   endif
+8033EAEC:   if_string_eq LW(0) ["pik_04"]
+8033EAF8:     callc [evt_npc_set_position evt_npc.o] ["宿屋のカメラマン"] 310 1329 -100
+8033EB10:     callc [evt_npc_set_position evt_npc.o] LW(10) 310 1329 -65
+8033EB28:   endif
+8033EB2C:   if_string_eq LW(0) ["usu_00"]
+8033EB38:     callc [evt_npc_set_position evt_npc.o] ["宿屋のカメラマン"] 268 0 -210
+8033EB50:   endif
+8033EB54:   callc [evt_set_dir_to_target evt_npc.o] ["宿屋のカメラマン"] ["mario"]
+8033EB64:   callc [evt_set_dir_to_target evt_npc.o] LW(10) ["mario"]
+8033EB74:   callc [evt_mario_set_dir_npc evt_mario.o] ["宿屋のカメラマン"]
+8033EB80:   callc [evt_party_set_dir_npc evt_party.o] 0 ["宿屋のカメラマン"]
+8033EB90:   callc [msg_no evt_kinopio.o] 9 LW(0)
+8033EBA0:   callc [evt_msg_print evt_msg.o] 0 LW(0) 0 LW(10)
+8033EBB8:   callc [get_bed evt_kinopio.o] LW(0) LW(1) LW(2)
+8033EBCC:   callc [evt_mario_set_pos evt_mario.o] LW(0) LW(1) LW(2)
+8033EBE0:   addi LW(2) 5
+8033EBEC:   callc [evt_party_set_pos evt_party.o] 0 LW(0) LW(1) LW(2)
+8033EC04:   callc [evt_fade_entry evt_fade.o] 9 1000 0 0 0
+8033EC20:   callc [evt_fade_end_wait evt_fade.o]
+8033EC28:   wait_ms 500
+8033EC30:   callc [evt_mario_get_pos evt_mario.o] 0 LW(0) LW(1) LW(2)
+8033EC48:   addi LW(1) 100
+8033EC54:   callc [evt_eff evt_eff.o] 0 ["confetti"] 3 LW(0) LW(1) LW(2) 600 0 0 0 0 0 0 0
+8033EC94:   begin_thread
+8033EC98:     callc [evt_mario_get_pos evt_mario.o] 0 LW(0) LW(1) LW(2)
+8033ECB0:     callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_VOICE_MARIO_FIND1"] LW(0) LW(1) LW(2) 0
+8033ECCC:   end_thread
+8033ECD0:   callc [evt_eff_fukidashi evt_eff.o] 0 0 0 0 0 0 0 0 0 0 0
+8033ED04:   callc [evt_eff_fukidashi evt_eff.o] 3 0 0 0 0 0 0 0 0 0 0
+8033ED38:   wait_ms 1000
+8033ED40:   callc [msg_no evt_kinopio.o] 10 LW(0)
+8033ED50:   callc [evt_msg_print evt_msg.o] 0 LW(0) 0 LW(10)
+8033ED68:   callc [get_bedside evt_kinopio.o] LW(0) LW(1) LW(2)
+8033ED7C:   callc [evt_mario_mov_pos2 evt_mario.o] LW(0) LW(2) 90.00
+8033ED90:   callc [get_npctalk evt_kinopio.o] LW(0) LW(1) LW(2)
+8033EDA4:   callc [evt_mario_mov_pos2 evt_mario.o] LW(0) LW(2) 90.00
+8033EDB8:   callc [evt_mario_set_dir_npc evt_mario.o] LW(10)
+8033EDC4:   callc [msg_no evt_kinopio.o] 11 LW(0)
+8033EDD4:   callc [evt_msg_print evt_msg.o] 0 LW(0) 0 LW(10)
+8033EDEC:   callc [evt_mario_set_dir_npc evt_mario.o] ["宿屋のカメラマン"]
+8033EDF8:   callc [evt_party_set_dir_npc evt_party.o] 0 ["宿屋のカメラマン"]
+8033EE08:   wait_ms 300
+8033EE10:   callc [evt_snd_sfxon evt_snd.o] ["SFX_EVT_50_HOTEL_SHUTTER1"] 0
+8033EE20:   callc [evt_fade_entry evt_fade.o] 8 150 255 255 255
+8033EE3C:   callc [evt_mario_get_pos evt_mario.o] 0 LW(0) LW(1) LW(2)
+8033EE54:   addi LW(1) 40
+8033EE60:   callc [evt_fade_set_spot_pos evt_fade.o] LW(0) LW(1) LW(2)
+8033EE74:   callc [evt_fade_end_wait evt_fade.o]
+8033EE7C:   callc [evt_fade_entry evt_fade.o] 7 150 255 255 255
+8033EE98:   callc [evt_fade_end_wait evt_fade.o]
+8033EEA0:   callc [msg_no evt_kinopio.o] 12 LW(0)
+8033EEB0:   callc [evt_msg_print evt_msg.o] 0 LW(0) 0 LW(10)
+8033EEC8:   callc [evt_mario_set_dir_npc evt_mario.o] LW(10)
+8033EED4:   callc [evt_party_set_dir_npc evt_party.o] 0 LW(10)
+8033EEE4:   wait_ms 300
+8033EEEC:   callc [evt_sub_get_coin evt_sub.o] 200
+8033EEF8:   callc [msg_no evt_kinopio.o] 13 LW(0)
+8033EF08:   callc [evt_msg_print evt_msg.o] 0 LW(0) 0 LW(10)
+8033EF20:   callc [evt_fade_entry evt_fade.o] 10 1000 0 0 0
+8033EF3C:   callc [evt_fade_end_wait evt_fade.o]
+8033EF44:   callc [evt_npc_check_delete evt_npc.o] ["宿屋のカメラマン"]
+8033EF50:   callc [evt_npc_set_position evt_npc.o] LW(10) LW(13) LW(14) LW(15)
+8033EF68:   callc [evt_set_dir_to_target evt_npc.o] LW(10) ["mario"]
+8033EF78:   callc [evt_fade_entry evt_fade.o] 9 1000 0 0 0
+8033EF94:   callc [evt_fade_end_wait evt_fade.o]
+8033EF9C:   callc [evt_party_run evt_party.o] 0
+8033EFA8:   callc [evt_mario_key_onoff evt_mario.o] 1
+8033EFB4:   return
+8033EFB8:   end

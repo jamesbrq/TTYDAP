@@ -1,0 +1,36 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [bero_case_entry evt_bero.o] AT 8030E608 ---
+8030E608:   loadi LW(2) [BeroNUM evt_bero.o]
+8030E614:   setii LW(1) 0
+8030E620:   loop 0
+8030E628:     callc [evt_bero_get_info_num evt_bero.o] LW(1)
+8030E634:     if_int_eq LW(9) -1
+8030E640:       setii LW(0) LW(4)
+8030E64C:       andr LW(0) 0xFFF
+8030E658:       switchi LW(0)
+8030E660:         case_int_eq 3840
+8030E668:           callc [evt_run_case_evt_bero evt_case.o] LW(10) 1 LW(3) 0 [bero_case_exec_none evt_bero.o] LW(15)
+8030E688:         case_int_eq 0
+8030E690:           callc [evt_hitobj_attr_onoff evt_hit.o] 0 1 LW(3) 8388608
+8030E6A8:           callc [evt_run_case_evt_bero evt_case.o] LW(10) 1 LW(3) 0 [bero_case_exec_road evt_bero.o] LW(15)
+8030E6C8:         case_int_eq 1
+8030E6D0:           callc [evt_run_case_evt_bero evt_case.o] LW(10) 1 LW(3) 0 [bero_case_exec_door evt_bero.o] LW(15)
+8030E6F0:         case_int_eq 2
+8030E6F8:           callc [evt_run_case_evt_bero evt_case.o] LW(10) 1 LW(3) 0 [bero_case_exec_pipe evt_bero.o] LW(15)
+8030E718:         case_int_eq 3
+8030E720:           callc [evt_run_case_evt_bero evt_case.o] LW(10) 1 LW(3) 0 [bero_case_exec_gate evt_bero.o] LW(15)
+8030E740:       end_switch
+8030E744:       callc [evt_bero_case_id_save evt_bero.o] LW(1) LW(15)
+8030E754:       begin_thread
+8030E758:         callc [evt_bero_switch_on evt_bero.o] LW(1)
+8030E764:       end_thread
+8030E768:     endif
+8030E76C:     addi LW(1) 1
+8030E778:     if_int_eq LW(1) LW(2)
+8030E784:       loop_break
+8030E788:     endif
+8030E78C:   end_loop
+8030E790:   return
+8030E794:   end

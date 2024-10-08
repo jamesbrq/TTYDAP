@@ -1,0 +1,52 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [talk_g_1 tou_04.o] AT 805E33A8 ---
+805E33A8:   switchi GSW(0)
+805E33B0:     case_int_lt 133
+805E33B8:       callc [evt_msg_print evt_msg.o] 0 ["stg3_tou_39"] 0 0
+805E33D0:     case_int_range 140 142
+805E33DC:       callc [evt_msg_print evt_msg.o] 0 ["stg3_tou_297_13"] 0 0
+805E33F4:       if_int_lt GSW(0) 141
+805E3400:         callss [move_g_1_dokimasu tou_04.o]
+805E3408:       endif
+805E340C:     case_int_eq 163
+805E3414:       callc [evt_msg_print evt_msg.o] 0 ["stg3_tou_96_01"] 0 0
+805E342C:     case_int_lt 172
+805E3434:       callc [evt_tou_get_ranking tou.o] LW(0)
+805E3440:       if_int_le LW(0) 10
+805E344C:         callc [evt_msg_print evt_msg.o] 0 ["stg3_tou_96"] 0 0
+805E3464:       else
+805E3468:         callc [evt_msg_print evt_msg.o] 0 ["stg3_tou_95"] 0 0
+805E3480:       endif
+805E3484:     case_default
+805E3488:       if_int_eq GSWF(2500) 0
+805E3494:         callc [evt_msg_print evt_msg.o] 0 ["stg3_tou_39"] 0 0
+805E34AC:       else
+805E34B0:         callc [evt_tou_get_ranking tou.o] LW(0)
+805E34BC:         if_int_le LW(0) 10
+805E34C8:           callc [evt_msg_print evt_msg.o] 0 ["stg3_tou_96"] 0 0
+805E34E0:         else
+805E34E4:           callc [evt_msg_print evt_msg.o] 0 ["stg3_tou_95"] 0 0
+805E34FC:         endif
+805E3500:       endif
+805E3504:   end_switch
+805E3508:   return
+805E350C:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [move_g_1_dokimasu tou_04.o] AT 805E32DC ---
+805E32DC:   callc [evt_mario_get_pos evt_mario.o] 0 LW(0) LW(1) LW(2)
+805E32F4:   callc [evt_npc_get_position evt_npc.o] ["me"] LW(10) LW(11) LW(12)
+805E330C:   if_int_lt LW(2) LW(12)
+805E3318:     addi LW(12) 50
+805E3324:   else
+805E3328:     addi LW(12) -50
+805E3334:   endif
+805E3338:   callc [evt_npc_flag_onoff evt_npc.o] 1 ["me"] 32
+805E334C:   callc [evt_npc_move_position evt_npc.o] ["me"] LW(10) LW(12) 0 80.00 1
+805E336C:   callc [evt_npc_flag_onoff evt_npc.o] 0 ["me"] 32
+805E3380:   setii LW(0) ["s_bero_7"]
+805E338C:   callss [bero_case_switch_on evt_bero.o]
+805E3394:   setii GSW(0) 141
+805E33A0:   return
+805E33A4:   end

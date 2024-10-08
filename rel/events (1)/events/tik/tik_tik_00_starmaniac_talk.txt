@@ -1,0 +1,90 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [starmaniac_talk tik_00.o] AT 805C9E34 ---
+805C9E34:   callc [evt_badgeShop_starmaniac_get_kind_cnt evt_badgeshop.o] LW(0)
+805C9E40:   if_int_le LW(0) 0
+805C9E4C:     callc [evt_msg_print evt_msg.o] 0 ["starmaniac_02"] 0 ["me"]
+805C9E64:     return
+805C9E68:   endif
+805C9E6C:   callc [unk_tik_000005c0 tik_00.o]
+805C9E74:   if_int_eq GSWF(1325) 0
+805C9E80:     callc [evt_msg_print evt_msg.o] 0 ["starmaniac_00"] 0 ["me"]
+805C9E98:     setii GSWF(1325) 1
+805C9EA4:   else
+805C9EA8:     callc [evt_msg_print evt_msg.o] 0 ["starmaniac_01"] 0 ["me"]
+805C9EC0:   endif
+805C9EC4:   callc [evt_msg_select evt_msg.o] 0 ["starmaniac_03"]
+805C9ED4:   if_int_eq LW(0) 1
+805C9EE0:     callc [evt_msg_print_add evt_msg.o] 0 ["starmaniac_05"]
+805C9EF0:     callc [unk_tik_00000598 tik_00.o]
+805C9EF8:     return
+805C9EFC:   endif
+805C9F00:   callc [evt_pouch_get_starpiece evt_pouch.o] LW(0)
+805C9F0C:   if_int_le LW(0) 0
+805C9F18:     callc [evt_msg_print_add evt_msg.o] 0 ["starmaniac_06"]
+805C9F28:     callc [unk_tik_00000598 tik_00.o]
+805C9F30:     return
+805C9F34:   endif
+805C9F38:   callc [evt_msg_print_add evt_msg.o] 0 ["starmaniac_07"]
+805C9F48: 0:
+805C9F50:   callc [evt_win_coin_on evt_window.o] 2 LW(12)
+805C9F60:   callc [evt_win_other_select evt_window.o] 13
+805C9F6C:   if_int_eq LW(0) 0
+805C9F78:     callc [evt_win_coin_off evt_window.o] LW(12)
+805C9F84:     callc [evt_msg_print evt_msg.o] 0 ["starmaniac_08"] 0 ["me"]
+805C9F9C:     callc [unk_tik_00000598 tik_00.o]
+805C9FA4:     return
+805C9FA8:   endif
+805C9FAC:   callc [evt_sub_get_language evt_sub.o] LW(0)
+805C9FB8:   switchi LW(0)
+805C9FC0:     case_int_eq 0
+805C9FC8:       callc [evt_msg_print_insert evt_msg.o] 0 ["starmaniac_09"] 0 ["me"] LW(2) LW(3) LW(4)
+805C9FEC:     case_default
+805C9FF0:       callc [unk_800d0998 evt_msg.o] 0 LW(14) ["starmaniac_09"] LW(3)
+805CA008:       callc [unk_800d12b0 evt_msg.o] 1 LW(14) LW(14) LW(2)
+805CA020:       callc [evt_msg_print_insert evt_msg.o] 1 LW(14) 0 ["me"] LW(4)
+805CA03C:   end_switch
+805CA040:   callc [evt_msg_select evt_msg.o] 0 ["starmaniac_10"]
+805CA050:   if_int_eq LW(0) 1
+805CA05C:     callc [evt_win_coin_off evt_window.o] LW(12)
+805CA068:     callc [evt_msg_print_add evt_msg.o] 0 ["starmaniac_11"]
+805CA078:     goto 0
+805CA080:   endif
+805CA084:   callc [evt_pouch_add_item evt_pouch.o] LW(1) LW(0)
+805CA094:   if_int_eq LW(0) -1
+805CA0A0:     callc [evt_win_coin_off evt_window.o] LW(12)
+805CA0AC:     callc [evt_msg_print_add evt_msg.o] 0 ["starmaniac_15"]
+805CA0BC:     callc [unk_tik_00000598 tik_00.o]
+805CA0C4:     return
+805CA0C8:   endif
+805CA0CC:   callc [evt_badgeShop_starmaniac_dec evt_badgeshop.o] LW(1)
+805CA0D8:   muli LW(3) -1
+805CA0E4:   callc [evt_pouch_add_starpiece evt_pouch.o] LW(3)
+805CA0F0:   callc [evt_win_coin_wait evt_window.o] LW(12)
+805CA0FC:   wait_ms 500
+805CA104:   callc [evt_win_coin_off evt_window.o] LW(12)
+805CA110:   callc [evt_badgeShop_starmaniac_get_kind_cnt evt_badgeshop.o] LW(0)
+805CA11C:   if_int_eq LW(0) 0
+805CA128:     callc [evt_msg_print_add evt_msg.o] 0 ["starmaniac_12"]
+805CA138:     callc [unk_tik_00000598 tik_00.o]
+805CA140:     return
+805CA144:   endif
+805CA148:   callc [evt_pouch_get_starpiece evt_pouch.o] LW(0)
+805CA154:   if_int_eq LW(0) 0
+805CA160:     callc [evt_msg_print_add evt_msg.o] 0 ["starmaniac_12"]
+805CA170:     callc [unk_tik_00000598 tik_00.o]
+805CA178:     return
+805CA17C:   endif
+805CA180:   callc [evt_msg_print_add evt_msg.o] 0 ["starmaniac_13"]
+805CA190:   callc [evt_msg_select evt_msg.o] 0 ["starmaniac_10"]
+805CA1A0:   if_int_eq LW(0) 1
+805CA1AC:     callc [evt_msg_print_add evt_msg.o] 0 ["starmaniac_14"]
+805CA1BC:     callc [unk_tik_00000598 tik_00.o]
+805CA1C4:     return
+805CA1C8:   endif
+805CA1CC:   callc [evt_msg_continue evt_msg.o]
+805CA1D4:   goto 0
+805CA1DC:   callc [unk_tik_00000598 tik_00.o]
+805CA1E4:   return
+805CA1E8:   end

@@ -1,0 +1,42 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [in_dooranim evt_door.o] AT 8032E924 ---
+8032E924:   callc [door_group evt_door.o] LW(10) LW(9)
+8032E934:   begin_thread
+8032E938:     callc [evt_mapobj_get_position evt_map.o] LW(9) LW(2) LW(3) LW(4)
+8032E950:     callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_DOOR_OPEN1"] LW(2) LW(3) LW(4) 0
+8032E96C:     wait_ms 1500
+8032E974:     callc [evt_mapobj_get_position evt_map.o] LW(9) LW(2) LW(3) LW(4)
+8032E98C:     callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_DOOR_SHUT1"] LW(2) LW(3) LW(4) 0
+8032E9A8:     wait_ms 500
+8032E9B0:     callc [evt_mapobj_get_position evt_map.o] LW(9) LW(2) LW(3) LW(4)
+8032E9C8:     callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_DOOR_FALL1"] LW(2) LW(3) LW(4) 0
+8032E9E4:   end_thread
+8032E9E8:   callc [evt_sub_intpl_msec_init evt_sub.o] 5 0 80 500
+8032EA00: 0:
+8032EA08:   callc [evt_sub_intpl_msec_get_value_para evt_sub.o] LW(0) LW(1)
+8032EA18:   callc [evt_mapobj_rotate evt_map.o] 1 LW(9) 0 LW(0) 0
+8032EA34:   wait_frames 1
+8032EA3C:   if_int_eq LW(1) 1
+8032EA48:     goto 0
+8032EA50:   endif
+8032EA54:   wait_ms 500
+8032EA5C:   callc [evt_sub_intpl_msec_init evt_sub.o] 2 80 0 500
+8032EA74: 1:
+8032EA7C:   callc [evt_sub_intpl_msec_get_value_para evt_sub.o] LW(0) LW(1)
+8032EA8C:   callc [evt_mapobj_rotate evt_map.o] 1 LW(9) 0 LW(0) 0
+8032EAA8:   wait_frames 1
+8032EAB0:   if_int_eq LW(1) 1
+8032EABC:     goto 1
+8032EAC4:   endif
+8032EAC8:   callc [evt_sub_intpl_msec_init evt_sub.o] 2 0 90 500
+8032EAE0: 2:
+8032EAE8:   callc [evt_sub_intpl_msec_get_value_para evt_sub.o] LW(0) LW(1)
+8032EAF8:   callc [evt_mapobj_rotate evt_map.o] 1 LW(9) LW(0) 0 0
+8032EB14:   wait_frames 1
+8032EB1C:   if_int_eq LW(1) 1
+8032EB28:     goto 2
+8032EB30:   endif
+8032EB34:   return
+8032EB38:   end

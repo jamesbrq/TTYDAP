@@ -1,0 +1,115 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [evt_random_battle2 tou_03.o] AT 805CF278 ---
+805CF278:   callc [evt_mario_get_pos evt_mario.o] 0 LW(0) LW(1) LW(2)
+805CF290:   callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_VOICE_MARIO_FIND1_3"] LW(0) LW(1) LW(2) 0
+805CF2AC:   callc [evt_eff_fukidashi evt_eff.o] 0 ["m"] 0 0 0 0 0 0 0 0 0
+805CF2E0:   wait_ms 1000
+805CF2E8:   callc [evt_npc_set_position evt_npc.o] ["乱"] 370 0 210
+805CF300:   callc [evt_msg_print evt_msg.o] 0 ["stg3_tou_403_04"] 0 ["乱"]
+805CF318:   wait_ms 300
+805CF320:   callc [evt_snd_bgmon evt_snd.o] 512 ["BGM_EVT_KUPPA2"]
+805CF330:   callc [evt_cam3d_evt_set evt_cam.o] 300 134 732 300 38 190 1000 11
+805CF358:   wait_ms 1000
+805CF360:   callc [evt_npc_move_position evt_npc.o] ["乱"] 270 210 0 80.00 1
+805CF380:   callc [evt_npc_jump_position_nohit evt_npc.o] ["乱"] 180 60 167 500 30
+805CF3A0:   begin_thread
+805CF3A4:     callc [evt_cam_shake evt_cam.o] 4 0.00 0.03 500
+805CF3BC:   end_thread
+805CF3C0:   callc [evt_mario_dispflag_onoff evt_mario.o] 1 2
+805CF3D0:   callc [evt_mario_set_pose evt_mario.o] ["M_I_Y"]
+805CF3DC:   setii GF(0) 0
+805CF3E8:   begin_thread
+805CF3EC:     callc [evt_npc_move_position evt_npc.o] ["乱"] 55 50 0 80.00 1
+805CF40C:     setii GF(0) 1
+805CF418:   end_thread
+805CF41C:   wait_ms 300
+805CF424:   callc [evt_cam3d_evt_set evt_cam.o] 0 180 517 0 95 -145 0 11
+805CF44C:   wait_frames 1
+805CF454:   loop 0
+805CF45C:     if_int_eq GF(0) 1
+805CF468:       loop_break
+805CF46C:     endif
+805CF470:     wait_frames 1
+805CF478:   end_loop
+805CF47C:   callc [evt_cam3d_evt_set evt_cam.o] 0 130 62 0 115 -22 0 11
+805CF4A4:   wait_frames 1
+805CF4AC:   callc [evt_msg_print evt_msg.o] 0 ["stg3_tou_403_05"] 0 ["ガンス"]
+805CF4C4:   wait_ms 300
+805CF4CC:   callc [evt_cam3d_evt_set evt_cam.o] 15 189 396 15 116 -8 0 11
+805CF4F4:   wait_frames 1
+805CF4FC:   callc [evt_msg_print evt_msg.o] 0 ["stg3_tou_403_06"] 0 ["乱"]
+805CF514:   wait_ms 300
+805CF51C:   callc [evt_snd_sfxon evt_snd.o] ["SFX_STG3_GONG1"] 0
+805CF52C:   wait_ms 500
+805CF534:   callc [evt_npc_set_battle_info evt_npc.o] ["乱"] 24
+805CF544:   callc [evt_npc_battle_start evt_npc.o] ["乱"]
+805CF550:   callc [evt_npc_wait_battle_end evt_npc.o]
+805CF558:   callc [evt_mario_kill_party evt_mario.o] 1
+805CF564:   callc [evt_mario_dispflag_onoff evt_mario.o] 0 2
+805CF574:   callc [evt_mario_set_pose evt_mario.o] ["M_S_1"]
+805CF580:   callc [evt_npc_check evt_npc.o] ["敵１"] LW(0)
+805CF590:   if_int_eq LW(0) 1
+805CF59C:     callc [evt_npc_set_position evt_npc.o] ["敵１"] 0 -1000 0
+805CF5B4:   endif
+805CF5B8:   callc [evt_npc_check evt_npc.o] ["敵２"] LW(0)
+805CF5C8:   if_int_eq LW(0) 1
+805CF5D4:     callc [evt_npc_set_position evt_npc.o] ["敵２"] 0 -1000 0
+805CF5EC:   endif
+805CF5F0:   callc [evt_npc_check evt_npc.o] ["敵３"] LW(0)
+805CF600:   if_int_eq LW(0) 1
+805CF60C:     callc [evt_npc_set_position evt_npc.o] ["敵３"] 0 -1000 0
+805CF624:   endif
+805CF628:   callc [evt_mario_get_pos evt_mario.o] 0 LW(0) LW(1) LW(2)
+805CF640:   addi LW(0) -50
+805CF64C:   addi LW(2) -20
+805CF658:   callc [evt_party_set_pos evt_party.o] 0 LW(0) LW(1) LW(2)
+805CF670:   callc [evt_npc_get_battle_result evt_npc.o] LW(0)
+805CF67C:   if_int_eq LW(0) 1
+805CF688:     callc [evt_npc_set_anim evt_npc.o] ["乱"] ["KPA_Z_3"]
+805CF698:     callc [evt_npc_set_autotalkpose evt_npc.o] ["乱"] ["KPA_Z_3"] ["KPA_T_8"]
+805CF6AC:     callc [evt_msg_print evt_msg.o] 0 ["stg3_tou_403_08"] 0 ["乱"]
+805CF6C4:     wait_ms 300
+805CF6CC:     callc [evt_msg_togelr evt_msg.o] 0
+805CF6D8:     callc [evt_msg_print evt_msg.o] 0 ["stg3_tou_403_10"] 0 ["ガンス"]
+805CF6F0:     wait_ms 300
+805CF6F8:   else
+805CF6FC:     callss [evt_damage_pose tou_03.o]
+805CF704:     callc [evt_msg_print evt_msg.o] 0 ["stg3_tou_403_07"] 0 ["乱"]
+805CF71C:     wait_ms 300
+805CF724:     callc [evt_msg_togelr evt_msg.o] 0
+805CF730:     callc [evt_msg_print evt_msg.o] 0 ["stg3_tou_403_09"] 0 ["ガンス"]
+805CF748:     wait_ms 300
+805CF750:   endif
+805CF754:   setii LW(0) GSW(0)
+805CF760:   setii GSW(0) 178
+805CF76C:   callc [evt_snd_bgmoff_f evt_snd.o] 512 2000
+805CF77C:   setii GSW(0) LW(0)
+805CF788:   return
+805CF78C:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [evt_damage_pose tou_03.o] AT 805CE198 ---
+805CE198:   callc [evt_mario_dispflag_onoff evt_mario.o] 1 2
+805CE1A8:   callc [evt_mario_set_pose evt_mario.o] ["M_D_2"]
+805CE1B4:   callc [evt_party_cont_onoff evt_party.o] 0 0
+805CE1C4:   callc [evt_mario_get_party evt_mario.o] LW(0)
+805CE1D0:   switchi LW(0)
+805CE1D8:     case_int_eq 0
+805CE1E0:     case_int_eq 1
+805CE1E8:       callc [evt_party_set_pose evt_party.o] 0 ["PKR_D_3"]
+805CE1F8:     case_int_eq 2
+805CE200:       callc [evt_party_set_pose evt_party.o] 0 ["PNK_D_3"]
+805CE210:     case_int_eq 3
+805CE218:       callc [evt_party_set_pose evt_party.o] 0 ["D_3"]
+805CE228:     case_int_eq 4
+805CE230:       callc [evt_party_set_pose evt_party.o] 0 ["PYS_D_3"]
+805CE240:     case_int_eq 5
+805CE248:       callc [evt_party_set_pose evt_party.o] 0 ["PWD_D_3"]
+805CE258:     case_int_eq 6
+805CE260:       callc [evt_party_set_pose evt_party.o] 0 ["PTR_D_3"]
+805CE270:     case_int_eq 7
+805CE278:       callc [evt_party_set_pose evt_party.o] 0 ["PCH_D_3"]
+805CE288:   end_switch
+805CE28C:   return
+805CE290:   end

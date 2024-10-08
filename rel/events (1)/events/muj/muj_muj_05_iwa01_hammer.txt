@@ -1,0 +1,210 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [iwa01_hammer muj_05.o] AT 805E4734 ---
+805E4734:   if_int_eq GF(10) 1
+805E4740:     return
+805E4744:   endif
+805E4748:   if_int_eq GSWF(3139) 0
+805E4754:     return
+805E4758:   endif
+805E475C:   callc [evt_mapobj_get_position evt_map.o] ["S_hige_iwa03_me"] LW(0) LW(1) LW(2)
+805E4774:   callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_STG5_OBJ_BIG_ROCK_HIT1"] LW(0) LW(1) LW(2) 0
+805E4790:   callsa [blueeye_flush muj_05.o]
+805E4798:   callc [evt_dokuroiwa_command_set muj_05.o] GW(10) 1
+805E47A8:   addi GW(10) 1
+805E47B4:   callc [evt_dokuroiwa_command_check muj_05.o] LW(0)
+805E47C0:   if_int_eq LW(0) 1
+805E47CC:     callc [evt_mario_get_pos evt_mario.o] 0 LW(0) LW(1) LW(2)
+805E47E4:     addi LW(0) -30
+805E47F0:     callsa [penalty_event muj_05.o]
+805E47F8:     setii GW(5) -1
+805E4804:     callc [evt_exit_case_evt evt_case.o]
+805E480C:   endif
+805E4810:   if_int_eq LW(0) 2
+805E481C:     callsa [answer_event muj_05.o]
+805E4824:     setii GW(5) -1
+805E4830:     callc [evt_exit_case_evt evt_case.o]
+805E4838:   endif
+805E483C:   wait_ms 300
+805E4844:   setii GF(10) 0
+805E4850:   return
+805E4854:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [blueeye_flush muj_05.o] AT 805E3AAC ---
+805E3AAC:   callc [evt_mapobj_get_position evt_map.o] ["S_hige_iwa03_me"] LW(0) LW(1) LW(2)
+805E3AC4:   addi LW(0) -12
+805E3AD0:   addi LW(1) 2
+805E3ADC:   addi LW(2) 10
+805E3AE8:   callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_STG5_ROCK_EYE_SHINE1"] LW(0) LW(1) LW(2) 0
+805E3B04:   callc [evt_eff evt_eff.o] [zero_muj_000107fc muj_05.o] ["toge_flush"] 2 LW(0) LW(1) LW(2) 60 0 0 0 0 0 0 0
+805E3B44:   callc [evt_mapobj_get_position evt_map.o] ["S_hige_iwa03_me"] LW(0) LW(1) LW(2)
+805E3B5C:   addi LW(0) 10
+805E3B68:   addi LW(1) 2
+805E3B74:   addi LW(2) 10
+805E3B80:   callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_STG5_ROCK_EYE_SHINE1"] LW(0) LW(1) LW(2) 0
+805E3B9C:   callc [evt_eff evt_eff.o] [zero_muj_000107fc muj_05.o] ["toge_flush"] 2 LW(0) LW(1) LW(2) 60 0 0 0 0 0 0 0
+805E3BDC:   return
+805E3BE0:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [penalty_event muj_05.o] AT 805E4164 ---
+805E4164:   callc [evt_mario_key_onoff evt_mario.o] 0
+805E4170:   stop_tid GW(2)
+805E4178:   callc [evt_msg_close evt_msg.o] ["stg5_muj_93_02_00"]
+805E4184:   callc [evt_npc_flag_onoff evt_npc.o] 1 ["エルモスA"] 1073741856
+805E4198:   callc [evt_npc_flag_onoff evt_npc.o] 1 ["エルモスB"] 1073741856
+805E41AC:   callc [evt_npc_flag_onoff evt_npc.o] 1 ["エルモスC"] 1073741856
+805E41C0:   begin_thread
+805E41C4:     addi LW(0) -23
+805E41D0:     addi LW(2) -20
+805E41DC:     callc [evt_npc_set_position evt_npc.o] ["エルモスB"] LW(0) 220 LW(2)
+805E41F4:     callc [evt_npc_set_ry evt_npc.o] ["エルモスB"] 90
+805E4204:     callc [evt_npc_glide_position evt_npc.o] ["エルモスB"] LW(0) 20 LW(2) 1000 0 0 11 0
+805E4230:   end_thread
+805E4234:   begin_thread
+805E4238:     addi LW(0) -28
+805E4244:     addi LW(2) 48
+805E4250:     callc [evt_npc_set_position evt_npc.o] ["エルモスC"] LW(0) 210 LW(2)
+805E4268:     callc [evt_npc_set_ry evt_npc.o] ["エルモスC"] 90
+805E4278:     callc [evt_npc_glide_position evt_npc.o] ["エルモスC"] LW(0) 10 LW(2) 1000 0 0 11 0
+805E42A4:   end_thread
+805E42A8:   callc [evt_npc_set_position evt_npc.o] ["エルモスA"] LW(0) 200 LW(2)
+805E42C0:   callc [evt_npc_set_ry evt_npc.o] ["エルモスA"] 90
+805E42D0:   callc [evt_npc_glide_position evt_npc.o] ["エルモスA"] LW(0) 0 LW(2) 1000 0 0 11 0
+805E42FC:   callc [evt_mario_set_dir evt_mario.o] 270 200 0
+805E4310:   wait_ms 500
+805E4318:   loop 0
+805E4320:     callc [evt_mario_get_motion evt_mario.o] LW(10)
+805E432C:     if_int_eq LW(10) 0
+805E4338:       loop_break
+805E433C:     endif
+805E4340:     wait_frames 1
+805E4348:   end_loop
+805E434C:   callc [evt_eff_fukidashi evt_eff.o] 0 [zero_muj_000107fc muj_05.o] 0 0 0 0 0 0 0 0 60
+805E4380:   wait_ms 1000
+805E4388:   callc [evt_npc_set_battle_info evt_npc.o] ["エルモスA"] 7
+805E4398:   callc [evt_npc_battle_start evt_npc.o] ["エルモスA"]
+805E43A4:   callc [evt_npc_wait_battle_end evt_npc.o]
+805E43AC:   callc [evt_npc_set_position evt_npc.o] ["エルモスA"] 0 -1000 0
+805E43C4:   callc [evt_npc_set_position evt_npc.o] ["エルモスB"] 0 -1000 0
+805E43DC:   callc [evt_npc_set_position evt_npc.o] ["エルモスC"] 0 -1000 0
+805E43F4:   setii GW(10) 0
+805E4400:   setii GW(12) 1
+805E440C:   setii GW(13) 0
+805E4418:   callc [evt_dokuroiwa_command_clear muj_05.o]
+805E4420:   callsa_tid [marco_hanauta muj_05.o] GW(2)
+805E442C:   callss [case_event_delete muj_05.o]
+805E4434:   callss [case_event_entry muj_05.o]
+805E443C:   callc [evt_mario_key_onoff evt_mario.o] 1
+805E4448:   return
+805E444C:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [answer_event muj_05.o] AT 805E4540 ---
+805E4540:   callc [evt_mario_key_onoff evt_mario.o] 0
+805E454C:   callc [evt_cam3d_evt_set evt_cam.o] 525 119 584 525 23 42 500 11
+805E4574:   wait_ms 500
+805E457C:   wait_ms 500
+805E4584:   callsa [dokuroiwa_flush muj_05.o]
+805E458C:   wait_ms 300
+805E4594:   callsa [dokuroiwa_flush muj_05.o]
+805E459C:   wait_ms 300
+805E45A4:   callsa [dokuroiwa_flush muj_05.o]
+805E45AC:   wait_ms 300
+805E45B4:   callsa [dokuroiwa_flush muj_05.o]
+805E45BC:   wait_ms 300
+805E45C4:   callsa [dokuroiwa_flush muj_05.o]
+805E45CC:   wait_ms 300
+805E45D4:   callc [evt_mapobj_get_position evt_map.o] ["S_dkr_iwa"] LW(0) LW(1) LW(2)
+805E45EC:   callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_STG5_QUAKE1"] LW(0) LW(1) LW(2) LW(9)
+805E4608:   callsa_tid [cam_shake muj_05.o] LW(10)
+805E4614:   wait_ms 1000
+805E461C:   callc [evt_cam3d_evt_set evt_cam.o] 357 125 335 551 69 90 1000 11
+805E4644:   wait_ms 2000
+805E464C:   stop_tid LW(10)
+805E4654:   callss [cam_shake2 muj_05.o]
+805E465C:   callc [evt_snd_sfxoff evt_snd.o] LW(9)
+805E4668:   callc [evt_mapobj_get_position evt_map.o] ["S_dokuro_iwa"] LW(0) LW(1) LW(2)
+805E4680:   callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_STG5_OBJ_ROCK_WINDOW1"] LW(0) LW(1) LW(2) 0
+805E469C:   callc [evt_map_playanim evt_map.o] ["S-dkr_iwa"] 0 0
+805E46B0:   callc [evt_hitobj_onoff evt_hit.o] ["A_dkr_iwa_futa"] 1 0
+805E46C4:   callc [evt_hitobj_onoff evt_hit.o] ["A_dkr_iwa_futa02"] 1 1
+805E46D8:   callc [evt_map_checkanim evt_map.o] ["S-dkr_iwa"] LW(0) LW(1)
+805E46EC:   wait_ms LW(1)
+805E46F4:   wait_ms 1000
+805E46FC:   setii GSWF(3149) 1
+805E4708:   callss [case_event_delete muj_05.o]
+805E4710:   callc [evt_cam3d_evt_off evt_cam.o] 500 11
+805E4720:   callc [evt_mario_key_onoff evt_mario.o] 1
+805E472C:   return
+805E4730:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [marco_hanauta muj_05.o] AT 805E3954 ---
+805E3954:   return
+805E3958:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [case_event_delete muj_05.o] AT 805E40BC ---
+805E40BC:   if_int_ne GW(5) -1
+805E40C8:     callc [evt_del_case_evt evt_case.o] 0 GW(5)
+805E40D8:   endif
+805E40DC:   if_int_ne GW(6) -1
+805E40E8:     callc [evt_del_case_evt evt_case.o] 0 GW(6)
+805E40F8:   endif
+805E40FC:   if_int_ne GW(7) -1
+805E4108:     callc [evt_del_case_evt evt_case.o] 0 GW(7)
+805E4118:   endif
+805E411C:   if_int_ne GW(8) -1
+805E4128:     callc [evt_del_case_evt evt_case.o] 0 GW(8)
+805E4138:   endif
+805E413C:   if_int_ne GW(9) -1
+805E4148:     callc [evt_del_case_evt evt_case.o] 0 GW(9)
+805E4158:   endif
+805E415C:   return
+805E4160:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [case_event_entry muj_05.o] AT 805E4008 ---
+805E4008:   setii GF(10) 0
+805E4014:   callc [evt_run_case_evt evt_case.o] 13 1 ["A_iwa01"] 0 [iwa01_hammer muj_05.o] GW(5)
+805E4034:   callc [evt_run_case_evt evt_case.o] 4 1 ["A_iwa01"] 0 [iwa01_ride_a muj_05.o] GW(6)
+805E4054:   callc [evt_run_case_evt evt_case.o] 0 1 ["A_iwa_atari"] 0 [iwa02_ride muj_05.o] GW(7)
+805E4074:   callc [evt_run_case_evt evt_case.o] 13 1 ["A_iwa_atari"] 0 [iwa02_hammer muj_05.o] GW(8)
+805E4094:   callc [evt_run_case_evt evt_case.o] 4 1 ["A_iwa_atari"] 0 [iwa02_ride_a muj_05.o] GW(9)
+805E40B4:   return
+805E40B8:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [dokuroiwa_flush muj_05.o] AT 805E3D1C ---
+805E3D1C:   callc [evt_mapobj_get_position evt_map.o] ["S_dkr_iwa02"] LW(0) LW(1) LW(2)
+805E3D34:   addi LW(0) 0
+805E3D40:   addi LW(2) 20
+805E3D4C:   callc [evt_sub_random evt_sub.o] 10 LW(10)
+805E3D5C:   callc [evt_sub_random evt_sub.o] 5 LW(11)
+805E3D6C:   addi LW(0) LW(10)
+805E3D78:   addi LW(1) LW(11)
+805E3D84:   callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_STG5_ROCK_EYE_SHINE1"] LW(0) LW(1) LW(2) 0
+805E3DA0:   callc [evt_eff64 evt_eff.o] [zero_muj_000107fc muj_05.o] ["hagetaka_flush_n64"] 0 LW(0) LW(1) LW(2) 1.00 60 0 0 0 0 0 0
+805E3DE0:   return
+805E3DE4:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [cam_shake muj_05.o] AT 805E4450 ---
+805E4450:   callc [evt_sub_intpl_init evt_sub.o] 11 0 10 30
+805E4468: 0:
+805E4470:   callc [evt_sub_intpl_get_value evt_sub.o]
+805E4478:   divf LW(0) 1000.00
+805E4484:   callc [evt_cam_shake evt_cam.o] 4 LW(0) 0.00 100
+805E449C:   if_int_eq LW(1) 1
+805E44A8:     goto 0
+805E44B0:   endif
+805E44B4:   callc [evt_cam_shake evt_cam.o] 4 0.01 0.00 0
+805E44CC:   return
+805E44D0:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [cam_shake2 muj_05.o] AT 805E44D4 ---
+805E44D4:   callc [evt_sub_intpl_init evt_sub.o] 11 10 0 30
+805E44EC: 0:
+805E44F4:   callc [evt_sub_intpl_get_value evt_sub.o]
+805E44FC:   divf LW(0) 1000.00
+805E4508:   callc [evt_cam_shake evt_cam.o] 4 LW(0) 0.00 100
+805E4520:   if_int_eq LW(1) 1
+805E452C:     goto 0
+805E4534:   endif
+805E4538:   return
+805E453C:   end

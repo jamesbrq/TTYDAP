@@ -1,0 +1,44 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [evt_chorobon hei_12.o] AT 805CECD8 ---
+805CECD8:   setii GSWF(1774) 1
+805CECE4:   callc [evt_mario_wait_movable evt_mario.o]
+805CECEC:   callc [evt_mario_key_onoff evt_mario.o] 0
+805CECF8:   callc [evt_npc_flag_onoff evt_npc.o] 0 ["チョロボン"] 8
+805CED0C:   callc [evt_npc_flag_onoff evt_npc.o] 1 ["チョロボン"] 131120
+805CED20:   callc [evt_mario_get_pos evt_mario.o] 0 LW(0) LW(1) LW(2)
+805CED38:   callc [evt_npc_get_position evt_npc.o] ["チョロボン"] LW(3) LW(4) LW(5)
+805CED50:   callc [evt_npc_set_position evt_npc.o] ["チョロボン"] LW(0) LW(4) LW(2)
+805CED68:   begin_thread
+805CED6C:     wait_ms 400
+805CED74:     callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_STG1_CHORO_FALL1"] LW(0) LW(4) LW(2) 0
+805CED90:   end_thread
+805CED94:   callc [evt_npc_jump_position evt_npc.o] ["チョロボン"] 0 0 0 600 0 30.00 0
+805CEDBC:   callc [evt_mario_get_pos evt_mario.o] 0 LW(0) LW(1) LW(2)
+805CEDD4:   callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_VOICE_MARIO_SURPRISED1_2"] LW(0) LW(1) LW(2) 0
+805CEDF0:   callc [evt_mario_dispflag_onoff evt_mario.o] 1 2
+805CEE00:   callc [evt_mario_set_pose evt_mario.o] ["M_N_7"]
+805CEE0C:   wait_ms 500
+805CEE14:   callc [evt_npc_change_interrupt evt_npc.o] ["チョロボン"] 1 [chorobon_move_event npc_event.o]
+805CEE28:   callc [evt_npc_restart_regular_event evt_npc.o] ["チョロボン"]
+805CEE34:   callc [evt_npc_battle_start evt_npc.o] ["チョロボン"]
+805CEE40:   callc [evt_npc_wait_battle_end evt_npc.o]
+805CEE48:   callc [evt_npc_get_battle_result evt_npc.o] LW(0)
+805CEE54:   callc [evt_npc_check_escape_battle evt_npc.o] LW(0)
+805CEE60:   if_int_eq LW(0) 1
+805CEE6C:     callc [npc_set_me hei_12.o]
+805CEE74:     callc [npc_dead hei_12.o]
+805CEE7C:     callss [enemy_common_dead_event npc_event.o]
+805CEE84:   else
+805CEE88:     begin_thread
+805CEE8C:       callc [evt_npc_flag_onoff evt_npc.o] 1 ["チョロボン"] 8
+805CEEA0:       callc [evt_npc_flag_onoff evt_npc.o] 0 ["チョロボン"] 32
+805CEEB4:     end_thread
+805CEEB8:     callc [evt_npc_change_fbat_mode evt_npc.o] 1
+805CEEC4:   endif
+805CEEC8:   callc [evt_mario_set_pose evt_mario.o] ["M_S_1"]
+805CEED4:   callc [evt_mario_dispflag_onoff evt_mario.o] 0 2
+805CEEE4:   callc [evt_mario_key_onoff evt_mario.o] 1
+805CEEF0:   return
+805CEEF4:   end

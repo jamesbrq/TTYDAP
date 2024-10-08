@@ -1,0 +1,96 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [breath2_attack_event unit_boss_zonbaba.o] AT 80C97F1C ---
+80C97F1C:   callc [btlevtcmd_GetEnemyBelong battle_event_cmd.o] -2 LW(0)
+80C97F2C:   callc [btlevtcmd_SamplingEnemy battle_event_cmd.o] -2 LW(0) LW(9)
+80C97F40:   callc [btlevtcmd_ChoiceSamplingEnemy battle_event_cmd.o] LW(9) LW(3) LW(4)
+80C97F54:   if_int_eq LW(3) -1
+80C97F60:     goto 99
+80C97F68:   endif
+80C97F6C:   callc [btlevtcmd_WeaponAftereffect battle_event_cmd.o] LW(9)
+80C97F78:   callc [btlevtcmd_AttackDeclareAll battle_event_cmd.o] -2
+80C97F84:   callc [btlevtcmd_WaitGuardMove battle_event_cmd.o]
+80C97F8C:   callc [btlevtcmd_PayWeaponCost battle_event_cmd.o] -2 LW(9)
+80C97F9C:   callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 1 ["GNB_A2_1"]
+80C97FB0:   wait_ms 833
+80C97FB8:   callc [btlevtcmd_snd_se_offset battle_event_cmd.o] -2 ["SFX_BOSS_GNB_NECK_UP1"] [F1194D80] 0 -250 0 0 [F1194D80]
+80C97FE0:   wait_ms 1000
+80C97FE8:   callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 1 ["GNB_A2_3"]
+80C97FFC:   callc [btlevtcmd_snd_se_offset battle_event_cmd.o] -2 LW(13) [F1194D80] 0 -300 0 0 [F1194D80]
+80C98024:   setii LW(10) 120
+80C98030:   setii LW(11) 30
+80C9803C:   callc [btlevtcmd_GetPos battle_event_cmd.o] -2 LW(6) LW(7) LW(8)
+80C98054:   callc [btlevtcmd_FaceDirectionAdd battle_event_cmd.o] -2 LW(6) 360
+80C98068:   addi LW(7) 30
+80C98074:   callc [btlevtcmd_GetPos battle_event_cmd.o] -2 LW(12) [F1194D80] [F1194D80]
+80C9808C:   callc [btlevtcmd_FaceDirectionAdd battle_event_cmd.o] -2 LW(12) 360
+80C980A0:   callc [btlevtcmd_FaceDirectionAdd battle_event_cmd.o] -2 LW(12) LW(10)
+80C980B4:   begin_thread
+80C980B8:     wait_frames 20
+80C980C0:     addi LW(11) 45
+80C980CC:     subi LW(8) 10
+80C980D8:     switchi LW(9)
+80C980E0:       case_int_eq [weapon_zonbaba_cold_attack unit_boss_zonbaba.o]
+80C980E8:         callc [evt_eff evt_eff.o] 0 ["gonbaba_breath"] 3 LW(6) LW(7) LW(8) 3.00 LW(11) 0 0 0 0 0 0
+80C98128:       case_int_eq [weapon_zonbaba_confuze_attack unit_boss_zonbaba.o]
+80C98130:         callc [evt_eff evt_eff.o] 0 ["gonbaba_breath"] 4 LW(6) LW(7) LW(8) 3.00 LW(11) 0 0 0 0 0 0
+80C98170:       case_int_eq [weapon_zonbaba_sleep_attack unit_boss_zonbaba.o]
+80C98178:         callc [evt_eff evt_eff.o] 0 ["gonbaba_breath"] 5 LW(6) LW(7) LW(8) 3.00 LW(11) 0 0 0 0 0 0
+80C981B8:       case_int_eq [weapon_zonbaba_minimini_attack unit_boss_zonbaba.o]
+80C981C0:         callc [evt_eff evt_eff.o] 0 ["gonbaba_breath"] 6 LW(6) LW(7) LW(8) 3.00 LW(11) 0 0 0 0 0 0
+80C98200:     end_switch
+80C98204:   end_thread
+80C98208:   callc [btlevtcmd_GetHitPos battle_event_cmd.o] LW(3) LW(4) LW(12) [F1194D80] [F1194D80]
+80C98224:   subi LW(12) LW(6)
+80C98230:   if_int_lt LW(12) 0
+80C9823C:     muli LW(12) -1
+80C98248:   endif
+80C9824C:   addi LW(12) 20
+80C98258:   muli LW(12) LW(11)
+80C98264:   divi LW(12) LW(10)
+80C98270:   addi LW(12) 20
+80C9827C:   wait_frames LW(12)
+80C98284:   setii LW(10) 0
+80C98290: 10:
+80C98298:   callc [btlevtcmd_PreCheckDamage battle_event_cmd.o] -2 LW(3) LW(4) LW(9) 256 LW(5)
+80C982B8:   switchi LW(5)
+80C982C0:     case_int_eq_any 4
+80C982C8:       goto 90
+80C982D0:       end_multi_case
+80C982D4:     case_int_eq 3
+80C982DC:       callc [btlevtcmd_StartAvoid battle_event_cmd.o] LW(3) 38
+80C982EC:       goto 90
+80C982F4:       end_multi_case
+80C982F8:     case_int_eq 6
+80C98300:       callc [btlevtcmd_StartAvoid battle_event_cmd.o] LW(3) 39
+80C98310:       goto 90
+80C98318:     case_int_eq 2
+80C98320:       callc [btlevtcmd_StartAvoid battle_event_cmd.o] LW(3) 40
+80C98330:       goto 90
+80C98338:     case_int_eq 1
+80C98340:       goto 91
+80C98348:       end_multi_case
+80C9834C:     case_default
+80C98350:       goto 98
+80C98358:       end_multi_case
+80C9835C:   end_switch
+80C98360: 90:
+80C98368:   goto 97
+80C98370: 91:
+80C98378:   if_int_eq LW(10) 0
+80C98384:     callc [btlevtcmd_ResultACDefence battle_event_cmd.o] LW(3) LW(9)
+80C98394:   endif
+80C98398:   callc [btlevtcmd_CheckDamage battle_event_cmd.o] -2 LW(3) LW(4) LW(9) 256 LW(5)
+80C983B8:   goto 97
+80C983C0: 97:
+80C983C8:   callc [btlevtcmd_GetSelectNextEnemy battle_event_cmd.o] LW(3) LW(4)
+80C983D8:   if_int_ne LW(3) -1
+80C983E4:     wait_frames 20
+80C983EC:     addi LW(10) 1
+80C983F8:     goto 10
+80C98400:   endif
+80C98404:   wait_frames 84
+80C9840C: 99:
+80C98414:   return
+80C98418:   end

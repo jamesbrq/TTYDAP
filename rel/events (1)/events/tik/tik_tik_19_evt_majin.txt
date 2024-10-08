@@ -1,0 +1,132 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [evt_majin tik_19.o] AT 805E7858 ---
+805E7858:   callc [evt_mario_key_onoff evt_mario.o] 0
+805E7864:   callc [evt_mario_normalize evt_mario.o]
+805E786C:   callc [evt_mario_adjust_dir evt_mario.o]
+805E7874:   callc [evt_party_stop evt_party.o] 0
+805E7880:   callc [evt_party_stop evt_party.o] 1
+805E788C:   if_int_eq GSWF(1353) 0
+805E7898:     callc [evt_mobj_get_position evt_mobj.o] ["box"] LW(0) LW(1) LW(2)
+805E78B0:     addi LW(1) 30
+805E78BC:     callc [evt_msg_toge evt_msg.o] 2 LW(0) LW(1) LW(2)
+805E78D4:     callc [evt_msg_print evt_msg.o] 0 ["mac_majin_01"] 0 0
+805E78EC:     callc [evt_cam3d_evt_set evt_cam.o] 0 115 332 0 55 -13 500 11
+805E7914:     begin_thread
+805E7918:       wait_ms 500
+805E7920:       callc [evt_mario_get_pos evt_mario.o] 0 LW(3) LW(4) LW(5)
+805E7938:       if_int_le LW(3) LW(0)
+805E7944:         callc [evt_mario_set_dir evt_mario.o] 90 200 0
+805E7958:       else
+805E795C:         callc [evt_mario_set_dir evt_mario.o] 270 200 0
+805E7970:       endif
+805E7974:     end_thread
+805E7978:     begin_thread
+805E797C:       wait_ms 500
+805E7984:       callc [evt_party_move_pos2 evt_party.o] 0 -30 25 120.00
+805E799C:       callc [evt_party_set_dir evt_party.o] 0 90 -1
+805E79B0:     end_thread
+805E79B4:     begin_thread
+805E79B8:       wait_ms 500
+805E79C0:       callc [evt_party_move_pos2 evt_party.o] 1 30 25 120.00
+805E79D8:       callc [evt_party_set_dir evt_party.o] 1 270 -1
+805E79EC:     end_thread
+805E79F0:     callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_MOBJ_BLACKBOX_SWING1"] LW(0) LW(1) LW(2) LW(15)
+805E7A0C:     callc [evt_mobj_set_anim evt_mobj.o] ["box"] ["A_3"]
+805E7A1C:     callc [evt_mobj_wait_animation_end evt_mobj.o] ["box"]
+805E7A28:     callc [evt_snd_sfxoff evt_snd.o] LW(15)
+805E7A34:     wait_ms 300
+805E7A3C:     callc [evt_msg_toge evt_msg.o] 2 LW(0) LW(1) LW(2)
+805E7A54:     callc [evt_msg_print evt_msg.o] 0 ["mac_majin_02"] [majin_callback tik_19.o] 0
+805E7A6C:     callc [evt_mario_set_pose evt_mario.o] ["M_I_G"]
+805E7A78:     wait_ms 800
+805E7A80:     callc [evt_mario_set_pose evt_mario.o] ["M_S_1"]
+805E7A8C:     callc [evt_msg_toge evt_msg.o] 2 LW(0) LW(1) LW(2)
+805E7AA4:     callc [evt_msg_print evt_msg.o] 0 ["mac_majin_03"] [majin_callback tik_19.o] 0
+805E7ABC:     begin_thread
+805E7AC0:       callc [evt_mario_get_pos evt_mario.o] 0 LW(0) LW(1) LW(2)
+805E7AD8:       callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_VOICE_MARIO_HAND_UP1_1"] LW(0) LW(1) LW(2) 0
+805E7AF4:     end_thread
+805E7AF8:     callc [evt_mario_set_pose evt_mario.o] ["M_I_2"]
+805E7B04:     wait_ms 800
+805E7B0C:     callc [evt_mario_set_pose evt_mario.o] ["M_S_1"]
+805E7B18:     callc [evt_msg_toge evt_msg.o] 2 LW(0) LW(1) LW(2)
+805E7B30:     callc [evt_msg_print evt_msg.o] 0 ["mac_majin_04"] [majin_callback tik_19.o] 0
+805E7B48:     callc [evt_cam3d_evt_set evt_cam.o] 30 91 283 30 40 -13 500 11
+805E7B70:     wait_ms 500
+805E7B78:     callc [evt_msg_print evt_msg.o] 0 ["mac_majin_05"] 0 ["extparty"]
+805E7B90:     callc [evt_cam3d_evt_set evt_cam.o] 0 115 332 0 55 -13 500 11
+805E7BB8:     wait_ms 1000
+805E7BC0:     callc [evt_msg_toge evt_msg.o] 2 LW(0) LW(1) LW(2)
+805E7BD8:     callc [evt_msg_print evt_msg.o] 0 ["mac_majin_06"] [majin_callback tik_19.o] 0
+805E7BF0:     wait_ms 500
+805E7BF8:     callc [evt_msg_print_party evt_msg.o] ["mac_majin_07"]
+805E7C04:     begin_thread
+805E7C08:       callc [evt_mario_get_pos evt_mario.o] 0 LW(0) LW(1) LW(2)
+805E7C20:       callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_VOICE_MARIO_THINK1"] LW(0) LW(1) LW(2) 0
+805E7C3C:     end_thread
+805E7C40:     callc [evt_mario_set_pose evt_mario.o] ["M_I_Z"]
+805E7C4C:     wait_ms 1600
+805E7C54:     callc [evt_mario_set_pose evt_mario.o] ["M_S_1"]
+805E7C60:     callc [evt_msg_toge evt_msg.o] 2 LW(0) LW(1) LW(2)
+805E7C78:     callc [evt_msg_print evt_msg.o] 0 ["mac_majin_08"] [majin_callback tik_19.o] 0
+805E7C90:     callc [evt_mobj_exec_cancel evt_mobj.o] ["box"]
+805E7C9C:     setii GSWF(1353) 1
+805E7CA8:     callc [evt_cam3d_evt_off evt_cam.o] 500 11
+805E7CB8:   else
+805E7CBC:     callc [evt_pouch_check_item evt_pouch.o] 33 LW(0)
+805E7CCC:     if_int_le LW(0) 0
+805E7CD8:       callc [evt_mobj_get_position evt_mobj.o] ["box"] LW(0) LW(1) LW(2)
+805E7CF0:       addi LW(1) 30
+805E7CFC:       callc [evt_msg_toge evt_msg.o] 2 LW(0) LW(1) LW(2)
+805E7D14:       callc [evt_msg_print evt_msg.o] 0 ["mac_majin_09"] [majin_callback tik_19.o] 0
+805E7D2C:       callc [evt_mobj_exec_cancel evt_mobj.o] ["box"]
+805E7D38:     else
+805E7D3C:       callc [evt_mobj_get_position evt_mobj.o] ["box"] LW(0) LW(1) LW(2)
+805E7D54:       addi LW(1) 30
+805E7D60:       callc [evt_msg_toge evt_msg.o] 2 LW(0) LW(1) LW(2)
+805E7D78:       callc [evt_msg_print evt_msg.o] 0 ["mac_majin_10"] [majin_callback tik_19.o] 0
+805E7D90:       callc [evt_win_item_select evt_window.o] 0 [key_tbl tik_19.o] LW(0) 0
+805E7DA8:       if_int_eq LW(0) -1
+805E7DB4:         callc [evt_mobj_get_position evt_mobj.o] ["box"] LW(0) LW(1) LW(2)
+805E7DCC:         addi LW(1) 30
+805E7DD8:         callc [evt_msg_toge evt_msg.o] 2 LW(0) LW(1) LW(2)
+805E7DF0:         callc [evt_msg_print evt_msg.o] 0 ["mac_majin_11"] [majin_callback tik_19.o] 0
+805E7E08:         callc [evt_mobj_exec_cancel evt_mobj.o] ["box"]
+805E7E14:       else
+805E7E18:         begin_thread
+805E7E1C:           callc [evt_mario_get_pos evt_mario.o] 0 LW(3) LW(4) LW(5)
+805E7E34:           if_int_le LW(3) LW(0)
+805E7E40:             callc [evt_mario_set_dir evt_mario.o] 90 200 0
+805E7E54:           else
+805E7E58:             callc [evt_mario_set_dir evt_mario.o] 270 200 0
+805E7E6C:           endif
+805E7E70:         end_thread
+805E7E74:         begin_thread
+805E7E78:           callc [evt_mario_get_pos evt_mario.o] 0 LW(0) LW(1) LW(2)
+805E7E90:           subi LW(0) 30
+805E7E9C:           callc [evt_party_move_pos2 evt_party.o] 0 LW(0) 25 80.00
+805E7EB4:           callc [evt_party_set_dir evt_party.o] 0 90 -1
+805E7EC8:         end_thread
+805E7ECC:         begin_thread
+805E7ED0:           callc [evt_mario_get_pos evt_mario.o] 0 LW(0) LW(1) LW(2)
+805E7EE8:           addi LW(0) 30
+805E7EF4:           callc [evt_party_move_pos2 evt_party.o] 1 LW(0) 25 80.00
+805E7F0C:           callc [evt_party_set_dir evt_party.o] 1 270 -1
+805E7F20:         end_thread
+805E7F24:         callc [evt_pouch_remove_item evt_pouch.o] 33 LW(0)
+805E7F34:         callc [evt_mobj_get_position evt_mobj.o] ["box"] LW(0) LW(1) LW(2)
+805E7F4C:         addi LW(1) 30
+805E7F58:         callc [evt_msg_toge evt_msg.o] 2 LW(0) LW(1) LW(2)
+805E7F70:         callc [evt_msg_print evt_msg.o] 0 ["mac_majin_12"] [majin_callback tik_19.o] 0
+805E7F88:         callc [evt_mario_set_pose evt_mario.o] ["M_I_N"]
+805E7F94:         callc [evt_cam3d_evt_set evt_cam.o] 0 118 304 0 62 -13 500 11
+805E7FBC:       endif
+805E7FC0:     endif
+805E7FC4:   endif
+805E7FC8:   callc [evt_party_run evt_party.o] 0
+805E7FD4:   callc [evt_party_run evt_party.o] 1
+805E7FE0:   callc [evt_mario_key_onoff evt_mario.o] 1
+805E7FEC:   return
+805E7FF0:   end

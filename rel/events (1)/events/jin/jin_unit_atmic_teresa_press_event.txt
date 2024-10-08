@@ -1,0 +1,84 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [press_event unit_atmic_teresa.o] AT 805DA1F4 ---
+805DA1F4:   callc [btlevtcmd_GetEnemyBelong battle_event_cmd.o] -2 LW(0)
+805DA204:   callc [btlevtcmd_SamplingEnemy battle_event_cmd.o] -2 LW(0) [weapon_atmic_teresa_press unit_atmic_teresa.o]
+805DA218:   callc [btlevtcmd_ChoiceSamplingEnemy battle_event_cmd.o] [weapon_atmic_teresa_press unit_atmic_teresa.o] LW(3) LW(4)
+805DA22C:   if_int_eq LW(3) -1
+805DA238:     callc [btlevtcmd_CheckToken battle_event_cmd.o] -2 16 LW(0)
+805DA24C:     if_int_ne LW(0) 0
+805DA258:       callss [subsetevt_confuse_flustered battle_event_subset.o]
+805DA260:       return
+805DA264:     endif
+805DA268:     goto 99
+805DA270:   endif
+805DA274:   callc [btlevtcmd_WeaponAftereffect battle_event_cmd.o] [weapon_atmic_teresa_press unit_atmic_teresa.o]
+805DA280:   callc [btlevtcmd_AttackDeclareAll battle_event_cmd.o] -2
+805DA28C:   callc [btlevtcmd_WaitGuardMove battle_event_cmd.o]
+805DA294:   callc [btlevtcmd_PayWeaponCost battle_event_cmd.o] -2 [weapon_atmic_teresa_press unit_atmic_teresa.o]
+805DA2A4:   callc [evt_btl_camera_set_mode battle_camera.o] 0 7
+805DA2B4:   callc [evt_btl_camera_set_homing_unit battle_camera.o] 0 -2 -1
+805DA2C8:   callc [evt_btl_camera_set_moveSpeedLv battle_camera.o] 0 2
+805DA2D8:   callc [evt_btl_camera_set_zoom battle_camera.o] 0 200
+805DA2E8:   callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_BOSS_ATMTLSA_MOVE2"] [F1194D80] 0 LW(15)
+805DA304:   callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 1 ["R_1"]
+805DA318:   callc [btlevtcmd_GetHitPos battle_event_cmd.o] LW(3) LW(4) LW(0) LW(1) LW(2)
+805DA334:   subi LW(2) 10
+805DA340:   callc [btlevtcmd_DivePosition battle_event_cmd.o] -2 -125 100 LW(2) 120 10 4 0 -1
+805DA36C:   callc [evt_snd_sfxoff evt_snd.o] LW(15)
+805DA378:   callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 1 ["Z_1"]
+805DA38C:   callc [btlevtcmd_DivePosition battle_event_cmd.o] -2 -125 0 LW(2) 30 0 1 0 -1
+805DA3B8:   callc [evt_btl_camera_shake_h battle_camera.o] 0 10 0 60 0
+805DA3D4:   callc [btlevtcmd_GetSelectEnemy battle_event_cmd.o] LW(3) LW(4)
+805DA3E4:   setii LW(10) 0
+805DA3F0: 0:
+805DA3F8:   callc [btlevtcmd_PreCheckDamage battle_event_cmd.o] -2 LW(3) LW(4) [weapon_atmic_teresa_press unit_atmic_teresa.o] 0 LW(5)
+805DA418:   switchi LW(5)
+805DA420:     case_int_eq_any 4
+805DA428:       goto 90
+805DA430:       end_multi_case
+805DA434:     case_int_eq 3
+805DA43C:       callc [btlevtcmd_StartAvoid battle_event_cmd.o] LW(3) 38
+805DA44C:       goto 90
+805DA454:       end_multi_case
+805DA458:     case_int_eq 6
+805DA460:       callc [btlevtcmd_StartAvoid battle_event_cmd.o] LW(3) 39
+805DA470:       goto 90
+805DA478:       end_multi_case
+805DA47C:     case_int_eq 2
+805DA484:       callc [btlevtcmd_StartAvoid battle_event_cmd.o] LW(3) 40
+805DA494:       goto 90
+805DA49C:     case_int_eq 1
+805DA4A4:       goto 91
+805DA4AC:       end_multi_case
+805DA4B0:     case_default
+805DA4B4:       goto 98
+805DA4BC:       end_multi_case
+805DA4C0:   end_switch
+805DA4C4: 90:
+805DA4CC:   goto 97
+805DA4D4: 91:
+805DA4DC:   if_int_eq LW(10) 0
+805DA4E8:     callc [btlevtcmd_ResultACDefence battle_event_cmd.o] LW(3) [weapon_atmic_teresa_press unit_atmic_teresa.o]
+805DA4F8:   endif
+805DA4FC:   callc [btlevtcmd_CheckDamage battle_event_cmd.o] -2 LW(3) LW(4) [weapon_atmic_teresa_press unit_atmic_teresa.o] 256 LW(5)
+805DA51C:   goto 97
+805DA524: 97:
+805DA52C:   callc [btlevtcmd_GetSelectNextEnemy battle_event_cmd.o] LW(3) LW(4)
+805DA53C:   if_int_ne LW(3) -1
+805DA548:     addi LW(10) 1
+805DA554:     goto 0
+805DA55C:   endif
+805DA560:   callc [evt_btl_camera_set_mode battle_camera.o] 0 0
+805DA570: 98:
+805DA578:   wait_frames 60
+805DA580:   callc [evt_btl_camera_set_mode battle_camera.o] 0 0
+805DA590:   callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 1 ["W_1"]
+805DA5A4:   callc [btlevtcmd_GetHomePos battle_event_cmd.o] -2 LW(0) LW(1) LW(2)
+805DA5BC:   callc [btlevtcmd_DivePosition battle_event_cmd.o] -2 LW(0) LW(1) LW(2) 60 50 6 0 -1
+805DA5E8:   callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 1 ["S_1"]
+805DA5FC:   wait_ms 250
+805DA604: 99:
+805DA60C:   return
+805DA610:   end

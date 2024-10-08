@@ -1,0 +1,102 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [queen_hand_1_press_attack unit_boss_black_peach.o] AT 80610B84 ---
+80610B84:   callc [btlevtcmd_GetEnemyBelong battle_event_cmd.o] -2 LW(0)
+80610B94:   callc [btlevtcmd_SamplingEnemy battle_event_cmd.o] -2 LW(0) [weapon_peach_black_press_attack unit_boss_black_peach.o]
+80610BA8:   callc [btlevtcmd_ChoiceSamplingEnemy battle_event_cmd.o] [weapon_peach_black_press_attack unit_boss_black_peach.o] LW(3) LW(4)
+80610BBC:   callc [btlevtcmd_CheckToken battle_event_cmd.o] -2 16 LW(0)
+80610BD0:   if_int_ne LW(0) 0
+80610BDC:     callss [subsetevt_confuse_flustered battle_event_subset.o]
+80610BE4:     return
+80610BE8:   endif
+80610BEC:   callc [btlevtcmd_AttackDeclare battle_event_cmd.o] -2 LW(3) LW(4)
+80610C00:   callc [btlevtcmd_WaitGuardMove battle_event_cmd.o]
+80610C08:   callc [btlevtcmd_PayWeaponCost battle_event_cmd.o] -2 [weapon_peach_black_press_attack unit_boss_black_peach.o]
+80610C18:   callc [evt_eff_softdelete evt_eff.o] LW(10)
+80610C24:   setii LW(0) 255
+80610C30:   loop 15
+80610C38:     callc [btlevtcmd_SetAlpha battle_event_cmd.o] -2 1 LW(0)
+80610C4C:     addi LW(0) -16
+80610C58:     wait_ms 5
+80610C60:   end_loop
+80610C64:   callc [btlevtcmd_SetAlpha battle_event_cmd.o] -2 1 0
+80610C78:   wait_ms 500
+80610C80:   callc [btlevtcmd_GetHitPos battle_event_cmd.o] LW(3) LW(4) LW(0) LW(1) LW(2)
+80610C9C:   addi LW(0) 20
+80610CA8:   setii LW(1) 0
+80610CB4:   addi LW(2) -30
+80610CC0:   callc [btlevtcmd_SetPos battle_event_cmd.o] -2 LW(0) LW(1) LW(2)
+80610CD8:   callc [evt_btl_camera_set_mode battle_camera.o] 0 7
+80610CE8:   callc [evt_btl_camera_set_homing_unit battle_camera.o] 0 -2 -2
+80610CFC:   callc [evt_btl_camera_set_moveSpeedLv battle_camera.o] 0 2
+80610D0C:   callc [evt_btl_camera_set_zoom battle_camera.o] 0 250
+80610D1C:   setii LW(0) 0
+80610D28:   loop 15
+80610D30:     callc [btlevtcmd_SetAlpha battle_event_cmd.o] -2 1 LW(0)
+80610D44:     addi LW(0) 16
+80610D50:     wait_ms 5
+80610D58:   end_loop
+80610D5C:   callc [btlevtcmd_SetAlpha battle_event_cmd.o] -2 1 255
+80610D70:   callc [btlevtcmd_GetPos battle_event_cmd.o] -2 LW(0) LW(1) LW(2)
+80610D88:   callc [evt_eff evt_eff.o] LW(10) ["mist2"] 0 LW(0) 15 LW(2) 50 0 -1 0 0 0 0 0
+80610DC8:   callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 1 ["KRT_A1_1"]
+80610DDC:   callc [btlevtcmd_GetPos battle_event_cmd.o] LW(3) LW(0) LW(1) LW(2)
+80610DF4:   callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_BOSS_QWEN_HAND_UP1"] LW(0) LW(1) LW(2) 0
+80610E10:   wait_ms 1100
+80610E18:   callc [evt_btl_camera_shake_h battle_camera.o] 0 1 1 15 0
+80610E34:   callc [btlevtcmd_PreCheckDamage battle_event_cmd.o] -2 LW(3) LW(4) [weapon_peach_black_press_attack unit_boss_black_peach.o] 256 LW(5)
+80610E54:   switchi LW(5)
+80610E5C:     case_int_eq_any 4
+80610E64:       goto 90
+80610E6C:       end_multi_case
+80610E70:     case_int_eq 3
+80610E78:       callc [btlevtcmd_StartAvoid battle_event_cmd.o] LW(3) 38
+80610E88:       goto 90
+80610E90:       end_multi_case
+80610E94:     case_int_eq 6
+80610E9C:       callc [btlevtcmd_StartAvoid battle_event_cmd.o] LW(3) 39
+80610EAC:       goto 90
+80610EB4:     case_int_eq 2
+80610EBC:       callc [btlevtcmd_StartAvoid battle_event_cmd.o] LW(3) 40
+80610ECC:       goto 90
+80610ED4:     case_int_eq 1
+80610EDC:       goto 91
+80610EE4:       end_multi_case
+80610EE8:     case_default
+80610EEC:       goto 98
+80610EF4:       end_multi_case
+80610EF8:   end_switch
+80610EFC: 90:
+80610F04:   goto 95
+80610F0C: 91:
+80610F14:   callc [btlevtcmd_WeaponAftereffect battle_event_cmd.o] [weapon_peach_black_press_attack unit_boss_black_peach.o]
+80610F20:   callc [evt_btl_camera_set_mode battle_camera.o] 0 0
+80610F30:   callc [btlevtcmd_ResultACDefence battle_event_cmd.o] LW(3) [weapon_peach_black_press_attack unit_boss_black_peach.o]
+80610F40:   callc [btlevtcmd_CheckDamage battle_event_cmd.o] -2 LW(3) LW(4) [weapon_peach_black_press_attack unit_boss_black_peach.o] 256 LW(5)
+80610F60: 95:
+80610F68:   callc [evt_btl_camera_set_mode battle_camera.o] 0 0
+80610F78: 98:
+80610F80: 99:
+80610F88:   callc [evt_eff_softdelete evt_eff.o] LW(10)
+80610F94:   setii LW(0) 255
+80610FA0:   loop 15
+80610FA8:     callc [btlevtcmd_SetAlpha battle_event_cmd.o] -2 1 LW(0)
+80610FBC:     addi LW(0) -16
+80610FC8:     wait_ms 5
+80610FD0:   end_loop
+80610FD4:   callc [btlevtcmd_SetAlpha battle_event_cmd.o] -2 1 0
+80610FE8:   callc [btlevtcmd_GetHomePos battle_event_cmd.o] -2 LW(0) LW(1) LW(2)
+80611000:   callc [btlevtcmd_SetPos battle_event_cmd.o] -2 LW(0) LW(1) LW(2)
+80611018:   callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 1 ["KRT_S_1"]
+8061102C:   setii LW(0) 0
+80611038:   loop 15
+80611040:     callc [btlevtcmd_SetAlpha battle_event_cmd.o] -2 1 LW(0)
+80611054:     addi LW(0) 16
+80611060:     wait_ms 5
+80611068:   end_loop
+8061106C:   callc [btlevtcmd_SetAlpha battle_event_cmd.o] -2 1 255
+80611080:   callc [btlevtcmd_GetPos battle_event_cmd.o] -2 LW(0) LW(1) LW(2)
+80611098:   callc [evt_eff evt_eff.o] LW(10) ["mist2"] 0 LW(0) 15 LW(2) 50 0 -1 0 0 0 0 0
+806110D8:   return
+806110DC:   end

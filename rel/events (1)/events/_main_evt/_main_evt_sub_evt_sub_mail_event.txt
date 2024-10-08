@@ -1,0 +1,554 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [evt_sub_mail_event evt_sub.o] AT 8030955C ---
+8030955C:   callc [evt_sub_get_system_flag evt_sub.o] LW(0)
+80309568:   if_bits_set LW(0) 4096
+80309574:     return
+80309578:   endif
+8030957C:   callc [evt_mario_get_mode evt_mario.o] LW(0)
+80309588:   if_int_ne LW(0) 0
+80309594:     return
+80309598:   endif
+8030959C:   callc [evt_sub_get_mapname evt_sub.o] LW(0)
+803095A8:   if_string_eq LW(0) ["nok_01"]
+803095B4:     callss [mail_evt_nok_01 evt_sub.o]
+803095BC:     return
+803095C0:   endif
+803095C4:   if_string_eq LW(0) ["gor_03"]
+803095D0:     callss [mail_evt_gor_03 evt_sub.o]
+803095D8:     return
+803095DC:   endif
+803095E0:   if_string_eq LW(0) ["gor_02"]
+803095EC:     callsa [mail_evt_gor_02 evt_sub.o]
+803095F4:     callss [mail_evt_gor_02_2 evt_sub.o]
+803095FC:     return
+80309600:   endif
+80309604:   if_string_eq LW(0) ["gor_01"]
+80309610:     callsa [mail_evt_gor_01_2 evt_sub.o]
+80309618:     callss [mail_evt_gor_01 evt_sub.o]
+80309620:     return
+80309624:   endif
+80309628:   if_string_eq LW(0) ["gor_04"]
+80309634:     callss [mail_evt_gor_04 evt_sub.o]
+8030963C:     return
+80309640:   endif
+80309644:   if_string_eq LW(0) ["rsh_02_a"]
+80309650:     callss [mail_evt_rsh_03_a evt_sub.o]
+80309658:     return
+8030965C:   endif
+80309660:   if_string_eq LW(0) ["rsh_03_a"]
+8030966C:     callss [mail_evt_rsh_03_a_2 evt_sub.o]
+80309674:     return
+80309678:   endif
+8030967C:   if_string_eq LW(0) ["hom_00"]
+80309688:     callss [mail_evt_hom_00 evt_sub.o]
+80309690:     return
+80309694:   endif
+80309698:   if_string_eq LW(0) ["bom_01"]
+803096A4:     callss [mail_evt_bom_01 evt_sub.o]
+803096AC:     return
+803096B0:   endif
+803096B4:   if_string_eq LW(0) ["tik_00"]
+803096C0:     callss [mail_evt_tik_00 evt_sub.o]
+803096C8:     return
+803096CC:   endif
+803096D0:   if_string_eq LW(0) ["win_01"]
+803096DC:     callss [mail_evt_win_01 evt_sub.o]
+803096E4:     return
+803096E8:   endif
+803096EC:   if_string_eq LW(0) ["tou_01"]
+803096F8:     callss [mail_evt_tou_01 evt_sub.o]
+80309700:     return
+80309704:   endif
+80309708:   if_string_eq LW(0) ["usu_01"]
+80309714:     callss [mail_evt_usu_01 evt_sub.o]
+8030971C:     return
+80309720:   endif
+80309724:   if_string_eq LW(0) ["pik_00"]
+80309730:     callss [mail_evt_pik_00 evt_sub.o]
+80309738:     return
+8030973C:   endif
+80309740:   return
+80309744:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [mail_evt_nok_01 evt_sub.o] AT 80308394 ---
+80308394:   if_int_eq GSWF(7) 1
+803083A0:     return
+803083A4:   endif
+803083A8:   callc [evt_mario_get_pos evt_mario.o] 0 LW(0) LW(1) LW(2)
+803083C0:   loop 0
+803083C8:     setii LW(10) LW(0)
+803083D4:     setii LW(11) LW(1)
+803083E0:     setii LW(12) LW(2)
+803083EC:     callc [evt_mario_get_pos evt_mario.o] 0 LW(0) LW(1) LW(2)
+80308404:     callc [evt_sub_check_intersect evt_sub.o] LW(0) LW(2) LW(10) LW(12) 190 -2000 190 2000 LW(5)
+80308430:     if_int_eq GSW(0) 27
+8030843C:       if_int_eq LW(5) 1
+80308448:         loop_break
+8030844C:       endif
+80308450:     endif
+80308454:     wait_frames 1
+8030845C:   end_loop
+80308460:   setii GSWF(7) 1
+8030846C:   callc [evt_pouch_receive_mail evt_pouch.o] 16
+80308478:   callc [evt_pouch_receive_mail evt_pouch.o] 26
+80308484:   callss [mail_evt evt_sub.o]
+8030848C:   return
+80308490:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [mail_evt_gor_03 evt_sub.o] AT 80308494 ---
+80308494:   callc [evt_mario_get_pos evt_mario.o] 0 LW(0) LW(1) LW(2)
+803084AC:   loop 0
+803084B4:     setii LW(10) LW(0)
+803084C0:     setii LW(11) LW(1)
+803084CC:     setii LW(12) LW(2)
+803084D8:     callc [evt_mario_get_pos evt_mario.o] 0 LW(0) LW(1) LW(2)
+803084F0:     callc [evt_sub_check_intersect evt_sub.o] LW(0) LW(2) LW(10) LW(12) -100 -2000 -100 2000 LW(5)
+8030851C:     if_int_eq LW(5) 1
+80308528:       setii LF(0) 0
+80308534:       if_int_eq GSW(0) 125
+80308540:         if_int_eq GSWF(8) 0
+8030854C:           setii GSWF(8) 1
+80308558:           callc [evt_pouch_receive_mail evt_pouch.o] 17
+80308564:           setii LF(0) 1
+80308570:         endif
+80308574:       endif
+80308578:       callc [irai_mail_check evt_sub.o] 0 LW(5)
+80308588:       if_int_eq LW(5) 1
+80308594:         callc [irai_mail_check evt_sub.o] 1 LW(5)
+803085A4:         setii LF(0) 1
+803085B0:       endif
+803085B4:       if_int_eq LF(0) 1
+803085C0:         callss [mail_evt evt_sub.o]
+803085C8:         setii LF(0) 0
+803085D4:       endif
+803085D8:     endif
+803085DC:     wait_frames 1
+803085E4:   end_loop
+803085E8:   return
+803085EC:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [mail_evt_gor_02 evt_sub.o] AT 803085F0 ---
+803085F0:   callc [evt_mario_get_pos evt_mario.o] 0 LW(0) LW(1) LW(2)
+80308608:   loop 0
+80308610:     setii LW(10) LW(0)
+8030861C:     setii LW(11) LW(1)
+80308628:     setii LW(12) LW(2)
+80308634:     callc [evt_mario_get_pos evt_mario.o] 0 LW(0) LW(1) LW(2)
+8030864C:     callc [evt_sub_check_intersect evt_sub.o] LW(0) LW(2) LW(10) LW(12) -280 -50 -230 220 LW(5)
+80308678:     if_int_eq LW(5) 1
+80308684:       setii LF(0) 0
+80308690:       if_int_eq GSW(0) 175
+8030869C:         if_int_eq GSWF(9) 0
+803086A8:           setii GSWF(9) 1
+803086B4:           callc [evt_pouch_receive_mail evt_pouch.o] 18
+803086C0:           setii LF(0) 1
+803086CC:         endif
+803086D0:       endif
+803086D4:       callc [irai_mail_check evt_sub.o] 0 LW(5)
+803086E4:       if_int_eq LW(5) 1
+803086F0:         callc [irai_mail_check evt_sub.o] 1 LW(5)
+80308700:         setii LF(0) 1
+8030870C:       endif
+80308710:       if_int_eq LF(0) 1
+8030871C:         callss [mail_evt evt_sub.o]
+80308724:         setii LF(0) 0
+80308730:       endif
+80308734:     endif
+80308738:     wait_frames 1
+80308740:   end_loop
+80308744:   return
+80308748:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [mail_evt_gor_02_2 evt_sub.o] AT 80308BAC ---
+80308BAC:   if_int_eq GSWF(14) 1
+80308BB8:     return
+80308BBC:   endif
+80308BC0:   callc [evt_mario_get_pos evt_mario.o] 0 LW(0) LW(1) LW(2)
+80308BD8:   loop 0
+80308BE0:     setii LW(10) LW(0)
+80308BEC:     setii LW(11) LW(1)
+80308BF8:     setii LW(12) LW(2)
+80308C04:     callc [evt_mario_get_pos evt_mario.o] 0 LW(0) LW(1) LW(2)
+80308C1C:     callc [evt_sub_check_intersect evt_sub.o] LW(0) LW(2) LW(10) LW(12) -1000 -4226 1000 7374 LW(5)
+80308C48:     if_int_eq GSW(0) 348
+80308C54:       if_int_eq LW(5) 1
+80308C60:         loop_break
+80308C64:       endif
+80308C68:     endif
+80308C6C:     wait_frames 1
+80308C74:   end_loop
+80308C78:   setii GSWF(14) 1
+80308C84:   callc [evt_pouch_receive_mail evt_pouch.o] 23
+80308C90:   callss [mail_evt evt_sub.o]
+80308C98:   return
+80308C9C:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [mail_evt_gor_01_2 evt_sub.o] AT 803091D8 ---
+803091D8:   callc [evt_mario_get_pos evt_mario.o] 0 LW(0) LW(1) LW(2)
+803091F0:   loop 0
+803091F8:     setii LW(10) LW(0)
+80309204:     setii LW(11) LW(1)
+80309210:     setii LW(12) LW(2)
+8030921C:     callc [evt_mario_get_pos evt_mario.o] 0 LW(0) LW(1) LW(2)
+80309234:     callc [evt_sub_check_intersect evt_sub.o] LW(0) LW(2) LW(10) LW(12) -2000 200 2000 200 LW(5)
+80309260:     if_int_eq LW(5) 1
+8030926C:       setii LF(0) 0
+80309278:       if_int_eq GSW(0) 270
+80309284:         if_int_eq GSWF(20) 0
+80309290:           setii GSWF(20) 1
+8030929C:           callc [evt_pouch_receive_mail evt_pouch.o] 30
+803092A8:           setii GSWF(251) 1
+803092B4:           callc [evt_sub_save_playtime evt_sub.o] GSW(14)
+803092C0:           setii LF(0) 1
+803092CC:         endif
+803092D0:       endif
+803092D4:       callc [irai_mail_check evt_sub.o] 0 LW(5)
+803092E4:       if_int_eq LW(5) 1
+803092F0:         callc [irai_mail_check evt_sub.o] 1 LW(5)
+80309300:         setii LF(0) 1
+8030930C:       endif
+80309310:       if_int_eq LF(0) 1
+8030931C:         callss [mail_evt evt_sub.o]
+80309324:         setii LF(0) 0
+80309330:       endif
+80309334:     endif
+80309338:     wait_frames 1
+80309340:   end_loop
+80309344:   return
+80309348:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [mail_evt_gor_01 evt_sub.o] AT 8030874C ---
+8030874C:   if_int_eq GSWF(10) 1
+80308758:     return
+8030875C:   endif
+80308760:   callc [evt_mario_get_pos evt_mario.o] 0 LW(0) LW(1) LW(2)
+80308778:   loop 0
+80308780:     setii LW(10) LW(0)
+8030878C:     setii LW(11) LW(1)
+80308798:     setii LW(12) LW(2)
+803087A4:     callc [evt_mario_get_pos evt_mario.o] 0 LW(0) LW(1) LW(2)
+803087BC:     callc [evt_sub_check_intersect evt_sub.o] LW(0) LW(2) LW(10) LW(12) 350 -2000 350 2000 LW(5)
+803087E8:     if_int_eq GSW(0) 228
+803087F4:       if_int_eq LW(5) 1
+80308800:         loop_break
+80308804:       endif
+80308808:     endif
+8030880C:     wait_frames 1
+80308814:   end_loop
+80308818:   setii GSWF(10) 1
+80308824:   callc [evt_pouch_receive_mail evt_pouch.o] 19
+80308830:   callss [mail_evt evt_sub.o]
+80308838:   return
+8030883C:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [mail_evt_gor_04 evt_sub.o] AT 80308840 ---
+80308840:   callc [evt_mario_get_pos evt_mario.o] 0 LW(0) LW(1) LW(2)
+80308858:   loop 0
+80308860:     setii LW(10) LW(0)
+8030886C:     setii LW(11) LW(1)
+80308878:     setii LW(12) LW(2)
+80308884:     callc [evt_mario_get_pos evt_mario.o] 0 LW(0) LW(1) LW(2)
+8030889C:     callc [evt_sub_check_intersect evt_sub.o] LW(0) LW(2) LW(10) LW(12) 30 -2000 30 2000 LW(5)
+803088C8:     callc [mail_evt_gor_04_keyoff_check evt_sub.o] LW(3)
+803088D4:     if_int_gt LW(3) 0
+803088E0:       setii LW(5) 0
+803088EC:     endif
+803088F0:     if_int_eq LW(5) 1
+803088FC:       setii LF(0) 0
+80308908:       if_int_eq GSW(0) 280
+80308914:         if_int_eq GSWF(11) 0
+80308920:           setii GSWF(11) 1
+8030892C:           callc [evt_pouch_receive_mail evt_pouch.o] 20
+80308938:           setii LF(0) 1
+80308944:         endif
+80308948:       endif
+8030894C:       callc [irai_mail_check evt_sub.o] 0 LW(5)
+8030895C:       if_int_eq LW(5) 1
+80308968:         callc [irai_mail_check evt_sub.o] 1 LW(5)
+80308978:         setii LF(0) 1
+80308984:       endif
+80308988:       if_int_eq LF(0) 1
+80308994:         callss [mail_evt evt_sub.o]
+8030899C:         setii LF(0) 0
+803089A8:       endif
+803089AC:     endif
+803089B0:     wait_frames 1
+803089B8:   end_loop
+803089BC:   return
+803089C0:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [mail_evt_rsh_03_a evt_sub.o] AT 803089C4 ---
+803089C4:   if_int_eq GSWF(12) 1
+803089D0:     return
+803089D4:   endif
+803089D8:   callc [evt_mario_get_pos evt_mario.o] 0 LW(0) LW(1) LW(2)
+803089F0:   loop 0
+803089F8:     setii LW(10) LW(0)
+80308A04:     setii LW(11) LW(1)
+80308A10:     setii LW(12) LW(2)
+80308A1C:     callc [evt_mario_get_pos evt_mario.o] 0 LW(0) LW(1) LW(2)
+80308A34:     callc [evt_sub_check_intersect evt_sub.o] LW(0) LW(2) LW(10) LW(12) -100 -2000 -100 2000 LW(5)
+80308A60:     if_int_ge GSW(0) 328
+80308A6C:       if_int_eq LW(5) 1
+80308A78:         loop_break
+80308A7C:       endif
+80308A80:     endif
+80308A84:     wait_frames 1
+80308A8C:   end_loop
+80308A90:   setii GSWF(12) 1
+80308A9C:   callc [evt_pouch_receive_mail evt_pouch.o] 21
+80308AA8:   callss [mail_evt evt_sub.o]
+80308AB0:   return
+80308AB4:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [mail_evt_rsh_03_a_2 evt_sub.o] AT 8030934C ---
+8030934C:   if_int_eq GSWF(21) 1
+80309358:     return
+8030935C:   endif
+80309360:   callc [evt_mario_get_pos evt_mario.o] 0 LW(0) LW(1) LW(2)
+80309378:   loop 0
+80309380:     setii LW(10) LW(0)
+8030938C:     setii LW(11) LW(1)
+80309398:     setii LW(12) LW(2)
+803093A4:     callc [evt_mario_get_pos evt_mario.o] 0 LW(0) LW(1) LW(2)
+803093BC:     callc [evt_sub_check_intersect evt_sub.o] LW(0) LW(2) LW(10) LW(12) 400 -2000 400 2000 LW(5)
+803093E8:     if_int_eq GSW(0) 303
+803093F4:       if_int_eq LW(5) 1
+80309400:         loop_break
+80309404:       endif
+80309408:     endif
+8030940C:     wait_frames 1
+80309414:   end_loop
+80309418:   setii GSWF(21) 1
+80309424:   callc [evt_pouch_receive_mail evt_pouch.o] 31
+80309430:   callss [mail_evt evt_sub.o]
+80309438:   return
+8030943C:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [mail_evt_hom_00 evt_sub.o] AT 80308AB8 ---
+80308AB8:   if_int_eq GSWF(13) 1
+80308AC4:     return
+80308AC8:   endif
+80308ACC:   callc [evt_mario_get_pos evt_mario.o] 0 LW(0) LW(1) LW(2)
+80308AE4:   loop 0
+80308AEC:     setii LW(10) LW(0)
+80308AF8:     setii LW(11) LW(1)
+80308B04:     setii LW(12) LW(2)
+80308B10:     callc [evt_mario_get_pos evt_mario.o] 0 LW(0) LW(1) LW(2)
+80308B28:     callc [evt_sub_check_intersect evt_sub.o] LW(0) LW(2) LW(10) LW(12) -600 -2000 -600 2000 LW(5)
+80308B54:     if_int_eq GSW(0) 325
+80308B60:       if_int_eq LW(5) 1
+80308B6C:         loop_break
+80308B70:       endif
+80308B74:     endif
+80308B78:     wait_frames 1
+80308B80:   end_loop
+80308B84:   setii GSWF(13) 1
+80308B90:   callc [evt_pouch_receive_mail evt_pouch.o] 22
+80308B9C:   callss [mail_evt evt_sub.o]
+80308BA4:   return
+80308BA8:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [mail_evt_bom_01 evt_sub.o] AT 80308CA0 ---
+80308CA0:   if_int_eq GSWF(15) 1
+80308CAC:     return
+80308CB0:   endif
+80308CB4:   callc [evt_mario_get_pos evt_mario.o] 0 LW(0) LW(1) LW(2)
+80308CCC:   loop 0
+80308CD4:     setii LW(10) LW(0)
+80308CE0:     setii LW(11) LW(1)
+80308CEC:     setii LW(12) LW(2)
+80308CF8:     callc [evt_mario_get_pos evt_mario.o] 0 LW(0) LW(1) LW(2)
+80308D10:     callc [evt_sub_check_intersect evt_sub.o] LW(0) LW(2) LW(10) LW(12) -230 -2000 -230 2000 LW(5)
+80308D3C:     if_int_eq GSW(0) 354
+80308D48:       if_int_eq GSWF(3874) 1
+80308D54:         if_int_eq LW(5) 1
+80308D60:           loop_break
+80308D64:         endif
+80308D68:       endif
+80308D6C:     endif
+80308D70:     wait_frames 1
+80308D78:   end_loop
+80308D7C:   setii GSWF(15) 1
+80308D88:   callc [evt_pouch_receive_mail evt_pouch.o] 24
+80308D94:   callss [mail_evt evt_sub.o]
+80308D9C:   return
+80308DA0:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [mail_evt_tik_00 evt_sub.o] AT 80308DA4 ---
+80308DA4:   if_int_eq GSWF(16) 1
+80308DB0:     return
+80308DB4:   endif
+80308DB8:   callc [evt_mario_get_pos evt_mario.o] 0 LW(0) LW(1) LW(2)
+80308DD0:   loop 0
+80308DD8:     setii LW(10) LW(0)
+80308DE4:     setii LW(11) LW(1)
+80308DF0:     setii LW(12) LW(2)
+80308DFC:     callc [evt_mario_get_pos evt_mario.o] 0 LW(0) LW(1) LW(2)
+80308E14:     callc [evt_sub_check_intersect evt_sub.o] LW(0) LW(2) LW(10) LW(12) 470 -2000 470 2000 LW(5)
+80308E40:     callc [evt_sub_check_intersect evt_sub.o] LW(0) LW(2) LW(10) LW(12) -500 -2000 -500 2000 LW(6)
+80308E6C:     if_int_eq GSW(0) 378
+80308E78:       if_int_eq LW(5) 1
+80308E84:         loop_break
+80308E88:       endif
+80308E8C:       if_int_eq LW(6) 1
+80308E98:         loop_break
+80308E9C:       endif
+80308EA0:     endif
+80308EA4:     wait_frames 1
+80308EAC:   end_loop
+80308EB0:   setii GSWF(16) 1
+80308EBC:   callc [evt_pouch_receive_mail evt_pouch.o] 25
+80308EC8:   callc [evt_pouch_receive_mail evt_pouch.o] 33
+80308ED4:   callss [mail_evt evt_sub.o]
+80308EDC:   return
+80308EE0:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [mail_evt_win_01 evt_sub.o] AT 80308EE4 ---
+80308EE4:   if_int_eq GSWF(17) 1
+80308EF0:     return
+80308EF4:   endif
+80308EF8:   callc [evt_mario_get_pos evt_mario.o] 0 LW(0) LW(1) LW(2)
+80308F10:   loop 0
+80308F18:     setii LW(10) LW(0)
+80308F24:     setii LW(11) LW(1)
+80308F30:     setii LW(12) LW(2)
+80308F3C:     callc [evt_mario_get_pos evt_mario.o] 0 LW(0) LW(1) LW(2)
+80308F54:     callc [evt_sub_check_intersect evt_sub.o] LW(0) LW(2) LW(10) LW(12) 390 -2000 390 2000 LW(5)
+80308F80:     if_int_eq GSW(0) 87
+80308F8C:       if_int_eq LW(5) 1
+80308F98:         loop_break
+80308F9C:       endif
+80308FA0:     endif
+80308FA4:     wait_frames 1
+80308FAC:   end_loop
+80308FB0:   setii GSWF(17) 1
+80308FBC:   callc [evt_pouch_receive_mail evt_pouch.o] 27
+80308FC8:   callss [mail_evt evt_sub.o]
+80308FD0:   return
+80308FD4:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [mail_evt_tou_01 evt_sub.o] AT 80308FD8 ---
+80308FD8:   if_int_eq GSWF(18) 1
+80308FE4:     return
+80308FE8:   endif
+80308FEC:   callc [evt_mario_get_pos evt_mario.o] 0 LW(0) LW(1) LW(2)
+80309004:   loop 0
+8030900C:     setii LW(10) LW(0)
+80309018:     setii LW(11) LW(1)
+80309024:     setii LW(12) LW(2)
+80309030:     callc [evt_mario_get_pos evt_mario.o] 0 LW(0) LW(1) LW(2)
+80309048:     callc [evt_sub_check_intersect evt_sub.o] LW(0) LW(2) LW(10) LW(12) -50 -2000 -50 2000 LW(5)
+80309074:     if_int_eq GSW(0) 137
+80309080:       if_int_eq LW(5) 1
+8030908C:         loop_break
+80309090:       endif
+80309094:     endif
+80309098:     wait_frames 1
+803090A0:   end_loop
+803090A4:   setii GSWF(18) 1
+803090B0:   callc [evt_pouch_receive_mail evt_pouch.o] 28
+803090BC:   setii GSWF(250) 1
+803090C8:   callc [evt_sub_save_playtime evt_sub.o] GSW(5)
+803090D4:   callss [mail_evt evt_sub.o]
+803090DC:   return
+803090E0:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [mail_evt_usu_01 evt_sub.o] AT 803090E4 ---
+803090E4:   if_int_eq GSWF(19) 1
+803090F0:     return
+803090F4:   endif
+803090F8:   callc [evt_mario_get_pos evt_mario.o] 0 LW(0) LW(1) LW(2)
+80309110:   loop 0
+80309118:     setii LW(10) LW(0)
+80309124:     setii LW(11) LW(1)
+80309130:     setii LW(12) LW(2)
+8030913C:     callc [evt_mario_get_pos evt_mario.o] 0 LW(0) LW(1) LW(2)
+80309154:     callc [evt_sub_check_intersect evt_sub.o] LW(0) LW(2) LW(10) LW(12) 110 -2000 110 2000 LW(5)
+80309180:     if_int_eq GSW(0) 187
+8030918C:       if_int_eq LW(5) 1
+80309198:         loop_break
+8030919C:       endif
+803091A0:     endif
+803091A4:     wait_frames 1
+803091AC:   end_loop
+803091B0:   setii GSWF(19) 1
+803091BC:   callc [evt_pouch_receive_mail evt_pouch.o] 29
+803091C8:   callss [mail_evt evt_sub.o]
+803091D0:   return
+803091D4:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [mail_evt_pik_00 evt_sub.o] AT 80309440 ---
+80309440:   if_int_eq GSWF(22) 1
+8030944C:     return
+80309450:   endif
+80309454:   callc [evt_mario_get_pos evt_mario.o] 0 LW(0) LW(1) LW(2)
+8030946C:   loop 0
+80309474:     setii LW(10) LW(0)
+80309480:     setii LW(11) LW(1)
+8030948C:     setii LW(12) LW(2)
+80309498:     callc [evt_mario_get_pos evt_mario.o] 0 LW(0) LW(1) LW(2)
+803094B0:     callc [evt_sub_check_intersect evt_sub.o] LW(0) LW(2) LW(10) LW(12) -60 -2000 -60 2000 LW(5)
+803094DC:     if_int_eq GSW(0) 354
+803094E8:       if_int_eq GSWF(3874) 1
+803094F4:         if_int_eq LW(5) 1
+80309500:           loop_break
+80309504:         endif
+80309508:       endif
+8030950C:     endif
+80309510:     wait_frames 1
+80309518:   end_loop
+8030951C:   setii GSWF(22) 1
+80309528:   callc [evt_pouch_receive_mail evt_pouch.o] 32
+80309534:   setii GSWF(252) 1
+80309540:   callc [evt_sub_save_playtime evt_sub.o] GSW(23)
+8030954C:   callss [mail_evt evt_sub.o]
+80309554:   return
+80309558:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [mail_evt evt_sub.o] AT 80308254 ---
+80308254:   callc [evt_cam_letter_box_disable evt_cam.o] 1
+80308260:   callc [evt_mario_key_onoff evt_mario.o] 0
+8030826C:   callc [evt_mario_normalize evt_mario.o]
+80308274:   callc [evt_party_yoshi_ride evt_party.o] 0 0
+80308284:   callc [evt_mario_wait_rideon evt_mario.o]
+8030828C:   callc [evt_mario_balloon_bikkuri evt_mario.o]
+80308294:   callc [evt_snd_bgmoff evt_snd.o] 1024
+803082A0:   callc [evt_snd_bgmon evt_snd.o] 1 ["BGM_FF_MAIL_RECEPTION3"]
+803082B0:   callsa_tid [evt_sub_mail_vibration evt_sub.o] LW(10)
+803082BC:   wait_ms 500
+803082C4:   callc [evt_win_one_message evt_window.o] 0
+803082D0:   stop_tid LW(10)
+803082D8:   wait_frames 1
+803082E0:   callc [evt_sub_rumble_onoff evt_sub.o] 1 0
+803082F0:   callc [evt_mario_balloon_off evt_mario.o]
+803082F8:   callc [evt_snd_bgmoff evt_snd.o] 513
+80308304:   callc [evt_snd_bgmon evt_snd.o] 288 0
+80308314:   if_int_eq GSWF(37) 0
+80308320:     setii GSWF(37) 1
+8030832C:     callc [evt_msg_print evt_msg.o] 0 ["mail_first_hit"] 0 0
+80308344:   else
+80308348:     if_int_eq GSWF(38) 0
+80308354:       callc [evt_msg_print evt_msg.o] 0 ["mail_first_hit"] 0 0
+8030836C:     endif
+80308370:   endif
+80308374:   callc [evt_mario_key_onoff evt_mario.o] 1
+80308380:   callc [evt_cam_letter_box_disable evt_cam.o] 0
+8030838C:   return
+80308390:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [evt_sub_mail_vibration evt_sub.o] AT 803081EC ---
+803081EC:   loop 10
+803081F4:     loop 10
+803081FC:       callc [evt_sub_rumble_onoff evt_sub.o] 0 0
+8030820C:       wait_ms 50
+80308214:       callc [evt_sub_rumble_onoff evt_sub.o] 1 0
+80308224:       wait_ms 50
+8030822C:     end_loop
+80308230:     callc [evt_sub_rumble_onoff evt_sub.o] 2 0
+80308240:     wait_ms 2000
+80308248:   end_loop
+8030824C:   return
+80308250:   end

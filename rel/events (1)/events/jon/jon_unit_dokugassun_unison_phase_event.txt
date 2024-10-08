@@ -1,0 +1,40 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [unison_phase_event unit_dokugassun.o] AT 80CE3D2C ---
+80CE3D2C:   callc [btlevtcmd_CheckPhase battle_event_cmd.o] LW(0) 67108865
+80CE3D3C:   if_int_eq LW(0) 0
+80CE3D48:     goto 99
+80CE3D50:   endif
+80CE3D54:   callc [btlevtcmd_CheckActStatus battle_event_cmd.o] -2 LW(0)
+80CE3D64:   if_int_eq LW(0) 0
+80CE3D70:     goto 99
+80CE3D78:   endif
+80CE3D7C:   callc [btlevtcmd_CheckPartsCounterAttribute battle_event_cmd.o] -2 1 512 LW(0)
+80CE3D94:   if_int_eq LW(0) 1
+80CE3DA0:     goto 99
+80CE3DA8:   endif
+80CE3DAC:   callc [evt_sub_random evt_sub.o] 99 LW(0)
+80CE3DBC:   if_int_lt LW(0) 25
+80CE3DC8:     callc [btlevtcmd_GetUnitWork battle_event_cmd.o] -2 0 LW(0)
+80CE3DDC:     if_int_eq LW(0) 1
+80CE3DE8:       callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_ENM_KUMO_MOVE4"] [F1194D80] 0 [F1194D80]
+80CE3E04:       callc [btlevtcmd_GetPos battle_event_cmd.o] -2 LW(0) LW(1) LW(2)
+80CE3E1C:       setii LW(1) 40
+80CE3E28:       callc [btlevtcmd_DivePosition battle_event_cmd.o] -2 LW(0) LW(1) LW(2) 60 10 4 0 -1
+80CE3E54:       callc [btlevtcmd_SetHomePos battle_event_cmd.o] -2 LW(0) LW(1) LW(2)
+80CE3E6C:       callc [btlevtcmd_OnPartsAttribute battle_event_cmd.o] -2 1 6291456
+80CE3E80:       callc [btlevtcmd_SetUnitWork battle_event_cmd.o] -2 0 0
+80CE3E94:     else
+80CE3E98:       callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_ENM_KUMO_MOVE5"] [F1194D80] 0 [F1194D80]
+80CE3EB4:       callc [btlevtcmd_GetPos battle_event_cmd.o] -2 LW(0) LW(1) LW(2)
+80CE3ECC:       setii LW(1) 10
+80CE3ED8:       callc [btlevtcmd_DivePosition battle_event_cmd.o] -2 LW(0) LW(1) LW(2) 60 -10 4 0 -1
+80CE3F04:       callc [btlevtcmd_SetHomePos battle_event_cmd.o] -2 LW(0) LW(1) LW(2)
+80CE3F1C:       callc [btlevtcmd_OffPartsAttribute battle_event_cmd.o] -2 1 6291456
+80CE3F30:       callc [btlevtcmd_SetUnitWork battle_event_cmd.o] -2 0 1
+80CE3F44:     endif
+80CE3F48:   endif
+80CE3F4C: 99:
+80CE3F54:   return
+80CE3F58:   end

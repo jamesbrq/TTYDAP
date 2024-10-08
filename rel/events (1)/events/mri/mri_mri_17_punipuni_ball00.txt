@@ -1,0 +1,58 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [punipuni_ball00 mri_17.o] AT 806181F4 ---
+806181F4:   callc [evt_mario_key_onoff evt_mario.o] 0
+80618200:   if_int_eq GSWF(2870) 0
+8061820C:     callss [mri_punipuni_itemselect mri.o]
+80618214:     if_int_eq LW(1) 0
+80618220:       goto 100
+80618228:     endif
+8061822C:     setii GSWF(2870) 1
+80618238:     callc [evt_item_set_position evt_item.o] LW(10) 50 30 -58
+80618250:     setii GF(15) 1
+8061825C:     callss [mri_punipuni_itemset mri.o]
+80618264:     setii GF(15) 0
+80618270:   else
+80618274:     setii GSWF(2870) 0
+80618280:     callss [mri_punipuni_itemremove mri.o]
+80618288:   endif
+8061828C: 100:
+80618294:   callc [evt_mario_key_onoff evt_mario.o] 1
+806182A0:   return
+806182A4:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [mri_punipuni_itemselect mri.o] AT 805E3650 ---
+805E3650:   setii LW(1) 0
+805E365C:   callc [evt_pouch_check_item evt_pouch.o] 64 LW(0)
+805E366C:   if_int_eq LW(0) 0
+805E3678:     callc [evt_msg_toge evt_msg.o] 1 0 0 0
+805E3690:     callc [evt_msg_print evt_msg.o] 0 ["sys_no_item_to_put_on"] 0 0
+805E36A8:     return
+805E36AC:   endif
+805E36B0:   callc [evt_win_item_select evt_window.o] 0 [mri_itemsel_table mri.o] LW(0) 0
+805E36C8:   if_int_eq LW(0) -1
+805E36D4:     return
+805E36D8:   endif
+805E36DC:   setii LW(1) 1
+805E36E8:   return
+805E36EC:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [mri_punipuni_itemset mri.o] AT 805E36F0 ---
+805E36F0:   callc [evt_target_flag_onoff mri_puni.o] LW(11) 0 3
+805E3704:   callc [evt_pouch_remove_item evt_pouch.o] 64 LW(0)
+805E3714:   callc [evt_item_get_position evt_item.o] LW(10) LW(0) LW(1) LW(2)
+805E372C:   callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_STG2_PUNIDAMA_SET1"] LW(0) LW(1) LW(2) 0
+805E3748:   callc [evt_msg_toge evt_msg.o] 1 0 0 0
+805E3760:   callc [evt_msg_print evt_msg.o] 0 ["sys_stg2_punitama_on"] 0 0
+805E3778:   return
+805E377C:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [mri_punipuni_itemremove mri.o] AT 805E3780 ---
+805E3780:   callc [evt_target_flag_onoff mri_puni.o] LW(11) 1 1
+805E3794:   callc [evt_pouch_add_item evt_pouch.o] 64 LW(0)
+805E37A4:   callc [evt_item_set_position evt_item.o] LW(10) 0 -20000 0
+805E37BC:   callc [evt_msg_toge evt_msg.o] 1 0 0 0
+805E37D4:   callc [evt_msg_print evt_msg.o] 0 ["sys_stg2_punitama_off"] 0 0
+805E37EC:   return
+805E37F0:   end

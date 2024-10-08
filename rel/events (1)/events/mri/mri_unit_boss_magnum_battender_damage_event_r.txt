@@ -1,0 +1,33 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [damage_event_r unit_boss_magnum_battender.o] AT 8060CBA4 ---
+8060CBA4:   setii LW(10) -2
+8060CBB0:   setii LW(11) 1
+8060CBBC:   callss [btldefaultevt_Damage battle_event_default.o]
+8060CBC4:   callc [btlevtcmd_CheckDamageCode battle_event_cmd.o] -2 512 LW(0)
+8060CBD8:   if_int_ne LW(0) 0
+8060CBE4:     callc [btlevtcmd_CheckDamageCode battle_event_cmd.o] -2 2048 LW(0)
+8060CBF8:     if_int_eq LW(0) 0
+8060CC04:       callss [arm_event_end unit_boss_magnum_battender.o]
+8060CC0C:     endif
+8060CC10:   endif
+8060CC14:   return
+8060CC18:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [arm_event_end unit_boss_magnum_battender.o] AT 8060CB18 ---
+8060CB18:   callc [btlevtcmd_GetUnitWork battle_event_cmd.o] -2 0 LW(0)
+8060CB2C:   if_int_eq LW(0) 0
+8060CB38:     callc [arm_end unit_boss_magnum_battender.o] 0
+8060CB44:   endif
+8060CB48:   if_int_eq LW(0) 2
+8060CB54:     callc [arm_end unit_boss_magnum_battender.o] 0
+8060CB60:   endif
+8060CB64:   if_int_eq LW(0) 1
+8060CB70:     callc [arm_end unit_boss_magnum_battender.o] 1
+8060CB7C:   endif
+8060CB80:   if_int_eq LW(0) 3
+8060CB8C:     callc [arm_end unit_boss_magnum_battender.o] 1
+8060CB98:   endif
+8060CB9C:   return
+8060CBA0:   end

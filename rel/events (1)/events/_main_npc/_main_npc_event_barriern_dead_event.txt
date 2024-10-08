@@ -1,0 +1,51 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [barriern_dead_event npc_event.o] AT 80345150 ---
+80345150:   callc [evt_npc_get_unitwork evt_npc.o] ["me"] 0 LW(10)
+80345164:   callc [evt_snd_sfxoff evt_snd.o] LW(10)
+80345170:   callc [evt_npc_flag_onoff evt_npc.o] 1 ["slave_0"] 128
+80345184:   callss [enemy_common_dead_event npc_event.o]
+8034518C:   return
+80345190:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [enemy_common_dead_event npc_event.o] AT 8033EFC0 ---
+8033EFC0:   callc [evt_npc_flag_onoff evt_npc.o] 1 ["me"] 1024
+8033EFD4:   callc [evt_npc_set_attack_mode evt_npc.o] ["me"] 0
+8033EFE4:   callc [evt_npc_set_damage_anim evt_npc.o] ["me"]
+8033EFF0:   wait_ms 500
+8033EFF8:   callc [evt_npc_get_position evt_npc.o] ["me"] LW(0) LW(1) LW(2)
+8033F010:   callc [evt_eff evt_eff.o] 0 ["kemuri_test"] 4 LW(0) LW(1) LW(2) 0.80 0 0 0 0 0 0 0
+8033F050:   callc [evt_snd_sfxon evt_snd.o] ["SFX_ENEMY_DIE1"] 0
+8033F060:   callc [evt_npc_get_position evt_npc.o] ["me"] LW(0) LW(1) LW(2)
+8033F078:   callc [evt_npc_get_drop_coin evt_npc.o] ["me"] LW(3)
+8033F088:   if_int_gt LW(3) 0
+8033F094:     loop LW(3)
+8033F09C:       callc [evt_item_entry evt_item.o] 0 121 LW(0) LW(1) LW(2) 10 -1 0
+8033F0C4:     end_loop
+8033F0C8:   endif
+8033F0CC:   callc [evt_npc_get_drop_heart evt_npc.o] ["me"] LW(3)
+8033F0DC:   if_int_gt LW(3) 0
+8033F0E8:     loop LW(3)
+8033F0F0:       callc [evt_item_entry evt_item.o] 0 123 LW(0) LW(1) LW(2) 10 -1 0
+8033F118:     end_loop
+8033F11C:   endif
+8033F120:   callc [evt_npc_get_drop_flower evt_npc.o] ["me"] LW(3)
+8033F130:   if_int_gt LW(3) 0
+8033F13C:     loop LW(3)
+8033F144:       callc [evt_item_entry evt_item.o] 0 124 LW(0) LW(1) LW(2) 10 -1 0
+8033F16C:     end_loop
+8033F170:   endif
+8033F174:   callc [evt_npc_get_drop_item evt_npc.o] ["me"] LW(3)
+8033F184:   if_int_ne LW(3) 0
+8033F190:     callc [evt_item_entry evt_item.o] 0 LW(3) LW(0) LW(1) LW(2) 9 -1 0
+8033F1B8:   endif
+8033F1BC:   callc [evt_npc_getback_item_entry evt_npc.o] ["me"]
+8033F1C8:   callc [evt_npc_get_drop_fixitem evt_npc.o] ["me"] LW(3)
+8033F1D8:   if_int_ne LW(3) 0
+8033F1E4:     callc [evt_item_entry evt_item.o] 0 LW(3) LW(0) LW(1) LW(2) 9 -1 0
+8033F20C:   endif
+8033F210:   callc [evt_npc_delete evt_npc.o] ["me"]
+8033F21C:   callc [evt_npc_return_interrupt evt_npc.o] ["me"]
+8033F228:   return
+8033F22C:   end

@@ -1,0 +1,96 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [unison_phase_event unit_barriern_custom.o] AT 8060B000 ---
+8060B000:   callc [btlevtcmd_StopWaitEvent battle_event_cmd.o] -2
+8060B00C:   callc [btlevtcmd_CheckPhase battle_event_cmd.o] LW(0) 67108865
+8060B01C:   if_int_eq LW(0) 0
+8060B028:     goto 99
+8060B030:   endif
+8060B034:   callc [btlevtcmd_get_turn battle_event_cmd.o] LW(0)
+8060B040:   if_int_le LW(0) 1
+8060B04C:     goto 99
+8060B054:   endif
+8060B058:   callc [btlevtcmd_CheckActStatus battle_event_cmd.o] -2 LW(0)
+8060B068:   if_int_eq LW(0) 0
+8060B074:     goto 99
+8060B07C:   endif
+8060B080:   callc [evt_sub_random evt_sub.o] 10 LW(0)
+8060B090:   wait_frames LW(0)
+8060B098:   setii LW(0) 0
+8060B0A4:   setii LW(1) 4
+8060B0B0:   loop 4
+8060B0B8:     callc [btlevtcmd_GetUnitWork battle_event_cmd.o] -2 LW(1) LW(3)
+8060B0CC:     if_int_ne LW(3) -1
+8060B0D8:       addi LW(0) 1
+8060B0E4:     endif
+8060B0E8:     addi LW(1) 1
+8060B0F4:   end_loop
+8060B0F8:   if_int_ge LW(0) 4
+8060B104:     goto 99
+8060B10C:   endif
+8060B110:   callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_ENM_BARRI_ATTACK9"] [F1194D80] 0 [F1194D80]
+8060B12C:   callc [barriern_zanzou3 unit_barriern_custom.o] -2
+8060B138:   callss [satellite_blur_on unit_barriern_custom.o]
+8060B140:   callc [btlevtcmd_GetUnitWork battle_event_cmd.o] -2 0 LW(1)
+8060B154:   if_int_ge LW(1) 1
+8060B160:     callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_ENM_BARRI_SPLIT1"] [F1194D80] 0 [F1194D80]
+8060B17C:   endif
+8060B180:   callc [barriernSatelliteToInside unit_barriern_custom.o] -2 LW(1)
+8060B190:   callss [satellite_blur_off unit_barriern_custom.o]
+8060B198:   callc [btlevtcmd_GetUnitId battle_event_cmd.o] -2 LW(4)
+8060B1A8:   setii LW(1) 4
+8060B1B4:   setii LW(5) 0
+8060B1C0:   loop 4
+8060B1C8:     callc [btlevtcmd_GetUnitWork battle_event_cmd.o] -2 LW(1) LW(2)
+8060B1DC:     if_int_eq LW(2) -1
+8060B1E8:       callc [btlevtcmd_SpawnUnit battle_event_cmd.o] LW(3) [entry_barriern_satellite unit_barriern_custom.o] 0
+8060B1FC:       callc [btlevtcmd_AddPos battle_event_cmd.o] LW(3) 0 0 -1
+8060B214:       callc [btlevtcmd_SetUnitWork battle_event_cmd.o] -2 LW(1) LW(3)
+8060B228:       callc [btlevtcmd_SetUnitWork battle_event_cmd.o] LW(3) 0 LW(4)
+8060B23C:       addi LW(0) 1
+8060B248:       addi LW(5) 1
+8060B254:       if_int_ge LW(5) 2
+8060B260:         loop_break
+8060B264:       endif
+8060B268:     endif
+8060B26C:     addi LW(1) 1
+8060B278:   end_loop
+8060B27C:   wait_frames 5
+8060B284:   callss [satellite_blur_on unit_barriern_custom.o]
+8060B28C:   callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_ENM_BARRI_SPLIT2"] [F1194D80] 0 [F1194D80]
+8060B2A8:   callc [barriernSatelliteToOutside unit_barriern_custom.o] -2 LW(0)
+8060B2B8:   wait_frames 60
+8060B2C0:   callss [satellite_blur_off unit_barriern_custom.o]
+8060B2C8:   callc [btlevtcmd_SetUnitWork battle_event_cmd.o] -2 0 LW(0)
+8060B2DC: 99:
+8060B2E4:   callc [btlevtcmd_StartWaitEvent battle_event_cmd.o] -2
+8060B2F0:   return
+8060B2F4:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [satellite_blur_on unit_barriern_custom.o] AT 8060AEE4 ---
+8060AEE4:   setii LW(2) 4
+8060AEF0:   loop 4
+8060AEF8:     callc [btlevtcmd_GetUnitWork battle_event_cmd.o] -2 LW(2) LW(3)
+8060AF0C:     if_int_ne LW(3) -1
+8060AF18:       callc [btlevtcmd_GetBodyId battle_event_cmd.o] LW(3) LW(4)
+8060AF28:       callc [btlevtcmd_SetPartsBlur battle_event_cmd.o] LW(3) LW(4) 255 255 255 255 255 255 255 100 0
+8060AF5C:       callc [btlevtcmd_OnPartsAttribute battle_event_cmd.o] LW(3) LW(4) 67108864
+8060AF70:     endif
+8060AF74:     addi LW(2) 1
+8060AF80:   end_loop
+8060AF84:   return
+8060AF88:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [satellite_blur_off unit_barriern_custom.o] AT 8060AF8C ---
+8060AF8C:   setii LW(2) 4
+8060AF98:   loop 4
+8060AFA0:     callc [btlevtcmd_GetUnitWork battle_event_cmd.o] -2 LW(2) LW(3)
+8060AFB4:     if_int_ne LW(3) -1
+8060AFC0:       callc [btlevtcmd_GetBodyId battle_event_cmd.o] LW(3) LW(4)
+8060AFD0:       callc [btlevtcmd_OffPartsAttribute battle_event_cmd.o] LW(3) LW(4) 67108864
+8060AFE4:     endif
+8060AFE8:     addi LW(2) 1
+8060AFF4:   end_loop
+8060AFF8:   return
+8060AFFC:   end

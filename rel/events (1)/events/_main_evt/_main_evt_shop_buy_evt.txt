@@ -1,0 +1,154 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [buy_evt evt_shop.o] AT 8033CA20 ---
+8033CA20:   callc [evt_mario_normalize evt_mario.o]
+8033CA28:   setii LW(10) LW(0)
+8033CA34:   callc [disp_off evt_shop.o] LW(10)
+8033CA40:   if_int_eq GSWF(0) 0
+8033CA4C:     setii GSWF(0) 1
+8033CA58:     callss [first_shopping_evt evt_shop.o]
+8033CA60:     return
+8033CA64:   endif
+8033CA68:   callc [shopper_name evt_shop.o] LW(9)
+8033CA74:   callc [evt_set_dir_to_target evt_npc.o] LW(9) ["mario"]
+8033CA84:   callc [evt_win_coin_on evt_window.o] 0 LW(8)
+8033CA94:   callc [point_disp_onoff evt_shop.o] 1
+8033CAA0:   callc [get_value evt_shop.o] LW(10) LW(11) LW(12) LW(13)
+8033CAB8:   callc [get_msg evt_shop.o] LW(10) 0 LW(14)
+8033CACC:   callc [evt_sub_get_language evt_sub.o] LW(0)
+8033CAD8:   switchi LW(0)
+8033CAE0:     case_int_eq 0
+8033CAE8:       callc [evt_msg_print_insert evt_msg.o] 0 LW(14) 0 LW(9) LW(11) LW(13)
+8033CB08:     case_default
+8033CB0C:       callc [unk_800d0998 evt_msg.o] 0 LW(14) LW(14) LW(13)
+8033CB24:       callc [unk_800d12b0 evt_msg.o] 1 LW(14) LW(14) LW(11)
+8033CB3C:       callc [evt_msg_print evt_msg.o] 1 LW(14) 0 LW(9)
+8033CB54:   end_switch
+8033CB58:   callc [get_msg evt_shop.o] LW(10) 24 LW(14)
+8033CB6C:   callc [evt_msg_select evt_msg.o] 0 LW(14)
+8033CB7C:   if_int_eq LW(0) 1
+8033CB88:     callc [get_msg evt_shop.o] LW(10) 22 LW(14)
+8033CB9C:     callc [evt_msg_print_add evt_msg.o] 0 LW(14)
+8033CBAC:     callc [evt_win_coin_off evt_window.o] LW(8)
+8033CBB8:     callc [point_disp_onoff evt_shop.o] 0
+8033CBC4:     return
+8033CBC8:   endif
+8033CBCC:   callc [evt_pouch_get_coin evt_pouch.o] LW(0)
+8033CBD8:   if_int_lt LW(0) LW(13)
+8033CBE4:     callc [get_msg evt_shop.o] LW(10) 1 LW(14)
+8033CBF8:     callc [evt_msg_print_add evt_msg.o] 0 LW(14)
+8033CC08:     callc [evt_win_coin_off evt_window.o] LW(8)
+8033CC14:     callc [point_disp_onoff evt_shop.o] 0
+8033CC20:     return
+8033CC24:   endif
+8033CC28:   callc [evt_pouch_add_item evt_pouch.o] LW(12) LW(0)
+8033CC38:   if_int_eq LW(0) -1
+8033CC44:     callc [get_msg evt_shop.o] LW(10) 2 LW(14)
+8033CC58:     callc [evt_msg_print_add evt_msg.o] 0 LW(14)
+8033CC68:     callc [evt_win_coin_off evt_window.o] LW(8)
+8033CC74:     callc [point_disp_onoff evt_shop.o] 0
+8033CC80:     return
+8033CC84:   endif
+8033CC88:   callc [set_buy_item_id evt_shop.o] LW(12)
+8033CC94:   callc [evt_sub_load_progresstime evt_sub.o] GSW(5) LW(0)
+8033CCA4:   callc [evt_sub_load_progresstime evt_sub.o] GSW(14) LW(1)
+8033CCB4:   callc [evt_sub_load_progresstime evt_sub.o] GSW(23) LW(2)
+8033CCC4:   callc [add_shop_point evt_shop.o] 1 LW(0) LW(1) LW(2)
+8033CCDC:   muli LW(13) -1
+8033CCE8:   callc [evt_pouch_add_coin evt_pouch.o] LW(13)
+8033CCF4:   callc [evt_win_coin_wait evt_window.o] LW(8)
+8033CD00:   callc [point_wait evt_shop.o]
+8033CD08:   wait_ms 200
+8033CD10:   callc [evt_win_coin_off evt_window.o] LW(8)
+8033CD1C:   callc [point_disp_onoff evt_shop.o] 0
+8033CD28:   callc [get_msg evt_shop.o] LW(10) 11 LW(14)
+8033CD3C:   callc [evt_msg_print_add evt_msg.o] 0 LW(14)
+8033CD4C:   callc [evt_sub_get_system_flag evt_sub.o] LW(0)
+8033CD58:   if_bits_clear LW(0) 4096
+8033CD64:     if_int_eq GSWF(235) 0
+8033CD70:       setii GSWF(235) 1
+8033CD7C:       callc [evt_msg_print evt_msg.o] 0 ["item_first_hit"] 0 0
+8033CD94:     endif
+8033CD98:   endif
+8033CD9C:   loop 0
+8033CDA4:     callc [chk_shop_point evt_shop.o] LW(0) LW(1) LW(2)
+8033CDB8:     if_int_eq LW(0) -1
+8033CDC4:       goto 123
+8033CDCC:       return
+8033CDD0:     endif
+8033CDD4:     setii LF(0) 0
+8033CDE0:     callc [get_shop_point evt_shop.o] LW(0)
+8033CDEC:     if_int_ne LW(0) 300
+8033CDF8:       callc [get_msg evt_shop.o] LW(10) 26 LW(14)
+8033CE0C:       callc [evt_sub_get_language evt_sub.o] LW(0)
+8033CE18:       switchi LW(0)
+8033CE20:         case_int_eq 0
+8033CE28:           callc [evt_msg_print_insert evt_msg.o] 0 LW(14) 0 LW(9) LW(2)
+8033CE44:         case_default
+8033CE48:           callc [unk_800d12b0 evt_msg.o] 0 LW(14) LW(14) LW(2)
+8033CE60:           callc [evt_msg_print evt_msg.o] 1 LW(14) 0 LW(9)
+8033CE78:           end_multi_case
+8033CE7C:       end_switch
+8033CE80:     else
+8033CE84:       callc [get_msg evt_shop.o] LW(10) 34 LW(14)
+8033CE98:       callc [evt_msg_print evt_msg.o] 0 LW(14) 0 LW(9)
+8033CEB0:       callc [evt_win_coin_on evt_window.o] 0 LW(8)
+8033CEC0:       callc [point_disp_onoff evt_shop.o] 1
+8033CECC:       callc [reset_shop_point evt_shop.o]
+8033CED4:       callc [evt_win_coin_wait evt_window.o] LW(8)
+8033CEE0:       callc [point_wait evt_shop.o]
+8033CEE8:       wait_ms 500
+8033CEF0:       callc [evt_win_coin_off evt_window.o] LW(8)
+8033CEFC:       callc [point_disp_onoff evt_shop.o] 0
+8033CF08:       setii LF(0) 1
+8033CF14:     endif
+8033CF18:     callc [evt_pouch_add_item evt_pouch.o] LW(1) LW(0)
+8033CF28:     if_int_eq LW(0) -1
+8033CF34:       callc [get_msg evt_shop.o] LW(10) 27 LW(14)
+8033CF48:       callc [evt_msg_print evt_msg.o] 0 LW(14) 0 LW(9)
+8033CF60:       if_int_eq LF(0) 1
+8033CF6C:         setii GSWF(1) 1
+8033CF78:       endif
+8033CF7C:       goto 123
+8033CF84:       return
+8033CF88:     endif
+8033CF8C:     callc [exchange_shop_point evt_shop.o]
+8033CF94:   end_loop
+8033CF98: 123:
+8033CFA0:   callc [get_buy_evt evt_shop.o] LW(1)
+8033CFAC:   if_int_ne LW(1) 0
+8033CFB8:     setii LW(0) LW(12)
+8033CFC4:     callss LW(1)
+8033CFCC:   endif
+8033CFD0:   return
+8033CFD4:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [first_shopping_evt evt_shop.o] AT 8033D608 ---
+8033D608:   callc [shopper_name evt_shop.o] LW(9)
+8033D614:   callc [evt_set_dir_to_target evt_npc.o] LW(9) ["mario"]
+8033D624:   callc [evt_mario_set_dir_npc evt_mario.o] LW(9)
+8033D630:   callc [get_msg evt_shop.o] LW(10) 30 LW(14)
+8033D644:   if_int_eq LF(10) 0
+8033D650:     callc [evt_msg_print evt_msg.o] 0 LW(14) 0 LW(9)
+8033D668:   else
+8033D66C:     setii LF(10) 0
+8033D678:     callc [evt_msg_print_add evt_msg.o] 1 ["<scrl_auto><once_stop>"]
+8033D688:     callc [evt_msg_print_add evt_msg.o] 0 LW(14)
+8033D698:   endif
+8033D69C:   loop 0
+8033D6A4:     callc [get_msg evt_shop.o] LW(10) 31 LW(14)
+8033D6B8:     callc [evt_msg_print evt_msg.o] 0 LW(14) 0 LW(9)
+8033D6D0:     callc [get_msg evt_shop.o] LW(10) 24 LW(14)
+8033D6E4:     callc [evt_msg_select evt_msg.o] 0 LW(14)
+8033D6F4:     if_int_eq LW(0) 0
+8033D700:       callc [get_msg evt_shop.o] LW(10) 32 LW(14)
+8033D714:       callc [evt_msg_print_add evt_msg.o] 0 LW(14)
+8033D724:     else
+8033D728:       callc [get_msg evt_shop.o] LW(10) 33 LW(14)
+8033D73C:       callc [evt_msg_print_add evt_msg.o] 0 LW(14)
+8033D74C:       return
+8033D750:     endif
+8033D754:   end_loop
+8033D758:   return
+8033D75C:   end

@@ -1,0 +1,322 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [attack_event unit_hyper_jyugem.o] AT 8061A3C8 ---
+8061A3C8:   callc [btlevtcmd_EnemyItemUseCheck battle_event_cmd.o] -2 LW(0)
+8061A3D8:   if_int_ne LW(0) 0
+8061A3E4:     callss LW(0)
+8061A3EC:     goto 99
+8061A3F4:   endif
+8061A3F8:   callc [btlevtcmd_get_turn battle_event_cmd.o] LW(0)
+8061A404:   if_int_le LW(0) 1
+8061A410:     callc [btlevtcmd_DrawLots battle_event_cmd.o] LW(0) 2 40 90
+8061A428:   else
+8061A42C:     callc [btlevtcmd_DrawLots battle_event_cmd.o] LW(0) 2 40 70
+8061A444:   endif
+8061A448:   switchi LW(0)
+8061A450:     case_int_eq 0
+8061A458:       callc [btlevtcmd_GetPos battle_event_cmd.o] -2 LW(0) LW(1) LW(2)
+8061A470:       setii LW(1) 0
+8061A47C:       loop 0
+8061A484:         callc [btlevtcmd_FaceDirectionAdd battle_event_cmd.o] -2 LW(0) 40
+8061A498:         setii LW(4) LW(0)
+8061A4A4:         callc [btlevtcmd_GetFaceDirection battle_event_cmd.o] -2 LW(5)
+8061A4B4:         muli LW(4) LW(5)
+8061A4C0:         if_int_lt LW(4) 0
+8061A4CC:           subi LW(2) 10
+8061A4D8:           callc [btlevtcmd_CheckSpace battle_event_cmd.o] LW(3) LW(0) LW(1) LW(2) 40 0 0 0
+8061A500:           if_int_eq LW(3) -1
+8061A50C:             callss [friend_event unit_hyper_jyugem.o]
+8061A514:             goto 99
+8061A51C:           endif
+8061A520:         else
+8061A524:           goto 9
+8061A52C:         endif
+8061A530:       end_loop
+8061A534: 9:
+8061A53C:       callc [btlevtcmd_GetPos battle_event_cmd.o] -2 LW(0) LW(1) LW(2)
+8061A554:       setii LW(1) 0
+8061A560:       loop 0
+8061A568:         callc [btlevtcmd_FaceDirectionSub battle_event_cmd.o] -2 LW(0) 40
+8061A57C:         if_int_le LW(0) 150
+8061A588:           addi LW(2) 10
+8061A594:           callc [btlevtcmd_CheckSpace battle_event_cmd.o] LW(3) LW(0) LW(1) LW(2) 40 0 0 0
+8061A5BC:           if_int_eq LW(3) -1
+8061A5C8:             callss [friend_event unit_hyper_jyugem.o]
+8061A5D0:             goto 99
+8061A5D8:           endif
+8061A5DC:         else
+8061A5E0:           goto 10
+8061A5E8:         endif
+8061A5EC:       end_loop
+8061A5F0: 10:
+8061A5F8:   end_switch
+8061A5FC:   callc [btlevtcmd_GetUnitWork battle_event_cmd.o] -2 2 LW(0)
+8061A610:   if_int_eq LW(0) 1
+8061A61C:     callc [btlevtcmd_SetUnitWork battle_event_cmd.o] -2 1 0
+8061A630:     callss [normal_attack_event unit_hyper_jyugem.o]
+8061A638:     goto 99
+8061A640:   endif
+8061A644:   callc [btlevtcmd_get_turn battle_event_cmd.o] LW(0)
+8061A650:   if_int_le LW(0) 1
+8061A65C:     callc [btlevtcmd_DrawLots battle_event_cmd.o] LW(0) 3 30 30 30
+8061A678:   else
+8061A67C:     callc [btlevtcmd_DrawLots battle_event_cmd.o] LW(0) 3 30 30 10
+8061A698:   endif
+8061A69C:   switchi LW(0)
+8061A6A4:     case_int_eq 0
+8061A6AC:       callc [btlevtcmd_SetUnitWork battle_event_cmd.o] -2 1 0
+8061A6C0:       callss [normal_attack_event unit_hyper_jyugem.o]
+8061A6C8:     case_int_eq 1
+8061A6D0:       callc [btlevtcmd_SetUnitWork battle_event_cmd.o] -2 1 1
+8061A6E4:       callss [normal_attack_event unit_hyper_jyugem.o]
+8061A6EC:     case_int_eq 2
+8061A6F4:       callc [btlevtcmd_SetUnitWork battle_event_cmd.o] -2 2 1
+8061A708:       setii LW(9) [weapon_jyugem_charge unit_hyper_jyugem.o]
+8061A714:       callss [charge_event unit_hyper_jyugem.o]
+8061A71C:   end_switch
+8061A720: 99:
+8061A728:   callc [btlevtcmd_StartWaitEvent battle_event_cmd.o] -2
+8061A734:   return
+8061A738:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [friend_event unit_hyper_jyugem.o] AT 8061B060 ---
+8061B060:   callc [btlevtcmd_CalculateFaceDirection battle_event_cmd.o] -2 -1 LW(0) LW(2) 1 LW(15)
+8061B080:   callc [btlevtcmd_ChangeFaceDirection battle_event_cmd.o] -2 LW(15)
+8061B090:   callc [btlevtcmd_GetUnitWork battle_event_cmd.o] -2 0 LW(10)
+8061B0A4:   if_int_eq LW(10) 0
+8061B0B0:     callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_ENM_JUGEM_ATTACK1"] [F1194D80] 0 [F1194D80]
+8061B0CC:     callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 1 ["JGM_A_1"]
+8061B0E0:     wait_frames 40
+8061B0E8:     callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_ENM_JUGEM_ATTACK2"] [F1194D80] 0 [F1194D80]
+8061B104:     callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 1 ["JGM_A_2"]
+8061B118:     wait_frames 30
+8061B120:   else
+8061B124:     callc [btlevtcmd_SetUnitWork battle_event_cmd.o] -2 0 0
+8061B138:     callc [btlevtcmd_OffPartsCounterAttribute battle_event_cmd.o] -2 1 1
+8061B14C:     callc [btlevtcmd_AnimeSetPoseTable battle_event_cmd.o] -2 1 [pose_table unit_hyper_jyugem.o]
+8061B160:     callc [btlevtcmd_SetHitOffset battle_event_cmd.o] -2 1 0 0 0
+8061B17C:   endif
+8061B180:   callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 1 ["JGM_A_3"]
+8061B194:   wait_frames 2
+8061B19C:   callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_ENM_JUGEM_THROW2"] [F1194D80] 0 [F1194D80]
+8061B1B8:   callc [btlevtcmd_OffPartsAttribute battle_event_cmd.o] -2 2 50331648
+8061B1CC:   callc [btlevtcmd_GetPos battle_event_cmd.o] -2 LW(10) LW(11) LW(12)
+8061B1E4:   addi LW(11) 35
+8061B1F0:   callc [btlevtcmd_SetPartsPos battle_event_cmd.o] -2 2 LW(10) LW(11) LW(12)
+8061B20C:   callc [btlevtcmd_FaceDirectionSub battle_event_cmd.o] -2 LW(0) 20
+8061B220:   callc [btlevtcmd_JumpPartsSetting battle_event_cmd.o] -2 2 45 0 0.30
+8061B23C:   callc [btlevtcmd_JumpPartsPosition battle_event_cmd.o] -2 2 LW(0) LW(1) LW(2) 45 -1
+8061B260:   callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_ENM_JUGEM_JUMP1"] [F1194D80] 0 [F1194D80]
+8061B27C:   callc [btlevtcmd_FaceDirectionAdd battle_event_cmd.o] -2 LW(0) 15
+8061B290:   callc [btlevtcmd_JumpPartsSetting battle_event_cmd.o] -2 2 15 0 0.30
+8061B2AC:   callc [btlevtcmd_JumpPartsPosition battle_event_cmd.o] -2 2 LW(0) LW(1) LW(2) 15 -1
+8061B2D0:   callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_ENM_JUGEM_JUMP1"] [F1194D80] 0 [F1194D80]
+8061B2EC:   wait_frames 20
+8061B2F4:   callc [btlevtcmd_SpawnUnit battle_event_cmd.o] LW(3) [entry_togezo unit_hyper_jyugem.o] 0
+8061B308:   callc [togezo_copy_status unit_hyper_jyugem.o] -2 LW(3)
+8061B318:   callc [btlevtcmd_GetBodyId battle_event_cmd.o] LW(3) LW(4)
+8061B328:   callc [btlevtcmd_OnPartsAttribute battle_event_cmd.o] -2 2 50331648
+8061B33C:   callc [btlevtcmd_SetPos battle_event_cmd.o] LW(3) LW(0) LW(1) LW(2)
+8061B354:   callc [btlevtcmd_SetHomePos battle_event_cmd.o] LW(3) LW(0) LW(1) LW(2)
+8061B36C:   callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] LW(3) LW(4) ["TGZ_P_1"]
+8061B380:   callc [btlevtcmd_snd_se battle_event_cmd.o] LW(3) ["SFX_ENM_TOGEZO_TURN2"] [F1194D80] 0 [F1194D80]
+8061B39C:   callc [btlevtcmd_SetRotate battle_event_cmd.o] LW(3) 0 0 0
+8061B3B4:   callc [btlevtcmd_SetRotateOffset battle_event_cmd.o] LW(3) 0 15 0
+8061B3CC:   loop 5
+8061B3D4:     callc [btlevtcmd_AddRotate battle_event_cmd.o] LW(3) 0 0 -36
+8061B3EC:     wait_frames 1
+8061B3F4:   end_loop
+8061B3F8:   callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] LW(3) LW(4) ["TGZ_S_1"]
+8061B40C:   loop 5
+8061B414:     callc [btlevtcmd_AddRotate battle_event_cmd.o] LW(3) 0 0 -36
+8061B42C:     wait_frames 1
+8061B434:   end_loop
+8061B438:   callc [btlevtcmd_SetRotateOffset battle_event_cmd.o] LW(3) 0 0 0
+8061B450:   callc [evt_btl_camera_set_mode battle_camera.o] 0 0
+8061B460:   wait_frames 10
+8061B468:   callc [btlevtcmd_ResetFaceDirection battle_event_cmd.o] -2
+8061B474:   return
+8061B478:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [normal_attack_event unit_hyper_jyugem.o] AT 8061A73C ---
+8061A73C:   callc [btlevtcmd_GetEnemyBelong battle_event_cmd.o] -2 LW(0)
+8061A74C:   callc [btlevtcmd_SamplingEnemy battle_event_cmd.o] -2 LW(0) [weapon_jyugem_attack unit_hyper_jyugem.o]
+8061A760:   callc [btlevtcmd_ChoiceSamplingEnemy battle_event_cmd.o] [weapon_jyugem_attack unit_hyper_jyugem.o] LW(3) LW(4)
+8061A774:   if_int_eq LW(3) -1
+8061A780:     callc [btlevtcmd_CheckToken battle_event_cmd.o] -2 16 LW(0)
+8061A794:     if_int_ne LW(0) 0
+8061A7A0:       callss [subsetevt_confuse_flustered battle_event_subset.o]
+8061A7A8:       return
+8061A7AC:     endif
+8061A7B0:     goto 99
+8061A7B8:   endif
+8061A7BC:   callc [evt_btl_camera_set_mode battle_camera.o] 0 0
+8061A7CC:   callc [btlevtcmd_WeaponAftereffect battle_event_cmd.o] [weapon_jyugem_attack unit_hyper_jyugem.o]
+8061A7D8:   callc [btlevtcmd_AttackDeclare battle_event_cmd.o] -2 LW(3) LW(4)
+8061A7EC:   callc [btlevtcmd_WaitGuardMove battle_event_cmd.o]
+8061A7F4:   callc [btlevtcmd_PayWeaponCost battle_event_cmd.o] -2 [weapon_jyugem_attack unit_hyper_jyugem.o]
+8061A804:   callc [btlevtcmd_CalculateFaceDirection battle_event_cmd.o] -2 -1 LW(3) LW(4) 16 LW(15)
+8061A824:   callc [btlevtcmd_ChangeFaceDirection battle_event_cmd.o] -2 LW(15)
+8061A834:   callc [btlevtcmd_GetUnitWork battle_event_cmd.o] -2 0 LW(10)
+8061A848:   if_int_eq LW(10) 0
+8061A854:     callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_ENM_JUGEM_ATTACK1"] [F1194D80] 0 [F1194D80]
+8061A870:     callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 1 ["JGM_A_1"]
+8061A884:     wait_frames 40
+8061A88C:     callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_ENM_JUGEM_ATTACK2"] [F1194D80] 0 [F1194D80]
+8061A8A8:     callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 1 ["JGM_A_2"]
+8061A8BC:     wait_frames 30
+8061A8C4:   else
+8061A8C8:     callc [btlevtcmd_SetUnitWork battle_event_cmd.o] -2 0 0
+8061A8DC:     callc [btlevtcmd_OffPartsCounterAttribute battle_event_cmd.o] -2 1 1
+8061A8F0:     callc [btlevtcmd_AnimeSetPoseTable battle_event_cmd.o] -2 1 [pose_table unit_hyper_jyugem.o]
+8061A904:     callc [btlevtcmd_SetHitOffset battle_event_cmd.o] -2 1 0 0 0
+8061A920:   endif
+8061A924:   callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 1 ["JGM_A_3"]
+8061A938:   wait_frames 2
+8061A940:   callc [btlevtcmd_OffPartsAttribute battle_event_cmd.o] -2 2 50331648
+8061A954:   callc [btlevtcmd_GetPos battle_event_cmd.o] -2 LW(0) LW(1) LW(2)
+8061A96C:   addi LW(1) 35
+8061A978:   callc [btlevtcmd_SetPartsPos battle_event_cmd.o] -2 2 LW(0) LW(1) LW(2)
+8061A994:   callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_ENM_JUGEM_THROW1"] [F1194D80] 0 [F1194D80]
+8061A9B0:   callc [btlevtcmd_GetHitPos battle_event_cmd.o] LW(3) LW(4) LW(0) LW(1) LW(2)
+8061A9CC:   callc [btlevtcmd_JumpPartsSetting battle_event_cmd.o] -2 2 45 0 0.30
+8061A9E8:   callc [btlevtcmd_JumpPartsPosition battle_event_cmd.o] -2 2 LW(0) LW(1) LW(2) 45 -1
+8061AA0C:   callc [btlevtcmd_PreCheckDamage battle_event_cmd.o] -2 LW(3) LW(4) [weapon_jyugem_attack unit_hyper_jyugem.o] 256 LW(5)
+8061AA2C:   switchi LW(5)
+8061AA34:     case_int_eq_any 4
+8061AA3C:       goto 90
+8061AA44:       end_multi_case
+8061AA48:     case_int_eq 3
+8061AA50:       callc [btlevtcmd_StartAvoid battle_event_cmd.o] LW(3) 38
+8061AA60:       goto 90
+8061AA68:       end_multi_case
+8061AA6C:     case_int_eq 6
+8061AA74:       callc [btlevtcmd_StartAvoid battle_event_cmd.o] LW(3) 39
+8061AA84:       goto 90
+8061AA8C:     case_int_eq 2
+8061AA94:       callc [btlevtcmd_StartAvoid battle_event_cmd.o] LW(3) 40
+8061AAA4:       goto 90
+8061AAAC:     case_int_eq 1
+8061AAB4:       goto 91
+8061AABC:       end_multi_case
+8061AAC0:     case_default
+8061AAC4:       goto 98
+8061AACC:       end_multi_case
+8061AAD0:   end_switch
+8061AAD4: 90:
+8061AADC:   callc [btlevtcmd_JumpPartsContinue battle_event_cmd.o] -2 2
+8061AAEC:   callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_ENM_JUGEM_JUMP1"] [F1194D80] 0 [F1194D80]
+8061AB08:   goto 98
+8061AB10: 91:
+8061AB18:   callc [btlevtcmd_ResultACDefence battle_event_cmd.o] LW(3) [weapon_jyugem_attack unit_hyper_jyugem.o]
+8061AB28:   callc [btlevtcmd_CheckDamage battle_event_cmd.o] -2 LW(3) LW(4) [weapon_jyugem_attack unit_hyper_jyugem.o] 256 LW(5)
+8061AB48:   callc [btlevtcmd_GetUnitWork battle_event_cmd.o] -2 1 LW(0)
+8061AB5C:   if_int_eq LW(0) 1
+8061AB68:     callc [btlevtcmd_CheckDamageCode battle_event_cmd.o] LW(3) 262144 LW(0)
+8061AB7C:     if_int_ne LW(0) 0
+8061AB88:       callc [btlevtcmd_GetPos battle_event_cmd.o] -2 LW(0) LW(1) LW(2)
+8061ABA0:       setii LW(1) 0
+8061ABAC:       loop 0
+8061ABB4:         callc [btlevtcmd_FaceDirectionAdd battle_event_cmd.o] -2 LW(0) 40
+8061ABC8:         setii LW(4) LW(0)
+8061ABD4:         callc [btlevtcmd_GetFaceDirection battle_event_cmd.o] -2 LW(5)
+8061ABE4:         muli LW(4) LW(5)
+8061ABF0:         if_int_lt LW(4) 0
+8061ABFC:           subi LW(2) 10
+8061AC08:           callc [btlevtcmd_CheckSpace battle_event_cmd.o] LW(3) LW(0) LW(1) LW(2) 40 0 0 0
+8061AC30:           if_int_eq LW(3) -1
+8061AC3C:             goto 97
+8061AC44:           endif
+8061AC48:         else
+8061AC4C:           goto 96
+8061AC54:         endif
+8061AC58:       end_loop
+8061AC5C: 96:
+8061AC64:       callc [btlevtcmd_GetPos battle_event_cmd.o] -2 LW(0) LW(1) LW(2)
+8061AC7C:       setii LW(1) 0
+8061AC88:       loop 0
+8061AC90:         callc [btlevtcmd_FaceDirectionSub battle_event_cmd.o] -2 LW(0) 40
+8061ACA4:         if_int_le LW(0) 150
+8061ACB0:           addi LW(2) 10
+8061ACBC:           callc [btlevtcmd_CheckSpace battle_event_cmd.o] LW(3) LW(0) LW(1) LW(2) 40 0 0 0
+8061ACE4:           if_int_eq LW(3) -1
+8061ACF0:             goto 97
+8061ACF8:           endif
+8061ACFC:         else
+8061AD00:           goto 98
+8061AD08:         endif
+8061AD0C:       end_loop
+8061AD10:     endif
+8061AD14:   endif
+8061AD18:   goto 98
+8061AD20: 97:
+8061AD28:   callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_ENM_JUGEM_REBOUND1"] [F1194D80] 0 [F1194D80]
+8061AD44:   callc [evt_btl_camera_set_mode battle_camera.o] 0 0
+8061AD54:   callc [btlevtcmd_FaceDirectionAdd battle_event_cmd.o] -2 LW(0) 20
+8061AD68:   callc [btlevtcmd_JumpPartsSetting battle_event_cmd.o] -2 2 45 0 0.30
+8061AD84:   callc [btlevtcmd_JumpPartsPosition battle_event_cmd.o] -2 2 LW(0) LW(1) LW(2) 45 -1
+8061ADA8:   callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_ENM_JUGEM_JUMP1"] [F1194D80] 0 [F1194D80]
+8061ADC4:   callc [btlevtcmd_FaceDirectionSub battle_event_cmd.o] -2 LW(0) 20
+8061ADD8:   callc [btlevtcmd_JumpPartsSetting battle_event_cmd.o] -2 2 15 0 0.30
+8061ADF4:   callc [btlevtcmd_JumpPartsPosition battle_event_cmd.o] -2 2 LW(0) LW(1) LW(2) 15 -1
+8061AE18:   callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_ENM_JUGEM_JUMP1"] [F1194D80] 0 [F1194D80]
+8061AE34:   wait_frames 20
+8061AE3C:   callc [btlevtcmd_SpawnUnit battle_event_cmd.o] LW(3) [entry_togezo unit_hyper_jyugem.o] 0
+8061AE50:   callc [togezo_copy_status unit_hyper_jyugem.o] -2 LW(3)
+8061AE60:   callc [btlevtcmd_GetBodyId battle_event_cmd.o] LW(3) LW(4)
+8061AE70:   callc [btlevtcmd_OnPartsAttribute battle_event_cmd.o] -2 2 50331648
+8061AE84:   callc [btlevtcmd_SetPos battle_event_cmd.o] LW(3) LW(0) LW(1) LW(2)
+8061AE9C:   callc [btlevtcmd_SetHomePos battle_event_cmd.o] LW(3) LW(0) LW(1) LW(2)
+8061AEB4:   callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] LW(3) LW(4) ["TGZ_P_1"]
+8061AEC8:   callc [btlevtcmd_snd_se battle_event_cmd.o] LW(3) ["SFX_ENM_TOGEZO_TURN2"] [F1194D80] 0 [F1194D80]
+8061AEE4:   callc [btlevtcmd_SetRotate battle_event_cmd.o] LW(3) 0 0 0
+8061AEFC:   callc [btlevtcmd_SetRotateOffset battle_event_cmd.o] LW(3) 0 15 0
+8061AF14:   loop 5
+8061AF1C:     callc [btlevtcmd_AddRotate battle_event_cmd.o] LW(3) 0 0 -36
+8061AF34:     wait_frames 1
+8061AF3C:   end_loop
+8061AF40:   callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] LW(3) LW(4) ["TGZ_S_1"]
+8061AF54:   loop 5
+8061AF5C:     callc [btlevtcmd_AddRotate battle_event_cmd.o] LW(3) 0 0 -36
+8061AF74:     wait_frames 1
+8061AF7C:   end_loop
+8061AF80:   callc [btlevtcmd_SetRotateOffset battle_event_cmd.o] LW(3) 0 0 0
+8061AF98:   goto 99
+8061AFA0: 98:
+8061AFA8:   callc [evt_btl_camera_set_mode battle_camera.o] 0 0
+8061AFB8:   callc [btlevtcmd_GetPartsPos battle_event_cmd.o] -2 2 LW(0) LW(1) LW(2)
+8061AFD4:   callc [btlevtcmd_FaceDirectionAdd battle_event_cmd.o] -2 LW(0) 150
+8061AFE8:   callc [btlevtcmd_JumpPartsSetting battle_event_cmd.o] -2 2 0 5.00 0.30
+8061B004:   callc [btlevtcmd_JumpPartsPosition battle_event_cmd.o] -2 2 LW(0) 0 LW(2) 0 -1
+8061B028:   callc [btlevtcmd_OnPartsAttribute battle_event_cmd.o] -2 2 50331648
+8061B03C:   wait_frames 10
+8061B044: 99:
+8061B04C:   callc [btlevtcmd_ResetFaceDirection battle_event_cmd.o] -2
+8061B058:   return
+8061B05C:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [charge_event unit_hyper_jyugem.o] AT 8061B47C ---
+8061B47C:   callc [btlevtcmd_PayWeaponCost battle_event_cmd.o] -2 LW(9)
+8061B48C:   callc [evt_btl_camera_set_mode battle_camera.o] 0 7
+8061B49C:   callc [evt_btl_camera_set_homing_unit battle_camera.o] 0 -2 -1
+8061B4B0:   callc [evt_btl_camera_set_moveSpeedLv battle_camera.o] 0 2
+8061B4C0:   callc [evt_btl_camera_set_zoom battle_camera.o] 0 300
+8061B4D0:   wait_frames 40
+8061B4D8:   callc [btlevtcmd_GetPos battle_event_cmd.o] -2 LW(0) LW(1) LW(2)
+8061B4F0:   addi LW(1) 15
+8061B4FC:   addi LW(2) 10
+8061B508:   callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_ENM_CHARGE1"] [F1194D80] 0 [F1194D80]
+8061B524:   callc [evt_eff64 evt_eff.o] [zero_tou2_00010994 unit_hyper_jyugem.o] ["crystal_n64"] 7 LW(0) LW(1) LW(2) 1.50 60 0 0 0 0 0 0
+8061B564:   wait_ms 1000
+8061B56C:   begin_thread
+8061B570:     callc [evt_btl_camera_set_mode battle_camera.o] 0 3
+8061B580:     callc [btlevtcmd_GetPos battle_event_cmd.o] -2 LW(0) LW(1) LW(2)
+8061B598:     callc [btlevtcmd_JumpSetting battle_event_cmd.o] -2 20 0 1.00
+8061B5B0:     callc [btlevtcmd_JumpPosition battle_event_cmd.o] -2 LW(0) LW(1) LW(2) 20 -1
+8061B5D0:     wait_ms 500
+8061B5D8:     callc [evt_btl_camera_set_mode battle_camera.o] 0 0
+8061B5E8:   end_thread
+8061B5EC:   callc [btlevtcmd_CheckDamage battle_event_cmd.o] -2 -2 1 LW(9) 256 LW(5)
+8061B60C:   return
+8061B610:   end

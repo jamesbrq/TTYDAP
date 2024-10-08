@@ -1,0 +1,90 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [kamec_subset_blow_dead_event unit_kamec.o] AT 805EF328 ---
+805EF328:   callc [evt_snd_sfxon evt_snd.o] ["SFX_BTL_CLAUD_BREATH3"] 0
+805EF338:   callc [btlevtcmd_GetBodyId battle_event_cmd.o] -2 LW(0)
+805EF348:   callc [btlevtcmd_AnimeChangePoseType battle_event_cmd.o] -2 LW(0) 39
+805EF35C:   begin_child_thread
+805EF360: 0:
+805EF368:     callc [btlevtcmd_AddRotate battle_event_cmd.o] -2 0 20 0
+805EF380:     wait_frames 1
+805EF388:     goto 0
+805EF390:   end_child_thread
+805EF394:   callc [btlevtcmd_SetMoveSpeed battle_event_cmd.o] -2 2.00
+805EF3A4:   callc [btlevtcmd_GetPos battle_event_cmd.o] -2 LW(0) LW(1) LW(2)
+805EF3BC:   callc [btlevtcmd_GetStageSize battle_event_cmd.o] LW(0) [F1194D80] [F1194D80]
+805EF3D0:   addi LW(1) 40
+805EF3DC:   callc [btlevtcmd_DivePosition battle_event_cmd.o] -2 LW(0) LW(1) LW(2) 0 -10 2 0 -1
+805EF408:   callc [btlevtcmd_GetCoin battle_event_cmd.o] LW(10) LW(0)
+805EF418:   callc [btlevtcmd_StoreCoin battle_event_cmd.o] LW(0)
+805EF424:   callc [btlevtcmd_GetExp battle_event_cmd.o] LW(10) LW(0)
+805EF434:   callc [btlevtcmd_StoreExp battle_event_cmd.o] LW(0)
+805EF440:   callss [kamec_subset_bunsin_all_kill unit_kamec.o]
+805EF448:   callc [btlevtcmd_KillUnit battle_event_cmd.o] -2 0
+805EF458:   return
+805EF45C:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [kamec_subset_bunsin_all_kill unit_kamec.o] AT 805EEEEC ---
+805EEEEC:   callc [btlevtcmd_GetUnitWork battle_event_cmd.o] -2 1 LW(0)
+805EEF00:   if_int_eq LW(0) 0
+805EEF0C:     callc [kamec_get_bunsin unit_kamec.o] LW(1) LW(2) LW(3) LW(4) LW(0)
+805EEF28:     if_int_ge LW(0) 1
+805EEF34:       callc [btlevtcmd_WaitAttackEnd battle_event_cmd.o]
+805EEF3C:       callc [kamec_get_bunsin unit_kamec.o] LW(1) LW(2) LW(3) LW(4) LW(0)
+805EEF58:       setii LW(0) LW(1)
+805EEF64:       callsa [bunsin_kill_event unit_kamec.o]
+805EEF6C:       setii LW(0) LW(2)
+805EEF78:       callsa [bunsin_kill_event unit_kamec.o]
+805EEF80:       setii LW(0) LW(3)
+805EEF8C:       callsa [bunsin_kill_event unit_kamec.o]
+805EEF94:       setii LW(0) LW(4)
+805EEFA0:       callsa [bunsin_kill_event unit_kamec.o]
+805EEFA8:       loop 0
+805EEFB0:         callc [kamec_get_bunsin unit_kamec.o] LW(1) LW(2) LW(3) LW(4) LW(0)
+805EEFCC:         if_int_eq LW(0) 0
+805EEFD8:           loop_break
+805EEFDC:         endif
+805EEFE0:         wait_frames 1
+805EEFE8:       end_loop
+805EEFEC:     endif
+805EEFF0:   endif
+805EEFF4:   return
+805EEFF8:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [bunsin_kill_event unit_kamec.o] AT 805EF4A0 ---
+805EF4A0:   callc [btlevtcmd_GetUnitId battle_event_cmd.o] LW(0) LW(0)
+805EF4B0:   if_int_eq LW(0) -1
+805EF4BC:     return
+805EF4C0:   endif
+805EF4C4:   callc [btlevtcmd_GetUnitWork battle_event_cmd.o] LW(0) 3 LW(1)
+805EF4D8:   if_int_eq LW(1) 1
+805EF4E4:     goto 10
+805EF4EC:   endif
+805EF4F0:   callc [btlevtcmd_SetUnitWork battle_event_cmd.o] LW(0) 3 1
+805EF504:   callss [alpha_down_event unit_kamec.o]
+805EF50C: 10:
+805EF514:   callc [btlevtcmd_WaitAttackEnd battle_event_cmd.o]
+805EF51C:   callc [btlevtcmd_KillUnit battle_event_cmd.o] LW(0) 0
+805EF52C:   return
+805EF530:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [alpha_down_event unit_kamec.o] AT 805EEC14 ---
+805EEC14:   if_int_eq LW(0) -1
+805EEC20:     return
+805EEC24:   endif
+805EEC28:   callc [btlevtcmd_SetAlpha battle_event_cmd.o] LW(0) 1 254
+805EEC3C:   callc [btlevtcmd_AnimeFlagOnOff battle_event_cmd.o] LW(0) 1 1 1
+805EEC54:   wait_frames 1
+805EEC5C:   callc [evt_sub_intpl_init evt_sub.o] 0 254 0 30
+805EEC74:   loop 30
+805EEC7C:     callc [evt_sub_intpl_get_value_para evt_sub.o] LW(1) LW(2)
+805EEC8C:     callc [btlevtcmd_SetAlpha battle_event_cmd.o] LW(0) 1 LW(1)
+805EECA0:     wait_frames 1
+805EECA8:   end_loop
+805EECAC:   callc [btlevtcmd_OnPartsAttribute battle_event_cmd.o] LW(0) 1 33554432
+805EECC0:   callc [btlevtcmd_SetAlpha battle_event_cmd.o] LW(0) 1 0
+805EECD4:   callc [btlevtcmd_AnimeFlagOnOff battle_event_cmd.o] LW(0) 1 1 1
+805EECEC:   wait_frames 1
+805EECF4:   return
+805EECF8:   end

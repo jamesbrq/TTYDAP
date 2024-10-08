@@ -1,0 +1,148 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [watergate_handle dou_03.o] AT 805C2DA8 ---
+805C2DA8:   if_int_lt GSW(0) 248
+805C2DB4:     callc [evt_pouch_check_item evt_pouch.o] 72 LW(0)
+805C2DC4:     if_int_eq LW(0) 0
+805C2DD0:       callc [evt_mario_key_onoff evt_mario.o] 0
+805C2DDC:       callc [evt_msg_toge evt_msg.o] 1 0 0 0
+805C2DF4:       callc [evt_msg_print evt_msg.o] 0 ["stg5_dou_03_before"] 0 0
+805C2E0C:       callc [evt_mario_key_onoff evt_mario.o] 1
+805C2E18:       return
+805C2E1C:     endif
+805C2E20:     callc [evt_win_item_select evt_window.o] 0 [itemsel_table dou_03.o] LW(0) 0
+805C2E38:     if_int_eq LW(0) -1
+805C2E44:       return
+805C2E48:     endif
+805C2E4C:     callc [evt_mario_key_onoff evt_mario.o] 0
+805C2E58:     callc [evt_mapobj_flag_onoff evt_map.o] 0 0 ["S_reba"] 1
+805C2E70:     callc [evt_hitobj_onoff evt_hit.o] ["A_reba"] 1 1
+805C2E84:     callc [evt_pouch_remove_item evt_pouch.o] 72 LW(0)
+805C2E94:     callc [evt_snd_sfxon evt_snd.o] ["SFX_STG5_FLOODGATE_SHAKE1"] LW(10)
+805C2EA4:     callc [evt_cam_shake evt_cam.o] 4 0.01 0.00 500
+805C2EBC:     wait_ms 500
+805C2EC4:     callc [evt_snd_sfxoff evt_snd.o] LW(10)
+805C2ED0:     callc [evt_cam3d_evt_set evt_cam.o] 98 151 563 98 56 21 500 11
+805C2EF8:     wait_ms 1000
+805C2F00:     callc [evt_mapobj_get_position evt_map.o] ["s03_mon"] LW(0) LW(1) LW(2)
+805C2F18:     callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_STG5_FLOODGATE_UP1"] LW(0) LW(1) LW(2) LW(9)
+805C2F34:     callc [evt_map_playanim evt_map.o] ["mae"] 1 0
+805C2F48:     callc [evt_map_playanim evt_map.o] ["mon"] 0 0
+805C2F5C:     callc [evt_map_checkanim evt_map.o] ["mon"] LW(0) LW(1)
+805C2F70:     callsa_tid [watergate_lever dou_03.o] LW(10)
+805C2F7C:     callsa_tid [watergate_geer_small dou_03.o] LW(11)
+805C2F88:     callsa_tid [watergate_geer_large dou_03.o] LW(12)
+805C2F94:     begin_thread
+805C2F98:       callc [evt_cam_shake evt_cam.o] 4 0.00 0.00 LW(1)
+805C2FB0:     end_thread
+805C2FB4:     wait_ms LW(1)
+805C2FBC:     begin_thread
+805C2FC0:       callc [evt_cam_shake evt_cam.o] 4 0.01 0.00 250
+805C2FD8:     end_thread
+805C2FDC:     callc [evt_map_pauseanim evt_map.o] 0 ["mae"]
+805C2FEC:     stop_tid LW(10)
+805C2FF4:     stop_tid LW(11)
+805C2FFC:     stop_tid LW(12)
+805C3004:     callc [evt_snd_sfxoff evt_snd.o] LW(9)
+805C3010:     callc [evt_mapobj_get_position evt_map.o] ["s03_mon"] LW(0) LW(1) LW(2)
+805C3028:     callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_STG5_FLOODGATE_UP2"] LW(0) LW(1) LW(2) LW(9)
+805C3044:     stop_tid GW(10)
+805C304C:     callsa [nagare_taru dou_03.o]
+805C3054:     callsa [nagare_taru_se dou_03.o]
+805C305C:     stop_tid GW(11)
+805C3064:     callsa [nagare_bin dou_03.o]
+805C306C:     wait_ms 2000
+805C3074:     callc [evt_cam3d_evt_off evt_cam.o] 300 11
+805C3084:     wait_ms 500
+805C308C:     callc [evt_msg_toge evt_msg.o] 1 0 0 0
+805C30A4:     callc [evt_snd_sfxon evt_snd.o] ["SFX_STG5_ELMOS_VOICE1"] 0
+805C30B4:     callc [evt_msg_print evt_msg.o] 0 ["stg5_dou_02"] 0 0
+805C30CC:     wait_ms 500
+805C30D4:     callc [evt_party_stop evt_party.o] 0
+805C30E0:     callc [evt_msg_print_party evt_msg.o] ["stg5_dou_03"]
+805C30EC:     callc [evt_party_run evt_party.o] 0
+805C30F8:     setii LW(0) ["s_bero"]
+805C3104:     callss [bero_case_switch_on evt_bero.o]
+805C310C:     callc [evt_hitobj_attr_onoff evt_hit.o] 1 1 ["s_bero"] 128
+805C3124:     setii GSW(0) 248
+805C3130:     callc [evt_mario_key_onoff evt_mario.o] 1
+805C313C:   else
+805C3140:     callc [evt_mario_key_onoff evt_mario.o] 0
+805C314C:     callc [evt_msg_toge evt_msg.o] 1 0 0 0
+805C3164:     callc [evt_msg_print evt_msg.o] 0 ["stg5_dou_03_after"] 0 0
+805C317C:     callc [evt_mario_key_onoff evt_mario.o] 1
+805C3188:   endif
+805C318C:   return
+805C3190:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [watergate_lever dou_03.o] AT 805C2AE8 ---
+805C2AE8:   setii LW(0) 0
+805C2AF4:   loop 0
+805C2AFC:     callc [evt_mapobj_rotate evt_map.o] 1 ["S_reba"] LW(0) 0 0
+805C2B18:     addi LW(0) 2
+805C2B24:     wait_frames 1
+805C2B2C:   end_loop
+805C2B30:   return
+805C2B34:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [watergate_geer_small dou_03.o] AT 805C2B38 ---
+805C2B38:   setii LW(0) 0
+805C2B44:   loop 0
+805C2B4C:     callc [evt_mapobj_rotate evt_map.o] 1 ["S_zenmai1"] LW(0) 0 0
+805C2B68:     addi LW(0) 2
+805C2B74:     wait_frames 1
+805C2B7C:   end_loop
+805C2B80:   return
+805C2B84:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [watergate_geer_large dou_03.o] AT 805C2B88 ---
+805C2B88:   setii LW(0) 0
+805C2B94:   loop 0
+805C2B9C:     callc [evt_mapobj_rotate evt_map.o] 1 ["S_zenmai2"] LW(0) 0 0
+805C2BB8:     addi LW(0) -4
+805C2BC4:     wait_frames 1
+805C2BCC:   end_loop
+805C2BD0:   return
+805C2BD4:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [nagare_taru dou_03.o] AT 805C2BD8 ---
+805C2BD8:   callc [evt_sub_intpl_msec_init evt_sub.o] 1 0 100 2000
+805C2BF0:   loop 0
+805C2BF8:     callc [evt_sub_intpl_msec_get_value evt_sub.o]
+805C2C00:     callc [evt_mapobj_trans evt_map.o] 1 ["S_taru"] 0 0 LW(0)
+805C2C1C:     if_int_eq LW(1) 0
+805C2C28:       loop_break
+805C2C2C:     endif
+805C2C30:     wait_frames 1
+805C2C38:   end_loop
+805C2C3C:   callc [evt_mapobj_flag_onoff evt_map.o] 1 1 ["S_taru"] 1
+805C2C54:   callc [evt_hitobj_onoff evt_hit.o] ["A_taru"] 1 0
+805C2C68:   return
+805C2C6C:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [nagare_taru_se dou_03.o] AT 805C2C70 ---
+805C2C70:   callc [evt_mapobj_get_position evt_map.o] ["S_taru"] LW(0) LW(1) LW(2)
+805C2C88:   callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_STG5_BARREL_MOVE1"] LW(0) LW(1) LW(2) LW(9)
+805C2CA4:   wait_ms 1000
+805C2CAC:   callc [evt_mapobj_get_position evt_map.o] ["S_taru"] LW(0) LW(1) LW(2)
+805C2CC4:   callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_STG5_BARREL_MOVE1"] LW(0) LW(1) LW(2) LW(9)
+805C2CE0:   wait_ms 1000
+805C2CE8:   callc [evt_mapobj_get_position evt_map.o] ["S_taru"] LW(0) LW(1) LW(2)
+805C2D00:   callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_STG5_BARREL_MOVE1"] LW(0) LW(1) LW(2) LW(9)
+805C2D1C:   return
+805C2D20:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [nagare_bin dou_03.o] AT 805C2D24 ---
+805C2D24:   callc [evt_sub_intpl_msec_init evt_sub.o] 1 0 100 1200
+805C2D3C:   loop 0
+805C2D44:     callc [evt_sub_intpl_msec_get_value evt_sub.o]
+805C2D4C:     callc [evt_mapobj_trans evt_map.o] 1 ["S_bin"] 0 0 LW(0)
+805C2D68:     if_int_eq LW(1) 0
+805C2D74:       loop_break
+805C2D78:     endif
+805C2D7C:     wait_frames 1
+805C2D84:   end_loop
+805C2D88:   callc [evt_mapobj_flag_onoff evt_map.o] 1 1 ["S_bin"] 1
+805C2DA0:   return
+805C2DA4:   end

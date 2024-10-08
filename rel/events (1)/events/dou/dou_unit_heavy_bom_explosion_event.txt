@@ -1,0 +1,54 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [explosion_event unit_heavy_bom.o] AT 805D8298 ---
+805D8298:   callc [btlevtcmd_GetUnitWork battle_event_cmd.o] -2 2 LW(0)
+805D82AC:   callc [evt_snd_sfxoff evt_snd.o] LW(0)
+805D82B8:   callc [btlevtcmd_SetUnitWork battle_event_cmd.o] -2 2 -1
+805D82CC:   callc [evt_btl_camera_shake_h battle_camera.o] 0 10 0 60 4
+805D82E8:   callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_ENM_HEAVYB_ATTACK3"] [F1194D80] 0 [F1194D80]
+805D8304:   callc [btlevtcmd_GetPos battle_event_cmd.o] -2 LW(0) LW(1) LW(2)
+805D831C:   callc [btlevtcmd_GetHeight battle_event_cmd.o] -2 LW(5)
+805D832C:   divi LW(5) 2
+805D8338:   callc [btlevtcmd_GetStatusMg battle_event_cmd.o] -2 LW(6)
+805D8348:   mulf LW(5) LW(6)
+805D8354:   addi LW(1) LW(5)
+805D8360:   callc [evt_eff evt_eff.o] 0 ["bomb"] 5 LW(0) LW(1) LW(2) 2.00 0 0 0 0 0 0 0
+805D83A0:   callc [btlevtcmd_StageDispellFog battle_event_cmd.o]
+805D83A8:   wait_ms 300
+805D83B0:   callc [evt_eff evt_eff.o] 0 ["bomb"] 4 -40 30 20 2.00 0 0 0 0 0 0 0
+805D83F0:   wait_ms 125
+805D83F8:   callc [evt_eff evt_eff.o] 0 ["bomb"] 4 40 90 20 2.00 0 0 0 0 0 0 0
+805D8438:   wait_ms 125
+805D8440:   callc [evt_eff evt_eff.o] 0 ["bomb"] 4 40 30 20 2.00 0 0 0 0 0 0 0
+805D8480:   wait_ms 125
+805D8488:   callc [evt_eff evt_eff.o] 0 ["bomb"] 4 -40 90 20 2.00 0 0 0 0 0 0 0
+805D84C8:   wait_ms 125
+805D84D0:   callc [evt_eff evt_eff.o] 0 ["bomb"] 4 -100 60 20 2.00 0 0 0 0 0 0 0
+805D8510:   wait_ms 125
+805D8518:   callc [evt_eff evt_eff.o] 0 ["bomb"] 4 100 60 20 2.00 0 0 0 0 0 0 0
+805D8558:   callc [btlevtcmd_GetEnemyBelong battle_event_cmd.o] -2 LW(0)
+805D8568:   callc [btlevtcmd_SamplingEnemy battle_event_cmd.o] -2 LW(0) [weapon_heavy_bomb_super_explosion unit_heavy_bom.o]
+805D857C:   callc [btlevtcmd_ChoiceSamplingEnemy battle_event_cmd.o] [weapon_heavy_bomb_super_explosion unit_heavy_bom.o] LW(3) LW(4)
+805D8590:   if_int_eq LW(3) -1
+805D859C:     goto 99
+805D85A4:   endif
+805D85A8:   callc [btlevtcmd_WeaponAftereffect battle_event_cmd.o] [weapon_heavy_bomb_super_explosion unit_heavy_bom.o]
+805D85B4:   callc [btlevtcmd_PayWeaponCost battle_event_cmd.o] -2 [weapon_heavy_bomb_super_explosion unit_heavy_bom.o]
+805D85C4:   setii LW(10) 0
+805D85D0: 10:
+805D85D8:   callc [btlevtcmd_PreCheckDamage battle_event_cmd.o] -2 LW(3) LW(4) [weapon_heavy_bomb_super_explosion unit_heavy_bom.o] 256 LW(5)
+805D85F8:   if_int_eq LW(5) 1
+805D8604:     callc [btlevtcmd_CheckDamage battle_event_cmd.o] -2 LW(3) LW(4) [weapon_heavy_bomb_super_explosion unit_heavy_bom.o] 256 LW(5)
+805D8624:   endif
+805D8628:   callc [btlevtcmd_GetSelectNextEnemy battle_event_cmd.o] LW(3) LW(4)
+805D8638:   if_int_ne LW(3) -1
+805D8644:     addi LW(10) 1
+805D8650:     goto 10
+805D8658:   endif
+805D865C: 99:
+805D8664:   setii LW(10) -2
+805D8670:   callss [subsetevt_dead_core battle_event_subset.o]
+805D8678:   callc [btlevtcmd_KillUnit battle_event_cmd.o] -2 0
+805D8688:   return
+805D868C:   end

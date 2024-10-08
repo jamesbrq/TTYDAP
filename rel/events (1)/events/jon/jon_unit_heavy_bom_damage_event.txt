@@ -1,0 +1,73 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [damage_event unit_heavy_bom.o] AT 80CBAF24 ---
+80CBAF24:   setii LW(10) -2
+80CBAF30:   setii LW(11) 1
+80CBAF3C:   callc [btlevtcmd_CheckStatus battle_event_cmd.o] -2 9 LW(0)
+80CBAF50:   if_int_ne LW(0) 0
+80CBAF5C:     callc [btlevtcmd_GetUnitWork battle_event_cmd.o] -2 0 LW(0)
+80CBAF70:     if_int_ne LW(0) 0
+80CBAF7C:       callc [btlevtcmd_GetUnitWork battle_event_cmd.o] -2 2 LW(0)
+80CBAF90:       callc [evt_snd_sfxoff evt_snd.o] LW(0)
+80CBAF9C:       callc [btlevtcmd_SetUnitWork battle_event_cmd.o] -2 2 -1
+80CBAFB0:       callc [btlevtcmd_SetUnitWork battle_event_cmd.o] -2 0 0
+80CBAFC4:       callc [btlevtcmd_GetUnitWork battle_event_cmd.o] -2 1 LW(0)
+80CBAFD8:       switchi LW(0)
+80CBAFE0:         case_int_eq 2
+80CBAFE8:           callc [btlevtcmd_AnimeSetPoseTable battle_event_cmd.o] -2 1 [pose_table_2 unit_heavy_bom.o]
+80CBAFFC:         case_int_eq 1
+80CBB004:           callc [btlevtcmd_AnimeSetPoseTable battle_event_cmd.o] -2 1 [pose_table_1 unit_heavy_bom.o]
+80CBB018:         case_int_eq 0
+80CBB020:           callc [btlevtcmd_AnimeSetPoseTable battle_event_cmd.o] -2 1 [pose_table_0 unit_heavy_bom.o]
+80CBB034:       end_switch
+80CBB038:     endif
+80CBB03C:   endif
+80CBB040:   callc [btlevtcmd_CheckDamageCode battle_event_cmd.o] LW(10) 256 LW(0)
+80CBB054:   if_int_ne LW(0) 0
+80CBB060:     callc [btlevtcmd_GetDamageCode battle_event_cmd.o] LW(10) LW(0)
+80CBB070:     switchi LW(0)
+80CBB078:       case_int_eq_any 27
+80CBB080:       case_int_eq_any 24
+80CBB088:       case_int_eq_any 25
+80CBB090:       case_int_eq_any 52
+80CBB098:       case_int_eq_any 46
+80CBB0A0:       case_int_eq_any 50
+80CBB0A8:       case_int_eq_any 54
+80CBB0B0:         goto 50
+80CBB0B8:         end_multi_case
+80CBB0BC:     end_switch
+80CBB0C0:   endif
+80CBB0C4:   callss [btldefaultevt_Damage battle_event_default.o]
+80CBB0CC:   return
+80CBB0D0: 50:
+80CBB0D8:   callc [btlevtcmd_AnimeChangePoseType battle_event_cmd.o] -2 1 29
+80CBB0EC:   callss [dead_event unit_heavy_bom.o]
+80CBB0F4:   return
+80CBB0F8:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [dead_event unit_heavy_bom.o] AT 80CBB5C8 ---
+80CBB5C8:   callc [btlevtcmd_GetUnitWork battle_event_cmd.o] -2 2 LW(0)
+80CBB5DC:   if_int_ne LW(0) -1
+80CBB5E8:     callc [evt_snd_sfxoff evt_snd.o] LW(0)
+80CBB5F4:   endif
+80CBB5F8:   callc [btlevtcmd_GetDamageCode battle_event_cmd.o] LW(10) LW(0)
+80CBB608:   switchi LW(0)
+80CBB610:     case_int_eq_any 27
+80CBB618:     case_int_eq_any 24
+80CBB620:     case_int_eq_any 25
+80CBB628:     case_int_eq_any 52
+80CBB630:     case_int_eq_any 46
+80CBB638:     case_int_eq_any 50
+80CBB640:     case_int_eq_any 54
+80CBB648:       goto 50
+80CBB650:       end_multi_case
+80CBB654:   end_switch
+80CBB658: 10:
+80CBB660:   setii LW(10) -2
+80CBB66C:   callss [subsetevt_dead_core battle_event_subset.o]
+80CBB674:   return
+80CBB678: 50:
+80CBB680:   callc [btlevtcmd_AfterReactionEntry battle_event_cmd.o] -2 52
+80CBB690:   return
+80CBB694:   end

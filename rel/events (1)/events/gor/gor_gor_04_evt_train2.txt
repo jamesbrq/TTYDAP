@@ -1,0 +1,165 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [evt_train2 gor_04.o] AT 806176B4 ---
+806176B4:   callc [evt_mario_key_onoff evt_mario.o] 0
+806176C0:   callc [evt_party_stop evt_party.o] 0
+806176CC:   callc [evt_party_stop evt_party.o] 1
+806176D8:   callc [evt_mario_cont_onoff evt_mario.o] 0
+806176E4:   callc [evt_party_cont_onoff evt_party.o] 0 0
+806176F4:   callc [evt_party_cont_onoff evt_party.o] 1 0
+80617704:   callc [evt_mario_set_pos evt_mario.o] 0 -1000 0
+80617718:   callc [evt_party_set_pos evt_party.o] 0 0 -1000 0
+80617730:   callc [evt_party_set_pos evt_party.o] 1 0 -1000 0
+80617748:   callc [evt_cam3d_evt_set evt_cam.o] -360 232 603 -360 137 62 0 11
+80617770:   callc [evt_npc_flag_onoff evt_npc.o] 1 ["駅員"] 32768
+80617784:   callc [evt_npc_set_position evt_npc.o] ["駅員"] -400 80 100
+8061779C:   callc [evt_seq_wait evt_seq.o] 2
+806177A8:   wait_ms 1000
+806177B0:   loop 0
+806177B8:     if_int_eq GW(0) 0
+806177C4:       loop_break
+806177C8:     endif
+806177CC:     wait_frames 1
+806177D4:   end_loop
+806177D8:   callc [evt_npc_flag_onoff evt_npc.o] 0 ["駅員"] 32768
+806177EC:   callc [evt_mario_set_pos evt_mario.o] -350 80 30
+80617800:   callc [evt_party_set_pos evt_party.o] 0 -370 80 30
+80617818:   callc [evt_party_set_pos evt_party.o] 1 -360 80 20
+80617830:   callc [evt_mario_cont_onoff evt_mario.o] 1
+8061783C:   callc [evt_party_cont_onoff evt_party.o] 0 1
+8061784C:   callc [evt_party_cont_onoff evt_party.o] 1 1
+8061785C:   callc [evt_mario_set_dir evt_mario.o] 270 0 0
+80617870:   callc [evt_party_set_dir evt_party.o] 0 270 0
+80617884:   callc [evt_party_set_dir evt_party.o] 1 270 0
+80617898:   wait_ms 1000
+806178A0:   callc [evt_mario_get_pos evt_mario.o] 0 LW(0) LW(1) LW(2)
+806178B8:   callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_DOOR_OPEN_SLIDE1_3"] LW(0) LW(1) LW(2) 0
+806178D4:   callc [evt_sub_intpl_msec_init evt_sub.o] 11 0 -40 500
+806178EC: 0:
+806178F4:   callc [evt_sub_intpl_msec_get_value evt_sub.o]
+806178FC:   callc [evt_mapobj_trans evt_map.o] 1 ["tobira"] LW(0) 0 0
+80617918:   wait_frames 1
+80617920:   if_int_eq LW(1) 1
+8061792C:     goto 0
+80617934:   endif
+80617938:   wait_ms 500
+80617940:   begin_thread
+80617944:     callc [evt_party_move_pos2 evt_party.o] 0 -345 85 80.00
+8061795C:   end_thread
+80617960:   callc [evt_mario_mov_pos2 evt_mario.o] -330 100 80.00
+80617974:   callc [evt_mario_get_pos evt_mario.o] 0 LW(0) LW(1) LW(2)
+8061798C:   callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_DOOR_SHUT_SLIDE1_3"] LW(0) LW(1) LW(2) 0
+806179A8:   callc [evt_sub_intpl_msec_init evt_sub.o] 11 -40 0 500
+806179C0: 1:
+806179C8:   callc [evt_sub_intpl_msec_get_value evt_sub.o]
+806179D0:   callc [evt_mapobj_trans evt_map.o] 1 ["tobira"] LW(0) 0 0
+806179EC:   wait_frames 1
+806179F4:   if_int_eq LW(1) 1
+80617A00:     goto 1
+80617A08:   endif
+80617A0C:   wait_ms 500
+80617A14:   callc [evt_mario_get_pos evt_mario.o] 0 LW(0) LW(1) LW(2)
+80617A2C:   if_int_lt GSW(0) 345
+80617A38:     setii GSW(0) 345
+80617A44:   endif
+80617A48:   callc [N_evt_bero_set_mario_bottomless_respawn_pos_to_current_mario_pos evt_bero.o]
+80617A50:   callc [evt_party_run evt_party.o] 1
+80617A5C:   callc [evt_party_run evt_party.o] 0
+80617A68:   callc [evt_mario_key_onoff evt_mario.o] 1
+80617A74:   loop 0
+80617A7C:     callc [evt_mario_get_pos evt_mario.o] 0 LW(3) LW(4) LW(5)
+80617A94:     if_int_ne LW(0) LW(3)
+80617AA0:       loop_break
+80617AA4:     endif
+80617AA8:     if_int_ne LW(1) LW(4)
+80617AB4:       loop_break
+80617AB8:     endif
+80617ABC:     if_int_ne LW(2) LW(5)
+80617AC8:       loop_break
+80617ACC:     endif
+80617AD0:     wait_frames 1
+80617AD8:   end_loop
+80617ADC:   callc [evt_cam3d_evt_off evt_cam.o] 1000 11
+80617AEC:   setii GSWF(3461) 1
+80617AF8:   setii GSWF(3460) 0
+80617B04:   setii GSWF(3581) 1
+80617B10:   if_int_lt GSW(0) 346
+80617B1C:     callsa [peach_mail gor_04.o]
+80617B24:   endif
+80617B28:   return
+80617B2C:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [peach_mail gor_04.o] AT 80617B30 ---
+80617B30:   loop 0
+80617B38:     callc [evt_mario_get_pos evt_mario.o] 0 LW(0) LW(1) LW(2)
+80617B50:     if_int_ge LW(0) -275
+80617B5C:       loop_break
+80617B60:     endif
+80617B64:     wait_frames 1
+80617B6C:   end_loop
+80617B70:   callc [evt_mario_key_onoff evt_mario.o] 0
+80617B7C:   callc [evt_mario_normalize evt_mario.o]
+80617B84:   callc [evt_mario_get_pos evt_mario.o] 0 LW(0) LW(1) LW(2)
+80617B9C:   callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_VOICE_MARIO_FIND1_2"] LW(0) LW(1) LW(2) 0
+80617BB8:   callc [evt_snd_bgmoff evt_snd.o] 1024
+80617BC4:   callc [evt_snd_bgmon evt_snd.o] 1 ["BGM_FF_MAIL_RECEPTION1"]
+80617BD4:   callc [evt_eff_fukidashi evt_eff.o] 0 [zero_gor_0001d56c gor_04.o] 0 0 0 0 0 0 0 0 0
+80617C08:   callsa_tid [evt_sub_mail_vibration evt_sub.o] LW(10)
+80617C14:   wait_ms 500
+80617C1C:   setii GF(0) 1
+80617C28:   begin_thread
+80617C2C:     callc [evt_party_stop evt_party.o] 0
+80617C38:     callc [evt_mario_get_pos evt_mario.o] 0 LW(0) LW(1) LW(2)
+80617C50:     addi LW(0) -35
+80617C5C:     callc [evt_party_move_pos2 evt_party.o] 0 LW(0) LW(2) 60.00
+80617C74:     callc [evt_party_set_dir evt_party.o] 0 90 -1
+80617C88:     setii GF(0) 0
+80617C94:   end_thread
+80617C98:   wait_until GF(0)
+80617CA0:   callc [evt_msg_print_party evt_msg.o] ["gor_04_mail6_00"]
+80617CAC:   callc [evt_mario_balloon_bikkuri evt_mario.o]
+80617CB4:   loop 0
+80617CBC:     callc [evt_key_get_buttontrg evt_sub.o] 0 LW(0)
+80617CCC:     if_int_eq LW(0) 256
+80617CD8:       loop_break
+80617CDC:     endif
+80617CE0:     wait_frames 1
+80617CE8:   end_loop
+80617CEC:   callc [evt_mario_balloon_off evt_mario.o]
+80617CF4:   callc [evt_snd_bgmoff evt_snd.o] 513
+80617D00:   callc [evt_snd_bgmon evt_snd.o] 288 0
+80617D10:   callc [evt_mario_get_pos evt_mario.o] 0 LW(0) LW(1) LW(2)
+80617D28:   callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_MAIL_RECEPTION1"] LW(0) LW(1) LW(2) 0
+80617D44:   stop_tid LW(10)
+80617D4C:   wait_frames 1
+80617D54:   callc [evt_sub_rumble_onoff evt_sub.o] 1 0
+80617D64:   wait_ms 1000
+80617D6C:   callc [evt_mario_set_pose evt_mario.o] ["M_N_9"]
+80617D78:   wait_ms 500
+80617D80:   callc [evt_mario_get_pos evt_mario.o] 0 LW(0) LW(1) LW(2)
+80617D98:   callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_MAIL_RECEPTION2"] LW(0) LW(1) LW(2) 0
+80617DB4:   callc [evt_mario_set_pose evt_mario.o] ["M_N_10"]
+80617DC0:   wait_ms 500
+80617DC8:   callc [evt_mario_set_dir evt_mario.o] 90 300 0
+80617DDC:   setii GF(0) 1
+80617DE8:   begin_thread
+80617DEC:     callc [evt_mario_get_pos evt_mario.o] 0 LW(0) LW(1) LW(2)
+80617E04:     addi LW(0) -20
+80617E10:     addi LW(2) 10
+80617E1C:     callc [evt_party_move_pos2 evt_party.o] 0 LW(0) LW(2) 60.00
+80617E34:     callc [evt_party_set_dir evt_party.o] 0 90 -1
+80617E48:     setii GF(0) 0
+80617E54:   end_thread
+80617E58:   wait_until GF(0)
+80617E60:   callc [evt_msg_print evt_msg.o] 0 ["gor_04_mail6_01"] 0 0
+80617E78:   wait_ms 500
+80617E80:   callc [evt_msg_print_party evt_msg.o] ["gor_04_mail6_02"]
+80617E8C:   callc [evt_mario_set_pose evt_mario.o] ["M_S_1"]
+80617E98:   callc [evt_mario_key_onoff evt_mario.o] 1
+80617EA4:   callc [evt_party_run evt_party.o] 0
+80617EB0:   setii GSW(0) 346
+80617EBC:   callc [evt_pouch_receive_mail evt_pouch.o] 5
+80617EC8:   callc [evt_pouch_open_mail evt_pouch.o] 5
+80617ED4:   return
+80617ED8:   end

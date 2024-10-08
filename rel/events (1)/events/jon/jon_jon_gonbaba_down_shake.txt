@@ -1,0 +1,31 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [gonbaba_down_shake jon.o] AT 80C8BDC4 ---
+80C8BDC4:   callc [evt_npc_get_position evt_npc.o] ["敵"] LW(0) LW(1) LW(2)
+80C8BDDC:   callc [evt_snd_sfxon evt_snd.o] ["SFX_STG1_GNB_DOWN1"] 0
+80C8BDEC:   callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_STG1_GNB_DOWN2"] LW(0) LW(1) LW(2) LW(8)
+80C8BE08:   begin_thread
+80C8BE0C:     callc [evt_sub_intpl_msec_init evt_sub.o] 0 90 0 10000
+80C8BE24: 0:
+80C8BE2C:     callc [evt_sub_intpl_msec_get_value evt_sub.o]
+80C8BE34:     callc [evt_snd_sfx_vol evt_snd.o] LW(8) LW(0)
+80C8BE44:     wait_frames 1
+80C8BE4C:     if_int_eq LW(1) 1
+80C8BE58:       goto 0
+80C8BE60:     endif
+80C8BE64:     callc [evt_snd_sfxoff evt_snd.o] LW(8)
+80C8BE70:   end_thread
+80C8BE74:   callc [evt_cam_shake evt_cam.o] 4 0.05 0.00 500
+80C8BE8C:   callc [evt_sub_intpl_init evt_sub.o] 11 50 5 50
+80C8BEA4:   loop 0
+80C8BEAC:     callc [evt_sub_intpl_get_value evt_sub.o]
+80C8BEB4:     divf LW(0) 1000.00
+80C8BEC0:     callc [evt_cam_shake evt_cam.o] 4 LW(0) 0.00 50
+80C8BED8:     if_int_eq LW(1) 0
+80C8BEE4:       loop_break
+80C8BEE8:     endif
+80C8BEEC:   end_loop
+80C8BEF0:   callc [evt_cam_shake evt_cam.o] 4 0.00 0.00 2000
+80C8BF08:   return
+80C8BF0C:   end

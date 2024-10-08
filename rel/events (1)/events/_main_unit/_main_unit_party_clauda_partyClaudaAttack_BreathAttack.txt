@@ -1,0 +1,201 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [partyClaudaAttack_BreathAttack unit_party_clauda.o] AT 80379FC4 ---
+80379FC4:   callc [btlevtcmd_GetSelectEnemy battle_event_cmd.o] LW(3) LW(4)
+80379FD4:   if_int_eq LW(3) -1
+80379FE0:     goto 99
+80379FE8:   endif
+80379FEC:   callc [btlevtcmd_CommandGetWeaponAddress battle_event_cmd.o] -2 LW(12)
+80379FFC:   callc [btlevtcmd_WeaponAftereffect battle_event_cmd.o] LW(12)
+8037A008:   callc [btlevtcmd_AttackDeclareAll battle_event_cmd.o] -2
+8037A014:   callc [btlevtcmd_WaitGuardMove battle_event_cmd.o]
+8037A01C:   callc [btlevtcmd_PayWeaponCost battle_event_cmd.o] -2 LW(12)
+8037A02C:   callc [btlevtcmd_RunDataEventChild battle_event_cmd.o] -2 7
+8037A03C:   wait_frames 20
+8037A044:   callc [evt_btl_camera_set_mode battle_camera.o] 0 7
+8037A054:   callc [evt_btl_camera_set_homing_unit battle_camera.o] 0 -2 -2
+8037A068:   callc [evt_btl_camera_set_moveSpeedLv battle_camera.o] 0 1
+8037A078:   callc [evt_btl_camera_set_zoom battle_camera.o] 0 300
+8037A088:   callc [btlevtcmd_CommandGetWeaponActionLv battle_event_cmd.o] LW(0)
+8037A094:   callc [btlevtcmd_AcSetDifficulty battle_event_cmd.o] -2 LW(0)
+8037A0A4:   callc [btlevtcmd_AcGetDifficulty battle_event_cmd.o] LW(1)
+8037A0B0:   subi LW(1) 3
+8037A0BC:   switchi LW(1)
+8037A0C4:     case_int_le -3
+8037A0CC:       setii LW(0) 300
+8037A0D8:     case_int_eq -2
+8037A0E0:       setii LW(0) 300
+8037A0EC:     case_int_eq -1
+8037A0F4:       setii LW(0) 300
+8037A100:     case_int_eq 0
+8037A108:       setii LW(0) 300
+8037A114:     case_int_eq 1
+8037A11C:       setii LW(0) 300
+8037A128:     case_int_eq 2
+8037A130:       setii LW(0) 300
+8037A13C:     case_default
+8037A140:       setii LW(0) 300
+8037A14C:   end_switch
+8037A150:   callc [btlevtcmd_AcGetDifficulty battle_event_cmd.o] LW(1)
+8037A15C:   callc [btlevtcmd_AcSetParamAll battle_event_cmd.o] 1 LW(0) 4 40 60 80 100 LW(1)
+8037A184:   callc [btlevtcmd_SetupAC battle_event_cmd.o] -2 14 1 0
+8037A19C:   callc [_clauda_breath_effect_ready unit_party_clauda.o]
+8037A1A4:   callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 1 ["PWD_A2_1"]
+8037A1B8:   callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_BTL_CLAUD_BREATH1"] [F1194D80] 0 [F1194D80]
+8037A1D4:   callc [btlevtcmd_AnimeWaitPlayComplete battle_event_cmd.o] -2 1
+8037A1E4:   callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 1 ["PWD_A2_2"]
+8037A1F8:   callc [evt_btl_camera_nomove_x_onoff battle_camera.o] 0 1
+8037A208:   callc [evt_btl_camera_nomove_y_onoff battle_camera.o] 0 1
+8037A218:   callc [evt_btl_camera_nomove_z_onoff battle_camera.o] 0 1
+8037A228:   callc [btlevtcmd_AnimeWaitPlayComplete battle_event_cmd.o] -2 1
+8037A238:   callc [evt_btl_camera_set_mode battle_camera.o] 0 0
+8037A248:   callc [evt_btl_camera_set_moveSpeedLv battle_camera.o] 0 1
+8037A258:   callc [evt_btl_camera_set_zoom battle_camera.o] 0 0
+8037A268:   callc [evt_btl_camera_nomove_x_onoff battle_camera.o] 0 0
+8037A278:   callc [evt_btl_camera_nomove_y_onoff battle_camera.o] 0 0
+8037A288:   callc [evt_btl_camera_nomove_z_onoff battle_camera.o] 0 0
+8037A298:   callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 1 ["PWD_A2_3"]
+8037A2AC:   begin_thread
+8037A2B0:     wait_ms 500
+8037A2B8:     callc [btlevtcmd_StageDispellFog battle_event_cmd.o]
+8037A2C0:   end_thread
+8037A2C4:   callc [_clauda_breath_effect_fire unit_party_clauda.o] LW(13)
+8037A2D0:   callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_BTL_CLAUD_BREATH2"] [F1194D80] 0 LW(14)
+8037A2EC:   begin_child_thread_tid LW(15)
+8037A2F4:     setii LW(14) -1
+8037A300: 5:
+8037A308:     callc [btlevtcmd_AcGetOutputParam battle_event_cmd.o] 1 LW(0)
+8037A318:     wait_frames 1
+8037A320:     goto 5
+8037A328:   end_child_thread
+8037A32C:   callc [btlevtcmd_GetEnemyBelong battle_event_cmd.o] -2 LW(0)
+8037A33C:   callc [btlevtcmd_SamplingEnemy battle_event_cmd.o] -2 LW(0) LW(12)
+8037A350:   callc [btlevtcmd_GetSelectEnemy battle_event_cmd.o] LW(3) LW(4)
+8037A360: 8:
+8037A368:   if_int_ne LW(3) -1
+8037A374:     callc [_check_blow_rate unit_party_clauda.o] LW(3) LW(0)
+8037A384:     if_int_ge LW(0) 1
+8037A390:       callc [btlevtcmd_DamageDirect battle_event_cmd.o] LW(3) LW(4) 0 0 3 1
+8037A3B0:     endif
+8037A3B4:     callc [btlevtcmd_GetSelectNextEnemy battle_event_cmd.o] LW(3) LW(4)
+8037A3C4:     goto 8
+8037A3CC:   endif
+8037A3D0:   callc [btlevtcmd_StartAC battle_event_cmd.o] 1
+8037A3DC:   callc [btlevtcmd_ResultAC battle_event_cmd.o]
+8037A3E4:   stop_tid LW(15)
+8037A3EC:   callc [btlevtcmd_SetRotate battle_event_cmd.o] -2 0 0 0
+8037A404:   callc [btlevtcmd_StopAC battle_event_cmd.o]
+8037A40C:   setii LW(11) 99
+8037A418:   setii LW(12) [partyWeapon_ClaudaBreathAttack unit_party_clauda.o]
+8037A424:   callc [btlevtcmd_AcGetOutputParam battle_event_cmd.o] 2 LW(0)
+8037A434:   callc [_make_breath_weapon unit_party_clauda.o] LW(12) LW(0)
+8037A444:   wait_frames 60
+8037A44C:   callc [btlevtcmd_GetEnemyBelong battle_event_cmd.o] -2 LW(0)
+8037A45C:   callc [btlevtcmd_SamplingEnemy battle_event_cmd.o] -2 LW(0) LW(12)
+8037A470:   callc [btlevtcmd_GetSelectEnemy battle_event_cmd.o] LW(3) LW(4)
+8037A480:   setii LW(10) 0
+8037A48C: 10:
+8037A494:   callc [btlevtcmd_SetDispOffset battle_event_cmd.o] LW(3) 0 0 0
+8037A4AC:   callc [btlevtcmd_PreCheckDamage battle_event_cmd.o] -2 LW(3) LW(4) LW(12) 256 LW(6)
+8037A4CC:   if_int_ne LW(6) 1
+8037A4D8:     if_int_eq LW(6) 3
+8037A4E4:       callc [btlevtcmd_StartAvoid battle_event_cmd.o] LW(3) 38
+8037A4F4:       goto 51
+8037A4FC:     endif
+8037A500:     if_int_eq LW(6) 6
+8037A50C:       callc [btlevtcmd_StartAvoid battle_event_cmd.o] LW(3) 39
+8037A51C:       goto 51
+8037A524:     endif
+8037A528:     if_int_eq LW(6) 2
+8037A534:       callc [btlevtcmd_StartAvoid battle_event_cmd.o] LW(3) 40
+8037A544:       goto 51
+8037A54C:     endif
+8037A550:     goto 50
+8037A558:   endif
+8037A55C:   callc [btlevtcmd_GetResultAC battle_event_cmd.o] LW(0)
+8037A568:   if_bits_set LW(0) 2
+8037A574:     callc [btlevtcmd_CheckDamage battle_event_cmd.o] -2 LW(3) LW(4) LW(12) 131328 LW(5)
+8037A594:     callc [btlevtcmd_GetDamageCode battle_event_cmd.o] LW(3) LW(0)
+8037A5A4:     if_int_eq LW(0) 29
+8037A5B0:       callc [btlevtcmd_GetResultPrizeLv battle_event_cmd.o] LW(3) 0 LW(6)
+8037A5C4:       callc [btlevtcmd_GetHitPos battle_event_cmd.o] LW(3) LW(4) LW(0) LW(1) LW(2)
+8037A5E0:       callc [btlevtcmd_ACSuccessEffect battle_event_cmd.o] LW(6) LW(0) LW(1) LW(2)
+8037A5F8:       callc [btlevtcmd_AudienceDeclareACResult battle_event_cmd.o] LW(12) LW(6)
+8037A608:     endif
+8037A60C:   else
+8037A610:     callc [btlevtcmd_CheckDamage battle_event_cmd.o] -2 LW(3) LW(4) LW(12) 256 LW(5)
+8037A630:     callc [btlevtcmd_AudienceDeclareACResult battle_event_cmd.o] LW(12) -1
+8037A640:   endif
+8037A644: 50:
+8037A64C:   wait_ms 300
+8037A654: 51:
+8037A65C:   subi LW(11) 1
+8037A668:   if_int_ge LW(11) 1
+8037A674: 52:
+8037A67C:     callc [btlevtcmd_GetSelectNextEnemy battle_event_cmd.o] LW(3) LW(4)
+8037A68C:     if_int_ne LW(3) -1
+8037A698:       addi LW(10) 1
+8037A6A4:       goto 10
+8037A6AC:     endif
+8037A6B0:   endif
+8037A6B4: 80:
+8037A6BC:   wait_ms 1500
+8037A6C4: 90:
+8037A6CC:   callc [evt_btl_camera_set_mode battle_camera.o] 0 0
+8037A6DC:   callc [evt_btl_camera_set_moveSpeedLv battle_camera.o] 0 1
+8037A6EC:   callc [evt_snd_sfxoff evt_snd.o] LW(14)
+8037A6F8:   callc [evt_eff_delete_ptr evt_eff.o] LW(13)
+8037A704:   callc [btlevtcmd_AnimeChangePoseType battle_event_cmd.o] -2 1 43
+8037A718:   callc [btlevtcmd_ACRStart battle_event_cmd.o] -2 0 25 25 20
+8037A734:   callc [btlevtcmd_ACRGetResult battle_event_cmd.o] LW(6) LW(7)
+8037A744:   if_int_ne LW(6) 2
+8037A750:     callc [evt_audience_acrobat_notry evt_audience.o]
+8037A758:     wait_ms 500
+8037A760:     goto 99
+8037A768:   endif
+8037A76C:   callc [btlevtcmd_AudienceDeclareAcrobatResult battle_event_cmd.o] LW(12) 1 0 0 0
+8037A788:   callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 1 ["PWD_Y_1"]
+8037A79C:   wait_ms 1000
+8037A7A4: 99:
+8037A7AC:   callc [evt_audience_ap_recovery evt_audience.o]
+8037A7B4:   callc [btlevtcmd_InviteApInfoReport battle_event_cmd.o]
+8037A7BC:   callc [btlevtcmd_ResetFaceDirection battle_event_cmd.o] -2
+8037A7C8:   callss [btldefaultevt_SuitoruBadgeEffect battle_event_default.o]
+8037A7D0:   callc [btlevtcmd_StartWaitEvent battle_event_cmd.o] -2
+8037A7DC:   return
+8037A7E0:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [btldefaultevt_SuitoruBadgeEffect battle_event_default.o] AT 8034F2E4 ---
+8034F2E4:   callc [_get_heart_suitoru_point battle_event_default.o] -2 LW(5)
+8034F2F4:   if_int_ge LW(5) 1
+8034F300:     begin_child_thread
+8034F304:       callc [btlevtcmd_GetBodyId battle_event_cmd.o] -2 LW(4)
+8034F314:       callc [btlevtcmd_GetStatusMg battle_event_cmd.o] -2 LW(6)
+8034F324:       callc [btlevtcmd_GetHeight battle_event_cmd.o] -2 LW(7)
+8034F334:       mulf LW(7) LW(6)
+8034F340:       callc [btlevtcmd_GetPartsPos battle_event_cmd.o] -2 LW(4) LW(0) LW(1) LW(2)
+8034F35C:       addi LW(1) LW(7)
+8034F368:       callc [evt_eff evt_eff.o] 0 ["recovery"] 0 LW(0) LW(1) LW(2) LW(5) 0 0 0 0 0 0 0
+8034F3A8:       wait_frames 120
+8034F3B0:       callc [btlevtcmd_RecoverHp battle_event_cmd.o] -2 LW(4) LW(5)
+8034F3C4:     end_child_thread
+8034F3C8:     wait_frames 125
+8034F3D0:   endif
+8034F3D4:   callc [_get_flower_suitoru_point battle_event_default.o] -2 LW(5)
+8034F3E4:   if_int_ge LW(5) 1
+8034F3F0:     begin_child_thread
+8034F3F4:       callc [btlevtcmd_GetStatusMg battle_event_cmd.o] -2 LW(6)
+8034F404:       callc [btlevtcmd_GetHeight battle_event_cmd.o] -2 LW(7)
+8034F414:       mulf LW(7) LW(6)
+8034F420:       callc [btlevtcmd_GetBodyId battle_event_cmd.o] -2 LW(4)
+8034F430:       callc [btlevtcmd_GetPartsPos battle_event_cmd.o] -2 LW(4) LW(0) LW(1) LW(2)
+8034F44C:       addi LW(1) LW(7)
+8034F458:       callc [evt_eff evt_eff.o] 0 ["recovery"] 1 LW(0) LW(1) LW(2) LW(5) 0 0 0 0 0 0 0
+8034F498:       wait_frames 120
+8034F4A0:       callc [btlevtcmd_RecoverFp battle_event_cmd.o] -2 LW(4) LW(5)
+8034F4B4:     end_child_thread
+8034F4B8:     wait_frames 125
+8034F4C0:   endif
+8034F4C4:   return
+8034F4C8:   end

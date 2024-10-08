@@ -1,0 +1,46 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [phase_event unit_boss_koopa_tou.o] AT 8061DF5C ---
+8061DF5C:   callc [btlevtcmd_CheckStatus battle_event_cmd.o] -2 27 LW(0)
+8061DF70:   if_int_eq LW(0) 1
+8061DF7C:     goto 99
+8061DF84:   endif
+8061DF88:   callc [btlevtcmd_CheckPhase battle_event_cmd.o] LW(0) 67108867
+8061DF98:   if_int_ne LW(0) 0
+8061DFA4:     callc [btlevtcmd_PhaseEventStartDeclare battle_event_cmd.o] -2
+8061DFB0:     callss [harf_hp_event unit_boss_koopa_tou.o]
+8061DFB8:     callc [btlevtcmd_StartWaitEvent battle_event_cmd.o] -2
+8061DFC4:   endif
+8061DFC8: 99:
+8061DFD0:   return
+8061DFD4:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [harf_hp_event unit_boss_koopa_tou.o] AT 8061DFD8 ---
+8061DFD8:   callc [btlevtcmd_GetUnitWork battle_event_cmd.o] -2 3 LW(1)
+8061DFEC:   if_int_eq LW(1) 0
+8061DFF8:     callc [btlevtcmd_GetHp battle_event_cmd.o] -2 LW(0)
+8061E008:     callc [btlevtcmd_GetUnitWork battle_event_cmd.o] -2 2 LW(1)
+8061E01C:     if_int_lt LW(0) LW(1)
+8061E028:       callc [btlevtcmd_SetUnitWork battle_event_cmd.o] -2 3 1
+8061E03C:       callc [btlevtcmd_StatusWindowOnOff battle_event_cmd.o] 0
+8061E048:       callss [koopa_zoom unit_boss_koopa_tou.o]
+8061E050:       callc [btlevtcmd_SetTalkPose battle_event_cmd.o] -2 ["KPA_T_3"]
+8061E060:       callc [btlevtcmd_SetStayPose battle_event_cmd.o] -2 ["KPA_S_4"]
+8061E070:       callc [evt_msg_print evt_msg.o] 2 ["stg3_tou_403_06_02"] 0 -2
+8061E088:       wait_ms 300
+8061E090:       callc [btlevtcmd_StatusWindowOnOff battle_event_cmd.o] 1
+8061E09C:       callc [evt_btl_camera_set_mode battle_camera.o] 0 0
+8061E0AC:       callc [btlevtcmd_AnimeChangePoseType battle_event_cmd.o] -2 1 43
+8061E0C0:     endif
+8061E0C4:   endif
+8061E0C8:   return
+8061E0CC:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [koopa_zoom unit_boss_koopa_tou.o] AT 8061DB40 ---
+8061DB40:   callc [evt_btl_camera_set_mode battle_camera.o] 0 3
+8061DB50:   callc [btlevtcmd_GetPos battle_event_cmd.o] -2 LW(0) LW(1) LW(2)
+8061DB68:   callc [evt_btl_camera_set_moveto battle_camera.o] 0 LW(0) 95 350 LW(0) 45 -300 30 11
+8061DB94:   wait_frames 37
+8061DB9C:   return
+8061DBA0:   end

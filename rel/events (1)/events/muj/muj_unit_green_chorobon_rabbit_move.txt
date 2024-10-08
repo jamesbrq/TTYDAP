@@ -1,0 +1,44 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [rabbit_move unit_green_chorobon.o] AT 80606230 ---
+80606230:   loop 2
+80606238:     callc [btlevtcmd_AddScale battle_event_cmd.o] -2 0.16 -0.24 0
+80606250:     wait_frames 1
+80606258:   end_loop
+8060625C: 0:
+80606264:   callc [btlevtcmd_GetPos battle_event_cmd.o] -2 LW(0) LW(1) LW(2)
+8060627C:   setii LW(11) LW(5)
+80606288:   subi LW(11) LW(0)
+80606294:   setii LW(12) LW(11)
+806062A0:   if_int_lt LW(12) 0
+806062AC:     muli LW(12) -1
+806062B8:   endif
+806062BC:   if_int_gt LW(12) LW(8)
+806062C8:     if_int_ge LW(11) 0
+806062D4:       addi LW(0) LW(8)
+806062E0:     else
+806062E4:       subi LW(0) LW(8)
+806062F0:     endif
+806062F4:     callc [btlevtcmd_SetScale battle_event_cmd.o] -2 1.00 1.00 1.00
+8060630C:     callc [btlevtcmd_JumpPosition battle_event_cmd.o] -2 LW(0) LW(6) LW(2) 0 -1
+8060632C:     loop 2
+80606334:       callc [btlevtcmd_AddScale battle_event_cmd.o] -2 0.16 -0.24 0
+8060634C:       wait_frames 1
+80606354:     end_loop
+80606358:     goto 0
+80606360:   else
+80606364:     callc [btlevtcmd_SetScale battle_event_cmd.o] -2 1.00 1.00 1.00
+8060637C:     callc [btlevtcmd_JumpPosition battle_event_cmd.o] -2 LW(5) LW(6) LW(7) 0 -1
+8060639C:     callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_ENM_CHORO2_LANDING1"] [F1194D80] 0 [F1194D80]
+806063B8:     loop 2
+806063C0:       callc [btlevtcmd_AddScale battle_event_cmd.o] -2 0.16 -0.24 0
+806063D8:       wait_frames 1
+806063E0:     end_loop
+806063E4:   endif
+806063E8:   loop 2
+806063F0:     callc [btlevtcmd_AddScale battle_event_cmd.o] -2 -0.16 0.24 0
+80606408:     wait_frames 1
+80606410:   end_loop
+80606414:   return
+80606418:   end

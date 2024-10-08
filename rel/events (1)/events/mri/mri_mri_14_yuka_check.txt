@@ -1,0 +1,48 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [yuka_check mri_14.o] AT 806044CC ---
+806044CC:   setii LW(12) GW(0)
+806044D8:   callc [evt_puni_wait_systemmode mri_puni.o] 2
+806044E4:   loop 0
+806044EC:     setii LW(10) 1
+806044F8:     setii LW(11) 0
+80604504:     loop 0
+8060450C:       callc [evt_puni_get_flag mri_puni.o] LW(10) LW(0)
+8060451C:       callc [evt_puni_get_flag mri_puni.o] LW(10) LW(1)
+8060452C:       andi LW(0) 0x400
+80604538:       andi LW(1) 0x80
+80604544:       if_int_ne LW(0) 0
+80604550:         if_int_eq LW(1) 0
+8060455C:           callc [evt_puni_get_position mri_puni.o] LW(10) LW(0) LW(1) LW(2)
+80604574:           if_int_ge LW(1) -20
+80604580:             if_int_le LW(1) 20
+8060458C:               callc [evt_sub_area_check evt_sub.o] 0 -5 0 50 LW(0) LW(2) LW(15)
+806045B0:               if_int_eq LW(15) 1
+806045BC:                 addi LW(11) 1
+806045C8:               endif
+806045CC:             endif
+806045D0:           endif
+806045D4:         endif
+806045D8:       endif
+806045DC:       addi LW(10) 1
+806045E8:       if_int_eq LW(10) 103
+806045F4:         loop_break
+806045F8:       endif
+806045FC:     end_loop
+80604600:     setii GW(0) 101
+8060460C:     subi GW(0) LW(11)
+80604618:     if_int_ge GW(0) 101
+80604624:       setii GW(0) 101
+80604630:     endif
+80604634:     if_int_le GW(0) 0
+80604640:       setii GW(0) 0
+8060464C:     endif
+80604650:     if_int_ne GW(0) LW(12)
+8060465C:       callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_STG2_SWITCH_COUNTER1"] 0 0 -70 0
+80604678:     endif
+8060467C:     setii LW(12) GW(0)
+80604688:     wait_frames 1
+80604690:   end_loop
+80604694:   return
+80604698:   end

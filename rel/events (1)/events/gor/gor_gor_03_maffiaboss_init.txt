@@ -1,0 +1,116 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [maffiaboss_init gor_03.o] AT 80608EB8 ---
+80608EB8:   switchi GSW(0)
+80608EC0:     case_int_eq 123
+80608EC8:       callc [evt_npc_set_position evt_npc.o] ["me"] -198 155 -80
+80608EE0:       if_int_eq GSWF(1236) 1
+80608EEC:         setii GF(15) 0
+80608EF8:         callsa [maffiaboss_ticket_check gor_03.o]
+80608F00:       endif
+80608F04:     case_int_range 268 278
+80608F10:       callc [evt_npc_flag_onoff evt_npc.o] 1 ["me"] 1090781184
+80608F24:       callc [evt_npc_set_position evt_npc.o] ["me"] -200 170 -152
+80608F3C:       callc [evt_npc_set_rotate_offset evt_npc.o] ["me"] 0 20 0
+80608F54:       callc [evt_npc_set_rotate evt_npc.o] ["me"] 90 0 0
+80608F6C:       callc [evt_npc_set_autotalkpose evt_npc.o] ["me"] ["S_2"] ["T_2"]
+80608F80:       callc [evt_npc_change_interrupt evt_npc.o] ["me"] 6 0
+80608F94:     case_int_gt 278
+80608F9C:       callc [evt_npc_set_position evt_npc.o] ["me"] 0 -1000 0
+80608FB4:     case_default
+80608FB8:       callc [evt_npc_set_position evt_npc.o] ["me"] -198 155 -80
+80608FD0:   end_switch
+80608FD4:   return
+80608FD8:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [maffiaboss_ticket_check gor_03.o] AT 80608AF4 ---
+80608AF4:   loop 0
+80608AFC:     setii LF(0) 0
+80608B08:     callc [evt_mario_get_pos evt_mario.o] 0 LW(0) LW(1) LW(2)
+80608B20:     if_int_ge LW(0) -296
+80608B2C:       if_int_le LW(0) -104
+80608B38:         if_int_ge LW(1) 155
+80608B44:           if_int_le LW(1) 180
+80608B50:             if_int_ge LW(2) -110
+80608B5C:               addi LF(0) 1
+80608B68:             endif
+80608B6C:           endif
+80608B70:         endif
+80608B74:       endif
+80608B78:     endif
+80608B7C:     callc [evt_mario_get_name_hitobj_ride evt_mario.o] LW(0)
+80608B88:     if_string_eq LW(0) ["A_i02_tke_ue"]
+80608B94:       setii LW(5) 2
+80608BA0:       loop_break
+80608BA4:     endif
+80608BA8:     if_int_eq LF(0) 1
+80608BB4:       setii LW(5) 0
+80608BC0:       loop_break
+80608BC4:     endif
+80608BC8:     if_int_eq GF(15) 1
+80608BD4:       setii LW(5) 1
+80608BE0:       loop_break
+80608BE4:     endif
+80608BE8:     wait_frames 1
+80608BF0:   end_loop
+80608BF4:   callc [evt_mario_key_onoff evt_mario.o] 0
+80608C00:   callc [evt_mario_normalize evt_mario.o]
+80608C08:   callc [evt_snd_bgmon evt_snd.o] 513 ["BGM_STG0_CSN1"]
+80608C18:   callc [evt_msg_print evt_msg.o] 0 ["mac_2_116"] 0 ["マフィアボス"]
+80608C30:   callc [evt_npc_set_ry_lr evt_npc.o] ["マフィアボス"] 0
+80608C40:   begin_thread
+80608C44:     callc [evt_mario_get_pos evt_mario.o] 0 LW(0) LW(1) LW(2)
+80608C5C:     callc [evt_npc_get_position evt_npc.o] ["マフィアボス"] LW(10) LW(11) LW(12)
+80608C74:     if_int_le LW(2) LW(12)
+80608C80:       callc [evt_mario_set_dir evt_mario.o] 90 200 0
+80608C94:     else
+80608C98:       callc [evt_mario_set_dir evt_mario.o] 270 200 0
+80608CAC:     endif
+80608CB0:   end_thread
+80608CB4:   begin_thread
+80608CB8:     callc [evt_party_get_pos evt_party.o] 0 LW(0) LW(1) LW(2)
+80608CD0:     callc [evt_npc_get_position evt_npc.o] ["マフィアボス"] LW(10) LW(11) LW(12)
+80608CE8:     if_int_le LW(2) LW(12)
+80608CF4:       callc [evt_party_set_dir evt_party.o] 0 90 200
+80608D08:     else
+80608D0C:       callc [evt_party_set_dir evt_party.o] 0 270 200
+80608D20:     endif
+80608D24:   end_thread
+80608D28:   callc [evt_set_dir_to_target evt_npc.o] ["マフィアボス"] ["mario"]
+80608D38:   wait_ms 200
+80608D40:   callc [evt_msg_print evt_msg.o] 0 ["mac_2_117"] 0 ["マフィアボス"]
+80608D58:   if_int_eq LW(5) 0
+80608D64:     callc [evt_npc_flag_onoff evt_npc.o] 1 ["マフィアボス"] 1073741856
+80608D78:     callc [evt_mario_get_pos evt_mario.o] 0 LW(0) LW(1) LW(2)
+80608D90:     callc [evt_npc_get_position evt_npc.o] ["マフィアボス"] LW(10) LW(11) LW(12)
+80608DA8:     callc [evt_npc_move_position evt_npc.o] ["マフィアボス"] LW(0) -68 0 60.00 0
+80608DC8:     wait_ms 500
+80608DD0:     callss [maffiaboss_ticket_put gor_03.o]
+80608DD8:     callc [evt_msg_print evt_msg.o] 0 ["mac_2_118"] 0 ["マフィアボス"]
+80608DF0:     callc [evt_npc_move_position evt_npc.o] ["マフィアボス"] LW(10) LW(12) 0 60.00 0
+80608E10:     callc [evt_npc_flag_onoff evt_npc.o] 0 ["マフィアボス"] 1073741856
+80608E24:   else
+80608E28:     callss [maffiaboss_ticket_put gor_03.o]
+80608E30:     callc [evt_msg_print evt_msg.o] 0 ["mac_2_118"] 0 ["マフィアボス"]
+80608E48:   endif
+80608E4C:   callc [evt_npc_move_position evt_npc.o] ["マフィアボス"] -198 -80 0 60.00 0
+80608E6C:   wait_ms 500
+80608E74:   callc [evt_msg_print evt_msg.o] 0 ["mac_2_119"] 0 ["マフィアボス"]
+80608E8C:   setii GSW(0) 124
+80608E98:   callc [evt_mario_key_onoff evt_mario.o] 1
+80608EA4:   setii GF(14) 0
+80608EB0:   return
+80608EB4:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [maffiaboss_ticket_put gor_03.o] AT 80608A78 ---
+80608A78:   callc [evt_item_entry evt_item.o] ["ticket"] 52 0 -1000 0 16 -1 0
+80608AA0:   callc [evt_item_flag_on evt_item.o] ["ticket"] 32768
+80608AB0:   begin_thread
+80608AB4:     callc [evt_snd_bgmon evt_snd.o] 513 ["BGM_FF_GET_KEYITEM1"]
+80608AC4:     wait_ms 2000
+80608ACC:     callc [evt_snd_bgmon evt_snd.o] 513 ["BGM_STG0_CSN1"]
+80608ADC:   end_thread
+80608AE0:   callc [evt_item_get_item evt_item.o] ["ticket"]
+80608AEC:   return
+80608AF0:   end

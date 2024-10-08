@@ -1,0 +1,67 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [evt_hashi_pera gon_04.o] AT 805C6CB8 ---
+805C6CB8:   callc [evt_mario_key_onoff evt_mario.o] 0
+805C6CC4:   loop 0
+805C6CCC:     wait_frames 1
+805C6CD4:     callc [evt_mario_party_use_check evt_mario.o] LW(1)
+805C6CE0:     if_int_eq LW(1) 0
+805C6CEC:       loop_break
+805C6CF0:     endif
+805C6CF4:   end_loop
+805C6CF8:   if_int_eq LW(0) 0
+805C6D04:     callc [evt_cam3d_evt_set evt_cam.o] 280 1000 450 280 900 -140 300 11
+805C6D2C:   else
+805C6D30:     callc [evt_cam3d_evt_set evt_cam.o] 0 1000 450 0 900 -140 300 11
+805C6D58:   endif
+805C6D5C:   wait_ms 500
+805C6D64:   callc [evt_paper_entry evt_paper.o] ["OFF_gon_04_3"]
+805C6D70:   callc [evt_img_entry evt_img.o] ["capture_img"]
+805C6D7C:   callc [evt_img_set_paper evt_img.o] ["capture_img"] ["OFF_gon_04_3"]
+805C6D8C:   callc [evt_offscreen_entry evt_offscreen.o] ["offscreen2"]
+805C6D98:   if_int_eq LW(0) 0
+805C6DA4:     callc [evt_mapobj_set_offscreen evt_map.o] 1 ["tuuro_02"] ["offscreen2"]
+805C6DB8:   else
+805C6DBC:     callc [evt_mapobj_set_offscreen evt_map.o] 1 ["tuuro_01"] ["offscreen2"]
+805C6DD0:   endif
+805C6DD4:   callc [evt_offscreen_get_boundingbox evt_offscreen.o] ["offscreen2"] LW(10) LW(11) LW(12) LW(13)
+805C6DF0:   addi LW(10) -40
+805C6DFC:   addi LW(11) -100
+805C6E08:   addi LW(12) 80
+805C6E14:   addi LW(13) 100
+805C6E20:   callc [evt_img_alloc_capture evt_img.o] ["capture_img"] 0 0 1 LW(10) LW(11) LW(12) LW(13)
+805C6E48:   callc [evt_img_alloc_capture evt_img.o] ["capture_img"] 2 ["offscreen2"] 1 LW(10) LW(11) LW(12) LW(13)
+805C6E70:   callc [evt_img_clear_virtual_point evt_img.o] ["capture_img"]
+805C6E7C:   callc [evt_img_set_paper_anim evt_img.o] ["capture_img"] ["Z_1"]
+805C6E8C:   wait_ms 500
+805C6E94:   callc [evt_img_set_paper_anim evt_img.o] ["capture_img"] ["A_1"]
+805C6EA4:   if_int_eq LW(0) 0
+805C6EB0:     callc [evt_mapobj_flag_onoff evt_map.o] 1 0 ["tuuro_02"] 1
+805C6EC8:     callc [evt_hitobj_onoff evt_hit.o] ["a_tuuro_02"] 0 1
+805C6EDC:   else
+805C6EE0:     callc [evt_mapobj_flag_onoff evt_map.o] 1 0 ["tuuro_01"] 1
+805C6EF8:     callc [evt_hitobj_onoff evt_hit.o] ["a_tuuro_01"] 0 1
+805C6F0C:   endif
+805C6F10:   callc [evt_snd_sfxon evt_snd.o] ["SFX_STG1_PERA2"] 0
+805C6F20:   begin_thread
+805C6F24:     wait_ms 1900
+805C6F2C:     callc [evt_snd_sfxon evt_snd.o] ["SFX_STG1_PERA2"] 0
+805C6F3C:   end_thread
+805C6F40:   callc [evt_img_wait_animend evt_img.o] ["capture_img"]
+805C6F4C:   callc [evt_img_free_capture evt_img.o] ["capture_img"] 0
+805C6F5C:   callc [evt_img_free_capture evt_img.o] ["capture_img"] 1
+805C6F6C:   callc [evt_img_onoff evt_img.o] ["capture_img"] 0
+805C6F7C:   callc [evt_img_release evt_img.o] ["capture_img"]
+805C6F88:   if_int_eq LW(0) 0
+805C6F94:     callc [evt_mapobj_clear_offscreen evt_map.o] 1 ["tuuro_02"]
+805C6FA4:   else
+805C6FA8:     callc [evt_mapobj_clear_offscreen evt_map.o] 1 ["tuuro_01"]
+805C6FB8:   endif
+805C6FBC:   callc [evt_offscreen_delete evt_offscreen.o] ["offscreen2"]
+805C6FC8:   wait_ms 1000
+805C6FD0:   callc [evt_cam3d_evt_off evt_cam.o] 300 11
+805C6FE0:   wait_ms 300
+805C6FE8:   callc [evt_mario_key_onoff evt_mario.o] 1
+805C6FF4:   return
+805C6FF8:   end

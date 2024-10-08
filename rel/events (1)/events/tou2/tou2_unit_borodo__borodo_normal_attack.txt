@@ -1,0 +1,135 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [_borodo_normal_attack unit_borodo.o] AT 805E7DB8 ---
+805E7DB8:   callc [btlevtcmd_GetEnemyBelong battle_event_cmd.o] -2 LW(0)
+805E7DC8:   callc [btlevtcmd_SamplingEnemy battle_event_cmd.o] -2 LW(0) [weapon_borodo_attack unit_borodo.o]
+805E7DDC:   callc [btlevtcmd_ChoiceSamplingEnemy battle_event_cmd.o] [weapon_borodo_attack unit_borodo.o] LW(3) LW(4)
+805E7DF0:   if_int_eq LW(3) -1
+805E7DFC:     callc [btlevtcmd_CheckToken battle_event_cmd.o] -2 16 LW(0)
+805E7E10:     if_int_ne LW(0) 0
+805E7E1C:       callss [subsetevt_confuse_flustered battle_event_subset.o]
+805E7E24:       return
+805E7E28:     endif
+805E7E2C:     goto 99
+805E7E34:   endif
+805E7E38:   callc [evt_btl_camera_set_mode battle_camera.o] 0 8
+805E7E48:   callc [evt_btl_camera_set_homing_unit battle_camera.o] 0 -2 LW(3)
+805E7E5C:   callc [evt_btl_camera_set_moveSpeedLv battle_camera.o] 0 1
+805E7E6C:   callc [evt_btl_camera_set_zoom battle_camera.o] 0 250
+805E7E7C:   callc [btlevtcmd_WeaponAftereffect battle_event_cmd.o] [weapon_borodo_attack unit_borodo.o]
+805E7E88:   callc [btlevtcmd_AttackDeclare battle_event_cmd.o] -2 LW(3) LW(4)
+805E7E9C:   callc [btlevtcmd_WaitGuardMove battle_event_cmd.o]
+805E7EA4:   callc [btlevtcmd_PayWeaponCost battle_event_cmd.o] -2 [weapon_borodo_attack unit_borodo.o]
+805E7EB4:   callc [btlevtcmd_AnimeChangePoseType battle_event_cmd.o] -2 1 40
+805E7EC8:   callc [btlevtcmd_GetPos battle_event_cmd.o] LW(3) LW(0) LW(1) LW(2)
+805E7EE0:   callc [btlevtcmd_FaceDirectionAdd battle_event_cmd.o] LW(3) LW(0) 60
+805E7EF4:   callc [btlevtcmd_TransStageFloorPosition battle_event_cmd.o] LW(0) LW(1) LW(2)
+805E7F08:   callc [btlevtcmd_CalculateFaceDirection battle_event_cmd.o] -2 -1 LW(0) LW(2) 1 LW(15)
+805E7F28:   callc [btlevtcmd_ChangeFaceDirection battle_event_cmd.o] -2 LW(15)
+805E7F38:   callc [btlevtcmd_SetMoveSpeed battle_event_cmd.o] -2 4.00
+805E7F48:   callc [btlevtcmd_MovePosition battle_event_cmd.o] -2 LW(0) LW(1) LW(2) 0 -1 0
+805E7F6C:   callc [btlevtcmd_CalculateFaceDirection battle_event_cmd.o] -2 -1 LW(3) LW(4) 16 LW(15)
+805E7F8C:   callc [btlevtcmd_ChangeFaceDirection battle_event_cmd.o] -2 LW(15)
+805E7F9C:   callc [btlevtcmd_AnimeChangePoseType battle_event_cmd.o] -2 1 42
+805E7FB0:   callc [evt_btl_camera_set_zoom battle_camera.o] 0 350
+805E7FC0:   loop 8
+805E7FC8:     callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_ENM_BORODO_MOVE1L"] [F1194D80] 0 LW(14)
+805E7FE4:     wait_frames 3
+805E7FEC:     callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_ENM_BORODO_MOVE1R"] [F1194D80] 0 LW(14)
+805E8008:     wait_frames 3
+805E8010:   end_loop
+805E8014:   callc [evt_btl_camera_set_mode battle_camera.o] 0 3
+805E8024:   callc [btlevtcmd_PreCheckDamage battle_event_cmd.o] -2 LW(3) LW(4) [weapon_borodo_attack unit_borodo.o] 256 LW(5)
+805E8044:   if_int_eq LW(5) 5
+805E8050:     callc [btlevtcmd_GetStatusMg battle_event_cmd.o] LW(3) LW(6)
+805E8060:     mulf LW(6) 40
+805E806C:     callc [btlevtcmd_GetPos battle_event_cmd.o] LW(3) LW(0) LW(1) LW(2)
+805E8084:     callc [btlevtcmd_TransStageFloorPosition battle_event_cmd.o] LW(0) LW(1) LW(2)
+805E8098:     callc [btlevtcmd_FaceDirectionAdd battle_event_cmd.o] LW(3) LW(0) LW(6)
+805E80AC:     callc [btlevtcmd_CalculateFaceDirection battle_event_cmd.o] -2 -1 LW(0) LW(2) 1 LW(15)
+805E80CC:     callc [btlevtcmd_ChangeFaceDirection battle_event_cmd.o] -2 LW(15)
+805E80DC:     callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_ENM_BORODO_ATT1"] [F1194D80] 0 [F1194D80]
+805E80F8:     callc [btlevtcmd_AnimeChangePoseType battle_event_cmd.o] -2 1 50
+805E810C:     callc [btlevtcmd_SetMoveSpeed battle_event_cmd.o] -2 5.00
+805E811C:     callc [btlevtcmd_MovePosition battle_event_cmd.o] -2 LW(0) LW(1) LW(2) 0 -1 0
+805E8140:     callc [evt_snd_sfxoff evt_snd.o] LW(14)
+805E814C:     callc [btlevtcmd_CheckDamage battle_event_cmd.o] -2 LW(3) LW(4) [weapon_borodo_attack unit_borodo.o] 256 LW(5)
+805E816C:     return
+805E8170:   endif
+805E8174:   callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_ENM_BORODO_ATT1"] [F1194D80] 0 [F1194D80]
+805E8190:   callc [btlevtcmd_AnimeChangePoseType battle_event_cmd.o] -2 1 50
+805E81A4:   callc [btlevtcmd_SetMoveSpeed battle_event_cmd.o] -2 5.00
+805E81B4:   callc [btlevtcmd_GetPos battle_event_cmd.o] LW(3) LW(0) LW(1) LW(2)
+805E81CC:   callc [btlevtcmd_FaceDirectionAdd battle_event_cmd.o] LW(3) LW(0) 20
+805E81E0:   callc [btlevtcmd_TransStageFloorPosition battle_event_cmd.o] LW(0) LW(1) LW(2)
+805E81F4:   callc [btlevtcmd_MovePosition battle_event_cmd.o] -2 LW(0) LW(1) LW(2) 0 -1 0
+805E8218:   callc [evt_snd_sfxoff evt_snd.o] LW(14)
+805E8224:   switchi LW(5)
+805E822C:     case_int_eq_any 4
+805E8234:       goto 90
+805E823C:       end_multi_case
+805E8240:     case_int_eq 3
+805E8248:       callc [btlevtcmd_StartAvoid battle_event_cmd.o] LW(3) 38
+805E8258:       goto 90
+805E8260:       end_multi_case
+805E8264:     case_int_eq 6
+805E826C:       callc [btlevtcmd_StartAvoid battle_event_cmd.o] LW(3) 39
+805E827C:       goto 90
+805E8284:     case_int_eq 2
+805E828C:       callc [btlevtcmd_StartAvoid battle_event_cmd.o] LW(3) 40
+805E829C:       goto 90
+805E82A4:     case_int_eq 1
+805E82AC:       goto 91
+805E82B4:       end_multi_case
+805E82B8:     case_default
+805E82BC:       goto 98
+805E82C4:       end_multi_case
+805E82C8:   end_switch
+805E82CC: 90:
+805E82D4:   callc [btlevtcmd_SetFallAccel battle_event_cmd.o] -2 0.40
+805E82E4:   callc [btlevtcmd_FaceDirectionAdd battle_event_cmd.o] -2 LW(0) 30
+805E82F8:   callc [btlevtcmd_JumpPosition battle_event_cmd.o] -2 LW(0) LW(1) LW(2) 18 -1
+805E8318:   callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_ENM_BORODO_MOVE1L"] [F1194D80] 0 [F1194D80]
+805E8334:   callc [btlevtcmd_FaceDirectionAdd battle_event_cmd.o] -2 LW(0) 20
+805E8348:   callc [btlevtcmd_JumpPosition battle_event_cmd.o] -2 LW(0) LW(1) LW(2) 12 -1
+805E8368:   callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_ENM_BORODO_MOVE1R"] [F1194D80] 0 [F1194D80]
+805E8384:   wait_frames 20
+805E838C:   goto 98
+805E8394: 91:
+805E839C:   callc [btlevtcmd_ResultACDefence battle_event_cmd.o] LW(3) [weapon_borodo_attack unit_borodo.o]
+805E83AC:   callc [btlevtcmd_CheckDamage battle_event_cmd.o] -2 LW(3) LW(4) [weapon_borodo_attack unit_borodo.o] 256 LW(5)
+805E83CC:   callc [btlevtcmd_SetFallAccel battle_event_cmd.o] -2 0.25
+805E83DC:   callc [btlevtcmd_FaceDirectionAdd battle_event_cmd.o] LW(3) LW(0) 40
+805E83F0:   callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 1 ["O_1"]
+805E8404:   begin_child_thread
+805E8408:     callc [btlevtcmd_GetFaceDirection battle_event_cmd.o] -2 LW(0)
+805E8418:     if_int_ge LW(0) 0
+805E8424:       setii LW(5) 0
+805E8430:       setii LW(6) 360
+805E843C:     else
+805E8440:       setii LW(5) 360
+805E844C:       setii LW(6) 0
+805E8458:     endif
+805E845C:     callc [btlevtcmd_SetRotateOffsetFromCenterOffset battle_event_cmd.o] -2
+805E8468:     callc [evt_sub_intpl_init evt_sub.o] 13 LW(5) LW(6) 24
+805E8480:     loop 25
+805E8488:       callc [evt_sub_intpl_get_value evt_sub.o]
+805E8490:       callc [btlevtcmd_SetRotate battle_event_cmd.o] -2 0 0 LW(0)
+805E84A8:       wait_frames 1
+805E84B0:     end_loop
+805E84B4:   end_child_thread
+805E84B8:   callc [btlevtcmd_JumpPosition battle_event_cmd.o] -2 LW(0) LW(1) LW(2) 36 -1
+805E84D8:   callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 1 ["X_1"]
+805E84EC:   wait_ms 1000
+805E84F4: 98:
+805E84FC:   callc [evt_btl_camera_set_mode battle_camera.o] 0 0
+805E850C:   callc [btlevtcmd_AnimeChangePoseType battle_event_cmd.o] -2 1 42
+805E8520:   callc [btlevtcmd_SetMoveSpeed battle_event_cmd.o] -2 4.00
+805E8530:   callc [btlevtcmd_GetHomePos battle_event_cmd.o] -2 LW(0) LW(1) LW(2)
+805E8548:   callc [btlevtcmd_MovePosition battle_event_cmd.o] -2 LW(0) LW(1) LW(2) 0 -1 0
+805E856C: 99:
+805E8574:   callc [btlevtcmd_ResetFaceDirection battle_event_cmd.o] -2
+805E8580:   callc [btlevtcmd_StartWaitEvent battle_event_cmd.o] -2
+805E858C:   return
+805E8590:   end

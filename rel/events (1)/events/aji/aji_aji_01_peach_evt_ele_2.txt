@@ -1,0 +1,250 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [peach_evt_ele_2 aji_01.o] AT 805D7808 ---
+805D7808:   setii LW(5) LW(0)
+805D7814:   setii LW(9) LW(1)
+805D7820:   callc [evt_mario_key_onoff evt_mario.o] 0
+805D782C:   switchi GSW(0)
+805D7834:     case_int_eq 166
+805D783C:       setii LW(8) 2
+805D7848:     case_int_eq 262
+805D7850:       setii LW(8) 2
+805D785C:     case_default
+805D7860:       callc [evt_msg_print evt_msg.o] 0 ["peach_aji_40"] 0 ["mario"]
+805D7878:       callc [evt_mario_key_onoff evt_mario.o] 1
+805D7884:       return
+805D7888:   end_switch
+805D788C:   if_int_ne GW(1) LW(5)
+805D7898:     switchi GW(1)
+805D78A0:       case_int_eq 2
+805D78A8:         setii LW(0) 2000
+805D78B4:       case_int_eq 3
+805D78BC:         setii LW(0) 1000
+805D78C8:       case_int_eq 4
+805D78D0:         setii LW(0) 0
+805D78DC:     end_switch
+805D78E0:     switchi LW(5)
+805D78E8:       case_int_eq 2
+805D78F0:         setii LW(1) 2000
+805D78FC:       case_int_eq 3
+805D7904:         setii LW(1) 1000
+805D7910:       case_int_eq 4
+805D7918:         setii LW(1) 0
+805D7924:     end_switch
+805D7928:     setii LW(2) LW(0)
+805D7934:     subi LW(2) LW(1)
+805D7940:     if_int_lt LW(2) 0
+805D794C:       muli LW(2) -1
+805D7958:     endif
+805D795C:     callc [evt_mapobj_get_position evt_map.o] ["ere2_m"] LW(3) LW(4) LW(6)
+805D7974:     callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_PEACH_ELEVATOR_MOVE1"] LW(3) LW(4) LW(6) LW(10)
+805D7990:     callc [evt_sub_intpl_msec_init evt_sub.o] 11 LW(0) LW(1) LW(2)
+805D79A8: 0:
+805D79B0:     callc [evt_sub_intpl_msec_get_value evt_sub.o]
+805D79B8:     callc [evt_mapobj_trans evt_map.o] 1 ["ere2_m"] 0 LW(0) 0
+805D79D4:     addi LW(0) LW(4)
+805D79E0:     callc [evt_snd_sfx_pos evt_snd.o] LW(10) LW(3) LW(0) LW(6)
+805D79F8:     wait_frames 1
+805D7A00:     if_int_eq LW(1) 1
+805D7A0C:       goto 0
+805D7A14:     endif
+805D7A18:     callc [evt_hit_bind_update evt_hit.o] ["A_ere2_m"]
+805D7A24:     callc [evt_snd_sfxoff evt_snd.o] LW(10)
+805D7A30:     callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_PEACH_ELEVATOR_APPEAR1"] LW(3) LW(0) LW(6) 0
+805D7A4C:   endif
+805D7A50:   if_int_ne GSW(0) 166
+805D7A5C:     setii LW(0) LW(5)
+805D7A68:     callss [ele2_door_open aji_01.o]
+805D7A70:   endif
+805D7A74:   if_int_eq LW(9) 1
+805D7A80:     callc [evt_mario_mov_pos2 evt_mario.o] 550 -40 80.00
+805D7A94:   endif
+805D7A98:   callc [evt_mario_mov_pos2 evt_mario.o] 550 -120 120.00
+805D7AAC:   callc [evt_mario_adjust_dir evt_mario.o]
+805D7AB4:   begin_thread
+805D7AB8:     callc [evt_mario_get_pos evt_mario.o] 0 LW(0) LW(1) LW(2)
+805D7AD0:     callc [evt_cam3d_get_shift evt_cam.o] LW(0) LW(1) LW(2) LW(3)
+805D7AE8:     callc [evt_cam3d_event_from_road evt_cam.o] LW(0) LW(1) LW(2) LW(3) LW(4) LW(6) LW(7) LW(9) LW(10) LW(11)
+805D7B18:     callc [evt_cam3d_evt_set evt_cam.o] LW(4) LW(6) LW(7) LW(9) LW(10) LW(11) 0 11
+805D7B40:     wait_frames 1
+805D7B48:     callc [evt_cam3d_road_shift_onoff evt_cam.o] 0
+805D7B54:     callc [evt_cam3d_evt_off evt_cam.o] 1000 11
+805D7B64:   end_thread
+805D7B68:   setii LW(0) LW(5)
+805D7B74:   callss [ele2_door_close aji_01.o]
+805D7B7C:   switchi LW(5)
+805D7B84:     case_int_eq 2
+805D7B8C:       setii LW(0) 2000
+805D7B98:     case_int_eq 3
+805D7BA0:       setii LW(0) 1000
+805D7BAC:     case_int_eq 4
+805D7BB4:       setii LW(0) 0
+805D7BC0:   end_switch
+805D7BC4:   switchi LW(8)
+805D7BCC:     case_int_eq 2
+805D7BD4:       setii LW(1) 2000
+805D7BE0:     case_int_eq 3
+805D7BE8:       setii LW(1) 1000
+805D7BF4:     case_int_eq 4
+805D7BFC:       setii LW(1) 0
+805D7C08:   end_switch
+805D7C0C:   setii LW(2) LW(0)
+805D7C18:   subi LW(2) LW(1)
+805D7C24:   if_int_lt LW(2) 0
+805D7C30:     muli LW(2) -1
+805D7C3C:   endif
+805D7C40:   muli LW(2) 4
+805D7C4C:   callc [evt_mario_cont_onoff evt_mario.o] 0
+805D7C58:   callc [evt_mapobj_get_position evt_map.o] ["ere2_m"] LW(3) LW(4) LW(6)
+805D7C70:   callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_PEACH_ELEVATOR_APPEAR1"] LW(3) LW(0) LW(6) 0
+805D7C8C:   wait_ms 400
+805D7C94:   callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_PEACH_ELEVATOR_MOVE1"] LW(3) LW(4) LW(6) LW(10)
+805D7CB0:   callc [evt_sub_intpl_msec_init evt_sub.o] 11 LW(0) LW(1) LW(2)
+805D7CC8: 5:
+805D7CD0:   callc [evt_sub_intpl_msec_get_value evt_sub.o]
+805D7CD8:   callc [evt_mapobj_trans evt_map.o] 1 ["ere2_m"] 0 LW(0) 0
+805D7CF4:   callc [evt_hit_bind_update evt_hit.o] ["A_ere2_m"]
+805D7D00:   setii LW(7) LW(0)
+805D7D0C:   addi LW(7) LW(4)
+805D7D18:   callc [evt_snd_sfx_pos evt_snd.o] LW(10) LW(3) LW(7) LW(6)
+805D7D30:   addi LW(0) -999
+805D7D3C:   callc [evt_mario_get_pos evt_mario.o] 0 LW(2) LW(7) LW(9)
+805D7D54:   callc [evt_mario_set_pos evt_mario.o] LW(2) LW(0) LW(9)
+805D7D68:   wait_frames 1
+805D7D70:   if_int_eq LW(1) 1
+805D7D7C:     goto 5
+805D7D84:   endif
+805D7D88:   callc [evt_snd_sfxoff evt_snd.o] LW(10)
+805D7D94:   callc [evt_mapobj_get_position evt_map.o] ["ere2_m"] LW(3) LW(4) LW(6)
+805D7DAC:   callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_PEACH_ELEVATOR_APPEAR1"] LW(3) LW(4) LW(6) 0
+805D7DC8:   callc [evt_mario_cont_onoff evt_mario.o] 1
+805D7DD4:   if_int_eq GSW(0) 166
+805D7DE0:     callc [evt_msg_print evt_msg.o] 0 ["peach_aji_128"] 0 0
+805D7DF8:     wait_ms 500
+805D7E00:     callc [evt_msg_print evt_msg.o] 0 ["peach_aji_129"] 0 ["mario"]
+805D7E18:     callc [evt_npc_flag_onoff evt_npc.o] 0 ["手下１"] 128
+805D7E2C:     callc [evt_npc_set_position evt_npc.o] ["手下１"] 700 1000 0
+805D7E44:     callc [evt_npc_set_ry evt_npc.o] ["手下１"] 270
+805D7E54:     callc [evt_npc_move_position evt_npc.o] ["手下１"] 300 0 0 70 0
+805D7E74:     callc [evt_npc_set_position evt_npc.o] ["手下１"] 0 -1000 0
+805D7E8C:     callc [evt_npc_flag_onoff evt_npc.o] 1 ["手下１"] 128
+805D7EA0:     wait_ms 2000
+805D7EA8:     callc [evt_msg_print evt_msg.o] 0 ["peach_aji_131"] 0 0
+805D7EC0:   endif
+805D7EC4:   if_int_eq GSW(0) 262
+805D7ED0:     callc [evt_msg_print evt_msg.o] 0 ["peach_aji_218"] 0 0
+805D7EE8:   endif
+805D7EEC:   setii LW(0) LW(8)
+805D7EF8:   callss [ele2_door_open aji_01.o]
+805D7F00:   callc [evt_mario_mov_pos2 evt_mario.o] 550 0 120.00
+805D7F14:   setii LW(0) LW(8)
+805D7F20:   callss [ele2_door_close aji_01.o]
+805D7F28:   callc [evt_cam3d_road_shift_onoff evt_cam.o] 1
+805D7F34:   setii GW(1) LW(8)
+805D7F40:   callc [evt_mapobj_flag_onoff evt_map.o] 1 0 ["S_ekagi4_aka"] 1
+805D7F58:   callc [evt_mapobj_flag_onoff evt_map.o] 1 1 ["S_ekagi4_mid"] 1
+805D7F70:   callc [evt_mapobj_flag_onoff evt_map.o] 1 0 ["S_ekagi5_aka"] 1
+805D7F88:   callc [evt_mapobj_flag_onoff evt_map.o] 1 1 ["S_ekagi5_mid"] 1
+805D7FA0:   callc [evt_mapobj_flag_onoff evt_map.o] 1 0 ["S_ekagi6_aka"] 1
+805D7FB8:   callc [evt_mapobj_flag_onoff evt_map.o] 1 1 ["S_ekagi6_mid"] 1
+805D7FD0:   callc [evt_mario_key_onoff evt_mario.o] 1
+805D7FDC:   callc [evt_exit_case_evt evt_case.o]
+805D7FE4:   return
+805D7FE8:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [ele2_door_open aji_01.o] AT 805D5790 ---
+805D5790:   switchi LW(0)
+805D5798:     case_int_eq 2
+805D57A0:       setii LW(6) ["e2_4_door1"]
+805D57AC:       setii LW(7) ["e2_4_door2"]
+805D57B8:     case_int_eq 3
+805D57C0:       setii LW(6) ["e2_5_door1"]
+805D57CC:       setii LW(7) ["e2_5_door2"]
+805D57D8:     case_int_eq 4
+805D57E0:       setii LW(6) ["e2_6_door1"]
+805D57EC:       setii LW(7) ["e2_6_door2"]
+805D57F8:   end_switch
+805D57FC:   begin_thread
+805D5800:     callc [evt_mapobj_get_position evt_map.o] LW(6) LW(10) LW(11) LW(12)
+805D5818:     callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_STG7_ELEVATOR_OPEN1"] LW(10) LW(11) LW(12) 0
+805D5834:   end_thread
+805D5838:   begin_thread
+805D583C:     callc [evt_sub_intpl_msec_init evt_sub.o] 11 0 -9000 500
+805D5854: 1:
+805D585C:     callc [evt_sub_intpl_msec_get_value evt_sub.o]
+805D5864:     divf LW(0) 100.00
+805D5870:     callc [evt_mapobj_rotate evt_map.o] 1 LW(6) 0 LW(0) 0
+805D588C:     mulf LW(0) -1.00
+805D5898:     callc [evt_mapobj_rotate evt_map.o] 1 LW(7) 0 LW(0) 0
+805D58B4:     wait_frames 1
+805D58BC:     if_int_eq LW(1) 1
+805D58C8:       goto 1
+805D58D0:     endif
+805D58D4:   end_thread
+805D58D8:   wait_ms 300
+805D58E0:   begin_thread
+805D58E4:     callc [evt_mapobj_get_position evt_map.o] ["ee2_door1"] LW(10) LW(11) LW(12)
+805D58FC:     callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_STG7_ELEVATOR_OPEN2"] LW(10) LW(11) LW(12) 0
+805D5918:   end_thread
+805D591C:   callc [evt_sub_intpl_msec_init evt_sub.o] 11 0 -9000 500
+805D5934: 2:
+805D593C:   callc [evt_sub_intpl_msec_get_value evt_sub.o]
+805D5944:   divf LW(0) 100.00
+805D5950:   callc [evt_mapobj_rotate evt_map.o] 1 ["ee2_door1"] 0 LW(0) 0
+805D596C:   mulf LW(0) -1.00
+805D5978:   callc [evt_mapobj_rotate evt_map.o] 1 ["ee2_door2"] 0 LW(0) 0
+805D5994:   wait_frames 1
+805D599C:   if_int_eq LW(1) 1
+805D59A8:     goto 2
+805D59B0:   endif
+805D59B4:   return
+805D59B8:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [ele2_door_close aji_01.o] AT 805D59BC ---
+805D59BC:   switchi LW(0)
+805D59C4:     case_int_eq 2
+805D59CC:       setii LW(6) ["e2_4_door1"]
+805D59D8:       setii LW(7) ["e2_4_door2"]
+805D59E4:     case_int_eq 3
+805D59EC:       setii LW(6) ["e2_5_door1"]
+805D59F8:       setii LW(7) ["e2_5_door2"]
+805D5A04:     case_int_eq 4
+805D5A0C:       setii LW(6) ["e2_6_door1"]
+805D5A18:       setii LW(7) ["e2_6_door2"]
+805D5A24:   end_switch
+805D5A28:   begin_thread
+805D5A2C:     callc [evt_mapobj_get_position evt_map.o] ["ee2_door1"] LW(10) LW(11) LW(12)
+805D5A44:     callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_STG7_ELEVATOR_CLOSE2"] LW(10) LW(11) LW(12) 0
+805D5A60:   end_thread
+805D5A64:   begin_thread
+805D5A68:     callc [evt_sub_intpl_msec_init evt_sub.o] 11 -9000 0 500
+805D5A80: 3:
+805D5A88:     callc [evt_sub_intpl_msec_get_value evt_sub.o]
+805D5A90:     divf LW(0) 100.00
+805D5A9C:     callc [evt_mapobj_rotate evt_map.o] 1 ["ee2_door1"] 0 LW(0) 0
+805D5AB8:     mulf LW(0) -1.00
+805D5AC4:     callc [evt_mapobj_rotate evt_map.o] 1 ["ee2_door2"] 0 LW(0) 0
+805D5AE0:     wait_frames 1
+805D5AE8:     if_int_eq LW(1) 1
+805D5AF4:       goto 3
+805D5AFC:     endif
+805D5B00:   end_thread
+805D5B04:   wait_ms 300
+805D5B0C:   begin_thread
+805D5B10:     callc [evt_mapobj_get_position evt_map.o] LW(6) LW(10) LW(11) LW(12)
+805D5B28:     callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_STG7_ELEVATOR_CLOSE1"] LW(10) LW(11) LW(12) 0
+805D5B44:   end_thread
+805D5B48:   callc [evt_sub_intpl_msec_init evt_sub.o] 11 -9000 0 500
+805D5B60: 4:
+805D5B68:   callc [evt_sub_intpl_msec_get_value evt_sub.o]
+805D5B70:   divf LW(0) 100.00
+805D5B7C:   callc [evt_mapobj_rotate evt_map.o] 1 LW(6) 0 LW(0) 0
+805D5B98:   mulf LW(0) -1.00
+805D5BA4:   callc [evt_mapobj_rotate evt_map.o] 1 LW(7) 0 LW(0) 0
+805D5BC0:   wait_frames 1
+805D5BC8:   if_int_eq LW(1) 1
+805D5BD4:     goto 4
+805D5BDC:   endif
+805D5BE0:   return
+805D5BE4:   end

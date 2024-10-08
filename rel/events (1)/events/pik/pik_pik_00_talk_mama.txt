@@ -1,0 +1,108 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [talk_mama pik_00.o] AT 805C1298 ---
+805C1298:   if_int_eq GSW(1420) 29
+805C12A4:     if_int_eq GSWF(5406) 0
+805C12B0:       callc [evt_pouch_check_item evt_pouch.o] 100 LW(0)
+805C12C0:       if_int_gt LW(0) 0
+805C12CC:         callc [evt_msg_print evt_msg.o] 0 ["irai_29_14"] 0 0
+805C12E4:         callc [evt_win_item_select evt_window.o] 0 [iri_29_item_tbl pik_00.o] LW(0) 0
+805C12FC:         if_int_ne LW(0) -1
+805C1308:           callc [evt_pouch_remove_item evt_pouch.o] 100 LW(0)
+805C1318:           callc [evt_msg_print evt_msg.o] 0 ["irai_29_15"] [irai_29_15_cb pik_00.o] 0
+805C1330:           callc [evt_mario_get_pos evt_mario.o] 0 LW(0) LW(1) LW(2)
+805C1348:           callc [evt_npc_get_position evt_npc.o] ["ナリキンママ"] LW(3) LW(4) LW(5)
+805C1360:           setii LW(6) LW(5)
+805C136C:           subi LW(6) 15
+805C1378:           setii LW(7) LW(5)
+805C1384:           addi LW(7) 15
+805C1390:           setii LF(0) 0
+805C139C:           if_int_ge LW(0) LW(3)
+805C13A8:             if_int_ge LW(2) LW(6)
+805C13B4:               if_int_le LW(2) LW(7)
+805C13C0:                 setii LF(0) 1
+805C13CC:               endif
+805C13D0:             endif
+805C13D4:           endif
+805C13D8:           if_int_eq LF(0) 1
+805C13E4:             if_int_le LW(2) LW(5)
+805C13F0:               setii LW(6) 0
+805C13FC:             else
+805C1400:               setii LW(6) 180
+805C140C:             endif
+805C1410:             setii LW(7) LW(0)
+805C141C:             setii LW(8) LW(5)
+805C1428:             callc [evt_npc_add_dirdist evt_npc.o] LW(7) LW(8) LW(6) 15
+805C1440:             begin_thread
+805C1444:               callc [evt_party_get_pos evt_party.o] 0 LW(0) LW(1) LW(2)
+805C145C:               callc [evt_party_move_pos evt_party.o] 0 LW(0) LW(8) 150
+805C1474:             end_thread
+805C1478:             callc [evt_mario_dispflag_onoff evt_mario.o] 1 256
+805C1488:             callc [evt_mario_dispflag_onoff evt_mario.o] 1 4
+805C1498:             callc [evt_mario_mov_pos evt_mario.o] LW(7) LW(8) 150
+805C14AC:             callc [evt_mario_adjust_dir evt_mario.o]
+805C14B4:             callc [evt_mario_dispflag_onoff evt_mario.o] 0 4
+805C14C4:             callc [evt_mario_dispflag_onoff evt_mario.o] 0 256
+805C14D4:           endif
+805C14D8:           begin_thread
+805C14DC:             wait_ms 500
+805C14E4:             callc [evt_mario_set_dir_npc evt_mario.o] ["ナリキンママ"]
+805C14F0:           end_thread
+805C14F4:           begin_thread
+805C14F8:             wait_ms 500
+805C1500:             callc [evt_party_set_dir_npc evt_party.o] 0 ["ナリキンママ"]
+805C1510:           end_thread
+805C1514:           callc [evt_npc_flag_onoff evt_npc.o] 1 ["me"] 32
+805C1528:           callc [evt_npc_status_onoff evt_npc.o] 1 ["me"] 2
+805C153C:           callc [evt_npc_move_position evt_npc.o] ["me"] 115 330 0 150 0
+805C155C:           wait_ms 1000
+805C1564:           callc [evt_msg_print evt_msg.o] 0 ["irai_29_16"] 0 0
+805C157C:           wait_ms 1500
+805C1584:           begin_thread
+805C1588:             wait_ms 4000
+805C1590:             callc [evt_mario_set_dir_npc evt_mario.o] ["ナリキンママ"]
+805C159C:           end_thread
+805C15A0:           begin_thread
+805C15A4:             wait_ms 4000
+805C15AC:             callc [evt_party_set_dir_npc evt_party.o] 0 ["ナリキンママ"]
+805C15BC:           end_thread
+805C15C0:           callc [evt_npc_move_position evt_npc.o] ["me"] -133 330 0 60 0
+805C15E0:           callc [evt_npc_status_onoff evt_npc.o] 0 ["me"] 2
+805C15F4:           callc [evt_npc_flag_onoff evt_npc.o] 0 ["me"] 32
+805C1608:           callc [evt_set_dir_to_target evt_npc.o] ["me"] ["mario"]
+805C1618:           wait_ms 300
+805C1620:           callc [evt_msg_print evt_msg.o] 0 ["irai_29_17"] 0 0
+805C1638:           callc [evt_snd_bgmon evt_snd.o] 512 ["BGM_STG6_PIK1"]
+805C1648:           setii GSWF(5406) 1
+805C1654:         endif
+805C1658:         return
+805C165C:       else
+805C1660:         callc [evt_msg_print evt_msg.o] 0 ["irai_29_18_2"] 0 0
+805C1678:         return
+805C167C:       endif
+805C1680:     else
+805C1684:       callc [evt_msg_print evt_msg.o] 0 ["irai_29_18"] 0 0
+805C169C:       return
+805C16A0:     endif
+805C16A4:   endif
+805C16A8:   switchi GSW(0)
+805C16B0:     case_int_lt 339
+805C16B8:       callc [evt_msg_print evt_msg.o] 0 ["stg6_pik_02"] 0 0
+805C16D0:     case_int_lt 354
+805C16D8:       callc [evt_msg_print evt_msg.o] 0 ["stg7_pik_21_1"] 0 0
+805C16F0:     case_int_le 402
+805C16F8:       if_int_eq GSWF(3874) 0
+805C1704:         if_int_eq GSWF(3881) 0
+805C1710:           callc [evt_msg_print evt_msg.o] 0 ["stg7_pik_21_1"] 0 0
+805C1728:         else
+805C172C:           callc [evt_msg_print evt_msg.o] 0 ["stg7_pik_20"] 0 0
+805C1744:         endif
+805C1748:       else
+805C174C:         callc [evt_msg_print evt_msg.o] 0 ["stg7_pik_21"] 0 0
+805C1764:       endif
+805C1768:     case_default
+805C176C:       callc [evt_msg_print evt_msg.o] 0 ["stg7_pik_21_2"] 0 0
+805C1784:   end_switch
+805C1788:   return
+805C178C:   end

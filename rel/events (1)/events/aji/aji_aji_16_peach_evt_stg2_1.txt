@@ -1,0 +1,61 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [peach_evt_stg2_1 aji_16.o] AT 805F0508 ---
+805F0508:   callc [evt_seq_wait evt_seq.o] 2
+805F0514:   callc [evt_bero_exec_wait evt_bero.o] 65536
+805F0520:   callsa_tid [evt_sub_stopwatch evt_sub.o] LW(0)
+805F052C:   loop 0
+805F0534:     callc [evt_sub_get_stopwatch evt_sub.o] LW(0) LW(1)
+805F0544:     if_int_ge LW(1) 5000
+805F0550:       loop_break
+805F0554:     endif
+805F0558:     wait_frames 1
+805F0560:   end_loop
+805F0564:   callc [evt_mario_key_onoff evt_mario.o] 0
+805F0570:   callc [evt_mario_get_pos evt_mario.o] 0 LW(0) LW(1) LW(2)
+805F0588:   callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_VOICE_PEACH_SURPRISED1_3"] LW(0) LW(1) LW(2) 0
+805F05A4:   callc [evt_eff_fukidashi evt_eff.o] 0 [zero_aji_00014c50 aji_16.o] 0 0 0 0 0 0 0 0 60
+805F05D8:   wait_ms 1000
+805F05E0:   callc [evt_mario_set_dir evt_mario.o] 90 200 0
+805F05F4:   wait_ms 500
+805F05FC:   callss [peach_evt_door_open aji_16.o]
+805F0604:   wait_ms 500
+805F060C:   callc [evt_msg_print evt_msg.o] 0 ["peach_aji_75"] 0 ["mario"]
+805F0624:   callc [evt_cam3d_evt_off evt_cam.o] 1000 11
+805F0634:   wait_ms 1000
+805F063C:   setii GSW(0) 113
+805F0648:   callc [evt_mario_key_onoff evt_mario.o] 1
+805F0654:   setii LW(0) ["e_bero"]
+805F0660:   callss [bero_case_switch_off evt_bero.o]
+805F0668:   callc [evt_bero_overwrite evt_bero.o] ["e_bero"] [bero_peach_data aji_16.o]
+805F0678:   setii LW(0) ["e_bero"]
+805F0684:   callss [bero_case_switch_on evt_bero.o]
+805F068C:   callc [evt_del_case_evt evt_case.o] 0 GW(15)
+805F069C:   return
+805F06A0:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [peach_evt_door_open aji_16.o] AT 805F0188 ---
+805F0188:   callc [evt_cam3d_evt_set evt_cam.o] 35 114 334 157 54 17 1000 11
+805F01B0:   wait_ms 1000
+805F01B8:   wait_ms 1000
+805F01C0:   setii LW(1) 1
+805F01CC:   callsa [bero_open_door_play_se evt_bero.o]
+805F01D4:   callc [evt_sub_intpl_msec_init evt_sub.o] 11 0 180 500
+805F01EC: 0:
+805F01F4:   callc [evt_sub_intpl_msec_get_value evt_sub.o]
+805F01FC:   callss [e_door_open aji_16.o]
+805F0204:   if_int_eq LW(1) 1
+805F0210:     goto 0
+805F0218:   endif
+805F021C:   wait_ms 500
+805F0224:   return
+805F0228:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [e_door_open aji_16.o] AT 805EFDF0 ---
+805EFDF0:   mulf LW(0) -0.22
+805EFDFC:   callc [evt_mapobj_trans evt_map.o] 0 ["S_door2_1"] 0 0 LW(0)
+805EFE18:   mulf LW(0) -1.00
+805EFE24:   callc [evt_mapobj_trans evt_map.o] 0 ["S_door2_2"] 0 0 LW(0)
+805EFE40:   return
+805EFE44:   end

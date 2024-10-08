@@ -1,0 +1,79 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [dokuroiwa_touch muj_05.o] AT 805E3E0C ---
+805E3E0C:   callc [evt_pouch_check_item evt_pouch.o] 71 LW(0)
+805E3E1C:   if_int_eq LW(0) 0
+805E3E28:     callc [evt_mario_key_onoff evt_mario.o] 0
+805E3E34:     callc [evt_msg_toge evt_msg.o] 1 0 0 0
+805E3E4C:     callc [evt_msg_print evt_msg.o] 0 ["stg5_muj_93_01"] 0 0
+805E3E64:     if_int_ge GSW(0) 240
+805E3E70:       callc [evt_party_stop evt_party.o] 0
+805E3E7C:       callc [evt_msg_print_party evt_msg.o] ["stg5_muj_93_01_01"]
+805E3E88:       callc [evt_party_run evt_party.o] 0
+805E3E94:       setii GSWF(3140) 1
+805E3EA0:     endif
+805E3EA4:     callc [evt_mario_key_onoff evt_mario.o] 1
+805E3EB0:   else
+805E3EB4:     callc [evt_win_item_select evt_window.o] 0 [itemsel_table muj_05.o] LW(0) 0
+805E3ECC:     if_int_eq LW(0) -1
+805E3ED8:       return
+805E3EDC:     endif
+805E3EE0:     callc [evt_mapobj_get_position evt_map.o] ["S_jel"] LW(0) LW(1) LW(2)
+805E3EF8:     callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_STG5_JUWEL_SET1"] LW(0) LW(1) LW(2) 0
+805E3F14:     callc [evt_mapobj_flag_onoff evt_map.o] 1 0 ["S_jel"] 1
+805E3F2C:     begin_thread
+805E3F30:       wait_ms 400
+805E3F38:       callsa [blueeye_flush muj_05.o]
+805E3F40:       callsa [redeye_flush muj_05.o]
+805E3F48:     end_thread
+805E3F4C:     begin_thread
+805E3F50:       callc [evt_sub_intpl_msec_init evt_sub.o] 11 0.00 1.00 500
+805E3F68:       loop 0
+805E3F70:         callc [evt_sub_intpl_msec_get_value_para evt_sub.o] LW(0) LW(1)
+805E3F80:         callc [evt_mapobj_scale evt_map.o] 1 ["S_hige_iwa02_me"] 1.00 LW(0) 1.00
+805E3F9C:         callc [evt_mapobj_scale evt_map.o] 1 ["S_hige_iwa03_me"] 1.00 LW(0) 1.00
+805E3FB8:         if_int_eq LW(1) 0
+805E3FC4:           loop_break
+805E3FC8:         endif
+805E3FCC:         wait_frames 1
+805E3FD4:       end_loop
+805E3FD8:     end_thread
+805E3FDC:     callc [evt_mario_dump_item evt_mario.o] 71
+805E3FE8:     setii GSWF(3139) 1
+805E3FF4:     callc [evt_exit_case_evt evt_case.o]
+805E3FFC:   endif
+805E4000:   return
+805E4004:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [blueeye_flush muj_05.o] AT 805E3AAC ---
+805E3AAC:   callc [evt_mapobj_get_position evt_map.o] ["S_hige_iwa03_me"] LW(0) LW(1) LW(2)
+805E3AC4:   addi LW(0) -12
+805E3AD0:   addi LW(1) 2
+805E3ADC:   addi LW(2) 10
+805E3AE8:   callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_STG5_ROCK_EYE_SHINE1"] LW(0) LW(1) LW(2) 0
+805E3B04:   callc [evt_eff evt_eff.o] [zero_muj_000107fc muj_05.o] ["toge_flush"] 2 LW(0) LW(1) LW(2) 60 0 0 0 0 0 0 0
+805E3B44:   callc [evt_mapobj_get_position evt_map.o] ["S_hige_iwa03_me"] LW(0) LW(1) LW(2)
+805E3B5C:   addi LW(0) 10
+805E3B68:   addi LW(1) 2
+805E3B74:   addi LW(2) 10
+805E3B80:   callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_STG5_ROCK_EYE_SHINE1"] LW(0) LW(1) LW(2) 0
+805E3B9C:   callc [evt_eff evt_eff.o] [zero_muj_000107fc muj_05.o] ["toge_flush"] 2 LW(0) LW(1) LW(2) 60 0 0 0 0 0 0 0
+805E3BDC:   return
+805E3BE0:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [redeye_flush muj_05.o] AT 805E3BE4 ---
+805E3BE4:   callc [evt_mapobj_get_position evt_map.o] ["S_hige_iwa02_me"] LW(0) LW(1) LW(2)
+805E3BFC:   addi LW(0) -12
+805E3C08:   addi LW(1) 2
+805E3C14:   addi LW(2) 10
+805E3C20:   callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_STG5_ROCK_EYE_SHINE1"] LW(0) LW(1) LW(2) 0
+805E3C3C:   callc [evt_eff evt_eff.o] [zero_muj_000107fc muj_05.o] ["toge_flush"] 1 LW(0) LW(1) LW(2) 60 0 0 0 0 0 0 0
+805E3C7C:   callc [evt_mapobj_get_position evt_map.o] ["S_hige_iwa02_me"] LW(0) LW(1) LW(2)
+805E3C94:   addi LW(0) 10
+805E3CA0:   addi LW(1) 2
+805E3CAC:   addi LW(2) 10
+805E3CB8:   callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_STG5_ROCK_EYE_SHINE1"] LW(0) LW(1) LW(2) 0
+805E3CD4:   callc [evt_eff evt_eff.o] [zero_muj_000107fc muj_05.o] ["toge_flush"] 1 LW(0) LW(1) LW(2) 60 0 0 0 0 0 0 0
+805E3D14:   return
+805E3D18:   end

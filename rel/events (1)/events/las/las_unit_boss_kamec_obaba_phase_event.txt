@@ -1,0 +1,65 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [phase_event unit_boss_kamec_obaba.o] AT 805FDB54 ---
+805FDB54:   callc [btlevtcmd_CheckPhase battle_event_cmd.o] LW(0) 67108865
+805FDB64:   if_int_eq LW(0) 0
+805FDB70:     goto 99
+805FDB78:   endif
+805FDB7C:   callc [btlevtcmd_get_turn battle_event_cmd.o] LW(0)
+805FDB88:   if_int_eq LW(0) 1
+805FDB94:     goto 99
+805FDB9C:   endif
+805FDBA0:   callc [btlevtcmd_CheckStatus battle_event_cmd.o] -2 27 LW(0)
+805FDBB4:   if_int_eq LW(0) 1
+805FDBC0:     goto 99
+805FDBC8:   endif
+805FDBCC:   callc [btlevtcmd_CheckActStatus battle_event_cmd.o] -2 LW(0)
+805FDBDC:   if_int_eq LW(0) 0
+805FDBE8:     goto 99
+805FDBF0:   endif
+805FDBF4:   callc [btlevtcmd_GetUnitWork battle_event_cmd.o] -2 0 LW(0)
+805FDC08:   if_int_eq LW(0) 1
+805FDC14:     goto 99
+805FDC1C:   endif
+805FDC20:   callc [btlevtcmd_AddUnitWork battle_event_cmd.o] -2 2 1
+805FDC34:   callc [btlevtcmd_GetUnitWork battle_event_cmd.o] -2 2 LW(0)
+805FDC48:   if_int_lt LW(0) 3
+805FDC54:     goto 99
+805FDC5C:   endif
+805FDC60:   callc [btlevtcmd_ChangeFaceDirection battle_event_cmd.o] -2 1
+805FDC70:   callc [btlevtcmd_GetPos battle_event_cmd.o] -2 LW(0) LW(1) LW(2)
+805FDC88:   callc [btlevtcmd_SetMoveSpeed battle_event_cmd.o] -2 5.00
+805FDC98:   callc [btlevtcmd_MovePosition battle_event_cmd.o] -2 300 LW(1) LW(2) 0 -1 0
+805FDCBC:   wait_frames 60
+805FDCC4:   callc [btlevtcmd_OnAttribute battle_event_cmd.o] -2 4
+805FDCD4:   callc [btlevtcmd_OnPartsAttribute battle_event_cmd.o] -2 1 2097152
+805FDCE8:   callc [btlevtcmd_OnPartsAttribute battle_event_cmd.o] -2 1 4194304
+805FDCFC:   callc [btlevtcmd_AnimeChangePoseType battle_event_cmd.o] -2 1 40
+805FDD10:   wait_ms 500
+805FDD18:   callc [btlevtcmd_AnimeSetPoseTable battle_event_cmd.o] -2 1 [pose_table_sky unit_boss_kamec_obaba.o]
+805FDD2C:   callc [btlevtcmd_SetTalkPoseType battle_event_cmd.o] -2 65
+805FDD3C:   callc [btlevtcmd_SetStayPoseType battle_event_cmd.o] -2 43
+805FDD4C:   callc [btlevtcmd_AnimeChangePoseType battle_event_cmd.o] -2 1 40
+805FDD60:   begin_child_thread_tid LW(15)
+805FDD68:     loop 0
+805FDD70:       callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_BOSS_KAMEBABA_MOVE2"] [F1194D80] 0 [F1194D80]
+805FDD8C:       wait_ms 166
+805FDD94:     end_loop
+805FDD98:   end_child_thread
+805FDD9C:   callc [btlevtcmd_ChangeFaceDirection battle_event_cmd.o] -2 -1
+805FDDAC:   callc [btlevtcmd_GetPos battle_event_cmd.o] -2 LW(0) LW(1) LW(2)
+805FDDC4:   callc [btlevtcmd_SetPos battle_event_cmd.o] -2 LW(0) 40 LW(2)
+805FDDDC:   callc [btlevtcmd_GetHomePos battle_event_cmd.o] -2 LW(0) LW(1) LW(2)
+805FDDF4:   callc [btlevtcmd_DivePosition battle_event_cmd.o] -2 LW(0) 40 LW(2) 60 0 4 0 -1
+805FDE20:   callc [btlevtcmd_SetHomePos battle_event_cmd.o] -2 LW(0) 40 LW(2)
+805FDE38:   callc [btlevtcmd_AnimeChangePoseType battle_event_cmd.o] -2 1 69
+805FDE4C:   stop_tid LW(15)
+805FDE54:   wait_ms 500
+805FDE5C:   callc [btlevtcmd_SetUnitWork battle_event_cmd.o] -2 0 1
+805FDE70:   callc [btlevtcmd_SetUnitWork battle_event_cmd.o] -2 1 0
+805FDE84:   callc [btlevtcmd_SetUnitWork battle_event_cmd.o] -2 2 0
+805FDE98:   callc [btlevtcmd_StartWaitEvent battle_event_cmd.o] -2
+805FDEA4: 99:
+805FDEAC:   return
+805FDEB0:   end

@@ -1,0 +1,79 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [jin_06_init_evt jin_06.o] AT 805CCAA0 ---
+805CCAA0:   callc [evt_snd_bgmon evt_snd.o] 512 ["BGM_STG4_JIN1"]
+805CCAB0:   callc [evt_snd_envon evt_snd.o] 272 ["ENV_STG4_JIN1"]
+805CCAC0:   callc [evt_snd_set_rev_mode evt_snd.o] 2
+805CCACC:   callc [evt_kagemario_init evt_kagemario.o]
+805CCAD4:   setii LW(0) [bero_entry_data jin_06.o]
+805CCAE0:   callc [evt_bero_get_info evt_bero.o]
+805CCAE8:   callss [evt_bero_info_run evt_bero.o]
+805CCAF0:   callss [evt_usu_kagemario_party_kill evt_kagemario.o]
+805CCAF8:   callc [evt_mobj_itembox evt_mobj.o] ["mobj_box00"] 650 0 -150 0 0 [mobj_box00 jin_06.o] GSWF(2238)
+805CCB20:   callc [evt_mobj_jumpstand_red evt_mobj.o] 0 ["mobj_jump"] 0 0 0 [jin_06_jumpstand jin_06.o] 0
+805CCB44:   if_int_ne GSWF(2079) 0
+805CCB50:     setii GSWF(2079) 0
+805CCB5C:     begin_thread
+805CCB60:       callc [evt_cam_letter_box_disable evt_cam.o] 1
+805CCB6C:       callc [evt_mario_key_onoff evt_mario.o] 0
+805CCB78:       callc [evt_mario_set_pos evt_mario.o] 5 365 0
+805CCB8C:       callc [evt_party_set_pos evt_party.o] 0 5 645 0
+805CCBA4:       callc [evt_cam_road_reset evt_cam.o]
+805CCBAC:       callc [evt_seq_wait evt_seq.o] 2
+805CCBB8:       callc [evt_mario_wait_landon evt_mario.o]
+805CCBC0:       callc [evt_mario_key_onoff evt_mario.o] 1
+805CCBCC:       callc [evt_cam_letter_box_disable evt_cam.o] 0
+805CCBD8:     end_thread
+805CCBDC:     setii LW(0) 1
+805CCBE8:   else
+805CCBEC:     setii LW(0) 0
+805CCBF8:   endif
+805CCBFC:   begin_thread
+805CCC00:     if_int_ne LW(0) 0
+805CCC0C:       callc [evt_seq_wait evt_seq.o] 2
+805CCC18:       loop 0
+805CCC20:         callc [evt_mario_get_pos evt_mario.o] 0 LW(0) LW(1) LW(2)
+805CCC38:         if_int_lt LW(1) 365
+805CCC44:           loop_break
+805CCC48:         endif
+805CCC4C:         wait_frames 1
+805CCC54:       end_loop
+805CCC58:     endif
+805CCC5C:     loop 0
+805CCC64:       callc [evt_mario_get_pos evt_mario.o] 0 LW(0) LW(1) LW(2)
+805CCC7C:       if_int_ge LW(1) 365
+805CCC88:         loop_break
+805CCC8C:       endif
+805CCC90:       wait_frames 1
+805CCC98:     end_loop
+805CCC9C:     callc [evt_bero_mapchange evt_bero.o] ["jin_00"] ["ana"]
+805CCCAC:   end_thread
+805CCCB0:   if_int_eq GSWF(2229) 0
+805CCCBC:     callc [evt_cloud_init evt_cloud.o]
+805CCCC4:     callc [evt_cloud_ent evt_cloud.o] 0 ["mekure"] ["a_mekure"] [jin_06_wall_open_evt jin_06.o]
+805CCCDC:   else
+805CCCE0:     callc [evt_mapobj_flag_onoff evt_map.o] 1 1 ["mekure"] 1
+805CCCF8:     callc [evt_hitobj_onoff evt_hit.o] ["a_mekure"] 0 0
+805CCD0C:   endif
+805CCD10:   if_int_lt GSW(0) 195
+805CCD1C:     setii GSW(0) 195
+805CCD28:   endif
+805CCD2C:   return
+805CCD30:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [evt_usu_kagemario_party_kill evt_kagemario.o] AT 805CFAA8 ---
+805CFAA8:   switchi GSW(0)
+805CFAB0:     case_int_range 201 205
+805CFABC:       callc [evt_party_stop evt_party.o] 0
+805CFAC8:       callc [evt_party_set_pos evt_party.o] 0 0 -1000 0
+805CFAE0:       callc [evt_party_cont_onoff evt_party.o] 0 0
+805CFAF0:       callc [evt_mario_kill_party evt_mario.o] 0
+805CFAFC:       callc [evt_party_stop evt_party.o] 1
+805CFB08:       callc [evt_party_set_pos evt_party.o] 1 0 -1000 0
+805CFB20:       callc [evt_party_cont_onoff evt_party.o] 1 0
+805CFB30:       callc [evt_mario_clear_party evt_mario.o] 1
+805CFB3C:       callc [test evt_kagemario.o]
+805CFB44:   end_switch
+805CFB48:   return
+805CFB4C:   end

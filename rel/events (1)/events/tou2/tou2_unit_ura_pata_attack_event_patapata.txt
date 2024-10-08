@@ -1,0 +1,144 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [attack_event_patapata unit_ura_pata.o] AT 806066B8 ---
+806066B8:   callc [btlevtcmd_check_battleflag battle_event_cmd.o] LW(0) 2
+806066C8:   if_int_ne LW(0) 0
+806066D4:     callc [btlevtcmd_GetFirstAttackTarget battle_event_cmd.o] LW(3) LW(4)
+806066E4:     wait_frames 50
+806066EC:   else
+806066F0:     callc [btlevtcmd_EnemyItemUseCheck battle_event_cmd.o] -2 LW(0)
+80606700:     if_int_ne LW(0) 0
+8060670C:       callss LW(0)
+80606714:       callc [btlevtcmd_StartWaitEvent battle_event_cmd.o] -2
+80606720:       return
+80606724:     endif
+80606728:     callc [btlevtcmd_GetEnemyBelong battle_event_cmd.o] -2 LW(0)
+80606738:     callc [btlevtcmd_SamplingEnemy battle_event_cmd.o] -2 LW(0) [weapon_patapata_attack unit_ura_pata.o]
+8060674C:     callc [btlevtcmd_ChoiceSamplingEnemy battle_event_cmd.o] [weapon_patapata_attack unit_ura_pata.o] LW(3) LW(4)
+80606760:   endif
+80606764:   if_int_eq LW(3) -1
+80606770:     callc [btlevtcmd_CheckToken battle_event_cmd.o] -2 16 LW(0)
+80606784:     if_int_ne LW(0) 0
+80606790:       callss [subsetevt_confuse_flustered battle_event_subset.o]
+80606798:       return
+8060679C:     endif
+806067A0:     goto 99
+806067A8:   endif
+806067AC:   callc [evt_btl_camera_set_mode battle_camera.o] 0 8
+806067BC:   callc [evt_btl_camera_set_homing_unit battle_camera.o] 0 -2 LW(3)
+806067D0:   callc [evt_btl_camera_set_moveSpeedLv battle_camera.o] 0 1
+806067E0:   callc [evt_btl_camera_set_zoom battle_camera.o] 0 250
+806067F0:   callc [btlevtcmd_WeaponAftereffect battle_event_cmd.o] [weapon_patapata_attack unit_ura_pata.o]
+806067FC:   callc [btlevtcmd_AttackDeclare battle_event_cmd.o] -2 LW(3) LW(4)
+80606810:   callc [btlevtcmd_WaitGuardMove battle_event_cmd.o]
+80606818:   callc [btlevtcmd_PayWeaponCost battle_event_cmd.o] -2 [weapon_patapata_attack unit_ura_pata.o]
+80606828:   callc [btlevtcmd_AnimeChangePoseType battle_event_cmd.o] -2 1 42
+8060683C:   callc [btlevtcmd_GetHitPos battle_event_cmd.o] LW(3) LW(4) LW(0) LW(1) LW(2)
+80606858:   callc [btlevtcmd_FaceDirectionAdd battle_event_cmd.o] LW(3) LW(0) 45
+8060686C:   addi LW(1) 30
+80606878:   callc [btlevtcmd_CalculateFaceDirection battle_event_cmd.o] -2 -1 LW(0) LW(2) 1 LW(15)
+80606898:   callc [btlevtcmd_ChangeFaceDirection battle_event_cmd.o] -2 LW(15)
+806068A8:   callc [btlevtcmd_SetMoveSpeed battle_event_cmd.o] -2 3.50
+806068B8:   callc [btlevtcmd_DivePosition battle_event_cmd.o] -2 LW(0) LW(1) LW(2) 0 -16 0 0 -1
+806068E4:   callc [btlevtcmd_CalculateFaceDirection battle_event_cmd.o] -2 -1 LW(3) LW(4) 16 LW(15)
+80606904:   callc [btlevtcmd_ChangeFaceDirection battle_event_cmd.o] -2 LW(15)
+80606914:   callc [evt_btl_camera_nomove_y_onoff battle_camera.o] 0 1
+80606924:   callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_ENM_PATA_MOVE2"] [F1194D80] 0 [F1194D80]
+80606940:   callc [btlevtcmd_SetMoveSpeed battle_event_cmd.o] -2 1.00
+80606950:   callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 1 ["PTP_A_1"]
+80606964:   callc [btlevtcmd_GetPos battle_event_cmd.o] -2 LW(0) LW(1) LW(2)
+8060697C:   callc [btlevtcmd_FaceDirectionSub battle_event_cmd.o] -2 LW(0) 6
+80606990:   addi LW(1) 6
+8060699C:   callc [btlevtcmd_DivePosition battle_event_cmd.o] -2 LW(0) LW(1) LW(2) 0 0 0 0 0
+806069C8:   wait_frames 11
+806069D0:   callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_ENM_PATA_MOVE3"] [F1194D80] 0 [F1194D80]
+806069EC:   callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 1 ["PTP_A_4"]
+80606A00:   callc [btlevtcmd_GetPos battle_event_cmd.o] -2 LW(0) LW(1) LW(2)
+80606A18:   addi LW(1) 20
+80606A24:   callc [btlevtcmd_SetPos battle_event_cmd.o] -2 LW(0) LW(1) LW(2)
+80606A3C:   callc [btlevtcmd_check_battleflag battle_event_cmd.o] LW(0) 2
+80606A4C:   if_int_ne LW(0) 0
+80606A58:     callc [btlevtcmd_PreCheckDamage battle_event_cmd.o] -2 LW(3) LW(4) [weapon_patapata_attack unit_ura_pata.o] 1048832 LW(5)
+80606A78:   else
+80606A7C:     callc [btlevtcmd_PreCheckDamage battle_event_cmd.o] -2 LW(3) LW(4) [weapon_patapata_attack unit_ura_pata.o] 256 LW(5)
+80606A9C:   endif
+80606AA0:   switchi LW(5)
+80606AA8:     case_int_eq_any 4
+80606AB0:       goto 90
+80606AB8:       end_multi_case
+80606ABC:     case_int_eq 3
+80606AC4:       callc [btlevtcmd_StartAvoid battle_event_cmd.o] LW(3) 38
+80606AD4:       goto 90
+80606ADC:       end_multi_case
+80606AE0:     case_int_eq 6
+80606AE8:       callc [btlevtcmd_StartAvoid battle_event_cmd.o] LW(3) 39
+80606AF8:       goto 90
+80606B00:     case_int_eq 2
+80606B08:       callc [btlevtcmd_StartAvoid battle_event_cmd.o] LW(3) 40
+80606B18:       goto 90
+80606B20:     case_int_eq 1
+80606B28:       goto 91
+80606B30:       end_multi_case
+80606B34:     case_default
+80606B38:       goto 98
+80606B40:       end_multi_case
+80606B44:   end_switch
+80606B48: 90:
+80606B50:   callc [btlevtcmd_SetMoveSpeed battle_event_cmd.o] -2 5.00
+80606B60:   callc [btlevtcmd_GetHitPos battle_event_cmd.o] LW(3) LW(4) LW(0) LW(1) LW(2)
+80606B7C:   callc [btlevtcmd_DivePosition battle_event_cmd.o] -2 LW(0) LW(1) LW(2) 0 0 0 0 0
+80606BA8:   callc [btlevtcmd_FaceDirectionAdd battle_event_cmd.o] -2 LW(0) 25
+80606BBC:   setii LW(1) 20
+80606BC8:   callc [btlevtcmd_DivePosition battle_event_cmd.o] -2 LW(0) LW(1) LW(2) 0 0 0 0 0
+80606BF4:   goto 98
+80606BFC: 91:
+80606C04:   callc [btlevtcmd_SetMoveSpeed battle_event_cmd.o] -2 6.00
+80606C14:   callc [btlevtcmd_GetHitPos battle_event_cmd.o] LW(3) LW(4) LW(0) LW(1) LW(2)
+80606C30:   callc [btlevtcmd_DivePosition battle_event_cmd.o] -2 LW(0) LW(1) LW(2) 0 0 0 0 0
+80606C5C:   callc [evt_btl_camera_shake_h battle_camera.o] 0 1 1 8 0
+80606C78:   callc [evt_btl_camera_set_moveSpeedLv battle_camera.o] 0 2
+80606C88:   callc [evt_btl_camera_add_zoom battle_camera.o] 0 -50
+80606C98:   callc [btlevtcmd_check_battleflag battle_event_cmd.o] LW(0) 2
+80606CA8:   callc [btlevtcmd_ResultACDefence battle_event_cmd.o] LW(3) [weapon_patapata_attack unit_ura_pata.o]
+80606CB8:   if_int_ne LW(0) 0
+80606CC4:     callc [btlevtcmd_CheckDamage battle_event_cmd.o] -2 LW(3) LW(4) [weapon_patapata_attack unit_ura_pata.o] 1048832 LW(5)
+80606CE4:   else
+80606CE8:     callc [btlevtcmd_CheckDamage battle_event_cmd.o] -2 LW(3) LW(4) [weapon_patapata_attack unit_ura_pata.o] 256 LW(5)
+80606D08:   endif
+80606D0C:   callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_ENM_PATA_ATTACK1"] [F1194D80] 0 [F1194D80]
+80606D28:   callc [btlevtcmd_GetPos battle_event_cmd.o] -2 LW(0) LW(1) LW(2)
+80606D40:   callc [btlevtcmd_FaceDirectionSub battle_event_cmd.o] -2 LW(0) 40
+80606D54:   addi LW(1) 30
+80606D60:   callc [btlevtcmd_SetMoveSpeed battle_event_cmd.o] -2 3.00
+80606D70:   begin_thread
+80606D74:     setii LW(0) 0
+80606D80:     loop 24
+80606D88:       subi LW(0) 45
+80606D94:       if_int_lt LW(0) 0
+80606DA0:         addi LW(0) 360
+80606DAC:       endif
+80606DB0:       callc [btlevtcmd_SetRotate battle_event_cmd.o] -2 0 0 LW(0)
+80606DC8:       wait_frames 1
+80606DD0:     end_loop
+80606DD4:     callc [btlevtcmd_SetRotate battle_event_cmd.o] -2 0 0 0
+80606DEC:     callc [btlevtcmd_AnimeChangePoseType battle_event_cmd.o] -2 1 43
+80606E00:     wait_frames 1
+80606E08:     callc [btlevtcmd_GetPos battle_event_cmd.o] -2 LW(0) LW(1) LW(2)
+80606E20:     subi LW(1) 20
+80606E2C:     callc [btlevtcmd_SetPos battle_event_cmd.o] -2 LW(0) LW(1) LW(2)
+80606E44:   end_thread
+80606E48:   callc [btlevtcmd_DivePosition battle_event_cmd.o] -2 LW(0) LW(1) LW(2) 0 30 0 0 0
+80606E74:   wait_frames 10
+80606E7C:   goto 98
+80606E84: 98:
+80606E8C:   callc [evt_btl_camera_set_mode battle_camera.o] 0 0
+80606E9C:   callc [btlevtcmd_AnimeChangePoseType battle_event_cmd.o] -2 1 42
+80606EB0:   callc [btlevtcmd_SetMoveSpeed battle_event_cmd.o] -2 4.00
+80606EC0:   callc [btlevtcmd_GetHomePos battle_event_cmd.o] -2 LW(0) LW(1) LW(2)
+80606ED8:   callc [btlevtcmd_DivePosition battle_event_cmd.o] -2 LW(0) LW(1) LW(2) 0 -10 0 0 -1
+80606F04: 99:
+80606F0C:   callc [btlevtcmd_ResetFaceDirection battle_event_cmd.o] -2
+80606F18:   callc [btlevtcmd_StartWaitEvent battle_event_cmd.o] -2
+80606F24:   return
+80606F28:   end

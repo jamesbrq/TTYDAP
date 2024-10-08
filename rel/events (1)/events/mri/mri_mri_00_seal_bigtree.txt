@@ -1,0 +1,67 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [seal_bigtree mri_00.o] AT 805E4188 ---
+805E4188:   callc [evt_mario_key_onoff evt_mario.o] 0
+805E4194:   callc [evt_party_move_beside_mario evt_party.o] 0
+805E41A0:   callc [evt_npc_flag_onoff evt_npc.o] 1 ["me"] 1073741856
+805E41B4:   callc [evt_msg_print evt_msg.o] 0 ["stg2_mri_e03_00"] 0 ["me"]
+805E41CC:   callc [evt_cam3d_evt_set evt_cam.o] 142.20 160.10 440.10 142.20 64.60 -50.80 500 11
+805E41F4:   wait_ms 500
+805E41FC:   callc [evt_msg_print_party evt_msg.o] ["stg2_mri_e03_01"]
+805E4208:   wait_ms 300
+805E4210:   callc [evt_cam3d_evt_set evt_cam.o] 140 90 193 140 45 -154 750 11
+805E4238:   setii LW(0) ["ガイド"]
+805E4244:   callsa_tid [mri_puni_walk_se mri.o] LW(9)
+805E4250:   callc [evt_npc_move_position evt_npc.o] ["ガイド"] 140 -140 1000 0 0
+805E4270:   stop_tid LW(9)
+805E4278:   wait_ms 200
+805E4280:   callc [evt_msg_print evt_msg.o] 0 ["stg2_mri_e03_02"] 0 ["ガイド"]
+805E4298:   wait_ms 300
+805E42A0:   callc [evt_cam3d_evt_set evt_cam.o] 113.30 83.60 143.50 113.30 45.00 -154.00 750 11
+805E42C8:   callc [evt_mario_set_dir evt_mario.o] 90 0 0
+805E42DC:   callc [evt_party_stop evt_party.o] 0
+805E42E8:   callc [evt_party_move_pos evt_party.o] 0 110 -120 1000
+805E4300:   callc [evt_party_set_dir evt_party.o] 0 90 -1
+805E4314:   wait_ms 300
+805E431C:   callc [evt_msg_print_party evt_msg.o] ["stg2_mri_e03_03"]
+805E4328:   wait_ms 300
+805E4330:   callc [evt_cam3d_evt_set evt_cam.o] 140.90 83.60 143.50 140.90 45.00 -154.00 500 11
+805E4358:   wait_ms 700
+805E4360:   callc [evt_msg_print evt_msg.o] 0 ["stg2_mri_e03_04"] 0 ["ガイド"]
+805E4378:   wait_ms 300
+805E4380:   callc [evt_npc_flag_onoff evt_npc.o] 1 ["ガイド"] 131088
+805E4394:   callc [evt_npc_status_onoff evt_npc.o] 1 ["ガイド"] 2
+805E43A8:   callc [evt_npc_change_interrupt evt_npc.o] ["ガイド"] 6 0
+805E43BC:   begin_thread
+805E43C0:     callc [evt_sub_spline_init evt_sub.o] 0 0 [spline_dt mri_00.o] 8 50 0
+805E43E0: 0:
+805E43E8:     callc [evt_sub_spline_get_value evt_sub.o] LW(3) LW(4) LW(5) LW(6)
+805E4400:     setii LW(0) ["ガイド"]
+805E440C:     callsa_tid [mri_puni_walk_se mri.o] LW(9)
+805E4418:     callc [evt_npc_move_position evt_npc.o] ["ガイド"] LW(3) LW(5) 160 0 0
+805E4438:     stop_tid LW(9)
+805E4440:     if_int_eq LW(6) 1
+805E444C:       goto 0
+805E4454:     endif
+805E4458:     callc [evt_npc_flag_onoff evt_npc.o] 0 ["me"] 1073741856
+805E446C:     callc [evt_npc_change_interrupt evt_npc.o] ["ガイド"] 6 [guide_talk mri_00.o]
+805E4480:   end_thread
+805E4484:   wait_ms 1000
+805E448C:   callc [evt_party_run evt_party.o] 0
+805E4498:   callc [evt_cam3d_evt_off evt_cam.o] 500 11
+805E44A8:   wait_ms 500
+805E44B0:   setii GSW(0) 75
+805E44BC:   setii GSWF(2881) 1
+805E44C8:   callc [evt_mario_key_onoff evt_mario.o] 1
+805E44D4:   return
+805E44D8:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [mri_puni_walk_se mri.o] AT 805E3DE8 ---
+805E3DE8:   loop 0
+805E3DF0:     callc [evt_npc_get_position evt_npc.o] LW(0) LW(10) LW(11) LW(12)
+805E3E08:     callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_STG2_PUNI_MOVE2_1"] LW(10) LW(11) LW(12) 0
+805E3E24:     wait_frames 5
+805E3E2C:   end_loop
+805E3E30:   return
+805E3E34:   end

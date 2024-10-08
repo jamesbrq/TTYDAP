@@ -1,0 +1,40 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [unison_phase_event unit_dokugassun.o] AT 805CF32C ---
+805CF32C:   callc [btlevtcmd_CheckPhase battle_event_cmd.o] LW(0) 67108865
+805CF33C:   if_int_eq LW(0) 0
+805CF348:     goto 99
+805CF350:   endif
+805CF354:   callc [btlevtcmd_CheckActStatus battle_event_cmd.o] -2 LW(0)
+805CF364:   if_int_eq LW(0) 0
+805CF370:     goto 99
+805CF378:   endif
+805CF37C:   callc [btlevtcmd_CheckPartsCounterAttribute battle_event_cmd.o] -2 1 512 LW(0)
+805CF394:   if_int_eq LW(0) 1
+805CF3A0:     goto 99
+805CF3A8:   endif
+805CF3AC:   callc [evt_sub_random evt_sub.o] 99 LW(0)
+805CF3BC:   if_int_lt LW(0) 25
+805CF3C8:     callc [btlevtcmd_GetUnitWork battle_event_cmd.o] -2 0 LW(0)
+805CF3DC:     if_int_eq LW(0) 1
+805CF3E8:       callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_ENM_KUMO_MOVE4"] [F1194D80] 0 [F1194D80]
+805CF404:       callc [btlevtcmd_GetPos battle_event_cmd.o] -2 LW(0) LW(1) LW(2)
+805CF41C:       setii LW(1) 40
+805CF428:       callc [btlevtcmd_DivePosition battle_event_cmd.o] -2 LW(0) LW(1) LW(2) 60 10 4 0 -1
+805CF454:       callc [btlevtcmd_SetHomePos battle_event_cmd.o] -2 LW(0) LW(1) LW(2)
+805CF46C:       callc [btlevtcmd_OnPartsAttribute battle_event_cmd.o] -2 1 6291456
+805CF480:       callc [btlevtcmd_SetUnitWork battle_event_cmd.o] -2 0 0
+805CF494:     else
+805CF498:       callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_ENM_KUMO_MOVE5"] [F1194D80] 0 [F1194D80]
+805CF4B4:       callc [btlevtcmd_GetPos battle_event_cmd.o] -2 LW(0) LW(1) LW(2)
+805CF4CC:       setii LW(1) 10
+805CF4D8:       callc [btlevtcmd_DivePosition battle_event_cmd.o] -2 LW(0) LW(1) LW(2) 60 -10 4 0 -1
+805CF504:       callc [btlevtcmd_SetHomePos battle_event_cmd.o] -2 LW(0) LW(1) LW(2)
+805CF51C:       callc [btlevtcmd_OffPartsAttribute battle_event_cmd.o] -2 1 6291456
+805CF530:       callc [btlevtcmd_SetUnitWork battle_event_cmd.o] -2 0 1
+805CF544:     endif
+805CF548:   endif
+805CF54C: 99:
+805CF554:   return
+805CF558:   end

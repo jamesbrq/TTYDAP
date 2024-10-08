@@ -1,0 +1,35 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [koe_evt las_29.o] AT 805F1514 ---
+805F1514:   setii LW(0) 1
+805F1520:   loop 0
+805F1528:     callc [make_koe_label las_29.o] LW(0) LW(1)
+805F1538:     callc [make_koe_pos las_29.o] LW(2) LW(3) LW(4)
+805F154C:     begin_thread
+805F1550:       addi GW(1) 1
+805F155C:       callc [evt_msg_toge evt_msg.o] 16777219 LW(2) LW(3) LW(4)
+805F1574:       callc [evt_msg_pri evt_msg.o] GW(6)
+805F1580:       addi GW(6) 1
+805F158C:       if_int_eq GW(6) 10
+805F1598:         setii GW(6) 0
+805F15A4:       endif
+805F15A8:       callc [evt_msg_print evt_msg.o] 0 LW(1) 0 0
+805F15C0:       subi GW(1) 1
+805F15CC:     end_thread
+805F15D0:     wait_ms 300
+805F15D8:     loop 0
+805F15E0:       setii LF(0) 0
+805F15EC:       if_int_ge GW(1) 6
+805F15F8:         setii LF(0) 1
+805F1604:       endif
+805F1608:       if_int_eq LF(0) 0
+805F1614:         loop_break
+805F1618:       endif
+805F161C:       wait_frames 1
+805F1624:     end_loop
+805F1628:     addi LW(0) 3
+805F1634:     modi LW(0) 20
+805F1640:   end_loop
+805F1644:   return
+805F1648:   end

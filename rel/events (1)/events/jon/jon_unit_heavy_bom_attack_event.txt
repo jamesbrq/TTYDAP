@@ -1,0 +1,55 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [attack_event unit_heavy_bom.o] AT 80CBB2F4 ---
+80CBB2F4:   callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_ENM_HEAVYB_ATTACK1"] [F1194D80] 0 [F1194D80]
+80CBB310:   callc [btlevtcmd_GetUnitWork battle_event_cmd.o] -2 0 LW(0)
+80CBB324:   if_int_eq LW(0) 0
+80CBB330:     callc [btlevtcmd_GetUnitWork battle_event_cmd.o] -2 1 LW(0)
+80CBB344:     switchi LW(0)
+80CBB34C:       case_int_eq 3
+80CBB354:         callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 1 ["G_1"]
+80CBB368:       case_int_eq 2
+80CBB370:         callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 1 ["G_2"]
+80CBB384:       case_int_eq 1
+80CBB38C:         callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 1 ["G_3"]
+80CBB3A0:       case_int_eq 0
+80CBB3A8:         callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 1 ["G_4"]
+80CBB3BC:     end_switch
+80CBB3C0:     wait_frames 40
+80CBB3C8:     callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_ENM_HEAVYB_WAIT1"] [F1194D80] 0 LW(0)
+80CBB3E4:     callc [btlevtcmd_SetUnitWork battle_event_cmd.o] -2 2 LW(0)
+80CBB3F8:     callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_ENM_HEAVYB_ATTACK2"] [F1194D80] 0 [F1194D80]
+80CBB414:     callc [btlevtcmd_SetUnitWork battle_event_cmd.o] -2 0 1
+80CBB428:     callc [btlevtcmd_OnUnitFlag battle_event_cmd.o] -2 16
+80CBB438:   else
+80CBB43C:     callc [btlevtcmd_GetUnitWork battle_event_cmd.o] -2 1 LW(0)
+80CBB450:     switchi LW(0)
+80CBB458:       case_int_eq 3
+80CBB460:         callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 1 ["G_1"]
+80CBB474:       case_int_eq 2
+80CBB47C:         callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 1 ["G_2"]
+80CBB490:       case_int_eq 1
+80CBB498:         callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 1 ["G_3"]
+80CBB4AC:       case_int_eq 0
+80CBB4B4:         callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 1 ["G_4"]
+80CBB4C8:     end_switch
+80CBB4CC:     wait_frames 40
+80CBB4D4:     callc [btlevtcmd_GetUnitWork battle_event_cmd.o] -2 3 LW(0)
+80CBB4E8:     switchi LW(0)
+80CBB4F0:       case_int_eq 0
+80CBB4F8:         setii LW(12) [weapon_heavy_bomb_guard unit_heavy_bom.o]
+80CBB504:         callc [btlevtcmd_SetUnitWork battle_event_cmd.o] -2 3 1
+80CBB518:       case_int_eq 1
+80CBB520:         setii LW(12) [weapon_heavy_bomb_guard_2 unit_heavy_bom.o]
+80CBB52C:         callc [btlevtcmd_SetUnitWork battle_event_cmd.o] -2 3 2
+80CBB540:       case_int_eq 2
+80CBB548:         setii LW(12) [weapon_heavy_bomb_guard_3 unit_heavy_bom.o]
+80CBB554:         callc [btlevtcmd_SetUnitWork battle_event_cmd.o] -2 3 0
+80CBB568:     end_switch
+80CBB56C:     callc [btlevtcmd_WeaponAftereffect battle_event_cmd.o] LW(12)
+80CBB578:     callc [btlevtcmd_CheckDamage battle_event_cmd.o] -2 -2 1 LW(12) 256 LW(5)
+80CBB598:   endif
+80CBB59C:   callc [btlevtcmd_StartWaitEvent battle_event_cmd.o] -2
+80CBB5A8:   return
+80CBB5AC:   end

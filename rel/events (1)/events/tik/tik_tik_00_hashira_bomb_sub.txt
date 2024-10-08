@@ -1,0 +1,43 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [hashira_bomb_sub tik_00.o] AT 805CD6BC ---
+805CD6BC:   begin_thread
+805CD6C0:     wait_ms 200
+805CD6C8:     callc [evt_mapobj_get_position evt_map.o] ["S_ana_before"] LW(0) LW(1) LW(2)
+805CD6E0:     callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_OFF_WALL_BREAK1"] LW(0) LW(1) LW(2) 0
+805CD6FC:   end_thread
+805CD700:   callc [evt_hitobj_onoff evt_hit.o] ["a_bom_mae"] 1 0
+805CD714:   callc [evt_hitobj_onoff evt_hit.o] ["a_bom_go"] 1 1
+805CD728:   callc [evt_hitobj_onoff evt_hit.o] ["ro_ru"] 1 0
+805CD73C:   setii GSWF(1330) 1
+805CD748:   callc [evt_img_entry evt_img.o] ["capture_img"]
+805CD754:   callc [evt_img_set_paper evt_img.o] ["capture_img"] ["OFF_d_bom_ver2"]
+805CD764:   callc [evt_offscreen_entry evt_offscreen.o] ["offscreen"]
+805CD770:   callc [evt_mapobj_set_offscreen evt_map.o] 1 ["bom_mae"] ["offscreen"]
+805CD784:   callc [evt_offscreen_get_boundingbox2 evt_offscreen.o] ["offscreen"] LW(10) LW(11) LW(12) LW(13)
+805CD7A0:   setii LF(0) 0
+805CD7AC:   if_int_eq LW(12) 0
+805CD7B8:     if_int_eq LW(13) 0
+805CD7C4:       setii LF(0) 1
+805CD7D0:     endif
+805CD7D4:   endif
+805CD7D8:   if_int_eq LF(0) 0
+805CD7E4:     callc [evt_img_alloc_capture evt_img.o] ["capture_img"] 0 ["offscreen"] 1 LW(10) LW(11) LW(12) LW(13)
+805CD80C:     callc [evt_img_clear_virtual_point evt_img.o] ["capture_img"]
+805CD818:     callc [evt_img_set_paper_anim evt_img.o] ["capture_img"] ["A_1"]
+805CD828:     callc [evt_mapobj_flag_onoff evt_map.o] 1 1 ["bom_mae"] 1
+805CD840:     callc [evt_mapobj_flag_onoff evt_map.o] 1 0 ["bom_go"] 1
+805CD858:     callc [evt_img_wait_animend evt_img.o] ["capture_img"]
+805CD864:   else
+805CD868:     callc [evt_mapobj_flag_onoff evt_map.o] 1 1 ["bom_mae"] 1
+805CD880:     callc [evt_mapobj_flag_onoff evt_map.o] 1 0 ["bom_go"] 1
+805CD898:   endif
+805CD89C:   callc [evt_mapobj_clear_offscreen evt_map.o] 1 ["bom_mae"]
+805CD8AC:   callc [evt_img_free_capture evt_img.o] ["capture_img"] 0
+805CD8BC:   callc [evt_img_free_capture evt_img.o] ["capture_img"] 1
+805CD8CC:   callc [evt_img_onoff evt_img.o] ["capture_img"] 0
+805CD8DC:   callc [evt_img_release evt_img.o] ["capture_img"]
+805CD8E8:   callc [evt_offscreen_delete evt_offscreen.o] ["offscreen"]
+805CD8F4:   return
+805CD8F8:   end

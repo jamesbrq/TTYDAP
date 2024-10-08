@@ -1,0 +1,130 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [mahorn_subset_dead_event unit_mahorn_custom.o] AT 80CD53A0 ---
+80CD53A0:   callc [btlevtcmd_CheckDataOfDataTable battle_event_cmd.o] LW(10) LW(0) 50
+80CD53B4:   if_int_ne LW(0) 0
+80CD53C0:     callc [btlevtcmd_RunDataEventChild battle_event_cmd.o] LW(10) 50
+80CD53D0:   endif
+80CD53D4:   setii LW(0) 48
+80CD53E0:   callc [btlevtcmd_OnUnitFlag battle_event_cmd.o] LW(10) 134217728
+80CD53F0:   callc [btlevtcmd_snd_se battle_event_cmd.o] LW(10) ["SFX_BTL_ENEMY_DIE1_1"] [F1194D80] 0 [F1194D80]
+80CD540C: 10:
+80CD5414:   wait_frames 1
+80CD541C:   callc [btlevtcmd_AddRotate battle_event_cmd.o] LW(10) 0 -15 0
+80CD5434:   subi LW(0) 1
+80CD5440:   if_int_gt LW(0) 0
+80CD544C:     goto 10
+80CD5454:   endif
+80CD5458:   callc [btlevtcmd_SetRotate battle_event_cmd.o] LW(10) 0 0 0
+80CD5470:   callc [btlevtcmd_snd_se battle_event_cmd.o] LW(10) ["SFX_BTL_ENEMY_DIE1_2"] [F1194D80] 0 [F1194D80]
+80CD548C:   callc [btlevtcmd_GetPos battle_event_cmd.o] LW(10) LW(0) LW(1) LW(2)
+80CD54A4:   addi LW(2) 10
+80CD54B0:   callc [evt_eff evt_eff.o] 0 ["kemuri_test"] 4 LW(0) LW(1) LW(2) 0.80 0 0 0 0 0 0 0
+80CD54F0:   callc [btlevtcmd_GetCoin battle_event_cmd.o] LW(10) LW(0)
+80CD5500:   callc [btlevtcmd_StoreCoin battle_event_cmd.o] LW(0)
+80CD550C:   callc [btlevtcmd_GetExp battle_event_cmd.o] LW(10) LW(0)
+80CD551C:   callc [btlevtcmd_StoreExp battle_event_cmd.o] LW(0)
+80CD5528:   callc [btlevtcmd_GetPos battle_event_cmd.o] LW(10) LW(3) LW(1) LW(2)
+80CD5540:   addi LW(2) 10
+80CD554C:   addi LW(1) 30
+80CD5558:   callc [_add_star_point_disp_offset battle_event_subset.o] LW(10) LW(3) LW(1) LW(2)
+80CD5570:   callc [evt_eff evt_eff.o] [zero_jon_0000c944 unit_mahorn_custom.o] ["star_point"] 0 LW(3) LW(1) LW(2) LW(0) 0 0 0 0 0 0 0
+80CD55B0:   if_int_ge LW(0) 1
+80CD55BC:     loop LW(0)
+80CD55C4:     end_loop
+80CD55C8:   endif
+80CD55CC:   callc [btlevtcmd_SetRotateOffset battle_event_cmd.o] LW(10) 0 0 0
+80CD55E4:   setii LW(0) 30
+80CD55F0: 20:
+80CD55F8:   wait_frames 1
+80CD5600:   callc [btlevtcmd_AddRotate battle_event_cmd.o] LW(10) 3 0 0
+80CD5618:   subi LW(0) 1
+80CD5624:   if_int_gt LW(0) 0
+80CD5630:     goto 20
+80CD5638:   endif
+80CD563C:   callc [btlevtcmd_GetBackItem battle_event_cmd.o] LW(10)
+80CD5648:   callc [btlevtcmd_ClearAllStatus battle_event_cmd.o] LW(10)
+80CD5654:   callc [btlevtcmd_OnAttribute battle_event_cmd.o] LW(10) 16777216
+80CD5664:   callc [btlevtcmd_OnAttribute battle_event_cmd.o] LW(10) 536870912
+80CD5674:   callss [mahorn_subset_bunsin_all_kill unit_mahorn_custom.o]
+80CD567C:   callc [btlevtcmd_CheckDamageCode battle_event_cmd.o] LW(10) 1024 LW(0)
+80CD5690:   if_int_ne LW(0) 0
+80CD569C:     callc [btlevtcmd_KillUnit battle_event_cmd.o] LW(10) 0
+80CD56AC:   else
+80CD56B0:     callc [btlevtcmd_KillUnit battle_event_cmd.o] LW(10) 2
+80CD56C0:   endif
+80CD56C4:   return
+80CD56C8:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [mahorn_subset_bunsin_all_kill unit_mahorn_custom.o] AT 80CD5290 ---
+80CD5290:   callc [btlevtcmd_GetUnitWork battle_event_cmd.o] -2 4 LW(0)
+80CD52A4:   if_int_eq LW(0) 0
+80CD52B0:     callc [mahorn_get_bunsin unit_mahorn_custom.o] LW(1) LW(2) LW(3) LW(4) LW(0)
+80CD52CC:     if_int_ge LW(0) 1
+80CD52D8:       callc [btlevtcmd_WaitAttackEnd battle_event_cmd.o]
+80CD52E0:       callc [mahorn_get_bunsin unit_mahorn_custom.o] LW(1) LW(2) LW(3) LW(4) LW(0)
+80CD52FC:       setii LW(0) LW(1)
+80CD5308:       callsa [bunsin_kill_event unit_mahorn_custom.o]
+80CD5310:       setii LW(0) LW(2)
+80CD531C:       callsa [bunsin_kill_event unit_mahorn_custom.o]
+80CD5324:       setii LW(0) LW(3)
+80CD5330:       callsa [bunsin_kill_event unit_mahorn_custom.o]
+80CD5338:       setii LW(0) LW(4)
+80CD5344:       callsa [bunsin_kill_event unit_mahorn_custom.o]
+80CD534C:       loop 0
+80CD5354:         callc [mahorn_get_bunsin unit_mahorn_custom.o] LW(1) LW(2) LW(3) LW(4) LW(0)
+80CD5370:         if_int_eq LW(0) 0
+80CD537C:           loop_break
+80CD5380:         endif
+80CD5384:         wait_frames 1
+80CD538C:       end_loop
+80CD5390:     endif
+80CD5394:   endif
+80CD5398:   return
+80CD539C:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [bunsin_kill_event unit_mahorn_custom.o] AT 80CD5844 ---
+80CD5844:   callc [btlevtcmd_GetUnitId battle_event_cmd.o] LW(0) LW(0)
+80CD5854:   if_int_eq LW(0) -1
+80CD5860:     return
+80CD5864:   endif
+80CD5868:   callc [btlevtcmd_GetUnitWork battle_event_cmd.o] LW(0) 6 LW(1)
+80CD587C:   if_int_eq LW(1) 1
+80CD5888:     goto 10
+80CD5890:   endif
+80CD5894:   callc [btlevtcmd_SetUnitWork battle_event_cmd.o] LW(0) 6 1
+80CD58A8:   callss [alpha_down_event unit_mahorn_custom.o]
+80CD58B0: 10:
+80CD58B8:   callc [btlevtcmd_WaitAttackEnd battle_event_cmd.o]
+80CD58C0:   callc [btlevtcmd_KillUnit battle_event_cmd.o] LW(0) 0
+80CD58D0:   return
+80CD58D4:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [alpha_down_event unit_mahorn_custom.o] AT 80CD4DCC ---
+80CD4DCC:   if_int_eq LW(0) -1
+80CD4DD8:     return
+80CD4DDC:   endif
+80CD4DE0:   callc [btlevtcmd_SetAlpha battle_event_cmd.o] LW(0) 1 254
+80CD4DF4:   callc [btlevtcmd_AnimeFlagOnOff battle_event_cmd.o] LW(0) 1 1 1
+80CD4E0C:   wait_frames 1
+80CD4E14:   callc [evt_sub_intpl_init evt_sub.o] 0 255 0 30
+80CD4E2C:   loop 30
+80CD4E34:     callc [evt_sub_intpl_get_value_para evt_sub.o] LW(1) LW(2)
+80CD4E44:     callc [btlevtcmd_SetAlpha battle_event_cmd.o] LW(0) 1 LW(1)
+80CD4E58:     callc [btlevtcmd_SetAlpha battle_event_cmd.o] LW(0) 2 LW(1)
+80CD4E6C:     callc [btlevtcmd_SetAlpha battle_event_cmd.o] LW(0) 3 LW(1)
+80CD4E80:     callc [btlevtcmd_SetAlpha battle_event_cmd.o] LW(0) 4 LW(1)
+80CD4E94:     callc [btlevtcmd_SetAlpha battle_event_cmd.o] LW(0) 5 LW(1)
+80CD4EA8:     wait_frames 1
+80CD4EB0:   end_loop
+80CD4EB4:   callc [btlevtcmd_OnPartsAttribute battle_event_cmd.o] LW(0) 1 33554432
+80CD4EC8:   callc [btlevtcmd_OnPartsAttribute battle_event_cmd.o] LW(0) 2 33554432
+80CD4EDC:   callc [btlevtcmd_OnPartsAttribute battle_event_cmd.o] LW(0) 3 33554432
+80CD4EF0:   callc [btlevtcmd_OnPartsAttribute battle_event_cmd.o] LW(0) 4 33554432
+80CD4F04:   callc [btlevtcmd_OnPartsAttribute battle_event_cmd.o] LW(0) 5 33554432
+80CD4F18:   callc [btlevtcmd_SetAlpha battle_event_cmd.o] LW(0) 1 0
+80CD4F2C:   callc [btlevtcmd_AnimeFlagOnOff battle_event_cmd.o] LW(0) 1 1 1
+80CD4F44:   wait_frames 1
+80CD4F4C:   return
+80CD4F50:   end

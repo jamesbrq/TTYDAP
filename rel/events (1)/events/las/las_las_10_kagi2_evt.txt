@@ -1,0 +1,143 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [kagi2_evt las_10.o] AT 805DE174 ---
+805DE174:   callc [evt_mario_key_onoff evt_mario.o] 0
+805DE180:   callc [make_kagi_tbl las_10.o] LW(0) LW(1)
+805DE190:   if_int_gt LW(1) 0
+805DE19C:     callc [evt_win_item_select evt_window.o] 0 LW(0) LW(1) 0
+805DE1B4:     if_int_eq LW(1) -1
+805DE1C0:       callc [evt_mario_key_onoff evt_mario.o] 1
+805DE1CC:       return
+805DE1D0:     endif
+805DE1D4:   else
+805DE1D8:     callc [evt_msg_print evt_msg.o] 0 ["stg8_las_32_01"] 0 0
+805DE1F0:     callc [evt_mario_key_onoff evt_mario.o] 1
+805DE1FC:     return
+805DE200:   endif
+805DE204:   callc [evt_pouch_remove_item evt_pouch.o] LW(1) LW(2)
+805DE214:   callc [evt_mapobj_get_position evt_map.o] ["S_kagi2"] LW(0) LW(1) LW(2)
+805DE22C:   callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_STG8_KEY_SET1"] LW(0) LW(1) LW(2) 0
+805DE248:   setii LW(0) ["S_kagi2"]
+805DE254:   setii LW(1) ["A113_daiza2"]
+805DE260:   callss [kagi_rotate las_10.o]
+805DE268:   setii GSWF(4332) 1
+805DE274:   addi GSW(1122) 1
+805DE280:   if_int_eq GSW(1122) 8
+805DE28C:     callss [tenkyugi_evt las_10.o]
+805DE294:   endif
+805DE298:   callc [evt_mario_key_onoff evt_mario.o] 1
+805DE2A4:   callc [evt_exit_case_evt evt_case.o]
+805DE2AC:   return
+805DE2B0:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [kagi_rotate las_10.o] AT 805DDEFC ---
+805DDEFC:   setii LW(10) LW(0)
+805DDF08:   setii LW(9) LW(1)
+805DDF14:   wait_ms 500
+805DDF1C:   begin_thread
+805DDF20:     callc [evt_snd_sfxon evt_snd.o] ["SFX_STG8_KEYSTAND_SHAKE1"] LW(0)
+805DDF30:     callc [evt_cam_shake evt_cam.o] 4 0.01 0.00 1000
+805DDF48:     callc [evt_snd_sfxoff evt_snd.o] LW(0)
+805DDF54:   end_thread
+805DDF58:   callc [evt_mapobj_get_position evt_map.o] LW(10) LW(0) LW(1) LW(2)
+805DDF70:   callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_STG8_KEYSTAND_ROUND1"] LW(0) LW(1) LW(2) LW(8)
+805DDF8C:   callc [evt_sub_intpl_msec_init evt_sub.o] 11 0 180 1000
+805DDFA4: 0:
+805DDFAC:   callc [evt_sub_intpl_msec_get_value evt_sub.o]
+805DDFB4:   callc [evt_mapobj_rotate evt_map.o] 1 LW(10) 0 LW(0) 0
+805DDFD0:   callc [evt_hit_bind_update evt_hit.o] LW(9)
+805DDFDC:   wait_frames 1
+805DDFE4:   if_int_eq LW(1) 1
+805DDFF0:     goto 0
+805DDFF8:   endif
+805DDFFC:   callc [evt_snd_sfxoff evt_snd.o] LW(8)
+805DE008:   return
+805DE00C:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [tenkyugi_evt las_10.o] AT 805DD808 ---
+805DD808:   callc [evt_mario_key_onoff evt_mario.o] 0
+805DD814:   callc [evt_snd_bgmoff_f evt_snd.o] 512 3000
+805DD824:   callc [evt_snd_sfxon evt_snd.o] ["SFX_STG8_CELESTIAL_SHAKE1"] LW(10)
+805DD834:   callc [evt_cam_shake evt_cam.o] 4 0.01 0.00 1200
+805DD84C:   callc [evt_snd_sfxoff evt_snd.o] LW(10)
+805DD858:   wait_ms 1200
+805DD860:   callc [evt_cam3d_evt_set evt_cam.o] 0 425 787 0 530 95 0 11
+805DD888:   wait_frames 1
+805DD890:   wait_ms 1000
+805DD898:   callc [evt_mapobj_color evt_map.o] 1 ["S_hoshihoshi"] 255 255 255 0
+805DD8B8:   callc [evt_mapobj_flag_onoff evt_map.o] 1 0 ["S_hoshihoshi"] 1
+805DD8D0:   callc [evt_snd_sfxon evt_snd.o] ["SFX_STG8_CELESTIAL_MOVE1"] 0
+805DD8E0:   callc [evt_sub_intpl_msec_init evt_sub.o] 11 0 255 1000
+805DD8F8: 0:
+805DD900:   callc [evt_sub_intpl_msec_get_value evt_sub.o]
+805DD908:   callc [evt_mapobj_color evt_map.o] 1 ["S_hoshihoshi"] 255 255 255 LW(0)
+805DD928:   wait_frames 1
+805DD930:   if_int_eq LW(1) 1
+805DD93C:     goto 0
+805DD944:   endif
+805DD948:   callc [evt_map_playanim evt_map.o] ["en"] 1 0
+805DD95C:   callc [evt_sub_intpl_msec_init evt_sub.o] 1 0 1000 3000
+805DD974:   loop 0
+805DD97C:     callc [evt_sub_intpl_msec_get_value evt_sub.o]
+805DD984:     divf LW(0) 1000.00
+805DD990:     callc [evt_map_set_playrate evt_map.o] ["en"] LW(0)
+805DD9A0:     wait_frames 1
+805DD9A8:     if_int_eq LW(1) 0
+805DD9B4:       loop_break
+805DD9B8:     endif
+805DD9BC:   end_loop
+805DD9C0:   callc [evt_map_set_playrate evt_map.o] ["en"] 1.00
+805DD9D0:   wait_ms 1000
+805DD9D8:   callc [evt_cam3d_evt_set evt_cam.o] -125 575 295 -125 575 95 0 11
+805DDA00:   wait_frames 1
+805DDA08:   callc [evt_cam3d_evt_set evt_cam.o] 125 575 295 125 575 95 5000 0
+805DDA30:   wait_ms 5000
+805DDA38:   callc [evt_mario_set_pos evt_mario.o] -55 400 60
+805DDA4C:   callc [evt_mario_get_party evt_mario.o] LW(0)
+805DDA58:   if_int_eq LW(0) 0
+805DDA64:     callc [evt_mario_set_party evt_mario.o] 0 1
+805DDA74:   endif
+805DDA78:   callc [evt_party_stop evt_party.o] 0
+805DDA84:   callc [evt_party_set_pos evt_party.o] 0 -25 400 80
+805DDA9C:   callc [evt_mario_dispflag_onoff evt_mario.o] 1 512
+805DDAAC:   callc [evt_party_dispflg_onoff evt_party.o] 0 32 1
+805DDAC0:   callc [evt_mario_set_dispdir evt_mario.o] 180
+805DDACC:   callc [evt_party_set_dispdir evt_party.o] 0 180
+805DDADC:   callc [evt_mario_adjust_dir evt_mario.o]
+805DDAE4:   wait_frames 1
+805DDAEC:   callc [evt_mario_dispflag_onoff evt_mario.o] 0 512
+805DDAFC:   callc [evt_party_dispflg_onoff evt_party.o] 0 32 0
+805DDB10:   callc [evt_cam3d_evt_set evt_cam.o] 0 500 390 0 450 95 0 11
+805DDB38:   wait_frames 1
+805DDB40:   wait_ms 500
+805DDB48:   callc [evt_msg_print_party evt_msg.o] ["stg8_las_33"]
+805DDB54:   wait_ms 2000
+805DDB5C:   setii GF(0) 0
+805DDB68:   begin_thread
+805DDB6C:     callc [evt_snd_sfxon evt_snd.o] ["SFX_STG8_CELESTIAL_SHAKE1"] LW(10)
+805DDB7C:     loop 20
+805DDB84:       if_int_ne GF(0) 0
+805DDB90:         loop_break
+805DDB94:       endif
+805DDB98:       callc [evt_cam_shake evt_cam.o] 4 0.01 0.00 500
+805DDBB0:     end_loop
+805DDBB4:     callc [evt_snd_sfxoff evt_snd.o] LW(10)
+805DDBC0:   end_thread
+805DDBC4:   callc [evt_mario_get_pos evt_mario.o] 0 LW(0) LW(1) LW(2)
+805DDBDC:   callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_VOICE_MARIO_FIND1_2"] LW(0) LW(1) LW(2) 0
+805DDBF8:   callc [evt_eff_fukidashi evt_eff.o] 0 0 0 0 0 0 0 0 0 0 60
+805DDC2C:   callc [evt_eff_fukidashi evt_eff.o] 3 0 0 0 0 0 0 0 0 0 60
+805DDC60:   wait_ms 1500
+805DDC68:   begin_thread
+805DDC6C:     callc [evt_mario_set_dir evt_mario.o] 270 100 0
+805DDC80:     wait_ms 300
+805DDC88:     callc [evt_mario_set_dir evt_mario.o] 90 100 0
+805DDC9C:   end_thread
+805DDCA0:   wait_ms 500
+805DDCA8:   callc [evt_msg_print_party evt_msg.o] ["stg8_las_34"]
+805DDCB4:   setii GF(0) 1
+805DDCC0:   callc [evt_bero_mapchange evt_bero.o] ["las_19"] ["chgmap_evt"]
+805DDCD0:   callc [evt_mario_key_onoff evt_mario.o] 1
+805DDCDC:   return
+805DDCE0:   end

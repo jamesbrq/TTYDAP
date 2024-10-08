@@ -1,0 +1,126 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [gor_muj_ship_start gor_00.o] AT 805E67DC ---
+805E67DC:   callc [evt_mapobj_flag_onoff evt_map.o] 1 0 ["S_c_hikinami"] 1
+805E67F4:   callc [evt_map_set_tevcallback evt_map.o] 1 [alpha_tev gor_00.o]
+805E6804:   callc [evt_mapobj_flag_onoff evt_map.o] 0 1 ["S_c_hikinami"] 16777216
+805E681C:   callc [evt_mapobj_flag_onoff evt_map.o] 0 0 ["S_c_hikinami"] 256
+805E6834:   callc [alpha_set_func gor_00.o] 0
+805E6840:   callc [evt_map_set_playrate evt_map.o] ["hiki_nami"] 1.00
+805E6850:   begin_thread
+805E6854:     callc [evt_sub_intpl_msec_init evt_sub.o] 0 100 0 500
+805E686C:     loop 0
+805E6874:       callc [evt_sub_intpl_msec_get_value_para evt_sub.o] LW(0) LW(1)
+805E6884:       divf LW(0) 100.00
+805E6890:       callc [scale_func gor_00.o] LW(0)
+805E689C:       callc [evt_npc_set_scale evt_npc.o] ["コルテス"] LW(0) LW(0) LW(0)
+805E68B4:       if_int_eq LW(1) 0
+805E68C0:         loop_break
+805E68C4:       endif
+805E68C8:       wait_frames 1
+805E68D0:     end_loop
+805E68D4:     callc [evt_mario_cont_onoff evt_mario.o] 0
+805E68E0:     callc [evt_party_cont_onoff evt_party.o] 0 0
+805E68F0:     callc [evt_party_cont_onoff evt_party.o] 1 0
+805E6900:     callc [evt_mario_set_pos evt_mario.o] 0 -1000 0
+805E6914:     callc [evt_party_set_pos evt_party.o] 0 0 -1000 0
+805E692C:     callc [evt_party_set_pos evt_party.o] 1 0 -1000 0
+805E6944:   end_thread
+805E6948:   callc [evt_cam3d_evt_set evt_cam.o] 184 278 1091 184 158 99 500 11
+805E6970:   wait_ms 1000
+805E6978:   stop_tid GW(10)
+805E6980:   callc [evt_snd_bgmon evt_snd.o] 512 ["BGM_EVT_STG5_GHOST_SHIP1"]
+805E6990:   setii GF(10) 1
+805E699C:   callc [evt_npc_set_position evt_npc.o] ["船ダミー"] 0 GW(14) 0
+805E69B4:   begin_thread
+805E69B8:     wait_ms 400
+805E69C0:     callss [gor_muj_ship_pera gor_00.o]
+805E69C8:   end_thread
+805E69CC:   begin_thread
+805E69D0:     loop 0
+805E69D8:       callc [evt_npc_get_position evt_npc.o] ["船ダミー"] LW(0) LW(1) LW(2)
+805E69F0:       setff GW(14) LW(1)
+805E69FC:       if_int_eq GF(10) 0
+805E6A08:         loop_break
+805E6A0C:       endif
+805E6A10:       wait_frames 1
+805E6A18:     end_loop
+805E6A1C:   end_thread
+805E6A20:   callc [evt_mapobj_get_position evt_map.o] ["S_fune_b"] LW(0) LW(1) LW(2)
+805E6A38:   callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_STG0_SHIP_JUMP1"] LW(0) LW(1) LW(2) 0
+805E6A54:   callc [evt_npc_jump_position_nohit evt_npc.o] ["船ダミー"] 0 GW(14) 0 1800 150
+805E6A74:   callc [evt_mapobj_get_position evt_map.o] ["S_fune_b"] LW(0) LW(1) LW(2)
+805E6A8C:   callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_STG0_SHIP_LANDING1"] LW(0) LW(1) LW(2) 0
+805E6AA8:   setii GF(10) 0
+805E6AB4:   setir LW(0) 0xfd050f8e
+805E6AC0:   setff LW(1) 1.50
+805E6ACC:   callsa_tid [gor_ship_puka gor_00.o] GW(10)
+805E6AD8:   begin_thread
+805E6ADC:     wait_ms 2000
+805E6AE4:     callc [evt_sub_intpl_msec_init evt_sub.o] 11 0 255 5000
+805E6AFC:     loop 0
+805E6B04:       callc [evt_sub_intpl_msec_get_value evt_sub.o]
+805E6B0C:       callc [alpha_set_func gor_00.o] LW(0)
+805E6B18:       if_int_eq LW(1) 0
+805E6B24:         loop_break
+805E6B28:       endif
+805E6B2C:       wait_frames 1
+805E6B34:     end_loop
+805E6B38:   end_thread
+805E6B3C:   callc [evt_snd_sfxon evt_snd.o] ["SFX_STG5_SHIP_STARTING1_3"] 0
+805E6B4C:   setff LW(0) GW(13)
+805E6B58:   setff LW(1) GW(13)
+805E6B64:   addf LW(1) 800.00
+805E6B70:   callc [evt_sub_intpl_msec_init evt_sub.o] 1 LW(0) LW(1) 10000
+805E6B88:   loop 0
+805E6B90:     callc [evt_sub_intpl_msec_get_value_para evt_sub.o] LW(0) LW(1)
+805E6BA0:     setff GW(13) LW(0)
+805E6BAC:     if_int_eq LW(1) 0
+805E6BB8:       loop_break
+805E6BBC:     endif
+805E6BC0:     wait_frames 1
+805E6BC8:   end_loop
+805E6BCC:   callc [evt_bero_mapchange evt_bero.o] ["muj_20"] [zero_gor_00014c5c gor_00.o]
+805E6BDC:   return
+805E6BE0:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [gor_muj_ship_pera gor_00.o] AT 805E6610 ---
+805E6610:   callc [evt_img_entry evt_img.o] ["capture_img"]
+805E661C:   callc [evt_img_set_paper evt_img.o] ["capture_img"] ["OFF_d_kaiten"]
+805E662C:   callc [evt_offscreen_entry evt_offscreen.o] ["offscreen"]
+805E6638:   callc [evt_offscreen_set_texture_fmt evt_offscreen.o] ["offscreen"] 6 6
+805E664C:   callc [evt_mapobj_set_offscreen evt_map.o] 1 ["S_fune_b"] ["offscreen"]
+805E6660:   callc [evt_img_alloc_capture evt_img.o] ["capture_img"] 0 ["offscreen"] 0 0 0 608 480
+805E6688:   callc [evt_img_alloc_capture evt_img.o] ["capture_img"] 1 ["offscreen"] 0 0 0 608 480
+805E66B0:   callc [evt_img_onoff evt_img.o] ["capture_img"] 0
+805E66C0:   callc [evt_img_set_virtual_point evt_img.o] ["capture_img"] 191 0 50
+805E66D8:   callc [evt_img_set_paper_anim evt_img.o] ["capture_img"] ["Z_1"]
+805E66E8:   callc [evt_img_onoff evt_img.o] ["capture_img"] 1
+805E66F8:   callc [evt_snd_sfxon evt_snd.o] ["SFX_OFF_SHIP_REVERSE1"] 0
+805E6708:   callc [evt_mapobj_flag_onoff evt_map.o] 1 1 ["S_fune_b"] 1
+805E6720:   callc [evt_img_set_paper_anim evt_img.o] ["capture_img"] ["A_1"]
+805E6730:   callc [evt_img_wait_animend evt_img.o] ["capture_img"]
+805E673C:   callc [evt_img_onoff evt_img.o] ["capture_img"] 0
+805E674C:   callc [evt_mapobj_flag_onoff evt_map.o] 1 0 ["S_fune_b"] 1
+805E6764:   setii GW(15) 180
+805E6770:   callc [evt_mapobj_clear_offscreen evt_map.o] 1 ["S_fune_b"]
+805E6780:   callc [evt_img_free_capture evt_img.o] ["capture_img"] 0
+805E6790:   callc [evt_img_free_capture evt_img.o] ["capture_img"] 1
+805E67A0:   callc [evt_img_onoff evt_img.o] ["capture_img"] 0
+805E67B0:   callc [evt_img_release evt_img.o] ["capture_img"]
+805E67BC:   callc [evt_offscreen_delete evt_offscreen.o] ["offscreen"]
+805E67C8:   callc [evt_paper_delete evt_paper.o] ["OFF_d_kaiten"]
+805E67D4:   return
+805E67D8:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [gor_ship_puka gor_00.o] AT 805E6214 ---
+805E6214:   setii LW(10) 0
+805E6220:   loop 0
+805E6228:     callc [gor_ship_puka_func gor_00.o] LW(10) LW(1) LW(11)
+805E623C:     storef_ind LW(0) LW(11)
+805E6248:     addi LW(10) 1
+805E6254:     wait_ms 130
+805E625C:   end_loop
+805E6260:   return
+805E6264:   end

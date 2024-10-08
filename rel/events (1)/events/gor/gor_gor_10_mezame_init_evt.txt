@@ -1,0 +1,121 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [mezame_init_evt gor_10.o] AT 80621560 ---
+80621560:   callc [evt_snd_bgmoff evt_snd.o] 512
+8062156C:   callc [evt_snd_envoff evt_snd.o] 512
+80621578:   callc [evt_mario_key_onoff evt_mario.o] 0
+80621584:   callc [evt_party_stop evt_party.o] 0
+80621590:   callc [evt_mario_dispflag_onoff evt_mario.o] 1 1
+806215A0:   callc [evt_party_dispflg_onoff evt_party.o] 0 1 1
+806215B4:   callc [evt_mapobj_flag_onoff evt_map.o] 1 1 ["marukongou"] 1
+806215CC:   callc [evt_mapobj_flag_onoff evt_map.o] 1 1 ["densha"] 1
+806215E4:   callc [evt_mapobj_flag_onoff evt_map.o] 1 1 ["pukupuku"] 1
+806215FC:   setff GW(0) 50.00
+80621608:   begin_thread
+8062160C:     callc [depth gor_10.o]
+80621614:   end_thread
+80621618:   setff GW(1) 240.00
+80621624:   begin_thread
+80621628:     callc [mabuta gor_10.o]
+80621630:   end_thread
+80621634:   begin_thread
+80621638:     callc [cam_yure gor_10.o]
+80621640:   end_thread
+80621644:   callsa [evt_mezame gor_10.o]
+8062164C:   return
+80621650:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [evt_mezame gor_10.o] AT 806211D8 ---
+806211D8:   callc [evt_seq_wait evt_seq.o] 2
+806211E4:   wait_ms 1000
+806211EC:   callc [evt_fade_end_wait evt_fade.o]
+806211F4:   begin_thread_tid LW(10)
+806211FC:     wait_ms 2000
+80621204:     loop 0
+8062120C:       callc [evt_snd_sfxon evt_snd.o] ["SFX_VOICE_MARIO_SLEEP1"] GW(2)
+8062121C:       wait_ms 3000
+80621224:     end_loop
+80621228:   end_thread
+8062122C:   wait_ms 3000
+80621234:   callc [evt_msg_print evt_msg.o] 0 ["mac_0_012"] 0 0
+8062124C:   wait_ms 2000
+80621254:   callc [evt_msg_print evt_msg.o] 0 ["mac_0_013"] 0 0
+8062126C:   callc [evt_snd_envon evt_snd.o] 272 ["ENV_STG0_GOR0"]
+8062127C:   stop_tid LW(10)
+80621284:   wait_ms 300
+8062128C:   callc [evt_snd_sfxchk evt_snd.o] GW(2) LW(0)
+8062129C:   if_int_ne LW(0) -1
+806212A8:     callc [evt_snd_sfxoff evt_snd.o] GW(2)
+806212B4:   endif
+806212B8:   callc [evt_snd_sfxon evt_snd.o] ["SFX_VOICE_MARIO_FIND1_2"] 0
+806212C8:   callc [evt_sub_intpl_msec_init evt_sub.o] 11 2400 1200 2000
+806212E0:   loop 0
+806212E8:     callc [evt_sub_intpl_msec_get_value evt_sub.o]
+806212F0:     divf LW(0) 10.00
+806212FC:     setff GW(1) LW(0)
+80621308:     wait_frames 1
+80621310:     if_int_eq LW(1) 0
+8062131C:       loop_break
+80621320:     endif
+80621324:   end_loop
+80621328:   callc [evt_sub_intpl_msec_init evt_sub.o] 1 1200 2400 100
+80621340:   loop 0
+80621348:     callc [evt_sub_intpl_msec_get_value evt_sub.o]
+80621350:     divf LW(0) 10.00
+8062135C:     setff GW(1) LW(0)
+80621368:     wait_frames 1
+80621370:     if_int_eq LW(1) 0
+8062137C:       loop_break
+80621380:     endif
+80621384:   end_loop
+80621388:   callc [evt_sub_intpl_msec_init evt_sub.o] 1 2400 1200 100
+806213A0:   loop 0
+806213A8:     callc [evt_sub_intpl_msec_get_value evt_sub.o]
+806213B0:     divf LW(0) 10.00
+806213BC:     setff GW(1) LW(0)
+806213C8:     wait_frames 1
+806213D0:     if_int_eq LW(1) 0
+806213DC:       loop_break
+806213E0:     endif
+806213E4:   end_loop
+806213E8:   callc [evt_sub_intpl_msec_init evt_sub.o] 1 1200 2400 100
+80621400:   loop 0
+80621408:     callc [evt_sub_intpl_msec_get_value evt_sub.o]
+80621410:     divf LW(0) 10.00
+8062141C:     setff GW(1) LW(0)
+80621428:     wait_frames 1
+80621430:     if_int_eq LW(1) 0
+8062143C:       loop_break
+80621440:     endif
+80621444:   end_loop
+80621448:   wait_ms 500
+80621450:   begin_thread
+80621454:     callc [evt_sub_intpl_msec_init evt_sub.o] 1 500 0 2000
+8062146C:     loop 0
+80621474:       callc [evt_sub_intpl_msec_get_value evt_sub.o]
+8062147C:       divf LW(0) 10.00
+80621488:       setff GW(0) LW(0)
+80621494:       wait_frames 1
+8062149C:       if_int_eq LW(1) 0
+806214A8:         loop_break
+806214AC:       endif
+806214B0:     end_loop
+806214B4:   end_thread
+806214B8:   callc [evt_sub_intpl_msec_init evt_sub.o] 1 2400 0 2000
+806214D0:   loop 0
+806214D8:     callc [evt_sub_intpl_msec_get_value evt_sub.o]
+806214E0:     divf LW(0) 10.00
+806214EC:     setff GW(1) LW(0)
+806214F8:     wait_frames 1
+80621500:     if_int_eq LW(1) 0
+8062150C:       loop_break
+80621510:     endif
+80621514:   end_loop
+80621518:   wait_ms 3000
+80621520:   callc [evt_msg_print evt_msg.o] 0 ["mac_0_013_01"] 0 0
+80621538:   wait_ms 300
+80621540:   wait_ms 2000
+80621548:   callc [evt_bero_mapchange evt_bero.o] ["gor_00"] 0
+80621558:   return
+8062155C:   end

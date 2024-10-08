@@ -1,0 +1,134 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [evt_gor_door_open gor_02.o] AT 80601F9C ---
+80601F9C:   callc [evt_cam_letter_box_disable evt_cam.o] 1
+80601FA8:   callc [evt_mario_key_onoff evt_mario.o] 0
+80601FB4:   setii GF(0) 1
+80601FC0:   begin_thread
+80601FC4:     wait_ms 2500
+80601FCC:     setii GF(0) 0
+80601FD8:   end_thread
+80601FDC:   callsa [evt_gor_door_open_sub gor_02.o]
+80601FE4:   callsa [evt_gor_door_dark_sub gor_02.o]
+80601FEC:   callc [evt_gor_door_in_info gor_02.o] LW(0) LW(1) LW(2)
+80602000:   callc [evt_mario_mov_pos2 evt_mario.o] LW(0) LW(2) 135.00
+80602014:   callc [evt_party_move_beside_mario evt_party.o] 0
+80602020:   callc [evt_party_move_beside_mario evt_party.o] 1
+8060202C:   begin_thread
+80602030:     callc [evt_gor_door_out_info gor_02.o] LW(0) LW(1) LW(2)
+80602044:     callc [evt_mario_get_pos evt_mario.o] 0 LW(3) LW(4) LW(5)
+8060205C:     addi LW(4) 2
+80602068:     callc [evt_cam3d_evt_set_xyz evt_cam.o] LW(0) LW(4) LW(2) 0 150 11
+80602088:   end_thread
+8060208C:   wait_ms 500
+80602094:   callc [evt_gor_door_out_info gor_02.o] LW(0) LW(1) LW(2)
+806020A8:   callc [evt_mario_party_door_move evt_mario.o] LW(0) LW(2) 135.00
+806020BC:   wait_until GF(0)
+806020C4:   callc [evt_mario_key_onoff evt_mario.o] 1
+806020D0:   callc [evt_cam_letter_box_disable evt_cam.o] 0
+806020DC:   return
+806020E0:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [evt_gor_door_open_sub gor_02.o] AT 80601BCC ---
+80601BCC:   callss [evt_gor_door_open_sanders gor_02.o]
+80601BD4:   wait_ms 500
+80601BDC:   callc [evt_sub_intpl_msec_init evt_sub.o] 2 0 90 500
+80601BF4:   loop 0
+80601BFC:     callc [evt_sub_intpl_msec_get_value evt_sub.o]
+80601C04:     callc [evt_mapobj_rotate evt_map.o] 1 ["S_ie_03_doao"] LW(0) 0 0
+80601C20:     if_int_eq LW(1) 0
+80601C2C:       loop_break
+80601C30:     endif
+80601C34:     wait_frames 1
+80601C3C:   end_loop
+80601C40:   callc [evt_mapobj_get_position evt_map.o] ["S_ie_03_doao"] LW(0) LW(1) LW(2)
+80601C58:   callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_DOOR_DOWN1"] LW(0) LW(1) LW(2) 0
+80601C74:   return
+80601C78:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [evt_gor_door_dark_sub gor_02.o] AT 80601C7C ---
+80601C7C:   callc [evt_map_set_tevcallback evt_map.o] 1 [_door_color_tev gor_02.o]
+80601C8C:   callc [evt_map_set_tevcallback evt_map.o] 2 [_door_color2_tev gor_02.o]
+80601C9C:   callc [evt_mapobj_flag_onoff evt_map.o] 1 1 ["S_i03_del_mC"] 16777216
+80601CB4:   callc [evt_mapobj_flag_onoff evt_map.o] 1 1 ["S_i03_kmn_mC"] 16777216
+80601CCC:   callc [evt_mapobj_flag_onoff evt_map.o] 1 1 ["S_i03_yuka_mD"] 16777216
+80601CE4:   callc [evt_mapobj_flag_onoff evt_map.o] 1 1 ["S_ie_03_doam"] 16777216
+80601CFC:   callc [evt_mapobj_flag_onoff evt_map.o] 1 1 ["S_i03_sikiri_mC"] 33554432
+80601D14:   callc [evt_mapobj_flag_onoff evt_map.o] 1 0 ["S_i03_del_mC"] 256
+80601D2C:   callc [evt_mapobj_flag_onoff evt_map.o] 1 0 ["S_i03_kmn_mC"] 256
+80601D44:   callc [evt_mapobj_flag_onoff evt_map.o] 1 0 ["S_i03_yuka_mD"] 256
+80601D5C:   callc [evt_mapobj_flag_onoff evt_map.o] 1 0 ["S_ie_03_doam"] 256
+80601D74:   callc [evt_mapobj_flag_onoff evt_map.o] 1 0 ["S_i03_sikiri_mC"] 256
+80601D8C:   begin_thread
+80601D90:     callc [evt_sub_intpl_msec_init evt_sub.o] 0 255 0 300
+80601DA8:     loop 0
+80601DB0:       callc [evt_sub_intpl_msec_get_value evt_sub.o]
+80601DB8:       callc [evt_npc_set_color evt_npc.o] ["サンダース"] 255 255 255 LW(0)
+80601DD4:       if_int_eq LW(1) 0
+80601DE0:         loop_break
+80601DE4:       endif
+80601DE8:       wait_frames 1
+80601DF0:     end_loop
+80601DF4:   end_thread
+80601DF8:   callc [evt_sub_intpl_msec_init evt_sub.o] 0 255 0 300
+80601E10:   loop 0
+80601E18:     callc [evt_sub_intpl_msec_get_value evt_sub.o]
+80601E20:     callc [_door_color_main_func gor_02.o] LW(0) LW(0) LW(0) 255
+80601E38:     if_int_eq LW(1) 0
+80601E44:       loop_break
+80601E48:     endif
+80601E4C:     wait_frames 1
+80601E54:   end_loop
+80601E58:   callc [evt_mapobj_flag_onoff evt_map.o] 1 1 ["S_i03_del_mC"] 1
+80601E70:   callc [evt_mapobj_flag_onoff evt_map.o] 1 1 ["S_i03_kmn_mC"] 1
+80601E88:   callc [evt_mapobj_flag_onoff evt_map.o] 1 1 ["S_i03_yuka_mD"] 1
+80601EA0:   callc [evt_mapobj_flag_onoff evt_map.o] 1 1 ["S_ie_03_doam"] 1
+80601EB8:   callc [evt_sub_intpl_msec_init evt_sub.o] 1 0 -90 500
+80601ED0:   loop 0
+80601ED8:     callc [evt_sub_intpl_msec_get_value evt_sub.o]
+80601EE0:     callc [evt_mapobj_rotate evt_map.o] 1 ["S_i03_sikiri_mC"] LW(0) 0 0
+80601EFC:     if_int_eq LW(1) 0
+80601F08:       loop_break
+80601F0C:     endif
+80601F10:     wait_frames 1
+80601F18:   end_loop
+80601F1C:   callc [evt_sub_intpl_msec_init evt_sub.o] 0 255 0 300
+80601F34:   loop 0
+80601F3C:     callc [evt_sub_intpl_msec_get_value evt_sub.o]
+80601F44:     callc [_door_color2_main_func gor_02.o] LW(0) LW(0) LW(0) 255
+80601F5C:     if_int_eq LW(1) 0
+80601F68:       loop_break
+80601F6C:     endif
+80601F70:     wait_frames 1
+80601F78:   end_loop
+80601F7C:   callc [evt_mapobj_flag_onoff evt_map.o] 1 1 ["S_i03_sikiri_mC"] 1
+80601F94:   return
+80601F98:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [evt_gor_door_open_sanders gor_02.o] AT 80601A8C ---
+80601A8C:   callc [evt_mapobj_get_position evt_map.o] ["S_ie_03_doao"] LW(0) LW(1) LW(2)
+80601AA4:   callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_DOOR_OPEN1"] LW(0) LW(1) LW(2) 0
+80601AC0:   callc [evt_sub_intpl_msec_init evt_sub.o] 2 0 100 500
+80601AD8:   loop 0
+80601AE0:     callc [evt_sub_intpl_msec_get_value evt_sub.o]
+80601AE8:     callc [evt_mapobj_rotate evt_map.o] 1 ["S_ie_03_doao"] 0 LW(0) 0
+80601B04:     if_int_eq LW(1) 0
+80601B10:       loop_break
+80601B14:     endif
+80601B18:     wait_frames 1
+80601B20:   end_loop
+80601B24:   wait_ms 500
+80601B2C:   callc [evt_sub_intpl_msec_init evt_sub.o] 2 100 0 500
+80601B44:   loop 0
+80601B4C:     callc [evt_sub_intpl_msec_get_value evt_sub.o]
+80601B54:     callc [evt_mapobj_rotate evt_map.o] 1 ["S_ie_03_doao"] 0 LW(0) 0
+80601B70:     if_int_eq LW(1) 0
+80601B7C:       loop_break
+80601B80:     endif
+80601B84:     wait_frames 1
+80601B8C:   end_loop
+80601B90:   callc [evt_mapobj_get_position evt_map.o] ["S_ie_03_doao"] LW(0) LW(1) LW(2)
+80601BA8:   callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_DOOR_SHUT1"] LW(0) LW(1) LW(2) 0
+80601BC4:   return
+80601BC8:   end

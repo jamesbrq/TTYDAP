@@ -1,0 +1,65 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [gesso_ikasumi_attack unit_boss_gesso.o] AT 805E0014 ---
+805E0014:   setii LW(12) [weapon_gesso_ikasumi_attack unit_boss_gesso.o]
+805E0020:   callc [btlevtcmd_GetEnemyBelong battle_event_cmd.o] -2 LW(0)
+805E0030:   callc [btlevtcmd_SamplingEnemy battle_event_cmd.o] -2 LW(0) LW(12)
+805E0044:   callc [btlevtcmd_ChoiceSamplingEnemy battle_event_cmd.o] LW(12) LW(3) LW(4)
+805E0058:   if_int_eq LW(3) -1
+805E0064:     goto 99
+805E006C:   endif
+805E0070:   callc [btlevtcmd_WeaponAftereffect battle_event_cmd.o] LW(12)
+805E007C:   callc [btlevtcmd_AttackDeclare battle_event_cmd.o] -2 LW(3) LW(4)
+805E0090:   callc [btlevtcmd_WaitGuardMove battle_event_cmd.o]
+805E0098:   callc [btlevtcmd_PayWeaponCost battle_event_cmd.o] -2 LW(12)
+805E00A8:   callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 1 ["GSO_A2_1"]
+805E00BC:   begin_child_thread
+805E00C0:     callc [btlevtcmd_ftof battle_event_cmd.o] 16 LW(0)
+805E00D0:     wait_frames LW(0)
+805E00D8:     callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_BOSS_GESSO_UP1"] [F1194D80] 0 [F1194D80]
+805E00F4:     callc [btlevtcmd_ftof battle_event_cmd.o] 55 LW(0)
+805E0104:     wait_frames LW(0)
+805E010C:     callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_BOSS_GESSO_UP1"] [F1194D80] 0 [F1194D80]
+805E0128:   end_child_thread
+805E012C:   callc [btlevtcmd_ftof battle_event_cmd.o] 120 LW(0)
+805E013C:   wait_frames LW(0)
+805E0144:   callc [btlevtcmd_GetPos battle_event_cmd.o] -2 LW(0) LW(1) LW(2)
+805E015C:   callc [btlevtcmd_ftof battle_event_cmd.o] 90 LW(7)
+805E016C:   callc [_ikasumi_effect unit_boss_gesso.o] -2 LW(7)
+805E017C:   begin_thread
+805E0180:     callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_BOSS_GESSO_SUMI1"] [F1194D80] 0 LW(15)
+805E019C:     wait_frames LW(7)
+805E01A4:     callc [evt_snd_sfxoff evt_snd.o] LW(15)
+805E01B0:   end_thread
+805E01B4:   callc [btlevtcmd_ftof battle_event_cmd.o] 10 LW(0)
+805E01C4:   wait_frames LW(0)
+805E01CC:   setii LW(10) 0
+805E01D8: 50:
+805E01E0:   callc [btlevtcmd_PreCheckDamage battle_event_cmd.o] -2 LW(3) LW(4) LW(12) 256 LW(5)
+805E0200:   if_int_ne LW(5) 1
+805E020C:     switchi LW(5)
+805E0214:       case_int_eq 3
+805E021C:         callc [btlevtcmd_StartAvoid battle_event_cmd.o] LW(3) 38
+805E022C:       case_int_eq 6
+805E0234:         callc [btlevtcmd_StartAvoid battle_event_cmd.o] LW(3) 39
+805E0244:       case_int_eq 2
+805E024C:         callc [btlevtcmd_StartAvoid battle_event_cmd.o] LW(3) 40
+805E025C:     end_switch
+805E0260:   else
+805E0264:     if_int_eq LW(10) 0
+805E0270:       callc [btlevtcmd_ResultACDefence battle_event_cmd.o] LW(3) LW(12)
+805E0280:     endif
+805E0284:     callc [btlevtcmd_CheckDamage battle_event_cmd.o] -2 LW(3) LW(4) LW(12) 256 LW(5)
+805E02A4:   endif
+805E02A8:   addi LW(10) 1
+805E02B4:   callc [btlevtcmd_GetSelectNextEnemy battle_event_cmd.o] LW(3) LW(4)
+805E02C4:   if_int_ne LW(3) -1
+805E02D0:     goto 50
+805E02D8:   endif
+805E02DC:   callc [btlevtcmd_AnimeWaitPlayComplete battle_event_cmd.o] -2 1
+805E02EC: 99:
+805E02F4:   callc [evt_btl_camera_set_mode battle_camera.o] 0 0
+805E0304:   callc [btlevtcmd_StartWaitEvent battle_event_cmd.o] -2
+805E0310:   return
+805E0314:   end

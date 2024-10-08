@@ -1,0 +1,47 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [peach_evt_stg1_2 aji_01.o] AT 805D7340 ---
+805D7340:   if_int_eq GSWF(4201) 1
+805D734C:     return
+805D7350:   endif
+805D7354:   callc [evt_seq_wait evt_seq.o] 2
+805D7360:   loop 0
+805D7368:     callc [evt_mario_get_pos evt_mario.o] 0 LW(0) LW(1) LW(2)
+805D7380:     if_int_ge LW(0) 900
+805D738C:       loop_break
+805D7390:     endif
+805D7394:     wait_frames 1
+805D739C:   end_loop
+805D73A0:   callc [evt_mario_key_onoff evt_mario.o] 0
+805D73AC:   callc [evt_mario_get_pos evt_mario.o] 0 LW(0) LW(1) LW(2)
+805D73C4:   callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_VOICE_PEACH_QUESTION1"] LW(0) LW(1) LW(2) 0
+805D73E0:   callc [evt_eff_fukidashi evt_eff.o] 0 [zero_aji_000117b8 aji_01.o] 0 0 0 0 0 0 0 0 60
+805D7414:   setii LW(1) 13
+805D7420:   callsa [bero_open_door_play_se evt_bero.o]
+805D7428:   callc [evt_sub_intpl_msec_init evt_sub.o] 11 0 180 500
+805D7440: 0:
+805D7448:   callc [evt_sub_intpl_msec_get_value evt_sub.o]
+805D7450:   callss [e5_door_open aji_01.o]
+805D7458:   if_int_eq LW(1) 1
+805D7464:     goto 0
+805D746C:   endif
+805D7470:   setii LW(0) ["e_bero_5"]
+805D747C:   callss [bero_case_switch_off evt_bero.o]
+805D7484:   callc [evt_bero_overwrite evt_bero.o] ["e_bero_5"] [e_bero_5_peach aji_01.o]
+805D7494:   setii LW(0) ["e_bero_5"]
+805D74A0:   callss [bero_case_switch_on evt_bero.o]
+805D74A8:   wait_ms 700
+805D74B0:   callc [evt_msg_print evt_msg.o] 0 ["peach_aji_41"] 0 ["mario"]
+805D74C8:   setii GSWF(4201) 1
+805D74D4:   callc [evt_mario_key_onoff evt_mario.o] 1
+805D74E0:   return
+805D74E4:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [e5_door_open aji_01.o] AT 805D40E8 ---
+805D40E8:   mulf LW(0) 0.25
+805D40F4:   callc [evt_mapobj_trans evt_map.o] 1 ["S_door14_2"] 0 0 LW(0)
+805D4110:   mulf LW(0) -1.00
+805D411C:   callc [evt_mapobj_trans evt_map.o] 1 ["S_door14_1"] 0 0 LW(0)
+805D4138:   return
+805D413C:   end

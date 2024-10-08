@@ -1,0 +1,72 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [evt_narikin_room rsh_04.o] AT 805E3068 ---
+805E3068:   set_thread_type_mask 0
+805E3070:   setii LF(0) 0
+805E307C:   loop 0
+805E3084:     if_int_eq GSWF(3446) 1
+805E3090:       if_int_eq LF(0) 0
+805E309C:         callc [mario_flag rsh_04.o] LW(0)
+805E30A8:         if_int_eq LW(0) 0
+805E30B4:           setii LF(0) 1
+805E30C0:           switchi GSW(0)
+805E30C8:             case_int_range 288 300
+805E30D4:               callsa_tid [talk_papa_repeat rsh_04.o] GW(14)
+805E30E0:               callsa_tid [talk_mama_repeat rsh_04.o] GW(15)
+805E30EC:           end_switch
+805E30F0:         endif
+805E30F4:       else
+805E30F8:         callc [mario_flag rsh_04.o] LW(0)
+805E3104:         if_int_eq LW(0) 1
+805E3110:           setii LF(0) 0
+805E311C:           stop_tid GW(14)
+805E3124:           stop_tid GW(15)
+805E312C:           callc [evt_msg_close evt_msg.o] ["stg6_rsh_85_01"]
+805E3138:           callc [evt_msg_close evt_msg.o] ["stg6_rsh_85_02"]
+805E3144:         endif
+805E3148:       endif
+805E314C:     else
+805E3150:       if_int_eq LF(0) 1
+805E315C:         setii LF(0) 0
+805E3168:         switchi GSW(0)
+805E3170:           case_int_range 288 300
+805E317C:             stop_tid GW(14)
+805E3184:             stop_tid GW(15)
+805E318C:             callc [evt_msg_close evt_msg.o] ["stg6_rsh_85_01"]
+805E3198:             callc [evt_msg_close evt_msg.o] ["stg6_rsh_85_02"]
+805E31A4:         end_switch
+805E31A8:       endif
+805E31AC:     endif
+805E31B0:     wait_frames 1
+805E31B8:   end_loop
+805E31BC:   return
+805E31C0:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [talk_papa_repeat rsh_04.o] AT 805E1C78 ---
+805E1C78:   callc [evt_npc_flag_onoff evt_npc.o] 1 ["ナリキンパパ"] [80000000]
+805E1C8C:   callc [evt_npc_get_position evt_npc.o] ["ナリキンパパ"] LW(0) LW(1) LW(2)
+805E1CA4:   callc [evt_npc_get_height evt_npc.o] ["ナリキンパパ"] LW(3)
+805E1CB4:   addi LW(1) LW(3)
+805E1CC0:   addi LW(1) 15
+805E1CCC:   callc [evt_msg_toge evt_msg.o] 2 LW(0) LW(1) LW(2)
+805E1CE4:   callc [evt_msg_print evt_msg.o] 0 ["stg6_rsh_85_01"] 0 ["ナリキンパパ"]
+805E1CFC:   loop 0
+805E1D04:     callc [evt_msg_repeat evt_msg.o]
+805E1D0C:   end_loop
+805E1D10:   return
+805E1D14:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [talk_mama_repeat rsh_04.o] AT 805E1E94 ---
+805E1E94:   callc [evt_npc_flag_onoff evt_npc.o] 1 ["ナリキンママ"] [80000000]
+805E1EA8:   callc [evt_npc_get_position evt_npc.o] ["ナリキンママ"] LW(0) LW(1) LW(2)
+805E1EC0:   callc [evt_npc_get_height evt_npc.o] ["ナリキンママ"] LW(3)
+805E1ED0:   addi LW(1) LW(3)
+805E1EDC:   addi LW(1) 10
+805E1EE8:   callc [evt_msg_toge evt_msg.o] 2 LW(0) LW(1) LW(2)
+805E1F00:   callc [evt_msg_print evt_msg.o] 0 ["stg6_rsh_85_02"] 0 ["ナリキンママ"]
+805E1F18:   loop 0
+805E1F20:     callc [evt_msg_repeat evt_msg.o]
+805E1F28:   end_loop
+805E1F2C:   return
+805E1F30:   end

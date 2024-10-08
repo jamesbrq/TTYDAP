@@ -1,0 +1,51 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [dai3_shurai_after muj_00.o] AT 805D3414 ---
+805D3414:   loop 0
+805D341C:     callc [evt_sub_random evt_sub.o] 2500 LW(10)
+805D342C:     wait_ms LW(10)
+805D3434:     wait_ms 500
+805D343C:     callc [evt_sub_random evt_sub.o] 2 LW(11)
+805D344C:     switchi LW(11)
+805D3454:       case_int_eq 0
+805D345C:         setii LW(0) 1086
+805D3468:         setii LW(1) -60
+805D3474:         setii LW(2) -247
+805D3480:         setff LW(3) 4.00
+805D348C:         callss [tama_shoot muj_00.o]
+805D3494:       case_int_eq 1
+805D349C:         setii LW(0) 1135
+805D34A8:         setii LW(1) -60
+805D34B4:         setii LW(2) 51
+805D34C0:         setff LW(3) 2.00
+805D34CC:         callss [tama_shoot muj_00.o]
+805D34D4:       case_int_eq 2
+805D34DC:         setii LW(0) 1251
+805D34E8:         setii LW(1) -60
+805D34F4:         setii LW(2) 153
+805D3500:         setff LW(3) 3.00
+805D350C:         callss [tama_shoot muj_00.o]
+805D3514:     end_switch
+805D3518:   end_loop
+805D351C:   return
+805D3520:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [tama_shoot muj_00.o] AT 805D2030 ---
+805D2030:   callc [evt_snd_sfxon evt_snd.o] ["SFX_STG5_CANNON_FIRING1"] 0
+805D2040:   begin_thread
+805D2044:     setii LW(0) GW(13)
+805D2050:     addi LW(0) 320
+805D205C:     setii LW(1) GW(14)
+805D2068:     addi LW(1) 130
+805D2074:     setii LW(2) GW(15)
+805D2080:     callc [evt_eff evt_eff.o] 0 ["kemuri_test"] 16 LW(0) LW(1) LW(2) 3.00 0 0 0 0 0 0 0
+805D20C0:   end_thread
+805D20C4:   wait_ms 1000
+805D20CC:   begin_thread
+805D20D0:     callc [evt_cam_shake evt_cam.o] 4 0.01 0.00 500
+805D20E8:   end_thread
+805D20EC:   callc [evt_snd_sfxon evt_snd.o] ["SFX_STG5_CANNON_SEA1"] 0
+805D20FC:   callc [evt_eff evt_eff.o] 0 ["splash"] 0 LW(0) -20 LW(2) 3.00 0 0 0 0 0 0 0
+805D213C:   return
+805D2140:   end

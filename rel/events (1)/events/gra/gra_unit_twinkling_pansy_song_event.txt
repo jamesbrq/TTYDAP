@@ -1,0 +1,105 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [song_event unit_twinkling_pansy.o] AT 805CD6BC ---
+805CD6BC:   callc [btlevtcmd_GetEnemyBelong battle_event_cmd.o] -2 LW(0)
+805CD6CC:   callc [btlevtcmd_SamplingEnemy battle_event_cmd.o] -2 LW(0) LW(9)
+805CD6E0:   callc [btlevtcmd_ChoiceSamplingEnemy battle_event_cmd.o] LW(9) LW(3) LW(4)
+805CD6F4:   if_int_eq LW(3) -1
+805CD700:     callc [btlevtcmd_CheckToken battle_event_cmd.o] -2 16 LW(0)
+805CD714:     if_int_ne LW(0) 0
+805CD720:       callss [subsetevt_confuse_flustered battle_event_subset.o]
+805CD728:       return
+805CD72C:     endif
+805CD730:     goto 99
+805CD738:   endif
+805CD73C:   callc [btlevtcmd_WeaponAftereffect battle_event_cmd.o] LW(9)
+805CD748:   callc [btlevtcmd_AttackDeclare battle_event_cmd.o] -2 LW(3) LW(4)
+805CD75C:   callc [btlevtcmd_WaitGuardMove battle_event_cmd.o]
+805CD764:   callc [btlevtcmd_PayWeaponCost battle_event_cmd.o] -2 LW(9)
+805CD774:   callc [btlevtcmd_CalculateFaceDirection battle_event_cmd.o] -2 -1 LW(3) LW(4) 16 LW(15)
+805CD794:   callc [btlevtcmd_ChangeFaceDirection battle_event_cmd.o] -2 LW(15)
+805CD7A4:   setii LW(0) 255
+805CD7B0:   setii LW(1) 255
+805CD7BC:   loop 0
+805CD7C4:     if_int_lt LW(0) 192
+805CD7D0:       loop_break
+805CD7D4:     endif
+805CD7D8:     callc [evt_map_set_blend evt_map.o] 0 LW(0) LW(1) LW(1) 255
+805CD7F4:     subi LW(0) 2
+805CD800:     wait_frames 1
+805CD808:   end_loop
+805CD80C:   callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_ENM_PANSY_ATTACK1"] [F1194D80] 0 [F1194D80]
+805CD828:   callc [btlevtcmd_AnimeChangePoseType battle_event_cmd.o] -2 1 50
+805CD83C:   begin_child_thread
+805CD840:     loop 10
+805CD848:       callc [btlevtcmd_GetPos battle_event_cmd.o] -2 LW(0) LW(1) LW(2)
+805CD860:       if_int_lt LW(15) 0
+805CD86C:         callc [evt_eff64 evt_eff.o] [zero_gra_00002ebc unit_twinkling_pansy.o] ["onpu_n64"] 1 LW(0) LW(1) LW(2) 0 0 0 0 0 0 0 0
+805CD8AC:       else
+805CD8B0:         callc [evt_eff64 evt_eff.o] [zero_gra_00002ebc unit_twinkling_pansy.o] ["onpu_n64"] 2 LW(0) LW(1) LW(2) 0 0 0 0 0 0 0 0
+805CD8F0:       endif
+805CD8F4:       wait_frames 12
+805CD8FC:     end_loop
+805CD900:   end_child_thread
+805CD904:   wait_frames 120
+805CD90C:   setii LW(6) 0
+805CD918:   callc [btlevtcmd_GetSelectEnemy battle_event_cmd.o] LW(3) LW(4)
+805CD928: 10:
+805CD930:   callc [btlevtcmd_PreCheckDamage battle_event_cmd.o] -2 LW(3) LW(4) LW(9) 256 LW(5)
+805CD950:   switchi LW(5)
+805CD958:     case_int_eq_any 4
+805CD960:       goto 90
+805CD968:       end_multi_case
+805CD96C:     case_int_eq 3
+805CD974:       callc [btlevtcmd_StartAvoid battle_event_cmd.o] LW(3) 38
+805CD984:       goto 90
+805CD98C:       end_multi_case
+805CD990:     case_int_eq 6
+805CD998:       callc [btlevtcmd_StartAvoid battle_event_cmd.o] LW(3) 39
+805CD9A8:       goto 90
+805CD9B0:     case_int_eq 2
+805CD9B8:       callc [btlevtcmd_StartAvoid battle_event_cmd.o] LW(3) 40
+805CD9C8:       goto 90
+805CD9D0:     case_int_eq 1
+805CD9D8:       goto 91
+805CD9E0:       end_multi_case
+805CD9E4:     case_default
+805CD9E8:       goto 97
+805CD9F0:       end_multi_case
+805CD9F4:   end_switch
+805CD9F8: 90:
+805CDA00:   goto 97
+805CDA08: 91:
+805CDA10:   if_int_eq LW(6) 0
+805CDA1C:     callc [btlevtcmd_ResultACDefence battle_event_cmd.o] LW(3) LW(9)
+805CDA2C:     setii LW(6) 1
+805CDA38:   endif
+805CDA3C:   callc [btlevtcmd_CheckDamage battle_event_cmd.o] -2 LW(3) LW(4) LW(9) 256 LW(5)
+805CDA5C:   goto 97
+805CDA64: 97:
+805CDA6C:   callc [btlevtcmd_GetSelectNextEnemy battle_event_cmd.o] LW(3) LW(4)
+805CDA7C:   if_int_eq LW(3) -1
+805CDA88:     goto 98
+805CDA90:   endif
+805CDA94:   goto 10
+805CDA9C: 98:
+805CDAA4:   setii LW(0) 192
+805CDAB0:   setii LW(1) 255
+805CDABC:   loop 0
+805CDAC4:     if_int_ge LW(0) 256
+805CDAD0:       loop_break
+805CDAD4:     endif
+805CDAD8:     callc [evt_map_set_blend evt_map.o] 0 LW(0) LW(1) LW(1) 255
+805CDAF4:     addi LW(0) 2
+805CDB00:     wait_frames 1
+805CDB08:   end_loop
+805CDB0C:   callc [evt_map_blend_off evt_map.o] 0
+805CDB18:   callc [evt_btl_camera_set_mode battle_camera.o] 0 0
+805CDB28:   callc [btlevtcmd_AnimeChangePoseType battle_event_cmd.o] -2 1 69
+805CDB3C:   wait_ms 500
+805CDB44: 99:
+805CDB4C:   callc [btlevtcmd_ResetFaceDirection battle_event_cmd.o] -2
+805CDB58:   callc [btlevtcmd_StartWaitEvent battle_event_cmd.o] -2
+805CDB64:   return
+805CDB68:   end

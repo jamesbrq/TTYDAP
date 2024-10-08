@@ -1,0 +1,60 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [sub_call_satellite unit_boss_batten_leader.o] AT 8061A640 ---
+8061A640:   callc [btlevtcmd_GetUnitId battle_event_cmd.o] -2 LW(4)
+8061A650:   setii LW(1) 9
+8061A65C:   setii LW(5) 0
+8061A668:   loop 4
+8061A670:     callc [btlevtcmd_GetUnitWork battle_event_cmd.o] -2 LW(1) LW(2)
+8061A684:     if_int_eq LW(2) -1
+8061A690:       callc [btlevtcmd_SpawnUnit battle_event_cmd.o] LW(3) [entry_batten_satellite unit_boss_batten_leader.o] 0
+8061A6A4:       callc [btlevtcmd_AddPos battle_event_cmd.o] LW(3) 0 45 -5
+8061A6BC:       callc [btlevtcmd_SetUnitWork battle_event_cmd.o] -2 LW(1) LW(3)
+8061A6D0:       callc [btlevtcmd_SetUnitWork battle_event_cmd.o] LW(3) 0 LW(4)
+8061A6E4:       addi LW(0) 1
+8061A6F0:       addi LW(5) 1
+8061A6FC:       if_int_ge LW(5) LW(6)
+8061A708:         loop_break
+8061A70C:       endif
+8061A710:     endif
+8061A714:     addi LW(1) 1
+8061A720:   end_loop
+8061A724:   wait_frames 5
+8061A72C:   callss [satellite_blur_on unit_boss_batten_leader.o]
+8061A734:   if_int_ne LW(0) 0
+8061A740:     callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_BOSS_SRYO_SPLIT2"] [F1194D80] 0 [F1194D80]
+8061A75C:   endif
+8061A760:   callc [battenSatelliteToOutside unit_boss_batten_leader.o] -2 LW(0)
+8061A770:   wait_ms 1000
+8061A778:   callss [satellite_blur_off unit_boss_batten_leader.o]
+8061A780:   callc [btlevtcmd_SetUnitWork battle_event_cmd.o] -2 0 LW(0)
+8061A794:   return
+8061A798:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [satellite_blur_on unit_boss_batten_leader.o] AT 8061A524 ---
+8061A524:   setii LW(2) 9
+8061A530:   loop 4
+8061A538:     callc [btlevtcmd_GetUnitWork battle_event_cmd.o] -2 LW(2) LW(3)
+8061A54C:     if_int_ne LW(3) -1
+8061A558:       callc [btlevtcmd_GetBodyId battle_event_cmd.o] LW(3) LW(4)
+8061A568:       callc [btlevtcmd_SetPartsBlur battle_event_cmd.o] LW(3) LW(4) 255 255 255 255 255 255 255 100 0
+8061A59C:       callc [btlevtcmd_OnPartsAttribute battle_event_cmd.o] LW(3) LW(4) 67108864
+8061A5B0:     endif
+8061A5B4:     addi LW(2) 1
+8061A5C0:   end_loop
+8061A5C4:   return
+8061A5C8:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [satellite_blur_off unit_boss_batten_leader.o] AT 8061A5CC ---
+8061A5CC:   setii LW(2) 9
+8061A5D8:   loop 4
+8061A5E0:     callc [btlevtcmd_GetUnitWork battle_event_cmd.o] -2 LW(2) LW(3)
+8061A5F4:     if_int_ne LW(3) -1
+8061A600:       callc [btlevtcmd_GetBodyId battle_event_cmd.o] LW(3) LW(4)
+8061A610:       callc [btlevtcmd_OffPartsAttribute battle_event_cmd.o] LW(3) LW(4) 67108864
+8061A624:     endif
+8061A628:     addi LW(2) 1
+8061A634:   end_loop
+8061A638:   return
+8061A63C:   end

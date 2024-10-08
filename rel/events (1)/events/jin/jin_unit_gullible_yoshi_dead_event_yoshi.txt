@@ -1,0 +1,54 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [dead_event_yoshi unit_gullible_yoshi.o] AT 805D34E0 ---
+805D34E0:   callc [btlevtcmd_GetHomePos battle_event_cmd.o] -2 LW(0) LW(1) LW(2)
+805D34F8:   callc [btlevtcmd_GetPos battle_event_cmd.o] -2 LW(3) LW(4) LW(5)
+805D3510:   setii LW(6) 1
+805D351C:   if_int_eq LW(0) LW(3)
+805D3528:     if_int_eq LW(1) LW(4)
+805D3534:       if_int_eq LW(2) LW(5)
+805D3540:         setii LW(6) 0
+805D354C:       endif
+805D3550:     endif
+805D3554:   endif
+805D3558:   if_int_eq LW(6) 1
+805D3564:     callc [btlevtcmd_SetMoveSpeed battle_event_cmd.o] -2 6.00
+805D3574:     callc [btlevtcmd_AnimeChangePoseType battle_event_cmd.o] -2 1 40
+805D3588:     callc [btlevtcmd_MovePosition battle_event_cmd.o] -2 LW(0) LW(1) LW(2) 0 -1 0
+805D35AC:     callc [btlevtcmd_ResetFaceDirection battle_event_cmd.o] -2
+805D35B8:   endif
+805D35BC:   wait_frames 1
+805D35C4:   callc [btlevtcmd_WaitAttackEnd battle_event_cmd.o]
+805D35CC:   switchi GW(19)
+805D35D4:     case_int_eq 0
+805D35DC:       callc [evt_btl_camera_set_mode battle_camera.o] 0 3
+805D35EC:       callc [evt_btl_camera_set_moveto battle_camera.o] 0 130 58 228 130 38 -20 30 11
+805D3618:       wait_frames 37
+805D3620:       callc [evt_msg_print evt_msg.o] 2 ["stg4_jin_26_03_yos"] 0 -2
+805D3638:       callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 1 ["PYS_D_3"]
+805D364C:       callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_PARTY_BATTLE_DIE1"] [F1194D80] 0 [F1194D80]
+805D3668:       wait_ms 500
+805D3670:       callc [evt_btl_camera_set_mode battle_camera.o] 0 3
+805D3680:       callc [evt_btl_camera_set_moveto battle_camera.o] 0 90 58 228 90 38 -20 30 11
+805D36AC:       wait_frames 37
+805D36B4:       callc [evt_msg_print evt_msg.o] 2 ["stg4_jin_26_04"] 0 GW(16)
+805D36CC:       wait_ms 200
+805D36D4:     case_int_eq 1
+805D36DC:       callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 1 ["PYS_D_3"]
+805D36F0:       callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_PARTY_BATTLE_DIE1"] [F1194D80] 0 [F1194D80]
+805D370C:       loop 0
+805D3714:         if_int_eq GW(19) 2
+805D3720:           loop_break
+805D3724:         endif
+805D3728:         wait_frames 1
+805D3730:       end_loop
+805D3734:     case_int_eq 2
+805D373C:       callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 1 ["PYS_D_3"]
+805D3750:       callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_PARTY_BATTLE_DIE1"] [F1194D80] 0 [F1194D80]
+805D376C:   end_switch
+805D3770:   callc [btlevtcmd_KillUnit battle_event_cmd.o] -2 1
+805D3780:   setii GW(20) 2
+805D378C:   callc [evt_btl_camera_set_mode battle_camera.o] 0 0
+805D379C:   return
+805D37A0:   end

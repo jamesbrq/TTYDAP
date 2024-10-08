@@ -1,0 +1,26 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [phase_event unit_monban.o] AT 8061CBB4 ---
+8061CBB4:   if_int_eq GSWF(1208) 0
+8061CBC0:     callc [btlevtcmd_GetHp battle_event_cmd.o] -3 LW(0)
+8061CBD0:     if_int_le LW(0) 5
+8061CBDC:       callc [btlevtcmd_CheckPhase battle_event_cmd.o] LW(0) 67108866
+8061CBEC:       if_int_ne LW(0) 0
+8061CBF8:         callc [btlevtcmd_CheckActStatus battle_event_cmd.o] -2 LW(0)
+8061CC08:         if_int_ne LW(0) 0
+8061CC14:           callc [btlevtcmd_StatusWindowOnOff battle_event_cmd.o] 0
+8061CC20:           callc [evt_btl_camera_set_mode battle_camera.o] 0 3
+8061CC30:           callc [evt_btl_camera_set_moveto battle_camera.o] 0 88 88 432 88 60 0 30 11
+8061CC5C:           wait_frames 30
+8061CC64:           callc [evt_msg_print evt_msg.o] 2 ["gor_02_008_01"] 0 -2
+8061CC7C:           callc [btlevtcmd_StatusWindowOnOff battle_event_cmd.o] 1
+8061CC88:           setii GSWF(1208) 1
+8061CC94:           callc [evt_btl_camera_set_mode battle_camera.o] 0 0
+8061CCA4:           wait_frames 60
+8061CCAC:         endif
+8061CCB0:       endif
+8061CCB4:     endif
+8061CCB8:   endif
+8061CCBC:   return
+8061CCC0:   end

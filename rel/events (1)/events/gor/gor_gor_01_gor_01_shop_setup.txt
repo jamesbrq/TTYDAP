@@ -1,0 +1,66 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [gor_01_shop_setup gor_01.o] AT 805F187C ---
+805F187C:   if_int_eq GSWF(1188) 0
+805F1888:     if_int_eq GSWF(1191) 0
+805F1894:       callc [evt_shop_setup evt_shop.o] [obj_list gor_01.o] [goods_list gor_01.o] [shopper_data gor_01.o] [trade_list gor_01.o]
+805F18AC:     else
+805F18B0:       callc [evt_shop_setup evt_shop.o] [obj_list gor_01.o] [goods_list2 gor_01.o] [shopper_data gor_01.o] [trade_list gor_01.o]
+805F18C8:     endif
+805F18CC:   else
+805F18D0:     callc [evt_pouch_check_item evt_pouch.o] 55 LW(1)
+805F18E0:     callc [evt_pouch_check_item evt_pouch.o] 56 LW(2)
+805F18F0:     callc [evt_pouch_check_item evt_pouch.o] 57 LW(3)
+805F1900:     callc [evt_pouch_check_item evt_pouch.o] 58 LW(4)
+805F1910:     callc [evt_pouch_check_item evt_pouch.o] 59 LW(5)
+805F1920:     switchi GSW(0)
+805F1928:       case_int_lt 215
+805F1930:         setii LW(11) 0
+805F193C:       case_int_lt 261
+805F1944:         setii LW(11) 1
+805F1950:       case_int_lt 339
+805F1958:         setii LW(11) 2
+805F1964:       case_int_lt 373
+805F196C:         setii LW(11) 3
+805F1978:       case_int_lt 401
+805F1980:         setii LW(11) 4
+805F198C:       case_default
+805F1990:         setii LW(11) 5
+805F199C:     end_switch
+805F19A0:     setii LW(12) 0
+805F19AC:     if_int_ne LW(1) 0
+805F19B8:       addi LW(12) 1
+805F19C4:     endif
+805F19C8:     if_int_ne LW(2) 0
+805F19D4:       addi LW(12) 1
+805F19E0:     endif
+805F19E4:     if_int_ne LW(3) 0
+805F19F0:       addi LW(12) 1
+805F19FC:     endif
+805F1A00:     if_int_ne LW(4) 0
+805F1A0C:       addi LW(12) 1
+805F1A18:     endif
+805F1A1C:     if_int_ne LW(5) 0
+805F1A28:       addi LW(12) 1
+805F1A34:     endif
+805F1A38:     if_int_ge LW(12) LW(11)
+805F1A44:       setii LW(10) [goods_list gor_01.o]
+805F1A50:     else
+805F1A54:       switchi LW(12)
+805F1A5C:         case_int_eq 0
+805F1A64:           setii LW(10) [goods_luigi1 gor_01.o]
+805F1A70:         case_int_eq 1
+805F1A78:           setii LW(10) [goods_luigi2 gor_01.o]
+805F1A84:         case_int_eq 2
+805F1A8C:           setii LW(10) [goods_luigi3 gor_01.o]
+805F1A98:         case_int_eq 3
+805F1AA0:           setii LW(10) [goods_luigi4 gor_01.o]
+805F1AAC:         case_int_eq 4
+805F1AB4:           setii LW(10) [goods_luigi5 gor_01.o]
+805F1AC0:       end_switch
+805F1AC4:     endif
+805F1AC8:     callc [evt_shop_setup evt_shop.o] [obj_list gor_01.o] LW(10) [shopper_data gor_01.o] [trade_list gor_01.o]
+805F1AE0:   endif
+805F1AE4:   return
+805F1AE8:   end

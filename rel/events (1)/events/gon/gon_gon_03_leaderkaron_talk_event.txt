@@ -1,0 +1,230 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [leaderkaron_talk_event gon_03.o] AT 805C5018 ---
+805C5018:   begin_thread
+805C501C:     loop 10
+805C5024:       callc [evt_npc_get_position evt_npc.o] ["me"] LW(0) LW(1) LW(2)
+805C503C:       callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_STG1_HONE_ACCESS1"] LW(0) LW(1) LW(2) 0
+805C5058:       wait_ms 200
+805C5060:     end_loop
+805C5064:   end_thread
+805C5068:   callc [evt_npc_flag_onoff evt_npc.o] 1 ["me"] [80000000]
+805C507C:   if_int_eq GW(0) 0
+805C5088:     callc [evt_npc_set_width evt_npc.o] ["リーダー"] 20.00
+805C5098:     callsa [senkaron_event gon_03.o]
+805C50A0:     setii GW(0) 1
+805C50AC:   endif
+805C50B0:   return
+805C50B4:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [senkaron_event gon_03.o] AT 805C40F8 ---
+805C40F8:   if_int_le GSW(0) 39
+805C4104:     callc [senkaronFlagOffMesPushing gon_03.o]
+805C410C:     setii GW(14) 0
+805C4118:     setii GW(15) 1
+805C4124:     callc [evt_npc_change_interrupt evt_npc.o] ["リチャード"] 6 0
+805C4138:     callss [senkaron_entry_event gon_03.o]
+805C4140:     callc [evt_snd_bgmoff evt_snd.o] 512
+805C414C:     callc [evt_snd_envoff evt_snd.o] 512
+805C4158:     callc [evt_mario_key_onoff evt_mario.o] 0
+805C4164:     callc [evt_mario_dispflag_onoff evt_mario.o] 1 2
+805C4174:     callc [evt_mario_set_pose evt_mario.o] ["M_S_1"]
+805C4180:     callc [evt_eff_fukidashi evt_eff.o] 0 ["fukidashi"] 0 0 0 0 0 0 0 0 0
+805C41B4:     callc [evt_npc_set_anim evt_npc.o] ["リーダー"] ["KRN_D_3"]
+805C41C4:     wait_ms 1000
+805C41CC:     callc [evt_cam3d_evt_set evt_cam.o] 350 80 310 350 30 -90 300 0
+805C41F4:     wait_ms 300
+805C41FC:     callc [evt_msg_print evt_msg.o] 0 ["stg1_gon_10"] 0 0
+805C4214:     wait_ms 300
+805C421C:     begin_thread
+805C4220:       callc [evt_snd_bgmon evt_snd.o] 512 ["BGM_EVT_DANGER4"]
+805C4230:     end_thread
+805C4234:     begin_child_thread
+805C4238:       callc [evt_mario_set_pose evt_mario.o] ["M_N_5B"]
+805C4244:       wait_ms 500
+805C424C:       callc [evt_mario_set_pose evt_mario.o] ["M_I_Y"]
+805C4258:     end_child_thread
+805C425C:     setii LW(0) 0
+805C4268:     callc [evt_npc_set_anim evt_npc.o] ["リーダー"] ["KRN_D_4"]
+805C4278:     loop 0
+805C4280:       setff LW(10) 0.00
+805C428C:       setff LW(11) 10.00
+805C4298:       setff LW(12) -1.00
+805C42A4:       loop 0
+805C42AC:         wait_frames 1
+805C42B4:         callc [evt_npc_get_position evt_npc.o] ["リーダー"] LW(13) LW(10) LW(14)
+805C42CC:         addf LW(10) LW(11)
+805C42D8:         addf LW(11) LW(12)
+805C42E4:         if_int_le LW(10) 0.00
+805C42F0:           setff LW(10) 0.00
+805C42FC:           callc [evt_npc_set_position evt_npc.o] ["リーダー"] LW(13) LW(10) LW(14)
+805C4314:           loop_break
+805C4318:         endif
+805C431C:         callc [evt_npc_set_position evt_npc.o] ["リーダー"] LW(13) LW(10) LW(14)
+805C4334:       end_loop
+805C4338:       addi LW(0) 1
+805C4344:       if_int_ge LW(0) 1
+805C4350:         loop_break
+805C4354:       endif
+805C4358:     end_loop
+805C435C:     callc [evt_npc_set_anim evt_npc.o] ["リーダー"] ["KRN_R_1"]
+805C436C:     callc [evt_cam3d_evt_off evt_cam.o] 300 0
+805C437C:     wait_ms 700
+805C4384:     callc [evt_snd_sfxon evt_snd.o] ["SFX_STG1_HONE_DOWN1_2"] 0
+805C4394:     callc [senkaronAttackStart gon_03.o]
+805C439C:     begin_thread
+805C43A0:       wait_ms 400
+805C43A8:       callc [evt_cam_shake evt_cam.o] 4 0.00 0.00 1500
+805C43C0:     end_thread
+805C43C4:     setff LW(3) -1.10
+805C43D0:     setff LW(4) 0.01
+805C43DC:     setii LW(5) 90
+805C43E8:     wait_ms 1300
+805C43F0:     callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_STG1_HONE__MOVE1"] 0 0 0 GW(13)
+805C440C:     callc [evt_mario_set_pose evt_mario.o] ["M_I_O"]
+805C4418:     wait_frames 1
+805C4420:     callc [evt_mario_cont_onoff evt_mario.o] 0
+805C442C:     callc [evt_mario_dispflag_onoff evt_mario.o] 1 256
+805C443C:     loop 0
+805C4444:       wait_frames 1
+805C444C:       callc [evt_mario_get_pos evt_mario.o] 0 LW(0) LW(1) LW(2)
+805C4464:       if_int_le LW(0) 100
+805C4470:         loop_break
+805C4474:       endif
+805C4478:       addf LW(0) LW(3)
+805C4484:       addf LW(3) LW(4)
+805C4490:       if_int_ge LW(3) -0.01
+805C449C:         setff LW(3) -0.01
+805C44A8:       endif
+805C44AC:       callc [evt_mario_set_pos evt_mario.o] LW(0) LW(1) LW(2)
+805C44C0:       addi LW(5) 10
+805C44CC:       if_int_ge LW(5) 360
+805C44D8:         subi LW(5) 360
+805C44E4:       endif
+805C44E8:       callc [evt_mario_set_dispdir evt_mario.o] LW(5)
+805C44F4:     end_loop
+805C44F8:     callc [evt_mario_dispflag_onoff evt_mario.o] 0 256
+805C4508:     callc [evt_mario_cont_onoff evt_mario.o] 1
+805C4514:     callc [evt_cam_letter_box_disable evt_cam.o] 1
+805C4520:     callc [evt_mario_dispflag_onoff evt_mario.o] 0 2
+805C4530:     callc [evt_mario_key_onoff evt_mario.o] 1
+805C453C:     setii LW(0) ["w_bero"]
+805C4548:     callss [bero_case_switch_off evt_bero.o]
+805C4550:     if_int_eq GSWF(1479) 0
+805C455C:       callc [evt_mario_cont_onoff evt_mario.o] 0
+805C4568:       callc [senkaronFlagOnMesPushing gon_03.o]
+805C4570:       callc [evt_mario_get_party evt_mario.o] LW(3)
+805C457C:       switchi LW(3)
+805C4584:         case_int_eq 1
+805C458C:           callc [evt_msg_print evt_msg.o] 0 ["stg1_gon_11"] 0 ["party"]
+805C45A4:         case_int_eq 2
+805C45AC:           callc [evt_msg_print evt_msg.o] 0 ["stg1_gon_12"] 0 ["party"]
+805C45C4:       end_switch
+805C45C8:       setii GSWF(1479) 1
+805C45D4:       callc [senkaronFlagOffMesPushing gon_03.o]
+805C45DC:       callc [evt_mario_cont_onoff evt_mario.o] 1
+805C45E8:     endif
+805C45EC:     callc [evt_cam_letter_box_disable evt_cam.o] 0
+805C45F8:     begin_child_thread
+805C45FC:       loop 0
+805C4604:         callc [senkaronGetMarioPushedFlag gon_03.o] LW(6)
+805C4610:         if_int_ne LW(6) 0
+805C461C:           setii LW(7) 18
+805C4628:         endif
+805C462C:         if_int_gt LW(7) 0
+805C4638:           callc [evt_mario_get_motion evt_mario.o] LW(8)
+805C4644:           if_int_eq LW(8) 0
+805C4650:             callc [evt_mario_get_pose evt_mario.o] LW(9)
+805C465C:             if_string_ne LW(9) ["M_I_O"]
+805C4668:               callc [evt_mario_set_pose evt_mario.o] ["M_I_O"]
+805C4674:             endif
+805C4678:             callc [evt_mario_get_dispdir evt_mario.o] LW(5)
+805C4684:             addi LW(5) 10
+805C4690:             if_int_ge LW(5) 360
+805C469C:               subi LW(5) 360
+805C46A8:             endif
+805C46AC:             callc [evt_mario_set_dispdir evt_mario.o] LW(5)
+805C46B8:             subi LW(7) 1
+805C46C4:             if_int_eq LW(7) 0
+805C46D0:               callc [evt_mario_set_pose evt_mario.o] ["M_S_1"]
+805C46DC:             endif
+805C46E0:           else
+805C46E4:             setii LW(7) 0
+805C46F0:           endif
+805C46F4:         endif
+805C46F8:         wait_frames 1
+805C4700:       end_loop
+805C4704:     end_child_thread
+805C4708:     loop 0
+805C4710:       wait_frames 1
+805C4718:       callc [unk_gon_00000374 gon_03.o]
+805C4720:       if_int_ge LW(0) 1
+805C472C:         loop_break
+805C4730:       endif
+805C4734:       callc [evt_mario_get_pos evt_mario.o] 0 LW(0) LW(1) LW(2)
+805C474C:       callc [evt_sub_area_check evt_sub.o] 0 -390 0 50 LW(0) LW(2) LW(10)
+805C4770:       if_int_eq LW(10) 1
+805C477C:         if_int_eq GW(14) 0
+805C4788:           setii GW(14) 1
+805C4794:           callc [evt_map_playanim evt_map.o] ["m_door01_b"] 0 0
+805C47A8:         endif
+805C47AC:       endif
+805C47B0:       callc [evt_mario_get_pos evt_mario.o] 0 LW(0) LW(1) LW(2)
+805C47C8:       callc [evt_sub_area_check evt_sub.o] 0 -390 0 20 LW(0) LW(2) LW(10)
+805C47EC:       if_int_eq LW(10) 1
+805C47F8:         setii GW(15) 0
+805C4804:         callc [evt_npc_change_interrupt evt_npc.o] ["リチャード"] 6 [richard_talk_event gon_03.o]
+805C4818:         callc [evt_mario_key_onoff evt_mario.o] 0
+805C4824:         begin_thread
+805C4828:           loop 0
+805C4830:             callc [evt_mario_get_dispdir evt_mario.o] LW(5)
+805C483C:             addi LW(5) 10
+805C4848:             callc [evt_mario_set_dispdir evt_mario.o] LW(5)
+805C4854:             wait_frames 1
+805C485C:           end_loop
+805C4860:         end_thread
+805C4864:         setii GSWF(1476) 1
+805C4870:         if_int_eq GSWF(1477) 0
+805C487C:           setii GSWF(1477) 1
+805C4888:         else
+805C488C:           setii GSWF(1478) 1
+805C4898:         endif
+805C489C:         callc [evt_mario_get_pos evt_mario.o] 0 LW(0) LW(1) LW(2)
+805C48B4:         addi LW(1) 50
+805C48C0:         callc [evt_fade_set_spot_pos evt_fade.o] LW(0) LW(1) LW(2)
+805C48D4:         callc [evt_fade_set_mapchange_type evt_fade.o] 0 4 500 9 300
+805C48F0:         callc [evt_bero_mapchange evt_bero.o] ["gon_01"] ["e_bero"]
+805C4900:       endif
+805C4904:     end_loop
+805C4908:     callc [senkaronFlagOnMesPushing gon_03.o]
+805C4910:     callc [evt_npc_set_battle_info evt_npc.o] ["リーダー"] 6
+805C4920:     callc [evt_npc_battle_start evt_npc.o] ["リーダー"]
+805C492C:     callc [evt_npc_wait_battle_end evt_npc.o]
+805C4934:     callc [evt_snd_bgmon evt_snd.o] 512 ["BGM_STG1_GON1"]
+805C4944:     callc [evt_snd_envon evt_snd.o] 272 ["ENV_STG1_GON1"]
+805C4954:     callc [evt_snd_sfxoff evt_snd.o] GW(13)
+805C4960:     setii GW(15) 0
+805C496C:     callc [evt_npc_change_interrupt evt_npc.o] ["リチャード"] 6 [richard_talk_event gon_03.o]
+805C4980:     callc [evt_npc_set_position evt_npc.o] ["リーダー"] 0 -1000 0
+805C4998:     callc [evt_snd_sfxon evt_snd.o] ["SFX_STG1_HONE_ESCAPE1"] 0
+805C49A8:     callsa [senkaron_escape_event gon_03.o]
+805C49B0:     setii GSW(0) 39
+805C49BC:     callc [evt_map_playanim evt_map.o] ["m_door01_a"] 0 0
+805C49D0:     setii LW(0) ["w_bero"]
+805C49DC:     callss [bero_case_switch_on evt_bero.o]
+805C49E4:     setii LW(0) ["e_bero"]
+805C49F0:     callss [bero_case_switch_on evt_bero.o]
+805C49F8:   endif
+805C49FC:   return
+805C4A00:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [senkaron_entry_event gon_03.o] AT 805C5220 ---
+805C5220:   callc [evt_ext_entry evt_ext.o] 1000 [senkaron_ext_entry_data gon_03.o] [senkaron_ext_init gon_03.o] [senkaron_ext_main gon_03.o] [senkaron_ext_dispent gon_03.o]
+805C523C:   return
+805C5240:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [senkaron_escape_event gon_03.o] AT 805C5244 ---
+805C5244:   callc [senkaronToEscape gon_03.o]
+805C524C:   return
+805C5250:   end

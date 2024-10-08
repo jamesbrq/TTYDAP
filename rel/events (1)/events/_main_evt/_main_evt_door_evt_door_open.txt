@@ -1,0 +1,297 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [evt_door_open evt_door.o] AT 8032F670 ---
+8032F670:   callc [evt_cam_letter_box_disable evt_cam.o] 1
+8032F67C:   callc [evt_mario_key_onoff evt_mario.o] 0
+8032F688:   storei 1 [DoorFLAG evt_door.o]
+8032F694:   callc [evt_door_param evt_door.o] LW(0) 7 LW(1) LW(2)
+8032F6AC:   if_int_ne LW(1) 0
+8032F6B8:     setii LF(0) 0
+8032F6C4:     callsa LW(1)
+8032F6CC:   endif
+8032F6D0:   callc [evt_door_param evt_door.o] LW(0) 2 LW(1) LW(2)
+8032F6E8:   if_int_ne LW(1) 0
+8032F6F4:     callc [evt_door_save_mapflag evt_door.o] LW(1)
+8032F700:     callc [evt_mapobj_flag_onoff evt_map.o] 1 0 LW(1) 2
+8032F718:   endif
+8032F71C:   begin_thread
+8032F720:     callc [evt_door_param evt_door.o] LW(0) 4 LW(1) LW(2) LW(3)
+8032F73C:     callc [evt_mario_get_pos evt_mario.o] 0 LW(4) LW(5) LW(6)
+8032F754:     addi LW(5) 2
+8032F760:     callc [evt_cam3d_evt_set_xyz evt_cam.o] LW(1) LW(5) LW(3) 0 150 11
+8032F780:   end_thread
+8032F784:   callc [evt_door_param evt_door.o] LW(0) 2 LW(1) LW(2)
+8032F79C:   if_int_ne LW(1) 0
+8032F7A8:     callc [evt_mapobj_flag_onoff evt_map.o] 1 1 LW(1) 2048
+8032F7C0:   endif
+8032F7C4:   callc [evt_door_param evt_door.o] LW(0) 1 LW(1) LW(2) LW(3)
+8032F7E0:   if_int_ne LW(1) 0
+8032F7EC:     callc [evt_mapobj_flag_onoff evt_map.o] 1 1 LW(1) 2048
+8032F804:     callc [evt_mapobj_flag_onoff evt_map.o] 1 1 LW(1) 4096
+8032F81C:   endif
+8032F820:   callc [evt_door_param evt_door.o] LW(0) 3 LW(1) LW(2)
+8032F838:   if_int_ne LW(1) 0
+8032F844:     callc [evt_mapobj_flag_onoff evt_map.o] 1 0 LW(1) 1
+8032F85C:     callc [evt_mapobj_flag_onoff evt_map.o] 1 1 LW(1) 2048
+8032F874:     callc [evt_mapobj_flag_onoff evt_map.o] 1 1 LW(1) 4096
+8032F88C:   endif
+8032F890:   if_int_ne LW(2) 0
+8032F89C:     callc [evt_hitobj_onoff evt_hit.o] LW(2) 1 1
+8032F8B0:   endif
+8032F8B4:   callc [evt_door_param evt_door.o] LW(0) 9 LW(1)
+8032F8C8:   if_bits_set LW(1) 1
+8032F8D4:     callc [npc_hide_onoff evt_door.o] LW(0) 0
+8032F8E4:   endif
+8032F8E8:   callc [door_dark_flag evt_door.o] LW(0) 1
+8032F8F8:   if_bits_set LW(15) 4
+8032F904:     callc [evt_door_param evt_door.o] LW(0) 6 LW(7) LW(8) LW(9)
+8032F920:     if_int_ne LW(9) 0
+8032F92C:       begin_thread
+8032F930:         wait_ms 500
+8032F938:         callsa [house_open_se evt_door.o]
+8032F940:         callc [evt_door_param evt_door.o] LW(0) 6 LW(7) LW(8) LW(9)
+8032F95C:         setii LW(6) 0
+8032F968:         callc [evt_sub_intpl_msec_init evt_sub.o] 2 0 180 500
+8032F980: 2:
+8032F988:         callc [evt_sub_intpl_msec_get_value evt_sub.o]
+8032F990:         setii LW(5) LW(1)
+8032F99C:         setii LW(1) 0
+8032F9A8:         setii LF(0) 0
+8032F9B4:         callsa LW(9)
+8032F9BC:         setii LW(6) 1
+8032F9C8:         wait_frames 1
+8032F9D0:         if_int_eq LW(5) 1
+8032F9DC:           goto 2
+8032F9E4:         endif
+8032F9E8:       end_thread
+8032F9EC:     endif
+8032F9F0:   endif
+8032F9F4:   callc [N_evt_mario_party_door_halve_hitbox evt_mario.o]
+8032F9FC:   callc [evt_door_param evt_door.o] LW(0) 5 LW(1) LW(2) LW(3)
+8032FA18:   callc [evt_mario_mov_pos2 evt_mario.o] LW(1) LW(3) 135.00
+8032FA2C:   callc [evt_party_move_beside_mario evt_party.o] 0
+8032FA38:   callc [evt_party_move_beside_mario evt_party.o] 1
+8032FA44:   if_bits_clear LW(15) 2
+8032FA50:     callsa [door_dark evt_door.o]
+8032FA58:   endif
+8032FA5C:   callsa [door_open_se evt_door.o]
+8032FA64:   callc [evt_door_param evt_door.o] LW(0) 6 LW(7) LW(8) LW(9)
+8032FA80:   if_int_ne LW(7) 0
+8032FA8C:     begin_thread
+8032FA90:       callc [evt_door_param evt_door.o] LW(0) 6 LW(7) LW(8) LW(9)
+8032FAAC:       callc [evt_sub_intpl_msec_init evt_sub.o] 5 0 180 500
+8032FAC4: 0:
+8032FACC:       callc [evt_sub_intpl_msec_get_value evt_sub.o]
+8032FAD4:       setii LW(5) LW(1)
+8032FAE0:       setii LW(1) 0
+8032FAEC:       setii LF(0) 0
+8032FAF8:       callsa LW(7)
+8032FB00:       wait_frames 1
+8032FB08:       if_int_eq LW(5) 1
+8032FB14:         goto 0
+8032FB1C:       endif
+8032FB20:     end_thread
+8032FB24:   endif
+8032FB28:   wait_ms 500
+8032FB30:   callc [evt_door_param evt_door.o] LW(0) 4 LW(1) LW(2) LW(3)
+8032FB4C:   callc [evt_mario_party_door_move evt_mario.o] LW(1) LW(3) 135.00
+8032FB60:   callc [evt_door_param evt_door.o] LW(0) 6 LW(7) LW(8) LW(9)
+8032FB7C:   if_int_ne LW(7) 0
+8032FB88:     begin_thread
+8032FB8C:       callsa [door_close_se evt_door.o]
+8032FB94:     end_thread
+8032FB98:     begin_thread
+8032FB9C:       callc [evt_door_param evt_door.o] LW(0) 6 LW(7) LW(8) LW(9)
+8032FBB8:       callc [evt_sub_intpl_msec_init evt_sub.o] 2 180 0 500
+8032FBD0: 1:
+8032FBD8:       callc [evt_sub_intpl_msec_get_value evt_sub.o]
+8032FBE0:       setii LW(5) LW(1)
+8032FBEC:       setii LW(1) 1
+8032FBF8:       setii LF(0) 0
+8032FC04:       callsa LW(7)
+8032FC0C:       wait_frames 1
+8032FC14:       if_int_eq LW(5) 1
+8032FC20:         goto 1
+8032FC28:       endif
+8032FC2C:     end_thread
+8032FC30:   endif
+8032FC34:   if_bits_clear LW(15) 4
+8032FC40:     callc [evt_door_param evt_door.o] LW(0) 6 LW(7) LW(8) LW(9)
+8032FC5C:     if_int_ne LW(9) 0
+8032FC68:       begin_thread
+8032FC6C:         callsa [house_open_se evt_door.o]
+8032FC74:         callc [evt_door_param evt_door.o] LW(0) 6 LW(7) LW(8) LW(9)
+8032FC90:         setii LW(6) 0
+8032FC9C:         callc [evt_sub_intpl_msec_init evt_sub.o] 2 0 180 500
+8032FCB4: 2:
+8032FCBC:         callc [evt_sub_intpl_msec_get_value evt_sub.o]
+8032FCC4:         setii LW(5) LW(1)
+8032FCD0:         setii LW(1) 0
+8032FCDC:         setii LF(0) 0
+8032FCE8:         callsa LW(9)
+8032FCF0:         setii LW(6) 1
+8032FCFC:         wait_frames 1
+8032FD04:         if_int_eq LW(5) 1
+8032FD10:           goto 2
+8032FD18:         endif
+8032FD1C:       end_thread
+8032FD20:     endif
+8032FD24:   endif
+8032FD28:   wait_ms 500
+8032FD30:   if_bits_clear LW(15) 2
+8032FD3C:     callsa [door_dark2 evt_door.o]
+8032FD44:   endif
+8032FD48:   callc [evt_door_param evt_door.o] LW(0) 6 LW(7) LW(8) LW(9)
+8032FD64:   if_int_ne LW(8) 0
+8032FD70:     begin_thread
+8032FD74:       wait_ms 500
+8032FD7C:       callsa [door_down_se evt_door.o]
+8032FD84:     end_thread
+8032FD88:     begin_thread
+8032FD8C:       callc [evt_door_param evt_door.o] LW(0) 6 LW(7) LW(8) LW(9)
+8032FDA8:       callc [evt_sub_intpl_msec_init evt_sub.o] 2 0 180 500
+8032FDC0: 3:
+8032FDC8:       callc [evt_sub_intpl_msec_get_value evt_sub.o]
+8032FDD0:       setii LF(0) 0
+8032FDDC:       callsa LW(8)
+8032FDE4:       wait_frames 1
+8032FDEC:       if_int_eq LW(1) 1
+8032FDF8:         goto 3
+8032FE00:       endif
+8032FE04:     end_thread
+8032FE08:   endif
+8032FE0C:   wait_ms 500
+8032FE14:   callc [evt_cam3d_evt_xyz_off evt_cam.o] 0 11
+8032FE24:   storei 0 [DoorFLAG evt_door.o]
+8032FE30:   wait_frames 2
+8032FE38:   callc [evt_mario_key_onoff evt_mario.o] 1
+8032FE44:   callc [evt_cam_letter_box_disable evt_cam.o] 0
+8032FE50:   callc [?snd_door_in evt_door.o]
+8032FE58:   return
+8032FE5C:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [house_open_se evt_door.o] AT 8032E444 ---
+8032E444:   callc [evt_door_param evt_door.o] LW(0) 9 LW(1)
+8032E458:   if_bits_set LW(1) 2
+8032E464:     return
+8032E468:   endif
+8032E46C:   callc [evt_door_param evt_door.o] LW(0) 1 LW(2) LW(3) LW(4)
+8032E488:   callc [evt_hit_get_position evt_hit.o] LW(3) LW(10) LW(11) LW(12)
+8032E4A0:   callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_HOUSE_OPEN1"] LW(10) LW(11) LW(12) 0
+8032E4BC:   return
+8032E4C0:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [door_dark evt_door.o] AT 8032F470 ---
+8032F470:   callc [evt_sub_intpl_msec_init evt_sub.o] 11 255 0 300
+8032F488: 0:
+8032F490:   callc [evt_sub_intpl_msec_get_value evt_sub.o]
+8032F498:   callc [evt_map_set_blend evt_map.o] 0 LW(0) LW(0) LW(0) 255
+8032F4B4:   wait_frames 1
+8032F4BC:   if_int_eq LW(1) 1
+8032F4C8:     goto 0
+8032F4D0:   endif
+8032F4D4:   callc [evt_map_set_blend evt_map.o] 0 LW(0) LW(0) LW(0) 0
+8032F4F0:   return
+8032F4F4:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [door_open_se evt_door.o] AT 8032DF08 ---
+8032DF08:   callc [evt_door_param evt_door.o] LW(0) 8 LW(1)
+8032DF1C:   callc [evt_door_param evt_door.o] LW(0) 1 LW(2) LW(3) LW(4)
+8032DF38:   callc [evt_hit_get_position evt_hit.o] LW(3) LW(10) LW(11) LW(12)
+8032DF50:   switchi LW(1)
+8032DF58:     case_int_eq 0
+8032DF60:     case_int_eq 1
+8032DF68:       callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_DOOR_OPEN1"] LW(10) LW(11) LW(12) 0
+8032DF84:     case_int_eq 2
+8032DF8C:       callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_DOOR_OPEN_WOOD1"] LW(10) LW(11) LW(12) 0
+8032DFA8:     case_int_eq 3
+8032DFB0:       callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_DOOR_OPEN_WOOD2"] LW(10) LW(11) LW(12) 0
+8032DFCC:     case_int_eq 4
+8032DFD4:       callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_DOOR_OPEN_WOOD3"] LW(10) LW(11) LW(12) 0
+8032DFF0:     case_int_eq 5
+8032DFF8:       callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_DOOR_OPEN_IRON1"] LW(10) LW(11) LW(12) 0
+8032E014:     case_int_eq 6
+8032E01C:       callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_DOOR_OPEN_IRON2"] LW(10) LW(11) LW(12) 0
+8032E038:     case_int_eq 7
+8032E040:       callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_DOOR_OPEN_GRILLE1"] LW(10) LW(11) LW(12) 0
+8032E05C:     case_int_eq 8
+8032E064:       callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_DOOR_OPEN_SLIDE1"] LW(10) LW(11) LW(12) 0
+8032E080:     case_int_eq 9
+8032E088:       callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_DOOR_OPEN_TURN1"] LW(10) LW(11) LW(12) 0
+8032E0A4:     case_int_eq 10
+8032E0AC:       callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_DOOR_OPEN_ELEC1"] LW(10) LW(11) LW(12) 0
+8032E0C8:     case_int_eq 11
+8032E0D0:       callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_DOOR_OPEN_STONE1"] LW(10) LW(11) LW(12) 0
+8032E0EC:     case_int_eq 12
+8032E0F4:       callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_DOOR_OPEN_CASTLE1"] LW(10) LW(11) LW(12) 0
+8032E110:     case_int_eq 13
+8032E118:       callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_DOOR_OPEN_CASTLE2"] LW(10) LW(11) LW(12) 0
+8032E134:     case_int_eq 14
+8032E13C:       callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_DOOR_OPEN_METAL1"] LW(10) LW(11) LW(12) 0
+8032E158:   end_switch
+8032E15C:   return
+8032E160:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [door_close_se evt_door.o] AT 8032E164 ---
+8032E164:   callc [evt_door_param evt_door.o] LW(0) 8 LW(1)
+8032E178:   callc [evt_door_param evt_door.o] LW(0) 1 LW(2) LW(3) LW(4)
+8032E194:   callc [evt_hit_get_position evt_hit.o] LW(3) LW(10) LW(11) LW(12)
+8032E1AC:   switchi LW(1)
+8032E1B4:     case_int_eq 0
+8032E1BC:     case_int_eq 1
+8032E1C4:       callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_DOOR_SHUT1"] LW(10) LW(11) LW(12) 0
+8032E1E0:     case_int_eq 2
+8032E1E8:       callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_DOOR_SHUT_WOOD1"] LW(10) LW(11) LW(12) 0
+8032E204:     case_int_eq 3
+8032E20C:       callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_DOOR_SHUT_WOOD2"] LW(10) LW(11) LW(12) 0
+8032E228:     case_int_eq 4
+8032E230:       callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_DOOR_SHUT_WOOD2"] LW(10) LW(11) LW(12) 0
+8032E24C:     case_int_eq 5
+8032E254:       callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_DOOR_SHUT_IRON1"] LW(10) LW(11) LW(12) 0
+8032E270:     case_int_eq 6
+8032E278:       callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_DOOR_SHUT_IRON2"] LW(10) LW(11) LW(12) 0
+8032E294:     case_int_eq 7
+8032E29C:       callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_DOOR_SHUT_GRILLE1"] LW(10) LW(11) LW(12) 0
+8032E2B8:     case_int_eq 8
+8032E2C0:       callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_DOOR_SHUT_SLIDE1"] LW(10) LW(11) LW(12) 0
+8032E2DC:     case_int_eq 9
+8032E2E4:       callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_DOOR_SHUT_TURN1"] LW(10) LW(11) LW(12) 0
+8032E300:     case_int_eq 10
+8032E308:       callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_DOOR_SHUT_ELEC1"] LW(10) LW(11) LW(12) 0
+8032E324:     case_int_eq 11
+8032E32C:       callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_DOOR_SHUT_STONE1"] LW(10) LW(11) LW(12) 0
+8032E348:     case_int_eq 12
+8032E350:       callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_DOOR_SHUT_CASTLE1"] LW(10) LW(11) LW(12) 0
+8032E36C:     case_int_eq 13
+8032E374:       callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_DOOR_SHUT_CASTLE2"] LW(10) LW(11) LW(12) 0
+8032E390:     case_int_eq 14
+8032E398:       callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_DOOR_SHUT_METAL1"] LW(10) LW(11) LW(12) 0
+8032E3B4:   end_switch
+8032E3B8:   return
+8032E3BC:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [door_dark2 evt_door.o] AT 8032F4F8 ---
+8032F4F8:   callc [evt_sub_intpl_msec_init evt_sub.o] 11 255 0 300
+8032F510: 0:
+8032F518:   callc [evt_sub_intpl_msec_get_value evt_sub.o]
+8032F520:   callc [evt_map_set_blend evt_map.o] 1 LW(0) LW(0) LW(0) 255
+8032F53C:   wait_frames 1
+8032F544:   if_int_eq LW(1) 1
+8032F550:     goto 0
+8032F558:   endif
+8032F55C:   callc [evt_map_set_blend evt_map.o] 1 LW(0) LW(0) LW(0) 0
+8032F578:   return
+8032F57C:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [door_down_se evt_door.o] AT 8032E3C0 ---
+8032E3C0:   callc [evt_door_param evt_door.o] LW(0) 8 LW(1)
+8032E3D4:   callc [evt_door_param evt_door.o] LW(0) 1 LW(2) LW(3) LW(4)
+8032E3F0:   callc [evt_hit_get_position evt_hit.o] LW(3) LW(10) LW(11) LW(12)
+8032E408:   switchi LW(1)
+8032E410:     case_int_eq 0
+8032E418:     case_default
+8032E41C:       callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_DOOR_FALL1"] LW(10) LW(11) LW(12) 0
+8032E438:   end_switch
+8032E43C:   return
+8032E440:   end

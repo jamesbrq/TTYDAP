@@ -1,0 +1,34 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [taimatu_evt las_08.o] AT 805DA300 ---
+805DA300:   mo_set_base_int [taimatu_data las_08.o]
+805DA308:   loop 8
+805DA310:     mo_read_int2 LW(0) LW(1)
+805DA31C:     callc [evt_mapobj_flag_onoff evt_map.o] 0 1 LW(0) 1
+805DA334:   end_loop
+805DA338:   callsa [hikari_anim las_08.o]
+805DA340:   return
+805DA344:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [hikari_anim las_08.o] AT 805DA230 ---
+805DA230:   callc [evt_seq_wait evt_seq.o] 2
+805DA23C:   callc [evt_bero_exec_wait evt_bero.o] 65536
+805DA248:   setii LW(0) 0
+805DA254:   loop 0
+805DA25C:     callc [evt_sub_get_sincos evt_sub.o] LW(0) LW(1) LW(2)
+805DA270:     mulf LW(1) 0.20
+805DA27C:     addf LW(1) 0.80
+805DA288:     mo_set_base_int [taimatu_data las_08.o]
+805DA290:     loop 8
+805DA298:       mo_read_int2 LW(3) LW(4)
+805DA2A4:       callc [evt_mapobj_scale evt_map.o] 0 LW(3) LW(1) LW(1) LW(1)
+805DA2C0:     end_loop
+805DA2C4:     addi LW(0) 2
+805DA2D0:     if_int_ge LW(0) 360
+805DA2DC:       subi LW(0) 360
+805DA2E8:     endif
+805DA2EC:     wait_frames 1
+805DA2F4:   end_loop
+805DA2F8:   return
+805DA2FC:   end

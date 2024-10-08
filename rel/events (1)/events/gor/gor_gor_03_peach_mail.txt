@@ -1,0 +1,80 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [peach_mail gor_03.o] AT 80612CF8 ---
+80612CF8:   loop 0
+80612D00:     callc [evt_mario_get_pos evt_mario.o] 0 LW(0) LW(1) LW(2)
+80612D18:     if_int_ge LW(2) -300
+80612D24:       loop_break
+80612D28:     endif
+80612D2C:     wait_frames 1
+80612D34:   end_loop
+80612D38:   callc [evt_mario_key_onoff evt_mario.o] 0
+80612D44:   callc [evt_mario_normalize evt_mario.o]
+80612D4C:   callc [evt_mario_get_pos evt_mario.o] 0 LW(0) LW(1) LW(2)
+80612D64:   if_int_le LW(0) -50
+80612D70:     callc [evt_mario_mov_pos evt_mario.o] -50 LW(2) 500
+80612D84:   endif
+80612D88:   if_int_ge LW(0) 50
+80612D94:     callc [evt_mario_mov_pos evt_mario.o] 50 LW(2) 500
+80612DA8:   endif
+80612DAC:   callc [evt_mario_get_pos evt_mario.o] 0 LW(0) LW(1) LW(2)
+80612DC4:   callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_VOICE_MARIO_FIND1_2"] LW(0) LW(1) LW(2) 0
+80612DE0:   callc [evt_snd_bgmoff evt_snd.o] 1024
+80612DEC:   callc [evt_snd_bgmon evt_snd.o] 1 ["BGM_FF_MAIL_RECEPTION1"]
+80612DFC:   callc [evt_eff_fukidashi evt_eff.o] 0 [zero_gor_0001aa0c gor_03.o] 0 0 0 0 0 0 0 0 0
+80612E30:   callsa_tid [evt_sub_mail_vibration evt_sub.o] LW(10)
+80612E3C:   wait_ms 500
+80612E44:   setii GF(0) 0
+80612E50:   begin_thread
+80612E54:     callc [evt_party_stop evt_party.o] 0
+80612E60:     callc [evt_mario_get_pos evt_mario.o] 0 LW(0) LW(1) LW(2)
+80612E78:     addi LW(0) 40
+80612E84:     callc [evt_party_move_pos2 evt_party.o] 0 LW(0) LW(2) 60.00
+80612E9C:     callc [evt_party_set_dir evt_party.o] 0 270 -1
+80612EB0:     setii GF(0) 1
+80612EBC:   end_thread
+80612EC0:   loop 0
+80612EC8:     if_int_eq GF(0) 1
+80612ED4:       loop_break
+80612ED8:     endif
+80612EDC:     wait_frames 1
+80612EE4:   end_loop
+80612EE8:   callc [evt_msg_print_party evt_msg.o] ["gor_03_mail3_00"]
+80612EF4:   callc [evt_mario_balloon_bikkuri evt_mario.o]
+80612EFC:   loop 0
+80612F04:     callc [evt_key_get_buttontrg evt_sub.o] 0 LW(0)
+80612F14:     if_int_eq LW(0) 256
+80612F20:       loop_break
+80612F24:     endif
+80612F28:     wait_frames 1
+80612F30:   end_loop
+80612F34:   callc [evt_mario_balloon_off evt_mario.o]
+80612F3C:   callc [evt_snd_bgmoff evt_snd.o] 513
+80612F48:   callc [evt_snd_bgmon evt_snd.o] 288 0
+80612F58:   callc [evt_mario_get_pos evt_mario.o] 0 LW(0) LW(1) LW(2)
+80612F70:   callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_MAIL_RECEPTION1"] LW(0) LW(1) LW(2) 0
+80612F8C:   stop_tid LW(10)
+80612F94:   wait_frames 1
+80612F9C:   callc [evt_sub_rumble_onoff evt_sub.o] 1 0
+80612FAC:   callc [evt_cam3d_evt_set evt_cam.o] LW(0) 91 -11 LW(0) 39 -307 1000 11
+80612FD4:   wait_ms 1000
+80612FDC:   callc [evt_mario_set_pose evt_mario.o] ["M_N_9"]
+80612FE8:   wait_ms 500
+80612FF0:   callc [evt_mario_get_pos evt_mario.o] 0 LW(0) LW(1) LW(2)
+80613008:   callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_MAIL_RECEPTION2"] LW(0) LW(1) LW(2) 0
+80613024:   callc [evt_mario_set_pose evt_mario.o] ["M_N_10"]
+80613030:   wait_ms 500
+80613038:   callc [evt_mario_set_dir evt_mario.o] 90 300 0
+8061304C:   callc [evt_msg_print evt_msg.o] 0 ["gor_03_mail3_01"] 0 0
+80613064:   callc [evt_msg_print_party evt_msg.o] ["gor_03_mail3_02"]
+80613070:   callc [evt_mario_set_pose evt_mario.o] ["M_S_1"]
+8061307C:   callc [evt_mario_key_onoff evt_mario.o] 1
+80613088:   callc [evt_party_run evt_party.o] 0
+80613094:   callc [evt_cam_shift_reset evt_cam.o]
+8061309C:   callc [evt_cam3d_evt_off evt_cam.o] 500 11
+806130AC:   setii GSW(0) 173
+806130B8:   callc [evt_pouch_receive_mail evt_pouch.o] 2
+806130C4:   callc [evt_pouch_open_mail evt_pouch.o] 2
+806130D0:   return
+806130D4:   end

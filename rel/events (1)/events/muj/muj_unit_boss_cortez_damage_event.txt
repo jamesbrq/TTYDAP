@@ -1,0 +1,556 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [damage_event unit_boss_cortez.o] AT 805F2BA4 ---
+805F2BA4:   setii LW(10) -2
+805F2BB0:   setii LW(11) 1
+805F2BBC:   callc [btlevtcmd_GetUnitWork battle_event_cmd.o] -2 5 LW(0)
+805F2BD0:   if_int_le LW(0) 0
+805F2BDC:     callc [btlevtcmd_GetDamagePartsId battle_event_cmd.o] -2 LW(0)
+805F2BEC:     if_int_ne LW(0) 4
+805F2BF8:       callc [btlevtcmd_AnimeSetPoseTable battle_event_cmd.o] -2 1 [pose_table_mode_1 unit_boss_cortez.o]
+805F2C0C:       callss [btldefaultevt_Damage battle_event_default.o]
+805F2C14:     else
+805F2C18:       callc [btlevtcmd_AnimeSetPoseTable battle_event_cmd.o] -2 1 [pose_table_mode_1_hone unit_boss_cortez.o]
+805F2C2C:       callss [btldefaultevt_Damage battle_event_default.o]
+805F2C34:     endif
+805F2C38:     return
+805F2C3C:   endif
+805F2C40:   callc [btlevtcmd_GetDamagePartsId battle_event_cmd.o] -2 LW(0)
+805F2C50:   switchi LW(0)
+805F2C58:     case_int_eq 1
+805F2C60:       callss [btldefaultevt_Damage battle_event_default.o]
+805F2C68:     case_int_eq 2
+805F2C70:       callc [btlevtcmd_SetUnitWork battle_event_cmd.o] -2 7 1
+805F2C84:       callc [btlevtcmd_SetUnitWork battle_event_cmd.o] -2 11 2
+805F2C98:       callss [btldefaultevt_Damage battle_event_default.o]
+805F2CA0:     case_int_eq 4
+805F2CA8:       callss [mode2_honeduka_damage_event unit_boss_cortez.o]
+805F2CB0:   end_switch
+805F2CB4:   return
+805F2CB8:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [mode2_honeduka_damage_event unit_boss_cortez.o] AT 805F70D4 ---
+805F70D4:   callc [btlevtcmd_OnUnitFlag battle_event_cmd.o] -2 1
+805F70E4:   setii LW(8) 0
+805F70F0:   callc [btlevtcmd_SetUnitWork battle_event_cmd.o] -2 7 1
+805F7104:   callc [btlevtcmd_CheckDamageCode battle_event_cmd.o] -2 256 LW(1)
+805F7118:   if_int_ne LW(1) 0
+805F7124:     begin_child_thread_tid LW(8)
+805F712C:       callss [mode_change_event unit_boss_cortez.o]
+805F7134:     end_child_thread
+805F7138:   endif
+805F713C:   begin_child_thread_tid LW(9)
+805F7144:     callc [evt_sub_intpl_init evt_sub.o] 8 6 0 30
+805F715C:     loop 30
+805F7164:       callc [evt_sub_intpl_get_value evt_sub.o]
+805F716C:       callc [btlevtcmd_SetPartsDispOffset battle_event_cmd.o] -2 4 0 LW(0) 0
+805F7188:       wait_frames 1
+805F7190:     end_loop
+805F7194:   end_child_thread
+805F7198:   callc [btlevtcmd_WaitEventEnd battle_event_cmd.o] LW(9)
+805F71A4:   if_int_ne LW(8) 0
+805F71B0:     callc [btlevtcmd_WaitEventEnd battle_event_cmd.o] LW(8)
+805F71BC:   endif
+805F71C0:   callc [btlevtcmd_CheckDamageCode battle_event_cmd.o] LW(10) 1024 LW(1)
+805F71D4:   if_int_ne LW(1) 0
+805F71E0:     callss [dead_event unit_boss_cortez.o]
+805F71E8:     return
+805F71EC:   endif
+805F71F0:   callc [btlevtcmd_StartWaitEvent battle_event_cmd.o] -2
+805F71FC:   return
+805F7200:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [mode_change_event unit_boss_cortez.o] AT 805F7204 ---
+805F7204:   callc [btlevtcmd_GetUnitWork battle_event_cmd.o] -2 5 LW(0)
+805F7218:   switchi LW(0)
+805F7220:     case_int_eq 1
+805F7228:       callc [btlevtcmd_GetUnitWork battle_event_cmd.o] -2 11 LW(0)
+805F723C:       if_int_eq LW(0) 0
+805F7248:         callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 1 ["KRT_1H_1"]
+805F725C:       else
+805F7260:         callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 1 ["KRT_1H2_1"]
+805F7274:       endif
+805F7278:       callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_BOSS_KOR_MOVE2"] [F1194D80] 0 LW(15)
+805F7294:       callc [btlevtcmd_AnimeWaitPlayComplete battle_event_cmd.o] -2 1
+805F72A4:       callc [evt_snd_sfxoff evt_snd.o] LW(15)
+805F72B0:       callc [btlevtcmd_SetUnitWork battle_event_cmd.o] -2 5 2
+805F72C4:       callss [cortez_reset_pose_table unit_boss_cortez.o]
+805F72CC:     case_int_eq 2
+805F72D4:       callc [btlevtcmd_GetUnitWork battle_event_cmd.o] -2 11 LW(0)
+805F72E8:       if_int_eq LW(0) 0
+805F72F4:         callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 1 ["KRT_2H_1"]
+805F7308:       else
+805F730C:         callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 1 ["KRT_2H2_1"]
+805F7320:       endif
+805F7324:       begin_child_thread_tid LW(15)
+805F732C:         callc [btlevtcmd_ftomsec battle_event_cmd.o] 80 LW(0)
+805F733C:         wait_ms LW(0)
+805F7344:         callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_BOSS_KOR_MOVE2"] [F1194D80] 0 LW(15)
+805F7360:         callc [btlevtcmd_AnimeWaitPlayComplete battle_event_cmd.o] -2 1
+805F7370:         callc [evt_snd_sfxoff evt_snd.o] LW(15)
+805F737C:       end_child_thread
+805F7380:       callc [btlevtcmd_WaitEventEnd battle_event_cmd.o] LW(15)
+805F738C:       callc [btlevtcmd_SetUnitWork battle_event_cmd.o] -2 5 3
+805F73A0:       callss [cortez_reset_pose_table unit_boss_cortez.o]
+805F73A8:       callss [mode2_rib_open_event unit_boss_cortez.o]
+805F73B0:     case_default
+805F73B4:   end_switch
+805F73B8:   return
+805F73BC:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [dead_event unit_boss_cortez.o] AT 805F5F00 ---
+805F5F00:   callc [btlevtcmd_ClearAllStatus battle_event_cmd.o] -2
+805F5F0C:   callc [btlevtcmd_WaitAttackEnd battle_event_cmd.o]
+805F5F14:   callc [btlevtcmd_GetUnitWork battle_event_cmd.o] -2 5 LW(0)
+805F5F28:   switchi LW(0)
+805F5F30:     case_int_eq 0
+805F5F38:       callc [btlevtcmd_SetUnitWork battle_event_cmd.o] -2 5 1
+805F5F4C:       callc [btlevtcmd_SetEventAttack battle_event_cmd.o] -2 [attack_event_mode2 unit_boss_cortez.o]
+805F5F5C:       callc [btlevtcmd_RecoverHp battle_event_cmd.o] -2 1 999
+805F5F70:       callc [btlevtcmd_OffPartsAttribute battle_event_cmd.o] -2 4 65536
+805F5F84:       callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 1 ["KRT_D2_1"]
+805F5F98:       begin_child_thread
+805F5F9C:         callc [btlevtcmd_ftomsec battle_event_cmd.o] 125 LW(0)
+805F5FAC:         wait_ms LW(0)
+805F5FB4:         callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_BOSS_KOR_SWORD_FALL1"] [F1194D80] 0 [F1194D80]
+805F5FD0:       end_child_thread
+805F5FD4:       begin_child_thread
+805F5FD8:         callc [btlevtcmd_ftomsec battle_event_cmd.o] 120 LW(0)
+805F5FE8:         wait_ms LW(0)
+805F5FF0:         callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_BOSS_KOR_SWORD_FALL1"] [F1194D80] 0 [F1194D80]
+805F600C:       end_child_thread
+805F6010:       begin_child_thread
+805F6014:         callc [btlevtcmd_ftomsec battle_event_cmd.o] 118 LW(0)
+805F6024:         wait_ms LW(0)
+805F602C:         callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_BOSS_KOR_SWORD_FALL1"] [F1194D80] 0 [F1194D80]
+805F6048:       end_child_thread
+805F604C:       begin_child_thread
+805F6050:         callc [btlevtcmd_ftomsec battle_event_cmd.o] 117 LW(0)
+805F6060:         wait_ms LW(0)
+805F6068:         callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_BOSS_KOR_SWORD_FALL1"] [F1194D80] 0 [F1194D80]
+805F6084:       end_child_thread
+805F6088:       begin_child_thread
+805F608C:         wait_ms 2000
+805F6094:         callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 3 ["KRT_Z_1"]
+805F60A8:         callc [btlevtcmd_OffPartsAttribute battle_event_cmd.o] -2 3 16777216
+805F60BC:       end_child_thread
+805F60C0:       callc [btlevtcmd_AnimeWaitPlayComplete battle_event_cmd.o] -2 1
+805F60D0:       callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 1 ["KRT_D2_2"]
+805F60E4:       begin_child_thread
+805F60E8:         callc [btlevtcmd_ftomsec battle_event_cmd.o] 33 LW(0)
+805F60F8:         wait_ms LW(0)
+805F6100:         callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_BOSS_KOR_MOVE2"] [F1194D80] 0 LW(7)
+805F611C:         callc [btlevtcmd_ftomsec battle_event_cmd.o] 36 LW(0)
+805F612C:         wait_ms LW(0)
+805F6134:         callc [evt_snd_sfxoff evt_snd.o] LW(7)
+805F6140:       end_child_thread
+805F6144:       callc [btlevtcmd_AnimeWaitPlayComplete battle_event_cmd.o] -2 1
+805F6154:       callc [btlevtcmd_GetMaxHp battle_event_cmd.o] -2 LW(0)
+805F6164:       callc [btlevtcmd_SetHp battle_event_cmd.o] -2 LW(0)
+805F6174:       callc [evt_fade_entry evt_fade.o] 24 1000 0 0 0
+805F6190:       callc [evt_fade_set_anim_ofs_pos evt_fade.o] 0 130
+805F61A0:       callc [evt_fade_set_anim_virtual_pos evt_fade.o] 0 0 80
+805F61B4:       callc [evt_fade_end_wait evt_fade.o]
+805F61BC:       callc [btlevtcmd_AnimeChangeGroup battle_event_cmd.o] -2 1 ["c_korutesu2"]
+805F61D0:       callss [cortez_reset_pose_table unit_boss_cortez.o]
+805F61D8:       callc [btlevtcmd_AnimeSetPoseSoundTable battle_event_cmd.o] -2 1 [pose_sound_timing_table unit_boss_cortez.o]
+805F61EC:       callc [btlevtcmd_AnimeChangePoseFromTable battle_event_cmd.o] -2 1
+805F61FC:       callc [evt_fade_entry evt_fade.o] 25 1000 0 0 0
+805F6218:       callc [evt_fade_set_anim_ofs_pos evt_fade.o] 0 130
+805F6228:       callc [evt_fade_set_anim_virtual_pos evt_fade.o] 0 0 80
+805F623C:       callc [evt_fade_end_wait evt_fade.o]
+805F6244:       callc [btlevtcmd_SetCutBaseOffset battle_event_cmd.o] -2 -80 120 0
+805F625C:       callc [btlevtcmd_SetCutWidth battle_event_cmd.o] -2 200
+805F626C:       callc [btlevtcmd_SetCutHeight battle_event_cmd.o] -2 100
+805F627C:       callc [btlevtcmd_reset_turn battle_event_cmd.o]
+805F6284:     case_int_eq_any 1
+805F628C:     case_int_eq_any 2
+805F6294:     case_int_eq_any 3
+805F629C:       callc [btlevtcmd_SetEventAttack battle_event_cmd.o] -2 [attack_event_mode3 unit_boss_cortez.o]
+805F62AC:       callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_BOSS_KOR_BONE_FALL1"] [F1194D80] 0 [F1194D80]
+805F62C8:       callc [btlevtcmd_GetUnitWork battle_event_cmd.o] -2 5 LW(0)
+805F62DC:       switchi LW(0)
+805F62E4:         case_int_eq 1
+805F62EC:           callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 1 ["KRT_1B_1"]
+805F6300:         case_int_eq 2
+805F6308:           callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 1 ["KRT_2B_1"]
+805F631C:           callc [btlevtcmd_ftomsec battle_event_cmd.o] 80 LW(0)
+805F632C:           wait_ms LW(0)
+805F6334:           callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_BOSS_KOR_MOVE2"] [F1194D80] 0 LW(15)
+805F6350:           callc [btlevtcmd_AnimeWaitPlayComplete battle_event_cmd.o] -2 1
+805F6360:           callc [evt_snd_sfxoff evt_snd.o] LW(15)
+805F636C:           callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 1 ["KRT_1B_1"]
+805F6380:         case_int_eq 3
+805F6388:           callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_BOSS_KOR_MOVE2"] [F1194D80] 0 LW(15)
+805F63A4:           callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 1 ["KRT_3B_1"]
+805F63B8:           callc [btlevtcmd_AnimeWaitPlayComplete battle_event_cmd.o] -2 1
+805F63C8:           callc [evt_snd_sfxoff evt_snd.o] LW(15)
+805F63D4:           callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 1 ["KRT_1B_1"]
+805F63E8:       end_switch
+805F63EC:       begin_child_thread
+805F63F0:         callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_BOSS_KOR_BONE_FALL1"] [F1194D80] 0 [F1194D80]
+805F640C:         callc [btlevtcmd_ftomsec battle_event_cmd.o] 7 LW(0)
+805F641C:         wait_ms LW(0)
+805F6424:         callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_BOSS_KOR_BONE_FALL1"] [F1194D80] 0 [F1194D80]
+805F6440:         callc [btlevtcmd_ftomsec battle_event_cmd.o] 8 LW(0)
+805F6450:         wait_ms LW(0)
+805F6458:         callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_BOSS_KOR_BONE_FALL1"] [F1194D80] 0 [F1194D80]
+805F6474:         callc [btlevtcmd_ftomsec battle_event_cmd.o] 4 LW(0)
+805F6484:         wait_ms LW(0)
+805F648C:         callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_BOSS_KOR_BONE_FALL1"] [F1194D80] 0 [F1194D80]
+805F64A8:         callc [btlevtcmd_ftomsec battle_event_cmd.o] 6 LW(0)
+805F64B8:         wait_ms LW(0)
+805F64C0:         callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_BOSS_KOR_BONE_FALL1"] [F1194D80] 0 [F1194D80]
+805F64DC:         callc [btlevtcmd_ftomsec battle_event_cmd.o] 7 LW(0)
+805F64EC:         wait_ms LW(0)
+805F64F4:         callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_BOSS_KOR_BONE_FALL1"] [F1194D80] 0 [F1194D80]
+805F6510:         callc [btlevtcmd_ftomsec battle_event_cmd.o] 8 LW(0)
+805F6520:         wait_ms LW(0)
+805F6528:         callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_BOSS_KOR_BONE_FALL1"] [F1194D80] 0 [F1194D80]
+805F6544:         callc [btlevtcmd_ftomsec battle_event_cmd.o] 8 LW(0)
+805F6554:         wait_ms LW(0)
+805F655C:         callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_BOSS_KOR_BONE_FALL1"] [F1194D80] 0 [F1194D80]
+805F6578:         callc [btlevtcmd_ftomsec battle_event_cmd.o] 5 LW(0)
+805F6588:         wait_ms LW(0)
+805F6590:         callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_BOSS_KOR_BONE_FALL1"] [F1194D80] 0 [F1194D80]
+805F65AC:         callc [btlevtcmd_ftomsec battle_event_cmd.o] 7 LW(0)
+805F65BC:         wait_ms LW(0)
+805F65C4:         callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_BOSS_KOR_BONE_FALL1"] [F1194D80] 0 [F1194D80]
+805F65E0:         callc [btlevtcmd_ftomsec battle_event_cmd.o] 5 LW(0)
+805F65F0:         wait_ms LW(0)
+805F65F8:         callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_BOSS_KOR_BONE_FALL1"] [F1194D80] 0 [F1194D80]
+805F6614:         callc [btlevtcmd_ftomsec battle_event_cmd.o] 7 LW(0)
+805F6624:         wait_ms LW(0)
+805F662C:         callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_BOSS_KOR_BONE_FALL1"] [F1194D80] 0 [F1194D80]
+805F6648:         callc [btlevtcmd_ftomsec battle_event_cmd.o] 14 LW(0)
+805F6658:         wait_ms LW(0)
+805F6660:         callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_BOSS_KOR_BONE_FALL1"] [F1194D80] 0 [F1194D80]
+805F667C:         callc [btlevtcmd_ftomsec battle_event_cmd.o] 30 LW(0)
+805F668C:         wait_ms LW(0)
+805F6694:         callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_BOSS_KOR_BONE_FALL1"] [F1194D80] 0 [F1194D80]
+805F66B0:       end_child_thread
+805F66B4:       callc [btlevtcmd_AnimeWaitPlayComplete battle_event_cmd.o] -2 1
+805F66C4:       callc [btlevtcmd_SetUnitWork battle_event_cmd.o] -2 5 4
+805F66D8:       wait_ms 1000
+805F66E0:       callc [btlevtcmd_AnimeSetPoseSoundTable battle_event_cmd.o] -2 1 0
+805F66F4:       callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 3 ["KRT_A_1"]
+805F6708:       callc [btlevtcmd_OffPartsAttribute battle_event_cmd.o] -2 3 16777216
+805F671C:       callc [btlevtcmd_AnimeWaitPlayComplete battle_event_cmd.o] -2 3
+805F672C:       callc [btlevtcmd_GetUnitWork battle_event_cmd.o] -2 1 LW(3)
+805F6740:       callc [btlevtcmd_AnimeChangePoseFromTable battle_event_cmd.o] LW(3) 1
+805F6750:       callc [btlevtcmd_OffPartsAttribute battle_event_cmd.o] LW(3) 1 50397184
+805F6764:       callc [btlevtcmd_OffAttribute battle_event_cmd.o] LW(3) 33554432
+805F6774:       callc [btlevtcmd_SetMaxMoveCount battle_event_cmd.o] LW(3) 1
+805F6784:       callc [btlevtcmd_GetUnitWork battle_event_cmd.o] -2 2 LW(3)
+805F6798:       callc [btlevtcmd_AnimeChangePoseFromTable battle_event_cmd.o] LW(3) 1
+805F67A8:       callc [btlevtcmd_OffPartsAttribute battle_event_cmd.o] LW(3) 1 50397184
+805F67BC:       callc [btlevtcmd_OffAttribute battle_event_cmd.o] LW(3) 33554432
+805F67CC:       callc [btlevtcmd_SetMaxMoveCount battle_event_cmd.o] LW(3) 1
+805F67DC:       callc [btlevtcmd_GetUnitWork battle_event_cmd.o] -2 4 LW(3)
+805F67F0:       callc [btlevtcmd_AnimeChangePoseFromTable battle_event_cmd.o] LW(3) 1
+805F6800:       callc [btlevtcmd_OffPartsAttribute battle_event_cmd.o] LW(3) 1 50397184
+805F6814:       callc [btlevtcmd_OffAttribute battle_event_cmd.o] LW(3) 33554432
+805F6824:       callc [btlevtcmd_SetMaxMoveCount battle_event_cmd.o] LW(3) 1
+805F6834:       callc [btlevtcmd_GetUnitWork battle_event_cmd.o] -2 3 LW(3)
+805F6848:       callc [btlevtcmd_AnimeChangePoseFromTable battle_event_cmd.o] LW(3) 1
+805F6858:       callc [btlevtcmd_OffPartsAttribute battle_event_cmd.o] LW(3) 1 50397184
+805F686C:       callc [btlevtcmd_OffAttribute battle_event_cmd.o] LW(3) 33554432
+805F687C:       callc [btlevtcmd_SetMaxMoveCount battle_event_cmd.o] LW(3) 1
+805F688C:       callc [btlevtcmd_OnPartsAttribute battle_event_cmd.o] -2 3 50331648
+805F68A0:       callc [btlevtcmd_OnPartsAttribute battle_event_cmd.o] -2 4 50397184
+805F68B4:       callc [btlevtcmd_OnPartsAttribute battle_event_cmd.o] -2 2 65536
+805F68C8:       setii LW(11) 1
+805F68D4:       loop 4
+805F68DC:         callc [btlevtcmd_GetUnitWork battle_event_cmd.o] -2 LW(11) LW(9)
+805F68F0:         begin_thread
+805F68F4:           callss [cortez_weapon_get_home_height unit_boss_cortez_sword.o]
+805F68FC:           callc [btlevtcmd_GetUnitWork battle_event_cmd.o] LW(9) 2 LW(6)
+805F6910:           if_int_eq LW(6) 2
+805F691C:             callc [btlevtcmd_FaceDirectionAdd battle_event_cmd.o] LW(9) LW(0) 15
+805F6930:           endif
+805F6934:           callc [btlevtcmd_PhaseEventStartDeclare battle_event_cmd.o] LW(9)
+805F6940:           callc [btlevtcmd_DivePosition battle_event_cmd.o] LW(9) LW(0) LW(5) LW(2) 60 0 5 0 -1
+805F696C:           callc [btlevtcmd_SetHomePos battle_event_cmd.o] LW(9) LW(0) LW(5) LW(2)
+805F6984:           callss [cortez_weapon_set_formation_attribute unit_boss_cortez_sword.o]
+805F698C:           callc [btlevtcmd_StartWaitEvent battle_event_cmd.o] LW(9)
+805F6998:         end_thread
+805F699C:         addi LW(11) 1
+805F69A8:       end_loop
+805F69AC:       callc [btlevtcmd_GetPos battle_event_cmd.o] -2 LW(0) LW(1) LW(2)
+805F69C4:       addi LW(1) 40
+805F69D0:       callc [btlevtcmd_SetHomePos battle_event_cmd.o] -2 LW(0) LW(1) LW(2)
+805F69E8:       callc [evt_fade_entry evt_fade.o] 24 1000 0 0 0
+805F6A04:       callc [evt_fade_set_anim_ofs_pos evt_fade.o] 0 130
+805F6A14:       callc [evt_fade_set_anim_virtual_pos evt_fade.o] 0 0 80
+805F6A28:       callc [evt_fade_end_wait evt_fade.o]
+805F6A30:       callc [btlevtcmd_AnimeChangeGroup battle_event_cmd.o] -2 1 ["c_korutesu3"]
+805F6A44:       callc [btlevtcmd_AnimeSetPoseTable battle_event_cmd.o] -2 1 [pose_table_mode_3 unit_boss_cortez.o]
+805F6A58:       callc [btlevtcmd_AnimeChangePoseFromTable battle_event_cmd.o] -2 1
+805F6A68:       callc [btlevtcmd_SetDiveSound battle_event_cmd.o] -2 ["SFX_BOSS_KOR_MOVE3"] 0 0 0 0
+805F6A88:       callc [btlevtcmd_GetHomePos battle_event_cmd.o] -2 LW(0) LW(1) LW(2)
+805F6AA0:       callc [btlevtcmd_SetPos battle_event_cmd.o] -2 LW(0) LW(1) LW(2)
+805F6AB8:       callc [evt_fade_entry evt_fade.o] 25 1000 0 0 0
+805F6AD4:       callc [evt_fade_set_anim_ofs_pos evt_fade.o] 0 130
+805F6AE4:       callc [evt_fade_set_anim_virtual_pos evt_fade.o] 0 0 80
+805F6AF8:       callc [evt_fade_end_wait evt_fade.o]
+805F6B00:       callc [btlevtcmd_GetMaxHp battle_event_cmd.o] -2 LW(0)
+805F6B10:       callc [btlevtcmd_SetHp battle_event_cmd.o] -2 LW(0)
+805F6B20:       callss [cortez_reset_pose_table unit_boss_cortez.o]
+805F6B28:       callc [btlevtcmd_SetCutBaseOffset battle_event_cmd.o] -2 0 48 0
+805F6B40:       callc [btlevtcmd_SetCutWidth battle_event_cmd.o] -2 90
+805F6B50:       callc [btlevtcmd_SetCutHeight battle_event_cmd.o] -2 96
+805F6B60:       callc [btlevtcmd_reset_turn battle_event_cmd.o]
+805F6B68:       callc [btlevtcmd_AnimeChangePoseFromTable battle_event_cmd.o] -2 1
+805F6B78:       end_multi_case
+805F6B7C:     case_default
+805F6B80:       callc [btlevtcmd_GetUnitWork battle_event_cmd.o] -2 1 LW(3)
+805F6B94:       if_int_ne LW(3) -1
+805F6BA0:         callc [btlevtcmd_SetUnitWork battle_event_cmd.o] LW(3) 0 -1
+805F6BB4:         callc [btlevtcmd_SetUnitWork battle_event_cmd.o] -2 1 -1
+805F6BC8:         callc [btlevtcmd_GetDataFromDataTable battle_event_cmd.o] LW(3) LW(0) 71
+805F6BDC:         callc [btlevtcmd_RunHitEventDirect battle_event_cmd.o] LW(3) 0 LW(0) 0
+805F6BF4:       endif
+805F6BF8:       callc [btlevtcmd_GetUnitWork battle_event_cmd.o] -2 2 LW(3)
+805F6C0C:       if_int_ne LW(3) -1
+805F6C18:         callc [btlevtcmd_SetUnitWork battle_event_cmd.o] LW(3) 0 -1
+805F6C2C:         callc [btlevtcmd_SetUnitWork battle_event_cmd.o] -2 2 -1
+805F6C40:         callc [btlevtcmd_GetDataFromDataTable battle_event_cmd.o] LW(3) LW(0) 71
+805F6C54:         callc [btlevtcmd_RunHitEventDirect battle_event_cmd.o] LW(3) 0 LW(0) 0
+805F6C6C:       endif
+805F6C70:       callc [btlevtcmd_GetUnitWork battle_event_cmd.o] -2 3 LW(3)
+805F6C84:       if_int_ne LW(3) -1
+805F6C90:         callc [btlevtcmd_SetUnitWork battle_event_cmd.o] LW(3) 0 -1
+805F6CA4:         callc [btlevtcmd_SetUnitWork battle_event_cmd.o] -2 3 -1
+805F6CB8:         callc [btlevtcmd_GetDataFromDataTable battle_event_cmd.o] LW(3) LW(0) 71
+805F6CCC:         callc [btlevtcmd_RunHitEventDirect battle_event_cmd.o] LW(3) 0 LW(0) 0
+805F6CE4:       endif
+805F6CE8:       callc [btlevtcmd_GetUnitWork battle_event_cmd.o] -2 4 LW(3)
+805F6CFC:       if_int_ne LW(3) -1
+805F6D08:         callc [btlevtcmd_SetUnitWork battle_event_cmd.o] LW(3) 0 -1
+805F6D1C:         callc [btlevtcmd_SetUnitWork battle_event_cmd.o] -2 4 -1
+805F6D30:         callc [btlevtcmd_GetDataFromDataTable battle_event_cmd.o] LW(3) LW(0) 71
+805F6D44:         callc [btlevtcmd_RunHitEventDirect battle_event_cmd.o] LW(3) 0 LW(0) 0
+805F6D5C:       endif
+805F6D60:       callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 1 ["KRT_D_3"]
+805F6D74:       begin_child_thread
+805F6D78:         wait_ms 1500
+805F6D80:         callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_BOSS_KOR_BONE_FALL1"] [F1194D80] 0 [F1194D80]
+805F6D9C:       end_child_thread
+805F6DA0:       callc [btlevtcmd_AnimeWaitPlayComplete battle_event_cmd.o] -2 1
+805F6DB0:       callc [btlevtcmd_OnPartsAttribute battle_event_cmd.o] -2 1 50331648
+805F6DC4:       callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_BTL_ENEMY_DIE1_2"] [F1194D80] 0 [F1194D80]
+805F6DE0:       callc [btlevtcmd_GetPos battle_event_cmd.o] -2 LW(0) LW(1) LW(2)
+805F6DF8:       callc [btlevtcmd_TransStageFloorPosition battle_event_cmd.o] LW(0) LW(1) LW(2)
+805F6E0C:       addi LW(2) 10
+805F6E18:       callc [evt_eff evt_eff.o] 0 ["kemuri_test"] 4 LW(0) LW(1) LW(2) 1.00 0 0 0 0 0 0 0
+805F6E58:       callc [btlevtcmd_GetCoin battle_event_cmd.o] -2 LW(0)
+805F6E68:       callc [btlevtcmd_StoreCoin battle_event_cmd.o] LW(0)
+805F6E74:       callc [btlevtcmd_GetExp battle_event_cmd.o] -2 LW(0)
+805F6E84:       callc [btlevtcmd_StoreExp battle_event_cmd.o] LW(0)
+805F6E90:       callc [btlevtcmd_GetPos battle_event_cmd.o] -2 LW(3) LW(1) LW(2)
+805F6EA8:       addi LW(2) 10
+805F6EB4:       addi LW(1) 30
+805F6EC0:       callc [evt_eff evt_eff.o] [zero_muj_00012654 unit_boss_cortez.o] ["star_point"] 0 LW(3) LW(1) LW(2) LW(0) 0 0 0 0 0 0 0
+805F6F00:       wait_ms 1000
+805F6F08:       callc [btlevtcmd_KillUnit battle_event_cmd.o] -2 1
+805F6F18:   end_switch
+805F6F1C:   return
+805F6F20:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [cortez_reset_pose_table unit_boss_cortez.o] AT 805F5594 ---
+805F5594:   callc [btlevtcmd_GetUnitWork battle_event_cmd.o] -2 5 LW(0)
+805F55A8:   switchi LW(0)
+805F55B0:     case_int_eq 0
+805F55B8:       callc [btlevtcmd_AnimeSetPoseTable battle_event_cmd.o] -2 1 [pose_table_mode_1 unit_boss_cortez.o]
+805F55CC:     case_int_eq 1
+805F55D4:       callc [btlevtcmd_SetKissHitOffset battle_event_cmd.o] -2 160 120 50
+805F55EC:       callc [btlevtcmd_GetUnitWork battle_event_cmd.o] -2 11 LW(0)
+805F5600:       if_int_eq LW(0) 0
+805F560C:         callc [btlevtcmd_GetUnitWork battle_event_cmd.o] -2 10 LW(0)
+805F5620:         if_int_eq LW(0) 0
+805F562C:           callc [btlevtcmd_AnimeSetPoseTable battle_event_cmd.o] -2 1 [pose_table_mode_2_upper_normal unit_boss_cortez.o]
+805F5640:         else
+805F5644:           callc [btlevtcmd_AnimeSetPoseTable battle_event_cmd.o] -2 1 [pose_table_mode_2_upper_charge unit_boss_cortez.o]
+805F5658:         endif
+805F565C:         callc [btlevtcmd_SetPartsDefenceTable battle_event_cmd.o] -2 2 [defence_mode2_upper_rib_close unit_boss_cortez.o]
+805F5670:         callc [btlevtcmd_SetPartsDefenceAttrTable battle_event_cmd.o] -2 2 [defence_attr_mode2_upper_rib_close unit_boss_cortez.o]
+805F5684:       else
+805F5688:         callc [btlevtcmd_GetUnitWork battle_event_cmd.o] -2 10 LW(0)
+805F569C:         if_int_eq LW(0) 0
+805F56A8:           callc [btlevtcmd_AnimeSetPoseTable battle_event_cmd.o] -2 1 [pose_table_mode_2_upper_normal_counter unit_boss_cortez.o]
+805F56BC:         else
+805F56C0:           callc [btlevtcmd_AnimeSetPoseTable battle_event_cmd.o] -2 1 [pose_table_mode_2_upper_charge_counter unit_boss_cortez.o]
+805F56D4:         endif
+805F56D8:         callc [btlevtcmd_SetPartsDefenceTable battle_event_cmd.o] -2 2 [defence_mode2_upper_rib_open unit_boss_cortez.o]
+805F56EC:         callc [btlevtcmd_SetPartsDefenceAttrTable battle_event_cmd.o] -2 2 [defence_attr_mode2_upper_rib_open unit_boss_cortez.o]
+805F5700:       endif
+805F5704:       callc [btlevtcmd_SetPartsDefenceTable battle_event_cmd.o] -2 1 [defence_mode2_upper_head unit_boss_cortez.o]
+805F5718:       callc [btlevtcmd_SetPartsDefenceAttrTable battle_event_cmd.o] -2 1 [defence_attr_mode2_upper_head unit_boss_cortez.o]
+805F572C:       callc [btlevtcmd_OnPartsAttribute battle_event_cmd.o] -2 1 6291456
+805F5740:       callc [btlevtcmd_OnPartsAttribute battle_event_cmd.o] -2 2 7340032
+805F5754:       callc [btlevtcmd_SetHitOffset battle_event_cmd.o] -2 1 20 15 0
+805F5770:       callc [btlevtcmd_SetHitCursorOffset battle_event_cmd.o] -2 1 20 15 0
+805F578C:       callc [btlevtcmd_SetHitOffset battle_event_cmd.o] -2 2 0 0 0
+805F57A8:       callc [btlevtcmd_SetHitCursorOffset battle_event_cmd.o] -2 2 0 0 0
+805F57C4:     case_int_eq 2
+805F57CC:       callc [btlevtcmd_SetKissHitOffset battle_event_cmd.o] -2 160 85 50
+805F57E4:       callc [btlevtcmd_GetUnitWork battle_event_cmd.o] -2 11 LW(0)
+805F57F8:       if_int_eq LW(0) 0
+805F5804:         callc [btlevtcmd_GetUnitWork battle_event_cmd.o] -2 10 LW(0)
+805F5818:         if_int_eq LW(0) 0
+805F5824:           callc [btlevtcmd_AnimeSetPoseTable battle_event_cmd.o] -2 1 [pose_table_mode_2_middle_normal unit_boss_cortez.o]
+805F5838:         else
+805F583C:           callc [btlevtcmd_AnimeSetPoseTable battle_event_cmd.o] -2 1 [pose_table_mode_2_middle_charge unit_boss_cortez.o]
+805F5850:         endif
+805F5854:         callc [btlevtcmd_SetPartsDefenceTable battle_event_cmd.o] -2 2 [defence_mode2_middle_rib_close unit_boss_cortez.o]
+805F5868:         callc [btlevtcmd_SetPartsDefenceAttrTable battle_event_cmd.o] -2 2 [defence_attr_mode2_middle_rib_close unit_boss_cortez.o]
+805F587C:       else
+805F5880:         callc [btlevtcmd_GetUnitWork battle_event_cmd.o] -2 10 LW(0)
+805F5894:         if_int_eq LW(0) 0
+805F58A0:           callc [btlevtcmd_AnimeSetPoseTable battle_event_cmd.o] -2 1 [pose_table_mode_2_middle_normal_counter unit_boss_cortez.o]
+805F58B4:         else
+805F58B8:           callc [btlevtcmd_AnimeSetPoseTable battle_event_cmd.o] -2 1 [pose_table_mode_2_middle_charge_counter unit_boss_cortez.o]
+805F58CC:         endif
+805F58D0:         callc [btlevtcmd_SetPartsDefenceTable battle_event_cmd.o] -2 2 [defence_mode2_middle_rib_open unit_boss_cortez.o]
+805F58E4:         callc [btlevtcmd_SetPartsDefenceAttrTable battle_event_cmd.o] -2 2 [defence_attr_mode2_middle_rib_open unit_boss_cortez.o]
+805F58F8:       endif
+805F58FC:       callc [btlevtcmd_SetPartsDefenceTable battle_event_cmd.o] -2 1 [defence_mode2_middle_head unit_boss_cortez.o]
+805F5910:       callc [btlevtcmd_SetPartsDefenceAttrTable battle_event_cmd.o] -2 1 [defence_attr_mode2_middle_head unit_boss_cortez.o]
+805F5924:       callc [btlevtcmd_OnPartsAttribute battle_event_cmd.o] -2 1 6291456
+805F5938:       callc [btlevtcmd_OnPartsAttribute battle_event_cmd.o] -2 2 7340032
+805F594C:       callc [btlevtcmd_SetHitOffset battle_event_cmd.o] -2 1 10 10 0
+805F5968:       callc [btlevtcmd_SetHitCursorOffset battle_event_cmd.o] -2 1 10 10 0
+805F5984:       callc [btlevtcmd_SetHitOffset battle_event_cmd.o] -2 2 -7 -20 0
+805F59A0:       callc [btlevtcmd_SetHitCursorOffset battle_event_cmd.o] -2 2 -7 -20 0
+805F59BC:     case_int_eq 3
+805F59C4:       callc [btlevtcmd_SetKissHitOffset battle_event_cmd.o] -2 150 85 50
+805F59DC:       callc [btlevtcmd_GetUnitWork battle_event_cmd.o] -2 11 LW(0)
+805F59F0:       if_int_eq LW(0) 0
+805F59FC:         callc [btlevtcmd_GetUnitWork battle_event_cmd.o] -2 10 LW(0)
+805F5A10:         if_int_eq LW(0) 0
+805F5A1C:           callc [btlevtcmd_AnimeSetPoseTable battle_event_cmd.o] -2 1 [pose_table_mode_2_lower_normal unit_boss_cortez.o]
+805F5A30:         else
+805F5A34:           callc [btlevtcmd_AnimeSetPoseTable battle_event_cmd.o] -2 1 [pose_table_mode_2_lower_charge unit_boss_cortez.o]
+805F5A48:         endif
+805F5A4C:         callc [btlevtcmd_SetPartsDefenceTable battle_event_cmd.o] -2 2 [defence_mode2_lower_rib_close unit_boss_cortez.o]
+805F5A60:         callc [btlevtcmd_SetPartsDefenceAttrTable battle_event_cmd.o] -2 2 [defence_attr_mode2_lower_rib_close unit_boss_cortez.o]
+805F5A74:       else
+805F5A78:         callc [btlevtcmd_GetUnitWork battle_event_cmd.o] -2 10 LW(0)
+805F5A8C:         if_int_eq LW(0) 0
+805F5A98:           callc [btlevtcmd_AnimeSetPoseTable battle_event_cmd.o] -2 1 [pose_table_mode_2_lower_normal_counter unit_boss_cortez.o]
+805F5AAC:         else
+805F5AB0:           callc [btlevtcmd_AnimeSetPoseTable battle_event_cmd.o] -2 1 [pose_table_mode_2_lower_charge_counter unit_boss_cortez.o]
+805F5AC4:         endif
+805F5AC8:         callc [btlevtcmd_SetPartsDefenceTable battle_event_cmd.o] -2 2 [defence_mode2_lower_rib_open unit_boss_cortez.o]
+805F5ADC:         callc [btlevtcmd_SetPartsDefenceAttrTable battle_event_cmd.o] -2 2 [defence_attr_mode2_lower_rib_open unit_boss_cortez.o]
+805F5AF0:         callc [btlevtcmd_OnPartsAttribute battle_event_cmd.o] -2 2 6291456
+805F5B04:       endif
+805F5B08:       callc [btlevtcmd_SetPartsDefenceTable battle_event_cmd.o] -2 1 [defence_mode2_lower_head unit_boss_cortez.o]
+805F5B1C:       callc [btlevtcmd_SetPartsDefenceAttrTable battle_event_cmd.o] -2 1 [defence_attr_mode2_lower_head unit_boss_cortez.o]
+805F5B30:       callc [btlevtcmd_OnPartsAttribute battle_event_cmd.o] -2 1 6291456
+805F5B44:       callc [btlevtcmd_OnPartsAttribute battle_event_cmd.o] -2 2 6291456
+805F5B58:       callc [btlevtcmd_OffPartsAttribute battle_event_cmd.o] -2 2 1048576
+805F5B6C:       callc [btlevtcmd_SetHitOffset battle_event_cmd.o] -2 1 -15 -5 0
+805F5B88:       callc [btlevtcmd_SetHitCursorOffset battle_event_cmd.o] -2 1 -15 -5 0
+805F5BA4:       callc [btlevtcmd_SetHitOffset battle_event_cmd.o] -2 2 -20 -35 0
+805F5BC0:       callc [btlevtcmd_SetHitCursorOffset battle_event_cmd.o] -2 2 -20 -35 0
+805F5BDC:     case_default
+805F5BE0:       callc [btlevtcmd_SetKissHitOffset battle_event_cmd.o] -2 30 50 50
+805F5BF8:       callc [btlevtcmd_AnimeSetPoseTable battle_event_cmd.o] -2 1 [pose_table_mode_3 unit_boss_cortez.o]
+805F5C0C:       callc [btlevtcmd_SetPartsDefenceTable battle_event_cmd.o] -2 1 [defence_mode3 unit_boss_cortez.o]
+805F5C20:       callc [btlevtcmd_SetPartsDefenceAttrTable battle_event_cmd.o] -2 1 [defence_attr_mode3 unit_boss_cortez.o]
+805F5C34:       callc [btlevtcmd_OnPartsAttribute battle_event_cmd.o] -2 1 6291456
+805F5C48:       callc [btlevtcmd_OnAttribute battle_event_cmd.o] -2 4
+805F5C58:       callc [btlevtcmd_SetHitOffset battle_event_cmd.o] -2 1 -135 -64 0
+805F5C74:       callc [btlevtcmd_SetHitCursorOffset battle_event_cmd.o] -2 1 -135 -65 0
+805F5C90:   end_switch
+805F5C94:   return
+805F5C98:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [mode2_rib_open_event unit_boss_cortez.o] AT 805F6F24 ---
+805F6F24:   callc [btlevtcmd_SetUnitWork battle_event_cmd.o] -2 11 2
+805F6F38:   callc [btlevtcmd_GetUnitWork battle_event_cmd.o] -2 5 LW(0)
+805F6F4C:   switchi LW(0)
+805F6F54:     case_int_eq 1
+805F6F5C:       callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 1 ["KRT_1D2_3"]
+805F6F70:     case_int_eq 2
+805F6F78:       callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 1 ["KRT_2D2_3"]
+805F6F8C:     case_int_eq 3
+805F6F94:       callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 1 ["KRT_3D3_3"]
+805F6FA8:   end_switch
+805F6FAC:   callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_BOSS_KOR_INHALE1"] [F1194D80] 0 [F1194D80]
+805F6FC8:   callc [btlevtcmd_AnimeWaitPlayComplete battle_event_cmd.o] -2 1
+805F6FD8:   callc [btlevtcmd_OffPartsAttribute battle_event_cmd.o] -2 2 65536
+805F6FEC:   callss [cortez_reset_pose_table unit_boss_cortez.o]
+805F6FF4:   return
+805F6FF8:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [cortez_weapon_get_home_height unit_boss_cortez_sword.o] AT 805F7B10 ---
+805F7B10:   setii LW(5) 0
+805F7B1C:   callc [btlevtcmd_GetPos battle_event_cmd.o] LW(9) LW(0) LW(1) LW(2)
+805F7B34:   callc [btlevtcmd_GetUnitWork battle_event_cmd.o] LW(9) 0 LW(3)
+805F7B48:   callc [btlevtcmd_GetUnitWork battle_event_cmd.o] LW(3) 8 LW(4)
+805F7B5C:   switchi LW(4)
+805F7B64:     case_int_eq 0
+805F7B6C:       callc [btlevtcmd_GetUnitWork battle_event_cmd.o] LW(9) 2 LW(6)
+805F7B80:       switchi LW(6)
+805F7B88:         case_int_eq 0
+805F7B90:           addi LW(5) 20
+805F7B9C:         case_int_eq 1
+805F7BA4:           addi LW(5) 60
+805F7BB0:         case_int_eq 2
+805F7BB8:           addi LW(5) 60
+805F7BC4:         case_int_eq 3
+805F7BCC:           addi LW(5) 20
+805F7BD8:       end_switch
+805F7BDC:     case_int_eq 1
+805F7BE4:       callc [btlevtcmd_GetUnitWork battle_event_cmd.o] LW(9) 2 LW(6)
+805F7BF8:       switchi LW(6)
+805F7C00:         case_int_eq 0
+805F7C08:           addi LW(5) 20
+805F7C14:         case_int_eq 1
+805F7C1C:           addi LW(5) 20
+805F7C28:         case_int_eq 2
+805F7C30:           addi LW(5) 60
+805F7C3C:         case_int_eq 3
+805F7C44:           addi LW(5) 60
+805F7C50:       end_switch
+805F7C54:     case_int_eq 2
+805F7C5C:       callc [btlevtcmd_GetUnitWork battle_event_cmd.o] LW(9) 2 LW(6)
+805F7C70:       switchi LW(6)
+805F7C78:         case_int_eq 0
+805F7C80:           addi LW(5) 60
+805F7C8C:         case_int_eq 1
+805F7C94:           addi LW(5) 20
+805F7CA0:         case_int_eq 2
+805F7CA8:           addi LW(5) 60
+805F7CB4:         case_int_eq 3
+805F7CBC:           addi LW(5) 20
+805F7CC8:       end_switch
+805F7CCC:     case_int_eq 3
+805F7CD4:       callc [btlevtcmd_GetUnitWork battle_event_cmd.o] LW(9) 2 LW(6)
+805F7CE8:       switchi LW(6)
+805F7CF0:         case_int_eq 0
+805F7CF8:           addi LW(5) 60
+805F7D04:         case_int_eq 1
+805F7D0C:           addi LW(5) 20
+805F7D18:         case_int_eq 2
+805F7D20:           addi LW(5) 20
+805F7D2C:         case_int_eq 3
+805F7D34:           addi LW(5) 60
+805F7D40:       end_switch
+805F7D44:   end_switch
+805F7D48:   return
+805F7D4C:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [cortez_weapon_set_formation_attribute unit_boss_cortez_sword.o] AT 805F7D50 ---
+805F7D50:   callc [btlevtcmd_GetBodyId battle_event_cmd.o] LW(9) LW(0)
+805F7D60:   callc [btlevtcmd_GetHomePos battle_event_cmd.o] LW(9) [F1194D80] LW(1) [F1194D80]
+805F7D78:   if_int_ge LW(1) 40
+805F7D84:     callc [btlevtcmd_OnPartsAttribute battle_event_cmd.o] LW(9) LW(0) 6291456
+805F7D98:   else
+805F7D9C:     callc [btlevtcmd_OffPartsAttribute battle_event_cmd.o] LW(9) LW(0) 6291456
+805F7DB0:   endif
+805F7DB4:   return
+805F7DB8:   end

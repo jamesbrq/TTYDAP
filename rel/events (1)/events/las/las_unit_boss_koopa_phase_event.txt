@@ -1,0 +1,89 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [phase_event unit_boss_koopa.o] AT 805FAFE0 ---
+805FAFE0:   callc [btlevtcmd_CheckStatus battle_event_cmd.o] -2 27 LW(0)
+805FAFF4:   if_int_eq LW(0) 1
+805FB000:     goto 99
+805FB008:   endif
+805FB00C:   callc [btlevtcmd_get_turn battle_event_cmd.o] LW(0)
+805FB018:   if_int_eq LW(0) 1
+805FB024:     goto 90
+805FB02C:   endif
+805FB030:   callc [btlevtcmd_CheckPhase battle_event_cmd.o] LW(0) 67108865
+805FB040:   if_int_ne LW(0) 0
+805FB04C:     callc [btlevtcmd_CheckActStatus battle_event_cmd.o] -2 LW(0)
+805FB05C:     if_int_ne LW(0) 0
+805FB068:       callc [btlevtcmd_PhaseEventStartDeclare battle_event_cmd.o] -2
+805FB074:       callc [btlevtcmd_GetUnitWork battle_event_cmd.o] -2 0 LW(0)
+805FB088:       if_int_eq LW(0) 0
+805FB094:         callc [evt_sub_random evt_sub.o] 99 LW(1)
+805FB0A4:         if_int_lt LW(1) 0
+805FB0B0:           callc [btlevtcmd_SetUnitWork battle_event_cmd.o] -2 0 1
+805FB0C4:           callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 1 ["KPA_U_2"]
+805FB0D8:           wait_ms 200
+805FB0E0:           callc [btlevtcmd_OnPartsCounterAttribute battle_event_cmd.o] -2 1 1
+805FB0F4:           callc [btlevtcmd_AnimeSetPoseTable battle_event_cmd.o] -2 1 [pose_table_forward_leaning unit_boss_koopa.o]
+805FB108:         endif
+805FB10C:       else
+805FB110:         callc [evt_sub_random evt_sub.o] 99 LW(1)
+805FB120:         if_int_lt LW(1) 100
+805FB12C:           callc [btlevtcmd_SetUnitWork battle_event_cmd.o] -2 0 0
+805FB140:           callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 1 ["KPA_U_3"]
+805FB154:           wait_ms 200
+805FB15C:           callc [btlevtcmd_OffPartsCounterAttribute battle_event_cmd.o] -2 1 1
+805FB170:           callc [btlevtcmd_AnimeSetPoseTable battle_event_cmd.o] -2 1 [pose_table unit_boss_koopa.o]
+805FB184:         endif
+805FB188:       endif
+805FB18C:       callc [btlevtcmd_StartWaitEvent battle_event_cmd.o] -2
+805FB198:     endif
+805FB19C:   endif
+805FB1A0: 90:
+805FB1A8:   callc [btlevtcmd_CheckPhase battle_event_cmd.o] LW(0) 67108867
+805FB1B8:   if_int_ne LW(0) 0
+805FB1C4:     callc [btlevtcmd_PhaseEventStartDeclare battle_event_cmd.o] -2
+805FB1D0:     callss [harf_hp_event unit_boss_koopa.o]
+805FB1D8:     callc [btlevtcmd_StartWaitEvent battle_event_cmd.o] -2
+805FB1E4:   endif
+805FB1E8: 99:
+805FB1F0:   return
+805FB1F4:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [harf_hp_event unit_boss_koopa.o] AT 805FB1F8 ---
+805FB1F8:   callc [btlevtcmd_GetUnitWork battle_event_cmd.o] -2 3 LW(1)
+805FB20C:   if_int_eq LW(1) 0
+805FB218:     callc [btlevtcmd_GetHp battle_event_cmd.o] -2 LW(0)
+805FB228:     callc [btlevtcmd_GetUnitWork battle_event_cmd.o] -2 2 LW(1)
+805FB23C:     if_int_lt LW(0) LW(1)
+805FB248:       callc [btlevtcmd_SetUnitWork battle_event_cmd.o] -2 3 1
+805FB25C:       callc [btlevtcmd_GetUnitWork battle_event_cmd.o] -2 0 LW(0)
+805FB270:       if_int_eq LW(0) 1
+805FB27C:         callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 1 ["KPA_U_3"]
+805FB290:         wait_ms 200
+805FB298:       endif
+805FB29C:       callc [btlevtcmd_StatusWindowOnOff battle_event_cmd.o] 0
+805FB2A8:       callss [koopa_zoom unit_boss_koopa.o]
+805FB2B0:       callc [btlevtcmd_SetTalkPose battle_event_cmd.o] -2 ["KPA_T_3"]
+805FB2C0:       callc [btlevtcmd_SetStayPose battle_event_cmd.o] -2 ["KPA_S_4"]
+805FB2D0:       callc [evt_msg_print evt_msg.o] 2 ["stg8_las_100"] 0 -2
+805FB2E8:       wait_ms 300
+805FB2F0:       callc [btlevtcmd_StatusWindowOnOff battle_event_cmd.o] 1
+805FB2FC:       callc [evt_btl_camera_set_mode battle_camera.o] 0 0
+805FB30C:       callc [btlevtcmd_GetUnitWork battle_event_cmd.o] -2 0 LW(0)
+805FB320:       if_int_eq LW(0) 1
+805FB32C:         callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 1 ["KPA_U_2"]
+805FB340:         wait_ms 200
+805FB348:       endif
+805FB34C:       callc [btlevtcmd_AnimeChangePoseType battle_event_cmd.o] -2 1 43
+805FB360:     endif
+805FB364:   endif
+805FB368:   return
+805FB36C:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [koopa_zoom unit_boss_koopa.o] AT 805FA908 ---
+805FA908:   callc [evt_btl_camera_set_mode battle_camera.o] 0 3
+805FA918:   callc [btlevtcmd_GetPos battle_event_cmd.o] -2 LW(0) LW(1) LW(2)
+805FA930:   callc [evt_btl_camera_set_moveto battle_camera.o] 0 LW(0) 95 350 LW(0) 45 -300 30 11
+805FA95C:   wait_frames 37
+805FA964:   return
+805FA968:   end

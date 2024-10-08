@@ -1,0 +1,36 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [patapata_move_event npc_event.o] AT 803410F4 ---
+803410F4:   callc [evt_npc_set_rotate evt_npc.o] ["me"] 0 0 0
+8034110C:   callc [evt_npc_set_attack_mode evt_npc.o] ["me"] 0
+8034111C:   callc [evt_sub_random evt_sub.o] 360 LW(3)
+8034112C:   callc [evt_npc_sound_data_reset evt_npc.o] ["me"]
+80341138: 0:
+80341140:   callc [evt_npc_set_stay_anim evt_npc.o] ["me"]
+8034114C:   wait_ms 500
+80341154:   callc [evt_npc_set_walk_anim evt_npc.o] ["me"]
+80341160:   setii LW(10) 0
+8034116C:   loop 0
+80341174:     if_int_eq LW(10) 0
+80341180:       callc [evt_npc_get_loiter_dir evt_npc.o] LW(3) -20.00 20.00
+80341194:     endif
+80341198:     if_int_eq LW(10) 2
+803411A4:       callc [evt_npc_get_loiter_dir evt_npc.o] LW(3) -20.00 20.00
+803411B8:     endif
+803411BC:     callc [evt_npc_get_position evt_npc.o] ["me"] LW(0) LW(1) LW(2)
+803411D4:     callc [evt_npc_add_dirdist evt_npc.o] LW(0) LW(2) LW(3) 30.00
+803411EC:     callc [evt_fbat_trans_floor_position evt_npc.o] LW(0) LW(1) LW(2) 50 500
+80341208:     callc [evt_npc_glide_position evt_npc.o] ["me"] LW(0) LW(1) LW(2) 500 0 -7.00 0 2
+80341234:     callc [evt_npc_get_position evt_npc.o] ["me"] LW(0) LW(1) LW(2)
+8034124C:     callc [evt_npc_add_dirdist evt_npc.o] LW(0) LW(2) LW(3) 30.00
+80341264:     callc [evt_fbat_trans_floor_position evt_npc.o] LW(0) LW(1) LW(2) 50 500
+80341280:     callc [evt_npc_glide_position evt_npc.o] ["me"] LW(0) LW(1) LW(2) 500 0 7.00 0 2
+803412AC:     if_int_ge LW(10) 4
+803412B8:       loop_break
+803412BC:     endif
+803412C0:     addi LW(10) 1
+803412CC:   end_loop
+803412D0:   goto 0
+803412D8:   return
+803412DC:   end

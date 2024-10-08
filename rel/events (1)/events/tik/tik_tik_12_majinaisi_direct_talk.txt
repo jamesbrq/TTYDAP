@@ -1,0 +1,38 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [majinaisi_direct_talk tik_12.o] AT 805DE8B4 ---
+805DE8B4:   if_int_eq GSW(1420) 14
+805DE8C0:     if_int_eq GSWF(5405) 0
+805DE8CC:       callc [evt_msg_print evt_msg.o] 0 ["irai_14_00"] 0 0
+805DE8E4:     else
+805DE8E8:       if_int_eq GSWF(5406) 0
+805DE8F4:         callc [evt_msg_print evt_msg.o] 0 ["irai_14_01"] 0 0
+805DE90C:         callc [evt_mario_set_pose evt_mario.o] ["M_I_2"]
+805DE918:         wait_ms 1000
+805DE920:         callc [evt_mario_set_pose evt_mario.o] ["M_S_1"]
+805DE92C:         callc [evt_msg_print evt_msg.o] 0 ["irai_14_02"] 0 0
+805DE944:         setii GSWF(5406) 1
+805DE950:       else
+805DE954:         callc [evt_pouch_check_item evt_pouch.o] 172 LW(0)
+805DE964:         if_int_gt LW(0) 0
+805DE970:           callc [evt_msg_print evt_msg.o] 0 ["irai_14_04"] 0 0
+805DE988:           callc [evt_win_item_select evt_window.o] 0 [iri_14_item_tbl tik_12.o] LW(0) 0
+805DE9A0:           if_int_ne LW(0) -1
+805DE9AC:             callc [evt_pouch_remove_item evt_pouch.o] 172 LW(0)
+805DE9BC:             callc [evt_msg_print evt_msg.o] 0 ["irai_14_05"] 0 0
+805DE9D4:             callc [evt_sub_get_coin evt_sub.o] 30
+805DE9E0:             setii GSW(1420) 0
+805DE9EC:             setii GSWF(5388) 1
+805DE9F8:             callc [evt_msg_print evt_msg.o] 0 ["sys_request_finish"] 0 0
+805DEA10:           endif
+805DEA14:         else
+805DEA18:           callc [evt_msg_print evt_msg.o] 0 ["irai_14_03"] 0 0
+805DEA30:         endif
+805DEA34:       endif
+805DEA38:     endif
+805DEA3C:     return
+805DEA40:   endif
+805DEA44:   callc [evt_msg_print evt_msg.o] 0 ["majinaisi_00"] 0 ["me"]
+805DEA5C:   return
+805DEA60:   end

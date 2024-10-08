@@ -1,0 +1,82 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [mario_fly moo_04.o] AT 805C0C4C ---
+805C0C4C:   callc [evt_mario_key_onoff evt_mario.o] 0
+805C0C58:   callc [evt_party_stop evt_party.o] 0
+805C0C64:   wait_frames 1
+805C0C6C:   callc [evt_snd_sfxon evt_snd.o] ["SFX_STG7_MARIO_FLY1"] LW(10)
+805C0C7C:   callc [evt_mario_dispflag_onoff evt_mario.o] 1 2
+805C0C8C:   callc [evt_mario_set_pose evt_mario.o] ["M_N_7"]
+805C0C98:   callss [party_damage_pose moo_04.o]
+805C0CA0:   wait_frames 1
+805C0CA8:   callc [evt_mario_cont_onoff evt_mario.o] 0
+805C0CB4:   callc [evt_party_cont_onoff evt_party.o] 0 0
+805C0CC4:   callc [evt_mario_set_dir evt_mario.o] 90 0 0
+805C0CD8:   callc [evt_party_set_dir evt_party.o] 0 90 0
+805C0CEC:   callc [evt_mario_set_pos evt_mario.o] -300 -300 0
+805C0D00:   callc [evt_party_set_pos evt_party.o] 0 -300 -300 0
+805C0D18:   begin_thread
+805C0D1C:     callc [evt_sub_intpl_msec_init evt_sub.o] 4 1000 10 5000
+805C0D34: 0:
+805C0D3C:     callc [evt_sub_intpl_msec_get_value evt_sub.o]
+805C0D44:     divf LW(0) 1000.00
+805C0D50:     callc [mario_kirimomi moo_04.o] LW(0)
+805C0D5C:     wait_frames 1
+805C0D64:     if_int_eq LW(1) 1
+805C0D70:       goto 0
+805C0D78:     endif
+805C0D7C:   end_thread
+805C0D80:   begin_thread
+805C0D84:     callc [evt_sub_spline_init evt_sub.o] 1 6 [spline_dt moo_04.o] 3 0 5000
+805C0DA4: 0:
+805C0DAC:     callc [evt_sub_spline_get_value evt_sub.o] LW(0) LW(1) LW(2) LW(3)
+805C0DC4:     callc [evt_mario_set_pos evt_mario.o] LW(0) LW(1) LW(2)
+805C0DD8:     wait_frames 1
+805C0DE0:     if_int_eq LW(3) 1
+805C0DEC:       goto 0
+805C0DF4:     endif
+805C0DF8:     callc [evt_mario_set_pos evt_mario.o] 0 -1000 0
+805C0E0C:   end_thread
+805C0E10:   wait_ms 500
+805C0E18:   begin_thread
+805C0E1C:     callc [evt_sub_spline_init evt_sub.o] 1 6 [spline_dt moo_04.o] 3 0 5000
+805C0E3C: 1:
+805C0E44:     callc [evt_sub_spline_get_value evt_sub.o] LW(0) LW(1) LW(2) LW(3)
+805C0E5C:     callc [evt_party_set_pos evt_party.o] 0 LW(0) LW(1) LW(2)
+805C0E74:     wait_frames 1
+805C0E7C:     if_int_eq LW(3) 1
+805C0E88:       goto 1
+805C0E90:     endif
+805C0E94:     callc [evt_party_set_pos evt_party.o] 0 0 -1000 0
+805C0EAC:   end_thread
+805C0EB0:   wait_ms 7000
+805C0EB8:   begin_thread
+805C0EBC:     wait_ms 500
+805C0EC4:     callc [evt_snd_sfxoff evt_snd.o] LW(10)
+805C0ED0:   end_thread
+805C0ED4:   callc [evt_bero_mapchange evt_bero.o] ["moo_00"] 0
+805C0EE4:   return
+805C0EE8:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [party_damage_pose moo_04.o] AT 805C0B7C ---
+805C0B7C:   callc [evt_mario_get_party evt_mario.o] LW(0)
+805C0B88:   switchi LW(0)
+805C0B90:     case_int_eq 0
+805C0B98:     case_int_eq 1
+805C0BA0:       callc [evt_party_set_pose evt_party.o] 0 ["PKR_D_1"]
+805C0BB0:     case_int_eq 2
+805C0BB8:       callc [evt_party_set_pose evt_party.o] 0 ["PNK_D_1"]
+805C0BC8:     case_int_eq 3
+805C0BD0:       callc [evt_party_set_pose evt_party.o] 0 ["D_1"]
+805C0BE0:     case_int_eq 4
+805C0BE8:       callc [evt_party_set_pose evt_party.o] 0 ["PYS_D_1"]
+805C0BF8:     case_int_eq 5
+805C0C00:       callc [evt_party_set_pose evt_party.o] 0 ["PWD_D_1"]
+805C0C10:     case_int_eq 6
+805C0C18:       callc [evt_party_set_pose evt_party.o] 0 ["PTR_D_1"]
+805C0C28:     case_int_eq 7
+805C0C30:       callc [evt_party_set_pose evt_party.o] 0 ["PCH_D_1"]
+805C0C40:   end_switch
+805C0C44:   return
+805C0C48:   end

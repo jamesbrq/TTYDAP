@@ -1,0 +1,103 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [evt_tojikome tou_11.o] AT 805F893C ---
+805F893C:   if_int_eq GSWF(2386) 1
+805F8948:     return
+805F894C:   endif
+805F8950:   setii GSWF(2386) 1
+805F895C:   callc [evt_snd_bgm_scope evt_snd.o] 0 0
+805F896C:   callc [evt_mario_key_onoff evt_mario.o] 0
+805F8978:   callc [evt_party_stop evt_party.o] 0
+805F8984:   callc [evt_mario_set_pos evt_mario.o] 0 0 -170
+805F8998:   callc [evt_party_set_pos evt_party.o] 0 0 0 -200
+805F89B0:   callc [evt_npc_set_position evt_npc.o] ["ガードマン"] 0 0 -160
+805F89C8:   callc [evt_npc_status_onoff evt_npc.o] 1 ["ガードマン"] 2
+805F89DC:   callc [evt_seq_wait evt_seq.o] 2
+805F89E8:   setii LW(1) 0
+805F89F4:   callsa [bero_open_door_play_se evt_bero.o]
+805F89FC:   callc [evt_sub_intpl_msec_init evt_sub.o] 11 0 -180 500
+805F8A14:   loop 0
+805F8A1C:     callc [evt_sub_intpl_msec_get_value evt_sub.o]
+805F8A24:     callss [n_door_open tou_11.o]
+805F8A2C:     if_int_eq LW(1) 0
+805F8A38:       loop_break
+805F8A3C:     endif
+805F8A40:   end_loop
+805F8A44:   begin_thread
+805F8A48:     wait_ms 4000
+805F8A50:     setii LW(1) 0
+805F8A5C:     callsa [bero_close_door_play_se evt_bero.o]
+805F8A64:     callc [evt_sub_intpl_msec_init evt_sub.o] 11 -180 0 500
+805F8A7C:     loop 0
+805F8A84:       callc [evt_sub_intpl_msec_get_value evt_sub.o]
+805F8A8C:       callss [n_door_open tou_11.o]
+805F8A94:       if_int_eq LW(1) 0
+805F8AA0:         loop_break
+805F8AA4:       endif
+805F8AA8:     end_loop
+805F8AAC:   end_thread
+805F8AB0:   begin_thread
+805F8AB4:     callc [evt_npc_move_position evt_npc.o] ["ガードマン"] -1 -90 0 70.00 1
+805F8AD4:     callc [evt_npc_move_position evt_npc.o] ["ガードマン"] -30 -80 0 70.00 1
+805F8AF4:     callc [evt_set_dir_to_target evt_npc.o] ["ガードマン"] ["mario"]
+805F8B04:   end_thread
+805F8B08:   begin_thread
+805F8B0C:     wait_ms 1500
+805F8B14:     callc [evt_party_stop evt_party.o] 0
+805F8B20:     wait_ms 100
+805F8B28:     callc [evt_party_move_pos2 evt_party.o] 0 0 -90 60.00
+805F8B40:     callc [evt_party_stop evt_party.o] 0
+805F8B4C:     wait_ms 100
+805F8B54:     callc [evt_party_move_pos2 evt_party.o] 0 60 -90 60.00
+805F8B6C:     callc [evt_party_set_dir_npc evt_party.o] 0 ["ガードマン"]
+805F8B7C:   end_thread
+805F8B80:   wait_ms 1000
+805F8B88:   callc [evt_mario_mov_pos2 evt_mario.o] 0 -80 60.00
+805F8B9C:   callc [evt_mario_mov_pos2 evt_mario.o] 30 -80 60.00
+805F8BB0:   callc [evt_mario_set_dir_npc evt_mario.o] ["ガードマン"]
+805F8BBC:   callc [evt_msg_print evt_msg.o] 0 ["stg3_tou_409"] 0 ["ガードマン"]
+805F8BD4:   wait_ms 300
+805F8BDC:   callc [evt_mario_get_pos evt_mario.o] 0 LW(0) LW(1) LW(2)
+805F8BF4:   callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_VOICE_MARIO_QUESTION1"] LW(0) LW(1) LW(2) 0
+805F8C10:   callc [evt_eff_fukidashi evt_eff.o] 0 ["m"] 0 1 0 0 0 0 0 0 0
+805F8C44:   callc [evt_eff_fukidashi evt_eff.o] 3 ["p"] 0 1 0 0 0 0 0 0 0
+805F8C78:   wait_ms 500
+805F8C80:   callc [evt_npc_move_position evt_npc.o] ["ガードマン"] 0 -100 0 70.00 1
+805F8CA0:   setii LW(1) 0
+805F8CAC:   callsa [bero_open_door_play_se evt_bero.o]
+805F8CB4:   callc [evt_sub_intpl_msec_init evt_sub.o] 11 0 180 500
+805F8CCC:   loop 0
+805F8CD4:     callc [evt_sub_intpl_msec_get_value evt_sub.o]
+805F8CDC:     callss [n_door_open tou_11.o]
+805F8CE4:     if_int_eq LW(1) 0
+805F8CF0:       loop_break
+805F8CF4:     endif
+805F8CF8:   end_loop
+805F8CFC:   begin_thread
+805F8D00:     wait_ms 1000
+805F8D08:     setii LW(1) 0
+805F8D14:     callsa [bero_close_door_play_se evt_bero.o]
+805F8D1C:     callc [evt_sub_intpl_msec_init evt_sub.o] 11 180 0 500
+805F8D34:     loop 0
+805F8D3C:       callc [evt_sub_intpl_msec_get_value evt_sub.o]
+805F8D44:       callss [n_door_open tou_11.o]
+805F8D4C:       if_int_eq LW(1) 0
+805F8D58:         loop_break
+805F8D5C:       endif
+805F8D60:     end_loop
+805F8D64:   end_thread
+805F8D68:   callc [evt_npc_move_position evt_npc.o] ["ガードマン"] 0 -200 0 70.00 1
+805F8D88:   callc [evt_party_stop evt_party.o] 0
+805F8D94:   callc [evt_msg_print_party evt_msg.o] ["stg3_tou_409_01"]
+805F8DA0:   wait_ms 1000
+805F8DA8:   callc [evt_fade_set_mapchange_type evt_fade.o] 0 2 300 1 300
+805F8DC4:   callc [evt_bero_mapchange evt_bero.o] ["tou_03"] 0
+805F8DD4:   return
+805F8DD8:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [n_door_open tou_11.o] AT 805F8710 ---
+805F8710:   mulf LW(0) 0.44
+805F871C:   callc [evt_mapobj_rotate evt_map.o] 1 ["door_1"] 0 LW(0) 0
+805F8738:   return
+805F873C:   end

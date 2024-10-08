@@ -1,0 +1,78 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [exchange_return_sub gor_03.o] AT 8060CA2C ---
+8060CA2C:   if_int_ne LW(11) 0
+8060CA38:     callc [evt_cam3d_evt_set evt_cam.o] -541.00 125.00 -407.00 -197.00 64.00 -407.00 600 11
+8060CA60:     wait_ms 600
+8060CA68:   endif
+8060CA6C:   callc [evt_npc_get_position evt_npc.o] ["バニーテレサ"] LW(6) LW(7) LW(10)
+8060CA84:   callc [evt_npc_get_dir evt_npc.o] ["バニーテレサ"] LW(9)
+8060CA94:   setii LW(0) 48
+8060CAA0:   callss [bteresa_n_fadeout gor_03.o]
+8060CAA8:   if_int_ne LW(11) 0
+8060CAB4:     callc [evt_cam3d_evt_off evt_cam.o] 0 11
+8060CAC4:     wait_frames 1
+8060CACC:   endif
+8060CAD0:   callc [evt_mario_get_pos evt_mario.o] 0 LW(0) LW(1) LW(2)
+8060CAE8:   subi LW(0) 30
+8060CAF4:   subi LW(2) 20
+8060CB00:   callc [evt_npc_set_position evt_npc.o] ["バニーテレサ"] LW(0) LW(1) LW(2)
+8060CB18:   callc [evt_npc_set_ry evt_npc.o] ["バニーテレサ"] 180
+8060CB28:   setii LW(0) 48
+8060CB34:   callss [bteresa_n_fadein gor_03.o]
+8060CB3C:   callc [yuugijou_get_montemedal_keep evt_yuugijou.o] LW(1)
+8060CB48:   callc [evt_sub_get_language evt_sub.o] LW(0)
+8060CB54:   switchi LW(0)
+8060CB5C:     case_int_eq 0
+8060CB64:       callc [evt_msg_print_insert evt_msg.o] 0 ["bunny_teresa_90"] 0 ["バニーテレサ"] LW(1)
+8060CB80:     case_default
+8060CB84:       callc [unk_800d0998 evt_msg.o] 0 LW(14) ["bunny_teresa_90"] LW(1)
+8060CB9C:       callc [evt_msg_print evt_msg.o] 1 LW(14) 0 ["バニーテレサ"]
+8060CBB4:   end_switch
+8060CBB8:   callc [yuugijou_montemedal_return evt_yuugijou.o]
+8060CBC0:   setii LW(0) 48
+8060CBCC:   callss [bteresa_n_fadeout gor_03.o]
+8060CBD4:   callc [evt_npc_set_position evt_npc.o] ["バニーテレサ"] LW(6) LW(7) LW(10)
+8060CBEC:   callc [evt_npc_set_ry evt_npc.o] ["バニーテレサ"] LW(9)
+8060CBFC:   setii LW(0) 48
+8060CC08:   if_int_eq LW(11) 0
+8060CC14:     callss [bteresa_n_fadein gor_03.o]
+8060CC1C:   else
+8060CC20:     begin_thread
+8060CC24:       callss [bteresa_n_fadein gor_03.o]
+8060CC2C:     end_thread
+8060CC30:   endif
+8060CC34:   return
+8060CC38:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [bteresa_n_fadeout gor_03.o] AT 8060C984 ---
+8060C984:   callc [evt_npc_get_position evt_npc.o] ["バニーテレサ"] LW(1) LW(2) LW(3)
+8060C99C:   callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_EVT_GAME_TELESA_MOVE1"] LW(1) LW(2) LW(3) 0
+8060C9B8:   setii LW(1) LW(0)
+8060C9C4:   loop LW(0)
+8060C9CC:     setii LW(2) LW(0)
+8060C9D8:     subi LW(2) 1
+8060C9E4:     muli LW(2) 255
+8060C9F0:     divi LW(2) LW(1)
+8060C9FC:     callc [evt_npc_set_color evt_npc.o] ["バニーテレサ"] 255 255 255 LW(2)
+8060CA18:     wait_frames 1
+8060CA20:   end_loop
+8060CA24:   return
+8060CA28:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [bteresa_n_fadein gor_03.o] AT 8060C8D0 ---
+8060C8D0:   callc [evt_npc_get_position evt_npc.o] ["バニーテレサ"] LW(1) LW(2) LW(3)
+8060C8E8:   callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_EVT_GAME_TELESA_MOVE2"] LW(1) LW(2) LW(3) 0
+8060C904:   setii LW(1) LW(0)
+8060C910:   loop LW(0)
+8060C918:     setii LW(2) LW(1)
+8060C924:     subi LW(2) LW(0)
+8060C930:     addi LW(2) 1
+8060C93C:     muli LW(2) 255
+8060C948:     divi LW(2) LW(1)
+8060C954:     callc [evt_npc_set_color evt_npc.o] ["バニーテレサ"] 255 255 255 LW(2)
+8060C970:     wait_frames 1
+8060C978:   end_loop
+8060C97C:   return
+8060C980:   end

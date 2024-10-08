@@ -1,0 +1,127 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [sys_01_init_evt sys.o] AT 805BD2A0 ---
+805BD2A0:   callc [unk_sys_0000010c sys.o]
+805BD2A8:   callc [evt_mario_cont_onoff evt_mario.o] 0
+805BD2B4:   callc [evt_party_cont_onoff evt_party.o] 0 0
+805BD2C4:   callc [evt_mario_set_pos evt_mario.o] 0 0 0
+805BD2D8:   callc [evt_party_set_pos evt_party.o] 0 0 0 0
+805BD2F0:   callc [evt_cam3d_evt_set evt_cam.o] 0 0 500 0 0 0 0 11
+805BD318:   callc [bg sys.o]
+805BD320:   callc [evt_fade_entry evt_fade.o] 32 0 0 0 0
+805BD33C:   callc [evt_fade_end_wait evt_fade.o]
+805BD344:   begin_thread
+805BD348:     setii LW(0) 0
+805BD354:     callc [evt_bero_get_entername evt_bero.o] LW(1)
+805BD360:     if_string_eq LW(1) ["prologue"]
+805BD36C:       setii LW(0) 0
+805BD378:     endif
+805BD37C:     if_string_eq LW(1) ["stg_1"]
+805BD388:       setii LW(0) 1
+805BD394:     endif
+805BD398:     if_string_eq LW(1) ["stg_2"]
+805BD3A4:       setii LW(0) 2
+805BD3B0:     endif
+805BD3B4:     if_string_eq LW(1) ["stg_3"]
+805BD3C0:       setii LW(0) 3
+805BD3CC:     endif
+805BD3D0:     if_string_eq LW(1) ["stg_4"]
+805BD3DC:       setii LW(0) 4
+805BD3E8:     endif
+805BD3EC:     if_string_eq LW(1) ["stg_5"]
+805BD3F8:       setii LW(0) 5
+805BD404:     endif
+805BD408:     if_string_eq LW(1) ["stg_6"]
+805BD414:       setii LW(0) 6
+805BD420:     endif
+805BD424:     if_string_eq LW(1) ["stg_7"]
+805BD430:       setii LW(0) 7
+805BD43C:     endif
+805BD440:     if_string_eq LW(1) ["stg_8"]
+805BD44C:       setii LW(0) 8
+805BD458:     endif
+805BD45C:     callc [display sys.o] LW(0)
+805BD468:   end_thread
+805BD46C:   wait_ms 3000
+805BD474:   callc [evt_fade_set_mapchange_type evt_fade.o] 0 17 1800 16 1800
+805BD490:   callc [evt_fade_set_mapchange_type evt_fade.o] 1 17 1800 16 1800
+805BD4AC:   callsa [evt_start sys.o]
+805BD4B4:   return
+805BD4B8:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [evt_start sys.o] AT 805BD4BC ---
+805BD4BC:   callc [evt_fade_end_wait evt_fade.o]
+805BD4C4:   wait_ms 2000
+805BD4CC:   callc [evt_bero_get_entername evt_bero.o] LW(1)
+805BD4D8:   if_string_ne LW(1) ["stg_3"]
+805BD4E4:     if_string_ne LW(1) ["stg_5"]
+805BD4F0:       if_string_ne LW(1) ["stg_6"]
+805BD4FC:         callc [evt_snd_bgmon evt_snd.o] 512 ["BGM_FF_STG_START1"]
+805BD50C:       endif
+805BD510:     endif
+805BD514:   endif
+805BD518:   callc [evt_fade_entry evt_fade.o] 35 0 0 0 0
+805BD534:   callc [evt_fade_end_wait evt_fade.o]
+805BD53C:   callc [start sys.o]
+805BD544:   callc [unk_sys_000000c4 sys.o]
+805BD54C:   wait_ms 3000
+805BD554:   loop 0
+805BD55C:     callc [evt_key_get_buttontrg evt_sub.o] 0 LW(0)
+805BD56C:     if_bits_set LW(0) 4864
+805BD578:       loop_break
+805BD57C:     endif
+805BD580:     wait_frames 1
+805BD588:   end_loop
+805BD58C:   callc [evt_fade_set_mapchange_type evt_fade.o] 0 19 500 18 500
+805BD5A8:   callc [evt_fade_set_mapchange_type evt_fade.o] 1 19 500 18 500
+805BD5C4:   callc [evt_bero_get_entername evt_bero.o] LW(1)
+805BD5D0:   if_string_eq LW(1) ["prologue"]
+805BD5DC:     setii LW(0) 0
+805BD5E8:   endif
+805BD5EC:   if_string_eq LW(1) ["stg_1"]
+805BD5F8:     setii LW(0) 1
+805BD604:   endif
+805BD608:   if_string_eq LW(1) ["stg_2"]
+805BD614:     setii LW(0) 2
+805BD620:   endif
+805BD624:   if_string_eq LW(1) ["stg_3"]
+805BD630:     setii LW(0) 3
+805BD63C:   endif
+805BD640:   if_string_eq LW(1) ["stg_4"]
+805BD64C:     setii LW(0) 4
+805BD658:   endif
+805BD65C:   if_string_eq LW(1) ["stg_5"]
+805BD668:     setii LW(0) 5
+805BD674:   endif
+805BD678:   if_string_eq LW(1) ["stg_6"]
+805BD684:     setii LW(0) 6
+805BD690:   endif
+805BD694:   if_string_eq LW(1) ["stg_7"]
+805BD6A0:     setii LW(0) 7
+805BD6AC:   endif
+805BD6B0:   if_string_eq LW(1) ["stg_8"]
+805BD6BC:     setii LW(0) 8
+805BD6C8:   endif
+805BD6CC:   switchi LW(0)
+805BD6D4:     case_int_eq 0
+805BD6DC:       callc [evt_bero_mapchange evt_bero.o] ["gor_10"] 0
+805BD6EC:     case_int_eq 1
+805BD6F4:       callc [evt_bero_mapchange evt_bero.o] ["hei_00"] ["dokan_2"]
+805BD704:     case_int_eq 2
+805BD70C:       callc [evt_bero_mapchange evt_bero.o] ["win_06"] ["dokan1"]
+805BD71C:     case_int_eq 3
+805BD724:       callc [evt_bero_mapchange evt_bero.o] ["tou_20"] 0
+805BD734:     case_int_eq 4
+805BD73C:       callc [evt_bero_mapchange evt_bero.o] ["usu_00"] ["dokan_1"]
+805BD74C:     case_int_eq 5
+805BD754:       callc [evt_bero_mapchange evt_bero.o] ["muj_20"] 0
+805BD764:     case_int_eq 6
+805BD76C:       callc [evt_bero_mapchange evt_bero.o] ["rsh_02_a"] 0
+805BD77C:     case_int_eq 7
+805BD784:       callc [evt_bero_mapchange evt_bero.o] ["bom_00"] ["dokan"]
+805BD794:     case_int_eq 8
+805BD79C:       callc [evt_bero_mapchange evt_bero.o] ["las_00"] ["w_bero"]
+805BD7AC:   end_switch
+805BD7B0:   return
+805BD7B4:   end

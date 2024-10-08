@@ -1,0 +1,28 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [subsetevt_binta_damage_left_last battle_event_subset.o] AT 803534DC ---
+803534DC:   callc [btlevtcmd_AnimeChangePoseType battle_event_cmd.o] LW(10) LW(11) LW(14)
+803534F0:   callc [btlevtcmd_SetRotate battle_event_cmd.o] LW(10) 0 0 0
+80353508:   begin_child_thread_tid LW(0)
+80353510:     callc [btlevtcmd_GetFaceDirection battle_event_cmd.o] LW(10) LW(0)
+80353520:     if_int_ge LW(0) 0
+8035352C:       setii LW(8) -2160
+80353538:     else
+8035353C:       setii LW(8) 2160
+80353548:     endif
+8035354C:     callc [_binta_effect battle_event_subset.o] LW(10) LW(8)
+8035355C:     setii LW(7) LW(10)
+80353568:     callc [evt_sub_intpl_init evt_sub.o] 11 0 LW(8) 90
+80353580:     loop 90
+80353588:       callc [evt_sub_intpl_get_value evt_sub.o]
+80353590:       callc [btlevtcmd_SetRotate battle_event_cmd.o] LW(7) 0 LW(0) 0
+803535A8:       wait_frames 1
+803535B0:     end_loop
+803535B4:     callc [btlevtcmd_SetRotate battle_event_cmd.o] LW(7) 0 0 0
+803535CC:   end_child_thread
+803535D0:   callc [btlevtcmd_WaitEventEnd battle_event_cmd.o] LW(0)
+803535DC:   wait_frames 30
+803535E4:   return
+803535E8:   return
+803535EC:   end

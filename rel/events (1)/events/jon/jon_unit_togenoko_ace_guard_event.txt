@@ -1,0 +1,37 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [guard_event unit_togenoko_ace.o] AT 80CCA004 ---
+80CCA004:   setii LW(10) -2
+80CCA010:   setii LW(11) 1
+80CCA01C:   begin_child_thread
+80CCA020:     wait_frames 10
+80CCA028:     callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_ENM_TOGENOKO_SHELL1"] [F1194D80] 0 [F1194D80]
+80CCA044:     wait_frames 5
+80CCA04C:     callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] LW(10) LW(11) ["A_1"]
+80CCA060:   end_child_thread
+80CCA064:   callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_ENM_TOGENOKO_MOVE1"] [F1194D80] 0 [F1194D80]
+80CCA080:   callc [btlevtcmd_GetPos battle_event_cmd.o] LW(10) LW(0) LW(1) LW(2)
+80CCA098:   callc [btlevtcmd_JumpSetting battle_event_cmd.o] LW(10) 20 0 0.50
+80CCA0B0:   callc [btlevtcmd_JumpPosition battle_event_cmd.o] LW(10) LW(0) LW(1) LW(2) 20 -1
+80CCA0D0:   setff LW(12) 30.00
+80CCA0DC:   setff LW(13) 0.00
+80CCA0E8:   loop 15
+80CCA0F0:     callc [evt_sub_get_sincos evt_sub.o] LW(13) LW(14) LW(15)
+80CCA104:     mulf LW(14) LW(12)
+80CCA110:     callc [btlevtcmd_SetRotate battle_event_cmd.o] LW(10) 0 0 LW(14)
+80CCA128:     subf LW(12) 2.00
+80CCA134:     addf LW(13) 30.00
+80CCA140:     wait_frames 1
+80CCA148:   end_loop
+80CCA14C:   callc [btlevtcmd_SetRotate battle_event_cmd.o] LW(10) 0 0 0
+80CCA164:   callc [btlevtcmd_SetPartsDefenceTable battle_event_cmd.o] LW(10) LW(11) [defence_guard unit_togenoko_ace.o]
+80CCA178:   callc [btlevtcmd_SetPartsDefenceAttrTable battle_event_cmd.o] LW(10) LW(11) [defence_attr_guard unit_togenoko_ace.o]
+80CCA18C:   callc [btlevtcmd_SetRegistStatus battle_event_cmd.o] LW(10) [regist_guard unit_togenoko_ace.o]
+80CCA19C:   callc [btlevtcmd_AnimeSetPoseTable battle_event_cmd.o] LW(10) LW(11) [pose_table_guard unit_togenoko_ace.o]
+80CCA1B0:   callc [btlevtcmd_ChangeDataTable battle_event_cmd.o] LW(10) [data_table_guard unit_togenoko_ace.o]
+80CCA1C0:   callc [btlevtcmd_SetUnitWork battle_event_cmd.o] LW(10) 0 1
+80CCA1D4:   callc [btlevtcmd_SetHitOffset battle_event_cmd.o] LW(10) LW(11) 0 -20 0
+80CCA1F0:   wait_ms 300
+80CCA1F8:   return
+80CCA1FC:   end

@@ -1,0 +1,76 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [kpa_bgm_change kpa.o] AT 805BD9C8 ---
+805BD9C8:   if_int_gt GSW(1222) 30
+805BD9D4:     setii LW(2) 0
+805BD9E0:   else
+805BD9E4:     setii LW(2) 1
+805BD9F0:   endif
+805BD9F4:   setii LW(3) -1
+805BDA00:   setii LW(4) -1
+805BDA0C: 10:
+805BDA14:   if_int_gt GSW(1222) 30
+805BDA20:     setii LW(3) 0
+805BDA2C:     addi LW(3) LSW(1)
+805BDA38:   else
+805BDA3C:     if_int_eq LW(2) 0
+805BDA48:       setii LW(3) 3
+805BDA54:       addi LW(3) LSW(1)
+805BDA60:     else
+805BDA64:       setii LW(3) 6
+805BDA70:     endif
+805BDA74:   endif
+805BDA78:   callc [kpa_muteki_check kpa.o]
+805BDA80:   if_int_ne LW(0) 0
+805BDA8C:     setii LW(3) 7
+805BDA98:     setii LW(2) 0
+805BDAA4:   endif
+805BDAA8:   if_int_eq LSWF(4) 1
+805BDAB4:     setii LW(3) 8
+805BDAC0:   endif
+805BDAC4:   if_int_eq LSWF(5) 1
+805BDAD0:     setii LW(3) 9
+805BDADC:   endif
+805BDAE0:   if_int_ne LW(3) LW(4)
+805BDAEC:     setii LW(4) LW(3)
+805BDAF8:     switchi LW(3)
+805BDB00:       case_int_eq 0
+805BDB08:         callc [evt_snd_bgmon evt_snd.o] 512 ["BGM_STGK_FIELD1"]
+805BDB18:         callc [evt_snd_bgmoff evt_snd.o] 513
+805BDB24:       case_int_eq 1
+805BDB2C:         callc [evt_snd_bgmon evt_snd.o] 512 ["BGM_STGK_FIELD3"]
+805BDB3C:         callc [evt_snd_bgmoff evt_snd.o] 513
+805BDB48:       case_int_eq 2
+805BDB50:         callc [evt_snd_bgmon evt_snd.o] 512 ["BGM_STGK_FIELD4"]
+805BDB60:         callc [evt_snd_bgmoff evt_snd.o] 513
+805BDB6C:       case_int_eq 3
+805BDB74:         callc [evt_snd_bgmon evt_snd.o] 512 ["BGM_STGK_FIELD1_UP1"]
+805BDB84:         callc [evt_snd_bgmoff evt_snd.o] 513
+805BDB90:       case_int_eq 4
+805BDB98:         callc [evt_snd_bgmon evt_snd.o] 512 ["BGM_STGK_FIELD3_UP1"]
+805BDBA8:         callc [evt_snd_bgmoff evt_snd.o] 513
+805BDBB4:       case_int_eq 5
+805BDBBC:         callc [evt_snd_bgmon evt_snd.o] 512 ["BGM_STGK_FIELD4_UP1"]
+805BDBCC:         callc [evt_snd_bgmoff evt_snd.o] 513
+805BDBD8:       case_int_eq 6
+805BDBE0:         callc [evt_snd_bgmon evt_snd.o] 512 ["BGM_STGK_FIELD1_UP2"]
+805BDBF0:         callc [evt_snd_bgmoff evt_snd.o] 513
+805BDBFC:       case_int_eq 7
+805BDC04:         callc [evt_snd_bgmoff evt_snd.o] 512
+805BDC10:         callc [evt_snd_bgmon evt_snd.o] 513 ["BGM_STGK_FIELD2"]
+805BDC20:       case_int_eq 8
+805BDC28:         callc [evt_snd_bgmon evt_snd.o] 512 ["BGM_FF_KUPPA_DOWN1"]
+805BDC38:         callc [evt_snd_bgmoff evt_snd.o] 513
+805BDC44:         return
+805BDC48:       case_int_eq 9
+805BDC50:         callc [evt_snd_bgmon evt_snd.o] 512 ["BGM_FF_KUPPA_GOAL1"]
+805BDC60:         callc [evt_snd_bgmoff evt_snd.o] 513
+805BDC6C:         return
+805BDC70:     end_switch
+805BDC74:     wait_ms 300
+805BDC7C:   endif
+805BDC80:   wait_frames 1
+805BDC88:   goto 10
+805BDC90:   return
+805BDC94:   end

@@ -1,0 +1,153 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [attack_event unit_monochrome_sinemon.o] AT 80C9FD98 ---
+80C9FD98:   callc [btlevtcmd_GetOverTurnCount battle_event_cmd.o] -2 LW(0)
+80C9FDA8:   if_int_ge LW(0) 1
+80C9FDB4:     callss [wakeup_event unit_monochrome_sinemon.o]
+80C9FDBC:     return
+80C9FDC0:   endif
+80C9FDC4:   callc [btlevtcmd_check_battleflag battle_event_cmd.o] LW(0) 2
+80C9FDD4:   if_int_ne LW(0) 0
+80C9FDE0:     callc [btlevtcmd_GetFirstAttackTarget battle_event_cmd.o] LW(3) LW(4)
+80C9FDF0:     callc [evt_btl_camera_set_mode battle_camera.o] 0 8
+80C9FE00:     callc [evt_btl_camera_set_moveSpeedLv battle_camera.o] 0 3
+80C9FE10:     wait_ms 800
+80C9FE18:   else
+80C9FE1C:     callc [btlevtcmd_EnemyItemUseCheck battle_event_cmd.o] -2 LW(0)
+80C9FE2C:     if_int_ne LW(0) 0
+80C9FE38:       callss LW(0)
+80C9FE40:       callc [btlevtcmd_StartWaitEvent battle_event_cmd.o] -2
+80C9FE4C:       return
+80C9FE50:     endif
+80C9FE54:     callc [btlevtcmd_GetEnemyBelong battle_event_cmd.o] -2 LW(0)
+80C9FE64:     callc [btlevtcmd_SamplingEnemy battle_event_cmd.o] -2 LW(0) [weapon_sinemon_attack unit_monochrome_sinemon.o]
+80C9FE78:     callc [btlevtcmd_ChoiceSamplingEnemy battle_event_cmd.o] [weapon_sinemon_attack unit_monochrome_sinemon.o] LW(3) LW(4)
+80C9FE8C:   endif
+80C9FE90:   if_int_eq LW(3) -1
+80C9FE9C:     callc [btlevtcmd_CheckToken battle_event_cmd.o] -2 16 LW(0)
+80C9FEB0:     if_int_ne LW(0) 0
+80C9FEBC:       callss [subsetevt_confuse_flustered battle_event_subset.o]
+80C9FEC4:       return
+80C9FEC8:     endif
+80C9FECC:     goto 99
+80C9FED4:   endif
+80C9FED8:   callc [evt_btl_camera_set_mode battle_camera.o] 0 8
+80C9FEE8:   callc [evt_btl_camera_set_homing_unit battle_camera.o] 0 -2 LW(3)
+80C9FEFC:   callc [evt_btl_camera_set_moveSpeedLv battle_camera.o] 0 1
+80C9FF0C:   callc [evt_btl_camera_set_zoom battle_camera.o] 0 250
+80C9FF1C:   callc [btlevtcmd_WeaponAftereffect battle_event_cmd.o] [weapon_sinemon_attack unit_monochrome_sinemon.o]
+80C9FF28:   callc [btlevtcmd_AttackDeclare battle_event_cmd.o] -2 LW(3) LW(4)
+80C9FF3C:   callc [btlevtcmd_WaitGuardMove battle_event_cmd.o]
+80C9FF44:   callc [btlevtcmd_PayWeaponCost battle_event_cmd.o] -2 [weapon_sinemon_attack unit_monochrome_sinemon.o]
+80C9FF54:   callc [btlevtcmd_AnimeChangePoseType battle_event_cmd.o] -2 1 40
+80C9FF68:   callc [btlevtcmd_GetPos battle_event_cmd.o] LW(3) LW(0) LW(1) LW(2)
+80C9FF80:   callc [btlevtcmd_FaceDirectionAdd battle_event_cmd.o] LW(3) LW(0) 100
+80C9FF94:   callc [btlevtcmd_CalculateFaceDirection battle_event_cmd.o] -2 -1 LW(0) LW(2) 1 LW(15)
+80C9FFB4:   callc [btlevtcmd_ChangeFaceDirection battle_event_cmd.o] -2 LW(15)
+80C9FFC4:   callc [btlevtcmd_SetMoveSpeed battle_event_cmd.o] -2 4.00
+80C9FFD4:   callc [btlevtcmd_MovePosition battle_event_cmd.o] -2 LW(0) 0 LW(2) 0 -1 1
+80C9FFF8:   callc [btlevtcmd_CalculateFaceDirection battle_event_cmd.o] -2 -1 LW(3) LW(4) 16 LW(15)
+80CA0018:   callc [btlevtcmd_ChangeFaceDirection battle_event_cmd.o] -2 LW(15)
+80CA0028:   begin_child_thread_tid LW(15)
+80CA0030:     loop 0
+80CA0038:       callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_ENM_EMON_MOVE1"] [F1194D80] 0 [F1194D80]
+80CA0054:       wait_frames 7
+80CA005C:       callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_ENM_EMON_MOVE2"] [F1194D80] 0 [F1194D80]
+80CA0078:       wait_frames 7
+80CA0080:     end_loop
+80CA0084:   end_child_thread
+80CA0088:   callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_ENM_EMON_MOVE3"] [F1194D80] 0 [F1194D80]
+80CA00A4:   callc [btlevtcmd_AnimeChangePoseType battle_event_cmd.o] -2 1 50
+80CA00B8:   callc [evt_btl_camera_set_moveSpeedLv battle_camera.o] 0 2
+80CA00C8:   callc [evt_btl_camera_set_zoom battle_camera.o] 0 200
+80CA00D8:   wait_ms 750
+80CA00E0:   callc [evt_btl_camera_set_mode battle_camera.o] 0 3
+80CA00F0:   callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_ENM_EMON_DASH1"] [F1194D80] 0 [F1194D80]
+80CA010C:   callc [btlevtcmd_SetMoveSpeed battle_event_cmd.o] -2 5.00
+80CA011C:   callc [btlevtcmd_GetHitPos battle_event_cmd.o] LW(3) LW(4) LW(0) LW(1) LW(2)
+80CA0138:   callc [btlevtcmd_GetPos battle_event_cmd.o] -2 [F1194D80] LW(5) [F1194D80]
+80CA0150:   callc [btlevtcmd_MovePosition battle_event_cmd.o] -2 LW(0) LW(5) LW(2) 0 -1 0
+80CA0174:   stop_tid LW(15)
+80CA017C:   callc [btlevtcmd_PreCheckDamage battle_event_cmd.o] -2 LW(3) LW(4) [weapon_sinemon_attack unit_monochrome_sinemon.o] 256 LW(5)
+80CA019C:   switchi LW(5)
+80CA01A4:     case_int_eq_any 4
+80CA01AC:       goto 90
+80CA01B4:       end_multi_case
+80CA01B8:     case_int_eq 3
+80CA01C0:       callc [btlevtcmd_StartAvoid battle_event_cmd.o] LW(3) 38
+80CA01D0:       goto 90
+80CA01D8:       end_multi_case
+80CA01DC:     case_int_eq 6
+80CA01E4:       callc [btlevtcmd_StartAvoid battle_event_cmd.o] LW(3) 39
+80CA01F4:       goto 90
+80CA01FC:     case_int_eq 2
+80CA0204:       callc [btlevtcmd_StartAvoid battle_event_cmd.o] LW(3) 40
+80CA0214:       goto 90
+80CA021C:     case_int_eq 1
+80CA0224:       goto 91
+80CA022C:       end_multi_case
+80CA0230:     case_default
+80CA0234:       goto 98
+80CA023C:       end_multi_case
+80CA0240:   end_switch
+80CA0244: 90:
+80CA024C:   callc [btlevtcmd_FaceDirectionAdd battle_event_cmd.o] -2 LW(0) 50
+80CA0260:   callc [btlevtcmd_MovePosition battle_event_cmd.o] -2 LW(0) 0 LW(2) 0 -1 0
+80CA0284:   wait_ms 500
+80CA028C:   goto 98
+80CA0294: 91:
+80CA029C:   callc [evt_btl_camera_shake_h battle_camera.o] 0 1 1 8 0
+80CA02B8:   callc [evt_btl_camera_set_moveSpeedLv battle_camera.o] 0 2
+80CA02C8:   callc [evt_btl_camera_add_zoom battle_camera.o] 0 -50
+80CA02D8:   callc [btlevtcmd_ResultACDefence battle_event_cmd.o] LW(3) [weapon_sinemon_attack unit_monochrome_sinemon.o]
+80CA02E8:   callc [btlevtcmd_CheckDamage battle_event_cmd.o] -2 LW(3) LW(4) [weapon_sinemon_attack unit_monochrome_sinemon.o] 256 LW(5)
+80CA0308:   callc [btlevtcmd_JumpSetting battle_event_cmd.o] -2 20 1.00 0.20
+80CA0320:   callc [btlevtcmd_GetPos battle_event_cmd.o] LW(3) LW(0) LW(1) LW(2)
+80CA0338:   callc [btlevtcmd_FaceDirectionSub battle_event_cmd.o] -2 LW(0) 75
+80CA034C:   callc [btlevtcmd_JumpPosition battle_event_cmd.o] -2 LW(0) 0 LW(2) 20 -1
+80CA036C:   callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_ENM_EMON_MOVE1"] [F1194D80] 0 [F1194D80]
+80CA0388:   callc [btlevtcmd_JumpSetting battle_event_cmd.o] -2 20 0.50 0.20
+80CA03A0:   callc [btlevtcmd_GetPos battle_event_cmd.o] LW(3) LW(0) LW(1) LW(2)
+80CA03B8:   callc [btlevtcmd_FaceDirectionSub battle_event_cmd.o] -2 LW(0) 100
+80CA03CC:   callc [btlevtcmd_JumpPosition battle_event_cmd.o] -2 LW(0) 0 LW(2) 20 -1
+80CA03EC:   callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_ENM_EMON_MOVE2"] [F1194D80] 0 [F1194D80]
+80CA0408:   goto 98
+80CA0410: 98:
+80CA0418:   callc [evt_btl_camera_set_mode battle_camera.o] 0 0
+80CA0428:   callc [btlevtcmd_AnimeChangePoseType battle_event_cmd.o] -2 1 42
+80CA043C:   callc [btlevtcmd_SetMoveSpeed battle_event_cmd.o] -2 4.00
+80CA044C:   callc [btlevtcmd_GetHomePos battle_event_cmd.o] -2 LW(0) LW(1) LW(2)
+80CA0464:   callc [btlevtcmd_MovePosition battle_event_cmd.o] -2 LW(0) LW(1) LW(2) 0 -1 0
+80CA0488: 99:
+80CA0490:   callc [btlevtcmd_ResetFaceDirection battle_event_cmd.o] -2
+80CA049C:   callc [btlevtcmd_StartWaitEvent battle_event_cmd.o] -2
+80CA04A8:   return
+80CA04AC:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [wakeup_event unit_monochrome_sinemon.o] AT 80C9FBF8 ---
+80C9FBF8:   setii LW(10) -2
+80C9FC04:   setii LW(11) 1
+80C9FC10:   callc [btlevtcmd_GetOverTurnCount battle_event_cmd.o] LW(10) LW(0)
+80C9FC20:   subi LW(0) 1
+80C9FC2C:   callc [btlevtcmd_SetOverTurnCount battle_event_cmd.o] LW(10) LW(0)
+80C9FC3C:   if_int_ne LW(0) 0
+80C9FC48:     callc [btlevtcmd_StartWaitEvent battle_event_cmd.o] -2
+80C9FC54:     return
+80C9FC58:   endif
+80C9FC5C:   callc [btlevtcmd_SetPartsDefenceTable battle_event_cmd.o] LW(10) LW(11) [defence unit_monochrome_sinemon.o]
+80C9FC70:   callc [btlevtcmd_OffStatusFlag battle_event_cmd.o] LW(10) 1
+80C9FC80:   callc [btlevtcmd_AnimeSetPoseTable battle_event_cmd.o] LW(10) LW(11) [pose_table unit_monochrome_sinemon.o]
+80C9FC94:   callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] LW(10) LW(11) ["SIN_S_1"]
+80C9FCA8:   callc [btlevtcmd_GetPos battle_event_cmd.o] -2 LW(0) LW(1) LW(2)
+80C9FCC0:   callc [btlevtcmd_SetPos battle_event_cmd.o] -2 LW(0) 0 LW(2)
+80C9FCD8:   callc [btlevtcmd_SetHomePos battle_event_cmd.o] -2 LW(0) 0 LW(2)
+80C9FCF0:   callc [btlevtcmd_SetHitOffset battle_event_cmd.o] LW(10) LW(11) 0 0 0
+80C9FD0C:   callc [btlevtcmd_OnPartsCounterAttribute battle_event_cmd.o] -2 1 1
+80C9FD20:   callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_ENM_INSIDE2"] [F1194D80] 0 [F1194D80]
+80C9FD3C:   callc [btlevtcmd_SetFallAccel battle_event_cmd.o] -2 1.00
+80C9FD4C:   callc [btlevtcmd_GetPos battle_event_cmd.o] -2 LW(0) LW(1) LW(2)
+80C9FD64:   callc [btlevtcmd_JumpPosition battle_event_cmd.o] -2 LW(0) LW(1) LW(2) 12 -1
+80C9FD84:   callc [btlevtcmd_StartWaitEvent battle_event_cmd.o] -2
+80C9FD90:   return
+80C9FD94:   end

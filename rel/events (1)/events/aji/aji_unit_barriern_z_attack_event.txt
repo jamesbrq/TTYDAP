@@ -1,0 +1,582 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [attack_event unit_barriern_z.o] AT 806044F0 ---
+806044F0:   callc [btlevtcmd_SetRGB battle_event_cmd.o] -2 1 255 255 255
+8060450C:   callc [btlevtcmd_check_battleflag battle_event_cmd.o] LW(0) 2
+8060451C:   if_int_ne LW(0) 0
+80604528:     callss [wakka_attack_event unit_barriern_z.o]
+80604530:     return
+80604534:   endif
+80604538:   callc [btlevtcmd_EnemyItemUseCheck battle_event_cmd.o] -2 LW(0)
+80604548:   if_int_ne LW(0) 0
+80604554:     callss LW(0)
+8060455C:     callc [btlevtcmd_StartWaitEvent battle_event_cmd.o] -2
+80604568:     return
+8060456C:   endif
+80604570:   callc [_check_satellite unit_barriern_z.o]
+80604578:   setii LW(0) 0
+80604584:   setii LW(1) 4
+80604590:   loop 4
+80604598:     callc [btlevtcmd_GetUnitWork battle_event_cmd.o] -2 LW(1) LW(3)
+806045AC:     if_int_ne LW(3) -1
+806045B8:       callc [btlevtcmd_CheckActStatus battle_event_cmd.o] LW(3) LW(2)
+806045C8:       if_int_ne LW(2) 0
+806045D4:         callc [btlevtcmd_CheckStatus battle_event_cmd.o] LW(3) 5 LW(2)
+806045E8:         if_int_eq LW(2) 0
+806045F4:           addi LW(0) 1
+80604600:         endif
+80604604:       endif
+80604608:     endif
+8060460C:     addi LW(1) 1
+80604618:   end_loop
+8060461C:   if_int_eq LW(0) 4
+80604628:     callss [wawawa_attack_event unit_barriern_z.o]
+80604630:   else
+80604634:     setii LW(0) 70
+80604640:     addi LW(0) 30
+8060464C:     subi LW(0) 1
+80604658:     callc [evt_sub_random evt_sub.o] LW(0) LW(1)
+80604668:     if_int_lt LW(1) 70
+80604674:       callss [wakka_attack_event unit_barriern_z.o]
+8060467C:     else
+80604680:       callss [recovery_event unit_barriern_z.o]
+80604688:     endif
+8060468C:   endif
+80604690:   return
+80604694:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [wakka_attack_event unit_barriern_z.o] AT 80605230 ---
+80605230:   callc [btlevtcmd_GetEnemyBelong battle_event_cmd.o] -2 LW(0)
+80605240:   callc [btlevtcmd_SamplingEnemy battle_event_cmd.o] -2 LW(0) [weapon_wakka_attack unit_barriern_z.o]
+80605254:   callc [btlevtcmd_ChoiceSamplingEnemy battle_event_cmd.o] [weapon_wakka_attack unit_barriern_z.o] LW(3) LW(4)
+80605268:   if_int_eq LW(3) -1
+80605274:     callc [btlevtcmd_CheckToken battle_event_cmd.o] -2 16 LW(0)
+80605288:     if_int_ne LW(0) 0
+80605294:       callss [subsetevt_confuse_flustered battle_event_subset.o]
+8060529C:       return
+806052A0:     endif
+806052A4:     goto 99
+806052AC:   endif
+806052B0:   callc [btlevtcmd_SetUnitWork battle_event_cmd.o] -2 1 0
+806052C4:   callc [btlevtcmd_SetPartsWork battle_event_cmd.o] -2 1 0 LW(3)
+806052DC:   callc [btlevtcmd_SetPartsWork battle_event_cmd.o] -2 1 5 LW(4)
+806052F4:   setii LW(9) [weapon_wakka_attack unit_barriern_z.o]
+80605300:   setii LW(10) 1
+8060530C:   setii LW(12) -2
+80605318:   setii LW(15) 7
+80605324:   callc [evt_btl_camera_set_mode battle_camera.o] 0 7
+80605334:   callc [evt_btl_camera_set_homing_unit battle_camera.o] 0 -2 -1
+80605348:   callc [evt_btl_camera_set_zoom battle_camera.o] 0 250
+80605358:   callc [evt_btl_camera_set_moveSpeedLv battle_camera.o] 0 1
+80605368:   callc [btlevtcmd_WeaponAftereffect battle_event_cmd.o] [weapon_wakka_attack unit_barriern_z.o]
+80605374:   callc [btlevtcmd_AttackDeclare battle_event_cmd.o] -2 LW(3) LW(4)
+80605388:   callc [btlevtcmd_WaitGuardMove battle_event_cmd.o]
+80605390:   callc [btlevtcmd_PayWeaponCost battle_event_cmd.o] -2 [weapon_wakka_attack unit_barriern_z.o]
+806053A0:   callc [btlevtcmd_CalculateFaceDirection battle_event_cmd.o] -2 -1 LW(3) LW(4) 16 LW(14)
+806053C0:   callc [btlevtcmd_ChangeFaceDirection battle_event_cmd.o] -2 LW(14)
+806053D0:   callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 1 ["S_1"]
+806053E4:   callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_ENM_BARRI_ATTACK2"] [F1194D80] 0 [F1194D80]
+80605400:   callc [barriern_zanzou unit_barriern_z.o] -2
+8060540C:   callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_ENM_BARRI_ATTACK9"] [F1194D80] 0 [F1194D80]
+80605428:   callc [barriern_zanzou2 unit_barriern_z.o] -2
+80605434:   callc [btlevtcmd_SetRotate battle_event_cmd.o] -2 0 0 0
+8060544C:   setii LW(0) 6
+80605458:   callc [btlevtcmd_GetFaceDirection battle_event_cmd.o] -2 LW(14)
+80605468:   muli LW(0) LW(14)
+80605474:   loop 10
+8060547C:     wait_frames 1
+80605484:     callc [btlevtcmd_AddRotate battle_event_cmd.o] -2 0 LW(0) 0
+8060549C:   end_loop
+806054A0:   callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_ENM_BARRI_ATTACK1"] [F1194D80] 0 [F1194D80]
+806054BC:   callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 1 ["A_1"]
+806054D0:   wait_frames 30
+806054D8:   callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 1 ["A_2"]
+806054EC:   wait_frames 30
+806054F4:   callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 1 ["A_3"]
+80605508:   callc [evt_btl_camera_set_mode battle_camera.o] 0 0
+80605518:   wait_frames 10
+80605520:   callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 1 ["A_4"]
+80605534:   callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_ENM_BARRI_ATTACK3"] [F1194D80] 0 [F1194D80]
+80605550:   callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_ENM_BARRI_ATTACK7"] [F1194D80] 0 LW(0)
+8060556C:   callc [btlevtcmd_SetPartsWork battle_event_cmd.o] -2 7 15 LW(0)
+80605584:   callss [damage_check_event_sub unit_barriern_z.o]
+8060558C:   callc [btlevtcmd_GetPartsWork battle_event_cmd.o] -2 7 15 LW(0)
+806055A4:   callc [evt_snd_sfxoff evt_snd.o] LW(0)
+806055B0:   setii LW(0) -6
+806055BC:   callc [btlevtcmd_GetFaceDirection battle_event_cmd.o] -2 LW(14)
+806055CC:   muli LW(0) LW(14)
+806055D8:   loop 10
+806055E0:     wait_frames 1
+806055E8:     callc [btlevtcmd_AddRotate battle_event_cmd.o] -2 0 LW(0) 0
+80605600:   end_loop
+80605604: 99:
+8060560C:   callc [btlevtcmd_ResetFaceDirection battle_event_cmd.o] -2
+80605618:   callc [btlevtcmd_StartWaitEvent battle_event_cmd.o] -2
+80605624:   return
+80605628:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [wawawa_attack_event unit_barriern_z.o] AT 80605654 ---
+80605654:   callc [btlevtcmd_GetEnemyBelong battle_event_cmd.o] -2 LW(0)
+80605664:   callc [btlevtcmd_SamplingEnemy battle_event_cmd.o] -2 LW(0) [weapon_wawawa_attack unit_barriern_z.o]
+80605678:   callc [btlevtcmd_ChoiceSamplingEnemy battle_event_cmd.o] [weapon_wawawa_attack unit_barriern_z.o] LW(3) LW(4)
+8060568C:   if_int_eq LW(3) -1
+80605698:     callc [btlevtcmd_CheckToken battle_event_cmd.o] -2 16 LW(0)
+806056AC:     if_int_ne LW(0) 0
+806056B8:       callss [subsetevt_confuse_flustered battle_event_subset.o]
+806056C0:       return
+806056C4:     endif
+806056C8:     goto 99
+806056D0:   endif
+806056D4:   callc [btlevtcmd_SetUnitWork battle_event_cmd.o] -2 1 1
+806056E8:   callc [btlevtcmd_SetUnitWork battle_event_cmd.o] -2 2 0
+806056FC:   callc [barriern_wawawa_set_target unit_barriern_z.o] LW(0) LW(1) LW(2) LW(3) LW(4) LW(5) LW(6) LW(7) LW(8) LW(9)
+8060572C:   callc [btlevtcmd_SetPartsWork battle_event_cmd.o] -2 1 0 LW(0)
+80605744:   callc [btlevtcmd_SetPartsWork battle_event_cmd.o] -2 1 1 LW(2)
+8060575C:   callc [btlevtcmd_SetPartsWork battle_event_cmd.o] -2 1 2 LW(4)
+80605774:   callc [btlevtcmd_SetPartsWork battle_event_cmd.o] -2 1 3 LW(6)
+8060578C:   callc [btlevtcmd_SetPartsWork battle_event_cmd.o] -2 1 4 LW(8)
+806057A4:   callc [btlevtcmd_SetPartsWork battle_event_cmd.o] -2 1 5 LW(1)
+806057BC:   callc [btlevtcmd_SetPartsWork battle_event_cmd.o] -2 1 6 LW(3)
+806057D4:   callc [btlevtcmd_SetPartsWork battle_event_cmd.o] -2 1 7 LW(5)
+806057EC:   callc [btlevtcmd_SetPartsWork battle_event_cmd.o] -2 1 8 LW(7)
+80605804:   callc [btlevtcmd_SetPartsWork battle_event_cmd.o] -2 1 9 LW(9)
+8060581C:   callc [btlevtcmd_SetPartsWork battle_event_cmd.o] -2 1 10 0
+80605834:   callc [btlevtcmd_SetPartsWork battle_event_cmd.o] -2 1 11 0
+8060584C:   callc [btlevtcmd_SetPartsWork battle_event_cmd.o] -2 1 12 0
+80605864:   callc [btlevtcmd_SetPartsWork battle_event_cmd.o] -2 1 13 0
+8060587C:   callc [btlevtcmd_SetPartsWork battle_event_cmd.o] -2 1 14 0
+80605894:   callc [evt_btl_camera_set_mode battle_camera.o] 0 7
+806058A4:   callc [evt_btl_camera_set_homing_unit battle_camera.o] 0 -2 -1
+806058B8:   callc [evt_btl_camera_set_zoom battle_camera.o] 0 250
+806058C8:   callc [evt_btl_camera_set_moveSpeedLv battle_camera.o] 0 1
+806058D8:   callc [btlevtcmd_WeaponAftereffect battle_event_cmd.o] [weapon_wawawa_attack unit_barriern_z.o]
+806058E4:   callc [btlevtcmd_AttackDeclareAll battle_event_cmd.o] -2
+806058F0:   callc [btlevtcmd_WaitGuardMove battle_event_cmd.o]
+806058F8:   callc [btlevtcmd_PayWeaponCost battle_event_cmd.o] -2 [weapon_wawawa_attack unit_barriern_z.o]
+80605908:   callc [btlevtcmd_GetPartsWork battle_event_cmd.o] -2 1 0 LW(3)
+80605920:   callc [btlevtcmd_GetPartsWork battle_event_cmd.o] -2 1 5 LW(4)
+80605938:   callc [btlevtcmd_CalculateFaceDirection battle_event_cmd.o] -2 -1 LW(3) LW(4) 16 LW(15)
+80605958:   callc [btlevtcmd_ChangeFaceDirection battle_event_cmd.o] -2 LW(15)
+80605968:   callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_ENM_BARRI_ATTACK5"] [F1194D80] 0 [F1194D80]
+80605984:   setii LW(0) 0
+80605990:   loop 4
+80605998:     callsa [wawawa_attack_event_satellite_blur unit_barriern_z.o]
+806059A0:     addi LW(0) 1
+806059AC:     wait_frames 10
+806059B4:   end_loop
+806059B8:   callc [barriern_zanzou unit_barriern_z.o] -2
+806059C4:   callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_ENM_BARRI_ATTACK10"] [F1194D80] 0 [F1194D80]
+806059E0:   callc [barriern_zanzou2 unit_barriern_z.o] -2
+806059EC:   callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_ENM_BARRI_ATTACK6"] [F1194D80] 0 [F1194D80]
+80605A08:   callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 1 ["F_1"]
+80605A1C:   wait_frames 20
+80605A24:   setii LW(11) 4
+80605A30:   loop 0
+80605A38:     if_int_ge LW(11) 8
+80605A44:       loop_break
+80605A48:     endif
+80605A4C:     callc [btlevtcmd_GetUnitWork battle_event_cmd.o] -2 LW(11) LW(12)
+80605A60:     callc [btlevtcmd_GetBodyId battle_event_cmd.o] LW(12) LW(13)
+80605A70:     callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] LW(12) LW(13) ["F_2"]
+80605A84:     addi LW(11) 1
+80605A90:   end_loop
+80605A94:   wait_frames 20
+80605A9C:   callc [btlevtcmd_SetRotate battle_event_cmd.o] -2 0 0 0
+80605AB4:   setii LW(11) 4
+80605AC0:   loop 0
+80605AC8:     if_int_ge LW(11) 8
+80605AD4:       loop_break
+80605AD8:     endif
+80605ADC:     callc [btlevtcmd_GetUnitWork battle_event_cmd.o] -2 LW(11) LW(12)
+80605AF0:     callc [btlevtcmd_SetRotate battle_event_cmd.o] LW(12) 0 0 0
+80605B08:     addi LW(11) 1
+80605B14:   end_loop
+80605B18:   setii LW(0) 6
+80605B24:   callc [btlevtcmd_GetFaceDirection battle_event_cmd.o] -2 LW(14)
+80605B34:   muli LW(0) LW(14)
+80605B40:   loop 10
+80605B48:     wait_frames 1
+80605B50:     callc [btlevtcmd_AddRotate battle_event_cmd.o] -2 0 LW(0) 0
+80605B68:     setii LW(11) 4
+80605B74:     loop 0
+80605B7C:       if_int_ge LW(11) 8
+80605B88:         loop_break
+80605B8C:       endif
+80605B90:       callc [btlevtcmd_GetUnitWork battle_event_cmd.o] -2 LW(11) LW(12)
+80605BA4:       callc [btlevtcmd_AddRotate battle_event_cmd.o] LW(12) 0 LW(0) 0
+80605BBC:       addi LW(11) 1
+80605BC8:     end_loop
+80605BCC:   end_loop
+80605BD0:   setii LW(11) 4
+80605BDC:   loop 0
+80605BE4:     if_int_ge LW(11) 8
+80605BF0:       loop_break
+80605BF4:     endif
+80605BF8:     callc [btlevtcmd_GetUnitWork battle_event_cmd.o] -2 LW(11) LW(12)
+80605C0C:     callc [btlevtcmd_GetBodyId battle_event_cmd.o] LW(12) LW(13)
+80605C1C:     callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] LW(12) LW(13) ["S_2"]
+80605C30:     addi LW(11) 1
+80605C3C:   end_loop
+80605C40:   callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_ENM_BARRI_ATTACK1"] [F1194D80] 0 [F1194D80]
+80605C5C:   callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 1 ["A_1"]
+80605C70:   wait_frames 30
+80605C78:   callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 1 ["A_2"]
+80605C8C:   wait_frames 30
+80605C94:   callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 1 ["A_3"]
+80605CA8:   callc [evt_btl_camera_set_mode battle_camera.o] 0 0
+80605CB8:   wait_frames 10
+80605CC0:   callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 1 ["A_4"]
+80605CD4:   setii LW(12) -2
+80605CE0:   setii LW(13) 0
+80605CEC:   setii LW(14) 5
+80605CF8:   setii LW(15) 7
+80605D04:   callsa [wawawa_attack_event_sub unit_barriern_z.o]
+80605D0C:   wait_frames 30
+80605D14:   setii LW(11) 4
+80605D20:   addi LW(13) 1
+80605D2C:   addi LW(14) 1
+80605D38:   addi LW(15) 1
+80605D44:   loop 0
+80605D4C:     if_int_ge LW(11) 8
+80605D58:       loop_break
+80605D5C:     endif
+80605D60:     callc [btlevtcmd_GetUnitWork battle_event_cmd.o] -2 LW(11) LW(12)
+80605D74:     callsa [wawawa_attack_event_sub unit_barriern_z.o]
+80605D7C:     wait_frames 20
+80605D84:     addi LW(11) 1
+80605D90:     addi LW(13) 1
+80605D9C:     addi LW(14) 1
+80605DA8:     addi LW(15) 1
+80605DB4:   end_loop
+80605DB8:   loop 0
+80605DC0:     callc [btlevtcmd_GetUnitWork battle_event_cmd.o] -2 2 LW(0)
+80605DD4:     if_int_ge LW(0) 5
+80605DE0:       loop_break
+80605DE4:     endif
+80605DE8:     wait_frames 1
+80605DF0:   end_loop
+80605DF4:   wait_frames 10
+80605DFC:   callc [_check_satellite unit_barriern_z.o]
+80605E04:   setii LW(0) -6
+80605E10:   callc [btlevtcmd_GetFaceDirection battle_event_cmd.o] -2 LW(14)
+80605E20:   muli LW(0) LW(14)
+80605E2C:   loop 10
+80605E34:     wait_frames 1
+80605E3C:     callc [btlevtcmd_AddRotate battle_event_cmd.o] -2 0 LW(0) 0
+80605E54:     setii LW(11) 4
+80605E60:     loop 0
+80605E68:       if_int_ge LW(11) 8
+80605E74:         loop_break
+80605E78:       endif
+80605E7C:       callc [btlevtcmd_GetUnitWork battle_event_cmd.o] -2 LW(11) LW(12)
+80605E90:       callc [btlevtcmd_AddRotate battle_event_cmd.o] LW(12) 0 LW(0) 0
+80605EA8:       addi LW(11) 1
+80605EB4:     end_loop
+80605EB8:   end_loop
+80605EBC: 99:
+80605EC4:   callc [btlevtcmd_ResetFaceDirection battle_event_cmd.o] -2
+80605ED0:   callc [btlevtcmd_StartWaitEvent battle_event_cmd.o] -2
+80605EDC:   return
+80605EE0:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [recovery_event unit_barriern_z.o] AT 80604698 ---
+80604698:   callc [evt_btl_camera_set_mode battle_camera.o] 0 7
+806046A8:   callc [evt_btl_camera_set_homing_unit battle_camera.o] 0 -2 -1
+806046BC:   callc [evt_btl_camera_set_zoom battle_camera.o] 0 300
+806046CC:   callc [evt_btl_camera_set_moveSpeedLv battle_camera.o] 0 2
+806046DC:   callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 1 ["S_3"]
+806046F0:   wait_frames 120
+806046F8:   callc [btlevtcmd_AnimeChangePoseFromTable battle_event_cmd.o] -2 1
+80604708:   callc [evt_btl_camera_set_mode battle_camera.o] 0 0
+80604718:   callc [btlevtcmd_RecoverHp battle_event_cmd.o] -2 1 2
+8060472C:   callc [btlevtcmd_GetPos battle_event_cmd.o] -2 LW(5) LW(6) LW(7)
+80604744:   addi LW(6) 30
+80604750:   addi LW(7) 10
+8060475C:   callc [evt_eff evt_eff.o] [zero_aji_000172c8 unit_barriern_z.o] ["recovery"] 0 LW(5) LW(6) LW(7) 2 0 0 0 0 0 0 0
+8060479C:   wait_frames 30
+806047A4:   return
+806047A8:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [damage_check_event_sub unit_barriern_z.o] AT 80605024 ---
+80605024:   callc [btlevtcmd_PreCheckDamage battle_event_cmd.o] -2 LW(3) LW(4) LW(9) 0 LW(5)
+80605044:   switchi LW(5)
+8060504C:     case_int_eq_any 4
+80605054:       goto 90
+8060505C:       end_multi_case
+80605060:     case_int_eq 3
+80605068:       goto 90
+80605070:       end_multi_case
+80605074:     case_int_eq 6
+8060507C:       goto 90
+80605084:     case_int_eq 2
+8060508C:       goto 90
+80605094:     case_int_eq 1
+8060509C:       goto 91
+806050A4:       end_multi_case
+806050A8:     case_default
+806050AC:       goto 98
+806050B4:       end_multi_case
+806050B8:   end_switch
+806050BC: 90:
+806050C4:   callss [wakka_attack_common_event_no_hit unit_barriern_z.o]
+806050CC:   goto 98
+806050D4: 91:
+806050DC:   setii LW(13) 0
+806050E8:   setii LW(14) 5
+806050F4:   loop 0
+806050FC:     callc [btlevtcmd_GetPartsWork battle_event_cmd.o] -2 1 LW(13) LW(5)
+80605114:     callc [btlevtcmd_GetPartsWork battle_event_cmd.o] -2 1 LW(14) LW(6)
+8060512C:     if_int_eq LW(3) LW(5)
+80605138:       if_int_eq LW(4) LW(6)
+80605144:         addi LW(13) 10
+80605150:         callc [btlevtcmd_SetPartsWork battle_event_cmd.o] -2 1 LW(13) 1
+80605168:         loop_break
+8060516C:       endif
+80605170:     endif
+80605174:     addi LW(13) 1
+80605180:     addi LW(14) 1
+8060518C:   end_loop
+80605190:   callss [wakka_attack_common_event_hit unit_barriern_z.o]
+80605198:   callc [btlevtcmd_ResultACDefence battle_event_cmd.o] LW(3) LW(9)
+806051A8:   if_int_eq LW(10) 1
+806051B4:     callc [btlevtcmd_CheckDamage battle_event_cmd.o] -2 LW(3) LW(4) LW(9) 256 LW(5)
+806051D4:   else
+806051D8:     callc [btlevtcmd_CheckDamage battle_event_cmd.o] -2 LW(3) LW(4) LW(9) 0 LW(5)
+806051F8:   endif
+806051FC:   goto 98
+80605204: 98:
+8060520C:   callc [btlevtcmd_SetPartsPos battle_event_cmd.o] -2 LW(15) 0 -1000 0
+80605228:   return
+8060522C:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [wawawa_attack_event_satellite_blur unit_barriern_z.o] AT 8060562C ---
+8060562C:   callc [barriern_satellite_zanzou unit_barriern_z.o] -2 LW(0)
+8060563C:   callc [barriern_satellite_zanzou2 unit_barriern_z.o] -2 LW(0)
+8060564C:   return
+80605650:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [wawawa_attack_event_sub unit_barriern_z.o] AT 80605EE4 ---
+80605EE4:   callc [btlevtcmd_GetPartsWork battle_event_cmd.o] -2 1 LW(13) LW(3)
+80605EFC:   callc [btlevtcmd_GetPartsWork battle_event_cmd.o] -2 1 LW(14) LW(4)
+80605F14:   callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_ENM_BARRI_ATTACK4"] [F1194D80] 0 [F1194D80]
+80605F30:   callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_ENM_BARRI_ATTACK8"] [F1194D80] 0 LW(0)
+80605F4C:   callc [btlevtcmd_SetPartsWork battle_event_cmd.o] -2 LW(15) 15 LW(0)
+80605F64:   loop 0
+80605F6C:     if_int_ge LW(13) 3
+80605F78:       callss [wawawa_attack_event_sub_last unit_barriern_z.o]
+80605F80:       loop_break
+80605F84:     endif
+80605F88:     addi LW(13) 1
+80605F94:     addi LW(14) 1
+80605FA0:     callc [btlevtcmd_GetPartsWork battle_event_cmd.o] -2 1 LW(13) LW(5)
+80605FB8:     callc [btlevtcmd_GetPartsWork battle_event_cmd.o] -2 1 LW(14) LW(6)
+80605FD0:     if_int_eq LW(3) LW(5)
+80605FDC:       if_int_eq LW(4) LW(6)
+80605FE8:         callss [wawawa_attack_event_sub_no_last unit_barriern_z.o]
+80605FF0:         loop_break
+80605FF4:       endif
+80605FF8:     endif
+80605FFC:   end_loop
+80606000:   callc [btlevtcmd_AddUnitWork battle_event_cmd.o] -2 2 1
+80606014:   callc [btlevtcmd_GetPartsWork battle_event_cmd.o] -2 LW(15) 15 LW(0)
+8060602C:   callc [evt_snd_sfxoff evt_snd.o] LW(0)
+80606038:   return
+8060603C:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [wakka_attack_common_event_no_hit unit_barriern_z.o] AT 80604814 ---
+80604814:   callc [btlevtcmd_GetUnitWork battle_event_cmd.o] -2 1 LW(6)
+80604828:   if_int_eq LW(6) 0
+80604834:     callc [btlevtcmd_OffPartsAttribute battle_event_cmd.o] -2 LW(15) 67108864
+80604848:   else
+8060484C:     callc [btlevtcmd_SetPartsBlur battle_event_cmd.o] -2 LW(15) 255 255 255 255 255 255 255 100 0
+80604880:     callc [btlevtcmd_OnPartsAttribute battle_event_cmd.o] -2 LW(15) 67108864
+80604894:   endif
+80604898:   callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 LW(15) ["Z_3"]
+806048AC:   callc [btlevtcmd_GetPos battle_event_cmd.o] LW(12) LW(6) LW(7) LW(8)
+806048C4:   addi LW(8) 1
+806048D0:   callc [btlevtcmd_SetPartsPos battle_event_cmd.o] -2 LW(15) LW(6) LW(7) LW(8)
+806048EC:   callc [btlevtcmd_CheckPartsAttribute battle_event_cmd.o] -2 LW(15) 16777216 LW(0)
+80604904:   if_int_ne LW(0) 0
+80604910:     callc [btlevtcmd_OffPartsAttribute battle_event_cmd.o] -2 LW(15) 16777216
+80604924:   endif
+80604928:   callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 1 ["A_5"]
+8060493C:   begin_child_thread
+80604940:     loop 0
+80604948:       callc [btlevtcmd_GetFaceDirection battle_event_cmd.o] -2 LW(0)
+80604958:       if_int_eq LW(0) -1
+80604964:         callc [btlevtcmd_GetPartsPos battle_event_cmd.o] -2 LW(15) LW(0) LW(1) LW(2)
+80604980:         callc [btlevtcmd_GetHitPos battle_event_cmd.o] LW(3) LW(4) LW(6) LW(7) LW(8)
+8060499C:         if_int_le LW(0) LW(6)
+806049A8:           callss [start_avoid unit_barriern_z.o]
+806049B0:           loop_break
+806049B4:         endif
+806049B8:       else
+806049BC:         callc [btlevtcmd_GetPartsPos battle_event_cmd.o] -2 LW(15) LW(0) LW(1) LW(2)
+806049D8:         callc [btlevtcmd_GetHitPos battle_event_cmd.o] LW(3) LW(4) LW(6) LW(7) LW(8)
+806049F4:         if_int_ge LW(0) LW(6)
+80604A00:           callss [start_avoid unit_barriern_z.o]
+80604A08:           loop_break
+80604A0C:         endif
+80604A10:       endif
+80604A14:       wait_frames 1
+80604A1C:     end_loop
+80604A20:   end_child_thread
+80604A24:   callc [btlevtcmd_GetUnitWork battle_event_cmd.o] -2 1 LW(6)
+80604A38:   if_int_eq LW(6) 0
+80604A44:     callc [btlevtcmd_GetHitPos battle_event_cmd.o] LW(3) LW(4) LW(6) LW(7) LW(8)
+80604A60:     callc [btlevtcmd_GetStageSize battle_event_cmd.o] LW(6) [F1194D80] [F1194D80]
+80604A74:     muli LW(6) 1
+80604A80:     callc [btlevtcmd_GetFaceDirection battle_event_cmd.o] -2 LW(0)
+80604A90:     muli LW(6) LW(0)
+80604A9C:     subi LW(7) 5
+80604AA8:     callc [btlevtcmd_SetPartsScale battle_event_cmd.o] -2 LW(15) 1 0 1
+80604AC4:     begin_child_thread
+80604AC8:       loop 0
+80604AD0:         loop 10
+80604AD8:           callc [btlevtcmd_AddPartsScale battle_event_cmd.o] -2 LW(15) 0 0.13 0
+80604AF4:           wait_frames 1
+80604AFC:         end_loop
+80604B00:         loop 10
+80604B08:           callc [btlevtcmd_AddPartsScale battle_event_cmd.o] -2 LW(15) 0 -0.13 0
+80604B24:           wait_frames 1
+80604B2C:         end_loop
+80604B30:       end_loop
+80604B34:     end_child_thread
+80604B38:     callc [btlevtcmd_JumpPartsSetting battle_event_cmd.o] -2 LW(15) 0 4 0
+80604B54:     callc [btlevtcmd_JumpPartsPosition battle_event_cmd.o] -2 LW(15) LW(6) LW(7) LW(8) 0 -1
+80604B78:   else
+80604B7C:     callc [btlevtcmd_GetHitPos battle_event_cmd.o] LW(3) LW(4) LW(6) LW(7) LW(8)
+80604B98:     callc [btlevtcmd_GetStageSize battle_event_cmd.o] LW(6) [F1194D80] [F1194D80]
+80604BAC:     muli LW(6) 1
+80604BB8:     callc [btlevtcmd_GetFaceDirection battle_event_cmd.o] -2 LW(0)
+80604BC8:     muli LW(6) LW(0)
+80604BD4:     subi LW(7) 5
+80604BE0:     callc [btlevtcmd_SetPartsScale battle_event_cmd.o] -2 LW(15) 1 0 1
+80604BFC:     begin_child_thread
+80604C00:       loop 0
+80604C08:         loop 5
+80604C10:           callc [btlevtcmd_AddPartsScale battle_event_cmd.o] -2 LW(15) 0 0.25 0
+80604C2C:           wait_frames 1
+80604C34:         end_loop
+80604C38:         loop 5
+80604C40:           callc [btlevtcmd_AddPartsScale battle_event_cmd.o] -2 LW(15) 0 -0.25 0
+80604C5C:           wait_frames 1
+80604C64:         end_loop
+80604C68:       end_loop
+80604C6C:     end_child_thread
+80604C70:     callc [btlevtcmd_JumpPartsSetting battle_event_cmd.o] -2 LW(15) 0 7 0
+80604C8C:     callc [btlevtcmd_JumpPartsPosition battle_event_cmd.o] -2 LW(15) LW(6) LW(7) LW(8) 0 -1
+80604CB0:     callc [btlevtcmd_SetPartsPos battle_event_cmd.o] -2 LW(15) 0 -1000 0
+80604CCC:   endif
+80604CD0:   return
+80604CD4:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [wakka_attack_common_event_hit unit_barriern_z.o] AT 80604CD8 ---
+80604CD8:   callc [btlevtcmd_GetUnitWork battle_event_cmd.o] -2 1 LW(6)
+80604CEC:   if_int_eq LW(6) 0
+80604CF8:     callc [btlevtcmd_OffPartsAttribute battle_event_cmd.o] -2 LW(15) 67108864
+80604D0C:   else
+80604D10:     callc [btlevtcmd_SetPartsBlur battle_event_cmd.o] -2 LW(15) 255 255 255 255 255 255 255 100 0
+80604D44:     callc [btlevtcmd_OnPartsAttribute battle_event_cmd.o] -2 LW(15) 67108864
+80604D58:   endif
+80604D5C:   callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 LW(15) ["Z_3"]
+80604D70:   callc [btlevtcmd_GetPos battle_event_cmd.o] LW(12) LW(6) LW(7) LW(8)
+80604D88:   addi LW(8) 1
+80604D94:   callc [btlevtcmd_SetPartsPos battle_event_cmd.o] -2 LW(15) LW(6) LW(7) LW(8)
+80604DB0:   callc [btlevtcmd_CheckPartsAttribute battle_event_cmd.o] -2 LW(15) 16777216 LW(0)
+80604DC8:   if_int_ne LW(0) 0
+80604DD4:     callc [btlevtcmd_OffPartsAttribute battle_event_cmd.o] -2 LW(15) 16777216
+80604DE8:   endif
+80604DEC:   callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 1 ["A_5"]
+80604E00:   callc [btlevtcmd_GetUnitWork battle_event_cmd.o] -2 1 LW(6)
+80604E14:   if_int_eq LW(6) 0
+80604E20:     callc [btlevtcmd_SetPartsScale battle_event_cmd.o] -2 LW(15) 1 0 1
+80604E3C:     begin_child_thread
+80604E40:       loop 0
+80604E48:         loop 10
+80604E50:           callc [btlevtcmd_AddPartsScale battle_event_cmd.o] -2 LW(15) 0 0.13 0
+80604E6C:           wait_frames 1
+80604E74:         end_loop
+80604E78:         loop 10
+80604E80:           callc [btlevtcmd_AddPartsScale battle_event_cmd.o] -2 LW(15) 0 -0.13 0
+80604E9C:           wait_frames 1
+80604EA4:         end_loop
+80604EA8:       end_loop
+80604EAC:     end_child_thread
+80604EB0:     callc [btlevtcmd_GetHitPos battle_event_cmd.o] LW(3) LW(4) LW(6) LW(7) LW(8)
+80604ECC:     callc [btlevtcmd_JumpPartsSetting battle_event_cmd.o] -2 LW(15) 0 4 0
+80604EE8:     callc [btlevtcmd_JumpPartsPosition battle_event_cmd.o] -2 LW(15) LW(6) LW(7) LW(8) 0 -1
+80604F0C:   else
+80604F10:     callc [btlevtcmd_SetPartsScale battle_event_cmd.o] -2 LW(15) 1 0 1
+80604F2C:     begin_child_thread
+80604F30:       loop 0
+80604F38:         loop 5
+80604F40:           callc [btlevtcmd_AddPartsScale battle_event_cmd.o] -2 LW(15) 0 0.25 0
+80604F5C:           wait_frames 1
+80604F64:         end_loop
+80604F68:         loop 5
+80604F70:           callc [btlevtcmd_AddPartsScale battle_event_cmd.o] -2 LW(15) 0 -0.25 0
+80604F8C:           wait_frames 1
+80604F94:         end_loop
+80604F98:       end_loop
+80604F9C:     end_child_thread
+80604FA0:     callc [btlevtcmd_GetHitPos battle_event_cmd.o] LW(3) LW(4) LW(6) LW(7) LW(8)
+80604FBC:     callc [btlevtcmd_JumpPartsSetting battle_event_cmd.o] -2 LW(15) 0 7 0
+80604FD8:     callc [btlevtcmd_JumpPartsPosition battle_event_cmd.o] -2 LW(15) LW(6) LW(7) LW(8) 0 -1
+80604FFC:     callc [btlevtcmd_SetPartsPos battle_event_cmd.o] -2 LW(15) 0 -1000 0
+80605018:   endif
+8060501C:   return
+80605020:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [wawawa_attack_event_sub_last unit_barriern_z.o] AT 80606068 ---
+80606068:   setii LW(13) 0
+80606074:   setii LW(14) 5
+80606080:   loop 0
+80606088:     callc [btlevtcmd_GetPartsWork battle_event_cmd.o] -2 1 LW(13) LW(5)
+806060A0:     callc [btlevtcmd_GetPartsWork battle_event_cmd.o] -2 1 LW(14) LW(6)
+806060B8:     if_int_eq LW(3) LW(5)
+806060C4:       if_int_eq LW(4) LW(6)
+806060D0:         addi LW(13) 10
+806060DC:         callc [btlevtcmd_GetPartsWork battle_event_cmd.o] -2 1 LW(13) LW(0)
+806060F4:         loop_break
+806060F8:       endif
+806060FC:     endif
+80606100:     addi LW(13) 1
+8060610C:     addi LW(14) 1
+80606118:   end_loop
+8060611C:   if_int_eq LW(0) 1
+80606128:     callss [wakka_attack_common_event_hit unit_barriern_z.o]
+80606130:     callc [btlevtcmd_ResultACDefence battle_event_cmd.o] LW(3) [weapon_wawawa_attack unit_barriern_z.o]
+80606140:     callc [btlevtcmd_CheckDamage battle_event_cmd.o] -2 LW(3) LW(4) [weapon_wawawa_attack unit_barriern_z.o] 256 LW(5)
+80606160:     callc [btlevtcmd_SetPartsPos battle_event_cmd.o] -2 LW(15) 0 -1000 0
+8060617C:     wait_frames 20
+80606184:     callc [btlevtcmd_OffPartsAttribute battle_event_cmd.o] -2 LW(15) 67108864
+80606198:     callc [btlevtcmd_OnPartsAttribute battle_event_cmd.o] -2 LW(15) 16777216
+806061AC:   else
+806061B0:     setii LW(9) [weapon_wawawa_attack unit_barriern_z.o]
+806061BC:     setii LW(10) 1
+806061C8:     callss [damage_check_event_sub unit_barriern_z.o]
+806061D0:   endif
+806061D4:   return
+806061D8:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [wawawa_attack_event_sub_no_last unit_barriern_z.o] AT 80606040 ---
+80606040:   setii LW(9) [weapon_wawawa_attack unit_barriern_z.o]
+8060604C:   setii LW(10) 0
+80606058:   callss [damage_check_event_sub unit_barriern_z.o]
+80606060:   return
+80606064:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [start_avoid unit_barriern_z.o] AT 806047AC ---
+806047AC:   if_int_eq LW(5) 3
+806047B8:     callc [btlevtcmd_StartAvoid battle_event_cmd.o] LW(3) 38
+806047C8:   endif
+806047CC:   if_int_eq LW(5) 6
+806047D8:     callc [btlevtcmd_StartAvoid battle_event_cmd.o] LW(3) 39
+806047E8:   endif
+806047EC:   if_int_eq LW(5) 2
+806047F8:     callc [btlevtcmd_StartAvoid battle_event_cmd.o] LW(3) 40
+80604808:   endif
+8060480C:   return
+80604810:   end

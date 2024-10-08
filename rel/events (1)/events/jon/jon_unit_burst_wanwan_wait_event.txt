@@ -1,0 +1,148 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [wait_event unit_burst_wanwan.o] AT 80CE6B9C ---
+80CE6B9C:   callc [btlevtcmd_SetUnitWork battle_event_cmd.o] -2 2 0
+80CE6BB0:   callc [btlevtcmd_CheckStatus battle_event_cmd.o] -2 1 LW(15)
+80CE6BC4:   if_int_ne LW(15) 0
+80CE6BD0:     callc [btlevtcmd_SetUnitWork battle_event_cmd.o] -2 2 2
+80CE6BE4:     callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 1 ["WAN_N_1"]
+80CE6BF8:     callc [btlevtcmd_SetPartsRotateOffset battle_event_cmd.o] -2 1 0 10 0
+80CE6C14:     begin_child_thread
+80CE6C18: 1:
+80CE6C20:       callss [sound_gensui_event unit_burst_wanwan.o]
+80CE6C28:       callc [btlevtcmd_SetPartsRotate battle_event_cmd.o] -2 1 0 0 0
+80CE6C44:       wait_frames 20
+80CE6C4C:       loop 10
+80CE6C54:         wait_frames 4
+80CE6C5C:         callc [btlevtcmd_AddPartsRotate battle_event_cmd.o] -2 1 0 0 1
+80CE6C78:       end_loop
+80CE6C7C:       loop 10
+80CE6C84:         wait_frames 4
+80CE6C8C:         callc [btlevtcmd_AddPartsRotate battle_event_cmd.o] -2 1 0 0 -1
+80CE6CA8:       end_loop
+80CE6CAC:       goto 1
+80CE6CB4:     end_child_thread
+80CE6CB8:     goto 98
+80CE6CC0:   endif
+80CE6CC4:   callc [btlevtcmd_CheckStatus battle_event_cmd.o] -2 2 LW(14)
+80CE6CD8:   callc [btlevtcmd_CheckStatus battle_event_cmd.o] -2 9 LW(15)
+80CE6CEC:   ori LW(15) LW(14)
+80CE6CF8:   if_int_ne LW(15) 0
+80CE6D04:     callc [btlevtcmd_SetUnitWork battle_event_cmd.o] -2 2 2
+80CE6D18:     callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 1 ["WAN_Y_1"]
+80CE6D2C:     begin_child_thread
+80CE6D30: 5:
+80CE6D38:       callss [sound_gensui_event unit_burst_wanwan.o]
+80CE6D40:       callc [evt_sub_random evt_sub.o] 20 LW(0)
+80CE6D50:       wait_frames LW(0)
+80CE6D58:       goto 5
+80CE6D60:     end_child_thread
+80CE6D64:     goto 98
+80CE6D6C:   endif
+80CE6D70:   callc [btlevtcmd_CheckStatus battle_event_cmd.o] -2 5 LW(13)
+80CE6D84:   callc [btlevtcmd_CheckStatus battle_event_cmd.o] -2 4 LW(14)
+80CE6D98:   callc [btlevtcmd_CheckStatus battle_event_cmd.o] -2 3 LW(15)
+80CE6DAC:   ori LW(15) LW(13)
+80CE6DB8:   ori LW(15) LW(14)
+80CE6DC4:   if_int_ne LW(15) 0
+80CE6DD0:     begin_child_thread
+80CE6DD4: 3:
+80CE6DDC:       callss [sound_gensui_event unit_burst_wanwan.o]
+80CE6DE4:       callc [btlevtcmd_AnimeChangePoseFromTable battle_event_cmd.o] -2 1
+80CE6DF4:       callc [evt_sub_random evt_sub.o] 20 LW(0)
+80CE6E04:       wait_frames LW(0)
+80CE6E0C:       setii LW(10) 15
+80CE6E18:       callsa [wait_sound_event1 unit_burst_wanwan.o]
+80CE6E20:       callc [btlevtcmd_GetPos battle_event_cmd.o] -2 LW(0) LW(1) LW(2)
+80CE6E38:       callc [btlevtcmd_JumpPartsSetting battle_event_cmd.o] -2 1 30 0 0.25
+80CE6E54:       callc [btlevtcmd_JumpPartsPosition battle_event_cmd.o] -2 1 LW(0) 0 LW(2) 30 0
+80CE6E78:       callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_ENM_WAN_LANDING1"] LW(11) 0 [F1194D80]
+80CE6E94:       setii LW(10) 10
+80CE6EA0:       callsa [wait_sound_event2 unit_burst_wanwan.o]
+80CE6EA8:       callc [btlevtcmd_FaceDirectionAdd battle_event_cmd.o] -2 LW(0) 5
+80CE6EBC:       callc [btlevtcmd_JumpPartsSetting battle_event_cmd.o] -2 1 20 0 0.20
+80CE6ED8:       callc [btlevtcmd_JumpPartsPosition battle_event_cmd.o] -2 1 LW(0) 0 LW(2) 20 0
+80CE6EFC:       callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_ENM_WAN_LANDING1"] LW(11) 0 [F1194D80]
+80CE6F18:       setii LW(10) 7
+80CE6F24:       callsa [wait_sound_event2 unit_burst_wanwan.o]
+80CE6F2C:       callc [btlevtcmd_FaceDirectionSub battle_event_cmd.o] -2 LW(0) 20
+80CE6F40:       callc [btlevtcmd_JumpPartsSetting battle_event_cmd.o] -2 1 15 0 0.40
+80CE6F5C:       callc [btlevtcmd_JumpPartsPosition battle_event_cmd.o] -2 1 LW(0) 0 LW(2) 15 0
+80CE6F80:       callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_ENM_WAN_LANDING1"] LW(11) 0 [F1194D80]
+80CE6F9C:       setii LW(10) 7
+80CE6FA8:       callsa [wait_sound_event2 unit_burst_wanwan.o]
+80CE6FB0:       callc [btlevtcmd_GetPos battle_event_cmd.o] -2 LW(0) LW(1) LW(2)
+80CE6FC8:       callc [btlevtcmd_JumpPartsSetting battle_event_cmd.o] -2 1 15 0 0.20
+80CE6FE4:       callc [btlevtcmd_JumpPartsPosition battle_event_cmd.o] -2 1 LW(0) LW(1) LW(2) 15 0
+80CE7008:       callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_ENM_WAN_LANDING1"] LW(11) 0 [F1194D80]
+80CE7024:       goto 3
+80CE702C:     end_child_thread
+80CE7030:     goto 98
+80CE7038:   endif
+80CE703C:   begin_child_thread
+80CE7040: 4:
+80CE7048:     callss [sound_gensui_event unit_burst_wanwan.o]
+80CE7050:     callc [evt_sub_random evt_sub.o] 20 LW(0)
+80CE7060:     wait_frames LW(0)
+80CE7068:     setii LW(10) 15
+80CE7074:     callsa [wait_sound_event1 unit_burst_wanwan.o]
+80CE707C:     callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 1 ["WAN_A_1"]
+80CE7090:     callc [btlevtcmd_GetPos battle_event_cmd.o] -2 LW(0) LW(1) LW(2)
+80CE70A8:     callc [btlevtcmd_JumpPartsSetting battle_event_cmd.o] -2 1 30 0 0.25
+80CE70C4:     callc [btlevtcmd_JumpPartsPosition battle_event_cmd.o] -2 1 LW(0) 0 LW(2) 30 0
+80CE70E8:     callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_ENM_WAN_LANDING1"] LW(11) 0 [F1194D80]
+80CE7104:     setii LW(10) 10
+80CE7110:     callsa [wait_sound_event2 unit_burst_wanwan.o]
+80CE7118:     callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 1 ["WAN_S_1A"]
+80CE712C:     callc [btlevtcmd_FaceDirectionAdd battle_event_cmd.o] -2 LW(0) 5
+80CE7140:     callc [btlevtcmd_JumpPartsSetting battle_event_cmd.o] -2 1 20 0 0.20
+80CE715C:     callc [btlevtcmd_JumpPartsPosition battle_event_cmd.o] -2 1 LW(0) 0 LW(2) 20 0
+80CE7180:     callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_ENM_WAN_LANDING1"] LW(11) 0 [F1194D80]
+80CE719C:     setii LW(10) 7
+80CE71A8:     callsa [wait_sound_event2 unit_burst_wanwan.o]
+80CE71B0:     callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 1 ["WAN_A_1"]
+80CE71C4:     callc [btlevtcmd_FaceDirectionSub battle_event_cmd.o] -2 LW(0) 20
+80CE71D8:     callc [btlevtcmd_JumpPartsSetting battle_event_cmd.o] -2 1 15 0 0.40
+80CE71F4:     callc [btlevtcmd_JumpPartsPosition battle_event_cmd.o] -2 1 LW(0) 0 LW(2) 15 0
+80CE7218:     callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_ENM_WAN_LANDING1"] LW(11) 0 [F1194D80]
+80CE7234:     setii LW(10) 7
+80CE7240:     callsa [wait_sound_event2 unit_burst_wanwan.o]
+80CE7248:     callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 1 ["WAN_S_1A"]
+80CE725C:     callc [btlevtcmd_GetPos battle_event_cmd.o] -2 LW(0) LW(1) LW(2)
+80CE7274:     callc [btlevtcmd_JumpPartsSetting battle_event_cmd.o] -2 1 15 0 0.20
+80CE7290:     callc [btlevtcmd_JumpPartsPosition battle_event_cmd.o] -2 1 LW(0) LW(1) LW(2) 15 0
+80CE72B4:     callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_ENM_WAN_LANDING1"] LW(11) 0 [F1194D80]
+80CE72D0:     goto 4
+80CE72D8:   end_child_thread
+80CE72DC:   goto 98
+80CE72E4: 98:
+80CE72EC: 99:
+80CE72F4:   wait_frames 1
+80CE72FC:   goto 99
+80CE7304:   return
+80CE7308:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [sound_gensui_event unit_burst_wanwan.o] AT 80CE730C ---
+80CE730C:   callc [btlevtcmd_GetUnitWork battle_event_cmd.o] -2 1 LW(11)
+80CE7320:   mulf LW(11) 0.70
+80CE732C:   if_int_lt LW(11) 32
+80CE7338:     setii LW(11) 32
+80CE7344:   endif
+80CE7348:   callc [btlevtcmd_SetUnitWork battle_event_cmd.o] -2 1 LW(11)
+80CE735C:   return
+80CE7360:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [wait_sound_event1 unit_burst_wanwan.o] AT 80CE7364 ---
+80CE7364:   callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_ENM_WAN_WAIT1"] LW(11) 0 [F1194D80]
+80CE7380:   callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_ENM_WAN_WAIT3"] LW(11) 0 [F1194D80]
+80CE739C:   wait_frames LW(10)
+80CE73A4:   callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_ENM_WAN_WAIT2"] LW(11) 0 [F1194D80]
+80CE73C0:   return
+80CE73C4:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [wait_sound_event2 unit_burst_wanwan.o] AT 80CE73C8 ---
+80CE73C8:   wait_frames LW(10)
+80CE73D0:   callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_ENM_WAN_WAIT4"] LW(11) 0 [F1194D80]
+80CE73EC:   return
+80CE73F0:   end

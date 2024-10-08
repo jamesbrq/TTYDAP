@@ -1,0 +1,68 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [renzoku_attack_event_sub_no_last unit_piders.o] AT 805FCD58 ---
+805FCD58:   setii LW(8) 0
+805FCD64:   setii LW(10) 1
+805FCD70:   callss [damage_check_event_sub unit_piders.o]
+805FCD78:   return
+805FCD7C:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [damage_check_event_sub unit_piders.o] AT 805FC044 ---
+805FC044:   callc [btlevtcmd_PreCheckDamage battle_event_cmd.o] -2 LW(3) LW(4) LW(9) 0 LW(0)
+805FC064:   switchi LW(0)
+805FC06C:     case_int_eq_any 4
+805FC074:       goto 90
+805FC07C:       end_multi_case
+805FC080:     case_int_eq 3
+805FC088:       callc [btlevtcmd_StartAvoid battle_event_cmd.o] LW(3) 38
+805FC098:       goto 90
+805FC0A0:       end_multi_case
+805FC0A4:     case_int_eq 6
+805FC0AC:       callc [btlevtcmd_StartAvoid battle_event_cmd.o] LW(3) 39
+805FC0BC:       goto 90
+805FC0C4:     case_int_eq 2
+805FC0CC:       callc [btlevtcmd_StartAvoid battle_event_cmd.o] LW(3) 40
+805FC0DC:       goto 90
+805FC0E4:     case_int_eq 1
+805FC0EC:       goto 91
+805FC0F4:       end_multi_case
+805FC0F8:     case_default
+805FC0FC:       goto 99
+805FC104:       end_multi_case
+805FC108:   end_switch
+805FC10C: 90:
+805FC114:   callc [btlevtcmd_JumpPartsContinue battle_event_cmd.o] -2 LW(7)
+805FC124:   callc [btlevtcmd_OnPartsAttribute battle_event_cmd.o] -2 LW(7) 16777216
+805FC138:   callc [btlevtcmd_OnPartsAttribute battle_event_cmd.o] -2 LW(7) 33554432
+805FC14C:   goto 99
+805FC154: 91:
+805FC15C:   callc [btlevtcmd_OnPartsAttribute battle_event_cmd.o] -2 LW(7) 16777216
+805FC170:   callc [btlevtcmd_OnPartsAttribute battle_event_cmd.o] -2 LW(7) 33554432
+805FC184:   if_int_eq LW(10) 1
+805FC190:     setii LW(0) 5
+805FC19C:     setii LW(1) 8
+805FC1A8:     loop 0
+805FC1B0:       callc [btlevtcmd_GetUnitWork battle_event_cmd.o] -2 LW(0) LW(2)
+805FC1C4:       if_int_eq LW(3) LW(2)
+805FC1D0:         callc [btlevtcmd_GetUnitWork battle_event_cmd.o] -2 LW(1) LW(2)
+805FC1E4:         if_int_eq LW(4) LW(2)
+805FC1F0:           addi LW(0) 6
+805FC1FC:           callc [btlevtcmd_SetUnitWork battle_event_cmd.o] -2 LW(0) 1
+805FC210:           loop_break
+805FC214:         endif
+805FC218:       endif
+805FC21C:       addi LW(0) 1
+805FC228:       addi LW(1) 1
+805FC234:     end_loop
+805FC238:   endif
+805FC23C:   callc [btlevtcmd_ResultACDefence battle_event_cmd.o] LW(3) LW(9)
+805FC24C:   if_int_eq LW(8) 1
+805FC258:     callc [btlevtcmd_CheckDamage battle_event_cmd.o] -2 LW(3) LW(4) LW(9) 256 LW(0)
+805FC278:   else
+805FC27C:     callc [btlevtcmd_CheckDamage battle_event_cmd.o] -2 LW(3) LW(4) LW(9) 0 LW(0)
+805FC29C:   endif
+805FC2A0:   goto 99
+805FC2A8: 99:
+805FC2B0:   return
+805FC2B4:   end

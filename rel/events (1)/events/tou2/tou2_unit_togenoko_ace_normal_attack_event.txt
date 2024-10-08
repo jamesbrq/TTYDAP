@@ -1,0 +1,113 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [normal_attack_event unit_togenoko_ace.o] AT 806166CC ---
+806166CC:   callc [btlevtcmd_check_battleflag battle_event_cmd.o] LW(0) 2
+806166DC:   if_int_ne LW(0) 0
+806166E8:     wait_ms 750
+806166F0:     callc [btlevtcmd_GetFirstAttackTarget battle_event_cmd.o] LW(3) LW(4)
+80616700:   else
+80616704:     callc [btlevtcmd_GetEnemyBelong battle_event_cmd.o] -2 LW(0)
+80616714:     callc [btlevtcmd_SamplingEnemy battle_event_cmd.o] -2 LW(0) LW(9)
+80616728:     callc [btlevtcmd_ChoiceSamplingEnemy battle_event_cmd.o] LW(9) LW(3) LW(4)
+8061673C:   endif
+80616740:   if_int_eq LW(3) -1
+8061674C:     callc [btlevtcmd_CheckToken battle_event_cmd.o] -2 16 LW(0)
+80616760:     if_int_ne LW(0) 0
+8061676C:       callss [subsetevt_confuse_flustered battle_event_subset.o]
+80616774:       return
+80616778:     endif
+8061677C:     goto 99
+80616784:   endif
+80616788:   callc [btlevtcmd_WeaponAftereffect battle_event_cmd.o] LW(9)
+80616794:   callc [btlevtcmd_AttackDeclare battle_event_cmd.o] -2 LW(3) LW(4)
+806167A8:   callc [btlevtcmd_WaitGuardMove battle_event_cmd.o]
+806167B0:   callc [btlevtcmd_PayWeaponCost battle_event_cmd.o] -2 LW(9)
+806167C0:   callc [btlevtcmd_CalculateFaceDirection battle_event_cmd.o] -2 -1 LW(3) LW(4) 16 LW(15)
+806167E0:   callc [btlevtcmd_ChangeFaceDirection battle_event_cmd.o] -2 LW(15)
+806167F0:   callc [evt_btl_camera_set_mode battle_camera.o] 0 8
+80616800:   callc [evt_btl_camera_set_homing_unit battle_camera.o] 0 -2 LW(3)
+80616814:   callc [evt_btl_camera_set_moveSpeedLv battle_camera.o] 0 1
+80616824:   callc [evt_btl_camera_set_zoom battle_camera.o] 0 200
+80616834:   begin_child_thread
+80616838:     loop 10
+80616840:       callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_ENM_TOGENOKO_MOVE3"] [F1194D80] 0 [F1194D80]
+8061685C:       wait_frames 3
+80616864:       callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_ENM_TOGENOKO_MOVE4"] [F1194D80] 0 [F1194D80]
+80616880:       wait_frames 3
+80616888:     end_loop
+8061688C:   end_child_thread
+80616890:   callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 1 ["R_3"]
+806168A4:   wait_frames 60
+806168AC:   callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_ENM_TOGENOKO_MOVE5"] [F1194D80] 0 [F1194D80]
+806168C8:   callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 1 ["A_2"]
+806168DC:   callc [btlevtcmd_GetHitPos battle_event_cmd.o] LW(3) LW(4) LW(0) LW(1) LW(2)
+806168F8:   callc [btlevtcmd_FaceDirectionSub battle_event_cmd.o] -2 LW(0) 10
+8061690C:   callc [btlevtcmd_SetMoveSpeed battle_event_cmd.o] -2 10.00
+8061691C:   callc [btlevtcmd_MovePosition battle_event_cmd.o] -2 LW(0) 0 LW(2) 0 -1 0
+80616940:   callc [btlevtcmd_PreCheckDamage battle_event_cmd.o] -2 LW(3) LW(4) LW(9) 0 LW(5)
+80616960:   switchi LW(5)
+80616968:     case_int_eq_any 4
+80616970:       goto 90
+80616978:       end_multi_case
+8061697C:     case_int_eq 3
+80616984:       callc [btlevtcmd_StartAvoid battle_event_cmd.o] LW(3) 38
+80616994:       goto 90
+8061699C:       end_multi_case
+806169A0:     case_int_eq 6
+806169A8:       callc [btlevtcmd_StartAvoid battle_event_cmd.o] LW(3) 39
+806169B8:       goto 90
+806169C0:     case_int_eq 2
+806169C8:       callc [btlevtcmd_StartAvoid battle_event_cmd.o] LW(3) 40
+806169D8:       goto 90
+806169E0:     case_int_eq 1
+806169E8:       goto 91
+806169F0:       end_multi_case
+806169F4:     case_default
+806169F8:       goto 98
+80616A00:       end_multi_case
+80616A04:   end_switch
+80616A08: 90:
+80616A10:   callc [btlevtcmd_FaceDirectionAdd battle_event_cmd.o] -2 LW(0) 500
+80616A24:   callc [btlevtcmd_MovePosition battle_event_cmd.o] -2 LW(0) 0 LW(2) 0 -1 0
+80616A48:   callc [evt_btl_camera_set_mode battle_camera.o] 0 0
+80616A58:   callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 1 ["R_1"]
+80616A6C:   callc [btlevtcmd_ChangeFaceDirection battle_event_cmd.o] -2 -1
+80616A7C:   callc [btlevtcmd_GetPos battle_event_cmd.o] -2 LW(0) LW(1) LW(2)
+80616A94:   callc [btlevtcmd_SetPos battle_event_cmd.o] -2 300 LW(1) LW(2)
+80616AAC:   callc [btlevtcmd_GetHomePos battle_event_cmd.o] -2 LW(0) LW(1) LW(2)
+80616AC4:   callc [btlevtcmd_SetMoveSpeed battle_event_cmd.o] -2 10.00
+80616AD4:   callc [btlevtcmd_MovePosition battle_event_cmd.o] -2 LW(0) LW(1) LW(2) 0 -1 0
+80616AF8:   callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 1 ["S_1"]
+80616B0C:   goto 98
+80616B14: 91:
+80616B1C:   callc [evt_btl_camera_shake_h battle_camera.o] 0 1 1 8 0
+80616B38:   callc [evt_btl_camera_set_moveSpeedLv battle_camera.o] 0 2
+80616B48:   callc [evt_btl_camera_add_zoom battle_camera.o] 0 -50
+80616B58:   callc [btlevtcmd_ResultACDefence battle_event_cmd.o] LW(3) LW(9)
+80616B68:   callc [btlevtcmd_CheckDamage battle_event_cmd.o] -2 LW(3) LW(4) LW(9) 256 LW(5)
+80616B88:   callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 1 ["S_1"]
+80616B9C:   callc [btlevtcmd_GetPos battle_event_cmd.o] LW(3) LW(0) LW(1) LW(2)
+80616BB4:   callc [btlevtcmd_GetHomePos battle_event_cmd.o] -2 LW(10) LW(11) LW(12)
+80616BCC:   subf LW(10) LW(0)
+80616BD8:   subf LW(11) LW(1)
+80616BE4:   subf LW(12) LW(2)
+80616BF0:   mulf LW(10) 0.75
+80616BFC:   mulf LW(11) 0.75
+80616C08:   mulf LW(12) 0.75
+80616C14:   addf LW(0) LW(10)
+80616C20:   addf LW(1) LW(11)
+80616C2C:   addf LW(2) LW(12)
+80616C38:   callc [btlevtcmd_JumpSetting battle_event_cmd.o] -2 20 0 0.20
+80616C50:   callc [btlevtcmd_JumpPosition battle_event_cmd.o] -2 LW(0) LW(1) LW(2) 20 -1
+80616C70:   callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_ENM_TOGENOKO_MOVE6"] [F1194D80] 0 [F1194D80]
+80616C8C:   callc [btlevtcmd_GetHomePos battle_event_cmd.o] -2 LW(0) LW(1) LW(2)
+80616CA4:   callc [btlevtcmd_JumpSetting battle_event_cmd.o] -2 20 0 0.20
+80616CBC:   callc [btlevtcmd_JumpPosition battle_event_cmd.o] -2 LW(0) LW(1) LW(2) 20 -1
+80616CDC:   callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_ENM_TOGENOKO_MOVE6"] [F1194D80] 0 [F1194D80]
+80616CF8:   goto 98
+80616D00: 98:
+80616D08:   callc [btlevtcmd_ResetFaceDirection battle_event_cmd.o] -2
+80616D14:   wait_ms 500
+80616D1C:   return
+80616D20:   end

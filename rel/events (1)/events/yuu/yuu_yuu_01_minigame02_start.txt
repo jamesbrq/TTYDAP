@@ -1,0 +1,69 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [minigame02_start yuu_01.o] AT 805D5FC4 ---
+805D5FC4:   callc [yuuminigame2_opening_chk yuu_01.o] LW(0) LW(1)
+805D5FD4:   if_int_ne LW(1) 0
+805D5FE0:     callsa_tid [minigame02_start_cam yuu_01.o] LW(8)
+805D5FEC:     loop 0
+805D5FF4:       check_thread_running LW(8) LW(9)
+805D6000:       if_int_eq LW(9) 0
+805D600C:         callc [evt_seq_wait evt_seq.o] 2
+805D6018:         loop_break
+805D601C:       else
+805D6020:         callc [evt_key_get_buttontrg evt_sub.o] 0 LW(9)
+805D6030:         if_bits_set LW(9) 768
+805D603C:           stop_tid LW(8)
+805D6044:           callc [evt_seq_wait evt_seq.o] 2
+805D6050:           callss [minigame02_start_cam_cancel yuu_01.o]
+805D6058:           loop_break
+805D605C:         endif
+805D6060:       endif
+805D6064:       wait_frames 1
+805D606C:     end_loop
+805D6070:     callc [yuuminigame2_opening_on_off yuu_01.o] LW(0) 0
+805D6080:     callss [yuu_01_kaijo_init2 yuu_01.o]
+805D6088:     callc [evt_cam3d_evt_off evt_cam.o] 0 11
+805D6098:     wait_frames 1
+805D60A0:   endif
+805D60A4:   callc [evt_hitobj_onoff evt_hit.o] ["taisaku"] 0 0
+805D60B8:   callc [evt_mario_mov_pos2 evt_mario.o] -660 200 120
+805D60CC:   callc [evt_hitobj_onoff evt_hit.o] ["taisaku"] 0 1
+805D60E0:   callc [evt_snd_bgmon evt_snd.o] 512 ["BGM_EVT_MINIGAME1"]
+805D60F0:   callc [eff_call_minigame evt_yuuminigame.o] 0 0 0 500
+805D6108:   wait_ms 3000
+805D6110:   callc [evt_cam_letter_box_onoff evt_cam.o] 0 0
+805D6120:   callc [evt_cam_letter_box_disable evt_cam.o] 1
+805D612C:   callc [evt_yuucounter_alloc evt_yuucounter.o] 0 70 1 120
+805D6144:   callc [evt_mario_key_onoff evt_mario.o] 1
+805D6150:   return
+805D6154:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [minigame02_start_cam yuu_01.o] AT 805D5EE0 ---
+805D5EE0:   callc [evt_cam3d_evt_set evt_cam.o] -560.00 565.00 1185.00 -560.00 75.00 155.00 0 11
+805D5F08:   wait_frames 1
+805D5F10:   callc [evt_seq_wait evt_seq.o] 2
+805D5F1C:   callc [evt_cam3d_evt_set evt_cam.o] 550.00 565.00 1185.00 550.00 75.00 155.00 4000 0
+805D5F44:   wait_ms 500
+805D5F4C:   callc [evt_yuutitle_alloc evt_yuutitle.o] 0 0 ["menu_title_minigame2"]
+805D5F60:   wait_ms 3000
+805D5F68:   callc [evt_yuutitle_free evt_yuutitle.o]
+805D5F70:   wait_ms 500
+805D5F78:   return
+805D5F7C:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [minigame02_start_cam_cancel yuu_01.o] AT 805D5F80 ---
+805D5F80:   callc [evt_seq_wait evt_seq.o] 2
+805D5F8C:   callc [evt_yuutitle_free evt_yuutitle.o]
+805D5F94:   callc [evt_cam3d_evt_off evt_cam.o] 0 11
+805D5FA4:   wait_frames 1
+805D5FAC:   callc [evt_mario_wait_move_end evt_mario.o]
+805D5FB4:   callss [yuu_01_kaijo_init2 yuu_01.o]
+805D5FBC:   return
+805D5FC0:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [yuu_01_kaijo_init2 yuu_01.o] AT 805D5E1C ---
+805D5E1C:   callc [evt_mario_set_pos evt_mario.o] -800 0 200
+805D5E30:   callc [evt_mario_set_dir evt_mario.o] 90 0 0
+805D5E44:   return
+805D5E48:   end

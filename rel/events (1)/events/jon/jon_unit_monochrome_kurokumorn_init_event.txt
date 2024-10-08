@@ -1,0 +1,34 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [init_event unit_monochrome_kurokumorn.o] AT 80CA5850 ---
+80CA5850:   callc [btlevtcmd_SetEventWait battle_event_cmd.o] -2 [wait_event unit_monochrome_kurokumorn.o]
+80CA5860:   callc [btlevtcmd_SetEventUnisonPhase battle_event_cmd.o] -2 [unison_phase_event unit_monochrome_kurokumorn.o]
+80CA5870:   callc [btlevtcmd_SetEventAttack battle_event_cmd.o] -2 [attack_event unit_monochrome_kurokumorn.o]
+80CA5880:   callc [btlevtcmd_SetEventDamage battle_event_cmd.o] -2 [damage_event unit_monochrome_kurokumorn.o]
+80CA5890:   callc [btlevtcmd_SetEventConfusion battle_event_cmd.o] -2 [attack_event unit_monochrome_kurokumorn.o]
+80CA58A0:   callc [btlevtcmd_SetUnitWork battle_event_cmd.o] -2 0 0
+80CA58B4:   callc [btlevtcmd_SetUnitWork battle_event_cmd.o] -2 1 0
+80CA58C8:   callsa [barrier_event unit_monochrome_kurokumorn.o]
+80CA58D0:   callc [btlevtcmd_StartWaitEvent battle_event_cmd.o] -2
+80CA58DC:   return
+80CA58E0:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [barrier_event unit_monochrome_kurokumorn.o] AT 80CA58E4 ---
+80CA58E4: 0:
+80CA58EC:   wait_frames 31
+80CA58F4:   callc [btlevtcmd_GetUnitId battle_event_cmd.o] -2 LW(0)
+80CA5904:   if_int_eq LW(0) -1
+80CA5910:     goto 99
+80CA5918:   endif
+80CA591C:   callc [btlevtcmd_CheckPartsCounterAttribute battle_event_cmd.o] -2 1 1024 LW(0)
+80CA5934:   if_int_ne LW(0) 0
+80CA5940:     callc [btlevtcmd_GetPos battle_event_cmd.o] -2 LW(0) LW(1) LW(2)
+80CA5958:     addi LW(1) 20
+80CA5964:     callc [btlevtcmd_GetStatusMg battle_event_cmd.o] -2 LW(3)
+80CA5974:     callc [evt_eff64 evt_eff.o] [zero_jon_00009370 unit_monochrome_kurokumorn.o] ["akari_charge_n64"] 0 LW(0) LW(1) LW(2) LW(3) 30 0 0 0 0 0 0
+80CA59B4:   endif
+80CA59B8:   goto 0
+80CA59C0: 99:
+80CA59C8:   return
+80CA59CC:   end

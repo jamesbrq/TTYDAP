@@ -1,0 +1,77 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [ItemEvent_Fire_Flower_Core battle_item_data.o] AT 80366350 ---
+80366350:   callc [evt_btl_camera_set_mode battle_camera.o] 0 0
+80366360:   callc [evt_btl_camera_set_moveSpeedLv battle_camera.o] 0 1
+80366370:   wait_ms 100
+80366378:   callc [btlevtcmd_GetPos battle_event_cmd.o] -2 LW(0) LW(1) LW(2)
+80366390:   callc [btlevtcmd_FaceDirectionAdd battle_event_cmd.o] -2 LW(0) 40
+803663A4:   setii LW(3) LW(0)
+803663B0:   setii LW(4) LW(1)
+803663BC:   setii LW(5) LW(2)
+803663C8:   callc [btlevtcmd_FaceDirectionAdd battle_event_cmd.o] -2 LW(3) 240
+803663DC:   callc [btlevtcmd_TransStageFloorPosition battle_event_cmd.o] LW(0) LW(1) LW(2)
+803663F0:   if_int_lt LW(0) LW(3)
+803663FC:     callc [evt_eff64 evt_eff.o] [zero_804227c0 battle_item_data.o] ["fireflower_n64"] 0 LW(0) LW(1) LW(2) 180 0 0 0 0 0 0 0
+8036643C:     begin_child_thread
+80366440:       wait_frames 45
+80366448:       loop 36
+80366450:         callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_ITEM_FIRE_FLOWER1"] LW(0) LW(1) LW(2) 0
+8036646C:         wait_frames 5
+80366474:       end_loop
+80366478:     end_child_thread
+8036647C:   else
+80366480:     callc [evt_eff64 evt_eff.o] [zero_804227c0 battle_item_data.o] ["fireflower_n64"] 1 LW(0) LW(1) LW(2) 180 0 0 0 0 0 0 0
+803664C0:     begin_child_thread
+803664C4:       wait_frames 45
+803664CC:       loop 36
+803664D4:         callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_ITEM_FIRE_FLOWER1"] LW(0) LW(1) LW(2) 0
+803664F0:         wait_frames 5
+803664F8:       end_loop
+803664FC:     end_child_thread
+80366500:   endif
+80366504:   wait_ms 2800
+8036650C:   callc [btlevtcmd_GetEnemyBelong battle_event_cmd.o] -2 LW(0)
+8036651C:   callc [btlevtcmd_SamplingEnemy battle_event_cmd.o] -2 LW(0) [ItemWeaponData_Fire_Flower battle_item_data.o]
+80366530:   callc [btlevtcmd_GetSelectEnemy battle_event_cmd.o] LW(10) LW(11)
+80366540: 10:
+80366548:   if_int_eq LW(10) -1
+80366554:     goto 90
+8036655C:   endif
+80366560:   callc [btlevtcmd_PreCheckDamage battle_event_cmd.o] -2 LW(10) LW(11) [ItemWeaponData_Fire_Flower battle_item_data.o] 256 LW(5)
+80366580:   switchi LW(5)
+80366588:     case_int_eq 3
+80366590:       callc [btlevtcmd_StartAvoid battle_event_cmd.o] LW(10) 38
+803665A0:     case_int_eq 6
+803665A8:       callc [btlevtcmd_StartAvoid battle_event_cmd.o] LW(10) 39
+803665B8:     case_int_eq 2
+803665C0:       callc [btlevtcmd_StartAvoid battle_event_cmd.o] LW(10) 40
+803665D0:     case_int_eq 1
+803665D8:       callc [btlevtcmd_CheckDamage battle_event_cmd.o] -2 LW(10) LW(11) [ItemWeaponData_Fire_Flower battle_item_data.o] 256 LW(5)
+803665F8:   end_switch
+803665FC:   callc [btlevtcmd_GetSelectNextEnemy battle_event_cmd.o] LW(10) LW(11)
+8036660C:   wait_ms 80
+80366614:   goto 10
+8036661C: 90:
+80366624:   callc [evt_audience_ap_recovery evt_audience.o]
+8036662C:   wait_frames 150
+80366634:   callss [_return_home_event battle_item_data.o]
+8036663C:   callc [btlevtcmd_StartWaitEvent battle_event_cmd.o] -2
+80366648:   return
+8036664C:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [_return_home_event battle_item_data.o] AT 80364998 ---
+80364998:   callc [btlevtcmd_GetHomePos battle_event_cmd.o] -2 LW(0) LW(1) LW(2)
+803649B0: 95:
+803649B8:   callc [btlevtcmd_GetPos battle_event_cmd.o] -2 LW(3) LW(4) LW(5)
+803649D0:   if_int_ne LW(0) LW(3)
+803649DC:     begin_child_thread
+803649E0:       callc [btlevtcmd_GetBodyId battle_event_cmd.o] -2 LW(0)
+803649F0:       callc [btlevtcmd_AnimeChangePoseType battle_event_cmd.o] -2 LW(0) 42
+80364A04:     end_child_thread
+80364A08:     callc [btlevtcmd_SetMoveSpeed battle_event_cmd.o] -2 5.00
+80364A18:     callc [btlevtcmd_MovePosition battle_event_cmd.o] -2 LW(0) LW(1) LW(2) 0 -1 0
+80364A3C:   endif
+80364A40:   return
+80364A44:   end

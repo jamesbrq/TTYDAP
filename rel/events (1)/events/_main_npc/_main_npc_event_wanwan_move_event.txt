@@ -1,0 +1,55 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [wanwan_move_event npc_event.o] AT 8034AB40 ---
+8034AB40:   callss [enemy_common_flag_init_event npc_event.o]
+8034AB48:   callc [evt_npc_flag_onoff evt_npc.o] 0 ["me"] 1024
+8034AB5C:   callc [evt_npc_set_attack_mode evt_npc.o] ["me"] 0
+8034AB6C:   callc [evt_npc_set_anim evt_npc.o] ["me"] ["WAN_S_1A"]
+8034AB7C:   begin_child_thread
+8034AB80:     loop 0
+8034AB88:       callc [evt_npc_get_position evt_npc.o] ["me"] LW(0) LW(1) LW(2)
+8034ABA0:       callc [evt_mario_get_pos evt_mario.o] 0 LW(10) LW(11) LW(12)
+8034ABB8:       if_int_ge LW(0) LW(10)
+8034ABC4:         callc [evt_npc_set_ry evt_npc.o] ["me"] 270
+8034ABD4:       else
+8034ABD8:         callc [evt_npc_set_ry evt_npc.o] ["me"] 90
+8034ABE8:       endif
+8034ABEC:       wait_frames 1
+8034ABF4:     end_loop
+8034ABF8:   end_child_thread
+8034ABFC:   begin_child_thread
+8034AC00:     callc [evt_npc_flag_onoff evt_npc.o] 1 ["me"] 2097152
+8034AC14:     wait_ms 1500
+8034AC1C:     callc [evt_npc_flag_onoff evt_npc.o] 0 ["me"] 2097152
+8034AC30:   end_child_thread
+8034AC34:   begin_child_thread
+8034AC38:     loop 0
+8034AC40:       callc [chain_main npc_event.o]
+8034AC48:       wait_frames 1
+8034AC50:     end_loop
+8034AC54:   end_child_thread
+8034AC58:   begin_child_thread
+8034AC5C:     loop 0
+8034AC64:       callc [evt_npc_set_anim evt_npc.o] ["me"] ["WAN_A_1"]
+8034AC74:       wait_ms 1000
+8034AC7C:       callc [evt_npc_set_anim evt_npc.o] ["me"] ["WAN_S_1A"]
+8034AC8C:       wait_ms 500
+8034AC94:     end_loop
+8034AC98:   end_child_thread
+8034AC9C: 0:
+8034ACA4:   callc [evt_npc_get_home_position evt_npc.o] ["me"] LW(0) LW(1) LW(2)
+8034ACBC:   callc [evt_sub_random evt_sub.o] 360 LW(3)
+8034ACCC:   callc [evt_npc_add_dirdist evt_npc.o] LW(0) LW(2) LW(3) 50
+8034ACE4:   callc [evt_sub_random evt_sub.o] 15 LW(4)
+8034ACF4:   addi LW(4) 15
+8034AD00:   setii LW(5) LW(4)
+8034AD0C:   setii LW(6) LW(4)
+8034AD18:   muli LW(6) 17
+8034AD24:   callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_FLD_ENM_WAN_MOVE1"] LW(0) LW(1) LW(2) 0
+8034AD40:   callc [evt_npc_jump_position evt_npc.o] ["me"] LW(0) LW(1) LW(2) LW(6) 80 LW(5) 1
+8034AD68:   callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_FLD_ENM_WAN_LANDING1"] LW(0) LW(1) LW(2) 0
+8034AD84:   wait_frames 1
+8034AD8C:   goto 0
+8034AD94:   return
+8034AD98:   end

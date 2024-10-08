@@ -1,0 +1,112 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [gon_extra_eaten_event unit_boss_gonbaba.o] AT 805D4AAC ---
+805D4AAC:   wait_frames 14
+805D4AB4:   callc [btlevtcmd_SetUnitWork battle_event_cmd.o] -2 4 6
+805D4AC8:   callc [evt_audience_flag_on evt_audience.o] LW(0) 18
+805D4AD8:   callc [evt_audience_flag_off evt_audience.o] LW(0) 4
+805D4AE8:   callc [evt_audience_set_animpose evt_audience.o] LW(0) 9 0
+805D4AFC:   callc [evt_audience_get_position evt_audience.o] LW(0) LW(1) LW(2) LW(3)
+805D4B14:   addi LW(2) 40
+805D4B20:   callc [evt_audience_set_position evt_audience.o] LW(0) LW(1) LW(2) LW(3)
+805D4B38:   wait_frames 1
+805D4B40:   addi LW(2) 80
+805D4B4C:   subi LW(1) 80
+805D4B58:   callc [evt_audience_move_position_speed evt_audience.o] LW(0) LW(1) LW(2) LW(3) 10.00
+805D4B74:   if_int_eq LW(0) 32
+805D4B80:     callc [evt_audience_flag_on evt_audience.o] LW(0) 4
+805D4B90:     begin_thread
+805D4B94:       callc [evt_audience_set_rotate_offset evt_audience.o] LW(0) 0 18 0
+805D4BAC:       setii LW(4) 0
+805D4BB8:       setii LW(5) 0
+805D4BC4:       loop 45
+805D4BCC:         addi LW(4) 2
+805D4BD8:         addi LW(5) 15
+805D4BE4:         callc [evt_audience_set_rotate evt_audience.o] LW(0) LW(4) LW(5) 0
+805D4BFC:         wait_frames 1
+805D4C04:       end_loop
+805D4C08:     end_thread
+805D4C0C:     callc [evt_audience_get_position evt_audience.o] LW(0) LW(1) LW(2) LW(3)
+805D4C24:     callc [btlevtcmd_GetStageAudienceAreaSize battle_event_cmd.o] [F1194D80] LW(2) [F1194D80]
+805D4C38:     subi LW(1) 40
+805D4C44:     addi LW(2) 1
+805D4C50:     callc [evt_audience_jump_position_firstsp evt_audience.o] LW(0) LW(1) LW(2) LW(3) 60 1.00
+805D4C70:     callc [evt_audience_set_rotate_offset evt_audience.o] LW(0) 0 0 0
+805D4C88:     callc [evt_audience_set_rotate evt_audience.o] LW(0) 90 0 0
+805D4CA0:     wait_frames 30
+805D4CA8:     callc [evt_audience_set_rotate_offset evt_audience.o] LW(0) 0 0 0
+805D4CC0:     setii LW(1) 90
+805D4CCC:     loop 90
+805D4CD4:       subi LW(1) 1
+805D4CE0:       callc [evt_audience_set_rotate evt_audience.o] LW(0) LW(1) 0 0
+805D4CF8:       wait_frames 1
+805D4D00:     end_loop
+805D4D04:     callc [evt_audience_set_rotate evt_audience.o] LW(0) 0 0 0
+805D4D1C:     callc [evt_audience_set_animpose evt_audience.o] LW(0) 7 0
+805D4D30:     wait_frames 10
+805D4D38:     callc [evt_audience_get_position evt_audience.o] LW(0) LW(1) LW(2) LW(3)
+805D4D50:     callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_AUDIENCE_PANIC_SCREAM2"] LW(1) LW(2) LW(3) 0
+805D4D6C:     callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_AUDIENCE_PANIC_RUN1"] LW(1) LW(2) LW(3) LW(5)
+805D4D88:     begin_child_thread_tid LW(6)
+805D4D90:       loop 1000
+805D4D98:         callc [evt_audience_get_position evt_audience.o] LW(0) LW(1) LW(2) LW(3)
+805D4DB0:         callc [evt_snd_sfx_pos evt_snd.o] LW(5) LW(1) LW(2) LW(3)
+805D4DC8:         wait_frames 1
+805D4DD0:       end_loop
+805D4DD4:     end_child_thread
+805D4DD8:     callc [evt_audience_move_position_speed evt_audience.o] LW(0) -300 LW(2) LW(3) 4.50
+805D4DF4:     stop_tid LW(6)
+805D4DFC:     callc [evt_snd_sfxoff evt_snd.o] LW(5)
+805D4E08:     callc [evt_audience_delete evt_audience.o] LW(0)
+805D4E14:     return
+805D4E18:   endif
+805D4E1C:   if_int_eq LW(0) 53
+805D4E28:     callc [evt_audience_flag_on evt_audience.o] LW(0) 4
+805D4E38:     begin_thread
+805D4E3C:       setii LW(4) 0
+805D4E48:       loop 45
+805D4E50:         addi LW(4) 2
+805D4E5C:         callc [evt_audience_set_rotate evt_audience.o] LW(0) LW(4) 0 0
+805D4E74:         wait_frames 1
+805D4E7C:       end_loop
+805D4E80:     end_thread
+805D4E84:     callc [evt_audience_get_position evt_audience.o] LW(0) LW(1) LW(2) LW(3)
+805D4E9C:     callc [btlevtcmd_GetStageAudienceAreaSize battle_event_cmd.o] [F1194D80] LW(2) [F1194D80]
+805D4EB0:     addi LW(3) 40
+805D4EBC:     addi LW(2) 1
+805D4EC8:     callc [evt_audience_jump_position_firstsp evt_audience.o] LW(0) LW(1) LW(2) LW(3) 60 1.00
+805D4EE8:     callc [evt_audience_set_rotate evt_audience.o] LW(0) 90 0 0
+805D4F00:     wait_frames 30
+805D4F08:     callc [evt_audience_set_rotate evt_audience.o] LW(0) 0 0 0
+805D4F20:     callc [evt_audience_set_rotate_offset evt_audience.o] LW(0) 0 0 0
+805D4F38:     setii LW(1) 90
+805D4F44:     loop 90
+805D4F4C:       subi LW(1) 1
+805D4F58:       callc [evt_audience_set_rotate evt_audience.o] LW(0) LW(1) 0 0
+805D4F70:       wait_frames 1
+805D4F78:     end_loop
+805D4F7C:     callc [evt_audience_set_rotate evt_audience.o] LW(0) 0 0 0
+805D4F94:     callc [evt_audience_set_animpose evt_audience.o] LW(0) 7 0
+805D4FA8:     wait_frames 10
+805D4FB0:     callc [evt_audience_get_position evt_audience.o] LW(0) LW(1) LW(2) LW(3)
+805D4FC8:     callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_AUDIENCE_PANIC_SCREAM3"] LW(1) LW(2) LW(3) 0
+805D4FE4:     callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_AUDIENCE_PANIC_RUN2"] LW(1) LW(2) LW(3) LW(5)
+805D5000:     begin_child_thread_tid LW(6)
+805D5008:       loop 1000
+805D5010:         callc [evt_audience_get_position evt_audience.o] LW(0) LW(1) LW(2) LW(3)
+805D5028:         callc [evt_snd_sfx_pos evt_snd.o] LW(5) LW(1) LW(2) LW(3)
+805D5040:         wait_frames 1
+805D5048:       end_loop
+805D504C:     end_child_thread
+805D5050:     callc [evt_audience_move_position_speed evt_audience.o] LW(0) -300 LW(2) LW(3) 4.50
+805D506C:     stop_tid LW(6)
+805D5074:     callc [evt_snd_sfxoff evt_snd.o] LW(5)
+805D5080:     callc [evt_audience_delete evt_audience.o] LW(0)
+805D508C:     callc [evt_audience_num_updown_in_event evt_audience.o] -1.00
+805D5098:     return
+805D509C:   endif
+805D50A0:   callc [evt_audience_delete evt_audience.o] LW(0)
+805D50AC:   callc [evt_audience_num_updown_in_event evt_audience.o] -1.00
+805D50B8:   return
+805D50BC:   end

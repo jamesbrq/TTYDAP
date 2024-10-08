@@ -1,0 +1,63 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [kanbu_fly moo_04.o] AT 805C0EEC ---
+805C0EEC:   wait_ms 2000
+805C0EF4:   callc [evt_npc_set_position evt_npc.o] ["幹部"] 25 75 -70
+805C0F0C:   callc [evt_npc_set_scale evt_npc.o] ["幹部"] 0.30 0.30 0.30
+805C0F24:   begin_thread
+805C0F28:     loop 0
+805C0F30:       setff LW(0) 25.00
+805C0F3C:       callc [evt_npc_get_scale evt_npc.o] ["幹部"] LW(1) LW(2) LW(3)
+805C0F54:       mulf LW(0) LW(2)
+805C0F60:       callc [evt_npc_set_rotate_offset evt_npc.o] ["幹部"] 0 LW(0) 0
+805C0F78:       callc [evt_npc_add_rotate evt_npc.o] ["幹部"] 0 0 30
+805C0F90:       wait_frames 1
+805C0F98:     end_loop
+805C0F9C:   end_thread
+805C0FA0:   begin_thread
+805C0FA4:     setff LW(0) -1.25
+805C0FB0:     setff LW(1) 0.25
+805C0FBC:     setff LW(2) 0.00
+805C0FC8:     callc [evt_npc_get_position evt_npc.o] ["幹部"] LW(3) LW(4) LW(5)
+805C0FE0:     callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_STG7_3RD_FLY1"] LW(3) LW(4) LW(5) LW(9)
+805C0FFC:     callc [evt_sub_intpl_msec_init evt_sub.o] 4 0 100 2000
+805C1014:     loop 0
+805C101C:       callc [evt_sub_intpl_msec_get_value evt_sub.o]
+805C1024:       divf LW(0) 100.00
+805C1030:       setff LW(2) -125.00
+805C103C:       setff LW(3) 25.00
+805C1048:       setff LW(4) 0.00
+805C1054:       mulf LW(2) LW(0)
+805C1060:       mulf LW(3) LW(0)
+805C106C:       mulf LW(4) LW(0)
+805C1078:       addf LW(2) 25.00
+805C1084:       addf LW(3) 75.00
+805C1090:       addf LW(4) -70.00
+805C109C:       callc [evt_npc_set_position evt_npc.o] ["幹部"] LW(2) LW(3) LW(4)
+805C10B4:       callc [evt_snd_sfx_pos evt_snd.o] LW(9) LW(2) LW(3) LW(4)
+805C10CC:       wait_frames 1
+805C10D4:       if_int_eq LW(1) 0
+805C10E0:         loop_break
+805C10E4:       endif
+805C10E8:     end_loop
+805C10EC:     callc [evt_npc_set_position evt_npc.o] ["幹部"] 0 -1000 0
+805C1104:     callc [evt_snd_sfxoff evt_snd.o] LW(9)
+805C1110:   end_thread
+805C1114:   callc [evt_sub_intpl_msec_init evt_sub.o] 0 30 1 2000
+805C112C:   loop 0
+805C1134:     callc [evt_sub_intpl_msec_get_value evt_sub.o]
+805C113C:     divf LW(0) 100.00
+805C1148:     callc [evt_npc_set_scale evt_npc.o] ["幹部"] LW(0) LW(0) LW(0)
+805C1160:     wait_frames 1
+805C1168:     if_int_eq LW(1) 0
+805C1174:       loop_break
+805C1178:     endif
+805C117C:   end_loop
+805C1180:   wait_ms 1000
+805C1188:   callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_STG7_3RD_LIGHT1"] -100 100 -70 0
+805C11A4:   callc [evt_eff64 evt_eff.o] 0 ["wangflush_n64"] 0 -100 100 -70 60 0 0 0 0 0 0 0
+805C11E4:   wait_ms 3000
+805C11EC:   callc [evt_bero_mapchange evt_bero.o] ["aji_14"] ["tuzuki"]
+805C11FC:   return
+805C1200:   end

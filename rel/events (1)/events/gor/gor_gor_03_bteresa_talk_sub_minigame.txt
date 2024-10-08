@@ -1,0 +1,107 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [bteresa_talk_sub_minigame gor_03.o] AT 8060D19C ---
+8060D19C:   setii LW(15) LW(0)
+8060D1A8:   loop 0
+8060D1B0:     callc [evt_msg_print_add evt_msg.o] 0 ["bunny_teresa_34"]
+8060D1C0:     callc [evt_msg_select evt_msg.o] 0 ["bunny_teresa_yesno2"]
+8060D1D0:     if_int_eq LW(0) 1
+8060D1DC:       callc [evt_msg_print_add evt_msg.o] 0 ["bunny_teresa_48"]
+8060D1EC:       return
+8060D1F0:     else
+8060D1F4:       if_int_eq LW(0) 2
+8060D200:         callc [evt_msg_continue evt_msg.o]
+8060D208:         switchi LW(15)
+8060D210:           case_int_eq 0
+8060D218:             callc [evt_msg_print evt_msg.o] 0 ["bunny_teresa_38"] 0 ["me"]
+8060D230:           case_int_eq 1
+8060D238:             callc [evt_msg_print evt_msg.o] 0 ["bunny_teresa_39"] 0 ["me"]
+8060D250:           case_int_eq 2
+8060D258:             callc [evt_msg_print evt_msg.o] 0 ["bunny_teresa_40"] 0 ["me"]
+8060D270:           case_int_eq 3
+8060D278:             callc [evt_msg_print evt_msg.o] 0 ["bunny_teresa_41"] 0 ["me"]
+8060D290:         end_switch
+8060D294:       else
+8060D298:         loop_break
+8060D29C:       endif
+8060D2A0:     endif
+8060D2A4:   end_loop
+8060D2A8:   setii LW(1) 10
+8060D2B4:   callc [yuugijou_get_montemedal evt_yuugijou.o] LW(0)
+8060D2C0:   if_int_lt LW(0) LW(1)
+8060D2CC:     callc [evt_msg_print_add evt_msg.o] 0 ["bunny_teresa_35"]
+8060D2DC:     return
+8060D2E0:   endif
+8060D2E4:   muli LW(1) -1
+8060D2F0:   callc [yuugijou_add_montemedal evt_yuugijou.o] 0 LW(1)
+8060D300:   callc [yuugijou_montemedal_wait evt_yuugijou.o]
+8060D308:   wait_ms 200
+8060D310:   callc [evt_msg_print_add evt_msg.o] 0 ["bunny_teresa_36"]
+8060D320:   wait_ms 500
+8060D328:   callss [gor_03_dokan_up_evt gor_03.o]
+8060D330:   callc [evt_mario_get_pos evt_mario.o] 0 LW(0) LW(1) LW(2)
+8060D348:   callc [evt_mapobj_get_position evt_map.o] ["S_dokan_1"] LW(3) LW(4) LW(5)
+8060D360:   callc [mario_walkpoint_enzan gor_03.o] LW(0) LW(2) LW(3) LW(5) 40.00 LW(0) LW(2)
+8060D384:   callc [evt_mario_mov_pos2 evt_mario.o] LW(0) LW(2) 120.00
+8060D398:   wait_ms 500
+8060D3A0:   callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_VOICE_MARIO_FLD_JUMP1"] LW(0) LW(1) LW(2) 0
+8060D3BC:   callc [evt_mario_jump_pos evt_mario.o] LW(3) 30 LW(5) 500 0 10
+8060D3DC:   callc [evt_msg_print evt_msg.o] 0 ["bunny_teresa_37"] 0 ["me"]
+8060D3F4:   switchi LW(15)
+8060D3FC:     case_int_eq 0
+8060D404:       setii LW(0) ["A_dokan_02"]
+8060D410:       callss [bero_case_switch_off evt_bero.o]
+8060D418:       callc [evt_bero_overwrite evt_bero.o] ["A_dokan_02"] [yuu_00_data gor_03.o]
+8060D428:       setii LW(0) ["A_dokan_02"]
+8060D434:       callss [bero_case_switch_on evt_bero.o]
+8060D43C:     case_int_eq 1
+8060D444:       setii LW(0) ["A_dokan_02"]
+8060D450:       callss [bero_case_switch_off evt_bero.o]
+8060D458:       callc [evt_bero_overwrite evt_bero.o] ["A_dokan_02"] [yuu_03_data gor_03.o]
+8060D468:       setii LW(0) ["A_dokan_02"]
+8060D474:       callss [bero_case_switch_on evt_bero.o]
+8060D47C:     case_int_eq 2
+8060D484:       setii LW(0) ["A_dokan_02"]
+8060D490:       callss [bero_case_switch_off evt_bero.o]
+8060D498:       callc [evt_bero_overwrite evt_bero.o] ["A_dokan_02"] [yuu_02_data gor_03.o]
+8060D4A8:       setii LW(0) ["A_dokan_02"]
+8060D4B4:       callss [bero_case_switch_on evt_bero.o]
+8060D4BC:     case_int_eq 3
+8060D4C4:       setii LW(0) ["A_dokan_02"]
+8060D4D0:       callss [bero_case_switch_off evt_bero.o]
+8060D4D8:       callc [evt_bero_overwrite evt_bero.o] ["A_dokan_02"] [yuu_01_data gor_03.o]
+8060D4E8:       setii LW(0) ["A_dokan_02"]
+8060D4F4:       callss [bero_case_switch_on evt_bero.o]
+8060D4FC:   end_switch
+8060D500:   callc [yuugijou_montemedal_disp_onoff evt_yuugijou.o] 0
+8060D50C:   callc [evt_snd_bgmoff_f evt_snd.o] 512 2000
+8060D51C:   callc [evt_snd_bgmoff_f evt_snd.o] 513 2000
+8060D52C:   callc [evt_snd_envoff_f evt_snd.o] 512 2000
+8060D53C:   setii LW(1) ["A_dokan_02"]
+8060D548:   callc [evt_bero_id_filter evt_bero.o] LW(1)
+8060D554:   callc [evt_bero_get_info_num evt_bero.o] LW(1)
+8060D560:   callss [bero_case_exec_pipe evt_bero.o]
+8060D568:   return
+8060D56C:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [gor_03_dokan_up_evt gor_03.o] AT 8060CED8 ---
+8060CED8:   callc [evt_mapobj_get_position evt_map.o] ["S_dokan_1"] LW(0) LW(1) LW(2)
+8060CEF0:   callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_DOKAN_APPEAR1"] LW(0) LW(1) LW(2) LW(3)
+8060CF0C:   callc [evt_snd_sfx_vol evt_snd.o] LW(3) 76
+8060CF1C:   begin_thread
+8060CF20:     wait_ms 100
+8060CF28:     callc [evt_mapobj_trans evt_map.o] 1 ["S_dokan_1_kage"] 0 0 0
+8060CF44:   end_thread
+8060CF48:   setii LW(0) 60
+8060CF54:   loop LW(0)
+8060CF5C:     setff LW(1) LW(0)
+8060CF68:     subf LW(1) 1
+8060CF74:     mulf LW(1) -31
+8060CF80:     divf LW(1) 60
+8060CF8C:     callc [evt_mapobj_trans evt_map.o] 1 ["S_dokan_1"] 0 LW(1) 0
+8060CFA8:     callc [evt_hit_bind_update evt_hit.o] ["A_dokan_l_02"]
+8060CFB4:     wait_frames 1
+8060CFBC:   end_loop
+8060CFC0:   return
+8060CFC4:   end

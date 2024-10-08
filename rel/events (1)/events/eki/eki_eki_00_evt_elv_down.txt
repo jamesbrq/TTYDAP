@@ -1,0 +1,240 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [evt_elv_down eki_00.o] AT 805C6120 ---
+805C6120:   begin_thread
+805C6124:     callc [evt_mapobj_get_position evt_map.o] ["d_1"] LW(0) LW(1) LW(2)
+805C613C:     callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_STG6_ELEVATOR_OPEN1"] LW(0) LW(1) LW(2) 0
+805C6158:     wait_ms 1000
+805C6160:     callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_STG6_ELEVATOR_OPEN1"] LW(0) LW(1) LW(2) 0
+805C617C:   end_thread
+805C6180:   callc [evt_map_playanim evt_map.o] ["anm_ere_door_1"] 0 0
+805C6194:   wait_frames 20
+805C619C:   callc [evt_mario_mov_pos2 evt_mario.o] 190 -65 60.00
+805C61B0:   callc [evt_map_checkanim evt_map.o] ["anm_ere_door_1"] LW(0) LW(1)
+805C61C4:   addi LW(1) 1
+805C61D0:   wait_ms LW(1)
+805C61D8:   begin_thread
+805C61DC:     callc [evt_party_move_pos2 evt_party.o] 0 190 -65 60.00
+805C61F4:     callc [evt_party_stop evt_party.o] 0
+805C6200:     callc [evt_party_jump_pos evt_party.o] 0 160 0 -160 500 0 -1000
+805C6224:     callc [evt_party_stop evt_party.o] 0
+805C6230:     callc [evt_party_set_dir evt_party.o] 0 90 200
+805C6244:   end_thread
+805C6248:   callc [evt_mario_mov_pos2 evt_mario.o] 190 -160 60.00
+805C625C:   callc [evt_mario_set_dir evt_mario.o] 270 200 0
+805C6270:   callc [evt_mapobj_set_offscreen evt_map.o] 1 ["s_eki_00"] ["offscreen"]
+805C6284:   callc [evt_mapobj_clear_offscreen evt_map.o] 1 ["s_eki_07"]
+805C6294:   callc [evt_mapobj_flag_onoff evt_map.o] 1 1 ["s_eki_00"] 1
+805C62AC:   callc [evt_img_onoff evt_img.o] ["capture_img"] 1
+805C62BC:   begin_thread
+805C62C0:     callc [evt_mapobj_get_position evt_map.o] ["d_1"] LW(0) LW(1) LW(2)
+805C62D8:     callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_STG6_ELEVATOR_CLOSE1"] LW(0) LW(1) LW(2) 0
+805C62F4:     wait_ms 1000
+805C62FC:     callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_STG6_ELEVATOR_CLOSE1"] LW(0) LW(1) LW(2) 0
+805C6318:   end_thread
+805C631C:   callc [evt_map_playanim evt_map.o] ["anm_ere_door_2"] 0 0
+805C6330:   callc [evt_map_checkanim evt_map.o] ["anm_ere_door_2"] LW(0) LW(2)
+805C6344:   callc [evt_sub_intpl_msec_init evt_sub.o] 11 255 0 LW(2)
+805C635C:   loop 0
+805C6364:     callc [evt_sub_intpl_msec_get_value evt_sub.o]
+805C636C:     callc [img_set_color eki_00.o] ["capture_img"] 255 255 255 LW(0)
+805C6388:     wait_frames 1
+805C6390:     if_int_eq LW(1) 0
+805C639C:       loop_break
+805C63A0:     endif
+805C63A4:   end_loop
+805C63A8:   callc [evt_img_onoff evt_img.o] ["capture_img"] 0
+805C63B8:   begin_thread
+805C63BC:     wait_ms 200
+805C63C4:     callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_STG6_ELEVATOR_MOVE1"] LW(0) LW(1) LW(2) LW(10)
+805C63E0:     callc [evt_map_checkanim evt_map.o] ["anm_ere_1"] LW(0) LW(1)
+805C63F4:     wait_ms LW(1)
+805C63FC:     callc [evt_snd_sfxoff evt_snd.o] LW(10)
+805C6408:   end_thread
+805C640C:   callc [evt_map_playanim evt_map.o] ["anm_ere_1"] 0 0
+805C6420:   callsa [evt_elv_rumble eki_00.o]
+805C6428:   callc [evt_map_checkanim evt_map.o] ["anm_ere_1"] LW(0) LW(1)
+805C643C:   wait_ms LW(1)
+805C6444:   callc [evt_mapobj_get_position evt_map.o] ["d_1"] LW(0) LW(1) LW(2)
+805C645C:   callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_STG6_ELEVATOR_BELL1"] LW(0) LW(1) LW(2) 0
+805C6478:   wait_ms 400
+805C6480:   callc [evt_mapobj_clear_offscreen evt_map.o] 1 ["s_eki_00"]
+805C6490:   callc [evt_mapobj_set_offscreen evt_map.o] 1 ["s_eki_07"] ["offscreen"]
+805C64A4:   callc [evt_img_onoff evt_img.o] ["capture_img"] 1
+805C64B4:   if_int_lt GSW(0) 323
+805C64C0:     callc [evt_moamoa_flag_onoff eki_00.o] 0 1
+805C64D0:     callc [evt_moamoa_flag_onoff eki_00.o] 1 2
+805C64E0:   endif
+805C64E4:   begin_thread
+805C64E8:     callc [evt_mapobj_get_position evt_map.o] ["d_1"] LW(0) LW(1) LW(2)
+805C6500:     callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_STG6_ELEVATOR_OPEN1"] LW(0) LW(1) LW(2) 0
+805C651C:     wait_ms 1000
+805C6524:     callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_STG6_ELEVATOR_OPEN1"] LW(0) LW(1) LW(2) 0
+805C6540:   end_thread
+805C6544:   callc [evt_map_playanim evt_map.o] ["anm_ere_door_1"] 0 0
+805C6558:   callc [evt_map_checkanim evt_map.o] ["anm_ere_door_1"] LW(0) LW(2)
+805C656C:   callc [evt_sub_intpl_msec_init evt_sub.o] 11 0 255 LW(2)
+805C6584:   loop 0
+805C658C:     callc [evt_sub_intpl_msec_get_value evt_sub.o]
+805C6594:     callc [img_set_color eki_00.o] ["capture_img"] 255 255 255 LW(0)
+805C65B0:     wait_frames 1
+805C65B8:     if_int_eq LW(1) 0
+805C65C4:       loop_break
+805C65C8:     endif
+805C65CC:   end_loop
+805C65D0:   callc [evt_img_onoff evt_img.o] ["capture_img"] 0
+805C65E0:   if_int_lt GSW(0) 323
+805C65EC:     callc [evt_moamoa_flag_onoff eki_00.o] 1 1
+805C65FC:     callc [evt_moamoa_flag_onoff eki_00.o] 0 2
+805C660C:   endif
+805C6610:   callc [evt_mapobj_flag_onoff evt_map.o] 1 0 ["s_eki_07"] 1
+805C6628:   callc [evt_hitobj_onoff evt_hit.o] ["a_eki_07"] 1 1
+805C663C:   callc [evt_mapobj_flag_onoff evt_map.o] 1 1 ["s_eki_00"] 1
+805C6654:   callc [evt_hitobj_onoff evt_hit.o] ["a_eki_00"] 1 0
+805C6668:   switchi GSW(0)
+805C6670:     case_int_lt 323
+805C6678:     case_int_eq 323
+805C6680:       callc [evt_run_case_evt evt_case.o] 9 1 ["a_lever"] 0 [evt_origami eki_00.o] GW(10)
+805C66A0:     case_default
+805C66A4:       callc [evt_mapobj_rotate evt_map.o] 1 ["s_lever"] 0 0 -80
+805C66C0:   end_switch
+805C66C4:   if_int_eq GSW(0) 324
+805C66D0:     callc [evt_mobj_switch_blue evt_mobj.o] 0 ["bridge_sw"] -220 60 0 [evt_bridge eki_00.o] GSWF(3725)
+805C66F4:   endif
+805C66F8:   callc [evt_item_delete_check evt_item.o] ["item"] LW(0)
+805C6708:   if_int_eq LW(0) 0
+805C6714:     callc [evt_item_get_position evt_item.o] ["item"] LW(0) LW(1) LW(2)
+805C672C:     subi LW(1) 2000
+805C6738:     callc [evt_item_set_position evt_item.o] ["item"] LW(0) LW(1) LW(2)
+805C6750:   endif
+805C6754:   if_int_lt GSW(0) 324
+805C6760:     callc [evt_mapobj_flag_onoff evt_map.o] 1 1 ["kaidann"] 1
+805C6778:     callc [evt_mapobj_flag_onoff evt_map.o] 1 1 ["ori"] 1
+805C6790:     callc [evt_mapobj_flag_onoff evt_map.o] 1 0 ["n_kaidan"] 1
+805C67A8:     callc [evt_mapobj_flag_onoff evt_map.o] 1 0 ["n_ori"] 1
+805C67C0:     callc [evt_hitobj_onoff evt_hit.o] ["kaidann_A"] 1 0
+805C67D4:   else
+805C67D8:     callc [evt_map_playanim evt_map.o] ["anm_ori"] 2 0
+805C67EC:     callc [evt_mapobj_flag_onoff evt_map.o] 1 0 ["kaidann"] 1
+805C6804:     callc [evt_mapobj_flag_onoff evt_map.o] 1 0 ["ori"] 1
+805C681C:     callc [evt_mapobj_flag_onoff evt_map.o] 1 1 ["n_kaidan"] 1
+805C6834:     callc [evt_mapobj_flag_onoff evt_map.o] 1 1 ["n_ori"] 1
+805C684C:     callc [evt_mapobj_flag_onoff evt_map.o] 1 1 ["n_kabe"] 1
+805C6864:   endif
+805C6868:   begin_thread
+805C686C:     callc [evt_party_stop evt_party.o] 0
+805C6878:     wait_ms 100
+805C6880:     callc [evt_party_move_pos2 evt_party.o] 0 190 -65 60.00
+805C6898:     callc [evt_party_stop evt_party.o] 0
+805C68A4:     wait_ms 100
+805C68AC:     callc [evt_party_move_pos2 evt_party.o] 0 150 -65 60.00
+805C68C4:     callc [evt_party_stop evt_party.o] 0
+805C68D0:   end_thread
+805C68D4:   wait_ms 500
+805C68DC:   callc [evt_mario_mov_pos2 evt_mario.o] 190 -65 60.00
+805C68F0:   begin_thread
+805C68F4:     callc [evt_mapobj_get_position evt_map.o] ["d_1"] LW(0) LW(1) LW(2)
+805C690C:     callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_STG6_ELEVATOR_CLOSE1"] LW(0) LW(1) LW(2) 0
+805C6928:     wait_ms 1000
+805C6930:     callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_STG6_ELEVATOR_CLOSE1"] LW(0) LW(1) LW(2) 0
+805C694C:   end_thread
+805C6950:   callc [evt_map_playanim evt_map.o] ["anm_ere_door_2"] 0 0
+805C6964:   wait_ms 500
+805C696C:   if_int_lt GSW(0) 322
+805C6978:     callss [evt_meet_moamoa eki_00.o]
+805C6980:   endif
+805C6984:   if_int_eq GSW(0) 322
+805C6990:     callc [evt_snd_bgmon evt_snd.o] 512 ["BGM_EVT_DANGER4"]
+805C69A0:   endif
+805C69A4:   callc [evt_map_checkanim evt_map.o] ["anm_ere_door_2"] LW(0) LW(1)
+805C69B8:   wait_ms LW(1)
+805C69C0:   return
+805C69C4:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [evt_elv_rumble eki_00.o] AT 805C5F6C ---
+805C5F6C:   if_int_eq GF(0) 0
+805C5F78:     callc [evt_map_checkanim evt_map.o] ["anm_ere_1"] LW(0) LW(1)
+805C5F8C:   else
+805C5F90:     callc [evt_map_checkanim evt_map.o] ["anm_ere_2"] LW(0) LW(1)
+805C5FA4:   endif
+805C5FA8:   subi LW(1) 500
+805C5FB4:   callc [evt_mario_get_pos evt_mario.o] 0 LW(3) LW(4) LW(5)
+805C5FCC:   callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_STG6_ELEVATOR_SHAKE1"] LW(3) LW(4) LW(5) 0
+805C5FE8:   callc [evt_cam_shake evt_cam.o] 4 0.00 0.00 250
+805C6000:   wait_ms LW(1)
+805C6008:   callc [evt_mario_get_pos evt_mario.o] 0 LW(3) LW(4) LW(5)
+805C6020:   callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_STG6_ELEVATOR_SHAKE1"] LW(3) LW(4) LW(5) 0
+805C603C:   callc [evt_cam_shake evt_cam.o] 4 0.00 0.00 250
+805C6054:   return
+805C6058:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [evt_meet_moamoa eki_00.o] AT 805C5B54 ---
+805C5B54:   callc [evt_party_stop evt_party.o] 0
+805C5B60:   begin_thread
+805C5B64:     callc [evt_mario_set_dir evt_mario.o] 270 200 0
+805C5B78:   end_thread
+805C5B7C:   begin_thread
+805C5B80:     callc [evt_party_set_dir evt_party.o] 0 90 200
+805C5B94:   end_thread
+805C5B98:   wait_ms 500
+805C5BA0:   begin_thread
+805C5BA4:     wait_ms 1000
+805C5BAC:     callc [evt_party_set_dir evt_party.o] 0 270 200
+805C5BC0:   end_thread
+805C5BC4:   callc [evt_mario_get_party evt_mario.o] LW(0)
+805C5BD0:   switchi LW(0)
+805C5BD8:     case_int_eq 1
+805C5BE0:       callc [evt_msg_print evt_msg.o] 0 ["stg6_eki_02_0"] 0 ["party"]
+805C5BF8:     case_int_eq 2
+805C5C00:       callc [evt_msg_print evt_msg.o] 0 ["stg6_eki_02_1"] 0 ["party"]
+805C5C18:     case_int_eq 4
+805C5C20:       callc [evt_msg_print evt_msg.o] 0 ["stg6_eki_02_2"] 0 ["party"]
+805C5C38:     case_int_eq 5
+805C5C40:       callc [evt_msg_print evt_msg.o] 0 ["stg6_eki_02_3"] 0 ["party"]
+805C5C58:     case_int_eq 6
+805C5C60:       callc [evt_msg_print evt_msg.o] 0 ["stg6_eki_02_4"] 0 ["party"]
+805C5C78:     case_int_eq 3
+805C5C80:       callc [evt_msg_print evt_msg.o] 0 ["stg6_eki_02_5"] 0 ["party"]
+805C5C98:     case_int_eq 7
+805C5CA0:       callc [evt_msg_print evt_msg.o] 0 ["stg6_eki_02_6"] 0 ["party"]
+805C5CB8:   end_switch
+805C5CBC:   begin_thread
+805C5CC0:     callc [evt_snd_bgmoff evt_snd.o] 1024
+805C5CCC:     callc [evt_snd_bgmon evt_snd.o] 1 ["BGM_FF_ENV_SURPRISED1"]
+805C5CDC:     wait_ms 2000
+805C5CE4:     callc [evt_snd_bgmoff evt_snd.o] 513
+805C5CF0:     callc [evt_snd_bgmon evt_snd.o] 288 0
+805C5D00:   end_thread
+805C5D04:   callc [evt_cam3d_evt_set evt_cam.o] 32 151 528 32 56 -12 500 11
+805C5D2C:   wait_ms 2000
+805C5D34:   callc [evt_snd_bgmon evt_snd.o] 512 ["BGM_EVT_DANGER4"]
+805C5D44:   begin_thread
+805C5D48:     callc [evt_mario_dispflag_onoff evt_mario.o] 1 2
+805C5D58:     wait_ms 1000
+805C5D60:     callc [evt_mario_set_pose evt_mario.o] ["M_N_2"]
+805C5D6C:   end_thread
+805C5D70:   callc [evt_mario_get_party evt_mario.o] LW(0)
+805C5D7C:   switchi LW(0)
+805C5D84:     case_int_eq 1
+805C5D8C:       callc [evt_msg_print evt_msg.o] 0 ["stg6_eki_03_0"] 0 ["party"]
+805C5DA4:     case_int_eq 2
+805C5DAC:       callc [evt_msg_print evt_msg.o] 0 ["stg6_eki_03_1"] 0 ["party"]
+805C5DC4:     case_int_eq 4
+805C5DCC:       callc [evt_msg_print evt_msg.o] 0 ["stg6_eki_03_2"] 0 ["party"]
+805C5DE4:     case_int_eq 5
+805C5DEC:       callc [evt_msg_print evt_msg.o] 0 ["stg6_eki_03_3"] 0 ["party"]
+805C5E04:     case_int_eq 6
+805C5E0C:       callc [evt_msg_print evt_msg.o] 0 ["stg6_eki_03_4"] 0 ["party"]
+805C5E24:     case_int_eq 3
+805C5E2C:       callc [evt_msg_print evt_msg.o] 0 ["stg6_eki_03_5"] 0 ["party"]
+805C5E44:     case_int_eq 7
+805C5E4C:       callc [evt_msg_print evt_msg.o] 0 ["stg6_eki_03_6"] 0 ["party"]
+805C5E64:   end_switch
+805C5E68:   callc [evt_cam3d_evt_off evt_cam.o] 500 11
+805C5E78:   wait_ms 500
+805C5E80:   setii GSW(0) 322
+805C5E8C:   callc [evt_mario_dispflag_onoff evt_mario.o] 0 2
+805C5E9C:   callc [evt_party_run evt_party.o] 0
+805C5EA8:   return
+805C5EAC:   end

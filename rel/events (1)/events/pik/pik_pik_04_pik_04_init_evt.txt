@@ -1,0 +1,183 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [pik_04_init_evt pik_04.o] AT 805CBD94 ---
+805CBD94:   setii LW(0) [bero_data pik_04.o]
+805CBDA0:   callc [evt_bero_get_info evt_bero.o]
+805CBDA8:   callss [evt_bero_info_run evt_bero.o]
+805CBDB0:   callc [evt_snd_bgmon evt_snd.o] 512 ["BGM_STG6_PIK1"]
+805CBDC0:   if_int_eq GSW(0) 402
+805CBDCC:     callc [evt_snd_bgm_scope evt_snd.o] 0 1
+805CBDDC:   endif
+805CBDE0:   callc [evt_snd_envon evt_snd.o] 272 ["ENV_STG6_PIK1_2"]
+805CBDF0:   callc [evt_map_playanim evt_map.o] ["anm_taki"] 1 0
+805CBE04:   callc [evt_map_playanim evt_map.o] ["anm_mizu_1"] 1 0
+805CBE18:   callc [evt_map_playanim evt_map.o] ["anm_mizu_2"] 1 0
+805CBE2C:   mo_set_base_int [name_tbl pik_04.o]
+805CBE34:   loop 6
+805CBE3C:     mo_read_int LW(9)
+805CBE44:     callsa [evt_pik_yajirushi pik_00.o]
+805CBE4C:   end_loop
+805CBE50:   callc [evt_hit_damage_return_set evt_hit.o] [dmgReturnPt pik_04.o]
+805CBE5C:   callss [evt_gazigazi_entry evt_damage.o]
+805CBE64:   callc [evt_npc_setup evt_npc.o] [npc_data pik_04.o]
+805CBE70:   callss [init_takun3 pik_04.o]
+805CBE78:   callc [evt_npc_change_interrupt evt_npc.o] ["ターくん３"] 6 [talk_takun3 pik_04.o]
+805CBE8C:   setii LW(0) [door_1 pik_04.o]
+805CBE98:   callss [evt_door_entry evt_door.o]
+805CBEA0:   setii LW(0) [door_2 pik_04.o]
+805CBEAC:   callss [evt_door_entry evt_door.o]
+805CBEB4:   callc [evt_run_case_evt evt_case.o] 9 1 ["a_door_2"] 0 [evt_up pik_04.o] 0
+805CBED4:   callc [evt_run_case_evt evt_case.o] 9 1 ["a_door_3"] 0 [evt_down pik_04.o] 0
+805CBEF4:   callc [evt_hitobj_attr_onoff evt_hit.o] 1 1 ["nw_bero"] 4
+805CBF0C:   callc [evt_hitobj_attr_onoff evt_hit.o] 1 1 ["se_bero"] 4
+805CBF24:   callc [evt_run_case_evt evt_case.o] 9 1 ["a_roten"] 0 [evt_roten pik_04.o] 0
+805CBF44:   callc [evt_item_entry evt_item.o] ["item_00"] 125 -250 5 -425 16 GSWF(5657) 0
+805CBF6C:   callc [evt_item_entry evt_item.o] ["item_01"] 164 -305 0 105 16 GSWF(3279) 0
+805CBF94:   callss [imginit pik_04.o]
+805CBF9C:   callc [evt_run_case_evt evt_case.o] 9 1 ["front_"] 0 [kinopio_house_talk_evt evt_kinopio.o] 0
+805CBFBC:   callc [evt_kinopio_setup evt_kinopio.o] [kino_dt pik_04.o]
+805CBFC8:   if_int_eq GSW(0) 402
+805CBFD4:     callc [evt_mario_kill_party evt_mario.o] 0
+805CBFE0:     callss [epilogue_npc_entry pik_04.o]
+805CBFE8:     callsa [epilogue_evt pik_04.o]
+805CBFF0:   endif
+805CBFF4:   callc [evt_mapobj_flag_onoff evt_map.o] 1 0 ["s_bero"] 2
+805CC00C:   callc [evt_mapobj_flag_onoff evt_map.o] 1 0 ["group92"] 2
+805CC024:   return
+805CC028:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [evt_pik_yajirushi pik_00.o] AT 805C01A8 ---
+805C01A8: 0:
+805C01B0:   callc [evt_sub_intpl_msec_init evt_sub.o] 11 20 -20 1000
+805C01C8: 10:
+805C01D0:   callc [evt_sub_intpl_msec_get_value evt_sub.o]
+805C01D8:   callc [evt_mapobj_rotate evt_map.o] 0 LW(9) 0 LW(0) 0
+805C01F4:   wait_frames 1
+805C01FC:   if_int_eq LW(1) 1
+805C0208:     goto 10
+805C0210:   endif
+805C0214:   callc [evt_sub_random evt_sub.o] 100 LW(0)
+805C0224:   if_int_lt LW(0) 90
+805C0230:     callc [evt_sub_intpl_msec_init evt_sub.o] 11 -20 20 1000
+805C0248:   else
+805C024C:     callc [evt_sub_intpl_msec_init evt_sub.o] 11 -20 380 1000
+805C0264:   endif
+805C0268: 20:
+805C0270:   callc [evt_sub_intpl_msec_get_value evt_sub.o]
+805C0278:   callc [evt_mapobj_rotate evt_map.o] 0 LW(9) 0 LW(0) 0
+805C0294:   wait_frames 1
+805C029C:   if_int_eq LW(1) 1
+805C02A8:     goto 20
+805C02B0:   endif
+805C02B4:   goto 0
+805C02BC:   return
+805C02C0:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [init_takun3 pik_04.o] AT 805CB130 ---
+805CB130:   callc [evt_npc_flag_onoff evt_npc.o] 1 ["ターくん３"] 132624
+805CB144:   return
+805CB148:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [imginit pik_04.o] AT 805C9DFC ---
+805C9DFC:   callc [evt_paper_entry evt_paper.o] ["OFF_hei_07"]
+805C9E08:   callc [evt_img_entry evt_img.o] ["capture_img"]
+805C9E14:   callc [evt_img_set_paper evt_img.o] ["capture_img"] ["OFF_hei_07"]
+805C9E24:   callc [evt_offscreen_entry evt_offscreen.o] ["offscreen"]
+805C9E30:   callc [evt_img_set_paper_anim evt_img.o] ["capture_img"] ["Z_1"]
+805C9E40:   callc [evt_img_alloc_capture evt_img.o] ["capture_img"] 0 ["offscreen"] 0 0 0 608 480
+805C9E68:   callc [evt_img_alloc_capture evt_img.o] ["capture_img"] 2 ["offscreen"] 0 0 0 608 480
+805C9E90:   callc [evt_img_clear_virtual_point evt_img.o] ["capture_img"]
+805C9E9C:   callc [evt_img_onoff evt_img.o] ["capture_img"] 0
+805C9EAC:   return
+805C9EB0:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [epilogue_npc_entry pik_04.o] AT 805CB888 ---
+805CB888:   callc [evt_npc_entry evt_npc.o] ["シュリョー"] ["c_shuryo"]
+805CB898:   callc [evt_npc_set_tribe evt_npc.o] ["シュリョー"] ["第三勢力総統"]
+805CB8A8:   callc [evt_npc_set_position evt_npc.o] ["シュリョー"] 10 0 250
+805CB8C0:   callc [evt_npc_set_ry evt_npc.o] ["シュリョー"] 90
+805CB8D0:   callc [evt_npc_set_anim evt_npc.o] ["シュリョー"] ["S_4"]
+805CB8E0:   callc [evt_npc_set_width evt_npc.o] ["シュリョー"] 40
+805CB8F0:   callc [evt_npc_entry evt_npc.o] ["カンブー"] ["c_kanbu_ibt"]
+805CB900:   callc [evt_npc_set_tribe evt_npc.o] ["カンブー"] ["第三勢力幹部"]
+805CB910:   callc [evt_npc_set_position evt_npc.o] ["カンブー"] 90 0 250
+805CB928:   callc [evt_npc_set_ry evt_npc.o] ["カンブー"] 270
+805CB938:   callc [evt_npc_entry evt_npc.o] ["軍団Ａ"] ["c_zako_n"]
+805CB948:   callc [evt_npc_set_tribe evt_npc.o] ["軍団Ａ"] ["第三勢力部下"]
+805CB958:   callc [evt_npc_set_position evt_npc.o] ["軍団Ａ"] 35 5 1240
+805CB970:   callc [evt_npc_set_ry evt_npc.o] ["軍団Ａ"] 270
+805CB980:   callc [evt_npc_entry evt_npc.o] ["軍団Ｂ"] ["c_zako_m"]
+805CB990:   callc [evt_npc_set_tribe evt_npc.o] ["軍団Ｂ"] ["第三勢力研究員"]
+805CB9A0:   callc [evt_npc_set_position evt_npc.o] ["軍団Ｂ"] 7 5 151
+805CB9B8:   callc [evt_npc_set_ry evt_npc.o] ["軍団Ｂ"] 90
+805CB9C8:   callc [evt_npc_flag_onoff evt_npc.o] 1 ["軍団Ｂ"] 32768
+805CB9DC:   callc [evt_npc_entry evt_npc.o] ["軍団Ｃ"] ["c_zako_e"]
+805CB9EC:   callc [evt_npc_set_tribe evt_npc.o] ["軍団Ｃ"] ["第三勢力エリート"]
+805CB9FC:   callc [evt_npc_set_position evt_npc.o] ["軍団Ｃ"] -48 0 193
+805CBA14:   callc [evt_npc_set_ry evt_npc.o] ["軍団Ｃ"] 90
+805CBA24:   callc [evt_npc_flag_onoff evt_npc.o] 1 ["軍団Ｃ"] 32768
+805CBA38:   callc [evt_npc_entry evt_npc.o] ["軍団Ｄ"] ["c_zako_n"]
+805CBA48:   callc [evt_npc_set_tribe evt_npc.o] ["軍団Ｄ"] ["第三勢力部下"]
+805CBA58:   callc [evt_npc_set_position evt_npc.o] ["軍団Ｄ"] 142 5 233
+805CBA70:   callc [evt_npc_set_ry evt_npc.o] ["軍団Ｄ"] 270
+805CBA80:   callc [evt_npc_entry evt_npc.o] ["軍団Ｅ"] ["c_zako_e"]
+805CBA90:   callc [evt_npc_set_tribe evt_npc.o] ["軍団Ｅ"] ["第三勢力エリート"]
+805CBAA0:   callc [evt_npc_set_position evt_npc.o] ["軍団Ｅ"] 138 5 316
+805CBAB8:   callc [evt_npc_set_ry evt_npc.o] ["軍団Ｅ"] 270
+805CBAC8:   callc [evt_npc_entry evt_npc.o] ["ポワン"] ["c_powan"]
+805CBAD8:   callc [evt_npc_set_tribe evt_npc.o] ["ポワン"] ["ポワン探偵"]
+805CBAE8:   callc [evt_npc_set_position evt_npc.o] ["ポワン"] -29 0 455
+805CBB00:   callc [evt_npc_set_ry evt_npc.o] ["ポワン"] 90
+805CBB10:   callc [evt_npc_flag_onoff evt_npc.o] 1 ["ポワン"] 32768
+805CBB24:   return
+805CBB28:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [epilogue_evt pik_04.o] AT 805CBC98 ---
+805CBC98:   callc [evt_snd_bgmon evt_snd.o] 512 ["BGM_STG6_PIK1"]
+805CBCA8:   callc [evt_snd_bgm_scope evt_snd.o] 0 1
+805CBCB8:   callc [evt_mario_key_onoff evt_mario.o] 0
+805CBCC4:   callc [evt_mario_dispflag_onoff evt_mario.o] 1 1
+805CBCD4:   callc [evt_cam3d_evt_set evt_cam.o] 50 150 842 50 50 250 0 11
+805CBCFC:   callc [evt_seq_wait evt_seq.o] 2
+805CBD08:   callsa [epilogue_evt_sub pik_04.o]
+805CBD10:   callc [evt_fade_end_wait evt_fade.o]
+805CBD18:   wait_ms 2000
+805CBD20:   callc [evt_msg_print evt_msg.o] 0 ["ep_44"] 0 0
+805CBD38:   wait_ms 1000
+805CBD40:   callc [evt_snd_bgmoff_f evt_snd.o] 512 3000
+805CBD50:   callc [evt_snd_envoff_f evt_snd.o] 512 3000
+805CBD60:   callc [evt_fade_set_mapchange_type evt_fade.o] 1 10 900 9 900
+805CBD7C:   callc [evt_bero_mapchange evt_bero.o] ["tik_00"] [zero_pik_000039b8 pik_04.o]
+805CBD8C:   return
+805CBD90:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [epilogue_evt_sub pik_04.o] AT 805CBB2C ---
+805CBB2C:   wait_ms 500
+805CBB34:   callc [evt_npc_get_position evt_npc.o] ["シュリョー"] LW(0) LW(1) LW(2)
+805CBB4C:   loop 3
+805CBB54:     callc [evt_npc_jump_position_nohit evt_npc.o] ["シュリョー"] LW(0) LW(1) LW(2) 150 10
+805CBB74:     wait_ms 50
+805CBB7C:   end_loop
+805CBB80:   callc [evt_npc_set_anim evt_npc.o] ["カンブー"] ["T_1"]
+805CBB90:   wait_ms 1500
+805CBB98:   callc [evt_npc_set_anim evt_npc.o] ["カンブー"] ["S_1"]
+805CBBA8:   callc [evt_snd_sfxon evt_snd.o] ["SFX_EVT_EPILOGUE_3RD_BATTEN1"] 0
+805CBBB8:   callc [evt_npc_set_anim evt_npc.o] ["軍団Ａ"] ["P_1"]
+805CBBC8:   callc [evt_npc_set_anim evt_npc.o] ["軍団Ｂ"] ["P_1"]
+805CBBD8:   callc [evt_npc_set_anim evt_npc.o] ["軍団Ｃ"] ["P_1"]
+805CBBE8:   callc [evt_npc_set_anim evt_npc.o] ["軍団Ｄ"] ["P_1"]
+805CBBF8:   callc [evt_npc_set_anim evt_npc.o] ["軍団Ｅ"] ["P_1"]
+805CBC08:   wait_ms 500
+805CBC10:   loop 0
+805CBC18:     callc [evt_npc_get_position evt_npc.o] ["シュリョー"] LW(0) LW(1) LW(2)
+805CBC30:     loop 3
+805CBC38:       callc [evt_npc_jump_position_nohit evt_npc.o] ["シュリョー"] LW(0) LW(1) LW(2) 150 10
+805CBC58:       wait_ms 50
+805CBC60:     end_loop
+805CBC64:     callc [evt_npc_set_anim evt_npc.o] ["カンブー"] ["T_1"]
+805CBC74:     wait_ms 1500
+805CBC7C:     callc [evt_npc_set_anim evt_npc.o] ["カンブー"] ["S_1"]
+805CBC8C:   end_loop
+805CBC90:   return
+805CBC94:   end

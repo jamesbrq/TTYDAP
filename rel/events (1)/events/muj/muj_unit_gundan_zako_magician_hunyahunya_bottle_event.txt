@@ -1,0 +1,157 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [hunyahunya_bottle_event unit_gundan_zako_magician.o] AT 80602F74 ---
+80602F74:   setii LW(9) [weapon_gundan_zako_magician_hunyahunya_bottle unit_gundan_zako_magician.o]
+80602F80:   callc [btlevtcmd_GetEnemyBelong battle_event_cmd.o] -2 LW(0)
+80602F90:   callc [btlevtcmd_SamplingEnemy battle_event_cmd.o] -2 LW(0) LW(9)
+80602FA4:   callc [btlevtcmd_ChoiceSamplingEnemy battle_event_cmd.o] LW(9) LW(3) LW(4)
+80602FB8:   if_int_eq LW(3) -1
+80602FC4:     callc [btlevtcmd_CheckToken battle_event_cmd.o] -2 16 LW(0)
+80602FD8:     if_int_ne LW(0) 0
+80602FE4:       callss [subsetevt_confuse_flustered battle_event_subset.o]
+80602FEC:       return
+80602FF0:     endif
+80602FF4:     goto 99
+80602FFC:   endif
+80603000:   callss [attack_common_event1 unit_gundan_zako_magician.o]
+80603008:   callss [attack_common_event2 unit_gundan_zako_magician.o]
+80603010: 99:
+80603018:   return
+8060301C:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [attack_common_event1 unit_gundan_zako_magician.o] AT 80602344 ---
+80602344:   callc [btlevtcmd_WeaponAftereffect battle_event_cmd.o] LW(9)
+80602350:   callc [btlevtcmd_AttackDeclareAll battle_event_cmd.o] -2
+8060235C:   callc [btlevtcmd_WaitGuardMove battle_event_cmd.o]
+80602364:   callc [btlevtcmd_PayWeaponCost battle_event_cmd.o] -2 LW(9)
+80602374:   if_int_eq LW(9) [weapon_gundan_zako_magician_minimini_bottle unit_gundan_zako_magician.o]
+80602380:     callc [btlevtcmd_GetEnemyBelong battle_event_cmd.o] LW(3) LW(10)
+80602390:     if_int_eq LW(10) 0
+8060239C:       setii LW(10) 125
+806023A8:     else
+806023AC:       setii LW(10) -125
+806023B8:     endif
+806023BC:     callc [btlevtcmd_CalculateFaceDirection battle_event_cmd.o] -2 -1 LW(10) 0 1 LW(14)
+806023DC:     callc [btlevtcmd_ChangeFaceDirection battle_event_cmd.o] -2 LW(14)
+806023EC:   else
+806023F0:     callc [btlevtcmd_CalculateFaceDirection battle_event_cmd.o] -2 -1 LW(3) LW(4) 16 LW(14)
+80602410:     callc [btlevtcmd_ChangeFaceDirection battle_event_cmd.o] -2 LW(14)
+80602420:   endif
+80602424:   begin_child_thread
+80602428:     callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_ENM_3RD2_ATTACK1"] [F1194D80] 0 [F1194D80]
+80602444:     wait_frames 40
+8060244C:     callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_ENM_3RD2_ATTACK2"] [F1194D80] 0 [F1194D80]
+80602468:   end_child_thread
+8060246C:   if_int_eq LW(9) [weapon_gundan_zako_magician_fire_bottle unit_gundan_zako_magician.o]
+80602478:     callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 1 ["A_1A"]
+8060248C:   endif
+80602490:   if_int_eq LW(9) [weapon_gundan_zako_magician_hunyahunya_bottle unit_gundan_zako_magician.o]
+8060249C:     callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 1 ["A_2A"]
+806024B0:   endif
+806024B4:   if_int_eq LW(9) [weapon_gundan_zako_magician_minimini_bottle unit_gundan_zako_magician.o]
+806024C0:     callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 1 ["A_3A"]
+806024D4:   endif
+806024D8:   if_int_eq LW(9) [weapon_gundan_zako_magician_yokeyoke_bottle unit_gundan_zako_magician.o]
+806024E4:     callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 1 ["A_5A"]
+806024F8:   endif
+806024FC:   if_int_eq LW(9) [weapon_gundan_zako_magician_one_recover unit_gundan_zako_magician.o]
+80602508:     callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 1 ["A_4A"]
+8060251C:   endif
+80602520:   if_int_eq LW(9) [weapon_gundan_zako_magician_all_recover unit_gundan_zako_magician.o]
+8060252C:     callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 1 ["A_4A"]
+80602540:   endif
+80602544:   if_int_eq LW(9) [weapon_gundan_zako_magician_ziwaziwa_bottle unit_gundan_zako_magician.o]
+80602550:     callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 1 ["A_4A"]
+80602564:   endif
+80602568:   wait_frames 80
+80602570:   return
+80602574:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [attack_common_event2 unit_gundan_zako_magician.o] AT 80602578 ---
+80602578:   if_int_eq LW(9) [weapon_gundan_zako_magician_fire_bottle unit_gundan_zako_magician.o]
+80602584:     callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 2 ["B_1A"]
+80602598:   endif
+8060259C:   if_int_eq LW(9) [weapon_gundan_zako_magician_hunyahunya_bottle unit_gundan_zako_magician.o]
+806025A8:     callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 2 ["B_1B"]
+806025BC:   endif
+806025C0:   callc [btlevtcmd_GetPos battle_event_cmd.o] -2 LW(0) LW(1) LW(2)
+806025D8:   callc [btlevtcmd_FaceDirectionAdd battle_event_cmd.o] -2 LW(0) 10
+806025EC:   addi LW(1) 20
+806025F8:   callc [btlevtcmd_SetPartsPos battle_event_cmd.o] -2 2 LW(0) LW(1) LW(2)
+80602614:   callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_ENM_3RD2_ATTACK3"] [F1194D80] 0 [F1194D80]
+80602630:   if_int_eq LW(9) [weapon_gundan_zako_magician_fire_bottle unit_gundan_zako_magician.o]
+8060263C:     callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 1 ["A_1B"]
+80602650:   endif
+80602654:   if_int_eq LW(9) [weapon_gundan_zako_magician_hunyahunya_bottle unit_gundan_zako_magician.o]
+80602660:     callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 1 ["A_2B"]
+80602674:   endif
+80602678:   wait_frames 24
+80602680:   callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_ENM_3RD2_ATTACK4"] [F1194D80] 0 [F1194D80]
+8060269C:   begin_child_thread
+806026A0:     wait_frames 24
+806026A8:     callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 1 ["S_1"]
+806026BC:   end_child_thread
+806026C0:   callc [btlevtcmd_OffPartsAttribute battle_event_cmd.o] -2 2 16777216
+806026D4:   callc [btlevtcmd_OffPartsAttribute battle_event_cmd.o] -2 2 33554432
+806026E8:   callc [btlevtcmd_GetHitPos battle_event_cmd.o] LW(3) LW(4) LW(0) LW(1) LW(2)
+80602704:   callc [btlevtcmd_JumpPartsSetting battle_event_cmd.o] -2 2 0 6.00 0.30
+80602720:   callc [btlevtcmd_JumpPartsPosition battle_event_cmd.o] -2 2 LW(0) LW(1) LW(2) 0 -1
+80602744:   callc [btlevtcmd_PreCheckDamage battle_event_cmd.o] -2 LW(3) LW(4) LW(9) 0 LW(5)
+80602764:   switchi LW(5)
+8060276C:     case_int_eq_any 4
+80602774:       goto 90
+8060277C:       end_multi_case
+80602780:     case_int_eq 3
+80602788:       callc [btlevtcmd_StartAvoid battle_event_cmd.o] LW(3) 38
+80602798:       goto 90
+806027A0:       end_multi_case
+806027A4:     case_int_eq 6
+806027AC:       callc [btlevtcmd_StartAvoid battle_event_cmd.o] LW(3) 39
+806027BC:       goto 90
+806027C4:     case_int_eq 2
+806027CC:       callc [btlevtcmd_StartAvoid battle_event_cmd.o] LW(3) 40
+806027DC:       goto 90
+806027E4:     case_int_eq 1
+806027EC:       goto 91
+806027F4:       end_multi_case
+806027F8:     case_default
+806027FC:       goto 98
+80602804:       end_multi_case
+80602808: 90:
+80602810:       callc [btlevtcmd_JumpPartsContinue battle_event_cmd.o] -2 2
+80602820:       callc [btlevtcmd_GetPartsPos battle_event_cmd.o] -2 2 LW(0) LW(1) LW(2)
+8060283C:       loop 12
+80602844:         callc [evt_eff64 evt_eff.o] [zero_muj_00013a48 unit_gundan_zako_magician.o] ["glass_n64"] 0 LW(0) LW(1) LW(2) 1.00 30 0 0 0 0 0 0
+80602884:       end_loop
+80602888:       callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_ENM_3RD2_CRASH1"] [F1194D80] 0 [F1194D80]
+806028A4:       callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 2 ["B_2"]
+806028B8:       wait_frames 8
+806028C0:       callc [btlevtcmd_OnPartsAttribute battle_event_cmd.o] -2 2 16777216
+806028D4:       callc [btlevtcmd_OnPartsAttribute battle_event_cmd.o] -2 2 33554432
+806028E8:       goto 98
+806028F0: 91:
+806028F8:       if_int_eq LW(9) [weapon_gundan_zako_magician_fire_bottle unit_gundan_zako_magician.o]
+80602904:         callc [btlevtcmd_GetHitPos battle_event_cmd.o] LW(3) LW(4) LW(0) LW(1) LW(2)
+80602920:         callc [evt_eff evt_eff.o] [zero_muj_00013a48 unit_gundan_zako_magician.o] ["kemuri_test"] 16 LW(0) LW(1) LW(2) 1.00 0 0 0 0 0 0 0
+80602960:       endif
+80602964:       callc [btlevtcmd_GetHitPos battle_event_cmd.o] LW(3) LW(4) LW(0) LW(1) LW(2)
+80602980:       loop 12
+80602988:         callc [evt_eff64 evt_eff.o] [zero_muj_00013a48 unit_gundan_zako_magician.o] ["glass_n64"] 0 LW(0) LW(1) LW(2) 1.00 30 0 0 0 0 0 0
+806029C8:       end_loop
+806029CC:       callc [btlevtcmd_ResultACDefence battle_event_cmd.o] LW(3) LW(9)
+806029DC:       callc [btlevtcmd_CheckDamage battle_event_cmd.o] -2 LW(3) LW(4) LW(9) 256 LW(5)
+806029FC:       callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_ENM_3RD2_CRASH1"] [F1194D80] 0 [F1194D80]
+80602A18:       callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 2 ["B_2"]
+80602A2C:       wait_frames 8
+80602A34:       callc [btlevtcmd_OnPartsAttribute battle_event_cmd.o] -2 2 16777216
+80602A48:       callc [btlevtcmd_OnPartsAttribute battle_event_cmd.o] -2 2 33554432
+80602A5C:       goto 98
+80602A64: 98:
+80602A6C:       wait_frames 10
+80602A74:       callc [evt_btl_camera_set_mode battle_camera.o] 0 0
+80602A84:       wait_frames 30
+80602A8C: 99:
+80602A94:       callc [btlevtcmd_ResetFaceDirection battle_event_cmd.o] -2
+80602AA0:       return
+80602AA4:       end

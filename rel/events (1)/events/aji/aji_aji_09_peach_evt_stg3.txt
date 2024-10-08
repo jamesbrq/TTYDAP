@@ -1,0 +1,70 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [peach_evt_stg3 aji_09.o] AT 805E62D0 ---
+805E62D0:   callc [evt_mario_key_onoff evt_mario.o] 0
+805E62DC:   if_int_lt GSW(0) 167
+805E62E8:     callc [evt_mapobj_flag_onoff evt_map.o] 1 1 ["S_fuku1"] 1
+805E6300:     callc [evt_mapobj_flag_onoff evt_map.o] 1 1 ["S_fuku2"] 1
+805E6318:     callc [evt_mapobj_flag_onoff evt_map.o] 0 0 ["R_fuku_g"] 1
+805E6330:     callc [evt_hitobj_onoff evt_hit.o] ["A_R_fuku_g"] 1 1
+805E6344:     callc [evt_run_case_evt evt_case.o] 9 1 ["A_R_fuku_g"] 0 [peach_evt_fuku_g aji_09.o] 0
+805E6364:   else
+805E6368:     if_int_eq GSWF(4204) 0
+805E6374:       if_int_eq GSWF(4205) 0
+805E6380:         callc [evt_mapobj_flag_onoff evt_map.o] 1 0 ["S_fuku2_g"] 1
+805E6398:         callc [evt_mapobj_flag_onoff evt_map.o] 1 1 ["S_fuku2_p"] 1
+805E63B0:         callc [evt_mapobj_flag_onoff evt_map.o] 1 1 ["S_fuku1"] 1
+805E63C8:       else
+805E63CC:         callc [evt_mapobj_flag_onoff evt_map.o] 1 0 ["S_fuku1_g"] 1
+805E63E4:         callc [evt_mapobj_flag_onoff evt_map.o] 1 1 ["S_fuku1_p"] 1
+805E63FC:         callc [evt_mapobj_flag_onoff evt_map.o] 1 1 ["S_fuku2"] 1
+805E6414:       endif
+805E6418:     else
+805E641C:       callc [evt_peach_transform_gundan_on evt_mario.o]
+805E6424:       if_int_eq GSWF(4205) 0
+805E6430:         callc [evt_mapobj_flag_onoff evt_map.o] 1 1 ["S_fuku2_g"] 1
+805E6448:         callc [evt_mapobj_flag_onoff evt_map.o] 1 0 ["S_fuku2_p"] 1
+805E6460:         callc [evt_mapobj_flag_onoff evt_map.o] 1 1 ["S_fuku1"] 1
+805E6478:       else
+805E647C:         callc [evt_mapobj_flag_onoff evt_map.o] 1 1 ["S_fuku1_g"] 1
+805E6494:         callc [evt_mapobj_flag_onoff evt_map.o] 1 0 ["S_fuku1_p"] 1
+805E64AC:         callc [evt_mapobj_flag_onoff evt_map.o] 1 1 ["S_fuku2"] 1
+805E64C4:       endif
+805E64C8:     endif
+805E64CC:     callc [evt_mapobj_flag_onoff evt_map.o] 0 1 ["R_fuku_g"] 1
+805E64E4:   endif
+805E64E8:   callc [evt_run_case_evt evt_case.o] 9 1 ["A_kou1_ka_omo"] 0 [peach_evt_kou1_in aji_09.o] 0
+805E6508:   callc [evt_run_case_evt evt_case.o] 9 1 ["A_kou1_ka_ura"] 0 [peach_evt_kou1_out aji_09.o] 0
+805E6528:   callc [evt_run_case_evt evt_case.o] 9 1 ["A_kou2_ka_omo"] 0 [peach_evt_kou2_in aji_09.o] 0
+805E6548:   callc [evt_run_case_evt evt_case.o] 9 1 ["A_kou2_ka_ura"] 0 [peach_evt_kou2_out aji_09.o] 0
+805E6568:   callc [evt_seq_wait evt_seq.o] 2
+805E6574:   callc [evt_bero_exec_wait evt_bero.o] 65536
+805E6580:   if_int_lt GSW(0) 168
+805E658C:     setii LW(0) ["s_bero"]
+805E6598:     callss [bero_case_switch_off evt_bero.o]
+805E65A0:     callc [evt_bero_overwrite evt_bero.o] ["s_bero"] [bero_data_peach1 aji_09.o]
+805E65B0:     setii LW(0) ["s_bero"]
+805E65BC:     callss [bero_case_switch_on evt_bero.o]
+805E65C4:   else
+805E65C8:     setii LW(0) 0
+805E65D4:     callss [bero_case_switch_off evt_bero.o]
+805E65DC:     callc [evt_run_case_evt evt_case.o] 9 1 ["s_bero"] 0 [s_bero_out aji_09.o] 0
+805E65FC:   endif
+805E6600:   if_int_eq GSW(0) 166
+805E660C:     wait_ms 600
+805E6614:     callc [evt_msg_print evt_msg.o] 0 ["peach_aji_132"] 0 0
+805E662C:   endif
+805E6630:   if_int_eq GSW(0) 168
+805E663C:     wait_ms 500
+805E6644:     callc [evt_mario_set_dir evt_mario.o] 90 300 0
+805E6658:     callc [evt_msg_print evt_msg.o] 0 ["peach_aji_152"] 0 ["mario"]
+805E6670:     callc [evt_cam3d_evt_set evt_cam.o] 0 60 442 0 41 42 800 11
+805E6698:     wait_ms 800
+805E66A0:     callc [evt_msg_print evt_msg.o] 0 ["peach_aji_153"] 0 ["mario"]
+805E66B8:     callc [evt_cam3d_evt_off evt_cam.o] 800 11
+805E66C8:     wait_ms 800
+805E66D0:   endif
+805E66D4:   callc [evt_mario_key_onoff evt_mario.o] 1
+805E66E0:   return
+805E66E4:   end

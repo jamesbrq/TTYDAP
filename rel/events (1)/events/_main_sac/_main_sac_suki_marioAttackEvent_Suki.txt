@@ -1,0 +1,322 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [marioAttackEvent_Suki sac_suki.o] AT 803B8588 ---
+803B8588:   callc [btlevtcmd_GetUnitId battle_event_cmd.o] -4 LW(14)
+803B8598:   callc [btlevtcmd_GetBodyId battle_event_cmd.o] LW(14) LW(15)
+803B85A8:   callc [btlevtcmd_CheckStatus battle_event_cmd.o] LW(14) 27 LW(0)
+803B85BC:   if_int_ne LW(0) 0
+803B85C8:     setii LW(14) -1
+803B85D4:   endif
+803B85D8:   callc [btlevtcmd_ChoiceSamplingEnemy battle_event_cmd.o] [weapon sac_suki.o] LW(3) LW(4)
+803B85EC:   callc [btlevtcmd_GetSelectEnemy battle_event_cmd.o] LW(3) LW(4)
+803B85FC:   if_int_eq LW(3) -1
+803B8608:     goto 99
+803B8610:   endif
+803B8614:   callc [btlevtcmd_AttackDeclare battle_event_cmd.o] -2 LW(3) LW(4)
+803B8628:   callc [btlevtcmd_WaitGuardMove battle_event_cmd.o]
+803B8630:   callc [btlevtcmd_CommandPayWeaponCost battle_event_cmd.o] -2
+803B863C:   callc [btlevtcmd_CommandGetWeaponAddress battle_event_cmd.o] -2 LW(0)
+803B864C:   callc [btlevtcmd_WeaponAftereffect battle_event_cmd.o] LW(0)
+803B8658:   callc [btlevtcmd_reset_move_color_lv_all battle_event_cmd.o]
+803B8660:   begin_child_thread
+803B8664:     callc [main_suki sac_suki.o] LW(14)
+803B8670:   end_child_thread
+803B8674:   callss [sac_start_camera_evt sac_common.o]
+803B867C:   wait_ms 500
+803B8684:   callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_BTL_SAC_START1"] [F1194D80] 0 [F1194D80]
+803B86A0:   callss [sac_mario_item_on_evt sac_common.o]
+803B86A8:   wait_ms 500
+803B86B0:   callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_BTL_SAC_START2"] [F1194D80] 0 LW(11)
+803B86CC:   callc [star_stone_appear sac_suki.o]
+803B86D4:   begin_child_thread
+803B86D8:     callss [sac_start_stardust sac_common.o]
+803B86E0:   end_child_thread
+803B86E4:   wait_frames 100
+803B86EC:   callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_BTL_SAC_START3"] [F1194D80] 0 [F1194D80]
+803B8708:   callc [evt_snd_sfxoff evt_snd.o] LW(11)
+803B8714:   wait_frames 40
+803B871C:   callss [sac_mario_item_on_end_evt sac_common.o]
+803B8724:   callss [sac_mario_back_home sac_common.o]
+803B872C:   callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 1 ["M_I_Y"]
+803B8740:   callc [wait_star_stone_up_end sac_suki.o]
+803B8748:   wait_ms 100
+803B8750:   begin_child_thread
+803B8754:     callc [sac_cheer sac_common.o] 0
+803B8760:   end_child_thread
+803B8764:   callc [sac_ac_help_on sac_common.o]
+803B876C:   callc [start_game sac_suki.o]
+803B8774:   callc [wait_game_end sac_suki.o] LW(0)
+803B8780:   callc [sac_ac_help_off sac_common.o]
+803B8788:   callc [sac_cheer_end sac_common.o]
+803B8790:   callc [set_weapon sac_suki.o] LW(0) LW(9)
+803B87A0:   wait_ms 500
+803B87A8:   callc [evt_btl_camera_set_mode battle_camera.o] 0 0
+803B87B8:   callc [evt_btl_camera_set_moveSpeedLv battle_camera.o] 0 2
+803B87C8:   wait_ms 1000
+803B87D0:   setii LW(10) 0
+803B87DC:   setii LW(11) LW(0)
+803B87E8:   callc [evt_paper_entry evt_paper.o] ["OFF_d_yabu_small"]
+803B87F4:   loop LW(11)
+803B87FC:     callc [star_stone_get_attack_point sac_suki.o] LW(10) LW(1) LW(2) LW(3)
+803B8814:     callc [get_img_name sac_suki.o] LW(10) LW(13)
+803B8824:     callc [evt_img_entry evt_img.o] LW(13)
+803B8830:     callc [evt_img_set_paper evt_img.o] LW(13) ["OFF_d_yabu_small"]
+803B8840:     callc [get_screen_point sac_suki.o] LW(1) LW(2) LW(3) LW(4) LW(5)
+803B885C:     addi LW(4) 256
+803B8868:     muli LW(5) -1
+803B8874:     addi LW(5) 204
+803B8880:     callc [evt_img_alloc_capture evt_img.o] LW(13) 0 0 0 LW(4) LW(5) 96 72
+803B88A8:     callc [evt_img_clear_virtual_point evt_img.o] LW(13)
+803B88B4:     callc [evt_img_onoff evt_img.o] LW(13) 1
+803B88C4:     callc [evt_img_set_paper_anim evt_img.o] LW(13) ["A_1"]
+803B88D4:     begin_child_thread
+803B88D8:       callc [star_stone_attack sac_suki.o] LW(10)
+803B88E4:       callc [evt_btl_camera_shake_h battle_camera.o] 0 8 0 10 0
+803B8900:     end_child_thread
+803B8904:     callc [eff_crystal sac_suki.o] LW(1) LW(2)
+803B8914:     callc [evt_eff evt_eff.o] [zero_80428648 sac_suki.o] ["indirect"] 0 LW(1) LW(2) 30 60 0 0 0 0 0 0 0
+803B8954:     callc [evt_snd_sfxon evt_snd.o] ["SFX_BTL_SAC_SUKKIRI4"] 0
+803B8964:     callc [evt_snd_sfxon evt_snd.o] ["SFX_BTL_SAC_SUKKIRI4_2"] 0
+803B8974:     if_int_eq LW(10) 0
+803B8980:       callc [btlevtcmd_GetEnemyBelong battle_event_cmd.o] -2 LW(1)
+803B8990:       callc [btlevtcmd_SamplingEnemy battle_event_cmd.o] -2 LW(1) [weapon sac_suki.o]
+803B89A4:       callc [btlevtcmd_ChoiceSamplingEnemy battle_event_cmd.o] [weapon sac_suki.o] LW(3) LW(4)
+803B89B8:       callc [btlevtcmd_GetSelectEnemy battle_event_cmd.o] LW(3) LW(4)
+803B89C8: 5:
+803B89D0:       if_int_eq LW(3) -1
+803B89DC:         goto 8
+803B89E4:       endif
+803B89E8:       callc [btlevtcmd_CheckPartsAttribute battle_event_cmd.o] LW(3) LW(4) 536870912 LW(1)
+803B8A00:       if_int_eq LW(1) 0
+803B8A0C:         callc [btlevtcmd_AnimeChangePoseType battle_event_cmd.o] LW(3) LW(4) 39
+803B8A20:       endif
+803B8A24:       callc [btlevtcmd_GetSelectNextEnemy battle_event_cmd.o] LW(3) LW(4)
+803B8A34:       goto 5
+803B8A3C:     endif
+803B8A40: 8:
+803B8A48:     wait_frames 30
+803B8A50:     callc [wait_star_stone_attack_end sac_suki.o]
+803B8A58:     addi LW(10) 1
+803B8A64:   end_loop
+803B8A68:   callc [evt_paper_delete evt_paper.o] ["OFF_d_yabu_small"]
+803B8A74:   setii LW(10) 0
+803B8A80:   setii LW(11) LW(0)
+803B8A8C:   loop LW(11)
+803B8A94:     callc [get_img_name sac_suki.o] LW(10) LW(13)
+803B8AA4:     callc [evt_img_release evt_img.o] LW(13)
+803B8AB0:     addi LW(10) 1
+803B8ABC:   end_loop
+803B8AC0:   callss [flash_evt sac_suki.o]
+803B8AC8:   setii LW(10) 3
+803B8AD4:   loop 4
+803B8ADC:     callc [evt_snd_sfxon evt_snd.o] ["SFX_BTL_SAC_SUKKIRI5"] 0
+803B8AEC:     loop 4
+803B8AF4:       addi LW(10) 63
+803B8B00:       callc [flash_update sac_suki.o] LW(10)
+803B8B0C:       callss [flash_main_evt sac_suki.o]
+803B8B14:       wait_frames 1
+803B8B1C:     end_loop
+803B8B20:     loop 4
+803B8B28:       subi LW(10) 63
+803B8B34:       callc [flash_update sac_suki.o] LW(10)
+803B8B40:       callss [flash_main_evt sac_suki.o]
+803B8B48:       wait_frames 1
+803B8B50:     end_loop
+803B8B54:   end_loop
+803B8B58:   callss [flash_cancel_evt sac_suki.o]
+803B8B60:   callc [btlevtcmd_GetEnemyBelong battle_event_cmd.o] -2 LW(0)
+803B8B70:   callc [btlevtcmd_SamplingEnemy battle_event_cmd.o] -2 LW(0) [weapon sac_suki.o]
+803B8B84:   callc [btlevtcmd_ChoiceSamplingEnemy battle_event_cmd.o] [weapon sac_suki.o] LW(3) LW(4)
+803B8B98:   callc [btlevtcmd_GetSelectEnemy battle_event_cmd.o] LW(3) LW(4)
+803B8BA8: 10:
+803B8BB0:   if_int_eq LW(3) -1
+803B8BBC:     goto 20
+803B8BC4:   endif
+803B8BC8:   callc [btlevtcmd_CheckPartsAttribute battle_event_cmd.o] LW(3) LW(4) 16384 LW(0)
+803B8BE0:   if_int_eq LW(0) 0
+803B8BEC:     callc [btlevtcmd_CheckDamage battle_event_cmd.o] -2 LW(3) LW(4) LW(9) 256 LW(5)
+803B8C0C:   endif
+803B8C10:   callc [btlevtcmd_GetSelectNextEnemy battle_event_cmd.o] LW(3) LW(4)
+803B8C20:   goto 10
+803B8C28: 20:
+803B8C30:   wait_frames 30
+803B8C38:   callc [evt_btl_camera_set_mode battle_camera.o] 0 0
+803B8C48:   callc [end_suki sac_suki.o]
+803B8C50:   callc [btlevtcmd_StartWaitEvent battle_event_cmd.o] -2
+803B8C5C:   return
+803B8C60:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [sac_start_camera_evt sac_common.o] AT 803B7160 ---
+803B7160:   callc [evt_btl_camera_set_mode battle_camera.o] 0 7
+803B7170:   callc [evt_btl_camera_set_homing_unit battle_camera.o] 0 -2 -1
+803B7184:   callc [btlevtcmd_CheckStatus battle_event_cmd.o] -2 10 LW(0)
+803B7198:   if_int_eq LW(0) 1
+803B71A4:     callc [evt_btl_camera_set_zoom battle_camera.o] 0 100
+803B71B4:   else
+803B71B8:     callc [evt_btl_camera_set_zoom battle_camera.o] 0 300
+803B71C8:   endif
+803B71CC:   callc [evt_btl_camera_set_moveSpeedLv battle_camera.o] 0 2
+803B71DC:   callc [evt_btl_camera_set_zoomSpeedLv battle_camera.o] 0 2
+803B71EC:   return
+803B71F0:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [sac_mario_item_on_evt sac_common.o] AT 803B71F4 ---
+803B71F4:   callc [btlevtcmd_AnimeChangePoseType battle_event_cmd.o] -2 1 40
+803B7208:   callc [btlevtcmd_GetPos battle_event_cmd.o] -2 LW(0) LW(1) LW(2)
+803B7220:   callc [btlevtcmd_FaceDirectionAdd battle_event_cmd.o] -2 LW(0) 15
+803B7234:   callc [btlevtcmd_MovePosition battle_event_cmd.o] -2 LW(0) LW(1) LW(2) 5 -1 0
+803B7258:   callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_VOICE_MARIO_HAPPY1"] [F1194D80] 0 [F1194D80]
+803B7274:   callc [evt_audience_sound_cheer evt_audience.o] 180 60
+803B7284:   callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 1 ["M_P_2"]
+803B7298:   callc [btlevtcmd_GetPartsPos battle_event_cmd.o] -2 1 LW(0) LW(1) LW(2)
+803B72B4:   callc [btlevtcmd_GetHeight battle_event_cmd.o] -2 LW(5)
+803B72C4:   callc [btlevtcmd_GetStatusMg battle_event_cmd.o] -2 LW(6)
+803B72D4:   mulf LW(5) LW(6)
+803B72E0:   addi LW(1) LW(5)
+803B72EC:   addi LW(1) 35
+803B72F8:   addi LW(2) -5
+803B7304:   callc [evt_eff evt_eff.o] ["sac_treasure"] ["treasure_map"] 0 LW(0) LW(1) LW(2) 0 0 0 0 0 0 0 0
+803B7344:   addi LW(1) 2
+803B7350:   addi LW(2) -7
+803B735C:   callc [evt_eff evt_eff.o] ["sac_itemget"] ["itemget"] 9 LW(0) LW(1) LW(2) 0 0 0 0 0 0 0 0
+803B739C:   return
+803B73A0:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [sac_start_stardust sac_common.o] AT 803B73A4 ---
+803B73A4:   loop 6
+803B73AC:     callc [btlevtcmd_GetPos battle_event_cmd.o] -2 LW(0) LW(1) LW(2)
+803B73C4:     addi LW(1) 50
+803B73D0:     callc [evt_eff evt_eff.o] [zero_804283d0 sac_common.o] ["stardust"] 5 LW(0) LW(1) LW(2) 30 30 10 30 0 0 0 0
+803B7410:     wait_frames 10
+803B7418:   end_loop
+803B741C:   return
+803B7420:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [sac_mario_back_home sac_common.o] AT 803B7424 ---
+803B7424:   callc [btlevtcmd_AnimeChangePoseType battle_event_cmd.o] -2 1 40
+803B7438:   callc [btlevtcmd_GetHomePos battle_event_cmd.o] -2 LW(0) LW(1) LW(2)
+803B7450:   callc [btlevtcmd_MovePosition battle_event_cmd.o] -2 LW(0) LW(1) LW(2) 5 -1 0
+803B7474:   return
+803B7478:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [flash_evt sac_suki.o] AT 803B8C64 ---
+803B8C64:   callc [evt_map_set_tevcallback evt_map.o] 1 [set_tev sac_suki.o]
+803B8C74:   callc [evt_mapobj_flag_onoff evt_map.o] 1 1 ["bti_S"] 16777216
+803B8C8C:   callc [evt_mapobj_flag_onoff evt_map.o] 1 0 ["bti_S"] 256
+803B8CA4:   callc [exist_map sac_suki.o] ["A1"] LW(0)
+803B8CB4:   if_int_eq LW(0) 1
+803B8CC0:     callc [evt_mapobj_flag_onoff evt_map.o] 1 0 ["A1"] 251658240
+803B8CD8:     callc [evt_mapobj_flag_onoff evt_map.o] 1 1 ["A1"] 16777216
+803B8CF0:     callc [evt_mapobj_flag_onoff evt_map.o] 1 0 ["A1"] 256
+803B8D08:   endif
+803B8D0C:   callc [exist_map sac_suki.o] ["A2"] LW(0)
+803B8D1C:   if_int_eq LW(0) 1
+803B8D28:     callc [evt_mapobj_flag_onoff evt_map.o] 1 1 ["A2"] 16777216
+803B8D40:     callc [evt_mapobj_flag_onoff evt_map.o] 1 0 ["A2"] 256
+803B8D58:   endif
+803B8D5C:   callc [exist_map sac_suki.o] ["B"] LW(0)
+803B8D6C:   if_int_eq LW(0) 1
+803B8D78:     callc [evt_mapobj_flag_onoff evt_map.o] 1 1 ["B"] 16777216
+803B8D90:     callc [evt_mapobj_flag_onoff evt_map.o] 1 0 ["B"] 256
+803B8DA8:   endif
+803B8DAC:   callc [exist_map sac_suki.o] ["C"] LW(0)
+803B8DBC:   if_int_eq LW(0) 1
+803B8DC8:     callc [evt_mapobj_flag_onoff evt_map.o] 1 1 ["C"] 16777216
+803B8DE0:     callc [evt_mapobj_flag_onoff evt_map.o] 1 0 ["C"] 256
+803B8DF8:   endif
+803B8DFC:   callc [btlevtcmd_SetAlpha battle_event_cmd.o] -2 1 0
+803B8E10:   callc [btlevtcmd_OnPartsAttribute battle_event_cmd.o] -2 1 33554432
+803B8E24:   if_int_ne LW(14) -1
+803B8E30:     callc [btlevtcmd_SetAlpha battle_event_cmd.o] LW(14) LW(15) 0
+803B8E44:     callc [btlevtcmd_OnPartsAttribute battle_event_cmd.o] LW(14) LW(15) 33554432
+803B8E58:   endif
+803B8E5C:   callc [btlevtcmd_GetEnemyBelong battle_event_cmd.o] -2 LW(0)
+803B8E6C:   callc [btlevtcmd_SamplingEnemy battle_event_cmd.o] -2 LW(0) [weapon sac_suki.o]
+803B8E80:   callc [btlevtcmd_ChoiceSamplingEnemy battle_event_cmd.o] [weapon sac_suki.o] LW(3) LW(4)
+803B8E94:   callc [btlevtcmd_GetSelectEnemy battle_event_cmd.o] LW(3) LW(4)
+803B8EA4: 5:
+803B8EAC:   if_int_eq LW(3) -1
+803B8EB8:     goto 8
+803B8EC0:   endif
+803B8EC4:   callc [btlevtcmd_SetRGB battle_event_cmd.o] LW(3) LW(4) 0 0 0
+803B8EE0:   callc [btlevtcmd_GetSelectNextEnemy battle_event_cmd.o] LW(3) LW(4)
+803B8EF0:   goto 5
+803B8EF8: 8:
+803B8F00:   callc [aud_set_draw sac_suki.o] 0
+803B8F0C:   callc [evt_batstage_set_stg_dark evt_batstage.o] 0 0 0
+803B8F20:   callc [evt_batstage_set_aud_dark evt_batstage.o] 0 0 0
+803B8F34:   return
+803B8F38:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [flash_main_evt sac_suki.o] AT 803B8F3C ---
+803B8F3C:   setii LW(11) 255
+803B8F48:   subi LW(11) LW(10)
+803B8F54:   callc [flash_update sac_suki.o] LW(10)
+803B8F60:   callc [btlevtcmd_GetEnemyBelong battle_event_cmd.o] -2 LW(0)
+803B8F70:   callc [btlevtcmd_SamplingEnemy battle_event_cmd.o] -2 LW(0) [weapon sac_suki.o]
+803B8F84:   callc [btlevtcmd_ChoiceSamplingEnemy battle_event_cmd.o] [weapon sac_suki.o] LW(3) LW(4)
+803B8F98:   callc [btlevtcmd_GetSelectEnemy battle_event_cmd.o] LW(3) LW(4)
+803B8FA8: 5:
+803B8FB0:   if_int_eq LW(3) -1
+803B8FBC:     goto 8
+803B8FC4:   endif
+803B8FC8:   callc [btlevtcmd_SetRGB battle_event_cmd.o] LW(3) LW(4) LW(11) LW(11) LW(11)
+803B8FE4:   callc [btlevtcmd_GetSelectNextEnemy battle_event_cmd.o] LW(3) LW(4)
+803B8FF4:   goto 5
+803B8FFC: 8:
+803B9004:   return
+803B9008:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [flash_cancel_evt sac_suki.o] AT 803B900C ---
+803B900C:   callc [evt_mapobj_flag_onoff evt_map.o] 1 0 ["bti_S"] 251658240
+803B9024:   callc [evt_mapobj_flag_onoff evt_map.o] 1 1 ["bti_S"] 256
+803B903C:   callc [exist_map sac_suki.o] ["A1"] LW(0)
+803B904C:   if_int_eq LW(0) 1
+803B9058:     callc [evt_mapobj_flag_onoff evt_map.o] 1 0 ["A1"] 251658240
+803B9070:     callc [evt_mapobj_flag_onoff evt_map.o] 1 1 ["A1"] 256
+803B9088:   endif
+803B908C:   callc [exist_map sac_suki.o] ["A2"] LW(0)
+803B909C:   if_int_eq LW(0) 1
+803B90A8:     callc [evt_mapobj_flag_onoff evt_map.o] 1 0 ["A2"] 251658240
+803B90C0:     callc [evt_mapobj_flag_onoff evt_map.o] 1 1 ["A2"] 256
+803B90D8:   endif
+803B90DC:   callc [exist_map sac_suki.o] ["B"] LW(0)
+803B90EC:   if_int_eq LW(0) 1
+803B90F8:     callc [evt_mapobj_flag_onoff evt_map.o] 1 0 ["B"] 251658240
+803B9110:     callc [evt_mapobj_flag_onoff evt_map.o] 1 1 ["B"] 256
+803B9128:   endif
+803B912C:   callc [exist_map sac_suki.o] ["C"] LW(0)
+803B913C:   if_int_eq LW(0) 1
+803B9148:     callc [evt_mapobj_flag_onoff evt_map.o] 1 0 ["C"] 251658240
+803B9160:     callc [evt_mapobj_flag_onoff evt_map.o] 1 1 ["C"] 256
+803B9178:   endif
+803B917C:   callc [exist_map sac_suki.o] ["gamen"] LW(0)
+803B918C:   if_int_eq LW(0) 1
+803B9198:     callc [evt_map_set_tevcallback evt_map.o] 8 [tou_gamen_screen_tev battle_stage.o]
+803B91A8:     callc [evt_mapobj_flag_onoff evt_map.o] 1 1 ["gamen"] 134217728
+803B91C0:     callc [evt_mapobj_flag_onoff evt_map.o] 1 0 ["gamen"] 256
+803B91D8:   endif
+803B91DC:   callc [btlevtcmd_SetAlpha battle_event_cmd.o] -2 1 255
+803B91F0:   callc [btlevtcmd_OffPartsAttribute battle_event_cmd.o] -2 1 33554432
+803B9204:   if_int_ne LW(14) -1
+803B9210:     callc [btlevtcmd_SetAlpha battle_event_cmd.o] LW(14) LW(15) 255
+803B9224:     callc [btlevtcmd_OffPartsAttribute battle_event_cmd.o] LW(14) LW(15) 33554432
+803B9238:   endif
+803B923C:   callc [btlevtcmd_GetEnemyBelong battle_event_cmd.o] -2 LW(0)
+803B924C:   callc [btlevtcmd_SamplingEnemy battle_event_cmd.o] -2 LW(0) [weapon sac_suki.o]
+803B9260:   callc [btlevtcmd_ChoiceSamplingEnemy battle_event_cmd.o] [weapon sac_suki.o] LW(3) LW(4)
+803B9274:   callc [btlevtcmd_GetSelectEnemy battle_event_cmd.o] LW(3) LW(4)
+803B9284: 5:
+803B928C:   if_int_eq LW(3) -1
+803B9298:     goto 8
+803B92A0:   endif
+803B92A4:   callc [btlevtcmd_SetRGB battle_event_cmd.o] LW(3) LW(4) 255 255 255
+803B92C0:   callc [btlevtcmd_GetSelectNextEnemy battle_event_cmd.o] LW(3) LW(4)
+803B92D0:   goto 5
+803B92D8: 8:
+803B92E0:   callc [aud_set_draw sac_suki.o] 1
+803B92EC:   callc [evt_batstage_return_stg_dark_base evt_batstage.o] 0 0
+803B92FC:   callc [evt_batstage_return_aud_dark_base evt_batstage.o] 0 0
+803B930C:   return
+803B9310:   end

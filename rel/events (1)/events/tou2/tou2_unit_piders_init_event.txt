@@ -1,0 +1,39 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [init_event unit_piders.o] AT 805FB288 ---
+805FB288:   callc [btlevtcmd_SetEventWait battle_event_cmd.o] -2 [wait_event unit_piders.o]
+805FB298:   callc [btlevtcmd_SetEventUnisonPhase battle_event_cmd.o] -2 [unison_phase_event unit_piders.o]
+805FB2A8:   callc [btlevtcmd_SetEventAttack battle_event_cmd.o] -2 [attack_event unit_piders.o]
+805FB2B8:   callc [btlevtcmd_SetEventDamage battle_event_cmd.o] -2 [damage_event unit_piders.o]
+805FB2C8:   callc [btlevtcmd_SetEventConfusion battle_event_cmd.o] -2 [attack_event unit_piders.o]
+805FB2D8:   callc [btlevtcmd_SetEventEntry battle_event_cmd.o] -2 [entry_event unit_piders.o]
+805FB2E8:   callc [btlevtcmd_SetUnitWork battle_event_cmd.o] -2 0 0
+805FB2FC:   callc [btlevtcmd_SetUnitWork battle_event_cmd.o] -2 2 0
+805FB310:   callc [btlevtcmd_SetUnitWork battle_event_cmd.o] -2 3 1
+805FB324:   callc [btlevtcmd_SetUnitWork battle_event_cmd.o] -2 1 255
+805FB338:   callc [piders_yarn_init unit_piders.o]
+805FB340:   callsa [yarn_event unit_piders.o]
+805FB348:   callc [btlevtcmd_StartWaitEvent battle_event_cmd.o] -2
+805FB354:   return
+805FB358:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [yarn_event unit_piders.o] AT 805FB3A8 ---
+805FB3A8: 0:
+805FB3B0:   callc [btlevtcmd_GetUnitId battle_event_cmd.o] -2 LW(0)
+805FB3C0:   if_int_eq LW(0) -1
+805FB3CC:     goto 99
+805FB3D4:   endif
+805FB3D8:   callc [btlevtcmd_GetUnitWork battle_event_cmd.o] -2 1 LW(0)
+805FB3EC:   if_int_lt LW(0) 255
+805FB3F8:     if_int_gt LW(0) 2
+805FB404:       subi LW(0) 2
+805FB410:       callc [btlevtcmd_SetUnitWork battle_event_cmd.o] -2 1 LW(0)
+805FB424:     endif
+805FB428:   endif
+805FB42C:   callc [piders_draw_yarn unit_piders.o] LW(0)
+805FB438:   wait_frames 1
+805FB440:   goto 0
+805FB448: 99:
+805FB450:   return
+805FB454:   end

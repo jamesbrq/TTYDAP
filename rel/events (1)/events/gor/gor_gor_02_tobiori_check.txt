@@ -1,0 +1,24 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [tobiori_check gor_02.o] AT 80607E34 ---
+80607E34:   callc [get_camcurve_init gor_02.o]
+80607E3C:   loop 0
+80607E44:     loop 0
+80607E4C:       callc [get_camcurve gor_02.o] LW(10)
+80607E58:       callc [evt_mario_get_pos evt_mario.o] 0 LW(0) LW(1) LW(2)
+80607E70:       if_int_eq LW(10) 1
+80607E7C:         if_int_ge LW(0) 370
+80607E88:           loop_break
+80607E8C:         endif
+80607E90:       endif
+80607E94:       wait_frames 1
+80607E9C:     end_loop
+80607EA0:     dbg_report ["カメラ移動開始"]
+80607EA8:     callc [evt_mapobj_flag_onoff evt_map.o] 1 1 ["S_ie_05_soto"] 1
+80607EC0:     callc [camera_move_check gor_02.o]
+80607EC8:     dbg_report ["カメラ移動終了"]
+80607ED0:     callc [evt_mapobj_flag_onoff evt_map.o] 1 0 ["S_ie_05_soto"] 1
+80607EE8:   end_loop
+80607EEC:   return
+80607EF0:   end

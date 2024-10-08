@@ -1,0 +1,46 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [dead_event unit_boss_macho_gance.o] AT 805DC678 ---
+805DC678:   callc [btlevtcmd_WaitAttackEnd battle_event_cmd.o]
+805DC680:   callc [btlevtcmd_StatusWindowOnOff battle_event_cmd.o] 0
+805DC68C:   setii LW(0) 1
+805DC698:   callss [macho_gance_zoom unit_boss_macho_gance.o]
+805DC6A0:   callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 1 ["D_2"]
+805DC6B4:   wait_ms 170
+805DC6BC:   callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_BOSS_GANSU_DOWN1"] [F1194D80] 0 [F1194D80]
+805DC6D8:   callc [evt_cam_shake evt_cam.o] 4 0.02 0.00 500
+805DC6F0:   wait_ms 200
+805DC6F8:   callc [btlevtcmd_SetTalkPose battle_event_cmd.o] -2 ["T_2"]
+805DC708:   callc [btlevtcmd_SetStayPose battle_event_cmd.o] -2 ["S_2"]
+805DC718:   callc [evt_msg_print evt_msg.o] 2 ["stg3_tou_471_20"] 0 -2
+805DC730:   wait_ms 300
+805DC738:   callc [btlevtcmd_StatusWindowOnOff battle_event_cmd.o] 1
+805DC744:   callc [evt_btl_camera_set_mode battle_camera.o] 0 0
+805DC754:   wait_ms 500
+805DC75C:   setii LW(10) -2
+805DC768:   callss [subsetevt_dead_core_nospin_norotate battle_event_subset.o]
+805DC770:   return
+805DC774:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [macho_gance_zoom unit_boss_macho_gance.o] AT 805DB768 ---
+805DB768:   callc [btlevtcmd_GetStatusMg battle_event_cmd.o] -2 LW(2)
+805DB778:   mulf LW(2) 10.00
+805DB784:   callc [btlevtcmd_GetUnitWorkFloat battle_event_cmd.o] -2 3 LW(1)
+805DB798:   mulf LW(2) LW(1)
+805DB7A4:   callc [evt_btl_camera_set_mode battle_camera.o] 0 3
+805DB7B4:   if_int_ne LW(0) 2
+805DB7C0:     setii LW(1) 30
+805DB7CC:   else
+805DB7D0:     setii LW(1) 1
+805DB7DC:   endif
+805DB7E0:   if_int_le LW(2) 10.00
+805DB7EC:     callc [evt_btl_camera_set_moveto battle_camera.o] 0 83 124 512 83 89 0 LW(1) 11
+805DB818:   else
+805DB81C:     callc [evt_btl_camera_set_moveto battle_camera.o] 0 71 159 609 71 118 0 LW(1) 11
+805DB848:   endif
+805DB84C:   if_int_eq LW(0) 1
+805DB858:     wait_ms 600
+805DB860:   endif
+805DB864:   return
+805DB868:   end

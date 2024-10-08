@@ -1,0 +1,139 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [attack_event_patakuri unit_hyper_patakuri.o] AT 805C89EC ---
+805C89EC:   callc [btlevtcmd_CheckStatus battle_event_cmd.o] -2 16 LW(0)
+805C8A00:   if_int_eq LW(0) 1
+805C8A0C:     goto 10
+805C8A14:   endif
+805C8A18:   callc [btlevtcmd_EnemyItemUseCheck battle_event_cmd.o] -2 LW(0)
+805C8A28:   if_int_ne LW(0) 0
+805C8A34:     callss LW(0)
+805C8A3C:     callc [btlevtcmd_StartWaitEvent battle_event_cmd.o] -2
+805C8A48:     return
+805C8A4C:   endif
+805C8A50:   callc [btlevtcmd_get_turn battle_event_cmd.o] LW(0)
+805C8A5C:   if_int_le LW(0) 1
+805C8A68:     callc [btlevtcmd_DrawLots battle_event_cmd.o] LW(0) 2 25 75
+805C8A80:   else
+805C8A84:     callc [btlevtcmd_DrawLots battle_event_cmd.o] LW(0) 2 25 25
+805C8A9C:   endif
+805C8AA0:   if_int_eq LW(0) 1
+805C8AAC:     setii LW(9) [weapon_patakuri_charge unit_hyper_patakuri.o]
+805C8AB8:     callc [btlevtcmd_PayWeaponCost battle_event_cmd.o] -2 LW(9)
+805C8AC8:     callc [evt_btl_camera_set_mode battle_camera.o] 0 7
+805C8AD8:     callc [evt_btl_camera_set_homing_unit battle_camera.o] 0 -2 -1
+805C8AEC:     callc [evt_btl_camera_set_moveSpeedLv battle_camera.o] 0 2
+805C8AFC:     callc [evt_btl_camera_set_zoom battle_camera.o] 0 300
+805C8B0C:     wait_frames 40
+805C8B14:     callc [btlevtcmd_GetPos battle_event_cmd.o] -2 LW(0) LW(1) LW(2)
+805C8B2C:     addi LW(1) 15
+805C8B38:     addi LW(2) 10
+805C8B44:     callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_ENM_CHARGE1"] [F1194D80] 0 [F1194D80]
+805C8B60:     callc [evt_eff64 evt_eff.o] [zero_gra_000027d4 unit_hyper_patakuri.o] ["crystal_n64"] 7 LW(0) LW(1) LW(2) 1.50 60 0 0 0 0 0 0
+805C8BA0:     wait_ms 1000
+805C8BA8:     begin_thread
+805C8BAC:       callc [evt_btl_camera_set_mode battle_camera.o] 0 3
+805C8BBC:       callc [btlevtcmd_GetPos battle_event_cmd.o] -2 LW(0) LW(1) LW(2)
+805C8BD4:       callc [btlevtcmd_JumpSetting battle_event_cmd.o] -2 20 0 1.00
+805C8BEC:       callc [btlevtcmd_JumpPosition battle_event_cmd.o] -2 LW(0) LW(1) LW(2) 20 -1
+805C8C0C:       wait_ms 500
+805C8C14:       callc [evt_btl_camera_set_mode battle_camera.o] 0 0
+805C8C24:     end_thread
+805C8C28:     callc [btlevtcmd_CheckDamage battle_event_cmd.o] -2 -2 1 LW(9) 256 LW(5)
+805C8C48:     return
+805C8C4C:   endif
+805C8C50: 10:
+805C8C58:   callc [btlevtcmd_GetEnemyBelong battle_event_cmd.o] -2 LW(0)
+805C8C68:   callc [btlevtcmd_SamplingEnemy battle_event_cmd.o] -2 LW(0) [weapon_patakuri_attack unit_hyper_patakuri.o]
+805C8C7C:   callc [btlevtcmd_ChoiceSamplingEnemy battle_event_cmd.o] [weapon_patakuri_attack unit_hyper_patakuri.o] LW(3) LW(4)
+805C8C90:   if_int_eq LW(3) -1
+805C8C9C:     callc [btlevtcmd_CheckToken battle_event_cmd.o] -2 16 LW(0)
+805C8CB0:     if_int_ne LW(0) 0
+805C8CBC:       callss [subsetevt_confuse_flustered battle_event_subset.o]
+805C8CC4:       return
+805C8CC8:     endif
+805C8CCC:     goto 99
+805C8CD4:   endif
+805C8CD8:   callc [evt_btl_camera_set_mode battle_camera.o] 0 8
+805C8CE8:   callc [evt_btl_camera_set_homing_unit battle_camera.o] 0 -2 LW(3)
+805C8CFC:   callc [evt_btl_camera_set_moveSpeedLv battle_camera.o] 0 1
+805C8D0C:   callc [evt_btl_camera_set_zoom battle_camera.o] 0 250
+805C8D1C:   callc [btlevtcmd_WeaponAftereffect battle_event_cmd.o] [weapon_patakuri_attack unit_hyper_patakuri.o]
+805C8D28:   callc [btlevtcmd_AttackDeclare battle_event_cmd.o] -2 LW(3) LW(4)
+805C8D3C:   callc [btlevtcmd_WaitGuardMove battle_event_cmd.o]
+805C8D44:   callc [btlevtcmd_PayWeaponCost battle_event_cmd.o] -2 [weapon_patakuri_attack unit_hyper_patakuri.o]
+805C8D54:   callc [btlevtcmd_AnimeChangePoseType battle_event_cmd.o] -2 1 40
+805C8D68:   callc [btlevtcmd_GetHitPos battle_event_cmd.o] LW(3) LW(4) LW(0) LW(1) LW(2)
+805C8D84:   callc [btlevtcmd_FaceDirectionAdd battle_event_cmd.o] LW(3) LW(0) 50
+805C8D98:   addi LW(1) 40
+805C8DA4:   callc [btlevtcmd_CalculateFaceDirection battle_event_cmd.o] -2 -1 LW(0) LW(2) 1 LW(15)
+805C8DC4:   callc [btlevtcmd_ChangeFaceDirection battle_event_cmd.o] -2 LW(15)
+805C8DD4:   callc [btlevtcmd_SetMoveSpeed battle_event_cmd.o] -2 4.00
+805C8DE4:   callc [btlevtcmd_DivePosition battle_event_cmd.o] -2 LW(0) LW(1) LW(2) 0 -16 0 0 -1
+805C8E10:   wait_ms 100
+805C8E18:   callc [btlevtcmd_CalculateFaceDirection battle_event_cmd.o] -2 -1 LW(3) LW(4) 16 LW(15)
+805C8E38:   callc [btlevtcmd_ChangeFaceDirection battle_event_cmd.o] -2 LW(15)
+805C8E48:   callc [evt_btl_camera_set_mode battle_camera.o] 0 3
+805C8E58:   callc [evt_btl_camera_nomove_y_onoff battle_camera.o] 0 1
+805C8E68:   callc [btlevtcmd_AnimeChangePoseType battle_event_cmd.o] -2 1 50
+805C8E7C:   callc [btlevtcmd_FaceDirectionAdd battle_event_cmd.o] LW(3) LW(0) 50
+805C8E90:   callc [btlevtcmd_SetMoveSpeed battle_event_cmd.o] -2 5.00
+805C8EA0:   callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_ENM_PATAKURI_MOVE2"] [F1194D80] 0 [F1194D80]
+805C8EBC:   callc [btlevtcmd_DivePosition battle_event_cmd.o] -2 LW(0) LW(1) LW(2) 0 5 4 0 0
+805C8EE8:   callc [btlevtcmd_PreCheckDamage battle_event_cmd.o] -2 LW(3) LW(4) [weapon_patakuri_attack unit_hyper_patakuri.o] 256 LW(5)
+805C8F08:   switchi LW(5)
+805C8F10:     case_int_eq_any 4
+805C8F18:       goto 90
+805C8F20:       end_multi_case
+805C8F24:     case_int_eq 3
+805C8F2C:       callc [btlevtcmd_StartAvoid battle_event_cmd.o] LW(3) 38
+805C8F3C:       goto 90
+805C8F44:       end_multi_case
+805C8F48:     case_int_eq 6
+805C8F50:       callc [btlevtcmd_StartAvoid battle_event_cmd.o] LW(3) 39
+805C8F60:       goto 90
+805C8F68:     case_int_eq 2
+805C8F70:       callc [btlevtcmd_StartAvoid battle_event_cmd.o] LW(3) 40
+805C8F80:       goto 90
+805C8F88:     case_int_eq 1
+805C8F90:       goto 91
+805C8F98:       end_multi_case
+805C8F9C:     case_default
+805C8FA0:       goto 98
+805C8FA8:       end_multi_case
+805C8FAC:   end_switch
+805C8FB0: 90:
+805C8FB8:   callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_ENM_PATAKURI_MOVE3"] [F1194D80] 0 [F1194D80]
+805C8FD4:   callc [btlevtcmd_SetMoveSpeed battle_event_cmd.o] -2 5.00
+805C8FE4:   callc [btlevtcmd_GetHitPos battle_event_cmd.o] LW(3) LW(4) LW(0) LW(1) LW(2)
+805C9000:   callc [btlevtcmd_FaceDirectionSub battle_event_cmd.o] LW(3) LW(0) 50
+805C9014:   subi LW(1) 10
+805C9020:   callc [btlevtcmd_DivePosition battle_event_cmd.o] -2 LW(0) LW(1) LW(2) 0 -20 1 0 0
+805C904C:   callc [btlevtcmd_AnimeChangePoseType battle_event_cmd.o] -2 1 69
+805C9060:   wait_ms 500
+805C9068:   goto 98
+805C9070: 91:
+805C9078:   callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_ENM_PATAKURI_MOVE3"] [F1194D80] 0 [F1194D80]
+805C9094:   callc [btlevtcmd_SetMoveSpeed battle_event_cmd.o] -2 5.00
+805C90A4:   callc [btlevtcmd_GetHitPos battle_event_cmd.o] LW(3) LW(4) LW(0) LW(1) LW(2)
+805C90C0:   subi LW(1) 10
+805C90CC:   callc [btlevtcmd_DivePosition battle_event_cmd.o] -2 LW(0) LW(1) LW(2) 0 -16 1 0 0
+805C90F8:   callc [evt_btl_camera_shake_h battle_camera.o] 0 1 1 8 0
+805C9114:   callc [evt_btl_camera_set_moveSpeedLv battle_camera.o] 0 2
+805C9124:   callc [evt_btl_camera_add_zoom battle_camera.o] 0 -50
+805C9134:   callc [btlevtcmd_ResultACDefence battle_event_cmd.o] LW(3) [weapon_patakuri_attack unit_hyper_patakuri.o]
+805C9144:   callc [btlevtcmd_CheckDamage battle_event_cmd.o] -2 LW(3) LW(4) [weapon_patakuri_attack unit_hyper_patakuri.o] 256 LW(5)
+805C9164:   goto 98
+805C916C: 98:
+805C9174:   callc [evt_btl_camera_set_mode battle_camera.o] 0 0
+805C9184:   callc [btlevtcmd_SetMoveSoundDataWork battle_event_cmd.o] -2 ["SFX_ENM_PATAKURI_MOVE1"] ["SFX_ENM_PATAKURI_MOVE1"] 0 15 15 0 0
+805C91AC:   callc [btlevtcmd_AnimeChangePoseType battle_event_cmd.o] -2 1 42
+805C91C0:   callc [btlevtcmd_SetMoveSpeed battle_event_cmd.o] -2 7.00
+805C91D0:   callc [btlevtcmd_GetHomePos battle_event_cmd.o] -2 LW(0) LW(1) LW(2)
+805C91E8:   callc [btlevtcmd_DivePosition battle_event_cmd.o] -2 LW(0) LW(1) LW(2) 0 -10 0 0 -2
+805C9214: 99:
+805C921C:   callc [btlevtcmd_ResetFaceDirection battle_event_cmd.o] -2
+805C9228:   callc [btlevtcmd_StartWaitEvent battle_event_cmd.o] -2
+805C9234:   return
+805C9238:   end

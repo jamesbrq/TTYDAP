@@ -1,0 +1,98 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [evt_shop_open rsh_03.o] AT 805DE350 ---
+805DE350:   callc [evt_mario_key_onoff evt_mario.o] 0
+805DE35C:   callc [evt_party_stop evt_party.o] 0
+805DE368:   callc [evt_party_stop evt_party.o] 1
+805DE374:   callc [evt_hitobj_attr_onoff evt_hit.o] 0 1 ["tobira_omise"] 8388608
+805DE38C:   callc [evt_hitobj_attr_onoff evt_hit.o] 0 1 ["tobira_omise_heya"] 8388608
+805DE3A4:   begin_thread
+805DE3A8:     callc [evt_hit_get_position evt_hit.o] ["tobira_omise"] LW(10) LW(11) LW(12)
+805DE3C0:     addi LW(12) 30
+805DE3CC:     callc [evt_party_move_pos evt_party.o] 0 LW(10) LW(12) 300
+805DE3E4:   end_thread
+805DE3E8:   begin_thread
+805DE3EC:     callc [evt_hit_get_position evt_hit.o] ["tobira_omise"] LW(10) LW(11) LW(12)
+805DE404:     addi LW(12) 50
+805DE410:     callc [evt_party_move_pos evt_party.o] 1 LW(10) LW(12) 300
+805DE428:   end_thread
+805DE42C:   callss [shop_door_open rsh_03.o]
+805DE434:   begin_thread
+805DE438:     callc [evt_hit_get_position evt_hit.o] ["tobira_omise"] LW(10) LW(11) LW(12)
+805DE450:     subi LW(12) 30
+805DE45C:     callc [evt_mario_mov_pos evt_mario.o] LW(10) LW(12) 300
+805DE470:   end_thread
+805DE474:   callc [evt_hit_get_position evt_hit.o] ["tobira_omise"] LW(10) LW(11) LW(12)
+805DE48C:   subi LW(12) 20
+805DE498:   callc [evt_party_move_pos evt_party.o] 0 LW(10) LW(12) 300
+805DE4B0:   callc [evt_hit_get_position evt_hit.o] ["tobira_omise"] LW(10) LW(11) LW(12)
+805DE4C8:   subi LW(12) 10
+805DE4D4:   callc [evt_party_move_pos evt_party.o] 1 LW(10) LW(12) 300
+805DE4EC:   callss [shop_door_close rsh_03.o]
+805DE4F4:   callc [omiseHozon rsh_03.o]
+805DE4FC:   callc [evt_img_entry evt_img.o] ["capture_img"]
+805DE508:   callc [evt_img_set_paper evt_img.o] ["capture_img"] ["OFF_d_jaba"]
+805DE518:   callc [evt_img_free_capture evt_img.o] ["capture_img"] 0
+805DE528:   callc [evt_img_alloc_capture evt_img.o] ["capture_img"] 0 0 1 0 0 608 480
+805DE550:   wait_frames 1
+805DE558:   callc [evt_mapobj_flag_onoff evt_map.o] 1 1 ["omise_soto"] 1
+805DE570:   callc [evt_mapobj_flag_onoff evt_map.o] 1 1 ["shokudou"] 1
+805DE588:   callc [evt_mapobj_flag_onoff evt_map.o] 1 1 ["kagu_s"] 1
+805DE5A0:   callc [evt_mapobj_flag_onoff evt_map.o] 1 1 ["tobira"] 1
+805DE5B8:   callc [evt_mapobj_flag_onoff evt_map.o] 1 1 ["s_tobira_omise"] 1
+805DE5D0:   begin_thread
+805DE5D4:     callc [evt_sub_intpl_msec_init evt_sub.o] 11 255 0 500
+805DE5EC:     loop 0
+805DE5F4:       callc [evt_sub_intpl_msec_get_value evt_sub.o]
+805DE5FC:       callc [unk_rsh_00002674 rsh_03.o] LW(0)
+805DE608:       wait_frames 1
+805DE610:       if_int_eq LW(1) 0
+805DE61C:         loop_break
+805DE620:       endif
+805DE624:     end_loop
+805DE628:   end_thread
+805DE62C:   begin_thread
+805DE630:     callc [evt_mario_get_pos evt_mario.o] 0 LW(0) LW(1) LW(2)
+805DE648:     callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_OFF6_SHOP_IN1"] LW(0) LW(1) LW(2) 0
+805DE664:   end_thread
+805DE668:   callc [evt_img_set_paper_anim evt_img.o] ["capture_img"] ["A_1"]
+805DE678:   callc [evt_img_clear_virtual_point evt_img.o] ["capture_img"]
+805DE684:   callc [evt_img_onoff evt_img.o] ["capture_img"] 1
+805DE694:   callc [evt_mapobj_flag_onoff evt_map.o] 1 0 ["omise_masuku"] 1
+805DE6AC:   wait_frames 1
+805DE6B4:   callc [evt_img_wait_animend evt_img.o] ["capture_img"]
+805DE6C0:   callc [evt_mapobj_clear_offscreen evt_map.o] 1 ["omise_soto"]
+805DE6D0:   callc [evt_mapobj_clear_offscreen evt_map.o] 1 ["shokudou"]
+805DE6E0:   callc [evt_mapobj_clear_offscreen evt_map.o] 1 ["kagu_s"]
+805DE6F0:   callc [evt_mapobj_clear_offscreen evt_map.o] 1 ["tobira"]
+805DE700:   callc [evt_mapobj_clear_offscreen evt_map.o] 1 ["s_tobira_omise"]
+805DE710:   callc [evt_img_onoff evt_img.o] ["capture_img"] 0
+805DE720:   callc [evt_hitobj_attr_onoff evt_hit.o] 0 0 ["tobira_omise"] 8388608
+805DE738:   callc [evt_hitobj_attr_onoff evt_hit.o] 0 0 ["tobira_omise_heya"] 8388608
+805DE750:   callc [evt_party_run evt_party.o] 1
+805DE75C:   callc [evt_party_run evt_party.o] 0
+805DE768:   callc [evt_mario_key_onoff evt_mario.o] 1
+805DE774:   return
+805DE778:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [shop_door_open rsh_03.o] AT 805DE268 ---
+805DE268:   callc [evt_mapobj_get_position evt_map.o] ["S_tobira_omise"] LW(0) LW(1) LW(2)
+805DE280:   callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_DOOR_OPEN_SLIDE1"] LW(0) LW(1) LW(2) 0
+805DE29C:   callc [evt_map_playanim evt_map.o] ["mise_door_open"] 0 0
+805DE2B0:   callc [evt_map_checkanim evt_map.o] ["mise_door_open"] LW(0) LW(1)
+805DE2C4:   wait_ms LW(1)
+805DE2CC:   return
+805DE2D0:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [shop_door_close rsh_03.o] AT 805DE2D4 ---
+805DE2D4:   begin_thread
+805DE2D8:     wait_ms 300
+805DE2E0:     callc [evt_mapobj_get_position evt_map.o] ["S_tobira_omise"] LW(0) LW(1) LW(2)
+805DE2F8:     callc [evt_snd_sfxon_3d evt_snd.o] ["SFX_DOOR_SHUT_SLIDE1"] LW(0) LW(1) LW(2) 0
+805DE314:   end_thread
+805DE318:   callc [evt_map_playanim evt_map.o] ["mise_door_close"] 0 0
+805DE32C:   callc [evt_map_checkanim evt_map.o] ["mise_door_close"] LW(0) LW(1)
+805DE340:   wait_ms LW(1)
+805DE348:   return
+805DE34C:   end

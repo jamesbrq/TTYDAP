@@ -1,0 +1,34 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [talk_gard tou_10.o] AT 805F3F14 ---
+805F3F14:   callc [evt_npc_flag_onoff evt_npc.o] 1 ["ガードマン"] 32
+805F3F28:   callc [evt_npc_move_position evt_npc.o] ["ガードマン"] 0 -130 0 80.00 1
+805F3F48:   setii LW(1) 0
+805F3F54:   callsa [bero_open_door_play_se evt_bero.o]
+805F3F5C:   callc [evt_sub_intpl_msec_init evt_sub.o] 11 0 180 500
+805F3F74:   loop 0
+805F3F7C:     callc [evt_sub_intpl_msec_get_value evt_sub.o]
+805F3F84:     callss [n_door_open tou_10.o]
+805F3F8C:     if_int_eq LW(1) 0
+805F3F98:       loop_break
+805F3F9C:     endif
+805F3FA0:   end_loop
+805F3FA4:   begin_thread
+805F3FA8:     callc [evt_npc_move_position evt_npc.o] ["ガードマン"] 0 -200 0 80.00 1
+805F3FC8:     callc [evt_npc_set_position evt_npc.o] ["ガードマン"] 0 -1000 0
+805F3FE0:   end_thread
+805F3FE4:   wait_ms 800
+805F3FEC:   begin_thread
+805F3FF0:     callc [evt_mario_mov_pos2 evt_mario.o] 0 -200 60
+805F4004:   end_thread
+805F4008:   wait_ms 500
+805F4010:   callc [evt_bero_mapchange evt_bero.o] ["tou_03"] 0
+805F4020:   return
+805F4024:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [n_door_open tou_10.o] AT 805F3DA0 ---
+805F3DA0:   mulf LW(0) 0.44
+805F3DAC:   callc [evt_mapobj_rotate evt_map.o] 1 ["door_1"] 0 LW(0) 0
+805F3DC8:   return
+805F3DCC:   end

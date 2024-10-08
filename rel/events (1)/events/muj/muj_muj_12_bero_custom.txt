@@ -1,0 +1,74 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [bero_custom muj_12.o] AT 805E7F00 ---
+805E7F00:   switchi GSW(0)
+805E7F08:     case_int_eq 252
+805E7F10:       callsa [door_custom muj_12.o]
+805E7F18:       callc [evt_mario_normalize evt_mario.o]
+805E7F20:       callc [evt_party_stop evt_party.o] 0
+805E7F2C:       callc [evt_party_stop evt_party.o] 1
+805E7F38:       begin_thread
+805E7F3C:         callc [evt_mario_set_pos evt_mario.o] -218 0 0
+805E7F50:         callc [evt_mario_set_dir evt_mario.o] 90 0 0
+805E7F64:         callc [evt_mario_mov_pos2 evt_mario.o] -100 0 120.00
+805E7F78:       end_thread
+805E7F7C:       begin_thread
+805E7F80:         callc [evt_party_set_pos evt_party.o] 0 -230 0 20
+805E7F98:         callc [evt_party_set_dir evt_party.o] 0 90 0
+805E7FAC:         callc [evt_party_move_pos2 evt_party.o] 0 -130 20 120.00
+805E7FC4:       end_thread
+805E7FC8:       wait_ms 2000
+805E7FD0:       setii LW(0) 1
+805E7FDC:       return
+805E7FE0:     case_int_eq 257
+805E7FE8:       callsa [door_custom muj_12.o]
+805E7FF0:       callc [evt_mario_normalize evt_mario.o]
+805E7FF8:       callc [evt_party_stop evt_party.o] 0
+805E8004:       callc [evt_party_stop evt_party.o] 1
+805E8010:       begin_thread
+805E8014:         callc [evt_mario_set_pos evt_mario.o] -218 0 0
+805E8028:         callc [evt_mario_set_dir evt_mario.o] 90 0 0
+805E803C:         callc [evt_mario_mov_pos2 evt_mario.o] -90 0 120.00
+805E8050:       end_thread
+805E8054:       begin_thread
+805E8058:         callc [evt_party_set_pos evt_party.o] 0 -240 0 -25
+805E8070:         callc [evt_party_set_dir evt_party.o] 0 90 0
+805E8084:         callc [evt_party_move_pos2 evt_party.o] 0 -110 -25 120.00
+805E809C:       end_thread
+805E80A0:       begin_thread
+805E80A4:         callc [evt_party_set_pos evt_party.o] 1 -220 0 25
+805E80BC:         callc [evt_party_set_dir evt_party.o] 1 90 0
+805E80D0:         callc [evt_party_move_pos2 evt_party.o] 1 -120 25 120.00
+805E80E8:       end_thread
+805E80EC:       wait_ms 2000
+805E80F4:       setii LW(0) 1
+805E8100:       return
+805E8104:   end_switch
+805E8108:   setii LW(0) 0
+805E8114:   return
+805E8118:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [door_custom muj_12.o] AT 805E7E2C ---
+805E7E2C:   callc [evt_bero_get_info_anime evt_bero.o] LW(1) LW(10) LW(11) LW(12) LW(13)
+805E7E48:   if_int_ne LW(12) 0
+805E7E54:     setff LW(0) 180.00
+805E7E60:     callss LW(12)
+805E7E68:     callc [evt_bero_mario_go evt_bero.o]
+805E7E70:     wait_ms 1500
+805E7E78:     callsa [bero_close_door_play_se evt_bero.o]
+805E7E80:     setii LW(9) LW(12)
+805E7E8C:     callc [evt_sub_intpl_msec_init evt_sub.o] 11 180 0 500
+805E7EA4:     loop 0
+805E7EAC:       callc [evt_sub_intpl_msec_get_value_para evt_sub.o] LW(0) LW(10)
+805E7EBC:       if_int_eq LW(10) 0
+805E7EC8:         setff LW(0) 0.00
+805E7ED4:         callss LW(9)
+805E7EDC:         loop_break
+805E7EE0:       else
+805E7EE4:         callss LW(9)
+805E7EEC:       endif
+805E7EF0:     end_loop
+805E7EF4:   endif
+805E7EF8:   return
+805E7EFC:   end

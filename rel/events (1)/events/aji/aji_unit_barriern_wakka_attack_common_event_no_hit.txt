@@ -1,0 +1,103 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [wakka_attack_common_event_no_hit unit_barriern.o] AT 8060EC7C ---
+8060EC7C:   callc [btlevtcmd_GetUnitWork battle_event_cmd.o] -2 1 LW(6)
+8060EC90:   if_int_eq LW(6) 0
+8060EC9C:     callc [btlevtcmd_OffPartsAttribute battle_event_cmd.o] -2 LW(15) 67108864
+8060ECB0:   else
+8060ECB4:     callc [btlevtcmd_SetPartsBlur battle_event_cmd.o] -2 LW(15) 255 255 255 255 255 255 255 100 0
+8060ECE8:     callc [btlevtcmd_OnPartsAttribute battle_event_cmd.o] -2 LW(15) 67108864
+8060ECFC:   endif
+8060ED00:   callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 LW(15) ["Z_3"]
+8060ED14:   callc [btlevtcmd_GetPos battle_event_cmd.o] LW(12) LW(6) LW(7) LW(8)
+8060ED2C:   addi LW(8) 1
+8060ED38:   callc [btlevtcmd_SetPartsPos battle_event_cmd.o] -2 LW(15) LW(6) LW(7) LW(8)
+8060ED54:   callc [btlevtcmd_CheckPartsAttribute battle_event_cmd.o] -2 LW(15) 16777216 LW(0)
+8060ED6C:   if_int_ne LW(0) 0
+8060ED78:     callc [btlevtcmd_OffPartsAttribute battle_event_cmd.o] -2 LW(15) 16777216
+8060ED8C:   endif
+8060ED90:   callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 1 ["A_5"]
+8060EDA4:   begin_child_thread
+8060EDA8:     loop 0
+8060EDB0:       callc [btlevtcmd_GetFaceDirection battle_event_cmd.o] -2 LW(0)
+8060EDC0:       if_int_eq LW(0) -1
+8060EDCC:         callc [btlevtcmd_GetPartsPos battle_event_cmd.o] -2 LW(15) LW(0) LW(1) LW(2)
+8060EDE8:         callc [btlevtcmd_GetHitPos battle_event_cmd.o] LW(3) LW(4) LW(6) LW(7) LW(8)
+8060EE04:         if_int_le LW(0) LW(6)
+8060EE10:           callss [start_avoid unit_barriern.o]
+8060EE18:           loop_break
+8060EE1C:         endif
+8060EE20:       else
+8060EE24:         callc [btlevtcmd_GetPartsPos battle_event_cmd.o] -2 LW(15) LW(0) LW(1) LW(2)
+8060EE40:         callc [btlevtcmd_GetHitPos battle_event_cmd.o] LW(3) LW(4) LW(6) LW(7) LW(8)
+8060EE5C:         if_int_ge LW(0) LW(6)
+8060EE68:           callss [start_avoid unit_barriern.o]
+8060EE70:           loop_break
+8060EE74:         endif
+8060EE78:       endif
+8060EE7C:       wait_frames 1
+8060EE84:     end_loop
+8060EE88:   end_child_thread
+8060EE8C:   callc [btlevtcmd_GetUnitWork battle_event_cmd.o] -2 1 LW(6)
+8060EEA0:   if_int_eq LW(6) 0
+8060EEAC:     callc [btlevtcmd_GetHitPos battle_event_cmd.o] LW(3) LW(4) LW(6) LW(7) LW(8)
+8060EEC8:     callc [btlevtcmd_GetStageSize battle_event_cmd.o] LW(6) [F1194D80] [F1194D80]
+8060EEDC:     muli LW(6) 1
+8060EEE8:     callc [btlevtcmd_GetFaceDirection battle_event_cmd.o] -2 LW(0)
+8060EEF8:     muli LW(6) LW(0)
+8060EF04:     subi LW(7) 5
+8060EF10:     callc [btlevtcmd_SetPartsScale battle_event_cmd.o] -2 LW(15) 1 0 1
+8060EF2C:     begin_child_thread
+8060EF30:       loop 0
+8060EF38:         loop 10
+8060EF40:           callc [btlevtcmd_AddPartsScale battle_event_cmd.o] -2 LW(15) 0 0.13 0
+8060EF5C:           wait_frames 1
+8060EF64:         end_loop
+8060EF68:         loop 10
+8060EF70:           callc [btlevtcmd_AddPartsScale battle_event_cmd.o] -2 LW(15) 0 -0.13 0
+8060EF8C:           wait_frames 1
+8060EF94:         end_loop
+8060EF98:       end_loop
+8060EF9C:     end_child_thread
+8060EFA0:     callc [btlevtcmd_JumpPartsSetting battle_event_cmd.o] -2 LW(15) 0 4 0
+8060EFBC:     callc [btlevtcmd_JumpPartsPosition battle_event_cmd.o] -2 LW(15) LW(6) LW(7) LW(8) 0 -1
+8060EFE0:   else
+8060EFE4:     callc [btlevtcmd_GetHitPos battle_event_cmd.o] LW(3) LW(4) LW(6) LW(7) LW(8)
+8060F000:     callc [btlevtcmd_GetStageSize battle_event_cmd.o] LW(6) [F1194D80] [F1194D80]
+8060F014:     muli LW(6) 1
+8060F020:     callc [btlevtcmd_GetFaceDirection battle_event_cmd.o] -2 LW(0)
+8060F030:     muli LW(6) LW(0)
+8060F03C:     subi LW(7) 5
+8060F048:     callc [btlevtcmd_SetPartsScale battle_event_cmd.o] -2 LW(15) 1 0 1
+8060F064:     begin_child_thread
+8060F068:       loop 0
+8060F070:         loop 5
+8060F078:           callc [btlevtcmd_AddPartsScale battle_event_cmd.o] -2 LW(15) 0 0.25 0
+8060F094:           wait_frames 1
+8060F09C:         end_loop
+8060F0A0:         loop 5
+8060F0A8:           callc [btlevtcmd_AddPartsScale battle_event_cmd.o] -2 LW(15) 0 -0.25 0
+8060F0C4:           wait_frames 1
+8060F0CC:         end_loop
+8060F0D0:       end_loop
+8060F0D4:     end_child_thread
+8060F0D8:     callc [btlevtcmd_JumpPartsSetting battle_event_cmd.o] -2 LW(15) 0 7 0
+8060F0F4:     callc [btlevtcmd_JumpPartsPosition battle_event_cmd.o] -2 LW(15) LW(6) LW(7) LW(8) 0 -1
+8060F118:     callc [btlevtcmd_SetPartsPos battle_event_cmd.o] -2 LW(15) 0 -1000 0
+8060F134:   endif
+8060F138:   return
+8060F13C:   end
+
+--- START OF DISASSEMBLY FOR FUNCTION [start_avoid unit_barriern.o] AT 8060EC14 ---
+8060EC14:   if_int_eq LW(5) 3
+8060EC20:     callc [btlevtcmd_StartAvoid battle_event_cmd.o] LW(3) 38
+8060EC30:   endif
+8060EC34:   if_int_eq LW(5) 6
+8060EC40:     callc [btlevtcmd_StartAvoid battle_event_cmd.o] LW(3) 39
+8060EC50:   endif
+8060EC54:   if_int_eq LW(5) 2
+8060EC60:     callc [btlevtcmd_StartAvoid battle_event_cmd.o] LW(3) 40
+8060EC70:   endif
+8060EC74:   return
+8060EC78:   end

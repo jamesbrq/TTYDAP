@@ -1,0 +1,39 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [dmg_avoid_counter_thorn_front_event unit_yamitogedaruma.o] AT 80CC4C08 ---
+80CC4C08:   callc [btlevtcmd_snd_se battle_event_cmd.o] -2 ["SFX_ENM_TOGEDA_MOVE1"] [F1194D80] 0 [F1194D80]
+80CC4C24:   begin_child_thread
+80CC4C28:     callc [btlevtcmd_CheckStatus battle_event_cmd.o] -2 17 LW(0)
+80CC4C3C:     if_int_ne LW(0) 0
+80CC4C48:       callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 1 ["TGD_J_3"]
+80CC4C5C:       wait_frames 60
+80CC4C64:       callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 1 ["TGD_J_4"]
+80CC4C78:     else
+80CC4C7C:       callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 1 ["TGD_J_1"]
+80CC4C90:       wait_frames 60
+80CC4C98:       callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] -2 1 ["TGD_J_2"]
+80CC4CAC:     endif
+80CC4CB0:   end_child_thread
+80CC4CB4:   wait_frames 30
+80CC4CBC:   callc [btlevtcmd_GetPos battle_event_cmd.o] -2 LW(0) LW(1) LW(2)
+80CC4CD4:   callc [btlevtcmd_CheckStatus battle_event_cmd.o] -2 10 LW(3)
+80CC4CE8:   if_int_ne LW(3) 0
+80CC4CF4:     callc [btlevtcmd_FaceDirectionAdd battle_event_cmd.o] -2 LW(0) 53
+80CC4D08:     addi LW(1) 26
+80CC4D14:     goto 90
+80CC4D1C:   endif
+80CC4D20:   callc [btlevtcmd_CheckStatus battle_event_cmd.o] -2 11 LW(3)
+80CC4D34:   if_int_ne LW(3) 0
+80CC4D40:     callc [btlevtcmd_FaceDirectionAdd battle_event_cmd.o] -2 LW(0) 33
+80CC4D54:     addi LW(1) 16
+80CC4D60:     goto 90
+80CC4D68:   endif
+80CC4D6C:   callc [btlevtcmd_FaceDirectionAdd battle_event_cmd.o] -2 LW(0) 43
+80CC4D80:   addi LW(1) 21
+80CC4D8C:   goto 90
+80CC4D94: 90:
+80CC4D9C:   callc [evt_eff evt_eff.o] [zero_jon_0000b820 unit_yamitogedaruma.o] ["toge_flush"] 0 LW(0) LW(1) LW(2) 60 0 0 0 0 0 0 0
+80CC4DDC:   wait_frames 60
+80CC4DE4:   return
+80CC4DE8:   end

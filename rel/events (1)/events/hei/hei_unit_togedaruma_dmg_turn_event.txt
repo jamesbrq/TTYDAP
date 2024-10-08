@@ -1,0 +1,39 @@
+ttydasm v1.0 by PistonMiner, built on Wed Jul 19 12:47:35 2017
+
+
+--- START OF DISASSEMBLY FOR FUNCTION [dmg_turn_event unit_togedaruma.o] AT 805DF40C ---
+805DF40C:   setii LW(10) -2
+805DF418:   setii LW(11) 1
+805DF424:   callc [btlevtcmd_SetPartsDefenceTable battle_event_cmd.o] LW(10) LW(11) [defence_turn unit_togedaruma.o]
+805DF438:   callc [btlevtcmd_AnimeSetPoseTable battle_event_cmd.o] LW(10) LW(11) [pose_table_turn unit_togedaruma.o]
+805DF44C:   callc [btlevtcmd_OnStatusFlag battle_event_cmd.o] LW(10) 1
+805DF45C:   callc [btlevtcmd_GetOverTurnCount battle_event_cmd.o] LW(10) LW(12)
+805DF46C:   callc [btlevtcmd_SetOverTurnCount battle_event_cmd.o] LW(10) 2
+805DF47C:   wait_frames 2
+805DF484:   callc [btlevtcmd_snd_se battle_event_cmd.o] LW(10) ["SFX_ENM_INSIDE1"] [F1194D80] 0 [F1194D80]
+805DF4A0:   callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] LW(10) LW(11) ["TGD_S_1"]
+805DF4B4:   if_int_le LW(12) 0
+805DF4C0:     setii LW(12) 0
+805DF4CC:     callc [btlevtcmd_SetRotateOffset battle_event_cmd.o] -2 0 10 0
+805DF4E4:     begin_child_thread
+805DF4E8:       loop 0
+805DF4F0:         if_int_ge LW(12) 10
+805DF4FC:           loop_break
+805DF500:         endif
+805DF504:         addi LW(12) 1
+805DF510:         wait_frames 1
+805DF518:         callc [btlevtcmd_AddRotate battle_event_cmd.o] -2 0 0 -18
+805DF530:       end_loop
+805DF534:     end_child_thread
+805DF538:   endif
+805DF53C:   callc [btlevtcmd_SetFallAccel battle_event_cmd.o] -2 0.70
+805DF54C:   callc [btlevtcmd_GetPos battle_event_cmd.o] -2 LW(0) LW(1) LW(2)
+805DF564:   callc [btlevtcmd_JumpPosition battle_event_cmd.o] -2 LW(0) LW(1) LW(2) 25 -1
+805DF584:   callc [btlevtcmd_SetRotate battle_event_cmd.o] -2 0 0 0
+805DF59C:   callc [btlevtcmd_SetRotateOffset battle_event_cmd.o] -2 0 0 0
+805DF5B4:   callc [btlevtcmd_AnimeChangePose battle_event_cmd.o] LW(10) LW(11) ["TGD_S_5"]
+805DF5C8:   callc [btlevtcmd_GetPos battle_event_cmd.o] -2 LW(0) LW(1) LW(2)
+805DF5E0:   callc [btlevtcmd_SetPos battle_event_cmd.o] -2 LW(0) 10 LW(2)
+805DF5F8:   callc [btlevtcmd_SetHomePos battle_event_cmd.o] -2 LW(0) 10 LW(2)
+805DF610:   return
+805DF614:   end
