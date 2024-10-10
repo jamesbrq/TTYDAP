@@ -3,6 +3,6 @@
 #include <gc/OSLink.h>
 #include "common_types.h"
 
-using namespace ttyd::common;
+using gc::OSLink::OSModuleInfo;
 
-void DoPatches(ModuleId::e module_id);
+void DoPatches(OSModuleInfo*);

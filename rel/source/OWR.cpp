@@ -3,7 +3,7 @@
 #include <ttyd/itemdrv.h>
 #include <ttyd/item_data.h>
 #include <ttyd/common_types.h>
-#include <ttyd/OSLink.h>
+#include <gc/OSLink.h>
 #include <OWR_STATE.h>
 #include <ttyd/swdrv.h>
 #include <ttyd/mario_party.h>
@@ -19,7 +19,7 @@
 #include "patch.h"
 
 using ::ttyd::common::ItemData;
-using ::ttyd::oslink::OSModuleInfo;
+using gc::OSLink::OSModuleInfo;
 using ::ttyd::common::ShopItemData;
 using namespace ::ttyd::common;
 using ::ttyd::seqdrv::SeqIndex;
@@ -115,7 +115,7 @@ namespace mod::owr
 			}); */
 
 		g_OSLink_trampoline = patch::hookFunction(
-			ttyd::oslink::OSLink, [](OSModuleInfo* new_module, void* bss) {
+			gc::OSLink::OSLink, [](OSModuleInfo* new_module, void* bss) {
 				bool result = g_OSLink_trampoline(new_module, bss);
 				if (new_module != nullptr && result) {
 					gSelf->OnModuleLoaded(new_module);
@@ -162,10 +162,9 @@ namespace mod::owr
 	void OWR::OnModuleLoaded(OSModuleInfo* module_info)
 	{
 		if (module_info == nullptr) return;
-		int32_t module_id = module_info->id;
 		uintptr_t module_ptr = reinterpret_cast<uintptr_t>(module_info);
-		if (module_id != ModuleId::GOR) return;
-		DoPatches(static_cast<ttyd::common::ModuleId::e>(module_id));
+		if (module_info->id != ModuleId::GOR) return;
+		DoPatches(module_info);
 		ShopItemData* item_data = reinterpret_cast<ShopItemData*>(module_ptr + kShopOffsets[0]);
 		for (int32_t copy = 0; copy < 7; ++copy) {
 			// Skip first item slot on additional copies.
