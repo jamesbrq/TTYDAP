@@ -9,6 +9,8 @@ void writeStandardBranches(void *address, void functionStart(), void functionBra
 void writeBranch(void *ptr, void *destination);
 void writeBranchBL(void *ptr, void *destination);
 void writeBranchMain(void *ptr, void *destination, uint32_t branch);
+void replaceEvtInstr(int32_t* instr, uint16_t opc);
+void writeEvtBranch(int32_t* instr, const int32_t* destination, bool async = false);
 
 // Replaces the data at `destination` with an arbitrary patch.
 void writePatch(void* destination, const void* patch_start, const void* patch_end);

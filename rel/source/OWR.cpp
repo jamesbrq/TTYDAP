@@ -13,6 +13,7 @@
 #include <ttyd/event.h>
 #include <ttyd/string.h>
 #include <patches_gor1.h>
+#include <gor.h>
 
 #include "common.h"
 #include "OWR.h"
@@ -77,19 +78,21 @@ namespace mod::owr
 		if (SequencePosition != 0)
 			return;
 
-		ttyd::swdrv::swByteSet(0, 12);
+		ttyd::swdrv::swByteSet(0, 3);
 
-		uint8_t goombella = static_cast<uint8_t>(ttyd::party::PartyMembers::Goombella);
+		//uint8_t goombella = static_cast<uint8_t>(ttyd::party::PartyMembers::Goombella);
 
-		ttyd::mario_party::partyJoin(goombella);
+		//ttyd::mario_party::partyJoin(goombella);
 
-		ttyd::mario_party::marioPartyHello(goombella);
+		//ttyd::mario_party::marioPartyHello(goombella);
 
 		uint16_t size = GSWF_ARR_SIZE;
 		for (int i = 0; i < size; i++)
 		{
 			ttyd::swdrv::swSet(GSWF_ARR[i]);
 		}
+		ttyd::swdrv::swSet(1215);
+		ttyd::swdrv::swSet(1216);
 	}
 
 	void OWR::LZTest()
@@ -100,7 +103,7 @@ namespace mod::owr
 
 		if (NextSeq == Load)
 		{
-			strcpy_String(reinterpret_cast<char*>(aaa_00_Address), "gor_01");
+			strcpy_String(reinterpret_cast<char*>(aaa_00_Address), "gor_00");
 		}
 	}
 
@@ -165,6 +168,7 @@ namespace mod::owr
 		uintptr_t module_ptr = reinterpret_cast<uintptr_t>(module_info);
 		if (module_info->id != ModuleId::GOR) return;
 		DoPatches(module_info);
+		ApplyGorPatches(module_info);
 		ShopItemData* item_data = reinterpret_cast<ShopItemData*>(module_ptr + kShopOffsets[0]);
 		for (int32_t copy = 0; copy < 7; ++copy) {
 			// Skip first item slot on additional copies.
