@@ -79,6 +79,7 @@ namespace mod::owr
 			return;
 
 		ttyd::swdrv::swByteSet(0, 3);
+		ttyd::swdrv::swByteSet(1700, 3);
 
 		//uint8_t goombella = static_cast<uint8_t>(ttyd::party::PartyMembers::Goombella);
 

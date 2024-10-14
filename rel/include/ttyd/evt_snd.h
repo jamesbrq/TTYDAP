@@ -12,9 +12,9 @@ extern "C" {
 // evt_snd_set_rev_mode
 // evt_snd_env_lpf
 // evt_snd_envoff_f
-// evt_snd_envoff
+EVT_DECLARE_USER_FUNC(evt_snd_envoff, 1)
 // evt_snd_envon_f
-// evt_snd_envon
+EVT_DECLARE_USER_FUNC(evt_snd_envon, 2)
 // evt_snd_sfx_dist
 // evt_snd_sfx_pos
 // evt_snd_sfx_vol
@@ -26,7 +26,7 @@ extern "C" {
 // evt_snd_sfxon_
 // evt_snd_sfxon__
 EVT_DECLARE_USER_FUNC(evt_snd_sfxon, 2)
-// evt_snd_bgm_scope
+EVT_DECLARE_USER_FUNC(evt_snd_bgm_scope, 2)
 // evt_snd_bgm_freq
 // evt_snd_bgmoff_f
 EVT_DECLARE_USER_FUNC(evt_snd_bgmoff, 1)
