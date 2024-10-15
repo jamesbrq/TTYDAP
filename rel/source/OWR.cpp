@@ -12,8 +12,9 @@
 #include <ttyd/seqdrv.h>
 #include <ttyd/event.h>
 #include <ttyd/string.h>
-#include <patches_gor1.h>
-#include <gor.h>
+#include <AP/gor_00.h>
+#include <AP/gor_01.h>
+#include <AP/gor_02.h>
 
 #include "common.h"
 #include "OWR.h"
@@ -53,11 +54,14 @@ uint16_t GSWF_ARR[] =
 	//Zess T. blocking gate enable
 	1187,
 
-	//Contact Lens Ordered
-	1189,
+	//Contact Lens Ordered and in shop
+	1189, 1191,
 
 	//Skip Zess T. Explain Dialogue
-	1197
+	1197,
+
+	//Attempt to enter ch.4 pipe early
+	1341
 };
 uint16_t GSWF_ARR_SIZE = sizeof(GSWF_ARR) / sizeof(GSWF_ARR[0]);
 
@@ -79,13 +83,14 @@ namespace mod::owr
 			return;
 
 		ttyd::swdrv::swByteSet(0, 3);
-		ttyd::swdrv::swByteSet(1700, 3);
+		ttyd::swdrv::swByteSet(1700, 7);
+		ttyd::swdrv::swByteSet(1705, 1);
 
-		//uint8_t goombella = static_cast<uint8_t>(ttyd::party::PartyMembers::Goombella);
+		uint8_t goombella = static_cast<uint8_t>(ttyd::party::PartyMembers::Goombella);
 
-		//ttyd::mario_party::partyJoin(goombella);
+		ttyd::mario_party::partyJoin(goombella);
 
-		//ttyd::mario_party::marioPartyHello(goombella);
+		ttyd::mario_party::marioPartyHello(goombella);
 
 		uint16_t size = GSWF_ARR_SIZE;
 		for (int i = 0; i < size; i++)
@@ -104,7 +109,7 @@ namespace mod::owr
 
 		if (NextSeq == Load)
 		{
-			strcpy_String(reinterpret_cast<char*>(aaa_00_Address), "gor_00");
+			strcpy_String(reinterpret_cast<char*>(aaa_00_Address), "gor_01");
 		}
 	}
 
@@ -168,8 +173,9 @@ namespace mod::owr
 		if (module_info == nullptr) return;
 		uintptr_t module_ptr = reinterpret_cast<uintptr_t>(module_info);
 		if (module_info->id != ModuleId::GOR) return;
-		DoPatches(module_info);
-		ApplyGorPatches(module_info);
+		ApplyGor00Patches(module_info);
+		ApplyGor01Patches(module_info);
+		ApplyGor02Patches(module_info);
 		ShopItemData* item_data = reinterpret_cast<ShopItemData*>(module_ptr + kShopOffsets[0]);
 		for (int32_t copy = 0; copy < 7; ++copy) {
 			// Skip first item slot on additional copies.
