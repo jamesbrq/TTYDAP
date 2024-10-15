@@ -10,7 +10,7 @@ extern "C" {
 
 // evt_snd_sfx_all_stop
 // evt_snd_set_rev_mode
-// evt_snd_env_lpf
+EVT_DECLARE_USER_FUNC(evt_snd_env_lpf, 2)
 // evt_snd_envoff_f
 EVT_DECLARE_USER_FUNC(evt_snd_envoff, 1)
 // evt_snd_envon_f

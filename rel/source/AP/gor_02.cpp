@@ -78,6 +78,95 @@ EVT_BEGIN(borodo2_talk_evt)
 	RETURN()
 EVT_END()
 
+EVT_BEGIN(gor_02_init_evt1)
+	SET(LW(0), 0)
+	IF_EQUAL(GSW(1700), 18)
+		ADD(LW(0), 1)
+	END_IF()
+	IF_EQUAL(GSW(1701), 99) //Unknown
+		ADD(LW(0), 1)
+	END_IF()
+	IF_EQUAL(GSW(1702), 99) //Unknown
+		ADD(LW(0), 1)
+	END_IF()
+	IF_EQUAL(GSW(1703), 99) //Unknown
+		ADD(LW(0), 1)
+	END_IF()
+	IF_EQUAL(GSW(1704), 99) //Unknown
+		ADD(LW(0), 1)
+	END_IF()
+	IF_EQUAL(GSW(1705), 99) //Unknown
+		ADD(LW(0), 1)
+	END_IF()
+	IF_EQUAL(GSW(1706), 99) //Unknown
+		ADD(LW(0), 1)
+	END_IF()
+	IF_LARGE_EQUAL(LW(0), 1)
+		USER_FUNC(evt_snd::evt_snd_bgmon, 512, PTR("BGM_EVT_FRANKURI1"))
+		USER_FUNC(evt_snd::evt_snd_envoff, 512)
+	ELSE()
+		IF_NOT_EQUAL(GSW(1708), 99) //Unknown
+			USER_FUNC(evt_snd::evt_snd_bgmon, 512, PTR("BGM_STG0_GOR1"))
+			USER_FUNC(evt_snd::evt_snd_envon, 272, PTR("ENV_STG0_GOR3"))
+		END_IF()
+	END_IF()
+	RETURN()
+EVT_END()
+
+EVT_BEGIN(evt_door_02_open_evt)
+	SET(LW(0), 0)
+	IF_EQUAL(GSW(1700), 18)
+		ADD(LW(0), 1)
+	END_IF()
+	IF_EQUAL(GSW(1701), 99) //Unknown
+		ADD(LW(0), 1)
+	END_IF()
+	IF_EQUAL(GSW(1702), 99) //Unknown
+		ADD(LW(0), 1)
+	END_IF()
+	IF_EQUAL(GSW(1703), 99) //Unknown
+		ADD(LW(0), 1)
+	END_IF()
+	IF_EQUAL(GSW(1704), 99) //Unknown
+		ADD(LW(0), 1)
+	END_IF()
+	IF_EQUAL(GSW(1705), 99) //Unknown
+		ADD(LW(0), 1)
+	END_IF()
+	IF_EQUAL(GSW(1706), 99) //Unknown
+		ADD(LW(0), 1)
+	END_IF()
+	IF_LARGE_EQUAL(LW(0), 1)
+		USER_FUNC(evt_snd::evt_snd_envoff, 18432)
+		USER_FUNC(evt_snd::evt_snd_env_lpf, 0, 800)
+		RETURN()
+	END_IF()
+	IF_EQUAL(GSW(1706), 99) //Unknown
+		USER_FUNC(evt_snd::evt_snd_bgmon, 512, PTR("BGM_EVT_FRANKURI1"))
+		USER_FUNC(evt_snd::evt_snd_envoff, 18432)
+		USER_FUNC(evt_snd::evt_snd_env_lpf, 0, 800)
+		RETURN()
+	END_IF()
+	IF_NOT_EQUAL(GSW(1708), 99) //Unknown
+		USER_FUNC(evt_snd::evt_snd_bgmoff, 18432)
+		USER_FUNC(evt_snd::evt_snd_envoff, 18432)
+		USER_FUNC(evt_snd::evt_snd_env_lpf, 0, 800)
+		RETURN()
+	END_IF()
+	END_IF()
+	RETURN()
+EVT_END()
+
+EVT_BEGIN(gor_02_init_hook)
+	RUN_CHILD_EVT(gor_02_init_evt1)
+	GOTO(&gor_02_init_evt[38])
+EVT_END()
+
+EVT_BEGIN(evt_door_02_open_hook)
+	RUN_CHILD_EVT(evt_door_02_open_evt)
+	GOTO(&evt_door_02_open[55])
+EVT_END()
+
 
 void ApplyGor02Patches(OSModuleInfo* module_info)
 {
@@ -203,5 +292,50 @@ void ApplyGor02Patches(OSModuleInfo* module_info)
 	epigraphy_map_after_stage6[227] = 99;
 
 	kurihakase_after3minutes[136] = GSW(1706); //Ch.6 epilogue
-	epigraphy_map_after_stage6[137] = 99;
+	kurihakase_after3minutes[137] = 99;
+	
+	gor_02_init_evt[531] = GSW(1708); //Gor_02 Init
+	gor_02_init_evt[532] = 99; //Unknown
+	gor_02_init_evt[407] = GSW(1710);
+	gor_02_init_evt[409] = 0;
+	gor_02_init_evt[413] = 1;
+	gor_02_init_evt[417] = 2;
+	gor_02_init_evt[421] = 3;
+	gor_02_init_evt[425] = 4;
+	gor_02_init_evt[429] = 5;
+	gor_02_init_evt[433] = 6;
+	gor_02_init_evt[401] = GSW(1700);
+	gor_02_init_evt[378] = GSW(1700);
+	gor_02_init_evt[375] = GSW(1700);
+	gor_02_init_evt[360] = GSW(1700);
+	gor_02_init_evt[201] = GSW(1701);
+	gor_02_init_evt[202] = 1;
+	gor_02_init_evt[59] = GSW(1700);
+	gor_02_init_evt[46] = GSW(1705);
+	gor_02_init_evt[47] = 99; //Unknown
+	patch::writePatch(&gor_02_init_evt[0], gor_02_init_evt1, sizeof(gor_02_init_evt1));
+
+	evt_door_03_close[15] = GSW(1705); //Door 3 close
+	evt_door_03_close[16] = 3;
+	evt_door_03_close[86] = GSW(1705);
+	evt_door_03_close[87] = 5;
+	evt_door_03_close[159] = GSW(1705);
+	evt_door_03_close[160] = 6;
+
+	evt_door_02_close[3] = GSW(1706); //Door 2 open
+	evt_door_02_close[5] = 99; //Unknown
+	evt_door_02_close[7] = 99; //Unknown
+	evt_door_02_close[43] = GSW(1700);
+	evt_door_02_close[51] = GSW(1700);
+
+	evt_door_02_open[56] = GSW(1700); //Door 2 open
+	evt_door_02_open[69] = GSW(1710);
+	evt_door_02_open[71] = 1;
+	evt_door_02_open[72] = 2;
+	evt_door_02_open[80] = 3;
+	evt_door_02_open[81] = 4;
+	evt_door_02_open[91] = 5;
+	evt_door_02_open[92] = 6;
+	evt_door_02_open[102] = GSW(1700);
+	patch::writePatch(&evt_door_02_open[2], evt_door_02_open_hook, sizeof(evt_door_02_open_hook));
 }
