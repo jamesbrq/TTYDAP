@@ -15,6 +15,7 @@
 #include <AP/gor_00.h>
 #include <AP/gor_01.h>
 #include <AP/gor_02.h>
+#include <AP/gor_03.h>
 
 #include "common.h"
 #include "OWR.h"
@@ -176,6 +177,7 @@ namespace mod::owr
 		ApplyGor00Patches(module_info);
 		ApplyGor01Patches(module_info);
 		ApplyGor02Patches(module_info);
+		ApplyGor03Patches(module_info);
 		ShopItemData* item_data = reinterpret_cast<ShopItemData*>(module_ptr + kShopOffsets[0]);
 		for (int32_t copy = 0; copy < 7; ++copy) {
 			// Skip first item slot on additional copies.

@@ -9,8 +9,8 @@ namespace ttyd::evt_cam {
 extern "C" {
 
 // evt_cam_letter_box_camid
-// evt_cam_letter_box_disable
-// evt_cam_letter_box_onoff
+EVT_DECLARE_USER_FUNC(evt_cam_letter_box_disable, 1)
+EVT_DECLARE_USER_FUNC(evt_cam_letter_box_onoff, 2)
 // evt_cam_type_change
 // evt_cam_shift_reset
 // evt_cam_road_reset2

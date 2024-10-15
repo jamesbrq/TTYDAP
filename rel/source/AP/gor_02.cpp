@@ -1,4 +1,5 @@
-#include <AP/gor_01.h>
+#include <AP/gor_02.h>
+#include <ttyd/evt_cam.h>
 #include <ttyd/evt_npc.h>
 #include <ttyd/evt_nannpc.h>
 #include <ttyd/evt_msg.h>
@@ -165,6 +166,72 @@ EVT_END()
 EVT_BEGIN(evt_door_02_open_hook)
 	RUN_CHILD_EVT(evt_door_02_open_evt)
 	GOTO(&evt_door_02_open[55])
+EVT_END()
+
+EVT_BEGIN(kurihakase_talk_evt)
+	IF_LARGE_EQUAL(GSW(1708), 99) //Unknown
+		IF_EQUAL(GSWF(1249), 0)
+			USER_FUNC(evt_msg::evt_msg_print, 0, PTR("gor_02_029"), 0, PTR("me"))
+			USER_FUNC(evt_mario::evt_mario_set_pose, PTR("M_I_2"))
+			WAIT_MSEC(1000)
+			USER_FUNC(evt_mario::evt_mario_set_pose, PTR("M_S_1"))
+			USER_FUNC(evt_msg::evt_msg_print, 0, PTR("gor_02_029_01"), 0, PTR("me"))
+			USER_FUNC(evt_mario::evt_mario_set_pose, PTR("M_I_N"))
+			WAIT_MSEC(500)
+			USER_FUNC(evt_msg::evt_msg_print, 0, PTR("gor_02_029_02"), 0, PTR("me"))
+			USER_FUNC(evt_mario::evt_mario_set_pose, PTR("M_S_1"))
+			SET(GSW(1249), 1)
+		ELSE()
+			USER_FUNC(evt_msg::evt_msg_print, 0, PTR("gor_02_029_03"), 0, PTR("me"))
+		END_IF()
+		RETURN()
+	END_IF()
+	IF_EQUAL(GSW(1700), 11)
+		USER_FUNC(evt_msg::evt_msg_print, 0, PTR("mac_0_085"), 0, PTR("me"))
+		RETURN()
+	END_IF()
+	IF_SMALL(GSW(1701), 1)
+		USER_FUNC(evt_msg::evt_msg_print, 0, PTR("gor_02_013"), 0, PTR("me"))
+		RETURN()
+	END_IF()
+	IF_SMALL(GSW(1702), 1)
+		USER_FUNC(evt_msg::evt_msg_print, 0, PTR("gor_02_015"), 0, PTR("me"))
+		RETURN()
+	END_IF()
+	IF_SMALL(GSW(1703), 1)
+		USER_FUNC(evt_msg::evt_msg_print, 0, PTR("gor_02_017"), 0, PTR("me"))
+		RETURN()
+	END_IF()
+	IF_SMALL(GSW(1704), 1)
+		USER_FUNC(evt_msg::evt_msg_print, 0, PTR("gor_02_020"), 0, PTR("me"))
+		RETURN()
+	END_IF()
+	IF_SMALL(GSW(1705), 1)
+		USER_FUNC(evt_msg::evt_msg_print, 0, PTR("gor_02_022"), 0, PTR("me"))
+		RETURN()
+	END_IF()
+	IF_EQUAL(GSW(1705), 2)
+		USER_FUNC(evt_msg::evt_msg_print, 0, PTR("mac_4_048"), 0, PTR("me"))
+		SET(GSWF(1214), 1)
+		RETURN()
+	END_IF()
+	IF_EQUAL(GSW(1705), 3)
+		USER_FUNC(evt_msg::evt_msg_print, 0, PTR("mac_4_060"), 0, PTR("me"))
+		RETURN()
+	END_IF()
+	IF_SMALL(GSW(1706), 1)
+		USER_FUNC(evt_msg::evt_msg_print, 0, PTR("gor_02_024"), 0, PTR("me"))
+		RETURN()
+	END_IF()
+	IF_SMALL(GSW(1707), 1)
+		USER_FUNC(evt_cam::evt_cam_letter_box_disable, 1)
+		USER_FUNC(evt_cam::evt_cam_letter_box_onoff, 1, 0)
+		WAIT_MSEC(1000)
+		RUN_CHILD_EVT(kurihakase_after3minutes)
+		RETURN()
+	END_IF()
+	USER_FUNC(evt_msg::evt_msg_print, 0, PTR("gor_02_028"), 0, PTR("me"))
+	RETURN()
 EVT_END()
 
 
@@ -338,4 +405,6 @@ void ApplyGor02Patches(OSModuleInfo* module_info)
 	evt_door_02_open[92] = 6;
 	evt_door_02_open[102] = GSW(1700);
 	patch::writePatch(&evt_door_02_open[2], evt_door_02_open_hook, sizeof(evt_door_02_open_hook));
+
+	patch::writePatch(&kurihakase_talk[0], kurihakase_talk_evt, sizeof(kurihakase_talk_evt)); //Frankley Speach
 }
