@@ -36,7 +36,7 @@ extern int32_t luigi_init_03[];
 extern int32_t luigi_npcEnt_03[];
 extern int32_t roten_4_talk[];
 extern int32_t kinopiko_a_talk[];
-extern int32_t kinopiko_b_talk[];
+extern int32_t kinopiko_b_talk_03[];
 extern int32_t kinopio_a_talk[];
 extern int32_t kokinopio_a_talk[];
 extern int32_t kokinopio_b_talk[];
@@ -48,7 +48,7 @@ extern int32_t evt_door_02_1_open[];
 extern int32_t evt_door_02_1_close[];
 extern int32_t majorin_nusumigiki[];
 extern int32_t yuureturn_rtn[];
-extern int32_t peach_mail[];
+extern int32_t peach_mail_03[];
 extern int32_t debug_event_mode[];
 extern int32_t gor_03_init_evt[];
 extern int32_t maffiaboss_nekomu00[];
@@ -251,14 +251,14 @@ void ApplyGor03Patches(OSModuleInfo* module_info)
 	kinopiko_a_talk[43] = 7;
 	kinopiko_a_talk[51] = 8;
 
-	kinopiko_b_talk[4] = GSW(1710); //Random NPC 3 Speach
-	kinopiko_b_talk[6] = 2;
-	kinopiko_b_talk[25] = 3;
-	kinopiko_b_talk[44] = 4;
-	kinopiko_b_talk[63] = 5;
-	kinopiko_b_talk[82] = 6;
-	kinopiko_b_talk[101] = 7;
-	kinopiko_b_talk[120] = 8;
+	kinopiko_b_talk_03[4] = GSW(1710); //Random NPC 3 Speach
+	kinopiko_b_talk_03[6] = 2;
+	kinopiko_b_talk_03[25] = 3;
+	kinopiko_b_talk_03[44] = 4;
+	kinopiko_b_talk_03[63] = 5;
+	kinopiko_b_talk_03[82] = 6;
+	kinopiko_b_talk_03[101] = 7;
+	kinopiko_b_talk_03[120] = 8;
 
 	kinopio_a_talk[1] = GSW(1710); //Random NPC 4 Speach
 	kinopio_a_talk[3] = 2;
@@ -331,8 +331,8 @@ void ApplyGor03Patches(OSModuleInfo* module_info)
 	yuureturn_rtn[80] = GSW(1708); //Casino maid speach
 	yuureturn_rtn[81] = 99; //Unknown
 
-	peach_mail[238] = GSW(1703); //Peach mail
-	peach_mail[239] = 99; //Unknown
+	peach_mail_03[238] = GSW(1703); //Peach mail
+	peach_mail_03[239] = 99; //Unknown
 
 	debug_event_mode[12] = GSW(1709); //Debug event mode
 	debug_event_mode[13] = 0;

@@ -75,7 +75,7 @@ extern int32_t gorotsuki_kikan[];
 extern int32_t into_gor_ship[];
 extern int32_t unk_evt_gor_0002a2d4[];
 extern int32_t gor_00_koopa_evt[];
-extern int32_t peach_mail[];
+extern int32_t peach_mail_00[];
 extern int32_t option_ship_mario[];
 extern int32_t tsumini[];
 extern int32_t epilogue_npc_entry[];
@@ -781,8 +781,8 @@ void ApplyGor00Patches(OSModuleInfo* module_info)
 			gor_00_koopa_evt[1049] = GSW(1704); //After Bowser intermission, post ch.4
 			gor_00_koopa_evt[1050] = 99; //Unknown
 
-			peach_mail[199] = GSW(1705); //After peach mail, post ch.5
-			peach_mail[200] = 99; //Unknown
+			peach_mail_00[199] = GSW(1705); //After peach mail, post ch.5
+			peach_mail_00[200] = 99; //Unknown
 
 			option_ship_mario[89] = GSW(1709); //Spawn params for frankie and francesca
 			option_ship_mario[90] = 99; //Unknown
