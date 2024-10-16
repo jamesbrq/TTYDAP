@@ -805,19 +805,19 @@ void ApplyGor00Patches(OSModuleInfo* module_info)
 			gor_00_init_evt[31] = EVT_HELPER_OP(&gor_00_init_evt[140]);
 
 			gor_00_init_evt[156] = GSW(1709); //Related to frankie and francesca arriving back from keelhaul
-			gor_00_init_evt[157] = 99; //Unknown
+			gor_00_init_evt[157] = 8;
 
 			gor_00_init_evt[187] = GSW(1704); //Disable save block during Bowser intermission, post ch.4
 			gor_00_init_evt[188] = 99; //Unknown
 
-			gor_00_init_evt[302] = GSW(1709); //Ship related stuff if not in epilogue
+			gor_00_init_evt[302] = GSW(1708); //Ship related stuff if not in epilogue
 			gor_00_init_evt[303] = 99; //Unknown
 
 			gor_00_init_evt[308] = GSW(1705); //Peach mail post ch.5
 			gor_00_init_evt[309] = 99; //Unknown
 
 			gor_00_init_evt[314] = GSW(1709); //Frankie and francesca speach related, ch.3 sequence
-			gor_00_init_evt[315] = 99; //Unknown
+			gor_00_init_evt[315] = 2; //Unknown
 
 			gor_00_init_evt[329] = EVT_HELPER_CMD(1, 94); //First Switch Function
 			gor_00_init_evt[330] = EVT_HELPER_OP(gor_00_init_evt2);

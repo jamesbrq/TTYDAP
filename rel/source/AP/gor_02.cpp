@@ -389,7 +389,7 @@ void ApplyGor02Patches(OSModuleInfo* module_info)
 	evt_door_03_close[159] = GSW(1705);
 	evt_door_03_close[160] = 6;
 
-	evt_door_02_close[3] = GSW(1706); //Door 2 open
+	evt_door_02_close[3] = GSW(1706); //Door 2 Close
 	evt_door_02_close[5] = 99; //Unknown
 	evt_door_02_close[7] = 99; //Unknown
 	evt_door_02_close[43] = GSW(1700);
