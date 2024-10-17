@@ -16,6 +16,11 @@
 #include <AP/gor_01.h>
 #include <AP/gor_02.h>
 #include <AP/gor_03.h>
+#include <AP/gor_04.h>
+#include <AP/gor_misc.h>
+#include <AP/hei.h>
+#include <AP/gon.h>
+#include <AP/nok.h>
 
 #include "common.h"
 #include "OWR.h"
@@ -178,6 +183,11 @@ namespace mod::owr
 		ApplyGor01Patches(module_info);
 		ApplyGor02Patches(module_info);
 		ApplyGor03Patches(module_info);
+		ApplyGor04Patches(module_info);
+		ApplyGorMiscPatches(module_info);
+		ApplyHeiPatches(module_info);
+		ApplyGonPatches(module_info);
+		ApplyNokPatches(module_info);
 		ShopItemData* item_data = reinterpret_cast<ShopItemData*>(module_ptr + kShopOffsets[0]);
 		for (int32_t copy = 0; copy < 7; ++copy) {
 			// Skip first item slot on additional copies.

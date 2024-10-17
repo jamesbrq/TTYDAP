@@ -1,4 +1,4 @@
-#include <AP/gor_misc.h>
+#include <AP/hei.h>
 #include <ttyd/evt_cam.h>
 #include <ttyd/evt_npc.h>
 #include <ttyd/evt_nannpc.h>
