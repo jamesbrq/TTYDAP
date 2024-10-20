@@ -68,14 +68,14 @@ void ApplyGonPatches(OSModuleInfo* module_info)
 	senkaron_event[559] = GSW(1711);
 	senkaron_event[560] = 5;
 
-	gon_key_get_03[1] = GSWF(2002);
+	gon_key_get_03[1] = GSWF(6002);
 	gon_key_get_03[2] = 1;
 
 	gon_03_init_evt[30] = GSW(1711);
 	gon_03_init_evt[31] = 5;
 	gon_03_init_evt[45] = GSW(1711);
 	gon_03_init_evt[46] = 4;
-	gon_03_init_evt[51] = GSWF(2002);
+	gon_03_init_evt[51] = GSWF(6002);
 	gon_03_init_evt[52] = 1;
 
 	leaderkaron_init_event[6] = GSW(1711);
@@ -86,99 +86,99 @@ void ApplyGonPatches(OSModuleInfo* module_info)
 	evt_kaidan_pera[76] = GSW(1711);
 	evt_kaidan_pera[77] = 6;
 
-	evt_hashi_pera0[9] = GSWF(2003);
+	evt_hashi_pera0[9] = GSWF(6003);
 	evt_hashi_pera0[10] = 1;
 
-	evt_hashi_pera1[9] = GSWF(2004);
+	evt_hashi_pera1[9] = GSWF(6004);
 	evt_hashi_pera1[10] = 1;
 
-	evt_hashi[1] = GSWF(2003);
+	evt_hashi[1] = GSWF(6003);
 	evt_hashi[2] = 1;
-	evt_hashi[25] = GSWF(2004);
+	evt_hashi[25] = GSWF(6004);
 	evt_hashi[26] = 1;
 
-	gon_evt_unlock_04[6] = GSWF(2005);
+	gon_evt_unlock_04[6] = GSWF(6005);
 	gon_evt_unlock_04[7] = 1;
 
-	gon_key_get_04[1] = GSWF(2006);
+	gon_key_get_04[1] = GSWF(6006);
 	gon_key_get_04[2] = 1;
 
-	gon_04_init_evt[269] = GSWF(2006);
+	gon_04_init_evt[269] = GSWF(6006);
 	gon_04_init_evt[270] = 1;
-	gon_04_init_evt[332] = GSWF(2005);
+	gon_04_init_evt[332] = GSWF(6005);
 	gon_04_init_evt[333] = 1;
 
-	evt_unlock00[6] = GSWF(2007);
+	evt_unlock00[6] = GSWF(6007);
 	evt_unlock00[7] = 1;
 
-	evt_unlock01[6] = GSWF(2008);
+	evt_unlock01[6] = GSWF(6008);
 	evt_unlock01[7] = 1;
 
-	gon_key_get_05[1] = GSWF(2009);
+	gon_key_get_05[1] = GSWF(6009);
 	gon_key_get_05[2] = 1;
 
-	gon_05_init_evt[241] = GSWF(2009);
+	gon_05_init_evt[241] = GSWF(6009);
 	gon_05_init_evt[242] = 1;
-	gon_05_init_evt[275] = GSWF(2007);
+	gon_05_init_evt[275] = GSWF(6007);
 	gon_05_init_evt[276] = 1;
-	gon_05_init_evt[295] = GSWF(2008);
+	gon_05_init_evt[295] = GSWF(6008);
 	gon_05_init_evt[296] = 1;
 
-	tsuritenjo_event[126] = GSWF(2010);
+	tsuritenjo_event[126] = GSWF(6010);
 	tsuritenjo_event[127] = 1;
 
-	evt_majin2[212] = GSWF(2011);
+	evt_majin2[212] = GSWF(6011);
 	evt_majin2[213] = 1;
 
-	gon_06_init_evt[6] = GSWF(2012);
+	gon_06_init_evt[6] = GSWF(6012);
 	gon_06_init_evt[7] = 1;
-	gon_06_init_evt[317] = GSWF(2011);
+	gon_06_init_evt[317] = GSWF(6011);
 	gon_06_init_evt[318] = 1;
 
-	out_func[3] = GSWF(2012);
+	out_func[3] = GSWF(6012);
 	out_func[4] = 1;
 
-	gor_item_evt_07[1] = GSWF(2012);
+	gor_item_evt_07[1] = GSWF(6012);
 	gor_item_evt_07[2] = 1;
-	gor_item_evt_07[6] = GSWF(2012);
+	gor_item_evt_07[6] = GSWF(6012);
 	gor_item_evt_07[7] = 1;
 
-	gon_07_init_evt[22] = GSWF(2012);
+	gon_07_init_evt[22] = GSWF(6012);
 	gon_07_init_evt[23] = 1;
 
-	gon_evt_unlock_08[6] = GSWF(2013);
+	gon_evt_unlock_08[6] = GSWF(6013);
 	gon_evt_unlock_08[7] = 1;
 
-	gon_08_init_evt[199] = GSWF(2013);
+	gon_08_init_evt[199] = GSWF(6013);
 	gon_08_init_evt[200] = 1;
 
-	gon_10_init_evt[35] = GSWF(2014);
+	gon_10_init_evt[35] = GSWF(6014);
 	gon_10_init_evt[36] = 1;
 
-	gonbaba_event[1384] = GSWF(2014);
+	gonbaba_event[1384] = GSWF(6014);
 	gonbaba_event[1385] = 1;
-	gonbaba_event[1387] = GSWF(2015);
+	gonbaba_event[1387] = GSWF(6015);
 	gonbaba_event[1388] = 1;
 
-	gon_11_init_evt[6] = GSWF(2014);
+	gon_11_init_evt[6] = GSWF(6014);
 	gon_11_init_evt[8] = 1;
-	gon_11_init_evt[14] = GSWF(2014);
+	gon_11_init_evt[14] = GSWF(6014);
 	gon_11_init_evt[16] = 1;
-	gon_11_init_evt[47] = GSWF(2014);
+	gon_11_init_evt[47] = GSWF(6014);
 	gon_11_init_evt[48] = 1;
-	gon_11_init_evt[90] = GSWF(2014);
+	gon_11_init_evt[90] = GSWF(6014);
 	gon_11_init_evt[91] = 1;
 
-	chuchurina_sogu[1] = GSWF(2016);
+	chuchurina_sogu[1] = GSWF(6016);
 	chuchurina_sogu[2] = 1;
-	chuchurina_sogu[64] = GSWF(2016);
+	chuchurina_sogu[64] = GSWF(6016);
 	chuchurina_sogu[65] = 1;
 
-	item_get00[33] = GSWF(2017);
+	item_get00[33] = GSWF(6017);
 	item_get00[34] = 1;
 
-	gon_12_init_evt[6] = GSWF(2016);
+	gon_12_init_evt[6] = GSWF(6016);
 	gon_12_init_evt[7] = 1;
-	gon_12_init_evt[31] = GSWF(2017);
+	gon_12_init_evt[31] = GSWF(6017);
 	gon_12_init_evt[32] = 1;
 }

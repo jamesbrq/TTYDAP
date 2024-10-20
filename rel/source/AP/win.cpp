@@ -41,7 +41,7 @@ extern int32_t touch_door[];
 extern int32_t win_04_init_evt[];
 extern int32_t cloud_toujou[];
 extern int32_t win_05_init_evt[];
-extern int32_t first_evt_dokan[];
+extern int32_t win_first_evt_dokan[];
 extern int32_t welcome_wonderforest[];
 extern int32_t win_06_init_evt[];
 
@@ -158,8 +158,8 @@ void ApplyWinPatches(OSModuleInfo* module_info)
 	win_05_init_evt[35] = GSW(1702);
 	win_05_init_evt[36] = 5;
 
-	first_evt_dokan[1] = GSW(1702);
-	first_evt_dokan[2] = 0;
+	win_first_evt_dokan[1] = GSW(1702);
+	win_first_evt_dokan[2] = 0;
 
 	welcome_wonderforest[239] = GSW(1702);
 	welcome_wonderforest[240] = 1;

@@ -19,7 +19,7 @@ using namespace ttyd;
 
 extern int32_t first_evt[];
 extern int32_t gonbaba_evt[];
-extern int32_t first_evt_dokan[];
+extern int32_t hei_first_evt_dokan[];
 extern int32_t dokan_evt[];
 extern int32_t hei_00_koopa_evt[];
 extern int32_t hei_00_init_evt[];
@@ -49,8 +49,8 @@ void ApplyHeiPatches(OSModuleInfo* module_info)
 	gonbaba_evt[434] = GSW(1701);
 	gonbaba_evt[435] = 2;
 
-	first_evt_dokan[1] = GSW(1701); //??? cutscene
-	first_evt_dokan[2] = 1;
+	hei_first_evt_dokan[1] = GSW(1701); //??? cutscene
+	hei_first_evt_dokan[2] = 1;
 
 	dokan_evt[324] = GSW(1711); //After opening castle pipe
 	dokan_evt[325] = 1;
@@ -75,7 +75,7 @@ void ApplyHeiPatches(OSModuleInfo* module_info)
 	hei_00_init_evt[283] = GSW(1708);
 	hei_00_init_evt[284] = 99; //Unknown
 
-	bridge_evt[21] = GSWF(2001); //Bridge cutscene
+	bridge_evt[21] = GSWF(6001); //Bridge cutscene
 	bridge_evt[22] = 1;
 	
 	nokotaro_get[69] = GSW(1701); //Koops get
@@ -93,11 +93,11 @@ void ApplyHeiPatches(OSModuleInfo* module_info)
 	hei_peach_mail[277] = GSW(1701); //Peach mail
 	hei_peach_mail[278] = 99; //Unknown
 
-	hei_01_init_evt[81] = GSWF(2001); //Room 1 Init
+	hei_01_init_evt[81] = GSWF(6001); //Room 1 Init
 	hei_01_init_evt[82] = 1;
 	hei_01_init_evt[117] = GSW(1701);
 	hei_01_init_evt[118] = 99; //Unknown
-	hei_01_init_evt[137] = GSWF(2001);
+	hei_01_init_evt[137] = GSWF(6001);
 	hei_01_init_evt[138] = 1;
 
 	door_open_03[89] = GSW(1701); //Door open 3

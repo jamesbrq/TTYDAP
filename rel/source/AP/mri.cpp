@@ -23,12 +23,12 @@ extern int32_t seal_bigtree2[];
 extern int32_t mri_guide_init_00[];
 extern int32_t mri_guide_talk_00[];
 extern int32_t mri_rival_init_00[];
-extern int32_t chibitoge_init[];
+extern int32_t mri_chibitoge_init_00[];
 extern int32_t mri_sister_init_00[];
 extern int32_t mri_elder_init_00[];
 extern int32_t fabio_init[];
 extern int32_t fabio_talk[];
-extern int32_t first_time_w_bero[];
+extern int32_t mri_first_time_w_bero_00[];
 extern int32_t out_dokan_1[];
 extern int32_t first_bigtree[];
 extern int32_t open_bigtree[];
@@ -70,7 +70,7 @@ extern int32_t bero_custom_00[];
 extern int32_t guide_sister[];
 extern int32_t mri_03_init_evt[];
 extern int32_t bero_custom[];
-extern int32_t chibitoge_init[];
+extern int32_t mri_chibitoge_init_04[];
 extern int32_t chuchurina_sogu[];
 extern int32_t mri_04_init_evt[];
 extern int32_t puni_4_init[];
@@ -78,7 +78,7 @@ extern int32_t puni_4_talk[];
 extern int32_t puni_5_init[];
 extern int32_t puni_5_talk[];
 extern int32_t mri_05_init_evt[];
-extern int32_t rival_init[];
+extern int32_t mri_rival_init_06[];
 extern int32_t rival_talk[];
 extern int32_t puni_6_init[];
 extern int32_t puni_6_talk[];
@@ -94,7 +94,7 @@ extern int32_t puni_11_init[];
 extern int32_t puni_11_talk[];
 extern int32_t apper_toge[];
 extern int32_t mri_06_init_evt[];
-extern int32_t chibitoge_init[];
+extern int32_t mri_chibitoge_init_07[];
 extern int32_t puniinfo_talk[];
 extern int32_t mri_07_init_evt[];
 extern int32_t toge_1_init[];
@@ -136,7 +136,7 @@ extern int32_t punipuni_ball00[];
 extern int32_t yuka_check[];
 extern int32_t yuka_event[];
 extern int32_t mri_13_init_evt[];
-extern int32_t first_time_w_bero[];
+extern int32_t mri_first_time_w_bero_14[];
 extern int32_t dai3_kanbu[];
 extern int32_t time_bomb[];
 extern int32_t mri_14_init_evt[];
@@ -454,7 +454,68 @@ EVT_BEGIN(mri_03_init_evt_hook)
 	GOTO(&mri_03_init_evt[84])
 EVT_END()
 
-void ApplyGorMiscPatches(OSModuleInfo* module_info)
+EVT_BEGIN(puniinfo_talk_evt)
+	IF_SMALL(GSW(1713), 99) //Unknown
+		SWITCH(LSW(714))
+			CASE_EQUAL(0)
+				USER_FUNC(evt_msg::evt_msg_print, 0, PTR("stg2_mri_f00_00"), 0, PTR("me"))
+				SET(LSW(714), 1)
+				RETURN()
+			CASE_END()
+			CASE_EQUAL(0)
+				USER_FUNC(evt_msg::evt_msg_print, 0, PTR("stg2_mri_f00_01"), 0, PTR("me"))
+				SET(LSW(714), 2)
+				RETURN()
+			CASE_END()
+			CASE_EQUAL(0)
+				USER_FUNC(evt_msg::evt_msg_print, 0, PTR("stg2_mri_f00_02"), 0, PTR("me"))
+				SET(LSW(714), 0)
+				RETURN()
+			CASE_END()
+		END_SWITCH()
+	END_IF()
+	IF_SMALL(GSW(1708), 99) //Unknown
+		SWITCH(LSW(714))
+			CASE_EQUAL(0)
+				USER_FUNC(evt_msg::evt_msg_print, 0, PTR("stg2_mri_f00_00"), 0, PTR("me"))
+				SET(LSW(714), 1)
+				RETURN()
+			CASE_END()
+			CASE_EQUAL(0)
+				USER_FUNC(evt_msg::evt_msg_print, 0, PTR("stg2_mri_f00_01"), 0, PTR("me"))
+				SET(LSW(714), 2)
+				RETURN()
+			CASE_END()
+			CASE_EQUAL(0)
+				USER_FUNC(evt_msg::evt_msg_print, 0, PTR("stg2_mri_f00_02"), 0, PTR("me"))
+				SET(LSW(714), 0)
+				RETURN()
+			CASE_END()
+		END_SWITCH()
+	END_IF()
+	SWITCH(LSW(714))
+		CASE_EQUAL(0)
+			USER_FUNC(evt_msg::evt_msg_print, 0, PTR("stg2_mri_f00_00"), 0, PTR("me"))
+			SET(LSW(714), 1)
+		CASE_END()
+		CASE_EQUAL(0)
+			USER_FUNC(evt_msg::evt_msg_print, 0, PTR("stg2_mri_f00_01"), 0, PTR("me"))
+			SET(LSW(714), 2)
+		CASE_END()
+		CASE_EQUAL(0)
+			USER_FUNC(evt_msg::evt_msg_print, 0, PTR("stg2_mri_f00_02"), 0, PTR("me"))
+			SET(LSW(714), 0)
+		CASE_END()
+	END_SWITCH()
+	RETURN()
+EVT_END()
+
+EVT_BEGIN(puniinfo_talk_hook)
+	RUN_CHILD_EVT(puniinfo_talk_hook)
+	RETURN()
+EVT_END()
+
+void ApplyMriPatches(OSModuleInfo* module_info)
 {
 	mri_countdown[1] = GSW(1713);
 	mri_countdown[2] = 31;
@@ -474,8 +535,8 @@ void ApplyGorMiscPatches(OSModuleInfo* module_info)
 	mri_rival_init_00[1] = GSW(1713);
 	mri_rival_init_00[3] = 99; //Unknown
 
-	chibitoge_init[1] = GSW(1713);
-	chibitoge_init[3] = 99; //Unknown
+	mri_chibitoge_init_00[1] = GSW(1713);
+	mri_chibitoge_init_00[3] = 99; //Unknown
 
 	mri_sister_init_00[1] = GSW(1713);
 	mri_sister_init_00[3] = 99; //Unknown
@@ -489,8 +550,8 @@ void ApplyGorMiscPatches(OSModuleInfo* module_info)
 	fabio_talk[1] = GSW(1708);
 	fabio_talk[3] = 99; //Unknown
 
-	first_time_w_bero[1] = GSW(1702);
-	first_time_w_bero[2] = 2;
+	mri_first_time_w_bero_00[1] = GSW(1702);
+	mri_first_time_w_bero_00[2] = 2;
 
 	out_dokan_1[1] = GSW(1713);
 	out_dokan_1[2] = 99; //Unknown
@@ -647,8 +708,8 @@ void ApplyGorMiscPatches(OSModuleInfo* module_info)
 	bero_custom[1] = GSWF(6022);
 	bero_custom[2] = 0;
 
-	chibitoge_init[1] = GSW(1713);
-	chibitoge_init[3] = 99; //Unknown
+	mri_chibitoge_init_04[1] = GSW(1713);
+	mri_chibitoge_init_04[3] = 99; //Unknown
 
 	chuchurina_sogu[802] = GSWF(6022);
 	chuchurina_sogu[803] = 1;
@@ -666,10 +727,284 @@ void ApplyGorMiscPatches(OSModuleInfo* module_info)
 	mri_04_init_evt[157] = GSWF(6022);
 	mri_04_init_evt[158] = 1;
 
+	puni_4_init[1] = GSW(1713);
+	puni_4_init[3] = 99; //Unknown
+
+	puni_4_talk[1] = GSW(1708);
+	puni_4_talk[3] = 99; //Unknown
+
+	puni_5_init[1] = GSW(1713);
+	puni_5_init[3] = 99; //Unknown
+
+	puni_5_talk[1] = GSW(1708);
+	puni_5_talk[3] = 99; //Unknown
+
+	mri_05_init_evt[49] = GSW(1713);
+	mri_05_init_evt[50] = 99; //Unknown
+	mri_05_init_evt[64] = GSW(1713);
+	mri_05_init_evt[66] = 99; //Unknown
+	mri_05_init_evt[67] = 99; //Unknown
+
+	mri_rival_init_06[1] = GSW(1713);
+	mri_rival_init_06[3] = 99; //Unknown
+
+	rival_talk[1] = GSW(1708);
+	rival_talk[3] = 99; //Unknown
+
+	puni_6_init[1] = GSW(1713);
+	puni_6_init[3] = 99; //Unknown
+
+	puni_6_talk[1] = GSW(1708);
+	puni_6_talk[3] = 99; //Unknown
+
+	puni_7_init[1] = GSW(1713);
+	puni_7_init[3] = 99; //Unknown
+
+	puni_7_talk[1] = GSW(1708);
+	puni_7_talk[3] = 99; //Unknown
+
+	puni_8_init[1] = GSW(1713);
+	puni_8_init[3] = 99; //Unknown
+
+	puni_8_talk[1] = GSW(1708);
+	puni_8_talk[3] = 99; //Unknown
+
+	puni_9_init[1] = GSW(1713);
+	puni_9_init[3] = 99; //Unknown
+
+	puni_9_talk[1] = GSW(1708);
+	puni_9_talk[3] = 99; //Unknown
+
+	puni_10_init[1] = GSW(1713);
+	puni_10_init[3] = 99; //Unknown
+
+	puni_10_talk[1] = GSW(1708);
+	puni_10_talk[3] = 99; //Unknown
+
+	puni_11_init[1] = GSW(1713);
+	puni_11_init[3] = 99; //Unknown
+
+	puni_11_talk[1] = GSW(1708);
+	puni_11_talk[3] = 99; //Unknown
+
+	apper_toge[242] = GSWF(6023);
+	apper_toge[243] = 1;
+
+	mri_06_init_evt[85] = GSW(1713);
+	mri_06_init_evt[87] = 99; //Unknown
+	mri_06_init_evt[88] = 99; //Unknown
+	mri_06_init_evt[143] = GSWF(6023);
+	mri_06_init_evt[144] = 0;
+
+	mri_chibitoge_init_07[1] = GSW(1713);
+	mri_chibitoge_init_07[3] = 99; //Unknown
+	mri_chibitoge_init_07[4] = 99; //Unknown
+	mri_chibitoge_init_07[6] = 99; //Unknown
+
+	patch::writePatch(&puniinfo_talk[0], puniinfo_talk_hook, sizeof(puniinfo_talk_hook));
+
+	mri_07_init_evt[66] = GSW(1713);
+	mri_07_init_evt[68] = 99; //Unknown
+	mri_07_init_evt[69] = 99; //Unknown
+
+	toge_1_init[1] = GSW(1713);
+	toge_1_init[3] = 99; //Unknown
+
+	toge_1_talk[1] = GSW(1708);
+	toge_1_talk[3] = 99; //Unknown
+
+	toge_2_init[1] = GSW(1713);
+	toge_2_init[3] = 99; //Unknown
+
+	toge_2_talk[1] = GSW(1708);
+	toge_2_talk[3] = 99; //Unknown
+
+	toge_3_init[1] = GSW(1713);
+	toge_3_init[3] = 99; //Unknown
+
+	toge_3_talk[1] = GSW(1708);
+	toge_3_talk[3] = 99; //Unknown
+
+	toge_4_init[1] = GSW(1713);
+	toge_4_init[3] = 99; //Unknown
+
+	toge_4_talk[1] = GSW(1708);
+	toge_4_talk[3] = 99; //Unknown
+
+	toge_5_init[1] = GSW(1713);
+	toge_5_init[3] = 99; //Unknown
+
+	toge_5_talk[1] = GSW(1708);
+	toge_5_talk[3] = 99; //Unknown
+
+	toge_6_init[1] = GSW(1713);
+	toge_6_init[3] = 99; //Unknown
+
+	toge_6_talk[1] = GSW(1708);
+	toge_6_talk[3] = 99; //Unknown
+
+	mri_08_init_evt[71] = GSW(1713);
+	mri_08_init_evt[73] = 99; //Unknown
+	mri_08_init_evt[74] = 99; //Unknown
+
+	wall_roll[261] = GSWF(6024);
+	wall_roll[262] = 1;
+
+	slot00_event[1] = GSWF(6024);
+	slot00_event[2] = 1;
+
+	slot01_event[1] = GSWF(6024);
+	slot01_event[2] = 1;
+
+	slot02_event[1] = GSWF(6024);
+	slot02_event[2] = 1;
+
+	slot03_event[1] = GSWF(6024);
+	slot03_event[2] = 1;
+
+	get_blue_jail_key[115] = GSWF(6021);
+	get_blue_jail_key[116] = 1;
+	get_blue_jail_key[117] = EVT_HELPER_CMD(0, 2);
 
 
+	mri_09_init_evt[53] = GSW(1713);
+	mri_09_init_evt[55] = 99; //Unknown
+	mri_09_init_evt[56] = 99; //Unknown
 
+	item_evt[58] = GSWF(6025);
+	item_evt[59] = 1;
 
+	mri_10_init_evt[46] = GSW(1713);
+	mri_10_init_evt[48] = 99; //Unknown
+	mri_10_init_evt[49] = 99; //Unknown
 
+	toge_7_init[1] = GSW(1713);
+	toge_7_init[3] = 99; //Unknown
 
+	toge_7_talk[1] = GSW(1708);
+	toge_7_talk[3] = 99; //Unknown
+
+	toge_8_init[1] = GSW(1713);
+	toge_8_init[3] = 99; //Unknown
+
+	toge_8_talk[1] = GSW(1708);
+	toge_8_talk[3] = 99; //Unknown
+
+	toge_9_init[1] = GSW(1713);
+	toge_9_init[3] = 99; //Unknown
+
+	toge_9_talk[1] = GSW(1708);
+	toge_9_talk[3] = 99; //Unknown
+
+	toge_10_init[1] = GSW(1713);
+	toge_10_init[3] = 99; //Unknown
+
+	toge_10_talk[1] = GSW(1708);
+	toge_10_talk[3] = 99; //Unknown
+
+	toge_11_init[1] = GSW(1713);
+	toge_11_init[3] = 99; //Unknown
+
+	toge_11_talk[1] = GSW(1708);
+	toge_11_talk[3] = 99; //Unknown
+
+	mri_11_init_evt[71] = GSW(1713);
+	mri_11_init_evt[73] = 99; //Unknown
+	mri_11_init_evt[74] = 99; //Unknown
+
+	mri_12_init_evt[51] = GSW(1713);
+	mri_12_init_evt[53] = 99; //Unknown
+	mri_12_init_evt[54] = 99; //Unknown
+
+	punipuni_ball00_init[5] = GSW(1713);
+	punipuni_ball00_init[6] = 99; //Unknown
+	punipuni_ball00_init[36] = GSW(1713);
+	punipuni_ball00_init[37] = 99; //Unknown
+
+	punipuni_ball00[18] = GSW(1713);
+	punipuni_ball00[19] = 99; //Unknown
+
+	yuka_check[44] = GSW(1713);
+	yuka_check[45] = 99; //Unknown
+
+	yuka_event[402] = GSW(1713);
+	yuka_event[403] = 99; //Unknown
+
+	mri_13_init_evt[51] = GSW(1713);
+	mri_13_init_evt[53] = 99; //Unknown
+	mri_13_init_evt[54] = 99; //Unknown
+	mri_13_init_evt[119] = GSW(1713);
+	mri_13_init_evt[120] = 99; //Unknown
+	mri_13_init_evt[186] = GSW(1713);
+	mri_13_init_evt[187] = 99; //Unknown
+
+	mri_first_time_w_bero_14[1] = GSW(1713);
+	mri_first_time_w_bero_14[2] = 99; //Unknown
+
+	dai3_kanbu[170] = GSW(1713);
+	dai3_kanbu[171] = 99; //Unknown
+
+	time_bomb[921] = GSW(1713);
+	time_bomb[922] = 99; //Unknown
+
+	mri_14_init_evt[33] = GSW(1713);
+	mri_14_init_evt[34] = 99; //Unknown
+	mri_14_init_evt[61] = GSW(1713);
+	mri_14_init_evt[63] = 99; //Unknown
+	mri_14_init_evt[64] = 99; //Unknown
+	mri_14_init_evt[109] = GSW(1713);
+	mri_14_init_evt[110] = 99; //Unknown
+	mri_14_init_evt[138] = GSW(1713);
+	mri_14_init_evt[139] = 99; //Unknown
+	mri_14_init_evt[144] = GSW(1713);
+	mri_14_init_evt[145] = 99; //Unknown
+
+	dai3_battle[121] = GSW(1713);
+	dai3_battle[122] = 99; //Unknown
+
+	mri_15_init_evt[51] = GSW(1713);
+	mri_15_init_evt[53] = 99; //Unknown
+	mri_15_init_evt[54] = 99; //Unknown
+	mri_15_init_evt[137] = GSW(1713);
+	mri_15_init_evt[138] = 99; //Unknown
+
+	mri_16_init_evt[46] = GSW(1713);
+	mri_16_init_evt[48] = 99; //Unknown
+	mri_16_init_evt[49] = 99; //Unknown
+
+	puni_disp_info[1] = GSW(1713);
+	puni_disp_info[2] = 99; //Unknown
+
+	mri_puni_init[3] = GSW(1708);
+	mri_puni_init[4] = EVT_HELPER_CMD(0, 0);
+	mri_puni_init[5] = EVT_HELPER_CMD(0, 0);
+	mri_puni_init[6] = EVT_HELPER_CMD(0, 0);
+
+	breakyuka_main[121] = 0; //Unused
+
+	mri_17_init_evt[81] = GSW(1713);
+	mri_17_init_evt[83] = 99; //Unknown
+	mri_17_init_evt[84] = 99; //Unknown
+	mri_17_init_evt[131] = GSW(1713);
+	mri_17_init_evt[132] = 0; //Unused
+	mri_17_init_evt[153] = EVT_HELPER_CMD(1, 4);
+	mri_17_init_evt[154] = EVT_HELPER_OP(&mri_17_init_evt[200]);
+
+	mri_20_init_evt[46] = GSW(1713);
+	mri_20_init_evt[48] = 99; //Unknown
+	mri_20_init_evt[49] = 99; //Unknown
+	mri_20_init_evt[69] = GSW(1713);
+	mri_20_init_evt[70] = 99; //Unknown
+	mri_20_init_evt[104] = GSW(1713);
+	mri_20_init_evt[105] = 3;
+
+	mri_18_init_evt[39] = GSW(1713);
+	mri_18_init_evt[41] = 99; //Unknown
+	mri_18_init_evt[42] = 99; //Unknown
+	mri_18_init_evt[69] = GSW(1713);
+	mri_18_init_evt[70] = 99; //Unknown
+
+	mri_19_init_evt[39] = GSW(1713);
+	mri_19_init_evt[41] = 99; //Unknown
+	mri_19_init_evt[42] = 99; //Unknown
 }
