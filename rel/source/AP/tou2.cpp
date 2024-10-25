@@ -19,7 +19,6 @@ using namespace ttyd;
 
 extern int32_t init_kinosikowa[];
 extern int32_t npc_entry[];
-extern int32_t evt_random_battle2[];
 extern int32_t evt_match[];
 extern int32_t evt_kurikuri_lose[];
 extern int32_t evt_shinemon_lose[];
@@ -41,5 +40,13 @@ extern int32_t tou_03_init_evt[];
 
 void ApplyTou2Patches(OSModuleInfo* module_info)
 {
+	init_kinosikowa[1] = GSW(1703);
+	init_kinosikowa[2] = 172;
 
+	npc_entry[1] = GSW(1703);
+	npc_entry[2] = 2;
+	npc_entry[55] = GSW(1703);
+	npc_entry[57] = 2;
+	npc_entry[58] = 18;
+	npc_entry[63] = 20;
 }

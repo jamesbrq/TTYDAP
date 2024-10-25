@@ -138,7 +138,7 @@ extern int32_t tou_08_init_evt[];
 extern int32_t tou_09_init_evt[];
 extern int32_t init_kino[];
 extern int32_t talk_kino[];
-extern int32_t init_michel[];
+extern int32_t tou_init_michel_10[];
 extern int32_t talk_michel[];
 extern int32_t talk_octo[];
 extern int32_t tou_init_brots_10[];
@@ -152,11 +152,11 @@ extern int32_t init_iron2[];
 extern int32_t talk_iron2[];
 extern int32_t evt_saisyo_after[];
 extern int32_t evt_okorareru[];
-extern int32_t evt_block[];
+extern int32_t tou_evt_block_10[];
 extern int32_t tou_10_init_evt[];
 extern int32_t tou_11_init_evt[];
 extern int32_t tou_evt_block_broken_12[];
-extern int32_t init_michel[];
+extern int32_t tou_init_michel_12[];
 extern int32_t init_michel_dummy[];
 extern int32_t tou_init_brots_12[];
 extern int32_t init_brots_dummy[];
@@ -191,11 +191,11 @@ void ApplyTouPatches(OSModuleInfo* module_info)
 	evt_open[2] = 6;
 
 	talk_gardman[15] = GSW(1703);
-	talk_gardman[16] = 12;
+	talk_gardman[16] = 11;
 	talk_gardman[18] = GSW(1703);
-	talk_gardman[19] = 13;
+	talk_gardman[19] = 12;
 	talk_gardman[173] = GSW(1703);
-	talk_gardman[174] = 99; //Unknown
+	talk_gardman[174] = 172;
 
 	evt_tou_match_make_default_sub[147] = GSW(1703);
 	evt_tou_match_make_default_sub[148] = 99; //Unknown
@@ -219,11 +219,11 @@ void ApplyTouPatches(OSModuleInfo* module_info)
 	evt_tou_match_make_default[176] = 99; //Unknown
 
 	evt_tou_match_after_default[31] = GSW(1703);
-	evt_tou_match_after_default[32] = 12;
+	evt_tou_match_after_default[32] = 11;
 	evt_tou_match_after_default[34] = GSW(1703);
-	evt_tou_match_after_default[35] = 13;
+	evt_tou_match_after_default[35] = 12;
 	evt_tou_match_after_default[1316] = GSW(1703);
-	evt_tou_match_after_default[1317] = 99; //Unknown
+	evt_tou_match_after_default[1317] = 172;
 	evt_tou_match_after_default[1380] = GSW(1703);
 	evt_tou_match_after_default[1381] = 12;
 	evt_tou_match_after_default[1394] = GSW(1703);
@@ -776,29 +776,164 @@ void ApplyTouPatches(OSModuleInfo* module_info)
 	evt_toile_door[39] = GSW(1703);
 	evt_toile_door[40] = 172;
 
-	tou_08_init_evt[1] = GSW(1703);
+	tou_08_init_evt[6] = 0;
+	tou_08_init_evt[15] = 0;
+	tou_08_init_evt[24] = 0;
+	tou_08_init_evt[49] = GSWF(6036);
+	tou_08_init_evt[58] = 0;
+	tou_08_init_evt[59] = 0;
+	tou_08_init_evt[60] = 0;
+	tou_08_init_evt[68] = 0;
+	tou_08_init_evt[69] = 0;
+	tou_08_init_evt[70] = 0;
+	tou_08_init_evt[188] = GSW(1703);
+	tou_08_init_evt[190] = 4;
+	tou_08_init_evt[202] = GSW(1703);
+	tou_08_init_evt[204] = 2;
+	tou_08_init_evt[205] = 11;
+	tou_08_init_evt[220] = GSW(1708);
+	tou_08_init_evt[220] = 402;
+	tou_08_init_evt[277] = GSW(1708);
+	tou_08_init_evt[278] = 402;
 
+	tou_09_init_evt[1] = GSW(1703);
+	tou_09_init_evt[3] = 2;
+	tou_09_init_evt[4] = 11;
+	tou_09_init_evt[17] = 165;
 
+	init_kino[1] = GSW(1703);
+	init_kino[3] = 6;
 
+	talk_kino[1] = GSW(1703);
+	talk_kino[3] = 6;
 
+	tou_init_michel_10[1] = GSW(1703);
+	tou_init_michel_10[3] = 172;
 
+	talk_michel[1] = GSW(1703);
+	talk_michel[2] = 172;
 
+	talk_octo[1] = GSW(1703);
+	talk_octo[2] = 172;
+	talk_octo[90] = GSW(1703);
+	talk_octo[92] = 0;
+	talk_octo[93] = 0;
 
+	tou_init_brots_10[1] = GSW(1703);
+	tou_init_brots_10[2] = 172;
 
+	talk_brots[1] = GSW(1703);
+	talk_brots[2] = 172;
 
+	talk_gangan[1] = GSW(1703);
+	talk_gangan[2] = 172;
+	talk_gangan[90] = GSW(1703);
+	talk_gangan[92] = 0;
+	talk_gangan[93] = 0;
 
+	init_poku[6] = GSW(1703);
+	init_poku[8] = 172;
+	init_poku[20] = 172;
 
+	talk_poku[23] = GSW(1703);
+	talk_poku[25] = 0;
+	talk_poku[26] = 0;
 
+	init_iron[1] = GSW(1703);
+	init_iron[2] = 172;
 
+	talk_iron[1] = GSW(1703);
+	talk_iron[2] = 172;
 
+	init_iron2[1] = GSW(1703);
+	init_iron2[2] = 172;
 
+	talk_iron2[1] = GSW(1703);
+	talk_iron2[2] = 172;
 
+	evt_saisyo_after[723] = GSW(1703);
+	evt_saisyo_after[724] = 8;
 
+	evt_okorareru[283] = GSWF(6036);
+	evt_okorareru[284] = 1;
 
+	tou_evt_block_10[1] = GSWF(6037);
+	tou_evt_block_10[2] = 1;
 
+	tou_10_init_evt[1] = GSW(1703);
+	tou_10_init_evt[3] = 2;
+	tou_10_init_evt[4] = 11;
+	tou_10_init_evt[17] = 165;
+	tou_10_init_evt[43] = GSW(1703);
+	tou_10_init_evt[44] = 11;
+	tou_10_init_evt[46] = GSW(1703);
+	tou_10_init_evt[47] = 11;
+	tou_10_init_evt[82] = GSW(1703);
+	tou_10_init_evt[83] = 7;
+	tou_10_init_evt[105] = GSWF(6037);
+	tou_10_init_evt[106] = 1;
+	tou_10_init_evt[123] = GSW(1703);
+	tou_10_init_evt[125] = 6;
+	tou_10_init_evt[176] = GSW(1703);
+	tou_10_init_evt[177] = 172;
+	tou_10_init_evt[197] = GSW(1703);
+	tou_10_init_evt[198] = 172;
+	tou_10_init_evt[222] = GSWF(6036);
+	tou_10_init_evt[223] = 1;
+	tou_10_init_evt[236] = GSW(1703);
+	tou_10_init_evt[237] = 11;
 
+	tou_11_init_evt[138] = GSW(1703);
+	tou_11_init_evt[140] = 2;
+	tou_11_init_evt[141] = 11;
 
+	tou_evt_block_broken_12[52] = GSWF(6038);
+	tou_evt_block_broken_12[53] = 1;
 
+	tou_init_michel_12[1] = GSW(1703);
+	tou_init_michel_12[2] = 20;
 
+	init_michel_dummy[1] = GSW(1703);
+	init_michel_dummy[2] = 20;
+
+	tou_init_brots_12[1] = GSW(1703);
+	tou_init_brots_12[2] = 20;
+
+	init_brots_dummy[1] = GSW(1703);
+	init_brots_dummy[2] = 20;
+
+	tou_12_init_evt[1] = GSW(1703);
+	tou_12_init_evt[2] = 19;
+	tou_12_init_evt[11] = GSW(1703);
+	tou_12_init_evt[13] = 2;
+	tou_12_init_evt[14] = 11;
+	tou_12_init_evt[27] = 21;
+	tou_12_init_evt[71] = GSWF(6038);
+	tou_12_init_evt[72] = 1;
+	tou_12_init_evt[89] = GSW(1703);
+	tou_12_init_evt[90] = 20;
+
+	tou_evt_dakuto_13[30] = GSW(1703);
+	tou_evt_dakuto_13[31] = 18;
+	tou_evt_dakuto_13[33] = GSW(1703);
+	tou_evt_dakuto_13[34] = 18;
+
+	evt_nusumi[178] = GSW(1703);
+	evt_nusumi[179] = 17;
+
+	evt_first[38] = GSW(1703);
+	evt_first[39] = 16;
+
+	tou_13_init_evt[1] = GSW(1703);
+	tou_13_init_evt[3] = 2;
+	tou_13_init_evt[4] = 11;
+	tou_13_init_evt[17] = 21;
+	tou_13_init_evt[50] = GSW(1703);
+	tou_13_init_evt[52] = 18;
+	tou_13_init_evt[57] = 172;
+	tou_13_init_evt[104] = GSW(1703);
+	tou_13_init_evt[105] = 17;
+	tou_13_init_evt[110] = GSW(1703);
+	tou_13_init_evt[111] = 16;
 
 }
