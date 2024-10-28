@@ -25,6 +25,7 @@
 #include <AP/mri.h>
 #include <AP/tou.h>
 #include <AP/tou2.h>
+#include <AP/usu.h>
 
 #include "common.h"
 #include "OWR.h"
@@ -196,6 +197,7 @@ namespace mod::owr
 		ApplyMriPatches(module_info);
 		ApplyTouPatches(module_info);
 		ApplyTou2Patches(module_info);
+		ApplyUsuPatches(module_info);
 
 		ShopItemData* item_data = reinterpret_cast<ShopItemData*>(module_ptr + kShopOffsets[0]);
 		for (int32_t copy = 0; copy < 7; ++copy) {

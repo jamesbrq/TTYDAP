@@ -235,15 +235,15 @@ void ApplyTouPatches(OSModuleInfo* module_info)
 	tou_00_init_evt[69] = 2;
 
 	talk_sakaba[23] = GSWF(6026);
-	talk_sakaba[24] = EVT_HELPER_OP(0, 0);
-	talk_sakaba[25] = EVT_HELPER_OP(0, 0);
-	talk_sakaba[26] = EVT_HELPER_OP(0, 0);
-	talk_sakaba[27] = EVT_HELPER_OP(0, 0);
-	talk_sakaba[28] = EVT_HELPER_OP(0, 0);
-	talk_sakaba[29] = EVT_HELPER_OP(0, 0);
-	talk_sakaba[30] = EVT_HELPER_OP(0, 0);
-	talk_sakaba[31] = EVT_HELPER_OP(0, 0);
-	talk_sakaba[276] = EVT_HELPER_OP(0, 49);
+	talk_sakaba[24] = EVT_HELPER_CMD(0, 0);
+	talk_sakaba[25] = EVT_HELPER_CMD(0, 0);
+	talk_sakaba[26] = EVT_HELPER_CMD(0, 0);
+	talk_sakaba[27] = EVT_HELPER_CMD(0, 0);
+	talk_sakaba[28] = EVT_HELPER_CMD(0, 0);
+	talk_sakaba[29] = EVT_HELPER_CMD(0, 0);
+	talk_sakaba[30] = EVT_HELPER_CMD(0, 0);
+	talk_sakaba[31] = EVT_HELPER_CMD(0, 0);
+	talk_sakaba[276] = EVT_HELPER_CMD(0, 49);
 	patch::writePatch(&talk_sakaba[277], talk_sakaba_hook, sizeof(talk_sakaba_hook));
 
 	init_papa[1] = GSW(1706);
