@@ -109,7 +109,7 @@ EVT_BEGIN(villagerA_init_evt)
 	RETURN()
 EVT_END()
 
-EVT_BEGIN(villagerA_init_evt)
+EVT_BEGIN(villagerA_talk_evt)
 	IF_EQUAL(GSW(1708), 402)
 		USER_FUNC(evt_msg::evt_msg_print, 0, PTR("stg4_usu_31_1"), 0, PTR("me"))
 		RETURN()
