@@ -22,7 +22,7 @@ EVT_DECLARE_USER_FUNC(evt_snd_envon, 2)
 // evt_snd_sfxchk
 // evt_snd_sfxoff
 // evt_snd_sfxon_3d_ex
-// evt_snd_sfxon_3d
+EVT_DECLARE_USER_FUNC(evt_snd_sfxon_3d, 5)
 // evt_snd_sfxon_
 // evt_snd_sfxon__
 EVT_DECLARE_USER_FUNC(evt_snd_sfxon, 2)
