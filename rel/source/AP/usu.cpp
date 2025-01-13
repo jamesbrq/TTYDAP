@@ -90,7 +90,7 @@ extern int32_t evt_monban_look[];
 extern int32_t unlock[];
 extern int32_t evt_majin2[];
 extern int32_t usu_01_init_evt[];
-extern int32_t evt_usu_kagemario_party_kill[];
+extern int32_t evt_usu_kagemario_party_kill_usu[];
 
 const char usuVillagerA[] = "\x91\xBA\x90\x6C\x82\x60";
 
@@ -773,20 +773,84 @@ void ApplyUsuPatches(OSModuleInfo* module_info)
 	evt_mon_open[2] = 5;
 	evt_mon_open[105] = 6;
 
+	usu01_crowFG_talk_event[193] = GSWF(6039);
+	usu01_crowFG_talk_event[194] = 1;
+	usu01_crowFG_talk_event[222] = GSW(1704);
+	usu01_crowFG_talk_event[224] = 210;
+	usu01_crowFG_talk_event[327] = 222;
 
+	usu01_crowHI_talk_event[181] = GSWF(6039);
+	usu01_crowHI_talk_event[182] = 1;
+	usu01_crowHI_talk_event[210] = GSW(1704);
+	usu01_crowHI_talk_event[212] = 210;
+	usu01_crowHI_talk_event[226] = 222;
 
+	usu01_crowJ_talk_event[181] = GSWF(6039);
+	usu01_crowJ_talk_event[182] = 1;
+	usu01_crowJ_talk_event[210] = GSW(1704);
+	usu01_crowJ_talk_event[212] = 210;
+	usu01_crowJ_talk_event[220] = 222;
 
+	loop_msg[1] = GSW(1704);
+	loop_msg[2] = 200;
+	loop_msg[6] = GSW(1704);
+	loop_msg[7] = 215;
 
+	mawari_house_delay[1] = GSW(1704);
+	mawari_house_delay[2] = 3;
 
+	evt_ie2_door2_1[150] = GSWF(6042);
+	evt_ie2_door2_1[151] = 1;
 
+	evt_ie2_door2_2[82] = GSWF(6042);
+	evt_ie2_door2_2[83] = 1;
 
+	usu01_gusun[1] = GSW(1704);
+	usu01_gusun[2] = 219;
+	usu01_gusun[31] = GSW(1704);
+	usu01_gusun[32] = 200;
 
+	evt_monban_buta_main[30] = GSW(1704);
+	evt_monban_buta_main[31] = 4;
 
+	evt_monban_buta[1] = GSW(1704);
+	evt_monban_buta[2] = 4;
 
+	evt_monban_buta2[1] = GSW(1704);
+	evt_monban_buta2[2] = 4;
 
+	evt_monban_look[3] = GSW(1704);
+	evt_monban_look[4] = 5;
+	evt_monban_look[8] = GSW(1704);
+	evt_monban_look[9] = 4;
+	evt_monban_look[109] = GSW(1704);
+	evt_monban_look[110] = 5;
 
+	unlock[9] = GSWF(6042);
+	unlock[10] = 1;
 
+	evt_majin2[210] = GSWF(6043);
+	evt_majin2[211] = 1;
 
+	usu_01_init_evt[23] = GSW(1704);
+	usu_01_init_evt[25] = 1;
+	usu_01_init_evt[26] = 200;
+	usu_01_init_evt[34] = 200;
+	usu_01_init_evt[35] = 215;
+	usu_01_init_evt[44] = GSWF(6042);
+	usu_01_init_evt[45] = 1;
+	usu_01_init_evt[93] = GSW(1704);
+	usu_01_init_evt[94] = 3;
+	usu_01_init_evt[106] = GSWF(6042);
+	usu_01_init_evt[107] = 1;
+	usu_01_init_evt[109] = GSW(1704);
+	usu_01_init_evt[110] = 200;
+	usu_01_init_evt[117] = GSW(1704);
+	usu_01_init_evt[118] = 213;
+	usu_01_init_evt[156] = GSW(1704);
+	usu_01_init_evt[157] = 6;
+	usu_01_init_evt[309] = GSWF(6043);
+	usu_01_init_evt[310] = 1;
 
-
+	evt_usu_kagemario_party_kill_usu[1] = GSW(1704);
 }
