@@ -17,7 +17,7 @@
 using namespace mod;
 using namespace ttyd;
 
-extern int32_t evt_open[];
+extern int32_t evt_open_tou[];
 extern int32_t talk_gardman[];
 extern int32_t evt_tou_match_make_default_sub[];
 extern int32_t evt_tou_match_make_default[];
@@ -187,8 +187,8 @@ EVT_END()
 
 void ApplyTouPatches(OSModuleInfo* module_info)
 {
-	evt_open[1] = GSW(1703);
-	evt_open[2] = 6;
+	evt_open_tou[1] = GSW(1703);
+	evt_open_tou[2] = 6;
 
 	talk_gardman[15] = GSW(1703);
 	talk_gardman[16] = 11;

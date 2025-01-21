@@ -25,6 +25,7 @@
 #include <AP/nok.h>
 #include <AP/win.h>
 #include <AP/mri.h>
+#include <AP/muj.h>
 #include <AP/tou.h>
 #include <AP/tou2.h>
 #include <AP/usu.h>
@@ -202,6 +203,7 @@ namespace mod::owr
 		ApplyUsuPatches(module_info);
 		ApplyGraPatches(module_info);
 		ApplyJinPatches(module_info);
+		ApplyMujPatches(module_info);
 
 		ShopItemData* item_data = reinterpret_cast<ShopItemData*>(module_ptr + kShopOffsets[0]);
 		for (int32_t copy = 0; copy < 7; ++copy) {

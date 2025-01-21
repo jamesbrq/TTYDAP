@@ -307,6 +307,8 @@ void ApplyGor03Patches(OSModuleInfo* module_info)
 
 	evt_door_01_0_close[13] = GSW(1709); //Door 1 close
 	evt_door_01_0_close[14] = 3;
+	evt_door_01_0_close[27] = GSWF(6050);
+	evt_door_01_0_close[28] = 1;
 	evt_door_01_0_close[37] = GSW(1709);
 	evt_door_01_0_close[38] = 10;
 

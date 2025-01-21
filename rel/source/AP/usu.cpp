@@ -35,6 +35,7 @@ extern int32_t village_chief_init[];
 extern int32_t village_chief_pig_init[];
 extern int32_t village_chief_talk[];
 extern int32_t vivian_init[];
+extern int32_t usu00_3witch_event[];
 extern int32_t usu00_stage4_coming_event[];
 extern int32_t gra00_2witch_find_ranpel_event[];
 extern int32_t usu00_vivian_joinup_event[];
@@ -567,6 +568,9 @@ void ApplyUsuPatches(OSModuleInfo* module_info)
 	vivian_init[8] = 0;
 	vivian_init[9] = 0;
 	vivian_init[30] = 0;
+
+	usu00_3witch_event[267] = GSW(1715);
+	usu00_3witch_event[268] = 4;
 
 	usu00_stage4_coming_event[810] = GSW(1704);
 	usu00_stage4_coming_event[811] = 1;
