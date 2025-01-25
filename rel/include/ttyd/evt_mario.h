@@ -33,7 +33,7 @@ EVT_DECLARE_USER_FUNC(evt_mario_set_party_pos, 5)
 // evt_mario_party_use_check
 // evt_mario_chk_join_party
 // evt_mario_get_exparty
-// evt_mario_get_party
+EVT_DECLARE_USER_FUNC(evt_mario_get_party, 1)
 // evt_peach_set_condition
 // evt_peach_transform_gundan_off
 // evt_peach_transform_gundan_on
