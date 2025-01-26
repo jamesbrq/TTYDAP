@@ -74,11 +74,11 @@ extern int32_t muj_03_event_01[];
 extern int32_t sanders_funto[];
 extern int32_t muj_04_init_evt[];
 extern int32_t sanders_nakama[];
-extern int32_t sanders_init_muj_03[];
+extern int32_t sanders_init_muj_05[];
 extern int32_t sanders_talk_sub[];
-extern int32_t sanders_talk_muj_03[];
-extern int32_t marco_init_muj_03[];
-extern int32_t marco_talk_muj_03[];
+extern int32_t sanders_talk_muj_05[];
+extern int32_t marco_init_muj_05[];
+extern int32_t marco_talk_muj_05[];
 extern int32_t sanders_kyushutsu_sub[];
 extern int32_t marco_and_jewel[];
 extern int32_t dokuroiwa_touch[];
@@ -88,7 +88,7 @@ extern int32_t yure_yashi_ha1[];
 extern int32_t yure_yashi[];
 extern int32_t muj_05_init_evt[];
 extern int32_t megane_init_muj_10[];
-extern int32_t bero_in_event[];
+extern int32_t bero_in_event_muj_10[];
 extern int32_t nazo_event[];
 extern int32_t oidasare_event[];
 extern int32_t unk_evt_muj_0002cb0c[];
@@ -469,6 +469,120 @@ EVT_BEGIN(suifu_bomb_talk_hook)
 	RETURN()
 EVT_END()
 
+EVT_BEGIN(suifu_d_talk_muj_01_evt)
+	IF_LARGE_EQUAL(GSW(1717), 268)
+		IF_SMALL_EQUAL(GSW(1717), 272)
+			USER_FUNC(evt_msg::evt_msg_print, 0, PTR("stg5_muj_159"), 0, PTR("me"))
+			RETURN()
+		END_IF()
+	END_IF()
+	SWITCH(GSW(1709))
+		CASE_BETWEEN(4, 6)
+			USER_FUNC(evt_msg::evt_msg_print, 0, PTR("stg5_muj_160"), 0, PTR("me"))
+			RETURN()
+		CASE_END()
+		CASE_EQUAL(7)
+			USER_FUNC(evt_msg::evt_msg_print, 0, PTR("stg5_muj_161"), 0, PTR("me"))
+			RETURN()
+		CASE_END()
+		CASE_LARGE_EQUAL(10)
+			IF_SMALL_EQUAL(GSW(1707), 377)
+				USER_FUNC(evt_msg::evt_msg_print, 0, PTR("stg5_muj_162"), 0, PTR("me"))
+				RETURN()
+			END_IF()
+		CASE_END()
+	END_SWITCH()
+	IF_LARGE_EQUAL(GSW(1707), 377)
+		IF_SMALL_EQUAL(GSW(1708), 402)
+			USER_FUNC(evt_msg::evt_msg_print, 0, PTR("stg5_muj_163"), 0, PTR("me"))
+			RETURN()
+		END_IF()
+	END_IF()
+	USER_FUNC(evt_msg::evt_msg_print, 0, PTR("stg5_muj_163_1"), 0, PTR("me"))
+	RETURN()
+EVT_END()
+
+EVT_BEGIN(suifu_d_talk_muj_01_hook)
+	RUN_CHILD_EVT(suifu_d_talk_muj_01_evt)
+	RETURN()
+EVT_END()
+
+EVT_BEGIN(borosuifu_a_talk_evt)
+	IF_LARGE_EQUAL(GSW(1717), 268)
+		IF_SMALL_EQUAL(GSW(1717), 272)
+			USER_FUNC(evt_msg::evt_msg_print, 0, PTR("stg5_muj_154"), 0, PTR("me"))
+			RETURN()
+		END_IF()
+	END_IF()
+	SWITCH(GSW(1709))
+		CASE_BETWEEN(4, 6)
+			USER_FUNC(evt_msg::evt_msg_print, 0, PTR("stg5_muj_155"), 0, PTR("me"))
+			RETURN()
+		CASE_END()
+		CASE_EQUAL(7)
+			USER_FUNC(evt_msg::evt_msg_print, 0, PTR("stg5_muj_156"), 0, PTR("me"))
+			RETURN()
+		CASE_END()
+		CASE_LARGE_EQUAL(10)
+			IF_SMALL_EQUAL(GSW(1707), 377)
+				USER_FUNC(evt_msg::evt_msg_print, 0, PTR("stg5_muj_157"), 0, PTR("me"))
+				RETURN()
+			END_IF()
+		CASE_END()
+	END_SWITCH()
+	IF_LARGE_EQUAL(GSW(1707), 377)
+		IF_SMALL_EQUAL(GSW(1708), 402)
+			USER_FUNC(evt_msg::evt_msg_print, 0, PTR("stg5_muj_158"), 0, PTR("me"))
+			RETURN()
+		END_IF()
+	END_IF()
+	USER_FUNC(evt_msg::evt_msg_print, 0, PTR("stg5_muj_158_1"), 0, PTR("me"))
+	RETURN()
+EVT_END()
+
+EVT_BEGIN(borosuifu_a_talk_hook)
+	RUN_CHILD_EVT(borosuifu_a_talk_evt)
+	RETURN()
+EVT_END()
+
+EVT_BEGIN(borosuifu_b_talk_evt)
+	IF_LARGE_EQUAL(GSW(1717), 268)
+		IF_SMALL_EQUAL(GSW(1717), 272)
+			USER_FUNC(evt_msg::evt_msg_print, 0, PTR("stg5_muj_164"), 0, PTR("me"))
+			RETURN()
+		END_IF()
+	END_IF()
+	SWITCH(GSW(1709))
+		CASE_BETWEEN(4, 6)
+			USER_FUNC(evt_msg::evt_msg_print, 0, PTR("stg5_muj_165"), 0, PTR("me"))
+			RETURN()
+		CASE_END()
+		CASE_EQUAL(7)
+			USER_FUNC(evt_msg::evt_msg_print, 0, PTR("stg5_muj_166"), 0, PTR("me"))
+			RETURN()
+		CASE_END()
+		CASE_LARGE_EQUAL(10)
+			IF_SMALL_EQUAL(GSW(1707), 377)
+				USER_FUNC(evt_msg::evt_msg_print, 0, PTR("stg5_muj_167"), 0, PTR("me"))
+				RETURN()
+			END_IF()
+		CASE_END()
+	END_SWITCH()
+	IF_LARGE_EQUAL(GSW(1707), 377)
+		IF_SMALL_EQUAL(GSW(1708), 402)
+			USER_FUNC(evt_msg::evt_msg_print, 0, PTR("stg5_muj_168"), 0, PTR("me"))
+			RETURN()
+		END_IF()
+	END_IF()
+	USER_FUNC(evt_msg::evt_msg_print, 0, PTR("stg5_muj_168_1"), 0, PTR("me"))
+	RETURN()
+EVT_END()
+
+EVT_BEGIN(borosuifu_b_talk_hook)
+	RUN_CHILD_EVT(borosuifu_b_talk_evt)
+	RETURN()
+EVT_END()
+
 void ApplyMujPatches(OSModuleInfo* module_info)
 {
 	garawaru_init_muj_00[1] = GSW(1705);
@@ -630,4 +744,228 @@ void ApplyMujPatches(OSModuleInfo* module_info)
 
 	suifu_d_regl_muj_01[1] = GSW(1717);
 	suifu_d_regl_muj_01[3] = 269;
+
+	patch::writePatch(&suifu_d_talk_muj_01[0], suifu_d_talk_muj_01_hook, sizeof(suifu_d_talk_muj_01_hook));
+	
+	borosuifu_a_init[1] = GSW(1717);
+	borosuifu_a_init[3] = 269;
+
+	patch::writePatch(&borosuifu_a_talk[0], borosuifu_a_talk_hook, sizeof(borosuifu_a_talk_hook));
+
+	borosuifu_b_init[6] = GSW(1717);
+	borosuifu_b_init[8] = 269;
+
+	borosuifu_b_regl[1] = GSW(1717);
+	borosuifu_b_regl[3] = 269;
+
+	patch::writePatch(&borosuifu_b_talk[0], borosuifu_b_talk_hook, sizeof(borosuifu_b_talk_hook));
+
+	mony_init_muj_01[1] = GSW(1717);
+	mony_init_muj_01[3] = 269;
+	mony_init_muj_01[4] = 272;
+
+	peton_init_muj_01[1] = GSW(1717);
+	peton_init_muj_01[3] = 269;
+	peton_init_muj_01[4] = 272;
+
+	kyoshu_event[182] = GSW(1705);
+	kyoshu_event[183] = 11;
+
+	settoku_event_main[68] = GSW(1705);
+	settoku_event_main[69] = 13;
+
+	muj_01_init_evt[4] = GSW(1708);
+	muj_01_init_evt[5] = 400;
+	muj_01_init_evt[76] = GSW(1708);
+	muj_01_init_evt[77] = 382;
+	muj_01_init_evt[149] = GSW(1705);
+	muj_01_init_evt[151] = 232;
+	muj_01_init_evt[155] = 234;
+	muj_01_init_evt[164] = GSW(1708);
+	muj_01_init_evt[165] = 400;
+	muj_01_init_evt[187] = GSW(1708);
+	muj_01_init_evt[188] = 402;
+
+	mony_init_muj_02[6] = GSW(1709);
+	mony_init_muj_02[8] = 5;
+	mony_init_muj_02[9] = 6;
+
+	peton_init_muj_02[6] = GSW(1709);
+	peton_init_muj_02[8] = 5;
+	peton_init_muj_02[9] = 6;
+
+	mony_talk_muj_02[1] = GSW(1709);
+	mony_talk_muj_02[3] = 5;
+	mony_talk_muj_02[16] = GSW(1709);
+	mony_talk_muj_02[17] = 6;
+	mony_talk_muj_02[19] = 6;
+	mony_talk_muj_02[44] = GSW(1709);
+	mony_talk_muj_02[45] = 7;
+
+	peton_talk_muj_02[1] = GSW(1709);
+	peton_talk_muj_02[3] = 5;
+	peton_talk_muj_02[16] = GSW(1709);
+	peton_talk_muj_02[17] = 6;
+	peton_talk_muj_02[19] = 6;
+	peton_talk_muj_02[44] = GSW(1709);
+	peton_talk_muj_02[45] = 7;
+
+	muj_02_init_evt[31] = GSW(1717);
+	muj_02_init_evt[32] = 269;
+	muj_02_init_evt[87] = GSW(1717);
+	muj_02_init_evt[88] = 261;
+
+	muj_03_event_01[1] = GSW(1705);
+	muj_03_event_01[3] = 12;
+
+	sanders_funto[462] = GSW(1705);
+	sanders_funto[463] = 12;
+
+	muj_04_init_evt[70] = GSW(1705);
+	muj_04_init_evt[71] = 11;
+
+	sanders_nakama[163] = GSW(1705);
+	sanders_nakama[164] = 17;
+
+	sanders_init_muj_05[1] = GSW(1705);
+	sanders_init_muj_05[3] = 13;
+	sanders_init_muj_05[9] = 13;
+	sanders_init_muj_05[10] = 15;
+	sanders_init_muj_05[22] = 16;
+
+	sanders_talk_sub[63] = GSW(1705);
+	sanders_talk_sub[64] = 16;
+
+	sanders_talk_muj_05[1] = GSW(1705);
+	sanders_talk_muj_05[3] = 13;
+	sanders_talk_muj_05[4] = 15;
+	sanders_talk_muj_05[38] = 16;
+
+	marco_init_muj_05[1] = GSW(1705);
+	marco_init_muj_05[3] = 19;
+
+	marco_talk_muj_05[1] = GSW(1705);
+	marco_talk_muj_05[3] = 19;
+
+	sanders_kyushutsu_sub[7] = GSW(1705);
+	sanders_kyushutsu_sub[8] = 13;
+
+	marco_and_jewel[77] = GSW(1705);
+	marco_and_jewel[78] = 19;
+
+	dokuroiwa_touch[23] = GSW(1705);
+	dokuroiwa_touch[24] = 18;
+
+	dokuroiwa_bomb[302] = GSW(1717);
+	dokuroiwa_bomb[303] = 1;
+
+	dokuroiwa_init[14] = GSW(1717);
+	dokuroiwa_init[15] = 1;
+
+	yure_yashi_ha1[84] = GSW(1705);
+	yure_yashi_ha1[85] = 13;
+	yure_yashi_ha1[173] = GSW(1705);
+	yure_yashi_ha1[174] = 13;
+
+	yure_yashi[46] = GSW(1705);
+	yure_yashi[47] = 13;
+	yure_yashi[78] = GSW(1705);
+	yure_yashi[79] = 13;
+
+	muj_05_init_evt[1] = GSW(1705);
+	muj_05_init_evt[3] = 12;
+	muj_05_init_evt[13] = 16;
+	muj_05_init_evt[65] = GSW(1705);
+	muj_05_init_evt[67] = 12;
+	muj_05_init_evt[79] = 18;
+	muj_05_init_evt[86] = GSW(1709);
+	muj_05_init_evt[87] = 5;
+
+	megane_init_muj_10[1] = GSW(1717);
+	megane_init_muj_10[3] = 251;
+	megane_init_muj_10[4] = 252;
+
+	bero_in_event_muj_10[1] = GSW(1717);
+	bero_in_event_muj_10[2] = 258;
+
+	nazo_event[168] = GSW(1717);
+	nazo_event[169] = 251;
+
+	oidasare_event[147] = GSW(1717);
+	oidasare_event[148] = 254;
+
+	unk_evt_muj_0002cb0c[79] = GSW(1717);
+	unk_evt_muj_0002cb0c[80] = 259;
+
+	muj_10_init_evt[1] = GSW(1717);
+	muj_10_init_evt[2] = 253;
+	muj_10_init_evt[45] = GSW(1717);
+	muj_10_init_evt[46] = 250;
+	muj_10_init_evt[51] = GSW(1717);
+	muj_10_init_evt[52] = 253;
+	muj_10_init_evt[57] = GSW(1717);
+	muj_10_init_evt[58] = 258;
+	muj_10_init_evt[65] = GSW(1717);
+	muj_10_init_evt[66] = 260;
+	muj_10_init_evt[85] = GSW(1717);
+	muj_10_init_evt[86] = 260;
+	muj_10_init_evt[88] = GSW(1717);
+	muj_10_init_evt[89] = 258;
+	muj_10_init_evt[118] = GSW(1717);
+	muj_10_init_evt[119] = 260;
+	muj_10_init_evt[164] = GSW(1717);
+	muj_10_init_evt[165] = 257;
+	muj_10_init_evt[167] = GSW(1717);
+	muj_10_init_evt[168] = 258;
+	muj_10_init_evt[184] = GSW(1717);
+	muj_10_init_evt[185] = 258;
+
+	warning_event[31] = GSW(1717);
+	warning_event[32] = 252;
+
+	muj_11_init_evt[1] = GSW(1717);
+	muj_11_init_evt[2] = 253;
+	muj_11_init_evt[28] = GSW(1717);
+	muj_11_init_evt[29] = 251;
+
+	bero_custom_muj_12[1] = GSW(1717);
+	bero_custom_muj_12[3] = 252;
+	bero_custom_muj_12[57] = 257;
+
+	korutesu_event[606] = GSW(1717);
+	korutesu_event[607] = 253;
+
+	korutesu_event_after[132] = GSW(1717);
+	korutesu_event_after[133] = 253;
+
+	kosho_event[504] = GSW(1717);
+	kosho_event[505] = 258;
+
+	muj_12_init_evt[8] = GSW(1717);
+	muj_12_init_evt[9] = 253;
+	muj_12_init_evt[28] = GSW(1717);
+	muj_12_init_evt[29] = 252;
+	muj_12_init_evt[44] = GSW(1717);
+	muj_12_init_evt[45] = 253;
+	muj_12_init_evt[50] = GSW(1717);
+	muj_12_init_evt[51] = 257;
+
+	onryo_event[20] = GSW(1705);
+	onryo_event[21] = 8;
+	onryo_event[144] = GSW(1705);
+	onryo_event[145] = 8;
+	onryo_event[2235] = GSW(1705);
+	onryo_event[2236] = 9;
+
+	muj_20_koopa_evt[122] = GSW(1715);
+	muj_20_koopa_evt[123] = 216;
+
+	muj_20_init_evt[109] = GSW(1715);
+	muj_20_init_evt[110] = 215;
+	muj_20_init_evt[210] = GSW(1705);
+	muj_20_init_evt[211] = 7;
+	muj_20_init_evt[224] = GSW(1705);
+	muj_20_init_evt[225] = 8;
+	muj_20_init_evt[334] = GSW(1708);
+	muj_20_init_evt[335] = 402;
 }

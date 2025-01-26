@@ -12,6 +12,7 @@
 #include <ttyd/seqdrv.h>
 #include <ttyd/event.h>
 #include <ttyd/string.h>
+#include <AP/dou.h>
 #include <AP/gor_00.h>
 #include <AP/gor_01.h>
 #include <AP/gor_02.h>
@@ -204,6 +205,7 @@ namespace mod::owr
 		ApplyGraPatches(module_info);
 		ApplyJinPatches(module_info);
 		ApplyMujPatches(module_info);
+		ApplyDouPatches(module_info);
 
 		ShopItemData* item_data = reinterpret_cast<ShopItemData*>(module_ptr + kShopOffsets[0]);
 		for (int32_t copy = 0; copy < 7; ++copy) {
