@@ -25,12 +25,12 @@ extern int32_t evt_tou_match_after_default[];
 extern int32_t tou_00_init_evt[];
 extern int32_t talk_sakaba[];
 extern int32_t talk_hot[];
-extern int32_t init_papa[];
-extern int32_t talk_papa[];
-extern int32_t init_mama[];
-extern int32_t talk_mama[];
-extern int32_t init_konari[];
-extern int32_t talk_konari[];
+extern int32_t init_papa_tou_04[];
+extern int32_t talk_papa_tou_04[];
+extern int32_t init_mama_tou_04[];
+extern int32_t talk_mama_tou_04[];
+extern int32_t init_konari_tou_04[];
+extern int32_t talk_konari_tou_04[];
 extern int32_t talk_musume[];
 extern int32_t init_musume_1[];
 extern int32_t init_musume_2[];
@@ -44,7 +44,7 @@ extern int32_t talk_jugem_2[];
 extern int32_t talk_bijyo[];
 extern int32_t init_kiza[];
 extern int32_t talk_kiza[];
-extern int32_t init_sarary[];
+extern int32_t init_sarary_tou_01[];
 extern int32_t evt_uron[];
 extern int32_t evt_tamago_sleep[];
 extern int32_t evt_tamago_move[];
@@ -60,8 +60,8 @@ extern int32_t init_gard1[];
 extern int32_t talk_gard1[];
 extern int32_t init_gard2[];
 extern int32_t talk_gard2[];
-extern int32_t init_madam[];
-extern int32_t talk_madam[];
+extern int32_t init_madam_tou_02[];
+extern int32_t talk_madam_tou_02[];
 extern int32_t talk_repo[];
 extern int32_t talk_cam1[];
 extern int32_t init_cam2[];
@@ -246,26 +246,26 @@ void ApplyTouPatches(OSModuleInfo* module_info)
 	talk_sakaba[276] = EVT_HELPER_CMD(0, 49);
 	patch::writePatch(&talk_sakaba[277], talk_sakaba_hook, sizeof(talk_sakaba_hook));
 
-	init_papa[1] = GSW(1706);
-	init_papa[3] = 1;
+	init_papa_tou_04[1] = GSW(1706);
+	init_papa_tou_04[3] = 1;
 
-	talk_papa[1] = GSW(1703);
-	talk_papa[3] = 5;
-	talk_papa[11] = 99; //Unknown
+	talk_papa_tou_04[1] = GSW(1703);
+	talk_papa_tou_04[3] = 5;
+	talk_papa_tou_04[11] = 99; //Unknown
 
-	init_mama[1] = GSW(1706);
-	init_mama[3] = 1;
+	init_mama_tou_04[1] = GSW(1706);
+	init_mama_tou_04[3] = 1;
 
-	talk_mama[1] = GSW(1703);
-	talk_mama[3] = 5;
-	talk_mama[11] = 99; //Unknown
+	talk_mama_tou_04[1] = GSW(1703);
+	talk_mama_tou_04[3] = 5;
+	talk_mama_tou_04[11] = 99; //Unknown
 
-	init_konari[1] = GSW(1706);
-	init_konari[3] = 1;
+	init_konari_tou_04[1] = GSW(1706);
+	init_konari_tou_04[3] = 1;
 
-	talk_konari[1] = GSW(1703);
-	talk_konari[3] = 5;
-	talk_konari[11] = 99; //Unknown
+	talk_konari_tou_04[1] = GSW(1703);
+	talk_konari_tou_04[3] = 5;
+	talk_konari_tou_04[11] = 99; //Unknown
 
 	talk_musume[1] = GSW(1703);
 	talk_musume[3] = 5;
@@ -319,8 +319,8 @@ void ApplyTouPatches(OSModuleInfo* module_info)
 	talk_kiza[3] = 5;
 	talk_kiza[11] = 99; //Unknown
 
-	init_sarary[1] = GSW(1706);
-	init_sarary[2] = 99; //Unknown
+	init_sarary_tou_01[1] = GSW(1706);
+	init_sarary_tou_01[2] = 99; //Unknown
 
 	evt_uron[191] = GSW(1703);
 	evt_uron[192] = 3;
@@ -396,13 +396,13 @@ void ApplyTouPatches(OSModuleInfo* module_info)
 	talk_gard2[21] = 5;
 	talk_gard2[29] = 99; //Unknown
 
-	init_madam[1] = GSW(1703);
-	init_madam[3] = 99; //Unknown
-	init_madam[11] = 99; //Unknown
+	init_madam_tou_02[1] = GSW(1703);
+	init_madam_tou_02[3] = 99; //Unknown
+	init_madam_tou_02[11] = 99; //Unknown
 
-	talk_madam[1] = GSW(1703);
-	talk_madam[3] = 5;
-	talk_madam[11] = 99; //Unknown
+	talk_madam_tou_02[1] = GSW(1703);
+	talk_madam_tou_02[3] = 5;
+	talk_madam_tou_02[11] = 99; //Unknown
 
 	talk_repo[1] = GSW(1703);
 	talk_repo[3] = 5;
