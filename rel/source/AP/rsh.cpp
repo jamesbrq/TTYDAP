@@ -461,4 +461,122 @@ void ApplyRshPatches(OSModuleInfo* module_info)
 	rsh_02_a_init_evt[628] = 27;
 	rsh_02_a_init_evt[648] = GSW(1706);
 	rsh_02_a_init_evt[649] = 27;
+
+	init_cook[1] = GSW(1706);
+	init_cook[3] = 48;
+	init_cook[4] = 52;
+
+	talk_cook[210] = GSW(1706);
+	talk_cook[212] = 3;
+	talk_cook[234] = 4;
+	talk_cook[242] = 7;
+	talk_cook[250] = 8;
+	talk_cook[261] = 14;
+	talk_cook[269] = 21;
+	talk_cook[277] = 22;
+	talk_cook[285] = 30;
+	talk_cook[307] = 46;
+	talk_cook[315] = 47;
+	talk_cook[326] = 66;
+
+	init_waitless_rsh_03[1] = GSW(1706);
+	init_waitless_rsh_03[3] = 48;
+	init_waitless_rsh_03[4] = 52;
+
+	talk_waitless_pias_return[137] = GSW(1706);
+	talk_waitless_pias_return[139] = 30;
+	talk_waitless_pias_return[140] = 45;
+	talk_waitless_pias_return[145] = 54;
+	talk_waitless_pias_return[146] = 64;
+
+	talk_waitless_rsh_03[1] = GSW(1706);
+	talk_waitless_rsh_03[2] = 8;
+	talk_waitless_rsh_03[50] = GSW(1706);
+	talk_waitless_rsh_03[52] = 30;
+	talk_waitless_rsh_03[53] = 45;
+	talk_waitless_rsh_03[58] = 54;
+	talk_waitless_rsh_03[59] = 64;
+	talk_waitless_rsh_03[84] = GSW(1706);
+	talk_waitless_rsh_03[86] = 3;
+	talk_waitless_rsh_03[108] = 4;
+	talk_waitless_rsh_03[116] = 7;
+	talk_waitless_rsh_03[151] = 8;
+	talk_waitless_rsh_03[159] = 21;
+	talk_waitless_rsh_03[167] = 22;
+	talk_waitless_rsh_03[175] = 30;
+	talk_waitless_rsh_03[207] = 46;
+	talk_waitless_rsh_03[225] = 47;
+	talk_waitless_rsh_03[233] = 66;
+
+	move_waitless[1] = GSW(1706);
+	move_waitless[2] = 3;
+	move_waitless[4] = GSW(1706);
+	move_waitless[5] = 7;
+
+	talk_toron_rsh_03[1] = GSW(1706);
+	talk_toron_rsh_03[3] = 4;
+
+	talk_sarary_rsh_03[1] = GSW(1706);
+	talk_sarary_rsh_03[3] = 4;
+
+	evt_lanch_missing[731] = GSW(1706);
+	evt_lanch_missing[732] = 4;
+
+	talk_powan_rsh_03[1] = GSW(1706);
+	talk_powan_rsh_03[3] = 4;
+
+	evt_shop_moamoa_talk[1] = GSW(1706);
+	evt_shop_moamoa_talk[3] = 48;
+	evt_shop_moamoa_talk[8] = 49;
+	evt_shop_moamoa_talk[19] = 52;
+
+	evt_shop_close[253] = GSW(1706);
+	evt_shop_close[255] = 3;
+	evt_shop_close[256] = 22;
+
+	evt_shop_door_init[7] = GSW(1706);
+	evt_shop_door_init[9] = 21;
+	evt_shop_door_init[11] = 46;
+
+	evt_yuka_simi_rsh_03[23] = GSW(1706);
+	evt_yuka_simi_rsh_03[24] = 5;
+	evt_yuka_simi_rsh_03[38] = GSW(1706);
+	evt_yuka_simi_rsh_03[39] = 5;
+
+	evt_access_rsh_03[4] = GSW(1706);
+	evt_access_rsh_03[5] = 65;
+
+	rsh_03_init_evt[1] = GSW(1706);
+	rsh_03_init_evt[3] = 30;
+	rsh_03_init_evt[4] = 45;
+	rsh_03_init_evt[6] = 53;
+	rsh_03_init_evt[35] = GSW(1706);
+	rsh_03_init_evt[37] = 3;
+	rsh_03_init_evt[38] = 6;
+	rsh_03_init_evt[101] = 3;
+	rsh_03_init_evt[106] = 7;
+	rsh_03_init_evt[107] = 72;
+	rsh_03_init_evt[124] = GSW(1706);
+	rsh_03_init_evt[125] = 48;
+	rsh_03_init_evt[127] = GSW(1706);
+	rsh_03_init_evt[128] = 52;
+	rsh_03_init_evt[156] = GSW(1706);
+	rsh_03_init_evt[158] = 4;
+	rsh_03_init_evt[159] = 6;
+	rsh_03_init_evt[169] = 24;
+	rsh_03_init_evt[170] = 29;
+	rsh_03_init_evt[180] = 30;
+	rsh_03_init_evt[181] = 45;
+	rsh_03_init_evt[193] = 47;
+	rsh_03_init_evt[194] = 48;
+	rsh_03_init_evt[203] = 49;
+	rsh_03_init_evt[204] = 51;
+	rsh_03_init_evt[214] = 54;
+	rsh_03_init_evt[215] = 64;
+
+	rsh_03_a_init_evt[1] = GSW(1706);
+
+
+
+
 }
