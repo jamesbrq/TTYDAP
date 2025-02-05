@@ -92,7 +92,7 @@ extern int32_t talk_mama_rsh_04[];
 extern int32_t init_konari_rsh_04[];
 extern int32_t talk_konari_rsh_04[];
 extern int32_t init_powan[];
-extern int32_t talk_powan_rsh_05[];
+extern int32_t talk_powan_rsh_04[];
 extern int32_t evt_tana_5[];
 extern int32_t evt_access_rsh_04[];
 extern int32_t evt_narikin_room[];
@@ -574,9 +574,303 @@ void ApplyRshPatches(OSModuleInfo* module_info)
 	rsh_03_init_evt[214] = 54;
 	rsh_03_init_evt[215] = 64;
 
-	rsh_03_a_init_evt[1] = GSW(1706);
+	rsh_03_a_init_evt[12] = GSW(1706);
+	rsh_03_a_init_evt[14] = 3;
+	rsh_03_a_init_evt[15] = 22;
+	rsh_03_a_init_evt[29] = GSW(1706);
+	rsh_03_a_init_evt[30] = 3;
+	rsh_03_a_init_evt[32] = GSW(1706);
+	rsh_03_a_init_evt[33] = 7;
 
+	rsh_03_c_init_evt[91] = GSW(1706);
+	rsh_03_c_init_evt[93] = 21;
+	rsh_03_c_init_evt[95] = 46;
 
+	evt_rsh_konarikin_irai_party_talk[81] = GSW(1706);
+	evt_rsh_konarikin_irai_party_talk[82] = 12;
+	evt_rsh_konarikin_irai_party_talk[84] = GSW(1706);
+	evt_rsh_konarikin_irai_party_talk[85] = 12;
 
+	evt_allow_kamotsu[68] = GSW(1706);
+	evt_allow_kamotsu[69] = 18;
 
+	evt_shorui_funshitu[358] = GSW(1706);
+	evt_shorui_funshitu[359] = 24;
+
+	evt_daijisouna_kami[204] = GSW(1706);
+	evt_daijisouna_kami[205] = 26;
+
+	init_syashou_rsh_04[1] = GSW(1706);
+	init_syashou_rsh_04[3] = 18;
+	init_syashou_rsh_04[4] = 19;
+	init_syashou_rsh_04[12] = 48;
+	init_syashou_rsh_04[13] = 52;
+
+	talk_syashou_rsh_04[1] = GSW(1706);
+	talk_syashou_rsh_04[3] = 14;
+	talk_syashou_rsh_04[4] = 20;
+	talk_syashou_rsh_04[10] = GSW(1706);
+	talk_syashou_rsh_04[12] = 3;
+	talk_syashou_rsh_04[61] = GSW(1706);
+	talk_syashou_rsh_04[62] = 3;
+	talk_syashou_rsh_04[64] = 8;
+	talk_syashou_rsh_04[89] = 11;
+	talk_syashou_rsh_04[97] = 14;
+	talk_syashou_rsh_04[113] = GSW(1706);
+	talk_syashou_rsh_04[114] = 12;
+	talk_syashou_rsh_04[116] = GSW(1706);
+	talk_syashou_rsh_04[117] = 12;
+	talk_syashou_rsh_04[121] = 15;
+	talk_syashou_rsh_04[154] = GSW(1706);
+	talk_syashou_rsh_04[155] = 15;
+	talk_syashou_rsh_04[163] = 17;
+	talk_syashou_rsh_04[171] = 18;
+	talk_syashou_rsh_04[175] = 19;
+	talk_syashou_rsh_04[183] = 20;
+	talk_syashou_rsh_04[191] = 21;
+	talk_syashou_rsh_04[282] = GSW(1706);
+	talk_syashou_rsh_04[283] = 21;
+	talk_syashou_rsh_04[290] = 22;
+	talk_syashou_rsh_04[298] = 30;
+	talk_syashou_rsh_04[323] = 46;
+	talk_syashou_rsh_04[331] = 47;
+	talk_syashou_rsh_04[342] = 66;
+	talk_syashou_rsh_04[402] = GSW(1706);
+	talk_syashou_rsh_04[404] = 14;
+	talk_syashou_rsh_04[405] = 21;
+
+	init_sarary_rsh_04[1] = GSW(1706);
+	init_sarary_rsh_04[3] = 3;
+	init_sarary_rsh_04[4] = 6;
+	init_sarary_rsh_04[12] = 23;
+	init_sarary_rsh_04[13] = 29;
+	init_sarary_rsh_04[21] = 48;
+	init_sarary_rsh_04[22] = 52;
+	init_sarary_rsh_04[30] = 54;
+
+	talk_sarary_rsh_04[1] = GSW(1706);
+	talk_sarary_rsh_04[3] = 7;
+	talk_sarary_rsh_04[11] = 14;
+	talk_sarary_rsh_04[19] = 21;
+	talk_sarary_rsh_04[38] = 22;
+	talk_sarary_rsh_04[46] = 30;
+	talk_sarary_rsh_04[54] = 46;
+	talk_sarary_rsh_04[62] = 47;
+
+	talk_papa_mama[130] = GSW(1706);
+	talk_papa_mama[131] = 11;
+	talk_papa_mama[138] = GSW(1706);
+	talk_papa_mama[139] = 9;
+	talk_papa_mama[141] = GSW(1706);
+	talk_papa_mama[142] = 10;
+
+	init_papa_rsh_04[1] = GSW(1706);
+	init_papa_rsh_04[3] = 30;
+	init_papa_rsh_04[4] = 45;
+	init_papa_rsh_04[12] = 48;
+	init_papa_rsh_04[13] = 52;
+	init_papa_rsh_04[21] = 54;
+
+	talk_papa_rsh_04[1] = GSW(1706);
+	talk_papa_rsh_04[3] = 8;
+	talk_papa_rsh_04[11] = 9;
+	talk_papa_rsh_04[15] = 21;
+	talk_papa_rsh_04[23] = 22;
+	talk_papa_rsh_04[31] = 30;
+	talk_papa_rsh_04[39] = 47;
+
+	init_mama_rsh_04[1] = GSW(1706);
+	init_mama_rsh_04[3] = 48;
+	init_mama_rsh_04[4] = 52;
+	init_mama_rsh_04[12] = 54;
+
+	talk_mama_rsh_04[1] = GSW(1706);
+	talk_mama_rsh_04[3] = 8;
+	talk_mama_rsh_04[11] = 9;
+	talk_mama_rsh_04[15] = 21;
+	talk_mama_rsh_04[23] = 22;
+	talk_mama_rsh_04[31] = 30;
+	talk_mama_rsh_04[39] = 46;
+	talk_mama_rsh_04[47] = 47;
+
+	init_konari_rsh_04[1] = GSW(1706);
+	init_konari_rsh_04[3] = 30;
+	init_konari_rsh_04[4] = 45;
+	init_konari_rsh_04[12] = 48;
+	init_konari_rsh_04[13] = 52;
+	init_konari_rsh_04[21] = 54;
+
+	talk_konari_rsh_04[1] = GSW(1706);
+	talk_konari_rsh_04[3] = 8;
+	talk_konari_rsh_04[11] = 9;
+	talk_konari_rsh_04[19] = 11;
+	talk_konari_rsh_04[24] = GSW(1706);
+	talk_konari_rsh_04[25] = 10;
+	talk_konari_rsh_04[27] = GSW(1706);
+	talk_konari_rsh_04[28] = 10;
+	talk_konari_rsh_04[55] = GSW(1706);
+	talk_konari_rsh_04[56] = 11;
+	talk_konari_rsh_04[102] = GSW(1706);
+	talk_konari_rsh_04[103] = 12;
+	talk_konari_rsh_04[105] = GSW(1706);
+	talk_konari_rsh_04[106] = 12;
+	talk_konari_rsh_04[222] = GSW(1706);
+	talk_konari_rsh_04[223] = 14;
+
+	init_powan[1] = GSW(1706);
+	init_powan[3] = 3;
+	init_powan[4] = 6;
+	init_powan[12] = 23;
+	init_powan[13] = 29;
+	init_powan[21] = 30;
+	init_powan[22] = 45;
+	init_powan[30] = 48;
+	init_powan[31] = 52;
+	init_powan[39] = 54;
+
+	talk_powan_rsh_04[1] = GSW(1706);
+	talk_powan_rsh_04[3] = 7;
+	talk_powan_rsh_04[11] = 8;
+	talk_powan_rsh_04[109] = GSW(1706);
+	talk_powan_rsh_04[110] = 8;
+	talk_powan_rsh_04[116] = 11;
+	talk_powan_rsh_04[124] = 14;
+	talk_powan_rsh_04[135] = 15;
+	talk_powan_rsh_04[143] = 17;
+	talk_powan_rsh_04[151] = 21;
+	talk_powan_rsh_04[162] = 22;
+	talk_powan_rsh_04[170] = 24;
+	talk_powan_rsh_04[174] = 25;
+	talk_powan_rsh_04[182] = 26;
+	talk_powan_rsh_04[186] = 29;
+	talk_powan_rsh_04[194] = 47;
+
+	evt_tana_5[4] = GSW(1706);
+	evt_tana_5[5] = 65;
+
+	evt_access_rsh_04[7] = GSW(1706);
+	evt_access_rsh_04[8] = 65;
+
+	evt_narikin_room[23] = GSW(1706);
+	evt_narikin_room[25] = 8;
+	evt_narikin_room[26] = 20;
+	evt_narikin_room[65] = GSW(1706);
+	evt_narikin_room[67] = 8;
+	evt_narikin_room[68] = 20;
+
+	evt_powan_room[21] = GSW(1706);
+	evt_powan_room[23] = 23;
+	evt_powan_room[62] = GSW(1706);
+	evt_powan_room[64] = 23;
+
+	rsh_04_init_evt[1] = GSW(1706);
+	rsh_04_init_evt[3] = 30;
+	rsh_04_init_evt[4] = 45;
+	rsh_04_init_evt[6] = 53;
+	rsh_04_init_evt[55] = GSW(1706);
+	rsh_04_init_evt[57] = 18;
+	rsh_04_init_evt[64] = GSW(1706);
+	rsh_04_init_evt[65] = 20;
+	rsh_04_init_evt[73] = GSW(1706);
+	rsh_04_init_evt[74] = 48;
+	rsh_04_init_evt[82] = GSW(1706);
+	rsh_04_init_evt[83] = 54;
+	rsh_04_init_evt[85] = GSW(1706);
+	rsh_04_init_evt[86] = 60;
+	rsh_04_init_evt[101] = GSW(1706);
+	rsh_04_init_evt[103] = 4;
+	rsh_04_init_evt[104] = 6;
+	rsh_04_init_evt[114] = 24;
+	rsh_04_init_evt[115] = 29;
+	rsh_04_init_evt[125] = 30;
+	rsh_04_init_evt[126] = 45;
+	rsh_04_init_evt[138] = 47;
+	rsh_04_init_evt[139] = 48;
+	rsh_04_init_evt[148] = 49;
+	rsh_04_init_evt[149] = 51;
+	rsh_04_init_evt[159] = 54;
+	rsh_04_init_evt[160] = 64;
+
+	rsh_04_a_init_evt[12] = GSW(1706);
+	rsh_04_a_init_evt[13] = 48;
+
+	rsh_04_c_init_evt[53] = GSW(1706);
+	rsh_04_c_init_evt[54] = 19;
+
+	evt_meet_moamoa[181] = GSW(1706);
+	evt_meet_moamoa[182] = 50;
+
+	evt_moamoa_escape[122] = GSW(1706);
+	evt_moamoa_escape[123] = 51;
+
+	init_syashou_rsh_05[1] = GSW(1706);
+	init_syashou_rsh_05[3] = 49;
+	init_syashou_rsh_05[4] = 52;
+
+	talk_syashou_rsh_05[1] = GSW(1706);
+	talk_syashou_rsh_05[2] = 51;
+
+	init_waitless_rsh_05[1] = GSW(1706);
+	init_waitless_rsh_05[3] = 49;
+	init_waitless_rsh_05[4] = 52;
+
+	talk_waitless_rsh_05[1] = GSW(1706);
+	talk_waitless_rsh_05[2] = 51;
+
+	evt_ghost_diary[1] = GSW(1706);
+	evt_ghost_diary[2] = 19;
+
+	rsh_05_init_evt[1] = GSW(1706);
+	rsh_05_init_evt[3] = 30;
+	rsh_05_init_evt[4] = 45;
+	rsh_05_init_evt[15] = GSW(1706);
+	rsh_05_init_evt[17] = 4;
+	rsh_05_init_evt[18] = 6;
+	rsh_05_init_evt[28] = 24;
+	rsh_05_init_evt[29] = 29;
+	rsh_05_init_evt[39] = 30;
+	rsh_05_init_evt[40] = 45;
+	rsh_05_init_evt[52] = 47;
+	rsh_05_init_evt[53] = 48;
+	rsh_05_init_evt[62] = 49;
+	rsh_05_init_evt[63] = 51;
+	rsh_05_init_evt[73] = 54;
+	rsh_05_init_evt[74] = 64;
+
+	rsh_05_a_init_evt[1] = GSW(1706);
+	rsh_05_a_init_evt[3] = 8;
+	rsh_05_a_init_evt[8] = 14;
+	rsh_05_a_init_evt[13] = 23;
+	rsh_05_a_init_evt[18] = 29;
+	rsh_05_a_init_evt[23] = 46;
+	rsh_05_a_init_evt[28] = 48;
+	rsh_05_a_init_evt[47] = GSW(1706);
+	rsh_05_a_init_evt[49] = 49;
+	rsh_05_a_init_evt[56] = 49;
+	rsh_05_a_init_evt[67] = 50;
+	rsh_05_a_init_evt[88] = GSW(1706);
+	rsh_05_a_init_evt[89] = 19;
+
+	hom_10_evt_resha_start_rsh_06[49] = GSW(1706);
+	hom_10_evt_resha_start_rsh_06[50] = 59;
+
+	evt_great_moamoa[729] = GSW(1706);
+	evt_great_moamoa[730] = 52;
+
+	rsh_06_init_evt[3] = GSW(1706);
+	rsh_06_init_evt[5] = 4;
+	rsh_06_init_evt[6] = 6;
+	rsh_06_init_evt[16] = 24;
+	rsh_06_init_evt[17] = 29;
+	rsh_06_init_evt[27] = 30;
+	rsh_06_init_evt[28] = 45;
+	rsh_06_init_evt[40] = 47;
+	rsh_06_init_evt[41] = 48;
+	rsh_06_init_evt[50] = 49;
+	rsh_06_init_evt[51] = 51;
+	rsh_06_init_evt[61] = 54;
+	rsh_06_init_evt[62] = 64;
+
+	rsh_06_a_init_evt[25] = GSW(1706);
+	rsh_06_a_init_evt[26] = 52;
 }

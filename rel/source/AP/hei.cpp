@@ -79,16 +79,16 @@ void ApplyHeiPatches(OSModuleInfo* module_info)
 	bridge_evt[22] = 1;
 	
 	nokotaro_get[69] = GSW(1701); //Koops get
-	nokotaro_get[70] = 11;
+	nokotaro_get[70] = 10;
 
 	nokotaro_nakama[11] = GSW(1701); //Koops init
-	nokotaro_nakama[12] = 10;
+	nokotaro_nakama[12] = 9;
 
 	nokotarou_talk_2[19] = GSW(1701); //Koops talk
-	nokotarou_talk_2[20] = 11;
+	nokotarou_talk_2[20] = 10;
 
 	evt_nokorin[10] = GSW(1701); //Koopie koo evt???
-	evt_nokorin[11] = 11;
+	evt_nokorin[11] = 10;
 
 	hei_peach_mail[277] = GSW(1701); //Peach mail
 	hei_peach_mail[278] = 99; //Unknown

@@ -68,10 +68,13 @@ extern int32_t puni_3_init[];
 extern int32_t puni_3_talk[];
 extern int32_t bero_custom_00[];
 extern int32_t guide_sister[];
+extern int32_t toraware_elder[];
+extern int32_t toraware_elder[];
 extern int32_t mri_03_init_evt[];
 extern int32_t bero_custom[];
 extern int32_t mri_chibitoge_init_04[];
 extern int32_t chuchurina_sogu[];
+extern int32_t black_shadow[];
 extern int32_t mri_04_init_evt[];
 extern int32_t puni_4_init[];
 extern int32_t puni_4_talk[];
@@ -523,10 +526,10 @@ void ApplyMriPatches(OSModuleInfo* module_info)
 	mri_countdown[81] = 99; //??? Idk what this does
 
 	seal_bigtree[203] = GSW(1702);
-	seal_bigtree[204] = 4; //Might be incorrect
+	seal_bigtree[204] = 4;
 
 	seal_bigtree2[122] = GSW(1702);
-	seal_bigtree2[123] = 5; //Might be incorrect
+	seal_bigtree2[123] = 5;
 
 	patch::writePatch(&mri_guide_init_00[0], guide_init_00_hook, sizeof(guide_init_00_hook));
 
@@ -714,14 +717,17 @@ void ApplyMriPatches(OSModuleInfo* module_info)
 	chuchurina_sogu[802] = GSWF(6022);
 	chuchurina_sogu[803] = 1;
 
+	black_shadow[333] = GSW(1713);
+	black_shadow[334] = 4;
+
 	mri_04_init_evt[54] = GSW(1713);
-	mri_04_init_evt[56] = 99; //Unused
+	mri_04_init_evt[56] = 3;
 	mri_04_init_evt[64] = 99; //Unknown
 	mri_04_init_evt[65] = 99; //Unknown
 	mri_04_init_evt[95] = GSW(1713);
-	mri_04_init_evt[96] = 99; //Unused
+	mri_04_init_evt[96] = 3;
 	mri_04_init_evt[145] = GSW(1713);
-	mri_04_init_evt[146] = 99; //Unused
+	mri_04_init_evt[146] = 3;
 	mri_04_init_evt[151] = GSWF(6022);
 	mri_04_init_evt[152] = 0;
 	mri_04_init_evt[157] = GSWF(6022);

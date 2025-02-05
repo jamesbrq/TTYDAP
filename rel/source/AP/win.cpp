@@ -46,21 +46,21 @@ extern int32_t welcome_wonderforest[];
 extern int32_t win_06_init_evt[];
 
 EVT_BEGIN(vivian_init_evt)
-	IF_SMALL(GSW(1712), 2)
+	IF_SMALL(GSW(1712), 3)
 		USER_FUNC(evt_npc::evt_npc_set_position, PTR("me"), -535, 0, -30)
 	END_IF()
 	RETURN()
 EVT_END()
 
 EVT_BEGIN(maririn_init_evt)
-	IF_SMALL(GSWF(1712), 2)
+	IF_SMALL(GSWF(1712), 3)
 		USER_FUNC(evt_npc::evt_npc_set_position, PTR("me"), -495, 0, -60)
 	END_IF()
 	RETURN()
 EVT_END()
 
 EVT_BEGIN(majorin_init_evt)
-	IF_SMALL(GSWF(1712), 2)
+	IF_SMALL(GSWF(1712), 3)
 		USER_FUNC(evt_npc::evt_npc_set_position, PTR("me"), -495, 0, -60)
 	END_IF()
 	RETURN()
@@ -72,14 +72,17 @@ void ApplyWinPatches(OSModuleInfo* module_info)
 	patch::writePatch(&maririn_init[5], maririn_init_evt, sizeof(maririn_init_evt));
 	patch::writePatch(&majorin_init[5], majorin_init_evt, sizeof(majorin_init_evt));
 
+	witchtrio_momeru[862] = GSW(1712);
+	witchtrio_momeru[863] = 1;
+
 	witchtrio_picture[514] = GSW(1702);
 	witchtrio_picture[515] = 13;
 
 	mario_vs_witchtrio[548] = GSW(1712);
-	mario_vs_witchtrio[549] = 1;
+	mario_vs_witchtrio[549] = 2;
 
 	witchtrio_lose[541] = GSW(1712);
-	witchtrio_lose[542] = 2;
+	witchtrio_lose[542] = 3;
 
 	win_00_init_evt[22] = GSW(1702);
 	win_00_init_evt[23] = 99; //Unknown
@@ -137,8 +140,8 @@ void ApplyWinPatches(OSModuleInfo* module_info)
 	touch_door[1] = GSW(1702);
 	touch_door[3] = 11;
 	touch_door[7] = 11;
-	touch_door[11] = 11; //Unused
-	touch_door[12] = 11; //Unused
+	touch_door[11] = 99; //Unused
+	touch_door[12] = 99; //Unused
 	touch_door[16] = 13;
 
 	win_04_init_evt[34] = GSW(1702);

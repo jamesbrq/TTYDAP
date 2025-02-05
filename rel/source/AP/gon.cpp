@@ -38,7 +38,7 @@ extern int32_t tsuritenjo_event[];
 extern int32_t evt_majin2[];
 extern int32_t gon_06_init_evt[];
 extern int32_t out_func[];
-extern int32_t gor_item_evt_07[];
+extern int32_t gon_item_evt_07[];
 extern int32_t gon_07_init_evt[];
 extern int32_t gon_evt_unlock_08[];
 extern int32_t gon_08_init_evt[];
@@ -138,10 +138,10 @@ void ApplyGonPatches(OSModuleInfo* module_info)
 	out_func[3] = GSWF(6012);
 	out_func[4] = 1;
 
-	gor_item_evt_07[1] = GSWF(6012);
-	gor_item_evt_07[2] = 1;
-	gor_item_evt_07[6] = GSWF(6012);
-	gor_item_evt_07[7] = 1;
+	gon_item_evt_07[1] = GSWF(6012);
+	gon_item_evt_07[2] = 1;
+	gon_item_evt_07[6] = GSWF(6012);
+	gon_item_evt_07[7] = 1;
 
 	gon_07_init_evt[22] = GSWF(6012);
 	gon_07_init_evt[23] = 1;
@@ -155,10 +155,10 @@ void ApplyGonPatches(OSModuleInfo* module_info)
 	gon_10_init_evt[35] = GSWF(6014);
 	gon_10_init_evt[36] = 1;
 
-	gonbaba_event[1384] = GSWF(6014);
-	gonbaba_event[1385] = 1;
-	gonbaba_event[1387] = GSWF(6015);
-	gonbaba_event[1388] = 1;
+	gonbaba_event[1384] = GSWF(1711);
+	gonbaba_event[1385] = 7;
+	gonbaba_event[1387] = GSWF(1711);
+	gonbaba_event[1388] = 8;
 
 	gon_11_init_evt[6] = GSWF(6014);
 	gon_11_init_evt[8] = 1;
