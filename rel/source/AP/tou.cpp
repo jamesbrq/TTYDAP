@@ -323,7 +323,7 @@ void ApplyTouPatches(OSModuleInfo* module_info)
 	init_sarary_tou_01[2] = 99; //Unknown
 
 	evt_uron[191] = GSW(1703);
-	evt_uron[192] = 3;
+	evt_uron[192] = 1;
 
 	evt_tamago_sleep[3] = GSW(1703);
 	evt_tamago_sleep[4] = 10;
@@ -479,7 +479,7 @@ void ApplyTouPatches(OSModuleInfo* module_info)
 	talk_borodo[3] = 99; //Unknown
 
 	evt_tougi2[273] = GSW(1703);
-	evt_tougi2[274] = 3;
+	evt_tougi2[274] = 2;
 
 	evt_momikucha[7] = GSW(1703);
 	evt_momikucha[8] = 7;

@@ -68,8 +68,6 @@ extern int32_t puni_3_init[];
 extern int32_t puni_3_talk[];
 extern int32_t bero_custom_00[];
 extern int32_t guide_sister[];
-extern int32_t toraware_elder[];
-extern int32_t toraware_elder[];
 extern int32_t mri_03_init_evt[];
 extern int32_t bero_custom[];
 extern int32_t mri_chibitoge_init_04[];
@@ -619,7 +617,7 @@ void ApplyMriPatches(OSModuleInfo* module_info)
 	meet_rival[2113] = 3;
 
 	rival_nakama[1125] = GSW(1713);
-	rival_nakama[1126] = 8;
+	rival_nakama[1126] = 5;
 
 	boss_battle[1133] = GSW(1713);
 	boss_battle[1134] = 23;
