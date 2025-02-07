@@ -767,7 +767,7 @@ void ApplyGor00Patches(OSModuleInfo* module_info)
 			gundan1000tai_afterbattle[1182] = GSW(1700); //After crump fight
 
 			shukko_event[490] = GSW(1705); //Ship arrives back from Keelhaul Key
-			shukko_event[491] = 99; //Unknown
+			shukko_event[491] = 7;
 
 			gorotsuki_kikan[235] = GSW(1705); //After toads leave ship
 			gorotsuki_kikan[236] = 99; //Unknown

@@ -573,7 +573,7 @@ void ApplyUsuPatches(OSModuleInfo* module_info)
 	usu00_3witch_event[268] = 4;
 
 	usu00_stage4_coming_event[810] = GSW(1704);
-	usu00_stage4_coming_event[811] = 1;
+	usu00_stage4_coming_event[811] = 2;
 
 	gra00_2witch_find_ranpel_event[172] = GSW(1704);
 	gra00_2witch_find_ranpel_event[173] = 214;
@@ -753,9 +753,9 @@ void ApplyUsuPatches(OSModuleInfo* module_info)
 	gatekeeper_pig_init[16] = 200;
 
 	gatekeeper_talk[1] = GSW(1704);
-	gatekeeper_talk[3] = 2;
-	gatekeeper_talk[75] = 3;
-	gatekeeper_talk[83] = 4;
+	gatekeeper_talk[3] = 3;
+	gatekeeper_talk[75] = 4;
+	gatekeeper_talk[83] = 5;
 	gatekeeper_talk[91] = 200;
 	gatekeeper_talk[112] = 219;
 	gatekeeper_talk[120] = 222;

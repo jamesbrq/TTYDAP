@@ -21,6 +21,9 @@ extern int32_t evt_open_tou[];
 extern int32_t talk_gardman[];
 extern int32_t evt_tou_match_make_default_sub[];
 extern int32_t evt_tou_match_make_default[];
+extern int32_t evt_mail_1[];
+extern int32_t evt_mail_3[];
+extern int32_t evt_mail_5[];
 extern int32_t evt_tou_match_after_default[];
 extern int32_t tou_00_init_evt[];
 extern int32_t talk_sakaba[];
@@ -182,7 +185,7 @@ EVT_END()
 
 EVT_BEGIN(talk_sakaba_hook)
 	RUN_CHILD_EVT(talk_sakaba_evt)
-	GOTO(&talk_sakaba[367])
+	RETURN()
 EVT_END()
 
 void ApplyTouPatches(OSModuleInfo* module_info)
@@ -218,6 +221,12 @@ void ApplyTouPatches(OSModuleInfo* module_info)
 	evt_tou_match_make_default[171] = 99; //Unknown
 	evt_tou_match_make_default[176] = 99; //Unknown
 
+	evt_mail_1[153] = GSW(1703);
+	evt_mail_1[154] = 14;
+
+	evt_mail_3[153] = GSW(1703);
+	evt_mail_3[154] = 15;
+
 	evt_tou_match_after_default[31] = GSW(1703);
 	evt_tou_match_after_default[32] = 11;
 	evt_tou_match_after_default[34] = GSW(1703);
@@ -235,14 +244,16 @@ void ApplyTouPatches(OSModuleInfo* module_info)
 	tou_00_init_evt[69] = 2;
 
 	talk_sakaba[23] = GSWF(6026);
-	talk_sakaba[24] = EVT_HELPER_CMD(0, 0);
-	talk_sakaba[25] = EVT_HELPER_CMD(0, 0);
-	talk_sakaba[26] = EVT_HELPER_CMD(0, 0);
-	talk_sakaba[27] = EVT_HELPER_CMD(0, 0);
-	talk_sakaba[28] = EVT_HELPER_CMD(0, 0);
-	talk_sakaba[29] = EVT_HELPER_CMD(0, 0);
-	talk_sakaba[30] = EVT_HELPER_CMD(0, 0);
-	talk_sakaba[31] = EVT_HELPER_CMD(0, 0);
+	talk_sakaba[24] = 0;
+	talk_sakaba[25] = 0;
+	talk_sakaba[26] = 0;
+	talk_sakaba[27] = 0;
+	talk_sakaba[28] = 0;
+	talk_sakaba[29] = 0;
+	talk_sakaba[30] = 0;
+	talk_sakaba[31] = 0;
+	talk_sakaba[31] = 0;
+	talk_sakaba[33] = 0;
 	talk_sakaba[276] = EVT_HELPER_CMD(0, 49);
 	patch::writePatch(&talk_sakaba[277], talk_sakaba_hook, sizeof(talk_sakaba_hook));
 
