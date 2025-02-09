@@ -53,17 +53,12 @@ class Mod
 public:
 	Mod();
 	void init();
-
-private:
 	void updateEarly();
 	void draw();
-
-private:
 	void (*mPFN_makeKey_trampoline)() = nullptr;
-
-	owr::OWR owr_mod_;
-
 	ConsoleSystem mConsole;
+	owr::StateManager state_;
+	owr::OWR owr_mod_;
 };
-
+	extern Mod* gMod;
 }

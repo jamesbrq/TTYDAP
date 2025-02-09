@@ -3,7 +3,7 @@
 #include <cstdint>
 
 // Types and enums used for the shuffled state of a particular Shufflizer seed.
-namespace mod::owr {
+namespace mod {
 
 namespace ShopType {
     enum e {
@@ -39,5 +39,4 @@ struct SeedState {
     int16_t special_field_items[12];  // Last is only for padding
     int16_t ultra_hammer_flag;
 };
-
 }

@@ -13,6 +13,7 @@
 #include <ttyd/seqdrv.h>
 #include <ttyd/event.h>
 #include <ttyd/string.h>
+#include <AP/aaa.h>
 #include <AP/aji.h>
 #include <AP/bom.h>
 #include <AP/dou.h>
@@ -29,12 +30,14 @@
 #include <AP/gon.h>
 #include <AP/gra.h>
 #include <AP/jin.h>
+#include <AP/kpa.h>
 #include <AP/nok.h>
 #include <AP/pik.h>
 #include <AP/win.h>
 #include <AP/mri.h>
 #include <AP/muj.h>
 #include <AP/rsh.h>
+#include <AP/tik.h>
 #include <AP/tou.h>
 #include <AP/tou2.h>
 #include <AP/usu.h>
@@ -96,8 +99,6 @@ namespace mod::owr
 	void* (*g_itemEntry_trampoline)(const char*, uint32_t, uint32_t, int32_t, void*, float, float, float) = nullptr;
 	bool (*g_OSLink_trampoline)(OSModuleInfo*, void*) = nullptr;
 	void (*g_stg0_00_init_trampoline)() = nullptr;
-
-	OWR::OWR() {}
 
 	void OWR::SequenceInit()
 	{
@@ -268,6 +269,15 @@ namespace mod::owr
             case ModuleId::AJI:
                 ApplyAjiPatches(module_info);
                 break;
+			case ModuleId::AAA:
+				ApplyAaaPatches(module_info);
+				break;
+			case ModuleId::KPA:
+				ApplyKpaPatches(module_info);
+				break;
+			case ModuleId::TIK:
+				ApplyTikPatches(module_info);
+				break;
             default:
                 return;
         }

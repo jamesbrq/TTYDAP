@@ -81,7 +81,7 @@ extern int32_t tsumini[];
 extern int32_t epilogue_npc_entry[];
 extern int32_t epilogue_evt[];
 extern int32_t epilogue_npc_entry2[];
-extern int32_t epilogue_evt2[];
+extern int32_t gor_epilogue_evt2[];
 extern int32_t return_gorotsuki_town_init[];
 extern int32_t return_gorotsuki_town[];
 extern int32_t gor_00_init_evt[];
@@ -555,10 +555,10 @@ EVT_BEGIN(gor_00_init_evt2)
 			USER_FUNC(evt_bero::evt_bero_get_entername, LW(0))
 			IF_STR_EQUAL(LW(0), PTR("epilogue2"))
 				RUN_CHILD_EVT(epilogue_npc_entry2)
-				RUN_EVT(epilogue_evt2)
+				RUN_EVT(gor_epilogue_evt2)
 			ELSE()
 				RUN_CHILD_EVT(epilogue_npc_entry2)
-				RUN_EVT(epilogue_evt2)
+				RUN_EVT(gor_epilogue_evt2)
 			END_IF()
 			RETURN()
 		CASE_END()
