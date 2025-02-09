@@ -25,7 +25,7 @@ EVT_DECLARE_USER_FUNC(evt_cam_letter_box_onoff, 2)
 // evt_cam3d_evt_set_rel_dir
 // evt_cam3d_evt_set_npc_rel
 // evt_cam3d_evt_set_rel
-// evt_cam3d_evt_set
+EVT_DECLARE_USER_FUNC(evt_cam3d_evt_set, 8)
 // evt_cam3d_evt_set_at
 // evt_cam3d_evt_zoom_in
 // evt_cam_shake

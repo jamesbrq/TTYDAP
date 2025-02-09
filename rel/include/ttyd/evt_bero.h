@@ -69,6 +69,7 @@ EVT_DECLARE_USER_FUNC(evt_bero_exec_wait, 1)
 EVT_DECLARE_USER_FUNC(evt_bero_exec_onoff, 2)
 EVT_DECLARE_USER_FUNC(evt_bero_get_entername, 1)
 EVT_DECLARE_USER_FUNC(evt_bero_mapchange, 2)
+EVT_DECLARE_USER_FUNC(evt_bero_overwrite, 2)
 // bero_id_filter
 // bero_clear_Offset
 // bero_get_ptr

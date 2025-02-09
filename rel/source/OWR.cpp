@@ -7,12 +7,17 @@
 #include <OWR_STATE.h>
 #include <ttyd/swdrv.h>
 #include <ttyd/mario_party.h>
+#include <ttyd/mario_pouch.h>
 #include <ttyd/party.h>
 #include <ttyd/fontmgr.h>
 #include <ttyd/seqdrv.h>
 #include <ttyd/event.h>
 #include <ttyd/string.h>
+#include <AP/aji.h>
+#include <AP/bom.h>
 #include <AP/dou.h>
+#include <AP/eki.h>
+#include <AP/end.h>
 #include <AP/gor_00.h>
 #include <AP/gor_01.h>
 #include <AP/gor_02.h>
@@ -20,10 +25,12 @@
 #include <AP/gor_04.h>
 #include <AP/gor_misc.h>
 #include <AP/hei.h>
+#include <AP/hom.h>
 #include <AP/gon.h>
 #include <AP/gra.h>
 #include <AP/jin.h>
 #include <AP/nok.h>
+#include <AP/pik.h>
 #include <AP/win.h>
 #include <AP/mri.h>
 #include <AP/muj.h>
@@ -103,8 +110,10 @@ namespace mod::owr
 		ttyd::swdrv::swByteSet(1705, 0);
 
 		uint8_t goombella = static_cast<uint8_t>(ttyd::party::PartyMembers::Goombella);
+		uint8_t yoshi = static_cast<uint8_t>(ttyd::party::PartyMembers::Yoshi);
 
 		ttyd::mario_party::partyJoin(goombella);
+		ttyd::mario_party::partyJoin(yoshi);
 
 		ttyd::mario_party::marioPartyHello(goombella);
 
@@ -115,6 +124,11 @@ namespace mod::owr
 		}
 		ttyd::swdrv::swSet(1215);
 		ttyd::swdrv::swSet(1216);
+
+
+		ttyd::mario_pouch::pouchGetItem(ItemId::ULTRA_BOOTS);
+		ttyd::mario_pouch::pouchGetItem(ItemId::ULTRA_HAMMER);
+		ttyd::mario_pouch::pouchGetItem(ItemId::INVALID_ITEM_PAPER_MODE_ICON);
 	}
 
 	void OWR::LZTest()
@@ -188,26 +202,75 @@ namespace mod::owr
 	{
 		if (module_info == nullptr) return;
 		uintptr_t module_ptr = reinterpret_cast<uintptr_t>(module_info);
-		if (module_info->id != ModuleId::GOR) return;
-		ApplyGor00Patches(module_info);
-		ApplyGor01Patches(module_info);
-		ApplyGor02Patches(module_info);
-		ApplyGor03Patches(module_info);
-		ApplyGor04Patches(module_info);
-		ApplyGorMiscPatches(module_info);
-		ApplyHeiPatches(module_info);
-		ApplyGonPatches(module_info);
-		ApplyNokPatches(module_info);
-		ApplyWinPatches(module_info);
-		ApplyMriPatches(module_info);
-		ApplyTouPatches(module_info);
-		ApplyTou2Patches(module_info);
-		ApplyUsuPatches(module_info);
-		ApplyGraPatches(module_info);
-		ApplyJinPatches(module_info);
-		ApplyMujPatches(module_info);
-		ApplyDouPatches(module_info);
-		ApplyRshPatches(module_info);
+        switch (module_info->id) {
+            case ModuleId::GOR:
+                //ApplyGor00Patches(module_info);
+                //ApplyGor01Patches(module_info);
+                //ApplyGor02Patches(module_info);
+                //ApplyGor03Patches(module_info);
+                //ApplyGor04Patches(module_info);
+                //ApplyGorMiscPatches(module_info);
+                break;
+            case ModuleId::HEI:
+                ApplyHeiPatches(module_info);
+                break;
+            case ModuleId::GON:
+                ApplyGonPatches(module_info);
+                break;
+            case ModuleId::NOK:
+                ApplyNokPatches(module_info);
+                break;
+            case ModuleId::WIN:
+                ApplyWinPatches(module_info);
+                break;
+            case ModuleId::MRI:
+                ApplyMriPatches(module_info);
+                break;
+            case ModuleId::TOU:
+                ApplyTouPatches(module_info);
+                break;
+            case ModuleId::TOU2:
+                ApplyTou2Patches(module_info);
+                break;
+            case ModuleId::USU:
+                ApplyUsuPatches(module_info);
+                break;
+            case ModuleId::GRA:
+                ApplyGraPatches(module_info);
+                break;
+            case ModuleId::JIN:
+                ApplyJinPatches(module_info);
+                break;
+            case ModuleId::MUJ:
+                ApplyMujPatches(module_info);
+                break;
+            case ModuleId::DOU:
+                ApplyDouPatches(module_info);
+                break;
+            case ModuleId::RSH:
+                ApplyRshPatches(module_info);
+                break;
+            case ModuleId::EKI:
+                ApplyEkiPatches(module_info);
+                break;
+            case ModuleId::END:
+                ApplyEndPatches(module_info);
+                break;
+            case ModuleId::HOM:
+                ApplyHomPatches(module_info);
+                break;
+            case ModuleId::PIK:
+                ApplyPikPatches(module_info);
+                break;
+            case ModuleId::BOM:
+                ApplyBomPatches(module_info);
+                break;
+            case ModuleId::AJI:
+                ApplyAjiPatches(module_info);
+                break;
+            default:
+                return;
+        }
 
 		ShopItemData* item_data = reinterpret_cast<ShopItemData*>(module_ptr + kShopOffsets[0]);
 		for (int32_t copy = 0; copy < 7; ++copy) {

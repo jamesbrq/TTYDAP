@@ -34,12 +34,12 @@ EVT_DECLARE_USER_FUNC(evt_mario_set_party_pos, 5)
 // evt_mario_chk_join_party
 // evt_mario_get_exparty
 EVT_DECLARE_USER_FUNC(evt_mario_get_party, 1)
+EVT_DECLARE_USER_FUNC(evt_mario_set_mode, 1)
 // evt_peach_set_condition
 // evt_peach_transform_gundan_off
 // evt_peach_transform_gundan_on
 // evt_koopa_set_level
 // evt_koopa_get_level
-// evt_mario_set_mode
 // evt_mario_get_mode
 // evt_mario_get_state
 // evt_mario_wait_movable
@@ -67,6 +67,7 @@ EVT_DECLARE_USER_FUNC(evt_mario_get_party, 1)
 // evt_mario_get_motion
 EVT_DECLARE_USER_FUNC(evt_mario_normalize, 0)
 EVT_DECLARE_USER_FUNC(evt_mario_set_pose, 1)
+EVT_DECLARE_USER_FUNC(evt_mario_set_pos, 3)
 // evt_mario_set_normal_pose
 // evt_mario_adjust_dir
 // unk_JP_US_EU_26_800e6b1c
@@ -79,7 +80,6 @@ EVT_DECLARE_USER_FUNC(evt_mario_set_pose, 1)
 // evt_mario_get_mov_spd
 // evt_mario_set_mov_spd
 // evt_mario_set_hosei_xyz
-// evt_mario_set_pos
 // evt_mario_get_pos
 // evt_mario_set_camid
 // evt_mario_init_camid
@@ -93,7 +93,7 @@ EVT_DECLARE_USER_FUNC(evt_mario_set_pose, 1)
 // evt_mario_bgmode_on
 // evt_mario_set_enable_key
 EVT_DECLARE_USER_FUNC(evt_mario_key_onoff, 1)
-// evt_mario_cont_onoff
+EVT_DECLARE_USER_FUNC(evt_mario_cont_onoff, 1)
 // evt_mario_trigflag_onoff
 // evt_mario_dispflag_onoff
 // evt_mario_flag_onoff

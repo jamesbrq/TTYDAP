@@ -43,13 +43,13 @@ EVT_DECLARE_USER_FUNC(evt_party_run, 1)
 // evt_party_set_dir_npc
 // evt_party_set_dir
 EVT_DECLARE_USER_FUNC(evt_party_get_pos, 4)
+EVT_DECLARE_USER_FUNC(evt_party_set_pos, 4)
 // evt_party_set_hosei_xyz
-// evt_party_set_pos
 // evt_party_outofscreen
 // evt_party_force_reset_outofscreen
 EVT_DECLARE_USER_FUNC(evt_party_set_camid, 2)
+EVT_DECLARE_USER_FUNC(evt_party_cont_onoff, 2)
 // evt_party_init_camid
-// evt_party_cont_onoff
 // unk_JP_US_EU_27_800eb9cc
 // evt_party_dispflg_onoff
 // evt_party_flg_onoff

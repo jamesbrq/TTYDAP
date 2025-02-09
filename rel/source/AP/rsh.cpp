@@ -91,7 +91,7 @@ extern int32_t init_mama_rsh_04[];
 extern int32_t talk_mama_rsh_04[];
 extern int32_t init_konari_rsh_04[];
 extern int32_t talk_konari_rsh_04[];
-extern int32_t init_powan[];
+extern int32_t init_powan_rsh_04[];
 extern int32_t talk_powan_rsh_04[];
 extern int32_t evt_tana_5[];
 extern int32_t evt_access_rsh_04[];
@@ -717,16 +717,16 @@ void ApplyRshPatches(OSModuleInfo* module_info)
 	talk_konari_rsh_04[222] = GSW(1706);
 	talk_konari_rsh_04[223] = 14;
 
-	init_powan[1] = GSW(1706);
-	init_powan[3] = 3;
-	init_powan[4] = 6;
-	init_powan[12] = 23;
-	init_powan[13] = 29;
-	init_powan[21] = 30;
-	init_powan[22] = 45;
-	init_powan[30] = 48;
-	init_powan[31] = 52;
-	init_powan[39] = 54;
+	init_powan_rsh_04[1] = GSW(1706);
+	init_powan_rsh_04[3] = 3;
+	init_powan_rsh_04[4] = 6;
+	init_powan_rsh_04[12] = 23;
+	init_powan_rsh_04[13] = 29;
+	init_powan_rsh_04[21] = 30;
+	init_powan_rsh_04[22] = 45;
+	init_powan_rsh_04[30] = 48;
+	init_powan_rsh_04[31] = 52;
+	init_powan_rsh_04[39] = 54;
 
 	talk_powan_rsh_04[1] = GSW(1706);
 	talk_powan_rsh_04[3] = 7;

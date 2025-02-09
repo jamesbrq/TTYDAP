@@ -18,7 +18,7 @@ using namespace mod;
 using namespace ttyd;
 
 extern int32_t hom_10_evt_resha_start_gor_04[];
-extern int32_t evt_train[];
+extern int32_t gor_evt_train[];
 extern int32_t evt_train2[];
 extern int32_t peach_mail_04[];
 extern int32_t jugemu_a_init[];
@@ -33,10 +33,10 @@ void ApplyGor04Patches(OSModuleInfo* module_info)
 	hom_10_evt_resha_start_gor_04[49] = GSW(1706);
 	hom_10_evt_resha_start_gor_04[50] = 99; //Unknown
 
-	evt_train[255] = GSW(1706);
-	evt_train[256] = 99; //Unknown
-	evt_train[270] = GSW(1706);
-	evt_train[271] = 1;
+	gor_evt_train[255] = GSW(1706);
+	gor_evt_train[256] = 99; //Unknown
+	gor_evt_train[270] = GSW(1706);
+	gor_evt_train[271] = 1;
 
 	evt_train2[223] = GSW(1706);
 	evt_train2[224] = 99; //Unknown

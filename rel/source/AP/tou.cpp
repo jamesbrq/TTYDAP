@@ -45,7 +45,7 @@ extern int32_t talk_roten_2[];
 extern int32_t talk_jugem_1[];
 extern int32_t talk_jugem_2[];
 extern int32_t talk_bijyo[];
-extern int32_t init_kiza[];
+extern int32_t tou_init_kiza[];
 extern int32_t talk_kiza[];
 extern int32_t init_sarary_tou_01[];
 extern int32_t evt_uron[];
@@ -108,7 +108,7 @@ extern int32_t init_g_10[];
 extern int32_t talk_g_10[];
 extern int32_t init_g_11[];
 extern int32_t talk_g_11[];
-extern int32_t tou_init_brots_05[];
+extern int32_t tou_init_brots_04[];
 extern int32_t evt_gardman[];
 extern int32_t tou_evt_lock_04[];
 extern int32_t tou_04_init_evt[];
@@ -322,9 +322,9 @@ void ApplyTouPatches(OSModuleInfo* module_info)
 	talk_bijyo[3] = 5;
 	talk_bijyo[11] = 99; //Unknown
 
-	init_kiza[1] = GSW(1706);
-	init_kiza[3] = 2;
-	init_kiza[4] = 99; //Unknown
+	tou_init_kiza[1] = GSW(1706);
+	tou_init_kiza[3] = 2;
+	tou_init_kiza[4] = 99; //Unknown
 
 	talk_kiza[1] = GSW(1703);
 	talk_kiza[3] = 5;
@@ -601,8 +601,8 @@ void ApplyTouPatches(OSModuleInfo* module_info)
 	talk_g_11[3] = 99; //Unknown
 	talk_g_11[15] = 99; //Unknown
 
-	tou_init_brots_05[1] = GSW(1703);
-	tou_init_brots_05[2] = 99; //Unknown
+	tou_init_brots_04[1] = GSW(1703);
+	tou_init_brots_04[2] = 99; //Unknown
 
 	evt_gardman[159] = GSW(1703);
 	evt_gardman[161] = 6;
