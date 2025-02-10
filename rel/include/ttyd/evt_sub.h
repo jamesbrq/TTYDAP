@@ -28,6 +28,7 @@ extern "C" {
 // evt_sub_countdown_start
 // evt_sub_animgroup_async
 EVT_DECLARE_USER_FUNC(evt_sub_get_language, 1)
+EVT_DECLARE_USER_FUNC(evt_sub_get_mapname, 1)
 // evt_sub_load_progresstime
 // evt_sub_save_playtime
 // N_evt_sub_status_gauge_force_update
@@ -35,7 +36,7 @@ EVT_DECLARE_USER_FUNC(evt_sub_get_language, 1)
 // evt_sub_status_gauge_force_close
 // evt_sub_status_gauge_force_open
 // evt_sub_get_areaname
-// evt_sub_get_mapname
+
 // evt_key_get_buttontrg
 // evt_key_get_button
 // evt_key_get_dir

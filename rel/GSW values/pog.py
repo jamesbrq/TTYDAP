@@ -1,4 +1,4 @@
-instruction = 0x805DF354
+instruction = 0x805DF0D8
 base = 0x805DF054
 strings = [
   ""

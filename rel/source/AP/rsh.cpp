@@ -9,6 +9,7 @@
 #include <ttyd/evt_party.h>
 #include <ttyd/evt_bero.h>
 #include <ttyd/evt_snd.h>
+#include <ttyd/evt_sub.h>
 #include <ttyd/evt_urouro.h>
 #include "evt_cmd.h"
 #include "common_types.h"
@@ -113,6 +114,174 @@ extern int32_t hom_10_evt_resha_start_rsh_06[];
 extern int32_t evt_great_moamoa[];
 extern int32_t rsh_06_init_evt[];
 extern int32_t rsh_06_a_init_evt[];
+
+EVT_BEGIN(rsh_06_init_evt_evt)
+	IF_LARGE_EQUAL(GSW(1720), 1)
+		IF_SMALL_EQUAL(GSW(1720), 8)
+			USER_FUNC(evt_snd::evt_snd_bgmon, 512, PTR("BGM_STG6_HOM1"))
+			USER_FUNC(evt_snd::evt_snd_envoff, 512)
+			USER_FUNC(evt_snd::evt_snd_bgmoff, 26624)
+			RETURN()
+		END_IF()
+	END_IF()
+	SWITCH(GSW(1706))
+		CASE_BETWEEN(4, 6)
+			USER_FUNC(evt_snd::evt_snd_bgmon, 512, PTR("BGM_STG6_HOM1"))
+			USER_FUNC(evt_snd::evt_snd_envon, 272, PTR("ENV_STG6_RSH1_3"))
+		CASE_END()
+		CASE_BETWEEN(24, 29)
+			USER_FUNC(evt_snd::evt_snd_bgmon, 512, PTR("BGM_EVT_POWAN1"))
+			USER_FUNC(evt_snd::evt_snd_envon, 272, PTR("ENV_STG6_RSH1_3"))
+		CASE_END()
+		CASE_BETWEEN(31, 32)
+			USER_FUNC(evt_snd::evt_snd_bgmoff, 512)
+			USER_FUNC(evt_snd::evt_snd_envon, 272, PTR("ENV_STG6_RSH1_3"))
+		CASE_END()
+		CASE_BETWEEN(33, 35)
+			USER_FUNC(evt_snd::evt_snd_bgmon, 512, PTR("BGM_EVT_DANGER4"))
+			USER_FUNC(evt_snd::evt_snd_envon, 272, PTR("ENV_STG6_RSH1_3"))
+		CASE_END()
+		CASE_BETWEEN(38, 48)
+			USER_FUNC(evt_snd::evt_snd_bgmon, 512, PTR("BGM_STG6_PIK1"))
+			USER_FUNC(evt_snd::evt_snd_envoff, 512)
+			USER_FUNC(evt_snd::evt_snd_bgmoff, 26624)
+		CASE_END()
+		CASE_ETC()
+			USER_FUNC(evt_snd::evt_snd_bgmoff, 512)
+			USER_FUNC(evt_snd::evt_snd_envon, 272, PTR("ENV_STG6_RSH1_3"))
+		CASE_END()
+	END_SWITCH()
+	RETURN()
+EVT_END()
+
+EVT_BEGIN(rsh_06_init_evt_hook)
+	RUN_CHILD_EVT(rsh_06_init_evt_evt)
+	RETURN()
+EVT_END()
+
+EVT_BEGIN(rsh_04_init_evt_evt)
+	IF_LARGE_EQUAL(GSW(1720), 1)
+		IF_SMALL_EQUAL(GSW(1720), 8)
+			USER_FUNC(evt_snd::evt_snd_bgmon, 512, PTR("BGM_STG6_HOM1"))
+			USER_FUNC(evt_snd::evt_snd_envoff, 512)
+			USER_FUNC(evt_snd::evt_snd_bgmoff, 26624)
+			RETURN()
+		END_IF()
+	END_IF()
+	SWITCH(GSW(1706))
+		CASE_BETWEEN(4, 6)
+			USER_FUNC(evt_snd::evt_snd_bgmon, 512, PTR("BGM_STG6_HOM1"))
+			USER_FUNC(evt_snd::evt_snd_envon, 272, PTR("ENV_STG6_RSH1_3"))
+		CASE_END()
+		CASE_BETWEEN(24, 29)
+			USER_FUNC(evt_snd::evt_snd_bgmon, 512, PTR("BGM_EVT_POWAN1"))
+			USER_FUNC(evt_snd::evt_snd_envon, 272, PTR("ENV_STG6_RSH1_3"))
+		CASE_END()
+		CASE_BETWEEN(31, 32)
+			USER_FUNC(evt_snd::evt_snd_bgmoff, 512)
+			USER_FUNC(evt_snd::evt_snd_envon, 272, PTR("ENV_STG6_RSH1_3"))
+		CASE_END()
+		CASE_BETWEEN(33, 35)
+			USER_FUNC(evt_snd::evt_snd_bgmon, 512, PTR("BGM_EVT_DANGER4"))
+			USER_FUNC(evt_snd::evt_snd_envon, 272, PTR("ENV_STG6_RSH1_3"))
+		CASE_END()
+		CASE_BETWEEN(38, 48)
+			USER_FUNC(evt_snd::evt_snd_bgmon, 512, PTR("BGM_STG6_PIK1"))
+			USER_FUNC(evt_snd::evt_snd_envoff, 512)
+			USER_FUNC(evt_snd::evt_snd_bgmoff, 26624)
+		CASE_END()
+		CASE_ETC()
+			USER_FUNC(evt_sub::evt_sub_get_mapname, LW(0))
+	IF_STR_EQUAL(LW(0), PTR("stg6_rsh_04"))
+	USER_FUNC(evt_snd::evt_snd_bgmon, 512, PTR("BGM_STG6_RSH1"))
+	USER_FUNC(evt_snd::evt_snd_envon, 272, PTR("ENV_STG6_RSH1_3")) //TODO
+	ELSE()
+	USER_FUNC(evt_snd::evt_snd_bgmoff, 512)
+	USER_FUNC(evt_snd::evt_snd_envon, 272, PTR("ENV_STG6_RSH1_3"))
+			USER_FUNC(evt_snd::evt_snd_envon, 272, PTR("ENV_STG6_RSH1_3"))
+		CASE_END()
+	END_SWITCH()
+	RETURN()
+EVT_END()
+
+EVT_BEGIN(rsh_06_init_evt_hook)
+	RUN_CHILD_EVT(rsh_06_init_evt_evt)
+	RETURN()
+EVT_END()
+
+EVT_BEGIN(rsh_04_init_evt_evt)
+	IF_LARGE_EQUAL(GSW(1720), 1)
+		IF_SMALL_EQUAL(GSW(1720), 8)
+			RETURN()
+		END_IF()
+	END_IF()
+	IF_LARGE_EQUAL(GSW(1706), 37)
+		RETURN()
+	END_IF()
+	USER_FUNC(evt_map::evt_map_playanim, PTR("yure"), 1, 0)
+	USER_FUNC(evt_map::evt_map_playanim, PTR("hai_sora"), 1, 0)
+	USER_FUNC(evt_map::evt_map_playanim, PTR("hai_yama"), 1, 0)
+	USER_FUNC(evt_map::evt_map_playanim, PTR("hai_iwayama"), 1, 0)
+	USER_FUNC(evt_map::evt_map_playanim, PTR("hai_saboten"), 1, 0)
+	RETURN()
+EVT_END()
+
+EVT_BEGIN(rsh_04_init_evt_hook)
+	RUN_CHILD_EVT(rsh_04_init_evt_evt)
+	GOTO(99)
+EVT_END()
+
+EVT_BEGIN(init_powan_evt)
+	IF_LARGE_EQUAL(GSW(1720), 1)
+		IF_SMALL_EQUAL(GSW(1720), 8)
+			USER_FUNC(evt_npc::evt_npc_set_position, PTR("me"), 0, -1000, 0)
+			RETURN()
+		END_IF()
+	END_IF()
+	SWITCH(GSW(1706))
+		CASE_BETWEEN(3, 6)
+			USER_FUNC(evt_npc::evt_npc_set_position, PTR("me"), 0, -1000, 0)
+		CASE_END()
+		CASE_BETWEEN(23, 29)
+			USER_FUNC(evt_npc::evt_npc_set_position, PTR("me"), 230, 0, -180)
+		CASE_END()
+		CASE_BETWEEN(32, 36)
+			USER_FUNC(evt_npc::evt_npc_set_position, PTR("me"), 0, -1000, 0)
+		CASE_END()
+		CASE_LARGE_EQUAL(38)
+			USER_FUNC(evt_npc::evt_npc_set_position, PTR("me"), 0, -1000, 0)
+		CASE_END()
+	END_SWITCH()
+	RETURN()
+EVT_END()
+
+EVT_BEGIN(init_powan_hook)
+	RUN_CHILD_EVT(init_powan_evt)
+	GOTO(99)
+EVT_END()
+
+EVT_BEGIN(init_konari_evt)
+	IF_LARGE_EQUAL(GSW(1720), 1)
+		IF_SMALL_EQUAL(GSW(1720), 8)
+			USER_FUNC(evt_npc::evt_npc_set_position, PTR("me"), 0, -1000, 0)
+			RETURN()
+		END_IF()
+	END_IF()
+	SWITCH(GSW(1706))
+		CASE_BETWEEN(32, 36)
+			USER_FUNC(evt_npc::evt_npc_set_position, PTR("me"), 0, -1000, 0)
+		CASE_END()
+		CASE_LARGE_EQUAL(38)
+			USER_FUNC(evt_npc::evt_npc_set_position, PTR("me"), 0, -1000, 0)
+		CASE_END()
+	END_SWITCH()
+	RETURN()
+EVT_END()
+
+EVT_BEGIN(init_konari_hook)
+	RUN_CHILD_EVT(init_konari_evt)
+	GOTO(99)
+EVT_END()
 
 void ApplyRshPatches(OSModuleInfo* module_info)
 {
@@ -546,20 +715,19 @@ void ApplyRshPatches(OSModuleInfo* module_info)
 	evt_access_rsh_03[4] = GSW(1706);
 	evt_access_rsh_03[5] = 65;
 
-	rsh_03_init_evt[1] = GSW(1706);
-	rsh_03_init_evt[3] = 30;
-	rsh_03_init_evt[4] = 45;
-	rsh_03_init_evt[6] = 53;
+	patch::writePatch(&rsh_03_init_evt[0], rsh_04_init_evt_hook, sizeof(rsh_04_init_evt_hook));
+	rsh_03_init_evt[32] = EVT_HELPER_CMD(1, 3);
+	rsh_03_init_evt[33] = EVT_HELPER_OP(99);
 	rsh_03_init_evt[35] = GSW(1706);
 	rsh_03_init_evt[37] = 3;
 	rsh_03_init_evt[38] = 6;
 	rsh_03_init_evt[101] = 3;
 	rsh_03_init_evt[106] = 7;
-	rsh_03_init_evt[107] = 72;
+	rsh_03_init_evt[107] = 40;
 	rsh_03_init_evt[124] = GSW(1706);
-	rsh_03_init_evt[125] = 48;
+	rsh_03_init_evt[125] = 32;
 	rsh_03_init_evt[127] = GSW(1706);
-	rsh_03_init_evt[128] = 52;
+	rsh_03_init_evt[128] = 36;
 	rsh_03_init_evt[156] = GSW(1706);
 	rsh_03_init_evt[158] = 4;
 	rsh_03_init_evt[159] = 6;
@@ -584,7 +752,7 @@ void ApplyRshPatches(OSModuleInfo* module_info)
 
 	rsh_03_c_init_evt[91] = GSW(1706);
 	rsh_03_c_init_evt[93] = 21;
-	rsh_03_c_init_evt[95] = 46;
+	rsh_03_c_init_evt[95] = 30;
 
 	evt_rsh_konarikin_irai_party_talk[81] = GSW(1706);
 	evt_rsh_konarikin_irai_party_talk[82] = 12;
@@ -603,8 +771,8 @@ void ApplyRshPatches(OSModuleInfo* module_info)
 	init_syashou_rsh_04[1] = GSW(1706);
 	init_syashou_rsh_04[3] = 18;
 	init_syashou_rsh_04[4] = 19;
-	init_syashou_rsh_04[12] = 48;
-	init_syashou_rsh_04[13] = 52;
+	init_syashou_rsh_04[12] = 32;
+	init_syashou_rsh_04[13] = 36;
 
 	talk_syashou_rsh_04[1] = GSW(1706);
 	talk_syashou_rsh_04[3] = 14;
@@ -631,10 +799,11 @@ void ApplyRshPatches(OSModuleInfo* module_info)
 	talk_syashou_rsh_04[282] = GSW(1706);
 	talk_syashou_rsh_04[283] = 21;
 	talk_syashou_rsh_04[290] = 22;
-	talk_syashou_rsh_04[298] = 30;
-	talk_syashou_rsh_04[323] = 46;
-	talk_syashou_rsh_04[331] = 47;
-	talk_syashou_rsh_04[342] = 66;
+	talk_syashou_rsh_04[297] = EVT_HELPER_CMD(1, 40);
+	talk_syashou_rsh_04[298] = 29;
+	talk_syashou_rsh_04[323] = 30;
+	talk_syashou_rsh_04[331] = 31;
+	talk_syashou_rsh_04[342] = 40;
 	talk_syashou_rsh_04[402] = GSW(1706);
 	talk_syashou_rsh_04[404] = 14;
 	talk_syashou_rsh_04[405] = 21;
@@ -644,18 +813,19 @@ void ApplyRshPatches(OSModuleInfo* module_info)
 	init_sarary_rsh_04[4] = 6;
 	init_sarary_rsh_04[12] = 23;
 	init_sarary_rsh_04[13] = 29;
-	init_sarary_rsh_04[21] = 48;
-	init_sarary_rsh_04[22] = 52;
-	init_sarary_rsh_04[30] = 54;
+	init_sarary_rsh_04[21] = 32;
+	init_sarary_rsh_04[22] = 36;
+	init_sarary_rsh_04[30] = 38;
 
 	talk_sarary_rsh_04[1] = GSW(1706);
 	talk_sarary_rsh_04[3] = 7;
 	talk_sarary_rsh_04[11] = 14;
 	talk_sarary_rsh_04[19] = 21;
 	talk_sarary_rsh_04[38] = 22;
-	talk_sarary_rsh_04[46] = 30;
-	talk_sarary_rsh_04[54] = 46;
-	talk_sarary_rsh_04[62] = 47;
+	talk_sarary_rsh_04[45] = EVT_HELPER_CMD(1, 40);
+	talk_sarary_rsh_04[46] = 29;
+	talk_sarary_rsh_04[54] = 30;
+	talk_sarary_rsh_04[62] = 31;
 
 	talk_papa_mama[130] = GSW(1706);
 	talk_papa_mama[131] = 11;
@@ -664,41 +834,37 @@ void ApplyRshPatches(OSModuleInfo* module_info)
 	talk_papa_mama[141] = GSW(1706);
 	talk_papa_mama[142] = 10;
 
-	init_papa_rsh_04[1] = GSW(1706);
-	init_papa_rsh_04[3] = 30;
-	init_papa_rsh_04[4] = 45;
-	init_papa_rsh_04[12] = 48;
-	init_papa_rsh_04[13] = 52;
-	init_papa_rsh_04[21] = 54;
+	patch::writePatch(&init_papa_rsh_04[0], init_konari_hook, sizeof(init_konari_hook));
+	init_papa_rsh_04[27] = EVT_HELPER_CMD(1, 3);
+	init_papa_rsh_04[28] = EVT_HELPER_OP(99);
 
 	talk_papa_rsh_04[1] = GSW(1706);
 	talk_papa_rsh_04[3] = 8;
 	talk_papa_rsh_04[11] = 9;
 	talk_papa_rsh_04[15] = 21;
 	talk_papa_rsh_04[23] = 22;
-	talk_papa_rsh_04[31] = 30;
-	talk_papa_rsh_04[39] = 47;
+	talk_papa_rsh_04[30] = EVT_HELPER_CMD(1, 40);
+	talk_papa_rsh_04[31] = 29;
+	talk_papa_rsh_04[39] = 31;
 
 	init_mama_rsh_04[1] = GSW(1706);
-	init_mama_rsh_04[3] = 48;
-	init_mama_rsh_04[4] = 52;
-	init_mama_rsh_04[12] = 54;
+	init_mama_rsh_04[3] = 32;
+	init_mama_rsh_04[4] = 36;
+	init_mama_rsh_04[12] = 38;
 
 	talk_mama_rsh_04[1] = GSW(1706);
 	talk_mama_rsh_04[3] = 8;
 	talk_mama_rsh_04[11] = 9;
 	talk_mama_rsh_04[15] = 21;
 	talk_mama_rsh_04[23] = 22;
-	talk_mama_rsh_04[31] = 30;
-	talk_mama_rsh_04[39] = 46;
-	talk_mama_rsh_04[47] = 47;
+	talk_mama_rsh_04[30] = EVT_HELPER_CMD(1, 40);
+	talk_mama_rsh_04[31] = 29;
+	talk_mama_rsh_04[39] = 30;
+	talk_mama_rsh_04[47] = 31;
 
-	init_konari_rsh_04[1] = GSW(1706);
-	init_konari_rsh_04[3] = 30;
-	init_konari_rsh_04[4] = 45;
-	init_konari_rsh_04[12] = 48;
-	init_konari_rsh_04[13] = 52;
-	init_konari_rsh_04[21] = 54;
+	patch::writePatch(&init_konari_rsh_04[0], init_konari_hook, sizeof(init_konari_hook));
+	init_konari_rsh_04[27] = EVT_HELPER_CMD(1, 3);
+	init_konari_rsh_04[28] = EVT_HELPER_OP(99);
 
 	talk_konari_rsh_04[1] = GSW(1706);
 	talk_konari_rsh_04[3] = 8;
@@ -717,16 +883,9 @@ void ApplyRshPatches(OSModuleInfo* module_info)
 	talk_konari_rsh_04[222] = GSW(1706);
 	talk_konari_rsh_04[223] = 14;
 
-	init_powan_rsh_04[1] = GSW(1706);
-	init_powan_rsh_04[3] = 3;
-	init_powan_rsh_04[4] = 6;
-	init_powan_rsh_04[12] = 23;
-	init_powan_rsh_04[13] = 29;
-	init_powan_rsh_04[21] = 30;
-	init_powan_rsh_04[22] = 45;
-	init_powan_rsh_04[30] = 48;
-	init_powan_rsh_04[31] = 52;
-	init_powan_rsh_04[39] = 54;
+	patch::writePatch(&init_powan_rsh_04[0], init_powan_hook, sizeof(init_powan_hook));
+	init_powan_rsh_04[45] = EVT_HELPER_CMD(1, 3);
+	init_powan_rsh_04[46] = EVT_HELPER_OP(99);
 
 	talk_powan_rsh_04[1] = GSW(1706);
 	talk_powan_rsh_04[3] = 7;
@@ -743,13 +902,13 @@ void ApplyRshPatches(OSModuleInfo* module_info)
 	talk_powan_rsh_04[174] = 25;
 	talk_powan_rsh_04[182] = 26;
 	talk_powan_rsh_04[186] = 29;
-	talk_powan_rsh_04[194] = 47;
+	talk_powan_rsh_04[194] = 31;
 
 	evt_tana_5[4] = GSW(1706);
 	evt_tana_5[5] = 65;
 
 	evt_access_rsh_04[7] = GSW(1706);
-	evt_access_rsh_04[8] = 65;
+	evt_access_rsh_04[8] = 49;
 
 	evt_narikin_room[23] = GSW(1706);
 	evt_narikin_room[25] = 8;
@@ -763,114 +922,77 @@ void ApplyRshPatches(OSModuleInfo* module_info)
 	evt_powan_room[62] = GSW(1706);
 	evt_powan_room[64] = 23;
 
-	rsh_04_init_evt[1] = GSW(1706);
-	rsh_04_init_evt[3] = 30;
-	rsh_04_init_evt[4] = 45;
-	rsh_04_init_evt[6] = 53;
+	patch::writePatch(&rsh_04_init_evt[0], rsh_04_init_evt_hook, sizeof(rsh_04_init_evt_hook));
+	rsh_04_init_evt[32] = EVT_HELPER_CMD(1, 3);
+	rsh_04_init_evt[33] = EVT_HELPER_OP(99);
 	rsh_04_init_evt[55] = GSW(1706);
 	rsh_04_init_evt[57] = 18;
 	rsh_04_init_evt[64] = GSW(1706);
 	rsh_04_init_evt[65] = 20;
 	rsh_04_init_evt[73] = GSW(1706);
-	rsh_04_init_evt[74] = 48;
+	rsh_04_init_evt[74] = 32;
 	rsh_04_init_evt[82] = GSW(1706);
-	rsh_04_init_evt[83] = 54;
+	rsh_04_init_evt[83] = 38;
 	rsh_04_init_evt[85] = GSW(1706);
-	rsh_04_init_evt[86] = 60;
-	rsh_04_init_evt[101] = GSW(1706);
-	rsh_04_init_evt[103] = 4;
-	rsh_04_init_evt[104] = 6;
-	rsh_04_init_evt[114] = 24;
-	rsh_04_init_evt[115] = 29;
-	rsh_04_init_evt[125] = 30;
-	rsh_04_init_evt[126] = 45;
-	rsh_04_init_evt[138] = 47;
-	rsh_04_init_evt[139] = 48;
-	rsh_04_init_evt[148] = 49;
-	rsh_04_init_evt[149] = 51;
-	rsh_04_init_evt[159] = 54;
-	rsh_04_init_evt[160] = 64;
+	rsh_04_init_evt[86] = 44;
+	patch::writePatch(&rsh_04_init_evt[100], rsh_06_init_evt_hook, sizeof(rsh_06_init_evt_hook));
 
 	rsh_04_a_init_evt[12] = GSW(1706);
-	rsh_04_a_init_evt[13] = 48;
+	rsh_04_a_init_evt[13] = 32;
 
 	rsh_04_c_init_evt[53] = GSW(1706);
 	rsh_04_c_init_evt[54] = 19;
 
 	evt_meet_moamoa[181] = GSW(1706);
-	evt_meet_moamoa[182] = 50;
+	evt_meet_moamoa[182] = 34;
 
 	evt_moamoa_escape[122] = GSW(1706);
-	evt_moamoa_escape[123] = 51;
+	evt_moamoa_escape[123] = 35;
 
 	init_syashou_rsh_05[1] = GSW(1706);
-	init_syashou_rsh_05[3] = 49;
-	init_syashou_rsh_05[4] = 52;
+	init_syashou_rsh_05[3] = 33;
+	init_syashou_rsh_05[4] = 36;
 
 	talk_syashou_rsh_05[1] = GSW(1706);
-	talk_syashou_rsh_05[2] = 51;
+	talk_syashou_rsh_05[2] = 35;
 
 	init_waitless_rsh_05[1] = GSW(1706);
-	init_waitless_rsh_05[3] = 49;
-	init_waitless_rsh_05[4] = 52;
+	init_waitless_rsh_05[3] = 33;
+	init_waitless_rsh_05[4] = 36;
 
 	talk_waitless_rsh_05[1] = GSW(1706);
-	talk_waitless_rsh_05[2] = 51;
+	talk_waitless_rsh_05[2] = 35;
 
 	evt_ghost_diary[1] = GSW(1706);
 	evt_ghost_diary[2] = 19;
 
-	rsh_05_init_evt[1] = GSW(1706);
-	rsh_05_init_evt[3] = 30;
-	rsh_05_init_evt[4] = 45;
-	rsh_05_init_evt[15] = GSW(1706);
-	rsh_05_init_evt[17] = 4;
-	rsh_05_init_evt[18] = 6;
-	rsh_05_init_evt[28] = 24;
-	rsh_05_init_evt[29] = 29;
-	rsh_05_init_evt[39] = 30;
-	rsh_05_init_evt[40] = 45;
-	rsh_05_init_evt[52] = 47;
-	rsh_05_init_evt[53] = 48;
-	rsh_05_init_evt[62] = 49;
-	rsh_05_init_evt[63] = 51;
-	rsh_05_init_evt[73] = 54;
-	rsh_05_init_evt[74] = 64;
+	rsh_05_init_evt[1] = GSW(1720);
+	rsh_05_init_evt[3] = 1;
+	rsh_05_init_evt[4] = 8;
+	patch::writePatch(&rsh_05_init_evt[14], rsh_06_init_evt_hook, sizeof(rsh_06_init_evt_hook));
 
 	rsh_05_a_init_evt[1] = GSW(1706);
 	rsh_05_a_init_evt[3] = 8;
 	rsh_05_a_init_evt[8] = 14;
 	rsh_05_a_init_evt[13] = 23;
 	rsh_05_a_init_evt[18] = 29;
-	rsh_05_a_init_evt[23] = 46;
-	rsh_05_a_init_evt[28] = 48;
+	rsh_05_a_init_evt[23] = 30;
+	rsh_05_a_init_evt[28] = 32;
 	rsh_05_a_init_evt[47] = GSW(1706);
-	rsh_05_a_init_evt[49] = 49;
-	rsh_05_a_init_evt[56] = 49;
-	rsh_05_a_init_evt[67] = 50;
+	rsh_05_a_init_evt[49] = 33;
+	rsh_05_a_init_evt[56] = 33;
+	rsh_05_a_init_evt[67] = 34;
 	rsh_05_a_init_evt[88] = GSW(1706);
 	rsh_05_a_init_evt[89] = 19;
 
 	hom_10_evt_resha_start_rsh_06[49] = GSW(1706);
-	hom_10_evt_resha_start_rsh_06[50] = 59;
+	hom_10_evt_resha_start_rsh_06[50] = 43;
 
 	evt_great_moamoa[729] = GSW(1706);
-	evt_great_moamoa[730] = 52;
+	evt_great_moamoa[730] = 36;
 
-	rsh_06_init_evt[3] = GSW(1706);
-	rsh_06_init_evt[5] = 4;
-	rsh_06_init_evt[6] = 6;
-	rsh_06_init_evt[16] = 24;
-	rsh_06_init_evt[17] = 29;
-	rsh_06_init_evt[27] = 30;
-	rsh_06_init_evt[28] = 45;
-	rsh_06_init_evt[40] = 47;
-	rsh_06_init_evt[41] = 48;
-	rsh_06_init_evt[50] = 49;
-	rsh_06_init_evt[51] = 51;
-	rsh_06_init_evt[61] = 54;
-	rsh_06_init_evt[62] = 64;
+	patch::writePatch(&rsh_06_init_evt[2], rsh_06_init_evt_hook, sizeof(rsh_06_init_evt_hook));
 
 	rsh_06_a_init_evt[25] = GSW(1706);
-	rsh_06_a_init_evt[26] = 52;
+	rsh_06_a_init_evt[26] = 36;
 }

@@ -58,8 +58,8 @@ void ApplyHomPatches(OSModuleInfo* module_info)
 	evt_train_door[1] = GSW(1720);
 	evt_train_door[3] = 8;
 
-	hom_evt_train[252] = GSW(1720);
-	hom_evt_train[253] = 9;
+	hom_evt_train[252] = GSW(1706);
+	hom_evt_train[253] = 30;
 
 	evt_hom_touchaku[452] = GSW(1720);
 	evt_hom_touchaku[453] = 1;
