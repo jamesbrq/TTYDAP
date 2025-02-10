@@ -18,11 +18,11 @@ using namespace ttyd;
 
 extern int32_t no00_custom[];
 extern int32_t mony_init_gor00[];
-extern int32_t frankie_run_event[];
+extern int32_t unk_evt_gor_00020d94[];
 extern int32_t mony_peton_talk[];
 extern int32_t mony_talk[];
 extern int32_t peton_init[];
-extern int32_t francesca_run_event[];
+extern int32_t unk_evt_gor_000212f0[];
 extern int32_t peton_talk[];
 extern int32_t marco_init_00[];
 extern int32_t marco_talk_00[];
@@ -90,26 +90,26 @@ extern int32_t nannpc_ext_main_sub_fast;
 
 
 EVT_BEGIN(garawaru_init_evt)
-	IF_SMALL(GSW(1700), 4) //Before Crump Fight
+	IF_SMALL(GSW(1700), 4)
 		USER_FUNC(evt_npc::evt_npc_set_ry, PTR("me"), 90)
 		USER_FUNC(evt_npc::evt_npc_set_position, PTR("me"), -200, 15, -175)
 		RETURN()
 	END_IF()
-	IF_EQUAL(GSW(1704), 99) //During Bowser Intermission (Unknown Value)
+	IF_EQUAL(GSW(1715), 12)
 		USER_FUNC(evt_npc::evt_npc_set_position, PTR("me"), 0, -1000, 0)
 		USER_FUNC(evt_npc::evt_npc_set_ry, PTR("me"), 90)
 		USER_FUNC(evt_npc::evt_npc_change_interrupt, PTR("me"), 1, 0)
 		USER_FUNC(evt_npc::evt_npc_restart_regular_event, PTR("me"))
 		RETURN()
 	END_IF()
-	IF_LARGE_EQUAL(GSW(1705), 1) //After Talking to Flavio
+	IF_LARGE_EQUAL(GSW(1705), 1)
 		IF_SMALL_EQUAL(GSW(1705), 7)
 			USER_FUNC(evt_npc::evt_npc_set_ry, PTR("me"), 270)
 			USER_FUNC(evt_npc::evt_npc_set_position, PTR("me"), 160, 73, 135)
 			RETURN()
 		END_IF()
 	END_IF()
-	IF_SMALL(GSW(1705), 7) //Before ship leaves for keelhaul key
+	IF_SMALL(GSW(1705), 7)
 		USER_FUNC(evt_npc::evt_npc_set_ry, PTR("me"), 90)
 		USER_FUNC(evt_npc::evt_npc_set_position, PTR("me"), -200, 15, -175)
 		RETURN()
@@ -124,7 +124,7 @@ EVT_BEGIN(garawaru_init_hook)
 EVT_END()
 
 EVT_BEGIN(garawaru_regl_evt)
-	IF_SMALL(GSW(1700), 7) //Before Goombella Joins
+	IF_SMALL(GSW(1700), 7)
 		IF_EQUAL(GSWF(1179), 1)
 			RETURN()
 		END_IF()
@@ -143,14 +143,16 @@ EVT_BEGIN(garawaru_regl_evt)
 		USER_FUNC(evt_npc::evt_npc_set_ry, PTR("me"), 90)
 		RETURN()
 	END_IF()
-	IF_EQUAL(GSW(1705), 0) //Before Talking to Flavio
+	IF_SMALL(GSW(1705), 1)
 		RUN_CHILD_EVT(garawaru_urouro2)
 		RETURN()
 	END_IF()
-	IF_SMALL_EQUAL(GSW(1705), 7) //After Talking to flavio
-		RETURN()
+	IF_LARGE_EQUAL(GSW(1705), 1)
+		IF_SMALL_EQUAL(GSW(1705), 7)
+			RETURN()
+		END_IF()
 	END_IF()
-	IF_LARGE(GSW(1705), 7) //After Ship Leaves
+	IF_LARGE(GSW(1705), 7)
 		RUN_CHILD_EVT(garawaru_urouro2)
 		RETURN()
 	END_IF()
@@ -163,19 +165,19 @@ EVT_BEGIN(garawaru_regl_hook)
 EVT_END()
 
 EVT_BEGIN(garawaru_talk_evt)
-	IF_SMALL(GSW(1700), 7) // Before Goombella Joins
+	IF_SMALL(GSW(1700), 7)
 		USER_FUNC(evt_msg::evt_msg_print, 0, PTR("gor_00_06_01"), 0, PTR("me"))
 		RETURN()
 	END_IF()
-	IF_EQUAL(GSW(1705), 0) // Before talking to flavio
+	IF_EQUAL(GSW(1705), 0)
 		USER_FUNC(evt_msg::evt_msg_print, 0, PTR("gor_00_06_07"), 0, PTR("me"))
 		RETURN()
 	END_IF()
-	IF_SMALL(GSW(1705), 6) // Before bobbery leaves his house
+	IF_SMALL(GSW(1705), 6)
 		USER_FUNC(evt_msg::evt_msg_print, 0, PTR("gor_00_06_08"), 0, PTR("me"))
 		RETURN()
 	END_IF()
-	IF_SMALL(GSW(1705), 7) // Before sailing off
+	IF_SMALL(GSW(1705), 7)
 		USER_FUNC(evt_msg::evt_msg_print, 0, PTR("mac_4_025"), 0, PTR("me"))
 		RETURN()
 	END_IF()
@@ -186,6 +188,13 @@ EVT_BEGIN(odoodo_init_evt)
 	IF_SMALL(GSW(1700), 7)
 		USER_FUNC(evt_npc::evt_npc_set_ry, PTR("me"), 90)
 		USER_FUNC(evt_npc::evt_npc_set_position, PTR("me"), -225, 15, -400)
+		RETURN()
+	END_IF()
+	IF_EQUAL(GSW(1715), 12)
+		USER_FUNC(evt_npc::evt_npc_set_position, PTR("me"), 0, -1000, 0)
+		USER_FUNC(evt_npc::evt_npc_set_ry, PTR("me"), 90)
+		USER_FUNC(evt_npc::evt_npc_change_interrupt, PTR("me"), 1, 0)
+		USER_FUNC(evt_npc::evt_npc_restart_regular_event, PTR("me"))
 		RETURN()
 	END_IF()
 	SWITCH(GSW(1705))
@@ -206,11 +215,11 @@ EVT_BEGIN(odoodo_regl_evt)
 		CASE_BETWEEN(1, 7)
 			RETURN()
 		CASE_END()
-		CASE_EQUAL(46)
-			RETURN()
-		CASE_END()
 	END_SWITCH()
-	IF_LARGE_EQUAL(GSW(1700), 22)
+	IF_EQUAL(GSW(1717), 25)
+		RETURN()
+	END_IF()
+	IF_LARGE_EQUAL(GSW(1701), 1)
 		USER_FUNC(evt_npc::evt_npc_get_position, PTR("me"), LW(0), LW(1), LW(2))
 		USER_FUNC(evt_urouro::urouro_init_func, PTR("me"), LW(0), LW(2), FLOAT(100.00), FLOAT(30.00), 0)
 		USER_FUNC(evt_urouro::urouro_main_func, PTR("me"))
@@ -241,7 +250,7 @@ EVT_BEGIN(odoodo_talk_evt)
 		USER_FUNC(evt_msg::evt_msg_print, 0, PTR("mac_4_024"), 0, PTR("me"))
 		RETURN()
 	END_IF()
-	IF_SMALL(GSW(1705), 99) //Unknown, post ch.5
+	IF_SMALL(GSW(1705), 99)
 		USER_FUNC(evt_msg::evt_msg_print, 0, PTR("gor_00_05_09"), 0, PTR("me"))
 		RETURN()
 	END_IF()
@@ -268,16 +277,32 @@ EVT_BEGIN(suifu_a_talk_evt)
 			USER_FUNC(evt_msg::evt_msg_print, 0, PTR("gor_00_03_08"), 0, PTR("me"))
 			RETURN()
 		CASE_END()
-		CASE_LARGE(99) // Unknown, Post Ch.5
-			USER_FUNC(evt_msg::evt_msg_print, 0, PTR("gor_00_03_09"), 0, PTR("me"))
-			RETURN()
-		CASE_END()
-		CASE_ETC()
-			USER_FUNC(evt_msg::evt_msg_print, 0, PTR("gor_00_03_04"), 0, PTR("me"))
+	END_SWITCH()
+	IF_LARGE_EQUAL(GSW(1708), 18)
+		USER_FUNC(evt_msg::evt_msg_print, 0, PTR("gor_00_03_12"), 0, PTR("me"))
+		RETURN()
+	END_IF()
+	USER_FUNC(evt_msg::evt_msg_print, 0, PTR("gor_00_03_02"), 0, PTR("me"))
+	RETURN()
+EVT_END()
+
+EVT_BEGIN(suifu_a_regl_evt)
+	SWITCH(GSW(1705))
+		CASE_BETWEEN(1, 7)
 			RETURN()
 		CASE_END()
 	END_SWITCH()
-	USER_FUNC(evt_msg::evt_msg_print, 0, PTR("gor_00_03_12"), 0, PTR("me"))
+	IF_EQUAL(GSW(1717), 25)
+		RETURN()
+	END_IF()
+	USER_FUNC(evt_npc::evt_npc_get_position, PTR("me"), LW(0), LW(1), LW(2))
+	USER_FUNC(evt_urouro::urouro_init_func, PTR("me"), LW(0), LW(2), FLOAT(100.00), FLOAT(30.00), 0)
+	USER_FUNC(evt_urouro::urouro_main_func, PTR("me"))
+	RETURN()
+EVT_END()
+
+EVT_BEGIN(suifu_a_regl_hook)
+	RUN_CHILD_EVT(suifu_a_regl_evt)
 	RETURN()
 EVT_END()
 
@@ -287,7 +312,7 @@ EVT_BEGIN(suifu_b_init_evt)
 		USER_FUNC(evt_npc::evt_npc_set_position, PTR("me"), 0, -1000, 0)
 		RETURN()
 	END_IF()
-	IF_LARGE_EQUAL(GSW(1704), 99) // Unknown, Bowser Intermission
+	IF_EQUAL(GSW(1715), 12)
 		USER_FUNC(evt_npc::evt_npc_set_position, PTR("me"), -191, 15, 36)
 		USER_FUNC(evt_npc::evt_npc_set_ry, PTR("me"), 90)
 		USER_FUNC(evt_npc::evt_npc_change_interrupt, PTR("me"), 1, 0)
@@ -318,16 +343,12 @@ EVT_BEGIN(suifu_b_talk_evt)
 			USER_FUNC(evt_msg::evt_msg_print, 0, PTR("gor_00_04_08"), 0, PTR("me"))
 			RETURN()
 		CASE_END()
-		CASE_LARGE(99) // Unknown, Post Ch.5
-			USER_FUNC(evt_msg::evt_msg_print, 0, PTR("gor_00_04_09"), 0, PTR("me"))
-			RETURN()
-		CASE_END()
-		CASE_ETC()
-			USER_FUNC(evt_msg::evt_msg_print, 0, PTR("gor_00_04_04"), 0, PTR("me"))
-			RETURN()
-		CASE_END()
 	END_SWITCH()
-	USER_FUNC(evt_msg::evt_msg_print, 0, PTR("gor_00_04_12"), 0, PTR("me"))
+	IF_LARGE_EQUAL(GSW(1708), 18)
+		USER_FUNC(evt_msg::evt_msg_print, 0, PTR("gor_00_04_12"), 0, PTR("me"))
+		RETURN()
+	END_IF()
+	USER_FUNC(evt_msg::evt_msg_print, 0, PTR("gor_00_04_02"), 0, PTR("me"))
 	RETURN()
 EVT_END()
 
@@ -337,7 +358,7 @@ EVT_BEGIN(suifubomb_a_init_evt)
 		USER_FUNC(evt_npc::evt_npc_set_position, PTR("me"), -215, 15, 175)
 		RETURN()
 	END_IF()
-	IF_EQUAL(GSW(1704), 99) // Unknown, Bowser Intermission
+	IF_EQUAL(GSW(1715), 12)
 		USER_FUNC(evt_npc::evt_npc_set_position, PTR("me"), -160, 15, 207)
 		USER_FUNC(evt_npc::evt_npc_set_ry, PTR("me"), 90)
 		USER_FUNC(evt_npc::evt_npc_change_interrupt, PTR("me"), 1, 0)
@@ -402,21 +423,17 @@ EVT_BEGIN(suifubomb_a_talk_evt)
 			USER_FUNC(evt_msg::evt_msg_print, 0, PTR("gor_00_01_08_02"), 0, PTR("me"))
 			RETURN()
 		CASE_END()
-		CASE_LARGE(99) // Unknown, Post Ch.5
-			USER_FUNC(evt_msg::evt_msg_print, 0, PTR("gor_00_01_09"), 0, PTR("me"))
-			RETURN()
-		CASE_END()
-		CASE_ETC()
-			USER_FUNC(evt_msg::evt_msg_print, 0, PTR("gor_00_01_04"), 0, PTR("me"))
-			RETURN()
-		CASE_END()
 	END_SWITCH()
-	USER_FUNC(evt_msg::evt_msg_print, 0, PTR("gor_00_01_12"), 0, PTR("me"))
+	IF_LARGE_EQUAL(GSW(1708), 18)
+		USER_FUNC(evt_msg::evt_msg_print, 0, PTR("gor_00_01_12"), 0, PTR("me"))
+		RETURN()
+	END_IF()
+	USER_FUNC(evt_msg::evt_msg_print, 0, PTR("gor_00_01_02"), 0, PTR("me"))
 	RETURN()
 EVT_END()
 
 EVT_BEGIN(suifubomb_b_regl_evt)
-	IF_SMALL(GSW(1700), 7) //Before Goombella Joins
+	IF_SMALL(GSW(1700), 7)
 		IF_EQUAL(GSWF(1179), 1)
 			RETURN()
 		END_IF()
@@ -435,14 +452,16 @@ EVT_BEGIN(suifubomb_b_regl_evt)
 		USER_FUNC(evt_npc::evt_npc_set_ry, PTR("me"), 90)
 		RETURN()
 		END_IF()
-	IF_EQUAL(GSW(1705), 0) //Before Talking to Flavio
+	IF_SMALL(GSW(1705), 1)
 		RUN_CHILD_EVT(suifubomb_b_urouro2)
 		RETURN()
 	END_IF()
-	IF_SMALL_EQUAL(GSW(1705), 7) //After Talking to flavio
-		RETURN()
+	IF_LARGE_EQUAL(GSW(1705), 1)
+		IF_SMALL_EQUAL(GSW(1705), 7)
+			RETURN()
 		END_IF()
-	IF_LARGE(GSW(1705), 7) //After Ship Leaves
+	END_IF()
+	IF_LARGE(GSW(1705), 7)
 		RUN_CHILD_EVT(suifubomb_b_urouro2)
 		RETURN()
 	END_IF()
@@ -468,24 +487,20 @@ EVT_BEGIN(suifubomb_b_talk_evt)
 			USER_FUNC(evt_msg::evt_msg_print, 0, PTR("gor_00_02_08"), 0, PTR("me"))
 			RETURN()
 		CASE_END()
-		CASE_LARGE(99) // Unknown, Post Ch.5
-			USER_FUNC(evt_msg::evt_msg_print, 0, PTR("gor_00_02_09"), 0, PTR("me"))
-			RETURN()
-		CASE_END()
-		CASE_ETC()
-			USER_FUNC(evt_msg::evt_msg_print, 0, PTR("gor_00_02_04"), 0, PTR("me"))
-			RETURN()
-		CASE_END()
 	END_SWITCH()
-	USER_FUNC(evt_msg::evt_msg_print, 0, PTR("gor_00_02_12"), 0, PTR("me"))
+	IF_LARGE_EQUAL(GSW(1708), 18)
+		USER_FUNC(evt_msg::evt_msg_print, 0, PTR("gor_00_02_12"), 0, PTR("me"))
+		RETURN()
+	END_IF()
+	USER_FUNC(evt_msg::evt_msg_print, 0, PTR("gor_00_02_02"), 0, PTR("me"))
 	RETURN()
 EVT_END()
 
 EVT_BEGIN(korutesu_init_evt)
-	IF_EQUAL(GSW(1708), 99) // Unknown
+	IF_EQUAL(GSW(1708), 20)
 		RETURN()
 	END_IF()
-	IF_LARGE_EQUAL(GSW(1705), 99) // Unknown
+	IF_LARGE_EQUAL(GSW(1717), 25)
 		USER_FUNC(evt_npc::evt_npc_set_ry, PTR("me"), 270)
 		USER_FUNC(evt_npc::evt_npc_set_position, PTR("me"), 210, 40, 92)
 		RETURN()
@@ -499,7 +514,7 @@ EVT_BEGIN(korutesu_init_hook)
 EVT_END()
 
 EVT_BEGIN(gor_00_init_evt1)
-	IF_EQUAL(GSW(1708), 99) //Unknown
+	IF_EQUAL(GSW(1708), 18)
 		USER_FUNC(evt_bero::evt_bero_get_entername, LW(0))
 		IF_STR_EQUAL(LW(0), PTR("epilogue2"))
 			USER_FUNC(evt_snd::evt_snd_bgmon_f, 768, PTR("BGM_ENDING2"), 800)
@@ -511,13 +526,13 @@ EVT_BEGIN(gor_00_init_evt1)
 		END_IF()
 		RETURN()
 	END_IF()
-	IF_EQUAL(GSW(1705), 99) //Unknown
+	IF_EQUAL(GSW(1717), 25)
 		USER_FUNC(evt_snd::evt_snd_bgmon_f, 768, PTR("BGM_STG0_GOR1"), 2000)
 		USER_FUNC(evt_snd::evt_snd_bgmoff, 30784)
 		USER_FUNC(evt_snd::evt_snd_envon, 272, PTR("ENV_STG0_GOR0"))
 		RETURN()
 	END_IF()
-	IF_EQUAL(GSW(1704), 99) //Unknown
+	IF_EQUAL(GSW(1715), 12)
 		USER_FUNC(evt_snd::evt_snd_bgmon, 512, PTR("BGM_EVT_KUPPA1"))
 		USER_FUNC(evt_snd::evt_snd_bgm_scope, 0, 1)
 		USER_FUNC(evt_snd::evt_snd_bgmon, 512, PTR("ENV_STG0_GOR0"))
@@ -549,8 +564,8 @@ EVT_BEGIN(gor_00_init_evt1)
 EVT_END()
 
 EVT_BEGIN(gor_00_init_evt2)
-	SWITCH(GSW(1709)) //Epilogue
-		CASE_EQUAL(98) //Unknown
+	SWITCH(GSW(1708))
+		CASE_EQUAL(18)
 			USER_FUNC(evt_mario::evt_mario_kill_party, 0)
 			USER_FUNC(evt_bero::evt_bero_get_entername, LW(0))
 			IF_STR_EQUAL(LW(0), PTR("epilogue2"))
@@ -562,17 +577,17 @@ EVT_BEGIN(gor_00_init_evt2)
 			END_IF()
 			RETURN()
 		CASE_END()
-		CASE_EQUAL(99) //Unknown
+		CASE_EQUAL(20)
 			RUN_CHILD_EVT(return_gorotsuki_town_init)
 			RUN_EVT(return_gorotsuki_town)
 			RETURN()
 		CASE_END()
 	END_SWITCH()
-	IF_EQUAL(GSW(1705), 99) //Arriving back from keelhaul
+	IF_EQUAL(GSW(1717), 25)
 		RUN_EVT(gorotsuki_kikan)
 		RETURN()
 	END_IF()
-	IF_EQUAL(GSW(1704), 99) //Unknown, bowser internission post ch.4
+	IF_EQUAL(GSW(1715), 12)
 		USER_FUNC(evt_mario::evt_mario_kill_party, 0)
 		USER_FUNC(evt_npc::evt_npc_entry, PTR("houki"), PTR("c_kamek_be"))
 		USER_FUNC(evt_npc::evt_npc_set_anim, PTR("houki"), PTR("H_2"))
@@ -623,212 +638,223 @@ EVT_BEGIN(gor_00_init_evt2)
 	END_IF()
 EVT_END()
 
+EVT_BEGIN(gor_00_init_evt1_hook)
+	RUN_CHILD_EVT(gor_00_init_evt1)
+	GOTO(98)
+EVT_END()
+
+EVT_BEGIN(gor_00_init_evt2_hook)
+	RUN_CHILD_EVT(gor_00_init_evt2)
+	GOTO(99)
+EVT_END()
+
 void ApplyGor00Patches(OSModuleInfo* module_info)
 {
-	switch (module_info->id)
-	{
-		case ModuleId::GOR:
-			//gor_00.o
-			no00_custom[1] = GSW(1700); //Goombella Cutscene trigger loading into gor_01
+			no00_custom[1] = GSW(1700);
 			no00_custom[2] = 5;
 
-			mony_init_gor00[1] = GSW(1709); //Frankie spawn trigger for blimp ticket
+			mony_init_gor00[1] = GSW(1709);
 			mony_init_gor00[3] = 1;
 			mony_init_gor00[4] = 2;
 
-			frankie_run_event[1] = GSW(1709); //Frankie running to door after keelhaul key sequence
-			frankie_run_event[3] = 99; //Unknown atm
+			unk_evt_gor_00020d94[1] = GSW(1709);
+			unk_evt_gor_00020d94[3] = 9;
 
-			mony_peton_talk[270] = GSW(1709); //After talking to frankie during chapter 3 sequence.
+			mony_peton_talk[270] = GSW(1709);
 			mony_peton_talk[271] = 2;
 
-			mony_talk[1] = GSW(1709); //Initial dialogue options for frankie in chapter 3 sequence.
+			mony_talk[1] = GSW(1709);
 			mony_talk[3] = 1;
 			mony_talk[7] = 2;
 
-			peton_init[1] = GSW(1709); //Spawning Francesca during chapter 3 sequence.
+			peton_init[1] = GSW(1709);
 			peton_init[3] = 1;
 			peton_init[4] = 2;
-			francesca_run_event[1] = GSW(1709); //Francesca running to door after keelhaul key sequence
-			francesca_run_event[3] = 99; //Unknown atm
-			peton_talk[1] = GSW(1709); //Initial dialogue options for francesca in chapter 3 sequence.
+
+			unk_evt_gor_000212f0[1] = GSW(1709);
+			unk_evt_gor_000212f0[3] = 9;
+
+			peton_talk[1] = GSW(1709);
 			peton_talk[3] = 1;
 			peton_talk[7] = 2;
 
-			marco_init_00[1] = GSW(1705); //Spawning Flavio during chapter 5 sequence.
+			marco_init_00[1] = GSW(1705);
 			marco_init_00[3] = 1;
 			marco_init_00[4] = 7;
-			marco_talk_00[1] = GSW(1705); //Various dialogue options for flavio in chapter 5 sequence.
+
+			marco_talk_00[1] = GSW(1705);
 			marco_talk_00[3] = 1;
 			marco_talk_00[268] = GSW(1705);
 			marco_talk_00[269] = 2;
 			marco_talk_00[271] = 2;
-			marco_talk_00[290] = 6;
-			marco_talk_00[298] = 7;
+			marco_talk_00[290] = 5;
+			marco_talk_00[298] = 6;
 
-			patch::writePatch(&garawaru_init[5], garawaru_init_hook, sizeof(garawaru_init_hook)); //Bob-omb with bones wheel
+			patch::writePatch(&garawaru_init[5], garawaru_init_hook, sizeof(garawaru_init_hook));
 			patch::writePatch(&garawaru_regl[0], garawaru_regl_hook, sizeof(garawaru_regl_hook));
 			patch::writePatch(&garawaru_talk[0], garawaru_talk_evt, sizeof(garawaru_talk_evt));
 
-			megane_init[1] = GSW(1705); //Unknown NPC Init
+			megane_init[1] = GSW(1705);
 			megane_init[3] = 1;
 			megane_init[4] = 7;
-			megane_talk[1] = GSW(1705); //Unknown NPC Speach
+
+			megane_talk[1] = GSW(1705);
 			megane_talk[3] = 1;
 			megane_talk[4] = 7;
 
-			patch::writePatch(&odoodo_init[0], odoodo_init_evt, sizeof(odoodo_init_evt)); //Toad who lost brother init
-			patch::writePatch(&odoodo_regl[0], odoodo_regl_hook, sizeof(odoodo_regl_hook)); //Toad who lost brother Movement
-			patch::writePatch(&odoodo_talk[0], odoodo_talk_evt, sizeof(odoodo_talk_evt)); //Toad who lost brother Speach
+			patch::writePatch(&odoodo_init[0], odoodo_init_evt, sizeof(odoodo_init_evt));
+			patch::writePatch(&odoodo_regl[0], odoodo_regl_hook, sizeof(odoodo_regl_hook));
+			patch::writePatch(&odoodo_talk[0], odoodo_talk_evt, sizeof(odoodo_talk_evt));
 
-			odoodo_ani_init[1] = GSW(1705); //Toads Brother Init
-			odoodo_ani_init[3] = 99; //Unknown, Post Ch.5
-			odoodo_ani_regl[1] = GSW(1705); //Toads Brother Movement
-			odoodo_ani_regl[3] = 99; //Unknown, Post Ch.5
-			patch::writePatch(&odoodo_ani_talk[0], odoodo_ani_talk_evt, sizeof(odoodo_ani_talk_evt)); //Toad Brother Speach
+			odoodo_ani_init[1] = GSW(1717);
+			odoodo_ani_init[3] = 26;
 
-			suifu_a_init[1] = GSW(1704); //Random Toad Init
-			suifu_a_init[3] = 99; //Unknown, Bowser intermission
-			suifu_a_regl[1] = GSW(1750); //Random Toad Movement
-			suifu_a_regl[3] = 1;
-			suifu_a_regl[4] = 7;
-			suifu_a_regl[6] = 7;
-			patch::writePatch(&suifu_a_talk[0], suifu_a_talk_evt, sizeof(suifu_a_talk_evt)); //Random Toad Speach
+			odoodo_ani_regl[1] = GSW(1717);
+			odoodo_ani_regl[3] = 25;
 
-			patch::writePatch(&suifu_b_init[0], suifu_b_init_hook, sizeof(suifu_b_init_hook)); //Random Toad 2 Init
-			patch::writePatch(&suifu_b_regl[0], odoodo_regl_hook, sizeof(odoodo_regl_hook)); //Random Toad 2 Movement
-			patch::writePatch(&suifu_b_talk[0], suifu_b_talk_evt, sizeof(suifu_b_talk_evt)); //Random Toad 2 Speach
+			patch::writePatch(&odoodo_ani_talk[0], odoodo_ani_talk_evt, sizeof(odoodo_ani_talk_evt));
 
-			suifu_d_init[1] = GSW(1705); //Random Toad 3 Init
+			suifu_a_init[1] = GSW(1715);
+			suifu_a_init[3] = 12;
+
+			patch::writePatch(&suifu_a_regl[0], suifu_a_regl_hook, sizeof(suifu_a_regl_hook));
+
+			patch::writePatch(&suifu_a_talk[0], suifu_a_talk_evt, sizeof(suifu_a_talk_evt));
+
+			patch::writePatch(&suifu_b_init[0], suifu_b_init_hook, sizeof(suifu_b_init_hook));
+			patch::writePatch(&suifu_b_regl[0], odoodo_regl_hook, sizeof(odoodo_regl_hook));
+			patch::writePatch(&suifu_b_talk[0], suifu_b_talk_evt, sizeof(suifu_b_talk_evt));
+
+			suifu_d_init[1] = GSW(1705);
 			suifu_d_init[3] = 1; 
 			suifu_d_init[4] = 7;
 
-			patch::writePatch(&suifubomb_a_init[0], suifubomb_a_init_hook, sizeof(suifubomb_a_init_hook)); //Random Bomb 1 Init
-			patch::writePatch(&suifubomb_a_regl[0], suifubomb_a_regl_hook, sizeof(suifubomb_a_regl_hook)); //Random Bomb 1 Movement
-			patch::writePatch(&suifubomb_a_talk[91], suifubomb_a_talk_evt, sizeof(suifubomb_a_talk_evt)); //Random Bomb 1 Speach
+			patch::writePatch(&suifubomb_a_init[0], suifubomb_a_init_hook, sizeof(suifubomb_a_init_hook));
+			patch::writePatch(&suifubomb_a_regl[0], suifubomb_a_regl_hook, sizeof(suifubomb_a_regl_hook));
+			patch::writePatch(&suifubomb_a_talk[91], suifubomb_a_talk_evt, sizeof(suifubomb_a_talk_evt));
 
-			suifubomb_b_init[16] = GSW(1704); //Random Bomb 2 Init
-			suifubomb_b_init[17] = 99; // Bowser Intermission, Post Ch.4
-			patch::writePatch(&suifubomb_b_regl[0], suifubomb_b_regl_hook, sizeof(suifubomb_b_regl_hook)); //Random Bomb 2 Movement
-			patch::writePatch(&suifubomb_b_talk[0], suifubomb_b_talk_evt, sizeof(suifubomb_b_talk_evt)); //Random Bomb 2 Speach
+			suifubomb_b_init[16] = GSW(1715);
+			suifubomb_b_init[17] = 12;
 
-			suifubomb_c_init[1] = GSW(1705); //Random Bomb 3 Init
+			patch::writePatch(&suifubomb_b_regl[0], suifubomb_b_regl_hook, sizeof(suifubomb_b_regl_hook));
+			patch::writePatch(&suifubomb_b_talk[0], suifubomb_b_talk_evt, sizeof(suifubomb_b_talk_evt));
+
+			suifubomb_c_init[1] = GSW(1705);
 			suifubomb_c_init[3] = 1;
 			suifubomb_c_init[4] = 7;
 
-			sanders_init_00[1] = GSW(1705); //Bobbery init
+			sanders_init_00[1] = GSW(1705);
 			sanders_init_00[3] = 1;
 			sanders_init_00[4] = 7;
 			sanders_init_00[23] = GSW(1705);
 			sanders_init_00[24] = 6;
 
-			patch::writePatch(&korutesu_init[0], korutesu_init_hook, sizeof(korutesu_init_hook)); //Cortez Init
+			patch::writePatch(&korutesu_init[0], korutesu_init_hook, sizeof(korutesu_init_hook));
 
-			tentyou_init[1] = GSW(1705); //Unknown NPC Init
+			tentyou_init[1] = GSW(1705);
 			tentyou_init[3] = 1;
 			tentyou_init[4] = 7;
 
-			tentyou_talk[1] = GSW(1705); //Unknown NPC Talk
+			tentyou_talk[1] = GSW(1705);
 			tentyou_talk[3] = 1;
 			tentyou_talk[4] = 7;
 
-			tenin_init[1] = GSW(1705); //Unknown NPC Init
+			tenin_init[1] = GSW(1705);
 			tenin_init[3] = 1;
 			tenin_init[4] = 7;
 
-			tenin_talk[1] = GSW(1705); //Unknown NPC Talk
+			tenin_talk[1] = GSW(1705);
 			tenin_talk[3] = 1;
 			tenin_talk[4] = 7;
 
-			mokorim_init[3] = GSW(1710); //Lumpy Init
+			mokorim_init[3] = GSW(1710); //TODO
 			mokorim_init[5] = 0;
 			mokorim_init[6] = 1;
 			mokorim_init[13] = 4;
 
-			mokorim_talk[4] = GSW(1710); //Lumpy Speach
+			mokorim_talk[4] = GSW(1710); //TODO
 			mokorim_talk[6] = 0;
 			mokorim_talk[7] = 1;
 			mokorim_talk[214] = 4;
 
-			luigi_init_00[1] = GSW(1705); //Luigi Init
-			luigi_init_00[3] = 98; // Unknown
-			luigi_init_00[4] = 99;// Unknown
+			luigi_init_00[1] = GSW(1717); //TODO
+			luigi_init_00[3] = 18;
+			luigi_init_00[4] = 99;
 
-			luigi_npcEnt_00[1] = GSW(1705); //Luigi Partner
-			luigi_npcEnt_00[3] = 99; // Unknown
-			luigi_npcEnt_00[4] = 99;// Unknown
+			luigi_npcEnt_00[1] = GSW(1705); //TODO
+			luigi_npcEnt_00[3] = 99;
+			luigi_npcEnt_00[4] = 99;
 
-			enter_gorotsuki_town[576] = GSW(1700); //After mario arrives
+			enter_gorotsuki_town[576] = GSW(1700);
 
-			christine_osoware[334] = GSW(1700); //After goombella asks for help
+			christine_osoware[334] = GSW(1700);
 
-			gundan1000tai_beforebattle[483] = GSW(1700); //Before Crump Fight
+			gundan1000tai_beforebattle[483] = GSW(1700);
 
-			gundan1000tai_afterbattle[1182] = GSW(1700); //After crump fight
+			gundan1000tai_afterbattle[1182] = GSW(1700);
 
-			shukko_event[490] = GSW(1705); //Ship arrives back from Keelhaul Key
+			shukko_event[490] = GSW(1705);
 			shukko_event[491] = 7;
 
-			gorotsuki_kikan[235] = GSW(1705); //After toads leave ship
-			gorotsuki_kikan[236] = 99; //Unknown
+			gorotsuki_kikan[235] = GSW(1717);
+			gorotsuki_kikan[236] = 26;
 
-			into_gor_ship[108] = GSW(1709); //Frankie and francesca cutscene positioning
-			into_gor_ship[109] = 99; //Unknown
+			into_gor_ship[108] = GSW(1709);
+			into_gor_ship[109] = 8;
+			into_gor_ship[247] = GSW(1709);
+			into_gor_ship[248] = 8;
 
-			unk_evt_gor_0002a2d4[1] = GSW(1709); //After frankie and francesca run
-			unk_evt_gor_0002a2d4[2] = 99; //Unknown
+			unk_evt_gor_0002a2d4[1] = GSW(1709);
+			unk_evt_gor_0002a2d4[2] = 9;
 
-			gor_00_koopa_evt[1049] = GSW(1704); //After Bowser intermission, post ch.4
-			gor_00_koopa_evt[1050] = 99; //Unknown
+			gor_00_koopa_evt[1049] = GSW(1715);
+			gor_00_koopa_evt[1050] = 13;
 
-			peach_mail_00[199] = GSW(1705); //After peach mail, post ch.5
-			peach_mail_00[200] = 99; //Unknown
+			peach_mail_00[199] = GSW(1717);
+			peach_mail_00[200] = 27;
 
-			option_ship_mario[89] = GSW(1709); //Spawn params for frankie and francesca
-			option_ship_mario[90] = 99; //Unknown
+			option_ship_mario[89] = GSW(1709);
+			option_ship_mario[90] = 8;
 
-			tsumini[1] = GSW(1704); //Change map during and after bowser intermission, post ch.4
-			tsumini[2] = 99; //Unknown
-			tsumini[95] = GSW(1705); //NPC Flags for stuff during ch.5 sequence??
+			tsumini[1] = GSW(1715);
+			tsumini[2] = 10;
+			tsumini[95] = GSW(1705);
 			tsumini[97] = 1;
 			tsumini[98] = 7;
 			tsumini[150] = GSW(1705);
 			tsumini[152] = 1;
 			tsumini[153] = 7;
 
-			return_gorotsuki_town[609] = GSW(1708); //Epilogue
-			return_gorotsuki_town[610] = 99; //Unknown
+			return_gorotsuki_town[609] = GSW(1708);
+			return_gorotsuki_town[610] = 21;
 
-			gor_00_init_evt[28] = EVT_HELPER_CMD(1, 94); //First Switch Function
-			gor_00_init_evt[29] = EVT_HELPER_OP(gor_00_init_evt1);
-			gor_00_init_evt[30] = EVT_HELPER_CMD(1, 4);
-			gor_00_init_evt[31] = EVT_HELPER_OP(&gor_00_init_evt[140]);
+			patch::writePatch(&gor_00_init_evt[28], gor_00_init_evt1_hook, sizeof(gor_00_init_evt1_hook));
+			gor_00_init_evt[138] = EVT_HELPER_CMD(1, 3);
+			gor_00_init_evt[139] = EVT_HELPER_OP(98);
 
-			gor_00_init_evt[156] = GSW(1709); //Related to frankie and francesca arriving back from keelhaul
+			gor_00_init_evt[156] = GSW(1709);
 			gor_00_init_evt[157] = 8;
 
-			gor_00_init_evt[187] = GSW(1704); //Disable save block during Bowser intermission, post ch.4
-			gor_00_init_evt[188] = 99; //Unknown
+			gor_00_init_evt[187] = GSW(1715);
+			gor_00_init_evt[188] = 12;
 
-			gor_00_init_evt[302] = GSW(1708); //Ship related stuff if not in epilogue
-			gor_00_init_evt[303] = 99; //Unknown
+			gor_00_init_evt[302] = GSW(1708);
+			gor_00_init_evt[303] = 18;
 
-			gor_00_init_evt[308] = GSW(1705); //Peach mail post ch.5
-			gor_00_init_evt[309] = 99; //Unknown
+			gor_00_init_evt[308] = GSW(1717);
+			gor_00_init_evt[309] = 26;
 
-			gor_00_init_evt[314] = GSW(1709); //Frankie and francesca speach related, ch.3 sequence
-			gor_00_init_evt[315] = 2; //Unknown
+			gor_00_init_evt[314] = GSW(1709);
+			gor_00_init_evt[315] = 2;
 
-			gor_00_init_evt[329] = EVT_HELPER_CMD(1, 94); //First Switch Function
-			gor_00_init_evt[330] = EVT_HELPER_OP(gor_00_init_evt2);
-			gor_00_init_evt[331] = EVT_HELPER_CMD(1, 4);
-			gor_00_init_evt[332] = EVT_HELPER_OP(&gor_00_init_evt[469]);
+			patch::writePatch(&gor_00_init_evt[329], gor_00_init_evt2_hook, sizeof(gor_00_init_evt2_hook));
+			gor_00_init_evt[467] = EVT_HELPER_CMD(1, 3);
+			gor_00_init_evt[468] = EVT_HELPER_OP(99);
 
-			gor_00_init_evt[470] = GSW(1709); //Epilogue
-			gor_00_init_evt[471] = 99; //Unknown
-			gor_00_init_evt[473] = GSW(1709); //Epilogue
-			gor_00_init_evt[474] = 99; //Unknown
-			gor_00_init_evt[476] = GSW(1705); //After returning from keelhaul
-			gor_00_init_evt[477] = 99; //Unknown
-	}
+			gor_00_init_evt[470] = GSW(1708);
+			gor_00_init_evt[471] = 18;
+			gor_00_init_evt[473] = GSW(1708);
+			gor_00_init_evt[474] = 20;
+			gor_00_init_evt[476] = GSW(1717);
+			gor_00_init_evt[477] = 25;
 }
