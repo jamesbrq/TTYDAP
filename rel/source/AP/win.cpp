@@ -171,9 +171,4 @@ void ApplyWinPatches(OSModuleInfo* module_info)
 	win_06_init_evt[2] = 1;
 	win_06_init_evt[65] = GSW(1702);
 	win_06_init_evt[66] = 0;
-
-
-
-
-
 }

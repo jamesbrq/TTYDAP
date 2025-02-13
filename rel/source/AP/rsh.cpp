@@ -10,6 +10,7 @@
 #include <ttyd/evt_bero.h>
 #include <ttyd/evt_snd.h>
 #include <ttyd/evt_sub.h>
+#include <ttyd/evt_case.h>
 #include <ttyd/evt_urouro.h>
 #include "evt_cmd.h"
 #include "common_types.h"
@@ -269,6 +270,182 @@ EVT_BEGIN(rsh_00_init_evt_music_hook)
 	RETURN()
 EVT_END()
 
+EVT_BEGIN(rsh_01_init_evt_music)
+	IF_LARGE_EQUAL(GSW(1720), 1)
+		IF_SMALL_EQUAL(GSW(1720), 8)
+			USER_FUNC(evt_snd::evt_snd_bgmon, 512, PTR("BGM_STG6_HOM1"))
+			USER_FUNC(evt_snd::evt_snd_envoff, 512)
+			USER_FUNC(evt_snd::evt_snd_bgmoff, 26624)
+			RETURN()
+		END_IF()
+	END_IF()
+	SWITCH(GSW(1706))
+		CASE_BETWEEN(4, 6)
+			USER_FUNC(evt_snd::evt_snd_bgmon, 512, PTR("BGM_EVT_POWAN1"))
+			USER_FUNC(evt_snd::evt_snd_envon, 272, PTR("ENV_STG6_RSH1"))
+		CASE_END()
+		CASE_BETWEEN(24, 29)
+			USER_FUNC(evt_snd::evt_snd_bgmon, 512, PTR("BGM_EVT_POWAN1"))
+			USER_FUNC(evt_snd::evt_snd_envon, 272, PTR("ENV_STG6_RSH1"))
+		CASE_END()
+		CASE_BETWEEN(31, 32)
+			USER_FUNC(evt_snd::evt_snd_bgmoff, 512)
+			USER_FUNC(evt_snd::evt_snd_envon, 272, PTR("ENV_STG6_RSH1_3"))
+		CASE_END()
+		CASE_BETWEEN(33, 35)
+			USER_FUNC(evt_snd::evt_snd_bgmon, 512, PTR("BGM_EVT_DANGER4"))
+			USER_FUNC(evt_snd::evt_snd_envon, 272, PTR("ENV_STG6_RSH1"))
+		CASE_END()
+		CASE_BETWEEN(38, 48)
+			USER_FUNC(evt_snd::evt_snd_bgmon, 512, PTR("BGM_STG6_PIK1"))
+			USER_FUNC(evt_snd::evt_snd_envoff, 512)
+			USER_FUNC(evt_snd::evt_snd_bgmoff, 26624)
+		CASE_END()
+		CASE_ETC()
+			USER_FUNC(evt_sub::evt_sub_get_mapname, LW(0))
+			IF_STR_EQUAL(LW(0), PTR("rsh_01_a"))
+				USER_FUNC(evt_snd::evt_snd_bgmon, 512, PTR("BGM_STG6_RSH1"))
+				USER_FUNC(evt_snd::evt_snd_envon, 272, PTR("ENV_STG6_RSH1"))
+			END_IF()
+			IF_STR_EQUAL(LW(0), PTR("rsh_01_b"))
+				USER_FUNC(evt_snd::evt_snd_bgmon, 512, PTR("BGM_STG6_RSH3"))
+				USER_FUNC(evt_snd::evt_snd_envon, 272, PTR("ENV_STG6_RSH1"))
+			END_IF()
+			IF_STR_EQUAL(LW(0), PTR("rsh_01_c"))
+				USER_FUNC(evt_snd::evt_snd_bgmon, 512, PTR("BGM_STG6_RSH2"))
+				USER_FUNC(evt_snd::evt_snd_envon, 272, PTR("ENV_STG6_RSH1"))
+			END_IF()
+		CASE_END()
+	END_SWITCH()
+	RETURN()
+EVT_END()
+
+EVT_BEGIN(rsh_01_init_evt_music_hook)
+	RUN_CHILD_EVT(rsh_01_init_evt_music)
+	RETURN()
+EVT_END()
+
+EVT_BEGIN(rsh_02_init_evt_music)
+	IF_LARGE_EQUAL(GSW(1720), 1)
+	IF_SMALL_EQUAL(GSW(1720), 8)
+	USER_FUNC(evt_snd::evt_snd_bgmon, 512, PTR("BGM_STG6_HOM1"))
+	USER_FUNC(evt_snd::evt_snd_envoff, 512)
+	USER_FUNC(evt_snd::evt_snd_bgmoff, 26624)
+	RETURN()
+	END_IF()
+	END_IF()
+	SWITCH(GSW(1706))
+		CASE_SMALL(2)
+			USER_FUNC(evt_snd::evt_snd_bgmon, 272, PTR("ENV_STG6_RSH1"))
+		CASE_END()
+		CASE_BETWEEN(4, 6)
+			USER_FUNC(evt_snd::evt_snd_bgmon, 512, PTR("BGM_EVT_POWAN1"))
+			USER_FUNC(evt_snd::evt_snd_envon, 272, PTR("ENV_STG6_RSH1_3"))
+		CASE_END()
+		CASE_BETWEEN(24, 27)
+			USER_FUNC(evt_snd::evt_snd_bgmon, 512, PTR("BGM_EVT_POWAN1"))
+			USER_FUNC(evt_snd::evt_snd_envon, 272, PTR("ENV_STG6_RSH1_3"))
+		CASE_END()
+		CASE_BETWEEN(28, 28)
+			USER_FUNC(evt_snd::evt_snd_bgmon, 512, PTR("BGM_EVT_STG3_EGG1"))
+			USER_FUNC(evt_snd::evt_snd_envon, 272, PTR("ENV_STG6_RSH1_3"))
+		CASE_END()
+		CASE_EQUAL(29)
+			USER_FUNC(evt_snd::evt_snd_bgmon, 512, PTR("BGM_EVT_POWAN1"))
+			USER_FUNC(evt_snd::evt_snd_envon, 272, PTR("ENV_STG6_RSH1_3"))
+		CASE_END()
+		CASE_BETWEEN(31, 32)
+			USER_FUNC(evt_snd::evt_snd_bgmoff, 512)
+			USER_FUNC(evt_snd::evt_snd_envon, 272, PTR("ENV_STG6_RSH1_3"))
+		CASE_END()
+		CASE_BETWEEN(33, 35)
+			USER_FUNC(evt_snd::evt_snd_bgmon, 512, PTR("BGM_EVT_DANGER4"))
+			USER_FUNC(evt_snd::evt_snd_envon, 272, PTR("ENV_STG6_RSH1_3"))
+		CASE_END()
+		CASE_BETWEEN(38, 48)
+			USER_FUNC(evt_snd::evt_snd_bgmon, 512, PTR("BGM_STG6_PIK1"))
+			USER_FUNC(evt_snd::evt_snd_envoff, 512)
+			USER_FUNC(evt_snd::evt_snd_bgmoff, 26624)
+		CASE_END()
+		CASE_ETC()
+			USER_FUNC(evt_sub::evt_sub_get_mapname, LW(0))
+			IF_STR_EQUAL(LW(0), PTR("rsh_02_a"))
+				USER_FUNC(evt_snd::evt_snd_bgmon, 512, PTR("BGM_STG6_RSH1"))
+				USER_FUNC(evt_snd::evt_snd_envon, 272, PTR("ENV_STG6_RSH1"))
+			END_IF()
+			IF_STR_EQUAL(LW(0), PTR("rsh_02_b"))
+				USER_FUNC(evt_snd::evt_snd_bgmon, 512, PTR("BGM_STG6_RSH3"))
+				USER_FUNC(evt_snd::evt_snd_envon, 272, PTR("ENV_STG6_RSH1"))
+			END_IF()
+			IF_STR_EQUAL(LW(0), PTR("rsh_02_c"))
+				USER_FUNC(evt_snd::evt_snd_bgmon, 512, PTR("BGM_STG6_RSH2"))
+				USER_FUNC(evt_snd::evt_snd_envon, 272, PTR("ENV_STG6_RSH1"))
+			END_IF()
+		CASE_END()
+	END_SWITCH()
+	RETURN()
+EVT_END()
+
+EVT_BEGIN(rsh_02_init_evt_music_hook)
+	RUN_CHILD_EVT(rsh_02_init_evt_music)
+	RETURN()
+EVT_END()
+
+EVT_BEGIN(rsh_03_init_evt_music)
+	IF_LARGE_EQUAL(GSW(1720), 1)
+		IF_SMALL_EQUAL(GSW(1720), 8)
+			USER_FUNC(evt_snd::evt_snd_bgmon, 512, PTR("BGM_STG6_HOM1"))
+			USER_FUNC(evt_snd::evt_snd_envoff, 512)
+			USER_FUNC(evt_snd::evt_snd_bgmoff, 26624)
+			RETURN()
+		END_IF()
+	END_IF()
+	SWITCH(GSW(1706))
+		CASE_BETWEEN(4, 6)
+			USER_FUNC(evt_snd::evt_snd_bgmon, 512, PTR("BGM_EVT_POWAN1"))
+			USER_FUNC(evt_snd::evt_snd_envon, 272, PTR("ENV_STG6_RSH1_3"))
+		CASE_END()
+		CASE_BETWEEN(24, 29)
+			USER_FUNC(evt_snd::evt_snd_bgmon, 512, PTR("BGM_EVT_POWAN1"))
+			USER_FUNC(evt_snd::evt_snd_envon, 272, PTR("ENV_STG6_RSH1_3"))
+		CASE_END()
+		CASE_BETWEEN(31, 32)
+			USER_FUNC(evt_snd::evt_snd_bgmoff, 512)
+			USER_FUNC(evt_snd::evt_snd_envon, 272, PTR("ENV_STG6_RSH1_3"))
+		CASE_END()
+		CASE_BETWEEN(33, 35)
+			USER_FUNC(evt_snd::evt_snd_bgmon, 512, PTR("BGM_EVT_DANGER4"))
+			USER_FUNC(evt_snd::evt_snd_envon, 272, PTR("ENV_STG6_RSH1_3"))
+		CASE_END()
+		CASE_BETWEEN(38, 48)
+			USER_FUNC(evt_snd::evt_snd_bgmon, 512, PTR("BGM_STG6_PIK1"))
+			USER_FUNC(evt_snd::evt_snd_envoff, 512)
+			USER_FUNC(evt_snd::evt_snd_bgmoff, 26624)
+		CASE_END()
+		CASE_ETC()
+			USER_FUNC(evt_sub::evt_sub_get_mapname, LW(0))
+			IF_STR_EQUAL(LW(0), PTR("rsh_03_a"))
+				USER_FUNC(evt_snd::evt_snd_bgmon, 512, PTR("BGM_STG6_RSH1"))
+				USER_FUNC(evt_snd::evt_snd_envon, 272, PTR("ENV_STG6_RSH1_2"))
+			END_IF()
+			IF_STR_EQUAL(LW(0), PTR("rsh_03_b"))
+				USER_FUNC(evt_snd::evt_snd_bgmon, 512, PTR("BGM_STG6_RSH3"))
+				USER_FUNC(evt_snd::evt_snd_envon, 272, PTR("ENV_STG6_RSH1_2"))
+			END_IF()
+			IF_STR_EQUAL(LW(0), PTR("rsh_03_c"))
+				USER_FUNC(evt_snd::evt_snd_bgmon, 512, PTR("BGM_STG6_RSH2"))
+				USER_FUNC(evt_snd::evt_snd_envon, 272, PTR("ENV_STG6_RSH1_2"))
+			END_IF()
+		CASE_END()
+	END_SWITCH()
+	RETURN()
+EVT_END()
+
+EVT_BEGIN(rsh_03_init_evt_music_hook)
+	RUN_CHILD_EVT(rsh_03_init_evt_music)
+	RETURN()
+EVT_END()
+
 EVT_BEGIN(rsh_04_init_evt_evt)
 	IF_LARGE_EQUAL(GSW(1720), 1)
 		IF_SMALL_EQUAL(GSW(1720), 8)
@@ -312,6 +489,27 @@ EVT_END()
 EVT_BEGIN(rsh_00_init_evt_hook)
 	RUN_CHILD_EVT(rsh_00_init_evt_evt)
 	GOTO(99)
+EVT_END()
+
+EVT_BEGIN(rsh_01_init_evt_evt)
+	IF_LARGE_EQUAL(GSW(1720), 1)
+		IF_SMALL_EQUAL(GSW(1720), 8)
+			RETURN()
+		END_IF()
+	END_IF()
+	IF_LARGE_EQUAL(GSW(1706), 37)
+		RETURN()
+	END_IF()
+	RUN_CHILD_EVT(evt_bero::bero_case_switch_off)
+	SET(LW(1), PTR("stg6_rsh_261"))
+	SET(LW(2), PTR("stg6_rsh_261"))
+	USER_FUNC(evt_case::evt_run_case_evt, 9, 1, PTR("s_bero"), 0, PTR(evt_access_rsh_01), 0)
+	RETURN()
+EVT_END()
+
+EVT_BEGIN(rsh_01_init_evt_hook)
+	RUN_CHILD_EVT(rsh_01_init_evt_evt)
+	GOTO(98)
 EVT_END()
 
 EVT_BEGIN(talk_waitless_evt)
@@ -385,6 +583,29 @@ EVT_END()
 
 EVT_BEGIN(init_konari_hook)
 	RUN_CHILD_EVT(init_konari_evt)
+	GOTO(99)
+EVT_END()
+
+EVT_BEGIN(talk_madam_ring_return_evt)
+	IF_LARGE_EQUAL(GSW(1720), 1)
+		IF_SMALL_EQUAL(GSW(1720), 8)
+			USER_FUNC(evt_snd::evt_snd_bgmoff, 26624)
+			RETURN()
+		END_IF()
+	END_IF()
+	SWITCH(GSW(1706))
+		CASE_BETWEEN(32, 36)
+			USER_FUNC(evt_snd::evt_snd_bgmoff, 26624)
+		CASE_END()
+		CASE_ETC()
+			USER_FUNC(evt_snd::evt_snd_bgmon, 160, 0)
+		CASE_END()
+	END_SWITCH()
+	RETURN()
+EVT_END()
+
+EVT_BEGIN(talk_madam_ring_return_hook)
+	RUN_CHILD_EVT(talk_madam_ring_return_evt)
 	GOTO(99)
 EVT_END()
 
@@ -503,63 +724,46 @@ void ApplyRshPatches(OSModuleInfo* module_info)
 	talk_toron_rsh_01[46] = 21;
 
 	init_madam_rsh_01[1] = GSW(1706);
-	init_madam_rsh_01[3] = 48;
-	init_madam_rsh_01[11] = 48;
-	init_madam_rsh_01[12] = 52;
-	init_madam_rsh_01[20] = 53;
+	init_madam_rsh_01[3] = 32;
+	init_madam_rsh_01[11] = 32;
+	init_madam_rsh_01[12] = 36;
+	init_madam_rsh_01[20] = 37;
 
-	talk_madam_ring_return[46] = GSW(1706);
-	talk_madam_ring_return[48] = 30;
-	talk_madam_ring_return[49] = 45;
-	talk_madam_ring_return[54] = 54;
-	talk_madam_ring_return[55] = 64;
+	patch::writePatch(&talk_madam_ring_return[45], talk_madam_ring_return_hook, sizeof(talk_madam_ring_return_hook));
+	talk_madam_ring_return[63] = EVT_HELPER_CMD(1, 3);
+	talk_madam_ring_return[64] = EVT_HELPER_OP(99);
 
 	talk_madam_rsh_01[1] = GSW(1706);
 	talk_madam_rsh_01[2] = 8;
-	talk_madam_rsh_01[117] = GSW(1706);
-	talk_madam_rsh_01[119] = 30;
-	talk_madam_rsh_01[120] = 45;
-	talk_madam_rsh_01[125] = 54;
-	talk_madam_rsh_01[126] = 64;
-	talk_madam_rsh_01[151] = GSW(1706);
-	talk_madam_rsh_01[153] = 4;
-	talk_madam_rsh_01[161] = 7;
-	talk_madam_rsh_01[169] = 8;
-	talk_madam_rsh_01[177] = 21;
-	talk_madam_rsh_01[185] = 22;
-	talk_madam_rsh_01[193] = 30;
-	talk_madam_rsh_01[201] = 46;
+
+	patch::writePatch(&talk_madam_rsh_01[48], talk_madam_ring_return_hook, sizeof(talk_madam_ring_return_hook));
+	talk_madam_ring_return[67] = EVT_HELPER_CMD(1, 3);
+	talk_madam_ring_return[68] = EVT_HELPER_OP(99);
+	talk_madam_rsh_01[84] = GSW(1706);
+	talk_madam_rsh_01[86] = 4;
+	talk_madam_rsh_01[94] = 7;
+	talk_madam_rsh_01[102] = 8;
+	talk_madam_rsh_01[110] = 21;
+	talk_madam_rsh_01[118] = 22;
+	talk_madam_rsh_01[126] = 29;
+	talk_madam_rsh_01[134] = 46;
 
 	evt_daiji_kami_rsh_01[16] = GSW(1706);
 	evt_daiji_kami_rsh_01[17] = 25;
 
 	evt_pikary_arrival[126] = GSW(1706);
-	evt_pikary_arrival[127] = 53;
+	evt_pikary_arrival[127] = 37;
 
 	evt_access_rsh_01[4] = GSW(1706);
-	evt_access_rsh_01[5] = 65;
+	evt_access_rsh_01[5] = 49;
 
-	rsh_01_init_evt[1] = GSW(1706);
-	rsh_01_init_evt[3] = 29;
-	rsh_01_init_evt[4] = 45;
-	rsh_01_init_evt[6] = 53;
-	rsh_01_init_evt[49] = GSW(1706);
-	rsh_01_init_evt[51] = 29;
-	rsh_01_init_evt[52] = 29;
-	rsh_01_init_evt[54] = 53;
-	rsh_01_init_evt[77] = GSW(1706);
-	rsh_01_init_evt[79] = 4;
-	rsh_01_init_evt[80] = 6;
-	rsh_01_init_evt[90] = 24;
-	rsh_01_init_evt[91] = 29;
-	rsh_01_init_evt[101] = 30;
-	rsh_01_init_evt[102] = 45;
-	rsh_01_init_evt[114] = 47;
-	rsh_01_init_evt[115] = 48;
-	rsh_01_init_evt[124] = 49;
-	rsh_01_init_evt[125] = 51;
-	rsh_01_init_evt[135] = 54;
-	rsh_01_init_evt[136] = 64;
+	patch::writePatch(&rsh_01_init_evt[0], rsh_04_init_evt_evt, sizeof(rsh_04_init_evt_evt));
+	rsh_01_init_evt[32] = EVT_HELPER_CMD(1, 3);
+	rsh_01_init_evt[33] = EVT_HELPER_OP(99);
+	patch::writePatch(&rsh_01_init_evt[48], rsh_01_init_evt_hook, sizeof(rsh_01_init_evt_hook));
+	rsh_01_init_evt[74] = EVT_HELPER_CMD(1, 3);
+	rsh_01_init_evt[75] = EVT_HELPER_OP(98);
+	patch::writePatch(&rsh_01_init_evt[76], rsh_01_init_evt_music_hook, sizeof(rsh_01_init_evt_music_hook));
 
 	rsh_01_a_init_evt[1] = GSW(1706);
 	rsh_01_a_init_evt[3] = 36;
@@ -672,7 +876,7 @@ void ApplyRshPatches(OSModuleInfo* module_info)
 	rsh_02_init_evt[64] = 3;
 	rsh_02_init_evt[66] = GSW(1706);
 	rsh_02_init_evt[67] = 28;
-	patch::writePatch(&rsh_02_init_evt[106], rsh_04_init_evt_music_hook, sizeof(rsh_04_init_evt_music_hook));
+	patch::writePatch(&rsh_02_init_evt[106], rsh_02_init_evt_music_hook, sizeof(rsh_02_init_evt_music_hook));
 
 	rsh_02_a_init_evt[1] = GSW(1706);
 	rsh_02_a_init_evt[2] = 22;
@@ -799,7 +1003,7 @@ void ApplyRshPatches(OSModuleInfo* module_info)
 	rsh_03_init_evt[125] = 32;
 	rsh_03_init_evt[127] = GSW(1706);
 	rsh_03_init_evt[128] = 36;
-	patch::writePatch(&rsh_03_init_evt[155], rsh_04_init_evt_music_hook, sizeof(rsh_04_init_evt_music_hook));
+	patch::writePatch(&rsh_03_init_evt[155], rsh_03_init_evt_music_hook, sizeof(rsh_03_init_evt_music_hook));
 
 	rsh_03_a_init_evt[12] = GSW(1706);
 	rsh_03_a_init_evt[14] = 3;
