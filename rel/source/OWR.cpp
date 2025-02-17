@@ -96,6 +96,8 @@ namespace mod::owr
 	ItemData* item_db = common::kItemDataArr;
 	OWR* gSelf = nullptr;
 
+	OWR::OWR() {}
+
 	void* (*g_itemEntry_trampoline)(const char*, uint32_t, uint32_t, int32_t, void*, float, float, float) = nullptr;
 	bool (*g_OSLink_trampoline)(OSModuleInfo*, void*) = nullptr;
 	void (*g_stg0_00_init_trampoline)() = nullptr;
@@ -125,6 +127,7 @@ namespace mod::owr
 		}
 		ttyd::swdrv::swSet(1215);
 		ttyd::swdrv::swSet(1216);
+		ttyd::swdrv::swByteSet(1700, 6);
 
 
 		ttyd::mario_pouch::pouchGetItem(ItemId::ULTRA_BOOTS);
