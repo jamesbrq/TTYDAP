@@ -249,6 +249,6 @@ void ApplyGor01Patches(OSModuleInfo* module_info)
 	gor_01_init_evt[523] = GSW(1708);
 	gor_01_init_evt[524] = 99; //Unknown
 
-	cooking_evt[412] = GSW(1710);
+	cooking_evt[412] = GSW(1715);
 	cooking_evt[413] = 4;
 }

@@ -19,6 +19,7 @@ extern "C" {
 	void bJohoyaSeqAddition();
 }
 
+//Assembly References
 extern int32_t statusWinDisp[];
 extern int32_t winRootMain[];
 extern int32_t compare_func3_r[];
@@ -51,6 +52,28 @@ extern int32_t uranaisi_data_make_next[];
 extern int32_t uranaisi_data_make_starpiece[];
 extern int32_t uranaisi_data_make_supercoin[];
 extern int32_t sys_prolog[];
+//End of Assekmbly References
+
+//Script References
+extern int32_t mail_evt_nok_01[];
+extern int32_t mail_evt_gor_03[];
+extern int32_t mail_evt_gor_02[];
+extern int32_t mail_evt_gor_01[];
+extern int32_t mail_evt_gor_04[];
+extern int32_t mail_evt_rsh_03_a[];
+extern int32_t mail_evt_hom_00[];
+extern int32_t mail_evt_gor_02_2[];
+extern int32_t mail_evt_bom_01[];
+extern int32_t mail_evt_tik_00[];
+extern int32_t mail_evt_win_01[];
+extern int32_t mail_evt_tou_01[];
+extern int32_t mail_evt_usu_01[];
+extern int32_t mail_evt_gor_01_2[];
+extern int32_t mail_evt_rsh_03_a_2[];
+extern int32_t mail_evt_pik_00[];
+extern int32_t mobj_save_blk_sysevt[];
+extern int32_t init_event[];
+extern int32_t evt_lecture_msg[];
 
 void ApplyMainAssemblyPatches()
 {
@@ -244,4 +267,9 @@ void ApplyMainAssemblyPatches()
 	sys_prolog[25] = 0x386006A4; // li r3, 0x6A4 (GSW(1700))
 	sys_prolog[28] = 0x2C030002; // cmpwi r3, 0x2
 	// FINISH ^
+}
+
+void ApplyMainScriptPatches()
+{
+
 }
