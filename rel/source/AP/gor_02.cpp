@@ -81,37 +81,79 @@ EVT_END()
 
 EVT_BEGIN(gor_02_init_evt1)
 	SET(LW(0), 0)
-	IF_EQUAL(GSW(1700), 18)
+	IF_EQUAL(GSW(1700), 14)
 		ADD(LW(0), 1)
 	END_IF()
-	IF_EQUAL(GSW(1701), 99) //Unknown
+	IF_EQUAL(GSW(1711), 16)
 		ADD(LW(0), 1)
 	END_IF()
-	IF_EQUAL(GSW(1702), 99) //Unknown
+	IF_EQUAL(GSW(1713), 19)
 		ADD(LW(0), 1)
 	END_IF()
-	IF_EQUAL(GSW(1703), 99) //Unknown
+	IF_EQUAL(GSW(1703), 30)
 		ADD(LW(0), 1)
 	END_IF()
-	IF_EQUAL(GSW(1704), 99) //Unknown
+	IF_EQUAL(GSW(1715), 16)
 		ADD(LW(0), 1)
 	END_IF()
-	IF_EQUAL(GSW(1705), 99) //Unknown
+	IF_EQUAL(GSW(1717), 28)
 		ADD(LW(0), 1)
 	END_IF()
-	IF_EQUAL(GSW(1706), 99) //Unknown
+	IF_EQUAL(GSW(1706), 51)
 		ADD(LW(0), 1)
 	END_IF()
 	IF_LARGE_EQUAL(LW(0), 1)
 		USER_FUNC(evt_snd::evt_snd_bgmon, 512, PTR("BGM_EVT_FRANKURI1"))
 		USER_FUNC(evt_snd::evt_snd_envoff, 512)
 	ELSE()
-		IF_NOT_EQUAL(GSW(1708), 99) //Unknown
+		IF_NOT_EQUAL(GSW(1708), 18)
 			USER_FUNC(evt_snd::evt_snd_bgmon, 512, PTR("BGM_STG0_GOR1"))
 			USER_FUNC(evt_snd::evt_snd_envon, 272, PTR("ENV_STG0_GOR3"))
 		END_IF()
 	END_IF()
 	RETURN()
+EVT_END()
+
+EVT_BEGIN(gor_02_init_evt1_hook)
+	RUN_CHILD_EVT(gor_02_init_evt1)
+	GOTO(&gor_02_init_evt[38])
+EVT_END()
+
+EVT_BEGIN(gor_02_init_evt2)
+	IF_EQUAL(GSW(1700), 14)
+		RUN_EVT(epigraphy_map)
+		RETURN()
+	END_IF()
+	IF_EQUAL(GSW(1711), 16)
+		RUN_EVT(epigraphy_map_after_stage1)
+		RETURN()
+	END_IF()
+	IF_EQUAL(GSW(1713), 19)
+		RUN_EVT(epigraphy_map_after_stage2)
+		RETURN()
+	END_IF()
+	IF_EQUAL(GSW(1703), 30)
+		RUN_EVT(epigraphy_map_after_stage3)
+		RETURN()
+	END_IF()
+	IF_EQUAL(GSW(1715), 16)
+		RUN_EVT(epigraphy_map_after_stage4)
+		RETURN()
+	END_IF()
+	IF_EQUAL(GSW(1717), 28)
+		RUN_EVT(epigraphy_map_after_stage6)
+		RETURN()
+	END_IF()
+	IF_EQUAL(GSW(1706), 51)
+		RUN_EVT(epigraphy_map_after_stage6)
+		RETURN()
+	END_IF()
+	RETURN()
+EVT_END()
+
+EVT_BEGIN(gor_02_init_evt2_hook)
+	RUN_CHILD_EVT(gor_02_init_evt2)
+	GOTO(&gor_02_init_evt[437])
 EVT_END()
 
 EVT_BEGIN(evt_door_02_open_evt)
@@ -360,27 +402,20 @@ void ApplyGor02Patches(OSModuleInfo* module_info)
 
 	kurihakase_after3minutes[136] = GSW(1706); //Ch.6 epilogue
 	kurihakase_after3minutes[137] = 99;
-	
-	gor_02_init_evt[531] = GSW(1708); //Gor_02 Init
-	gor_02_init_evt[532] = 99; //Unknown
-	gor_02_init_evt[407] = GSW(1710);
-	gor_02_init_evt[409] = 0;
-	gor_02_init_evt[413] = 1;
-	gor_02_init_evt[417] = 2;
-	gor_02_init_evt[421] = 3;
-	gor_02_init_evt[425] = 4;
-	gor_02_init_evt[429] = 5;
-	gor_02_init_evt[433] = 6;
-	gor_02_init_evt[401] = GSW(1700);
-	gor_02_init_evt[378] = GSW(1700);
-	gor_02_init_evt[375] = GSW(1700);
-	gor_02_init_evt[360] = GSW(1700);
+
+	patch::writePatch(&gor_02_init_evt[0], gor_02_init_evt1_hook, sizeof(gor_02_init_evt1_hook));
+	gor_02_init_evt[46] = GSW(1717);
+	gor_02_init_evt[47] = 25;
+	gor_02_init_evt[59] = GSW(1700);
 	gor_02_init_evt[201] = GSW(1701);
 	gor_02_init_evt[202] = 1;
-	gor_02_init_evt[59] = GSW(1700);
-	gor_02_init_evt[46] = GSW(1705);
-	gor_02_init_evt[47] = 99; //Unknown
-	patch::writePatch(&gor_02_init_evt[0], gor_02_init_evt1, sizeof(gor_02_init_evt1));
+	gor_02_init_evt[360] = GSW(1700);
+	gor_02_init_evt[375] = GSW(1700);
+	gor_02_init_evt[378] = GSW(1700);
+	gor_02_init_evt[401] = GSW(1700);
+	patch::writePatch(&gor_02_init_evt[406], gor_02_init_evt2_hook, sizeof(gor_02_init_evt2_hook));
+	gor_02_init_evt[531] = GSW(1708);
+	gor_02_init_evt[532] = 18;
 
 	evt_door_03_close[15] = GSW(1705); //Door 3 close
 	evt_door_03_close[16] = 3;

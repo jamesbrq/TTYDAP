@@ -194,11 +194,12 @@ void ApplyGor01Patches(OSModuleInfo* module_info)
 	thief_init[1] = GSW(1700); // Thief Init
 
 	thief_talk[1] = GSW(1700); // Thief Speach
+	thief_talk[4] = 17; // Thief Speach
 	thief_talk[89] = EVT_HELPER_CMD(0, 42);
 	thief_talk[90] = EVT_HELPER_CMD(0, 0);
-	master_talk[99] = EVT_HELPER_CMD(0, 49);
-	master_talk[100] = EVT_HELPER_CMD(0, 2);
-	master_talk[101] = EVT_HELPER_CMD(0, 1);
+	thief_talk[99] = EVT_HELPER_CMD(0, 49);
+	thief_talk[100] = EVT_HELPER_CMD(0, 2);
+	thief_talk[101] = EVT_HELPER_CMD(0, 1);
 
 	christine_nakama_before[1] = GSW(1700); //Goombella prologue
 	christine_nakama[754] = GSW(1700);

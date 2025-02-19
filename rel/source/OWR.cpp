@@ -31,6 +31,7 @@
 #include <AP/gra.h>
 #include <AP/jin.h>
 #include <AP/kpa.h>
+#include <AP/main.h>
 #include <AP/nok.h>
 #include <AP/pik.h>
 #include <AP/win.h>
@@ -104,12 +105,11 @@ namespace mod::owr
 
 	void OWR::SequenceInit()
 	{
-		uint32_t SequencePosition = ttyd::swdrv::swByteGet(0);
+		uint32_t SequencePosition = ttyd::swdrv::swByteGet(1700);
 		if (SequencePosition != 0)
 			return;
 
-		ttyd::swdrv::swByteSet(0, 3);
-		ttyd::swdrv::swByteSet(1700, 7);
+		ttyd::swdrv::swByteSet(1700, 15);
 		ttyd::swdrv::swByteSet(1705, 0);
 
 		uint8_t goombella = static_cast<uint8_t>(ttyd::party::PartyMembers::Goombella);
@@ -127,12 +127,12 @@ namespace mod::owr
 		}
 		ttyd::swdrv::swSet(1215);
 		ttyd::swdrv::swSet(1216);
-		ttyd::swdrv::swByteSet(1700, 6);
 
 
 		ttyd::mario_pouch::pouchGetItem(ItemId::ULTRA_BOOTS);
 		ttyd::mario_pouch::pouchGetItem(ItemId::ULTRA_HAMMER);
 		ttyd::mario_pouch::pouchGetItem(ItemId::INVALID_ITEM_PAPER_MODE_ICON);
+		ttyd::mario_pouch::pouchGetItem(ItemId::INVALID_ITEM_TUBE_MODE_ICON);
 	}
 
 	void OWR::LZTest()
@@ -150,6 +150,9 @@ namespace mod::owr
 	 void OWR::Init()
 	 {
 		gSelf = this;
+
+		ApplyMainAssemblyPatches();
+		ApplyMainScriptPatches();
 
 		/* g_itemEntry_trampoline = patch::HookFunction(
 			ttyd::itemdrv::itemEntry, [](const char* name, uint32_t id, uint32_t mode, int32_t collection_expr, void* script, float x, float y, float z) 
@@ -176,12 +179,6 @@ namespace mod::owr
 		const uint32_t skip_cutscene_opcode = 0x48000030;     // b 0x0030
 		mod::patch::writePatch(
 			kSkipUHCutsceneOpcode, &skip_cutscene_opcode, sizeof(uint32_t));
-
-		uint16_t size = GSWF_ARR_SIZE;
-		for (int i = 0; i < size; i++)
-		{
-			ttyd::swdrv::swSet(GSWF_ARR[i]);
-		}
 	 }
 
 	 void OWR::Update()
@@ -208,12 +205,12 @@ namespace mod::owr
 		uintptr_t module_ptr = reinterpret_cast<uintptr_t>(module_info);
         switch (module_info->id) {
             case ModuleId::GOR:
-                //ApplyGor00Patches(module_info);
-                //ApplyGor01Patches(module_info);
-                //ApplyGor02Patches(module_info);
-                //ApplyGor03Patches(module_info);
-                //ApplyGor04Patches(module_info);
-                //ApplyGorMiscPatches(module_info);
+                ApplyGor00Patches(module_info);
+                ApplyGor01Patches(module_info);
+                ApplyGor02Patches(module_info);
+                ApplyGor03Patches(module_info);
+                ApplyGor04Patches(module_info);
+                ApplyGorMiscPatches(module_info);
                 break;
             case ModuleId::HEI:
                 ApplyHeiPatches(module_info);

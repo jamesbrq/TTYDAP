@@ -64,6 +64,8 @@ extern int32_t mokorim_init[];
 extern int32_t mokorim_talk[];
 extern int32_t luigi_init_00[];
 extern int32_t luigi_npcEnt_00[];
+extern int32_t luigiEnt_00[];
+extern int32_t rakganEnt[];
 extern int32_t enter_gorotsuki_town_init[];
 extern int32_t christine_osoware_setup[];
 extern int32_t enter_gorotsuki_town[];
@@ -87,6 +89,8 @@ extern int32_t return_gorotsuki_town[];
 extern int32_t gor_00_init_evt[];
 extern int32_t nannpc_entry_data;
 extern int32_t nannpc_ext_main_sub_fast;
+
+const char npcEnt[] = "\x83\x8B\x83\x43\x81\x5B\x83\x57";
 
 
 EVT_BEGIN(garawaru_init_evt)
@@ -242,16 +246,20 @@ EVT_BEGIN(odoodo_talk_evt)
 		USER_FUNC(evt_msg::evt_msg_print, 0, PTR("gor_00_05_07"), 0, PTR("me"))
 		RETURN()
 	END_IF()
-	IF_SMALL(GSW(1705), 7)
+	IF_SMALL(GSW(1705), 6)
 		USER_FUNC(evt_msg::evt_msg_print, 0, PTR("gor_00_05_08"), 0, PTR("me"))
 		RETURN()
 	END_IF()
-	IF_SMALL(GSW(1705), 8)
+	IF_SMALL(GSW(1705), 7)
 		USER_FUNC(evt_msg::evt_msg_print, 0, PTR("mac_4_024"), 0, PTR("me"))
 		RETURN()
 	END_IF()
-	IF_SMALL(GSW(1705), 99)
+	IF_SMALL(GSW(1706), 43)
 		USER_FUNC(evt_msg::evt_msg_print, 0, PTR("gor_00_05_09"), 0, PTR("me"))
+		RETURN()
+	END_IF()
+	IF_SMALL(GSW(1708), 17)
+		USER_FUNC(evt_msg::evt_msg_print, 0, PTR("gor_00_05_11"), 0, PTR("me"))
 		RETURN()
 	END_IF()
 	USER_FUNC(evt_msg::evt_msg_print, 0, PTR("gor_00_05_12"), 0, PTR("me"))
@@ -326,6 +334,46 @@ EVT_END()
 
 EVT_BEGIN(suifu_b_init_hook)
 	RUN_CHILD_EVT(suifu_b_init_evt)
+	RETURN()
+EVT_END()
+
+EVT_BEGIN(mokorim_init_evt)
+	USER_FUNC(evt_npc::evt_npc_set_position, PTR("me"), 525, 15, -270)
+	USER_FUNC(evt_npc::evt_npc_set_ry, PTR("me"), 270)
+	RETURN()
+EVT_END()
+
+EVT_BEGIN(luigi_init_00_evt)
+	IF_LARGE_EQUAL(GSW(1717), 18)
+		IF_SMALL_EQUAL(GSW(1706), 42)
+			USER_FUNC(evt_npc::evt_npc_set_position, PTR("me"), 420, 15, -210)
+			USER_FUNC(evt_npc::evt_npc_set_ry_lr, PTR("me"), 0)
+		END_IF()
+	END_IF()
+	RETURN()
+EVT_END()
+
+EVT_BEGIN(luigi_init_00_hook)
+	RUN_CHILD_EVT(luigi_init_00_evt)
+	RETURN()
+EVT_END()
+
+EVT_BEGIN(luigi_npcEnt_00_evt)
+	IF_LARGE_EQUAL(GSW(1717), 18)
+		IF_SMALL_EQUAL(GSW(1706), 42)
+			USER_FUNC(evt_npc::evt_npc_entry, PTR(npcEnt), PTR("c_luigi"))
+			USER_FUNC(evt_npc::evt_npc_set_tribe, PTR(npcEnt), PTR(npcEnt))
+			USER_FUNC(evt_npc::evt_npc_setup, PTR(luigiEnt_00))
+			USER_FUNC(evt_npc::evt_npc_entry, PTR(npcEnt), PTR("c_lp_pansy"))
+			USER_FUNC(evt_npc::evt_npc_set_tribe, PTR(npcEnt), PTR(npcEnt))
+			USER_FUNC(evt_npc::evt_npc_setup, PTR(rakganEnt))
+		END_IF()
+	END_IF()
+	RETURN()
+EVT_END()
+
+EVT_BEGIN(luigi_npcEnt_00_hook)
+	RUN_CHILD_EVT(luigi_npcEnt_00_evt)
 	RETURN()
 EVT_END()
 
@@ -640,12 +688,12 @@ EVT_END()
 
 EVT_BEGIN(gor_00_init_evt1_hook)
 	RUN_CHILD_EVT(gor_00_init_evt1)
-	GOTO(98)
+	GOTO(&gor_00_init_evt[140])
 EVT_END()
 
 EVT_BEGIN(gor_00_init_evt2_hook)
 	RUN_CHILD_EVT(gor_00_init_evt2)
-	GOTO(99)
+	GOTO(&gor_00_init_evt[469])
 EVT_END()
 
 void ApplyGor00Patches(OSModuleInfo* module_info)
@@ -767,23 +815,16 @@ void ApplyGor00Patches(OSModuleInfo* module_info)
 			tenin_talk[3] = 1;
 			tenin_talk[4] = 7;
 
-			mokorim_init[3] = GSW(1710); //TODO
-			mokorim_init[5] = 0;
-			mokorim_init[6] = 1;
-			mokorim_init[13] = 4;
+			patch::writePatch(&mokorim_init[2], mokorim_init_evt, sizeof(mokorim_init_evt));
 
-			mokorim_talk[4] = GSW(1710); //TODO
+			mokorim_talk[4] = GSW(176);
 			mokorim_talk[6] = 0;
-			mokorim_talk[7] = 1;
-			mokorim_talk[214] = 4;
+			mokorim_talk[7] = 48;
+			mokorim_talk[214] = 49;
 
-			luigi_init_00[1] = GSW(1717); //TODO
-			luigi_init_00[3] = 18;
-			luigi_init_00[4] = 99;
+			patch::writePatch(&luigi_init_00[0], luigi_init_00_hook, sizeof(luigi_init_00_hook));
 
-			luigi_npcEnt_00[1] = GSW(1705); //TODO
-			luigi_npcEnt_00[3] = 99;
-			luigi_npcEnt_00[4] = 99;
+			patch::writePatch(&luigi_npcEnt_00[0], luigi_npcEnt_00_hook, sizeof(luigi_npcEnt_00_hook));
 
 			enter_gorotsuki_town[576] = GSW(1700);
 
@@ -829,28 +870,17 @@ void ApplyGor00Patches(OSModuleInfo* module_info)
 			return_gorotsuki_town[610] = 21;
 
 			patch::writePatch(&gor_00_init_evt[28], gor_00_init_evt1_hook, sizeof(gor_00_init_evt1_hook));
-			gor_00_init_evt[138] = EVT_HELPER_CMD(1, 3);
-			gor_00_init_evt[139] = EVT_HELPER_OP(98);
-
 			gor_00_init_evt[156] = GSW(1709);
 			gor_00_init_evt[157] = 8;
-
 			gor_00_init_evt[187] = GSW(1715);
 			gor_00_init_evt[188] = 12;
-
 			gor_00_init_evt[302] = GSW(1708);
 			gor_00_init_evt[303] = 18;
-
 			gor_00_init_evt[308] = GSW(1717);
 			gor_00_init_evt[309] = 26;
-
 			gor_00_init_evt[314] = GSW(1709);
 			gor_00_init_evt[315] = 2;
-
 			patch::writePatch(&gor_00_init_evt[329], gor_00_init_evt2_hook, sizeof(gor_00_init_evt2_hook));
-			gor_00_init_evt[467] = EVT_HELPER_CMD(1, 3);
-			gor_00_init_evt[468] = EVT_HELPER_OP(99);
-
 			gor_00_init_evt[470] = GSW(1708);
 			gor_00_init_evt[471] = 18;
 			gor_00_init_evt[473] = GSW(1708);

@@ -14,70 +14,75 @@
 .global bJohoyaSeqAddition
 
 bMapGXArrInject:
-	lis r3, win_log_mapGX_arr@ha
-	addi r28, r3, win_log_mapGX_arr@l
-	lhz r3, 0x0(r28)
+	lis %r3, win_log_mapGX_arr@ha
+	addi %r28, %r3, win_log_mapGX_arr@l
+	lhz %r3, 0x0(%r28)
 bMapGXArrInjectReturn:
 	b 0
 
 bMapGXArrIncrement:
-	addi r30, r30, 0xC #Original Intruction
-	addi r28, r28, 0x2
+	addi %r30, %r30, 0xC #Original Intruction
+	addi %r28, %r28, 0x2
 bMapGXArrIncrementReturn:
 	b 0
 
 bMapGXChSplit:
-	li r3, 0x06AF
+	li %r3, 0x06AF
 	bl swByteGet
-	cmpwi r3, 0x3
+	cmpwi %r3, 0x3
 bMapGXChSplitReturn:
 	b 0
 
 bWinLogArrInject:
-	lis r3, win_log_mapGX_arr@ha
-	addi r10, r3, win_log_mapGX_arr@l
-	lhz r3, 0x0(r10)
+	lis %r3, win_log_mapGX_arr@ha
+	addi %r10, %r3, win_log_mapGX_arr@l
+	lhz %r3, 0x0(%r10)
 bWinLogArrInjectReturn:
 	b 0
 
 bWinLogArrIncrement:
-	addi r27, r27, 0xC #Original Intruction
-	addi r10, r10, 0x2
+	addi %r27, %r27, 0xC #Original Intruction
+	addi %r10, %r10, 0x2
 bWinLogArrIncrementReturn:
 	b 0
 
 bChapterClearCheck:
-	li r3, 0x72
-	li r4, 0x1
-	li r5, 0x0
+	mflr %r28
+	li %r3, 0x72
+	li %r30, 0x1
+	li %r29, 0x0
 ChapterClearLoop:
 	bl pouchCheckItem
-	cmpwi r3, 0x1
-	bne .ChapterClearIncrement
-	addi r5, r5, 0x1
+	cmpwi %r3, 0x1
+	bne ChapterClearIncrement
+	addi %r29, %r29, 0x1
 ChapterClearIncrement:
-	addi r3, r4, 0x72
-	addi r4, r4, 0x1
-	cmpwi r3, 0x78
-	ble .ChapterClearLoop
-	mr r3, r5
+	addi %r3, %r30, 0x72
+	addi %r30, %r30, 0x1
+	cmpwi %r3, 0x78
+	ble ChapterClearLoop
+	mr %r3, %r29
+	li %r30, 0x0
+	li %r29, 0x0
+	mtlr %r28
+	li %r28, 0x0
 	blr
 
 bJohoyaSeqAddition:
-	li r3, 0x06A4
-	li r4, 0x1
-	li r5, 0x0
+	li %r3, 0x6A4
+	li %r4, 0x1
+	li %r5, 0x0
 JohoyaSeqLoop:
 	bl swByteGet
-	addi r5, r5, r3
-	addi r3, r4, 0x6A4
-	addi r4, r4, 0x1
-	cmpwi r3, 0x6B8
-	ble .JohoyaSeqLoop
-	mr r3, r5
+	add %r5, %r5, %r3
+	addi %r3, %r4, 0x6A4
+	addi %r4, %r4, 0x1
+	cmpwi %r3, 0x6B8
+	ble JohoyaSeqLoop
+	mr %r3, %r5
 	blr
 
-.obj win_log_mapGX_arr
+win_log_mapGX_arr:
 	.2byte 0x06A4
 	.2byte 0x06A4
 	.2byte 0x06A4
@@ -171,4 +176,3 @@ JohoyaSeqLoop:
 	.2byte 0x06AC
 	.2byte 0x06AC
 	.2byte 0x06AC
-.endobj win_log_mapGX_arr

@@ -1,6 +1,8 @@
 #include <AP/main.h>
 #include "patch.h"
 
+#include "evt_cmd.h"
+
 using namespace mod;
 
 extern "C" {
@@ -95,9 +97,9 @@ void ApplyMainAssemblyPatches()
 
 	mapGX[238] = 0x386006A4; // li r3, 0x6A4 (GSW(1700))
 	mapGX[240] = 0x2C03000F; // cmpwi r3, 0xF
-	patch::writeBranchPair(&mapGX[91], bMapGXArrInject, bMapGXArrInjectReturn);
-	patch::writeBranchPair(&mapGX[235], bMapGXArrIncrement, bMapGXArrIncrementReturn);
-	patch::writeBranchPair(&mapGX[243], bMapGXChSplit, bMapGXChSplitReturn);
+	patch::writeBranchPair(&mapGX[91], reinterpret_cast<void*>(bMapGXArrInject), reinterpret_cast<void*>(bMapGXArrInjectReturn));
+	patch::writeBranchPair(&mapGX[235], reinterpret_cast<void*>(bMapGXArrIncrement), reinterpret_cast<void*>(bMapGXArrIncrementReturn));
+	patch::writeBranchPair(&mapGX[243], reinterpret_cast<void*>(bMapGXChSplit), reinterpret_cast<void*>(bMapGXChSplitReturn));
 
 	winGetMapTplName[3] = 0x386006A5; // li r3, 0x6A5 (GSW(1701))
 	winGetMapTplName[8] = 0x2C030001; // cmpwi r3, 0x1
@@ -143,8 +145,8 @@ void ApplyMainAssemblyPatches()
 	winLogMain[295] = 0x386006AB; // li r3, 0x6AB (GSW(1707))
 	winLogMain[297] = 0x2C030001; // cmpwi r3, 0x1
 
-	patch::writeBranchPair(&winLogMain[432], bWinLogArrInject, bWinLogArrInjectReturn);
-	patch::writeBranchPair(&winLogMain[235], bWinLogArrIncrement, bWinLogArrIncrementReturn);
+	patch::writeBranchPair(&winLogMain[432], reinterpret_cast<void*>(bWinLogArrInject), reinterpret_cast<void*>(bWinLogArrInjectReturn));
+	patch::writeBranchPair(&winLogMain[235], reinterpret_cast<void*>(bWinLogArrIncrement), reinterpret_cast<void*>(bWinLogArrIncrementReturn));
 
 	winLogInit[53] = 0x386006A4; // li r3, 0x6A4 (GSW(1700))
 	winLogInit[55] = 0x2C030000; // cmpwi r3, 0x0
@@ -226,50 +228,107 @@ void ApplyMainAssemblyPatches()
 	setupDataLoad[22] = 0x386006A4; // li r3, 0x6A4 (GSW(1700))
 	setupDataLoad[25] = 0x2C030002; // cmpwi r3, 0x2
 
-	patch::writeBranchBL(&badgeShop_bargainGeneration[7], bChapterClearCheck);
+	patch::writeBranchBL(&badgeShop_bargainGeneration[7], reinterpret_cast<void*>(bChapterClearCheck));
 	badgeShop_bargainGeneration[8] = 0x2C030001; // cmpwi r3, 0x1
-	patch::writeBranchBL(&badgeShop_bargainGeneration[34], bChapterClearCheck);
+	patch::writeBranchBL(&badgeShop_bargainGeneration[34], reinterpret_cast<void*>(bChapterClearCheck));
 	badgeShop_bargainGeneration[35] = 0x2C030002; // cmpwi r3, 0x2
-	patch::writeBranchBL(&badgeShop_bargainGeneration[61], bChapterClearCheck);
+	patch::writeBranchBL(&badgeShop_bargainGeneration[61], reinterpret_cast<void*>(bChapterClearCheck));
 	badgeShop_bargainGeneration[62] = 0x2C030003; // cmpwi r3, 0x3
-	patch::writeBranchBL(&badgeShop_bargainGeneration[88], bChapterClearCheck);
+	patch::writeBranchBL(&badgeShop_bargainGeneration[88], reinterpret_cast<void*>(bChapterClearCheck));
 	badgeShop_bargainGeneration[89] = 0x2C030004; // cmpwi r3, 0x4
-	patch::writeBranchBL(&badgeShop_bargainGeneration[115], bChapterClearCheck);
+	patch::writeBranchBL(&badgeShop_bargainGeneration[115], reinterpret_cast<void*>(bChapterClearCheck));
 	badgeShop_bargainGeneration[116] = 0x2C030005; // cmpwi r3, 0x5
-	patch::writeBranchBL(&badgeShop_bargainGeneration[142], bChapterClearCheck);
+	patch::writeBranchBL(&badgeShop_bargainGeneration[142], reinterpret_cast<void*>(bChapterClearCheck));
 	badgeShop_bargainGeneration[143] = 0x2C030006; // cmpwi r3, 0x6
-	patch::writeBranchBL(&badgeShop_bargainGeneration[169], bChapterClearCheck);
+	patch::writeBranchBL(&badgeShop_bargainGeneration[169], reinterpret_cast<void*>(bChapterClearCheck));
 	badgeShop_bargainGeneration[170] = 0x2C030007; // cmpwi r3, 0x7
 	badgeShop_bargainGeneration[184] = 0x386006AC; // li r3, 0x6AC (GSW(1708))
 	badgeShop_bargainGeneration[187] = 0x2C030011; // cmpwi r3, 0x11
 
-	patch::writeBranchBL(&johoya_data_make[11], bJohoyaSeqAddition);
+	patch::writeBranchBL(&johoya_data_make[11], reinterpret_cast<void*>(bJohoyaSeqAddition));
 
-	patch::writeBranchBL(&keijiban_data_make[11], bJohoyaSeqAddition);
+	patch::writeBranchBL(&keijiban_data_make[11], reinterpret_cast<void*>(bJohoyaSeqAddition));
 
 	evt_shop_main_func[40] = 0x386006A4; // li r3, 0x6AA (GSW(1706))
 	evt_shop_main_func[43] = 0x2C030020; // cmpwi r3, 0x20
 	evt_shop_main_func[46] = 0x386006A4; // li r3, 0x6AA (GSW(1706))
 	evt_shop_main_func[49] = 0x2C030024; // cmpwi r3, 0x24
 
-	patch::writeBranchBL(&uranaisi_data_make_next[11], bJohoyaSeqAddition);
+	patch::writeBranchBL(&uranaisi_data_make_next[11], reinterpret_cast<void*>(bJohoyaSeqAddition));
 
-	patch::writeBranchBL(&uranaisi_data_make_starpiece[11], bJohoyaSeqAddition);
+	patch::writeBranchBL(&uranaisi_data_make_starpiece[11], reinterpret_cast<void*>(bJohoyaSeqAddition));
 
-	patch::writeBranchBL(&uranaisi_data_make_supercoin[11], bJohoyaSeqAddition);
+	patch::writeBranchBL(&uranaisi_data_make_supercoin[11], reinterpret_cast<void*>(bJohoyaSeqAddition));
 
-	sys_prolog[25] = 0x386006A4; // li r3, 0x6A4 (GSW(1700))
-	sys_prolog[28] = 0x2C030002; // cmpwi r3, 0x2
-	sys_prolog[25] = 0x386006A4; // li r3, 0x6A4 (GSW(1700))
-	sys_prolog[28] = 0x2C030002; // cmpwi r3, 0x2
-	sys_prolog[25] = 0x386006A4; // li r3, 0x6A4 (GSW(1700))
-	sys_prolog[28] = 0x2C030002; // cmpwi r3, 0x2
-	sys_prolog[25] = 0x386006A4; // li r3, 0x6A4 (GSW(1700))
-	sys_prolog[28] = 0x2C030002; // cmpwi r3, 0x2
+	//sys_prolog[25] = 0x386006A4; // li r3, 0x6A4 (GSW(1700))
+	//sys_prolog[28] = 0x2C030002; // cmpwi r3, 0x2
+	//sys_prolog[25] = 0x386006A4; // li r3, 0x6A4 (GSW(1700))
+	//sys_prolog[28] = 0x2C030002; // cmpwi r3, 0x2
+	//sys_prolog[25] = 0x386006A4; // li r3, 0x6A4 (GSW(1700))
+	//sys_prolog[28] = 0x2C030002; // cmpwi r3, 0x2
+	//sys_prolog[25] = 0x386006A4; // li r3, 0x6A4 (GSW(1700))
+	//sys_prolog[28] = 0x2C030002; // cmpwi r3, 0x2
 	// FINISH ^
 }
 
 void ApplyMainScriptPatches()
 {
+	mail_evt_nok_01[40] = GSW(1701);
+	mail_evt_nok_01[41] = 4;
 
+	mail_evt_gor_03[41] = GSW(1709);
+	mail_evt_gor_03[42] = 3;
+
+	mail_evt_gor_02[41] = GSW(1703);
+	mail_evt_gor_02[42] = 31;
+
+	mail_evt_gor_01[40] = GSW(1705);
+	mail_evt_gor_01[41] = 6;
+
+	mail_evt_gor_04[51] = GSW(1709);
+	mail_evt_gor_04[52] = 11;
+
+	mail_evt_rsh_03_a[40] = GSW(1706);
+	mail_evt_rsh_03_a[41] = 32;
+
+	mail_evt_hom_00[40] = GSW(1720);
+	mail_evt_hom_00[41] = 8;
+
+	mail_evt_gor_02_2[40] = GSW(1706);
+	mail_evt_gor_02_2[41] = 52;
+
+	mail_evt_bom_01[40] = GSW(1707);
+	mail_evt_bom_01[41] = 3;
+
+	mail_evt_tik_00[51] = GSW(1707);
+	mail_evt_tik_00[52] = 21;
+
+	mail_evt_win_01[40] = GSW(1702);
+	mail_evt_win_01[41] = 14;
+
+	mail_evt_tou_01[40] = GSW(1703);
+	mail_evt_tou_01[41] = 11;
+
+	mail_evt_usu_01[40] = GSWF(6043);
+	mail_evt_usu_01[41] = 1;
+
+	mail_evt_gor_01_2[41] = GSW(1717);
+	mail_evt_gor_01_2[42] = 29;
+
+	mail_evt_rsh_03_a_2[40] = GSW(1706);
+	mail_evt_rsh_03_a_2[41] = 23;
+
+	mail_evt_pik_00[40] = GSW(1707);
+	mail_evt_pik_00[41] = 3;
+
+	mobj_save_blk_sysevt[25] = GSW(1700);
+	mobj_save_blk_sysevt[26] = 7;
+
+	init_event[61] = GSW(1715);
+	init_event[62] = 3;
+	init_event[64] = GSW(1715);
+	init_event[65] = 7;
+
+	evt_lecture_msg[107] = GSW(1700);
+	evt_lecture_msg[108] = 16;
 }
