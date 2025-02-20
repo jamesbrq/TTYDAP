@@ -1,4 +1,5 @@
 #include <AP/gor_01.h>
+#include <AP/tik.h>
 #include <ttyd/evt_npc.h>
 #include <ttyd/evt_nannpc.h>
 #include <ttyd/evt_msg.h>
@@ -55,6 +56,37 @@ EVT_BEGIN(badgemaster_talk_evt)
 	RETURN()
 EVT_END()
 
+EVT_BEGIN(marco_init_01_evt)
+	IF_LARGE_EQUAL(GSW(1705), 1)
+		IF_SMALL_EQUAL(GSW(1717), 26)
+			USER_FUNC(evt_npc::evt_npc_set_position, PTR("me"), 0, -1000, 0)
+		END_IF()
+	END_IF()
+	RETURN()
+EVT_END()
+
+EVT_BEGIN(marco_init_01_hook)
+	RUN_CHILD_EVT(marco_init_01_evt)
+	RETURN()
+EVT_END()
+
+EVT_BEGIN(bottakuru_init_evt)
+	USER_FUNC(checkChapterRequirements, LW(0))
+	IF_SMALL(LW(0), 1)
+		USER_FUNC(evt_npc::evt_npc_set_position, PTR("me"), 0, -1000, 0)
+		RETURN()
+	END_IF()
+	USER_FUNC(evt_npc::evt_npc_flag_onoff, 1, PTR("me"), 1073741824)
+	USER_FUNC(evt_npc::evt_npc_set_ry, PTR("me"), 90)
+	SET(GSWF(1206), 0)
+	RETURN()
+EVT_END()
+
+EVT_BEGIN(bottakuru_init_hook)
+	RUN_CHILD_EVT(bottakuru_init_evt)
+	RETURN()
+EVT_END()
+
 EVT_BEGIN(kinoji_talk_evt)
 	USER_FUNC(evt_msg::evt_msg_print, 0, PTR("gor_01_019_02"), 0, PTR("me"))
 	RETURN()
@@ -108,20 +140,18 @@ EVT_END()
 
 void ApplyGor01Patches(OSModuleInfo* module_info)
 {
-	badgemaster_init[21] = GSW(1703); //Despawn Mowz??
-	badgemaster_init[22] = 99; //Unknown	
+	badgemaster_init[21] = GSW(1703);
+	badgemaster_init[22] = 1;
 	badgemaster_init[24] = GSW(1703);
-	badgemaster_init[25] = 99; //Unknown
+	badgemaster_init[25] = 13;
 
-	patch::writePatch(&badgemaster_talk[0], badgemaster_talk_evt, sizeof(badgemaster_talk_evt)); //Mowz Dialogue
+	patch::writePatch(&badgemaster_talk[0], badgemaster_talk_evt, sizeof(badgemaster_talk_evt));
 
-	patch::writePatch(&kinoji_talk[0], kinoji_talk_evt, sizeof(kinoji_talk_evt)); //Toadsworth Dialogue
+	patch::writePatch(&kinoji_talk[0], kinoji_talk_evt, sizeof(kinoji_talk_evt));
 
-	marco_init_01[1] = GSW(1705); //Flavio init
-	marco_init_01[3] = 1;
-	marco_init_01[4] = 99; //Unknown
+	patch::writePatch(&marco_init_01[0], marco_init_01_hook, sizeof(marco_init_01_hook));
 
-	marco_talk_01[6] = GSW(1705); //Flavio Dialogue
+	marco_talk_01[6] = GSW(1705);
 	marco_talk_01[7] = EVT_HELPER_CMD(1, 39);
 	marco_talk_01[8] = 99; //Never should be reachable
 	marco_talk_01[22] = 0;
@@ -133,10 +163,10 @@ void ApplyGor01Patches(OSModuleInfo* module_info)
 	marco_talk_01[494] = EVT_HELPER_CMD(0, 2);
 	marco_talk_01[495] = EVT_HELPER_CMD(0, 1);
 
-	master_init[1] = GSW(1705); //Podley init
+	master_init[1] = GSW(1705);
 	master_init[2] = 1;
 
-	master_talk[99] = GSW(1705); //Podley Dialogue
+	master_talk[99] = GSW(1705);
 	master_talk[101] = 1;
 	master_talk[109] = 2;
 	master_talk[120] = 3;
@@ -144,13 +174,14 @@ void ApplyGor01Patches(OSModuleInfo* module_info)
 	master_talk[545] = 4;
 	master_talk[556] = 4;
 	master_talk[563] = EVT_HELPER_CMD(0, 42);
-	master_talk[486] = EVT_HELPER_CMD(0, 0);
+	master_talk[564] = EVT_HELPER_CMD(0, 0);
 	master_talk[571] = EVT_HELPER_CMD(0, 49);
 	master_talk[572] = EVT_HELPER_CMD(0, 2);
 	master_talk[573] = EVT_HELPER_CMD(0, 1);
 
-	shoptender_init[0] = EVT_HELPER_CMD(0, 0); //Contact Lens NPC
+	shoptender_init[0] = EVT_HELPER_CMD(0, 0);
 	shoptender_init[1] = EVT_HELPER_CMD(0, 0);
+	shoptender_init[2] = EVT_HELPER_CMD(0, 0);
 
 	patch::writePatch(&shoptender_talk[189], shoptender_talk_evt, sizeof(shoptender_talk_evt)); //Shoptender Dialogue
 
@@ -163,8 +194,7 @@ void ApplyGor01Patches(OSModuleInfo* module_info)
 	patch::writePatch(&chusan2_talk[0], chusan2_talk_evt, sizeof(chusan2_talk_evt)); //Random NPC 7 Speach
 	patch::writePatch(&bomhei_talk[0], bomhei_talk_evt, sizeof(bomhei_talk_evt)); //Random NPC 8 Speach
 
-	bottakuru_init[1] = GSW(1710);
-	bottakuru_init[2] = 1;
+	patch::writePatch(&bottakuru_init[0], bottakuru_init_hook, sizeof(bottakuru_init_hook));
 
 	luigi_init_01[1] = GSW(1710); //Luigi Init
 	luigi_init_01[2] = EVT_HELPER_CMD(1, 36);

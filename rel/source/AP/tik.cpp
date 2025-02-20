@@ -21,8 +21,6 @@
 using namespace mod;
 using namespace ttyd;
 
-EVT_DECLARE_USER_FUNC(checkChapterRequirements, 1)
-
 EVT_DEFINE_USER_FUNC(checkChapterRequirements) {
 	auto& state = gMod->state_;
 	int8_t count = 0;

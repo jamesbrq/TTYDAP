@@ -108,11 +108,11 @@ EVT_BEGIN(mony_talk_muj_00_evt)
 	IF_EQUAL(GSW(1709), 8)
 		USER_FUNC(evt_msg::evt_msg_print, 0, PTR("stg5_muj_94_04"), 0, PTR("me"))
 	ELSE()
-		SWITCH(GSW(1750))
-			CASE_EQUAL(256)
+		SWITCH(GSW(1717))
+			CASE_EQUAL(13)
 				USER_FUNC(evt_msg::evt_msg_print, 0, PTR("stg5_muj_94_04"), 0, PTR("me"))
 			CASE_END()
-			CASE_BETWEEN(257, 258)
+			CASE_BETWEEN(14, 15)
 				USER_FUNC(evt_msg::evt_msg_print, 0, PTR("stg5_muj_117_07"), 0, PTR("me"))
 			CASE_END()
 		END_SWITCH()
@@ -129,11 +129,11 @@ EVT_BEGIN(peton_talk_muj_00_evt)
 	IF_EQUAL(GSW(1709), 8)
 		USER_FUNC(evt_msg::evt_msg_print, 0, PTR("stg5_muj_94_04"), 0, PTR("me"))
 	ELSE()
-		SWITCH(GSW(1750))
-			CASE_EQUAL(256)
+		SWITCH(GSW(1717))
+			CASE_EQUAL(13)
 				USER_FUNC(evt_msg::evt_msg_print, 0, PTR("stg5_muj_94_04"), 0, PTR("me"))
 			CASE_END()
-			CASE_BETWEEN(257, 258)
+			CASE_BETWEEN(14, 15)
 				USER_FUNC(evt_msg::evt_msg_print, 0, PTR("stg5_muj_117_07"), 0, PTR("me"))
 			CASE_END()
 		END_SWITCH()
@@ -147,8 +147,9 @@ EVT_BEGIN(peton_talk_muj_00_hook)
 EVT_END()
 
 EVT_BEGIN(muj_00_init_evt_evt)
-	IF_EQUAL(GSW(1709), 8)
-		USER_FUNC(evt_msg::evt_msg_print, 0, PTR("stg5_muj_94_04"), 0, PTR("me"))
+	IF_EQUAL(GSW(1705), 9)
+		RUN_EVT(mujinto_hyochaku)
+		USER_FUNC(evt_hit::evt_hitobj_onoff, PTR("A_b_bero01"), 1, 0)
 		SET(LW(0), 1)
 	END_IF()
 	RETURN()
@@ -168,33 +169,38 @@ EVT_END()
 EVT_BEGIN(muj_00_init_evt_hook)
 	RUN_CHILD_EVT(muj_00_init_evt_evt)
 	IF_EQUAL(LW(0), 1)
-		USER_FUNC(evt_hit::evt_hitobj_onoff, PTR("A_b_bero01"), 1, 0)
 		RETURN()
 	END_IF()
-	IF_EQUAL(GSW(1717), 256)
+	IF_EQUAL(GSW(1717), 13)
 		RUN_CHILD_EVT(muj_00_init_evt_evt_2)
 		RETURN()
 	END_IF()
-	GOTO(90)
+	GOTO(&muj_00_init_evt[323])
 EVT_END()
 
 EVT_BEGIN(garawaru_init_muj_01_evt)
 	SWITCH(GSW(1717))
-		CASE_BETWEEN(242, 254)
+		CASE_BETWEEN(1, 11)
 			USER_FUNC(evt_npc::evt_npc_set_position, PTR("me"), -155, 0, 170)
 		CASE_END()
-		CASE_LARGE_EQUAL(269)
+		CASE_LARGE_EQUAL(26)
 			USER_FUNC(evt_npc::evt_npc_set_position, PTR("me"), -110, 0, 225)
 		CASE_END()
 	END_SWITCH()
-	SWITCH(GSW(1705))
-		CASE_BETWEEN(232, 238)
+	IF_LARGE_EQUAL(GSW(1705), 10)
+		IF_SMALL_EQUAL(GSW(1705), 11)
+			USER_FUNC(evt_npc::evt_npc_set_position, PTR("me"), -155, 0, 170)
+			RETURN()
+		END_IF()
+	END_IF()
+	SWITCH(GSW(1719))
+		CASE_BETWEEN(0, 5)
 			USER_FUNC(evt_npc::evt_npc_set_position, PTR("me"), -155, 0, 170)
 		CASE_END()
-		CASE_EQUAL(239)
+		CASE_EQUAL(6)
 			USER_FUNC(evt_npc::evt_npc_set_position, PTR("me"), -110, 0, 225)
 		CASE_END()
-		CASE_BETWEEN(240, 2241)
+		CASE_BETWEEN(7, 8)
 			USER_FUNC(evt_npc::evt_npc_set_position, PTR("me"), -155, 0, 170)
 		CASE_END()
 	END_SWITCH()
@@ -207,16 +213,45 @@ EVT_BEGIN(garawaru_init_muj_01_hook)
 EVT_END()
 
 EVT_BEGIN(garawaru_talk_muj_01_evt)
-	SWITCH(GSW(1705))
-		CASE_EQUAL(233)
-			USER_FUNC(evt_msg::evt_msg_print, 0, PTR("$"), 0, PTR("me"))
+	IF_EQUAL(GSW(1705), 11)
+		USER_FUNC(evt_msg::evt_msg_print, 0, PTR("stg5_muj_22_1"), 0, PTR("me"))
+		RETURN()
+	END_IF()
+	IF_SMALL_EQUAL(GSW(1707), 16)
+		IF_EQUAL(GSWF(3878), 0)
+			SET(LF(0), 0)
+			IF_LARGE_EQUAL(GSW(1707), 3)
+				IF_SMALL_EQUAL(GSW(1707), 3)
+					IF_EQUAL(GSWF(3877), 1)
+						SET(GSWF(3878), 1)
+						SET(LF(0), 1)
+					END_IF()
+				END_IF()
+			END_IF()
+			IF_EQUAL(LF(0), 0)
+				USER_FUNC(evt_mario::evt_mario_get_party, LW(0))
+				IF_EQUAL(LW(0), 3)
+					USER_FUNC(evt_msg::evt_msg_print, 0, PTR("stg5_muj_152"), 0, PTR("me"))
+				ELSE()
+					USER_FUNC(evt_msg::evt_msg_print, 0, PTR("stg5_muj_1522_01"), 0, PTR("me"))
+				END_IF()
+			ELSE()
+				USER_FUNC(evt_mario::evt_mario_get_party, LW(0))
+				IF_EQUAL(LW(0), 3)
+					USER_FUNC(evt_msg::evt_msg_print, 0, PTR("stg7_muj_01"), 0, PTR("me"))
+				ELSE()
+					USER_FUNC(evt_msg::evt_msg_print, 0, PTR("stg7_muj_012_01"), 0, PTR("me"))
+				END_IF()
+			END_IF()
 			RETURN()
-		CASE_END()
-		CASE_BETWEEN(234, 238)
+		END_IF()
+	END_IF()
+	SWITCH(GSW(1719))
+		CASE_BETWEEN(0, 5)
 			USER_FUNC(evt_msg::evt_msg_print, 0, PTR("stg5_muj_32_02"), 0, PTR("me"))
 			RETURN()
 		CASE_END()
-		CASE_EQUAL(239)
+		CASE_EQUAL(6)
 			USER_FUNC(evt_mario::evt_mario_get_party, LW(0))
 			IF_EQUAL(LW(0), 3)
 				USER_FUNC(evt_msg::evt_msg_print, 0, PTR("stg5_muj_71_05"), 0, PTR("me"))
@@ -225,7 +260,7 @@ EVT_BEGIN(garawaru_talk_muj_01_evt)
 			END_IF()
 			RETURN()
 		CASE_END()
-		CASE_BETWEEN(240, 241)
+		CASE_BETWEEN(7, 8)
 			USER_FUNC(evt_mario::evt_mario_get_party, LW(0))
 			IF_EQUAL(LW(0), 3)
 				USER_FUNC(evt_msg::evt_msg_print, 0, PTR("stg5_muj_90_02"), 0, PTR("me"))
@@ -236,7 +271,7 @@ EVT_BEGIN(garawaru_talk_muj_01_evt)
 		CASE_END()
 	END_SWITCH()
 	SWITCH(GSW(1717))
-		CASE_BETWEEN(242, 254)
+		CASE_BETWEEN(1, 11)
 			USER_FUNC(evt_mario::evt_mario_get_party, LW(0))
 			IF_EQUAL(LW(0), 3)
 				USER_FUNC(evt_msg::evt_msg_print, 0, PTR("stg5_muj_90_13"), 0, PTR("me"))
@@ -245,7 +280,7 @@ EVT_BEGIN(garawaru_talk_muj_01_evt)
 			END_IF()
 			RETURN()
 		CASE_END()
-		CASE_BETWEEN(268, 272)
+		CASE_BETWEEN(25, 29)
 			USER_FUNC(evt_mario::evt_mario_get_party, LW(0))
 			IF_EQUAL(LW(0), 3)
 				USER_FUNC(evt_msg::evt_msg_print, 0, PTR("stg5_muj_149"), 0, PTR("me"))
@@ -275,36 +310,7 @@ EVT_BEGIN(garawaru_talk_muj_01_evt)
 			RETURN()
 		CASE_END()
 	END_SWITCH()
-	IF_LARGE_EQUAL(GSW(1709), 10)
-		IF_SMALL_EQUAL(GSW(1707), 373)
-			SET(LF(0), 0)
-			IF_LARGE_EQUAL(GSW(1707), 354)
-				IF_SMALL_EQUAL(GSW(1707), 354)
-					IF_EQUAL(GSWF(3877), 1)
-						SET(GSWF(3878), 1)
-						SET(LF(0), 1)
-					END_IF()
-				END_IF()
-			END_IF()
-		END_IF()
-		IF_EQUAL(LF(0), 0)
-			USER_FUNC(evt_mario::evt_mario_get_party, LW(0))
-			IF_EQUAL(LW(0), 3)
-				USER_FUNC(evt_msg::evt_msg_print, 0, PTR("stg5_muj_152"), 0, PTR("me"))
-			ELSE()
-				USER_FUNC(evt_msg::evt_msg_print, 0, PTR("stg5_muj_1522_01"), 0, PTR("me"))
-			END_IF()
-		ELSE()
-			USER_FUNC(evt_mario::evt_mario_get_party, LW(0))
-			IF_EQUAL(LW(0), 3)
-				USER_FUNC(evt_msg::evt_msg_print, 0, PTR("stg7_muj_01"), 0, PTR("me"))
-			ELSE()
-				USER_FUNC(evt_msg::evt_msg_print, 0, PTR("stg7_muj_012_01"), 0, PTR("me"))
-			END_IF()
-		END_IF()
-		RETURN()
-	END_IF()
-	IF_SMALL(GSW(1708), 401)
+	IF_SMALL(GSW(1708), 17)
 		USER_FUNC(evt_mario::evt_mario_get_party, LW(0))
 		IF_EQUAL(LW(0), 3)
 			USER_FUNC(evt_msg::evt_msg_print, 0, PTR("stg5_muj_153"), 0, PTR("me"))
@@ -328,15 +334,19 @@ EVT_BEGIN(garawaru_talk_muj_01_hook)
 EVT_END()
 
 EVT_BEGIN(marco_init_muj_01_evt)
-	IF_LARGE_EQUAL(GSW(1705), 232)
-		IF_SMALL_EQUAL(GSW(1705), 239)
-			USER_FUNC(evt_npc::evt_npc_set_position, PTR("me"), -164, 0, 170)
-			USER_FUNC(evt_npc::evt_npc_set_ry, PTR("me"), 90)
-			RETURN()
-		END_IF()
+	IF_LARGE_EQUAL(GSW(1705), 10)
+		USER_FUNC(evt_npc::evt_npc_set_position, PTR("me"), -164, 0, 170)
+		USER_FUNC(evt_npc::evt_npc_set_ry, PTR("me"), 90)
+		RETURN()
 	END_IF()
-	IF_LARGE_EQUAL(GSW(1717), 243)
-		IF_SMALL_EQUAL(GSW(1717), 254)
+	IF_SMALL_EQUAL(GSW(1705), 6)
+		USER_FUNC(evt_npc::evt_npc_set_position, PTR("me"), -164, 0, 170)
+		USER_FUNC(evt_npc::evt_npc_set_ry, PTR("me"), 90)
+		RETURN()
+	END_IF()
+	END_IF()
+	IF_LARGE_EQUAL(GSW(1717), 2)
+		IF_SMALL_EQUAL(GSW(1717), 11)
 			USER_FUNC(evt_npc::evt_npc_set_position, PTR("me"), -164, 0, 170)
 			USER_FUNC(evt_npc::evt_npc_set_ry, PTR("me"), 90)
 		END_IF()
@@ -350,10 +360,8 @@ EVT_BEGIN(marco_init_muj_01_hook)
 EVT_END()
 
 EVT_BEGIN(megane_init_muj_01_evt)
-	IF_LARGE_EQUAL(GSW(1705), 234)
-		IF_SMALL_EQUAL(GSW(1717), 250)
-			USER_FUNC(evt_npc::evt_npc_set_position, PTR("me"), 115, 0, 247)
-		END_IF()
+	IF_LARGE_EQUAL(GSW(1719), 1)
+		USER_FUNC(evt_npc::evt_npc_set_position, PTR("me"), 115, 0, 247)
 	END_IF()
 	RETURN()
 EVT_END()
@@ -364,10 +372,8 @@ EVT_BEGIN(megane_init_muj_01_hook)
 EVT_END()
 
 EVT_BEGIN(odoodo_init_muj_01_evt)
-	IF_LARGE_EQUAL(GSW(1705), 234)
-		IF_SMALL_EQUAL(GSW(1717), 254)
-			USER_FUNC(evt_npc::evt_npc_set_position, PTR("me"), 95, 0, 82)
-		END_IF()
+	IF_LARGE_EQUAL(GSW(1719), 1)
+		USER_FUNC(evt_npc::evt_npc_set_position, PTR("me"), 95, 0, 82)
 	END_IF()
 	RETURN()
 EVT_END()
@@ -378,10 +384,8 @@ EVT_BEGIN(odoodo_init_muj_01_hook)
 EVT_END()
 
 EVT_BEGIN(suifu_a_init_muj_01_evt)
-	IF_LARGE_EQUAL(GSW(1705), 232)
-		IF_SMALL_EQUAL(GSW(1717), 261)
-			USER_FUNC(evt_npc::evt_npc_set_position, PTR("me"), -193, 0, 77)
-		END_IF()
+	IF_LARGE_EQUAL(GSW(1705), 10)
+		USER_FUNC(evt_npc::evt_npc_set_position, PTR("me"), -193, 0, 77)
 	END_IF()
 	RETURN()
 EVT_END()
@@ -392,26 +396,26 @@ EVT_BEGIN(suifu_a_init_muj_01_hook)
 EVT_END()
 
 EVT_BEGIN(suifu_a_talk_muj_01_evt)
-	SWITCH(GSW(1705))
-		CASE_EQUAL(233)
-			USER_FUNC(evt_msg::evt_msg_print, 0, PTR("stg5_muj_22_2"), 0, PTR("me"))
-			RETURN()
-		CASE_END()
-		CASE_BETWEEN(234, 238)
+	IF_EQUAL(GSW(1705), 11)
+		USER_FUNC(evt_msg::evt_msg_print, 0, PTR("stg5_muj_22_2"), 0, PTR("me"))
+		RETURN()
+	END_IF()
+	SWITCH(GSW(1719))
+		CASE_BETWEEN(0, 5)
 			USER_FUNC(evt_msg::evt_msg_print, 0, PTR("stg5_muj_32_03"), 0, PTR("me"))
 			RETURN()
 		CASE_END()
-		CASE_BETWEEN(239, 241)
+		CASE_BETWEEN(6, 8)
 			USER_FUNC(evt_msg::evt_msg_print, 0, PTR("stg5_muj_71_06"), 0, PTR("me"))
 			RETURN()
 		CASE_END()
 	END_SWITCH()
 	SWITCH(GSW(1717))
-		CASE_BETWEEN(242, 254)
+		CASE_BETWEEN(1, 11)
 			USER_FUNC(evt_msg::evt_msg_print, 0, PTR("stg5_muj_90_14"), 0, PTR("me"))
 			RETURN()
 		CASE_END()
-		CASE_LARGE_EQUAL(255)
+		CASE_LARGE_EQUAL(12)
 			USER_FUNC(evt_msg::evt_msg_print, 0, PTR("stg5_muj_90_16"), 0, PTR("me"))
 		CASE_END()
 	END_SWITCH()
@@ -424,10 +428,8 @@ EVT_BEGIN(suifu_a_talk_muj_01_hook)
 EVT_END()
 
 EVT_BEGIN(suifu_bomb_init_evt)
-	IF_LARGE_EQUAL(GSW(1705), 232)
-		IF_SMALL_EQUAL(GSW(1717), 261)
-			USER_FUNC(evt_npc::evt_npc_set_position, PTR("me"), -33, 0, 74)
-		END_IF()
+	IF_LARGE_EQUAL(GSW(1705), 10)
+		USER_FUNC(evt_npc::evt_npc_set_position, PTR("me"), -33, 0, 74)
 	END_IF()
 	RETURN()
 EVT_END()
@@ -438,26 +440,26 @@ EVT_BEGIN(suifu_bomb_init_hook)
 EVT_END()
 
 EVT_BEGIN(suifu_bomb_talk_evt)
+	IF_EQUAL(GSW(1705), 11)
+		USER_FUNC(evt_msg::evt_msg_print, 0, PTR("stg5_muj_22_3"), 0, PTR("me"))
+		RETURN()
+	END_IF()
 	SWITCH(GSW(1705))
-		CASE_EQUAL(233)
-			USER_FUNC(evt_msg::evt_msg_print, 0, PTR("stg5_muj_22_3"), 0, PTR("me"))
-			RETURN()
-		CASE_END()
-		CASE_BETWEEN(234, 238)
+		CASE_BETWEEN(0, 5)
 			USER_FUNC(evt_msg::evt_msg_print, 0, PTR("stg5_muj_32_04"), 0, PTR("me"))
 			RETURN()
 		CASE_END()
-		CASE_BETWEEN(239, 241)
+		CASE_BETWEEN(6, 8)
 			USER_FUNC(evt_msg::evt_msg_print, 0, PTR("stg5_muj_71_07"), 0, PTR("me"))
 			RETURN()
 		CASE_END()
 	END_SWITCH()
 	SWITCH(GSW(1717))
-		CASE_BETWEEN(242, 254)
+		CASE_BETWEEN(1, 11)
 			USER_FUNC(evt_msg::evt_msg_print, 0, PTR("stg5_muj_90_15"), 0, PTR("me"))
 			RETURN()
 		CASE_END()
-		CASE_LARGE_EQUAL(255)
+		CASE_LARGE_EQUAL(12)
 			USER_FUNC(evt_msg::evt_msg_print, 0, PTR("stg5_muj_90_17"), 0, PTR("me"))
 		CASE_END()
 	END_SWITCH()
@@ -470,8 +472,8 @@ EVT_BEGIN(suifu_bomb_talk_hook)
 EVT_END()
 
 EVT_BEGIN(suifu_d_talk_muj_01_evt)
-	IF_LARGE_EQUAL(GSW(1717), 268)
-		IF_SMALL_EQUAL(GSW(1717), 272)
+	IF_LARGE_EQUAL(GSW(1717), 25)
+		IF_SMALL_EQUAL(GSW(1717), 29)
 			USER_FUNC(evt_msg::evt_msg_print, 0, PTR("stg5_muj_159"), 0, PTR("me"))
 			RETURN()
 		END_IF()
@@ -485,15 +487,9 @@ EVT_BEGIN(suifu_d_talk_muj_01_evt)
 			USER_FUNC(evt_msg::evt_msg_print, 0, PTR("stg5_muj_161"), 0, PTR("me"))
 			RETURN()
 		CASE_END()
-		CASE_LARGE_EQUAL(10)
-			IF_SMALL_EQUAL(GSW(1707), 377)
-				USER_FUNC(evt_msg::evt_msg_print, 0, PTR("stg5_muj_162"), 0, PTR("me"))
-				RETURN()
-			END_IF()
-		CASE_END()
 	END_SWITCH()
-	IF_LARGE_EQUAL(GSW(1707), 377)
-		IF_SMALL_EQUAL(GSW(1708), 402)
+	IF_LARGE_EQUAL(GSW(1707), 20)
+		IF_SMALL_EQUAL(GSW(1708), 18)
 			USER_FUNC(evt_msg::evt_msg_print, 0, PTR("stg5_muj_163"), 0, PTR("me"))
 			RETURN()
 		END_IF()
@@ -508,8 +504,8 @@ EVT_BEGIN(suifu_d_talk_muj_01_hook)
 EVT_END()
 
 EVT_BEGIN(borosuifu_a_talk_evt)
-	IF_LARGE_EQUAL(GSW(1717), 268)
-		IF_SMALL_EQUAL(GSW(1717), 272)
+	IF_LARGE_EQUAL(GSW(1717), 25)
+		IF_SMALL_EQUAL(GSW(1717), 29)
 			USER_FUNC(evt_msg::evt_msg_print, 0, PTR("stg5_muj_154"), 0, PTR("me"))
 			RETURN()
 		END_IF()
@@ -523,15 +519,9 @@ EVT_BEGIN(borosuifu_a_talk_evt)
 			USER_FUNC(evt_msg::evt_msg_print, 0, PTR("stg5_muj_156"), 0, PTR("me"))
 			RETURN()
 		CASE_END()
-		CASE_LARGE_EQUAL(10)
-			IF_SMALL_EQUAL(GSW(1707), 377)
-				USER_FUNC(evt_msg::evt_msg_print, 0, PTR("stg5_muj_157"), 0, PTR("me"))
-				RETURN()
-			END_IF()
-		CASE_END()
 	END_SWITCH()
-	IF_LARGE_EQUAL(GSW(1707), 377)
-		IF_SMALL_EQUAL(GSW(1708), 402)
+	IF_LARGE_EQUAL(GSW(1707), 20)
+		IF_SMALL_EQUAL(GSW(1708), 18)
 			USER_FUNC(evt_msg::evt_msg_print, 0, PTR("stg5_muj_158"), 0, PTR("me"))
 			RETURN()
 		END_IF()
@@ -546,8 +536,8 @@ EVT_BEGIN(borosuifu_a_talk_hook)
 EVT_END()
 
 EVT_BEGIN(borosuifu_b_talk_evt)
-	IF_LARGE_EQUAL(GSW(1717), 268)
-		IF_SMALL_EQUAL(GSW(1717), 272)
+	IF_LARGE_EQUAL(GSW(1717), 25)
+		IF_SMALL_EQUAL(GSW(1717), 29)
 			USER_FUNC(evt_msg::evt_msg_print, 0, PTR("stg5_muj_164"), 0, PTR("me"))
 			RETURN()
 		END_IF()
@@ -561,15 +551,9 @@ EVT_BEGIN(borosuifu_b_talk_evt)
 			USER_FUNC(evt_msg::evt_msg_print, 0, PTR("stg5_muj_166"), 0, PTR("me"))
 			RETURN()
 		CASE_END()
-		CASE_LARGE_EQUAL(10)
-			IF_SMALL_EQUAL(GSW(1707), 377)
-				USER_FUNC(evt_msg::evt_msg_print, 0, PTR("stg5_muj_167"), 0, PTR("me"))
-				RETURN()
-			END_IF()
-		CASE_END()
 	END_SWITCH()
-	IF_LARGE_EQUAL(GSW(1707), 377)
-		IF_SMALL_EQUAL(GSW(1708), 402)
+	IF_LARGE_EQUAL(GSW(1707), 20)
+		IF_SMALL_EQUAL(GSW(1708), 18)
 			USER_FUNC(evt_msg::evt_msg_print, 0, PTR("stg5_muj_168"), 0, PTR("me"))
 			RETURN()
 		END_IF()
@@ -585,46 +569,46 @@ EVT_END()
 
 void ApplyMujPatches(OSModuleInfo* module_info)
 {
-	garawaru_init_muj_00[1] = GSW(1705);
-	garawaru_init_muj_00[3] = 257;
-	garawaru_init_muj_00[4] = 258;
+	garawaru_init_muj_00[1] = GSW(1717);
+	garawaru_init_muj_00[3] = 14;
+	garawaru_init_muj_00[4] = 15;
 
-	odoodo_init_muj_00[1] = GSW(1705);
-	odoodo_init_muj_00[3] = 257;
-	odoodo_init_muj_00[4] = 258;
+	odoodo_init_muj_00[1] = GSW(1717);
+	odoodo_init_muj_00[3] = 14;
+	odoodo_init_muj_00[4] = 15;
 
-	suifu_c_init[1] = GSW(1705);
-	suifu_c_init[3] = 257;
-	suifu_c_init[4] = 258;
+	suifu_c_init[1] = GSW(1717);
+	suifu_c_init[3] = 14;
+	suifu_c_init[4] = 15;
 
-	suifu_c_talk[1] = GSW(1705);
-	suifu_c_talk[3] = 256;
-	suifu_c_talk[11] = 257;
-	suifu_c_talk[12] = 258;
+	suifu_c_talk[1] = GSW(1717);
+	suifu_c_talk[3] = 13;
+	suifu_c_talk[11] = 14;
+	suifu_c_talk[12] = 15;
 
-	suifu_d_init_muj_00[1] = GSW(1705);
-	suifu_d_init_muj_00[3] = 257;
-	suifu_d_init_muj_00[4] = 258;
+	suifu_d_init_muj_00[1] = GSW(1717);
+	suifu_d_init_muj_00[3] = 14;
+	suifu_d_init_muj_00[4] = 15;
 
-	suifu_d_talk_muj_00[1] = GSW(1705);
-	suifu_d_talk_muj_00[3] = 256;
-	suifu_d_talk_muj_00[11] = 257;
-	suifu_d_talk_muj_00[12] = 258;
+	suifu_d_talk_muj_00[1] = GSW(1717);
+	suifu_d_talk_muj_00[3] = 13;
+	suifu_d_talk_muj_00[11] = 14;
+	suifu_d_talk_muj_00[12] = 15;
 
-	suifu_e_init[1] = GSW(1705);
-	suifu_e_init[3] = 257;
-	suifu_e_init[4] = 258;
+	suifu_e_init[1] = GSW(1717);
+	suifu_e_init[3] = 14;
+	suifu_e_init[4] = 15;
 
-	suifu_e_talk[1] = GSW(1705);
-	suifu_e_talk[3] = 256;
-	suifu_e_talk[11] = 257;
-	suifu_e_talk[12] = 258;
+	suifu_e_talk[1] = GSW(1717);
+	suifu_e_talk[3] = 13;
+	suifu_e_talk[11] = 14;
+	suifu_e_talk[12] = 15;
 
-	korutesu_init_muj_00[1] = GSW(1705);
-	korutesu_init_muj_00[3] = 267;
+	korutesu_init_muj_00[1] = GSW(1717);
+	korutesu_init_muj_00[3] = 24;
 
-	korutesu_talk_muj_00[1] = GSW(1705);
-	korutesu_talk_muj_00[3] = 268;
+	korutesu_talk_muj_00[1] = GSW(1717);
+	korutesu_talk_muj_00[3] = 25;
 
 	patch::writePatch(&mony_talk_muj_00[0], mony_talk_muj_00_hook, sizeof(mony_talk_muj_00_hook));
 
@@ -633,22 +617,22 @@ void ApplyMujPatches(OSModuleInfo* module_info)
 	mujinto_hyochaku[277] = GSW(1705);
 	mujinto_hyochaku[278] = 10;
 
-	dai3_shurai_sub[1096] = GSW(1705);
-	dai3_shurai_sub[1097] = 257;
+	dai3_shurai_sub[1096] = GSW(1717);
+	dai3_shurai_sub[1097] = 14;
 
-	kaizoku_vs_dai3[522] = GSW(1705);
-	kaizoku_vs_dai3[523] = 260;
+	kaizoku_vs_dai3[522] = GSW(1717);
+	kaizoku_vs_dai3[523] = 17;
 
-	dai3_beat_back[148] = GSW(1705);
-	dai3_beat_back[149] = 261;
+	dai3_beat_back[148] = GSW(1717);
+	dai3_beat_back[149] = 18;
 	
-	leave_island[757] = GSW(1705);
-	leave_island[758] = 268;
+	leave_island[757] = GSW(1717);
+	leave_island[758] = 25;
 	
 	into_muj_ship[161] = GSW(1709);
-	into_muj_ship[162] = 3;
+	into_muj_ship[162] = 4;
 	into_muj_ship[164] = GSW(1709);
-	into_muj_ship[165] = 4;
+	into_muj_ship[165] = 5;
 
 	mony_peton_boarding[4] = GSW(1709);
 	mony_peton_boarding[5] = 7;
@@ -660,28 +644,26 @@ void ApplyMujPatches(OSModuleInfo* module_info)
 	mony_peton_boarding[112] = 8;
 
 	muj_00_init_evt[29] = GSW(1717);
-	muj_00_init_evt[30] = 268;
+	muj_00_init_evt[30] = 25;
 	muj_00_init_evt[46] = GSW(1705);
 	muj_00_init_evt[47] = 9;
 	muj_00_init_evt[49] = GSW(1717);
-	muj_00_init_evt[50] = 267;
+	muj_00_init_evt[50] = 24;
 	muj_00_init_evt[52] = GSW(1717);
-	muj_00_init_evt[53] = 260;
+	muj_00_init_evt[53] = 17;
 	muj_00_init_evt[98] = GSW(1708);
-	muj_00_init_evt[99] = 382;
+	muj_00_init_evt[99] = 2;
 	muj_00_init_evt[236] = GSW(1717);
-	muj_00_init_evt[237] = 255;
+	muj_00_init_evt[237] = 12;
 	muj_00_init_evt[264] = GSW(1717);
-	muj_00_init_evt[265] = 260;
+	muj_00_init_evt[265] = 17;
 	muj_00_init_evt[281] = GSW(1717);
-	muj_00_init_evt[282] = 257;
+	muj_00_init_evt[282] = 14;
 	muj_00_init_evt[284] = GSW(1717);
-	muj_00_init_evt[285] = 258;
+	muj_00_init_evt[285] = 15;
 
 	patch::writePatch(&muj_00_init_evt[296], muj_00_init_evt_hook, sizeof(muj_00_init_evt_hook));
 
-	muj_00_init_evt[321] = EVT_HELPER_CMD(1, 3);
-	muj_00_init_evt[322] = 90;
 	muj_00_init_evt[323] = EVT_HELPER_CMD(1, 34);
 	muj_00_init_evt[324] = GSW(1717);
 
@@ -691,9 +673,9 @@ void ApplyMujPatches(OSModuleInfo* module_info)
 
 	patch::writePatch(&marco_init_muj_01[0], marco_init_muj_01_hook, sizeof(marco_init_muj_01_hook));
 
-	marco_talk_muj_01[1] = GSW(1705);
-	marco_talk_muj_01[3] = 234;
-	marco_talk_muj_01[4] = 237;
+	marco_talk_muj_01[1] = GSW(1719);
+	marco_talk_muj_01[3] = 1;
+	marco_talk_muj_01[4] = 4;
 	marco_talk_muj_01[13] = GSW(1705);
 	marco_talk_muj_01[15] = 233;
 	marco_talk_muj_01[23] = 234;
@@ -709,24 +691,24 @@ void ApplyMujPatches(OSModuleInfo* module_info)
 
 	patch::writePatch(&megane_init_muj_01[0], megane_init_muj_01_hook, sizeof(megane_init_muj_01_hook));
 
-	megane_talk_muj_01[1] = GSW(1705);
-	megane_talk_muj_01[3] = 234;
-	megane_talk_muj_01[4] = 238;
-	megane_talk_muj_01[12] = 239;
-	megane_talk_muj_01[34] = 240;
-	megane_talk_muj_01[35] = 241;
+	megane_talk_muj_01[1] = GSW(1719);
+	megane_talk_muj_01[3] = 1;
+	megane_talk_muj_01[4] = 5;
+	megane_talk_muj_01[12] = 6;
+	megane_talk_muj_01[34] = 7;
+	megane_talk_muj_01[35] = 8;
 	megane_talk_muj_01[42] = EVT_HELPER_CMD(0, 42);
 	megane_talk_muj_01[43] = 0;
 	megane_talk_muj_01[44] = 0;
 
 	patch::writePatch(&odoodo_init_muj_01[0], odoodo_init_muj_01_hook, sizeof(odoodo_init_muj_01_hook));
 
-	odoodo_talk_muj_01[1] = GSW(1705);
-	odoodo_talk_muj_01[3] = 234;
-	odoodo_talk_muj_01[4] = 238;
-	odoodo_talk_muj_01[12] = 239;
-	odoodo_talk_muj_01[34] = 240;
-	odoodo_talk_muj_01[35] = 241;
+	odoodo_talk_muj_01[1] = GSW(1719);
+	odoodo_talk_muj_01[3] = 1;
+	odoodo_talk_muj_01[4] = 5;
+	odoodo_talk_muj_01[12] = 6;
+	odoodo_talk_muj_01[34] = 7;
+	odoodo_talk_muj_01[35] = 8;
 	odoodo_talk_muj_01[42] = EVT_HELPER_CMD(0, 42);
 	odoodo_talk_muj_01[43] = 0;
 	odoodo_talk_muj_01[44] = 0;
@@ -740,51 +722,51 @@ void ApplyMujPatches(OSModuleInfo* module_info)
 	patch::writePatch(&suifu_bomb_talk[0], suifu_bomb_talk_hook, sizeof(suifu_bomb_talk_hook));
 
 	suifu_d_init_muj_01[1] = GSW(1717);
-	suifu_d_init_muj_01[3] = 269;
+	suifu_d_init_muj_01[3] = 26;
 
 	suifu_d_regl_muj_01[1] = GSW(1717);
-	suifu_d_regl_muj_01[3] = 269;
+	suifu_d_regl_muj_01[3] = 26;
 
 	patch::writePatch(&suifu_d_talk_muj_01[0], suifu_d_talk_muj_01_hook, sizeof(suifu_d_talk_muj_01_hook));
 	
 	borosuifu_a_init[1] = GSW(1717);
-	borosuifu_a_init[3] = 269;
+	borosuifu_a_init[3] = 26;
 
 	patch::writePatch(&borosuifu_a_talk[0], borosuifu_a_talk_hook, sizeof(borosuifu_a_talk_hook));
 
 	borosuifu_b_init[6] = GSW(1717);
-	borosuifu_b_init[8] = 269;
+	borosuifu_b_init[8] = 26;
 
 	borosuifu_b_regl[1] = GSW(1717);
-	borosuifu_b_regl[3] = 269;
+	borosuifu_b_regl[3] = 26;
 
 	patch::writePatch(&borosuifu_b_talk[0], borosuifu_b_talk_hook, sizeof(borosuifu_b_talk_hook));
 
 	mony_init_muj_01[1] = GSW(1717);
-	mony_init_muj_01[3] = 269;
-	mony_init_muj_01[4] = 272;
+	mony_init_muj_01[3] = 26;
+	mony_init_muj_01[4] = 29;
 
 	peton_init_muj_01[1] = GSW(1717);
-	peton_init_muj_01[3] = 269;
-	peton_init_muj_01[4] = 272;
+	peton_init_muj_01[3] = 26;
+	peton_init_muj_01[4] = 29;
 
 	kyoshu_event[182] = GSW(1705);
 	kyoshu_event[183] = 11;
 
-	settoku_event_main[68] = GSW(1705);
-	settoku_event_main[69] = 13;
+	settoku_event_main[68] = GSW(1719);
+	settoku_event_main[69] = 2;
 
 	muj_01_init_evt[4] = GSW(1708);
-	muj_01_init_evt[5] = 400;
+	muj_01_init_evt[5] = 16;
 	muj_01_init_evt[76] = GSW(1708);
-	muj_01_init_evt[77] = 382;
+	muj_01_init_evt[77] = 2;
 	muj_01_init_evt[149] = GSW(1705);
-	muj_01_init_evt[151] = 232;
+	muj_01_init_evt[151] = 10;
 	muj_01_init_evt[155] = 234;
 	muj_01_init_evt[164] = GSW(1708);
-	muj_01_init_evt[165] = 400;
+	muj_01_init_evt[165] = 16;
 	muj_01_init_evt[187] = GSW(1708);
-	muj_01_init_evt[188] = 402;
+	muj_01_init_evt[188] = 18;
 
 	mony_init_muj_02[6] = GSW(1709);
 	mony_init_muj_02[8] = 5;
@@ -929,26 +911,26 @@ void ApplyMujPatches(OSModuleInfo* module_info)
 	muj_11_init_evt[29] = 251;
 
 	bero_custom_muj_12[1] = GSW(1717);
-	bero_custom_muj_12[3] = 252;
-	bero_custom_muj_12[57] = 257;
+	bero_custom_muj_12[3] = 9;
+	bero_custom_muj_12[57] = 14;
 
 	korutesu_event[606] = GSW(1717);
-	korutesu_event[607] = 253;
+	korutesu_event[607] = 10;
 
 	korutesu_event_after[132] = GSW(1717);
-	korutesu_event_after[133] = 253;
+	korutesu_event_after[133] = 10;
 
 	kosho_event[504] = GSW(1717);
-	kosho_event[505] = 258;
+	kosho_event[505] = 15;
 
 	muj_12_init_evt[8] = GSW(1717);
-	muj_12_init_evt[9] = 253;
+	muj_12_init_evt[9] = 10;
 	muj_12_init_evt[28] = GSW(1717);
-	muj_12_init_evt[29] = 252;
+	muj_12_init_evt[29] = 9;
 	muj_12_init_evt[44] = GSW(1717);
-	muj_12_init_evt[45] = 253;
+	muj_12_init_evt[45] = 10;
 	muj_12_init_evt[50] = GSW(1717);
-	muj_12_init_evt[51] = 257;
+	muj_12_init_evt[51] = 14;
 
 	onryo_event[20] = GSW(1705);
 	onryo_event[21] = 8;
@@ -958,14 +940,14 @@ void ApplyMujPatches(OSModuleInfo* module_info)
 	onryo_event[2236] = 9;
 
 	muj_20_koopa_evt[122] = GSW(1715);
-	muj_20_koopa_evt[123] = 216;
+	muj_20_koopa_evt[123] = 11;
 
 	muj_20_init_evt[109] = GSW(1715);
-	muj_20_init_evt[110] = 215;
+	muj_20_init_evt[110] = 10;
 	muj_20_init_evt[210] = GSW(1705);
 	muj_20_init_evt[211] = 7;
 	muj_20_init_evt[224] = GSW(1705);
 	muj_20_init_evt[225] = 8;
 	muj_20_init_evt[334] = GSW(1708);
-	muj_20_init_evt[335] = 402;
+	muj_20_init_evt[335] = 18;
 }
