@@ -51,24 +51,25 @@ extern int32_t nok_01_init_evt[];
 
 EVT_BEGIN(nokonoko_A_talk_evt)
 	IF_EQUAL(GSW(1707), 3)
+		SET(GSWF(3877), 1)
 		USER_FUNC(evt_msg::evt_msg_print, 0, PTR("stg7_nok_01"), 0, 0)
 		RETURN()
 	END_IF()
-	SWITCH(GSW(1701))
-		CASE_SMALL(9)
-			USER_FUNC(evt_msg::evt_msg_print, 0, PTR("stg1_nok_02"), 0, 0)
-			RETURN()
-		CASE_END()
-		CASE_SMALL(99) //Unknown
+	IF_SMALL(GSW(1701), 9)
+		USER_FUNC(evt_msg::evt_msg_print, 0, PTR("stg1_nok_02"), 0, 0)
+		RETURN()
+	END_IF()
+	SWITCH(GSW(1711))
+		CASE_SMALL(8)
 			USER_FUNC(evt_msg::evt_msg_print, 0, PTR("stg1_nok_02_01"), 0, 0)
 			RETURN()
 		CASE_END()
-		CASE_SMALL(99) //Unknown
+		CASE_SMALL(17)
 			USER_FUNC(evt_msg::evt_msg_print, 0, PTR("stg1_nok_03"), 0, 0)
 			RETURN()
 		CASE_END()
 	END_SWITCH()
-	IF_SMALL(GSW(1708), 99) //Unknown
+	IF_SMALL(GSW(1708), 18)
 		USER_FUNC(evt_msg::evt_msg_print, 0, PTR("stg1_nok_03_1"), 0, 0)
 		RETURN()
 	END_IF()
@@ -82,21 +83,21 @@ EVT_BEGIN(nokonoko_A_talk_hook)
 EVT_END()
 
 EVT_BEGIN(nokonoko_B_talk_evt)
-	SWITCH(GSW(1701))
-		CASE_SMALL(9)
-			USER_FUNC(evt_msg::evt_msg_print, 0, PTR("stg1_nok_04"), 0, 0)
-			RETURN()
-		CASE_END()
-		CASE_SMALL(99) //Unknown
+	IF_SMALL(GSW(1701), 9)
+		USER_FUNC(evt_msg::evt_msg_print, 0, PTR("stg1_nok_04"), 0, 0)
+		RETURN()
+	END_IF()
+	SWITCH(GSW(1711))
+		CASE_SMALL(8)
 			USER_FUNC(evt_msg::evt_msg_print, 0, PTR("stg1_nok_04_01"), 0, 0)
 			RETURN()
 		CASE_END()
-		CASE_SMALL(99) //Unknown
+		CASE_SMALL(17)
 			USER_FUNC(evt_msg::evt_msg_print, 0, PTR("stg1_nok_05"), 0, 0)
 			RETURN()
 		CASE_END()
 	END_SWITCH()
-	IF_SMALL(GSW(1708), 99) //Unknown
+	IF_SMALL(GSW(1708), 18)
 		USER_FUNC(evt_msg::evt_msg_print, 0, PTR("stg1_nok_05_1"), 0, 0)
 		RETURN()
 	END_IF()
@@ -111,21 +112,21 @@ EVT_BEGIN(nokonoko_B_talk_hook)
 EVT_END()
 
 EVT_BEGIN(nokonoko_C_talk_evt)
-	SWITCH(GSW(1701))
-		CASE_SMALL(9)
-			USER_FUNC(evt_msg::evt_msg_print, 0, PTR("stg1_nok_06"), 0, 0)
-			RETURN()
-		CASE_END()
-		CASE_SMALL(99) //Unknown
+	IF_SMALL(GSW(1701), 9)
+		USER_FUNC(evt_msg::evt_msg_print, 0, PTR("stg1_nok_06"), 0, 0)
+		RETURN()
+	END_IF()
+	SWITCH(GSW(1711))
+		CASE_SMALL(8)
 			USER_FUNC(evt_msg::evt_msg_print, 0, PTR("stg1_nok_06_01"), 0, 0)
 			RETURN()
 		CASE_END()
-		CASE_SMALL(99) //Unknown
+		CASE_SMALL(17)
 			USER_FUNC(evt_msg::evt_msg_print, 0, PTR("stg1_nok_07"), 0, 0)
 			RETURN()
 		CASE_END()
 	END_SWITCH()
-	IF_SMALL(GSW(1708), 99) //Unknown
+	IF_SMALL(GSW(1708), 18)
 		USER_FUNC(evt_msg::evt_msg_print, 0, PTR("stg1_nok_07_1"), 0, 0)
 		RETURN()
 	END_IF()
@@ -139,23 +140,23 @@ EVT_BEGIN(nokonoko_C_talk_hook)
 EVT_END()
 
 EVT_BEGIN(nokonoko_D_talk_evt)
-	SWITCH(GSW(1701))
-		CASE_SMALL(9)
-			USER_FUNC(evt_msg::evt_msg_print, 0, PTR("stg1_nok_08"), 0, 0)
-			RETURN()
-		CASE_END()
-		CASE_SMALL(99) //Unknown
+	IF_SMALL(GSW(1701), 9)
+		USER_FUNC(evt_msg::evt_msg_print, 0, PTR("stg1_nok_08"), 0, 0)
+		RETURN()
+	END_IF()
+	SWITCH(GSW(1711))
+		CASE_SMALL(8)
 			USER_FUNC(evt_msg::evt_msg_print, 0, PTR("stg1_nok_08_01"), 0, 0)
 			RETURN()
 		CASE_END()
-		CASE_SMALL(99) //Unknown
+		CASE_SMALL(17)
 			USER_FUNC(evt_msg::evt_msg_print, 0, PTR("stg1_nok_09"), 0, 0)
 			USER_FUNC(evt_msg::evt_msg_select, 0, PTR("stg1_nok_09_yesno"))
 			USER_FUNC(evt_msg::evt_msg_print, 0, PTR("stg1_nok_09_01"), 0, 0)
 			RETURN()
 		CASE_END()
 	END_SWITCH()
-	IF_SMALL(GSW(1708), 99) //Unknown
+	IF_SMALL(GSW(1708), 18)
 		USER_FUNC(evt_msg::evt_msg_print, 0, PTR("stg1_nok_09_01_1"), 0, 0)
 		RETURN()
 	END_IF()
@@ -169,21 +170,21 @@ EVT_BEGIN(nokonoko_D_talk_hook)
 EVT_END()
 
 EVT_BEGIN(nokonoko_F_talk_evt)
-	SWITCH(GSW(1701))
-		CASE_SMALL(9)
-			USER_FUNC(evt_msg::evt_msg_print, 0, PTR("stg1_nok_17"), 0, 0)
-			RETURN()
-		CASE_END()
-		CASE_SMALL(99) //Unknown
+	IF_SMALL(GSW(1701), 9)
+		USER_FUNC(evt_msg::evt_msg_print, 0, PTR("stg1_nok_17"), 0, 0)
+		RETURN()
+	END_IF()
+	SWITCH(GSW(1711))
+		CASE_SMALL(8)
 			USER_FUNC(evt_msg::evt_msg_print, 0, PTR("stg1_nok_17_01"), 0, 0)
 			RETURN()
 		CASE_END()
-		CASE_SMALL(99) //Unknown
+		CASE_SMALL(17)
 			USER_FUNC(evt_msg::evt_msg_print, 0, PTR("stg1_nok_18"), 0, 0)
 			RETURN()
 		CASE_END()
 	END_SWITCH()
-	IF_SMALL(GSW(1708), 99) //Unknown
+	IF_SMALL(GSW(1708), 18)
 		USER_FUNC(evt_msg::evt_msg_print, 0, PTR("stg1_nok_18_1"), 0, 0)
 		RETURN()
 	END_IF()
@@ -197,10 +198,10 @@ EVT_BEGIN(nokonoko_F_talk_hook)
 EVT_END()
 
 EVT_BEGIN(init_white_evt)
-	IF_EQUAL(GSW(1702), 99) //Unknown
+	IF_EQUAL(GSW(1713), 15)
 		RETURN()
 	END_IF()
-	IF_SMALL(GSW(1710), 5)
+	IF_SMALL(GSW(1707), 3)
 		USER_FUNC(evt_npc::evt_npc_set_position, PTR("me"), 375, 50, -105)
 	END_IF()
 	RETURN()
@@ -212,17 +213,15 @@ EVT_BEGIN(init_white_hook)
 EVT_END()
 
 EVT_BEGIN(talk_white_evt)
-	SWITCH(GSW(1701))
-		CASE_SMALL(9)
-			USER_FUNC(evt_msg::evt_msg_print, 0, PTR("stg1_nok_19_01"), 0, 0)
-			RETURN()
-		CASE_END()
-		CASE_SMALL(99) //Unknown
-			USER_FUNC(evt_msg::evt_msg_print, 0, PTR("stg1_nok_19_02"), 0, 0)
-			RETURN()
-		CASE_END()
-	END_SWITCH()
-	IF_SMALL(GSW(1710), 2)
+	IF_SMALL(GSW(1701), 9)
+		USER_FUNC(evt_msg::evt_msg_print, 0, PTR("stg1_nok_19_01"), 0, 0)
+		RETURN()
+	END_IF()
+	IF_SMALL(GSW(1711), 7)
+		USER_FUNC(evt_msg::evt_msg_print, 0, PTR("stg1_nok_19_02"), 0, 0)
+		RETURN()
+	END_IF()
+	IF_SMALL(GSW(1713), 11)
 		USER_FUNC(evt_msg::evt_msg_print, 0, PTR("stg1_nok_19_03"), 0, 0)
 		RETURN()
 	END_IF()
@@ -236,21 +235,21 @@ EVT_BEGIN(talk_white_hook)
 EVT_END()
 
 EVT_BEGIN(nokonoko_G_talk_evt)
-	SWITCH(GSW(1701))
-		CASE_SMALL(9)
-			USER_FUNC(evt_msg::evt_msg_print, 0, PTR("stg1_nok_20"), 0, 0)
-			RETURN()
-		CASE_END()
-		CASE_SMALL(99) //Unknown
+	IF_SMALL(GSW(1701), 9)
+		USER_FUNC(evt_msg::evt_msg_print, 0, PTR("stg1_nok_20"), 0, 0)
+		RETURN()
+	END_IF()
+	SWITCH(GSW(1711))
+		CASE_SMALL(8)
 			USER_FUNC(evt_msg::evt_msg_print, 0, PTR("stg1_nok_20_01"), 0, 0)
 			RETURN()
 		CASE_END()
-		CASE_SMALL(99) //Unknown
+		CASE_SMALL(17)
 			USER_FUNC(evt_msg::evt_msg_print, 0, PTR("stg1_nok_21"), 0, 0)
 			RETURN()
 		CASE_END()
 	END_SWITCH()
-	IF_SMALL(GSW(1708), 99) //Unknown
+	IF_SMALL(GSW(1708), 18)
 		USER_FUNC(evt_msg::evt_msg_print, 0, PTR("stg1_nok_21_1"), 0, 0)
 		RETURN()
 	END_IF()
@@ -264,23 +263,23 @@ EVT_BEGIN(nokonoko_G_talk_hook)
 EVT_END()
 
 EVT_BEGIN(nokonoko_H_talk_evt)
-	SWITCH(GSW(1701))
-		CASE_SMALL(9)
-			USER_FUNC(evt_msg::evt_msg_print, 0, PTR("stg1_nok_22"), 0, 0)
-			RETURN()
-		CASE_END()
-		CASE_SMALL(99) //Unknown
+	IF_SMALL(GSW(1701), 9)
+		USER_FUNC(evt_msg::evt_msg_print, 0, PTR("stg1_nok_22"), 0, 0)
+		RETURN()
+	END_IF()
+	SWITCH(GSW(1711))
+		CASE_SMALL(8)
 			USER_FUNC(evt_msg::evt_msg_print, 0, PTR("stg1_nok_22_01"), 0, 0)
 			RETURN()
 		CASE_END()
-		CASE_SMALL(99) //Unknown
+		CASE_SMALL(17)
 			USER_FUNC(evt_msg::evt_msg_print, 0, PTR("stg1_nok_23"), 0, 0)
 			USER_FUNC(evt_msg::evt_msg_select, 0, PTR("stg1_nok_23_yesno"))
 			USER_FUNC(evt_msg::evt_msg_print, 0, PTR("stg1_nok_23_01"), 0, 0)
 			RETURN()
 		CASE_END()
 	END_SWITCH()
-	IF_SMALL(GSW(1708), 99) //Unknown
+	IF_SMALL(GSW(1708), 18)
 		USER_FUNC(evt_msg::evt_msg_print, 0, PTR("stg1_nok_23_01_1"), 0, 0)
 		RETURN()
 	END_IF()
@@ -294,21 +293,21 @@ EVT_BEGIN(nokonoko_H_talk_hook)
 EVT_END()
 
 EVT_BEGIN(nokonoko_I_talk_evt)
-	SWITCH(GSW(1701))
-		CASE_SMALL(9)
-			USER_FUNC(evt_msg::evt_msg_print, 0, PTR("stg1_nok_24"), 0, 0)
-			RETURN()
-		CASE_END()
-		CASE_SMALL(99) //Unknown
+	IF_SMALL(GSW(1701), 9)
+		USER_FUNC(evt_msg::evt_msg_print, 0, PTR("stg1_nok_24"), 0, 0)
+		RETURN()
+	END_IF()
+	SWITCH(GSW(1711))
+		CASE_SMALL(8)
 			USER_FUNC(evt_msg::evt_msg_print, 0, PTR("stg1_nok_24_01"), 0, 0)
 			RETURN()
 		CASE_END()
-		CASE_SMALL(99) //Unknown
+		CASE_SMALL(17)
 			USER_FUNC(evt_msg::evt_msg_print, 0, PTR("stg1_nok_25"), 0, 0)
 			RETURN()
 		CASE_END()
 	END_SWITCH()
-	IF_SMALL(GSW(1708), 99) //Unknown
+	IF_SMALL(GSW(1708), 18)
 		USER_FUNC(evt_msg::evt_msg_print, 0, PTR("stg1_nok_25_1"), 0, 0)
 		RETURN()
 	END_IF()
@@ -317,8 +316,8 @@ EVT_BEGIN(nokonoko_I_talk_evt)
 EVT_END()
 
 EVT_BEGIN(nokonoko_I_talk_hook)
-RUN_CHILD_EVT(nokonoko_I_talk_evt)
-RETURN()
+	RUN_CHILD_EVT(nokonoko_I_talk_evt)
+	RETURN()
 EVT_END()
 
 EVT_BEGIN(monban_talk_evt)
@@ -335,16 +334,18 @@ EVT_BEGIN(monban_talk_evt)
 			USER_FUNC(evt_msg::evt_msg_print, 0, PTR("stg1_nok_31_01_00"), 0, 0)
 			RETURN()
 		CASE_END()
-		CASE_SMALL(99) //Unknown
+	END_SWITCH()
+	SWITCH(GSW(1711))
+		CASE_SMALL(8)
 			USER_FUNC(evt_msg::evt_msg_print, 0, PTR("stg1_nok_31_01_01"), 0, 0)
 			RETURN()
 		CASE_END()
-		CASE_SMALL(99) //Unknown
+		CASE_SMALL(17)
 			USER_FUNC(evt_msg::evt_msg_print, 0, PTR("stg1_nok_31_02_1"), 0, 0)
 			RETURN()
 		CASE_END()
 	END_SWITCH()
-	IF_SMALL(GSW(1708), 99) //Unknown
+	IF_SMALL(GSW(1708), 18)
 		USER_FUNC(evt_msg::evt_msg_print, 0, PTR("stg1_nok_31_02_2"), 0, 0)
 		RETURN()
 	END_IF()
@@ -358,7 +359,7 @@ EVT_BEGIN(monban_talk_hook)
 EVT_END()
 
 EVT_BEGIN(nokopapa_talk_evt)
-	IF_SMALL(GSW(1704), 1)
+	IF_SMALL(GSW(1704), 2)
 		IF_EQUAL(LW(0), 2)
 			USER_FUNC(evt_msg::evt_msg_print, 0, PTR("stg1_nok_79"), 0, 0)
 		ELSE()
@@ -374,7 +375,7 @@ EVT_BEGIN(nokopapa_talk_evt)
 		END_IF()
 		RETURN()
 	END_IF()
-	IF_SMALL(GSW(1708), 99) //Unknown
+	IF_SMALL(GSW(1708), 16)
 		IF_EQUAL(LW(0), 2)
 			USER_FUNC(evt_msg::evt_msg_print, 0, PTR("stg1_nok_83"), 0, 0)
 		ELSE()
@@ -392,21 +393,21 @@ EVT_BEGIN(nokopapa_talk_hook)
 EVT_END()
 
 EVT_BEGIN(nokonoko_K_talk_evt)
-	SWITCH(GSW(1701))
-		CASE_SMALL(9)
-			USER_FUNC(evt_msg::evt_msg_print, 0, PTR("stg1_nok_32"), 0, 0)
-			RETURN()
-		CASE_END()
-		CASE_SMALL(99) //Unknown
+	IF_SMALL(GSW(1701), 9)
+		USER_FUNC(evt_msg::evt_msg_print, 0, PTR("stg1_nok_32"), 0, 0)
+		RETURN()
+	END_IF()
+	SWITCH(GSW(1711))
+		CASE_SMALL(8)
 			USER_FUNC(evt_msg::evt_msg_print, 0, PTR("stg1_nok_32_01"), 0, 0)
 			RETURN()
 		CASE_END()
-		CASE_SMALL(99) //Unknown
+		CASE_SMALL(17)
 			USER_FUNC(evt_msg::evt_msg_print, 0, PTR("stg1_nok_33"), 0, 0)
 			RETURN()
 		CASE_END()
 	END_SWITCH()
-	IF_SMALL(GSW(1708), 99) //Unknown
+	IF_SMALL(GSW(1708), 18)
 		USER_FUNC(evt_msg::evt_msg_print, 0, PTR("stg1_nok_33_1"), 0, 0)
 		RETURN()
 	END_IF()
@@ -440,17 +441,17 @@ EVT_BEGIN(boss_noko_talk_evt)
 		USER_FUNC(evt_msg::evt_msg_print, 0, PTR("stg1_nok_47"), 0, 0)
 		RETURN()
 	END_IF()
-	SWITCH(GSW(1701))
-		CASE_SMALL(99) //Unknown
+	SWITCH(GSW(1711))
+		CASE_SMALL(8)
 			USER_FUNC(evt_msg::evt_msg_print, 0, PTR("stg1_nok_56_01"), 0, 0)
 			RETURN()
 		CASE_END()
-		CASE_SMALL(99) //Unknown
+		CASE_SMALL(17)
 			USER_FUNC(evt_msg::evt_msg_print, 0, PTR("stg1_nok_57"), 0, 0)
 			RETURN()
 		CASE_END()
 	END_SWITCH()
-	IF_SMALL(GSW(1708), 99) //Unknown
+	IF_SMALL(GSW(1708), 18)
 		USER_FUNC(evt_msg::evt_msg_print, 0, PTR("stg1_nok_57_1"), 0, 0)
 		RETURN()
 	END_IF()
@@ -464,39 +465,69 @@ EVT_BEGIN(boss_noko_talk_hook)
 EVT_END()
 
 EVT_BEGIN(nokorin_talk_evt)
+	USER_FUNC(evt_mario::evt_mario_get_party, LW(0))
+	IF_SMALL(GSW(1711), 8)
+		IF_EQUAL(GSWF(1627), 0)
+			IF_EQUAL(LW(0), 2)
+				SET(GSWF(1627), 1)
+				USER_FUNC(evt_msg::evt_msg_print, 0, PTR("stg1_nok_67"), 0, 0)
+				USER_FUNC(evt_msg::evt_msg_print, 0, PTR("stg1_nok_68"), 0, 0)
+				USER_FUNC(evt_npc::evt_npc_status_onoff, 1, PTR("me"), 2)
+				USER_FUNC(evt_npc::evt_npc_flag_onoff, 1, PTR("me"), 131120)
+				USER_FUNC(evt_npc::evt_npc_move_position, PTR("me"), -85, -300, 0, FLOAT(60.00), 1)
+				USER_FUNC(evt_npc::evt_npc_flag_onoff, 0, PTR("me"), 131120)
+				RETURN()
+			ELSE()
+				USER_FUNC(evt_msg::evt_msg_print, 0, PTR("stg1_nok_70"), 0, 0)
+				RETURN()
+			END_IF()
+		ELSE()
+			IF_EQUAL(LW(0), 2)
+				USER_FUNC(evt_msg::evt_msg_print, 0, PTR("stg1_nok_69"), 0, 0)
+				RETURN()
+			ELSE()
+				USER_FUNC(evt_msg::evt_msg_print, 0, PTR("stg1_nok_70"), 0, 0)
+				RETURN()
+			END_IF()
+		END_IF()
+	END_IF()
 	IF_SMALL(GSW(1702), 1)
 		IF_EQUAL(LW(0), 2)
-			USER_FUNC(evt_msg::evt_msg_print, 0, PTR("stg1_nok_79"), 0, 0)
+			USER_FUNC(evt_msg::evt_msg_print, 0, PTR("stg1_nok_71"), 0, 0)
 		ELSE()
-			USER_FUNC(evt_msg::evt_msg_print, 0, PTR("stg1_nok_80"), 0, 0)
+			USER_FUNC(evt_msg::evt_msg_print, 0, PTR("stg1_nok_72"), 0, 0)
 		END_IF()
 		RETURN()
 	END_IF()
-	IF_SMALL(GSW(1704), 1)
+	IF_SMALL(GSW(1704), 2)
 		IF_EQUAL(LW(0), 2)
-			USER_FUNC(evt_msg::evt_msg_print, 0, PTR("stg1_nok_81"), 0, 0)
+			USER_FUNC(evt_msg::evt_msg_print, 0, PTR("stg1_nok_73"), 0, 0)
 		ELSE()
-			USER_FUNC(evt_msg::evt_msg_print, 0, PTR("stg1_nok_82"), 0, 0)
+			USER_FUNC(evt_msg::evt_msg_print, 0, PTR("stg1_nok_74"), 0, 0)
 		END_IF()
 		RETURN()
 	END_IF()
 	IF_SMALL(GSW(1707), 1)
 		IF_EQUAL(LW(0), 2)
-			USER_FUNC(evt_msg::evt_msg_print, 0, PTR("stg1_nok_83"), 0, 0)
+			USER_FUNC(evt_msg::evt_msg_print, 0, PTR("stg1_nok_75"), 0, 0)
 		ELSE()
-			USER_FUNC(evt_msg::evt_msg_print, 0, PTR("stg1_nok_84"), 0, 0)
+			USER_FUNC(evt_msg::evt_msg_print, 0, PTR("stg1_nok_76"), 0, 0)
 		END_IF()
 		RETURN()
 	END_IF()
-	IF_SMALL(GSW(1708), 99) //Unknown
+	IF_SMALL(GSW(1708), 18)
 		IF_EQUAL(LW(0), 2)
-			USER_FUNC(evt_msg::evt_msg_print, 0, PTR("stg1_nok_83"), 0, 0)
+			USER_FUNC(evt_msg::evt_msg_print, 0, PTR("stg1_nok_77"), 0, 0)
 		ELSE()
-			USER_FUNC(evt_msg::evt_msg_print, 0, PTR("stg1_nok_84"), 0, 0)
+			USER_FUNC(evt_msg::evt_msg_print, 0, PTR("stg1_nok_78"), 0, 0)
 		END_IF()
 		RETURN()
 	END_IF()
-	USER_FUNC(evt_msg::evt_msg_print, 0, PTR("stg1_nok_84_1"), 0, 0)
+	IF_EQUAL(LW(0), 2)
+		USER_FUNC(evt_msg::evt_msg_print, 0, PTR("stg1_nok_77"), 0, 0)
+	ELSE()
+		USER_FUNC(evt_msg::evt_msg_print, 0, PTR("stg1_nok_78"), 0, 0)
+	END_IF()
 	RETURN()
 EVT_END()
 
@@ -510,25 +541,31 @@ void ApplyNokPatches(OSModuleInfo* module_info)
 {
 	nokonoko_A_init[6] = GSW(1701);
 	nokonoko_A_init[7] = 3;
-	nokonoko_A_init[16] = GSW(1702);
-	nokonoko_A_init[17] = 99; //Unknown
+	nokonoko_A_init[16] = GSW(1713);
+	nokonoko_A_init[17] = 15;
 
-	patch::writePatch(&nokonoko_A_talk[0], nokonoko_A_talk_hook, sizeof(nokonoko_A_talk_hook)); //Nokonoko A Dialogue
-	patch::writePatch(&nokonoko_B_talk[0], nokonoko_B_talk_hook, sizeof(nokonoko_B_talk_hook)); //Nokonoko B Dialogue
-	patch::writePatch(&nokonoko_C_talk[0], nokonoko_C_talk_hook, sizeof(nokonoko_C_talk_hook)); //Nokonoko C Dialogue
-	patch::writePatch(&nokonoko_D_talk[0], nokonoko_D_talk_hook, sizeof(nokonoko_D_talk_hook)); //Nokonoko D Dialogue
-	patch::writePatch(&nokonoko_F_talk[274], nokonoko_F_talk_hook, sizeof(nokonoko_F_talk_hook)); //Nokonoko F Dialogue
-	patch::writePatch(&init_white[8], init_white_hook, sizeof(init_white_hook)); //General White Init
-	patch::writePatch(&talk_white[0], talk_white_hook, sizeof(talk_white_hook)); //General White Dialogue
+	patch::writePatch(&nokonoko_A_talk[0], nokonoko_A_talk_hook, sizeof(nokonoko_A_talk_hook));
 
-	first_time_camera[179] = GSW(1701); //First time camera
+	patch::writePatch(&nokonoko_B_talk[0], nokonoko_B_talk_hook, sizeof(nokonoko_B_talk_hook));
+
+	patch::writePatch(&nokonoko_C_talk[0], nokonoko_C_talk_hook, sizeof(nokonoko_C_talk_hook));
+
+	patch::writePatch(&nokonoko_D_talk[0], nokonoko_D_talk_hook, sizeof(nokonoko_D_talk_hook));
+
+	patch::writePatch(&nokonoko_F_talk[274], nokonoko_F_talk_hook, sizeof(nokonoko_F_talk_hook));
+
+	patch::writePatch(&init_white[8], init_white_hook, sizeof(init_white_hook));
+
+	patch::writePatch(&talk_white[0], talk_white_hook, sizeof(talk_white_hook));
+
+	first_time_camera[179] = GSW(1701);
 	first_time_camera[180] = 3;
 
-	nok_00_koopa_evt[1213] = GSW(1702); //Bowser intermission
-	nok_00_koopa_evt[1214] = 99; //Unknown
+	nok_00_koopa_evt[1213] = GSW(1713);
+	nok_00_koopa_evt[1214] = 16;
 
-	nok_00_init_evt[1] = GSW(1702); //Room 0 Init
-	nok_00_init_evt[2] = 99; //Unknown
+	nok_00_init_evt[1] = GSW(1713);
+	nok_00_init_evt[2] = 13;
 	nok_00_init_evt[25] = GSW(1701);
 	nok_00_init_evt[26] = 3;
 	nok_00_init_evt[40] = GSW(1701);
@@ -577,9 +614,9 @@ void ApplyNokPatches(OSModuleInfo* module_info)
 	nokorin_talk[1] = GSW(1701); //Nokorin Dialogue
 	nokorin_talk[3] = 9;
 	nokorin_talk[82] = 10;
-	nokorin_talk[90] = 99; //Unknown
+	nokorin_talk[89] = EVT_HELPER_CMD(0, 49);
 	nokorin_talk[169] = EVT_HELPER_CMD(0, 49);
-	patch::writePatch(&nokorin_talk[170], nokorin_talk_hook, sizeof(nokorin_talk_hook)); //Nokorin Dialogue
+	patch::writePatch(&nokorin_talk[90], nokorin_talk_hook, sizeof(nokorin_talk_hook)); //Nokorin Dialogue
 
 	odoriko_1_talk[1] = GSW(1701); //Odoriko 1 Dialogue
 	odoriko_1_talk[3] = 9;
