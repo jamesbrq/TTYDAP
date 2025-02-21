@@ -84,16 +84,18 @@ void ApplyWinPatches(OSModuleInfo* module_info)
 	witchtrio_lose[541] = GSW(1712);
 	witchtrio_lose[542] = 3;
 
-	win_00_init_evt[22] = GSW(1702);
-	win_00_init_evt[23] = 99; //Unknown
-	win_00_init_evt[46] = GSW(1712);
-	win_00_init_evt[47] = 0;
+	win_00_init_evt[22] = GSW(1713);
+	win_00_init_evt[23] = 11;
+	win_00_init_evt[34] = GSW(1702);
+	win_00_init_evt[35] = 1;
+	win_00_init_evt[40] = GSW(1702);
+	win_00_init_evt[41] = 12;
+	win_00_init_evt[46] = GSW(1702);
+	win_00_init_evt[47] = 13;
 	win_00_init_evt[52] = GSW(1712);
-	win_00_init_evt[53] = 1;
+	win_00_init_evt[53] = 2;
 	win_00_init_evt[58] = GSW(1712);
-	win_00_init_evt[59] = 2;
-	win_00_init_evt[33] = EVT_HELPER_CMD(1, 4);
-	win_00_init_evt[34] = EVT_HELPER_OP(&win_00_init_evt[45]);
+	win_00_init_evt[59] = 3;
 
 	evt_dokan1_message[39] = GSW(1702);
 	evt_dokan1_message[40] = 8;
@@ -104,13 +106,13 @@ void ApplyWinPatches(OSModuleInfo* module_info)
 	guide_bigtree[155] = GSW(1702);
 	guide_bigtree[156] = 2;
 
-	win_peach_mail[247] = GSW(1702);
-	win_peach_mail[248] = 99; //Unknown
+	win_peach_mail[247] = GSW(1713);
+	win_peach_mail[248] = 18;
 
-	win_01_init_evt[21] = GSW(1702);
+	win_01_init_evt[21] = GSW(1712);
 	win_01_init_evt[22] = 1;
-	win_01_init_evt[27] = GSW(1702);
-	win_01_init_evt[28] = 99; //Unknown
+	win_01_init_evt[27] = GSW(1713);
+	win_01_init_evt[28] = 17;
 
 	lookat_house[33] = GSW(1702);
 	lookat_house[34] = 9;
@@ -140,8 +142,8 @@ void ApplyWinPatches(OSModuleInfo* module_info)
 	touch_door[1] = GSW(1702);
 	touch_door[3] = 11;
 	touch_door[7] = 11;
-	touch_door[11] = 99; //Unused
-	touch_door[12] = 99; //Unused
+	touch_door[11] = 12;
+	touch_door[12] = 12;
 	touch_door[16] = 13;
 
 	win_04_init_evt[34] = GSW(1702);
