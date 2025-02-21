@@ -10,8 +10,6 @@ Discarded input sections
  .bss           0x00000000        0x0 OWR.o
  .text._Z13strcpy_StringPcPKc
                 0x00000000        0x4 OWR.o
- .text._ZN3mod3owr3OWR12SequenceInitEv
-                0x00000000       0x3c OWR.o
  .text._ZN3mod3owr3OWR6LZTestEv
                 0x00000000       0x48 OWR.o
  .text._ZN3mod3owr3OWR11NewFileInitEv
@@ -161,6 +159,8 @@ Discarded input sections
                 0x00000000        0x8 patch.o
  .text._ZN3mod5patch14writeEvtBranchEPiPKib
                 0x00000000       0x1c patch.o
+ .text._ZN3mod5patch13writeBranchBLEPvS1_
+                0x00000000       0x50 patch.o
  .text._ZN3mod5patch15writeBranchMainEPvS1_j
                 0x00000000       0x48 patch.o
  .text._ZN3mod5patch10writePatchEPvPKvS3_
@@ -169,6 +169,8 @@ Discarded input sections
                 0x00000000       0x6c patch.o
  .text._ZN3mod5patch15writeBranchPairEPvS1_S1_S1_
                 0x00000000       0x88 patch.o
+ .text._ZN3mod5patch15writeBranchPairEPvS1_S1_
+                0x00000000       0x80 patch.o
  .text          0x00000000        0x0 rel.o
  .data          0x00000000        0x0 rel.o
  .bss           0x00000000        0x0 rel.o
@@ -240,6 +242,10 @@ Discarded input sections
  .text          0x00000000        0x0 main.o
  .data          0x00000000        0x0 main.o
  .bss           0x00000000        0x0 main.o
+ .text._Z24ApplyMainAssemblyPatchesv
+                0x00000000      0x57c main.o
+ .text._Z22ApplyMainScriptPatchesv
+                0x00000000      0x1e8 main.o
  .text          0x00000000        0x0 moo.o
  .data          0x00000000        0x0 moo.o
  .bss           0x00000000        0x0 moo.o
@@ -279,6 +285,7 @@ Discarded input sections
  .text          0x00000000        0x0 win.o
  .data          0x00000000        0x0 win.o
  .bss           0x00000000        0x0 win.o
+ .text          0x00000000      0x176 asm_main.o
  .data          0x00000000        0x0 asm_main.o
  .bss           0x00000000        0x0 asm_main.o
  .text          0x00000000       0x7c patch_ih.o
@@ -427,263 +434,235 @@ Linker script and memory map
 .rela.plt
  *(.rela.plt)
 
-.text           0x80003100     0xc900
+.text           0x80003100     0xbe40
  *(.text)
- .text          0x80003100      0x178 asm_main.o
-                0x80003100                bMapGXArrInject
-                0x8000310c                bMapGXArrInjectReturn
-                0x80003110                bMapGXArrIncrement
-                0x80003118                bMapGXArrIncrementReturn
-                0x8000311c                bMapGXChSplit
-                0x80003128                bMapGXChSplitReturn
-                0x8000312c                bWinLogArrInject
-                0x80003138                bWinLogArrInjectReturn
-                0x8000313c                bWinLogArrIncrement
-                0x80003144                bWinLogArrIncrementReturn
-                0x80003148                bChapterClearCheck
-                0x80003190                bJohoyaSeqAddition
-                0x800031bc                win_log_mapGX_arr
  *(.text.*)
- *fill*         0x80003278        0x0 00000000
  .text._ZZN3mod3owr3OWR4InitEvENUlvE_4_FUNEv
-                0x80003278       0x10 OWR.o
- .text._ZN3mod3owr3OWR12SequenceInitEv.part.0
-                0x80003288       0xe4 OWR.o
+                0x80003100       0x10 OWR.o
  .text._ZN3mod3owr3OWRC2Ev
-                0x8000336c        0xc OWR.o
-                0x8000336c                _ZN3mod3owr3OWRC1Ev
-                0x8000336c                _ZN3mod3owr3OWRC2Ev
+                0x80003110        0xc OWR.o
+                0x80003110                _ZN3mod3owr3OWRC1Ev
+                0x80003110                _ZN3mod3owr3OWRC2Ev
+ .text._ZN3mod3owr3OWR12SequenceInitEv
+                0x8000311c      0x1a4 OWR.o
+                0x8000311c                _ZN3mod3owr3OWR12SequenceInitEv
  .text._ZN3mod3owr3OWR4InitEv
-                0x80003378       0xec OWR.o
-                0x80003378                _ZN3mod3owr3OWR4InitEv
+                0x800032c0       0xe8 OWR.o
+                0x800032c0                _ZN3mod3owr3OWR4InitEv
  .text._ZN3mod3owr3OWR6UpdateEv
-                0x80003464       0x5c OWR.o
-                0x80003464                _ZN3mod3owr3OWR6UpdateEv
+                0x800033a8       0x4c OWR.o
+                0x800033a8                _ZN3mod3owr3OWR6UpdateEv
  .text._ZN3mod3owr3OWR4DrawEv
-                0x800034c0        0x4 OWR.o
-                0x800034c0                _ZN3mod3owr3OWR4DrawEv
+                0x800033f4        0x4 OWR.o
+                0x800033f4                _ZN3mod3owr3OWR4DrawEv
  .text._ZN3mod3owr3OWR14OnModuleLoadedEPN2gc6OSLink12OSModuleInfoE
-                0x800034c4      0x210 OWR.o
-                0x800034c4                _ZN3mod3owr3OWR14OnModuleLoadedEPN2gc6OSLink12OSModuleInfoE
+                0x800033f8       0xd4 OWR.o
+                0x800033f8                _ZN3mod3owr3OWR14OnModuleLoadedEPN2gc6OSLink12OSModuleInfoE
  .text._ZZN3mod3owr3OWR4InitEvENUlPN2gc6OSLink12OSModuleInfoEPvE_4_FUNES5_S6_
-                0x800036d4       0x84 OWR.o
+                0x800034cc       0x84 OWR.o
  .text.startup._GLOBAL__sub_I__Z13strcpy_StringPcPKc
-                0x80003758       0x14 OWR.o
+                0x80003550       0x14 OWR.o
  .text._ZN3modL13mod_if_func22Ev
-                0x8000376c       0x54 con_mario.o
+                0x80003564       0x54 con_mario.o
  .text.startup._GLOBAL__sub_I__ZN3mod13mario_set_posE
-                0x800037c0       0x88 con_mario.o
+                0x800035b8       0x88 con_mario.o
  .text._ZN3modL13mod_if_func46Ev
-                0x80003848      0x19c con_perf.o
+                0x80003640      0x19c con_perf.o
  .text.startup._GLOBAL__sub_I__ZN3mod15perf_fake_spikeE
-                0x800039e4       0x8c con_perf.o
+                0x800037dc       0x8c con_perf.o
  .text._ZZN3modL13mod_if_func16EvENUlPN4ttyd6seqdrv7SeqInfoEE_4_FUNES3_
-                0x80003a70       0x44 con_seq.o
+                0x80003868       0x44 con_seq.o
  .text._ZN3modL13mod_if_func16Ev
-                0x80003ab4       0x74 con_seq.o
+                0x800038ac       0x74 con_seq.o
  .text.startup._GLOBAL__sub_I__ZN3mod13seq_logo_skipE
-                0x80003b28       0x8c con_seq.o
+                0x80003920       0x8c con_seq.o
  .text._ZN3mod13ConsoleSystem4initEv
-                0x80003bb4       0x38 console.o
-                0x80003bb4                _ZN3mod13ConsoleSystem4initEv
+                0x800039ac       0x38 console.o
+                0x800039ac                _ZN3mod13ConsoleSystem4initEv
  .text._ZN3mod13ConsoleSystem8logColorEPKcN2gc6color4E
-                0x80003bec      0x2a8 console.o
-                0x80003bec                _ZN3mod13ConsoleSystem8logColorEPKcN2gc6color4E
+                0x800039e4      0x2a8 console.o
+                0x800039e4                _ZN3mod13ConsoleSystem8logColorEPKcN2gc6color4E
  .text._ZN3mod13ConsoleSystem7logInfoEPKcz
-                0x80003e94       0xb8 console.o
-                0x80003e94                _ZN3mod13ConsoleSystem7logInfoEPKcz
+                0x80003c8c       0xb8 console.o
+                0x80003c8c                _ZN3mod13ConsoleSystem7logInfoEPKcz
  .text._ZN3mod7CC_findEPKc
-                0x80003f4c      0x12c console.o
-                0x80003f4c                _ZN3mod7CC_findEPKc
+                0x80003d44      0x12c console.o
+                0x80003d44                _ZN3mod7CC_findEPKc
  .text._ZN3mod13ConsoleSystem10logWarningEPKcz
-                0x80004078       0xbc console.o
-                0x80004078                _ZN3mod13ConsoleSystem10logWarningEPKcz
+                0x80003e70       0xbc console.o
+                0x80003e70                _ZN3mod13ConsoleSystem10logWarningEPKcz
  .text._ZN3mod13ConsoleSystem8logErrorEPKcz
-                0x80004134       0xbc console.o
-                0x80004134                _ZN3mod13ConsoleSystem8logErrorEPKcz
+                0x80003f2c       0xbc console.o
+                0x80003f2c                _ZN3mod13ConsoleSystem8logErrorEPKcz
  .text._ZN3mod13ConsoleSystem7overlayEPKcz
-                0x800041f0       0xd0 console.o
-                0x800041f0                _ZN3mod13ConsoleSystem7overlayEPKcz
+                0x80003fe8       0xd0 console.o
+                0x80003fe8                _ZN3mod13ConsoleSystem7overlayEPKcz
  .text._ZN3mod13ConsoleSystem14processCommandEPKc
-                0x800042c0      0x288 console.o
-                0x800042c0                _ZN3mod13ConsoleSystem14processCommandEPKc
+                0x800040b8      0x288 console.o
+                0x800040b8                _ZN3mod13ConsoleSystem14processCommandEPKc
  .text._ZN3mod13ConsoleSystem12updatePromptEv
-                0x80004548      0x974 console.o
-                0x80004548                _ZN3mod13ConsoleSystem12updatePromptEv
+                0x80004340      0x974 console.o
+                0x80004340                _ZN3mod13ConsoleSystem12updatePromptEv
  .text._ZN3mod13ConsoleSystem14updateUsbGeckoEv.part.0
-                0x80004ebc      0x19c console.o
+                0x80004cb4      0x19c console.o
  .text._ZN3mod13ConsoleSystem6updateEv
-                0x80005058       0x70 console.o
-                0x80005058                _ZN3mod13ConsoleSystem6updateEv
+                0x80004e50       0x70 console.o
+                0x80004e50                _ZN3mod13ConsoleSystem6updateEv
  .text._ZN3mod13ConsoleSystem4dispEv
-                0x800050c8      0x534 console.o
-                0x800050c8                _ZN3mod13ConsoleSystem4dispEv
+                0x80004ec0      0x534 console.o
+                0x80004ec0                _ZN3mod13ConsoleSystem4dispEv
  .text._ZZN3mod13ConsoleSystem6updateEvENUlN4ttyd7dispdrv8CameraIdEPvE_4_FUNES3_S4_
-                0x800055fc        0x8 console.o
+                0x800053f4        0x8 console.o
  .text.startup._GLOBAL__sub_I__ZN3mod10ConCommand6sFirstE
-                0x80005604      0x1ac console.o
- .text._Znwj    0x800057b0        0xc cxx.o
-                0x800057b0                _Znwj
- .text._Znaj    0x800057bc        0xc cxx.o
-                0x800057bc                _Znaj
+                0x800053fc      0x1ac console.o
+ .text._Znwj    0x800055a8        0xc cxx.o
+                0x800055a8                _Znwj
+ .text._Znaj    0x800055b4        0xc cxx.o
+                0x800055b4                _Znaj
  .text._ZN3mod8KeyboardC2Ei
-                0x800057c8       0x84 keyboard.o
-                0x800057c8                _ZN3mod8KeyboardC2Ei
-                0x800057c8                _ZN3mod8KeyboardC1Ei
+                0x800055c0       0x84 keyboard.o
+                0x800055c0                _ZN3mod8KeyboardC2Ei
+                0x800055c0                _ZN3mod8KeyboardC1Ei
  .text._ZN3mod8Keyboard6updateEv
-                0x8000584c      0x59c keyboard.o
-                0x8000584c                _ZN3mod8Keyboard6updateEv
+                0x80005644      0x59c keyboard.o
+                0x80005644                _ZN3mod8Keyboard6updateEv
  .text._ZZN3mod3Mod4initEvENUlvE0_4_FUNEv
-                0x80005de8        0x4 mod.o
+                0x80005be0        0x4 mod.o
  .text._ZZN3mod3Mod11updateEarlyEvENUlN4ttyd7dispdrv8CameraIdEPvE_4_FUNES3_S4_
-                0x80005dec        0x8 mod.o
+                0x80005be4        0x8 mod.o
  .text._ZZN3mod3Mod4initEvENUlvE_4_FUNEv
-                0x80005df4       0x94 mod.o
+                0x80005bec       0x94 mod.o
  .text._ZN3mod3Mod4initEv
-                0x80005e88       0xfc mod.o
-                0x80005e88                _ZN3mod3Mod4initEv
+                0x80005c80       0xfc mod.o
+                0x80005c80                _ZN3mod3Mod4initEv
  .text.startup._ZN3mod4mainEv
-                0x80005f84       0xb0 mod.o
-                0x80005f84                _ZN3mod4mainEv
+                0x80005d7c       0xb0 mod.o
+                0x80005d7c                _ZN3mod4mainEv
  .text._ZN3mod5patch17clear_DC_IC_CacheEPvj
-                0x80006034       0x40 patch.o
-                0x80006034                _ZN3mod5patch17clear_DC_IC_CacheEPvj
+                0x80005e2c       0x40 patch.o
+                0x80005e2c                _ZN3mod5patch17clear_DC_IC_CacheEPvj
  .text._ZN3mod5patch11writeBranchEPvS1_
-                0x80006074       0x4c patch.o
-                0x80006074                _ZN3mod5patch11writeBranchEPvS1_
- .text._ZN3mod5patch13writeBranchBLEPvS1_
-                0x800060c0       0x50 patch.o
-                0x800060c0                _ZN3mod5patch13writeBranchBLEPvS1_
+                0x80005e6c       0x4c patch.o
+                0x80005e6c                _ZN3mod5patch11writeBranchEPvS1_
  .text._ZN3mod5patch10writePatchEPvPKvj
-                0x80006110       0x7c patch.o
-                0x80006110                _ZN3mod5patch10writePatchEPvPKvj
- .text._ZN3mod5patch15writeBranchPairEPvS1_S1_
-                0x8000618c       0x80 patch.o
-                0x8000618c                _ZN3mod5patch15writeBranchPairEPvS1_S1_
- .text._prolog  0x8000620c       0xac rel.o
-                0x8000620c                _prolog
- .text._epilog  0x800062b8       0xac rel.o
-                0x800062b8                _epilog
+                0x80005eb8       0x7c patch.o
+                0x80005eb8                _ZN3mod5patch10writePatchEPvPKvj
+ .text._prolog  0x80005f34       0xac rel.o
+                0x80005f34                _prolog
+ .text._epilog  0x80005fe0       0xac rel.o
+                0x80005fe0                _epilog
  .text._unresolved
-                0x80006364        0x4 rel.o
-                0x80006364                _unresolved
+                0x8000608c        0x4 rel.o
+                0x8000608c                _unresolved
  .text._ZN3mod7ugProbeEi
-                0x80006368      0x110 ug.o
-                0x80006368                _ZN3mod7ugProbeEi
+                0x80006090      0x110 ug.o
+                0x80006090                _ZN3mod7ugProbeEi
  .text._ZN3mod6ugSendEiPKvi
-                0x80006478      0x12c ug.o
-                0x80006478                _ZN3mod6ugSendEiPKvi
+                0x800061a0      0x12c ug.o
+                0x800061a0                _ZN3mod6ugSendEiPKvi
  .text._ZN3mod6ugRecvEiPvi
-                0x800065a4      0x124 ug.o
-                0x800065a4                _ZN3mod6ugRecvEiPvi
- .text.strstr   0x800066c8       0xf0 util.o
-                0x800066c8                strstr
+                0x800062cc      0x124 ug.o
+                0x800062cc                _ZN3mod6ugRecvEiPvi
+ .text.strstr   0x800063f0       0xf0 util.o
+                0x800063f0                strstr
  .text._Z15ApplyAaaPatchesPN2gc6OSLink12OSModuleInfoE
-                0x800067b8       0x50 aaa.o
-                0x800067b8                _Z15ApplyAaaPatchesPN2gc6OSLink12OSModuleInfoE
+                0x800064e0       0x50 aaa.o
+                0x800064e0                _Z15ApplyAaaPatchesPN2gc6OSLink12OSModuleInfoE
  .text._Z15ApplyAjiPatchesPN2gc6OSLink12OSModuleInfoE
-                0x80006808      0x8a0 aji.o
-                0x80006808                _Z15ApplyAjiPatchesPN2gc6OSLink12OSModuleInfoE
+                0x80006530      0x864 aji.o
+                0x80006530                _Z15ApplyAjiPatchesPN2gc6OSLink12OSModuleInfoE
  .text._Z15ApplyBomPatchesPN2gc6OSLink12OSModuleInfoE
-                0x800070a8      0x2fc bom.o
-                0x800070a8                _Z15ApplyBomPatchesPN2gc6OSLink12OSModuleInfoE
+                0x80006d94      0x2fc bom.o
+                0x80006d94                _Z15ApplyBomPatchesPN2gc6OSLink12OSModuleInfoE
  .text._Z15ApplyDouPatchesPN2gc6OSLink12OSModuleInfoE
-                0x800073a4      0x304 dou.o
-                0x800073a4                _Z15ApplyDouPatchesPN2gc6OSLink12OSModuleInfoE
+                0x80007090      0x30c dou.o
+                0x80007090                _Z15ApplyDouPatchesPN2gc6OSLink12OSModuleInfoE
  .text._Z15ApplyEkiPatchesPN2gc6OSLink12OSModuleInfoE
-                0x800076a8      0x270 eki.o
-                0x800076a8                _Z15ApplyEkiPatchesPN2gc6OSLink12OSModuleInfoE
+                0x8000739c      0x270 eki.o
+                0x8000739c                _Z15ApplyEkiPatchesPN2gc6OSLink12OSModuleInfoE
  .text._Z15ApplyEndPatchesPN2gc6OSLink12OSModuleInfoE
-                0x80007918       0x30 end.o
-                0x80007918                _Z15ApplyEndPatchesPN2gc6OSLink12OSModuleInfoE
+                0x8000760c       0x30 end.o
+                0x8000760c                _Z15ApplyEndPatchesPN2gc6OSLink12OSModuleInfoE
  .text._Z15ApplyGonPatchesPN2gc6OSLink12OSModuleInfoE
-                0x80007948      0x35c gon.o
-                0x80007948                _Z15ApplyGonPatchesPN2gc6OSLink12OSModuleInfoE
+                0x8000763c      0x35c gon.o
+                0x8000763c                _Z15ApplyGonPatchesPN2gc6OSLink12OSModuleInfoE
  .text._Z17ApplyGor00PatchesPN2gc6OSLink12OSModuleInfoE
-                0x80007ca4      0x624 gor_00.o
-                0x80007ca4                _Z17ApplyGor00PatchesPN2gc6OSLink12OSModuleInfoE
+                0x80007998      0x624 gor_00.o
+                0x80007998                _Z17ApplyGor00PatchesPN2gc6OSLink12OSModuleInfoE
  .text.startup._GLOBAL__sub_I__Z17ApplyGor00PatchesPN2gc6OSLink12OSModuleInfoE
-                0x800082c8       0x1c gor_00.o
+                0x80007fbc       0x1c gor_00.o
  .text._Z17ApplyGor01PatchesPN2gc6OSLink12OSModuleInfoE
-                0x800082e4      0x43c gor_01.o
-                0x800082e4                _Z17ApplyGor01PatchesPN2gc6OSLink12OSModuleInfoE
+                0x80007fd8      0x43c gor_01.o
+                0x80007fd8                _Z17ApplyGor01PatchesPN2gc6OSLink12OSModuleInfoE
  .text._Z17ApplyGor02PatchesPN2gc6OSLink12OSModuleInfoE
-                0x80008720      0x4d8 gor_02.o
-                0x80008720                _Z17ApplyGor02PatchesPN2gc6OSLink12OSModuleInfoE
+                0x80008414      0x4d8 gor_02.o
+                0x80008414                _Z17ApplyGor02PatchesPN2gc6OSLink12OSModuleInfoE
  .text._Z17ApplyGor03PatchesPN2gc6OSLink12OSModuleInfoE
-                0x80008bf8      0x4e4 gor_03.o
-                0x80008bf8                _Z17ApplyGor03PatchesPN2gc6OSLink12OSModuleInfoE
+                0x800088ec      0x4e4 gor_03.o
+                0x800088ec                _Z17ApplyGor03PatchesPN2gc6OSLink12OSModuleInfoE
  .text._Z17ApplyGor04PatchesPN2gc6OSLink12OSModuleInfoE
-                0x800090dc      0x170 gor_04.o
-                0x800090dc                _Z17ApplyGor04PatchesPN2gc6OSLink12OSModuleInfoE
+                0x80008dd0      0x170 gor_04.o
+                0x80008dd0                _Z17ApplyGor04PatchesPN2gc6OSLink12OSModuleInfoE
  .text._Z19ApplyGorMiscPatchesPN2gc6OSLink12OSModuleInfoE
-                0x8000924c       0xc8 gor_misc.o
-                0x8000924c                _Z19ApplyGorMiscPatchesPN2gc6OSLink12OSModuleInfoE
+                0x80008f40       0xc8 gor_misc.o
+                0x80008f40                _Z19ApplyGorMiscPatchesPN2gc6OSLink12OSModuleInfoE
  .text._Z15ApplyGraPatchesPN2gc6OSLink12OSModuleInfoE
-                0x80009314      0x22c gra.o
-                0x80009314                _Z15ApplyGraPatchesPN2gc6OSLink12OSModuleInfoE
+                0x80009008      0x22c gra.o
+                0x80009008                _Z15ApplyGraPatchesPN2gc6OSLink12OSModuleInfoE
  .text._Z15ApplyHeiPatchesPN2gc6OSLink12OSModuleInfoE
-                0x80009540      0x230 hei.o
-                0x80009540                _Z15ApplyHeiPatchesPN2gc6OSLink12OSModuleInfoE
+                0x80009234      0x230 hei.o
+                0x80009234                _Z15ApplyHeiPatchesPN2gc6OSLink12OSModuleInfoE
  .text._Z15ApplyHomPatchesPN2gc6OSLink12OSModuleInfoE
-                0x80009770      0x140 hom.o
-                0x80009770                _Z15ApplyHomPatchesPN2gc6OSLink12OSModuleInfoE
+                0x80009464      0x140 hom.o
+                0x80009464                _Z15ApplyHomPatchesPN2gc6OSLink12OSModuleInfoE
  .text._Z15ApplyJinPatchesPN2gc6OSLink12OSModuleInfoE
-                0x800098b0      0x2e8 jin.o
-                0x800098b0                _Z15ApplyJinPatchesPN2gc6OSLink12OSModuleInfoE
+                0x800095a4      0x2e8 jin.o
+                0x800095a4                _Z15ApplyJinPatchesPN2gc6OSLink12OSModuleInfoE
  .text._Z15ApplyKpaPatchesPN2gc6OSLink12OSModuleInfoE
-                0x80009b98       0xe4 kpa.o
-                0x80009b98                _Z15ApplyKpaPatchesPN2gc6OSLink12OSModuleInfoE
- .text._Z24ApplyMainAssemblyPatchesv
-                0x80009c7c      0x57c main.o
-                0x80009c7c                _Z24ApplyMainAssemblyPatchesv
- .text._Z22ApplyMainScriptPatchesv
-                0x8000a1f8      0x1e8 main.o
-                0x8000a1f8                _Z22ApplyMainScriptPatchesv
+                0x8000988c       0xe4 kpa.o
+                0x8000988c                _Z15ApplyKpaPatchesPN2gc6OSLink12OSModuleInfoE
  .text._Z15ApplyMriPatchesPN2gc6OSLink12OSModuleInfoE
-                0x8000a3e0      0xb8c mri.o
-                0x8000a3e0                _Z15ApplyMriPatchesPN2gc6OSLink12OSModuleInfoE
+                0x80009970      0xb8c mri.o
+                0x80009970                _Z15ApplyMriPatchesPN2gc6OSLink12OSModuleInfoE
  .text.startup._GLOBAL__sub_I__Z15ApplyMriPatchesPN2gc6OSLink12OSModuleInfoE
-                0x8000af6c       0x14 mri.o
+                0x8000a4fc       0x14 mri.o
  .text._Z15ApplyMujPatchesPN2gc6OSLink12OSModuleInfoE
-                0x8000af80      0x9b8 muj.o
-                0x8000af80                _Z15ApplyMujPatchesPN2gc6OSLink12OSModuleInfoE
- .text.startup._GLOBAL__sub_I__Z15ApplyMujPatchesPN2gc6OSLink12OSModuleInfoE
-                0x8000b938       0x30 muj.o
+                0x8000a510      0x998 muj.o
+                0x8000a510                _Z15ApplyMujPatchesPN2gc6OSLink12OSModuleInfoE
  .text._Z15ApplyNokPatchesPN2gc6OSLink12OSModuleInfoE
-                0x8000b968      0x370 nok.o
-                0x8000b968                _Z15ApplyNokPatchesPN2gc6OSLink12OSModuleInfoE
+                0x8000aea8      0x384 nok.o
+                0x8000aea8                _Z15ApplyNokPatchesPN2gc6OSLink12OSModuleInfoE
  .text._Z15ApplyPikPatchesPN2gc6OSLink12OSModuleInfoE
-                0x8000bcd8      0x534 pik.o
-                0x8000bcd8                _Z15ApplyPikPatchesPN2gc6OSLink12OSModuleInfoE
+                0x8000b22c      0x534 pik.o
+                0x8000b22c                _Z15ApplyPikPatchesPN2gc6OSLink12OSModuleInfoE
  .text._Z15ApplyRshPatchesPN2gc6OSLink12OSModuleInfoE
-                0x8000c20c      0xf70 rsh.o
-                0x8000c20c                _Z15ApplyRshPatchesPN2gc6OSLink12OSModuleInfoE
+                0x8000b760      0xf70 rsh.o
+                0x8000b760                _Z15ApplyRshPatchesPN2gc6OSLink12OSModuleInfoE
  .text._Z24checkChapterRequirementsPN4ttyd6evtmgr8EvtEntryEb
-                0x8000d17c       0xac tik.o
-                0x8000d17c                _Z24checkChapterRequirementsPN4ttyd6evtmgr8EvtEntryEb
+                0x8000c6d0       0xac tik.o
+                0x8000c6d0                _Z24checkChapterRequirementsPN4ttyd6evtmgr8EvtEntryEb
  .text._Z15ApplyTikPatchesPN2gc6OSLink12OSModuleInfoE
-                0x8000d228      0x5c0 tik.o
-                0x8000d228                _Z15ApplyTikPatchesPN2gc6OSLink12OSModuleInfoE
+                0x8000c77c      0x5c0 tik.o
+                0x8000c77c                _Z15ApplyTikPatchesPN2gc6OSLink12OSModuleInfoE
  .text._Z15ApplyTouPatchesPN2gc6OSLink12OSModuleInfoE
-                0x8000d7e8      0xfb8 tou.o
-                0x8000d7e8                _Z15ApplyTouPatchesPN2gc6OSLink12OSModuleInfoE
+                0x8000cd3c      0xfb8 tou.o
+                0x8000cd3c                _Z15ApplyTouPatchesPN2gc6OSLink12OSModuleInfoE
  .text._Z16ApplyTou2PatchesPN2gc6OSLink12OSModuleInfoE
-                0x8000e7a0      0x2e8 tou2.o
-                0x8000e7a0                _Z16ApplyTou2PatchesPN2gc6OSLink12OSModuleInfoE
+                0x8000dcf4      0x2e8 tou2.o
+                0x8000dcf4                _Z16ApplyTou2PatchesPN2gc6OSLink12OSModuleInfoE
  .text._Z15ApplyUsuPatchesPN2gc6OSLink12OSModuleInfoE
-                0x8000ea88      0x8a8 usu.o
-                0x8000ea88                _Z15ApplyUsuPatchesPN2gc6OSLink12OSModuleInfoE
+                0x8000dfdc      0x8a8 usu.o
+                0x8000dfdc                _Z15ApplyUsuPatchesPN2gc6OSLink12OSModuleInfoE
  .text._Z15ApplyWinPatchesPN2gc6OSLink12OSModuleInfoE
-                0x8000f330      0x2cc win.o
-                0x8000f330                _Z15ApplyWinPatchesPN2gc6OSLink12OSModuleInfoE
+                0x8000e884      0x2cc win.o
+                0x8000e884                _Z15ApplyWinPatchesPN2gc6OSLink12OSModuleInfoE
  .text.__divdi3
-                0x8000f5fc      0x3ec C:/devkitPro/devkitPPC/bin/../lib/gcc/powerpc-eabi/13.1.0\libgcc.a(_divdi3.o)
-                0x8000f5fc                __divdi3
+                0x8000eb50      0x3ec C:/devkitPro/devkitPPC/bin/../lib/gcc/powerpc-eabi/13.1.0\libgcc.a(_divdi3.o)
+                0x8000eb50                __divdi3
  *(.gnu.warning)
  *(.gnu.linkonce.t.*)
-                0x8000fa00                        . = ALIGN (0x20)
- *fill*         0x8000f9e8       0x18 00000000
+                0x8000ef40                        . = ALIGN (0x20)
+ *fill*         0x8000ef3c        0x4 00000000
 
 .text._ZN3mod13mario_set_posMUlPKcE_4_FUNES2_
                 0x00000000       0x6c
@@ -721,7 +700,7 @@ Linker script and memory map
                 [!provide]                        PROVIDE (_etext = .)
                 [!provide]                        PROVIDE (etext = .)
 
-.rodata         0x00000040     0x9b4c
+.rodata         0x00000040     0x9eb8
  *(.rodata)
  *(.rodata.*)
  .rodata._ZN3mod3owr3OWR6LZTestEv.str1.4
@@ -795,553 +774,559 @@ Linker script and memory map
  .rodata._ZL17teshita2_init_evt
                 0x00000ec0       0xc0 aji.o
  .rodata._ZL20peach_evt_ele_2_hook
-                0x00000f80       0x14 aji.o
+                0x00000f80       0x30 aji.o
  .rodata._ZL19peach_evt_ele_2_evt
-                0x00000f94       0x6c aji.o
+                0x00000fb0       0x6c aji.o
  .rodata._ZL20aji_00_init_evt_hook
-                0x00001000       0x10 aji.o
+                0x0000101c       0x10 aji.o
  .rodata._ZL19aji_00_init_evt_evt
-                0x00001010       0x5c aji.o
+                0x0000102c       0x5c aji.o
  .rodata._ZL4npc4
-                0x0000106c       0x13 aji.o
- *fill*         0x0000107f        0x1 
+                0x00001088       0x13 aji.o
+ *fill*         0x0000109b        0x1 
  .rodata._ZL4npc3
-                0x00001080        0x7 aji.o
- *fill*         0x00001087        0x1 
+                0x0000109c        0x7 aji.o
+ *fill*         0x000010a3        0x1 
  .rodata._ZL4npc2
-                0x00001088        0xf aji.o
- *fill*         0x00001097        0x1 
+                0x000010a4        0xf aji.o
+ *fill*         0x000010b3        0x1 
  .rodata._ZL4npc1
-                0x00001098        0x7 aji.o
- *fill*         0x0000109f        0x1 
+                0x000010b4        0x7 aji.o
+ *fill*         0x000010bb        0x1 
  .rodata._ZL21gor_00_init_evt2_hook
-                0x000010a0       0x14 gor_00.o
+                0x000010bc       0x14 gor_00.o
  .rodata._ZL21gor_00_init_evt1_hook
-                0x000010b4       0x14 gor_00.o
+                0x000010d0       0x14 gor_00.o
  .rodata.str1.4
-                0x000010c8      0x2ce gor_00.o
- *fill*         0x00001396        0x2 
+                0x000010e4      0x2ce gor_00.o
+ *fill*         0x000013b2        0x2 
  .rodata._ZL16gor_00_init_evt1
-                0x00001398      0x1f8 gor_00.o
+                0x000013b4      0x1f8 gor_00.o
  .rodata._ZL18korutesu_init_hook
-                0x00001590       0x10 gor_00.o
+                0x000015ac       0x10 gor_00.o
  .rodata._ZL17korutesu_init_evt
-                0x000015a0       0x58 gor_00.o
+                0x000015bc       0x58 gor_00.o
  .rodata._ZL20suifubomb_b_talk_evt
-                0x000015f8       0xd4 gor_00.o
+                0x00001614       0xd4 gor_00.o
  .rodata._ZL21suifubomb_b_regl_hook
-                0x000016cc       0x10 gor_00.o
+                0x000016e8       0x10 gor_00.o
  .rodata._ZL20suifubomb_b_regl_evt
-                0x000016dc      0x120 gor_00.o
+                0x000016f8      0x120 gor_00.o
  .rodata._ZL20suifubomb_a_talk_evt
-                0x000017fc      0x150 gor_00.o
+                0x00001818      0x150 gor_00.o
  .rodata._ZL21suifubomb_a_regl_hook
-                0x0000194c       0x10 gor_00.o
+                0x00001968       0x10 gor_00.o
  .rodata._ZL20suifubomb_a_regl_evt
-                0x0000195c       0x90 gor_00.o
+                0x00001978       0x90 gor_00.o
  .rodata._ZL21suifubomb_a_init_hook
-                0x000019ec       0x10 gor_00.o
+                0x00001a08       0x10 gor_00.o
  .rodata._ZL20suifubomb_a_init_evt
-                0x000019fc       0xc8 gor_00.o
+                0x00001a18       0xc8 gor_00.o
  .rodata._ZL16suifu_b_talk_evt
-                0x00001ac4       0xd4 gor_00.o
+                0x00001ae0       0xd4 gor_00.o
  .rodata._ZL20luigi_npcEnt_00_hook
-                0x00001b98       0x10 gor_00.o
+                0x00001bb4       0x10 gor_00.o
  .rodata._ZL19luigi_npcEnt_00_evt
-                0x00001ba8       0x80 gor_00.o
+                0x00001bc4       0x80 gor_00.o
  .rodata._ZL18luigi_init_00_hook
-                0x00001c28       0x10 gor_00.o
+                0x00001c44       0x10 gor_00.o
  .rodata._ZL17luigi_init_00_evt
-                0x00001c38       0x50 gor_00.o
+                0x00001c54       0x50 gor_00.o
  .rodata._ZL16mokorim_init_evt
-                0x00001c88       0x30 gor_00.o
+                0x00001ca4       0x30 gor_00.o
  .rodata._ZL17suifu_b_init_hook
-                0x00001cb8       0x10 gor_00.o
+                0x00001cd4       0x10 gor_00.o
  .rodata._ZL16suifu_b_init_evt
-                0x00001cc8       0xc8 gor_00.o
+                0x00001ce4       0xc8 gor_00.o
  .rodata._ZL17suifu_a_regl_hook
-                0x00001d90       0x10 gor_00.o
+                0x00001dac       0x10 gor_00.o
  .rodata._ZL16suifu_a_regl_evt
-                0x00001da0       0x80 gor_00.o
+                0x00001dbc       0x80 gor_00.o
  .rodata._ZL16suifu_a_talk_evt
-                0x00001e20       0xd4 gor_00.o
+                0x00001e3c       0xd4 gor_00.o
  .rodata._ZL19odoodo_ani_talk_evt
-                0x00001ef4       0x20 gor_00.o
+                0x00001f10       0x20 gor_00.o
  .rodata._ZL15odoodo_talk_evt
-                0x00001f14      0x128 gor_00.o
+                0x00001f30      0x128 gor_00.o
  .rodata._ZL16odoodo_regl_hook
-                0x0000203c       0x10 gor_00.o
+                0x00002058       0x10 gor_00.o
  .rodata._ZL15odoodo_regl_evt
-                0x0000204c       0x94 gor_00.o
+                0x00002068       0x94 gor_00.o
  .rodata._ZL15odoodo_init_evt
-                0x000020e0      0x114 gor_00.o
+                0x000020fc      0x114 gor_00.o
  .rodata._ZL17garawaru_talk_evt
-                0x000021f4       0xb8 gor_00.o
+                0x00002210       0xb8 gor_00.o
  .rodata._ZL18garawaru_regl_hook
-                0x000022ac       0x10 gor_00.o
+                0x000022c8       0x10 gor_00.o
  .rodata._ZL17garawaru_regl_evt
-                0x000022bc      0x120 gor_00.o
+                0x000022d8      0x120 gor_00.o
  .rodata._ZL18garawaru_init_hook
-                0x000023dc       0x10 gor_00.o
+                0x000023f8       0x10 gor_00.o
  .rodata._ZL17garawaru_init_evt
-                0x000023ec      0x140 gor_00.o
+                0x00002408      0x140 gor_00.o
  .rodata._ZL6npcEnt
-                0x0000252c        0x9 gor_00.o
- *fill*         0x00002535        0x3 
+                0x00002548        0x9 gor_00.o
+ *fill*         0x00002551        0x3 
  .rodata.str1.4
-                0x00002538       0xb2 gor_01.o
- *fill*         0x000025ea        0x2 
+                0x00002554       0xb2 gor_01.o
+ *fill*         0x00002606        0x2 
  .rodata._ZL15bomhei_talk_evt
-                0x000025ec       0x20 gor_01.o
+                0x00002608       0x20 gor_01.o
  .rodata._ZL16chusan2_talk_evt
-                0x0000260c       0x20 gor_01.o
+                0x00002628       0x20 gor_01.o
  .rodata._ZL16chusan1_talk_evt
-                0x0000262c       0x20 gor_01.o
+                0x00002648       0x20 gor_01.o
  .rodata._ZL16kuribo3_talk_evt
-                0x0000264c       0x20 gor_01.o
+                0x00002668       0x20 gor_01.o
  .rodata._ZL16kuribo2_talk_evt
-                0x0000266c       0x20 gor_01.o
+                0x00002688       0x20 gor_01.o
  .rodata._ZL16kuribo1_talk_evt
-                0x0000268c       0x20 gor_01.o
+                0x000026a8       0x20 gor_01.o
  .rodata._ZL15roten2_talk_evt
-                0x000026ac       0x20 gor_01.o
+                0x000026c8       0x20 gor_01.o
  .rodata._ZL15roten1_talk_evt
-                0x000026cc       0x20 gor_01.o
+                0x000026e8       0x20 gor_01.o
  .rodata._ZL19shoptender_talk_evt
-                0x000026ec       0x20 gor_01.o
+                0x00002708       0x20 gor_01.o
  .rodata._ZL15kinoji_talk_evt
-                0x0000270c       0x20 gor_01.o
+                0x00002728       0x20 gor_01.o
  .rodata._ZL19bottakuru_init_hook
-                0x0000272c       0x10 gor_01.o
+                0x00002748       0x10 gor_01.o
  .rodata._ZL18bottakuru_init_evt
-                0x0000273c       0x70 gor_01.o
+                0x00002758       0x70 gor_01.o
  .rodata._ZL18marco_init_01_hook
-                0x000027ac       0x10 gor_01.o
+                0x000027c8       0x10 gor_01.o
  .rodata._ZL17marco_init_01_evt
-                0x000027bc       0x40 gor_01.o
+                0x000027d8       0x40 gor_01.o
  .rodata._ZL20badgemaster_talk_evt
-                0x000027fc       0x20 gor_01.o
+                0x00002818       0x20 gor_01.o
  .rodata._Z17ApplyGor02PatchesPN2gc6OSLink12OSModuleInfoE.str1.4
-                0x0000281c        0x3 gor_02.o
- *fill*         0x0000281f        0x1 
+                0x00002838        0x3 gor_02.o
+ *fill*         0x0000283b        0x1 
  .rodata.str1.4
-                0x00002820      0x14e gor_02.o
- *fill*         0x0000296e        0x2 
+                0x0000283c      0x14e gor_02.o
+ *fill*         0x0000298a        0x2 
  .rodata._ZL19kurihakase_talk_evt
-                0x00002970      0x2cc gor_02.o
+                0x0000298c      0x2cc gor_02.o
  .rodata._ZL21evt_door_02_open_hook
-                0x00002c3c       0x14 gor_02.o
+                0x00002c58       0x14 gor_02.o
  .rodata._ZL20evt_door_02_open_evt
-                0x00002c50      0x188 gor_02.o
+                0x00002c6c      0x188 gor_02.o
  .rodata._ZL21gor_02_init_evt2_hook
-                0x00002dd8       0x14 gor_02.o
+                0x00002df4       0x14 gor_02.o
  .rodata._ZL16gor_02_init_evt2
-                0x00002dec       0xcc gor_02.o
+                0x00002e08       0xcc gor_02.o
  .rodata._ZL21gor_02_init_evt1_hook
-                0x00002eb8       0x14 gor_02.o
+                0x00002ed4       0x14 gor_02.o
  .rodata._ZL16gor_02_init_evt1
-                0x00002ecc      0x138 gor_02.o
+                0x00002ee8      0x138 gor_02.o
  .rodata._ZL16borodo2_talk_evt
-                0x00003004       0x20 gor_02.o
+                0x00003020       0x20 gor_02.o
  .rodata._ZL16borodo1_talk_evt
-                0x00003024       0x20 gor_02.o
+                0x00003040       0x20 gor_02.o
  .rodata._ZL15roten3_talk_evt
-                0x00003044       0x20 gor_02.o
+                0x00003060       0x20 gor_02.o
  .rodata._ZL16chusan3_talk_evt
-                0x00003064       0x20 gor_02.o
+                0x00003080       0x20 gor_02.o
  .rodata._ZL16kuribo4_talk_evt
-                0x00003084       0x20 gor_02.o
+                0x000030a0       0x20 gor_02.o
  .rodata.str1.4
-                0x000030a4       0xf9 gor_03.o
- *fill*         0x0000319d        0x3 
+                0x000030c0       0xf9 gor_03.o
+ *fill*         0x000031b9        0x3 
  .rodata._ZL16maffia3_talk_evt
-                0x000031a0       0x20 gor_03.o
+                0x000031bc       0x20 gor_03.o
  .rodata._ZL16maffia2_talk_evt
-                0x000031c0      0x140 gor_03.o
+                0x000031dc      0x140 gor_03.o
  .rodata._ZL16maffia1_talk_evt
-                0x00003300      0x140 gor_03.o
+                0x0000331c      0x140 gor_03.o
  .rodata._ZL26maffiaboss_casino_talk_evt
-                0x00003440       0x20 gor_03.o
+                0x0000345c       0x20 gor_03.o
  .rodata._ZL26maffiaboss_talk_common_evt
-                0x00003460      0x120 gor_03.o
+                0x0000347c      0x120 gor_03.o
  .rodata.str1.4
-                0x00003580       0x18 gra.o
+                0x0000359c       0x18 gra.o
  .rodata._ZL18evt_machibuse_evt1
-                0x00003598       0x50 gra.o
+                0x000035b4       0x50 gra.o
  .rodata._ZL8doopliss
-                0x000035e8        0xb gra.o
- *fill*         0x000035f3        0x1 
+                0x00003604        0xb gra.o
+ *fill*         0x0000360f        0x1 
  .rodata._ZL18puniinfo_talk_hook
-                0x000035f4       0x10 mri.o
+                0x00003610       0x10 mri.o
  .rodata._ZL20mri_03_init_evt_hook
-                0x00003604       0x14 mri.o
+                0x00003620       0x14 mri.o
  .rodata.str1.4
-                0x00003618      0x10b mri.o
- *fill*         0x00003723        0x1 
+                0x00003634      0x10b mri.o
+ *fill*         0x0000373f        0x1 
  .rodata._ZL22mri_03_init_evt_switch
-                0x00003724       0x9c mri.o
+                0x00003740       0x9c mri.o
  .rodata._ZL20mri_01_init_evt_hook
-                0x000037c0       0x14 mri.o
+                0x000037dc       0x14 mri.o
  .rodata._ZL22mri_01_init_evt_switch
-                0x000037d4       0xb0 mri.o
+                0x000037f0       0xb0 mri.o
  .rodata._ZL23mri_sister_init_01_hook
-                0x00003884       0x10 mri.o
+                0x000038a0       0x10 mri.o
  .rodata._ZL22mri_sister_init_01_evt
-                0x00003894       0xa8 mri.o
+                0x000038b0       0xa8 mri.o
  .rodata._ZL16puni_2_init_hook
-                0x0000393c       0x10 mri.o
+                0x00003958       0x10 mri.o
  .rodata._ZL15puni_2_init_evt
-                0x0000394c       0x78 mri.o
+                0x00003968       0x78 mri.o
  .rodata._ZL16puni_1_talk_hook
-                0x000039c4       0x10 mri.o
+                0x000039e0       0x10 mri.o
  .rodata._ZL15puni_1_talk_evt
-                0x000039d4       0xb0 mri.o
+                0x000039f0       0xb0 mri.o
  .rodata._ZL16puni_1_init_hook
-                0x00003a84       0x10 mri.o
+                0x00003aa0       0x10 mri.o
  .rodata._ZL15puni_1_init_evt
-                0x00003a94       0x78 mri.o
+                0x00003ab0       0x78 mri.o
  .rodata._ZL15elder_talk_hook
-                0x00003b0c       0x10 mri.o
+                0x00003b28       0x10 mri.o
  .rodata._ZL22mri_elder_init_01_hook
-                0x00003b1c       0x10 mri.o
+                0x00003b38       0x10 mri.o
  .rodata._ZL21mri_elder_init_01_evt
-                0x00003b2c       0xcc mri.o
+                0x00003b48       0xcc mri.o
  .rodata._ZL22mri_rival_init_01_hook
-                0x00003bf8       0x10 mri.o
+                0x00003c14       0x10 mri.o
  .rodata._ZL21mri_rival_init_01_evt
-                0x00003c08       0xa8 mri.o
+                0x00003c24       0xa8 mri.o
  .rodata._ZL18guide_init_01_hook
-                0x00003cb0       0x10 mri.o
+                0x00003ccc       0x10 mri.o
  .rodata._ZL17guide_init_01_evt
-                0x00003cc0       0x8c mri.o
+                0x00003cdc       0x8c mri.o
  .rodata._ZL15guide_talk_hook
-                0x00003d4c       0x10 mri.o
+                0x00003d68       0x10 mri.o
  .rodata._ZL14guide_talk_evt
-                0x00003d5c       0x98 mri.o
+                0x00003d78       0x98 mri.o
  .rodata._ZL18guide_init_00_hook
-                0x00003df4       0x10 mri.o
+                0x00003e10       0x10 mri.o
  .rodata._ZL17guide_init_00_evt
-                0x00003e04      0x150 mri.o
+                0x00003e20      0x150 mri.o
+ .rodata._ZL20muj_01_init_evt_hook
+                0x00003f70       0x14 muj.o
+ .rodata._ZL19muj_01_init_evt_evt
+                0x00003f84       0x50 muj.o
  .rodata._ZL21borosuifu_b_talk_hook
-                0x00003f54       0x10 muj.o
+                0x00003fd4       0x10 muj.o
  .rodata.str1.4
-                0x00003f64      0x344 muj.o
+                0x00003fe4      0x384 muj.o
  .rodata._ZL20borosuifu_b_talk_evt
-                0x000042a8       0xf8 muj.o
+                0x00004368       0xf8 muj.o
  .rodata._ZL21borosuifu_a_talk_hook
-                0x000043a0       0x10 muj.o
+                0x00004460       0x10 muj.o
  .rodata._ZL20borosuifu_a_talk_evt
-                0x000043b0       0xf8 muj.o
+                0x00004470       0xf8 muj.o
  .rodata._ZL24suifu_d_talk_muj_01_hook
-                0x000044a8       0x10 muj.o
+                0x00004568       0x10 muj.o
  .rodata._ZL23suifu_d_talk_muj_01_evt
-                0x000044b8       0xf8 muj.o
+                0x00004578       0xf8 muj.o
  .rodata._ZL20suifu_bomb_talk_hook
-                0x000045b0       0x10 muj.o
+                0x00004670       0x10 muj.o
  .rodata._ZL19suifu_bomb_talk_evt
-                0x000045c0       0xf4 muj.o
+                0x00004680       0xf4 muj.o
  .rodata._ZL20suifu_bomb_init_hook
-                0x000046b4       0x10 muj.o
+                0x00004774       0x10 muj.o
  .rodata._ZL19suifu_bomb_init_evt
-                0x000046c4       0x30 muj.o
+                0x00004784       0x30 muj.o
  .rodata._ZL24suifu_a_talk_muj_01_hook
-                0x000046f4       0x10 muj.o
+                0x000047b4       0x10 muj.o
  .rodata._ZL23suifu_a_talk_muj_01_evt
-                0x00004704       0xf4 muj.o
+                0x000047c4       0xf4 muj.o
  .rodata._ZL24suifu_a_init_muj_01_hook
-                0x000047f8       0x10 muj.o
- .rodata._ZL23suifu_a_init_muj_01_evt
-                0x00004808       0x30 muj.o
- .rodata._ZL23odoodo_init_muj_01_hook
-                0x00004838       0x10 muj.o
- .rodata._ZL22odoodo_init_muj_01_evt
-                0x00004848       0x30 muj.o
- .rodata._ZL23megane_init_muj_01_hook
-                0x00004878       0x10 muj.o
- .rodata._ZL22megane_init_muj_01_evt
-                0x00004888       0x30 muj.o
- .rodata._ZL22marco_init_muj_01_hook
                 0x000048b8       0x10 muj.o
+ .rodata._ZL23suifu_a_init_muj_01_evt
+                0x000048c8       0x30 muj.o
+ .rodata._ZL23odoodo_init_muj_01_hook
+                0x000048f8       0x10 muj.o
+ .rodata._ZL22odoodo_init_muj_01_evt
+                0x00004908       0x30 muj.o
+ .rodata._ZL23megane_init_muj_01_hook
+                0x00004938       0x10 muj.o
+ .rodata._ZL22megane_init_muj_01_evt
+                0x00004948       0x30 muj.o
+ .rodata._ZL22marco_init_muj_01_hook
+                0x00004978       0x10 muj.o
  .rodata._ZL21marco_init_muj_01_evt
-                0x000048c8       0xcc muj.o
+                0x00004988       0xcc muj.o
  .rodata._ZL25garawaru_talk_muj_01_hook
-                0x00004994       0x10 muj.o
+                0x00004a54       0x10 muj.o
  .rodata._ZL24garawaru_talk_muj_01_evt
-                0x000049a4      0x4b4 muj.o
+                0x00004a64      0x4b4 muj.o
  .rodata._ZL25garawaru_init_muj_01_hook
-                0x00004e58       0x10 muj.o
+                0x00004f18       0x10 muj.o
  .rodata._ZL24garawaru_init_muj_01_evt
-                0x00004e68      0x11c muj.o
+                0x00004f28      0x11c muj.o
  .rodata._ZL20muj_00_init_evt_hook
-                0x00004f84       0x44 muj.o
+                0x00005044       0x44 muj.o
+ .rodata._ZL21muj_00_init_evt_evt_2
+                0x00005088       0x70 muj.o
  .rodata._ZL19muj_00_init_evt_evt
-                0x00004fc8       0x40 muj.o
+                0x000050f8       0x40 muj.o
  .rodata._ZL22peton_talk_muj_00_hook
-                0x00005008       0x10 muj.o
+                0x00005138       0x10 muj.o
  .rodata._ZL21peton_talk_muj_00_evt
-                0x00005018       0x8c muj.o
+                0x00005148       0x8c muj.o
  .rodata._ZL21mony_talk_muj_00_hook
-                0x000050a4       0x10 muj.o
+                0x000051d4       0x10 muj.o
  .rodata._ZL20mony_talk_muj_00_evt
-                0x000050b4       0x8c muj.o
+                0x000051e4       0x8c muj.o
  .rodata._ZL17nokorin_talk_hook
-                0x00005140       0x10 nok.o
+                0x00005270       0x10 nok.o
  .rodata.str1.4
-                0x00005150      0x45e nok.o
- *fill*         0x000055ae        0x2 
+                0x00005280      0x4ee nok.o
+ *fill*         0x0000576e        0x2 
  .rodata._ZL16nokorin_talk_evt
-                0x000055b0      0x180 nok.o
+                0x00005770      0x2f4 nok.o
  .rodata._ZL19boss_noko_talk_hook
-                0x00005730       0x10 nok.o
+                0x00005a64       0x10 nok.o
  .rodata._ZL18boss_noko_talk_evt
-                0x00005740      0x164 nok.o
+                0x00005a74      0x164 nok.o
  .rodata._ZL20nokonoko_K_talk_hook
-                0x000058a4       0x10 nok.o
+                0x00005bd8       0x10 nok.o
  .rodata._ZL19nokonoko_K_talk_evt
-                0x000058b4       0xd0 nok.o
+                0x00005be8       0xd4 nok.o
  .rodata._ZL18nokopapa_talk_hook
-                0x00005984       0x10 nok.o
- .rodata._ZL17nokopapa_talk_evt
-                0x00005994      0x128 nok.o
- .rodata._ZL16monban_talk_hook
-                0x00005abc       0x10 nok.o
- .rodata._ZL15monban_talk_evt
-                0x00005acc      0x110 nok.o
- .rodata._ZL20nokonoko_I_talk_hook
-                0x00005bdc       0x10 nok.o
- .rodata._ZL19nokonoko_I_talk_evt
-                0x00005bec       0xd0 nok.o
- .rodata._ZL20nokonoko_H_talk_hook
                 0x00005cbc       0x10 nok.o
+ .rodata._ZL17nokopapa_talk_evt
+                0x00005ccc      0x128 nok.o
+ .rodata._ZL16monban_talk_hook
+                0x00005df4       0x10 nok.o
+ .rodata._ZL15monban_talk_evt
+                0x00005e04      0x11c nok.o
+ .rodata._ZL20nokonoko_I_talk_hook
+                0x00005f20       0x10 nok.o
+ .rodata._ZL19nokonoko_I_talk_evt
+                0x00005f30       0xd4 nok.o
+ .rodata._ZL20nokonoko_H_talk_hook
+                0x00006004       0x10 nok.o
  .rodata._ZL19nokonoko_H_talk_evt
-                0x00005ccc       0xf8 nok.o
+                0x00006014       0xfc nok.o
  .rodata._ZL20nokonoko_G_talk_hook
-                0x00005dc4       0x10 nok.o
+                0x00006110       0x10 nok.o
  .rodata._ZL19nokonoko_G_talk_evt
-                0x00005dd4       0xd0 nok.o
+                0x00006120       0xd4 nok.o
  .rodata._ZL15talk_white_hook
-                0x00005ea4       0x10 nok.o
+                0x000061f4       0x10 nok.o
  .rodata._ZL14talk_white_evt
-                0x00005eb4       0xa8 nok.o
+                0x00006204       0xa4 nok.o
  .rodata._ZL15init_white_hook
-                0x00005f5c       0x10 nok.o
+                0x000062a8       0x10 nok.o
  .rodata._ZL14init_white_evt
-                0x00005f6c       0x44 nok.o
+                0x000062b8       0x44 nok.o
  .rodata._ZL20nokonoko_F_talk_hook
-                0x00005fb0       0x10 nok.o
+                0x000062fc       0x10 nok.o
  .rodata._ZL19nokonoko_F_talk_evt
-                0x00005fc0       0xd0 nok.o
+                0x0000630c       0xd4 nok.o
  .rodata._ZL20nokonoko_D_talk_hook
-                0x00006090       0x10 nok.o
+                0x000063e0       0x10 nok.o
  .rodata._ZL19nokonoko_D_talk_evt
-                0x000060a0       0xf8 nok.o
+                0x000063f0       0xfc nok.o
  .rodata._ZL20nokonoko_C_talk_hook
-                0x00006198       0x10 nok.o
+                0x000064ec       0x10 nok.o
  .rodata._ZL19nokonoko_C_talk_evt
-                0x000061a8       0xd0 nok.o
+                0x000064fc       0xd4 nok.o
  .rodata._ZL20nokonoko_B_talk_hook
-                0x00006278       0x10 nok.o
+                0x000065d0       0x10 nok.o
  .rodata._ZL19nokonoko_B_talk_evt
-                0x00006288       0xd0 nok.o
+                0x000065e0       0xd4 nok.o
  .rodata._ZL20nokonoko_A_talk_hook
-                0x00006358       0x10 nok.o
+                0x000066b4       0x10 nok.o
  .rodata._ZL19nokonoko_A_talk_evt
-                0x00006368       0xfc nok.o
+                0x000066c4      0x10c nok.o
  .rodata._ZL14evt_daiza_hook
-                0x00006464       0x1c pik.o
+                0x000067d0       0x1c pik.o
  .rodata.str1.4
-                0x00006480      0x142 pik.o
- *fill*         0x000065c2        0x2 
+                0x000067ec      0x142 pik.o
+ *fill*         0x0000692e        0x2 
  .rodata._ZL13evt_daiza_evt
-                0x000065c4       0x5c pik.o
+                0x00006930       0x5c pik.o
  .rodata._ZL18pik_evt_powan_hook
-                0x00006620       0x28 pik.o
+                0x0000698c       0x28 pik.o
  .rodata._ZL17pik_evt_powan_evt
-                0x00006648       0x80 pik.o
+                0x000069b4       0x80 pik.o
  .rodata._ZL16takun6_talk_hook
-                0x000066c8       0x10 pik.o
+                0x00006a34       0x10 pik.o
  .rodata._ZL15takun6_talk_evt
-                0x000066d8       0x78 pik.o
+                0x00006a44       0x78 pik.o
  .rodata._ZL16takun5_talk_hook
-                0x00006750       0x10 pik.o
+                0x00006abc       0x10 pik.o
  .rodata._ZL15takun5_talk_evt
-                0x00006760       0x78 pik.o
+                0x00006acc       0x78 pik.o
  .rodata._ZL16takun4_talk_hook
-                0x000067d8       0x10 pik.o
+                0x00006b44       0x10 pik.o
  .rodata._ZL15takun4_talk_evt
-                0x000067e8       0xb4 pik.o
+                0x00006b54       0xb4 pik.o
  .rodata._ZL18miyageya_talk_hook
-                0x0000689c       0x28 pik.o
+                0x00006c08       0x28 pik.o
  .rodata._ZL17miyageya_talk_evt
-                0x000068c4      0x114 pik.o
+                0x00006c30      0x114 pik.o
  .rodata._ZL27talk_madam_ring_return_hook
-                0x000069d8       0x14 rsh.o
+                0x00006d44       0x14 rsh.o
  .rodata._ZL26talk_madam_ring_return_evt
-                0x000069ec       0x78 rsh.o
+                0x00006d58       0x78 rsh.o
  .rodata._ZL16init_konari_hook
-                0x00006a64       0x14 rsh.o
+                0x00006dd0       0x14 rsh.o
  .rodata.str1.4
-                0x00006a78      0x1d5 rsh.o
- *fill*         0x00006c4d        0x3 
+                0x00006de4      0x1d5 rsh.o
+ *fill*         0x00006fb9        0x3 
  .rodata._ZL15init_konari_evt
-                0x00006c50       0x9c rsh.o
+                0x00006fbc       0x9c rsh.o
  .rodata._ZL15init_powan_hook
-                0x00006cec       0x14 rsh.o
+                0x00007058       0x14 rsh.o
  .rodata._ZL14init_powan_evt
-                0x00006d00       0xec rsh.o
+                0x0000706c       0xec rsh.o
  .rodata._ZL18talk_waitless_hook
-                0x00006dec       0x14 rsh.o
+                0x00007158       0x14 rsh.o
  .rodata._ZL17talk_waitless_evt
-                0x00006e00       0x78 rsh.o
+                0x0000716c       0x78 rsh.o
  .rodata._ZL20rsh_01_init_evt_hook
-                0x00006e78       0x14 rsh.o
+                0x000071e4       0x14 rsh.o
  .rodata._ZL19rsh_01_init_evt_evt
-                0x00006e8c       0x80 rsh.o
+                0x000071f8       0x80 rsh.o
  .rodata._ZL20rsh_00_init_evt_hook
-                0x00006f0c       0x14 rsh.o
+                0x00007278       0x14 rsh.o
  .rodata._ZL19rsh_00_init_evt_evt
-                0x00006f20       0xb8 rsh.o
+                0x0000728c       0xb8 rsh.o
  .rodata._ZL20rsh_04_init_evt_hook
-                0x00006fd8       0x14 rsh.o
+                0x00007344       0x14 rsh.o
  .rodata._ZL19rsh_04_init_evt_evt
-                0x00006fec       0xa4 rsh.o
+                0x00007358       0xa4 rsh.o
  .rodata._ZL26rsh_03_init_evt_music_hook
-                0x00007090       0x10 rsh.o
+                0x000073fc       0x10 rsh.o
  .rodata._ZL21rsh_03_init_evt_music
-                0x000070a0      0x1f8 rsh.o
+                0x0000740c      0x1f8 rsh.o
  .rodata._ZL26rsh_02_init_evt_music_hook
-                0x00007298       0x10 rsh.o
+                0x00007604       0x10 rsh.o
  .rodata._ZL21rsh_02_init_evt_music
-                0x000072a8      0x270 rsh.o
+                0x00007614      0x270 rsh.o
  .rodata._ZL26rsh_01_init_evt_music_hook
-                0x00007518       0x10 rsh.o
+                0x00007884       0x10 rsh.o
  .rodata._ZL21rsh_01_init_evt_music
-                0x00007528      0x1f8 rsh.o
+                0x00007894      0x1f8 rsh.o
  .rodata._ZL26rsh_00_init_evt_music_hook
-                0x00007720       0x10 rsh.o
+                0x00007a8c       0x10 rsh.o
  .rodata._ZL21rsh_00_init_evt_music
-                0x00007730      0x1f8 rsh.o
+                0x00007a9c      0x1f8 rsh.o
  .rodata._ZL26rsh_04_init_evt_music_hook
-                0x00007928       0x10 rsh.o
+                0x00007c94       0x10 rsh.o
  .rodata._ZL21rsh_04_init_evt_music
-                0x00007938      0x1f8 rsh.o
+                0x00007ca4      0x1f8 rsh.o
  .rodata._ZL20rsh_06_init_evt_hook
-                0x00007b30       0x10 rsh.o
+                0x00007e9c       0x10 rsh.o
  .rodata._ZL19rsh_06_init_evt_evt
-                0x00007b40      0x178 rsh.o
+                0x00007eac      0x178 rsh.o
  .rodata._ZL21tik_05_init_evt_hook2
-                0x00007cb8       0x14 tik.o
+                0x00008024       0x14 tik.o
  .rodata.str1.4
-                0x00007ccc      0x227 tik.o
- *fill*         0x00007ef3        0x1 
+                0x00008038      0x227 tik.o
+ *fill*         0x0000825f        0x1 
  .rodata._ZL20tik_05_init_evt_evt2
-                0x00007ef4       0xd4 tik.o
+                0x00008260       0xd4 tik.o
  .rodata._ZL24tik_kurihakase_init_hook
-                0x00007fc8       0x10 tik.o
+                0x00008334       0x10 tik.o
  .rodata._ZL23tik_kurihakase_init_evt
-                0x00007fd8       0x7c tik.o
+                0x00008344       0x7c tik.o
  .rodata._ZL18master_2_talk_hook
-                0x00008054       0x10 tik.o
+                0x000083c0       0x10 tik.o
  .rodata._ZL17master_2_talk_evt
-                0x00008064      0x180 tik.o
+                0x000083d0      0x180 tik.o
  .rodata._ZL17borodo4_talk_hook
-                0x000081e4       0x10 tik.o
+                0x00008550       0x10 tik.o
  .rodata._ZL16borodo4_talk_evt
-                0x000081f4      0x180 tik.o
+                0x00008560      0x180 tik.o
  .rodata._ZL17borodo3_talk_hook
-                0x00008374       0x10 tik.o
+                0x000086e0       0x10 tik.o
  .rodata._ZL16borodo3_talk_evt
-                0x00008384      0x180 tik.o
+                0x000086f0      0x180 tik.o
  .rodata._ZL17chusan4_talk_hook
-                0x00008504       0x10 tik.o
+                0x00008870       0x10 tik.o
  .rodata._ZL16chusan4_talk_evt
-                0x00008514      0x180 tik.o
+                0x00008880      0x180 tik.o
  .rodata._ZL17kuribo5_talk_hook
-                0x00008694       0x10 tik.o
+                0x00008a00       0x10 tik.o
  .rodata._ZL16kuribo5_talk_evt
-                0x000086a4      0x180 tik.o
+                0x00008a10      0x180 tik.o
  .rodata._ZL16talk_sakaba_hook
-                0x00008824       0x10 tou.o
+                0x00008b90       0x10 tou.o
  .rodata.str1.4
-                0x00008834       0x28 tou.o
+                0x00008ba0       0x28 tou.o
  .rodata._ZL15talk_sakaba_evt
-                0x0000885c       0x84 tou.o
+                0x00008bc8       0x84 tou.o
  .rodata._ZL20shop_woman_talk_hook
-                0x000088e0       0x10 usu.o
+                0x00008c4c       0x10 usu.o
  .rodata.str1.4
-                0x000088f0      0x400 usu.o
+                0x00008c5c      0x400 usu.o
  .rodata._ZL19shop_woman_talk_evt
-                0x00008cf0       0x78 usu.o
+                0x0000905c       0x78 usu.o
  .rodata._ZL18shop_man_talk_hook
-                0x00008d68       0x10 usu.o
+                0x000090d4       0x10 usu.o
  .rodata._ZL17shop_man_talk_evt
-                0x00008d78       0x78 usu.o
+                0x000090e4       0x78 usu.o
  .rodata._ZL19villagerJ_talk_hook
-                0x00008df0       0x10 usu.o
+                0x0000915c       0x10 usu.o
  .rodata._ZL18villagerJ_talk_evt
-                0x00008e00      0x104 usu.o
+                0x0000916c      0x104 usu.o
  .rodata._ZL19villagerI_talk_hook
-                0x00008f04       0x10 usu.o
+                0x00009270       0x10 usu.o
  .rodata._ZL18villagerI_talk_evt
-                0x00008f14      0x104 usu.o
+                0x00009280      0x104 usu.o
  .rodata._ZL19villagerH_talk_hook
-                0x00009018       0x10 usu.o
+                0x00009384       0x10 usu.o
  .rodata._ZL18villagerH_talk_evt
-                0x00009028       0xd0 usu.o
+                0x00009394       0xd0 usu.o
  .rodata._ZL19villagerG_talk_hook
-                0x000090f8       0x10 usu.o
+                0x00009464       0x10 usu.o
  .rodata._ZL18villagerG_talk_evt
-                0x00009108       0xf0 usu.o
+                0x00009474       0xf0 usu.o
  .rodata._ZL19villagerF_talk_hook
-                0x000091f8       0x10 usu.o
+                0x00009564       0x10 usu.o
  .rodata._ZL18villagerF_talk_evt
-                0x00009208       0xf0 usu.o
+                0x00009574       0xf0 usu.o
  .rodata._ZL19villagerK_talk_hook
-                0x000092f8       0x10 usu.o
+                0x00009664       0x10 usu.o
  .rodata._ZL18villagerK_talk_evt
-                0x00009308      0x130 usu.o
+                0x00009674      0x130 usu.o
  .rodata._ZL19villagerE_talk_hook
-                0x00009438       0x10 usu.o
+                0x000097a4       0x10 usu.o
  .rodata._ZL18villagerE_talk_evt
-                0x00009448      0x130 usu.o
+                0x000097b4      0x130 usu.o
  .rodata._ZL19villagerD_talk_hook
-                0x00009578       0x10 usu.o
+                0x000098e4       0x10 usu.o
  .rodata._ZL18villagerD_talk_evt
-                0x00009588      0x194 usu.o
+                0x000098f4      0x194 usu.o
  .rodata._ZL19villagerC_talk_hook
-                0x0000971c       0x10 usu.o
+                0x00009a88       0x10 usu.o
  .rodata._ZL18villagerC_talk_evt
-                0x0000972c       0xfc usu.o
+                0x00009a98       0xfc usu.o
  .rodata._ZL19villagerB_talk_hook
-                0x00009828       0x10 usu.o
+                0x00009b94       0x10 usu.o
  .rodata._ZL18villagerB_talk_evt
-                0x00009838       0xfc usu.o
+                0x00009ba4       0xfc usu.o
  .rodata._ZL19villagerA_talk_hook
-                0x00009934       0x10 usu.o
+                0x00009ca0       0x10 usu.o
  .rodata._ZL18villagerA_talk_evt
-                0x00009944      0x130 usu.o
+                0x00009cb0      0x130 usu.o
  .rodata._ZL19villagerA_init_hook
-                0x00009a74       0x10 usu.o
+                0x00009de0       0x10 usu.o
  .rodata._ZL18villagerA_init_evt
-                0x00009a84       0x6c usu.o
+                0x00009df0       0x6c usu.o
  .rodata._ZL12usuVillagerA
-                0x00009af0        0x7 usu.o
- *fill*         0x00009af7        0x1 
+                0x00009e5c        0x7 usu.o
+ *fill*         0x00009e63        0x1 
  .rodata.str1.4
-                0x00009af8        0x3 win.o
- *fill*         0x00009afb        0x1 
+                0x00009e64        0x3 win.o
+ *fill*         0x00009e67        0x1 
  .rodata._ZL16majorin_init_evt
-                0x00009afc       0x30 win.o
+                0x00009e68       0x30 win.o
  .rodata._ZL16maririn_init_evt
-                0x00009b2c       0x30 win.o
+                0x00009e98       0x30 win.o
  .rodata._ZL15vivian_init_evt
-                0x00009b5c       0x30 win.o
+                0x00009ec8       0x30 win.o
  *(.gnu.linkonce.r.*)
 
 .rodata1
  *(.rodata1)
 
-.sdata2         0x00009b8c        0x0
+.sdata2         0x00009ef8        0x0
                 [!provide]                        PROVIDE (_SDA2_BASE_ = .)
  *(.sdata2)
  *(.sdata2.*)
@@ -1351,7 +1336,7 @@ Linker script and memory map
  *(.sbss2)
  *(.sbss2.*)
  *(.gnu.linkonce.sb2.*)
-                0x00009b8c                        . = ALIGN (0x4)
+                0x00009ef8                        . = ALIGN (0x4)
                 [!provide]                        PROVIDE (__preinit_array_start = .)
 
 .preinit_array
@@ -1368,28 +1353,26 @@ Linker script and memory map
  *(.fini_array)
                 [!provide]                        PROVIDE (__fini_array_end = .)
 
-.data           0x00009b8c      0x3f4
+.data           0x00009ef8      0x388
  *(.data)
  *(.data.*)
  .data.GSWF_ARR_SIZE
-                0x00009b8c        0x2 OWR.o
-                0x00009b8c                GSWF_ARR_SIZE
- *fill*         0x00009b8e        0x2 
+                0x00009ef8        0x2 OWR.o
+                0x00009ef8                GSWF_ARR_SIZE
+ *fill*         0x00009efa        0x2 
  .data.GSWF_ARR
-                0x00009b90       0x14 OWR.o
-                0x00009b90                GSWF_ARR
+                0x00009efc       0x14 OWR.o
+                0x00009efc                GSWF_ARR
  .data._ZN3mod6common12kItemDataArrE
-                0x00009ba4        0x4 common.o
-                0x00009ba4                _ZN3mod6common12kItemDataArrE
+                0x00009f10        0x4 common.o
+                0x00009f10                _ZN3mod6common12kItemDataArrE
  .data._ZL16gor_00_init_evt2
-                0x00009ba8      0x2a8 gor_00.o
+                0x00009f14      0x2a8 gor_00.o
  .data._ZL14elder_talk_evt
-                0x00009e50       0xb8 mri.o
- .data._ZL21muj_00_init_evt_evt_2
-                0x00009f08       0x70 muj.o
+                0x0000a1bc       0xb8 mri.o
  *(.gnu.linkonce.d.*)
-                0x00009f80                        . = ALIGN (0x20)
- *fill*         0x00009f78        0x8 
+                0x0000a280                        . = ALIGN (0x20)
+ *fill*         0x0000a274        0xc 
 
 .data1
  *(.data1)
@@ -1401,62 +1384,63 @@ Linker script and memory map
  *(.tbss .tbss.* .gnu.linkonce.tb.*)
  *(.tcommon)
 
-.eh_frame       0x00009f80     0x14d8
+.eh_frame       0x0000a280     0x13fc
  *(.eh_frame)
- .eh_frame      0x00009f80      0x144 OWR.o
-                                0x1f4 (size before relaxing)
- .eh_frame      0x0000a0c4        0x0 common.o
+ .eh_frame      0x0000a280      0x138 OWR.o
+                                0x1c0 (size before relaxing)
+ .eh_frame      0x0000a3b8        0x0 common.o
                                  0xc8 (size before relaxing)
- .eh_frame      0x0000a0c4       0x70 con_mario.o
- .eh_frame      0x0000a134       0x84 con_perf.o
- .eh_frame      0x0000a1b8       0xac con_seq.o
- .eh_frame      0x0000a264      0x454 console.o
+ .eh_frame      0x0000a3b8       0x70 con_mario.o
+ .eh_frame      0x0000a428       0x84 con_perf.o
+ .eh_frame      0x0000a4ac       0xac con_seq.o
+ .eh_frame      0x0000a558      0x454 console.o
                                 0x4e8 (size before relaxing)
- .eh_frame      0x0000a6b8       0x3c cxx.o
+ .eh_frame      0x0000a9ac       0x3c cxx.o
                                  0x64 (size before relaxing)
- .eh_frame      0x0000a6f4       0x84 keyboard.o
+ .eh_frame      0x0000a9e8       0x84 keyboard.o
                                 0x110 (size before relaxing)
- .eh_frame      0x0000a778       0xb8 mod.o
+ .eh_frame      0x0000aa6c       0xb8 mod.o
                                 0x120 (size before relaxing)
- .eh_frame      0x0000a830       0xd8 patch.o
+ .eh_frame      0x0000ab24       0x90 patch.o
                                 0x1cc (size before relaxing)
- .eh_frame      0x0000a908       0x90 rel.o
- .eh_frame      0x0000a998       0xbc ug.o
- .eh_frame      0x0000aa54       0x3c util.o
- .eh_frame      0x0000aa90       0x28 aaa.o
- .eh_frame      0x0000aab8       0x78 aji.o
- .eh_frame      0x0000ab30       0x40 bom.o
- .eh_frame      0x0000ab70       0x40 dou.o
- .eh_frame      0x0000abb0       0x3c eki.o
- .eh_frame      0x0000abec       0x28 end.o
- .eh_frame      0x0000ac14       0x3c gon.o
- .eh_frame      0x0000ac50       0x7c gor_00.o
- .eh_frame      0x0000accc       0x54 gor_01.o
- .eh_frame      0x0000ad20       0x64 gor_02.o
- .eh_frame      0x0000ad84       0x64 gor_03.o
- .eh_frame      0x0000ade8       0x38 gor_04.o
- .eh_frame      0x0000ae20       0x34 gor_misc.o
- .eh_frame      0x0000ae54       0x48 gra.o
- .eh_frame      0x0000ae9c       0x3c hei.o
- .eh_frame      0x0000aed8       0x38 hom.o
- .eh_frame      0x0000af10       0x40 jin.o
- .eh_frame      0x0000af50       0x30 kpa.o
- .eh_frame      0x0000af80        0x0 las.o
+ .eh_frame      0x0000abb4       0x90 rel.o
+ .eh_frame      0x0000ac44       0xbc ug.o
+ .eh_frame      0x0000ad00       0x3c util.o
+ .eh_frame      0x0000ad3c       0x28 aaa.o
+ .eh_frame      0x0000ad64       0x78 aji.o
+ .eh_frame      0x0000addc       0x40 bom.o
+ .eh_frame      0x0000ae1c       0x40 dou.o
+ .eh_frame      0x0000ae5c       0x3c eki.o
+ .eh_frame      0x0000ae98       0x28 end.o
+ .eh_frame      0x0000aec0       0x3c gon.o
+ .eh_frame      0x0000aefc       0x7c gor_00.o
+ .eh_frame      0x0000af78       0x54 gor_01.o
+ .eh_frame      0x0000afcc       0x64 gor_02.o
+ .eh_frame      0x0000b030       0x64 gor_03.o
+ .eh_frame      0x0000b094       0x38 gor_04.o
+ .eh_frame      0x0000b0cc       0x34 gor_misc.o
+ .eh_frame      0x0000b100       0x48 gra.o
+ .eh_frame      0x0000b148       0x3c hei.o
+ .eh_frame      0x0000b184       0x38 hom.o
+ .eh_frame      0x0000b1bc       0x40 jin.o
+ .eh_frame      0x0000b1fc       0x30 kpa.o
+ .eh_frame      0x0000b22c        0x0 las.o
                                  0x40 (size before relaxing)
- .eh_frame      0x0000af80       0x74 main.o
- .eh_frame      0x0000aff4        0x0 moo.o
+ .eh_frame      0x0000b22c        0x0 main.o
+                                 0x74 (size before relaxing)
+ .eh_frame      0x0000b22c        0x0 moo.o
                                  0x30 (size before relaxing)
- .eh_frame      0x0000aff4       0x74 mri.o
- .eh_frame      0x0000b068       0x88 muj.o
- .eh_frame      0x0000b0f0       0x4c nok.o
- .eh_frame      0x0000b13c       0x60 pik.o
- .eh_frame      0x0000b19c       0x78 rsh.o
- .eh_frame      0x0000b214       0xa4 tik.o
- .eh_frame      0x0000b2b8       0x68 tou.o
- .eh_frame      0x0000b320       0x40 tou2.o
- .eh_frame      0x0000b360       0x78 usu.o
- .eh_frame      0x0000b3d8       0x44 win.o
- .eh_frame      0x0000b41c       0x3c C:/devkitPro/devkitPPC/bin/../lib/gcc/powerpc-eabi/13.1.0\libgcc.a(_divdi3.o)
+ .eh_frame      0x0000b22c       0x74 mri.o
+ .eh_frame      0x0000b2a0       0x74 muj.o
+ .eh_frame      0x0000b314       0x4c nok.o
+ .eh_frame      0x0000b360       0x60 pik.o
+ .eh_frame      0x0000b3c0       0x78 rsh.o
+ .eh_frame      0x0000b438       0xa4 tik.o
+ .eh_frame      0x0000b4dc       0x68 tou.o
+ .eh_frame      0x0000b544       0x40 tou2.o
+ .eh_frame      0x0000b584       0x78 usu.o
+ .eh_frame      0x0000b5fc       0x44 win.o
+ .eh_frame      0x0000b640       0x3c C:/devkitPro/devkitPPC/bin/../lib/gcc/powerpc-eabi/13.1.0\libgcc.a(_divdi3.o)
 
 .gcc_except_table
  *(.gcc_except_table)
@@ -1473,28 +1457,27 @@ Linker script and memory map
 .dynamic
  *(.dynamic)
 
-.ctors          0x0000b458       0x28
+.ctors          0x0000b67c       0x24
  *crtbegin.o(.ctors)
  *(EXCLUDE_FILE(*crtend.o) .ctors)
- .ctors         0x0000b458        0x4 OWR.o
- .ctors         0x0000b45c        0x4 con_mario.o
- .ctors         0x0000b460        0x4 con_perf.o
- .ctors         0x0000b464        0x4 con_seq.o
- .ctors         0x0000b468        0x4 console.o
- .ctors         0x0000b46c        0x4 gor_00.o
- .ctors         0x0000b470        0x4 mri.o
- .ctors         0x0000b474        0x4 muj.o
+ .ctors         0x0000b67c        0x4 OWR.o
+ .ctors         0x0000b680        0x4 con_mario.o
+ .ctors         0x0000b684        0x4 con_perf.o
+ .ctors         0x0000b688        0x4 con_seq.o
+ .ctors         0x0000b68c        0x4 console.o
+ .ctors         0x0000b690        0x4 gor_00.o
+ .ctors         0x0000b694        0x4 mri.o
  *(SORT_BY_NAME(.ctors.*))
  *(.ctors)
-                0x0000b480                        . = ALIGN (0x20)
- *fill*         0x0000b478        0x8 
+                0x0000b6a0                        . = ALIGN (0x20)
+ *fill*         0x0000b698        0x8 
 
-.dtors          0x0000b480        0x0
+.dtors          0x0000b6a0        0x0
  *crtbegin.o(.dtors)
  *(EXCLUDE_FILE(*crtend.o) .dtors)
  *(SORT_BY_NAME(.dtors.*))
  *(.dtors)
-                0x0000b480                        . = ALIGN (0x20)
+                0x0000b6a0                        . = ALIGN (0x20)
 
 .jcr
  *(.jcr)
@@ -1503,17 +1486,17 @@ Linker script and memory map
  *(.got.plt)
  *(.got)
 
-.sdata          0x0000b480        0x0
+.sdata          0x0000b6a0        0x0
                 [!provide]                        PROVIDE (_SDA_BASE_ = .)
  *(.sdata)
  *(.sdata.*)
  *(.gnu.linkonce.s.*)
-                0x0000b480                        . = ALIGN (0x20)
-                0x0000b480                        _edata = .
+                0x0000b6a0                        . = ALIGN (0x20)
+                0x0000b6a0                        _edata = .
                 [!provide]                        PROVIDE (edata = .)
 
-.sbss           0x0000b480        0x0
-                0x0000b480                        __sbss_start = .
+.sbss           0x0000b6a0        0x0
+                0x0000b6a0                        __sbss_start = .
                 [!provide]                        PROVIDE (__sbss_start = .)
                 [!provide]                        PROVIDE (___sbss_start = .)
  *(.dynsbss)
@@ -1523,109 +1506,109 @@ Linker script and memory map
  *(.scommon)
                 [!provide]                        PROVIDE (__sbss_end = .)
                 [!provide]                        PROVIDE (___sbss_end = .)
-                0x0000b480                        . = ALIGN (0x20)
-                0x0000b480                        __sbss_end = .
+                0x0000b6a0                        . = ALIGN (0x20)
+                0x0000b6a0                        __sbss_end = .
 
-.bss            0x0000b480      0x140
-                0x0000b480                        __bss_start = .
+.bss            0x0000b6a0      0x140
+                0x0000b6a0                        __bss_start = .
                 [!provide]                        PROVIDE (__bss_start = .)
  *(.dynbss)
  *(.bss)
  *(.bss.*)
  .bss._ZN3mod3owr25g_stg0_00_init_trampolineE
-                0x0000b480        0x4 OWR.o
-                0x0000b480                _ZN3mod3owr25g_stg0_00_init_trampolineE
+                0x0000b6a0        0x4 OWR.o
+                0x0000b6a0                _ZN3mod3owr25g_stg0_00_init_trampolineE
  .bss._ZN3mod3owr19g_OSLink_trampolineE
-                0x0000b484        0x4 OWR.o
-                0x0000b484                _ZN3mod3owr19g_OSLink_trampolineE
+                0x0000b6a4        0x4 OWR.o
+                0x0000b6a4                _ZN3mod3owr19g_OSLink_trampolineE
  .bss._ZN3mod3owr5gSelfE
-                0x0000b488        0x4 OWR.o
-                0x0000b488                _ZN3mod3owr5gSelfE
+                0x0000b6a8        0x4 OWR.o
+                0x0000b6a8                _ZN3mod3owr5gSelfE
  .bss._ZN3mod3owr7item_dbE
-                0x0000b48c        0x4 OWR.o
-                0x0000b48c                _ZN3mod3owr7item_dbE
+                0x0000b6ac        0x4 OWR.o
+                0x0000b6ac                _ZN3mod3owr7item_dbE
  .bss._ZN3modL12mod_if_obj22E
-                0x0000b490        0x8 con_mario.o
+                0x0000b6b0        0x8 con_mario.o
  .bss._ZN3mod14mario_show_posE
-                0x0000b498       0x10 con_mario.o
-                0x0000b498                _ZN3mod14mario_show_posE
+                0x0000b6b8       0x10 con_mario.o
+                0x0000b6b8                _ZN3mod14mario_show_posE
  .bss._ZN3mod13mario_set_posE
-                0x0000b4a8        0xc con_mario.o
-                0x0000b4a8                _ZN3mod13mario_set_posE
+                0x0000b6c8        0xc con_mario.o
+                0x0000b6c8                _ZN3mod13mario_set_posE
  .bss._ZN3modL12mod_if_obj46E
-                0x0000b4b4        0x8 con_perf.o
+                0x0000b6d4        0x8 con_perf.o
  .bss._ZN3mod14mem_debug_heapE
-                0x0000b4bc       0x10 con_perf.o
-                0x0000b4bc                _ZN3mod14mem_debug_heapE
+                0x0000b6dc       0x10 con_perf.o
+                0x0000b6dc                _ZN3mod14mem_debug_heapE
  .bss._ZN3mod15perf_fake_spikeE
-                0x0000b4cc        0xc con_perf.o
-                0x0000b4cc                _ZN3mod15perf_fake_spikeE
+                0x0000b6ec        0xc con_perf.o
+                0x0000b6ec                _ZN3mod15perf_fake_spikeE
  .bss._ZN3mod14seq_change_mapE
-                0x0000b4d8        0xc con_seq.o
-                0x0000b4d8                _ZN3mod14seq_change_mapE
+                0x0000b6f8        0xc con_seq.o
+                0x0000b6f8                _ZN3mod14seq_change_mapE
  .bss._ZN3modL12mod_if_obj16E
-                0x0000b4e4        0x8 con_seq.o
+                0x0000b704        0x8 con_seq.o
  .bss._ZN3mod24gTrampoline_seq_logoMainE
-                0x0000b4ec        0x4 con_seq.o
-                0x0000b4ec                _ZN3mod24gTrampoline_seq_logoMainE
+                0x0000b70c        0x4 con_seq.o
+                0x0000b70c                _ZN3mod24gTrampoline_seq_logoMainE
  .bss._ZN3mod13seq_logo_skipE
-                0x0000b4f0       0x10 con_seq.o
-                0x0000b4f0                _ZN3mod13seq_logo_skipE
+                0x0000b710       0x10 con_seq.o
+                0x0000b710                _ZN3mod13seq_logo_skipE
  .bss._ZN3mod4findE
-                0x0000b500        0xc console.o
-                0x0000b500                _ZN3mod4findE
+                0x0000b720        0xc console.o
+                0x0000b720                _ZN3mod4findE
  .bss._ZN3mod11con_ug_chanE
-                0x0000b50c       0x10 console.o
-                0x0000b50c                _ZN3mod11con_ug_chanE
+                0x0000b72c       0x10 console.o
+                0x0000b72c                _ZN3mod11con_ug_chanE
  .bss._ZN3mod11con_ug_modeE
-                0x0000b51c       0x10 console.o
-                0x0000b51c                _ZN3mod11con_ug_modeE
+                0x0000b73c       0x10 console.o
+                0x0000b73c                _ZN3mod11con_ug_modeE
  .bss._ZN3mod21con_log_fade_durationE
-                0x0000b52c       0x10 console.o
-                0x0000b52c                _ZN3mod21con_log_fade_durationE
+                0x0000b74c       0x10 console.o
+                0x0000b74c                _ZN3mod21con_log_fade_durationE
  .bss._ZN3mod18con_log_fade_startE
-                0x0000b53c       0x10 console.o
-                0x0000b53c                _ZN3mod18con_log_fade_startE
+                0x0000b75c       0x10 console.o
+                0x0000b75c                _ZN3mod18con_log_fade_startE
  .bss._ZN3mod12con_log_fadeE
-                0x0000b54c       0x10 console.o
-                0x0000b54c                _ZN3mod12con_log_fadeE
+                0x0000b76c       0x10 console.o
+                0x0000b76c                _ZN3mod12con_log_fadeE
  .bss._ZN3mod13con_log_levelE
-                0x0000b55c       0x10 console.o
-                0x0000b55c                _ZN3mod13con_log_levelE
+                0x0000b77c       0x10 console.o
+                0x0000b77c                _ZN3mod13con_log_levelE
  .bss._ZN3mod11con_rainbowE
-                0x0000b56c       0x10 console.o
-                0x0000b56c                _ZN3mod11con_rainbowE
+                0x0000b78c       0x10 console.o
+                0x0000b78c                _ZN3mod11con_rainbowE
  .bss._ZN3mod8con_monoE
-                0x0000b57c       0x10 console.o
-                0x0000b57c                _ZN3mod8con_monoE
+                0x0000b79c       0x10 console.o
+                0x0000b79c                _ZN3mod8con_monoE
  .bss._ZN3mod8con_showE
-                0x0000b58c       0x10 console.o
-                0x0000b58c                _ZN3mod8con_showE
+                0x0000b7ac       0x10 console.o
+                0x0000b7ac                _ZN3mod8con_showE
  .bss._ZN3mod8gConsoleE
-                0x0000b59c        0x4 console.o
-                0x0000b59c                _ZN3mod8gConsoleE
+                0x0000b7bc        0x4 console.o
+                0x0000b7bc                _ZN3mod8gConsoleE
  .bss._ZN3mod9ConIntVar6sFirstE
-                0x0000b5a0        0x4 console.o
-                0x0000b5a0                _ZN3mod9ConIntVar6sFirstE
+                0x0000b7c0        0x4 console.o
+                0x0000b7c0                _ZN3mod9ConIntVar6sFirstE
  .bss._ZN3mod10ConCommand6sFirstE
-                0x0000b5a4        0x4 console.o
-                0x0000b5a4                _ZN3mod10ConCommand6sFirstE
+                0x0000b7c4        0x4 console.o
+                0x0000b7c4                _ZN3mod10ConCommand6sFirstE
  .bss._ZN3mod4gModE
-                0x0000b5a8        0x4 mod.o
-                0x0000b5a8                _ZN3mod4gModE
+                0x0000b7c8        0x4 mod.o
+                0x0000b7c8                _ZN3mod4gModE
  .bss._ZN17ModUpdateFunction6sFirstE
-                0x0000b5ac        0x4 mod.o
-                0x0000b5ac                _ZN17ModUpdateFunction6sFirstE
+                0x0000b7cc        0x4 mod.o
+                0x0000b7cc                _ZN17ModUpdateFunction6sFirstE
  .bss._ZN15ModInitFunction6sFirstE
-                0x0000b5b0        0x4 mod.o
-                0x0000b5b0                _ZN15ModInitFunction6sFirstE
+                0x0000b7d0        0x4 mod.o
+                0x0000b7d0                _ZN15ModInitFunction6sFirstE
  *(.gnu.linkonce.b.*)
  *(COMMON)
-                0x0000b5c0                        . = ALIGN (0x20)
- *fill*         0x0000b5b4        0xc 
+                0x0000b7e0                        . = ALIGN (0x20)
+ *fill*         0x0000b7d4        0xc 
                 [!provide]                        PROVIDE (__bss_end = .)
-                0x0000b5c0                        __bss_end = .
-                0x0000b5c0                        _end = .
+                0x0000b7e0                        __bss_end = .
+                0x0000b7e0                        _end = .
                 [!provide]                        PROVIDE (end = .)
 
 .bss._ZZNK3mod14seq_change_mapMUlPKcE_clES2_E8beroName
@@ -1753,290 +1736,290 @@ Linker script and memory map
 .debug_sfnames
  *(.debug_sfnames)
 
-.debug_aranges  0x00000000      0x800
+.debug_aranges  0x00000000      0x7f0
  *(.debug_aranges)
  .debug_aranges
-                0x00000000       0x88 OWR.o
+                0x00000000       0x80 OWR.o
  .debug_aranges
-                0x00000088       0x60 common.o
+                0x00000080       0x60 common.o
  .debug_aranges
-                0x000000e8       0x30 con_mario.o
+                0x000000e0       0x30 con_mario.o
  .debug_aranges
-                0x00000118       0x30 con_perf.o
+                0x00000110       0x30 con_perf.o
  .debug_aranges
-                0x00000148       0x38 con_seq.o
+                0x00000140       0x38 con_seq.o
  .debug_aranges
-                0x00000180       0xb0 console.o
+                0x00000178       0xb0 console.o
  .debug_aranges
-                0x00000230       0x38 cxx.o
+                0x00000228       0x38 cxx.o
  .debug_aranges
-                0x00000268       0x40 keyboard.o
+                0x00000260       0x40 keyboard.o
  .debug_aranges
-                0x000002a8       0x58 mod.o
+                0x000002a0       0x58 mod.o
  .debug_aranges
-                0x00000300       0x78 patch.o
+                0x000002f8       0x78 patch.o
  .debug_aranges
-                0x00000378       0x30 rel.o
+                0x00000370       0x30 rel.o
  .debug_aranges
-                0x000003a8       0x30 ug.o
+                0x000003a0       0x30 ug.o
  .debug_aranges
-                0x000003d8       0x20 util.o
+                0x000003d0       0x20 util.o
  .debug_aranges
-                0x000003f8       0x20 aaa.o
+                0x000003f0       0x20 aaa.o
  .debug_aranges
-                0x00000418       0x20 aji.o
+                0x00000410       0x20 aji.o
  .debug_aranges
-                0x00000438       0x20 bom.o
+                0x00000430       0x20 bom.o
  .debug_aranges
-                0x00000458       0x20 dou.o
+                0x00000450       0x20 dou.o
  .debug_aranges
-                0x00000478       0x20 eki.o
+                0x00000470       0x20 eki.o
  .debug_aranges
-                0x00000498       0x20 end.o
+                0x00000490       0x20 end.o
  .debug_aranges
-                0x000004b8       0x20 gon.o
+                0x000004b0       0x20 gon.o
  .debug_aranges
-                0x000004d8       0x28 gor_00.o
+                0x000004d0       0x28 gor_00.o
  .debug_aranges
-                0x00000500       0x20 gor_01.o
+                0x000004f8       0x20 gor_01.o
  .debug_aranges
-                0x00000520       0x20 gor_02.o
+                0x00000518       0x20 gor_02.o
  .debug_aranges
-                0x00000540       0x20 gor_03.o
+                0x00000538       0x20 gor_03.o
  .debug_aranges
-                0x00000560       0x20 gor_04.o
+                0x00000558       0x20 gor_04.o
  .debug_aranges
-                0x00000580       0x20 gor_misc.o
+                0x00000578       0x20 gor_misc.o
  .debug_aranges
-                0x000005a0       0x20 gra.o
+                0x00000598       0x20 gra.o
  .debug_aranges
-                0x000005c0       0x20 hei.o
+                0x000005b8       0x20 hei.o
  .debug_aranges
-                0x000005e0       0x20 hom.o
+                0x000005d8       0x20 hom.o
  .debug_aranges
-                0x00000600       0x20 jin.o
+                0x000005f8       0x20 jin.o
  .debug_aranges
-                0x00000620       0x20 kpa.o
+                0x00000618       0x20 kpa.o
  .debug_aranges
-                0x00000640       0x20 las.o
+                0x00000638       0x20 las.o
  .debug_aranges
-                0x00000660       0x28 main.o
+                0x00000658       0x28 main.o
  .debug_aranges
-                0x00000688       0x20 moo.o
+                0x00000680       0x20 moo.o
  .debug_aranges
-                0x000006a8       0x28 mri.o
+                0x000006a0       0x28 mri.o
  .debug_aranges
-                0x000006d0       0x28 muj.o
+                0x000006c8       0x20 muj.o
  .debug_aranges
-                0x000006f8       0x20 nok.o
+                0x000006e8       0x20 nok.o
  .debug_aranges
-                0x00000718       0x20 pik.o
+                0x00000708       0x20 pik.o
  .debug_aranges
-                0x00000738       0x20 rsh.o
+                0x00000728       0x20 rsh.o
  .debug_aranges
-                0x00000758       0x28 tik.o
+                0x00000748       0x28 tik.o
  .debug_aranges
-                0x00000780       0x20 tou.o
+                0x00000770       0x20 tou.o
  .debug_aranges
-                0x000007a0       0x20 tou2.o
+                0x00000790       0x20 tou2.o
  .debug_aranges
-                0x000007c0       0x20 usu.o
+                0x000007b0       0x20 usu.o
  .debug_aranges
-                0x000007e0       0x20 win.o
+                0x000007d0       0x20 win.o
 
 .debug_pubnames
  *(.debug_pubnames)
 
-.debug_info     0x00000000    0x41267
+.debug_info     0x00000000    0x41320
  *(.debug_info)
- .debug_info    0x00000000     0x399e OWR.o
- .debug_info    0x0000399e      0xf16 common.o
- .debug_info    0x000048b4     0x2574 con_mario.o
- .debug_info    0x00006e28     0x20ea con_perf.o
- .debug_info    0x00008f12     0x21f6 con_seq.o
- .debug_info    0x0000b108     0x3e13 console.o
- .debug_info    0x0000ef1b      0x394 cxx.o
- .debug_info    0x0000f2af      0xfaf keyboard.o
- .debug_info    0x0001025e     0x33f4 mod.o
- .debug_info    0x00013652     0x15c5 patch.o
- .debug_info    0x00014c17       0xf3 rel.o
- .debug_info    0x00014d0a      0x8d5 ug.o
- .debug_info    0x000155df      0x693 util.o
- .debug_info    0x00015c72     0x1120 aaa.o
- .debug_info    0x00016d92     0x1c98 aji.o
- .debug_info    0x00018a2a     0x121a bom.o
- .debug_info    0x00019c44     0x1224 dou.o
- .debug_info    0x0001ae68     0x11d4 eki.o
- .debug_info    0x0001c03c     0x1110 end.o
- .debug_info    0x0001d14c     0x1238 gon.o
- .debug_info    0x0001e384     0x20d2 gor_00.o
- .debug_info    0x00020456     0x18f6 gor_01.o
- .debug_info    0x00021d4c     0x1968 gor_02.o
- .debug_info    0x000236b4     0x176a gor_03.o
- .debug_info    0x00024e1e     0x1166 gor_04.o
- .debug_info    0x00025f84     0x1120 gor_misc.o
- .debug_info    0x000270a4     0x15fe gra.o
- .debug_info    0x000286a2     0x11d4 hei.o
- .debug_info    0x00029876     0x1170 hom.o
- .debug_info    0x0002a9e6     0x122e jin.o
- .debug_info    0x0002bc14     0x115c kpa.o
- .debug_info    0x0002cd70     0x12d8 las.o
- .debug_info    0x0002e048      0x693 main.o
- .debug_info    0x0002e6db     0x1624 moo.o
- .debug_info    0x0002fcff     0x1f2a mri.o
- .debug_info    0x00031c29     0x1d8a muj.o
- .debug_info    0x000339b3     0x1aa2 nok.o
- .debug_info    0x00035455     0x198b pik.o
- .debug_info    0x00036de0     0x1f21 rsh.o
- .debug_info    0x00038d01     0x2568 tik.o
- .debug_info    0x0003b269     0x1b0d tou.o
- .debug_info    0x0003cd76     0x11e8 tou2.o
- .debug_info    0x0003df5e     0x1c8a usu.o
- .debug_info    0x0003fbe8     0x167f win.o
+ .debug_info    0x00000000     0x3988 OWR.o
+ .debug_info    0x00003988      0xf16 common.o
+ .debug_info    0x0000489e     0x2574 con_mario.o
+ .debug_info    0x00006e12     0x20ea con_perf.o
+ .debug_info    0x00008efc     0x21f6 con_seq.o
+ .debug_info    0x0000b0f2     0x3e13 console.o
+ .debug_info    0x0000ef05      0x394 cxx.o
+ .debug_info    0x0000f299      0xfaf keyboard.o
+ .debug_info    0x00010248     0x33f4 mod.o
+ .debug_info    0x0001363c     0x15c5 patch.o
+ .debug_info    0x00014c01       0xf3 rel.o
+ .debug_info    0x00014cf4      0x8d5 ug.o
+ .debug_info    0x000155c9      0x693 util.o
+ .debug_info    0x00015c5c     0x1120 aaa.o
+ .debug_info    0x00016d7c     0x1cad aji.o
+ .debug_info    0x00018a29     0x121a bom.o
+ .debug_info    0x00019c43     0x1224 dou.o
+ .debug_info    0x0001ae67     0x11d4 eki.o
+ .debug_info    0x0001c03b     0x1110 end.o
+ .debug_info    0x0001d14b     0x1238 gon.o
+ .debug_info    0x0001e383     0x20d2 gor_00.o
+ .debug_info    0x00020455     0x18f6 gor_01.o
+ .debug_info    0x00021d4b     0x1968 gor_02.o
+ .debug_info    0x000236b3     0x176a gor_03.o
+ .debug_info    0x00024e1d     0x1166 gor_04.o
+ .debug_info    0x00025f83     0x1120 gor_misc.o
+ .debug_info    0x000270a3     0x15fe gra.o
+ .debug_info    0x000286a1     0x11d4 hei.o
+ .debug_info    0x00029875     0x1170 hom.o
+ .debug_info    0x0002a9e5     0x122e jin.o
+ .debug_info    0x0002bc13     0x115c kpa.o
+ .debug_info    0x0002cd6f     0x12d8 las.o
+ .debug_info    0x0002e047      0x693 main.o
+ .debug_info    0x0002e6da     0x1624 moo.o
+ .debug_info    0x0002fcfe     0x1f2a mri.o
+ .debug_info    0x00031c28     0x1de1 muj.o
+ .debug_info    0x00033a09     0x1b05 nok.o
+ .debug_info    0x0003550e     0x198b pik.o
+ .debug_info    0x00036e99     0x1f21 rsh.o
+ .debug_info    0x00038dba     0x2568 tik.o
+ .debug_info    0x0003b322     0x1b0d tou.o
+ .debug_info    0x0003ce2f     0x11e8 tou2.o
+ .debug_info    0x0003e017     0x1c8a usu.o
+ .debug_info    0x0003fca1     0x167f win.o
 
-.debug_abbrev   0x00000000     0x7643
+.debug_abbrev   0x00000000     0x75f3
  *(.debug_abbrev)
- .debug_abbrev  0x00000000      0x84a OWR.o
- .debug_abbrev  0x0000084a      0x21a common.o
- .debug_abbrev  0x00000a64      0x600 con_mario.o
- .debug_abbrev  0x00001064      0x620 con_perf.o
- .debug_abbrev  0x00001684      0x668 con_seq.o
- .debug_abbrev  0x00001cec      0x991 console.o
- .debug_abbrev  0x0000267d      0x170 cxx.o
- .debug_abbrev  0x000027ed      0x36e keyboard.o
- .debug_abbrev  0x00002b5b      0x7a7 mod.o
- .debug_abbrev  0x00003302      0x2bd patch.o
- .debug_abbrev  0x000035bf       0xeb rel.o
- .debug_abbrev  0x000036aa      0x230 ug.o
- .debug_abbrev  0x000038da      0x12d util.o
- .debug_abbrev  0x00003a07      0x183 aaa.o
- .debug_abbrev  0x00003b8a      0x24a aji.o
- .debug_abbrev  0x00003dd4      0x183 bom.o
- .debug_abbrev  0x00003f57      0x183 dou.o
- .debug_abbrev  0x000040da      0x183 eki.o
- .debug_abbrev  0x0000425d      0x180 end.o
- .debug_abbrev  0x000043dd      0x183 gon.o
- .debug_abbrev  0x00004560      0x27e gor_00.o
- .debug_abbrev  0x000047de      0x250 gor_01.o
- .debug_abbrev  0x00004a2e      0x237 gor_02.o
- .debug_abbrev  0x00004c65      0x20e gor_03.o
- .debug_abbrev  0x00004e73      0x183 gor_04.o
- .debug_abbrev  0x00004ff6      0x183 gor_misc.o
- .debug_abbrev  0x00005179      0x202 gra.o
- .debug_abbrev  0x0000537b      0x183 hei.o
- .debug_abbrev  0x000054fe      0x183 hom.o
- .debug_abbrev  0x00005681      0x183 jin.o
- .debug_abbrev  0x00005804      0x183 kpa.o
- .debug_abbrev  0x00005987      0x183 las.o
- .debug_abbrev  0x00005b0a      0x13f main.o
- .debug_abbrev  0x00005c49      0x21d moo.o
- .debug_abbrev  0x00005e66      0x27b mri.o
- .debug_abbrev  0x000060e1      0x273 muj.o
- .debug_abbrev  0x00006354      0x237 nok.o
- .debug_abbrev  0x0000658b      0x23a pik.o
- .debug_abbrev  0x000067c5      0x237 rsh.o
- .debug_abbrev  0x000069fc      0x47c tik.o
- .debug_abbrev  0x00006e78      0x203 tou.o
- .debug_abbrev  0x0000707b      0x183 tou2.o
- .debug_abbrev  0x000071fe      0x237 usu.o
- .debug_abbrev  0x00007435      0x20e win.o
+ .debug_abbrev  0x00000000      0x82d OWR.o
+ .debug_abbrev  0x0000082d      0x21a common.o
+ .debug_abbrev  0x00000a47      0x600 con_mario.o
+ .debug_abbrev  0x00001047      0x620 con_perf.o
+ .debug_abbrev  0x00001667      0x668 con_seq.o
+ .debug_abbrev  0x00001ccf      0x991 console.o
+ .debug_abbrev  0x00002660      0x170 cxx.o
+ .debug_abbrev  0x000027d0      0x36e keyboard.o
+ .debug_abbrev  0x00002b3e      0x7a7 mod.o
+ .debug_abbrev  0x000032e5      0x2bd patch.o
+ .debug_abbrev  0x000035a2       0xeb rel.o
+ .debug_abbrev  0x0000368d      0x230 ug.o
+ .debug_abbrev  0x000038bd      0x12d util.o
+ .debug_abbrev  0x000039ea      0x183 aaa.o
+ .debug_abbrev  0x00003b6d      0x24a aji.o
+ .debug_abbrev  0x00003db7      0x183 bom.o
+ .debug_abbrev  0x00003f3a      0x183 dou.o
+ .debug_abbrev  0x000040bd      0x183 eki.o
+ .debug_abbrev  0x00004240      0x180 end.o
+ .debug_abbrev  0x000043c0      0x183 gon.o
+ .debug_abbrev  0x00004543      0x27e gor_00.o
+ .debug_abbrev  0x000047c1      0x250 gor_01.o
+ .debug_abbrev  0x00004a11      0x237 gor_02.o
+ .debug_abbrev  0x00004c48      0x20e gor_03.o
+ .debug_abbrev  0x00004e56      0x183 gor_04.o
+ .debug_abbrev  0x00004fd9      0x183 gor_misc.o
+ .debug_abbrev  0x0000515c      0x202 gra.o
+ .debug_abbrev  0x0000535e      0x183 hei.o
+ .debug_abbrev  0x000054e1      0x183 hom.o
+ .debug_abbrev  0x00005664      0x183 jin.o
+ .debug_abbrev  0x000057e7      0x183 kpa.o
+ .debug_abbrev  0x0000596a      0x183 las.o
+ .debug_abbrev  0x00005aed      0x13f main.o
+ .debug_abbrev  0x00005c2c      0x21d moo.o
+ .debug_abbrev  0x00005e49      0x27b mri.o
+ .debug_abbrev  0x000060c4      0x23f muj.o
+ .debug_abbrev  0x00006303      0x238 nok.o
+ .debug_abbrev  0x0000653b      0x23a pik.o
+ .debug_abbrev  0x00006775      0x237 rsh.o
+ .debug_abbrev  0x000069ac      0x47c tik.o
+ .debug_abbrev  0x00006e28      0x203 tou.o
+ .debug_abbrev  0x0000702b      0x183 tou2.o
+ .debug_abbrev  0x000071ae      0x237 usu.o
+ .debug_abbrev  0x000073e5      0x20e win.o
 
-.debug_line     0x00000000    0x18127
+.debug_line     0x00000000    0x1808d
  *(.debug_line)
- .debug_line    0x00000000      0xcb6 OWR.o
- .debug_line    0x00000cb6      0x39d common.o
- .debug_line    0x00001053      0x4e0 con_mario.o
- .debug_line    0x00001533      0x5f6 con_perf.o
- .debug_line    0x00001b29      0x5b0 con_seq.o
- .debug_line    0x000020d9     0x1f5f console.o
- .debug_line    0x00004038      0x1c9 cxx.o
- .debug_line    0x00004201      0xcb4 keyboard.o
- .debug_line    0x00004eb5      0x79d mod.o
- .debug_line    0x00005652      0x80c patch.o
- .debug_line    0x00005e5e      0x226 rel.o
- .debug_line    0x00006084      0x4ad ug.o
- .debug_line    0x00006531      0x2cc util.o
- .debug_line    0x000067fd      0x33c aaa.o
- .debug_line    0x00006b39      0xee4 aji.o
- .debug_line    0x00007a1d      0x789 bom.o
- .debug_line    0x000081a6      0x75c dou.o
- .debug_line    0x00008902      0x679 eki.o
- .debug_line    0x00008f7b      0x315 end.o
- .debug_line    0x00009290      0x730 gon.o
- .debug_line    0x000099c0      0x934 gor_00.o
- .debug_line    0x0000a2f4      0x71b gor_01.o
- .debug_line    0x0000aa0f      0x833 gor_02.o
- .debug_line    0x0000b242      0x8d4 gor_03.o
- .debug_line    0x0000bb16      0x4fe gor_04.o
- .debug_line    0x0000c014      0x3c5 gor_misc.o
- .debug_line    0x0000c3d9      0x571 gra.o
- .debug_line    0x0000c94a      0x5c4 hei.o
- .debug_line    0x0000cf0e      0x461 hom.o
- .debug_line    0x0000d36f      0x6d8 jin.o
- .debug_line    0x0000da47      0x3b0 kpa.o
- .debug_line    0x0000ddf7      0x95f las.o
- .debug_line    0x0000e756      0x990 main.o
- .debug_line    0x0000f0e6      0x3d0 moo.o
- .debug_line    0x0000f4b6     0x13e7 mri.o
- .debug_line    0x0001089d      0xf02 muj.o
- .debug_line    0x0001179f      0x61a nok.o
- .debug_line    0x00011db9      0x9b2 pik.o
- .debug_line    0x0001276b     0x1925 rsh.o
- .debug_line    0x00014090      0xadf tik.o
- .debug_line    0x00014b6f     0x19fe tou.o
- .debug_line    0x0001656d      0x795 tou2.o
- .debug_line    0x00016d02      0xe02 usu.o
- .debug_line    0x00017b04      0x623 win.o
+ .debug_line    0x00000000      0xb5c OWR.o
+ .debug_line    0x00000b5c      0x39d common.o
+ .debug_line    0x00000ef9      0x4e0 con_mario.o
+ .debug_line    0x000013d9      0x5f6 con_perf.o
+ .debug_line    0x000019cf      0x5b0 con_seq.o
+ .debug_line    0x00001f7f     0x1f5f console.o
+ .debug_line    0x00003ede      0x1c9 cxx.o
+ .debug_line    0x000040a7      0xcb4 keyboard.o
+ .debug_line    0x00004d5b      0x79d mod.o
+ .debug_line    0x000054f8      0x80c patch.o
+ .debug_line    0x00005d04      0x226 rel.o
+ .debug_line    0x00005f2a      0x4ad ug.o
+ .debug_line    0x000063d7      0x2cc util.o
+ .debug_line    0x000066a3      0x33c aaa.o
+ .debug_line    0x000069df      0xebb aji.o
+ .debug_line    0x0000789a      0x789 bom.o
+ .debug_line    0x00008023      0x76c dou.o
+ .debug_line    0x0000878f      0x679 eki.o
+ .debug_line    0x00008e08      0x315 end.o
+ .debug_line    0x0000911d      0x730 gon.o
+ .debug_line    0x0000984d      0x934 gor_00.o
+ .debug_line    0x0000a181      0x71b gor_01.o
+ .debug_line    0x0000a89c      0x833 gor_02.o
+ .debug_line    0x0000b0cf      0x8d4 gor_03.o
+ .debug_line    0x0000b9a3      0x4fe gor_04.o
+ .debug_line    0x0000bea1      0x3c5 gor_misc.o
+ .debug_line    0x0000c266      0x571 gra.o
+ .debug_line    0x0000c7d7      0x5c4 hei.o
+ .debug_line    0x0000cd9b      0x461 hom.o
+ .debug_line    0x0000d1fc      0x6d8 jin.o
+ .debug_line    0x0000d8d4      0x3b0 kpa.o
+ .debug_line    0x0000dc84      0x95f las.o
+ .debug_line    0x0000e5e3      0x990 main.o
+ .debug_line    0x0000ef73      0x3d0 moo.o
+ .debug_line    0x0000f343     0x13e7 mri.o
+ .debug_line    0x0001072a      0xfc4 muj.o
+ .debug_line    0x000116ee      0x631 nok.o
+ .debug_line    0x00011d1f      0x9b2 pik.o
+ .debug_line    0x000126d1     0x1925 rsh.o
+ .debug_line    0x00013ff6      0xadf tik.o
+ .debug_line    0x00014ad5     0x19fe tou.o
+ .debug_line    0x000164d3      0x795 tou2.o
+ .debug_line    0x00016c68      0xe02 usu.o
+ .debug_line    0x00017a6a      0x623 win.o
 
 .debug_frame
  *(.debug_frame)
 
-.debug_str      0x00000000    0x52ab3
+.debug_str      0x00000000    0x52aa2
  *(.debug_str)
- .debug_str     0x00000000     0x3109 OWR.o
- .debug_str     0x00003109     0x13e4 common.o
- .debug_str     0x000044ed     0x1a59 con_mario.o
- .debug_str     0x00005f46     0x160e con_perf.o
- .debug_str     0x00007554     0x17a6 con_seq.o
- .debug_str     0x00008cfa     0x19f9 console.o
- .debug_str     0x0000a6f3      0x34e cxx.o
- .debug_str     0x0000aa41      0x955 keyboard.o
- .debug_str     0x0000b396     0x2d81 mod.o
- .debug_str     0x0000e117      0x6eb patch.o
- .debug_str     0x0000e802      0x191 rel.o
- .debug_str     0x0000e993      0x39b ug.o
- .debug_str     0x0000ed2e      0x3eb util.o
- .debug_str     0x0000f119     0x1e72 aaa.o
- .debug_str     0x00010f8b     0x289a aji.o
- .debug_str     0x00013825     0x2035 bom.o
- .debug_str     0x0001585a     0x203f dou.o
- .debug_str     0x00017899     0x1f67 eki.o
- .debug_str     0x00019800     0x1e6c end.o
- .debug_str     0x0001b66c     0x2018 gon.o
- .debug_str     0x0001d684     0x2a14 gor_00.o
- .debug_str     0x00020098     0x2436 gor_01.o
- .debug_str     0x000224ce     0x256f gor_02.o
- .debug_str     0x00024a3d     0x2445 gor_03.o
- .debug_str     0x00026e82     0x1eeb gor_04.o
- .debug_str     0x00028d6d     0x1e84 gor_misc.o
- .debug_str     0x0002abf1     0x22b4 gra.o
- .debug_str     0x0002cea5     0x1f6c hei.o
- .debug_str     0x0002ee11     0x1f07 hom.o
- .debug_str     0x00030d18     0x2016 jin.o
- .debug_str     0x00032d2e     0x1ec2 kpa.o
- .debug_str     0x00034bf0     0x210d las.o
- .debug_str     0x00036cfd      0x7e3 main.o
- .debug_str     0x000374e0     0x2276 moo.o
- .debug_str     0x00039756     0x2bac mri.o
- .debug_str     0x0003c302     0x2aa0 muj.o
- .debug_str     0x0003eda2     0x2580 nok.o
- .debug_str     0x00041322     0x254c pik.o
- .debug_str     0x0004386e     0x2b06 rsh.o
- .debug_str     0x00046374     0x3283 tik.o
- .debug_str     0x000495f7     0x294e tou.o
- .debug_str     0x0004bf45     0x1f8a tou2.o
- .debug_str     0x0004decf     0x28cb usu.o
- .debug_str     0x0005079a     0x2319 win.o
+ .debug_str     0x00000000     0x30c6 OWR.o
+ .debug_str     0x000030c6     0x13e4 common.o
+ .debug_str     0x000044aa     0x1a59 con_mario.o
+ .debug_str     0x00005f03     0x160e con_perf.o
+ .debug_str     0x00007511     0x17a6 con_seq.o
+ .debug_str     0x00008cb7     0x19f9 console.o
+ .debug_str     0x0000a6b0      0x34e cxx.o
+ .debug_str     0x0000a9fe      0x955 keyboard.o
+ .debug_str     0x0000b353     0x2d81 mod.o
+ .debug_str     0x0000e0d4      0x6eb patch.o
+ .debug_str     0x0000e7bf      0x191 rel.o
+ .debug_str     0x0000e950      0x39b ug.o
+ .debug_str     0x0000eceb      0x3eb util.o
+ .debug_str     0x0000f0d6     0x1e72 aaa.o
+ .debug_str     0x00010f48     0x289a aji.o
+ .debug_str     0x000137e2     0x2035 bom.o
+ .debug_str     0x00015817     0x203f dou.o
+ .debug_str     0x00017856     0x1f67 eki.o
+ .debug_str     0x000197bd     0x1e6c end.o
+ .debug_str     0x0001b629     0x2018 gon.o
+ .debug_str     0x0001d641     0x2a14 gor_00.o
+ .debug_str     0x00020055     0x2436 gor_01.o
+ .debug_str     0x0002248b     0x256f gor_02.o
+ .debug_str     0x000249fa     0x2445 gor_03.o
+ .debug_str     0x00026e3f     0x1eeb gor_04.o
+ .debug_str     0x00028d2a     0x1e84 gor_misc.o
+ .debug_str     0x0002abae     0x22b4 gra.o
+ .debug_str     0x0002ce62     0x1f6c hei.o
+ .debug_str     0x0002edce     0x1f07 hom.o
+ .debug_str     0x00030cd5     0x2016 jin.o
+ .debug_str     0x00032ceb     0x1ec2 kpa.o
+ .debug_str     0x00034bad     0x210d las.o
+ .debug_str     0x00036cba      0x7e3 main.o
+ .debug_str     0x0003749d     0x2276 moo.o
+ .debug_str     0x00039713     0x2bac mri.o
+ .debug_str     0x0003c2bf     0x2a80 muj.o
+ .debug_str     0x0003ed3f     0x25d2 nok.o
+ .debug_str     0x00041311     0x254c pik.o
+ .debug_str     0x0004385d     0x2b06 rsh.o
+ .debug_str     0x00046363     0x3283 tik.o
+ .debug_str     0x000495e6     0x294e tou.o
+ .debug_str     0x0004bf34     0x1f8a tou2.o
+ .debug_str     0x0004debe     0x28cb usu.o
+ .debug_str     0x00050789     0x2319 win.o
 
 .debug_loc
  *(.debug_loc)
@@ -2056,11 +2039,11 @@ Linker script and memory map
 .debug_varnames
  *(.debug_varnames)
                 0x00000000                        __isIPL = 0x0
-                0x0002b5c0                        __stack_addr = ((((__bss_start + SIZEOF (.bss)) + 0x20000) + 0x7) & 0xfffffffffffffff8)
-                0x0000b5c0                        __stack_end = (__bss_start + SIZEOF (.bss))
-                0x0002f5c0                        __intrstack_addr = (__stack_addr + 0x4000)
-                0x0002b5c0                        __intrstack_end = __stack_addr
-                0x0002f5c0                        __Arena1Lo = ((__intrstack_addr + 0x1f) & 0xffffffffffffffe0)
+                0x0002b7e0                        __stack_addr = ((((__bss_start + SIZEOF (.bss)) + 0x20000) + 0x7) & 0xfffffffffffffff8)
+                0x0000b7e0                        __stack_end = (__bss_start + SIZEOF (.bss))
+                0x0002f7e0                        __intrstack_addr = (__stack_addr + 0x4000)
+                0x0002b7e0                        __intrstack_end = __stack_addr
+                0x0002f7e0                        __Arena1Lo = ((__intrstack_addr + 0x1f) & 0xffffffffffffffe0)
                 0x817feff0                        __Arena1Hi = 0x817feff0
                 0x817ff000                        __gxregs = ((__Arena1Hi + 0x1f) & 0xffffffffffffffe0)
                 [!provide]                        PROVIDE (__stack = 0x817feff0)
@@ -2073,10 +2056,10 @@ Linker script and memory map
                 [!provide]                        PROVIDE (__Arena1Hi = __Arena1Hi)
                 [!provide]                        PROVIDE (__gxregs = __gxregs)
 LOAD H:/GhidraProjects/TTYDAP/TTYDAP/rel/source/cxx.ld
-                0x0000b458                        _ctors_start = ADDR (.ctors)
-                0x0000b480                        _ctors_end = (_ctors_start + SIZEOF (.ctors))
-                0x0000b480                        _dtors_start = ADDR (.dtors)
-                0x0000b480                        _dtors_end = (_dtors_start + SIZEOF (.dtors))
+                0x0000b67c                        _ctors_start = ADDR (.ctors)
+                0x0000b6a0                        _ctors_end = (_ctors_start + SIZEOF (.ctors))
+                0x0000b6a0                        _dtors_start = ADDR (.dtors)
+                0x0000b6a0                        _dtors_end = (_dtors_start + SIZEOF (.dtors))
 LOAD OWR.o
 LOAD StateManager.o
 LOAD common.o
@@ -2128,177 +2111,177 @@ LOAD C:/devkitPro/devkitPPC/bin/../lib/gcc/powerpc-eabi/13.1.0\libgcc.a
 OUTPUT(H:/GhidraProjects/TTYDAP/TTYDAP/rel/rel.jp.elf elf32-powerpc)
 
 .debug_loclists
-                0x00000000     0x4e30
+                0x00000000     0x4a22
  .debug_loclists
-                0x00000000      0xbae OWR.o
+                0x00000000      0x7a0 OWR.o
  .debug_loclists
-                0x00000bae      0x151 common.o
+                0x000007a0      0x151 common.o
  .debug_loclists
-                0x00000cff       0xa9 con_mario.o
+                0x000008f1       0xa9 con_mario.o
  .debug_loclists
-                0x00000da8      0x2eb con_perf.o
+                0x0000099a      0x2eb con_perf.o
  .debug_loclists
-                0x00001093       0xf8 con_seq.o
+                0x00000c85       0xf8 con_seq.o
  .debug_loclists
-                0x0000118b     0x1cd1 console.o
+                0x00000d7d     0x1cd1 console.o
  .debug_loclists
-                0x00002e5c       0x54 cxx.o
+                0x00002a4e       0x54 cxx.o
  .debug_loclists
-                0x00002eb0      0x886 keyboard.o
+                0x00002aa2      0x886 keyboard.o
  .debug_loclists
-                0x00003736      0x1b8 mod.o
+                0x00003328      0x1b8 mod.o
  .debug_loclists
-                0x000038ee      0xc5e patch.o
+                0x000034e0      0xc5e patch.o
  .debug_loclists
-                0x0000454c      0x2cd ug.o
+                0x0000413e      0x2cd ug.o
  .debug_loclists
-                0x00004819       0xd6 util.o
+                0x0000440b       0xd6 util.o
  .debug_loclists
-                0x000048ef       0x29 aaa.o
+                0x000044e1       0x29 aaa.o
  .debug_loclists
-                0x00004918       0x2a aji.o
+                0x0000450a       0x2a aji.o
  .debug_loclists
-                0x00004942       0x2a bom.o
+                0x00004534       0x2a bom.o
  .debug_loclists
-                0x0000496c       0x2a dou.o
+                0x0000455e       0x2a dou.o
  .debug_loclists
-                0x00004996       0x2a eki.o
+                0x00004588       0x2a eki.o
  .debug_loclists
-                0x000049c0       0x2a gon.o
+                0x000045b2       0x2a gon.o
  .debug_loclists
-                0x000049ea       0x2c gor_00.o
+                0x000045dc       0x2c gor_00.o
  .debug_loclists
-                0x00004a16       0x2a gor_01.o
+                0x00004608       0x2a gor_01.o
  .debug_loclists
-                0x00004a40       0x2a gor_02.o
+                0x00004632       0x2a gor_02.o
  .debug_loclists
-                0x00004a6a       0x2a gor_03.o
+                0x0000465c       0x2a gor_03.o
  .debug_loclists
-                0x00004a94       0x2a gor_04.o
+                0x00004686       0x2a gor_04.o
  .debug_loclists
-                0x00004abe       0x2a gor_misc.o
+                0x000046b0       0x2a gor_misc.o
  .debug_loclists
-                0x00004ae8       0x2a gra.o
+                0x000046da       0x2a gra.o
  .debug_loclists
-                0x00004b12       0x2a hei.o
+                0x00004704       0x2a hei.o
  .debug_loclists
-                0x00004b3c       0x2a hom.o
+                0x0000472e       0x2a hom.o
  .debug_loclists
-                0x00004b66       0x2a jin.o
+                0x00004758       0x2a jin.o
  .debug_loclists
-                0x00004b90       0x2a kpa.o
+                0x00004782       0x2a kpa.o
  .debug_loclists
-                0x00004bba       0x2a las.o
+                0x000047ac       0x2a las.o
  .debug_loclists
-                0x00004be4       0x2a moo.o
+                0x000047d6       0x2a moo.o
  .debug_loclists
-                0x00004c0e       0x2a mri.o
+                0x00004800       0x2a mri.o
  .debug_loclists
-                0x00004c38       0x2c muj.o
+                0x0000482a       0x2c muj.o
  .debug_loclists
-                0x00004c64       0x2a nok.o
+                0x00004856       0x2a nok.o
  .debug_loclists
-                0x00004c8e       0x2c pik.o
+                0x00004880       0x2c pik.o
  .debug_loclists
-                0x00004cba       0x2c rsh.o
+                0x000048ac       0x2c rsh.o
  .debug_loclists
-                0x00004ce6       0xa2 tik.o
+                0x000048d8       0xa2 tik.o
  .debug_loclists
-                0x00004d88       0x2a tou.o
+                0x0000497a       0x2a tou.o
  .debug_loclists
-                0x00004db2       0x2a tou2.o
+                0x000049a4       0x2a tou2.o
  .debug_loclists
-                0x00004ddc       0x2a usu.o
+                0x000049ce       0x2a usu.o
  .debug_loclists
-                0x00004e06       0x2a win.o
+                0x000049f8       0x2a win.o
 
 .debug_rnglists
-                0x00000000     0x145e
+                0x00000000     0x1401
  .debug_rnglists
-                0x00000000      0x129 OWR.o
+                0x00000000       0xd2 OWR.o
  .debug_rnglists
-                0x00000129       0x43 common.o
+                0x000000d2       0x43 common.o
  .debug_rnglists
-                0x0000016c       0x95 con_mario.o
+                0x00000115       0x95 con_mario.o
  .debug_rnglists
-                0x00000201       0xb4 con_perf.o
+                0x000001aa       0xb4 con_perf.o
  .debug_rnglists
-                0x000002b5       0xc4 con_seq.o
+                0x0000025e       0xc4 con_seq.o
  .debug_rnglists
-                0x00000379      0x71c console.o
+                0x00000322      0x71c console.o
  .debug_rnglists
-                0x00000a95       0x25 cxx.o
+                0x00000a3e       0x25 cxx.o
  .debug_rnglists
-                0x00000aba      0x315 keyboard.o
+                0x00000a63      0x315 keyboard.o
  .debug_rnglists
-                0x00000dcf       0xde mod.o
+                0x00000d78       0xde mod.o
  .debug_rnglists
-                0x00000ead      0x23d patch.o
+                0x00000e56      0x23d patch.o
  .debug_rnglists
-                0x000010ea       0x47 rel.o
+                0x00001093       0x47 rel.o
  .debug_rnglists
-                0x00001131       0x73 ug.o
+                0x000010da       0x73 ug.o
  .debug_rnglists
-                0x000011a4       0x21 util.o
+                0x0000114d       0x21 util.o
  .debug_rnglists
-                0x000011c5       0x13 aaa.o
+                0x0000116e       0x13 aaa.o
  .debug_rnglists
-                0x000011d8       0x14 aji.o
+                0x00001181       0x14 aji.o
  .debug_rnglists
-                0x000011ec       0x14 bom.o
+                0x00001195       0x14 bom.o
  .debug_rnglists
-                0x00001200       0x14 dou.o
+                0x000011a9       0x14 dou.o
  .debug_rnglists
-                0x00001214       0x14 eki.o
+                0x000011bd       0x14 eki.o
  .debug_rnglists
-                0x00001228       0x13 end.o
+                0x000011d1       0x13 end.o
  .debug_rnglists
-                0x0000123b       0x14 gon.o
+                0x000011e4       0x14 gon.o
  .debug_rnglists
-                0x0000124f       0x1a gor_00.o
+                0x000011f8       0x1a gor_00.o
  .debug_rnglists
-                0x00001269       0x14 gor_01.o
+                0x00001212       0x14 gor_01.o
  .debug_rnglists
-                0x0000127d       0x14 gor_02.o
+                0x00001226       0x14 gor_02.o
  .debug_rnglists
-                0x00001291       0x14 gor_03.o
+                0x0000123a       0x14 gor_03.o
  .debug_rnglists
-                0x000012a5       0x14 gor_04.o
+                0x0000124e       0x14 gor_04.o
  .debug_rnglists
-                0x000012b9       0x14 gor_misc.o
+                0x00001262       0x14 gor_misc.o
  .debug_rnglists
-                0x000012cd       0x14 gra.o
+                0x00001276       0x14 gra.o
  .debug_rnglists
-                0x000012e1       0x14 hei.o
+                0x0000128a       0x14 hei.o
  .debug_rnglists
-                0x000012f5       0x14 hom.o
+                0x0000129e       0x14 hom.o
  .debug_rnglists
-                0x00001309       0x14 jin.o
+                0x000012b2       0x14 jin.o
  .debug_rnglists
-                0x0000131d       0x14 kpa.o
+                0x000012c6       0x14 kpa.o
  .debug_rnglists
-                0x00001331       0x14 las.o
+                0x000012da       0x14 las.o
  .debug_rnglists
-                0x00001345       0x1b main.o
+                0x000012ee       0x1b main.o
  .debug_rnglists
-                0x00001360       0x14 moo.o
+                0x00001309       0x14 moo.o
  .debug_rnglists
-                0x00001374       0x1a mri.o
+                0x0000131d       0x1a mri.o
  .debug_rnglists
-                0x0000138e       0x1a muj.o
+                0x00001337       0x14 muj.o
  .debug_rnglists
-                0x000013a8       0x14 nok.o
+                0x0000134b       0x14 nok.o
  .debug_rnglists
-                0x000013bc       0x14 pik.o
+                0x0000135f       0x14 pik.o
  .debug_rnglists
-                0x000013d0       0x14 rsh.o
+                0x00001373       0x14 rsh.o
  .debug_rnglists
-                0x000013e4       0x2a tik.o
+                0x00001387       0x2a tik.o
  .debug_rnglists
-                0x0000140e       0x14 tou.o
+                0x000013b1       0x14 tou.o
  .debug_rnglists
-                0x00001422       0x14 tou2.o
+                0x000013c5       0x14 tou2.o
  .debug_rnglists
-                0x00001436       0x14 usu.o
+                0x000013d9       0x14 usu.o
  .debug_rnglists
-                0x0000144a       0x14 win.o
+                0x000013ed       0x14 win.o

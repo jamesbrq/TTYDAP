@@ -63,6 +63,8 @@ extern int32_t borosuifu_b_talk[];
 extern int32_t mony_init_muj_01[];
 extern int32_t peton_init_muj_01[];
 extern int32_t kyoshu_event[];
+extern int32_t nakamaware_event[];
+extern int32_t settoku_event[];
 extern int32_t settoku_event_main[];
 extern int32_t muj_01_init_evt[];
 extern int32_t mony_init_muj_02[];
@@ -106,7 +108,7 @@ extern int32_t muj_20_init_evt[];
 
 EVT_BEGIN(mony_talk_muj_00_evt)
 	IF_EQUAL(GSW(1709), 8)
-		USER_FUNC(evt_msg::evt_msg_print, 0, PTR("stg5_muj_94_04"), 0, PTR("me"))
+		USER_FUNC(evt_msg::evt_msg_print, 0, PTR("stg5_muj_146_02"), 0, PTR("me"))
 	ELSE()
 		SWITCH(GSW(1717))
 			CASE_EQUAL(13)
@@ -127,14 +129,14 @@ EVT_END()
 
 EVT_BEGIN(peton_talk_muj_00_evt)
 	IF_EQUAL(GSW(1709), 8)
-		USER_FUNC(evt_msg::evt_msg_print, 0, PTR("stg5_muj_94_04"), 0, PTR("me"))
+		USER_FUNC(evt_msg::evt_msg_print, 0, PTR("stg5_muj_146_01"), 0, PTR("me"))
 	ELSE()
 		SWITCH(GSW(1717))
 			CASE_EQUAL(13)
-				USER_FUNC(evt_msg::evt_msg_print, 0, PTR("stg5_muj_94_04"), 0, PTR("me"))
+				USER_FUNC(evt_msg::evt_msg_print, 0, PTR("stg5_muj_94_05"), 0, PTR("me"))
 			CASE_END()
 			CASE_BETWEEN(14, 15)
-				USER_FUNC(evt_msg::evt_msg_print, 0, PTR("stg5_muj_117_07"), 0, PTR("me"))
+				USER_FUNC(evt_msg::evt_msg_print, 0, PTR("stg5_muj_117_08"), 0, PTR("me"))
 			CASE_END()
 		END_SWITCH()
 	END_IF()
@@ -156,12 +158,12 @@ EVT_BEGIN(muj_00_init_evt_evt)
 EVT_END()
 
 EVT_BEGIN(muj_00_init_evt_evt_2)
-	RUN_CHILD_EVT(nannpc_mode_setup)
+	RUN_CHILD_EVT(&nannpc_mode_setup)
 	USER_FUNC(evt_map::evt_mapobj_flag_onoff, 1, 0, PTR("S_c"), 1)
 	USER_FUNC(evt_hit::evt_hitobj_onoff, PTR("A_c"), 1, 1)
 	USER_FUNC(evt_hit::evt_hit_bind_mapobj, PTR("A_c"), PTR("S_c"))
-	RUN_CHILD_EVT(dai3_shurai)
-	RUN_CHILD_EVT(suifu_random_sub)
+	RUN_EVT(&dai3_shurai)
+	RUN_EVT(&suifu_random_sub)
 	USER_FUNC(evt_hit::evt_hitobj_onoff, PTR("A_b_bero01"), 1, 0)
 	RETURN()
 EVT_END()
@@ -567,6 +569,25 @@ EVT_BEGIN(borosuifu_b_talk_hook)
 	RETURN()
 EVT_END()
 
+EVT_BEGIN(muj_01_init_evt_evt)
+	IF_EQUAL(GSW(1705), 10)
+		RUN_EVT(nakamaware_event)
+		RETURN()
+	END_IF()
+	IF_EQUAL(GSW(1719), 1)
+		IF_EQUAL(GSWF(3129), 0)
+			RUN_EVT(settoku_event)
+			RETURN()
+		END_IF()
+	END_IF()
+	RETURN()
+EVT_END()
+
+EVT_BEGIN(muj_01_init_evt_hook)
+	RUN_CHILD_EVT(muj_01_init_evt_evt)
+	GOTO(&muj_01_init_evt[163])
+EVT_END()
+
 void ApplyMujPatches(OSModuleInfo* module_info)
 {
 	garawaru_init_muj_00[1] = GSW(1717);
@@ -666,6 +687,11 @@ void ApplyMujPatches(OSModuleInfo* module_info)
 
 	muj_00_init_evt[323] = EVT_HELPER_CMD(1, 34);
 	muj_00_init_evt[324] = GSW(1717);
+	muj_00_init_evt[326] = 14;
+	muj_00_init_evt[332] = 16;
+	muj_00_init_evt[370] = 17;
+	muj_00_init_evt[411] = 24;
+	muj_00_init_evt[481] = 25;
 
 	patch::writePatch(&garawaru_init_muj_01[0], garawaru_init_muj_01_hook, sizeof(garawaru_init_muj_01_hook));
 
@@ -676,15 +702,21 @@ void ApplyMujPatches(OSModuleInfo* module_info)
 	marco_talk_muj_01[1] = GSW(1719);
 	marco_talk_muj_01[3] = 1;
 	marco_talk_muj_01[4] = 4;
-	marco_talk_muj_01[13] = GSW(1705);
-	marco_talk_muj_01[15] = 233;
-	marco_talk_muj_01[23] = 234;
-	marco_talk_muj_01[24] = 234;
-	marco_talk_muj_01[46] = 235;
-	marco_talk_muj_01[98] = 236;
-	marco_talk_muj_01[361] = 237;
-	marco_talk_muj_01[369] = 238;
-	marco_talk_muj_01[377] = 239;
+	marco_talk_muj_01[13] = GSW(1719);
+	marco_talk_muj_01[15] = 0;
+	marco_talk_muj_01[23] = 1;
+	marco_talk_muj_01[24] = 1;
+	marco_talk_muj_01[46] = 2;
+	marco_talk_muj_01[89] = GSW(1719);
+	marco_talk_muj_01[90] = 3;
+	marco_talk_muj_01[98] = 3;
+	marco_talk_muj_01[358] = GSW(1719);
+	marco_talk_muj_01[359] = 4;
+	marco_talk_muj_01[361] = 4;
+	marco_talk_muj_01[369] = 5;
+	marco_talk_muj_01[377] = 6;
+	marco_talk_muj_01[831] = GSW(1719);
+	marco_talk_muj_01[832] = 7;
 	marco_talk_muj_01[836] = EVT_HELPER_CMD(0, 42);
 	marco_talk_muj_01[837] = 0;
 	marco_talk_muj_01[838] = 0;
@@ -760,9 +792,7 @@ void ApplyMujPatches(OSModuleInfo* module_info)
 	muj_01_init_evt[5] = 16;
 	muj_01_init_evt[76] = GSW(1708);
 	muj_01_init_evt[77] = 2;
-	muj_01_init_evt[149] = GSW(1705);
-	muj_01_init_evt[151] = 10;
-	muj_01_init_evt[155] = 234;
+	patch::writePatch(&muj_01_init_evt[148], muj_01_init_evt_hook, sizeof(muj_01_init_evt_hook));
 	muj_01_init_evt[164] = GSW(1708);
 	muj_01_init_evt[165] = 16;
 	muj_01_init_evt[187] = GSW(1708);
@@ -793,50 +823,50 @@ void ApplyMujPatches(OSModuleInfo* module_info)
 	peton_talk_muj_02[45] = 7;
 
 	muj_02_init_evt[31] = GSW(1717);
-	muj_02_init_evt[32] = 269;
+	muj_02_init_evt[32] = 26;
 	muj_02_init_evt[87] = GSW(1717);
-	muj_02_init_evt[88] = 261;
+	muj_02_init_evt[88] = 18;
 
-	muj_03_event_01[1] = GSW(1705);
-	muj_03_event_01[3] = 12;
+	muj_03_event_01[1] = GSW(1719);
+	muj_03_event_01[2] = 1;
 
-	sanders_funto[462] = GSW(1705);
-	sanders_funto[463] = 12;
+	sanders_funto[462] = GSW(1719);
+	sanders_funto[463] = 1;
 
-	muj_04_init_evt[70] = GSW(1705);
-	muj_04_init_evt[71] = 11;
+	muj_04_init_evt[70] = GSW(1719);
+	muj_04_init_evt[72] = 0;
 
-	sanders_nakama[163] = GSW(1705);
-	sanders_nakama[164] = 17;
+	sanders_nakama[163] = GSW(1719);
+	sanders_nakama[164] = 6;
 
-	sanders_init_muj_05[1] = GSW(1705);
-	sanders_init_muj_05[3] = 13;
-	sanders_init_muj_05[9] = 13;
-	sanders_init_muj_05[10] = 15;
-	sanders_init_muj_05[22] = 16;
+	sanders_init_muj_05[1] = GSW(1719);
+	sanders_init_muj_05[3] = 2;
+	sanders_init_muj_05[9] = 2;
+	sanders_init_muj_05[10] = 4;
+	sanders_init_muj_05[22] = 5;
 
-	sanders_talk_sub[63] = GSW(1705);
-	sanders_talk_sub[64] = 16;
+	sanders_talk_sub[63] = GSW(1719);
+	sanders_talk_sub[64] = 5;
 
-	sanders_talk_muj_05[1] = GSW(1705);
-	sanders_talk_muj_05[3] = 13;
-	sanders_talk_muj_05[4] = 15;
-	sanders_talk_muj_05[38] = 16;
+	sanders_talk_muj_05[1] = GSW(1719);
+	sanders_talk_muj_05[3] = 2;
+	sanders_talk_muj_05[4] = 4;
+	sanders_talk_muj_05[38] = 5;
 
-	marco_init_muj_05[1] = GSW(1705);
-	marco_init_muj_05[3] = 19;
+	marco_init_muj_05[1] = GSW(1719);
+	marco_init_muj_05[3] = 8;
 
-	marco_talk_muj_05[1] = GSW(1705);
-	marco_talk_muj_05[3] = 19;
+	marco_talk_muj_05[1] = GSW(1719);
+	marco_talk_muj_05[3] = 8;
 
-	sanders_kyushutsu_sub[7] = GSW(1705);
-	sanders_kyushutsu_sub[8] = 13;
+	sanders_kyushutsu_sub[7] = GSW(1719);
+	sanders_kyushutsu_sub[8] = 2;
 
-	marco_and_jewel[77] = GSW(1705);
-	marco_and_jewel[78] = 19;
+	marco_and_jewel[77] = GSW(1719);
+	marco_and_jewel[78] = 8;
 
-	dokuroiwa_touch[23] = GSW(1705);
-	dokuroiwa_touch[24] = 18;
+	dokuroiwa_touch[23] = GSW(1719);
+	dokuroiwa_touch[24] = 7;
 
 	dokuroiwa_bomb[302] = GSW(1717);
 	dokuroiwa_bomb[303] = 1;
@@ -844,71 +874,71 @@ void ApplyMujPatches(OSModuleInfo* module_info)
 	dokuroiwa_init[14] = GSW(1717);
 	dokuroiwa_init[15] = 1;
 
-	yure_yashi_ha1[84] = GSW(1705);
-	yure_yashi_ha1[85] = 13;
-	yure_yashi_ha1[173] = GSW(1705);
-	yure_yashi_ha1[174] = 13;
+	yure_yashi_ha1[84] = GSW(1719);
+	yure_yashi_ha1[85] = 2;
+	yure_yashi_ha1[173] = GSW(1719);
+	yure_yashi_ha1[174] = 2;
 
-	yure_yashi[46] = GSW(1705);
-	yure_yashi[47] = 13;
-	yure_yashi[78] = GSW(1705);
-	yure_yashi[79] = 13;
+	yure_yashi[46] = GSW(1719);
+	yure_yashi[47] = 2;
+	yure_yashi[78] = GSW(1719);
+	yure_yashi[79] = 2;
 
-	muj_05_init_evt[1] = GSW(1705);
-	muj_05_init_evt[3] = 12;
-	muj_05_init_evt[13] = 16;
-	muj_05_init_evt[65] = GSW(1705);
-	muj_05_init_evt[67] = 12;
-	muj_05_init_evt[79] = 18;
+	muj_05_init_evt[1] = GSW(1719);
+	muj_05_init_evt[3] = 1;
+	muj_05_init_evt[13] = 5;
+	muj_05_init_evt[65] = GSW(1719);
+	muj_05_init_evt[67] = 1;
+	muj_05_init_evt[79] = 7;
 	muj_05_init_evt[86] = GSW(1709);
 	muj_05_init_evt[87] = 5;
 
 	megane_init_muj_10[1] = GSW(1717);
-	megane_init_muj_10[3] = 251;
-	megane_init_muj_10[4] = 252;
+	megane_init_muj_10[3] = 8;
+	megane_init_muj_10[4] = 9;
 
 	bero_in_event_muj_10[1] = GSW(1717);
-	bero_in_event_muj_10[2] = 258;
+	bero_in_event_muj_10[2] = 15;
 
 	nazo_event[168] = GSW(1717);
-	nazo_event[169] = 251;
+	nazo_event[169] = 8;
 
 	oidasare_event[147] = GSW(1717);
-	oidasare_event[148] = 254;
+	oidasare_event[148] = 11;
 
 	unk_evt_muj_0002cb0c[79] = GSW(1717);
-	unk_evt_muj_0002cb0c[80] = 259;
+	unk_evt_muj_0002cb0c[80] = 16;
 
 	muj_10_init_evt[1] = GSW(1717);
-	muj_10_init_evt[2] = 253;
+	muj_10_init_evt[2] = 10;
 	muj_10_init_evt[45] = GSW(1717);
-	muj_10_init_evt[46] = 250;
+	muj_10_init_evt[46] = 7;
 	muj_10_init_evt[51] = GSW(1717);
-	muj_10_init_evt[52] = 253;
+	muj_10_init_evt[52] = 10;
 	muj_10_init_evt[57] = GSW(1717);
-	muj_10_init_evt[58] = 258;
+	muj_10_init_evt[58] = 15;
 	muj_10_init_evt[65] = GSW(1717);
-	muj_10_init_evt[66] = 260;
+	muj_10_init_evt[66] = 17;
 	muj_10_init_evt[85] = GSW(1717);
-	muj_10_init_evt[86] = 260;
+	muj_10_init_evt[86] = 17;
 	muj_10_init_evt[88] = GSW(1717);
-	muj_10_init_evt[89] = 258;
+	muj_10_init_evt[89] = 15;
 	muj_10_init_evt[118] = GSW(1717);
-	muj_10_init_evt[119] = 260;
+	muj_10_init_evt[119] = 17;
 	muj_10_init_evt[164] = GSW(1717);
-	muj_10_init_evt[165] = 257;
+	muj_10_init_evt[165] = 14;
 	muj_10_init_evt[167] = GSW(1717);
-	muj_10_init_evt[168] = 258;
+	muj_10_init_evt[168] = 15;
 	muj_10_init_evt[184] = GSW(1717);
-	muj_10_init_evt[185] = 258;
+	muj_10_init_evt[185] = 15;
 
 	warning_event[31] = GSW(1717);
-	warning_event[32] = 252;
+	warning_event[32] = 9;
 
 	muj_11_init_evt[1] = GSW(1717);
-	muj_11_init_evt[2] = 253;
+	muj_11_init_evt[2] = 10;
 	muj_11_init_evt[28] = GSW(1717);
-	muj_11_init_evt[29] = 251;
+	muj_11_init_evt[29] = 8;
 
 	bero_custom_muj_12[1] = GSW(1717);
 	bero_custom_muj_12[3] = 9;

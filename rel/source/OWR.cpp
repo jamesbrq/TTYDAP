@@ -105,12 +105,26 @@ namespace mod::owr
 
 	void OWR::SequenceInit()
 	{
+		if (ttyd::mario_pouch::pouchCheckItem(ItemId::INVALID_ITEM_BOAT_MODE_ICON) == 0)
+		{
+			ttyd::mario_pouch::pouchGetItem(ItemId::INVALID_ITEM_BOAT_MODE_ICON);
+			ttyd::mario_pouch::pouchGetItem(ItemId::INVALID_ITEM_PLANE_MODE_ICON);
+			ttyd::mario_pouch::pouchGetItem(ItemId::GATE_HANDLE);
+		}
 		uint32_t SequencePosition = ttyd::swdrv::swByteGet(1700);
 		if (SequencePosition != 0)
 			return;
 
 		ttyd::swdrv::swByteSet(1700, 15);
-		ttyd::swdrv::swByteSet(1705, 0);
+		ttyd::swdrv::swByteSet(1705, 11);
+		ttyd::swdrv::swByteSet(1719, 8);
+		ttyd::swdrv::swByteSet(1717, 13);
+
+		ttyd::mario_pouch::pouchSetMaxHP(99);
+		ttyd::mario_pouch::pouchSetMaxFP(99);
+		ttyd::mario_pouch::pouchSetHP(99);
+		ttyd::mario_pouch::pouchSetFP(99);
+		ttyd::mario_pouch::pouchAddAP(96);
 
 		uint8_t goombella = static_cast<uint8_t>(ttyd::party::PartyMembers::Goombella);
 		uint8_t yoshi = static_cast<uint8_t>(ttyd::party::PartyMembers::Yoshi);
@@ -133,6 +147,8 @@ namespace mod::owr
 		ttyd::mario_pouch::pouchGetItem(ItemId::ULTRA_HAMMER);
 		ttyd::mario_pouch::pouchGetItem(ItemId::INVALID_ITEM_PAPER_MODE_ICON);
 		ttyd::mario_pouch::pouchGetItem(ItemId::INVALID_ITEM_TUBE_MODE_ICON);
+		for(int i = 0; i <= 10; i++)
+			ttyd::mario_pouch::pouchGetItem(ItemId::POWER_PLUS);
 	}
 
 	void OWR::LZTest()
@@ -151,8 +167,8 @@ namespace mod::owr
 	 {
 		gSelf = this;
 
-		ApplyMainAssemblyPatches();
-		ApplyMainScriptPatches();
+		//ApplyMainAssemblyPatches();
+		//ApplyMainScriptPatches();
 
 		/* g_itemEntry_trampoline = patch::HookFunction(
 			ttyd::itemdrv::itemEntry, [](const char* name, uint32_t id, uint32_t mode, int32_t collection_expr, void* script, float x, float y, float z) 
@@ -282,7 +298,7 @@ namespace mod::owr
                 return;
         }
 
-		ShopItemData* item_data = reinterpret_cast<ShopItemData*>(module_ptr + kShopOffsets[0]);
+		/*ShopItemData* item_data = reinterpret_cast<ShopItemData*>(module_ptr + kShopOffsets[0]);
 		for (int32_t copy = 0; copy < 7; ++copy) {
 			// Skip first item slot on additional copies.
 			if (copy > 0) ++item_data;
@@ -297,7 +313,7 @@ namespace mod::owr
 				item_data->buy_price = item_price.price;
 				++item_data;
 			}
-		}
+		} */
 	}
 
 	void OWR::DrawString(const char* data, int32_t x, int32_t y, uint32_t color, float scale) {

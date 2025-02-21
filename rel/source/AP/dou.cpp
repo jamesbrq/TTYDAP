@@ -50,7 +50,7 @@ extern int32_t dou_11_init_evt[];
 void ApplyDouPatches(OSModuleInfo* module_info)
 {
 	bero_in_event_dou_00[1] = GSW(1717);
-	bero_in_event_dou_00[3] = 1;
+	bero_in_event_dou_00[2] = 1;
 
 	totsunyu_event[34] = GSW(1717);
 	totsunyu_event[35] = 2;
@@ -93,8 +93,8 @@ void ApplyDouPatches(OSModuleInfo* module_info)
 
 	namiyoke_check[1] = GSW(1717);
 	namiyoke_check[2] = 5;
-	namiyoke_check[1] = GSW(1717);
-	namiyoke_check[2] = 6;
+	namiyoke_check[4] = GSW(1717);
+	namiyoke_check[5] = 6;
 
 	suifu_c_init_dou_11[1] = GSW(1717);
 	suifu_c_init_dou_11[3] = 7;
@@ -157,7 +157,7 @@ void ApplyDouPatches(OSModuleInfo* module_info)
 	escapeway_event[92] = 12;
 
 	bombwall_bomb[176] = GSW(1717);
-	bombwall_bomb[177] = 12;
+	bombwall_bomb[177] = 13;
 
 	bombwall_init[31] = GSW(1717);
 	bombwall_init[32] = 10;
@@ -166,7 +166,7 @@ void ApplyDouPatches(OSModuleInfo* module_info)
 	bombwall_init[101] = 13;
 
 	dou_11_init_evt[42] = GSW(1717);
-	dou_11_init_evt[43] = 6;
+	dou_11_init_evt[44] = 6;
 	dou_11_init_evt[60] = 11;
 	dou_11_init_evt[74] = GSW(1717);
 	dou_11_init_evt[75] = 6;

@@ -96,8 +96,8 @@ extern int32_t evt_usu_kagemario_party_kill_usu[];
 const char usuVillagerA[] = "\x91\xBA\x90\x6C\x82\x60";
 
 EVT_BEGIN(villagerA_init_evt)
-	IF_LARGE_EQUAL(GSW(1705), 265)
-		IF_SMALL_EQUAL(GSW(1705), 267)
+	IF_LARGE_EQUAL(GSW(1717), 22)
+		IF_SMALL_EQUAL(GSW(1717), 24)
 			USER_FUNC(evt_npc::evt_npc_set_position, PTR(usuVillagerA), -180, 0, 0)
 			RETURN()
 		END_IF()
@@ -114,7 +114,7 @@ EVT_BEGIN(villagerA_init_hook)
 EVT_END()
 
 EVT_BEGIN(villagerA_talk_evt)
-	IF_EQUAL(GSW(1705), 266)
+	IF_EQUAL(GSW(1717), 23)
 		USER_FUNC(evt_msg::evt_msg_print, 0, PTR("kpa_stg5_005"), 0, PTR("me"))
 		RETURN()
 	END_IF()
@@ -134,7 +134,7 @@ EVT_BEGIN(villagerA_talk_evt)
 			RETURN()
 		CASE_END()
 	END_SWITCH()
-	IF_SMALL_EQUAL(GSW(1708), 402)
+	IF_SMALL_EQUAL(GSW(1708), 18)
 		USER_FUNC(evt_msg::evt_msg_print, 0, PTR("stg4_usu_31_1"), 0, PTR("me"))
 		RETURN()
 	END_IF()
@@ -148,7 +148,7 @@ EVT_BEGIN(villagerA_talk_hook)
 EVT_END()
 
 EVT_BEGIN(villagerB_talk_evt)
-	IF_EQUAL(GSW(1705), 266)
+	IF_EQUAL(GSW(1717), 23)
 		USER_FUNC(evt_msg::evt_msg_print, 0, PTR("kpa_stg5_006"), 0, PTR("me"))
 		RETURN()
 	END_IF()
@@ -180,7 +180,7 @@ EVT_BEGIN(villagerB_talk_hook)
 EVT_END()
 
 EVT_BEGIN(villagerC_talk_evt)
-	IF_EQUAL(GSW(1705), 266)
+	IF_EQUAL(GSW(1717), 23)
 		USER_FUNC(evt_msg::evt_msg_print, 0, PTR("kpa_stg5_007"), 0, PTR("me"))
 		RETURN()
 	END_IF()
@@ -212,7 +212,7 @@ EVT_BEGIN(villagerC_talk_hook)
 EVT_END()
 
 EVT_BEGIN(villagerD_talk_evt)
-	IF_EQUAL(GSW(1705), 266)
+	IF_EQUAL(GSW(1717), 23)
 		USER_FUNC(evt_msg::evt_msg_print, 0, PTR("kpa_stg5_008"), 0, PTR("me"))
 		RETURN()
 	END_IF()
@@ -257,7 +257,7 @@ EVT_END()
 
 
 EVT_BEGIN(villagerE_talk_evt)
-	IF_EQUAL(GSW(1705), 266)
+	IF_EQUAL(GSW(1717), 23)
 		USER_FUNC(evt_msg::evt_msg_print, 0, PTR("kpa_stg5_009"), 0, PTR("me"))
 		RETURN()
 	END_IF()
@@ -291,7 +291,7 @@ EVT_BEGIN(villagerE_talk_hook)
 EVT_END()
 
 EVT_BEGIN(villagerK_talk_evt)
-	IF_EQUAL(GSW(1705), 266)
+	IF_EQUAL(GSW(1717), 23)
 		USER_FUNC(evt_msg::evt_msg_print, 0, PTR("kpa_stg5_006"), 0, PTR("me"))
 		RETURN()
 	END_IF()
@@ -601,25 +601,25 @@ void ApplyUsuPatches(OSModuleInfo* module_info)
 	dokan_1_evt[1] = GSW(1704);
 	dokan_1_evt[2] = 1;
 
-	kusa_01_evt[1] = GSW(1705);
-	kusa_01_evt[2] = 266;
+	kusa_01_evt[1] = GSW(1717);
+	kusa_01_evt[2] = 23;
 
 	evt_ichikorori_ball_get[1] = GSWF(6040);
 	evt_ichikorori_ball_get[2] = 1;
 
-	usu_00_koopa_first_evt[181] = GSW(1705);
-	usu_00_koopa_first_evt[182] = 266;
+	usu_00_koopa_first_evt[181] = GSW(1717);
+	usu_00_koopa_first_evt[182] = 23;
 
-	usu_00_koopa_second_evt[1260] = GSW(1705);
-	usu_00_koopa_second_evt[1261] = 267;
+	usu_00_koopa_second_evt[1260] = GSW(1717);
+	usu_00_koopa_second_evt[1261] = 24;
 
 	evt_after_peach[125] = GSW(1704);
 	evt_after_peach[126] = 219;
 
-	usu_00_init_evt[4] = GSW(1705);
-	usu_00_init_evt[5] = 265;
-	usu_00_init_evt[7] = GSW(1705);
-	usu_00_init_evt[8] = 266;
+	usu_00_init_evt[4] = GSW(1717);
+	usu_00_init_evt[5] = 22;
+	usu_00_init_evt[7] = GSW(1717);
+	usu_00_init_evt[8] = 23;
 	usu_00_init_evt[21] = GSW(1708);
 	usu_00_init_evt[23] = 99; //Unused
 	usu_00_init_evt[24] = 99; //Unused
@@ -644,10 +644,10 @@ void ApplyUsuPatches(OSModuleInfo* module_info)
 	usu_00_init_evt[475] = 99; //Unused
 	usu_00_init_evt[477] = GSW(1704);
 	usu_00_init_evt[478] = 99; //Unused
-	usu_00_init_evt[504] = GSW(1705);
-	usu_00_init_evt[505] = 265;
-	usu_00_init_evt[523] = GSW(1705);
-	usu_00_init_evt[524] = 266;
+	usu_00_init_evt[504] = GSW(1717);
+	usu_00_init_evt[505] = 22;
+	usu_00_init_evt[523] = GSW(1717);
+	usu_00_init_evt[524] = 23;
 	usu_00_init_evt[586] = GSW(1704);
 	usu_00_init_evt[587] = 218;
 	usu_00_init_evt[621] = GSW(1708);

@@ -136,7 +136,11 @@ EVT_END()
 
 EVT_BEGIN(peach_evt_ele_2_hook)
 	RUN_CHILD_EVT(peach_evt_ele_2_evt)
-	GOTO(99)
+	WAIT_MSEC(100)
+	IF_NOT_EQUAL(LW(8), 2)
+		RETURN()
+	END_IF()
+	GOTO(&peach_evt_ele_2[33])
 EVT_END()
 
 EVT_BEGIN(teshita2_init_evt)
@@ -186,13 +190,13 @@ EVT_BEGIN(teshita3_init_hook)
 EVT_END()
 
 EVT_BEGIN(aji_10_init_evt_evt)
-	IF_EQUAL(1711, 8)
+	IF_EQUAL(GSW(1711), 8)
 		USER_FUNC(evt_mario::evt_mario_set_mode, 1)
 		RUN_CHILD_EVT(monitor_init)
 		RUN_EVT(peach_evt_stg1_10)
 		RETURN()
 	END_IF()
-	IF_EQUAL(1713, 11)
+	IF_EQUAL(GSW(1713), 11)
 		USER_FUNC(evt_mario::evt_mario_set_mode, 1)
 		USER_FUNC(evt_npc::evt_npc_entry, PTR(npc1), PTR("c_zako_m"))
 		USER_FUNC(evt_npc::evt_npc_set_tribe, PTR(npc1), PTR(npc2))
@@ -201,16 +205,16 @@ EVT_BEGIN(aji_10_init_evt_evt)
 		RUN_EVT(peach_evt_stg2_10)
 		RETURN()
 	END_IF()
-	IF_EQUAL(1703, 20)
+	IF_EQUAL(GSW(1703), 20)
 		USER_FUNC(evt_mario::evt_mario_set_mode, 1)
 		RUN_EVT(peach_evt_stg3_10)
 		RETURN()
 	END_IF()
-	IF_EQUAL(1703, 23)
+	IF_EQUAL(GSW(1703), 23)
 		USER_FUNC(evt_mario::evt_mario_set_mode, 1)
 		RETURN()
 	END_IF()
-	IF_EQUAL(1715, 9)
+	IF_EQUAL(GSW(1715), 9)
 		USER_FUNC(evt_mario::evt_mario_set_mode, 1)
 		USER_FUNC(evt_npc::evt_npc_entry, PTR(npc1), PTR("c_zako_m"))
 		USER_FUNC(evt_npc::evt_npc_set_tribe, PTR(npc1), PTR(npc2))
@@ -219,14 +223,14 @@ EVT_BEGIN(aji_10_init_evt_evt)
 		RUN_EVT(peach_evt_stg4_10)
 		RETURN()
 	END_IF()
-	IF_EQUAL(1717, 18)
+	IF_EQUAL(GSW(1717), 18)
 		USER_FUNC(evt_mario::evt_mario_set_mode, 1)
-		RUN_CHILD_EVT(monitor_init)
-		RUN_EVT(peach_evt_stg5_10)
+		RUN_CHILD_EVT(&monitor_init)
+		RUN_EVT(&peach_evt_stg5_10)
 		RETURN()
 	END_IF()
-	IF_LARGE_EQUAL(1717, 20)
-		IF_SMALL_EQUAL(1717, 21)
+	IF_LARGE_EQUAL(GSW(1717), 20)
+		IF_SMALL_EQUAL(GSW(1717), 21)
 			USER_FUNC(evt_mario::evt_mario_set_mode, 1)
 			USER_FUNC(evt_aji::peach_evt_toumei)
 			USER_FUNC(evt_npc::evt_npc_entry, PTR(npc3), PTR("c_baria_c"))
@@ -245,7 +249,7 @@ EVT_BEGIN(aji_10_init_evt_evt)
 			RETURN()
 		END_IF()
 	END_IF()
-	IF_EQUAL(1706, 43)
+	IF_EQUAL(GSW(1706), 43)
 		USER_FUNC(evt_mario::evt_mario_set_mode, 1)
 		RUN_EVT(peach_evt_stg6_10)
 	END_IF()
@@ -254,7 +258,7 @@ EVT_END()
 
 EVT_BEGIN(aji_10_init_evt_hook)
 	RUN_CHILD_EVT(aji_10_init_evt_evt)
-	GOTO(99)
+	GOTO(&aji_10_init_evt[186])
 EVT_END()
 
 EVT_BEGIN(aji_17_init_evt_evt)
@@ -273,7 +277,7 @@ EVT_END()
 
 EVT_BEGIN(aji_17_init_evt_hook)
 	RUN_CHILD_EVT(aji_17_init_evt_evt)
-	GOTO(99)
+	GOTO(&aji_17_init_evt[178])
 EVT_END()
 
 
@@ -320,8 +324,9 @@ void ApplyAjiPatches(OSModuleInfo* module_info)
 
 
 	patch::writePatch(&peach_evt_ele_2[9], peach_evt_ele_2_hook, sizeof(peach_evt_ele_2_hook));
-	peach_evt_ele_2[31] = EVT_HELPER_CMD(1, 3);
-	peach_evt_ele_2[32] = EVT_HELPER_OP(99);
+	//peach_evt_ele_2[10] = GSW(1717);
+	//peach_evt_ele_2[12] = 19;
+	peach_evt_ele_2[147] = GSW(1703);
 	peach_evt_ele_2[147] = GSW(1703);
 	peach_evt_ele_2[148] = 22;
 	peach_evt_ele_2[372] = GSW(1703);
@@ -477,8 +482,6 @@ void ApplyAjiPatches(OSModuleInfo* module_info)
 	aji_10_init_evt[31] = GSW(1707);
 	aji_10_init_evt[32] = 1;
 	patch::writePatch(&aji_10_init_evt[50], aji_10_init_evt_hook, sizeof(aji_10_init_evt_hook));
-	aji_10_init_evt[184] = EVT_HELPER_CMD(1, 3);
-	aji_10_init_evt[185] = EVT_HELPER_OP(99);
 	aji_10_init_evt[219] = GSW(1707);
 	aji_10_init_evt[220] = 16;
 	aji_10_init_evt[255] = GSW(1703);
@@ -613,8 +616,6 @@ void ApplyAjiPatches(OSModuleInfo* module_info)
 	aji_17_init_evt[116] = GSW(1707);
 	aji_17_init_evt[117] = 18;
 	patch::writePatch(&aji_17_init_evt[166], aji_17_init_evt_hook, sizeof(aji_17_init_evt_hook));
-	aji_17_init_evt[176] = EVT_HELPER_CMD(1, 3);
-	aji_17_init_evt[177] = EVT_HELPER_OP(99);
 	aji_17_init_evt[198] = GSW(1708);
 	aji_17_init_evt[199] = 18;
 
