@@ -1,5 +1,5 @@
-instruction = 0x805C181C
-base = 0x805C16B8
+instruction = 0x805C4210
+base = 0x805C4144
 strings = [
   ""
 ]

@@ -162,7 +162,7 @@ EVT_BEGIN(guide_init_00_evt)
 			RETURN()
 		END_IF()
 	END_IF()
-	IF_LARGE_EQUAL(GSW(1713), 99) //Unknown
+	IF_LARGE_EQUAL(GSW(1713), 16)
 		IF_EQUAL(GSWF(2884), 0)
 			USER_FUNC(evt_npc::evt_npc_set_position, PTR("me"), -34, 0, 177)
 			USER_FUNC(evt_npc::evt_npc_set_ry, PTR("me"), 90)
@@ -204,7 +204,7 @@ EVT_BEGIN(guide_talk_evt)
 		USER_FUNC(evt_msg::evt_msg_print, 0, PTR("stg2_mri_e10_05"), 0, PTR("me"))
 		RETURN()
 	END_IF()
-	IF_LARGE_EQUAL(GSW(1713), 99) //Unknown
+	IF_LARGE_EQUAL(GSW(1713), 17)
 		USER_FUNC(evt_msg::evt_msg_print, 0, PTR("stg2_mri_e26_00_07"), 0, PTR("me"))
 		RETURN()
 	END_IF()
@@ -519,9 +519,9 @@ EVT_END()
 void ApplyMriPatches(OSModuleInfo* module_info)
 {
 	mri_countdown[1] = GSW(1713);
-	mri_countdown[2] = 31;
+	mri_countdown[2] = 17;
 	mri_countdown[80] = GSW(1713);
-	mri_countdown[81] = 99; //??? Idk what this does
+	mri_countdown[81] = 20; //This should probably be disabled.
 
 	seal_bigtree[203] = GSW(1702);
 	seal_bigtree[204] = 4;
@@ -534,28 +534,28 @@ void ApplyMriPatches(OSModuleInfo* module_info)
 	patch::writePatch(&mri_guide_talk_00[0], guide_talk_hook, sizeof(guide_talk_hook));
 
 	mri_rival_init_00[1] = GSW(1713);
-	mri_rival_init_00[3] = 99; //Unknown
+	mri_rival_init_00[3] = 16;
 
 	mri_chibitoge_init_00[1] = GSW(1713);
-	mri_chibitoge_init_00[3] = 99; //Unknown
+	mri_chibitoge_init_00[3] = 16;
 
 	mri_sister_init_00[1] = GSW(1713);
-	mri_sister_init_00[3] = 99; //Unknown
+	mri_sister_init_00[3] = 16;
 
 	mri_elder_init_00[1] = GSW(1713);
-	mri_elder_init_00[3] = 99; //Unknown
+	mri_elder_init_00[3] = 16;
 
 	fabio_init[1] = GSW(1708);
-	fabio_init[3] = 99; //Unknown
+	fabio_init[3] = 16;
 
 	fabio_talk[1] = GSW(1708);
-	fabio_talk[3] = 99; //Unknown
+	fabio_talk[3] = 18;
 
 	mri_first_time_w_bero_00[1] = GSW(1702);
 	mri_first_time_w_bero_00[2] = 2;
 
 	out_dokan_1[1] = GSW(1713);
-	out_dokan_1[2] = 99; //Unknown
+	out_dokan_1[2] = 11;
 
 	first_bigtree[92] = GSW(1702);
 	first_bigtree[93] = 3;
@@ -564,26 +564,26 @@ void ApplyMriPatches(OSModuleInfo* module_info)
 	open_bigtree[432] = 1;
 
 	mario_see_you[198] = GSW(1702);
-	mario_see_you[199] = 99; //Unknown
+	mario_see_you[199] = 17;
 
 	mri_00_init_evt[39] = GSW(1713);
-	mri_00_init_evt[40] = 99; //Unknown
+	mri_00_init_evt[40] = 16;
 	mri_00_init_evt[65] = GSW(1713);
-	mri_00_init_evt[67] = 99; //Unknown
+	mri_00_init_evt[67] = 16;
 	mri_00_init_evt[137] = GSW(1708);
-	mri_00_init_evt[138] = 99; //Unknown
+	mri_00_init_evt[138] = 16;
 	mri_00_init_evt[175] = GSW(1702);
 	mri_00_init_evt[176] = 2;
 	mri_00_init_evt[214] = GSW(1713);
 	mri_00_init_evt[215] = 1;
 	mri_00_init_evt[217] = GSW(1713);
-	mri_00_init_evt[218] = 99; //Unknown
+	mri_00_init_evt[218] = 11;
 	mri_00_init_evt[232] = GSW(1702);
 	mri_00_init_evt[233] = 2;
 	mri_00_init_evt[238] = GSW(1713);
 	mri_00_init_evt[239] = 0;
 	mri_00_init_evt[278] = GSW(1708);
-	mri_00_init_evt[279] = 99; //Unknown
+	mri_00_init_evt[279] = 16;
 
 	patch::writePatch(&mri_guide_init_01[0], guide_init_01_hook, sizeof(guide_init_01_hook));
 

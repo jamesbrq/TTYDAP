@@ -565,82 +565,82 @@ void ApplyNokPatches(OSModuleInfo* module_info)
 	nok_00_koopa_evt[1214] = 16;
 
 	nok_00_init_evt[1] = GSW(1713);
-	nok_00_init_evt[2] = 13;
+	nok_00_init_evt[2] = 15;
 	nok_00_init_evt[25] = GSW(1701);
 	nok_00_init_evt[26] = 3;
 	nok_00_init_evt[40] = GSW(1701);
 	nok_00_init_evt[41] = 1;
-	nok_00_init_evt[43] = GSW(1701);
-	nok_00_init_evt[44] = 99; //Unknown
-	nok_00_init_evt[77] = GSW(1702);
-	nok_00_init_evt[78] = 99; //Unknown
+	nok_00_init_evt[43] = GSW(1711);
+	nok_00_init_evt[44] = 8;
+	nok_00_init_evt[77] = GSW(1713);
+	nok_00_init_evt[78] = 15;
 
-	patch::writePatch(&nokonoko_G_talk[0], nokonoko_G_talk_hook, sizeof(nokonoko_G_talk_hook)); //Nokonoko G Dialogue
-	patch::writePatch(&nokonoko_H_talk[0], nokonoko_H_talk_hook, sizeof(nokonoko_H_talk_hook)); //Nokonoko H Dialogue
-	patch::writePatch(&nokonoko_I_talk[0], nokonoko_I_talk_hook, sizeof(nokonoko_I_talk_hook)); //Nokonoko I Dialogue
+	patch::writePatch(&nokonoko_G_talk[0], nokonoko_G_talk_hook, sizeof(nokonoko_G_talk_hook));
 
-	open_gate[217] = GSW(1701); //Open gate
+	patch::writePatch(&nokonoko_H_talk[0], nokonoko_H_talk_hook, sizeof(nokonoko_H_talk_hook));
+
+	patch::writePatch(&nokonoko_I_talk[0], nokonoko_I_talk_hook, sizeof(nokonoko_I_talk_hook));
+
+	open_gate[217] = GSW(1701);
 	open_gate[218] = 5;
 
-	monban_init[1] = GSW(1701); //Monban Init
+	monban_init[1] = GSW(1701);
 	monban_init[3] = 5;
 
-	patch::writePatch(&monban_talk[0], monban_talk_hook, sizeof(monban_talk_hook)); //Monban Dialogue
+	patch::writePatch(&monban_talk[0], monban_talk_hook, sizeof(monban_talk_hook));
 
-	nokotarou_init[3] = GSW(1701); //Nokotarou Init
+	nokotarou_init[3] = GSW(1701);
 	nokotarou_init[5] = 9;
 
-	nokotarou_talk[1] = GSW(1701); //Nokotarou Dialogue
+	nokotarou_talk[1] = GSW(1701);
 	nokotarou_talk[3] = 4;
 	nokotarou_talk[11] = 5;
 	nokotarou_talk[19] = 6;
 
-	nokopapa_init[3] = GSW(1701); //Nokopapa Init
-	nokopapa_init[5] = 99; //Unknown
+	nokopapa_init[3] = GSW(1711);
+	nokopapa_init[5] = 7;
 
-	patch::writePatch(&nokopapa_talk[3], nokopapa_talk_hook, sizeof(nokopapa_talk_hook)); //Nokopapa Dialogue
-	patch::writePatch(&nokonoko_K_talk[25], nokonoko_K_talk_hook, sizeof(nokonoko_K_talk_hook)); //Nokonoko K Dialogue
+	patch::writePatch(&nokopapa_talk[3], nokopapa_talk_hook, sizeof(nokopapa_talk_hook));
+	patch::writePatch(&nokonoko_K_talk[25], nokonoko_K_talk_hook, sizeof(nokonoko_K_talk_hook));
 
-	boss_noko_open_gate[180] = GSW(1701); //Boss Noko Open Gate
+	boss_noko_open_gate[180] = GSW(1701);
 	boss_noko_open_gate[181] = 4;
 
-	patch::writePatch(&boss_noko_talk[278], boss_noko_talk_hook, sizeof(boss_noko_talk_hook)); //Boss Noko Dialogue
+	patch::writePatch(&boss_noko_talk[278], boss_noko_talk_hook, sizeof(boss_noko_talk_hook));
 
-	nokorin_init[7] = GSW(1711); //Nokorin Init
-	nokorin_init[8] = 99; //Unknown
+	nokorin_init[7] = GSW(1711);
+	nokorin_init[8] = 8;
 	nokorin_init[10] = GSW(1701);
 	nokorin_init[11] = 10;
 
-	nokorin_talk[1] = GSW(1701); //Nokorin Dialogue
+	nokorin_talk[1] = GSW(1701);
 	nokorin_talk[3] = 9;
 	nokorin_talk[82] = 10;
 	nokorin_talk[89] = EVT_HELPER_CMD(0, 49);
-	nokorin_talk[169] = EVT_HELPER_CMD(0, 49);
-	patch::writePatch(&nokorin_talk[90], nokorin_talk_hook, sizeof(nokorin_talk_hook)); //Nokorin Dialogue
-
-	odoriko_1_talk[1] = GSW(1701); //Odoriko 1 Dialogue
+	patch::writePatch(&nokorin_talk[90], nokorin_talk_hook, sizeof(nokorin_talk_hook));
+	
+	odoriko_1_talk[1] = GSW(1701);
 	odoriko_1_talk[3] = 9;
 
-	odoriko_2_talk[1] = GSW(1701); //Odoriko 1 Dialogue
+	odoriko_2_talk[1] = GSW(1701);
 	odoriko_2_talk[3] = 9;
 
-	odoriko_3_talk[1] = GSW(1701); //Odoriko 1 Dialogue
+	odoriko_3_talk[1] = GSW(1701);
 	odoriko_3_talk[3] = 9;
 
-	nokotarou_tabidachi[306] = GSW(1701); //Nokotarou Tabidachi
-	nokotarou_tabidachi[307] = 99; //Unknown
+	nokotarou_tabidachi[306] = GSW(1711);
+	nokotarou_tabidachi[307] = 14;
 
-	nok_01_init_evt[13] = GSW(1708); //Room 1 Init
-	nok_01_init_evt[14] = 99; //Unknown
+	nok_01_init_evt[13] = GSW(1708);
+	nok_01_init_evt[14] = 16;
 	nok_01_init_evt[75] = GSW(1701);
 	nok_01_init_evt[76] = 1;
-	nok_01_init_evt[78] = GSW(1708);
-	nok_01_init_evt[79] = 99; //Unknown
+	nok_01_init_evt[78] = GSW(1711);
+	nok_01_init_evt[79] = 8;
 	nok_01_init_evt[109] = GSW(1701);
 	nok_01_init_evt[110] = 5;
 	nok_01_init_evt[292] = GSW(1708);
-	nok_01_init_evt[293] = 99; //Unknown
+	nok_01_init_evt[293] = 16;
 	nok_01_init_evt[311] = GSW(1708);
-	nok_01_init_evt[312] = 99; //Unknown
-
+	nok_01_init_evt[312] = 18;
 }
