@@ -19,7 +19,7 @@ using namespace ttyd;
 
 extern int32_t gon_01_init_evt[];
 extern int32_t tegami_event[];
-extern int32_t senkaron_event[];
+extern int32_t gon_senkaron_event[];
 extern int32_t gon_key_get_03[];
 extern int32_t gon_03_init_evt[];
 extern int32_t leaderkaron_init_event[];
@@ -35,7 +35,7 @@ extern int32_t evt_unlock01[];
 extern int32_t gon_key_get_05[];
 extern int32_t gon_05_init_evt[];
 extern int32_t tsuritenjo_event[];
-extern int32_t evt_majin2[];
+extern int32_t gon_evt_majin2[];
 extern int32_t gon_06_init_evt[];
 extern int32_t out_func[];
 extern int32_t gon_item_evt_07[];
@@ -45,7 +45,7 @@ extern int32_t gon_08_init_evt[];
 extern int32_t gon_10_init_evt[];
 extern int32_t gonbaba_event[];
 extern int32_t gon_11_init_evt[];
-extern int32_t chuchurina_sogu[];
+extern int32_t gon_chuchurina_sogu[];
 extern int32_t item_get00[];
 extern int32_t gon_12_init_evt[];
 
@@ -63,10 +63,10 @@ void ApplyGonPatches(OSModuleInfo* module_info)
 	tegami_event[17] = GSW(1711);
 	tegami_event[18] = 4;
 
-	senkaron_event[1] = GSW(1711);
-	senkaron_event[2] = 5;
-	senkaron_event[559] = GSW(1711);
-	senkaron_event[560] = 5;
+	gon_senkaron_event[1] = GSW(1711);
+	gon_senkaron_event[2] = 5;
+	gon_senkaron_event[559] = GSW(1711);
+	gon_senkaron_event[560] = 5;
 
 	gon_key_get_03[1] = GSWF(6002);
 	gon_key_get_03[2] = 1;
@@ -127,8 +127,8 @@ void ApplyGonPatches(OSModuleInfo* module_info)
 	tsuritenjo_event[126] = GSWF(6010);
 	tsuritenjo_event[127] = 1;
 
-	evt_majin2[212] = GSWF(6011);
-	evt_majin2[213] = 1;
+	gon_evt_majin2[212] = GSWF(6011);
+	gon_evt_majin2[213] = 1;
 
 	gon_06_init_evt[6] = GSWF(6012);
 	gon_06_init_evt[7] = 1;
@@ -169,10 +169,10 @@ void ApplyGonPatches(OSModuleInfo* module_info)
 	gon_11_init_evt[90] = GSWF(6014);
 	gon_11_init_evt[91] = 1;
 
-	chuchurina_sogu[1] = GSWF(6016);
-	chuchurina_sogu[2] = 1;
-	chuchurina_sogu[64] = GSWF(6016);
-	chuchurina_sogu[65] = 1;
+	gon_chuchurina_sogu[1] = GSWF(6016);
+	gon_chuchurina_sogu[2] = 1;
+	gon_chuchurina_sogu[64] = GSWF(6016);
+	gon_chuchurina_sogu[65] = 1;
 
 	item_get00[33] = GSWF(6017);
 	item_get00[34] = 1;

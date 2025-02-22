@@ -6,6 +6,7 @@
 	const int32_t name[] = {
 #define EVT_END() \
 	0x1 };
+#define EVT_PATCH_END() } ;
 
 // We use a C-style cast in order to convert both pointers and other integers
 #define EVT_HELPER_OP(op) \

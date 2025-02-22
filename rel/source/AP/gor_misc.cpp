@@ -25,8 +25,8 @@ extern int32_t gor_11_init_evt[];
 void ApplyGorMiscPatches(OSModuleInfo* module_info)
 {
 	luigi_gor_first_talk[18] = GSW(1708);
-	luigi_gor_first_talk[19] = 99; //Unknown
-	luigi_gor_first_talk[44] = GSW(1710);
+	luigi_gor_first_talk[19] = 17;
+	luigi_gor_first_talk[44] = GSW(1700);
 	luigi_gor_first_talk[46] = 1;
 	luigi_gor_first_talk[47] = 1;
 	luigi_gor_first_talk[52] = 2;
@@ -46,8 +46,7 @@ void ApplyGorMiscPatches(OSModuleInfo* module_info)
 	gor_10_init_evt[19] = GSW(1700);
 
 	gor_11_init_evt[19] = GSW(1708);
-	gor_11_init_evt[20] = 99; //Unknown
-
-	gor_11_init_evt[24] = GSW(1708);
-	gor_11_init_evt[25] = 99; //Unknown
+	gor_11_init_evt[20] = 18;
+	gor_12_init_evt[24] = GSW(1708);
+	gor_12_init_evt[25] = 18;
 }

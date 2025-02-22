@@ -71,7 +71,7 @@ EVT_BEGIN(marco_init_01_hook)
 EVT_END()
 
 EVT_BEGIN(bottakuru_init_evt)
-	USER_FUNC(checkChapterRequirements, LW(0))
+	USER_FUNC(checkChapterClears, LW(0))
 	IF_SMALL(LW(0), 1)
 		USER_FUNC(evt_npc::evt_npc_set_position, PTR("me"), 0, -1000, 0)
 		RETURN()

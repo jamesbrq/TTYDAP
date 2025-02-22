@@ -167,8 +167,8 @@ namespace mod::owr
 	 {
 		gSelf = this;
 
-		//ApplyMainAssemblyPatches();
-		//ApplyMainScriptPatches();
+		ApplyMainAssemblyPatches();
+		ApplyMainScriptPatches();
 
 		/* g_itemEntry_trampoline = patch::HookFunction(
 			ttyd::itemdrv::itemEntry, [](const char* name, uint32_t id, uint32_t mode, int32_t collection_expr, void* script, float x, float y, float z) 

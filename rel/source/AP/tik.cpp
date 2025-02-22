@@ -35,6 +35,17 @@ EVT_DEFINE_USER_FUNC(checkChapterRequirements) {
 	return 2;
 }
 
+EVT_DEFINE_USER_FUNC(checkChapterClears) {
+	auto& state = gMod->state_;
+	int8_t count = 0;
+	for (int i = 114; i <= 120; i++)
+	{
+		count += mario_pouch::pouchCheckItem(i);
+	}
+	evt->evtArguments[0] = count;
+	return 2;
+}
+
 extern int32_t uranaisi_next_evt[];
 extern int32_t unk_evt_tik_0000f448[];
 extern int32_t kuribo5_talk[];

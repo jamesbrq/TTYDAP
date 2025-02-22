@@ -37,6 +37,7 @@ extern int32_t village_chief_talk[];
 extern int32_t vivian_init[];
 extern int32_t usu00_3witch_event[];
 extern int32_t usu00_stage4_coming_event[];
+extern int32_t usu00_vivian_cry_event[];
 extern int32_t gra00_2witch_find_ranpel_event[];
 extern int32_t usu00_vivian_joinup_event[];
 extern int32_t usu00_crowAB_talk_event[];
@@ -46,6 +47,7 @@ extern int32_t evt_door2_chk[];
 extern int32_t dokan_1_evt[];
 extern int32_t kusa_01_evt[];
 extern int32_t evt_ichikorori_ball_get[];
+extern int32_t usu_00_touch_ichikorori_ball[];
 extern int32_t usu_00_koopa_first_evt[];
 extern int32_t usu_00_koopa_second_evt[];
 extern int32_t evt_after_peach[];
@@ -508,6 +510,24 @@ EVT_BEGIN(shop_woman_talk_hook)
 	RETURN()
 EVT_END()
 
+EVT_BEGIN(usu_00_init_evt_evt)
+	IF_EQUAL(GSW(1717), 22)
+		RETURN()
+	END_IF()
+	SWITCH(GSW(1704))
+		CASE_EQUAL(2)
+			RUN_EVT(&usu00_stage4_coming_event)
+		CASE_END()
+		CASE_BETWEEN(3, 3)
+			RUN_EVT(&chief_pig_event)
+		CASE_END()
+EVT_END()
+
+EVT_BEGIN(usu_00_init_evt_hook)
+	RUN_CHILD_EVT(usu_00_init_evt_evt)
+	GOTO(&usu_00_init_evt[414])
+EVT_PATCH_END()
+
 void ApplyUsuPatches(OSModuleInfo* module_info)
 {
 	patch::writePatch(&villagerA_init[5], villagerA_init_hook, sizeof(villagerA_init_hook));
@@ -575,11 +595,14 @@ void ApplyUsuPatches(OSModuleInfo* module_info)
 	usu00_stage4_coming_event[810] = GSW(1704);
 	usu00_stage4_coming_event[811] = 2;
 
+	usu00_vivian_cry_event[43] = GSW(1721);
+	usu00_vivian_cry_event[44] = 1;
+
 	gra00_2witch_find_ranpel_event[172] = GSW(1704);
 	gra00_2witch_find_ranpel_event[173] = 214;
 
-	usu00_vivian_joinup_event[595] = GSWF(6039);
-	usu00_vivian_joinup_event[596] = 1;
+	usu00_vivian_joinup_event[595] = GSW(1721);
+	usu00_vivian_joinup_event[596] = 2;
 
 	usu00_crowAB_talk_event[218] = GSW(1704);
 	usu00_crowAB_talk_event[219] = 0; //Unused
@@ -607,6 +630,9 @@ void ApplyUsuPatches(OSModuleInfo* module_info)
 	evt_ichikorori_ball_get[1] = GSWF(6040);
 	evt_ichikorori_ball_get[2] = 1;
 
+	usu_00_touch_ichikorori_ball[1] = GSWF(6040);
+	usu_00_touch_ichikorori_ball[2] = 1;
+
 	usu_00_koopa_first_evt[181] = GSW(1717);
 	usu_00_koopa_first_evt[182] = 23;
 
@@ -624,36 +650,33 @@ void ApplyUsuPatches(OSModuleInfo* module_info)
 	usu_00_init_evt[23] = 99; //Unused
 	usu_00_init_evt[24] = 99; //Unused
 	usu_00_init_evt[33] = 99; //Unused
-	usu_00_init_evt[54] = 400;
+	usu_00_init_evt[54] = 16;
 	usu_00_init_evt[102] = GSW(1708);
-	usu_00_init_evt[103] = 402;
-	usu_00_init_evt[403] = GSW(1704);
-	usu_00_init_evt[405] = 1;
-	usu_00_init_evt[409] = 2;
-	usu_00_init_evt[410] = 2;
+	usu_00_init_evt[103] = 18;
+	patch::writePatch(&usu_00_init_evt[402], usu_00_init_evt_hook, sizeof(usu_00_init_evt_hook));
 	usu_00_init_evt[415] = GSW(1715);
-	usu_00_init_evt[417] = 203;
-	usu_00_init_evt[418] = 209;
-	usu_00_init_evt[436] = GSW(1704);
-	usu_00_init_evt[447] = 99; //Unused
+	usu_00_init_evt[417] = 4;
+	usu_00_init_evt[418] = 5;
+	usu_00_init_evt[436] = GSW(1721);
+	usu_00_init_evt[447] = 0;
 	usu_00_init_evt[442] = GSWF(6040);
 	usu_00_init_evt[443] = 1;
-	usu_00_init_evt[454] = GSW(1704);
-	usu_00_init_evt[455] = 213;
-	usu_00_init_evt[474] = GSW(1704);
-	usu_00_init_evt[475] = 99; //Unused
+	usu_00_init_evt[454] = GSW(1715);
+	usu_00_init_evt[455] = 8;
+	usu_00_init_evt[474] = GSW(1715);
+	usu_00_init_evt[475] = 2;
 	usu_00_init_evt[477] = GSW(1704);
-	usu_00_init_evt[478] = 99; //Unused
+	usu_00_init_evt[478] = 7;
 	usu_00_init_evt[504] = GSW(1717);
 	usu_00_init_evt[505] = 22;
 	usu_00_init_evt[523] = GSW(1717);
 	usu_00_init_evt[524] = 23;
-	usu_00_init_evt[586] = GSW(1704);
-	usu_00_init_evt[587] = 218;
+	usu_00_init_evt[586] = GSW(1715);
+	usu_00_init_evt[587] = 13;
 	usu_00_init_evt[621] = GSW(1708);
-	usu_00_init_evt[622] = 400;
+	usu_00_init_evt[622] = 16;
 	usu_00_init_evt[644] = GSW(1708);
-	usu_00_init_evt[645] = 402;
+	usu_00_init_evt[645] = 18;
 
 	patch::writePatch(&villagerF_talk[0], villagerF_talk_hook, sizeof(villagerF_talk_hook));
 

@@ -6,5 +6,6 @@
 using namespace gc::OSLink;
 
 EVT_DECLARE_USER_FUNC(checkChapterRequirements, 1)
+EVT_DECLARE_USER_FUNC(checkChapterClears, 1)
 
 void ApplyTikPatches(OSModuleInfo* module_info);

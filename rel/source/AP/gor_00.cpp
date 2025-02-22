@@ -91,6 +91,7 @@ extern int32_t nannpc_entry_data;
 extern int32_t nannpc_ext_main_sub_fast;
 
 const char npcEnt[] = "\x83\x8B\x83\x43\x81\x5B\x83\x57";
+const char npcEnt2[] = "\x83\x89\x83\x4E\x83\x4B\x83\x93";
 
 
 EVT_BEGIN(garawaru_init_evt)
@@ -363,10 +364,10 @@ EVT_BEGIN(luigi_npcEnt_00_evt)
 		IF_SMALL_EQUAL(GSW(1706), 42)
 			USER_FUNC(evt_npc::evt_npc_entry, PTR(npcEnt), PTR("c_luigi"))
 			USER_FUNC(evt_npc::evt_npc_set_tribe, PTR(npcEnt), PTR(npcEnt))
-			USER_FUNC(evt_npc::evt_npc_setup, PTR(luigiEnt_00))
-			USER_FUNC(evt_npc::evt_npc_entry, PTR(npcEnt), PTR("c_lp_pansy"))
-			USER_FUNC(evt_npc::evt_npc_set_tribe, PTR(npcEnt), PTR(npcEnt))
-			USER_FUNC(evt_npc::evt_npc_setup, PTR(rakganEnt))
+			USER_FUNC(evt_npc::evt_npc_setup, PTR(&luigiEnt_00))
+			USER_FUNC(evt_npc::evt_npc_entry, PTR(npcEnt2), PTR("c_lp_pansy"))
+			USER_FUNC(evt_npc::evt_npc_set_tribe, PTR(npcEnt2), PTR(npcEnt2))
+			USER_FUNC(evt_npc::evt_npc_setup, PTR(&rakganEnt))
 		END_IF()
 	END_IF()
 	RETURN()
@@ -662,7 +663,7 @@ EVT_BEGIN(gor_00_init_evt2)
 			RUN_CHILD_EVT(enter_gorotsuki_town_init)
 			RUN_CHILD_EVT(christine_osoware_setup)
 			USER_FUNC(evt_nannpc::evt_nannpc_init, PTR(&nannpc_entry_data), 0, 0, 0, 400)
-			USER_FUNC(evt_nannpc::evt_nannpc_set_subfunc, 1, PTR(nannpc_ext_main_sub_fast))
+			USER_FUNC(evt_nannpc::evt_nannpc_set_subfunc, 1, PTR(&nannpc_ext_main_sub_fast))
 			SET(LW(0), 1)
 			RUN_EVT(gundan1000tai_beforebattle)
 			RETURN()
@@ -677,24 +678,27 @@ EVT_BEGIN(gor_00_init_evt2)
 			RETURN()
 		CASE_END()
 	END_SWITCH()
-	IF_SMALL_EQUAL(GSW(1705), 7) //Before leaving for heelkaul
-		IF_LARGE_EQUAL(GSW(1700), 7)
-			USER_FUNC(evt_map::evt_mapobj_flag_onoff, 1, 0, PTR("S_fune_c"), 1)
-			USER_FUNC(evt_hit::evt_hitobj_onoff, PTR("A_fune_C"), 1, 1)
-			RETURN()
+	IF_SMALL_EQUAL(GSW(1705), 7)
+		IF_LARGE_EQUAL(GSW(1705), 1)
+			IF_LARGE_EQUAL(GSW(1700), 7)
+				USER_FUNC(evt_map::evt_mapobj_flag_onoff, 1, 0, PTR("S_fune_c"), 1)
+				USER_FUNC(evt_hit::evt_hitobj_onoff, PTR("A_fune_C"), 1, 1)
+				RETURN()
+			END_IF()
 		END_IF()
 	END_IF()
+	RETURN()
 EVT_END()
 
 EVT_BEGIN(gor_00_init_evt1_hook)
 	RUN_CHILD_EVT(gor_00_init_evt1)
 	GOTO(&gor_00_init_evt[140])
-EVT_END()
+EVT_PATCH_END()
 
 EVT_BEGIN(gor_00_init_evt2_hook)
 	RUN_CHILD_EVT(gor_00_init_evt2)
 	GOTO(&gor_00_init_evt[469])
-EVT_END()
+EVT_PATCH_END()
 
 void ApplyGor00Patches(OSModuleInfo* module_info)
 {
@@ -817,7 +821,7 @@ void ApplyGor00Patches(OSModuleInfo* module_info)
 
 			patch::writePatch(&mokorim_init[2], mokorim_init_evt, sizeof(mokorim_init_evt));
 
-			mokorim_talk[4] = GSW(176);
+			mokorim_talk[4] = GSW(1706);
 			mokorim_talk[6] = 0;
 			mokorim_talk[7] = 48;
 			mokorim_talk[214] = 49;
