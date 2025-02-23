@@ -155,9 +155,9 @@ void ApplyGonPatches(OSModuleInfo* module_info)
 	gon_10_init_evt[35] = GSWF(6014);
 	gon_10_init_evt[36] = 1;
 
-	gonbaba_event[1384] = GSWF(1711);
+	gonbaba_event[1384] = GSW(1711);
 	gonbaba_event[1385] = 7;
-	gonbaba_event[1387] = GSWF(1711);
+	gonbaba_event[1387] = GSW(1711);
 	gonbaba_event[1388] = 8;
 
 	gon_11_init_evt[6] = GSWF(6014);

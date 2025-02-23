@@ -17,7 +17,7 @@
 using namespace mod;
 using namespace ttyd;
 
-extern int32_t vivian_init[];
+extern int32_t win_vivian_init[];
 extern int32_t maririn_init[];
 extern int32_t majorin_init[];
 extern int32_t witchtrio_momeru[];
@@ -45,30 +45,55 @@ extern int32_t win_first_evt_dokan[];
 extern int32_t welcome_wonderforest[];
 extern int32_t win_06_init_evt[];
 
-EVT_BEGIN(vivian_init_evt)
+EVT_BEGIN(win_vivian_init_evt)
 	IF_SMALL(GSW(1712), 3)
-		USER_FUNC(evt_npc::evt_npc_set_position, PTR("me"), -535, 0, -30)
+		IF_SMALL(GSW(1702), 13)
+			USER_FUNC(evt_npc::evt_npc_set_position, PTR("me"), -535, 0, -30)
+			USER_FUNC(evt_npc::evt_npc_set_force_regl_anim, PTR("me"), PTR("PTR_S_3"))
+			USER_FUNC(evt_npc::evt_npc_set_autotalkpose, PTR("me"), PTR("PTR_S_3"), PTR("PTR_T_3"))
+		ELSE()
+			USER_FUNC(evt_npc::evt_npc_set_position, PTR("me"), -535, 0, -30)
+		END_IF()
 	END_IF()
 	RETURN()
 EVT_END()
 
+EVT_BEGIN(win_vivian_init_hook)
+	RUN_CHILD_EVT(win_vivian_init_evt)
+	RETURN()
+EVT_END()
+
 EVT_BEGIN(maririn_init_evt)
-	IF_SMALL(GSWF(1712), 3)
+	IF_SMALL(GSW(1712), 3)
 		USER_FUNC(evt_npc::evt_npc_set_position, PTR("me"), -495, 0, -60)
 	END_IF()
 	RETURN()
 EVT_END()
 
 EVT_BEGIN(majorin_init_evt)
-	IF_SMALL(GSWF(1712), 3)
-		USER_FUNC(evt_npc::evt_npc_set_position, PTR("me"), -495, 0, -60)
+	IF_SMALL(GSW(1712), 3)
+		USER_FUNC(evt_npc::evt_npc_set_position, PTR("me"), -455, 0, -30)
 	END_IF()
 	RETURN()
 EVT_END()
 
+EVT_BEGIN(win_00_init_evt_evt)
+	IF_EQUAL(GSW(1702), 13)
+		IF_SMALL(GSW(1712), 2)
+			RUN_EVT(&mario_vs_witchtrio)
+		END_IF()
+	END_IF()
+	RETURN()
+EVT_END()
+
+EVT_BEGIN(win_00_init_evt_hook)
+	RUN_CHILD_EVT(win_00_init_evt_evt)
+	GOTO(&win_00_init_evt[51])
+EVT_PATCH_END()
+
 void ApplyWinPatches(OSModuleInfo* module_info)
 {
-	patch::writePatch(&vivian_init[5], vivian_init_evt, sizeof(vivian_init_evt));
+	patch::writePatch(&win_vivian_init[5], win_vivian_init_hook, sizeof(win_vivian_init_hook));
 	patch::writePatch(&maririn_init[5], maririn_init_evt, sizeof(maririn_init_evt));
 	patch::writePatch(&majorin_init[5], majorin_init_evt, sizeof(majorin_init_evt));
 
@@ -86,12 +111,11 @@ void ApplyWinPatches(OSModuleInfo* module_info)
 
 	win_00_init_evt[22] = GSW(1713);
 	win_00_init_evt[23] = 11;
-	win_00_init_evt[34] = GSW(1702);
-	win_00_init_evt[35] = 1;
+	win_00_init_evt[34] = GSW(1712);
+	win_00_init_evt[35] = 0;
 	win_00_init_evt[40] = GSW(1702);
 	win_00_init_evt[41] = 12;
-	win_00_init_evt[46] = GSW(1702);
-	win_00_init_evt[47] = 13;
+	patch::writePatch(&win_00_init_evt[45], win_00_init_evt_hook, sizeof(win_00_init_evt_hook));
 	win_00_init_evt[52] = GSW(1712);
 	win_00_init_evt[53] = 2;
 	win_00_init_evt[58] = GSW(1712);
@@ -109,7 +133,7 @@ void ApplyWinPatches(OSModuleInfo* module_info)
 	win_peach_mail[247] = GSW(1713);
 	win_peach_mail[248] = 18;
 
-	win_01_init_evt[21] = GSW(1712);
+	win_01_init_evt[21] = GSW(1702);
 	win_01_init_evt[22] = 1;
 	win_01_init_evt[27] = GSW(1713);
 	win_01_init_evt[28] = 17;

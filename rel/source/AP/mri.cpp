@@ -175,8 +175,8 @@ EVT_BEGIN(guide_init_00_evt)
 		USER_FUNC(evt_npc::evt_npc_set_ry, PTR("me"), 90)
 		RETURN()
 	END_IF()
-	IF_LARGE_EQUAL(GSWF(1702), 2)
-		IF_SMALL_EQUAL(GSWF(1702), 3)
+	IF_LARGE_EQUAL(GSW(1702), 2)
+		IF_SMALL_EQUAL(GSW(1702), 3)
 			USER_FUNC(evt_npc::evt_npc_flag_onoff, 1, PTR("me"), 16777216)
 			USER_FUNC(evt_npc::evt_npc_set_position, PTR("me"), 135, 0, -70)
 			USER_FUNC(evt_npc::evt_npc_set_ry, PTR("me"), 90)
@@ -196,7 +196,7 @@ EVT_BEGIN(guide_talk_evt)
 		RUN_EVT(&seal_bigtree)
 		RETURN()
 	END_IF()
-	IF_EQUAL(GSWF(1702), 4)
+	IF_EQUAL(GSW(1702), 4)
 		RUN_EVT(&seal_bigtree2)
 		RETURN()
 	END_IF()
@@ -218,7 +218,7 @@ EVT_END()
 
 EVT_BEGIN(guide_init_01_evt)
 	IF_LARGE_EQUAL(GSW(1703), 99) //Unknown
-		IF_SMALL_EQUAL(GSWF(1703), 99) //Unknown
+		IF_SMALL_EQUAL(GSW(1703), 99) //Unknown
 			USER_FUNC(evt_npc::evt_npc_change_interrupt, PTR("me"), 6, 0)
 			RETURN()
 		END_IF()
@@ -546,10 +546,10 @@ void ApplyMriPatches(OSModuleInfo* module_info)
 	mri_elder_init_00[3] = 16;
 
 	fabio_init[1] = GSW(1708);
-	fabio_init[3] = 16;
+	fabio_init[2] = 16;
 
 	fabio_talk[1] = GSW(1708);
-	fabio_talk[3] = 18;
+	fabio_talk[2] = 18;
 
 	mri_first_time_w_bero_00[1] = GSW(1702);
 	mri_first_time_w_bero_00[2] = 2;
