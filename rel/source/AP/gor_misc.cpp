@@ -1,4 +1,5 @@
 #include <AP/gor_misc.h>
+#include <AP/main.h>
 #include <ttyd/evt_cam.h>
 #include <ttyd/evt_npc.h>
 #include <ttyd/evt_nannpc.h>
@@ -21,6 +22,14 @@ extern int32_t luigi_gor_first_talk[];
 extern int32_t gor_10_init_evt[];
 extern int32_t gor_12_init_evt[];
 extern int32_t gor_11_init_evt[];
+
+//Assembly
+extern int32_t irai_init_func[];
+extern int32_t keijiban_data_make[];
+extern int32_t monosiri_check[];
+extern int32_t evt_exchange_msg_set[];
+extern int32_t exchange_ret_tbl_no[];
+extern int32_t exchange_ryokin_medal[];
 
 void ApplyGorMiscPatches(OSModuleInfo* module_info)
 {
@@ -49,4 +58,17 @@ void ApplyGorMiscPatches(OSModuleInfo* module_info)
 	gor_11_init_evt[20] = 18;
 	gor_12_init_evt[24] = GSW(1708);
 	gor_12_init_evt[25] = 18;
+
+	irai_init_func[33] = 0x386006A4; // li r3, 0x6A4 (GSW(1700))
+	irai_init_func[43] = 0x2C030000; // cmpwi r3, 0x0
+	irai_init_func[56] = 0x2C030000; // cmpwi r3, 0x0
+	irai_init_func[64] = 0x2C030000; // cmpwi r3, 0x0
+	irai_init_func[72] = 0x2C030000; // cmpwi r3, 0x0
+	irai_init_func[80] = 0x2C030000; // cmpwi r3, 0x0
+	irai_init_func[86] = 0x2C030000; // cmpwi r3, 0x0
+	irai_init_func[90] = 0x2C030000; // cmpwi r3, 0x0
+	irai_init_func[98] = 0x2C030000; // cmpwi r3, 0x0
+	irai_init_func[106] = 0x2C030000; // cmpwi r3, 0x0
+
+	patch::writeBranchBL(&keijiban_data_make[11], reinterpret_cast<void*>(bJohoyaSeqAddition));
 }

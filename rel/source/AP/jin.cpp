@@ -48,6 +48,9 @@ extern int32_t evt_yuka[];
 extern int32_t jin_11_init_evt[];
 extern int32_t evt_usu_kagemario_party_kill_jin[];
 
+//Assembly
+extern int32_t jin_evt_kagemario_init[];
+
 
 void ApplyJinPatches(OSModuleInfo* module_info)
 {
@@ -169,4 +172,8 @@ void ApplyJinPatches(OSModuleInfo* module_info)
 	jin_11_init_evt[41] = 1;
 
 	evt_usu_kagemario_party_kill_jin[1] = GSW(1715); //Unused
+
+	jin_evt_kagemario_init[2] = 0x386006B3; // li r3, 0x6B3 (GSW(1715))
+	jin_evt_kagemario_init[6] = 0x2C030003; // cmpwi r3, 0x3
+	jin_evt_kagemario_init[8] = 0x2C030007; // cmpwi r3, 0x7
 }

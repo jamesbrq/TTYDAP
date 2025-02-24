@@ -105,11 +105,10 @@ namespace mod::owr
 
 	void OWR::SequenceInit()
 	{
-		if (ttyd::mario_pouch::pouchCheckItem(ItemId::INVALID_ITEM_BOAT_MODE_ICON) == 0)
+		if (ttyd::mario_pouch::pouchCheckItem(ItemId::ULTRA_BOOTS) == 0)
 		{
-			ttyd::mario_pouch::pouchGetItem(ItemId::INVALID_ITEM_BOAT_MODE_ICON);
-			ttyd::mario_pouch::pouchGetItem(ItemId::INVALID_ITEM_PLANE_MODE_ICON);
-			ttyd::mario_pouch::pouchGetItem(ItemId::GATE_HANDLE);
+			ttyd::mario_pouch::pouchGetItem(ItemId::ULTRA_BOOTS);
+			ttyd::mario_pouch::pouchGetItem(ItemId::SPIKE_SHIELD);
 		}
 		uint32_t SequencePosition = ttyd::swdrv::swByteGet(1700);
 		if (SequencePosition != 0)
@@ -218,7 +217,7 @@ namespace mod::owr
 	void OWR::OnModuleLoaded(OSModuleInfo* module_info)
 	{
 		if (module_info == nullptr) return;
-		uintptr_t module_ptr = reinterpret_cast<uintptr_t>(module_info);
+		//uintptr_t module_ptr = reinterpret_cast<uintptr_t>(module_info);
         switch (module_info->id) {
             case ModuleId::GOR:
                 ApplyGor00Patches(module_info);

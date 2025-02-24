@@ -5,22 +5,6 @@
 
 using namespace mod;
 
-extern "C" {
-	void bMapGXArrInject();
-	void bMapGXArrInjectReturn();
-	void bMapGXArrIncrement();
-	void bMapGXArrIncrementReturn();
-	void bMapGXChSplit();
-	void bMapGXChSplitReturn();
-	void bWinLogArrInject();
-	void bWinLogArrInjectReturn();
-	void bWinLogArrIncrement();
-	void bWinLogArrIncrementReturn();
-	void bChapterClearCheck();
-	void bChapterClearCheckReturn();
-	void bJohoyaSeqAddition();
-}
-
 //Assembly References
 extern int32_t statusWinDisp[];
 extern int32_t winRootMain[];
@@ -176,40 +160,6 @@ void ApplyMainAssemblyPatches()
 	winMain[231] = 0x386006A4; // li r3, 0x6A4 (GSW(1700))
 	winMain[234] = 0x2C030000; // cmpwi r3, 0x0
 
-	irai_init_func[33] = 0x386006A4; // li r3, 0x6A4 (GSW(1700))
-	irai_init_func[43] = 0x2C030000; // cmpwi r3, 0x0
-	irai_init_func[56] = 0x2C030000; // cmpwi r3, 0x0
-	irai_init_func[64] = 0x2C030000; // cmpwi r3, 0x0
-	irai_init_func[72] = 0x2C030000; // cmpwi r3, 0x0
-	irai_init_func[80] = 0x2C030000; // cmpwi r3, 0x0
-	irai_init_func[86] = 0x2C030000; // cmpwi r3, 0x0
-	irai_init_func[90] = 0x2C030000; // cmpwi r3, 0x0
-	irai_init_func[98] = 0x2C030000; // cmpwi r3, 0x0
-	irai_init_func[106] = 0x2C030000; // cmpwi r3, 0x0
-
-	gra_evt_kagemario_init[2] = 0x386006B3; // li r3, 0x6B3 (GSW(1715))
-	gra_evt_kagemario_init[6] = 0x2C030003; // cmpwi r3, 0x3
-	gra_evt_kagemario_init[8] = 0x2C030007; // cmpwi r3, 0x7
-
-	jin_evt_kagemario_init[2] = 0x386006B3; // li r3, 0x6B3 (GSW(1715))
-	jin_evt_kagemario_init[6] = 0x2C030003; // cmpwi r3, 0x3
-	jin_evt_kagemario_init[8] = 0x2C030007; // cmpwi r3, 0x7
-
-	usu_evt_kagemario_init[2] = 0x386006B3; // li r3, 0x6B3 (GSW(1715))
-	usu_evt_kagemario_init[6] = 0x2C030003; // cmpwi r3, 0x3
-	usu_evt_kagemario_init[8] = 0x2C030007; // cmpwi r3, 0x7
-
-	rsh_prolog[14] = 0x386006A4; // li r3, 0x6AA (GSW(1706))
-	rsh_prolog[16] = 0x2C03002B; // cmpwi r3, 0x2B
-
-	check_kou_evt[15] = 0x386006A7; // li r3, 0x6A7 (GSW(1703))
-	check_kou_evt[17] = 0x2C030016; // cmpwi r3, 0x16
-	check_kou_evt[27] = 0x386006A7; // li r3, 0x6A7 (GSW(1703))
-	check_kou_evt[30] = 0x2C030016; // cmpwi r3, 0x18
-
-	mario_chk[172] = 0x386006AB; // li r3, 0x6AB (GSW(1707))
-	mario_chk[175] = 0x2C03000C; // cmpwi r3, 0xC
-
 	BattleInformationSetDropMaterial[87] = 0x386006A4; // li r3, 0x6A4 (GSW(1700))
 	BattleInformationSetDropMaterial[89] = 0x2C030000; // cmpwi r3, 0x0
 
@@ -218,12 +168,6 @@ void ApplyMainAssemblyPatches()
 
 	tou_gamen_screen_tev_init[25] = 0x386006A7; // li r3, 0x6A7 (GSW(1703))
 	tou_gamen_screen_tev_init[48] = 0x2C030013; // cmpwi r3, 0x13
-
-	bom1000_jump[62] = 0x386006AC; // li r3, 0x6AC (GSW(1708))
-	bom1000_jump[90] = 0x2C030011; // cmpwi r3, 0x11
-
-	jump_minnnanokoe[48] = 0x386006AC; // li r3, 0x6AC (GSW(1708))
-	jump_minnnanokoe[76] = 0x2C030011; // cmpwi r3, 0x11
 
 	setupDataLoad[22] = 0x386006A4; // li r3, 0x6A4 (GSW(1700))
 	setupDataLoad[25] = 0x2C030002; // cmpwi r3, 0x2
@@ -246,8 +190,6 @@ void ApplyMainAssemblyPatches()
 	badgeShop_bargainGeneration[187] = 0x2C030011; // cmpwi r3, 0x11
 
 	patch::writeBranchBL(&johoya_data_make[11], reinterpret_cast<void*>(bJohoyaSeqAddition));
-
-	patch::writeBranchBL(&keijiban_data_make[11], reinterpret_cast<void*>(bJohoyaSeqAddition));
 
 	evt_shop_main_func[40] = 0x386006A4; // li r3, 0x6AA (GSW(1706))
 	evt_shop_main_func[43] = 0x2C030020; // cmpwi r3, 0x20

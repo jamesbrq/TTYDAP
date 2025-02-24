@@ -116,6 +116,9 @@ extern int32_t evt_great_moamoa[];
 extern int32_t rsh_06_init_evt[];
 extern int32_t rsh_06_a_init_evt[];
 
+//Assembly
+extern int32_t rsh_prolog[];
+
 EVT_BEGIN(rsh_06_init_evt_evt)
 	IF_LARGE_EQUAL(GSW(1720), 1)
 		IF_SMALL_EQUAL(GSW(1720), 8)
@@ -1254,4 +1257,7 @@ void ApplyRshPatches(OSModuleInfo* module_info)
 
 	rsh_06_a_init_evt[25] = GSW(1706);
 	rsh_06_a_init_evt[26] = 36;
+
+	rsh_prolog[14] = 0x386006A4; // li r3, 0x6AA (GSW(1706))
+	rsh_prolog[16] = 0x2C03002B; // cmpwi r3, 0x2B
 }

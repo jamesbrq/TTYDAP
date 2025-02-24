@@ -89,6 +89,7 @@ EVT_DECLARE_USER_FUNC(evt_mobj_signboard, 6)
 // evt_mobj_hitevt_onoff
 // evt_mobj_set_camid
 EVT_DECLARE_USER_FUNC(evt_mobj_wait_animation_end, 1)
+EVT_DECLARE_USER_FUNC(evt_mobj_switch_red, 7)
 // evt_mobj_set_anim
 // evt_mobj_set_gravity_bound
 // evt_mobj_exec_cancel

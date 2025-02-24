@@ -99,6 +99,10 @@ extern int32_t aji_18_init_evt[];
 extern int32_t evt_hajimete[];
 extern int32_t aji_19_init_evt[];
 
+//Assembly
+extern int32_t check_kou_evt[];
+extern int32_t mario_chk[];
+
 const char npc1[] = "\x8C\xA4\x8B\x86\x88\xF5";
 const char npc2[] = "\x91\xE6\x8E\x4F\x90\xA8\x97\xCD\x8C\xA4\x8B\x86\x88\xF5";
 const char npc3[] = "\x82\xDD\x82\xCD\x82\xE8";
@@ -639,4 +643,12 @@ void ApplyAjiPatches(OSModuleInfo* module_info)
 
 	aji_19_init_evt[43] = GSW(1707);
 	aji_19_init_evt[44] = 8;
+
+	check_kou_evt[15] = 0x386006A7; // li r3, 0x6A7 (GSW(1703))
+	check_kou_evt[17] = 0x2C030016; // cmpwi r3, 0x16
+	check_kou_evt[27] = 0x386006A7; // li r3, 0x6A7 (GSW(1703))
+	check_kou_evt[30] = 0x2C030016; // cmpwi r3, 0x18
+
+	mario_chk[172] = 0x386006AB; // li r3, 0x6AB (GSW(1707))
+	mario_chk[175] = 0x2C03000C; // cmpwi r3, 0xC
 }

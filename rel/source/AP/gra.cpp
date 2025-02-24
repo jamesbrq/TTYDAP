@@ -36,6 +36,9 @@ extern int32_t first_gra06jin[];
 extern int32_t gra_06_init_evt[];
 extern int32_t evt_usu_kagemario_party_kill_gra[];
 
+//Assembly
+extern int32_t gra_evt_kagemario_init[];
+
 const char doopliss[] = "\x82\xC9\x82\xB9\x83\x7D\x83\x8A\x83\x49";
 
 EVT_BEGIN(evt_machibuse_evt1)
@@ -126,4 +129,8 @@ void ApplyGraPatches(OSModuleInfo* module_info)
 	gra_06_init_evt[133] = 6;
 
 	evt_usu_kagemario_party_kill_gra[1] = GSW(1714); //Unused
+
+	gra_evt_kagemario_init[2] = 0x386006B3; // li r3, 0x6B3 (GSW(1715))
+	gra_evt_kagemario_init[6] = 0x2C030003; // cmpwi r3, 0x3
+	gra_evt_kagemario_init[8] = 0x2C030007; // cmpwi r3, 0x7
 }

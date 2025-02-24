@@ -198,16 +198,16 @@ void ApplyTouPatches(OSModuleInfo* module_info)
 	talk_gardman[18] = GSW(1703);
 	talk_gardman[19] = 12;
 	talk_gardman[173] = GSW(1703);
-	talk_gardman[174] = 172;
+	talk_gardman[174] = 28;
 
 	evt_tou_match_make_default_sub[147] = GSW(1703);
-	evt_tou_match_make_default_sub[148] = 99; //Unknown
+	evt_tou_match_make_default_sub[148] = 28;
 	evt_tou_match_make_default_sub[225] = GSW(1703);
-	evt_tou_match_make_default_sub[226] = 99; //Unknown
+	evt_tou_match_make_default_sub[226] = 28;
 	evt_tou_match_make_default_sub[312] = GSW(1703);
-	evt_tou_match_make_default_sub[313] = 99; //Unknown
+	evt_tou_match_make_default_sub[313] = 28;
 	evt_tou_match_make_default_sub[388] = GSW(1703);
-	evt_tou_match_make_default_sub[389] = 99; //Unknown
+	evt_tou_match_make_default_sub[389] = 28;
 
 	evt_tou_match_make_default[117] = GSW(1703);
 	evt_tou_match_make_default[119] = 99; //Unknown
@@ -232,7 +232,7 @@ void ApplyTouPatches(OSModuleInfo* module_info)
 	evt_tou_match_after_default[34] = GSW(1703);
 	evt_tou_match_after_default[35] = 12;
 	evt_tou_match_after_default[1316] = GSW(1703);
-	evt_tou_match_after_default[1317] = 172;
+	evt_tou_match_after_default[1317] = 28;
 	evt_tou_match_after_default[1380] = GSW(1703);
 	evt_tou_match_after_default[1381] = 12;
 	evt_tou_match_after_default[1394] = GSW(1703);
@@ -739,7 +739,7 @@ void ApplyTouPatches(OSModuleInfo* module_info)
 	tou_07_init_evt[31] = 158;
 	tou_07_init_evt[68] = GSW(1703);
 	tou_07_init_evt[70] = 159;
-	tou_07_init_evt[75] = 172;
+	tou_07_init_evt[75] = 28;
 	tou_07_init_evt[149] = GSW(1703);
 	tou_07_init_evt[151] = 2;
 	tou_07_init_evt[152] = 11;
@@ -760,22 +760,22 @@ void ApplyTouPatches(OSModuleInfo* module_info)
 	evt_toile[32] = 157;
 
 	talk_togenoko[1] = GSW(1703);
-	talk_togenoko[2] = 172;
+	talk_togenoko[2] = 28;
 	talk_togenoko[4] = GSW(1703);
 	talk_togenoko[5] = 157;
 
 	talk_togemet[1] = GSW(1703);
-	talk_togemet[2] = 172;
+	talk_togemet[2] = 28;
 	talk_togemet[4] = GSW(1703);
 	talk_togemet[5] = 157;
 
 	talk_hammerbros[1] = GSW(1703);
-	talk_hammerbros[2] = 172;
+	talk_hammerbros[2] = 28;
 	talk_hammerbros[4] = GSW(1703);
 	talk_hammerbros[5] = 157;
 
 	tou_talk_uranoko_08[1] = GSW(1703);
-	tou_talk_uranoko_08[2] = 172;
+	tou_talk_uranoko_08[2] = 28;
 	tou_talk_uranoko_08[4] = GSW(1703);
 	tou_talk_uranoko_08[5] = 157;
 
@@ -785,7 +785,7 @@ void ApplyTouPatches(OSModuleInfo* module_info)
 	evt_toile_door[22] = GSW(1703);
 	evt_toile_door[23] = 157;
 	evt_toile_door[39] = GSW(1703);
-	evt_toile_door[40] = 172;
+	evt_toile_door[40] = 28;
 
 	tou_08_init_evt[6] = 0;
 	tou_08_init_evt[15] = 0;
@@ -800,17 +800,18 @@ void ApplyTouPatches(OSModuleInfo* module_info)
 	tou_08_init_evt[188] = GSW(1703);
 	tou_08_init_evt[190] = 4;
 	tou_08_init_evt[202] = GSW(1703);
-	tou_08_init_evt[204] = 2;
+	tou_08_init_evt[204] = 1;
 	tou_08_init_evt[205] = 11;
+	tou_08_init_evt[218] = 21;
 	tou_08_init_evt[220] = GSW(1708);
-	tou_08_init_evt[220] = 402;
+	tou_08_init_evt[221] = 18;
 	tou_08_init_evt[277] = GSW(1708);
-	tou_08_init_evt[278] = 402;
+	tou_08_init_evt[278] = 18;
 
 	tou_09_init_evt[1] = GSW(1703);
-	tou_09_init_evt[3] = 2;
+	tou_09_init_evt[3] = 1;
 	tou_09_init_evt[4] = 11;
-	tou_09_init_evt[17] = 165;
+	tou_09_init_evt[17] = 21;
 
 	init_kino[1] = GSW(1703);
 	init_kino[3] = 6;
@@ -819,48 +820,48 @@ void ApplyTouPatches(OSModuleInfo* module_info)
 	talk_kino[3] = 6;
 
 	tou_init_michel_10[1] = GSW(1703);
-	tou_init_michel_10[3] = 172;
+	tou_init_michel_10[3] = 28;
 
 	talk_michel[1] = GSW(1703);
-	talk_michel[2] = 172;
+	talk_michel[2] = 28;
 
 	talk_octo[1] = GSW(1703);
-	talk_octo[2] = 172;
+	talk_octo[2] = 28;
 	talk_octo[90] = GSW(1703);
 	talk_octo[92] = 0;
 	talk_octo[93] = 0;
 
 	tou_init_brots_10[1] = GSW(1703);
-	tou_init_brots_10[2] = 172;
+	tou_init_brots_10[2] = 28;
 
 	talk_brots[1] = GSW(1703);
-	talk_brots[2] = 172;
+	talk_brots[2] = 28;
 
 	talk_gangan[1] = GSW(1703);
-	talk_gangan[2] = 172;
+	talk_gangan[2] = 28;
 	talk_gangan[90] = GSW(1703);
 	talk_gangan[92] = 0;
 	talk_gangan[93] = 0;
 
 	init_poku[6] = GSW(1703);
-	init_poku[8] = 172;
-	init_poku[20] = 172;
+	init_poku[8] = 28;
+	init_poku[20] = 28;
 
 	talk_poku[23] = GSW(1703);
 	talk_poku[25] = 0;
 	talk_poku[26] = 0;
 
 	init_iron[1] = GSW(1703);
-	init_iron[2] = 172;
+	init_iron[2] = 28;
 
 	talk_iron[1] = GSW(1703);
-	talk_iron[2] = 172;
+	talk_iron[2] = 28;
 
 	init_iron2[1] = GSW(1703);
-	init_iron2[2] = 172;
+	init_iron2[2] = 28;
 
 	talk_iron2[1] = GSW(1703);
-	talk_iron2[2] = 172;
+	talk_iron2[2] = 28;
 
 	evt_saisyo_after[723] = GSW(1703);
 	evt_saisyo_after[724] = 8;
@@ -872,9 +873,9 @@ void ApplyTouPatches(OSModuleInfo* module_info)
 	tou_evt_block_10[2] = 1;
 
 	tou_10_init_evt[1] = GSW(1703);
-	tou_10_init_evt[3] = 2;
+	tou_10_init_evt[3] = 1;
 	tou_10_init_evt[4] = 11;
-	tou_10_init_evt[17] = 165;
+	tou_10_init_evt[17] = 21;
 	tou_10_init_evt[43] = GSW(1703);
 	tou_10_init_evt[44] = 11;
 	tou_10_init_evt[46] = GSW(1703);
@@ -886,17 +887,18 @@ void ApplyTouPatches(OSModuleInfo* module_info)
 	tou_10_init_evt[123] = GSW(1703);
 	tou_10_init_evt[125] = 6;
 	tou_10_init_evt[176] = GSW(1703);
-	tou_10_init_evt[177] = 172;
+	tou_10_init_evt[177] = 28;
 	tou_10_init_evt[197] = GSW(1703);
-	tou_10_init_evt[198] = 172;
+	tou_10_init_evt[198] = 28;
 	tou_10_init_evt[222] = GSWF(6036);
 	tou_10_init_evt[223] = 1;
 	tou_10_init_evt[236] = GSW(1703);
 	tou_10_init_evt[237] = 11;
 
 	tou_11_init_evt[138] = GSW(1703);
-	tou_11_init_evt[140] = 2;
+	tou_11_init_evt[140] = 1;
 	tou_11_init_evt[141] = 11;
+	tou_11_init_evt[154] = 21;
 
 	tou_evt_block_broken_12[52] = GSWF(6038);
 	tou_evt_block_broken_12[53] = 1;
@@ -916,7 +918,7 @@ void ApplyTouPatches(OSModuleInfo* module_info)
 	tou_12_init_evt[1] = GSW(1703);
 	tou_12_init_evt[2] = 19;
 	tou_12_init_evt[11] = GSW(1703);
-	tou_12_init_evt[13] = 2;
+	tou_12_init_evt[13] = 1;
 	tou_12_init_evt[14] = 11;
 	tou_12_init_evt[27] = 21;
 	tou_12_init_evt[71] = GSWF(6038);
@@ -941,7 +943,7 @@ void ApplyTouPatches(OSModuleInfo* module_info)
 	tou_13_init_evt[17] = 21;
 	tou_13_init_evt[50] = GSW(1703);
 	tou_13_init_evt[52] = 18;
-	tou_13_init_evt[57] = 172;
+	tou_13_init_evt[57] = 28;
 	tou_13_init_evt[104] = GSW(1703);
 	tou_13_init_evt[105] = 17;
 	tou_13_init_evt[110] = GSW(1703);

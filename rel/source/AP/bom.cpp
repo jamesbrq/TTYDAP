@@ -46,6 +46,10 @@ extern int32_t evt_white_bed[];
 extern int32_t kiza_talk[];
 extern int32_t bom_02_init_evt[];
 
+//Assembly
+extern int32_t bom1000_jump[];
+extern int32_t jump_minnnanokoe[];
+
 
 void ApplyBomPatches(OSModuleInfo* module_info)
 {
@@ -185,4 +189,10 @@ void ApplyBomPatches(OSModuleInfo* module_info)
 	bom_02_init_evt[65] = 5;
 	bom_02_init_evt[155] = GSW(1708);
 	bom_02_init_evt[156] = 16;
+
+	bom1000_jump[62] = 0x386006AC; // li r3, 0x6AC (GSW(1708))
+	bom1000_jump[90] = 0x2C030011; // cmpwi r3, 0x11
+
+	jump_minnnanokoe[48] = 0x386006AC; // li r3, 0x6AC (GSW(1708))
+	jump_minnnanokoe[76] = 0x2C030011; // cmpwi r3, 0x11
 }
