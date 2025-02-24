@@ -320,18 +320,18 @@ void ApplyTouPatches(OSModuleInfo* module_info)
 
 	talk_bijyo[1] = GSW(1703);
 	talk_bijyo[3] = 5;
-	talk_bijyo[11] = 99; //Unknown
+	talk_bijyo[11] = 20;
 
 	tou_init_kiza[1] = GSW(1706);
 	tou_init_kiza[3] = 2;
-	tou_init_kiza[4] = 99; //Unknown
+	tou_init_kiza[4] = 20;
 
 	talk_kiza[1] = GSW(1703);
 	talk_kiza[3] = 5;
-	talk_kiza[11] = 99; //Unknown
+	talk_kiza[11] = 20;
 
 	init_sarary_tou_01[1] = GSW(1706);
-	init_sarary_tou_01[2] = 99; //Unknown
+	init_sarary_tou_01[2] = 49;
 
 	evt_uron[191] = GSW(1703);
 	evt_uron[192] = 1;
@@ -349,13 +349,13 @@ void ApplyTouPatches(OSModuleInfo* module_info)
 	talk_tamago[25] = 11;
 
 	evt_gondora[159] = GSW(1703);
-	evt_gondora[160] = 2;
+	evt_gondora[160] = 1;
 
 	evt_gondora2[161] = GSW(1703);
-	evt_gondora2[162] = 99; //Unknown
+	evt_gondora2[162] = 28;
 
 	evt_peach_after[82] = GSW(1703);
-	evt_peach_after[83] = 99; //Unknown
+	evt_peach_after[83] = 28;
 
 	tou_evt_key_01[1] = GSWF(6027);
 	tou_evt_key_01[2] = 1;
@@ -364,7 +364,7 @@ void ApplyTouPatches(OSModuleInfo* module_info)
 	tou_evt_key_02[11] = 1;
 
 	tou_01_init_evt[107] = GSW(1708);
-	tou_01_init_evt[108] = 99; //Unknown
+	tou_01_init_evt[108] = 16;
 	tou_01_init_evt[211] = GSWF(6027);
 	tou_01_init_evt[212] = 0;
 	tou_01_init_evt[313] = GSW(1703);
@@ -372,15 +372,15 @@ void ApplyTouPatches(OSModuleInfo* module_info)
 	tou_01_init_evt[333] = GSW(1703);
 	tou_01_init_evt[334] = 11;
 	tou_01_init_evt[1422] = GSW(1708);
-	tou_01_init_evt[1423] = 99; //Unknown
+	tou_01_init_evt[1423] = 16;
 	tou_01_init_evt[1466] = GSW(1703);
 	tou_01_init_evt[1468] = 9;
 	tou_01_init_evt[1485] = 10;
 	tou_01_init_evt[1516] = 11;
 	tou_01_init_evt[1589] = GSW(1703);
-	tou_01_init_evt[1590] = 99; //Unknown
+	tou_01_init_evt[1590] = 27;
 	tou_01_init_evt[1615] = GSW(1708);
-	tou_01_init_evt[1616] = 99; //Unknown
+	tou_01_init_evt[1616] = 16;
 
 	evt_move_g[51] = GSW(1703);
 	evt_move_g[52] = 3;
@@ -389,105 +389,105 @@ void ApplyTouPatches(OSModuleInfo* module_info)
 
 	init_gard1[1] = GSW(1703);
 	init_gard1[3] = 3;
-	init_gard1[11] = 99; //Unknown
+	init_gard1[11] = 27;
 
 	talk_gard1[1] = GSW(1703);
 	talk_gard1[3] = 2;
 	talk_gard1[11] = 3;
 	talk_gard1[21] = 5;
-	talk_gard1[29] = 99; //Unknown
+	talk_gard1[29] = 27;
 
 	init_gard2[1] = GSW(1703);
 	init_gard2[3] = 3;
-	init_gard2[11] = 99; //Unknown
+	init_gard2[11] = 27;
 
 	talk_gard2[1] = GSW(1703);
 	talk_gard2[3] = 2;
 	talk_gard2[11] = 3;
 	talk_gard2[21] = 5;
-	talk_gard2[29] = 99; //Unknown
+	talk_gard2[29] = 27;
 
 	init_madam_tou_02[1] = GSW(1703);
-	init_madam_tou_02[3] = 99; //Unknown
-	init_madam_tou_02[11] = 99; //Unknown
+	init_madam_tou_02[3] = 28;
+	init_madam_tou_02[11] = 28;
 
 	talk_madam_tou_02[1] = GSW(1703);
 	talk_madam_tou_02[3] = 5;
-	talk_madam_tou_02[11] = 99; //Unknown
+	talk_madam_tou_02[11] = 20;
 
 	talk_repo[1] = GSW(1703);
 	talk_repo[3] = 5;
-	talk_repo[11] = 99; //Unknown
+	talk_repo[11] = 20;
 
 	talk_cam1[1] = GSW(1703);
 	talk_cam1[3] = 5;
-	talk_cam1[11] = 99; //Unknown
+	talk_cam1[11] = 20;
 
 	init_cam2[1] = GSW(1703);
 	init_cam2[2] = 2;
 
 	talk_cam2[1] = GSW(1703);
 	talk_cam2[3] = 5;
-	talk_cam2[11] = 99; //Unknown
+	talk_cam2[11] = 20;
 
 	talk_kino4[1] = GSW(1703);
 	talk_kino4[3] = 5;
-	talk_kino4[11] = 99; //Unknown
+	talk_kino4[11] = 20;
 
 	talk_kino5[4] = GSW(1703);
 	talk_kino5[6] = 5;
-	talk_kino5[14] = 99; //Unknown
+	talk_kino5[14] = 20;
 
 	talk_kinopiko[1] = GSW(1703);
 	talk_kinopiko[3] = 5;
-	talk_kinopiko[11] = 99; //Unknown
+	talk_kinopiko[11] = 20;
 
 	talk_kinopio_f[1] = GSW(1703);
 	talk_kinopio_f[3] = 5;
-	talk_kinopio_f[11] = 99; //Unknown
+	talk_kinopio_f[11] = 20;
 
 	init_chu[1] = GSWF(6028);
 	init_chu[3] = 1;
 
 	talk_chu[1] = GSW(1703);
 	talk_chu[3] = 5;
-	talk_chu[11] = 99; //Unknown
+	talk_chu[11] = 20;
 
 	init_champ[1] = GSW(1703);
-	init_champ[3] = 99; //Unknown
+	init_champ[3] = 27;
 
 	talk_champ[1] = GSW(1703);
-	talk_champ[3] = 99;
+	talk_champ[3] = 27;
 
 	init_shikowa[1] = GSW(1703);
-	init_shikowa[3] = 99; //Unknown
+	init_shikowa[3] = 27;
 
 	talk_shikowa[1] = GSW(1703);
-	talk_shikowa[3] = 99;
+	talk_shikowa[3] = 27;
 
 	init_uranoko[1] = GSW(1703);
-	init_uranoko[3] = 99; //Unknown
+	init_uranoko[3] = 27;
 
 	tou_talk_uranoko_02[1] = GSW(1703);
-	tou_talk_uranoko_02[3] = 99; //Unknown
+	tou_talk_uranoko_02[3] = 27;
 
 	init_ironA[1] = GSW(1703);
-	init_ironA[3] = 99; //Unknown
+	init_ironA[3] = 27;
 
 	talk_ironA[1] = GSW(1703);
-	talk_ironA[3] = 99; //Unknown
+	talk_ironA[3] = 27;
 
 	init_ironB[1] = GSW(1703);
-	init_ironB[3] = 99; //Unknown
+	init_ironB[3] = 27;
 
 	talk_ironB[1] = GSW(1703);
-	talk_ironB[3] = 99; //Unknown
+	talk_ironB[3] = 27;
 	
 	init_borodo[1] = GSW(1703);
-	init_borodo[3] = 99; //Unknown
+	init_borodo[3] = 27;
 
 	talk_borodo[1] = GSW(1703);
-	talk_borodo[3] = 99; //Unknown
+	talk_borodo[3] = 27;
 
 	evt_tougi2[273] = GSW(1703);
 	evt_tougi2[274] = 2;
@@ -499,17 +499,17 @@ void ApplyTouPatches(OSModuleInfo* module_info)
 	evt_poster_8[5] = 0;
 
 	tou_02_init_evt[1] = GSW(1703);
-	tou_02_init_evt[3] = 2;
+	tou_02_init_evt[3] = 1;
 	tou_02_init_evt[4] = 11;
-	tou_02_init_evt[17] = 99; //Unknown
-	tou_02_init_evt[79] = 3;
-	tou_02_init_evt[80] = 99; //Unknown
+	tou_02_init_evt[17] = 21;
+	tou_02_init_evt[79] = GSW(1703);
+	tou_02_init_evt[80] = 3;
 	tou_02_init_evt[93] = GSW(1703);
-	tou_02_init_evt[94] = 99; //Unknown
+	tou_02_init_evt[94] = 28;
 	tou_02_init_evt[111] = GSW(1703);
-	tou_02_init_evt[112] = 99; //Unknown
+	tou_02_init_evt[112] = 27;
 	tou_02_init_evt[131] = GSW(1703);
-	tou_02_init_evt[132] = 99; //Unknown
+	tou_02_init_evt[132] = 27;
 	tou_02_init_evt[897] = GSWF(6028);
 	tou_02_init_evt[898] = 0;
 
@@ -517,92 +517,76 @@ void ApplyTouPatches(OSModuleInfo* module_info)
 
 	talk_g_1[1] = GSW(1703);
 	talk_g_1[3] = 7;
-	talk_g_1[10] = 0;
 	talk_g_1[11] = 0;
 	talk_g_1[12] = 0;
-	talk_g_1[13] = 0;
-	talk_g_1[14] = 0;
-	talk_g_1[15] = 0;
-	talk_g_1[16] = 0;
-	talk_g_1[17] = 0;
-	talk_g_1[18] = 0;
-	talk_g_1[19] = 0;
-	talk_g_1[20] = 0;
-	talk_g_1[21] = 0;
-	talk_g_1[22] = 0;
-	talk_g_1[23] = 0;
-	talk_g_1[24] = 0;
-	talk_g_1[26] = 99; //Unknown
-	talk_g_1[34] = 99; //Unknown
+	talk_g_1[26] = 19;
+	talk_g_1[34] = 28;
 	talk_g_1[40] = 0; //Unused
 	talk_g_1[71] = 0; //Unused
 
 	move_g_1[6] = GSW(1703);
-	move_g_1[8] = 5;
-	move_g_1[19] = 99; //Unknown
-	move_g_1[25] = 0;
-	move_g_1[41] = 0;
+	move_g_1[8] = 99; //UNUSED
 
 	init_g_2[1] = GSW(1703);
-	init_g_2[2] = 99; //Unknown
+	init_g_2[2] = 19;
 
 	talk_g_2[1] = GSW(1703);
 	talk_g_2[3] = 7;
-	talk_g_2[11] = 99; //Unknown
-	talk_g_2[19] = 99; //Unknown
+	talk_g_2[11] = 19;
+	talk_g_2[19] = 13;
 
 	move_g_2[31] = GSW(1703);
-	move_g_2[32] = 99; //Unknown
+	move_g_2[32] = 13;
 	move_g_2[45] = GSW(1703);
-	move_g_2[46] = 99; //Unknown
+	move_g_2[46] = 19;
 
 	init_g_4[1] = GSW(1703);
-	init_g_4[2] = 99; //Unknown
+	init_g_4[2] = 28;
 
 	talk_g_4[1] = GSW(1703);
 	talk_g_4[3] = 4;
 	talk_g_4[91] = 5;
-	talk_g_4[99] = 99; //Unknown
-	talk_g_4[107] = 99; //Unknown
+	talk_g_4[99] = 19;
+	talk_g_4[107] = 28;
 
 	move_g_4[28] = GSW(1703);
 	move_g_4[30] = 4;
 	move_g_4[32] = 7;
-	move_g_4[39] = 99; //Unknown
-	move_g_4[71] = 99; //Unknown
-	move_g_4[72] = 99; //Unknown
+	move_g_4[39] = 18;
+	move_g_4[71] = 19;
+	move_g_4[72] = 27;
 
 	talk_g_7[1] = GSW(1703);
 	talk_g_7[3] = 7;
-	talk_g_7[11] = 99; //Unknown
+	talk_g_7[11] = 19;
 
 	talk_g_8[1] = GSW(1703);
 	talk_g_8[3] = 7;
-	talk_g_8[11] = 99; //Unknown
+	talk_g_8[11] = 13;
 
 	talk_g_9[1] = GSW(1703);
 	talk_g_9[3] = 7;
-	talk_g_9[11] = 99; //Unknown
-	talk_g_9[19] = 99; //Unknown
+	talk_g_9[11] = 19;
+	talk_g_9[19] = 28;
 
 	init_g_10[1] = GSW(1703);
-	init_g_10[3] = 99; //Unknown
-	init_g_10[15] = 99; //Unknown
+	init_g_10[3] = 13;
+	init_g_10[15] = 19;
 
 	talk_g_10[1] = GSW(1703);
-	talk_g_10[3] = 99; //Unknown
-	talk_g_10[15] = 99; //Unknown
+	talk_g_10[3] = 13;
+	talk_g_10[15] = 19;
 
 	init_g_11[1] = GSW(1703);
-	init_g_11[3] = 99; //Unknown
-	init_g_11[15] = 99; //Unknown
+	init_g_11[3] = 13;
+	init_g_11[15] = 19;
 
 	talk_g_11[1] = GSW(1703);
-	talk_g_11[3] = 99; //Unknown
-	talk_g_11[15] = 99; //Unknown
+	talk_g_11[3] = 13;
+	talk_g_11[15] = 19;
 
 	tou_init_brots_04[1] = GSW(1703);
-	tou_init_brots_04[2] = 99; //Unknown
+	tou_init_brots_04[2] = 28;
 
 	evt_gardman[159] = GSW(1703);
 	evt_gardman[161] = 6;
@@ -613,11 +597,11 @@ void ApplyTouPatches(OSModuleInfo* module_info)
 	tou_evt_lock_04[2] = 1;
 
 	tou_04_init_evt[123] = GSW(1703);
-	tou_04_init_evt[124] = 99; //Unknown
+	tou_04_init_evt[124] = 19;
 	tou_04_init_evt[136] = GSW(1703);
-	tou_04_init_evt[138] = 2;
+	tou_04_init_evt[138] = 1;
 	tou_04_init_evt[139] = 11;
-	tou_04_init_evt[152] = 99; //Unknown
+	tou_04_init_evt[152] = 21;
 	tou_04_init_evt[388] = GSW(1703);
 	tou_04_init_evt[390] = 4;
 	tou_04_init_evt[392] = 5;
@@ -626,11 +610,11 @@ void ApplyTouPatches(OSModuleInfo* module_info)
 	tou_04_init_evt[446] = GSW(1703);
 	tou_04_init_evt[447] = 0; //Unused
 	tou_04_init_evt[455] = GSW(1703);
-	tou_04_init_evt[456] = 99; //Unknown
+	tou_04_init_evt[456] = 13;
 	tou_04_init_evt[494] = GSW(1703);
-	tou_04_init_evt[495] = 99; //Unknown
+	tou_04_init_evt[495] = 19;
 	tou_04_init_evt[513] = GSW(1703);
-	tou_04_init_evt[514] = 99; //Unknown
+	tou_04_init_evt[514] = 19;
 	tou_04_init_evt[578] = GSWF(6029);
 	tou_04_init_evt[579] = 1;
 	tou_04_init_evt[616] = GSWF(6029);
@@ -638,15 +622,15 @@ void ApplyTouPatches(OSModuleInfo* module_info)
 	tou_04_init_evt[625] = GSW(1703);
 	tou_04_init_evt[626] = 0; //Unused
 	tou_04_init_evt[631] = GSW(1703);
-	tou_04_init_evt[632] = 99; //Unknown
+	tou_04_init_evt[632] = 28;
 
 	evt_takurami[337] = GSW(1703);
-	evt_takurami[338] = 99; //Unknown
+	evt_takurami[338] = 19;
 
 	evt_hiki_open[13] = GSW(1703);
-	evt_hiki_open[14] = 99; //Unknown
+	evt_hiki_open[14] = 19;
 	evt_hiki_open[135] = GSW(1703);
-	evt_hiki_open[136] = 99; //Unknown
+	evt_hiki_open[136] = 19;
 
 	init_gans[1] = GSW(1703);
 	init_gans[3] = 4;
@@ -656,10 +640,10 @@ void ApplyTouPatches(OSModuleInfo* module_info)
 	talk_gans[173] = 4;
 
 	init_kinoshikowa[1] = GSW(1703);
-	init_kinoshikowa[3] = 99; //Unknown
+	init_kinoshikowa[3] = 20;
 
 	talk_kinoshikowa[373] = GSW(1703);
-	talk_kinoshikowa[375] = 99; //Unknown
+	talk_kinoshikowa[375] = 20;
 
 	evt_sensyu2[194] = GSW(1703);
 	evt_sensyu2[195] = 5;
@@ -672,7 +656,7 @@ void ApplyTouPatches(OSModuleInfo* module_info)
 	evt_nozoki[692] = 1;
 
 	tou_05_init_evt[132] = GSW(1703);
-	tou_05_init_evt[133] = 99; //Unknown
+	tou_05_init_evt[133] = 18;
 	tou_05_init_evt[175] = GSW(1703);
 	tou_05_init_evt[176] = 4;
 	tou_05_init_evt[194] = GSWF(6030);
@@ -680,16 +664,16 @@ void ApplyTouPatches(OSModuleInfo* module_info)
 	tou_05_init_evt[256] = GSW(1703);
 	tou_05_init_evt[257] = 4;
 	tou_05_init_evt[298] = GSW(1703);
-	tou_05_init_evt[299] = 99; //Unknown
+	tou_05_init_evt[299] = 19;
 	tou_05_init_evt[311] = GSW(1703);
-	tou_05_init_evt[313] = 2;
+	tou_05_init_evt[313] = 1;
 	tou_05_init_evt[314] = 11;
-	tou_05_init_evt[327] = 99; //Unknown
+	tou_05_init_evt[327] = 21;
 	tou_05_init_evt[352] = GSW(1703);
-	tou_05_init_evt[354] = 99; //Unknown
-	tou_05_init_evt[359] = 99; //Unknown
+	tou_05_init_evt[354] = 18;
+	tou_05_init_evt[359] = 28;
 	tou_05_init_evt[411] = GSW(1703);
-	tou_05_init_evt[412] = 99; //Unknown
+	tou_05_init_evt[412] = 28;
 
 	evt_kontena[17] = GSWF(6031);
 	evt_kontena[18] = 1;
@@ -719,78 +703,81 @@ void ApplyTouPatches(OSModuleInfo* module_info)
 	tou_06_init_evt[486] = GSWF(6035);
 	tou_06_init_evt[487] = 1;
 	tou_06_init_evt[492] = GSW(1703);
-	tou_06_init_evt[493] = 99; //Unknown
+	tou_06_init_evt[493] = 19;
 	tou_06_init_evt[502] = GSW(1703);
-	tou_06_init_evt[503] = 2;
+	tou_06_init_evt[503] = 1;
 	tou_06_init_evt[504] = 11;
-	tou_06_init_evt[518] = 99; //Unknown
+	tou_06_init_evt[518] = 21;
 
 	evt_champion[568] = GSW(1703);
-	evt_champion[569] = 99; //Unknown
+	evt_champion[569] = 14;
 
 	tou_evt_dakuto_07[25] = GSW(1703);
-	tou_evt_dakuto_07[26] = 159;
+	tou_evt_dakuto_07[26] = 15;
 	tou_evt_dakuto_07[28] = GSW(1703);
-	tou_evt_dakuto_07[29] = 159;
+	tou_evt_dakuto_07[29] = 15;
 
 	tou_07_init_evt[27] = GSW(1703);
-	tou_07_init_evt[28] = 158;
+	tou_07_init_evt[28] = 14;
 	tou_07_init_evt[30] = GSW(1703);
-	tou_07_init_evt[31] = 158;
+	tou_07_init_evt[31] = 14;
 	tou_07_init_evt[68] = GSW(1703);
-	tou_07_init_evt[70] = 159;
+	tou_07_init_evt[70] = 15;
 	tou_07_init_evt[75] = 28;
 	tou_07_init_evt[149] = GSW(1703);
-	tou_07_init_evt[151] = 2;
+	tou_07_init_evt[151] = 1;
 	tou_07_init_evt[152] = 11;
-	tou_07_init_evt[165] = 165;
+	tou_07_init_evt[165] = 21;
 	tou_07_init_evt[188] = GSW(1703);
-	tou_07_init_evt[189] = 158;
+	tou_07_init_evt[189] = 14;
 	tou_07_init_evt[195] = GSW(1703);
-	tou_07_init_evt[196] = 158;
+	tou_07_init_evt[196] = 14;
 	tou_07_init_evt[227] = GSW(1703);
-	tou_07_init_evt[228] = 163;
+	tou_07_init_evt[228] = 19;
 	tou_07_init_evt[237] = GSW(1703);
-	tou_07_init_evt[239] = 2;
+	tou_07_init_evt[239] = 1;
 	tou_07_init_evt[240] = 12;
 
 	evt_toile[1] = GSW(1703);
-	evt_toile[2] = 157;
+	evt_toile[2] = 13;
 	evt_toile[31] = GSW(1703);
-	evt_toile[32] = 157;
+	evt_toile[32] = 13;
 
 	talk_togenoko[1] = GSW(1703);
 	talk_togenoko[2] = 28;
 	talk_togenoko[4] = GSW(1703);
-	talk_togenoko[5] = 157;
+	talk_togenoko[5] = 13;
 
 	talk_togemet[1] = GSW(1703);
 	talk_togemet[2] = 28;
 	talk_togemet[4] = GSW(1703);
-	talk_togemet[5] = 157;
+	talk_togemet[5] = 13;
 
 	talk_hammerbros[1] = GSW(1703);
 	talk_hammerbros[2] = 28;
 	talk_hammerbros[4] = GSW(1703);
-	talk_hammerbros[5] = 157;
+	talk_hammerbros[5] = 13;
 
 	tou_talk_uranoko_08[1] = GSW(1703);
 	tou_talk_uranoko_08[2] = 28;
 	tou_talk_uranoko_08[4] = GSW(1703);
-	tou_talk_uranoko_08[5] = 157;
+	tou_talk_uranoko_08[5] = 13;
 
 	evt_1st_leagu[743] = GSW(1703);
 	evt_1st_leagu[744] = 12;
 	
 	evt_toile_door[22] = GSW(1703);
-	evt_toile_door[23] = 157;
+	evt_toile_door[23] = 13;
 	evt_toile_door[39] = GSW(1703);
 	evt_toile_door[40] = 28;
 
 	tou_08_init_evt[6] = 0;
 	tou_08_init_evt[15] = 0;
 	tou_08_init_evt[24] = 0;
-	tou_08_init_evt[49] = GSWF(6036);
+	tou_08_init_evt[33] = 0;
+	tou_08_init_evt[48] = 0;
+	tou_08_init_evt[49] = 0;
+	tou_08_init_evt[50] = 0;
 	tou_08_init_evt[58] = 0;
 	tou_08_init_evt[59] = 0;
 	tou_08_init_evt[60] = 0;
