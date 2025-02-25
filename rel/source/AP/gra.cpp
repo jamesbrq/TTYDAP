@@ -41,48 +41,38 @@ extern int32_t gra_evt_kagemario_init[];
 
 const char doopliss[] = "\x82\xC9\x82\xB9\x83\x7D\x83\x8A\x83\x49";
 
-EVT_BEGIN(evt_machibuse_evt1)
+EVT_BEGIN(evt_machibuse_evt)
 	IF_SMALL(GSWF(6044), 1)
 		USER_FUNC(evt_msg::evt_msg_print, 0, PTR("stg4_gra_03"), 0, PTR(doopliss))
 	ELSE()
 		USER_FUNC(evt_msg::evt_msg_print, 0, PTR("stg4_gra_09"), 0, PTR(doopliss))
 	END_IF()
-	GOTO(90)
-EVT_END()
+	GOTO(&evt_machibuse[423])
+EVT_PATCH_END()
 
 void ApplyGraPatches(OSModuleInfo* module_info)
 {
-	evt_machibuse[78] = 0; //Unused
+	evt_machibuse[78] = 99; //Unused
 	evt_machibuse[291] = GSWF(6044);
 	evt_machibuse[292] = 1;
-	patch::writePatch(&evt_machibuse[358], evt_machibuse_evt1, sizeof(evt_machibuse_evt1));
-	evt_machibuse[421] = EVT_HELPER_CMD(1, 3);
-	evt_machibuse[422] = 90;
+	patch::writePatch(&evt_machibuse[358], evt_machibuse_evt, sizeof(evt_machibuse_evt));
 	evt_machibuse[426] = 0; //Unused
 	evt_machibuse[476] = GSW(1715);
-	evt_machibuse[477] = 210;
+	evt_machibuse[477] = 5;
 	evt_machibuse[538] = GSWF(6044);
 	evt_machibuse[540] = 1;
-	evt_machibuse[544] = EVT_HELPER_CMD(0, 49);
-	evt_machibuse[545] = 0;
-	evt_machibuse[546] = 0;
-	evt_machibuse[547] = 0;
-	evt_machibuse[548] = 0;
-	evt_machibuse[549] = 0;
-	evt_machibuse[550] = 0;
-	evt_machibuse[551] = 0;
 
 	gra_00_init_evt[65] = GSW(1715);
-	gra_00_init_evt[67] = 202;
-	gra_00_init_evt[68] = 209;
+	gra_00_init_evt[67] = 4;
+	gra_00_init_evt[68] = 4;
 
-	gra_01_init_evt[85] = 500; //Unused
+	gra_01_init_evt[84] = GSW(1715); //Unused
 
 	shopmaster_pig_init[1] = GSW(1715);
-	shopmaster_pig_init[3] = 200;
+	shopmaster_pig_init[3] = 2;
 
 	shopmaster_talk[1] = GSW(1715);
-	shopmaster_talk[3] = 200;
+	shopmaster_talk[3] = 2;
 
 	gra02_get_key[1] = GSWF(6041);
 	gra02_get_key[2] = 1;
