@@ -169,8 +169,20 @@ extern int32_t evt_nusumi[];
 extern int32_t evt_first[];
 extern int32_t tou_13_init_evt[];
 
+//Assembly
+extern int32_t tou_disp_proc[];
+extern int32_t tou_evt_tou_get_fighter_battle_msg[];
+extern int32_t tou_evt_tou_get_fighter_info[];
+extern int32_t tou_evt_tou_get_fighter_name2[];
+extern int32_t tou_evt_tou_get_rule_info[];
+extern int32_t tou_evt_tou_get_rule_msg2[];
+extern int32_t tou_gans_tex[];
+extern int32_t tou_make_monitor[];
+extern int32_t tou_rankingInit[];
+
+
 EVT_BEGIN(talk_sakaba_evt)
-	IF_EQUAL(GSW(1707), 99) //Unknown
+	IF_EQUAL(GSW(1707), 3)
 		IF_EQUAL(GSWF(3877), 1)
 			SET(GSWF(3879), 1)
 			USER_FUNC(evt_msg::evt_msg_print, 0, PTR("stg7_tou_01"), 0, 0)
@@ -210,16 +222,16 @@ void ApplyTouPatches(OSModuleInfo* module_info)
 	evt_tou_match_make_default_sub[389] = 28;
 
 	evt_tou_match_make_default[117] = GSW(1703);
-	evt_tou_match_make_default[119] = 99; //Unknown
-	evt_tou_match_make_default[120] = 99; //Unknown
-	evt_tou_match_make_default[142] = 99; //Unknown
-	evt_tou_match_make_default[158] = 99; //Unknown
-	evt_tou_match_make_default[159] = 99; //Unknown
-	evt_tou_match_make_default[164] = 99; //Unknown
-	evt_tou_match_make_default[165] = 99; //Unknown
-	evt_tou_match_make_default[170] = 99; //Unknown
-	evt_tou_match_make_default[171] = 99; //Unknown
-	evt_tou_match_make_default[176] = 99; //Unknown
+	evt_tou_match_make_default[119] = 0;
+	evt_tou_match_make_default[120] = 0;
+	evt_tou_match_make_default[142] = 0;
+	evt_tou_match_make_default[158] = 0;
+	evt_tou_match_make_default[159] = 0;
+	evt_tou_match_make_default[164] = 0;
+	evt_tou_match_make_default[165] = 0;
+	evt_tou_match_make_default[170] = 14;
+	evt_tou_match_make_default[171] = 19;
+	evt_tou_match_make_default[176] = 0;
 
 	evt_mail_1[153] = GSW(1703);
 	evt_mail_1[154] = 14;
@@ -238,85 +250,77 @@ void ApplyTouPatches(OSModuleInfo* module_info)
 	evt_tou_match_after_default[1394] = GSW(1703);
 	evt_tou_match_after_default[1395] = 12;
 
-	tou_00_init_evt[7] = GSW(1704);
-	tou_00_init_evt[8] = 99; //Unknown
+	tou_00_init_evt[7] = GSW(1715);
+	tou_00_init_evt[8] = 10;
 	tou_00_init_evt[68] = GSW(1703);
-	tou_00_init_evt[69] = 2;
+	tou_00_init_evt[69] = 1;
 
 	talk_sakaba[23] = GSWF(6026);
-	talk_sakaba[24] = 0;
-	talk_sakaba[25] = 0;
-	talk_sakaba[26] = 0;
-	talk_sakaba[27] = 0;
-	talk_sakaba[28] = 0;
-	talk_sakaba[29] = 0;
-	talk_sakaba[30] = 0;
-	talk_sakaba[31] = 0;
-	talk_sakaba[31] = 0;
+	talk_sakaba[25] = 0; //UNUSED
 	talk_sakaba[33] = 0;
-	talk_sakaba[276] = EVT_HELPER_CMD(0, 49);
-	patch::writePatch(&talk_sakaba[277], talk_sakaba_hook, sizeof(talk_sakaba_hook));
+	talk_sakaba[275] = EVT_HELPER_CMD(0, 49);
+	patch::writePatch(&talk_sakaba[276], talk_sakaba_hook, sizeof(talk_sakaba_hook));
 
 	init_papa_tou_04[1] = GSW(1706);
 	init_papa_tou_04[3] = 1;
 
 	talk_papa_tou_04[1] = GSW(1703);
 	talk_papa_tou_04[3] = 5;
-	talk_papa_tou_04[11] = 99; //Unknown
+	talk_papa_tou_04[11] = 20;
 
 	init_mama_tou_04[1] = GSW(1706);
 	init_mama_tou_04[3] = 1;
 
 	talk_mama_tou_04[1] = GSW(1703);
 	talk_mama_tou_04[3] = 5;
-	talk_mama_tou_04[11] = 99; //Unknown
+	talk_mama_tou_04[11] = 20;
 
 	init_konari_tou_04[1] = GSW(1706);
 	init_konari_tou_04[3] = 1;
 
 	talk_konari_tou_04[1] = GSW(1703);
 	talk_konari_tou_04[3] = 5;
-	talk_konari_tou_04[11] = 99; //Unknown
+	talk_konari_tou_04[11] = 20;
 
 	talk_musume[1] = GSW(1703);
 	talk_musume[3] = 5;
-	talk_musume[23] = 99; //Unknown
+	talk_musume[23] = 20;
 
 	init_musume_1[1] = GSW(1703);
-	init_musume_1[3] = 2;
-	init_musume_1[4] = 99; //Unknown
+	init_musume_1[3] = 1;
+	init_musume_1[4] = 20;
 
 	init_musume_2[1] = GSW(1703);
-	init_musume_2[3] = 2;
-	init_musume_2[4] = 99; //Unknown
+	init_musume_2[3] = 1;
+	init_musume_2[4] = 20;
 
 	init_musume_3[1] = GSW(1703);
-	init_musume_3[3] = 2;
-	init_musume_3[4] = 99; //Unknown
+	init_musume_3[3] = 1;
+	init_musume_3[4] = 20;
 
 	talk_kino_1[1] = GSW(1703);
 	talk_kino_1[3] = 5;
-	talk_kino_1[11] = 99; //Unknown
+	talk_kino_1[11] = 20;
 
 	talk_kino_2[1] = GSW(1703);
 	talk_kino_2[3] = 5;
-	talk_kino_2[11] = 99; //Unknown
+	talk_kino_2[11] = 20;
 
 	talk_roten_1[1] = GSW(1703);
 	talk_roten_1[3] = 5;
-	talk_roten_1[11] = 99; //Unknown
+	talk_roten_1[11] = 20;
 
 	talk_roten_2[1] = GSW(1703);
 	talk_roten_2[3] = 5;
-	talk_roten_2[11] = 99; //Unknown
+	talk_roten_2[11] = 20;
 
 	talk_jugem_1[1] = GSW(1703);
 	talk_jugem_1[3] = 5;
-	talk_jugem_1[11] = 99; //Unknown
+	talk_jugem_1[11] = 20;
 
 	talk_jugem_2[1] = GSW(1703);
 	talk_jugem_2[3] = 5;
-	talk_jugem_2[11] = 99; //Unknown
+	talk_jugem_2[11] = 20;
 
 	talk_bijyo[1] = GSW(1703);
 	talk_bijyo[3] = 5;
@@ -446,8 +450,8 @@ void ApplyTouPatches(OSModuleInfo* module_info)
 	talk_kinopio_f[3] = 5;
 	talk_kinopio_f[11] = 20;
 
-	init_chu[1] = GSWF(6028);
-	init_chu[3] = 1;
+	init_chu[1] = GSW(1703);
+	init_chu[3] = 13;
 
 	talk_chu[1] = GSW(1703);
 	talk_chu[3] = 5;
@@ -471,14 +475,14 @@ void ApplyTouPatches(OSModuleInfo* module_info)
 	tou_talk_uranoko_02[1] = GSW(1703);
 	tou_talk_uranoko_02[3] = 27;
 
-	init_ironA[1] = GSW(1703);
-	init_ironA[3] = 27;
+	init_ironA[7] = GSW(1703);
+	init_ironA[9] = 27;
 
 	talk_ironA[1] = GSW(1703);
 	talk_ironA[3] = 27;
 
-	init_ironB[1] = GSW(1703);
-	init_ironB[3] = 27;
+	init_ironB[7] = GSW(1703);
+	init_ironB[9] = 27;
 
 	talk_ironB[1] = GSW(1703);
 	talk_ironB[3] = 27;
@@ -510,6 +514,7 @@ void ApplyTouPatches(OSModuleInfo* module_info)
 	tou_02_init_evt[112] = 27;
 	tou_02_init_evt[131] = GSW(1703);
 	tou_02_init_evt[132] = 27;
+	tou_02_init_evt[285] = 99; //UNUSED
 	tou_02_init_evt[897] = GSWF(6028);
 	tou_02_init_evt[898] = 0;
 
@@ -525,7 +530,9 @@ void ApplyTouPatches(OSModuleInfo* module_info)
 	talk_g_1[71] = 0; //Unused
 
 	move_g_1[6] = GSW(1703);
-	move_g_1[8] = 99; //UNUSED
+	move_g_1[8] = 5;
+	move_g_1[25] = 0;
+	move_g_1[41] = 0;
 
 	init_g_2[1] = GSW(1703);
 	init_g_2[2] = 19;
@@ -936,4 +943,33 @@ void ApplyTouPatches(OSModuleInfo* module_info)
 	tou_13_init_evt[110] = GSW(1703);
 	tou_13_init_evt[111] = 16;
 
+	//Assembly
+	tou_disp_proc[17] = 0x386006A7; //li r3, 0x6A7 GSW(1703)
+	tou_disp_proc[20] = 0x2C03001C; //cmpwi r3, 0x1C
+
+	tou_evt_tou_get_fighter_battle_msg[11] = 0x386006A7; //li r3, 0x6A7 GSW(1703)
+	tou_evt_tou_get_fighter_battle_msg[13] = 0x2C03001C; //cmpwi r3, 0x1C
+
+	tou_evt_tou_get_fighter_info[11] = 0x386006A7; //li r3, 0x6A7 GSW(1703)
+	tou_evt_tou_get_fighter_info[13] = 0x2C03001C; //cmpwi r3, 0x1C
+
+	tou_evt_tou_get_fighter_name2[11] = 0x386006A7; //li r3, 0x6A7 GSW(1703)
+	tou_evt_tou_get_fighter_name2[13] = 0x2C03001C; //cmpwi r3, 0x1C
+
+	tou_evt_tou_get_rule_info[11] = 0x386006A7; //li r3, 0x6A7 GSW(1703)
+	tou_evt_tou_get_rule_info[13] = 0x2C03001C; //cmpwi r3, 0x1C
+
+	tou_evt_tou_get_rule_msg2[11] = 0x386006A7; //li r3, 0x6A7 GSW(1703)
+	tou_evt_tou_get_rule_msg2[13] = 0x2C03001C; //cmpwi r3, 0x1C
+
+	tou_gans_tex[86] = 0x38840827; //addi r4, r4, 0x827 GSW(1703)
+	tou_gans_tex[88] = 0x2C03001C; //cmpwi r3, 0x1C
+
+	tou_make_monitor[8] = 0x38850827; //addi r4, r5, 0x827 GSW(1703)
+	tou_make_monitor[10] = 0x2C03001C; //cmpwi r3, 0x1C
+
+	tou_rankingInit[11] = 0x386006A7; //li r3, 0x6A7 GSW(1703)
+	tou_rankingInit[14] = 0x2C03001C; //cmpwi r3, 0x1C
+	tou_rankingInit[94] = 0x386006A7; //li r3, 0x6A7 GSW(1703)
+	tou_rankingInit[97] = 0x2C03001C; //cmpwi r3, 0x1C
 }
