@@ -157,7 +157,7 @@ EVT_BEGIN(villagerB_talk_evt)
 		USER_FUNC(evt_msg::evt_msg_print, 0, PTR("kpa_stg5_006"), 0, PTR("me"))
 		RETURN()
 	END_IF()
-	SWITCH(GSW(1704))
+	SWITCH(GSW(1715))
 		CASE_SMALL(2)
 			USER_FUNC(evt_msg::evt_msg_print, 0, PTR("stg4_usu_32"), 0, PTR("me"))
 			RETURN()
@@ -189,7 +189,7 @@ EVT_BEGIN(villagerC_talk_evt)
 		USER_FUNC(evt_msg::evt_msg_print, 0, PTR("kpa_stg5_007"), 0, PTR("me"))
 		RETURN()
 	END_IF()
-	SWITCH(GSW(1704))
+	SWITCH(GSW(1715))
 		CASE_SMALL(2)
 			USER_FUNC(evt_msg::evt_msg_print, 0, PTR("stg4_usu_35"), 0, PTR("me"))
 		RETURN()
@@ -230,8 +230,8 @@ EVT_BEGIN(villagerD_talk_evt)
 		END_IF()
 		RETURN()
 	END_IF()
-	SWITCH(GSW(1704))
-		CASE_SMALL(1)
+	SWITCH(GSW(1715))
+		CASE_SMALL(2)
 			USER_FUNC(evt_npc::evt_npc_get_position, PTR("me"), LW(0), LW(1), LW(2))
 			USER_FUNC(evt_snd::evt_snd_sfxon_3d, PTR("SFX_STG4_VOICE_PIG1"), LW(0), LW(1), LW(2), 0)
 			USER_FUNC(evt_msg::evt_msg_print, 0, PTR("stg4_usu_38"), 0, PTR("me"))
@@ -266,7 +266,7 @@ EVT_BEGIN(villagerE_talk_evt)
 		USER_FUNC(evt_msg::evt_msg_print, 0, PTR("kpa_stg5_009"), 0, PTR("me"))
 		RETURN()
 	END_IF()
-	SWITCH(GSW(1704))
+	SWITCH(GSW(1715))
 		CASE_SMALL(2)
 			USER_FUNC(evt_npc::evt_npc_get_position, PTR("me"), LW(0), LW(1), LW(2))
 			USER_FUNC(evt_snd::evt_snd_sfxon_3d, PTR("SFX_STG4_VOICE_PIG1"), LW(0), LW(1), LW(2), 0)
@@ -300,7 +300,7 @@ EVT_BEGIN(villagerK_talk_evt)
 		USER_FUNC(evt_msg::evt_msg_print, 0, PTR("kpa_stg5_006"), 0, PTR("me"))
 		RETURN()
 	END_IF()
-	SWITCH(GSW(1704))
+	SWITCH(GSW(1715))
 		CASE_SMALL(2)
 			USER_FUNC(evt_npc::evt_npc_get_position, PTR("me"), LW(0), LW(1), LW(2))
 			USER_FUNC(evt_snd::evt_snd_sfxon_3d, PTR("SFX_STG4_VOICE_PIG1"), LW(0), LW(1), LW(2), 0)
@@ -330,7 +330,7 @@ EVT_BEGIN(villagerK_talk_hook)
 EVT_END()
 
 EVT_BEGIN(villagerF_talk_evt)
-	SWITCH(GSW(1704))
+	SWITCH(GSW(1715))
 		CASE_SMALL(2)
 			USER_FUNC(evt_msg::evt_msg_print, 0, PTR("stg4_usu_82"), 0, PTR("me"))
 			RETURN()
@@ -360,7 +360,7 @@ EVT_BEGIN(villagerF_talk_hook)
 EVT_END()
 
 EVT_BEGIN(villagerG_talk_evt)
-	SWITCH(GSW(1704))
+	SWITCH(GSW(1715))
 		CASE_SMALL(2)
 			USER_FUNC(evt_msg::evt_msg_print, 0, PTR("stg4_usu_85"), 0, PTR("me"))
 			RETURN()
@@ -390,7 +390,7 @@ EVT_BEGIN(villagerG_talk_hook)
 EVT_END()
 
 EVT_BEGIN(villagerH_talk_evt)
-	SWITCH(GSW(1704))
+	SWITCH(GSW(1715))
 		CASE_SMALL(2)
 			USER_FUNC(evt_msg::evt_msg_print, 0, PTR("stg4_usu_88"), 0, PTR("me"))
 			RETURN()
@@ -418,7 +418,7 @@ EVT_BEGIN(villagerH_talk_hook)
 EVT_END()
 
 EVT_BEGIN(villagerI_talk_evt)
-	SWITCH(GSW(1704))
+	SWITCH(GSW(1715))
 		CASE_SMALL(2)
 			USER_FUNC(evt_npc::evt_npc_get_position, PTR("me"), LW(0), LW(1), LW(2))
 			USER_FUNC(evt_snd::evt_snd_sfxon_3d, PTR("SFX_STG4_VOICE_PIG1"), LW(0), LW(1), LW(2), 0)
@@ -448,7 +448,7 @@ EVT_BEGIN(villagerI_talk_hook)
 EVT_END()
 
 EVT_BEGIN(villagerJ_talk_evt)
-	SWITCH(GSW(1704))
+	SWITCH(GSW(1715))
 		CASE_SMALL(2)
 			USER_FUNC(evt_npc::evt_npc_get_position, PTR("me"), LW(0), LW(1), LW(2))
 			USER_FUNC(evt_snd::evt_snd_sfxon_3d, PTR("SFX_STG4_VOICE_PIG1"), LW(0), LW(1), LW(2), 0)
@@ -478,7 +478,7 @@ EVT_BEGIN(villagerJ_talk_hook)
 EVT_END()
 
 EVT_BEGIN(shop_man_talk_evt)
-	IF_SMALL(GSW(1704), 14)
+	IF_SMALL(GSW(1715), 14)
 		USER_FUNC(evt_msg::evt_msg_print, 0, PTR("stg4_usu_61_5"), 0, PTR("me"))
 		RETURN()
 	END_IF()
@@ -618,14 +618,14 @@ void ApplyUsuPatches(OSModuleInfo* module_info)
 	usu00_crowCDE_talk_event[245] = 99; //Unused
 
 	chief_pig_event[56] = GSW(1704);
-	chief_pig_event[57] = 3;
+	chief_pig_event[57] = 4;
 
 	evt_door2_chk[1] = GSW(1704);
 	evt_door2_chk[3] = 0;
 	evt_door2_chk[4] = 0;
 
 	dokan_1_evt[1] = GSW(1704);
-	dokan_1_evt[2] = 1;
+	dokan_1_evt[2] = 2;
 
 	kusa_01_evt[1] = GSW(1717);
 	kusa_01_evt[2] = 23;
@@ -687,56 +687,56 @@ void ApplyUsuPatches(OSModuleInfo* module_info)
 
 	patch::writePatch(&villagerH_talk[0], villagerH_talk_hook, sizeof(villagerH_talk_hook));
 
-	villagerI_init[6] = GSW(1704);
-	villagerI_init[8] = 200;
+	villagerI_init[6] = GSW(1715);
+	villagerI_init[8] = 2;
 
-	villagerI_pig_init[6] = GSW(1704);
-	villagerI_pig_init[8] = 200;
+	villagerI_pig_init[6] = GSW(1715);
+	villagerI_pig_init[8] = 2;
 
 	patch::writePatch(&villagerI_talk[0], villagerI_talk_hook, sizeof(villagerI_talk_hook));
 
-	villagerJ_init[6] = GSW(1704);
-	villagerJ_init[8] = 200;
+	villagerJ_init[6] = GSW(1715);
+	villagerJ_init[8] = 2;
 
-	villagerJ_pig_init[6] = GSW(1704);
-	villagerJ_pig_init[8] = 200;
+	villagerJ_pig_init[6] = GSW(1715);
+	villagerJ_pig_init[8] = 2;
 
 	patch::writePatch(&villagerJ_talk[0], villagerJ_talk_hook, sizeof(villagerJ_talk_hook));
 
-	shop_man_init[6] = GSW(1704);
-	shop_man_init[8] = 200;
-	shop_man_init[10] = 219;
+	shop_man_init[6] = GSW(1715);
+	shop_man_init[8] = 2;
+	shop_man_init[10] = 14;
 
 	patch::writePatch(&shop_man_talk[0], shop_man_talk_hook, sizeof(shop_man_talk_hook));
 
 	shop_woman_talk[0] = EVT_HELPER_CMD(2, 24);
-	shop_woman_talk[1] = GSWF(6041);
+	shop_woman_talk[1] = GSWF(1925);
 	shop_woman_talk[2] = 0;
 	shop_woman_talk[3] = 0;
 	shop_woman_talk[135] = EVT_HELPER_CMD(0, 33);
 
 	patch::writePatch(&shop_woman_talk[136], shop_woman_talk_hook, sizeof(shop_woman_talk_hook));
 
-	kizayarou_init[6] = GSW(1704);
-	kizayarou_init[8] = 200;
-	kizayarou_init[16] = 219;
+	kizayarou_init[6] = GSW(1715);
+	kizayarou_init[8] = 2;
+	kizayarou_init[16] = 14;
 
-	kizayarou_pig_init[1] = GSW(1704);
-	kizayarou_pig_init[3] = 200;
+	kizayarou_pig_init[1] = GSW(1715);
+	kizayarou_pig_init[3] = 2;
 
-	kizayarou_talk[1] = GSW(1704);
-	kizayarou_talk[3] = 200;
+	kizayarou_talk[1] = GSW(1715);
+	kizayarou_talk[3] = 2;
 
-	aunt_init[6] = GSW(1704);
-	aunt_init[8] = 200;
+	aunt_init[6] = GSW(1715);
+	aunt_init[8] = 2;
 
-	aunt_pig_init[6] = GSW(1704);
-	aunt_pig_init[8] = 200;
+	aunt_pig_init[6] = GSW(1715);
+	aunt_pig_init[8] = 2;
 
-	aunt_talk[403] = GSW(1704);
-	aunt_talk[405] = 200;
-	aunt_talk[654] = 219;
-	aunt_talk[662] = 222;
+	aunt_talk[403] = GSW(1715);
+	aunt_talk[405] = 2;
+	aunt_talk[654] = 14;
+	aunt_talk[662] = 17;
 	aunt_talk[669] = 0;
 	aunt_talk[670] = 0;
 	aunt_talk[671] = 0;
@@ -746,7 +746,7 @@ void ApplyUsuPatches(OSModuleInfo* module_info)
 	aunt_talk[675] = 0;
 	aunt_talk[676] = 0;
 
-	childA_talk[1] = GSW(1704);
+	childA_talk[1] = GSW(1715);
 	childA_talk[3] = 200;
 	childA_talk[18] = 222;
 	childA_talk[21] = 0;
@@ -754,31 +754,31 @@ void ApplyUsuPatches(OSModuleInfo* module_info)
 	childA_talk[23] = 0;
 	childA_talk[24] = 0;
 
-	childB_talk[1] = GSW(1704);
-	childB_talk[3] = 200;
-	childB_talk[18] = 222;
+	childB_talk[1] = GSW(1715);
+	childB_talk[3] = 2;
+	childB_talk[18] = 17;
 	childB_talk[21] = 0;
 	childB_talk[22] = 0;
 	childB_talk[23] = 0;
 	childB_talk[24] = 0;
 
-	childC_talk[1] = GSW(1704);
-	childC_talk[3] = 200;
-	childC_talk[18] = 222;
+	childC_talk[1] = GSW(1715);
+	childC_talk[3] = 2;
+	childC_talk[18] = 17;
 	childC_talk[21] = 0;
 	childC_talk[22] = 0;
 	childC_talk[23] = 0;
 	childC_talk[24] = 0;
 
-	gatekeeper_init[6] = GSW(1704);
+	gatekeeper_init[6] = GSW(1704); //Need to hook
 	gatekeeper_init[8] = 4;
 	gatekeeper_init[21] = 200;
 
-	gatekeeper_pig_init[6] = GSW(1704);
+	gatekeeper_pig_init[6] = GSW(1704); //Need to hook
 	gatekeeper_pig_init[8] = 4;
 	gatekeeper_pig_init[16] = 200;
 
-	gatekeeper_talk[1] = GSW(1704);
+	gatekeeper_talk[1] = GSW(1704); //Need to hook
 	gatekeeper_talk[3] = 3;
 	gatekeeper_talk[75] = 4;
 	gatekeeper_talk[83] = 5;
@@ -795,39 +795,39 @@ void ApplyUsuPatches(OSModuleInfo* module_info)
 	gatekeeper_talk[134] = 0;
 
 	
-	musume_talk[1] = GSW(1704);
-	musume_talk[3] = 200;
-	musume_talk[18] = 215;
+	musume_talk[1] = GSW(1715);
+	musume_talk[3] = 2;
+	musume_talk[18] = 10;
 
 	evt_mon_open[1] = GSW(1704);
-	evt_mon_open[2] = 5;
-	evt_mon_open[105] = 6;
+	evt_mon_open[2] = 6;
+	evt_mon_open[105] = 7;
 
-	usu01_crowFG_talk_event[193] = GSWF(6039);
+	usu01_crowFG_talk_event[193] = GSW(1704);
 	usu01_crowFG_talk_event[194] = 1;
-	usu01_crowFG_talk_event[222] = GSW(1704);
-	usu01_crowFG_talk_event[224] = 210;
-	usu01_crowFG_talk_event[327] = 222;
+	usu01_crowFG_talk_event[222] = GSW(1717);
+	usu01_crowFG_talk_event[224] = 5;
+	usu01_crowFG_talk_event[327] = 17;
 
-	usu01_crowHI_talk_event[181] = GSWF(6039);
+	usu01_crowHI_talk_event[181] = GSW(1704);
 	usu01_crowHI_talk_event[182] = 1;
-	usu01_crowHI_talk_event[210] = GSW(1704);
-	usu01_crowHI_talk_event[212] = 210;
-	usu01_crowHI_talk_event[226] = 222;
+	usu01_crowHI_talk_event[210] = GSW(1717);
+	usu01_crowHI_talk_event[212] = 5;
+	usu01_crowHI_talk_event[226] = 17;
 
-	usu01_crowJ_talk_event[181] = GSWF(6039);
-	usu01_crowJ_talk_event[182] = 1;
-	usu01_crowJ_talk_event[210] = GSW(1704);
-	usu01_crowJ_talk_event[212] = 210;
-	usu01_crowJ_talk_event[220] = 222;
+	usu01_crowJ_talk_event[181] = GSW(1704);
+	usu01_crowJ_talk_event[182] = 0; //Unused
+	usu01_crowJ_talk_event[210] = GSW(1717);
+	usu01_crowJ_talk_event[212] = 5;
+	usu01_crowJ_talk_event[220] = 17;
 
-	loop_msg[1] = GSW(1704);
-	loop_msg[2] = 200;
-	loop_msg[6] = GSW(1704);
-	loop_msg[7] = 215;
+	loop_msg[1] = GSW(1715);
+	loop_msg[2] = 2;
+	loop_msg[6] = GSW(1715);
+	loop_msg[7] = 10;
 
 	mawari_house_delay[1] = GSW(1704);
-	mawari_house_delay[2] = 3;
+	mawari_house_delay[2] = 4;
 
 	evt_ie2_door2_1[150] = GSWF(6042);
 	evt_ie2_door2_1[151] = 1;
@@ -835,26 +835,26 @@ void ApplyUsuPatches(OSModuleInfo* module_info)
 	evt_ie2_door2_2[82] = GSWF(6042);
 	evt_ie2_door2_2[83] = 1;
 
-	usu01_gusun[1] = GSW(1704);
-	usu01_gusun[2] = 219;
-	usu01_gusun[31] = GSW(1704);
-	usu01_gusun[32] = 200;
+	usu01_gusun[1] = GSW(1715);
+	usu01_gusun[2] = 14;
+	usu01_gusun[31] = GSW(1715);
+	usu01_gusun[32] = 2;
 
 	evt_monban_buta_main[30] = GSW(1704);
-	evt_monban_buta_main[31] = 4;
+	evt_monban_buta_main[31] = 5;
 
 	evt_monban_buta[1] = GSW(1704);
-	evt_monban_buta[2] = 4;
+	evt_monban_buta[2] = 5;
 
 	evt_monban_buta2[1] = GSW(1704);
-	evt_monban_buta2[2] = 4;
+	evt_monban_buta2[2] = 5;
 
 	evt_monban_look[3] = GSW(1704);
-	evt_monban_look[4] = 5;
+	evt_monban_look[4] = 6;
 	evt_monban_look[8] = GSW(1704);
-	evt_monban_look[9] = 4;
+	evt_monban_look[9] = 5;
 	evt_monban_look[109] = GSW(1704);
-	evt_monban_look[110] = 5;
+	evt_monban_look[110] = 6;
 
 	unlock[9] = GSWF(6042);
 	unlock[10] = 1;
@@ -862,23 +862,23 @@ void ApplyUsuPatches(OSModuleInfo* module_info)
 	evt_majin2[210] = GSWF(6043);
 	evt_majin2[211] = 1;
 
-	usu_01_init_evt[23] = GSW(1704);
-	usu_01_init_evt[25] = 1;
-	usu_01_init_evt[26] = 200;
-	usu_01_init_evt[34] = 200;
-	usu_01_init_evt[35] = 215;
+	usu_01_init_evt[23] = GSW(1715);
+	usu_01_init_evt[25] = 0;
+	usu_01_init_evt[26] = 2;
+	usu_01_init_evt[34] = 2;
+	usu_01_init_evt[35] = 10;
 	usu_01_init_evt[44] = GSWF(6042);
 	usu_01_init_evt[45] = 1;
 	usu_01_init_evt[93] = GSW(1704);
-	usu_01_init_evt[94] = 3;
+	usu_01_init_evt[94] = 4;
 	usu_01_init_evt[106] = GSWF(6042);
 	usu_01_init_evt[107] = 1;
-	usu_01_init_evt[109] = GSW(1704);
-	usu_01_init_evt[110] = 200;
-	usu_01_init_evt[117] = GSW(1704);
-	usu_01_init_evt[118] = 213;
+	usu_01_init_evt[109] = GSW(1715);
+	usu_01_init_evt[110] = 2;
+	usu_01_init_evt[117] = GSW(1715);
+	usu_01_init_evt[118] = 8;
 	usu_01_init_evt[156] = GSW(1704);
-	usu_01_init_evt[157] = 6;
+	usu_01_init_evt[157] = 7;
 	usu_01_init_evt[309] = GSWF(6043);
 	usu_01_init_evt[310] = 1;
 
