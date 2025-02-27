@@ -190,9 +190,9 @@ void ApplyBomPatches(OSModuleInfo* module_info)
 	bom_02_init_evt[155] = GSW(1708);
 	bom_02_init_evt[156] = 16;
 
-	bom1000_jump[62] = 0x386006AC; // li r3, 0x6AC (GSW(1708))
+	bom1000_jump[60] = 0x3883082C; // addi r4, r4, 0x82C GSW(1708)
 	bom1000_jump[90] = 0x2C030011; // cmpwi r3, 0x11
 
-	jump_minnnanokoe[48] = 0x386006AC; // li r3, 0x6AC (GSW(1708))
+	jump_minnnanokoe[44] = 0x3883082C; // addi r4, r4, 0x82C GSW(1708)
 	jump_minnnanokoe[76] = 0x2C030011; // cmpwi r3, 0x11
 }

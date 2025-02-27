@@ -944,32 +944,32 @@ void ApplyTouPatches(OSModuleInfo* module_info)
 	tou_13_init_evt[111] = 16;
 
 	//Assembly
-	tou_disp_proc[17] = 0x386006A7; //li r3, 0x6A7 GSW(1703)
+	tou_disp_proc[18] = 0x38840827; // addi r4, r4, 0x827 GSW(1703)
 	tou_disp_proc[20] = 0x2C03001C; //cmpwi r3, 0x1C
 
-	tou_evt_tou_get_fighter_battle_msg[11] = 0x386006A7; //li r3, 0x6A7 GSW(1703)
+	tou_evt_tou_get_fighter_battle_msg[10] = 0x38840827; // addi r4, r4, 0x827 GSW(1703)
 	tou_evt_tou_get_fighter_battle_msg[13] = 0x2C03001C; //cmpwi r3, 0x1C
 
-	tou_evt_tou_get_fighter_info[11] = 0x386006A7; //li r3, 0x6A7 GSW(1703)
+	tou_evt_tou_get_fighter_info[10] = 0x38840827; // addi r4, r4, 0x827 GSW(1703)
 	tou_evt_tou_get_fighter_info[13] = 0x2C03001C; //cmpwi r3, 0x1C
 
-	tou_evt_tou_get_fighter_name2[11] = 0x386006A7; //li r3, 0x6A7 GSW(1703)
+	tou_evt_tou_get_fighter_name2[10] = 0x38840827; // addi r4, r4, 0x827 GSW(1703)
 	tou_evt_tou_get_fighter_name2[13] = 0x2C03001C; //cmpwi r3, 0x1C
 
-	tou_evt_tou_get_rule_info[11] = 0x386006A7; //li r3, 0x6A7 GSW(1703)
+	tou_evt_tou_get_rule_info[10] = 0x38840827; // addi r4, r4, 0x827 GSW(1703)
 	tou_evt_tou_get_rule_info[13] = 0x2C03001C; //cmpwi r3, 0x1C
 
-	tou_evt_tou_get_rule_msg2[11] = 0x386006A7; //li r3, 0x6A7 GSW(1703)
+	tou_evt_tou_get_rule_msg2[10] = 0x38840827; // addi r4, r4, 0x827 GSW(1703)
 	tou_evt_tou_get_rule_msg2[13] = 0x2C03001C; //cmpwi r3, 0x1C
 
-	tou_gans_tex[86] = 0x38840827; //addi r4, r4, 0x827 GSW(1703)
+	tou_gans_tex[86] = 0x38840827; // addi r4, r4, 0x827 GSW(1703)
 	tou_gans_tex[88] = 0x2C03001C; //cmpwi r3, 0x1C
 
-	tou_make_monitor[8] = 0x38850827; //addi r4, r5, 0x827 GSW(1703)
+	tou_make_monitor[8] = 0x38850827; // addi r4, r5, 0x827 GSW(1703)
 	tou_make_monitor[10] = 0x2C03001C; //cmpwi r3, 0x1C
 
-	tou_rankingInit[11] = 0x386006A7; //li r3, 0x6A7 GSW(1703)
+	tou_rankingInit[12] = 0x38840827; // addi r4, r4, 0x827 GSW(1703)
 	tou_rankingInit[14] = 0x2C03001C; //cmpwi r3, 0x1C
-	tou_rankingInit[94] = 0x386006A7; //li r3, 0x6A7 GSW(1703)
+	tou_rankingInit[95] = 0x38840827; // addi r4, r4, 0x827 GSW(1703)
 	tou_rankingInit[97] = 0x2C03001C; //cmpwi r3, 0x1C
 }

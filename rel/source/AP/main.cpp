@@ -60,6 +60,8 @@ extern int32_t mail_evt_pik_00[];
 extern int32_t mobj_save_blk_sysevt[];
 extern int32_t init_event[];
 extern int32_t evt_lecture_msg[];
+extern int32_t evt_msg_print_party[];
+extern int32_t evt_msg_print_party_add[];
 
 void ApplyMainAssemblyPatches()
 {
@@ -69,14 +71,14 @@ void ApplyMainAssemblyPatches()
 	winRootMain[40] = 0x386006A4; // li r3, 0x6A4 (GSW(1700))
 	winRootMain[82] = 0x386006A4; // li r3, 0x6A4 (GSW(1700))
 
-	compare_func3_r[29] = 0x386006B3; // li r3, 0x6B3 (GSW(1715))
+	compare_func3_r[30] = 0x38840833; // addi r4, r4, 0x833 GSW(1715)
 	compare_func3_r[32] = 0x2C030005; // cmpwi r3, 0x5
-	compare_func3_r[51] = 0x386006B3; // li r3, 0x6B3 (GSW(1715))
+	compare_func3_r[52] = 0x38840833; // addi r4, r4, 0x833 GSW(1715)
 	compare_func3_r[54] = 0x2C030005; // cmpwi r3, 0x5
 
-	compare_func3[29] = 0x386006B3; // li r3, 0x6B3 (GSW(1715))
+	compare_func3[30] = 0x38840833; // addi r4, r4, 0x833 GSW(1715)
 	compare_func3[32] = 0x2C030005; // cmpwi r3, 0x5
-	compare_func3[51] = 0x386006B3; // li r3, 0x6B3 (GSW(1715))
+	compare_func3[52] = 0x38840833; // addi r4, r4, 0x833 GSW(1715)
 	compare_func3[54] = 0x2C030005; // cmpwi r3, 0x5
 
 	mapGX[238] = 0x386006A4; // li r3, 0x6A4 (GSW(1700))
@@ -84,6 +86,7 @@ void ApplyMainAssemblyPatches()
 	patch::writeBranchPair(&mapGX[91], reinterpret_cast<void*>(bMapGXArrInject), reinterpret_cast<void*>(bMapGXArrInjectReturn));
 	patch::writeBranchPair(&mapGX[235], reinterpret_cast<void*>(bMapGXArrIncrement), reinterpret_cast<void*>(bMapGXArrIncrementReturn));
 	patch::writeBranchPair(&mapGX[243], reinterpret_cast<void*>(bMapGXChSplit), reinterpret_cast<void*>(bMapGXChSplitReturn));
+	//Still need to update tubuDt array with correct values
 
 	winGetMapTplName[3] = 0x386006A5; // li r3, 0x6A5 (GSW(1701))
 	winGetMapTplName[8] = 0x2C030001; // cmpwi r3, 0x1
@@ -130,7 +133,7 @@ void ApplyMainAssemblyPatches()
 	winLogMain[297] = 0x2C030001; // cmpwi r3, 0x1
 
 	patch::writeBranchPair(&winLogMain[432], reinterpret_cast<void*>(bWinLogArrInject), reinterpret_cast<void*>(bWinLogArrInjectReturn));
-	patch::writeBranchPair(&winLogMain[235], reinterpret_cast<void*>(bWinLogArrIncrement), reinterpret_cast<void*>(bWinLogArrIncrementReturn));
+	patch::writeBranchPair(&winLogMain[505], reinterpret_cast<void*>(bWinLogArrIncrement), reinterpret_cast<void*>(bWinLogArrIncrementReturn));
 
 	winLogInit[53] = 0x386006A4; // li r3, 0x6A4 (GSW(1700))
 	winLogInit[55] = 0x2C030000; // cmpwi r3, 0x0
@@ -142,35 +145,34 @@ void ApplyMainAssemblyPatches()
 	winLogInit[358] = 0x2C030001; // cmpwi r3, 0x1
 	winLogInit[362] = 0x386006AA; // li r3, 0x6AA (GSW(1706))
 	winLogInit[364] = 0x2C030026; // cmpwi r3, 0x26
-	winLogInit[669] = 0x386006AC; // li r3, 0x6AC (GSW(1708))
+	winLogInit[670] = 0x3884082C; // addi r4, r4, 0x82C GSW(1708)
 	winLogInit[672] = 0x2C030009; // cmpwi r3, 0x9
-	winLogInit[686] = 0x386006AC; // li r3, 0x6AC (GSW(1708))
+	winLogInit[687] = 0x3884082C; // addi r4, r4, 0x82C GSW(1708)
 	winLogInit[689] = 0x2C030010; // cmpwi r3, 0x10
 
-	monoshiriGX[230] = 0x386006B3; // li r3, 0x6B3 (GSW(1715))
+	monoshiriGX[231] = 0x38840833; // addi r4, r4, 0x833 GSW(1715)
 	monoshiriGX[233] = 0x2C030005; // cmpwi r3, 0x5
 
-	monosiri_disp[375] = 0x386006B3; // li r3, 0x6B3 (GSW(1715))
+	monosiri_disp[376] = 0x38840833; // addi r4, r4, 0x833 GSW(1715)
 	monosiri_disp[378] = 0x2C030005; // cmpwi r3, 0x5
 
 	winMain[184] = 0x386006A4; // li r3, 0x6A4 (GSW(1700))
 	winMain[186] = 0x2C030000; // cmpwi r3, 0x0
 	winMain[205] = 0x386006A4; // li r3, 0x6A4 (GSW(1700))
 	winMain[207] = 0x2C030000; // cmpwi r3, 0x0
-	winMain[231] = 0x386006A4; // li r3, 0x6A4 (GSW(1700))
+	winMain[232] = 0x38840824; // addi r4, r4, 0x824 GSW(1700)
 	winMain[234] = 0x2C030000; // cmpwi r3, 0x0
 
-	BattleInformationSetDropMaterial[87] = 0x386006A4; // li r3, 0x6A4 (GSW(1700))
+	BattleInformationSetDropMaterial[84] = 0x38830824; // addi r4, r3, 0x824 GSW(1700)
 	BattleInformationSetDropMaterial[89] = 0x2C030000; // cmpwi r3, 0x0
 
-	_rule_disp[9] = 0x386006A7; // li r3, 0x6A7 (GSW(1703))
+	_rule_disp[12] = 0x38840827; // addi r4, r4, 0x827 GSW(1703)
 	_rule_disp[14] = 0x2C03001C; // cmpwi r3, 0x1C
 
-	tou_gamen_screen_tev_init[25] = 0x386006A7; // li r3, 0x6A7 (GSW(1703))
+	tou_gamen_screen_tev_init[27] = 0x38840827; // addi r4, r4, 0x827 GSW(1703)
 	tou_gamen_screen_tev_init[48] = 0x2C030013; // cmpwi r3, 0x13
 
-	setupDataLoad[22] = 0x386006A4; // li r3, 0x6A4 (GSW(1700))
-	setupDataLoad[25] = 0x2C030002; // cmpwi r3, 0x2
+	setupDataLoad[23] = 0x38840824; // addi r4, r4, 0x824 GSW(1700)
 
 	patch::writeBranchBL(&badgeShop_bargainGeneration[7], reinterpret_cast<void*>(bChapterClearCheck));
 	badgeShop_bargainGeneration[8] = 0x2C030001; // cmpwi r3, 0x1
@@ -191,9 +193,9 @@ void ApplyMainAssemblyPatches()
 
 	patch::writeBranchBL(&johoya_data_make[11], reinterpret_cast<void*>(bJohoyaSeqAddition));
 
-	evt_shop_main_func[40] = 0x386006A4; // li r3, 0x6AA (GSW(1706))
+	evt_shop_main_func[41] = 0x3884082A; // addi r4, r4, 0x82C GSW(1706)
 	evt_shop_main_func[43] = 0x2C030020; // cmpwi r3, 0x20
-	evt_shop_main_func[46] = 0x386006A4; // li r3, 0x6AA (GSW(1706))
+	evt_shop_main_func[47] = 0x3884082A; // addi r4, r4, 0x82C GSW(1706)
 	evt_shop_main_func[49] = 0x2C030024; // cmpwi r3, 0x24
 
 	patch::writeBranchBL(&uranaisi_data_make_next[11], reinterpret_cast<void*>(bJohoyaSeqAddition));
@@ -201,6 +203,11 @@ void ApplyMainAssemblyPatches()
 	patch::writeBranchBL(&uranaisi_data_make_starpiece[11], reinterpret_cast<void*>(bJohoyaSeqAddition));
 
 	patch::writeBranchBL(&uranaisi_data_make_supercoin[11], reinterpret_cast<void*>(bJohoyaSeqAddition));
+
+	patch::writeBranchPair(&evt_msg_print_party[30], reinterpret_cast<void*>(bPrintPartyErrorFix), reinterpret_cast<void*>(bPrintPartyErrorFixReturn));
+
+	patch::writeBranchPair(&evt_msg_print_party_add[32], reinterpret_cast<void*>(bPrintPartyAddErrorFix), reinterpret_cast<void*>(bPrintPartyAddErrorFixReturn));
+
 
 	//sys_prolog[25] = 0x386006A4; // li r3, 0x6A4 (GSW(1700))
 	//sys_prolog[28] = 0x2C030002; // cmpwi r3, 0x2

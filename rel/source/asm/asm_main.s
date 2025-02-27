@@ -12,6 +12,10 @@
 .global bChapterClearCheck
 .global bChapterClearCheckReturn
 .global bJohoyaSeqAddition
+.global bPrintPartyErrorFix
+.global bPrintPartyErrorFixReturn
+.global bPrintPartyAddErrorFix
+.global bPrintPartyAddErrorFixReturn
 
 bMapGXArrInject:
 	lis %r3, win_log_mapGX_arr@ha
@@ -69,6 +73,7 @@ ChapterClearIncrement:
 	blr
 
 bJohoyaSeqAddition:
+	mflr %r28
 	li %r3, 0x6A4
 	li %r4, 0x1
 	li %r5, 0x0
@@ -80,7 +85,47 @@ JohoyaSeqLoop:
 	cmpwi %r3, 0x6B8
 	ble JohoyaSeqLoop
 	mr %r3, %r5
+	mtlr %r28
+	li %r28, 0x0
 	blr
+
+bPrintPartyAddErrorFix:
+	bl strcat
+	bl msgSearch
+	lis %r4, 0x802C
+	addi %r4, %r4, 0x30DC
+	cmpw %r3, %r4
+	bne bPrintPartyAddErrorFixReturn
+	mr %r4, %r30
+	lis %r3, 0x803D
+	ori %r3, %r3, 0xF508
+	bl strcpy
+	lis %r3, 0x803D
+	ori %r3, %r3, 0xF508
+	lis %r4, 0x8042
+	addi %r4, %r4, 0x1714
+	bl strcat
+bPrintPartyAddErrorFixReturn:
+	b 0
+
+bPrintPartyErrorFix:
+	bl strcat
+	bl msgSearch
+	lis %r4, 0x802C
+	addi %r4, %r4, 0x30DC
+	cmpw %r3, %r4
+	bne bPrintPartyErrorFixReturn
+	mr %r4, %r30
+	lis %r3, 0x803D
+	ori %r3, %r3, 0xF548
+	bl strcpy
+	lis %r3, 0x803D
+	ori %r3, %r3, 0xF548
+	lis %r4, 0x8042
+	addi %r4, %r4, 0x1714
+	bl strcat
+bPrintPartyErrorFixReturn:
+	b 0
 
 win_log_mapGX_arr:
 	.2byte 0x06A4

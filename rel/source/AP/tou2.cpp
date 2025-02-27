@@ -192,29 +192,29 @@ void ApplyTou2Patches(OSModuleInfo* module_info)
 	tou2_phase_event[373] = 14;
 
 	//Assembly
-	tou2_disp_proc[17] = 0x386006A7; //li r3, 0x6A7 GSW(1703)
+	tou2_disp_proc[18] = 0x38840827; // addi r4, r4, 0x827 GSW(1703)
 	tou2_disp_proc[20] = 0x2C03001C; //cmpwi r3, 0x1C
 
-	tou2_evt_tou_get_fighter_battle_msg[11] = 0x386006A7; //li r3, 0x6A7 GSW(1703)
+	tou2_evt_tou_get_fighter_battle_msg[10] = 0x38840827; // addi r4, r4, 0x827 GSW(1703)
 	tou2_evt_tou_get_fighter_battle_msg[13] = 0x2C03001C; //cmpwi r3, 0x1C
 
-	tou2_evt_tou_get_fighter_info[11] = 0x386006A7; //li r3, 0x6A7 GSW(1703)
+	tou2_evt_tou_get_fighter_info[10] = 0x38840827; // addi r4, r4, 0x827 GSW(1703)
 	tou2_evt_tou_get_fighter_info[13] = 0x2C03001C; //cmpwi r3, 0x1C
 
-	tou2_evt_tou_get_fighter_name2[11] = 0x386006A7; //li r3, 0x6A7 GSW(1703)
+	tou2_evt_tou_get_fighter_name2[10] = 0x38840827; // addi r4, r4, 0x827 GSW(1703)
 	tou2_evt_tou_get_fighter_name2[13] = 0x2C03001C; //cmpwi r3, 0x1C
 
-	tou2_evt_tou_get_rule_info[11] = 0x386006A7; //li r3, 0x6A7 GSW(1703)
+	tou2_evt_tou_get_rule_info[10] = 0x38840827; // addi r4, r4, 0x827 GSW(1703)
 	tou2_evt_tou_get_rule_info[13] = 0x2C03001C; //cmpwi r3, 0x1C
 
-	tou2_evt_tou_get_rule_msg2[11] = 0x386006A7; //li r3, 0x6A7 GSW(1703)
+	tou2_evt_tou_get_rule_msg2[10] = 0x38840827; // addi r4, r4, 0x827 GSW(1703)
 	tou2_evt_tou_get_rule_msg2[13] = 0x2C03001C; //cmpwi r3, 0x1C
 
-	tou2_rankingInit[11] = 0x386006A7; //li r3, 0x6A7 GSW(1703)
+	tou2_rankingInit[12] = 0x38840827; // addi r4, r4, 0x827 GSW(1703)
 	tou2_rankingInit[14] = 0x2C03001C; //cmpwi r3, 0x1C
-	tou2_rankingInit[94] = 0x386006A7; //li r3, 0x6A7 GSW(1703)
+	tou2_rankingInit[95] = 0x38840827; // addi r4, r4, 0x827 GSW(1703)
 	tou2_rankingInit[97] = 0x2C03001C; //cmpwi r3, 0x1C
 
-	screen_init[74] = 0x386006A7; //li r3, 0x6A7 GSW(1703)
+	screen_init[72] = 0x38840827; // addi r4, r4, 0x827 GSW(1703)
 	screen_init[76] = 0x2C03001C; //cmpwi r3, 0x1C
 }

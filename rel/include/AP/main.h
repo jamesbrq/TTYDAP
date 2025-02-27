@@ -14,6 +14,10 @@ extern "C" {
 	void bChapterClearCheck();
 	void bChapterClearCheckReturn();
 	void bJohoyaSeqAddition();
+	void bPrintPartyErrorFix();
+	void bPrintPartyErrorFixReturn();
+	void bPrintPartyAddErrorFix();
+	void bPrintPartyAddErrorFixReturn();
 }
 
 void ApplyMainAssemblyPatches();

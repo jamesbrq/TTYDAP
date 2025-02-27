@@ -644,11 +644,11 @@ void ApplyAjiPatches(OSModuleInfo* module_info)
 	aji_19_init_evt[43] = GSW(1707);
 	aji_19_init_evt[44] = 8;
 
-	check_kou_evt[15] = 0x386006A7; // li r3, 0x6A7 (GSW(1703))
+	check_kou_evt[13] = 0x38840827; // addi r4, r4, 0x827 GSW(1703)
 	check_kou_evt[17] = 0x2C030016; // cmpwi r3, 0x16
-	check_kou_evt[27] = 0x386006A7; // li r3, 0x6A7 (GSW(1703))
+	check_kou_evt[28] = 0x38840827; // addi r4, r4, 0x827 GSW(1703)
 	check_kou_evt[30] = 0x2C030016; // cmpwi r3, 0x18
 
-	mario_chk[172] = 0x386006AB; // li r3, 0x6AB (GSW(1707))
+	mario_chk[173] = 0x3884082B; // addi r4, r4, 0x82B GSW(1707)
 	mario_chk[175] = 0x2C03000C; // cmpwi r3, 0xC
 }
