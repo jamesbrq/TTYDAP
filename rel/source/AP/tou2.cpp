@@ -114,8 +114,8 @@ void ApplyTou2Patches(OSModuleInfo* module_info)
 	evt_default_opening[616] = 12;
 	evt_default_opening[617] = 28;
 	evt_default_opening[622] = 28;
-	evt_default_opening[633] = GSW(1703);
-	evt_default_opening[635] = 28;
+	evt_default_opening[634] = GSW(1703);
+	evt_default_opening[636] = 28;
 	evt_default_opening[675] = GSW(1703);
 	evt_default_opening[676] = 28;
 

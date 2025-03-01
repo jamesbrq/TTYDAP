@@ -179,6 +179,7 @@ extern int32_t tou_evt_tou_get_rule_msg2[];
 extern int32_t tou_gans_tex[];
 extern int32_t tou_make_monitor[];
 extern int32_t tou_rankingInit[];
+extern int32_t chk[];
 
 
 EVT_BEGIN(talk_sakaba_evt)
@@ -972,4 +973,6 @@ void ApplyTouPatches(OSModuleInfo* module_info)
 	tou_rankingInit[14] = 0x2C03001C; //cmpwi r3, 0x1C
 	tou_rankingInit[95] = 0x38840827; // addi r4, r4, 0x827 GSW(1703)
 	tou_rankingInit[97] = 0x2C03001C; //cmpwi r3, 0x1C
+
+	chk[9] = 0x38800000; //li r4, 0x0
 }

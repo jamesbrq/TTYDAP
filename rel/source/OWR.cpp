@@ -105,11 +105,6 @@ namespace mod::owr
 
 	void OWR::SequenceInit()
 	{
-		if (ttyd::mario_pouch::pouchCheckItem(ItemId::ULTRA_BOOTS) == 0)
-		{
-			ttyd::mario_pouch::pouchGetItem(ItemId::ULTRA_BOOTS);
-			ttyd::mario_pouch::pouchGetItem(ItemId::SPIKE_SHIELD);
-		}
 		uint32_t SequencePosition = ttyd::swdrv::swByteGet(1700);
 		if (SequencePosition != 0)
 			return;
@@ -123,13 +118,18 @@ namespace mod::owr
 		ttyd::mario_pouch::pouchSetMaxFP(99);
 		ttyd::mario_pouch::pouchSetHP(99);
 		ttyd::mario_pouch::pouchSetFP(99);
-		ttyd::mario_pouch::pouchAddAP(96);
 
 		uint8_t goombella = static_cast<uint8_t>(ttyd::party::PartyMembers::Goombella);
 		uint8_t yoshi = static_cast<uint8_t>(ttyd::party::PartyMembers::Yoshi);
+		uint8_t bobbery = static_cast<uint8_t>(ttyd::party::PartyMembers::Bobbery);
+		uint8_t koops = static_cast<uint8_t>(ttyd::party::PartyMembers::Koops);
+		uint8_t flurrie = static_cast<uint8_t>(ttyd::party::PartyMembers::Flurrie);
 
 		ttyd::mario_party::partyJoin(goombella);
 		ttyd::mario_party::partyJoin(yoshi);
+		ttyd::mario_party::partyJoin(bobbery);
+		ttyd::mario_party::partyJoin(koops);
+		ttyd::mario_party::partyJoin(flurrie);
 
 		ttyd::mario_party::marioPartyHello(goombella);
 
@@ -148,6 +148,11 @@ namespace mod::owr
 		ttyd::mario_pouch::pouchGetItem(ItemId::INVALID_ITEM_TUBE_MODE_ICON);
 		for(int i = 0; i <= 10; i++)
 			ttyd::mario_pouch::pouchGetItem(ItemId::POWER_PLUS);
+		ttyd::mario_pouch::pouchGetItem(ItemId::SPIKE_SHIELD);
+		ttyd::mario_pouch::pouchGetItem(ItemId::MULTIBOUNCE);
+		ttyd::mario_pouch::pouchGetItem(ItemId::POWER_BOUNCE);
+		ttyd::mario_pouch::pouchGetItem(ItemId::CONTACT_LENS);
+		ttyd::mario_pouch::pouchGetItem(ItemId::BLIMP_TICKET);
 	}
 
 	void OWR::LZTest()
