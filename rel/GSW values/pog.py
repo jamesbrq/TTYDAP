@@ -1,15 +1,15 @@
-instruction = 0x805BEEFC
-base = 0x805BE698
+instruction = 0x805F6AA8
+base = 0x805F6838
 strings = [
   ""
 ]
 
-text = "にせマリオ"
+text = "キノシコワ"
 hex_data = text.encode('shift_jis')
 literal_hex_string = ''.join(f'\\x{byte:02X}' for byte in hex_data)
-c_literal = f'const char doopliss[] = "{literal_hex_string}";'
+c_literal = f'const char jolene[] = "{literal_hex_string}";'
 
-#print(c_literal)
+print(c_literal)
 
 split = strings[0].split(":")[1:]
 

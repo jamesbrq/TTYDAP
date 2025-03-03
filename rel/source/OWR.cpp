@@ -9,10 +9,11 @@
 #include <ttyd/mario_party.h>
 #include <ttyd/mario_pouch.h>
 #include <ttyd/party.h>
+#include <ttyd/msgdrv.h>
 #include <ttyd/fontmgr.h>
 #include <ttyd/seqdrv.h>
-#include <ttyd/event.h>
 #include <ttyd/string.h>
+#include <ttyd/event.h>
 #include <AP/aaa.h>
 #include <AP/aji.h>
 #include <AP/bom.h>
@@ -52,6 +53,7 @@ using gc::OSLink::OSModuleInfo;
 using ::ttyd::common::ShopItemData;
 using namespace ::ttyd::common;
 using ::ttyd::seqdrv::SeqIndex;
+using ::ttyd::string::strcmp;
 
 namespace ItemId = ::ttyd::common::ItemId;
 namespace ModuleId = ::ttyd::common::ModuleId;
@@ -102,6 +104,7 @@ namespace mod::owr
 	void* (*g_itemEntry_trampoline)(const char*, uint32_t, uint32_t, int32_t, void*, float, float, float) = nullptr;
 	bool (*g_OSLink_trampoline)(OSModuleInfo*, void*) = nullptr;
 	void (*g_stg0_00_init_trampoline)() = nullptr;
+	const char* (*g_msgSearch_trampoline)(const char*) = nullptr;
 
 	void OWR::SequenceInit()
 	{
@@ -187,6 +190,22 @@ namespace mod::owr
 					gSelf->OnModuleLoaded(new_module);
 				}
 				return result;
+			});
+
+		g_msgSearch_trampoline = patch::hookFunction(
+			ttyd::msgdrv::msgSearch, [](const char* msgKey) {
+				if (!strcmp(msgKey, "jolene_fukidashi"))
+				{
+					return "Oh my!<wait 100> Excuse me.\n"
+							"<k>";
+				}
+				if (!strcmp(msgKey, "jolene_fukidashi_end"))
+				{
+					return "Well then.<wait 100> Shall we\n"
+							"get going?\n";
+							"<k>";
+				}
+				return g_msgSearch_trampoline(msgKey);
 			});
 
 		g_stg0_00_init_trampoline = patch::hookFunction(

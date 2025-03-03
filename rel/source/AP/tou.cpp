@@ -1,5 +1,6 @@
 #include <AP/tou.h>
 #include <ttyd/evt_cam.h>
+#include <ttyd/evt_eff.h>
 #include <ttyd/evt_npc.h>
 #include <ttyd/evt_nannpc.h>
 #include <ttyd/evt_msg.h>
@@ -158,8 +159,10 @@ extern int32_t talk_iron[];
 extern int32_t init_iron2[];
 extern int32_t talk_iron2[];
 extern int32_t evt_saisyo_after[];
+extern int32_t evt_tou_chibi_yoshi[];
 extern int32_t evt_okorareru[];
 extern int32_t tou_evt_block_10[];
+extern int32_t tou_10_evt_1st_leagu[];
 extern int32_t tou_10_init_evt[];
 extern int32_t tou_11_init_evt[];
 extern int32_t tou_evt_block_broken_12[];
@@ -184,6 +187,8 @@ extern int32_t tou_gans_tex[];
 extern int32_t tou_make_monitor[];
 extern int32_t tou_rankingInit[];
 extern int32_t chk[];
+
+const char jolene[] = "\x83\x4C\x83\x6D\x83\x56\x83\x52\x83\x8F";
 
 
 EVT_BEGIN(talk_sakaba_evt)
@@ -227,6 +232,33 @@ EVT_BEGIN(talk_gard_hook)
 	RUN_CHILD_EVT(talk_gard_evt)
 	RETURN()
 EVT_END()
+
+EVT_BEGIN(jolene_egg_evt)
+	WAIT_MSEC(300)
+	USER_FUNC(evt_npc::evt_npc_set_ry, PTR(jolene), 90)
+	USER_FUNC(evt_eff::evt_eff_fukidashi, 1, 0, PTR(jolene), 0, 0, 0, 0, 0, 0, 0, 30)
+	WAIT_MSEC(300)
+	USER_FUNC(evt_msg::evt_msg_print, 0, PTR("jolene_fukidashi"), 0, PTR(jolene))
+	WAIT_MSEC(300)
+	USER_FUNC(evt_npc::evt_npc_set_anim, PTR(jolene), PTR("M_1"))
+	WAIT_MSEC(600)
+	USER_FUNC(evt_npc::evt_npc_set_anim, PTR(jolene), PTR("S_1"))
+	USER_FUNC(evt_npc::evt_npc_set_ry, PTR(jolene), 270)
+	USER_FUNC(evt_npc::evt_npc_status_onoff, 1, PTR(jolene), 2)
+	USER_FUNC(evt_npc::evt_npc_move_position, PTR(jolene), -130, 0, -120, FLOAT(80.0), 1)
+	USER_FUNC(evt_npc::evt_npc_set_ry, PTR(jolene), 90)
+	RUN_CHILD_EVT(evt_tou_chibi_yoshi)
+	WAIT_MSEC(300)
+	USER_FUNC(evt_msg::evt_msg_print, 0, PTR("jolene_fukidashi_end"), 0, PTR(jolene))
+	USER_FUNC(evt_npc::evt_npc_set_anim, PTR(jolene), PTR("M_1"))
+	WAIT_MSEC(600)
+	RETURN()
+EVT_END()
+
+EVT_BEGIN(jolene_egg_hook)
+	RUN_CHILD_EVT(jolene_egg_evt)
+	GOTO(&tou_10_evt_1st_leagu[156])
+EVT_PATCH_END()
 
 void ApplyTouPatches(OSModuleInfo* module_info)
 {
@@ -895,6 +927,8 @@ void ApplyTouPatches(OSModuleInfo* module_info)
 
 	tou_evt_block_10[1] = GSWF(6037);
 	tou_evt_block_10[2] = 1;
+
+	patch::writePatch(&tou_10_evt_1st_leagu[150], jolene_egg_evt, sizeof(jolene_egg_evt));
 
 	tou_10_init_evt[1] = GSW(1703);
 	tou_10_init_evt[3] = 1;
