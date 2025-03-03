@@ -26,13 +26,13 @@ EVT_DECLARE_USER_FUNC(evt_mario_goodbye_party, 1)
 // evt_mario_set_prev_party_pos
 // evt_mario_set_prev_party
 EVT_DECLARE_USER_FUNC(evt_mario_set_party_pos, 5)
+EVT_DECLARE_USER_FUNC(evt_mario_hello_party, 2)
 // evt_mario_set_party
 // evt_mario_hello_exparty_pos
-// evt_mario_hello_party
 // evt_mario_set_prev_party_dokan
 // evt_mario_party_use_check
-// evt_mario_chk_join_party
 // evt_mario_get_exparty
+EVT_DECLARE_USER_FUNC(evt_mario_chk_join_party, 2)
 EVT_DECLARE_USER_FUNC(evt_mario_get_party, 1)
 EVT_DECLARE_USER_FUNC(evt_mario_set_mode, 1)
 // evt_peach_set_condition

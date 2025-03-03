@@ -12,6 +12,7 @@
 #include <ttyd/evt_snd.h>
 #include <ttyd/evt_urouro.h>
 #include <ttyd/mario_pouch.h>
+#include <ttyd/evtmgr_cmd.h>
 #include "evt_cmd.h"
 #include "common_types.h"
 #include "patch.h"
@@ -28,10 +29,10 @@ EVT_DEFINE_USER_FUNC(checkChapterRequirements) {
 	{
 		count += mario_pouch::pouchCheckItem(i);
 	}
-	if(count >= state.rChapters)
-		evt->evtArguments[0] = 1;
+	if (count >= state.rChapters)
+		evtmgr_cmd::evtSetValue(evt, evt->evtArguments[0], 1);
 	else
-		evt->evtArguments[0] = 0;
+		evtmgr_cmd::evtSetValue(evt, evt->evtArguments[0], 0);
 	return 2;
 }
 
@@ -42,7 +43,7 @@ EVT_DEFINE_USER_FUNC(checkChapterClears) {
 	{
 		count += mario_pouch::pouchCheckItem(i);
 	}
-	evt->evtArguments[0] = count;
+	evtmgr_cmd::evtSetValue(evt, evt->evtArguments[0], count);
 	return 2;
 }
 

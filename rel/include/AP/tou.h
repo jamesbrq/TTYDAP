@@ -1,6 +1,7 @@
 #pragma once
 
 #include <gc/OSLink.h>
+#include <ttyd/evtmgr.h>
 
 using namespace gc::OSLink;
 

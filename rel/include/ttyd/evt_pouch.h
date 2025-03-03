@@ -18,7 +18,7 @@ EVT_DECLARE_USER_FUNC(evt_pouch_get_havebadgecnt, 1)
 // evt_pouch_get_haveitemcnt
 // evt_pouch_all_party_recovery
 // evt_pouch_mario_recovery
-// evt_pouch_party_left
+EVT_DECLARE_USER_FUNC(evt_pouch_party_left, 1)
 EVT_DECLARE_USER_FUNC(evt_pouch_party_join, 1)
 // evt_pouch_set_ap
 // evt_pouch_get_max_ap
