@@ -235,29 +235,50 @@ EVT_END()
 
 EVT_BEGIN(jolene_egg_evt)
 	WAIT_MSEC(300)
+	IF_EQUAL(GSWF(6075), 1)
+		GOTO(99)
+	END_IF()
 	USER_FUNC(evt_npc::evt_npc_set_ry, PTR(jolene), 90)
-	USER_FUNC(evt_eff::evt_eff_fukidashi, 1, 0, PTR(jolene), 0, 0, 0, 0, 0, 0, 0, 30)
 	WAIT_MSEC(300)
+	USER_FUNC(evt_eff::evt_eff_fukidashi, 1, 0, PTR(jolene), 0, 0, 0, 0, 0, 0, 0, 0)
 	USER_FUNC(evt_msg::evt_msg_print, 0, PTR("jolene_fukidashi"), 0, PTR(jolene))
 	WAIT_MSEC(300)
 	USER_FUNC(evt_npc::evt_npc_set_anim, PTR(jolene), PTR("M_1"))
 	WAIT_MSEC(600)
 	USER_FUNC(evt_npc::evt_npc_set_anim, PTR(jolene), PTR("S_1"))
+	INLINE_EVT()
+		USER_FUNC(evt_npc::evt_npc_set_ry, PTR(jolene), 270)
+		WAIT_MSEC(600)
+		USER_FUNC(evt_npc::evt_npc_move_position, PTR(jolene), -90, -60, 0, FLOAT(80.0), 1)
+		USER_FUNC(evt_npc::evt_npc_move_position, PTR(jolene), -130, -60, 0, FLOAT(80.0), 1)
+		USER_FUNC(evt_npc::evt_npc_set_ry, PTR(jolene), 90)
+		WAIT_MSEC(300)
+	END_INLINE()
+	RUN_CHILD_EVT(&evt_tou_chibi_yoshi)
+	WAIT_MSEC(300)
+	USER_FUNC(evt_npc::evt_npc_move_position, PTR(jolene), 10, -60, 0, FLOAT(80.0), 1)
+	USER_FUNC(evt_npc::evt_npc_move_position, PTR(jolene), 10, -95, 0, FLOAT(80.0), 1)
 	USER_FUNC(evt_npc::evt_npc_set_ry, PTR(jolene), 270)
-	USER_FUNC(evt_npc::evt_npc_status_onoff, 1, PTR(jolene), 2)
-	USER_FUNC(evt_npc::evt_npc_move_position, PTR(jolene), -130, 0, -120, FLOAT(80.0), 1)
-	USER_FUNC(evt_npc::evt_npc_set_ry, PTR(jolene), 90)
-	RUN_CHILD_EVT(evt_tou_chibi_yoshi)
 	WAIT_MSEC(300)
 	USER_FUNC(evt_msg::evt_msg_print, 0, PTR("jolene_fukidashi_end"), 0, PTR(jolene))
+	WAIT_MSEC(300)
 	USER_FUNC(evt_npc::evt_npc_set_anim, PTR(jolene), PTR("M_1"))
 	WAIT_MSEC(600)
+	USER_FUNC(evt_npc::evt_npc_set_anim, PTR(jolene), PTR("S_1"))
+	USER_FUNC(evt_npc::evt_npc_status_onoff, 1, PTR(jolene), 2)
+	LBL(99)
+	USER_FUNC(evt_npc::evt_npc_move_position, PTR(jolene), 0, -130, 0, FLOAT(80.0), 1)
 	RETURN()
 EVT_END()
 
 EVT_BEGIN(jolene_egg_hook)
 	RUN_CHILD_EVT(jolene_egg_evt)
-	GOTO(&tou_10_evt_1st_leagu[156])
+	GOTO(&tou_10_evt_1st_leagu[173])
+EVT_PATCH_END()
+
+EVT_BEGIN(yoshi_gswf_evt)
+	SET(GSWF(6075), 1)
+	GOTO(&evt_tou_chibi_yoshi[102])
 EVT_PATCH_END()
 
 void ApplyTouPatches(OSModuleInfo* module_info)
@@ -272,7 +293,7 @@ void ApplyTouPatches(OSModuleInfo* module_info)
 	talk_gardman[173] = GSW(1703);
 	talk_gardman[174] = 28;
 
-	patch::writePatch(&talk_gardman[185], talk_gard_hook, sizeof(talk_gard_hook));
+	//patch::writePatch(&talk_gardman[185], talk_gard_hook, sizeof(talk_gard_hook));
 
 	evt_tou_match_make_default_sub[147] = GSW(1703);
 	evt_tou_match_make_default_sub[148] = 28;
@@ -909,12 +930,18 @@ void ApplyTouPatches(OSModuleInfo* module_info)
 
 	init_iron[1] = GSW(1703);
 	init_iron[2] = 28;
+	init_iron[6] = EVT_HELPER_CMD(2, 29);
+	init_iron[7] = GSW(1703);
+	init_iron[8] = 12;
 
 	talk_iron[1] = GSW(1703);
 	talk_iron[2] = 28;
 
 	init_iron2[1] = GSW(1703);
 	init_iron2[2] = 28;
+	init_iron2[6] = EVT_HELPER_CMD(2, 29);
+	init_iron2[7] = GSW(1703);
+	init_iron2[8] = 12;
 
 	talk_iron2[1] = GSW(1703);
 	talk_iron2[2] = 28;
@@ -928,7 +955,10 @@ void ApplyTouPatches(OSModuleInfo* module_info)
 	tou_evt_block_10[1] = GSWF(6037);
 	tou_evt_block_10[2] = 1;
 
-	patch::writePatch(&tou_10_evt_1st_leagu[150], jolene_egg_evt, sizeof(jolene_egg_evt));
+	patch::writePatch(&tou_10_evt_1st_leagu[148], jolene_egg_hook, sizeof(jolene_egg_hook));
+
+	patch::writePatch(&evt_tou_chibi_yoshi[73], yoshi_gswf_evt, sizeof(yoshi_gswf_evt));
+
 
 	tou_10_init_evt[1] = GSW(1703);
 	tou_10_init_evt[3] = 1;

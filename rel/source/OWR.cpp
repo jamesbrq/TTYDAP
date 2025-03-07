@@ -196,14 +196,11 @@ namespace mod::owr
 			ttyd::msgdrv::msgSearch, [](const char* msgKey) {
 				if (!strcmp(msgKey, "jolene_fukidashi"))
 				{
-					return "Oh my!<wait 100> Excuse me.\n"
-							"<k>";
+					return "Oh my!<wait 100> Excuse me.\n<k>";
 				}
 				if (!strcmp(msgKey, "jolene_fukidashi_end"))
 				{
-					return "Well then.<wait 100> Shall we\n"
-							"get going?\n";
-							"<k>";
+					return "Well then.<wait 100> Shall we\nget going?\n<k>";
 				}
 				return g_msgSearch_trampoline(msgKey);
 			});
