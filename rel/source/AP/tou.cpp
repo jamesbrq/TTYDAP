@@ -22,6 +22,10 @@
 using namespace mod;
 using namespace ttyd;
 
+extern "C" {
+	EVT_DECLARE_USER_FUNC(evt_tou_get_ranking, 1)
+}
+
 extern int32_t evt_open_tou[];
 extern int32_t talk_gardman[];
 extern int32_t evt_tou_match_make_default_sub[];
@@ -281,6 +285,28 @@ EVT_BEGIN(yoshi_gswf_evt)
 	GOTO(&evt_tou_chibi_yoshi[102])
 EVT_PATCH_END()
 
+EVT_BEGIN(tou_04_init_evt_evt)
+	SET(LW(0), 7)
+	RUN_CHILD_EVT(evt_bero::bero_case_switch_on)
+	USER_FUNC(evt_tou_get_ranking, LW(0))
+	IF_SMALL(LW(0), 11)
+		SET(LW(0), 6)
+		RUN_CHILD_EVT(evt_bero::bero_case_switch_on)
+	END_IF()
+	USER_FUNC(evt_tou_get_ranking, LW(0))
+	IF_SMALL(LW(0), 1)
+		SET(LW(0), 3)
+		RUN_CHILD_EVT(evt_bero::bero_case_switch_on)
+	END_IF()
+	RETURN()
+EVT_PATCH_END()
+
+
+EVT_BEGIN(tou_04_init_evt_hook)
+	RUN_CHILD_EVT(tou_04_init_evt_evt)
+	GOTO(&tou_04_init_evt[425])
+EVT_PATCH_END()
+
 void ApplyTouPatches(OSModuleInfo* module_info)
 {
 	evt_open_tou[1] = GSW(1703);
@@ -316,12 +342,6 @@ void ApplyTouPatches(OSModuleInfo* module_info)
 	evt_tou_match_make_default[171] = 19;
 	evt_tou_match_make_default[176] = 0;
 
-	evt_mail_1[153] = GSW(1703);
-	evt_mail_1[154] = 14;
-
-	evt_mail_3[153] = GSW(1703);
-	evt_mail_3[154] = 15;
-
 	evt_tou_match_after_default[31] = GSW(1703);
 	evt_tou_match_after_default[32] = 11;
 	evt_tou_match_after_default[34] = GSW(1703);
@@ -332,6 +352,9 @@ void ApplyTouPatches(OSModuleInfo* module_info)
 	evt_tou_match_after_default[1381] = 11;
 	evt_tou_match_after_default[1394] = GSW(1703);
 	evt_tou_match_after_default[1395] = 11;
+	evt_tou_match_after_default[1524] = 99; //UNUSED
+	evt_tou_match_after_default[1535] = 99; //UNUSED
+	evt_tou_match_after_default[1574] = 99; //UNUSED
 
 	tou_00_init_evt[7] = GSW(1715);
 	tou_00_init_evt[8] = 10;
@@ -695,6 +718,7 @@ void ApplyTouPatches(OSModuleInfo* module_info)
 	tou_04_init_evt[388] = GSW(1703);
 	tou_04_init_evt[390] = 4;
 	tou_04_init_evt[392] = 5;
+	patch::writePatch(&tou_04_init_evt[402], tou_04_init_evt_hook, sizeof(tou_04_init_evt_hook));
 	tou_04_init_evt[437] = GSW(1703);
 	tou_04_init_evt[438] = 0; //Unused
 	tou_04_init_evt[446] = GSW(1703);
