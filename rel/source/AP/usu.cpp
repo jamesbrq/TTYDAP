@@ -99,6 +99,11 @@ extern int32_t evt_usu_kagemario_party_kill_usu[];
 extern int32_t usu_evt_kagemario_init[];
 
 const char usuVillagerA[] = "\x91\xBA\x90\x6C\x82\x60";
+const char gatekeeper_pig[] = "\x83\x75\x83\x5E\x96\xE5\x94\xD4";
+const char gatekeeper[] = "\x96\xE5\x94\xD4";
+const char doopliss[] = "\x82\xC9\x82\xB9\x83\x7D\x83\x8A\x83\x49";
+const char mayor_pig[] = "\x83\x75\x83\x5E\x91\xBA\x92\xB7";
+const char mayor[] = "\x91\xBA\x92\xB7";
 
 EVT_BEGIN(villagerA_init_evt)
 	IF_LARGE_EQUAL(GSW(1717), 22)
@@ -518,17 +523,178 @@ EVT_BEGIN(usu_00_init_evt_evt)
 		RETURN()
 	END_IF()
 	SWITCH(GSW(1704))
-		CASE_EQUAL(2)
+		CASE_SMALL(2)
 			RUN_EVT(&usu00_stage4_coming_event)
+			RETURN()
 		CASE_END()
 		CASE_BETWEEN(3, 3)
 			RUN_EVT(&chief_pig_event)
+			RETURN()
 		CASE_END()
+	END_SWITCH()
+	RETURN()
 EVT_END()
 
 EVT_BEGIN(usu_00_init_evt_hook)
 	RUN_CHILD_EVT(usu_00_init_evt_evt)
 	GOTO(&usu_00_init_evt[414])
+EVT_PATCH_END()
+
+EVT_BEGIN(gatekeeper_talk_evt)
+	SWITCH(GSW(1715))
+		CASE_SMALL(2)
+			IF_LARGE_EQUAL(GSW(1704), 6)
+				USER_FUNC(evt_npc::evt_npc_get_position, PTR("me"), LW(0), LW(1), LW(2))
+				USER_FUNC(evt_snd::evt_snd_sfxon_3d, PTR("SFX_STG4_VOICE_PIG1"), LW(0), LW(1), LW(2), 0)
+				USER_FUNC(evt_msg::evt_msg_print, 0, PTR("stg4_usu_48"), 0, PTR("me"))
+				RETURN()
+			END_IF()
+		CASE_END()
+		CASE_SMALL(14)
+			USER_FUNC(evt_msg::evt_msg_print, 0, PTR("stg4_usu_49"), 0, PTR("me"))
+			RETURN()
+		CASE_END()
+		CASE_SMALL(17)
+			USER_FUNC(evt_msg::evt_msg_print, 0, PTR("stg4_usu_49_1"), 0, PTR("me"))
+			RETURN()
+		CASE_END()
+	END_SWITCH()
+	IF_SMALL(GSW(1708), 18)
+		USER_FUNC(evt_msg::evt_msg_print, 0, PTR("stg4_usu_49_2"), 0, PTR("me"))
+		RETURN()
+	END_IF()
+	USER_FUNC(evt_msg::evt_msg_print, 0, PTR("stg4_usu_49_2_1"), 0, PTR("me"))
+	RETURN()
+EVT_END()
+
+EVT_BEGIN(gatekeeper_talk_hook)
+	RUN_CHILD_EVT(gatekeeper_talk_evt)
+	RETURN()
+EVT_PATCH_END()
+
+EVT_BEGIN(gatekeeper_pig_init_evt)
+	IF_SMALL(GSW(1704), 5)
+		USER_FUNC(evt_npc::evt_npc_set_position, PTR(gatekeeper_pig), 0, -2000, 0)
+		RETURN()
+	END_IF()
+	IF_SMALL(GSW(1715), 2)
+		IF_LARGE_EQUAL(GSW(1704), 5)
+			USER_FUNC(evt_npc::evt_npc_set_position, PTR(gatekeeper_pig), 400, 0, -55)
+			RETURN()
+		END_IF()
+	END_IF()
+	USER_FUNC(evt_npc::evt_npc_set_position, PTR(gatekeeper_pig), 0, -2000, 0)
+	RETURN()
+EVT_END()
+
+EVT_BEGIN(gatekeeper_pig_init_hook)
+	RUN_CHILD_EVT(gatekeeper_pig_init_evt)
+	RETURN()
+EVT_PATCH_END()
+
+EVT_BEGIN(gatekeeper_init_evt)
+	IF_SMALL(GSW(1704), 5)
+		SET(LW(0), PTR("e_bero"))
+		RUN_CHILD_EVT(evt_bero::bero_case_switch_off)
+		USER_FUNC(evt_npc::evt_npc_set_position, PTR(gatekeeper), 400, 0, -55)
+		RETURN()
+	END_IF()
+	IF_SMALL(GSW(1715), 2)
+		IF_LARGE_EQUAL(GSW(1704), 5)
+			USER_FUNC(evt_npc::evt_npc_set_position, PTR(gatekeeper), 0, -2000, 0)
+			RETURN()
+		END_IF()
+	END_IF()
+	USER_FUNC(evt_npc::evt_npc_set_position, PTR(gatekeeper), 400, 0, -55)
+	RETURN()
+EVT_END()
+
+EVT_BEGIN(gatekeeper_init_hook)
+	RUN_CHILD_EVT(gatekeeper_init_evt)
+	RETURN()
+EVT_PATCH_END()
+
+EVT_BEGIN(village_chief_talk_evt)
+	IF_SMALL(GSW(1704), 4)
+		USER_FUNC(evt_msg::evt_msg_print, 0, PTR("stg4_usu_20"), 0, PTR("me"))
+		RETURN()
+	END_IF()
+	IF_SMALL(GSW(1715), 2)
+		IF_LARGE_EQUAL(GSW(1704), 4)
+			USER_FUNC(evt_npc::evt_npc_get_position, PTR("me"), LW(0), LW(1), LW(2))
+			USER_FUNC(evt_snd::evt_snd_sfxon_3d, PTR("SFX_STG4_VOICE_PIG1"), LW(0), LW(1), LW(2), 0)
+			USER_FUNC(evt_msg::evt_msg_print, 0, PTR("stg4_usu_22"), 0, PTR("me"))
+			RETURN()
+		END_IF()
+	END_IF()
+	IF_SMALL(GSW(1715), 5)
+		IF_EQUAL(GSWF(1929), 0)
+			SET(GSWF(1929), 1)
+			USER_FUNC(evt_msg::evt_msg_print, 0, PTR("stg4_usu_24"), 0, PTR("me"))
+			USER_FUNC(evt_npc::evt_set_dir_to_target, PTR("me"), PTR(doopliss))
+			RETURN()
+		ELSE()
+			USER_FUNC(evt_msg::evt_msg_print, 0, PTR("stg4_usu_24"), 0, PTR("me"))
+			USER_FUNC(evt_npc::evt_set_dir_to_target, PTR("me"), PTR(doopliss))
+			RETURN()
+		END_IF()
+	END_IF()
+	IF_SMALL(GSW(1715), 14)
+		USER_FUNC(evt_msg::evt_msg_print, 0, PTR("stg4_usu_25"), 0, PTR("me"))
+		RETURN()
+	END_IF()
+	IF_SMALL(GSW(1715), 17)
+		USER_FUNC(evt_msg::evt_msg_print, 0, PTR("stg4_usu_157"), 0, PTR("me"))
+		RETURN()
+	END_IF()
+	IF_SMALL(GSW(1708), 18)
+		USER_FUNC(evt_msg::evt_msg_print, 0, PTR("stg4_usu_157_1"), 0, PTR("me"))
+		RETURN()
+	END_IF()
+	USER_FUNC(evt_msg::evt_msg_print, 0, PTR("stg4_usu_157_1_1"), 0, PTR("me"))
+	RETURN()
+EVT_END()
+
+EVT_BEGIN(village_chief_talk_hook)
+	RUN_CHILD_EVT(village_chief_talk_evt)
+	RETURN()
+EVT_PATCH_END()
+
+EVT_BEGIN(village_chief_pig_init_evt)
+	IF_SMALL(GSW(1704), 3)
+		USER_FUNC(evt_npc::evt_npc_set_position, PTR(mayor_pig), 0, -2000, 0)
+		RETURN()
+	END_IF()
+	IF_SMALL(GSW(1715), 4)
+		IF_LARGE_EQUAL(GSW(1704), 3)
+			RETURN()
+		END_IF()
+	END_IF()
+	USER_FUNC(evt_npc::evt_npc_set_position, PTR(mayor_pig), 0, -2000, 0)
+	RETURN()
+EVT_END()
+
+EVT_BEGIN(village_chief_pig_init_hook)
+	RUN_CHILD_EVT(village_chief_pig_init_evt)
+	RETURN()
+EVT_PATCH_END()
+
+EVT_BEGIN(village_chief_init_evt)
+	IF_SMALL(GSW(1704), 3)
+		RETURN()
+	END_IF()
+	IF_SMALL(GSW(1715), 4)
+		IF_LARGE_EQUAL(GSW(1704), 3)
+			USER_FUNC(evt_npc::evt_npc_set_position, PTR(mayor), 0, -2000, 0)
+			RETURN()
+		END_IF()
+	END_IF()
+	RETURN()
+EVT_END()
+
+EVT_BEGIN(village_chief_init_hook)
+	RUN_CHILD_EVT(village_chief_init_evt)
+	RETURN()
 EVT_PATCH_END()
 
 void ApplyUsuPatches(OSModuleInfo* module_info)
@@ -568,24 +734,11 @@ void ApplyUsuPatches(OSModuleInfo* module_info)
 
 	patch::writePatch(&villagerK_talk[0], villagerK_talk_hook, sizeof(villagerK_talk_hook));
 
-	village_chief_init[6] = GSW(1704);
-	village_chief_init[8] = 179;
-	village_chief_init[10] = 200;
+	patch::writePatch(&village_chief_init[5], village_chief_init_hook, sizeof(village_chief_init_hook));
 
-	village_chief_pig_init[6] = GSW(1704);
-	village_chief_pig_init[8] = 179;
-	village_chief_pig_init[16] = 200;
+	patch::writePatch(&village_chief_pig_init[5], village_chief_pig_init_hook, sizeof(village_chief_pig_init_hook));
 
-	village_chief_talk[105] = GSW(1704);
-	village_chief_talk[107] = 180;
-	village_chief_talk[136] = 210;
-	village_chief_talk[166] = 219;
-	village_chief_talk[174] = 222;
-	village_chief_talk[181] = EVT_HELPER_CMD(0, 42);
-	village_chief_talk[182] = 0;
-	village_chief_talk[189] = EVT_HELPER_CMD(0, 49);
-	village_chief_talk[190] = EVT_HELPER_CMD(0, 2);
-	village_chief_talk[191] = 1;
+	patch::writePatch(&village_chief_talk[104], village_chief_talk_hook, sizeof(village_chief_talk_hook));
 
 	vivian_init[6] = GSW(1714);
 	vivian_init[8] = 0;
@@ -634,7 +787,7 @@ void ApplyUsuPatches(OSModuleInfo* module_info)
 	evt_ichikorori_ball_get[2] = 1;
 
 	usu_00_touch_ichikorori_ball[1] = GSWF(6040);
-	usu_00_touch_ichikorori_ball[2] = 1;
+	usu_00_touch_ichikorori_ball[2] = 0;
 
 	usu_00_koopa_first_evt[181] = GSW(1717);
 	usu_00_koopa_first_evt[182] = 23;
@@ -653,6 +806,8 @@ void ApplyUsuPatches(OSModuleInfo* module_info)
 	usu_00_init_evt[23] = 99; //Unused
 	usu_00_init_evt[24] = 99; //Unused
 	usu_00_init_evt[33] = 99; //Unused
+	usu_00_init_evt[43] = 99; //Unused
+	usu_00_init_evt[44] = 99; //Unused
 	usu_00_init_evt[54] = 16;
 	usu_00_init_evt[102] = GSW(1708);
 	usu_00_init_evt[103] = 18;
@@ -770,30 +925,18 @@ void ApplyUsuPatches(OSModuleInfo* module_info)
 	childC_talk[23] = 0;
 	childC_talk[24] = 0;
 
-	gatekeeper_init[6] = GSW(1704); //Need to hook
-	gatekeeper_init[8] = 4;
-	gatekeeper_init[21] = 200;
+	patch::writePatch(&gatekeeper_init[5], gatekeeper_init_hook, sizeof(gatekeeper_init_hook));
 
-	gatekeeper_pig_init[6] = GSW(1704); //Need to hook
-	gatekeeper_pig_init[8] = 4;
-	gatekeeper_pig_init[16] = 200;
+	patch::writePatch(&gatekeeper_pig_init[5], gatekeeper_pig_init_hook, sizeof(gatekeeper_pig_init_hook));
 
-	gatekeeper_talk[1] = GSW(1704); //Need to hook
+	gatekeeper_talk[1] = GSW(1704);
 	gatekeeper_talk[3] = 3;
+	gatekeeper_talk[71] = GSW(1704);
+	gatekeeper_talk[72] = 3;
 	gatekeeper_talk[75] = 4;
 	gatekeeper_talk[83] = 5;
-	gatekeeper_talk[91] = 200;
-	gatekeeper_talk[112] = 219;
-	gatekeeper_talk[120] = 222;
-	gatekeeper_talk[127] = 0;
-	gatekeeper_talk[128] = 0;
-	gatekeeper_talk[129] = 0;
-	gatekeeper_talk[130] = 0;
-	gatekeeper_talk[131] = 0;
-	gatekeeper_talk[132] = 0;
-	gatekeeper_talk[133] = 0;
-	gatekeeper_talk[134] = 0;
-
+	gatekeeper_talk[90] = EVT_HELPER_CMD(0, 49);
+	patch::writePatch(&gatekeeper_talk[91], gatekeeper_talk_hook, sizeof(gatekeeper_talk_hook));
 	
 	musume_talk[1] = GSW(1715);
 	musume_talk[3] = 2;
@@ -801,7 +944,8 @@ void ApplyUsuPatches(OSModuleInfo* module_info)
 
 	evt_mon_open[1] = GSW(1704);
 	evt_mon_open[2] = 6;
-	evt_mon_open[105] = 7;
+	evt_mon_open[105] = GSW(1704);
+	evt_mon_open[106] = 7;
 
 	usu01_crowFG_talk_event[193] = GSW(1704);
 	usu01_crowFG_talk_event[194] = 1;

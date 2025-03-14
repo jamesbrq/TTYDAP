@@ -355,6 +355,8 @@ void ApplyTouPatches(OSModuleInfo* module_info)
 	evt_tou_match_after_default[1524] = 99; //UNUSED
 	evt_tou_match_after_default[1535] = 99; //UNUSED
 	evt_tou_match_after_default[1574] = 99; //UNUSED
+	evt_tou_match_after_default[1585] = 99; //UNUSED
+	evt_tou_match_after_default[1600] = 99; //UNUSED
 
 	tou_00_init_evt[7] = GSW(1715);
 	tou_00_init_evt[8] = 10;

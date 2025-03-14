@@ -450,7 +450,7 @@ void ApplyAjiPatches(OSModuleInfo* module_info)
 	peach_evt_kou2_out[31] = GSW(1703);
 	peach_evt_kou2_out[32] = 22;
 	peach_evt_kou2_out[34] = GSW(1703);
-	peach_evt_kou2_out[35] = 24;
+	peach_evt_kou2_out[35] = 23;
 
 	peach_evt_stg3_09[4] = GSW(1703);
 	peach_evt_stg3_09[5] = 23;

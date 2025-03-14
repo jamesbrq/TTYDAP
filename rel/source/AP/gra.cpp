@@ -91,8 +91,8 @@ void ApplyGraPatches(OSModuleInfo* module_info)
 	gra_04_init_evt[20] = GSW(1714);
 	gra_04_init_evt[21] = 2;
 
-	gra_05_futa_open_evt[19] = GSWF(6047);
-	gra_05_futa_open_evt[20] = 3;
+	gra_05_futa_open_evt[24] = GSW(1714);
+	gra_05_futa_open_evt[25] = 3;
 
 	evt_gra_05iwa_move_init[5] = GSW(1714);
 	evt_gra_05iwa_move_init[6] = 5;
