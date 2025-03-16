@@ -109,6 +109,8 @@ namespace mod::owr
 	void OWR::SequenceInit()
 	{
 		uint32_t SequencePosition = ttyd::swdrv::swByteGet(1700);
+		if(ttyd::mario_pouch::pouchCheckItem(26) == 0)
+			ttyd::mario_pouch::pouchGetItem(ItemId::ELEVATOR_KEY_001A);
 		if (SequencePosition != 0)
 			return;
 

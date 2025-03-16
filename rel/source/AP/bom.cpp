@@ -31,8 +31,8 @@ extern int32_t bom_talk_murabito_f_01[];
 extern int32_t bom_talk_murabito_g_01[];
 extern int32_t bom_talk_murabito_h_01[];
 extern int32_t bom_talk_murabito_i_01[];
-extern int32_t talk_white[];
-extern int32_t musume_talk[];
+extern int32_t bom_talk_white[];
+extern int32_t bom_musume_talk[];
 extern int32_t bom_01_init_evt[];
 extern int32_t evt_taihou[];
 extern int32_t bom_init_soncho_02[];
@@ -115,12 +115,12 @@ void ApplyBomPatches(OSModuleInfo* module_info)
 	bom_talk_murabito_i_01[3] = 1;
 	bom_talk_murabito_i_01[11] = 6;
 
-	talk_white[1] = GSW(1707);
-	talk_white[3] = 6;
+	bom_talk_white[1] = GSW(1707);
+	bom_talk_white[3] = 6;
 
-	musume_talk[1] = GSW(1707);
-	musume_talk[3] = 3;
-	musume_talk[23] = 5;
+	bom_musume_talk[1] = GSW(1707);
+	bom_musume_talk[3] = 3;
+	bom_musume_talk[23] = 5;
 
 	bom_01_init_evt[6] = GSW(1707);
 	bom_01_init_evt[8] = 1;

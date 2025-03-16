@@ -7,6 +7,8 @@
 #include <ttyd/evt_hit.h>
 #include <ttyd/evt_mario.h>
 #include <ttyd/evt_party.h>
+#include <ttyd/evt_pouch.h>
+#include <ttyd/evt_window.h>
 #include <ttyd/evt_bero.h>
 #include <ttyd/evt_snd.h>
 #include <ttyd/evt_urouro.h>
@@ -19,11 +21,12 @@ using namespace ttyd;
 
 extern int32_t evt_bridge2[];
 extern int32_t eki_evt_origami_00[];
-extern int32_t evt_meet_moamoa[];
-extern int32_t evt_moamoa_escape[];
+extern int32_t eki_evt_meet_moamoa[];
+extern int32_t eki_evt_moamoa_escape[];
 extern int32_t evt_elv_down[];
 extern int32_t evt_elv_up[];
 extern int32_t evt_elv[];
+extern int32_t item_tbl[];
 extern int32_t eki_00_init_evt[];
 extern int32_t eki_evt_origami_01[];
 extern int32_t evt_lock[];
@@ -39,6 +42,39 @@ extern int32_t evt_box_open[];
 extern int32_t evt_sw_complete[];
 extern int32_t eki_06_init_evt[];
 
+EVT_BEGIN(evt_elv_evt)
+	USER_FUNC(evt_mario::evt_mario_key_onoff, 0)
+	USER_FUNC(evt_pouch::evt_pouch_check_item, 26, LW(0))
+	IF_SMALL_EQUAL(LW(0), 0)
+		USER_FUNC(evt_msg::evt_msg_print, 0, PTR("stg6_eki_06"), 0, 0)
+		USER_FUNC(evt_mario::evt_mario_key_onoff, 1)
+		RETURN()
+	END_IF()
+	IF_SMALL(GSW(1720), 4)
+		USER_FUNC(evt_window::evt_win_item_select, 0, PTR(&item_tbl), LW(1), 0)
+		IF_EQUAL(LW(1), -1)
+			USER_FUNC(evt_mario::evt_mario_key_onoff, 1)
+			SET(LW(0), 0)
+			RETURN()
+		END_IF()
+		USER_FUNC(evt_pouch::evt_pouch_remove_item, 26, LW(0))
+		SET(GSW(1720), 4)
+		USER_FUNC(evt_snd::evt_snd_sfxon, PTR("SFX_STG6_ELEVATOR_KEY1"), 0)
+		USER_FUNC(evt_msg::evt_msg_print, 0, PTR("stg6_eki_07"), 0, 0)
+		SET(LW(0), 1)
+		RETURN()
+	END_IF()
+	RETURN()
+EVT_END()
+
+EVT_BEGIN(evt_elv_hook)
+	RUN_CHILD_EVT(evt_elv_evt)
+	IF_EQUAL(LW(0), 0)
+		RETURN()
+	END_IF()
+	GOTO(&evt_elv[38])
+EVT_END()
+
 void ApplyEkiPatches(OSModuleInfo* module_info)
 {
 	evt_bridge2[111] = GSW(1720);
@@ -47,11 +83,11 @@ void ApplyEkiPatches(OSModuleInfo* module_info)
 	eki_evt_origami_00[183] = GSW(1720);
 	eki_evt_origami_00[184] = 7;
 
-	evt_meet_moamoa[204] = GSW(1720);
-	evt_meet_moamoa[205] = 5;
+	eki_evt_meet_moamoa[204] = GSW(1720);
+	eki_evt_meet_moamoa[205] = 5;
 
-	evt_moamoa_escape[40] = GSW(1720);
-	evt_moamoa_escape[41] = 6;
+	eki_evt_moamoa_escape[40] = GSW(1720);
+	eki_evt_moamoa_escape[41] = 6;
 
 	evt_elv_down[230] = GSW(1720);
 	evt_elv_down[231] = 6;
@@ -80,15 +116,14 @@ void ApplyEkiPatches(OSModuleInfo* module_info)
 	evt_elv_up[381] = GSW(1720);
 	evt_elv_up[382] = 6;
 
-	evt_elv[4] = GSW(1720);
-	evt_elv[5] = 4;
+	patch::writePatch(&evt_elv[0], evt_elv_hook, sizeof(evt_elv_hook));
 	evt_elv[25] = GSW(1720);
 	evt_elv[26] = 4;
 
 	eki_00_init_evt[26] = GSW(1720);
 	eki_00_init_evt[27] = 0; //Unused
 	eki_00_init_evt[49] = GSW(1720);
-	eki_00_init_evt[60] = 6;
+	eki_00_init_evt[50] = 6;
 
 	eki_evt_origami_01[116] = GSWF(6058);
 	eki_evt_origami_01[117] = 1;
@@ -126,17 +161,17 @@ void ApplyEkiPatches(OSModuleInfo* module_info)
 	eki_05_init_evt[48] = GSWF(6065);
 	eki_05_init_evt[49] = 1;
 
-	evt_box_open[1] = GSWF(6062);
+	evt_box_open[1] = GSW(1722);
 	evt_box_open[2] = 1;
-	evt_box_open[108] = GSWF(6062);
+	evt_box_open[108] = GSW(1722);
 	evt_box_open[109] = 1;
 
-	evt_sw_complete[265] = GSWF(6063);
-	evt_sw_complete[266] = 1;
+	evt_sw_complete[265] = GSW(1722);
+	evt_sw_complete[266] = 2;
 
-	eki_06_init_evt[20] = GSWF(6062);
+	eki_06_init_evt[20] = GSW(1722);
 	eki_06_init_evt[22] = 1;
 	eki_06_init_evt[29] = 1;
-	eki_06_init_evt[100] = GSWF(6062);
+	eki_06_init_evt[100] = GSW(1722);
 	eki_06_init_evt[101] = 1;
 }

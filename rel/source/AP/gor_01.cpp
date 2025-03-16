@@ -196,7 +196,7 @@ void ApplyGor01Patches(OSModuleInfo* module_info)
 
 	patch::writePatch(&bottakuru_init[0], bottakuru_init_hook, sizeof(bottakuru_init_hook));
 
-	luigi_init_01[1] = GSW(1710); //Luigi Init
+	luigi_init_01[1] = GSW(1710);
 	luigi_init_01[2] = EVT_HELPER_CMD(1, 36);
 	luigi_init_01[3] = 2;
 	luigi_init_01[4] = EVT_HELPER_CMD(0, 0);
@@ -206,7 +206,7 @@ void ApplyGor01Patches(OSModuleInfo* module_info)
 	luigi_init_01[28] = EVT_HELPER_CMD(1, 41);
 	luigi_init_01[29] = 7;
 
-	luigi_npcEnt_01[1] = GSW(1710); //Luigi Partner Init
+	luigi_npcEnt_01[1] = GSW(1710);
 	luigi_npcEnt_01[2] = EVT_HELPER_CMD(1, 36);
 	luigi_npcEnt_01[3] = 2;
 	luigi_npcEnt_01[4] = EVT_HELPER_CMD(0, 0);
@@ -216,12 +216,12 @@ void ApplyGor01Patches(OSModuleInfo* module_info)
 	luigi_npcEnt_01[30] = EVT_HELPER_CMD(1, 41);
 	luigi_npcEnt_01[31] = 7;
 
-	kick2_init[1] = GSW(1710); //??? Init
+	kick2_init[1] = GSW(1710);
 	kick2_init[2] = EVT_HELPER_CMD(1, 36);
 	kick2_init[3] = 7;
 	kick2_init[4] = EVT_HELPER_CMD(0, 0);
 
-	thief_init[1] = GSW(1700); // Thief Init
+	thief_init[1] = GSW(1700);
 
 	thief_talk[1] = GSW(1700); // Thief Speach
 	thief_talk[4] = 17; // Thief Speach
@@ -231,7 +231,7 @@ void ApplyGor01Patches(OSModuleInfo* module_info)
 	thief_talk[100] = EVT_HELPER_CMD(0, 2);
 	thief_talk[101] = EVT_HELPER_CMD(0, 1);
 
-	christine_nakama_before[1] = GSW(1700); //Goombella prologue
+	christine_nakama_before[1] = GSW(1700);
 	christine_nakama[754] = GSW(1700);
 
 	luigi_f1_fade_check[1] = GSW(1710); //Luigi color??
@@ -251,21 +251,21 @@ void ApplyGor01Patches(OSModuleInfo* module_info)
 	marco_hitorigoto[1] = GSW(1705);
 	marco_hitorigoto[2] = 1;
 
-	gor_01_shop_setup[124] = PTR(&goods_list); //Luigi books in shop
+	gor_01_shop_setup[124] = PTR(&goods_list);
 	gor_01_shop_setup[129] = PTR(&goods_list);
 	gor_01_shop_setup[134] = PTR(&goods_list);
 	gor_01_shop_setup[139] = PTR(&goods_list);
 	gor_01_shop_setup[144] = PTR(&goods_list);
 
-	gor_01_koopa_evt[573] = GSW(1706); //Bowser intermission, post ch.6
-	gor_01_koopa_evt[574] = 99; //Unknown
+	gor_01_koopa_evt[573] = GSW(1706);
+	gor_01_koopa_evt[574] = 46;
 
-	gor_01_init_evt[4] = GSW(1706); //gor_01 Init
-	gor_01_init_evt[5] = 99; //Unknown
+	gor_01_init_evt[4] = GSW(1706);
+	gor_01_init_evt[5] = 45;
 	gor_01_init_evt[14] = GSW(1708); 
-	gor_01_init_evt[15] = 99; //Unknown
+	gor_01_init_evt[15] = 16;
 	gor_01_init_evt[35] = GSW(1708);
-	gor_01_init_evt[36] = 99; //Unknown
+	gor_01_init_evt[36] = 18;
 	gor_01_init_evt[116] = GSW(1700); 
 	gor_01_init_evt[122] = GSW(1700);
 	gor_01_init_evt[138] = GSW(1710);
@@ -278,7 +278,7 @@ void ApplyGor01Patches(OSModuleInfo* module_info)
 	gor_01_init_evt[309] = 1;
 	gor_01_init_evt[321] = GSW(1700);
 	gor_01_init_evt[523] = GSW(1708);
-	gor_01_init_evt[524] = 99; //Unknown
+	gor_01_init_evt[524] = 18;
 
 	cooking_evt[412] = GSW(1715);
 	cooking_evt[413] = 4;

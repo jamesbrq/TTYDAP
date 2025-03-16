@@ -754,8 +754,8 @@ void ApplyUsuPatches(OSModuleInfo* module_info)
 	usu00_vivian_cry_event[43] = GSW(1721);
 	usu00_vivian_cry_event[44] = 1;
 
-	gra00_2witch_find_ranpel_event[172] = GSW(1704);
-	gra00_2witch_find_ranpel_event[173] = 214;
+	gra00_2witch_find_ranpel_event[172] = GSW(1715);
+	gra00_2witch_find_ranpel_event[173] = 9;
 
 	usu00_vivian_joinup_event[595] = GSW(1721);
 	usu00_vivian_joinup_event[596] = 2;
@@ -1028,6 +1028,7 @@ void ApplyUsuPatches(OSModuleInfo* module_info)
 
 	evt_usu_kagemario_party_kill_usu[1] = GSW(1704);
 
+	//These are swByteGet
 	usu_evt_kagemario_init[2] = 0x386006B3; // li r3, 0x6B3 (GSW(1715))
 	usu_evt_kagemario_init[6] = 0x2C030003; // cmpwi r3, 0x3
 	usu_evt_kagemario_init[8] = 0x2C030007; // cmpwi r3, 0x7

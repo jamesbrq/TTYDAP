@@ -111,16 +111,18 @@ void ApplyJinPatches(OSModuleInfo* module_info)
 	ranperu_toujou[327] = GSW(1715);
 	ranperu_toujou[328] = 2;
 
-	irekawatta_mario[281] = GSW(1715);
-	irekawatta_mario[282] = 3;
+	irekawatta_mario[442] = EVT_HELPER_CMD(1, 4);
+	irekawatta_mario[443] = EVT_HELPER_OP(&irekawatta_mario[454]);
+	irekawatta_mario[481] = GSW(1715);
+	irekawatta_mario[482] = 3;
 
 	ranperu_lastbattle[370] = GSW(1715);
-	ranperu_lastbattle[371] = 4;
+	ranperu_lastbattle[371] = 6;
 
 	hontonosugata_mario[929] = GSW(1715);
-	hontonosugata_mario[930] = 5;
+	hontonosugata_mario[930] = 7;
 	hontonosugata_mario[932] = GSW(1715);
-	hontonosugata_mario[933] = 6;
+	hontonosugata_mario[933] = 8;
 
 	ranperu_init[1] = GSW(1715);
 	ranperu_init[3] = 2;
@@ -136,9 +138,9 @@ void ApplyJinPatches(OSModuleInfo* module_info)
 	jin_04_init_evt[3] = 2;
 	jin_04_init_evt[56] = GSW(1715);
 	jin_04_init_evt[58] = 2;
-	jin_04_init_evt[68] = 4;
+	jin_04_init_evt[68] = 5;
 	jin_04_init_evt[80] = 2;
-	jin_04_init_evt[89] = 5;
+	jin_04_init_evt[89] = 6;
 
 	jin_06_init_evt[157] = GSWF(6045);
 	jin_06_init_evt[158] = 1;
@@ -160,7 +162,7 @@ void ApplyJinPatches(OSModuleInfo* module_info)
 	oumu_check[114] = GSW(1715);
 	oumu_check[115] = 0;
 	oumu_check[117] = GSW(1715);
-	oumu_check[118] = 9;
+	oumu_check[118] = 5;
 
 	jin_08_init_evt[26] = GSWF(6049);
 	jin_08_init_evt[27] = 1;

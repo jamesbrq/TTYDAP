@@ -120,6 +120,7 @@ void ApplyGraPatches(OSModuleInfo* module_info)
 
 	evt_usu_kagemario_party_kill_gra[1] = GSW(1714); //Unused
 
+	//These are swByteGet
 	gra_evt_kagemario_init[2] = 0x386006B3; // li r3, 0x6B3 (GSW(1715))
 	gra_evt_kagemario_init[6] = 0x2C030003; // cmpwi r3, 0x3
 	gra_evt_kagemario_init[8] = 0x2C030007; // cmpwi r3, 0x7

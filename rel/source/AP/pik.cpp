@@ -96,7 +96,7 @@ EVT_END()
 EVT_BEGIN(miyageya_talk_hook)
 	RUN_CHILD_EVT(miyageya_talk_evt)
 	IF_SMALL(LW(0), 1)
-		GOTO(99)
+		GOTO(&miyageya_talk[504])
 	END_IF()
 	RETURN()
 EVT_END()
@@ -162,24 +162,26 @@ EVT_BEGIN(takun6_talk_hook)
 EVT_END()
 
 EVT_BEGIN(pik_evt_powan_evt)
+	SET(LW(0), 0)
 	USER_FUNC(evt_mario::evt_mario_key_onoff, 0)
 	USER_FUNC(evt_snd::evt_snd_bgmoff, 18432)
 	USER_FUNC(evt_msg::evt_msg_print, 0, PTR("stg6_pik_06"), 0, 0)
+	WAIT_MSEC(300)
 	IF_SMALL(GSW(1706), 38)
 		USER_FUNC(evt_snd::evt_snd_bgmon, 288, 0)
 		USER_FUNC(evt_snd::evt_snd_bgmon, 160, 0)
 		USER_FUNC(evt_mario::evt_mario_key_onoff, 1)
-		SET(LW(1), 1)
+		SET(LW(0), 1)
 	END_IF()
 	RETURN()
 EVT_END()
 
 EVT_BEGIN(pik_evt_powan_hook)
 	RUN_CHILD_EVT(pik_evt_powan_evt)
-	IF_SMALL(LW(1), 1)
-		GOTO(99)
+	IF_EQUAL(LW(0), 1)
+		RETURN()
 	END_IF()
-	RETURN()
+	GOTO(&pik_evt_powan[14])
 EVT_END()
 
 EVT_BEGIN(evt_daiza_evt)
@@ -249,8 +251,6 @@ void ApplyPikPatches(OSModuleInfo* module_info)
 
 	patch::writePatch(&pik_evt_powan[0], pik_evt_powan_hook, sizeof(pik_evt_powan_hook));
 
-	pik_evt_powan[10] = EVT_HELPER_CMD(1, 3);
-	pik_evt_powan[11] = EVT_HELPER_OP(99);
 	pik_evt_powan[314] = GSW(1706);
 	pik_evt_powan[315] = 39;
 
@@ -258,8 +258,6 @@ void ApplyPikPatches(OSModuleInfo* module_info)
 	pik_init_powan_01[3] = 39;
 
 	patch::writePatch(&miyageya_talk[452], miyageya_talk_hook, sizeof(miyageya_talk_hook));
-	miyageya_talk[502] = EVT_HELPER_CMD(1, 3);
-	miyageya_talk[503] = EVT_HELPER_OP(99);
 	miyageya_talk[511] = GSW(1708);
 	miyageya_talk[512] = 18;
 	miyageya_talk[560] = 0;
