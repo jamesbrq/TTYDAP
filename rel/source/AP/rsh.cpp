@@ -891,7 +891,7 @@ void ApplyRshPatches(OSModuleInfo* module_info)
 	evt_yuka_simi_rsh_02[39] = 5;
 
 	evt_access_entry[1] = GSW(1706);
-	evt_access_entry[2] = 65;
+	evt_access_entry[2] = 49;
 
 	patch::writePatch(&rsh_02_init_evt[0], rsh_02_init_evt_hook, sizeof(rsh_02_init_evt_hook));
 	rsh_02_init_evt[63] = GSW(1706);
@@ -1178,7 +1178,7 @@ void ApplyRshPatches(OSModuleInfo* module_info)
 	talk_powan_rsh_04[194] = 31;
 
 	evt_tana_5[4] = GSW(1706);
-	evt_tana_5[5] = 65;
+	evt_tana_5[5] = 49;
 
 	evt_access_rsh_04[7] = GSW(1706);
 	evt_access_rsh_04[8] = 49;
@@ -1267,6 +1267,6 @@ void ApplyRshPatches(OSModuleInfo* module_info)
 	rsh_06_a_init_evt[25] = GSW(1706);
 	rsh_06_a_init_evt[26] = 36;
 
-	rsh_prolog[14] = 0x386006A4; // li r3, 0x6AA (GSW(1706))
+	rsh_prolog[14] = 0x386006AA; // li r3, 0x6AA (GSW(1706))
 	rsh_prolog[16] = 0x2C03002B; // cmpwi r3, 0x2B
 }
