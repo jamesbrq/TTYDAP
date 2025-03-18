@@ -180,11 +180,11 @@ namespace mod::owr
 		ApplyMainAssemblyPatches();
 		ApplyMainScriptPatches();
 
-		g_itemEntry_trampoline = patch::hookFunction(
+		/*g_itemEntry_trampoline = patch::hookFunction(
 			ttyd::itemdrv::itemEntry, [](const char* name, uint32_t id, uint32_t mode, int32_t collection_expr, void* script, float x, float y, float z) 
 			{
 				return g_itemEntry_trampoline(name, gSelf->state_.itemEntries[id], mode, collection_expr, script, x, y, z);
-			});
+			});*/
 
 		g_OSLink_trampoline = patch::hookFunction(
 			gc::OSLink::OSLink, [](OSModuleInfo* new_module, void* bss) {
