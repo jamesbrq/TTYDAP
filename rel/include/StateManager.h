@@ -9,6 +9,7 @@ namespace mod::owr {
 	public:
 		int8_t rChapters = 7;
 		int16_t itemEntries[255];
+		bool badgeInit = false;
 		void Init();
 		StateManager();
 	};

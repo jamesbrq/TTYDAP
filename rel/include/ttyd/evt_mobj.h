@@ -47,9 +47,7 @@ extern "C" {
 // evt_mobj_brick
 // mobj_10countblk
 // mobj_brickblk
-// evt_mobj_powerupblk
 // mobj_powerupblk
-// evt_mobj_badgeblk
 // mobj_badgeblk
 // evt_mobj_blk
 // mobj_blk
@@ -58,6 +56,8 @@ extern "C" {
 // evt_mobj_recovery_blk
 // mobj_recovery_blk
 EVT_DECLARE_USER_FUNC(evt_mobj_signboard, 6)
+EVT_DECLARE_USER_FUNC(evt_mobj_powerupblk, 7)
+EVT_DECLARE_USER_FUNC(evt_mobj_badgeblk, 8)
 // mobj_signboard
 // evt_mobj_itembox
 // mobj_itembox
