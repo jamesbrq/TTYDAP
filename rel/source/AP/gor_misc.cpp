@@ -7,6 +7,7 @@
 #include <ttyd/evt_map.h>
 #include <ttyd/evt_hit.h>
 #include <ttyd/evt_mario.h>
+#include <ttyd/evt_item.h>
 #include <ttyd/evt_party.h>
 #include <ttyd/evt_bero.h>
 #include <ttyd/evt_snd.h>
@@ -22,6 +23,7 @@ extern int32_t luigi_gor_first_talk[];
 extern int32_t gor_10_init_evt[];
 extern int32_t gor_12_init_evt[];
 extern int32_t gor_11_init_evt[];
+extern int32_t all_party_lecture[];
 
 //Assembly
 extern int32_t irai_init_func[];
@@ -31,8 +33,18 @@ extern int32_t evt_exchange_msg_set[];
 extern int32_t exchange_ret_tbl_no[];
 extern int32_t exchange_ryokin_medal[];
 
+EVT_BEGIN(party_evt)
+	USER_FUNC(evt_mario::evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
+	USER_FUNC(evt_item::evt_item_entry, PTR("item01"), 1, LW(0), LW(1), LW(2), 16, GSWF(6076), 0)
+	USER_FUNC(evt_item::evt_item_get_item, PTR("item01"))
+	WAIT_MSEC(800)
+	RETURN()
+EVT_END()
+
 void ApplyGorMiscPatches(OSModuleInfo* module_info)
 {
+	patch::writePatch(&all_party_lecture[0], party_evt, sizeof(party_evt));
+
 	luigi_gor_first_talk[18] = GSW(1708);
 	luigi_gor_first_talk[19] = 17;
 	luigi_gor_first_talk[44] = GSW(1700);

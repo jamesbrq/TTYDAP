@@ -68,6 +68,7 @@ EVT_DECLARE_USER_FUNC(evt_mario_set_mode, 1)
 EVT_DECLARE_USER_FUNC(evt_mario_normalize, 0)
 EVT_DECLARE_USER_FUNC(evt_mario_set_pose, 1)
 EVT_DECLARE_USER_FUNC(evt_mario_set_pos, 3)
+EVT_DECLARE_USER_FUNC(evt_mario_get_pos, 4)
 // evt_mario_set_normal_pose
 // evt_mario_adjust_dir
 // unk_JP_US_EU_26_800e6b1c

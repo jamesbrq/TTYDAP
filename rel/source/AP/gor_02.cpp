@@ -7,6 +7,7 @@
 #include <ttyd/evt_map.h>
 #include <ttyd/evt_hit.h>
 #include <ttyd/evt_mario.h>
+#include <ttyd/evt_mobj.h>
 #include <ttyd/evt_party.h>
 #include <ttyd/evt_bero.h>
 #include <ttyd/evt_snd.h>
@@ -461,6 +462,18 @@ EVT_BEGIN(luigi_init_hook)
 	RETURN()
 EVT_PATCH_END()
 
+EVT_BEGIN(gor_shine_sprites_02_evt)
+	USER_FUNC(evt_mobj::evt_mobj_badgeblk, PTR("pblk1"), -250, 288, -500, 99, 0, GSWF(5525), 0)
+	USER_FUNC(evt_mobj::evt_mobj_badgeblk, PTR("pblk2"), -30, 60, -215, 99, 0, GSWF(5526), 0)
+	USER_FUNC(evt_mobj::evt_mobj_badgeblk, PTR("pblk3"), 540, 60, -260, 99, 0, GSWF(5529), 0)
+	RETURN()
+EVT_PATCH_END()
+
+EVT_BEGIN(gor_shine_sprites_02_hook)
+	RUN_CHILD_EVT(gor_shine_sprites_02_evt)
+	GOTO(&gor_02_init_evt[155])
+EVT_PATCH_END()
+
 
 void ApplyGor02Patches(OSModuleInfo* module_info)
 {
@@ -556,6 +569,7 @@ void ApplyGor02Patches(OSModuleInfo* module_info)
 	gor_02_init_evt[46] = GSW(1717);
 	gor_02_init_evt[47] = 25;
 	gor_02_init_evt[59] = GSW(1700);
+	patch::writePatch(&gor_02_init_evt[128], gor_shine_sprites_02_hook, sizeof(gor_shine_sprites_02_hook));
 	gor_02_init_evt[201] = GSW(1701);
 	gor_02_init_evt[202] = 1;
 	gor_02_init_evt[360] = GSW(1700);

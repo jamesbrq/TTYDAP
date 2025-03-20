@@ -208,15 +208,14 @@ EVT_BEGIN(gor_03_init_evt_hook)
 	GOTO(&gor_03_init_evt[292])
 EVT_PATCH_END()
 
-EVT_BEGIN(shine_sprites)
-	USER_FUNC(evt_mobj::evt_mobj_badgeblk, PTR("mobj_01"), 250, 60, -510, LW(0), 0, GSWF(5527), 90)
-	USER_FUNC(evt_mobj::evt_mobj_badgeblk, PTR("mobj_02"), -563, 0, -150, LW(1), 0, GSWF(5528), 90)
+EVT_BEGIN(gor_shine_sprites_03)
+	USER_FUNC(evt_mobj::evt_mobj_badgeblk, PTR("mobj_01"), 250, 60, -510, LW(0), 0, GSWF(5527), 0)
+	USER_FUNC(evt_mobj::evt_mobj_badgeblk, PTR("mobj_02"), -563, 0, -150, LW(1), 0, GSWF(5528), 0)
+	RETURN()
 EVT_PATCH_END()
 
-EVT_BEGIN(shine_sprites_hook)
-	SET(LW(0), 0)
-	SET(LW(1), 0)
-	RUN_CHILD_EVT(shine_sprites)
+EVT_BEGIN(gor_shine_sprites_03_hook)
+	RUN_CHILD_EVT(gor_shine_sprites_03)
 	GOTO(&gor_03_init_evt[200])
 EVT_PATCH_END()
 
@@ -406,7 +405,11 @@ void ApplyGor03Patches(OSModuleInfo* module_info)
 	gor_03_init_evt[48] = 9;
 	gor_03_init_evt[49] = 11;
 	gor_03_init_evt[59] = 11;
-	patch::writePatch(&gor_03_init_evt[182], shine_sprites_hook, sizeof(shine_sprites_hook));
+	gor_03_init_evt[182] = EVT_HELPER_CMD(2, 50);
+	gor_03_init_evt[183] = EVT_HELPER_OP(LW(0));
+	gor_03_init_evt[185] = EVT_HELPER_CMD(2, 50);
+	gor_03_init_evt[186] = EVT_HELPER_OP(LW(1));
+	patch::writePatch(&gor_03_init_evt[188], gor_shine_sprites_03_hook, sizeof(gor_shine_sprites_03_hook));
 	patch::writePatch(&gor_03_init_evt[218], gor_03_init_evt_hook, sizeof(gor_03_init_evt_hook));
 	gor_03_init_evt[365] = GSW(1703);
 	gor_03_init_evt[366] = 28;
