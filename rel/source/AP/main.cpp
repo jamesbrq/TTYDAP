@@ -42,6 +42,10 @@ extern int32_t winMgrSelectEntry[];
 extern int32_t evt_badgeShop_starmaniac_get_kind_cnt[];
 extern int32_t badgeShop_get[];
 extern int32_t badgeShop_add[];
+extern int32_t evt_mobj_kururing_floor[];
+extern int32_t mobj_kururing_floor[];
+extern int32_t mobj_powerupblk[];
+extern int32_t evt_mobj_powerupblk[];
 //End of Assekmbly References
 
 //Script References
@@ -225,6 +229,16 @@ void ApplyMainAssemblyPatches()
 	//badgeShop_get[9] = 0x38A00001; // li r5, 0x0
 
 	//badgeShop_add[9] = 0x38C00001; // li r6, 0x0
+
+	patch::writeBranchPair(&evt_mobj_kururing_floor[39], reinterpret_cast<void*>(bKururingFloorCapture), reinterpret_cast<void*>(bKururingFloorCaptureReturn));
+	patch::writeBranchPair(&evt_mobj_kururing_floor[60], reinterpret_cast<void*>(bKururingFloorRelease), reinterpret_cast<void*>(bKururingFloorReleaseReturn));
+	patch::writeBranchPair(&evt_mobj_powerupblk[24], reinterpret_cast<void*>(bPowerupblkCapture), reinterpret_cast<void*>(bPowerupblkCaptureReturn));
+	patch::writeBranchPair(&evt_mobj_powerupblk[52], reinterpret_cast<void*>(bPowerupblkRelease), reinterpret_cast<void*>(bPowerupblkReleaseReturn));
+
+	mobj_kururing_floor[188] = 0x808301BB; // lwz r4, 0x1BA(r3)
+
+	mobj_powerupblk[73] = 0x809F01D8; // lwz r4, 0x1D8(r31)
+	mobj_powerupblk[110] = 0x809F01D8; // lwz r4, 0x1D8(r31)
 
 
 	//sys_prolog[25] = 0x386006A4; // li r3, 0x6A4 (GSW(1700))

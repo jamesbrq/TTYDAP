@@ -569,7 +569,8 @@ void ApplyGor02Patches(OSModuleInfo* module_info)
 	gor_02_init_evt[46] = GSW(1717);
 	gor_02_init_evt[47] = 25;
 	gor_02_init_evt[59] = GSW(1700);
-	patch::writePatch(&gor_02_init_evt[128], gor_shine_sprites_02_hook, sizeof(gor_shine_sprites_02_hook));
+	gor_02_init_evt[134] = 0x86;
+	//patch::writePatch(&gor_02_init_evt[128], gor_shine_sprites_02_hook, sizeof(gor_shine_sprites_02_hook));
 	gor_02_init_evt[201] = GSW(1701);
 	gor_02_init_evt[202] = 1;
 	gor_02_init_evt[360] = GSW(1700);

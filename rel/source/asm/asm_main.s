@@ -16,6 +16,14 @@
 .global bPrintPartyErrorFixReturn
 .global bPrintPartyAddErrorFix
 .global bPrintPartyAddErrorFixReturn
+.global bKururingFloorCapture
+.global bKururingFloorCaptureReturn
+.global bKururingFloorRelease
+.global bKururingFloorReleaseReturn
+.global bPowerupblkCapture
+.global bPowerupblkCaptureReturn
+.global bPowerupblkRelease
+.global bPowerupblkReleaseReturn
 
 bMapGXArrInject:
 	lis %r3, win_log_mapGX_arr@ha
@@ -125,6 +133,35 @@ bPrintPartyErrorFix:
 	addi %r4, %r4, 0x1714
 	bl strcat
 bPrintPartyErrorFixReturn:
+	b 0
+
+bKururingFloorCapture:
+	mr %r18, %r3
+	mr %r3, %r26 #Original Intruction
+bKururingFloorCaptureReturn:
+	b 0
+	
+bKururingFloorRelease:
+	stw %r18, 0x1C0(%r3)
+	li %r0, 0x0 #Original Intruction
+bKururingFloorReleaseReturn:
+	b 0
+
+bPowerupblkCapture:
+	cmpwi %r4, 0x0
+	bne bPowerupblkNorm
+	li %r4, 0x57
+bPowerupblkNorm:
+	mr %r19, %r4
+	li %r4, 0x0
+	mr %r3, %r30 #Original Intruction
+bPowerupblkCaptureReturn:
+	b 0
+	
+bPowerupblkRelease:
+	stw %r19, 0x1D8(%r3)
+	mr %r28, %r3 #Original Intruction
+bPowerupblkReleaseReturn:
 	b 0
 
 win_log_mapGX_arr:

@@ -18,6 +18,14 @@ extern "C" {
 	void bPrintPartyErrorFixReturn();
 	void bPrintPartyAddErrorFix();
 	void bPrintPartyAddErrorFixReturn();
+	void bKururingFloorCapture();
+	void bKururingFloorCaptureReturn();
+	void bKururingFloorRelease();
+	void bKururingFloorReleaseReturn();
+	void bPowerupblkCapture();
+	void bPowerupblkCaptureReturn();
+	void bPowerupblkRelease();
+	void bPowerupblkReleaseReturn();
 }
 
 void ApplyMainAssemblyPatches();

@@ -59,10 +59,6 @@ using ::ttyd::string::strcmp;
 namespace ItemId = ::ttyd::common::ItemId;
 namespace ModuleId = ::ttyd::common::ModuleId;
 
-extern "C" {
-	void badgeShop_init();
-}
-
 const uint32_t kShopOffsets[] = {
 	0x36c5c, 0x57b70,  0xdd98,  0x3c14, 0x40fa8,
 	0x1aed4, 0x15be8, 0x21c18, 0x23770, 0x11174
@@ -119,7 +115,7 @@ namespace mod::owr
 			ttyd::mario_pouch::pouchGetItem(ItemId::ELEVATOR_KEY_001A);
 		if (SequencePosition != 0)
 			return;
-		ttyd::swdrv::swByteSet(1700, 15);
+		ttyd::swdrv::swByteSet(1700, 16);
 		ttyd::swdrv::swByteSet(1705, 11);
 		ttyd::swdrv::swByteSet(1719, 8);
 		ttyd::swdrv::swByteSet(1717, 13);
