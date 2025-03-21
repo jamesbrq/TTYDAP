@@ -23,9 +23,31 @@
 
 namespace mod::util {
 
-inline int64_t GetTbRate()
-{
-	return *(int32_t *)0x800000f8 / 4;
-}
+	// Used to specifiy what region of GameCube memory a pointer points to.
+	enum PointerVerificationType
+	{
+		PTR_INVALID = 0, // Does not point to valid GameCube memory
+		PTR_CACHED,      // 0x80000000 through 0x817FFFFF
+		PTR_UNCACHED,    // 0xC0000000 through 0xC17FFFFF
+	};
+
+	inline int64_t GetTbRate()
+	{
+		return *(int32_t*)0x800000f8 / 4;
+	}
+
+	bool checkButtonCombo(uint32_t combo);
+	bool checkButtonsEveryFrame(uint32_t buttons);
+	bool checkButtonComboEveryFrame(uint32_t combo);
+
+	uint32_t ptrIsValid(void* ptr);
+	float intToFloat(int32_t value);
+	float getTextMultilineIncrement(const char* text, float scale, uint32_t additionalLines);
+
+	template<typename Ptr>
+	uint32_t ptrIsValid(Ptr ptr)
+	{
+		return ptrIsValid(reinterpret_cast<void*>(ptr));
+	}
 
 }

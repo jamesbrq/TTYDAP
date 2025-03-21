@@ -1,4 +1,5 @@
 #include <cstdint>
+#include <cstring>
 #include <cstdio>
 #include <ttyd/itemdrv.h>
 #include <ttyd/item_data.h>
@@ -114,7 +115,7 @@ namespace mod::owr
 	void OWR::SequenceInit()
 	{
 		uint32_t SequencePosition = ttyd::swdrv::swByteGet(1700);
-		if(ttyd::mario_pouch::pouchCheckItem(26) == 0)
+		if (ttyd::mario_pouch::pouchCheckItem(26) == 0)
 			ttyd::mario_pouch::pouchGetItem(ItemId::ELEVATOR_KEY_001A);
 		if (SequencePosition != 0)
 			return;
@@ -156,7 +157,7 @@ namespace mod::owr
 		ttyd::mario_pouch::pouchGetItem(ItemId::ULTRA_HAMMER);
 		ttyd::mario_pouch::pouchGetItem(ItemId::INVALID_ITEM_PAPER_MODE_ICON);
 		ttyd::mario_pouch::pouchGetItem(ItemId::INVALID_ITEM_TUBE_MODE_ICON);
-		for(int i = 0; i <= 10; i++)
+		for (int i = 0; i <= 10; i++)
 			ttyd::mario_pouch::pouchGetItem(ItemId::POWER_PLUS);
 		ttyd::mario_pouch::pouchGetItem(ItemId::SPIKE_SHIELD);
 		ttyd::mario_pouch::pouchGetItem(ItemId::MULTIBOUNCE);
@@ -177,15 +178,15 @@ namespace mod::owr
 		}
 	}
 
-	 void OWR::Init()
-	 {
+	void OWR::Init()
+	{
 		gSelf = this;
 
 		ApplyMainAssemblyPatches();
 		ApplyMainScriptPatches();
 
 		/*g_itemEntry_trampoline = patch::hookFunction(
-			ttyd::itemdrv::itemEntry, [](const char* name, uint32_t id, uint32_t mode, int32_t collection_expr, void* script, float x, float y, float z) 
+			ttyd::itemdrv::itemEntry, [](const char* name, uint32_t id, uint32_t mode, int32_t collection_expr, void* script, float x, float y, float z)
 			{
 				return g_itemEntry_trampoline(name, gSelf->state_.itemEntries[id], mode, collection_expr, script, x, y, z);
 			});*/
@@ -222,108 +223,108 @@ namespace mod::owr
 		const uint32_t skip_cutscene_opcode = 0x48000030;     // b 0x0030
 		mod::patch::writePatch(
 			kSkipUHCutsceneOpcode, &skip_cutscene_opcode, sizeof(uint32_t));
-	 }
+	}
 
-	 void OWR::Update()
-	 {
-		 SequenceInit();
-		 LZTest();
-	 }
+	void OWR::Update()
+	{
+		SequenceInit();
+		LZTest();
+	}
 
-	 void OWR::Draw()
-	 {
-		 //char* buffer = new char[256];
-		 //sprintf(buffer, "seq: %lu", ttyd::swdrv::swByteGet(0));
-		 //DrawString(buffer, -232, -120,-1U);
-	 }
+	void OWR::Draw()
+	{
+		//char* buffer = new char[256];
+		//sprintf(buffer, "seq: %lu", ttyd::swdrv::swByteGet(0));
+		//DrawString(buffer, -232, -120,-1U);
+	}
 
-	 void OWR::NewFileInit()
-	 {
+	void OWR::NewFileInit()
+	{
 
-	 }
+	}
 
 	void OWR::OnModuleLoaded(OSModuleInfo* module_info)
 	{
 		if (module_info == nullptr) return;
 		//uintptr_t module_ptr = reinterpret_cast<uintptr_t>(module_info);
-        switch (module_info->id) {
-            case ModuleId::GOR:
-                ApplyGor00Patches(module_info);
-                ApplyGor01Patches(module_info);
-                ApplyGor02Patches(module_info);
-                ApplyGor03Patches(module_info);
-                ApplyGor04Patches(module_info);
-                ApplyGorMiscPatches(module_info);
-                break;
-            case ModuleId::HEI:
-                ApplyHeiPatches(module_info);
-                break;
-            case ModuleId::GON:
-                ApplyGonPatches(module_info);
-                break;
-            case ModuleId::NOK:
-                ApplyNokPatches(module_info);
-                break;
-            case ModuleId::WIN:
-                ApplyWinPatches(module_info);
-                break;
-            case ModuleId::MRI:
-                ApplyMriPatches(module_info);
-                break;
-            case ModuleId::TOU:
-                ApplyTouPatches(module_info);
-                break;
-            case ModuleId::TOU2:
-                ApplyTou2Patches(module_info);
-                break;
-            case ModuleId::USU:
-                ApplyUsuPatches(module_info);
-                break;
-            case ModuleId::GRA:
-                ApplyGraPatches(module_info);
-                break;
-            case ModuleId::JIN:
-                ApplyJinPatches(module_info);
-                break;
-            case ModuleId::MUJ:
-                ApplyMujPatches(module_info);
-                break;
-            case ModuleId::DOU:
-                ApplyDouPatches(module_info);
-                break;
-            case ModuleId::RSH:
-                ApplyRshPatches(module_info);
-                break;
-            case ModuleId::EKI:
-                ApplyEkiPatches(module_info);
-                break;
-            case ModuleId::END:
-                ApplyEndPatches(module_info);
-                break;
-            case ModuleId::HOM:
-                ApplyHomPatches(module_info);
-                break;
-            case ModuleId::PIK:
-                ApplyPikPatches(module_info);
-                break;
-            case ModuleId::BOM:
-                ApplyBomPatches(module_info);
-                break;
-            case ModuleId::AJI:
-                ApplyAjiPatches(module_info);
-                break;
-			case ModuleId::AAA:
-				ApplyAaaPatches(module_info);
-				break;
-			case ModuleId::KPA:
-				ApplyKpaPatches(module_info);
-				break;
-			case ModuleId::TIK:
-				ApplyTikPatches(module_info);
-				break;
-            default:
-                return;
-        }
+		switch (module_info->id) {
+		case ModuleId::GOR:
+			ApplyGor00Patches(module_info);
+			ApplyGor01Patches(module_info);
+			ApplyGor02Patches(module_info);
+			ApplyGor03Patches(module_info);
+			ApplyGor04Patches(module_info);
+			ApplyGorMiscPatches(module_info);
+			break;
+		case ModuleId::HEI:
+			ApplyHeiPatches(module_info);
+			break;
+		case ModuleId::GON:
+			ApplyGonPatches(module_info);
+			break;
+		case ModuleId::NOK:
+			ApplyNokPatches(module_info);
+			break;
+		case ModuleId::WIN:
+			ApplyWinPatches(module_info);
+			break;
+		case ModuleId::MRI:
+			ApplyMriPatches(module_info);
+			break;
+		case ModuleId::TOU:
+			ApplyTouPatches(module_info);
+			break;
+		case ModuleId::TOU2:
+			ApplyTou2Patches(module_info);
+			break;
+		case ModuleId::USU:
+			ApplyUsuPatches(module_info);
+			break;
+		case ModuleId::GRA:
+			ApplyGraPatches(module_info);
+			break;
+		case ModuleId::JIN:
+			ApplyJinPatches(module_info);
+			break;
+		case ModuleId::MUJ:
+			ApplyMujPatches(module_info);
+			break;
+		case ModuleId::DOU:
+			ApplyDouPatches(module_info);
+			break;
+		case ModuleId::RSH:
+			ApplyRshPatches(module_info);
+			break;
+		case ModuleId::EKI:
+			ApplyEkiPatches(module_info);
+			break;
+		case ModuleId::END:
+			ApplyEndPatches(module_info);
+			break;
+		case ModuleId::HOM:
+			ApplyHomPatches(module_info);
+			break;
+		case ModuleId::PIK:
+			ApplyPikPatches(module_info);
+			break;
+		case ModuleId::BOM:
+			ApplyBomPatches(module_info);
+			break;
+		case ModuleId::AJI:
+			ApplyAjiPatches(module_info);
+			break;
+		case ModuleId::AAA:
+			ApplyAaaPatches(module_info);
+			break;
+		case ModuleId::KPA:
+			ApplyKpaPatches(module_info);
+			break;
+		case ModuleId::TIK:
+			ApplyTikPatches(module_info);
+			break;
+		default:
+			return;
+		}
 
 		/*ShopItemData* item_data = reinterpret_cast<ShopItemData*>(module_ptr + kShopOffsets[0]);
 		for (int32_t copy = 0; copy < 7; ++copy) {
@@ -343,12 +344,55 @@ namespace mod::owr
 		} */
 	}
 
-	void OWR::DrawString(const char* data, int32_t x, int32_t y, uint32_t color, float scale) {
+	void OWR::DrawString(const char* data, float x, float y, uint32_t color, float scale) {
 		if (!data) return;
+
+		// Init text drawing
 		ttyd::fontmgr::FontDrawStart();
 		ttyd::fontmgr::FontDrawColor(reinterpret_cast<uint8_t*>(&color));
 		ttyd::fontmgr::FontDrawEdge();
 		ttyd::fontmgr::FontDrawScale(scale);
+
+		// Draw each line
+		char buf[128];
+		const float lineDecrement = 32.f * scale;
+		constexpr int32_t maxLength = sizeof(buf) - 1;
+
+		while (1)
+		{
+			// Find the end of the current line
+			const char* newline = strchr(data, '\n');
+
+			// If a newline is not found, then currently at the last line
+			if (!newline)
+			{
+				break;
+			}
+
+			// Copy this line to the temporary buffer and append a null byte
+			int32_t lineLength = newline - data;
+
+			// Make sure the current line won't be an empty string
+			if (lineLength > 0)
+			{
+				// Prevent a buffer overflow
+				if (lineLength > maxLength)
+				{
+					lineLength = maxLength;
+				}
+
+				char* tempBuf = strncpy(buf, data, lineLength);
+				tempBuf[lineLength] = '\0';
+
+				ttyd::fontmgr::FontDrawString(x, y, tempBuf);
+			}
+
+			// Advance to the next line
+			data = newline + 1;
+			y -= lineDecrement;
+		}
+
+		// Draw the rest of the text
 		ttyd::fontmgr::FontDrawString(x, y, data);
 	}
 
