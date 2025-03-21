@@ -1,11 +1,10 @@
-instruction = 0x805E83A8
-base = 0x805E83A8
+instruction = 0x805CF2C0
+base = 0x805CF22C
 
 offset = int((instruction - base) / 4)
-rel = 0x0000dd98
+rel = 0x0001488c
 
-
-skip = 0
+skip = 3
 
 text = "キノシコワ"
 hex_data = text.encode('shift_jis')
