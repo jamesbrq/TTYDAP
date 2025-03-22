@@ -5,6 +5,7 @@
 #include <ttyd/evt_msg.h>
 #include <ttyd/evt_map.h>
 #include <ttyd/evt_hit.h>
+#include <ttyd/evt_item.h>
 #include <ttyd/evt_mario.h>
 #include <ttyd/evt_party.h>
 #include <ttyd/evt_bero.h>
@@ -44,6 +45,7 @@ extern int32_t win_05_init_evt[];
 extern int32_t win_first_evt_dokan[];
 extern int32_t welcome_wonderforest[];
 extern int32_t win_06_init_evt[];
+extern int32_t win_all_party_lecture[];
 
 EVT_BEGIN(win_vivian_init_evt)
 	IF_SMALL(GSW(1712), 3)
@@ -90,6 +92,14 @@ EVT_BEGIN(win_00_init_evt_hook)
 	RUN_CHILD_EVT(win_00_init_evt_evt)
 	GOTO(&win_00_init_evt[51])
 EVT_PATCH_END()
+
+EVT_BEGIN(party_evt)
+	USER_FUNC(evt_mario::evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
+	USER_FUNC(evt_item::evt_item_entry, PTR("item01"), 1, LW(0), LW(1), LW(2), 16, GSWF(6078), 0)
+	USER_FUNC(evt_item::evt_item_get_item, PTR("item01"))
+	WAIT_MSEC(800)
+	RETURN()
+EVT_END()
 
 void ApplyWinPatches(OSModuleInfo* module_info)
 {
@@ -197,4 +207,6 @@ void ApplyWinPatches(OSModuleInfo* module_info)
 	win_06_init_evt[2] = 1;
 	win_06_init_evt[65] = GSW(1702);
 	win_06_init_evt[66] = 0;
+
+	patch::writePatch(&win_all_party_lecture[0], party_evt, sizeof(party_evt));
 }

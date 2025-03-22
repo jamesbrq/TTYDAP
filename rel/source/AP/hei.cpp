@@ -3,6 +3,7 @@
 #include <ttyd/evt_npc.h>
 #include <ttyd/evt_nannpc.h>
 #include <ttyd/evt_msg.h>
+#include <ttyd/evt_item.h>
 #include <ttyd/evt_map.h>
 #include <ttyd/evt_hit.h>
 #include <ttyd/evt_mario.h>
@@ -38,6 +39,15 @@ extern int32_t a_sekizou_1[];
 extern int32_t hei_07_init_evt[];
 extern int32_t evt_golden[];
 extern int32_t hei_10_init_evt[];
+extern int32_t hei_all_party_lecture[];
+
+EVT_BEGIN(party_evt)
+	USER_FUNC(evt_mario::evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
+	USER_FUNC(evt_item::evt_item_entry, PTR("item01"), 1, LW(0), LW(1), LW(2), 16, GSWF(6077), 0)
+	USER_FUNC(evt_item::evt_item_get_item, PTR("item01"))
+	WAIT_MSEC(800)
+	RETURN()
+EVT_END()
 
 void ApplyHeiPatches(OSModuleInfo* module_info)
 {
@@ -128,4 +138,6 @@ void ApplyHeiPatches(OSModuleInfo* module_info)
 
 	hei_10_init_evt[41] = GSW(1701);
 	hei_10_init_evt[42] = 9;
+
+	patch::writePatch(&hei_all_party_lecture[0], party_evt, sizeof(party_evt));
 }

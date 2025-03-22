@@ -8,6 +8,7 @@
 #include <ttyd/evt_hit.h>
 #include <ttyd/evt_mario.h>
 #include <ttyd/evt_pouch.h>
+#include <ttyd/evt_item.h>
 #include <ttyd/party.h>
 #include <ttyd/evt_party.h>
 #include <ttyd/evtmgr_cmd.h>
@@ -179,6 +180,7 @@ extern int32_t tou_evt_dakuto_13[];
 extern int32_t evt_nusumi[];
 extern int32_t evt_first[];
 extern int32_t tou_13_init_evt[];
+extern int32_t tou_all_party_lecture[];
 
 //Assembly
 extern int32_t tou_disp_proc[];
@@ -306,6 +308,14 @@ EVT_BEGIN(tou_04_init_evt_hook)
 	RUN_CHILD_EVT(tou_04_init_evt_evt)
 	GOTO(&tou_04_init_evt[425])
 EVT_PATCH_END()
+
+EVT_BEGIN(party_evt)
+	USER_FUNC(evt_mario::evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
+	USER_FUNC(evt_item::evt_item_entry, PTR("item01"), 1, LW(0), LW(1), LW(2), 16, GSWF(6079), 0)
+	USER_FUNC(evt_item::evt_item_get_item, PTR("item01"))
+	WAIT_MSEC(800)
+	RETURN()
+EVT_END()
 
 void ApplyTouPatches(OSModuleInfo* module_info)
 {
@@ -1062,6 +1072,8 @@ void ApplyTouPatches(OSModuleInfo* module_info)
 	tou_13_init_evt[105] = 17;
 	tou_13_init_evt[110] = GSW(1703);
 	tou_13_init_evt[111] = 16;
+
+	patch::writePatch(&tou_all_party_lecture[0], party_evt, sizeof(party_evt));
 
 	//Assembly
 	tou_disp_proc[18] = 0x38840827; // addi r4, r4, 0x827 GSW(1703)

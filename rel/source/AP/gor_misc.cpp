@@ -23,7 +23,7 @@ extern int32_t luigi_gor_first_talk[];
 extern int32_t gor_10_init_evt[];
 extern int32_t gor_12_init_evt[];
 extern int32_t gor_11_init_evt[];
-extern int32_t all_party_lecture[];
+extern int32_t gor_all_party_lecture[];
 
 //Assembly
 extern int32_t irai_init_func[];
@@ -43,7 +43,7 @@ EVT_END()
 
 void ApplyGorMiscPatches(OSModuleInfo* module_info)
 {
-	patch::writePatch(&all_party_lecture[0], party_evt, sizeof(party_evt));
+	patch::writePatch(&gor_all_party_lecture[0], party_evt, sizeof(party_evt));
 
 	luigi_gor_first_talk[18] = GSW(1708);
 	luigi_gor_first_talk[19] = 17;

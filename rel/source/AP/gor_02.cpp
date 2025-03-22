@@ -462,19 +462,6 @@ EVT_BEGIN(luigi_init_hook)
 	RETURN()
 EVT_PATCH_END()
 
-EVT_BEGIN(gor_shine_sprites_02_evt)
-	USER_FUNC(evt_mobj::evt_mobj_badgeblk, PTR("pblk1"), -250, 288, -500, 99, 0, GSWF(5525), 0)
-	USER_FUNC(evt_mobj::evt_mobj_badgeblk, PTR("pblk2"), -30, 60, -215, 99, 0, GSWF(5526), 0)
-	USER_FUNC(evt_mobj::evt_mobj_badgeblk, PTR("pblk3"), 540, 60, -260, 99, 0, GSWF(5529), 0)
-	RETURN()
-EVT_PATCH_END()
-
-EVT_BEGIN(gor_shine_sprites_02_hook)
-	RUN_CHILD_EVT(gor_shine_sprites_02_evt)
-	GOTO(&gor_02_init_evt[155])
-EVT_PATCH_END()
-
-
 void ApplyGor02Patches(OSModuleInfo* module_info)
 {
 	unk_evt_gor_0003ec8c[26] = GSW(1700);
@@ -508,26 +495,26 @@ void ApplyGor02Patches(OSModuleInfo* module_info)
 	sanders_talk_02[569] = GSW(1705);
 	sanders_talk_02[570] = 5;
 
-	patch::writePatch(&kuribo4_talk[184], kuribo4_talk_evt, sizeof(kuribo4_talk_evt)); //Random NPC Speach
-	patch::writePatch(&chusan3_talk[0], chusan3_talk_evt, sizeof(chusan3_talk_evt)); //Random NPC 2 Speach
-	patch::writePatch(&roten3_talk[0], roten3_talk_evt, sizeof(roten3_talk_evt)); //Random NPC 3 Speach
+	patch::writePatch(&kuribo4_talk[184], kuribo4_talk_evt, sizeof(kuribo4_talk_evt));
+	patch::writePatch(&chusan3_talk[0], chusan3_talk_evt, sizeof(chusan3_talk_evt));
+	patch::writePatch(&roten3_talk[0], roten3_talk_evt, sizeof(roten3_talk_evt));
 
-	borodo1_talk[6] = GSW(1705); //Random NPC Init
+	borodo1_talk[6] = GSW(1705); //HOOK
 	borodo1_talk[8] = 1;
-	borodo1_talk[9] = 99; //Unknown
+	borodo1_talk[9] = 99;
 
-	borodo1_regl[1] = GSW(1705); //Random NPC Movement
+	borodo1_regl[1] = GSW(1705); //HOOK
 	borodo1_regl[3] = 1;
-	borodo1_regl[4] = 99; //Unknown
+	borodo1_regl[4] = 99;
 
-	patch::writePatch(&borodo1_talk[0], borodo1_talk_evt, sizeof(borodo1_talk_evt)); //Random NPC 4 Speach
+	patch::writePatch(&borodo1_talk[0], borodo1_talk_evt, sizeof(borodo1_talk_evt));
 
-	patch::writePatch(&borodo2_talk[24], borodo2_talk_evt, sizeof(borodo2_talk_evt)); //Random NPC 5 Speach
+	patch::writePatch(&borodo2_talk[24], borodo2_talk_evt, sizeof(borodo2_talk_evt));
 
-	kuragarisan_write_name[428] = GSW(1704); //Darkly write name
+	kuragarisan_write_name[428] = GSW(1704);
 	kuragarisan_write_name[429] = 1;
 
-	kuragarisan_talk[1] = GSW(1704); //Darkly Speach
+	kuragarisan_talk[1] = GSW(1704);
 	kuragarisan_talk[3] = 0;
 	kuragarisan_talk[17] = EVT_HELPER_CMD(0, 42);
 	kuragarisan_talk[18] = EVT_HELPER_CMD(0, 0);
@@ -537,15 +524,15 @@ void ApplyGor02Patches(OSModuleInfo* module_info)
 
 	patch::writePatch(&luigi_init_02[0], luigi_init_hook, sizeof(luigi_init_hook));
 
-	steel_coin[382] = GSW(1700); //Thief steals coins
+	steel_coin[382] = GSW(1700);
 
-	kurihakase_first_talk[780] = GSW(1700); //Frankley prologue
+	kurihakase_first_talk[780] = GSW(1700);
 
-	kurihakase_wall_remove[251] = GSW(1700); //Frankley break fence
+	kurihakase_wall_remove[251] = GSW(1700);
 
-	kurihakase_lecture[272] = GSW(1700); //Frankley battle tutorial
+	kurihakase_lecture[272] = GSW(1700);
 
-	kurihakase_lecture_badge[275] = GSW(1700); //Frankley badge tutorial
+	kurihakase_lecture_badge[275] = GSW(1700);
 
 	epigraphy_map[617] = GSW(1700);
 	epigraphy_map[618] = 15;
@@ -569,8 +556,6 @@ void ApplyGor02Patches(OSModuleInfo* module_info)
 	gor_02_init_evt[46] = GSW(1717);
 	gor_02_init_evt[47] = 25;
 	gor_02_init_evt[59] = GSW(1700);
-	gor_02_init_evt[134] = 0x86;
-	//patch::writePatch(&gor_02_init_evt[128], gor_shine_sprites_02_hook, sizeof(gor_shine_sprites_02_hook));
 	gor_02_init_evt[201] = GSW(1701);
 	gor_02_init_evt[202] = 1;
 	gor_02_init_evt[360] = GSW(1700);

@@ -7,6 +7,7 @@
 #include <ttyd/evt_hit.h>
 #include <ttyd/evt_mario.h>
 #include <ttyd/evt_party.h>
+#include <ttyd/evt_item.h>
 #include <ttyd/evt_bero.h>
 #include <ttyd/evt_snd.h>
 #include <ttyd/evt_urouro.h>
@@ -94,6 +95,7 @@ extern int32_t unlock[];
 extern int32_t evt_majin2[];
 extern int32_t usu_01_init_evt[];
 extern int32_t evt_usu_kagemario_party_kill_usu[];
+extern int32_t usu_all_party_lecture[];
 
 //Assembly
 extern int32_t usu_evt_kagemario_init[];
@@ -697,6 +699,14 @@ EVT_BEGIN(village_chief_init_hook)
 	RETURN()
 EVT_PATCH_END()
 
+EVT_BEGIN(party_evt)
+	USER_FUNC(evt_mario::evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
+	USER_FUNC(evt_item::evt_item_entry, PTR("item01"), 1, LW(0), LW(1), LW(2), 16, GSWF(6080), 0)
+	USER_FUNC(evt_item::evt_item_get_item, PTR("item01"))
+	WAIT_MSEC(800)
+	RETURN()
+EVT_END()
+
 void ApplyUsuPatches(OSModuleInfo* module_info)
 {
 	patch::writePatch(&villagerA_init[5], villagerA_init_hook, sizeof(villagerA_init_hook));
@@ -1027,6 +1037,8 @@ void ApplyUsuPatches(OSModuleInfo* module_info)
 	usu_01_init_evt[310] = 1;
 
 	evt_usu_kagemario_party_kill_usu[1] = GSW(1704);
+
+	patch::writePatch(&usu_all_party_lecture[0], party_evt, sizeof(party_evt));
 
 	//These are swByteGet
 	usu_evt_kagemario_init[2] = 0x386006B3; // li r3, 0x6B3 (GSW(1715))

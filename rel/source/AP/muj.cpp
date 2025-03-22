@@ -7,6 +7,7 @@
 #include <ttyd/evt_hit.h>
 #include <ttyd/evt_mario.h>
 #include <ttyd/evt_party.h>
+#include <ttyd/evt_item.h>
 #include <ttyd/evt_bero.h>
 #include <ttyd/evt_snd.h>
 #include <ttyd/evt_urouro.h>
@@ -73,7 +74,9 @@ extern int32_t peton_init_muj_02[];
 extern int32_t peton_talk_muj_02[];
 extern int32_t muj_02_init_evt[];
 extern int32_t muj_03_event_01[];
+extern int32_t muj_03_init_evt[];
 extern int32_t sanders_funto[];
+extern int32_t yashi_yure[];
 extern int32_t muj_04_init_evt[];
 extern int32_t sanders_nakama[];
 extern int32_t sanders_init_muj_05[];
@@ -105,6 +108,10 @@ extern int32_t muj_12_init_evt[];
 extern int32_t onryo_event[];
 extern int32_t muj_20_koopa_evt[];
 extern int32_t muj_20_init_evt[];
+extern int32_t koburon_dead[];
+extern int32_t muj_all_party_lecture[];
+
+EVT_DECLARE_USER_FUNC(koburon_get_encount_info, 1)
 
 EVT_BEGIN(mony_talk_muj_00_evt)
 	IF_EQUAL(GSW(1709), 8)
@@ -588,8 +595,111 @@ EVT_BEGIN(muj_01_init_evt_hook)
 	GOTO(&muj_01_init_evt[163])
 EVT_END()
 
+EVT_BEGIN(koburon_dead_evt)
+	USER_FUNC(evt_npc::evt_npc_get_position, PTR("me"), LW(0), LW(1), LW(2))
+	USER_FUNC(evt_snd::evt_snd_sfxon_3d, PTR("SFX_BTL_DAMAGED_PLIABLE1"), LW(0), LW(1), LW(2), 0)
+	USER_FUNC(evt_npc::evt_npc_set_damage_anim, PTR("me"))
+	WAIT_MSEC(200)
+	ADD(LW(1), 30)
+	ADD(LW(2), 10)
+	SET(LW(4), GSWF(6082))
+	USER_FUNC(evt_item::evt_item_entry, LW(3), LW(0), LW(1), LW(2), 14, LW(4), 0)
+	WAIT_MSEC(400)
+	IF_EQUAL(GSW(721), 7)
+		USER_FUNC(evt_msg::evt_msg_print, 0, PTR("koburon_14"), 0, PTR("me"))
+		GOTO(99)
+	END_IF()
+	USER_FUNC(koburon_get_encount_info, LW(0))
+	SWITCH(LW(0))
+		CASE_OR(131072)
+		CASE_OR(262144)
+		CASE_OR(524288)
+			USER_FUNC(evt_msg::evt_msg_print, 0, PTR("koburon_10"), 0, PTR("me"))
+		CASE_END()
+		CASE_OR(1048576)
+		CASE_OR(2097152)
+		CASE_OR(4194304)
+			USER_FUNC(evt_msg::evt_msg_print, 0, PTR("koburon_10"), 0, PTR("me"))
+		CASE_END()
+		CASE_OR(8388608)
+			USER_FUNC(evt_msg::evt_msg_print, 0, PTR("koburon_11"), 0, PTR("me"))
+		CASE_END()
+		CASE_OR(16777216)
+			USER_FUNC(evt_msg::evt_msg_print, 0, PTR("koburon_13"), 0, PTR("me"))
+		CASE_END()
+	END_SWITCH()
+	LBL(99)
+	USER_FUNC(evt_npc::evt_npc_set_anim, PTR("me"), PTR("S_1"))
+	WAIT_MSEC(100)
+	ADD(GSW(721), 1)
+	SET(LSWF(2), 1)
+	USER_FUNC(evt_npc::evt_npc_reaction_flag_onoff, 0, PTR("me"), 15)
+	USER_FUNC(evt_npc::evt_npc_set_anim, PTR("me"), PTR("A_2"))
+	WAIT_MSEC(500)
+	USER_FUNC(evt_npc::evt_npc_change_interrupt, PTR("me"), 1, 0)
+	USER_FUNC(evt_npc::evt_npc_set_position, PTR("me"), 0, -1000, 0)
+	SET(GSWF(3151), 1)
+	RETURN()
+EVT_END()
+
+EVT_BEGIN(koburon_dead_hook)
+	SWITCH(GSW(721))
+		CASE_EQUAL(0)
+			SET(LW(3), 125)
+			SET(LW(4), GSWF(6082))
+		CASE_END()
+		CASE_EQUAL(1)
+			SET(LW(3), 125)
+			SET(LW(4), GSWF(6083))
+		CASE_END()
+		CASE_EQUAL(2)
+			SET(LW(3), 125)
+			SET(LW(4), GSWF(6084))
+		CASE_END()
+		CASE_EQUAL(3)
+			SET(LW(3), 125)
+			SET(LW(4), GSWF(6085))
+		CASE_END()
+		CASE_EQUAL(4)
+			SET(LW(3), 125)
+			SET(LW(4), GSWF(6086))
+		CASE_END()
+		CASE_EQUAL(5)
+			SET(LW(3), 125)
+			SET(LW(4), GSWF(6087))
+		CASE_END()
+		CASE_EQUAL(6)
+			SET(LW(3), 125)
+			SET(LW(4), GSWF(6088))
+		CASE_END()
+		CASE_EQUAL(7)
+			SET(LW(3), 125)
+			SET(LW(4), GSWF(6089))
+		CASE_END()
+		CASE_ETC()
+			SET(LW(3), 125)
+			SET(LW(4), -1)
+		CASE_END()
+	END_SWITCH()
+	RUN_CHILD_EVT(koburon_dead_evt)
+	RETURN()
+EVT_PATCH_END()
+
+EVT_BEGIN(party_evt)
+	USER_FUNC(evt_mario::evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
+	USER_FUNC(evt_item::evt_item_entry, PTR("item01"), 1, LW(0), LW(1), LW(2), 16, GSWF(6081), 0)
+	USER_FUNC(evt_item::evt_item_get_item, PTR("item01"))
+	WAIT_MSEC(800)
+	RETURN()
+EVT_END()
+
+
 void ApplyMujPatches(OSModuleInfo* module_info)
 {
+	patch::writePatch(&koburon_dead[0], koburon_dead_hook, sizeof(koburon_dead_hook));
+
+	patch::writePatch(&muj_all_party_lecture[0], party_evt, sizeof(party_evt));
+
 	garawaru_init_muj_00[1] = GSW(1717);
 	garawaru_init_muj_00[3] = 14;
 	garawaru_init_muj_00[4] = 15;
@@ -830,8 +940,13 @@ void ApplyMujPatches(OSModuleInfo* module_info)
 	muj_03_event_01[1] = GSW(1719);
 	muj_03_event_01[2] = 1;
 
+	muj_03_init_evt[32] = 11;
+
 	sanders_funto[462] = GSW(1719);
 	sanders_funto[463] = 1;
+
+	yashi_yure[111] = GSWF(6090);
+	yashi_yure[238] = GSWF(6091);
 
 	muj_04_init_evt[70] = GSW(1719);
 	muj_04_init_evt[72] = 0;
