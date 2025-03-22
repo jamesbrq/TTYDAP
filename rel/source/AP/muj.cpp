@@ -111,8 +111,6 @@ extern int32_t muj_20_init_evt[];
 extern int32_t koburon_dead[];
 extern int32_t muj_all_party_lecture[];
 
-EVT_DECLARE_USER_FUNC(koburon_get_encount_info, 1)
-
 EVT_BEGIN(mony_talk_muj_00_evt)
 	IF_EQUAL(GSW(1709), 8)
 		USER_FUNC(evt_msg::evt_msg_print, 0, PTR("stg5_muj_146_02"), 0, PTR("me"))
@@ -603,7 +601,7 @@ EVT_BEGIN(koburon_dead_evt)
 	ADD(LW(1), 30)
 	ADD(LW(2), 10)
 	SET(LW(4), GSWF(6082))
-	USER_FUNC(evt_item::evt_item_entry, LW(3), LW(0), LW(1), LW(2), 14, LW(4), 0)
+	USER_FUNC(evt_item::evt_item_entry, PTR("item_99"), LW(3), LW(0), LW(1), LW(2), 14, LW(4), 0)
 	WAIT_MSEC(400)
 	IF_EQUAL(GSW(721), 7)
 		USER_FUNC(evt_msg::evt_msg_print, 0, PTR("koburon_14"), 0, PTR("me"))
