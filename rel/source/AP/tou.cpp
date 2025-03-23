@@ -3,6 +3,7 @@
 #include <ttyd/evt_eff.h>
 #include <ttyd/evt_npc.h>
 #include <ttyd/evt_nannpc.h>
+#include <ttyd/item_data.h>
 #include <ttyd/evt_msg.h>
 #include <ttyd/evt_map.h>
 #include <ttyd/evt_hit.h>
@@ -22,6 +23,7 @@
 
 using namespace mod;
 using namespace ttyd;
+using ItemId = ttyd::item_data::ItemType::e;
 
 extern "C" {
 	EVT_DECLARE_USER_FUNC(evt_tou_get_ranking, 1)
@@ -311,9 +313,14 @@ EVT_PATCH_END()
 
 EVT_BEGIN(party_evt)
 	USER_FUNC(evt_mario::evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
-	USER_FUNC(evt_item::evt_item_entry, PTR("item01"), 1, LW(0), LW(1), LW(2), 16, GSWF(6079), 0)
+	USER_FUNC(evt_item::evt_item_entry, PTR("item01"), LW(3), LW(0), LW(1), LW(2), 16, GSWF(6079), 0)
 	USER_FUNC(evt_item::evt_item_get_item, PTR("item01"))
 	WAIT_MSEC(800)
+	RETURN()
+EVT_END()
+
+EVT_BEGIN(party_evt_hook)
+	RUN_CHILD_EVT(party_evt)
 	RETURN()
 EVT_END()
 
@@ -994,6 +1001,9 @@ void ApplyTouPatches(OSModuleInfo* module_info)
 	patch::writePatch(&tou_10_evt_1st_leagu[148], jolene_egg_hook, sizeof(jolene_egg_hook));
 
 	patch::writePatch(&evt_tou_chibi_yoshi[73], yoshi_gswf_evt, sizeof(yoshi_gswf_evt));
+	evt_tou_chibi_yoshi[411] = EVT_HELPER_CMD(2, 50);
+	evt_tou_chibi_yoshi[412] = EVT_HELPER_OP(LW(3));
+	patch::writePatch(&evt_tou_chibi_yoshi[414], party_evt_hook, sizeof(party_evt_hook));
 
 
 	tou_10_init_evt[1] = GSW(1703);
@@ -1072,8 +1082,6 @@ void ApplyTouPatches(OSModuleInfo* module_info)
 	tou_13_init_evt[105] = 17;
 	tou_13_init_evt[110] = GSW(1703);
 	tou_13_init_evt[111] = 16;
-
-	patch::writePatch(&tou_all_party_lecture[0], party_evt, sizeof(party_evt));
 
 	//Assembly
 	tou_disp_proc[18] = 0x38840827; // addi r4, r4, 0x827 GSW(1703)

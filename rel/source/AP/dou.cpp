@@ -90,6 +90,7 @@ void ApplyDouPatches(OSModuleInfo* module_info)
 
 	dou_09_init_evt[31] = GSW(1717);
 	dou_09_init_evt[32] = 5;
+	dou_09_init_evt[204] = 12;
 
 	namiyoke_check[1] = GSW(1717);
 	namiyoke_check[2] = 5;

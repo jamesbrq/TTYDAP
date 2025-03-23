@@ -63,13 +63,13 @@ void ApplyGraPatches(OSModuleInfo* module_info)
 	evt_machibuse[538] = GSWF(6044);
 	evt_machibuse[540] = 1;
 
-	gra_00_init_evt[47] = 11;
+	gra_00_init_evt[47] = 12;
 	gra_00_init_evt[65] = GSW(1715);
 	gra_00_init_evt[67] = 4;
 	gra_00_init_evt[68] = 4;
 
 	gra_01_init_evt[84] = GSW(1715); //Unused
-	gra_01_init_evt[77] = 11;
+	gra_01_init_evt[77] = 12;
 
 	shopmaster_pig_init[1] = GSW(1715);
 	shopmaster_pig_init[3] = 2;
@@ -88,7 +88,7 @@ void ApplyGraPatches(OSModuleInfo* module_info)
 	gra_02_init_evt[57] = GSW(1714);
 	gra_02_init_evt[58] = 1;
 
-	gra_03_init_evt[15] = 11;
+	gra_03_init_evt[15] = 12;
 
 	gra_04_tree_open_evt[37] = GSW(1714);
 	gra_04_tree_open_evt[38] = 2;
@@ -108,7 +108,7 @@ void ApplyGraPatches(OSModuleInfo* module_info)
 	evt_break_floor[1] = GSW(1714);
 	evt_break_floor[2] = 4;
 
-	gra_05_init_evt[15] = 11;
+	gra_05_init_evt[15] = 12;
 	gra_05_init_evt[39] = GSW(1714);
 	gra_05_init_evt[40] = 3;
 	gra_05_init_evt[81] = GSW(1714);

@@ -5,6 +5,7 @@
 #include <ttyd/evt_msg.h>
 #include <ttyd/evt_map.h>
 #include <ttyd/evt_hit.h>
+#include <ttyd/evt_item.h>
 #include <ttyd/evt_mario.h>
 #include <ttyd/evt_party.h>
 #include <ttyd/evt_bero.h>
@@ -66,6 +67,9 @@ extern int32_t talk_takun2[];
 extern int32_t talk_takun3[];
 extern int32_t pik_init_kiza[];
 extern int32_t pik_04_init_evt[];
+extern int32_t pik_talk_madam_ring_return[];
+
+const char madame2[] = "\x83\x7D\x83\x5F\x83\x80";
 
 EVT_BEGIN(miyageya_talk_evt)
 	IF_LARGE_EQUAL(GSW(1707), 16)
@@ -201,9 +205,29 @@ EVT_BEGIN(evt_daiza_hook)
 	RETURN()
 EVT_END()
 
+EVT_BEGIN(talk_madam_ring_item)
+	USER_FUNC(evt_msg::evt_msg_print, 0, PTR("stg6_pik_04_07"), 0, PTR(madame2))
+	USER_FUNC(evt_mario::evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
+	USER_FUNC(evt_item::evt_item_entry, PTR("item01"), LW(3), LW(0), LW(1), LW(2), 16, GSWF(6092), 0)
+	USER_FUNC(evt_item::evt_item_get_item, PTR("item01"))
+	WAIT_MSEC(800)
+	USER_FUNC(evt_msg::evt_msg_print, 0, PTR("stg6_pik_04_08"), 0, PTR(madame2))
+	RETURN()
+EVT_END()
+
+EVT_BEGIN(pik_talk_madam_ring_return_hook3)
+	RUN_CHILD_EVT(talk_madam_ring_item)
+	GOTO(&pik_talk_madam_ring_return[33])
+EVT_PATCH_END()
+
 
 void ApplyPikPatches(OSModuleInfo* module_info)
 {
+
+	pik_talk_madam_ring_return[18] = EVT_HELPER_CMD(2, 50);
+	pik_talk_madam_ring_return[19] = EVT_HELPER_OP(LW(3));
+	patch::writePatch(&pik_talk_madam_ring_return[21], pik_talk_madam_ring_return_hook3, sizeof(pik_talk_madam_ring_return_hook3));
+
 	hom_10_evt_resha_start_pik_00[49] = GSW(1706);
 	hom_10_evt_resha_start_pik_00[50] = 43;
 

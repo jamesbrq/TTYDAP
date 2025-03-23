@@ -6,6 +6,7 @@
 #include <ttyd/evt_map.h>
 #include <ttyd/evt_hit.h>
 #include <ttyd/evt_mario.h>
+#include <ttyd/evt_item.h>
 #include <ttyd/evt_party.h>
 #include <ttyd/evt_bero.h>
 #include <ttyd/evt_snd.h>
@@ -115,6 +116,8 @@ extern int32_t hom_10_evt_resha_start_rsh_06[];
 extern int32_t evt_great_moamoa[];
 extern int32_t rsh_06_init_evt[];
 extern int32_t rsh_06_a_init_evt[];
+
+const char madame[] = "\x83\x7D\x83\x5F\x83\x80";
 
 //Assembly
 extern int32_t rsh_prolog[];
@@ -643,6 +646,21 @@ EVT_BEGIN(talk_madam_ring_return_hook2)
 	GOTO(&talk_madam_rsh_01[69])
 EVT_PATCH_END()
 
+EVT_BEGIN(talk_madam_ring_item)
+	USER_FUNC(evt_msg::evt_msg_print, 0, PTR("stg6_rsh_201"), 0, PTR(madame))
+	USER_FUNC(evt_mario::evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
+	USER_FUNC(evt_item::evt_item_entry, PTR("item01"), LW(3), LW(0), LW(1), LW(2), 16, GSWF(6092), 0)
+	USER_FUNC(evt_item::evt_item_get_item, PTR("item01"))
+	WAIT_MSEC(800)
+	USER_FUNC(evt_msg::evt_msg_print, 0, PTR("stg6_rsh_202"), 0, PTR(madame))
+	RETURN()
+EVT_END()
+
+EVT_BEGIN(talk_madam_ring_return_hook3)
+	RUN_CHILD_EVT(talk_madam_ring_item)
+	GOTO(&talk_madam_ring_return[33])
+EVT_PATCH_END()
+
 void ApplyRshPatches(OSModuleInfo* module_info)
 {
 	simi_check[24] = GSW(1706);
@@ -762,6 +780,9 @@ void ApplyRshPatches(OSModuleInfo* module_info)
 	init_madam_rsh_01[20] = 37;
 
 	patch::writePatch(&talk_madam_ring_return[45], talk_madam_ring_return_hook1, sizeof(talk_madam_ring_return_hook1));
+	talk_madam_ring_return[18] = EVT_HELPER_CMD(2, 50);
+	talk_madam_ring_return[19] = EVT_HELPER_OP(LW(3));
+	patch::writePatch(&talk_madam_ring_return[21], talk_madam_ring_return_hook3, sizeof(talk_madam_ring_return_hook3));
 
 	talk_madam_rsh_01[1] = GSW(1706);
 	talk_madam_rsh_01[2] = 8;

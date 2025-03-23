@@ -2,6 +2,7 @@
 #include <ttyd/evt_cam.h>
 #include <ttyd/evt_npc.h>
 #include <ttyd/evt_nannpc.h>
+#include <ttyd/item_data.h>
 #include <ttyd/evt_msg.h>
 #include <ttyd/evt_map.h>
 #include <ttyd/evt_hit.h>
@@ -17,6 +18,7 @@
 
 using namespace mod;
 using namespace ttyd;
+using ItemId = ttyd::item_data::ItemType::e;
 
 extern int32_t win_vivian_init[];
 extern int32_t maririn_init[];
@@ -46,6 +48,8 @@ extern int32_t win_first_evt_dokan[];
 extern int32_t welcome_wonderforest[];
 extern int32_t win_06_init_evt[];
 extern int32_t win_all_party_lecture[];
+
+const char flurrie[] = "\x83\x4E\x83\x89\x83\x45\x83\x5F";
 
 EVT_BEGIN(win_vivian_init_evt)
 	IF_SMALL(GSW(1712), 3)
@@ -95,9 +99,17 @@ EVT_PATCH_END()
 
 EVT_BEGIN(party_evt)
 	USER_FUNC(evt_mario::evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
-	USER_FUNC(evt_item::evt_item_entry, PTR("item01"), 1, LW(0), LW(1), LW(2), 16, GSWF(6078), 0)
+	USER_FUNC(evt_item::evt_item_entry, PTR("item01"), ItemId::SUPER_LUIGI_3, LW(0), LW(1), LW(2), 16, GSWF(6076), 0)
 	USER_FUNC(evt_item::evt_item_get_item, PTR("item01"))
 	WAIT_MSEC(800)
+	SET(GSW(1702), 14)
+	USER_FUNC(evt_npc::evt_npc_set_position, PTR(flurrie), 0, -1000, 0)
+	USER_FUNC(evt_cam::evt_cam3d_evt_off, 300, 11)
+	USER_FUNC(evt_mario::evt_mario_key_onoff, 1)
+	USER_FUNC(evt_snd::evt_snd_bgmon, 512, PTR("BGM_STG2_WIN1"))
+	USER_FUNC(evt_snd::evt_snd_bgmoff, 22528)
+	USER_FUNC(evt_snd::evt_snd_envon, 272, PTR("ENV_STG2_WIN2"))
+	USER_FUNC(evt_snd::evt_snd_env_lpf, 0, 800)
 	RETURN()
 EVT_END()
 
@@ -170,8 +182,7 @@ void ApplyWinPatches(OSModuleInfo* module_info)
 	clouda_irai[414] = GSW(1702);
 	clouda_irai[415] = 12;
 
-	clouda_nakama[1525] = GSW(1702);
-	clouda_nakama[1526] = 14;
+	patch::writePatch(&clouda_nakama[1497], party_evt, sizeof(party_evt));
 
 	touch_door[1] = GSW(1702);
 	touch_door[3] = 11;
@@ -207,6 +218,4 @@ void ApplyWinPatches(OSModuleInfo* module_info)
 	win_06_init_evt[2] = 1;
 	win_06_init_evt[65] = GSW(1702);
 	win_06_init_evt[66] = 0;
-
-	patch::writePatch(&win_all_party_lecture[0], party_evt, sizeof(party_evt));
 }

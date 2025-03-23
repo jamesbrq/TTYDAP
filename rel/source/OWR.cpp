@@ -91,7 +91,7 @@ uint16_t GSWF_ARR[] =
 	1197,
 
 	//Attempt to enter ch.4 pipe early
-	1341
+	1341,
 };
 uint16_t GSWF_ARR_SIZE = sizeof(GSWF_ARR) / sizeof(GSWF_ARR[0]);
 
@@ -106,19 +106,19 @@ namespace mod::owr
 	void* (*g_itemEntry_trampoline)(const char*, uint32_t, uint32_t, int32_t, void*, float, float, float) = nullptr;
 	bool (*g_OSLink_trampoline)(OSModuleInfo*, void*) = nullptr;
 	void (*g_stg0_00_init_trampoline)() = nullptr;
+	uint32_t(*g_pouchGetItem_trampoline)(int32_t) = nullptr;
 	const char* (*g_msgSearch_trampoline)(const char*) = nullptr;
 
 	void OWR::SequenceInit()
 	{
 		uint32_t SequencePosition = ttyd::swdrv::swByteGet(1700);
-		if (ttyd::mario_pouch::pouchCheckItem(26) == 0)
-			ttyd::mario_pouch::pouchGetItem(ItemId::ELEVATOR_KEY_001A);
+		bool item = ttyd::mario_pouch::pouchCheckItem(ItemId::NECKLACE);
+		if(!item)
+			ttyd::mario_pouch::pouchGetItem(ItemId::NECKLACE);
+
 		if (SequencePosition != 0)
 			return;
-		ttyd::swdrv::swByteSet(1700, 16);
-		ttyd::swdrv::swByteSet(1705, 11);
-		ttyd::swdrv::swByteSet(1719, 8);
-		ttyd::swdrv::swByteSet(1717, 13);
+		ttyd::swdrv::swByteSet(1700, 15);
 
 		ttyd::mario_pouch::pouchSetMaxHP(99);
 		ttyd::mario_pouch::pouchSetMaxFP(99);
@@ -126,17 +126,8 @@ namespace mod::owr
 		ttyd::mario_pouch::pouchSetFP(99);
 
 		uint8_t goombella = static_cast<uint8_t>(ttyd::party::PartyMembers::Goombella);
-		uint8_t yoshi = static_cast<uint8_t>(ttyd::party::PartyMembers::Yoshi);
-		uint8_t bobbery = static_cast<uint8_t>(ttyd::party::PartyMembers::Bobbery);
-		uint8_t koops = static_cast<uint8_t>(ttyd::party::PartyMembers::Koops);
-		uint8_t flurrie = static_cast<uint8_t>(ttyd::party::PartyMembers::Flurrie);
 
 		ttyd::mario_party::partyJoin(goombella);
-		ttyd::mario_party::partyJoin(yoshi);
-		ttyd::mario_party::partyJoin(bobbery);
-		ttyd::mario_party::partyJoin(koops);
-		ttyd::mario_party::partyJoin(flurrie);
-
 		ttyd::mario_party::marioPartyHello(goombella);
 
 		uint16_t size = GSWF_ARR_SIZE;
@@ -146,20 +137,6 @@ namespace mod::owr
 		}
 		ttyd::swdrv::swSet(1215);
 		ttyd::swdrv::swSet(1216);
-
-
-		ttyd::mario_pouch::pouchGetItem(ItemId::ULTRA_BOOTS);
-		ttyd::mario_pouch::pouchAddStarPiece(50);
-		ttyd::mario_pouch::pouchGetItem(ItemId::ULTRA_HAMMER);
-		ttyd::mario_pouch::pouchGetItem(ItemId::INVALID_ITEM_PAPER_MODE_ICON);
-		ttyd::mario_pouch::pouchGetItem(ItemId::INVALID_ITEM_TUBE_MODE_ICON);
-		for (int i = 0; i <= 10; i++)
-			ttyd::mario_pouch::pouchGetItem(ItemId::POWER_PLUS);
-		ttyd::mario_pouch::pouchGetItem(ItemId::SPIKE_SHIELD);
-		ttyd::mario_pouch::pouchGetItem(ItemId::MULTIBOUNCE);
-		ttyd::mario_pouch::pouchGetItem(ItemId::POWER_BOUNCE);
-		ttyd::mario_pouch::pouchGetItem(ItemId::CONTACT_LENS);
-		ttyd::mario_pouch::pouchGetItem(ItemId::BLIMP_TICKET);
 	}
 
 	void OWR::LZTest()
@@ -180,6 +157,7 @@ namespace mod::owr
 
 		ApplyMainAssemblyPatches();
 		ApplyMainScriptPatches();
+		ApplyItemDataTablePatches();
 
 		/*g_itemEntry_trampoline = patch::hookFunction(
 			ttyd::itemdrv::itemEntry, [](const char* name, uint32_t id, uint32_t mode, int32_t collection_expr, void* script, float x, float y, float z)
@@ -206,7 +184,188 @@ namespace mod::owr
 				{
 					return "Well then.<wait 100> Shall we\nget going?\n<k>";
 				}
+				if (!strcmp(msgKey, "goombella"))
+				{
+					return "Goombella";
+				}
+				if (!strcmp(msgKey, "goombella_desc"))
+				{
+					return "Goombella<k>";
+				}
+				if (!strcmp(msgKey, "koops"))
+				{
+					return "Koops";
+				}
+				if (!strcmp(msgKey, "koops_desc"))
+				{
+					return "Koops<k>";
+				}
+				if (!strcmp(msgKey, "flurrie"))
+				{
+					return "Flurrie";
+				}
+				if (!strcmp(msgKey, "flurrie_desc"))
+				{
+					return "Flurrie<k>";
+				}
+				if (!strcmp(msgKey, "yoshi"))
+				{
+					return "Yoshi";
+				}
+				if (!strcmp(msgKey, "yoshi_desc"))
+				{
+					return "Yoshi<k>";
+				}
+				if (!strcmp(msgKey, "vivian"))
+				{
+					return "Vivian";
+				}
+				if (!strcmp(msgKey, "vivian_desc"))
+				{
+					return "Vivian<k>";
+				}
+				if (!strcmp(msgKey, "bobbery"))
+				{
+					return "Bobbery";
+				}
+				if (!strcmp(msgKey, "bobbery_desc"))
+				{
+					return "Bobbery<k>";
+				}
+				if (!strcmp(msgKey, "mowz"))
+				{
+					return "Ms.Mowz";
+				}
+				if (!strcmp(msgKey, "mowz_desc"))
+				{
+					return "Ms.Mowz<k>";
+				}
+				if (!strcmp(msgKey, "ap_item"))
+				{
+					return "AP Item<k>";
+				}
+				if (!strcmp(msgKey, "10_coins"))
+				{
+					return "10 Coins<k>";
+				}
 				return g_msgSearch_trampoline(msgKey);
+			});
+
+		g_pouchGetItem_trampoline = patch::hookFunction(
+			ttyd::mario_pouch::pouchGetItem, [](int32_t item) {
+				uint32_t return_value = 0;
+				switch (item)
+				{
+					case ItemId::SUPER_LUIGI:
+					{
+						uint8_t member = static_cast<uint8_t>(ttyd::party::PartyMembers::Goombella);
+						ttyd::mario_party::partyJoin(member);
+						return_value = 1;
+						break;
+					}
+					case ItemId::SUPER_LUIGI_2:
+					{
+						uint8_t member = static_cast<uint8_t>(ttyd::party::PartyMembers::Koops);
+						ttyd::mario_party::partyJoin(member);
+						return_value = 1;
+						break;
+					}
+					case ItemId::SUPER_LUIGI_3:
+					{
+						uint8_t member = static_cast<uint8_t>(ttyd::party::PartyMembers::Flurrie);
+						ttyd::mario_party::partyJoin(member);
+						return_value = 1;
+						break;
+					}
+					case ItemId::SUPER_LUIGI_4:
+					{
+						uint8_t member = static_cast<uint8_t>(ttyd::party::PartyMembers::Yoshi);
+						ttyd::mario_party::partyJoin(member);
+						return_value = 1;
+						break;
+					}
+					case ItemId::SUPER_LUIGI_5:
+					{
+						uint8_t member = static_cast<uint8_t>(ttyd::party::PartyMembers::Vivian);
+						ttyd::mario_party::partyJoin(member);
+						return_value = 1;
+						break;
+					}
+					case ItemId::INVALID_ITEM_006F:
+					{
+						uint8_t member = static_cast<uint8_t>(ttyd::party::PartyMembers::Bobbery);
+						ttyd::mario_party::partyJoin(member);
+						return_value = 1;
+						break;
+					}
+					case ItemId::INVALID_ITEM_0070:
+					{
+						uint8_t member = static_cast<uint8_t>(ttyd::party::PartyMembers::MsMowz);
+						ttyd::mario_party::partyJoin(member);
+						return_value = 1;
+						break;
+					}
+					case ItemId::INVALID_ITEM_0071:
+					{
+						return_value = 1;
+						break;
+					}
+					case ItemId::INVALID_ITEM_PAPER_0053:
+					{
+						ttyd::mario_pouch::pouchAddCoin(10);
+						return_value = 1;
+						break;
+					}
+					case ItemId::BOOTS:
+					{
+						bool has_boots = ttyd::mario_pouch::pouchCheckItem(ItemId::BOOTS);
+						bool has_sboots = ttyd::mario_pouch::pouchCheckItem(ItemId::SUPER_BOOTS);
+						if (!has_boots)
+						{
+							g_pouchGetItem_trampoline(item);
+							return_value = 1;
+							break;
+						}
+						else if (!has_sboots)
+						{
+							ttyd::mario_pouch::pouchGetItem(ItemId::SUPER_BOOTS);
+							return_value = 1;
+							break;
+						}
+						else
+						{
+							ttyd::mario_pouch::pouchGetItem(ItemId::ULTRA_BOOTS);
+							return_value = 1;
+							break;
+						}
+						break;
+					}
+					case ItemId::HAMMER:
+					{
+						bool has_hammer = ttyd::mario_pouch::pouchCheckItem(ItemId::HAMMER);
+						bool has_shammer = ttyd::mario_pouch::pouchCheckItem(ItemId::SUPER_HAMMER);
+						if (!has_hammer)
+						{
+							g_pouchGetItem_trampoline(item);
+							break;
+						}
+						else if(!has_shammer)
+						{
+							ttyd::mario_pouch::pouchGetItem(ItemId::SUPER_HAMMER);
+							return_value = 1;
+							break;
+						}
+						else
+						{
+							ttyd::mario_pouch::pouchGetItem(ItemId::ULTRA_HAMMER);
+							return_value = 1;
+							break;
+						}
+					}
+					default:
+						return_value = g_pouchGetItem_trampoline(item);
+				}
+				return return_value;
 			});
 
 		g_stg0_00_init_trampoline = patch::hookFunction(

@@ -41,6 +41,7 @@ extern int32_t aji_01_init_evt[];
 extern int32_t aji_evt_box[];
 extern int32_t aji_02_init_evt[];
 extern int32_t evt_zenmai[];
+extern int32_t aji_03_init_evt[];
 extern int32_t evt_item[];
 extern int32_t kuizu_sekizou[];
 extern int32_t aji_04_init_evt[];
@@ -392,6 +393,13 @@ void ApplyAjiPatches(OSModuleInfo* module_info)
 
 	evt_zenmai[7] = GSW(1707);
 	evt_zenmai[8] = 15;
+
+	aji_02_init_evt[427] = GSWF(6093);
+	aji_02_init_evt[437] = GSWF(6094);
+	aji_02_init_evt[447] = GSWF(6095);
+	aji_02_init_evt[457] = GSWF(6096);
+	aji_02_init_evt[481] = GSWF(6097);
+	aji_02_init_evt[505] = GSWF(6098);
 
 	evt_item[1] = GSWF(6070);
 	evt_item[2] = 1;

@@ -3,6 +3,7 @@
 #include <ttyd/evt_cam.h>
 #include <ttyd/evt_npc.h>
 #include <ttyd/evt_nannpc.h>
+#include <ttyd/item_data.h>
 #include <ttyd/evt_msg.h>
 #include <ttyd/evt_map.h>
 #include <ttyd/evt_hit.h>
@@ -18,12 +19,14 @@
 
 using namespace mod;
 using namespace ttyd;
+using ItemId = ttyd::item_data::ItemType::e;
 
 extern int32_t luigi_gor_first_talk[];
 extern int32_t gor_10_init_evt[];
 extern int32_t gor_12_init_evt[];
 extern int32_t gor_11_init_evt[];
 extern int32_t gor_all_party_lecture[];
+extern int32_t christine_nakama[];
 
 //Assembly
 extern int32_t irai_init_func[];
@@ -33,17 +36,23 @@ extern int32_t evt_exchange_msg_set[];
 extern int32_t exchange_ret_tbl_no[];
 extern int32_t exchange_ryokin_medal[];
 
+const char goombella[] = "\x83\x4C\x83\x6D\x82\xB6\x82\xA2";
+
 EVT_BEGIN(party_evt)
 	USER_FUNC(evt_mario::evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
-	USER_FUNC(evt_item::evt_item_entry, PTR("item01"), 1, LW(0), LW(1), LW(2), 16, GSWF(6076), 0)
+	USER_FUNC(evt_item::evt_item_entry, PTR("item01"), ItemId::SUPER_LUIGI, LW(0), LW(1), LW(2), 16, GSWF(6076), 0)
 	USER_FUNC(evt_item::evt_item_get_item, PTR("item01"))
 	WAIT_MSEC(800)
+	SET(GSW(1700), 7)
+	USER_FUNC(evt_npc::evt_npc_set_position, PTR(goombella), 0, -1000, 0)
+	USER_FUNC(evt_cam::evt_cam3d_evt_off, 500, 11)
+	USER_FUNC(evt_mario::evt_mario_key_onoff, 1)
 	RETURN()
 EVT_END()
 
 void ApplyGorMiscPatches(OSModuleInfo* module_info)
 {
-	patch::writePatch(&gor_all_party_lecture[0], party_evt, sizeof(party_evt));
+	patch::writePatch(&christine_nakama[707], party_evt, sizeof(party_evt));
 
 	luigi_gor_first_talk[18] = GSW(1708);
 	luigi_gor_first_talk[19] = 17;

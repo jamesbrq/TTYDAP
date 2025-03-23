@@ -1,9 +1,15 @@
 #include <AP/main.h>
+#include <ttyd/item_data.h>
+#include <ttyd/common_types.h>
+#include <ttyd/icondrv.h>
 #include "patch.h"
 
 #include "evt_cmd.h"
 
 using namespace mod;
+using ::ttyd::item_data::itemDataTable;
+namespace ItemId = ::ttyd::common::ItemId;
+namespace IconType = ::ttyd::icondrv::IconType;
 
 //Assembly References
 extern int32_t statusWinDisp[];
@@ -312,4 +318,35 @@ void ApplyMainScriptPatches()
 
 	evt_lecture_msg[107] = GSW(1700);
 	evt_lecture_msg[108] = 16;
+}
+
+void ApplyItemDataTablePatches()
+{
+	itemDataTable[ItemId::SUPER_LUIGI].name = "goombella";
+	itemDataTable[ItemId::SUPER_LUIGI].description = "goombella_desc";
+	itemDataTable[ItemId::SUPER_LUIGI].icon_id = IconType::GOOMBELLA;
+	itemDataTable[ItemId::SUPER_LUIGI_2].name = "koops";
+	itemDataTable[ItemId::SUPER_LUIGI_2].description = "koops_desc";
+	itemDataTable[ItemId::SUPER_LUIGI_2].icon_id = IconType::KOOPS;
+	itemDataTable[ItemId::SUPER_LUIGI_3].name = "flurrie";
+	itemDataTable[ItemId::SUPER_LUIGI_3].description = "flurrie_desc";
+	itemDataTable[ItemId::SUPER_LUIGI_3].icon_id = IconType::FLURRIE;
+	itemDataTable[ItemId::SUPER_LUIGI_4].name = "yoshi";
+	itemDataTable[ItemId::SUPER_LUIGI_4].description = "yoshi_desc";
+	itemDataTable[ItemId::SUPER_LUIGI_4].icon_id = IconType::YOSHI_GREEN;
+	itemDataTable[ItemId::SUPER_LUIGI_5].name = "vivian";
+	itemDataTable[ItemId::SUPER_LUIGI_5].description = "vivian_desc";
+	itemDataTable[ItemId::SUPER_LUIGI_5].icon_id = IconType::VIVIAN;
+	itemDataTable[ItemId::INVALID_ITEM_006F].name = "bobbery";
+	itemDataTable[ItemId::INVALID_ITEM_006F].description = "bobbery_desc";
+	itemDataTable[ItemId::INVALID_ITEM_006F].icon_id = IconType::BOBBERY;
+	itemDataTable[ItemId::INVALID_ITEM_0070].name = "mowz";
+	itemDataTable[ItemId::INVALID_ITEM_0070].description = "mowz_desc";
+	itemDataTable[ItemId::INVALID_ITEM_0070].icon_id = IconType::MS_MOWZ;
+	itemDataTable[ItemId::INVALID_ITEM_0071].name = "ap_item";
+	itemDataTable[ItemId::INVALID_ITEM_0071].description = "ap_item";
+	itemDataTable[ItemId::INVALID_ITEM_0071].icon_id = IconType::MYSTERY;
+	itemDataTable[ItemId::INVALID_ITEM_PAPER_0053].name = "10_coins";
+	itemDataTable[ItemId::INVALID_ITEM_PAPER_0053].description = "10_coins";
+	itemDataTable[ItemId::INVALID_ITEM_PAPER_0053].icon_id = IconType::COIN;
 }

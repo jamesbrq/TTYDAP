@@ -6,6 +6,7 @@
 #include <ttyd/evt_item.h>
 #include <ttyd/evt_map.h>
 #include <ttyd/evt_hit.h>
+#include <ttyd/item_data.h>
 #include <ttyd/evt_mario.h>
 #include <ttyd/evt_party.h>
 #include <ttyd/evt_bero.h>
@@ -17,6 +18,7 @@
 
 using namespace mod;
 using namespace ttyd;
+using ItemId = ttyd::item_data::ItemType::e;
 
 extern int32_t first_evt[];
 extern int32_t gonbaba_evt[];
@@ -41,11 +43,15 @@ extern int32_t evt_golden[];
 extern int32_t hei_10_init_evt[];
 extern int32_t hei_all_party_lecture[];
 
+const char koops[] = "\x83\x6D\x83\x52\x83\x5E\x83\x8D\x83\x45";
+
 EVT_BEGIN(party_evt)
 	USER_FUNC(evt_mario::evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
-	USER_FUNC(evt_item::evt_item_entry, PTR("item01"), 1, LW(0), LW(1), LW(2), 16, GSWF(6077), 0)
+	USER_FUNC(evt_item::evt_item_entry, PTR("item01"), LW(3), LW(0), LW(1), LW(2), 16, GSWF(6077), 0)
 	USER_FUNC(evt_item::evt_item_get_item, PTR("item01"))
 	WAIT_MSEC(800)
+	SET(GSW(1701), 10)
+	USER_FUNC(evt_npc::evt_npc_set_position, PTR(koops), 0, -1000, 0)
 	RETURN()
 EVT_END()
 
@@ -88,8 +94,9 @@ void ApplyHeiPatches(OSModuleInfo* module_info)
 	bridge_evt[21] = GSWF(6001);
 	bridge_evt[22] = 1;
 	
-	nokotaro_get[69] = GSW(1701);
-	nokotaro_get[70] = 10;
+	nokotaro_get[37] = EVT_HELPER_CMD(2, 50);
+	nokotaro_get[38] = EVT_HELPER_OP(LW(3));
+	patch::writePatch(&nokotaro_get[40], party_evt, sizeof(party_evt));
 
 	nokotaro_nakama[11] = GSW(1701);
 	nokotaro_nakama[12] = 9;
@@ -138,6 +145,4 @@ void ApplyHeiPatches(OSModuleInfo* module_info)
 
 	hei_10_init_evt[41] = GSW(1701);
 	hei_10_init_evt[42] = 9;
-
-	patch::writePatch(&hei_all_party_lecture[0], party_evt, sizeof(party_evt));
 }

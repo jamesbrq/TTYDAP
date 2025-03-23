@@ -232,7 +232,6 @@ void ApplyGor01Patches(OSModuleInfo* module_info)
 	thief_talk[101] = EVT_HELPER_CMD(0, 1);
 
 	christine_nakama_before[1] = GSW(1700);
-	christine_nakama[754] = GSW(1700);
 
 	luigi_f1_fade_check[1] = GSW(1710); //Luigi color??
 	luigi_f1_fade_check[3] = 2;

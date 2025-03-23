@@ -2,6 +2,7 @@
 #include <ttyd/evt_cam.h>
 #include <ttyd/evt_npc.h>
 #include <ttyd/evt_nannpc.h>
+#include <ttyd/item_data.h>
 #include <ttyd/evt_msg.h>
 #include <ttyd/evt_map.h>
 #include <ttyd/evt_hit.h>
@@ -17,6 +18,7 @@
 
 using namespace mod;
 using namespace ttyd;
+using ItemId = ttyd::item_data::ItemType::e;
 
 extern int32_t villagerA_init[];
 extern int32_t villagerA_pig_init[];
@@ -106,6 +108,7 @@ const char gatekeeper[] = "\x96\xE5\x94\xD4";
 const char doopliss[] = "\x82\xC9\x82\xB9\x83\x7D\x83\x8A\x83\x49";
 const char mayor_pig[] = "\x83\x75\x83\x5E\x91\xBA\x92\xB7";
 const char mayor[] = "\x91\xBA\x92\xB7";
+const char vivian[] = "\x83\x72\x83\x72\x83\x41\x83\x93";
 
 EVT_BEGIN(villagerA_init_evt)
 	IF_LARGE_EQUAL(GSW(1717), 22)
@@ -701,9 +704,15 @@ EVT_PATCH_END()
 
 EVT_BEGIN(party_evt)
 	USER_FUNC(evt_mario::evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
-	USER_FUNC(evt_item::evt_item_entry, PTR("item01"), 1, LW(0), LW(1), LW(2), 16, GSWF(6080), 0)
+	USER_FUNC(evt_item::evt_item_entry, PTR("item01"), ItemId::SUPER_LUIGI_5, LW(0), LW(1), LW(2), 16, GSWF(6080), 0)
 	USER_FUNC(evt_item::evt_item_get_item, PTR("item01"))
 	WAIT_MSEC(800)
+	SET(GSW(1721), 2)
+	USER_FUNC(evt_npc::evt_npc_set_position, PTR(vivian), 0, -1000, 0)
+	USER_FUNC(evt_cam::evt_cam3d_evt_off, 100, 11)
+	USER_FUNC(evt_mario::evt_mario_key_onoff, 1)
+	USER_FUNC(evt_snd::evt_snd_bgmon, 512, PTR("BGM_STG4_USU1"))
+	USER_FUNC(evt_snd::evt_snd_envon, 272, PTR("ENV_STG4_USU1"))
 	RETURN()
 EVT_END()
 
@@ -767,8 +776,7 @@ void ApplyUsuPatches(OSModuleInfo* module_info)
 	gra00_2witch_find_ranpel_event[172] = GSW(1715);
 	gra00_2witch_find_ranpel_event[173] = 9;
 
-	usu00_vivian_joinup_event[595] = GSW(1721);
-	usu00_vivian_joinup_event[596] = 2;
+	patch::writePatch(&usu00_vivian_joinup_event[548], party_evt, sizeof(party_evt));
 
 	usu00_crowAB_talk_event[218] = GSW(1704);
 	usu00_crowAB_talk_event[219] = 0; //Unused
@@ -1037,8 +1045,6 @@ void ApplyUsuPatches(OSModuleInfo* module_info)
 	usu_01_init_evt[310] = 1;
 
 	evt_usu_kagemario_party_kill_usu[1] = GSW(1704);
-
-	patch::writePatch(&usu_all_party_lecture[0], party_evt, sizeof(party_evt));
 
 	//These are swByteGet
 	usu_evt_kagemario_init[2] = 0x386006B3; // li r3, 0x6B3 (GSW(1715))

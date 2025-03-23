@@ -30,3 +30,4 @@ extern "C" {
 
 void ApplyMainAssemblyPatches();
 void ApplyMainScriptPatches();
+void ApplyItemDataTablePatches();

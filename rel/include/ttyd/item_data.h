@@ -68,7 +68,7 @@ namespace ItemType {
         BLIMP_TICKET,
         TRAIN_TICKET,
         MAILBOX_SP,
-        SUPER_LUIGI,
+        SUPER_LUIGI, //0x37
         SUPER_LUIGI_2,
         SUPER_LUIGI_3,
         SUPER_LUIGI_4,
