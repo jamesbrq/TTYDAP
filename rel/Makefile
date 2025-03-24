@@ -7,14 +7,14 @@ ifeq ($(strip $(DEVKITPPC)),)
 $(error "Please set DEVKITPPC in your environment. export DEVKITPPC=<path to>devkitPPC")
 endif
 
-ifeq ($(strip $(TTYDTOOLS)),)
-$(error "Please set TTYDTOOLS in your environment. export TTYDTOOLS=<path to>ttyd-tools")
-endif
-
 include $(DEVKITPPC)/gamecube_rules
 
-export ELF2REL	:=	$(TTYDTOOLS)/bin/elf2rel
-export GCIPACK	:=	python "H:/GhidraProjects/TTYDAP/TTYDAP/gcipack/gcipack.py"
+ifeq ($(shell which elf2rel),)
+$(error "Please install pyelf2rel. pip install pyelf2rel")
+endif
+
+export ELF2REL    :=    elf2rel
+export GCIPACK	:=	python $(realpath ../../gcipack/gcipack.py)
 
 ifeq ($(VERSION),)
 all: us jp eu
@@ -168,7 +168,7 @@ $(OFILES_SOURCES) : $(HFILES)
 # REL linking
 %.rel: %.elf
 	@echo output ... $(notdir $@)
-	@$(ELF2REL) $< -s $(MAPFILE)
+	@$(ELF2REL) $< $(MAPFILE) $@
 	
 %.gci: %.rel
 	@echo packing ... $(notdir $@)

@@ -103,7 +103,7 @@ bPrintPartyAddErrorFix:
 	lis %r4, 0x802C
 	addi %r4, %r4, 0x30DC
 	cmpw %r3, %r4
-	bne bPrintPartyAddErrorFixReturn
+	bne addErrorEnd
 	mr %r4, %r30
 	lis %r3, 0x803D
 	ori %r3, %r3, 0xF508
@@ -113,6 +113,7 @@ bPrintPartyAddErrorFix:
 	lis %r4, 0x8042
 	addi %r4, %r4, 0x1714
 	bl strcat
+addErrorEnd:
 bPrintPartyAddErrorFixReturn:
 	b 0
 
@@ -122,7 +123,7 @@ bPrintPartyErrorFix:
 	lis %r4, 0x802C
 	addi %r4, %r4, 0x30DC
 	cmpw %r3, %r4
-	bne bPrintPartyErrorFixReturn
+	bne errorEnd
 	mr %r4, %r30
 	lis %r3, 0x803D
 	ori %r3, %r3, 0xF548
@@ -132,6 +133,7 @@ bPrintPartyErrorFix:
 	lis %r4, 0x8042
 	addi %r4, %r4, 0x1714
 	bl strcat
+errorEnd:
 bPrintPartyErrorFixReturn:
 	b 0
 

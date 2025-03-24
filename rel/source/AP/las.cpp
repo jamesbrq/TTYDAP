@@ -267,6 +267,9 @@ void ApplyLasPatches(OSModuleInfo* module_info)
 	last_evt_3_2[1822] = GSW(1708);
 	last_evt_3_2[1823] = 17;
 
+	last_evt_3_2[137] = 5;
+	last_evt_3_2[181] = 400;
+
 	last_evt_4[1821] = GSW(1708);
 	last_evt_4[1822] = 18;
 

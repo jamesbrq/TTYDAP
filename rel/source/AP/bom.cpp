@@ -33,6 +33,7 @@ extern int32_t bom_talk_murabito_h_01[];
 extern int32_t bom_talk_murabito_i_01[];
 extern int32_t bom_talk_white[];
 extern int32_t bom_musume_talk[];
+extern int32_t bom_minnnanokoe_evt[];
 extern int32_t bom_01_init_evt[];
 extern int32_t evt_taihou[];
 extern int32_t bom_init_soncho_02[];
@@ -121,6 +122,8 @@ void ApplyBomPatches(OSModuleInfo* module_info)
 	bom_musume_talk[1] = GSW(1707);
 	bom_musume_talk[3] = 3;
 	bom_musume_talk[23] = 5;
+
+	bom_minnnanokoe_evt[413] = 400;
 
 	bom_01_init_evt[6] = GSW(1707);
 	bom_01_init_evt[8] = 1;

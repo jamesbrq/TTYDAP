@@ -35,6 +35,7 @@ extern int32_t out_dokan_1[];
 extern int32_t first_bigtree[];
 extern int32_t open_bigtree[];
 extern int32_t mario_see_you[];
+extern int32_t mri_minnnanokoe_evt[];
 extern int32_t mri_00_init_evt[];
 extern int32_t mri_guide_init_01[];
 extern int32_t mri_guide_talk_01[];
@@ -638,6 +639,8 @@ void ApplyMriPatches(OSModuleInfo* module_info)
 
 	mario_see_you[198] = GSW(1702);
 	mario_see_you[199] = 17;
+
+	mri_minnnanokoe_evt[602] = 400;
 
 	mri_00_init_evt[39] = GSW(1713);
 	mri_00_init_evt[40] = 16;

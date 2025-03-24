@@ -111,13 +111,16 @@ namespace mod::owr
 
 	void OWR::SequenceInit()
 	{
+		SeqIndex Seq = ttyd::seqdrv::seqGetNextSeq();
+
+		if(Seq != SeqIndex::kMapChange)
+			return;
+
 		uint32_t SequencePosition = ttyd::swdrv::swByteGet(1700);
-		bool item = ttyd::mario_pouch::pouchCheckItem(ItemId::NECKLACE);
-		if(!item)
-			ttyd::mario_pouch::pouchGetItem(ItemId::NECKLACE);
 
 		if (SequencePosition != 0)
 			return;
+
 		ttyd::swdrv::swByteSet(1700, 15);
 
 		ttyd::mario_pouch::pouchSetMaxHP(99);
@@ -139,7 +142,7 @@ namespace mod::owr
 		ttyd::swdrv::swSet(1216);
 	}
 
-	void OWR::LZTest()
+	void OWR::AAAToGOR()
 	{
 		uint32_t aaa_00_Address = 0x802EDE78;
 		SeqIndex NextSeq = ttyd::seqdrv::seqGetNextSeq();
@@ -148,6 +151,24 @@ namespace mod::owr
 		if (NextSeq == Load)
 		{
 			strcpy_String(reinterpret_cast<char*>(aaa_00_Address), "gor_01");
+		}
+	}
+
+	void OWR::RecieveItems()
+	{
+		SeqIndex CurrentIndex = ttyd::seqdrv::seqGetSeq();
+
+		if (CurrentIndex != SeqIndex::kGame)
+			return;
+
+		uintptr_t item_pointer = 0x803DB864;
+		uint32_t* item = reinterpret_cast<uint32_t*>(item_pointer);
+		int value = *item;
+
+		if (value != 0)
+		{
+			ttyd::mario_pouch::pouchGetItem(value);
+			memset(reinterpret_cast<void*>(item_pointer), 0, sizeof(item_pointer));
 		}
 	}
 
@@ -368,12 +389,6 @@ namespace mod::owr
 				return return_value;
 			});
 
-		g_stg0_00_init_trampoline = patch::hookFunction(
-			ttyd::event::stg0_00_init, []() {
-				gSelf->NewFileInit();
-				g_stg0_00_init_trampoline();
-			});
-
 		uint32_t* kSkipUHCutsceneOpcode = reinterpret_cast<uint32_t*>(0x800abcd8);
 		const uint32_t skip_cutscene_opcode = 0x48000030;     // b 0x0030
 		mod::patch::writePatch(
@@ -383,7 +398,8 @@ namespace mod::owr
 	void OWR::Update()
 	{
 		SequenceInit();
-		LZTest();
+		AAAToGOR();
+		RecieveItems();
 	}
 
 	void OWR::Draw()
@@ -391,11 +407,6 @@ namespace mod::owr
 		//char* buffer = new char[256];
 		//sprintf(buffer, "seq: %lu", ttyd::swdrv::swByteGet(0));
 		//DrawString(buffer, -232, -120,-1U);
-	}
-
-	void OWR::NewFileInit()
-	{
-
 	}
 
 	void OWR::OnModuleLoaded(OSModuleInfo* module_info)

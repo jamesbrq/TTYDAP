@@ -19,8 +19,8 @@ namespace mod::owr
 		void OnModuleLoaded(OSModuleInfo* module_info);
 		void SequenceInit();
 		void DrawString(const char* data, float x, float y, uint32_t color, float scale = 1.0f);
-		void LZTest();
-		void NewFileInit();
+		void AAAToGOR();
+		void RecieveItems();
 
 		StateManager state_;
 	};

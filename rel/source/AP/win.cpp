@@ -99,7 +99,7 @@ EVT_PATCH_END()
 
 EVT_BEGIN(party_evt)
 	USER_FUNC(evt_mario::evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
-	USER_FUNC(evt_item::evt_item_entry, PTR("item01"), ItemId::SUPER_LUIGI_3, LW(0), LW(1), LW(2), 16, GSWF(6076), 0)
+	USER_FUNC(evt_item::evt_item_entry, PTR("item01"), LW(3), LW(0), LW(1), LW(2), 16, GSWF(6076), 0)
 	USER_FUNC(evt_item::evt_item_get_item, PTR("item01"))
 	WAIT_MSEC(800)
 	SET(GSW(1702), 14)
@@ -182,7 +182,9 @@ void ApplyWinPatches(OSModuleInfo* module_info)
 	clouda_irai[414] = GSW(1702);
 	clouda_irai[415] = 12;
 
-	patch::writePatch(&clouda_nakama[1497], party_evt, sizeof(party_evt));
+	clouda_nakama[1497] = EVT_HELPER_CMD(2, 50);
+	clouda_nakama[1498] = EVT_HELPER_OP(LW(3));
+	patch::writePatch(&clouda_nakama[1500], party_evt, sizeof(party_evt));
 
 	touch_door[1] = GSW(1702);
 	touch_door[3] = 11;
