@@ -1,31 +1,19 @@
+#include "evt_cmd.h"
+#include "patch.h"
 #include <AP/gor_misc.h>
 #include <AP/main.h>
 #include <ttyd/evt_cam.h>
-#include <ttyd/evt_npc.h>
-#include <ttyd/evt_nannpc.h>
-#include <ttyd/item_data.h>
-#include <ttyd/evt_msg.h>
-#include <ttyd/evt_map.h>
-#include <ttyd/evt_hit.h>
-#include <ttyd/evt_mario.h>
 #include <ttyd/evt_item.h>
-#include <ttyd/evt_party.h>
-#include <ttyd/evt_bero.h>
-#include <ttyd/evt_snd.h>
-#include <ttyd/evt_urouro.h>
-#include "evt_cmd.h"
-#include "common_types.h"
-#include "patch.h"
+#include <ttyd/evt_mario.h>
+#include <ttyd/evt_npc.h>
 
 using namespace mod;
 using namespace ttyd;
-using ItemId = ttyd::item_data::ItemType::e;
 
 extern int32_t luigi_gor_first_talk[];
 extern int32_t gor_10_init_evt[];
 extern int32_t gor_12_init_evt[];
 extern int32_t gor_11_init_evt[];
-extern int32_t gor_all_party_lecture[];
 extern int32_t christine_nakama[];
 
 //Assembly
@@ -40,7 +28,7 @@ const char goombella[] = "\x83\x4C\x83\x6D\x82\xB6\x82\xA2";
 
 EVT_BEGIN(party_evt)
 	USER_FUNC(evt_mario::evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
-	USER_FUNC(evt_item::evt_item_entry, PTR("item01"), ItemId::SUPER_LUIGI, LW(0), LW(1), LW(2), 16, GSWF(6076), 0)
+	USER_FUNC(evt_item::evt_item_entry, PTR("item01"), LW(3), LW(0), LW(1), LW(2), 16, GSWF(6076), 0)
 	USER_FUNC(evt_item::evt_item_get_item, PTR("item01"))
 	WAIT_MSEC(800)
 	SET(GSW(1700), 7)
@@ -52,7 +40,9 @@ EVT_END()
 
 void ApplyGorMiscPatches(OSModuleInfo* module_info)
 {
-	patch::writePatch(&christine_nakama[707], party_evt, sizeof(party_evt));
+	christine_nakama[707] = EVT_HELPER_CMD(2, 50);
+	christine_nakama[708] = EVT_HELPER_OP(LW(3));
+	patch::writePatch(&christine_nakama[710], party_evt, sizeof(party_evt));
 
 	luigi_gor_first_talk[18] = GSW(1708);
 	luigi_gor_first_talk[19] = 17;

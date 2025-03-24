@@ -1,24 +1,12 @@
-#include <AP/hei.h>
-#include <ttyd/evt_cam.h>
-#include <ttyd/evt_npc.h>
-#include <ttyd/evt_nannpc.h>
-#include <ttyd/evt_msg.h>
-#include <ttyd/evt_item.h>
-#include <ttyd/evt_map.h>
-#include <ttyd/evt_hit.h>
-#include <ttyd/item_data.h>
-#include <ttyd/evt_mario.h>
-#include <ttyd/evt_party.h>
-#include <ttyd/evt_bero.h>
-#include <ttyd/evt_snd.h>
-#include <ttyd/evt_urouro.h>
 #include "evt_cmd.h"
-#include "common_types.h"
 #include "patch.h"
+#include <AP/hei.h>
+#include <ttyd/evt_item.h>
+#include <ttyd/evt_mario.h>
+#include <ttyd/evt_npc.h>
 
 using namespace mod;
 using namespace ttyd;
-using ItemId = ttyd::item_data::ItemType::e;
 
 extern int32_t first_evt[];
 extern int32_t gonbaba_evt[];
@@ -41,7 +29,7 @@ extern int32_t a_sekizou_1[];
 extern int32_t hei_07_init_evt[];
 extern int32_t evt_golden[];
 extern int32_t hei_10_init_evt[];
-extern int32_t hei_all_party_lecture[];
+extern int32_t evt_anm_kan[];
 
 const char koops[] = "\x83\x6D\x83\x52\x83\x5E\x83\x8D\x83\x45";
 
@@ -145,4 +133,7 @@ void ApplyHeiPatches(OSModuleInfo* module_info)
 
 	hei_10_init_evt[41] = GSW(1701);
 	hei_10_init_evt[42] = 9;
+
+	evt_anm_kan[23] = GSWF(6102);
+	evt_anm_kan[45] = GSWF(6102);
 }

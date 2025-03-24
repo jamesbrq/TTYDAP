@@ -1,23 +1,14 @@
-#include <AP/tik.h>
-#include <ttyd/evt_cam.h>
-#include <ttyd/evt_case.h>
-#include <ttyd/evt_npc.h>
-#include <ttyd/evt_nannpc.h>
-#include <ttyd/evt_msg.h>
-#include <ttyd/evt_map.h>
-#include <ttyd/evt_hit.h>
-#include <ttyd/evt_mario.h>
-#include <ttyd/evt_party.h>
-#include <ttyd/evt_bero.h>
-#include <ttyd/evt_snd.h>
-#include <ttyd/evt_urouro.h>
-#include <ttyd/mario_pouch.h>
-#include <ttyd/evtmgr_cmd.h>
 #include "evt_cmd.h"
-#include "common_types.h"
-#include "patch.h"
-#include "OWR.h"
 #include "mod.h"
+#include "OWR.h"
+#include "patch.h"
+#include <AP/tik.h>
+#include <ttyd/evt_bero.h>
+#include <ttyd/evt_case.h>
+#include <ttyd/evt_msg.h>
+#include <ttyd/evt_npc.h>
+#include <ttyd/evtmgr_cmd.h>
+#include <ttyd/mario_pouch.h>
 
 using namespace mod;
 using namespace ttyd;
@@ -37,7 +28,6 @@ EVT_DEFINE_USER_FUNC(checkChapterRequirements) {
 }
 
 EVT_DEFINE_USER_FUNC(checkChapterClears) {
-	auto& state = gMod->state_;
 	int8_t count = 0;
 	for (int i = 114; i <= 120; i++)
 	{

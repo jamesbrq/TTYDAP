@@ -1,20 +1,12 @@
-#include <AP/aji.h>
-#include <ttyd/evt_cam.h>
-#include <ttyd/evt_npc.h>
-#include <ttyd/evt_nannpc.h>
-#include <ttyd/evt_msg.h>
-#include <ttyd/evt_map.h>
-#include <ttyd/evt_hit.h>
-#include <ttyd/evt_mario.h>
-#include <ttyd/evt_party.h>
-#include <ttyd/evt_bero.h>
-#include <ttyd/evt_aji.h>
-#include <ttyd/evt_snd.h>
-#include <ttyd/evt_case.h>
-#include <ttyd/evt_urouro.h>
 #include "evt_cmd.h"
-#include "common_types.h"
 #include "patch.h"
+#include <AP/aji.h>
+#include <ttyd/evt_aji.h>
+#include <ttyd/evt_bero.h>
+#include <ttyd/evt_case.h>
+#include <ttyd/evt_mario.h>
+#include <ttyd/evt_msg.h>
+#include <ttyd/evt_npc.h>
 
 using namespace mod;
 using namespace ttyd;
@@ -236,7 +228,7 @@ EVT_BEGIN(aji_10_init_evt_evt)
 	IF_LARGE_EQUAL(GSW(1717), 20)
 		IF_SMALL_EQUAL(GSW(1717), 21)
 			USER_FUNC(evt_mario::evt_mario_set_mode, 1)
-			USER_FUNC(evt_aji::peach_evt_toumei)
+			USER_FUNC(evt_aji::peach_evt_toumei, 0)
 			USER_FUNC(evt_npc::evt_npc_entry, PTR(npc3), PTR("c_baria_c"))
 			USER_FUNC(evt_npc::evt_npc_set_tribe, PTR(npc3), PTR(npc4))
 			USER_FUNC(evt_npc::evt_npc_set_position, PTR(npc3), 370, 60, -65)

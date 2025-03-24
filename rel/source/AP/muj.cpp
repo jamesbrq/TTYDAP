@@ -1,24 +1,17 @@
+#include "evt_cmd.h"
+#include "patch.h"
 #include <AP/muj.h>
 #include <ttyd/evt_cam.h>
-#include <ttyd/evt_npc.h>
-#include <ttyd/evt_nannpc.h>
-#include <ttyd/item_data.h>
-#include <ttyd/evt_msg.h>
-#include <ttyd/evt_map.h>
 #include <ttyd/evt_hit.h>
-#include <ttyd/evt_mario.h>
-#include <ttyd/evt_party.h>
 #include <ttyd/evt_item.h>
-#include <ttyd/evt_bero.h>
+#include <ttyd/evt_map.h>
+#include <ttyd/evt_mario.h>
+#include <ttyd/evt_msg.h>
+#include <ttyd/evt_npc.h>
 #include <ttyd/evt_snd.h>
-#include <ttyd/evt_urouro.h>
-#include "evt_cmd.h"
-#include "common_types.h"
-#include "patch.h"
 
 using namespace mod;
 using namespace ttyd;
-using ItemId = ttyd::item_data::ItemType::e;
 
 extern int32_t nannpc_mode_setup;
 extern int32_t garawaru_init_muj_00[];
@@ -687,7 +680,7 @@ EVT_PATCH_END()
 
 EVT_BEGIN(party_evt)
 	USER_FUNC(evt_mario::evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
-	USER_FUNC(evt_item::evt_item_entry, PTR("item01"), ItemId::INVALID_ITEM_006F, LW(0), LW(1), LW(2), 16, GSWF(6081), 0)
+	USER_FUNC(evt_item::evt_item_entry, PTR("item01"), LW(3), LW(0), LW(1), LW(2), 16, GSWF(6081), 0)
 	USER_FUNC(evt_item::evt_item_get_item, PTR("item01"))
 	WAIT_MSEC(800)
 	SET(GSW(1719), 6)
@@ -703,7 +696,9 @@ void ApplyMujPatches(OSModuleInfo* module_info)
 {
 	patch::writePatch(&koburon_dead[0], koburon_dead_hook, sizeof(koburon_dead_hook));
 
-	patch::writePatch(&sanders_nakama[150], party_evt, sizeof(party_evt));
+	sanders_nakama[150] = EVT_HELPER_CMD(2, 50);
+	sanders_nakama[151] = EVT_HELPER_OP(LW(3));
+	patch::writePatch(&sanders_nakama[153], party_evt, sizeof(party_evt));
 
 	garawaru_init_muj_00[1] = GSW(1717);
 	garawaru_init_muj_00[3] = 14;

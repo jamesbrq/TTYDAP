@@ -1,33 +1,15 @@
-#include <AP/tou.h>
-#include <ttyd/evt_cam.h>
-#include <ttyd/evt_eff.h>
-#include <ttyd/evt_npc.h>
-#include <ttyd/evt_nannpc.h>
-#include <ttyd/item_data.h>
-#include <ttyd/evt_msg.h>
-#include <ttyd/evt_map.h>
-#include <ttyd/evt_hit.h>
-#include <ttyd/evt_mario.h>
-#include <ttyd/evt_pouch.h>
-#include <ttyd/evt_item.h>
-#include <ttyd/party.h>
-#include <ttyd/evt_party.h>
-#include <ttyd/evtmgr_cmd.h>
-#include <ttyd/mario_party.h>
-#include <ttyd/evt_bero.h>
-#include <ttyd/evt_snd.h>
-#include <ttyd/evt_urouro.h>
 #include "evt_cmd.h"
-#include "common_types.h"
 #include "patch.h"
+#include <AP/tou.h>
+#include <ttyd/evt_bero.h>
+#include <ttyd/evt_eff.h>
+#include <ttyd/evt_item.h>
+#include <ttyd/evt_mario.h>
+#include <ttyd/evt_msg.h>
+#include <ttyd/evt_npc.h>
 
 using namespace mod;
 using namespace ttyd;
-using ItemId = ttyd::item_data::ItemType::e;
-
-extern "C" {
-	EVT_DECLARE_USER_FUNC(evt_tou_get_ranking, 1)
-}
 
 extern int32_t evt_open_tou[];
 extern int32_t talk_gardman[];
@@ -218,29 +200,6 @@ EVT_BEGIN(talk_sakaba_hook)
 	RETURN()
 EVT_END()
 
-EVT_BEGIN(talk_gard_evt)
-	IF_EQUAL(GSW(501), 10)
-		IF_SMALL(GSW(505), 1)
-			USER_FUNC(evt_mario::evt_mario_chk_join_party, LW(0), 4)
-			IF_EQUAL(LW(0), 1)
-				USER_FUNC(evt_mario::evt_mario_get_party, LW(0))
-				IF_EQUAL(LW(0), 4)
-					USER_FUNC(evt_mario::evt_mario_goodbye_party, 0)
-					USER_FUNC(evt_mario::evt_mario_hello_party, 0, 1)
-				END_IF()
-				USER_FUNC(evt_pouch::evt_pouch_party_left, 4)
-			END_IF()
-		END_IF()
-	END_IF()
-	USER_FUNC(evt_bero::evt_bero_mapchange, PTR("tou_03"), 0)
-	RETURN()
-EVT_END()
-
-EVT_BEGIN(talk_gard_hook)
-	RUN_CHILD_EVT(talk_gard_evt)
-	RETURN()
-EVT_END()
-
 EVT_BEGIN(jolene_egg_evt)
 	WAIT_MSEC(300)
 	IF_EQUAL(GSWF(6075), 1)
@@ -335,8 +294,6 @@ void ApplyTouPatches(OSModuleInfo* module_info)
 	talk_gardman[19] = 12;
 	talk_gardman[173] = GSW(1703);
 	talk_gardman[174] = 28;
-
-	//patch::writePatch(&talk_gardman[185], talk_gard_hook, sizeof(talk_gard_hook));
 
 	evt_tou_match_make_default_sub[147] = GSW(1703);
 	evt_tou_match_make_default_sub[148] = 28;

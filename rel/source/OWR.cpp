@@ -1,49 +1,44 @@
-#include <cstdint>
-#include <cstring>
-#include <cstdio>
-#include <ttyd/itemdrv.h>
-#include <ttyd/item_data.h>
-#include <ttyd/common_types.h>
-#include <gc/OSLink.h>
-#include <OWR_STATE.h>
-#include <ttyd/swdrv.h>
-#include <ttyd/mario_party.h>
-#include <ttyd/mario_pouch.h>
-#include <ttyd/party.h>
-#include <ttyd/msgdrv.h>
-#include <ttyd/fontmgr.h>
-#include <ttyd/seqdrv.h>
-#include <ttyd/string.h>
-#include <ttyd/event.h>
 #include <AP/aaa.h>
 #include <AP/aji.h>
 #include <AP/bom.h>
 #include <AP/dou.h>
 #include <AP/eki.h>
 #include <AP/end.h>
+#include <AP/gon.h>
 #include <AP/gor_00.h>
 #include <AP/gor_01.h>
 #include <AP/gor_02.h>
 #include <AP/gor_03.h>
 #include <AP/gor_04.h>
 #include <AP/gor_misc.h>
+#include <AP/gra.h>
 #include <AP/hei.h>
 #include <AP/hom.h>
-#include <AP/gon.h>
-#include <AP/gra.h>
 #include <AP/jin.h>
 #include <AP/kpa.h>
 #include <AP/main.h>
-#include <AP/nok.h>
-#include <AP/pik.h>
-#include <AP/win.h>
 #include <AP/mri.h>
 #include <AP/muj.h>
+#include <AP/nok.h>
+#include <AP/pik.h>
 #include <AP/rsh.h>
 #include <AP/tik.h>
 #include <AP/tou.h>
 #include <AP/tou2.h>
 #include <AP/usu.h>
+#include <AP/win.h>
+#include <cstdint>
+#include <cstring>
+#include <gc/OSLink.h>
+#include <ttyd/common_types.h>
+#include <ttyd/fontmgr.h>
+#include <ttyd/mario_party.h>
+#include <ttyd/mario_pouch.h>
+#include <ttyd/msgdrv.h>
+#include <ttyd/party.h>
+#include <ttyd/seqdrv.h>
+#include <ttyd/string.h>
+#include <ttyd/swdrv.h>
 
 #include "common.h"
 #include "OWR.h"
@@ -54,10 +49,6 @@ using gc::OSLink::OSModuleInfo;
 using ::ttyd::common::ShopItemData;
 using namespace ::ttyd::common;
 using ::ttyd::seqdrv::SeqIndex;
-using ::ttyd::string::strcmp;
-
-namespace ItemId = ::ttyd::common::ItemId;
-namespace ModuleId = ::ttyd::common::ModuleId;
 
 const uint32_t kShopOffsets[] = {
 	0x36c5c, 0x57b70,  0xdd98,  0x3c14, 0x40fa8,

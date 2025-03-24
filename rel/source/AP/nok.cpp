@@ -47,6 +47,9 @@ extern int32_t odoriko_1_talk[];
 extern int32_t odoriko_2_talk[];
 extern int32_t odoriko_3_talk[];
 extern int32_t nokotarou_tabidachi[];
+extern int32_t evt_kusa_4[];
+extern int32_t evt_kusa_5[];
+extern int32_t evt_kusa_6[];
 extern int32_t nok_01_init_evt[];
 
 EVT_BEGIN(nokonoko_A_talk_evt)
@@ -630,6 +633,10 @@ void ApplyNokPatches(OSModuleInfo* module_info)
 
 	nokotarou_tabidachi[306] = GSW(1711);
 	nokotarou_tabidachi[307] = 14;
+
+	evt_kusa_4[20] = GSWF(6101);
+	evt_kusa_5[20] = GSWF(6101);
+	evt_kusa_6[20] = GSWF(6101);
 
 	nok_01_init_evt[13] = GSW(1708);
 	nok_01_init_evt[14] = 16;

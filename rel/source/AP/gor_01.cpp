@@ -1,18 +1,9 @@
+#include "evt_cmd.h"
+#include "patch.h"
 #include <AP/gor_01.h>
 #include <AP/tik.h>
-#include <ttyd/evt_npc.h>
-#include <ttyd/evt_nannpc.h>
 #include <ttyd/evt_msg.h>
-#include <ttyd/evt_map.h>
-#include <ttyd/evt_hit.h>
-#include <ttyd/evt_mario.h>
-#include <ttyd/evt_party.h>
-#include <ttyd/evt_bero.h>
-#include <ttyd/evt_snd.h>
-#include <ttyd/evt_urouro.h>
-#include "evt_cmd.h"
-#include "common_types.h"
-#include "patch.h"
+#include <ttyd/evt_npc.h>
 
 using namespace mod;
 using namespace ttyd;
@@ -170,6 +161,7 @@ void ApplyGor01Patches(OSModuleInfo* module_info)
 	master_talk[101] = 1;
 	master_talk[109] = 2;
 	master_talk[120] = 3;
+	master_talk[483] = GSWF(6099);
 	master_talk[544] = GSW(1705);
 	master_talk[545] = 4;
 	master_talk[556] = 4;
@@ -183,16 +175,16 @@ void ApplyGor01Patches(OSModuleInfo* module_info)
 	shoptender_init[1] = EVT_HELPER_CMD(0, 0);
 	shoptender_init[2] = EVT_HELPER_CMD(0, 0);
 
-	patch::writePatch(&shoptender_talk[189], shoptender_talk_evt, sizeof(shoptender_talk_evt)); //Shoptender Dialogue
+	patch::writePatch(&shoptender_talk[189], shoptender_talk_evt, sizeof(shoptender_talk_evt));
 
-	patch::writePatch(&roten1_talk[0], roten1_talk_evt, sizeof(roten1_talk_evt)); //Random NPC 1 Speach
-	patch::writePatch(&roten2_talk[0], roten2_talk_evt, sizeof(roten2_talk_evt)); //Random NPC 2 Speach
-	patch::writePatch(&kuribo1_talk[25], kuribo1_talk_evt, sizeof(kuribo1_talk_evt)); //Random NPC 3 Speach
-	patch::writePatch(&kuribo2_talk[0], kuribo2_talk_evt, sizeof(kuribo2_talk_evt)); //Random NPC 4 Speach
-	patch::writePatch(&kuribo3_talk[68], kuribo3_talk_evt, sizeof(kuribo3_talk_evt)); //Random NPC 5 Speach
-	patch::writePatch(&chusan1_talk[104], chusan1_talk_evt, sizeof(chusan1_talk_evt)); //Random NPC 6 Speach
-	patch::writePatch(&chusan2_talk[0], chusan2_talk_evt, sizeof(chusan2_talk_evt)); //Random NPC 7 Speach
-	patch::writePatch(&bomhei_talk[0], bomhei_talk_evt, sizeof(bomhei_talk_evt)); //Random NPC 8 Speach
+	patch::writePatch(&roten1_talk[0], roten1_talk_evt, sizeof(roten1_talk_evt));
+	patch::writePatch(&roten2_talk[0], roten2_talk_evt, sizeof(roten2_talk_evt));
+	patch::writePatch(&kuribo1_talk[25], kuribo1_talk_evt, sizeof(kuribo1_talk_evt));
+	patch::writePatch(&kuribo2_talk[0], kuribo2_talk_evt, sizeof(kuribo2_talk_evt));
+	patch::writePatch(&kuribo3_talk[68], kuribo3_talk_evt, sizeof(kuribo3_talk_evt));
+	patch::writePatch(&chusan1_talk[104], chusan1_talk_evt, sizeof(chusan1_talk_evt));
+	patch::writePatch(&chusan2_talk[0], chusan2_talk_evt, sizeof(chusan2_talk_evt));
+	patch::writePatch(&bomhei_talk[0], bomhei_talk_evt, sizeof(bomhei_talk_evt));
 
 	patch::writePatch(&bottakuru_init[0], bottakuru_init_hook, sizeof(bottakuru_init_hook));
 

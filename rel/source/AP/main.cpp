@@ -1,8 +1,8 @@
+#include "patch.h"
 #include <AP/main.h>
-#include <ttyd/item_data.h>
 #include <ttyd/common_types.h>
 #include <ttyd/icondrv.h>
-#include "patch.h"
+#include <ttyd/item_data.h>
 
 #include "evt_cmd.h"
 

@@ -1,24 +1,16 @@
-﻿#include <AP/usu.h>
-#include <ttyd/evt_cam.h>
-#include <ttyd/evt_npc.h>
-#include <ttyd/evt_nannpc.h>
-#include <ttyd/item_data.h>
-#include <ttyd/evt_msg.h>
-#include <ttyd/evt_map.h>
-#include <ttyd/evt_hit.h>
-#include <ttyd/evt_mario.h>
-#include <ttyd/evt_party.h>
-#include <ttyd/evt_item.h>
-#include <ttyd/evt_bero.h>
-#include <ttyd/evt_snd.h>
-#include <ttyd/evt_urouro.h>
-#include "evt_cmd.h"
-#include "common_types.h"
+﻿#include "evt_cmd.h"
 #include "patch.h"
+#include <AP/usu.h>
+#include <ttyd/evt_bero.h>
+#include <ttyd/evt_cam.h>
+#include <ttyd/evt_item.h>
+#include <ttyd/evt_mario.h>
+#include <ttyd/evt_msg.h>
+#include <ttyd/evt_npc.h>
+#include <ttyd/evt_snd.h>
 
 using namespace mod;
 using namespace ttyd;
-using ItemId = ttyd::item_data::ItemType::e;
 
 extern int32_t villagerA_init[];
 extern int32_t villagerA_pig_init[];
@@ -704,7 +696,7 @@ EVT_PATCH_END()
 
 EVT_BEGIN(party_evt)
 	USER_FUNC(evt_mario::evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
-	USER_FUNC(evt_item::evt_item_entry, PTR("item01"), ItemId::SUPER_LUIGI_5, LW(0), LW(1), LW(2), 16, GSWF(6080), 0)
+	USER_FUNC(evt_item::evt_item_entry, PTR("item01"), LW(3), LW(0), LW(1), LW(2), 16, GSWF(6080), 0)
 	USER_FUNC(evt_item::evt_item_get_item, PTR("item01"))
 	WAIT_MSEC(800)
 	SET(GSW(1721), 2)
@@ -776,7 +768,9 @@ void ApplyUsuPatches(OSModuleInfo* module_info)
 	gra00_2witch_find_ranpel_event[172] = GSW(1715);
 	gra00_2witch_find_ranpel_event[173] = 9;
 
-	patch::writePatch(&usu00_vivian_joinup_event[548], party_evt, sizeof(party_evt));
+	usu00_vivian_joinup_event[548] = EVT_HELPER_CMD(2, 50);
+	usu00_vivian_joinup_event[549] = EVT_HELPER_OP(LW(3));
+	patch::writePatch(&usu00_vivian_joinup_event[551], party_evt, sizeof(party_evt));
 
 	usu00_crowAB_talk_event[218] = GSW(1704);
 	usu00_crowAB_talk_event[219] = 0; //Unused

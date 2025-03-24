@@ -1,21 +1,5 @@
-#include <AP/kpa.h>
-#include <ttyd/evt_cam.h>
-#include <ttyd/evt_npc.h>
-#include <ttyd/evt_nannpc.h>
-#include <ttyd/evt_msg.h>
-#include <ttyd/evt_map.h>
-#include <ttyd/evt_hit.h>
-#include <ttyd/evt_mario.h>
-#include <ttyd/evt_party.h>
-#include <ttyd/evt_bero.h>
-#include <ttyd/evt_snd.h>
-#include <ttyd/evt_urouro.h>
 #include "evt_cmd.h"
-#include "common_types.h"
-#include "patch.h"
-
-using namespace mod;
-using namespace ttyd;
+#include <AP/kpa.h>
 
 extern int32_t kpa_goal_00[];
 extern int32_t kpa_00_fly_evt[];
