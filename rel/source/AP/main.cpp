@@ -1,5 +1,5 @@
 #include "patch.h"
-#include <AP/main.h>
+#include <AP/rel_patch_definitions.h>
 #include <ttyd/common_types.h>
 #include <ttyd/icondrv.h>
 #include <ttyd/item_data.h>
@@ -52,6 +52,7 @@ extern int32_t evt_mobj_kururing_floor[];
 extern int32_t mobj_kururing_floor[];
 extern int32_t mobj_powerupblk[];
 extern int32_t evt_mobj_powerupblk[];
+extern int32_t itemseq_GetItem[];
 //End of Assekmbly References
 
 //Script References
@@ -245,6 +246,8 @@ void ApplyMainAssemblyPatches()
 
 	mobj_powerupblk[73] = 0x809F01D8; // lwz r4, 0x1D8(r31)
 	mobj_powerupblk[110] = 0x809F01D8; // lwz r4, 0x1D8(r31)
+
+	itemseq_GetItem[234] = 0x48000030; // b 0x0030
 
 
 	//sys_prolog[25] = 0x386006A4; // li r3, 0x6A4 (GSW(1700))

@@ -1,6 +1,6 @@
 #include "evt_cmd.h"
 #include "patch.h"
-#include <AP/hei.h>
+#include <AP/rel_patch_definitions.h>
 #include <ttyd/evt_item.h>
 #include <ttyd/evt_mario.h>
 #include <ttyd/evt_npc.h>
@@ -43,7 +43,7 @@ EVT_BEGIN(party_evt)
 	RETURN()
 EVT_END()
 
-void ApplyHeiPatches(OSModuleInfo* module_info)
+void ApplyHeiPatches()
 {
 	first_evt[187] = GSW(1701);
 	first_evt[188] = 1;

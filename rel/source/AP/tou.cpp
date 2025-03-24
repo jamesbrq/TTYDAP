@@ -1,6 +1,6 @@
 #include "evt_cmd.h"
 #include "patch.h"
-#include <AP/tou.h>
+#include <AP/rel_patch_definitions.h>
 #include <ttyd/evt_bero.h>
 #include <ttyd/evt_eff.h>
 #include <ttyd/evt_item.h>
@@ -283,7 +283,7 @@ EVT_BEGIN(party_evt_hook)
 	RETURN()
 EVT_END()
 
-void ApplyTouPatches(OSModuleInfo* module_info)
+void ApplyTouPatches()
 {
 	evt_open_tou[1] = GSW(1703);
 	evt_open_tou[2] = 6;

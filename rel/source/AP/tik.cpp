@@ -1,8 +1,7 @@
 #include "evt_cmd.h"
 #include "mod.h"
-#include "OWR.h"
 #include "patch.h"
-#include <AP/tik.h>
+#include <AP/rel_patch_definitions.h>
 #include <ttyd/evt_bero.h>
 #include <ttyd/evt_case.h>
 #include <ttyd/evt_msg.h>
@@ -397,7 +396,7 @@ EVT_BEGIN(tik_05_init_evt_hook2)
 	GOTO(98)
 EVT_END()
 
-void ApplyTikPatches(OSModuleInfo* module_info)
+void ApplyTikPatches()
 {
 	uranaisi_next_evt[1] = GSW(1708);
 	uranaisi_next_evt[2] = 21;

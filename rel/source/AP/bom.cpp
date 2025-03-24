@@ -1,5 +1,5 @@
 #include "evt_cmd.h"
-#include <AP/bom.h>
+#include <AP/rel_patch_definitions.h>
 
 extern int32_t bom_first_evt_00[];
 extern int32_t bom_00_init_evt[];
@@ -36,7 +36,7 @@ extern int32_t bom1000_jump[];
 extern int32_t jump_minnnanokoe[];
 
 
-void ApplyBomPatches(OSModuleInfo* module_info)
+void ApplyBomPatches()
 {
 	bom_first_evt_00[91] = GSW(1707);
 	bom_first_evt_00[92] = 1;

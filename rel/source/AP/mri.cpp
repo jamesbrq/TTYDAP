@@ -1,6 +1,6 @@
 #include "evt_cmd.h"
 #include "patch.h"
-#include <AP/mri.h>
+#include <AP/rel_patch_definitions.h>
 #include <ttyd/evt_hit.h>
 #include <ttyd/evt_map.h>
 #include <ttyd/evt_mobj.h>
@@ -583,7 +583,7 @@ EVT_BEGIN(mri_09_init_evt_hook)
 	GOTO(&mri_09_init_evt[188])
 EVT_PATCH_END()
 
-void ApplyMriPatches(OSModuleInfo* module_info)
+void ApplyMriPatches()
 {
 	mri_countdown[1] = GSW(1713);
 	mri_countdown[2] = 17;

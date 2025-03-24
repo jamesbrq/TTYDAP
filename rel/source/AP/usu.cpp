@@ -1,6 +1,6 @@
 ﻿#include "evt_cmd.h"
 #include "patch.h"
-#include <AP/usu.h>
+#include <AP/rel_patch_definitions.h>
 #include <ttyd/evt_bero.h>
 #include <ttyd/evt_cam.h>
 #include <ttyd/evt_item.h>
@@ -708,7 +708,7 @@ EVT_BEGIN(party_evt)
 	RETURN()
 EVT_END()
 
-void ApplyUsuPatches(OSModuleInfo* module_info)
+void ApplyUsuPatches()
 {
 	patch::writePatch(&villagerA_init[5], villagerA_init_hook, sizeof(villagerA_init_hook));
 

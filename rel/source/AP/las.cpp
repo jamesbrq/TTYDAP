@@ -1,5 +1,5 @@
 #include "evt_cmd.h"
-#include <AP/las.h>
+#include <AP/rel_patch_definitions.h>
 
 extern int32_t las_first_evt_00[];
 extern int32_t las_00_init_evt[];
@@ -50,7 +50,7 @@ extern int32_t las_29_init_evt[];
 extern int32_t las_30_init_evt[];
 
 
-void ApplyLasPatches(OSModuleInfo* module_info)
+void ApplyLasPatches()
 {
 	las_first_evt_00[160] = GSW(1708);
 	las_first_evt_00[161] = 2;

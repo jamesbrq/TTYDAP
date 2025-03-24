@@ -1,11 +1,11 @@
 #include "evt_cmd.h"
-#include <AP/aaa.h>
+#include <AP/rel_patch_definitions.h>
 
 extern int32_t evt_prologue2[];
 extern int32_t aaa_epilogue_evt2[];
 extern int32_t aaa_00_init_evt[];
 
-void ApplyAaaPatches(OSModuleInfo* module_info)
+void ApplyAaaPatches()
 {
 	evt_prologue2[188] = GSW(1700);
 	evt_prologue2[189] = 2;

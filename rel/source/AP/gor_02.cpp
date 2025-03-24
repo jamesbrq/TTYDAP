@@ -1,7 +1,6 @@
 #include "evt_cmd.h"
 #include "patch.h"
-#include <AP/gor_02.h>
-#include <AP/tik.h>
+#include <AP/rel_patch_definitions.h>
 #include <ttyd/evt_cam.h>
 #include <ttyd/evt_map.h>
 #include <ttyd/evt_mario.h>
@@ -455,7 +454,7 @@ EVT_BEGIN(luigi_init_hook)
 	RETURN()
 EVT_PATCH_END()
 
-void ApplyGor02Patches(OSModuleInfo* module_info)
+void ApplyGor02Patches()
 {
 	unk_evt_gor_0003ec8c[26] = GSW(1700);
 

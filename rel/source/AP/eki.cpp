@@ -1,6 +1,6 @@
 #include "evt_cmd.h"
 #include "patch.h"
-#include <AP/eki.h>
+#include <AP/rel_patch_definitions.h>
 #include <ttyd/evt_mario.h>
 #include <ttyd/evt_msg.h>
 #include <ttyd/evt_pouch.h>
@@ -66,7 +66,7 @@ EVT_BEGIN(evt_elv_hook)
 	GOTO(&evt_elv[38])
 EVT_END()
 
-void ApplyEkiPatches(OSModuleInfo* module_info)
+void ApplyEkiPatches()
 {
 	evt_bridge2[111] = GSW(1720);
 	evt_bridge2[112] = 8;

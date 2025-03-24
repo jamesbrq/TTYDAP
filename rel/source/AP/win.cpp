@@ -1,6 +1,5 @@
 #include "evt_cmd.h"
 #include "patch.h"
-#include <AP/win.h>
 #include <ttyd/evt_cam.h>
 #include <ttyd/evt_item.h>
 #include <ttyd/evt_mario.h>
@@ -103,7 +102,7 @@ EVT_BEGIN(party_evt)
 	RETURN()
 EVT_END()
 
-void ApplyWinPatches(OSModuleInfo* module_info)
+void ApplyWinPatches()
 {
 	patch::writePatch(&win_vivian_init[5], win_vivian_init_hook, sizeof(win_vivian_init_hook));
 	patch::writePatch(&maririn_init[5], maririn_init_evt, sizeof(maririn_init_evt));

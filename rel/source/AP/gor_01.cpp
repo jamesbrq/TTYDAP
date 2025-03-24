@@ -1,7 +1,6 @@
 #include "evt_cmd.h"
 #include "patch.h"
-#include <AP/gor_01.h>
-#include <AP/tik.h>
+#include <AP/rel_patch_definitions.h>
 #include <ttyd/evt_msg.h>
 #include <ttyd/evt_npc.h>
 
@@ -129,7 +128,7 @@ EVT_BEGIN(bomhei_talk_evt)
 EVT_END()
 
 
-void ApplyGor01Patches(OSModuleInfo* module_info)
+void ApplyGor01Patches()
 {
 	badgemaster_init[21] = GSW(1703);
 	badgemaster_init[22] = 1;

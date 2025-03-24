@@ -1,37 +1,8 @@
-#include <AP/aaa.h>
-#include <AP/aji.h>
-#include <AP/bom.h>
-#include <AP/dou.h>
-#include <AP/eki.h>
-#include <AP/end.h>
-#include <AP/gon.h>
-#include <AP/gor_00.h>
-#include <AP/gor_01.h>
-#include <AP/gor_02.h>
-#include <AP/gor_03.h>
-#include <AP/gor_04.h>
-#include <AP/gor_misc.h>
-#include <AP/gra.h>
-#include <AP/hei.h>
-#include <AP/hom.h>
-#include <AP/jin.h>
-#include <AP/kpa.h>
-#include <AP/main.h>
-#include <AP/mri.h>
-#include <AP/muj.h>
-#include <AP/nok.h>
-#include <AP/pik.h>
-#include <AP/rsh.h>
-#include <AP/tik.h>
-#include <AP/tou.h>
-#include <AP/tou2.h>
-#include <AP/usu.h>
-#include <AP/win.h>
+#include <AP/rel_patch_definitions.h>
 #include <cstdint>
 #include <cstring>
 #include <gc/OSLink.h>
 #include <ttyd/common_types.h>
-#include <ttyd/fontmgr.h>
 #include <ttyd/mario_party.h>
 #include <ttyd/mario_pouch.h>
 #include <ttyd/msgdrv.h>
@@ -43,6 +14,7 @@
 #include "common.h"
 #include "OWR.h"
 #include "patch.h"
+#include <ttyd/fontmgr.h>
 
 using ::ttyd::common::ItemData;
 using gc::OSLink::OSModuleInfo;
@@ -338,18 +310,14 @@ namespace mod::owr
 							return_value = 1;
 							break;
 						}
-						else if (!has_sboots)
+						if (!has_sboots)
 						{
 							ttyd::mario_pouch::pouchGetItem(ItemId::SUPER_BOOTS);
 							return_value = 1;
 							break;
 						}
-						else
-						{
-							ttyd::mario_pouch::pouchGetItem(ItemId::ULTRA_BOOTS);
-							return_value = 1;
-							break;
-						}
+						ttyd::mario_pouch::pouchGetItem(ItemId::ULTRA_BOOTS);
+						return_value = 1;
 						break;
 					}
 					case ItemId::HAMMER:
@@ -361,29 +329,21 @@ namespace mod::owr
 							g_pouchGetItem_trampoline(item);
 							break;
 						}
-						else if(!has_shammer)
+						if(!has_shammer)
 						{
 							ttyd::mario_pouch::pouchGetItem(ItemId::SUPER_HAMMER);
 							return_value = 1;
 							break;
 						}
-						else
-						{
 							ttyd::mario_pouch::pouchGetItem(ItemId::ULTRA_HAMMER);
 							return_value = 1;
 							break;
-						}
 					}
 					default:
 						return_value = g_pouchGetItem_trampoline(item);
 				}
 				return return_value;
 			});
-
-		uint32_t* kSkipUHCutsceneOpcode = reinterpret_cast<uint32_t*>(0x800abcd8);
-		const uint32_t skip_cutscene_opcode = 0x48000030;     // b 0x0030
-		mod::patch::writePatch(
-			kSkipUHCutsceneOpcode, &skip_cutscene_opcode, sizeof(uint32_t));
 	}
 
 	void OWR::Update()
@@ -393,112 +353,83 @@ namespace mod::owr
 		RecieveItems();
 	}
 
-	void OWR::Draw()
-	{
-		//char* buffer = new char[256];
-		//sprintf(buffer, "seq: %lu", ttyd::swdrv::swByteGet(0));
-		//DrawString(buffer, -232, -120,-1U);
-	}
-
 	void OWR::OnModuleLoaded(OSModuleInfo* module_info)
 	{
 		if (module_info == nullptr) return;
 		//uintptr_t module_ptr = reinterpret_cast<uintptr_t>(module_info);
 		switch (module_info->id) {
 		case ModuleId::GOR:
-			ApplyGor00Patches(module_info);
-			ApplyGor01Patches(module_info);
-			ApplyGor02Patches(module_info);
-			ApplyGor03Patches(module_info);
-			ApplyGor04Patches(module_info);
-			ApplyGorMiscPatches(module_info);
+			ApplyGorPatches();
 			break;
 		case ModuleId::HEI:
-			ApplyHeiPatches(module_info);
+			ApplyHeiPatches();
 			break;
 		case ModuleId::GON:
-			ApplyGonPatches(module_info);
+			ApplyGonPatches();
 			break;
 		case ModuleId::NOK:
-			ApplyNokPatches(module_info);
+			ApplyNokPatches();
 			break;
 		case ModuleId::WIN:
-			ApplyWinPatches(module_info);
+			ApplyWinPatches();
 			break;
 		case ModuleId::MRI:
-			ApplyMriPatches(module_info);
+			ApplyMriPatches();
 			break;
 		case ModuleId::TOU:
-			ApplyTouPatches(module_info);
+			ApplyTouPatches();
 			break;
 		case ModuleId::TOU2:
-			ApplyTou2Patches(module_info);
+			ApplyTou2Patches();
 			break;
 		case ModuleId::USU:
-			ApplyUsuPatches(module_info);
+			ApplyUsuPatches();
 			break;
 		case ModuleId::GRA:
-			ApplyGraPatches(module_info);
+			ApplyGraPatches();
 			break;
 		case ModuleId::JIN:
-			ApplyJinPatches(module_info);
+			ApplyJinPatches();
 			break;
 		case ModuleId::MUJ:
-			ApplyMujPatches(module_info);
+			ApplyMujPatches();
 			break;
 		case ModuleId::DOU:
-			ApplyDouPatches(module_info);
+			ApplyDouPatches();
 			break;
 		case ModuleId::RSH:
-			ApplyRshPatches(module_info);
+			ApplyRshPatches();
 			break;
 		case ModuleId::EKI:
-			ApplyEkiPatches(module_info);
+			ApplyEkiPatches();
 			break;
 		case ModuleId::END:
-			ApplyEndPatches(module_info);
+			ApplyEndPatches();
 			break;
 		case ModuleId::HOM:
-			ApplyHomPatches(module_info);
+			ApplyHomPatches();
 			break;
 		case ModuleId::PIK:
-			ApplyPikPatches(module_info);
+			ApplyPikPatches();
 			break;
 		case ModuleId::BOM:
-			ApplyBomPatches(module_info);
+			ApplyBomPatches();
 			break;
 		case ModuleId::AJI:
-			ApplyAjiPatches(module_info);
+			ApplyAjiPatches();
 			break;
 		case ModuleId::AAA:
-			ApplyAaaPatches(module_info);
+			ApplyAaaPatches();
 			break;
 		case ModuleId::KPA:
-			ApplyKpaPatches(module_info);
+			ApplyKpaPatches();
 			break;
 		case ModuleId::TIK:
-			ApplyTikPatches(module_info);
+			ApplyTikPatches();
 			break;
 		default:
-			return;
+			break;
 		}
-
-		/*ShopItemData* item_data = reinterpret_cast<ShopItemData*>(module_ptr + kShopOffsets[0]);
-		for (int32_t copy = 0; copy < 7; ++copy) {
-			// Skip first item slot on additional copies.
-			if (copy > 0) ++item_data;
-			for (int32_t i = copy > 0 ? 1 : 0; i < 6; ++i) {
-				ItemPrice item_price = ItemPrice();
-				if (i == 2)
-					item_price.item = ItemId::CARD_KEY_001D;
-				else
-					item_price.item = ItemId::ULTRA_BOOTS;
-				item_price.price = 1;
-				item_data->item_id = item_price.item;
-				item_data->buy_price = item_price.price;
-				++item_data;
-			}
-		} */
 	}
 
 	void OWR::DrawString(const char* data, float x, float y, uint32_t color, float scale) {
@@ -552,5 +483,4 @@ namespace mod::owr
 		// Draw the rest of the text
 		ttyd::fontmgr::FontDrawString(x, y, data);
 	}
-
 }

@@ -1,6 +1,6 @@
 #include "evt_cmd.h"
 #include "patch.h"
-#include <AP/moo.h>
+#include <AP/rel_patch_definitions.h>
 #include <ttyd/evt_cam.h>
 #include <ttyd/evt_mario.h>
 #include <ttyd/evt_party.h>
@@ -56,7 +56,7 @@ EVT_BEGIN(moo_04_init_evt_hook)
 	RETURN()
 EVT_END()
 
-void ApplyMooPatches(OSModuleInfo* module_info)
+void ApplyMooPatches()
 {
 	moo_evt_first_00[518] = GSW(1707);
 	moo_evt_first_00[519] = 6;

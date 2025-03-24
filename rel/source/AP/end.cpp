@@ -1,11 +1,11 @@
 #include "evt_cmd.h"
-#include <AP/end.h>
+#include <AP/rel_patch_definitions.h>
 
 extern int32_t unk_evt_end_00004654[];
 extern int32_t unk_evt_end_00004718[];
 
 
-void ApplyEndPatches(OSModuleInfo* module_info)
+void ApplyEndPatches()
 {
 	unk_evt_end_00004654[17] = GSW(1708);
 	unk_evt_end_00004654[18] = 20;

@@ -1,5 +1,5 @@
 #include "evt_cmd.h"
-#include <AP/gor_04.h>
+#include <AP/rel_patch_definitions.h>
 
 extern int32_t hom_10_evt_resha_start_gor_04[];
 extern int32_t gor_evt_train[];
@@ -12,7 +12,7 @@ extern int32_t luigi_init_04[];
 extern int32_t luigi_npcEnt_04[];
 extern int32_t gor_04_init_evt[];
 
-void ApplyGor04Patches(OSModuleInfo* module_info)
+void ApplyGor04Patches()
 {
 	hom_10_evt_resha_start_gor_04[49] = GSW(1706);
 	hom_10_evt_resha_start_gor_04[50] = 43;

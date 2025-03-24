@@ -1,6 +1,6 @@
 #include "evt_cmd.h"
 #include "patch.h"
-#include <AP/muj.h>
+#include <AP/rel_patch_definitions.h>
 #include <ttyd/evt_cam.h>
 #include <ttyd/evt_hit.h>
 #include <ttyd/evt_item.h>
@@ -692,7 +692,7 @@ EVT_BEGIN(party_evt)
 EVT_END()
 
 
-void ApplyMujPatches(OSModuleInfo* module_info)
+void ApplyMujPatches()
 {
 	patch::writePatch(&koburon_dead[0], koburon_dead_hook, sizeof(koburon_dead_hook));
 

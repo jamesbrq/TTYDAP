@@ -1,6 +1,6 @@
 #include "evt_cmd.h"
 #include "patch.h"
-#include <AP/aji.h>
+#include <AP/rel_patch_definitions.h>
 #include <ttyd/evt_aji.h>
 #include <ttyd/evt_bero.h>
 #include <ttyd/evt_case.h>
@@ -277,7 +277,7 @@ EVT_BEGIN(aji_17_init_evt_hook)
 EVT_PATCH_END()
 
 
-void ApplyAjiPatches(OSModuleInfo* module_info)
+void ApplyAjiPatches()
 {
 	aji_first_evt[308] = GSW(1707);
 	aji_first_evt[309] = 9;

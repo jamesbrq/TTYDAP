@@ -1,7 +1,7 @@
-#include <AP/dou.h>
-#include <ttyd/evt_cam.h>
-#include "evt_cmd.h"
 #include "common_types.h"
+#include "evt_cmd.h"
+#include <AP/rel_patch_definitions.h>
+#include <ttyd/evt_cam.h>
 
 using namespace mod;
 using namespace ttyd;
@@ -36,7 +36,7 @@ extern int32_t bombwall_bomb[];
 extern int32_t bombwall_init[];
 extern int32_t dou_11_init_evt[];
 
-void ApplyDouPatches(OSModuleInfo* module_info)
+void ApplyDouPatches()
 {
 	bero_in_event_dou_00[1] = GSW(1717);
 	bero_in_event_dou_00[2] = 1;

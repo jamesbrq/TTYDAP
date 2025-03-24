@@ -1,6 +1,6 @@
 #include "evt_cmd.h"
 #include "patch.h"
-#include <AP/pik.h>
+#include <AP/rel_patch_definitions.h>
 #include <ttyd/evt_item.h>
 #include <ttyd/evt_mario.h>
 #include <ttyd/evt_msg.h>
@@ -213,7 +213,7 @@ EVT_BEGIN(pik_talk_madam_ring_return_hook3)
 EVT_PATCH_END()
 
 
-void ApplyPikPatches(OSModuleInfo* module_info)
+void ApplyPikPatches()
 {
 
 	pik_talk_madam_ring_return[18] = EVT_HELPER_CMD(2, 50);

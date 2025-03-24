@@ -1,6 +1,6 @@
 #include "evt_cmd.h"
 #include "patch.h"
-#include <AP/gra.h>
+#include <AP/rel_patch_definitions.h>
 #include <ttyd/evt_msg.h>
 
 using namespace mod;
@@ -40,7 +40,7 @@ EVT_BEGIN(evt_machibuse_evt)
 	GOTO(&evt_machibuse[423])
 EVT_PATCH_END()
 
-void ApplyGraPatches(OSModuleInfo* module_info)
+void ApplyGraPatches()
 {
 	evt_machibuse[78] = 99; //Unused
 	evt_machibuse[291] = GSWF(6044);

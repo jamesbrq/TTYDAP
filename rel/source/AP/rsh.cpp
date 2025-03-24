@@ -1,6 +1,6 @@
 #include "evt_cmd.h"
 #include "patch.h"
-#include <AP/rsh.h>
+#include <AP/rel_patch_definitions.h>
 #include <ttyd/evt_bero.h>
 #include <ttyd/evt_case.h>
 #include <ttyd/evt_item.h>
@@ -655,7 +655,7 @@ EVT_BEGIN(talk_madam_ring_return_hook3)
 	GOTO(&talk_madam_ring_return[33])
 EVT_PATCH_END()
 
-void ApplyRshPatches(OSModuleInfo* module_info)
+void ApplyRshPatches()
 {
 	simi_check[24] = GSW(1706);
 	simi_check[26] = 3;

@@ -1,7 +1,6 @@
 #include "evt_cmd.h"
 #include "patch.h"
-#include <AP/gor_misc.h>
-#include <AP/main.h>
+#include <AP/rel_patch_definitions.h>
 #include <ttyd/evt_cam.h>
 #include <ttyd/evt_item.h>
 #include <ttyd/evt_mario.h>
@@ -38,7 +37,7 @@ EVT_BEGIN(party_evt)
 	RETURN()
 EVT_END()
 
-void ApplyGorMiscPatches(OSModuleInfo* module_info)
+void ApplyGorMiscPatches()
 {
 	christine_nakama[707] = EVT_HELPER_CMD(2, 50);
 	christine_nakama[708] = EVT_HELPER_OP(LW(3));
@@ -82,4 +81,14 @@ void ApplyGorMiscPatches(OSModuleInfo* module_info)
 	irai_init_func[106] = 0x2C030000; // cmpwi r3, 0x0
 
 	patch::writeBranchBL(&keijiban_data_make[11], reinterpret_cast<void*>(bJohoyaSeqAddition));
+}
+
+void ApplyGorPatches()
+{
+	ApplyGor00Patches();
+	ApplyGor01Patches();
+	ApplyGor02Patches();
+	ApplyGor03Patches();
+	ApplyGor04Patches();
+	ApplyGorMiscPatches();
 }

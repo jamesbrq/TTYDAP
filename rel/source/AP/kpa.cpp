@@ -1,5 +1,5 @@
 #include "evt_cmd.h"
-#include <AP/kpa.h>
+#include <AP/rel_patch_definitions.h>
 
 extern int32_t kpa_goal_00[];
 extern int32_t kpa_00_fly_evt[];
@@ -12,7 +12,7 @@ extern int32_t kpa_07_evt[];
 extern int32_t kpa_07_init_evt[];
 
 
-void ApplyKpaPatches(OSModuleInfo* module_info)
+void ApplyKpaPatches()
 {
 	kpa_goal_00[4] = GSW(1713);
 	kpa_goal_00[5] = 15;

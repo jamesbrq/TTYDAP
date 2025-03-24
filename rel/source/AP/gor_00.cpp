@@ -1,6 +1,6 @@
 #include "evt_cmd.h"
 #include "patch.h"
-#include <AP/gor_00.h>
+#include <AP/rel_patch_definitions.h>
 #include <ttyd/evt_bero.h>
 #include <ttyd/evt_hit.h>
 #include <ttyd/evt_map.h>
@@ -698,7 +698,7 @@ EVT_BEGIN(gor_00_init_evt2_hook)
 	GOTO(&gor_00_init_evt[469])
 EVT_PATCH_END()
 
-void ApplyGor00Patches(OSModuleInfo* module_info)
+void ApplyGor00Patches()
 {
 			no00_custom[1] = GSW(1700);
 			no00_custom[2] = 5;

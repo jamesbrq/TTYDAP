@@ -1,5 +1,5 @@
 #include "evt_cmd.h"
-#include <AP/end.h>
+#include <AP/rel_patch_definitions.h>
 
 extern int32_t evt_carry_up_bridge[];
 extern int32_t init_powan_toron_konari_papa_gurume[];
@@ -14,7 +14,7 @@ extern int32_t hom_00_init_evt[];
 extern int32_t hom_10_evt_resha_start_hom_00[];
 
 
-void ApplyHomPatches(OSModuleInfo* module_info)
+void ApplyHomPatches()
 {
 	evt_carry_up_bridge[82] = GSW(1720);
 	evt_carry_up_bridge[83] = 2;

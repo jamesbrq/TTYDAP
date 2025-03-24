@@ -1,5 +1,5 @@
 #include "evt_cmd.h"
-#include <AP/jin.h>
+#include <AP/rel_patch_definitions.h>
 
 extern int32_t door_teresa_n[];
 extern int32_t door_teresa_s[];
@@ -36,7 +36,7 @@ extern int32_t evt_usu_kagemario_party_kill_jin[];
 extern int32_t jin_evt_kagemario_init[];
 
 
-void ApplyJinPatches(OSModuleInfo* module_info)
+void ApplyJinPatches()
 {
 	door_teresa_n[1] = GSW(1716);
 	door_teresa_n[2] = 2;

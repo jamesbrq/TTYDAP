@@ -1,5 +1,5 @@
 #include "evt_cmd.h"
-#include <AP/tou2.h>
+#include <AP/rel_patch_definitions.h>
 
 extern int32_t init_kinosikowa[];
 extern int32_t npc_entry[];
@@ -35,7 +35,7 @@ extern int32_t tou2_evt_tou_get_rule_msg2[];
 extern int32_t tou2_rankingInit[];
 extern int32_t screen_init[];
 
-void ApplyTou2Patches(OSModuleInfo* module_info)
+void ApplyTou2Patches()
 {
 	init_kinosikowa[1] = GSW(1703);
 	init_kinosikowa[2] = 28;

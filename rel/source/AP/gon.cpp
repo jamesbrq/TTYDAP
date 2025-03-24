@@ -1,5 +1,5 @@
 #include "evt_cmd.h"
-#include <AP/gon.h>
+#include <AP/rel_patch_definitions.h>
 
 extern int32_t gon_01_init_evt[];
 extern int32_t tegami_event[];
@@ -33,7 +33,7 @@ extern int32_t gon_chuchurina_sogu[];
 extern int32_t item_get00[];
 extern int32_t gon_12_init_evt[];
 
-void ApplyGonPatches(OSModuleInfo* module_info)
+void ApplyGonPatches()
 {
 	gon_01_init_evt[36] = GSW(1711);
 	gon_01_init_evt[37] = 2;

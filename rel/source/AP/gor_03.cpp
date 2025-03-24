@@ -1,7 +1,6 @@
 #include "evt_cmd.h"
 #include "patch.h"
-#include <AP/gor_03.h>
-#include <AP/tik.h>
+#include <AP/rel_patch_definitions.h>
 #include <ttyd/evt_map.h>
 #include <ttyd/evt_msg.h>
 
@@ -198,7 +197,7 @@ EVT_BEGIN(gor_03_init_evt_hook)
 	GOTO(&gor_03_init_evt[292])
 EVT_PATCH_END()
 
-void ApplyGor03Patches(OSModuleInfo* module_info)
+void ApplyGor03Patches()
 {
 	maffiaboss_ticket_check[231] = GSW(1709);
 	maffiaboss_ticket_check[232] = 3;

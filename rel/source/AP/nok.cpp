@@ -1,18 +1,9 @@
-#include <AP/nok.h>
-#include <ttyd/evt_cam.h>
-#include <ttyd/evt_npc.h>
-#include <ttyd/evt_nannpc.h>
-#include <ttyd/evt_msg.h>
-#include <ttyd/evt_map.h>
-#include <ttyd/evt_hit.h>
-#include <ttyd/evt_mario.h>
-#include <ttyd/evt_party.h>
-#include <ttyd/evt_bero.h>
-#include <ttyd/evt_snd.h>
-#include <ttyd/evt_urouro.h>
 #include "evt_cmd.h"
-#include "common_types.h"
 #include "patch.h"
+#include <AP/rel_patch_definitions.h>
+#include <ttyd/evt_mario.h>
+#include <ttyd/evt_msg.h>
+#include <ttyd/evt_npc.h>
 
 using namespace mod;
 using namespace ttyd;
@@ -540,7 +531,7 @@ EVT_BEGIN(nokorin_talk_hook)
 EVT_END()
 
 
-void ApplyNokPatches(OSModuleInfo* module_info)
+void ApplyNokPatches()
 {
 	nokonoko_A_init[6] = GSW(1701);
 	nokonoko_A_init[7] = 3;
