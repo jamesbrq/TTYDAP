@@ -180,13 +180,25 @@ bPeachPointer:
 	addi %r3, %r3, str_pik_04_802c075c@l
 	bl strcmp
 	cmpwi %r3, 0x0
-	bne usuBreakfast
+	beq pikBreakfast
+	lis %r3, wp@h
+	ori %r3, %r3, wp@l
+	addi %r4, %r3, 0x12C
+	lis %r3, str_bom_02_802c0378@ha
+	addi %r3, %r3, str_bom_02_802c0378@l
+	bl strcmp
+	cmpwi %r3, 0x0
+	beq bomBreakfast
+	lis %r6, 0xF840 #usuBreakfast
+	ori %r6, %r6, 0x735A
+	b breakfastValueRestore	
+bomBreakfast:
+	lis %r6, 0xF840
+	ori %r6, %r6, 0x735F
+	b breakfastValueRestore	
+pikBreakfast:
 	lis %r6, 0xF840
 	ori %r6, %r6, 0x735E
-	b breakfastValueRestore	
-usuBreakfast:
-	lis %r6, 0xF840
-	ori %r6, %r6, 0x735A
 breakfastValueRestore:
 	mr %r3, %r18
 	mr %r4, %r19
