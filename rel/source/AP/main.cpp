@@ -52,8 +52,8 @@ extern int32_t evt_mobj_kururing_floor[];
 extern int32_t mobj_kururing_floor[];
 extern int32_t mobj_powerupblk[];
 extern int32_t evt_mobj_powerupblk[];
-extern int32_t itemseq_GetItem[];
-//End of Assekmbly References
+extern int32_t breakfast[];
+//End of Assembly References
 
 //Script References
 extern int32_t mail_evt_nok_01[];
@@ -223,20 +223,6 @@ void ApplyMainAssemblyPatches()
 
 	patch::writeBranchPair(&evt_msg_print_party_add[32], reinterpret_cast<void*>(bPrintPartyAddErrorFix), reinterpret_cast<void*>(bPrintPartyAddErrorFixReturn));
 
-	//winMgrSelectEntry[629] = 0x381C0001; //addi r0, r28, 0x0
-	//winMgrSelectEntry[634] = 0x387C0001; //addi r3, r28, 0x0
-	//winMgrSelectEntry[639] = 0x38BC0001; //addi r5, r28, 0x0
-	//winMgrSelectEntry[645] = 0xA01B0018; //lhz r0, 0x0(r27)
-	//winMgrSelectEntry[659] = 0x2C1C0149; //cmpwi r28, 0x149
-
-	//evt_badgeShop_starmaniac_get_kind_cnt[5] = 0x38000149; // li r0, 0x149
-	//evt_badgeShop_starmaniac_get_kind_cnt[18] = 0x38800001; // li r4, 0x0
-	//evt_badgeShop_starmaniac_get_kind_cnt[19] = 0x380C0001; // addi r0, r12, 0x0
-
-	//badgeShop_get[9] = 0x38A00001; // li r5, 0x0
-
-	//badgeShop_add[9] = 0x38C00001; // li r6, 0x0
-
 	patch::writeBranchPair(&evt_mobj_kururing_floor[39], reinterpret_cast<void*>(bKururingFloorCapture), reinterpret_cast<void*>(bKururingFloorCaptureReturn));
 	patch::writeBranchPair(&evt_mobj_kururing_floor[60], reinterpret_cast<void*>(bKururingFloorRelease), reinterpret_cast<void*>(bKururingFloorReleaseReturn));
 	patch::writeBranchPair(&evt_mobj_powerupblk[24], reinterpret_cast<void*>(bPowerupblkCapture), reinterpret_cast<void*>(bPowerupblkCaptureReturn));
@@ -247,7 +233,7 @@ void ApplyMainAssemblyPatches()
 	mobj_powerupblk[73] = 0x809F01D8; // lwz r4, 0x1D8(r31)
 	mobj_powerupblk[110] = 0x809F01D8; // lwz r4, 0x1D8(r31)
 
-	itemseq_GetItem[234] = 0x48000030; // b 0x0030
+	patch::writeBranchPair(&breakfast[22], reinterpret_cast<void*>(bPeachPointer), reinterpret_cast<void*>(bPeachReturn));
 
 
 	//sys_prolog[25] = 0x386006A4; // li r3, 0x6A4 (GSW(1700))

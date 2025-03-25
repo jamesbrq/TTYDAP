@@ -24,6 +24,10 @@
 .global bPowerupblkCaptureReturn
 .global bPowerupblkRelease
 .global bPowerupblkReleaseReturn
+.global bPeachPointer
+.global bPeachReturn
+.global usuBreakfast
+.global breakfastValueRestore
 
 bMapGXArrInject:
 	lis %r3, win_log_mapGX_arr@ha
@@ -164,6 +168,29 @@ bPowerupblkRelease:
 	stw %r19, 0x1D8(%r3)
 	mr %r28, %r3 #Original Intruction
 bPowerupblkReleaseReturn:
+	b 0
+
+bPeachPointer:
+	mr %r18, %r3
+	mr %r19, %r4
+	lis %r3, wp@h
+	ori %r3, %r3, wp@l
+	addi %r4, %r3, 0x12C
+	lis %r3, str_pik_04_802c075c@ha
+	addi %r3, %r3, str_pik_04_802c075c@l
+	bl strcmp
+	cmpwi %r3, 0x0
+	bne usuBreakfast
+	lis %r6, 0xF840
+	ori %r6, %r6, 0x735E
+	b breakfastValueRestore	
+usuBreakfast:
+	lis %r6, 0xF840
+	ori %r6, %r6, 0x735A
+breakfastValueRestore:
+	mr %r3, %r18
+	mr %r4, %r19
+bPeachReturn:
 	b 0
 
 win_log_mapGX_arr:

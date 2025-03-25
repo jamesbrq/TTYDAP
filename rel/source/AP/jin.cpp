@@ -13,6 +13,7 @@ extern int32_t oku_teresa_init[];
 extern int32_t temae_teresa_init[];
 extern int32_t senteresa_evt[];
 extern int32_t jin_00_init_evt[];
+extern int32_t ki_data_evt_01[];
 extern int32_t ranperu_toujou[];
 extern int32_t irekawatta_mario[];
 extern int32_t ranperu_lastbattle[];
@@ -91,6 +92,8 @@ void ApplyJinPatches()
 	jin_00_init_evt[138] = 1;
 	jin_00_init_evt[181] = GSW(1715);
 	jin_00_init_evt[182] = 3;
+
+	ki_data_evt_01[15] = GSWF(6106);
 
 	ranperu_toujou[327] = GSW(1715);
 	ranperu_toujou[328] = 2;

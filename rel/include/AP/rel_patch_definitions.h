@@ -30,6 +30,8 @@ extern "C" {
 	void bPowerupblkCaptureReturn();
 	void bPowerupblkRelease();
 	void bPowerupblkReleaseReturn();
+	void bPeachPointer();
+	void bPeachReturn();
 }
 
 EVT_DECLARE_USER_FUNC(checkChapterRequirements, 1)

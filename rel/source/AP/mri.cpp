@@ -430,14 +430,14 @@ EVT_BEGIN(mri_01_init_evt_hook)
 EVT_END()
 
 EVT_BEGIN(mri_03_init_evt_switch)
-	IF_LARGE_EQUAL(GSW(1713), 99) //Unknown
-		IF_SMALL_EQUAL(GSW(1713), 99) //Unknown
+	IF_LARGE_EQUAL(GSW(1713), 8)
+		IF_SMALL_EQUAL(GSW(1713), 9)
 			USER_FUNC(evt_snd::evt_snd_bgmon, 512, PTR("BGM_EVT_DANGER4"))
 			USER_FUNC(evt_snd::evt_snd_envon, 272, PTR("ENV_STG2_MRI9"))
 			RETURN()
 		END_IF()
 	END_IF()
-	IF_EQUAL(GSWF(6020), 1) //Unknown
+	IF_EQUAL(GSWF(6020), 1)
 		USER_FUNC(evt_snd::evt_snd_bgmon, 512, PTR("BGM_EVT_STG2_PUNI2"))
 		USER_FUNC(evt_snd::evt_snd_envoff, 512)
 		RETURN()
@@ -678,6 +678,7 @@ void ApplyMriPatches()
 
 	sister_talk[17] = GSW(1708);
 	sister_talk[19] = 18;
+	sister_talk[198] = GSWF(6103);
 
 	bigtree_firstbattle[641] = GSW(1713);
 	bigtree_firstbattle[642] = 2;
@@ -865,6 +866,7 @@ void ApplyMriPatches()
 	mri_06_init_evt[88] = 9;
 	mri_06_init_evt[143] = GSWF(6023);
 	mri_06_init_evt[144] = 0;
+	mri_06_init_evt[169] = GSWF(6104);
 
 	mri_chibitoge_init_07[1] = GSW(1713);
 	mri_chibitoge_init_07[3] = 0; //SKIPPED

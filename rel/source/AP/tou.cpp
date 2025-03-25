@@ -5,6 +5,7 @@
 #include <ttyd/evt_eff.h>
 #include <ttyd/evt_item.h>
 #include <ttyd/evt_mario.h>
+#include <ttyd/evt_pouch.h>
 #include <ttyd/evt_msg.h>
 #include <ttyd/evt_npc.h>
 
@@ -51,6 +52,7 @@ extern int32_t evt_gondora[];
 extern int32_t evt_gondora2[];
 extern int32_t evt_peach_after[];
 extern int32_t tou_evt_key_01[];
+extern int32_t evt_hotdog[];
 extern int32_t tou_01_init_evt[];
 extern int32_t evt_move_g[];
 extern int32_t init_gard1[];
@@ -283,6 +285,21 @@ EVT_BEGIN(party_evt_hook)
 	RETURN()
 EVT_END()
 
+EVT_BEGIN(hotdog_item)
+	USER_FUNC(evt_mario::evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
+	USER_FUNC(evt_item::evt_item_entry, PTR("item01"), LW(3), LW(0), LW(1), LW(2), 16, GSWF(6105), 0)
+	USER_FUNC(evt_item::evt_item_get_item, PTR("item01"))
+	WAIT_MSEC(800)
+	USER_FUNC(evt_pouch::evt_pouch_add_coin, -10)
+	USER_FUNC(evt_msg::evt_msg_print_add, 0, PTR("stg3_tou_14"))
+	RETURN()
+EVT_END()
+
+EVT_BEGIN(hotdog_item_hook)
+	RUN_CHILD_EVT(hotdog_item)
+	GOTO(&evt_hotdog[78])
+EVT_END()
+
 void ApplyTouPatches()
 {
 	evt_open_tou[1] = GSW(1703);
@@ -448,6 +465,10 @@ void ApplyTouPatches()
 
 	tou_evt_key_02[10] = GSWF(6028);
 	tou_evt_key_02[11] = 1;
+
+	evt_hotdog[51] = EVT_HELPER_CMD(2, 50);
+	evt_hotdog[52] = EVT_HELPER_OP(LW(3));
+	patch::writePatch(&evt_hotdog[54], hotdog_item_hook, sizeof(hotdog_item_hook));
 
 	tou_01_init_evt[107] = GSW(1708);
 	tou_01_init_evt[108] = 16;

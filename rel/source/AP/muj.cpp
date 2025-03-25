@@ -973,6 +973,7 @@ void ApplyMujPatches()
 
 	marco_talk_muj_05[1] = GSW(1719);
 	marco_talk_muj_05[3] = 8;
+	marco_talk_muj_05[95] = GSWF(6108);
 
 	sanders_kyushutsu_sub[7] = GSW(1719);
 	sanders_kyushutsu_sub[8] = 2;

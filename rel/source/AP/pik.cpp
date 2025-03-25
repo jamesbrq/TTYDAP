@@ -58,6 +58,7 @@ extern int32_t talk_takun1[];
 extern int32_t talk_takun2[];
 extern int32_t talk_takun3[];
 extern int32_t pik_init_kiza[];
+extern int32_t evt_roten[];
 extern int32_t pik_04_init_evt[];
 extern int32_t pik_talk_madam_ring_return[];
 
@@ -418,6 +419,8 @@ void ApplyPikPatches()
 
 	pik_init_kiza[1] = GSW(1706);
 	pik_init_kiza[3] = 51;
+
+	evt_roten[71] = GSWF(6109);
 
 	pik_04_init_evt[12] = GSW(1708);
 	pik_04_init_evt[13] = 18;

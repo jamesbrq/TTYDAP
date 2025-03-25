@@ -361,7 +361,7 @@ EVT_BEGIN(nokopapa_talk_evt)
 		END_IF()
 		RETURN()
 	END_IF()
-	IF_SMALL(GSW(1707), 99) //Unknown
+	IF_SMALL(GSW(1707), 16)
 		IF_EQUAL(LW(0), 2)
 			USER_FUNC(evt_msg::evt_msg_print, 0, PTR("stg1_nok_81"), 0, 0)
 		ELSE()
