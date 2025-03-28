@@ -91,7 +91,6 @@ extern int32_t nannpc_ext_main_sub_fast;
 const char npcEnt[] = "\x83\x8B\x83\x43\x81\x5B\x83\x57";
 const char npcEnt2[] = "\x83\x89\x83\x4E\x83\x4B\x83\x93";
 
-
 EVT_BEGIN(garawaru_init_evt)
 	IF_SMALL(GSW(1700), 4)
 		USER_FUNC(evt_npc::evt_npc_set_ry, PTR("me"), 90)
@@ -700,193 +699,193 @@ EVT_PATCH_END()
 
 void ApplyGor00Patches()
 {
-			no00_custom[1] = GSW(1700);
-			no00_custom[2] = 5;
+    no00_custom[1] = GSW(1700);
+    no00_custom[2] = 5;
 
-			mony_init_gor00[1] = GSW(1709);
-			mony_init_gor00[3] = 1;
-			mony_init_gor00[4] = 2;
+    mony_init_gor00[1] = GSW(1709);
+    mony_init_gor00[3] = 1;
+    mony_init_gor00[4] = 2;
 
-			unk_evt_gor_00020d94[1] = GSW(1709);
-			unk_evt_gor_00020d94[3] = 9;
+    unk_evt_gor_00020d94[1] = GSW(1709);
+    unk_evt_gor_00020d94[3] = 9;
 
-			mony_peton_talk[270] = GSW(1709);
-			mony_peton_talk[271] = 2;
+    mony_peton_talk[270] = GSW(1709);
+    mony_peton_talk[271] = 2;
 
-			mony_talk[1] = GSW(1709);
-			mony_talk[3] = 1;
-			mony_talk[7] = 2;
+    mony_talk[1] = GSW(1709);
+    mony_talk[3] = 1;
+    mony_talk[7] = 2;
 
-			peton_init[1] = GSW(1709);
-			peton_init[3] = 1;
-			peton_init[4] = 2;
+    peton_init[1] = GSW(1709);
+    peton_init[3] = 1;
+    peton_init[4] = 2;
 
-			unk_evt_gor_000212f0[1] = GSW(1709);
-			unk_evt_gor_000212f0[3] = 9;
+    unk_evt_gor_000212f0[1] = GSW(1709);
+    unk_evt_gor_000212f0[3] = 9;
 
-			peton_talk[1] = GSW(1709);
-			peton_talk[3] = 1;
-			peton_talk[7] = 2;
+    peton_talk[1] = GSW(1709);
+    peton_talk[3] = 1;
+    peton_talk[7] = 2;
 
-			marco_init_00[1] = GSW(1705);
-			marco_init_00[3] = 1;
-			marco_init_00[4] = 7;
+    marco_init_00[1] = GSW(1705);
+    marco_init_00[3] = 1;
+    marco_init_00[4] = 7;
 
-			marco_talk_00[1] = GSW(1705);
-			marco_talk_00[3] = 1;
-			marco_talk_00[268] = GSW(1705);
-			marco_talk_00[269] = 2;
-			marco_talk_00[271] = 2;
-			marco_talk_00[290] = 5;
-			marco_talk_00[298] = 6;
+    marco_talk_00[1] = GSW(1705);
+    marco_talk_00[3] = 1;
+    marco_talk_00[268] = GSW(1705);
+    marco_talk_00[269] = 2;
+    marco_talk_00[271] = 2;
+    marco_talk_00[290] = 5;
+    marco_talk_00[298] = 6;
 
-			patch::writePatch(&garawaru_init[5], garawaru_init_hook, sizeof(garawaru_init_hook));
-			patch::writePatch(&garawaru_regl[0], garawaru_regl_hook, sizeof(garawaru_regl_hook));
-			patch::writePatch(&garawaru_talk[0], garawaru_talk_evt, sizeof(garawaru_talk_evt));
+    patch::writePatch(&garawaru_init[5], garawaru_init_hook, sizeof(garawaru_init_hook));
+    patch::writePatch(&garawaru_regl[0], garawaru_regl_hook, sizeof(garawaru_regl_hook));
+    patch::writePatch(&garawaru_talk[0], garawaru_talk_evt, sizeof(garawaru_talk_evt));
 
-			megane_init[1] = GSW(1705);
-			megane_init[3] = 1;
-			megane_init[4] = 7;
+    megane_init[1] = GSW(1705);
+    megane_init[3] = 1;
+    megane_init[4] = 7;
 
-			megane_talk[1] = GSW(1705);
-			megane_talk[3] = 1;
-			megane_talk[4] = 7;
+    megane_talk[1] = GSW(1705);
+    megane_talk[3] = 1;
+    megane_talk[4] = 7;
 
-			patch::writePatch(&odoodo_init[0], odoodo_init_evt, sizeof(odoodo_init_evt));
-			patch::writePatch(&odoodo_regl[0], odoodo_regl_hook, sizeof(odoodo_regl_hook));
-			patch::writePatch(&odoodo_talk[0], odoodo_talk_evt, sizeof(odoodo_talk_evt));
+    patch::writePatch(&odoodo_init[0], odoodo_init_hook, sizeof(odoodo_init_hook));
+    patch::writePatch(&odoodo_regl[0], odoodo_regl_hook, sizeof(odoodo_regl_hook));
+    patch::writePatch(&odoodo_talk[0], odoodo_talk_evt, sizeof(odoodo_talk_evt));
 
-			odoodo_ani_init[1] = GSW(1717);
-			odoodo_ani_init[3] = 26;
+    odoodo_ani_init[1] = GSW(1717);
+    odoodo_ani_init[3] = 26;
 
-			odoodo_ani_regl[1] = GSW(1717);
-			odoodo_ani_regl[3] = 25;
+    odoodo_ani_regl[1] = GSW(1717);
+    odoodo_ani_regl[3] = 25;
 
-			patch::writePatch(&odoodo_ani_talk[0], odoodo_ani_talk_evt, sizeof(odoodo_ani_talk_evt));
+    patch::writePatch(&odoodo_ani_talk[0], odoodo_ani_talk_evt, sizeof(odoodo_ani_talk_evt));
 
-			suifu_a_init[1] = GSW(1715);
-			suifu_a_init[3] = 12;
+    suifu_a_init[1] = GSW(1715);
+    suifu_a_init[3] = 12;
 
-			patch::writePatch(&suifu_a_regl[0], suifu_a_regl_hook, sizeof(suifu_a_regl_hook));
+    patch::writePatch(&suifu_a_regl[0], suifu_a_regl_hook, sizeof(suifu_a_regl_hook));
 
-			patch::writePatch(&suifu_a_talk[0], suifu_a_talk_evt, sizeof(suifu_a_talk_evt));
+    patch::writePatch(&suifu_a_talk[0], suifu_a_talk_evt, sizeof(suifu_a_talk_evt));
 
-			patch::writePatch(&suifu_b_init[0], suifu_b_init_hook, sizeof(suifu_b_init_hook));
-			patch::writePatch(&suifu_b_regl[0], odoodo_regl_hook, sizeof(odoodo_regl_hook));
-			patch::writePatch(&suifu_b_talk[0], suifu_b_talk_evt, sizeof(suifu_b_talk_evt));
+    patch::writePatch(&suifu_b_init[0], suifu_b_init_hook, sizeof(suifu_b_init_hook));
+    patch::writePatch(&suifu_b_regl[0], odoodo_regl_hook, sizeof(odoodo_regl_hook));
+    patch::writePatch(&suifu_b_talk[0], suifu_b_talk_evt, sizeof(suifu_b_talk_evt));
 
-			suifu_d_init[1] = GSW(1705);
-			suifu_d_init[3] = 1; 
-			suifu_d_init[4] = 7;
+    suifu_d_init[1] = GSW(1705);
+    suifu_d_init[3] = 1;
+    suifu_d_init[4] = 7;
 
-			patch::writePatch(&suifubomb_a_init[0], suifubomb_a_init_hook, sizeof(suifubomb_a_init_hook));
-			patch::writePatch(&suifubomb_a_regl[0], suifubomb_a_regl_hook, sizeof(suifubomb_a_regl_hook));
-			patch::writePatch(&suifubomb_a_talk[91], suifubomb_a_talk_evt, sizeof(suifubomb_a_talk_evt));
+    patch::writePatch(&suifubomb_a_init[0], suifubomb_a_init_hook, sizeof(suifubomb_a_init_hook));
+    patch::writePatch(&suifubomb_a_regl[0], suifubomb_a_regl_hook, sizeof(suifubomb_a_regl_hook));
+    patch::writePatch(&suifubomb_a_talk[91], suifubomb_a_talk_evt, sizeof(suifubomb_a_talk_evt));
 
-			suifubomb_b_init[16] = GSW(1715);
-			suifubomb_b_init[17] = 12;
+    suifubomb_b_init[16] = GSW(1715);
+    suifubomb_b_init[17] = 12;
 
-			patch::writePatch(&suifubomb_b_regl[0], suifubomb_b_regl_hook, sizeof(suifubomb_b_regl_hook));
-			patch::writePatch(&suifubomb_b_talk[0], suifubomb_b_talk_evt, sizeof(suifubomb_b_talk_evt));
+    patch::writePatch(&suifubomb_b_regl[0], suifubomb_b_regl_hook, sizeof(suifubomb_b_regl_hook));
+    patch::writePatch(&suifubomb_b_talk[0], suifubomb_b_talk_evt, sizeof(suifubomb_b_talk_evt));
 
-			suifubomb_c_init[1] = GSW(1705);
-			suifubomb_c_init[3] = 1;
-			suifubomb_c_init[4] = 7;
+    suifubomb_c_init[1] = GSW(1705);
+    suifubomb_c_init[3] = 1;
+    suifubomb_c_init[4] = 7;
 
-			sanders_init_00[1] = GSW(1705);
-			sanders_init_00[3] = 1;
-			sanders_init_00[4] = 7;
-			sanders_init_00[23] = GSW(1705);
-			sanders_init_00[24] = 6;
+    sanders_init_00[1] = GSW(1705);
+    sanders_init_00[3] = 1;
+    sanders_init_00[4] = 7;
+    sanders_init_00[23] = GSW(1705);
+    sanders_init_00[24] = 6;
 
-			patch::writePatch(&korutesu_init[0], korutesu_init_hook, sizeof(korutesu_init_hook));
+    patch::writePatch(&korutesu_init[0], korutesu_init_hook, sizeof(korutesu_init_hook));
 
-			tentyou_init[1] = GSW(1705);
-			tentyou_init[3] = 1;
-			tentyou_init[4] = 7;
+    tentyou_init[1] = GSW(1705);
+    tentyou_init[3] = 1;
+    tentyou_init[4] = 7;
 
-			tentyou_talk[1] = GSW(1705);
-			tentyou_talk[3] = 1;
-			tentyou_talk[4] = 7;
+    tentyou_talk[1] = GSW(1705);
+    tentyou_talk[3] = 1;
+    tentyou_talk[4] = 7;
 
-			tenin_init[1] = GSW(1705);
-			tenin_init[3] = 1;
-			tenin_init[4] = 7;
+    tenin_init[1] = GSW(1705);
+    tenin_init[3] = 1;
+    tenin_init[4] = 7;
 
-			tenin_talk[1] = GSW(1705);
-			tenin_talk[3] = 1;
-			tenin_talk[4] = 7;
+    tenin_talk[1] = GSW(1705);
+    tenin_talk[3] = 1;
+    tenin_talk[4] = 7;
 
-			patch::writePatch(&mokorim_init[2], mokorim_init_evt, sizeof(mokorim_init_evt));
+    patch::writePatch(&mokorim_init[2], mokorim_init_evt, sizeof(mokorim_init_evt));
 
-			mokorim_talk[4] = GSW(1706);
-			mokorim_talk[6] = 0;
-			mokorim_talk[7] = 48;
-			mokorim_talk[214] = 49;
+    mokorim_talk[4] = GSW(1706);
+    mokorim_talk[6] = 0;
+    mokorim_talk[7] = 48;
+    mokorim_talk[214] = 49;
 
-			patch::writePatch(&luigi_init_00[0], luigi_init_00_hook, sizeof(luigi_init_00_hook));
+    patch::writePatch(&luigi_init_00[0], luigi_init_00_hook, sizeof(luigi_init_00_hook));
 
-			patch::writePatch(&luigi_npcEnt_00[0], luigi_npcEnt_00_hook, sizeof(luigi_npcEnt_00_hook));
+    patch::writePatch(&luigi_npcEnt_00[0], luigi_npcEnt_00_hook, sizeof(luigi_npcEnt_00_hook));
 
-			enter_gorotsuki_town[576] = GSW(1700);
+    enter_gorotsuki_town[576] = GSW(1700);
 
-			christine_osoware[334] = GSW(1700);
+    christine_osoware[334] = GSW(1700);
 
-			gundan1000tai_beforebattle[483] = GSW(1700);
+    gundan1000tai_beforebattle[483] = GSW(1700);
 
-			gundan1000tai_afterbattle[1182] = GSW(1700);
+    gundan1000tai_afterbattle[1182] = GSW(1700);
 
-			shukko_event[490] = GSW(1705);
-			shukko_event[491] = 7;
+    shukko_event[490] = GSW(1705);
+    shukko_event[491] = 7;
 
-			gorotsuki_kikan[235] = GSW(1717);
-			gorotsuki_kikan[236] = 26;
+    gorotsuki_kikan[235] = GSW(1717);
+    gorotsuki_kikan[236] = 26;
 
-			into_gor_ship[108] = GSW(1709);
-			into_gor_ship[109] = 8;
-			into_gor_ship[247] = GSW(1709);
-			into_gor_ship[248] = 8;
+    into_gor_ship[108] = GSW(1709);
+    into_gor_ship[109] = 8;
+    into_gor_ship[247] = GSW(1709);
+    into_gor_ship[248] = 8;
 
-			unk_evt_gor_0002a2d4[1] = GSW(1709);
-			unk_evt_gor_0002a2d4[2] = 9;
+    unk_evt_gor_0002a2d4[1] = GSW(1709);
+    unk_evt_gor_0002a2d4[2] = 9;
 
-			gor_00_koopa_evt[1049] = GSW(1715);
-			gor_00_koopa_evt[1050] = 13;
+    gor_00_koopa_evt[1049] = GSW(1715);
+    gor_00_koopa_evt[1050] = 13;
 
-			peach_mail_00[199] = GSW(1717);
-			peach_mail_00[200] = 27;
+    peach_mail_00[199] = GSW(1717);
+    peach_mail_00[200] = 27;
 
-			option_ship_mario[89] = GSW(1709);
-			option_ship_mario[90] = 8;
+    option_ship_mario[89] = GSW(1709);
+    option_ship_mario[90] = 8;
 
-			tsumini[1] = GSW(1715);
-			tsumini[2] = 10;
-			tsumini[95] = GSW(1705);
-			tsumini[97] = 1;
-			tsumini[98] = 7;
-			tsumini[150] = GSW(1705);
-			tsumini[152] = 1;
-			tsumini[153] = 7;
+    tsumini[1] = GSW(1715);
+    tsumini[2] = 10;
+    tsumini[95] = GSW(1705);
+    tsumini[97] = 1;
+    tsumini[98] = 7;
+    tsumini[150] = GSW(1705);
+    tsumini[152] = 1;
+    tsumini[153] = 7;
 
-			return_gorotsuki_town[609] = GSW(1708);
-			return_gorotsuki_town[610] = 21;
+    return_gorotsuki_town[609] = GSW(1708);
+    return_gorotsuki_town[610] = 21;
 
-			patch::writePatch(&gor_00_init_evt[28], gor_00_init_evt1_hook, sizeof(gor_00_init_evt1_hook));
-			gor_00_init_evt[156] = GSW(1709);
-			gor_00_init_evt[157] = 8;
-			gor_00_init_evt[187] = GSW(1715);
-			gor_00_init_evt[188] = 12;
-			gor_00_init_evt[302] = GSW(1708);
-			gor_00_init_evt[303] = 18;
-			gor_00_init_evt[308] = GSW(1717);
-			gor_00_init_evt[309] = 26;
-			gor_00_init_evt[314] = GSW(1709);
-			gor_00_init_evt[315] = 2;
-			patch::writePatch(&gor_00_init_evt[329], gor_00_init_evt2_hook, sizeof(gor_00_init_evt2_hook));
-			gor_00_init_evt[470] = GSW(1708);
-			gor_00_init_evt[471] = 18;
-			gor_00_init_evt[473] = GSW(1708);
-			gor_00_init_evt[474] = 20;
-			gor_00_init_evt[476] = GSW(1717);
-			gor_00_init_evt[477] = 25;
+    patch::writePatch(&gor_00_init_evt[28], gor_00_init_evt1_hook, sizeof(gor_00_init_evt1_hook));
+    gor_00_init_evt[156] = GSW(1709);
+    gor_00_init_evt[157] = 8;
+    gor_00_init_evt[187] = GSW(1715);
+    gor_00_init_evt[188] = 12;
+    gor_00_init_evt[302] = GSW(1708);
+    gor_00_init_evt[303] = 18;
+    gor_00_init_evt[308] = GSW(1717);
+    gor_00_init_evt[309] = 26;
+    gor_00_init_evt[314] = GSW(1709);
+    gor_00_init_evt[315] = 2;
+    patch::writePatch(&gor_00_init_evt[329], gor_00_init_evt2_hook, sizeof(gor_00_init_evt2_hook));
+    gor_00_init_evt[470] = GSW(1708);
+    gor_00_init_evt[471] = 18;
+    gor_00_init_evt[473] = GSW(1708);
+    gor_00_init_evt[474] = 20;
+    gor_00_init_evt[476] = GSW(1717);
+    gor_00_init_evt[477] = 25;
 }

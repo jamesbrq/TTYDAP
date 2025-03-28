@@ -64,14 +64,14 @@ struct PouchData {
 static_assert(sizeof(PouchData) == 0x5d4);
 
 const char* pouchGetYoshiName();
-// pouchSetYoshiName
+void pouchSetYoshiName(const char* name);
 void pouchSetPartyColor(int32_t party_member, int32_t color);  // 4 = Yoshi
 int32_t pouchGetPartyColor(int32_t party_member);
+void pouchGetStarstone(int32_t stone);
 // pouchCheckMail
 // pouchOpenMail
 // pouchReceiveMail
 // pouchReceiveMailCount
-// pouchGetStarStone
 // pouchAddKpaScore
 // pouchGetKpaScore
 // pouchAddKpaCoin

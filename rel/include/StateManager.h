@@ -2,15 +2,25 @@
 
 #include <cstdint>
 
-namespace mod::owr {
+namespace mod::owr
+{
 
-	class StateManager
-	{
-	public:
-		int8_t rChapters = 7;
-		int16_t itemEntries[255];
-		bool badgeInit = false;
-		void Init();
-		StateManager();
-	};
-}
+    struct APSettings
+    {
+        uint8_t requiredChapterClears;
+        uint8_t startingPartner;
+        uint8_t yoshiColor;
+        uint8_t apEnabled;
+        char *yoshiName;
+    };
+
+    static_assert(sizeof(APSettings) == 0x8);
+
+    class StateManager
+    {
+       public:
+        void Init();
+        StateManager();
+        APSettings *apSettings;
+    };
+} // namespace mod::owr

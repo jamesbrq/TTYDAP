@@ -92,7 +92,7 @@ extern int32_t aji_18_init_evt[];
 extern int32_t evt_hajimete[];
 extern int32_t aji_19_init_evt[];
 
-//Assembly
+// Assembly
 extern int32_t check_kou_evt[];
 extern int32_t mario_chk[];
 
@@ -276,379 +276,376 @@ EVT_BEGIN(aji_17_init_evt_hook)
 	GOTO(&aji_17_init_evt[178])
 EVT_PATCH_END()
 
-
 void ApplyAjiPatches()
 {
-	aji_first_evt[308] = GSW(1707);
-	aji_first_evt[309] = 9;
-
-	aji_00_init_evt[1] = GSW(1707);
-	aji_00_init_evt[2] = 9;
-	aji_00_init_evt[28] = GSW(1707);
-	aji_00_init_evt[29] = 9;
-	patch::writePatch(&aji_00_init_evt[70], aji_00_init_evt_hook, sizeof(aji_00_init_evt_hook));
-
-	elv_unlock1[117] = GSW(1707);
-	elv_unlock1[118] = 10;
-
-	elv_unlock2[117] = GSW(1707);
-	elv_unlock2[118] = 11;
-
-	ele_2[4] = GSW(1707);
-	ele_2[5] = 11;
-
-	evt_elv_init[1] = GSW(1707);
-	evt_elv_init[3] = 16;
-	evt_elv_init[67] = GSW(1707);
-	evt_elv_init[68] = 10;
-	evt_elv_init[162] = GSW(1707);
-	evt_elv_init[163] = 11;
-
-	evt_key_init[1] = GSW(1707);
-	evt_key_init[2] = 16;
-	evt_key_init[18] = GSW(1707);
-	evt_key_init[19] = 19;
-	evt_key_init[35] = GSW(1707);
-	evt_key_init[37] = 16;
-	evt_key_init[38] = 18;
-
-	evt_aikotoba[129] = GSWF(6068);
-	evt_aikotoba[130] = 1;
-
-	peach_evt_stg3_01[16] = GSW(1703);
-	peach_evt_stg3_01[17] = 22;
-
-
-	patch::writePatch(&peach_evt_ele_2[9], peach_evt_ele_2_hook, sizeof(peach_evt_ele_2_hook));
-	//peach_evt_ele_2[10] = GSW(1717);
-	//peach_evt_ele_2[12] = 19;
-	peach_evt_ele_2[147] = GSW(1703);
-	peach_evt_ele_2[147] = GSW(1703);
-	peach_evt_ele_2[148] = 22;
-	peach_evt_ele_2[372] = GSW(1703);
-	peach_evt_ele_2[373] = 22;
-	peach_evt_ele_2[432] = GSW(1717);
-	peach_evt_ele_2[433] = 19;
-
-	peach_evt_ele_init[13] = GSW(1717);
-	peach_evt_ele_init[14] = 19;
-	peach_evt_ele_init[93] = GSW(1703);
-	peach_evt_ele_init[94] = 21;
-
-	peach_evt_key_init[7] = GSW(1703);
-	peach_evt_key_init[8] = 21;
-	peach_evt_key_init[10] = GSW(1703);
-	peach_evt_key_init[11] = 25;
-	peach_evt_key_init[18] = GSW(1717);
-	peach_evt_key_init[19] = 19;
-	peach_evt_key_init[21] = GSW(1717);
-	peach_evt_key_init[22] = 22;
-
-	peach_evt_init[60] = GSW(1711);
-	peach_evt_init[61] = 10;
-	peach_evt_init[68] = GSW(1703);
-	peach_evt_init[69] = 21;
-	peach_evt_init[177] = GSW(1703);
-	peach_evt_init[178] = 22;
-	peach_evt_init[183] = GSW(1703);
-	peach_evt_init[184] = 23;
-	peach_evt_init[208] = GSW(1717);
-	peach_evt_init[209] = 20;
-	peach_evt_init[211] = GSW(1717);
-	peach_evt_init[212] = 21;
-	peach_evt_init[297] = GSW(1717);
-	peach_evt_init[298] = 19;
-	peach_evt_init[350] = GSW(1717);
-	peach_evt_init[351] = 20;
-	peach_evt_init[358] = GSW(1717);
-	peach_evt_init[359] = 21;
-
-	teshita1_init[13] = GSW(1703);
-	teshita1_init[15] = 23;
-
-	patch::writePatch(&teshita2_init[12], teshita2_init_hook, sizeof(teshita2_init_hook));
-
-	patch::writePatch(&teshita3_init[7], teshita3_init_hook, sizeof(teshita3_init_hook));
-
-	aji_01_init_evt[39] = GSWF(6068);
-	aji_01_init_evt[40] = 1;
-	aji_01_init_evt[95] = GSW(1707);
-	aji_01_init_evt[96] = 16;
-
-	aji_evt_box[26] = GSWF(6066);
-	aji_evt_box[27] = 1;
-
-	aji_02_init_evt[7] = GSW(1707);
-	aji_02_init_evt[8] = 1;
-	aji_02_init_evt[77] = GSWF(6066);
-	aji_02_init_evt[78] = 1;
-
-	evt_zenmai[7] = GSW(1707);
-	evt_zenmai[8] = 15;
-
-	aji_02_init_evt[427] = GSWF(6093);
-	aji_02_init_evt[437] = GSWF(6094);
-	aji_02_init_evt[447] = GSWF(6095);
-	aji_02_init_evt[457] = GSWF(6096);
-	aji_02_init_evt[481] = GSWF(6097);
-	aji_02_init_evt[505] = GSWF(6098);
-
-	evt_item[1] = GSWF(6070);
-	evt_item[2] = 1;
-
-	kuizu_sekizou[967] = GSWF(6069);
-	kuizu_sekizou[968] = 1;
-
-	aji_04_init_evt[19] = GSWF(6069);
-	aji_04_init_evt[20] = 1;
-	aji_04_init_evt[38] = GSWF(6069);
-	aji_04_init_evt[39] = 1;
-
-	bero_peach_evt[4] = GSW(1717);
-	bero_peach_evt[5] = 19;
-
-	peach_evt_kusuri_nomu[420] = GSW(1717);
-	peach_evt_kusuri_nomu[421] = 20;
-
-	aji_06_init_evt[1] = GSW(1707);
-	aji_06_init_evt[2] = 1;
-	aji_06_init_evt[100] = GSW(1707);
-	aji_06_init_evt[101] = 16;
-	aji_06_init_evt[107] = GSW(1717);
-	aji_06_init_evt[108] = 19;
-	aji_06_init_evt[122] = GSW(1717);
-	aji_06_init_evt[123] = 20;
-	aji_06_init_evt[138] = GSW(1717);
-	aji_06_init_evt[139] = 21;
-
-	tensou_ride[216] = GSW(1707);
-	tensou_ride[218] = 19;
-	tensou_ride[227] = 19;
-
-	aji_08_init_evt[140] = GSW(1707);
-	aji_08_init_evt[141] = 16;
-
-	peach_evt_kou_in[28] = GSW(1703);
-	peach_evt_kou_in[29] = 23;
-	peach_evt_kou_in[65] = GSW(1703);
-	peach_evt_kou_in[66] = 24;
-	peach_evt_kou_in[100] = GSW(1703);
-	peach_evt_kou_in[101] = 22;
-	peach_evt_kou_in[131] = GSW(1703);
-	peach_evt_kou_in[132] = 22;
-
-	peach_evt_kou_out[32] = GSW(1703);
-	peach_evt_kou_out[33] = 22;
-	peach_evt_kou_out[42] = GSW(1703);
-	peach_evt_kou_out[43] = 24;
-
-	peach_evt_kou1_out[31] = GSW(1703);
-	peach_evt_kou1_out[32] = 22;
-	peach_evt_kou1_out[34] = GSW(1703);
-	peach_evt_kou1_out[35] = 23;
-
-	peach_evt_kou2_out[31] = GSW(1703);
-	peach_evt_kou2_out[32] = 22;
-	peach_evt_kou2_out[34] = GSW(1703);
-	peach_evt_kou2_out[35] = 23;
-
-	peach_evt_stg3_09[4] = GSW(1703);
-	peach_evt_stg3_09[5] = 23;
-	peach_evt_stg3_09[173] = GSW(1703);
-	peach_evt_stg3_09[174] = 24;
-	peach_evt_stg3_09[205] = GSW(1703);
-	peach_evt_stg3_09[206] = 22;
-	peach_evt_stg3_09[217] = GSW(1703);
-	peach_evt_stg3_09[218] = 24;
-
-	evt_memo1[13] = GSWF(6067);
-	evt_memo1[14] = 1;
-	evt_memo1[16] = GSWF(6067);
-	evt_memo1[17] = 1;
-
-	aji_09_init_evt[34] = GSW(1703);
-	aji_09_init_evt[35] = 22;
-	aji_09_init_evt[37] = GSW(1703);
-	aji_09_init_evt[38] = 24;
-
-	monitor_init[9] = GSW(1717);
-	monitor_init[10] = 18;
-
-	peach_evt_stg3_syuryo_talk[130] = GSW(1703);
-	peach_evt_stg3_syuryo_talk[131] = 24;
-
-	syuryo_init[3] = GSW(1703);
-	syuryo_init[4] = 23;
-
-	aji_10_init_evt[1] = GSW(1707);
-	aji_10_init_evt[2] = 1;
-	aji_10_init_evt[31] = GSW(1707);
-	aji_10_init_evt[32] = 1;
-	patch::writePatch(&aji_10_init_evt[50], aji_10_init_evt_hook, sizeof(aji_10_init_evt_hook));
-	aji_10_init_evt[219] = GSW(1707);
-	aji_10_init_evt[220] = 16;
-	aji_10_init_evt[255] = GSW(1703);
-	aji_10_init_evt[256] = 23;
-	aji_10_init_evt[264] = GSW(1717);
-	aji_10_init_evt[265] = 20;
-	aji_10_init_evt[267] = GSW(1717);
-	aji_10_init_evt[268] = 21;
-
-	peach_evt_bero[4] = GSW(1717);
-	peach_evt_bero[5] = 21;
-
-	peach_evt_tana2[22] = GSW(1717);
-	peach_evt_tana2[23] = 21;
-
-	peach_evt_stg5_11[17] = GSW(1717);
-	peach_evt_stg5_11[18] = 21;
-
-	aji_11_init_evt[1] = GSW(1717);
-	aji_11_init_evt[3] = 20;
-	aji_11_init_evt[4] = 21;
-	aji_11_init_evt[60] = GSW(1707);
-	aji_11_init_evt[61] = 1;
-	aji_11_init_evt[90] = GSW(1717);
-	aji_11_init_evt[91] = 20;
-	aji_11_init_evt[93] = GSW(1717);
-	aji_11_init_evt[94] = 21;
-
-	evt_snd_stop[1] = GSW(1707);
-	evt_snd_stop[2] = 13;
-
-	aji_evt_sw[114] = GSW(1707);
-	aji_evt_sw[115] = 14;
-
-	evt_bcv_sw[1] = GSW(1707);
-	evt_bcv_sw[2] = 13;
-
-	evt_door_msg_13[40] = GSW(1707);
-	evt_door_msg_13[41] = 15;
-
-	aji_13_init_evt[44] = GSW(1707);
-	aji_13_init_evt[45] = 13;
-	aji_13_init_evt[181] = GSW(1707);
-	aji_13_init_evt[182] = 14;
-	aji_13_init_evt[205] = GSW(1707);
-	aji_13_init_evt[206] = 15;
-	aji_13_init_evt[278] = GSW(1707);
-	aji_13_init_evt[279] = 16;
-
-	evt_boss2[133] = GSW(1707);
-	evt_boss2[134] = 16;
-
-	aji_14_init_evt[46] = GSW(1707);
-	aji_14_init_evt[47] = 16;
-
-	aji_15_init_evt[8] = GSW(1707);
-	aji_15_init_evt[9] = 16;
-
-	peach_evt_stg1_16[77] = GSW(1711);
-	peach_evt_stg1_16[78] = 9;
-
-	peach_evt_stg1_1[66] = GSW(1711);
-	peach_evt_stg1_1[67] = 10;
-
-	peach_evt_stg2_1[78] = GSW(1713);
-	peach_evt_stg2_1[79] = 12;
-
-	peach_evt_stg3_16[137] = GSW(1703);
-	peach_evt_stg3_16[138] = 21;
-
-	peach_evt_stg6_16[127] = GSW(1706);
-	peach_evt_stg6_16[128] = 44;
-
-	aji_16_init_evt[27] = GSW(1711);
-	aji_16_init_evt[28] = 9;
-	aji_16_init_evt[37] = GSW(1713);
-	aji_16_init_evt[38] = 11;
-	aji_16_init_evt[69] = GSW(1711);
-	aji_16_init_evt[70] = 9;
-	aji_16_init_evt[89] = GSW(1711);
-	aji_16_init_evt[90] = 10;
-	aji_16_init_evt[106] = GSW(1713);
-	aji_16_init_evt[107] = 11;
-	aji_16_init_evt[123] = GSW(1707);
-	aji_16_init_evt[124] = 1;
-
-	evt_emergency[1] = GSW(1707);
-	evt_emergency[2] = 19;
-	evt_emergency[6] = GSW(1707);
-	evt_emergency[7] = 19;
-
-	evt_last2[258] = GSW(1707);
-	evt_last2[259] = 19;
-
-	peach_evt_stg1_17[1066] = GSW(1711);
-	peach_evt_stg1_17[1067] = 11;
-
-	peach_evt_stg2_17[835] = GSW(1713);
-	peach_evt_stg2_17[836] = 13;
-
-	peach_evt_stg3_1[585] = GSW(1703);
-	peach_evt_stg3_1[586] = 25;
-
-	peach_evt_stg4_17[915] = GSW(1715);
-	peach_evt_stg4_17[916] = 10;
-
-	peach_evt_stg5_17[401] = GSW(1717);
-	peach_evt_stg5_17[402] = 19;
-
-	peach_evt_stg5_1[460] = GSW(1717);
-	peach_evt_stg5_1[461] = 22;
-
-	peach_evt_stg6_17[1400] = GSW(1706);
-	peach_evt_stg6_17[1401] = 45;
-
-	aji_17_init_evt[54] = GSW(1711);
-	aji_17_init_evt[55] = 10;
-	aji_17_init_evt[60] = GSW(1713);
-	aji_17_init_evt[61] = 12;
-	aji_17_init_evt[66] = GSW(1703);
-	aji_17_init_evt[67] = 21;
-	aji_17_init_evt[72] = GSW(1703);
-	aji_17_init_evt[73] = 24;
-	aji_17_init_evt[81] = GSW(1715);
-	aji_17_init_evt[82] = 9;
-	aji_17_init_evt[87] = GSW(1717);
-	aji_17_init_evt[88] = 18;
-	aji_17_init_evt[93] = GSW(1717);
-	aji_17_init_evt[94] = 21;
-	aji_17_init_evt[99] = GSW(1706);
-	aji_17_init_evt[100] = 44;
-	aji_17_init_evt[116] = GSW(1707);
-	aji_17_init_evt[117] = 18;
-	patch::writePatch(&aji_17_init_evt[166], aji_17_init_evt_hook, sizeof(aji_17_init_evt_hook));
-	aji_17_init_evt[198] = GSW(1708);
-	aji_17_init_evt[199] = 18;
-
-	evt_machine[204] = GSW(1707);
-	evt_machine[205] = 12;
-
-	aji_18_init_evt[21] = GSW(1707);
-	aji_18_init_evt[22] = 12;
-	aji_18_init_evt[190] = GSW(1707);
-	aji_18_init_evt[191] = 12;
-	aji_18_init_evt[190] = GSW(1707);
-	aji_18_init_evt[191] = 12;
-	aji_18_init_evt[232] = GSW(1707);
-	aji_18_init_evt[234] = 16;
-	aji_18_init_evt[235] = 18;
-	aji_18_init_evt[263] = GSW(1707);
-	aji_18_init_evt[265] = 16;
-	aji_18_init_evt[266] = 18;
-
-	evt_hajimete[23] = GSW(1707);
-	evt_hajimete[24] = 8;
-
-	aji_19_init_evt[43] = GSW(1707);
-	aji_19_init_evt[44] = 8;
-
-	check_kou_evt[13] = 0x38840827; // addi r4, r4, 0x827 GSW(1703)
-	check_kou_evt[17] = 0x2C030016; // cmpwi r3, 0x16
-	check_kou_evt[28] = 0x38840827; // addi r4, r4, 0x827 GSW(1703)
-	check_kou_evt[30] = 0x2C030016; // cmpwi r3, 0x18
-
-	mario_chk[173] = 0x3884082B; // addi r4, r4, 0x82B GSW(1707)
-	mario_chk[175] = 0x2C03000C; // cmpwi r3, 0xC
+    aji_first_evt[308] = GSW(1707);
+    aji_first_evt[309] = 9;
+
+    aji_00_init_evt[1] = GSW(1707);
+    aji_00_init_evt[2] = 9;
+    aji_00_init_evt[28] = GSW(1707);
+    aji_00_init_evt[29] = 9;
+    patch::writePatch(&aji_00_init_evt[70], aji_00_init_evt_hook, sizeof(aji_00_init_evt_hook));
+
+    elv_unlock1[117] = GSW(1707);
+    elv_unlock1[118] = 10;
+
+    elv_unlock2[117] = GSW(1707);
+    elv_unlock2[118] = 11;
+
+    ele_2[4] = GSW(1707);
+    ele_2[5] = 11;
+
+    evt_elv_init[1] = GSW(1707);
+    evt_elv_init[3] = 16;
+    evt_elv_init[67] = GSW(1707);
+    evt_elv_init[68] = 10;
+    evt_elv_init[162] = GSW(1707);
+    evt_elv_init[163] = 11;
+
+    evt_key_init[1] = GSW(1707);
+    evt_key_init[2] = 16;
+    evt_key_init[18] = GSW(1707);
+    evt_key_init[19] = 19;
+    evt_key_init[35] = GSW(1707);
+    evt_key_init[37] = 16;
+    evt_key_init[38] = 18;
+
+    evt_aikotoba[129] = GSWF(6068);
+    evt_aikotoba[130] = 1;
+
+    peach_evt_stg3_01[16] = GSW(1703);
+    peach_evt_stg3_01[17] = 22;
+
+    patch::writePatch(&peach_evt_ele_2[9], peach_evt_ele_2_hook, sizeof(peach_evt_ele_2_hook));
+    peach_evt_ele_2[147] = GSW(1703);
+    peach_evt_ele_2[147] = GSW(1703);
+    peach_evt_ele_2[148] = 22;
+    peach_evt_ele_2[372] = GSW(1703);
+    peach_evt_ele_2[373] = 22;
+    peach_evt_ele_2[432] = GSW(1717);
+    peach_evt_ele_2[433] = 19;
+
+    peach_evt_ele_init[13] = GSW(1717);
+    peach_evt_ele_init[14] = 19;
+    peach_evt_ele_init[93] = GSW(1703);
+    peach_evt_ele_init[94] = 21;
+
+    peach_evt_key_init[7] = GSW(1703);
+    peach_evt_key_init[8] = 21;
+    peach_evt_key_init[10] = GSW(1703);
+    peach_evt_key_init[11] = 25;
+    peach_evt_key_init[18] = GSW(1717);
+    peach_evt_key_init[19] = 19;
+    peach_evt_key_init[21] = GSW(1717);
+    peach_evt_key_init[22] = 22;
+
+    peach_evt_init[60] = GSW(1711);
+    peach_evt_init[61] = 10;
+    peach_evt_init[68] = GSW(1703);
+    peach_evt_init[69] = 21;
+    peach_evt_init[177] = GSW(1703);
+    peach_evt_init[178] = 22;
+    peach_evt_init[183] = GSW(1703);
+    peach_evt_init[184] = 23;
+    peach_evt_init[208] = GSW(1717);
+    peach_evt_init[209] = 20;
+    peach_evt_init[211] = GSW(1717);
+    peach_evt_init[212] = 21;
+    peach_evt_init[297] = GSW(1717);
+    peach_evt_init[298] = 19;
+    peach_evt_init[350] = GSW(1717);
+    peach_evt_init[351] = 20;
+    peach_evt_init[358] = GSW(1717);
+    peach_evt_init[359] = 21;
+
+    teshita1_init[13] = GSW(1703);
+    teshita1_init[15] = 23;
+
+    patch::writePatch(&teshita2_init[12], teshita2_init_hook, sizeof(teshita2_init_hook));
+
+    patch::writePatch(&teshita3_init[7], teshita3_init_hook, sizeof(teshita3_init_hook));
+
+    aji_01_init_evt[39] = GSWF(6068);
+    aji_01_init_evt[40] = 1;
+    aji_01_init_evt[95] = GSW(1707);
+    aji_01_init_evt[96] = 16;
+
+    aji_evt_box[26] = GSWF(6066);
+    aji_evt_box[27] = 1;
+
+    aji_02_init_evt[7] = GSW(1707);
+    aji_02_init_evt[8] = 1;
+    aji_02_init_evt[77] = GSWF(6066);
+    aji_02_init_evt[78] = 1;
+
+    evt_zenmai[7] = GSW(1707);
+    evt_zenmai[8] = 15;
+
+    aji_02_init_evt[427] = GSWF(6093);
+    aji_02_init_evt[437] = GSWF(6094);
+    aji_02_init_evt[447] = GSWF(6095);
+    aji_02_init_evt[457] = GSWF(6096);
+    aji_02_init_evt[481] = GSWF(6097);
+    aji_02_init_evt[505] = GSWF(6098);
+
+    evt_item[1] = GSWF(6070);
+    evt_item[2] = 1;
+
+    kuizu_sekizou[967] = GSWF(6069);
+    kuizu_sekizou[968] = 1;
+
+    aji_04_init_evt[19] = GSWF(6069);
+    aji_04_init_evt[20] = 1;
+    aji_04_init_evt[38] = GSWF(6069);
+    aji_04_init_evt[39] = 1;
+
+    bero_peach_evt[4] = GSW(1717);
+    bero_peach_evt[5] = 19;
+
+    peach_evt_kusuri_nomu[420] = GSW(1717);
+    peach_evt_kusuri_nomu[421] = 20;
+
+    aji_06_init_evt[1] = GSW(1707);
+    aji_06_init_evt[2] = 1;
+    aji_06_init_evt[100] = GSW(1707);
+    aji_06_init_evt[101] = 16;
+    aji_06_init_evt[107] = GSW(1717);
+    aji_06_init_evt[108] = 19;
+    aji_06_init_evt[122] = GSW(1717);
+    aji_06_init_evt[123] = 20;
+    aji_06_init_evt[138] = GSW(1717);
+    aji_06_init_evt[139] = 21;
+
+    tensou_ride[216] = GSW(1707);
+    tensou_ride[218] = 19;
+    tensou_ride[227] = 19;
+
+    aji_08_init_evt[140] = GSW(1707);
+    aji_08_init_evt[141] = 16;
+
+    peach_evt_kou_in[28] = GSW(1703);
+    peach_evt_kou_in[29] = 23;
+    peach_evt_kou_in[65] = GSW(1703);
+    peach_evt_kou_in[66] = 24;
+    peach_evt_kou_in[100] = GSW(1703);
+    peach_evt_kou_in[101] = 22;
+    peach_evt_kou_in[131] = GSW(1703);
+    peach_evt_kou_in[132] = 22;
+
+    peach_evt_kou_out[32] = GSW(1703);
+    peach_evt_kou_out[33] = 22;
+    peach_evt_kou_out[42] = GSW(1703);
+    peach_evt_kou_out[43] = 24;
+
+    peach_evt_kou1_out[31] = GSW(1703);
+    peach_evt_kou1_out[32] = 22;
+    peach_evt_kou1_out[34] = GSW(1703);
+    peach_evt_kou1_out[35] = 23;
+
+    peach_evt_kou2_out[31] = GSW(1703);
+    peach_evt_kou2_out[32] = 22;
+    peach_evt_kou2_out[34] = GSW(1703);
+    peach_evt_kou2_out[35] = 23;
+
+    peach_evt_stg3_09[4] = GSW(1703);
+    peach_evt_stg3_09[5] = 23;
+    peach_evt_stg3_09[173] = GSW(1703);
+    peach_evt_stg3_09[174] = 24;
+    peach_evt_stg3_09[205] = GSW(1703);
+    peach_evt_stg3_09[206] = 22;
+    peach_evt_stg3_09[217] = GSW(1703);
+    peach_evt_stg3_09[218] = 24;
+
+    evt_memo1[13] = GSWF(6067);
+    evt_memo1[14] = 1;
+    evt_memo1[16] = GSWF(6067);
+    evt_memo1[17] = 1;
+
+    aji_09_init_evt[34] = GSW(1703);
+    aji_09_init_evt[35] = 22;
+    aji_09_init_evt[37] = GSW(1703);
+    aji_09_init_evt[38] = 24;
+
+    monitor_init[9] = GSW(1717);
+    monitor_init[10] = 18;
+
+    peach_evt_stg3_syuryo_talk[130] = GSW(1703);
+    peach_evt_stg3_syuryo_talk[131] = 24;
+
+    syuryo_init[3] = GSW(1703);
+    syuryo_init[4] = 23;
+
+    aji_10_init_evt[1] = GSW(1707);
+    aji_10_init_evt[2] = 1;
+    aji_10_init_evt[31] = GSW(1707);
+    aji_10_init_evt[32] = 1;
+    patch::writePatch(&aji_10_init_evt[50], aji_10_init_evt_hook, sizeof(aji_10_init_evt_hook));
+    aji_10_init_evt[219] = GSW(1707);
+    aji_10_init_evt[220] = 16;
+    aji_10_init_evt[255] = GSW(1703);
+    aji_10_init_evt[256] = 23;
+    aji_10_init_evt[264] = GSW(1717);
+    aji_10_init_evt[265] = 20;
+    aji_10_init_evt[267] = GSW(1717);
+    aji_10_init_evt[268] = 21;
+
+    peach_evt_bero[4] = GSW(1717);
+    peach_evt_bero[5] = 21;
+
+    peach_evt_tana2[22] = GSW(1717);
+    peach_evt_tana2[23] = 21;
+
+    peach_evt_stg5_11[17] = GSW(1717);
+    peach_evt_stg5_11[18] = 21;
+
+    aji_11_init_evt[1] = GSW(1717);
+    aji_11_init_evt[3] = 20;
+    aji_11_init_evt[4] = 21;
+    aji_11_init_evt[60] = GSW(1707);
+    aji_11_init_evt[61] = 1;
+    aji_11_init_evt[90] = GSW(1717);
+    aji_11_init_evt[91] = 20;
+    aji_11_init_evt[93] = GSW(1717);
+    aji_11_init_evt[94] = 21;
+
+    evt_snd_stop[1] = GSW(1707);
+    evt_snd_stop[2] = 13;
+
+    aji_evt_sw[114] = GSW(1707);
+    aji_evt_sw[115] = 14;
+
+    evt_bcv_sw[1] = GSW(1707);
+    evt_bcv_sw[2] = 13;
+
+    evt_door_msg_13[40] = GSW(1707);
+    evt_door_msg_13[41] = 15;
+
+    aji_13_init_evt[44] = GSW(1707);
+    aji_13_init_evt[45] = 13;
+    aji_13_init_evt[181] = GSW(1707);
+    aji_13_init_evt[182] = 14;
+    aji_13_init_evt[205] = GSW(1707);
+    aji_13_init_evt[206] = 15;
+    aji_13_init_evt[278] = GSW(1707);
+    aji_13_init_evt[279] = 16;
+
+    evt_boss2[133] = GSW(1707);
+    evt_boss2[134] = 16;
+
+    aji_14_init_evt[46] = GSW(1707);
+    aji_14_init_evt[47] = 16;
+
+    aji_15_init_evt[8] = GSW(1707);
+    aji_15_init_evt[9] = 16;
+
+    peach_evt_stg1_16[77] = GSW(1711);
+    peach_evt_stg1_16[78] = 9;
+
+    peach_evt_stg1_1[66] = GSW(1711);
+    peach_evt_stg1_1[67] = 10;
+
+    peach_evt_stg2_1[78] = GSW(1713);
+    peach_evt_stg2_1[79] = 12;
+
+    peach_evt_stg3_16[137] = GSW(1703);
+    peach_evt_stg3_16[138] = 21;
+
+    peach_evt_stg6_16[127] = GSW(1706);
+    peach_evt_stg6_16[128] = 44;
+
+    aji_16_init_evt[27] = GSW(1711);
+    aji_16_init_evt[28] = 9;
+    aji_16_init_evt[37] = GSW(1713);
+    aji_16_init_evt[38] = 11;
+    aji_16_init_evt[69] = GSW(1711);
+    aji_16_init_evt[70] = 9;
+    aji_16_init_evt[89] = GSW(1711);
+    aji_16_init_evt[90] = 10;
+    aji_16_init_evt[106] = GSW(1713);
+    aji_16_init_evt[107] = 11;
+    aji_16_init_evt[123] = GSW(1707);
+    aji_16_init_evt[124] = 1;
+
+    evt_emergency[1] = GSW(1707);
+    evt_emergency[2] = 19;
+    evt_emergency[6] = GSW(1707);
+    evt_emergency[7] = 19;
+
+    evt_last2[258] = GSW(1707);
+    evt_last2[259] = 19;
+
+    peach_evt_stg1_17[1066] = GSW(1711);
+    peach_evt_stg1_17[1067] = 11;
+
+    peach_evt_stg2_17[835] = GSW(1713);
+    peach_evt_stg2_17[836] = 13;
+
+    peach_evt_stg3_1[585] = GSW(1703);
+    peach_evt_stg3_1[586] = 25;
+
+    peach_evt_stg4_17[915] = GSW(1715);
+    peach_evt_stg4_17[916] = 10;
+
+    peach_evt_stg5_17[401] = GSW(1717);
+    peach_evt_stg5_17[402] = 19;
+
+    peach_evt_stg5_1[460] = GSW(1717);
+    peach_evt_stg5_1[461] = 22;
+
+    peach_evt_stg6_17[1400] = GSW(1706);
+    peach_evt_stg6_17[1401] = 45;
+
+    aji_17_init_evt[54] = GSW(1711);
+    aji_17_init_evt[55] = 10;
+    aji_17_init_evt[60] = GSW(1713);
+    aji_17_init_evt[61] = 12;
+    aji_17_init_evt[66] = GSW(1703);
+    aji_17_init_evt[67] = 21;
+    aji_17_init_evt[72] = GSW(1703);
+    aji_17_init_evt[73] = 24;
+    aji_17_init_evt[81] = GSW(1715);
+    aji_17_init_evt[82] = 9;
+    aji_17_init_evt[87] = GSW(1717);
+    aji_17_init_evt[88] = 18;
+    aji_17_init_evt[93] = GSW(1717);
+    aji_17_init_evt[94] = 21;
+    aji_17_init_evt[99] = GSW(1706);
+    aji_17_init_evt[100] = 44;
+    aji_17_init_evt[116] = GSW(1707);
+    aji_17_init_evt[117] = 18;
+    patch::writePatch(&aji_17_init_evt[166], aji_17_init_evt_hook, sizeof(aji_17_init_evt_hook));
+    aji_17_init_evt[198] = GSW(1708);
+    aji_17_init_evt[199] = 18;
+
+    evt_machine[204] = GSW(1707);
+    evt_machine[205] = 12;
+
+    aji_18_init_evt[21] = GSW(1707);
+    aji_18_init_evt[22] = 12;
+    aji_18_init_evt[190] = GSW(1707);
+    aji_18_init_evt[191] = 12;
+    aji_18_init_evt[190] = GSW(1707);
+    aji_18_init_evt[191] = 12;
+    aji_18_init_evt[232] = GSW(1707);
+    aji_18_init_evt[234] = 16;
+    aji_18_init_evt[235] = 18;
+    aji_18_init_evt[263] = GSW(1707);
+    aji_18_init_evt[265] = 16;
+    aji_18_init_evt[266] = 18;
+
+    evt_hajimete[23] = GSW(1707);
+    evt_hajimete[24] = 8;
+
+    aji_19_init_evt[43] = GSW(1707);
+    aji_19_init_evt[44] = 8;
+
+    // Assembly
+    check_kou_evt[13] = 0x38840827; // addi r4, r4, 0x827 GSW(1703)
+    check_kou_evt[17] = 0x2C030016; // cmpwi r3, 0x16
+    check_kou_evt[28] = 0x38840827; // addi r4, r4, 0x827 GSW(1703)
+    check_kou_evt[30] = 0x2C030016; // cmpwi r3, 0x18
+
+    mario_chk[173] = 0x3884082B; // addi r4, r4, 0x82B GSW(1707)
+    mario_chk[175] = 0x2C03000C; // cmpwi r3, 0xC
 }

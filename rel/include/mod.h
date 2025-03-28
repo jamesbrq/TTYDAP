@@ -8,57 +8,55 @@
 
 struct ModInitFunction
 {
-	ModInitFunction(void (*f)())
-	{
-		next = sFirst;
-		sFirst = this;
-		initFunction = f;
-	}
+    ModInitFunction(void (*f)())
+    {
+        next = sFirst;
+        sFirst = this;
+        initFunction = f;
+    }
 
-	ModInitFunction *next;
-	void (*initFunction)();
+    ModInitFunction *next;
+    void (*initFunction)();
 
-	static ModInitFunction *sFirst;
+    static ModInitFunction *sFirst;
 };
 
 struct ModUpdateFunction
 {
-	ModUpdateFunction(void (*f)())
-	{
-		next = sFirst;
-		sFirst = this;
-		updateFunction = f;
-	}
+    ModUpdateFunction(void (*f)())
+    {
+        next = sFirst;
+        sFirst = this;
+        updateFunction = f;
+    }
 
-	ModUpdateFunction *next;
-	void (*updateFunction)();
+    ModUpdateFunction *next;
+    void (*updateFunction)();
 
-	static ModUpdateFunction *sFirst;
+    static ModUpdateFunction *sFirst;
 };
 
-#define MOD_INTERNAL_ADD_FUNCTION(type) \
-	static void MOD_ANONYMOUS(mod_if_func)(); \
-	static type MOD_ANONYMOUS(mod_if_obj)(MOD_ANONYMOUS(mod_if_func)); \
-	static void MOD_ANONYMOUS(mod_if_func)()
+#define MOD_INTERNAL_ADD_FUNCTION(type)                                \
+    static void MOD_ANONYMOUS(mod_if_func)();                          \
+    static type MOD_ANONYMOUS(mod_if_obj)(MOD_ANONYMOUS(mod_if_func)); \
+    static void MOD_ANONYMOUS(mod_if_func)()
 
-#define MOD_INIT_FUNCTION() \
-	MOD_INTERNAL_ADD_FUNCTION(ModInitFunction)
-#define MOD_UPDATE_FUNCTION() \
-	MOD_INTERNAL_ADD_FUNCTION(ModUpdateFunction)
+#define MOD_INIT_FUNCTION() MOD_INTERNAL_ADD_FUNCTION(ModInitFunction)
+#define MOD_UPDATE_FUNCTION() MOD_INTERNAL_ADD_FUNCTION(ModUpdateFunction)
 
-namespace mod {
-
-class Mod
+namespace mod
 {
-public:
-	Mod();
-	void init();
-	void updateEarly();
-	void draw();
-	void (*mPFN_makeKey_trampoline)() = nullptr;
-	ConsoleSystem mConsole;
-	owr::StateManager state_;
-	owr::OWR owr_mod_;
-};
-	extern Mod* gMod;
-}
+
+    class Mod
+    {
+       public:
+        Mod();
+        void init();
+        void updateEarly();
+        void draw();
+        void (*mPFN_makeKey_trampoline)() = nullptr;
+        ConsoleSystem mConsole;
+        owr::OWR owr_mod_;
+    };
+    extern Mod *gMod;
+} // namespace mod

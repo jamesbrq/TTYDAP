@@ -1,37 +1,38 @@
 #pragma once
 #include <ttyd/evtmgr.h>
 
-extern "C" {
-	EVT_DECLARE_USER_FUNC(evt_tou_get_ranking, 1)
-	EVT_DECLARE_USER_FUNC(koburon_get_encount_info, 1)
+extern "C"
+{
+    EVT_DECLARE_USER_FUNC(evt_tou_get_ranking, 1)
+    EVT_DECLARE_USER_FUNC(koburon_get_encount_info, 1)
 
-	void bMapGXArrInject();
-	void bMapGXArrInjectReturn();
-	void bMapGXArrIncrement();
-	void bMapGXArrIncrementReturn();
-	void bMapGXChSplit();
-	void bMapGXChSplitReturn();
-	void bWinLogArrInject();
-	void bWinLogArrInjectReturn();
-	void bWinLogArrIncrement();
-	void bWinLogArrIncrementReturn();
-	void bChapterClearCheck();
-	void bChapterClearCheckReturn();
-	void bJohoyaSeqAddition();
-	void bPrintPartyErrorFix();
-	void bPrintPartyErrorFixReturn();
-	void bPrintPartyAddErrorFix();
-	void bPrintPartyAddErrorFixReturn();
-	void bKururingFloorCapture();
-	void bKururingFloorCaptureReturn();
-	void bKururingFloorRelease();
-	void bKururingFloorReleaseReturn();
-	void bPowerupblkCapture();
-	void bPowerupblkCaptureReturn();
-	void bPowerupblkRelease();
-	void bPowerupblkReleaseReturn();
-	void bPeachPointer();
-	void bPeachReturn();
+    void bMapGXArrInject();
+    void bMapGXArrInjectReturn();
+    void bMapGXArrIncrement();
+    void bMapGXArrIncrementReturn();
+    void bMapGXChSplit();
+    void bMapGXChSplitReturn();
+    void bWinLogArrInject();
+    void bWinLogArrInjectReturn();
+    void bWinLogArrIncrement();
+    void bWinLogArrIncrementReturn();
+    void bChapterClearCheck();
+    void bChapterClearCheckReturn();
+    void bJohoyaSeqAddition();
+    void bPrintPartyErrorFix();
+    void bPrintPartyErrorFixReturn();
+    void bPrintPartyAddErrorFix();
+    void bPrintPartyAddErrorFixReturn();
+    void bKururingFloorCapture();
+    void bKururingFloorCaptureReturn();
+    void bKururingFloorRelease();
+    void bKururingFloorReleaseReturn();
+    void bPowerupblkCapture();
+    void bPowerupblkCaptureReturn();
+    void bPowerupblkRelease();
+    void bPowerupblkReleaseReturn();
+    void bPeachPointer();
+    void bPeachReturn();
 }
 
 EVT_DECLARE_USER_FUNC(checkChapterRequirements, 1)
@@ -71,3 +72,5 @@ void ApplyTouPatches();
 void ApplyTou2Patches();
 void ApplyUsuPatches();
 void ApplyWinPatches();
+
+char* strcpy_String(char* dest, const char* src);
