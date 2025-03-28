@@ -12,11 +12,13 @@
 #include "ttyd/evtmgr.h"
 #include "ttyd/mariost.h"
 #include "ttyd/seq_title.h"
+#include "ttyd/seqdrv.h"
 
 #include <cstdint>
 #include <cstring>
 
 using namespace ::ttyd::seq_mapchange;
+using namespace ::ttyd::seqdrv;
 
 static uint32_t autoMashText(gc::pad::PadId controllerId)
 {
@@ -87,6 +89,36 @@ static void* fixPouchInitMemoryLeak(int32_t heap, uint32_t size)
     }
 }
 
+void cPreventDiaryTextboxOptionSelection(const char *currentText, int32_t *storeAddress, int32_t selectedOption)
+{
+    enum DiaryTextboxOption
+    {
+        FirstOption = 0,
+        SecondOption,
+        ThirdOption,
+    };
+
+    int32_t newOption = selectedOption;
+
+    // Only need to check if trying to read the diary
+    if (strcmp(currentText, "stg6_rsh_diary_01_yn") == 0)
+    {
+        // Prevent the first option from being selected, so that the game does not crash when reading the diary
+        // Only needs to run when not on the train
+        if (strcmp(_next_area, "rsh") != 0)
+        {
+            if (selectedOption == DiaryTextboxOption::ThirdOption)
+            {
+                seqSetSeq(SeqIndex::kGameOver, nullptr, nullptr);
+            }
+
+            newOption = DiaryTextboxOption::SecondOption;
+        }
+    }
+
+    // Restore the overwritten instruction
+    *storeAddress = newOption;
+}
 
 static void* fixMapProblems()
 {
@@ -249,6 +281,17 @@ void applyVariousGamePatches()
 #endif
 
     mod::patch::writePatch(reinterpret_cast<void*>(preventUpgradeItemCutscenesAddress), 0x60000000); // nop
+
+	// Prevent the game from crashing if the player tries to read the diary while not on the Excess Express
+#ifdef TTYD_US
+    constexpr uint32_t preventDiaryTextboxSelectionAddress = 0x800D214C;
+#elif defined TTYD_JP
+    constexpr uint32_t preventDiaryTextboxSelectionAddress = 0x800CE01C;
+#elif defined TTYD_EU
+    constexpr uint32_t preventDiaryTextboxSelectionAddress = 0x800D2F44;
+#endif
+
+    mod::patch::writeBranchBL(preventDiaryTextboxSelectionAddress, asmPreventDiaryTextboxSelection);
 
     // Certain rooms need some things patched at a specific point during the screen transition, so hook an address to handle
     // that

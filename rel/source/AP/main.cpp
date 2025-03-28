@@ -87,37 +87,6 @@ extern int32_t evt_msg_print_party[];
 extern int32_t evt_msg_print_party_add[];
 extern int32_t preventDiaryTextboxSelectionAddress[];
 
-void cPreventDiaryTextboxOptionSelection(const char* currentText, int32_t* storeAddress, int32_t selectedOption)
-{
-	enum DiaryTextboxOption
-	{
-		FirstOption = 0,
-		SecondOption,
-		ThirdOption,
-	};
-
-	int32_t newOption = selectedOption;
-
-	// Only need to check if trying to read the diary
-	if (strcmp(currentText, "stg6_rsh_diary_01_yn") == 0)
-	{
-		// Prevent the first option from being selected, so that the game does not crash when reading the diary
-		// Only needs to run when not on the train
-		if (strcmp(_next_area, "rsh") != 0)
-		{
-			if (selectedOption == DiaryTextboxOption::ThirdOption)
-			{
-				ttyd::seqdrv::seqSetSeq(ttyd::seqdrv::SeqIndex::kGameOver, nullptr, nullptr);
-			}
-
-			newOption = DiaryTextboxOption::SecondOption;
-		}
-	}
-
-	// Restore the overwritten instruction
-	*storeAddress = newOption;
-}
-
 void ApplyMainAssemblyPatches()
 {
     statusWinDisp[425] = 0x386006A4; // li r3, 0x6A4 (GSW(1700))
@@ -294,8 +263,6 @@ void ApplyMainAssemblyPatches()
     mobj_powerupblk[110] = 0x809F01D8; // lwz r4, 0x1D8(r31)
 
     patch::writeBranchPair(&breakfast[22], reinterpret_cast<void *>(bPeachPointer), reinterpret_cast<void *>(bPeachReturn));
-
-	patch::writeBranchBL(&preventDiaryTextboxSelectionAddress[0], asmPreventDiaryTextboxSelection);
 
     // sys_prolog[25] = 0x386006A4; // li r3, 0x6A4 (GSW(1700))
     // sys_prolog[28] = 0x2C030002; // cmpwi r3, 0x2

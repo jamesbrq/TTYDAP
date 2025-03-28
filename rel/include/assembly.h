@@ -7,6 +7,9 @@ extern "C"
     // Assembly overwrite functions
     void asmFixBlooperCrash1();
     void asmFixBlooperCrash2();
+    void asmPreventDiaryTextboxSelection();
+
+	void cPreventDiaryTextboxOptionSelection(const char *currentText, int32_t *storeAddress, int32_t selectedOption);
 
 #ifdef TTYD_JP
     void asmCrashScreenDecrementYPosStart();
