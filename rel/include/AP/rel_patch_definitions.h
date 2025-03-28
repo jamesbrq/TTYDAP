@@ -33,6 +33,9 @@ extern "C"
     void bPowerupblkReleaseReturn();
     void bPeachPointer();
     void bPeachReturn();
+
+	void asmPreventDiaryTextboxSelection();
+	void cPreventDiaryTextboxOptionSelection(const char* currentText, int32_t* storeAddress, int32_t selectedOption);
 }
 
 EVT_DECLARE_USER_FUNC(checkChapterRequirements, 1)

@@ -73,8 +73,8 @@ RETURN()
 EVT_END()
 
 EVT_BEGIN(stones_hook)
-RUN_CHILD_EVT(stones_evt)
-GOTO(&hei_00_init_evt[213])
+	RUN_CHILD_EVT(stones_evt)
+	GOTO(&hei_00_init_evt[213])
 EVT_PATCH_END()
 
 void ApplyHeiPatches()

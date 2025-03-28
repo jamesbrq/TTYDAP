@@ -16,6 +16,8 @@
 #include <cstdint>
 #include <cstring>
 
+using namespace ::ttyd::seq_mapchange;
+
 static uint32_t autoMashText(gc::pad::PadId controllerId)
 {
     if (mod::util::checkButtonComboEveryFrame(gc::pad::PadInput::PAD_B))
@@ -84,6 +86,7 @@ static void* fixPouchInitMemoryLeak(int32_t heap, uint32_t size)
         return ttyd::memory::__memAlloc(heap, size);
     }
 }
+
 
 static void* fixMapProblems()
 {

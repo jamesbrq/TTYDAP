@@ -212,6 +212,13 @@ EVT_BEGIN(odoodo_init_evt)
 	RETURN()
 EVT_END()
 
+EVT_BEGIN(odoodo_init_hook)
+	RUN_CHILD_EVT(odoodo_init_evt)
+	RETURN()
+EVT_END()
+
+
+
 EVT_BEGIN(odoodo_regl_evt)
 	SWITCH(GSW(1705))
 		CASE_BETWEEN(1, 7)
