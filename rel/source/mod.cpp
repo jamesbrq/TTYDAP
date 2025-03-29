@@ -71,7 +71,11 @@ namespace mod
             ttyd::dispdrv::CameraId::kDebug3d,
             1,
             0.f,
-            [](ttyd::dispdrv::CameraId layerId, void *user) { reinterpret_cast<Mod *>(user)->draw(); },
+            [](ttyd::dispdrv::CameraId layerId, void *user)
+            {
+                (void)layerId;
+                reinterpret_cast<Mod *>(user)->draw();
+            },
             this);
 
         mConsole.update();

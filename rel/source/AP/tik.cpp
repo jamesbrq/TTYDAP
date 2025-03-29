@@ -18,6 +18,8 @@ using namespace ttyd;
 
 EVT_DEFINE_USER_FUNC(checkChapterRequirements)
 {
+    (void)isFirstCall;
+
     auto &state = gMod->owr_mod_.state;
     int8_t count = 0;
     for (int i = 114; i <= 120; i++)
@@ -33,6 +35,8 @@ EVT_DEFINE_USER_FUNC(checkChapterRequirements)
 
 EVT_DEFINE_USER_FUNC(checkChapterClears)
 {
+    (void)isFirstCall;
+
     int8_t count = 0;
     for (int i = 114; i <= 120; i++)
     {

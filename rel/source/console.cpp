@@ -119,7 +119,11 @@ namespace mod
             cam_id,
             0,
             0.f,
-            [](ttyd::dispdrv::CameraId camId, void *user) { ((ConsoleSystem *)user)->disp(); },
+            [](ttyd::dispdrv::CameraId camId, void *user)
+            {
+                (void)camId;
+                ((ConsoleSystem *)user)->disp();
+            },
             this);
     }
 

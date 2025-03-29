@@ -7,14 +7,14 @@ ifeq ($(strip $(DEVKITPPC)),)
 $(error "Please set DEVKITPPC in your environment. export DEVKITPPC=<path to>devkitPPC")
 endif
 
-include $(DEVKITPPC)/gamecube_rules
-
 ifeq ($(shell which elf2rel),)
 $(error "Please install pyelf2rel. pip install pyelf2rel")
 endif
 
-export ELF2REL    :=    elf2rel
-export GCIPACK	:=	python $(realpath ../../gcipack/gcipack.py)
+include $(DEVKITPPC)/gamecube_rules
+
+export GCIPACK	:=	python3 $(realpath ../../gcipack/gcipack.py)
+export ELF2REL	:=	elf2rel
 
 ifeq ($(VERSION),)
 all: us jp eu
@@ -51,7 +51,7 @@ INCLUDES	:=	include
 
 MACHDEP		= -mno-sdata -mgcn -DGEKKO -mcpu=750 -meabi -mhard-float
 
-CFLAGS		= -nostdlib -ffreestanding -ffunction-sections -fdata-sections -g -Oz -Wall $(MACHDEP) $(INCLUDE)
+CFLAGS		= -nostdlib -ffreestanding -ffunction-sections -fdata-sections -g -Oz -Wall -Wextra $(MACHDEP) $(INCLUDE)
 CXXFLAGS	= -fno-exceptions -fno-rtti -std=gnu++17 $(CFLAGS)
 
 LDFLAGS		= -r -e _prolog -u _prolog -u _epilog -u _unresolved -Wl,--gc-sections -nostdlib -g $(MACHDEP) -Wl,-Map,$(notdir $@).map
@@ -59,12 +59,15 @@ LDFLAGS		= -r -e _prolog -u _prolog -u _epilog -u _unresolved -Wl,--gc-sections 
 # Platform options
 ifeq ($(VERSION),us)
 	CFLAGS += -DTTYD_US
+	ASFLAGS += -DTTYD_US
 	GAMECODE = "G8ME"
 else ifeq ($(VERSION),jp)
 	CFLAGS += -DTTYD_JP
+	ASFLAGS += -DTTYD_JP
 	GAMECODE = "G8MJ"
 else ifeq ($(VERSION),eu)
 	CFLAGS += -DTTYD_EU
+	ASFLAGS += -DTTYD_EU
 	GAMECODE = "G8MP"
 endif
 
@@ -72,7 +75,8 @@ endif
 #---------------------------------------------------------------------------------
 # any extra libraries we wish to link with the project
 #---------------------------------------------------------------------------------
-LIBS	:= -lgcc
+# LIBS	:= -lgcc
+LIBS	:= 
 
 #---------------------------------------------------------------------------------
 # list of directories containing libraries, this must be the top level containing

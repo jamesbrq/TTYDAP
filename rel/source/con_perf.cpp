@@ -4,6 +4,7 @@
 #include <gc/os.h>
 
 #include <cstdio>
+#include <cinttypes>
 
 namespace mod
 {
@@ -11,7 +12,7 @@ namespace mod
                                [](const char *args)
                                {
                                    uint32_t durationMs = 0;
-                                   if (sscanf(args, "%lu", &durationMs) == 1)
+                                   if (sscanf(args, "%" PRIu32, &durationMs) == 1)
                                    {
                                        // Cap to avoid double overflow
                                        if (durationMs > 100000)
