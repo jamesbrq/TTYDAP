@@ -4,12 +4,11 @@
 
 namespace ttyd::seq_title
 {
-
     // Taken from NWPlayer123's decomp:
     // https://github.com/NWPlayer123/PaperMario2/blob/master/include/seq/seq_title.h
     struct SeqTitleWork2
     {
-        void* texture;                   // FileEntry* texture
+        void *texture;                   // FileEntry* texture
         uint8_t field_0x4[0x8 - 0x4];    // 0x4
         int32_t field_0x8;               // 0x8
         float field_0xC;                 // 0xC
@@ -25,7 +24,7 @@ namespace ttyd::seq_title
 
     extern "C"
     {
-        extern SeqTitleWork2* seqTitleWorkPtr2;
+        extern SeqTitleWork2 *seqTitleWorkPtr2;
 
         // pressStartGX
         // disp2
@@ -38,5 +37,4 @@ namespace ttyd::seq_title
         // seq_titleInit
         // DbgBtlSel_GetMsgDataPtr
     }
-
-}
+} // namespace ttyd::seq_title

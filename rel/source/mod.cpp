@@ -15,7 +15,6 @@ ModUpdateFunction *ModUpdateFunction::sFirst = nullptr;
 
 namespace mod
 {
-
     Mod *gMod = nullptr;
 
     void main()
@@ -24,7 +23,9 @@ namespace mod
         mod->init();
     }
 
-    Mod::Mod() {}
+    Mod::Mod()
+    {
+    }
 
     void Mod::init()
     {
@@ -84,5 +85,4 @@ namespace mod
         // Draw any error messages that occured this frame
         drawErrorMessages();
     }
-
 } // namespace mod

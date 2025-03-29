@@ -103,6 +103,7 @@ const char mayor_pig[] = "\x83\x75\x83\x5E\x91\xBA\x92\xB7";
 const char mayor[] = "\x91\xBA\x92\xB7";
 const char vivian[] = "\x83\x72\x83\x72\x83\x41\x83\x93";
 
+// clang-format off
 EVT_BEGIN(villagerA_init_evt)
 IF_LARGE_EQUAL(GSW(1717), 22)
 IF_SMALL_EQUAL(GSW(1717), 24)
@@ -716,6 +717,7 @@ EVT_BEGIN(usu_evt_majin2_item)
 	USER_FUNC(evt_mario::evt_mario_key_onoff, 1)
 	RETURN()
 EVT_END()
+// clang-format on
 
 void ApplyUsuPatches()
 {

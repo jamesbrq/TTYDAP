@@ -2,135 +2,132 @@
 
 #include "keyboard.h"
 
-#include <gc/types.h>
+#include "gc/types.h"
 
-namespace mod {
-
-class ConCommand
+namespace mod
 {
-public:
-	using ExecuteCallback = void (*)(const char *args);
+    class ConCommand
+    {
+       public:
+        using ExecuteCallback = void (*)(const char *args);
 
-	ConCommand(const char *name, ExecuteCallback executeCb)
-	{
-		next = sFirst;
-		sFirst = this;
+        ConCommand(const char *name, ExecuteCallback executeCb)
+        {
+            next = sFirst;
+            sFirst = this;
 
-		this->name = name;
-		this->executeCb = executeCb;
-	}
+            this->name = name;
+            this->executeCb = executeCb;
+        }
 
-public:
-	const char *name;
-	ExecuteCallback executeCb;
+       public:
+        const char *name;
+        ExecuteCallback executeCb;
 
-private:
-	ConCommand *next;
-	static ConCommand *sFirst;
+       private:
+        ConCommand *next;
+        static ConCommand *sFirst;
 
-	friend class ConsoleSystem;
-	friend void CC_find(const char *args);
-};
+        friend class ConsoleSystem;
+        friend void CC_find(const char *args);
+    };
 
-class ConIntVar
-{
-public:
-	using ChangedCallback = void (*)(ConIntVar *self, int new_value);
+    class ConIntVar
+    {
+       public:
+        using ChangedCallback = void (*)(ConIntVar *self, int new_value);
 
-	ConIntVar(const char *name, int value, ChangedCallback changedCb = nullptr)
-	{
-		next = sFirst;
-		sFirst = this;
+        ConIntVar(const char *name, int value, ChangedCallback changedCb = nullptr)
+        {
+            next = sFirst;
+            sFirst = this;
 
-		this->name = name;
-		this->value = value;
-		this->changedCb = changedCb;
-	}
+            this->name = name;
+            this->value = value;
+            this->changedCb = changedCb;
+        }
 
-public:
-	const char *name;
-	int value;
-	ChangedCallback changedCb;
+       public:
+        const char *name;
+        int value;
+        ChangedCallback changedCb;
 
-private:
-	ConIntVar *next;
-	static ConIntVar *sFirst;
+       private:
+        ConIntVar *next;
+        static ConIntVar *sFirst;
 
-	friend class ConsoleSystem;
-	friend void CC_find(const char *args);
-};
+        friend class ConsoleSystem;
+        friend void CC_find(const char *args);
+    };
 
+    class ConsoleSystem;
+    extern ConsoleSystem *gConsole;
 
-class ConsoleSystem;
-extern ConsoleSystem *gConsole;
+    enum LogLevel
+    {
+        LogLevel_Debug = 0,
+        LogLevel_Info,
+        LogLevel_Warning,
+        LogLevel_Error,
+    };
 
-enum LogLevel
-{
-	LogLevel_Debug = 0,
-	LogLevel_Info,
-	LogLevel_Warning,
-	LogLevel_Error,
-};
+    class ConsoleSystem
+    {
+       public:
+        ConsoleSystem(): mKeyboard(1)
+        {
+            gConsole = this;
+        }
 
-class ConsoleSystem
-{
-public:
-	ConsoleSystem()
-		: mKeyboard(1)
-	{
-		gConsole = this;
-	}
+        void init();
+        void update();
 
-	void init();
-	void update();
+        void logInfo(const char *fmt, ...);
+        void logWarning(const char *fmt, ...);
+        void logError(const char *fmt, ...);
+        void logDebug(const char *fmt, ...);
 
-	void logInfo(const char *fmt, ...);
-	void logWarning(const char *fmt, ...);
-	void logError(const char *fmt, ...);
-	void logDebug(const char *fmt, ...);
+        void logColor(const char *text, gc::color4 color);
 
-	void logColor(const char *text, gc::color4 color);
-	
-	void overlay(const char *fmt, ...);
+        void overlay(const char *fmt, ...);
 
-	void setMonospace(bool monospace);
-	
-private:
-	void drawLine(int line, const char *text, gc::color4 color = {0xff,0xff,0xff,0xff});
+        void setMonospace(bool monospace);
 
-	void updatePrompt();
-	void updateUsbGecko();
-	void processCommand(const char *text);
-	void disp();
+       private:
+        void drawLine(int line, const char *text, gc::color4 color = {0xff, 0xff, 0xff, 0xff});
 
-private:
-	constexpr static int kMaxColumns = 608 / 8 - 2;
-	constexpr static int kNumRowsMonospaceFont = 480 / 8 - 2;
-	constexpr static int kNumRowsVariableWidthFont = 440 / 28;
-	constexpr static int kMaxRows = kNumRowsMonospaceFont;
-	static_assert(kMaxRows >= kNumRowsMonospaceFont);
-	static_assert(kMaxRows >= kNumRowsVariableWidthFont);
+        void updatePrompt();
+        void updateUsbGecko();
+        void processCommand(const char *text);
+        void disp();
 
-	bool mIsMonospace;
-	int mRowCount;
+       private:
+        constexpr static int kMaxColumns = 608 / 8 - 2;
+        constexpr static int kNumRowsMonospaceFont = 480 / 8 - 2;
+        constexpr static int kNumRowsVariableWidthFont = 440 / 28;
+        constexpr static int kMaxRows = kNumRowsMonospaceFont;
+        static_assert(kMaxRows >= kNumRowsMonospaceFont);
+        static_assert(kMaxRows >= kNumRowsVariableWidthFont);
 
-	char mOverlayBuffer[256] = "";
+        bool mIsMonospace;
+        int mRowCount;
 
-	struct LogLine
-	{
-		uint64_t time;
-		gc::color4 color;
-		char text[kMaxColumns + 1];
-	};
-	LogLine mLogLines[kMaxRows - 1] = {};
+        char mOverlayBuffer[256] = "";
 
-	bool mPromptActive = false;
-	char mPromptBuffer[64] = "";
-	int mBackspaceHoldTimer = 0;
-	Keyboard mKeyboard;
+        struct LogLine
+        {
+            uint64_t time;
+            gc::color4 color;
+            char text[kMaxColumns + 1];
+        };
+        LogLine mLogLines[kMaxRows - 1] = {};
 
-	int mUgBufferSize = 0;
-	char mUgBuffer[64];
-};
+        bool mPromptActive = false;
+        char mPromptBuffer[64] = "";
+        int mBackspaceHoldTimer = 0;
+        Keyboard mKeyboard;
 
-}
+        int mUgBufferSize = 0;
+        char mUgBuffer[64];
+    };
+} // namespace mod

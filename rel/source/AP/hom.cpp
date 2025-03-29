@@ -21,6 +21,7 @@ extern int32_t hom_00_init_evt[];
 extern int32_t hom_10_evt_resha_start_hom_00[];
 extern int32_t evt_sub_mail_event[];
 
+// clang-format off
 EVT_BEGIN(hom_00_init_evt_evt)
 IF_EQUAL(GSW(1720), 8)
 IF_SMALL(GSW(1706), 30)
@@ -38,6 +39,7 @@ EVT_BEGIN(hom_00_init_evt_hook)
 RUN_CHILD_EVT(hom_00_init_evt_evt)
 RETURN()
 EVT_END()
+// clang-format on
 
 void ApplyHomPatches()
 {

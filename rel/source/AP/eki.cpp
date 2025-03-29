@@ -33,6 +33,7 @@ extern int32_t evt_box_open[];
 extern int32_t evt_sw_complete[];
 extern int32_t eki_06_init_evt[];
 
+// clang-format off
 EVT_BEGIN(evt_elv_evt)
 	USER_FUNC(evt_mario::evt_mario_key_onoff, 0)
 	USER_FUNC(evt_pouch::evt_pouch_check_item, 26, LW(0))
@@ -65,6 +66,7 @@ EVT_BEGIN(evt_elv_hook)
 	END_IF()
 	GOTO(&evt_elv[38])
 EVT_END()
+// clang-format on
 
 void ApplyEkiPatches()
 {

@@ -59,8 +59,7 @@ uint16_t GSWF_ARR[] = {
     1341,
 
     // Ch.4 talk to shopkeep once
-    1925
-};
+    1925};
 uint16_t GSWF_ARR_SIZE = sizeof(GSWF_ARR) / sizeof(GSWF_ARR[0]);
 
 namespace mod::owr
@@ -69,7 +68,9 @@ namespace mod::owr
     OWR *gSelf = nullptr;
     StateManager *gState = nullptr;
 
-    OWR::OWR() {}
+    OWR::OWR()
+    {
+    }
 
     void *(*g_itemEntry_trampoline)(const char *, uint32_t, uint32_t, int32_t, void *, float, float, float) = nullptr;
     bool (*g_OSLink_trampoline)(OSModuleInfo *, void *) = nullptr;
@@ -122,21 +123,21 @@ namespace mod::owr
         }
     }
 
-	void OWR::HomewardWarp()
-	{
-		SeqIndex seq = ttyd::seqdrv::seqGetSeq();
-		if (seq != SeqIndex::kGame)
-			return;
+    void OWR::HomewardWarp()
+    {
+        SeqIndex seq = ttyd::seqdrv::seqGetSeq();
+        if (seq != SeqIndex::kGame)
+            return;
 
-		uint32_t combo = PadInput::PAD_L | PadInput::PAD_R | PadInput::PAD_START;
-		bool buttons = checkButtonComboEveryFrame(combo);
-		if (buttons)
-		{
-			uint32_t namePtr = 0x802c0298;
-			void* mapName = reinterpret_cast<char*>(namePtr);
-			ttyd::seqdrv::seqSetSeq(ttyd::seqdrv::SeqIndex::kMapChange, mapName, 0);
-		}
-	}
+        uint32_t combo = PadInput::PAD_L | PadInput::PAD_R | PadInput::PAD_START;
+        bool buttons = checkButtonComboEveryFrame(combo);
+        if (buttons)
+        {
+            uint32_t namePtr = 0x802c0298;
+            void *mapName = reinterpret_cast<char *>(namePtr);
+            ttyd::seqdrv::seqSetSeq(ttyd::seqdrv::SeqIndex::kMapChange, mapName, 0);
+        }
+    }
 
     void OWR::RecieveItems()
     {
@@ -183,7 +184,7 @@ namespace mod::owr
                                                          {
                                                              return "Oh my!<wait 100> Excuse me.\n<k>";
                                                          }
-														 if (!strcmp(msgKey, "stg6_rsh_diary_02"))
+                                                         if (!strcmp(msgKey, "stg6_rsh_diary_02"))
                                                          {
                                                              return "An unseen force prevents\nyou from opening the diary.<k>";
                                                          }
@@ -392,7 +393,7 @@ namespace mod::owr
         SequenceInit();
         AAAToGOR();
         RecieveItems();
-		HomewardWarp();
+        HomewardWarp();
     }
 
     void OWR::OnModuleLoaded(OSModuleInfo *module_info)
@@ -528,4 +529,4 @@ namespace mod::owr
         // Draw the rest of the text
         ttyd::fontmgr::FontDrawString(x, y, data);
     }
-}
+} // namespace mod::owr

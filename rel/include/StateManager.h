@@ -4,7 +4,6 @@
 
 namespace mod::owr
 {
-
     struct APSettings
     {
         uint8_t requiredChapterClears;

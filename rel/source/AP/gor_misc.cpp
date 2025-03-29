@@ -25,6 +25,7 @@ extern int32_t exchange_ryokin_medal[];
 
 const char goombella[] = "\x83\x4C\x83\x6D\x82\xB6\x82\xA2";
 
+// clang-format off
 EVT_BEGIN(party_evt)
 	USER_FUNC(evt_mario::evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
 	USER_FUNC(evt_item::evt_item_entry, PTR("item01"), LW(3), LW(0), LW(1), LW(2), 16, GSWF(6076), 0)
@@ -36,6 +37,7 @@ EVT_BEGIN(party_evt)
 	USER_FUNC(evt_mario::evt_mario_key_onoff, 1)
 	RETURN()
 EVT_END()
+// clang-format on
 
 void ApplyGorMiscPatches()
 {

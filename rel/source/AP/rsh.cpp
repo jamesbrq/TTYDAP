@@ -119,6 +119,7 @@ const char madame[] = "\x83\x7D\x83\x5F\x83\x80";
 // Assembly
 extern int32_t rsh_prolog[];
 
+// clang-format off
 EVT_BEGIN(rsh_06_init_evt_evt)
 IF_LARGE_EQUAL(GSW(1720), 1)
 IF_SMALL(GSW(1720), 8)
@@ -668,6 +669,7 @@ EVT_BEGIN(talk_madam_ring_return_hook3)
 RUN_CHILD_EVT(talk_madam_ring_item)
 GOTO(&talk_madam_ring_return[33])
 EVT_PATCH_END()
+// clang-format on
 
 void ApplyRshPatches()
 {

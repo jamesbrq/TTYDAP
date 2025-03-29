@@ -106,6 +106,7 @@ extern int32_t muj_20_init_evt[];
 extern int32_t koburon_dead[];
 extern int32_t muj_all_party_lecture[];
 
+// clang-format off
 EVT_BEGIN(mony_talk_muj_00_evt)
 IF_EQUAL(GSW(1709), 8)
 USER_FUNC(evt_msg::evt_msg_print, 0, PTR("stg5_muj_146_02"), 0, PTR("me"))
@@ -721,6 +722,7 @@ USER_FUNC(evt_mario::evt_mario_key_onoff, 1)
 USER_FUNC(evt_snd::evt_snd_bgmon, 512, PTR("BGM_STG5_MUJ1"))
 RETURN()
 EVT_END()
+// clang-format on
 
 void ApplyMujPatches()
 {

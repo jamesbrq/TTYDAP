@@ -1,9 +1,9 @@
 #pragma once
 
-namespace ttyd::mariost {
-
-    extern "C" {
-
+namespace ttyd::mariost
+{
+    extern "C"
+    {
         void marioStInit();
         void marioStMain();
         void marioStDisp();
@@ -13,8 +13,6 @@ namespace ttyd::mariost {
         void gcDvdCheckThread();
         void gcRumbleCheck();
 
-        extern void* _globalWorkPtr;
-
+        extern void *_globalWorkPtr;
     }
-
-}
+} // namespace ttyd::mariost

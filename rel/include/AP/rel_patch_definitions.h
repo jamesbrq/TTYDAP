@@ -1,4 +1,5 @@
 #pragma once
+
 #include <ttyd/evtmgr.h>
 
 extern "C"
@@ -34,8 +35,8 @@ extern "C"
     void bPeachPointer();
     void bPeachReturn();
 
-	void asmPreventDiaryTextboxSelection();
-	void cPreventDiaryTextboxOptionSelection(const char* currentText, int32_t* storeAddress, int32_t selectedOption);
+    void asmPreventDiaryTextboxSelection();
+    void cPreventDiaryTextboxOptionSelection(const char *currentText, int32_t *storeAddress, int32_t selectedOption);
 }
 
 EVT_DECLARE_USER_FUNC(checkChapterRequirements, 1)
@@ -76,4 +77,4 @@ void ApplyTou2Patches();
 void ApplyUsuPatches();
 void ApplyWinPatches();
 
-char* strcpy_String(char* dest, const char* src);
+char *strcpy_String(char *dest, const char *src);

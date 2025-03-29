@@ -98,6 +98,7 @@ extern int32_t tik_15_init_evt[];
 extern int32_t tik_18_init_evt[];
 extern int32_t tik_evt_majin2[];
 
+// clang-format off
 EVT_BEGIN(kuribo5_talk_evt)
 IF_SMALL(GSW(1711), 8)
 USER_FUNC(evt_msg::evt_msg_print, 0, PTR("tik_001_01"), 0, PTR("me"))
@@ -380,6 +381,7 @@ USER_FUNC(evt_cam::evt_cam3d_evt_off, 500, 11)
 USER_FUNC(evt_mario::evt_mario_key_onoff, 1)
 RETURN()
 EVT_END()
+// clang-format on
 
 void ApplyTikPatches()
 {

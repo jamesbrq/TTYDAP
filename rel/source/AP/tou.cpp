@@ -182,6 +182,7 @@ extern int32_t chk[];
 
 const char jolene[] = "\x83\x4C\x83\x6D\x83\x56\x83\x52\x83\x8F";
 
+// clang-format off
 EVT_BEGIN(talk_sakaba_evt)
 IF_EQUAL(GSW(1707), 3)
 IF_EQUAL(GSWF(3877), 1)
@@ -310,6 +311,7 @@ EVT_BEGIN(hotdog_item_hook)
 	RUN_CHILD_EVT(hotdog_item)
 	GOTO(&evt_hotdog[78])
 EVT_PATCH_END()
+// clang-format on
 
 void ApplyTouPatches()
 {
@@ -368,8 +370,8 @@ void ApplyTouPatches()
     talk_sakaba[23] = GSWF(6026);
     talk_sakaba[25] = 0; // UNUSED
     talk_sakaba[33] = 0;
-	talk_sakaba[268] = GSWF(6026);
-	talk_sakaba[269] = 1;
+    talk_sakaba[268] = GSWF(6026);
+    talk_sakaba[269] = 1;
     talk_sakaba[275] = EVT_HELPER_CMD(0, 49);
     patch::writePatch(&talk_sakaba[276], talk_sakaba_hook, sizeof(talk_sakaba_hook));
 
@@ -482,7 +484,7 @@ void ApplyTouPatches()
     evt_hotdog[51] = EVT_HELPER_CMD(2, 50);
     evt_hotdog[52] = EVT_HELPER_OP(LW(3));
     patch::writePatch(&evt_hotdog[54], hotdog_item_hook, sizeof(hotdog_item_hook));
-	evt_hotdog[65] = 0;
+    evt_hotdog[65] = 0;
 
     tou_01_init_evt[107] = GSW(1708);
     tou_01_init_evt[108] = 16;
@@ -633,8 +635,8 @@ void ApplyTouPatches()
     tou_02_init_evt[132] = 27;
     tou_02_init_evt[283] = GSWF(6028);
     tou_02_init_evt[285] = 1;
-	tou_02_init_evt[599] = GSWF(6028);
-	tou_02_init_evt[601] = 1;
+    tou_02_init_evt[599] = GSWF(6028);
+    tou_02_init_evt[601] = 1;
     tou_02_init_evt[897] = GSWF(6028);
     tou_02_init_evt[898] = 0;
 
@@ -995,8 +997,8 @@ void ApplyTouPatches()
 
     patch::writePatch(&tou_10_evt_1st_leagu[148], jolene_egg_hook, sizeof(jolene_egg_hook));
 
-	evt_tou_chibi_yoshi[0] = 0;
-	evt_tou_chibi_yoshi[1] = 0;
+    evt_tou_chibi_yoshi[0] = 0;
+    evt_tou_chibi_yoshi[1] = 0;
     patch::writePatch(&evt_tou_chibi_yoshi[73], yoshi_gswf_evt, sizeof(yoshi_gswf_evt));
     evt_tou_chibi_yoshi[396] = EVT_HELPER_CMD(2, 50);
     evt_tou_chibi_yoshi[397] = EVT_HELPER_OP(LW(3));

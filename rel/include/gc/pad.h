@@ -2,14 +2,13 @@
 
 #include <cstdint>
 
-#define PAD_RESULT_NONE 0
+#define PAD_RESULT_NONE          0
 #define PAD_RESULT_NO_CONTROLLER -1
-#define PAD_RESULT_NOT_READY -2
-#define PAD_RESULT_TRANSFER -3
+#define PAD_RESULT_NOT_READY     -2
+#define PAD_RESULT_TRANSFER      -3
 
 namespace gc::pad
 {
-
     enum PadId
     {
         CONTROLLER_ONE = 0,
@@ -76,5 +75,4 @@ namespace gc::pad
         // PADSetSamplingCallback
         // __PADDisableRecalibration
     }
-
-}
+} // namespace gc::pad

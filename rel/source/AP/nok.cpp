@@ -43,6 +43,7 @@ extern int32_t evt_kusa_5[];
 extern int32_t evt_kusa_6[];
 extern int32_t nok_01_init_evt[];
 
+// clang-format off
 EVT_BEGIN(nokonoko_A_talk_evt)
 IF_EQUAL(GSW(1707), 3)
 SET(GSWF(3877), 1)
@@ -527,6 +528,7 @@ EVT_BEGIN(nokorin_talk_hook)
 RUN_CHILD_EVT(nokorin_talk_evt)
 RETURN()
 EVT_END()
+// clang-format on
 
 void ApplyNokPatches()
 {
