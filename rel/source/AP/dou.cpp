@@ -41,6 +41,7 @@ extern int32_t bombwall_bomb[];
 extern int32_t bombwall_init[];
 extern int32_t dou_11_init_evt[];
 
+// clang-format off
 EVT_BEGIN(peramajin_after_item)
 	USER_FUNC(evt_mario::evt_mario_key_onoff, 0)
 	USER_FUNC(evt_mobj::evt_mobj_wait_animation_end, PTR("mobj_box00"))
@@ -53,6 +54,7 @@ EVT_BEGIN(peramajin_after_item)
 	USER_FUNC(evt_mario::evt_mario_key_onoff, 1)
 	RETURN()
 EVT_END()
+// clang-format on
 
 void ApplyDouPatches()
 {

@@ -41,6 +41,7 @@ extern int32_t hei_13_init_evt[];
 
 const char koops[] = "\x83\x6D\x83\x52\x83\x5E\x83\x8D\x83\x45";
 
+// clang-format off
 EVT_BEGIN(party_evt)
 USER_FUNC(evt_mario::evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
 USER_FUNC(evt_item::evt_item_entry, PTR("item01"), LW(3), LW(0), LW(1), LW(2), 16, GSWF(6077), 0)
@@ -76,6 +77,7 @@ EVT_BEGIN(stones_hook)
 	RUN_CHILD_EVT(stones_evt)
 	GOTO(&hei_00_init_evt[213])
 EVT_PATCH_END()
+// clang-format on
 
 void ApplyHeiPatches()
 {

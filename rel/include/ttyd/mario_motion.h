@@ -2,48 +2,44 @@
 
 namespace ttyd::mario_motion
 {
+    extern "C"
+    {
+        void marioChgMoveMotion();
+        void marioChgStayMotion();
+        void marioChgTalkMotion();
+        void marioChgGetItemMotion();
+        void marioChgShipMotion();
+        void marioChgRollMotion();
+        void marioChgJumpStandMotion(float direction);
+        void marioChgSmallJumpMotion();
 
-extern "C" {
+        bool marioChkItemGetMotion();
+        bool marioChkTalkable();
 
-void marioChgMoveMotion();
-void marioChgStayMotion();
-void marioChgTalkMotion();
-void marioChgGetItemMotion();
-void marioChgShipMotion();
-void marioChgRollMotion();
-void marioChgJumpStandMotion(float direction);
-void marioChgSmallJumpMotion();
+        // marioBoots
+        // marioMotion
 
-bool marioChkItemGetMotion();
-bool marioChkTalkable();
+        void marioChgMot(int motionId);
+        void marioChgMotSub(int motionId, bool unk);
+        void marioChgMot2(int motionId);
 
-// marioBoots
-// marioMotion
+        void marioClearJumpPara();
+        void marioSetJumpPara();
+        void marioSetFallPara();
+        float marioGetFallSpd();
+        float marioMakeJumpPara();
 
-void marioChgMot(int motionId);
-void marioChgMotSub(int motionId, bool unk);
-void marioChgMot2(int motionId);
+        // marioJump
+        // marioFall
+        // marioLandOn
 
-void marioClearJumpPara();
-void marioSetJumpPara();
-void marioSetFallPara();
-float marioGetFallSpd();
-float marioMakeJumpPara();
+        bool marioChkJump();
+        bool marioChkTransform();
+        bool marioChkItemMotion();
+        // L_marioChkRub
 
-// marioJump
-// marioFall
-// marioLandOn
+        int marioRollChgChk();
 
-bool marioChkJump();
-bool marioChkTransform();
-bool marioChkItemMotion();
-// L_marioChkRub
-
-int marioRollChgChk();
-
-void marioChgMotJump2();
-
-
-}
-
-}
+        void marioChgMotJump2();
+    }
+} // namespace ttyd::mario_motion

@@ -42,6 +42,7 @@ extern int32_t gon_chuchurina_sogu[];
 extern int32_t item_get00[];
 extern int32_t gon_12_init_evt[];
 
+// clang-format off
 EVT_BEGIN(gon_evt_majin2_item)
 	USER_FUNC(evt_npc::evt_npc_change_fbat_mode, 7)
 	USER_FUNC(evt_npc::evt_npc_stop_for_event)
@@ -59,6 +60,7 @@ EVT_BEGIN(gon_evt_majin2_item)
 	USER_FUNC(evt_npc::evt_npc_start_for_event)
 	RETURN()
 EVT_END()
+// clang-format on
 
 void ApplyGonPatches()
 {

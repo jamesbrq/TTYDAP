@@ -91,6 +91,7 @@ extern int32_t nannpc_ext_main_sub_fast;
 const char npcEnt[] = "\x83\x8B\x83\x43\x81\x5B\x83\x57";
 const char npcEnt2[] = "\x83\x89\x83\x4E\x83\x4B\x83\x93";
 
+// clang-format off
 EVT_BEGIN(garawaru_init_evt)
 	IF_SMALL(GSW(1700), 4)
 		USER_FUNC(evt_npc::evt_npc_set_ry, PTR("me"), 90)
@@ -703,6 +704,7 @@ EVT_BEGIN(gor_00_init_evt2_hook)
 	RUN_CHILD_EVT(gor_00_init_evt2)
 	GOTO(&gor_00_init_evt[469])
 EVT_PATCH_END()
+// clang-format on
 
 void ApplyGor00Patches()
 {

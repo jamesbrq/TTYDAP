@@ -1,48 +1,46 @@
 #pragma once
 
-namespace ttyd::mario_party {
+namespace ttyd::mario_party
+{
+    extern "C"
+    {
+        // marioUseParty
+        // unk_JP_US_EU_32
 
-extern "C" {
+        // Set party member by kind. Returns slot used.
+        int marioPartyEntry(int partyKindId);
 
-// marioUseParty
-// unk_JP_US_EU_32
+        // Set party member by kind with hello animation. Returns slot used.
+        int marioPartyHello(int partyKindId);
 
-// Set party member by kind. Returns slot used.
-int marioPartyEntry(int partyKindId);
+        // Remove main party if present. Returns whether there was one.
+        bool marioPartyGoodbye();
 
-// Set party member by kind with hello animation. Returns slot used.
-int marioPartyHello(int partyKindId);
+        // Remove all party.
+        void marioPartyKill();
 
-// Remove main party if present. Returns whether there was one.
-bool marioPartyGoodbye();
+        // Get main or extra party kind, preferring main.
+        int marioGetParty();
 
-// Remove all party.
-void marioPartyKill();
+        // Get slot of main party.
+        int marioGetPartyId();
 
-// Get main or extra party kind, preferring main.
-int marioGetParty();
+        // Get slot of extra party.
+        int marioGetExtraPartyId();
 
-// Get slot of main party.
-int marioGetPartyId();
+        // Add party kind to pouch.
+        void partyJoin(int partyKindId);
 
-// Get slot of extra party.
-int marioGetExtraPartyId();
+        // Remove party kind from pouch.
+        void partyLeft(int partyKindId);
 
-// Add party kind to pouch.
-void partyJoin(int partyKindId);
+        // Check whether the given party kind has already joined.
+        bool partyChkJoin(int partyKindId);
 
-// Remove party kind from pouch.
-void partyLeft(int partyKindId);
+        // Get current HP for party kind.
+        int partyGetHp(int partyKindId);
 
-// Check whether the given party kind has already joined.
-bool partyChkJoin(int partyKindId);
-
-// Get current HP for party kind.
-int partyGetHp(int partyKindId);
-
-// Get tech level for party kind.
-int partyGetTechLv(int partyKindId);
-
-}
-
-}
+        // Get tech level for party kind.
+        int partyGetTechLv(int partyKindId);
+    }
+} // namespace ttyd::mario_party

@@ -39,6 +39,7 @@ extern int32_t win_06_init_evt[];
 
 const char flurrie[] = "\x83\x4E\x83\x89\x83\x45\x83\x5F";
 
+// clang-format off
 EVT_BEGIN(win_vivian_init_evt)
 	IF_SMALL_EQUAL(GSW(1702), 12)
 		IF_LARGE_EQUAL(GSW(1712), 1)
@@ -114,6 +115,7 @@ EVT_BEGIN(party_evt)
 	USER_FUNC(evt_snd::evt_snd_env_lpf, 0, 800)
 	RETURN()
 EVT_END()
+// clang-format on
 
 void ApplyWinPatches()
 {

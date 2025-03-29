@@ -17,6 +17,7 @@ extern int32_t kanbu_fly[];
 extern int32_t moo_epilogue_evt[];
 extern int32_t moo_04_init_evt[];
 
+// clang-format off
 EVT_BEGIN(moo_04_init_evt_evt)
 IF_EQUAL(GSW(1708), 18)
 USER_FUNC(evt_mario::evt_mario_kill_party, 0)
@@ -55,6 +56,7 @@ GOTO(99)
 END_IF()
 RETURN()
 EVT_END()
+// clang-format on
 
 void ApplyMooPatches()
 {

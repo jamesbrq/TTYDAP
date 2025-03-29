@@ -4,7 +4,6 @@
 
 namespace ttyd::seq_mapchange
 {
-
     enum RelId : uint32_t
     {
         AAA = 1, // Mario's house
@@ -66,5 +65,4 @@ namespace ttyd::seq_mapchange
         // seq_mapChangeExit
         // seq_mapChangeInit
     }
-
-}
+} // namespace ttyd::seq_mapchange

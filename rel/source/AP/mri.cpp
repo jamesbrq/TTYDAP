@@ -151,6 +151,7 @@ extern int32_t mri_20_init_evt[];
 extern int32_t mri_18_init_evt[];
 extern int32_t mri_19_init_evt[];
 
+// clang-format off
 EVT_BEGIN(guide_init_00_evt)
 IF_EQUAL(GSW(1713), 1)
 IF_EQUAL(GSWF(2826), 0)
@@ -582,6 +583,7 @@ EVT_BEGIN(mri_09_init_evt_hook)
 RUN_CHILD_EVT(mri_09_init_evt_evt)
 GOTO(&mri_09_init_evt[188])
 EVT_PATCH_END()
+// clang-format on
 
 void ApplyMriPatches()
 {
@@ -686,7 +688,7 @@ void ApplyMriPatches()
     meet_rival[2112] = GSW(1713);
     meet_rival[2113] = 3;
 
-	rival_nakama[1077] = EVT_HELPER_CMD(2, 53);
+    rival_nakama[1077] = EVT_HELPER_CMD(2, 53);
     rival_nakama[1125] = GSW(1713);
     rival_nakama[1126] = 5;
 
@@ -767,8 +769,8 @@ void ApplyMriPatches()
     bero_custom_00[4] = GSW(1713);
     bero_custom_00[5] = 4;
 
-	guide_sister[651] = EVT_HELPER_CMD(2, 53);
-	guide_sister[653] = 89;
+    guide_sister[651] = EVT_HELPER_CMD(2, 53);
+    guide_sister[653] = 89;
     guide_sister[761] = GSWF(6020);
     guide_sister[762] = 1;
 

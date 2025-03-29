@@ -46,6 +46,7 @@ extern int32_t maffiaboss_nekomu01[];
 extern int32_t maffiaboss_nekomu02[];
 extern int32_t kuzi_keiziban_normal[];
 
+// clang-format off
 EVT_BEGIN(maffiaboss_talk_common_evt)
 SWITCH(GSW(1709))
 CASE_EQUAL(1)
@@ -196,6 +197,7 @@ EVT_BEGIN(gor_03_init_evt_hook)
 RUN_CHILD_EVT(gor_03_init_evt_evt)
 GOTO(&gor_03_init_evt[292])
 EVT_PATCH_END()
+// clang-format on
 
 void ApplyGor03Patches()
 {

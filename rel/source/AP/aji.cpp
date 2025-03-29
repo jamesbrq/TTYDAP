@@ -101,6 +101,7 @@ const char npc2[] = "\x91\xE6\x8E\x4F\x90\xA8\x97\xCD\x8C\xA4\x8B\x86\x88\xF5";
 const char npc3[] = "\x82\xDD\x82\xCD\x82\xE8";
 const char npc4[] = "\x83\x6F\x83\x8A\x83\x41\x81\x5B\x83\x93\x83\x4A\x83\x58\x83\x5E\x83\x80";
 
+// clang-format off
 EVT_BEGIN(aji_00_init_evt_evt)
 	IF_LARGE_EQUAL(GSW(1707), 20)
 		IF_SMALL_EQUAL(GSW(1708), 18)
@@ -275,6 +276,7 @@ EVT_BEGIN(aji_17_init_evt_hook)
 	RUN_CHILD_EVT(aji_17_init_evt_evt)
 	GOTO(&aji_17_init_evt[178])
 EVT_PATCH_END()
+// clang-format on
 
 void ApplyAjiPatches()
 {

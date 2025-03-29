@@ -15,7 +15,6 @@ ModUpdateFunction *ModUpdateFunction::sFirst = nullptr;
 
 namespace mod
 {
-
     Mod *gMod = nullptr;
 
     void main()
@@ -24,7 +23,9 @@ namespace mod
         mod->init();
     }
 
-    Mod::Mod() {}
+    Mod::Mod()
+    {
+    }
 
     void Mod::init()
     {
@@ -70,7 +71,11 @@ namespace mod
             ttyd::dispdrv::CameraId::kDebug3d,
             1,
             0.f,
-            [](ttyd::dispdrv::CameraId layerId, void *user) { reinterpret_cast<Mod *>(user)->draw(); },
+            [](ttyd::dispdrv::CameraId layerId, void *user)
+            {
+                (void)layerId;
+                reinterpret_cast<Mod *>(user)->draw();
+            },
             this);
 
         mConsole.update();
@@ -84,5 +89,4 @@ namespace mod
         // Draw any error messages that occured this frame
         drawErrorMessages();
     }
-
 } // namespace mod

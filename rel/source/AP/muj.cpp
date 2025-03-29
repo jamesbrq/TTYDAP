@@ -106,6 +106,7 @@ extern int32_t muj_20_init_evt[];
 extern int32_t koburon_dead[];
 extern int32_t muj_all_party_lecture[];
 
+// clang-format off
 EVT_BEGIN(mony_talk_muj_00_evt)
 IF_EQUAL(GSW(1709), 8)
 USER_FUNC(evt_msg::evt_msg_print, 0, PTR("stg5_muj_146_02"), 0, PTR("me"))
@@ -726,6 +727,7 @@ EVT_BEGIN(muj_party_hook)
     RUN_CHILD_EVT(muj_party_evt)
     RETURN()
 EVT_END()
+// clang-format on
 
 void ApplyMujPatches()
 {
@@ -966,7 +968,7 @@ void ApplyMujPatches()
     muj_02_init_evt[31] = GSW(1717);
     muj_02_init_evt[32] = 26;
     muj_02_init_evt[87] = GSW(1717);
-    muj_02_init_evt[88] = 0; //Unused
+    muj_02_init_evt[88] = 0; // Unused
 
     muj_03_event_01[1] = GSW(1719);
     muj_03_event_01[2] = 1;

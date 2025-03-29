@@ -2,36 +2,36 @@
 
 #include <cstdint>
 
-namespace ttyd::memory {
-
+namespace ttyd::memory
+{
     struct SmartAllocationData
     {
-        void* pMemory;
+        void *pMemory;
         uint32_t usedSize;
-        void* pFileInfo; // FileEntryData *pFileInfo;
+        void *pFileInfo; // FileEntryData *pFileInfo;
         uint16_t bUsed;
         uint8_t group;
         uint8_t pad_f;
         uint32_t unusedSize;
-        SmartAllocationData* pNext;
-        SmartAllocationData* pPrev;
+        SmartAllocationData *pNext;
+        SmartAllocationData *pPrev;
     } __attribute__((__packed__));
 
     struct SmartWork
     {
-        void* pArena;
+        void *pArena;
         SmartAllocationData allocations[2048];
         uint32_t unallocatedArenaStartSize;
-        SmartAllocationData* pFirstUsed;
-        SmartAllocationData* pLastUsed;
-        SmartAllocationData* pFirstFree;
-        SmartAllocationData* pLastFree;
+        SmartAllocationData *pFirstUsed;
+        SmartAllocationData *pLastUsed;
+        SmartAllocationData *pFirstFree;
+        SmartAllocationData *pLastFree;
         uint32_t lastFrameFreeCount;
     } __attribute__((__packed__));
 
     struct MapAllocEntry
     {
-        MapAllocEntry* next;
+        MapAllocEntry *next;
         uint32_t size;
         uint16_t inUse;
         uint16_t currentId;
@@ -42,20 +42,20 @@ namespace ttyd::memory {
     static_assert(sizeof(SmartWork) == 0xE01C);
     static_assert(sizeof(MapAllocEntry) == 0x20);
 
-    extern "C" {
-
+    extern "C"
+    {
 #ifndef TTYD_JP
-        extern MapAllocEntry* R_battlemapalloc_base_ptr;
+        extern MapAllocEntry *R_battlemapalloc_base_ptr;
         extern uint32_t R_battlemapalloc_size;
 #endif
-        extern SmartWork* _smartWorkPtr; // wp
+        extern SmartWork *_smartWorkPtr; // wp
         extern uint32_t mapalloc_size;
-        extern MapAllocEntry* mapalloc_base_ptr;
+        extern MapAllocEntry *mapalloc_base_ptr;
 
         // memInit
         // memClear
-        void* __memAlloc(uint32_t heap, uint32_t size);
-        void __memFree(uint32_t heap, void* ptr);
+        void *__memAlloc(uint32_t heap, uint32_t size);
+        void __memFree(uint32_t heap, void *ptr);
         // _mapAlloc
         // _mapAllocTail
         // _mapFree
@@ -66,7 +66,5 @@ namespace ttyd::memory {
         // smartAlloc
         // smartGarbage
         // smartTexObj
-
     }
-
-}
+} // namespace ttyd::memory

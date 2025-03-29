@@ -41,7 +41,7 @@ struct ModUpdateFunction
     static type MOD_ANONYMOUS(mod_if_obj)(MOD_ANONYMOUS(mod_if_func)); \
     static void MOD_ANONYMOUS(mod_if_func)()
 
-#define MOD_INIT_FUNCTION() MOD_INTERNAL_ADD_FUNCTION(ModInitFunction)
+#define MOD_INIT_FUNCTION()   MOD_INTERNAL_ADD_FUNCTION(ModInitFunction)
 #define MOD_UPDATE_FUNCTION() MOD_INTERNAL_ADD_FUNCTION(ModUpdateFunction)
 
 namespace mod

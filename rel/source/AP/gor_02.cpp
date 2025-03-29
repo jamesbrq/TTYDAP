@@ -48,6 +48,7 @@ extern int32_t epigraphy_map_after_stage6[];
 extern int32_t kurihakase_after3minutes[];
 extern int32_t gor_02_init_evt[];
 
+// clang-format off
 EVT_BEGIN(kuribo4_talk_evt)
 	USER_FUNC(evt_msg::evt_msg_print, 0, PTR("gor_02_030_02"), 0, PTR("me"))
 	RETURN()
@@ -452,6 +453,7 @@ EVT_BEGIN(luigi_init_hook)
 	RUN_CHILD_EVT(luigi_init_evt)
 	RETURN()
 EVT_END()
+// clang-format on
 
 void ApplyGor02Patches()
 {

@@ -18,11 +18,14 @@ using namespace ttyd;
 
 EVT_DEFINE_USER_FUNC(checkChapterRequirements)
 {
+    (void)isFirstCall;
+
     auto &state = gMod->owr_mod_.state;
     int8_t count = 0;
     for (int i = 114; i <= 120; i++)
     {
-        count += mario_pouch::pouchCheckItem(i);
+        if (mario_pouch::pouchCheckItem(i) > 0)
+            count++;
     }
     if (count >= state.apSettings->requiredChapterClears)
         evtmgr_cmd::evtSetValue(evt, evt->evtArguments[0], 1);
@@ -33,10 +36,13 @@ EVT_DEFINE_USER_FUNC(checkChapterRequirements)
 
 EVT_DEFINE_USER_FUNC(checkChapterClears)
 {
+    (void)isFirstCall;
+
     int8_t count = 0;
     for (int i = 114; i <= 120; i++)
     {
-        count += mario_pouch::pouchCheckItem(i);
+        if (mario_pouch::pouchCheckItem(i) > 0)
+            count++;
     }
     evtmgr_cmd::evtSetValue(evt, evt->evtArguments[0], count);
     return 2;
@@ -98,6 +104,7 @@ extern int32_t tik_15_init_evt[];
 extern int32_t tik_18_init_evt[];
 extern int32_t tik_evt_majin2[];
 
+// clang-format off
 EVT_BEGIN(kuribo5_talk_evt)
 IF_SMALL(GSW(1711), 8)
 USER_FUNC(evt_msg::evt_msg_print, 0, PTR("tik_001_01"), 0, PTR("me"))
@@ -381,6 +388,7 @@ EVT_BEGIN(tik_evt_majin2_item)
 	USER_FUNC(evt_mario::evt_mario_key_onoff, 1)
 	RETURN()
 EVT_END()
+// clang-format on
 
 void ApplyTikPatches()
 {

@@ -32,7 +32,7 @@ static uint32_t autoMashText(gc::pad::PadId controllerId)
     return ttyd::system::keyGetButtonTrg(controllerId);
 }
 
-uint32_t cFixBlooperCrash1(uint32_t unkValue, void* battleUnitPtr)
+uint32_t cFixBlooperCrash1(uint32_t unkValue, void *battleUnitPtr)
 {
     if (mod::util::ptrIsValid(battleUnitPtr))
     {
@@ -43,7 +43,7 @@ uint32_t cFixBlooperCrash1(uint32_t unkValue, void* battleUnitPtr)
 #elif defined TTYD_EU
         uint32_t offset = 0x218;
 #endif
-        * reinterpret_cast<uint32_t*>(reinterpret_cast<uint32_t>(battleUnitPtr) + offset) = unkValue;
+        *reinterpret_cast<uint32_t *>(reinterpret_cast<uint32_t>(battleUnitPtr) + offset) = unkValue;
     }
 
     // Restore the value that was in r3
@@ -73,10 +73,10 @@ int32_t cCrashScreenDecrementYPos()
 }
 #endif
 
-static void* fixPouchInitMemoryLeak(int32_t heap, uint32_t size)
+static void *fixPouchInitMemoryLeak(int32_t heap, uint32_t size)
 {
     // Check if the memory has already been allocated or not
-    ttyd::mario_pouch::PouchData* pouchPtr = ttyd::mario_pouch::pouchGetPtr();
+    ttyd::mario_pouch::PouchData *pouchPtr = ttyd::mario_pouch::pouchGetPtr();
     if (pouchPtr)
     {
         // The memory has already been allocated
@@ -98,8 +98,6 @@ void cPreventDiaryTextboxOptionSelection(const char *currentText, int32_t *store
         ThirdOption,
     };
 
-    int32_t newOption = selectedOption;
-
     // Only need to check if trying to read the diary
     if (strcmp(currentText, "stg6_rsh_diary_01_yn") == 0)
     {
@@ -107,23 +105,18 @@ void cPreventDiaryTextboxOptionSelection(const char *currentText, int32_t *store
         // Only needs to run when not on the train
         if (strcmp(_next_area, "rsh") != 0)
         {
-            if (selectedOption == DiaryTextboxOption::ThirdOption)
-            {
-                seqSetSeq(SeqIndex::kGameOver, nullptr, nullptr);
-            }
-
-            newOption = DiaryTextboxOption::SecondOption;
+            selectedOption = DiaryTextboxOption::SecondOption;
         }
     }
 
     // Restore the overwritten instruction
-    *storeAddress = newOption;
+    *storeAddress = selectedOption;
 }
 
-static void* fixMapProblems()
+static void *fixMapProblems()
 {
     const int32_t sequencePosition = ttyd::swdrv::swByteGet(0);
-    const char* nextMapPtr = &ttyd::seq_mapchange::_next_map[0];
+    const char *nextMapPtr = &ttyd::seq_mapchange::_next_map[0];
 
     if (strcmp(nextMapPtr, "nok_00") == 0)
     {
@@ -149,7 +142,7 @@ static void* fixMapProblems()
     {
         // Prevent the game from crashing if the conveyor belt has not been activated
         // Set GW(11) to 0 upon entering the room to prevent the crash
-        ttyd::evtmgr::EvtWork* eventWork = ttyd::evtmgr::evtGetWork();
+        ttyd::evtmgr::EvtWork *eventWork = ttyd::evtmgr::evtGetWork();
         eventWork->gwData[11] = 0;
     }
     else if (strcmp(nextMapPtr, "las_08") == 0)
@@ -194,7 +187,7 @@ void applyGameFixes()
     constexpr uint32_t msgWindowMrAddress = 0x800829B0;
 #endif
 
-    mod::patch::writePatch(reinterpret_cast<void*>(msgWindowMrAddress), 0x38830001); // addi r4,r3,1
+    mod::patch::writePatch(reinterpret_cast<void *>(msgWindowMrAddress), 0x38830001); // addi r4,r3,1
 
     // Fix a crash that can occur when defeating Blooper with an attack that causes both the body and the left tentacle to be
     // defeated at roughly the same time
@@ -228,7 +221,7 @@ void applyVariousGamePatches()
     constexpr uint32_t debugModeInitializeAddress = 0x80009CF0;
 #endif
 
-    mod::patch::writePatch(reinterpret_cast<void*>(debugModeInitializeAddress), 0x3800FFFF); // li r0,-1
+    mod::patch::writePatch(reinterpret_cast<void *>(debugModeInitializeAddress), 0x3800FFFF); // li r0,-1
 
     // Adjust the size of the text on the crash screen
 #ifdef TTYD_US
@@ -247,8 +240,8 @@ void applyVariousGamePatches()
     constexpr float newTextSize = 0.66f;
 #endif
 
-    const uint32_t* valuePtr = reinterpret_cast<const uint32_t*>(&newTextSize);
-    mod::patch::writePatch(reinterpret_cast<void*>(crasheScreenTextSizeAddress), *valuePtr);
+    const uint32_t *valuePtr = reinterpret_cast<const uint32_t *>(&newTextSize);
+    mod::patch::writePatch(reinterpret_cast<void *>(crasheScreenTextSizeAddress), *valuePtr);
 
     // Make the crash screen scroll and loop back around once it has gone offscreen
 #ifdef TTYD_US
@@ -263,10 +256,11 @@ void applyVariousGamePatches()
 
 #ifdef TTYD_JP
     mod::patch::writeStandardBranches(crashScreenPosYValueAddress,
-        asmCrashScreenDecrementYPosStart, asmCrashScreenDecrementYPosBranchBack);
+                                      asmCrashScreenDecrementYPosStart,
+                                      asmCrashScreenDecrementYPosBranchBack);
 #else
-    mod::patch::writePatch(reinterpret_cast<void*>(crashScreenPPCHaltBranchAddress), 0x3B400000); // li r26,0
-    mod::patch::writePatch(reinterpret_cast<void*>(crashScreenEndBranchAddress), 0x4BFFFDD4);     // b -0x22C
+    mod::patch::writePatch(reinterpret_cast<void *>(crashScreenPPCHaltBranchAddress), 0x3B400000); // li r26,0
+    mod::patch::writePatch(reinterpret_cast<void *>(crashScreenEndBranchAddress), 0x4BFFFDD4);     // b -0x22C
 #endif
 
     // Prevent upgrade item cutscenes from occuring, and instead just give them like standard items. This is needed because the
@@ -280,9 +274,9 @@ void applyVariousGamePatches()
     constexpr uint32_t preventUpgradeItemCutscenesAddress = 0x800AD0D4;
 #endif
 
-    mod::patch::writePatch(reinterpret_cast<void*>(preventUpgradeItemCutscenesAddress), 0x60000000); // nop
+    mod::patch::writePatch(reinterpret_cast<void *>(preventUpgradeItemCutscenesAddress), 0x60000000); // nop
 
-	// Prevent the game from crashing if the player tries to read the diary while not on the Excess Express
+    // Prevent the game from crashing if the player tries to read the diary while not on the Excess Express
 #ifdef TTYD_US
     constexpr uint32_t preventDiaryTextboxSelectionAddress = 0x800D214C;
 #elif defined TTYD_JP

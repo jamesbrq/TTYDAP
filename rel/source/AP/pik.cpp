@@ -65,6 +65,7 @@ extern int32_t pik_talk_madam_ring_return[];
 
 const char madame2[] = "\x83\x7D\x83\x5F\x83\x80";
 
+// clang-format off
 EVT_BEGIN(miyageya_talk_evt)
 IF_LARGE_EQUAL(GSW(1707), 16)
 IF_SMALL_EQUAL(GSW(1707), 18)
@@ -232,6 +233,7 @@ EVT_BEGIN(pik_00_init_hook)
 RUN_CHILD_EVT(pik_00_init_evt_evt)
 GOTO(&pik_00_init_evt[316])
 EVT_PATCH_END()
+// clang-format on
 
 void ApplyPikPatches()
 {

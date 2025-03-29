@@ -26,7 +26,7 @@ using namespace ::ttyd::common;
 using ::ttyd::seqdrv::SeqIndex;
 using namespace ::mod::util;
 
-uint16_t GSWF_ARR[] = {
+const uint16_t GSWF_ARR[] = {
     // Any of these being enabled will disable them
     // Shop Tutorial
     0,
@@ -58,13 +58,12 @@ uint16_t GSWF_ARR[] = {
     // Attempt to enter ch.4 pipe early
     1341,
 
-	//Goombella telling you about tattling
+    // Goombella telling you about tattling
     1805,
 
     // Ch.4 talk to shopkeep once
-    1925
-};
-uint16_t GSWF_ARR_SIZE = sizeof(GSWF_ARR) / sizeof(GSWF_ARR[0]);
+    1925};
+constexpr int32_t GSWF_ARR_SIZE = sizeof(GSWF_ARR) / sizeof(GSWF_ARR[0]);
 
 namespace mod::owr
 {
@@ -72,7 +71,9 @@ namespace mod::owr
     OWR *gSelf = nullptr;
     StateManager *gState = nullptr;
 
-    OWR::OWR() {}
+    OWR::OWR()
+    {
+    }
 
     void *(*g_itemEntry_trampoline)(const char *, uint32_t, uint32_t, int32_t, void *, float, float, float) = nullptr;
     bool (*g_OSLink_trampoline)(OSModuleInfo *, void *) = nullptr;
@@ -106,7 +107,7 @@ namespace mod::owr
             ttyd::mario_party::marioPartyHello(gState->apSettings->startingPartner);
         }
 
-        uint16_t size = GSWF_ARR_SIZE;
+        int32_t size = GSWF_ARR_SIZE;
         for (int i = 0; i < size; i++)
         {
             ttyd::swdrv::swSet(GSWF_ARR[i]);
@@ -125,21 +126,21 @@ namespace mod::owr
         }
     }
 
-	void OWR::HomewardWarp()
-	{
-		SeqIndex seq = ttyd::seqdrv::seqGetSeq();
-		if (seq != SeqIndex::kGame)
-			return;
+    void OWR::HomewardWarp()
+    {
+        SeqIndex seq = ttyd::seqdrv::seqGetSeq();
+        if (seq != SeqIndex::kGame)
+            return;
 
-		uint32_t combo = PadInput::PAD_L | PadInput::PAD_R | PadInput::PAD_START;
-		bool buttons = checkButtonComboEveryFrame(combo);
-		if (buttons)
-		{
-			uint32_t namePtr = 0x802c0298;
-			void* mapName = reinterpret_cast<char*>(namePtr);
-			ttyd::seqdrv::seqSetSeq(ttyd::seqdrv::SeqIndex::kMapChange, mapName, 0);
-		}
-	}
+        uint32_t combo = PadInput::PAD_L | PadInput::PAD_R | PadInput::PAD_START;
+        bool buttons = checkButtonCombo(combo);
+        if (buttons)
+        {
+            uint32_t namePtr = 0x802c0298;
+            void *mapName = reinterpret_cast<char *>(namePtr);
+            ttyd::seqdrv::seqSetSeq(ttyd::seqdrv::SeqIndex::kMapChange, mapName, 0);
+        }
+    }
 
     void OWR::RecieveItems()
     {
@@ -186,7 +187,7 @@ namespace mod::owr
                                                          {
                                                              return "Oh my!<wait 100> Excuse me.\n<o>";
                                                          }
-														 if (!strcmp(msgKey, "stg6_rsh_diary_01"))
+                                                         if (!strcmp(msgKey, "stg6_rsh_diary_01"))
                                                          {
                                                              return "An unseen force prevents\nyou from opening the diary.<k>";
                                                          }
@@ -346,8 +347,8 @@ namespace mod::owr
                                         }
                                         case ItemId::BOOTS:
                                         {
-                                            bool has_boots = ttyd::mario_pouch::pouchCheckItem(ItemId::BOOTS);
-                                            bool has_sboots = ttyd::mario_pouch::pouchCheckItem(ItemId::SUPER_BOOTS);
+                                            bool has_boots = ttyd::mario_pouch::pouchCheckItem(ItemId::BOOTS) > 0;
+                                            bool has_sboots = ttyd::mario_pouch::pouchCheckItem(ItemId::SUPER_BOOTS) > 0;
                                             if (!has_boots)
                                             {
                                                 g_pouchGetItem_trampoline(item);
@@ -366,8 +367,8 @@ namespace mod::owr
                                         }
                                         case ItemId::HAMMER:
                                         {
-                                            bool has_hammer = ttyd::mario_pouch::pouchCheckItem(ItemId::HAMMER);
-                                            bool has_shammer = ttyd::mario_pouch::pouchCheckItem(ItemId::SUPER_HAMMER);
+                                            bool has_hammer = ttyd::mario_pouch::pouchCheckItem(ItemId::HAMMER) > 0;
+                                            bool has_shammer = ttyd::mario_pouch::pouchCheckItem(ItemId::SUPER_HAMMER) > 0;
                                             if (!has_hammer)
                                             {
                                                 g_pouchGetItem_trampoline(item);
@@ -395,7 +396,7 @@ namespace mod::owr
         SequenceInit();
         AAAToGOR();
         RecieveItems();
-		HomewardWarp();
+        HomewardWarp();
     }
 
     void OWR::OnModuleLoaded(OSModuleInfo *module_info)
@@ -531,4 +532,4 @@ namespace mod::owr
         // Draw the rest of the text
         ttyd::fontmgr::FontDrawString(x, y, data);
     }
-}
+} // namespace mod::owr

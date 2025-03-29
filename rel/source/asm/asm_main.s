@@ -69,8 +69,8 @@ bChapterClearCheck:
 	li %r29, 0x0
 ChapterClearLoop:
 	bl pouchCheckItem
-	cmpwi %r3, 0x1
-	bne ChapterClearIncrement
+	cmpwi %r3, 0x0
+	beq ChapterClearIncrement
 	addi %r29, %r29, 0x1
 ChapterClearIncrement:
 	addi %r3, %r30, 0x72

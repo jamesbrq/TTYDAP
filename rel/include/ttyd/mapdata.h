@@ -4,16 +4,15 @@
 
 #include <cstdint>
 
-namespace ttyd::mapdata {
-
-extern "C"
+namespace ttyd::mapdata
 {
-
-void relSetBtlAddr(const char *areaName, const void *battleInfos, const database::DatabaseDefinition *nameToInfoIdTable);
-void relSetEvtAddr(const char *mapName, const void *pInitEvtCode);
-void **areaDataPtr(const char *areaName);
-void **mapDataPtr(const char *mapName);
-
-}
-
-}
+    extern "C"
+    {
+        void relSetBtlAddr(const char *areaName,
+                           const void *battleInfos,
+                           const database::DatabaseDefinition *nameToInfoIdTable);
+        void relSetEvtAddr(const char *mapName, const void *pInitEvtCode);
+        void **areaDataPtr(const char *areaName);
+        void **mapDataPtr(const char *mapName);
+    }
+} // namespace ttyd::mapdata

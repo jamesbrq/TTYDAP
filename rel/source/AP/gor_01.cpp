@@ -41,6 +41,7 @@ extern int32_t gor_01_koopa_evt[];
 extern int32_t gor_01_init_evt[];
 extern int32_t cooking_evt[];
 
+// clang-format off
 EVT_BEGIN(badgemaster_talk_evt)
 	USER_FUNC(evt_msg::evt_msg_print, 0, PTR("gor_01_024_00"), 0, PTR("me"))
 	RETURN()
@@ -126,6 +127,7 @@ EVT_BEGIN(bomhei_talk_evt)
 	USER_FUNC(evt_msg::evt_msg_print, 0, PTR("gor_01_031_05"), 0, PTR("me"))
 	RETURN()
 EVT_END()
+// clang-format on
 
 void ApplyGor01Patches()
 {

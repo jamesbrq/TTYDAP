@@ -6,7 +6,6 @@
 #include "ttyd/npcdrv.h"
 #include "ttyd/system.h"
 
-
 #include <cstdint>
 #include <cstdio>
 #include <cinttypes>
@@ -16,14 +15,14 @@ AnimPoseMainErrorInfo animPoseMainErrorInfo;
 HeapCorruptionInfo heapCorruptionInfo;
 float errorTextPosY = ERROR_TEXT_DEFAULT_POS_Y;
 
-ttyd::npcdrv::NpcEntry* (*g_npcNameToPtr_trampoline)(const char* name) = nullptr;
+ttyd::npcdrv::NpcEntry *(*g_npcNameToPtr_trampoline)(const char *name) = nullptr;
 void (*g_animPoseMain_trampoline)(int32_t poseId) = nullptr;
 
 void HeapCorruptionInfo::drawBuffer()
 {
     // Get the text to draw
     constexpr float scale = 0.6f;
-    const char* text = this->getBufferPtr();
+    const char *text = this->getBufferPtr();
 
     // Draw the text
     const float posY = errorTextPosY;
@@ -93,13 +92,13 @@ void AnimPoseMainErrorInfo::drawErrorMessage()
     errorTextPosY = posY - (32.f * scale);
 }
 
-static const void* checkIndividualStandardHeap(const gc::os::ChunkInfo* start)
+static const void *checkIndividualStandardHeap(const gc::os::ChunkInfo *start)
 {
-    const gc::os::ChunkInfo* prevChunk = nullptr;
-    for (const gc::os::ChunkInfo* currentChunk = start; currentChunk; currentChunk = currentChunk->next)
+    const gc::os::ChunkInfo *prevChunk = nullptr;
+    for (const gc::os::ChunkInfo *currentChunk = start; currentChunk; currentChunk = currentChunk->next)
     {
         // Check pointer sanity
-        if (!mod::util::ptrIsValid(const_cast<gc::os::ChunkInfo*>(currentChunk)))
+        if (!mod::util::ptrIsValid(const_cast<gc::os::ChunkInfo *>(currentChunk)))
         {
             return currentChunk;
         }
@@ -122,13 +121,13 @@ static const void* checkIndividualStandardHeap(const gc::os::ChunkInfo* start)
     return nullptr;
 }
 
-static const void* checkIndividualSmartHeap(const ttyd::memory::SmartAllocationData* start)
+static const void *checkIndividualSmartHeap(const ttyd::memory::SmartAllocationData *start)
 {
-    const ttyd::memory::SmartAllocationData* prevChunk = nullptr;
-    for (const ttyd::memory::SmartAllocationData* currentChunk = start; currentChunk; currentChunk = currentChunk->pNext)
+    const ttyd::memory::SmartAllocationData *prevChunk = nullptr;
+    for (const ttyd::memory::SmartAllocationData *currentChunk = start; currentChunk; currentChunk = currentChunk->pNext)
     {
         // Check pointer sanity
-        if (!mod::util::ptrIsValid(const_cast<ttyd::memory::SmartAllocationData*>(currentChunk)))
+        if (!mod::util::ptrIsValid(const_cast<ttyd::memory::SmartAllocationData *>(currentChunk)))
         {
             return currentChunk;
         }
@@ -151,12 +150,12 @@ static const void* checkIndividualSmartHeap(const ttyd::memory::SmartAllocationD
     return nullptr;
 }
 
-static const void* checkIndividualMapHeap(const ttyd::memory::MapAllocEntry* start)
+static const void *checkIndividualMapHeap(const ttyd::memory::MapAllocEntry *start)
 {
-    for (const ttyd::memory::MapAllocEntry* currentChunk = start; currentChunk; currentChunk = currentChunk->next)
+    for (const ttyd::memory::MapAllocEntry *currentChunk = start; currentChunk; currentChunk = currentChunk->next)
     {
         // Check pointer sanity
-        if (!mod::util::ptrIsValid(const_cast<ttyd::memory::MapAllocEntry*>(currentChunk)))
+        if (!mod::util::ptrIsValid(const_cast<ttyd::memory::MapAllocEntry *>(currentChunk)))
         {
             return currentChunk;
         }
@@ -171,18 +170,18 @@ static const void* checkIndividualMapHeap(const ttyd::memory::MapAllocEntry* sta
     return nullptr;
 }
 
-static void initStandardHeapError(const void* address, int32_t heapIndex, bool isUsedPortion)
+static void initStandardHeapError(const void *address, int32_t heapIndex, bool isUsedPortion)
 {
     // Set up the text to be drawn
     // Make sure heapCorruptioBufferIndex is valid
-    HeapCorruptionInfo* heapCorruptionInfoPtr = &heapCorruptionInfo;
+    HeapCorruptionInfo *heapCorruptionInfoPtr = &heapCorruptionInfo;
     if (!heapCorruptionInfoPtr->verifyBufferIndex())
     {
         return;
     }
 
     // Get the used or free text
-    const char* usedOrFreeString;
+    const char *usedOrFreeString;
     if (isUsedPortion)
     {
         usedOrFreeString = "used";
@@ -195,28 +194,28 @@ static void initStandardHeapError(const void* address, int32_t heapIndex, bool i
     int32_t index = heapCorruptionInfoPtr->getBufferIndex();
 
     index += snprintf(heapCorruptionInfoPtr->initBufferEntry(index),
-        heapCorruptionInfoPtr->getBufferSize() - index,
-        "Main Heap %" PRId32 " (%s) corrupt at 0x%08" PRIX32 "\r\n",
-        heapIndex,
-        usedOrFreeString,
-        reinterpret_cast<uint32_t>(address));
+                      heapCorruptionInfoPtr->getBufferSize() - index,
+                      "Main Heap %" PRId32 " (%s) corrupt at 0x%08" PRIX32 "\r\n",
+                      heapIndex,
+                      usedOrFreeString,
+                      reinterpret_cast<uint32_t>(address));
 
     // Update the index
     heapCorruptionInfoPtr->setBufferIndex(index);
 }
 
-static void initSmartHeapError(const void* address, bool isUsedPortion)
+static void initSmartHeapError(const void *address, bool isUsedPortion)
 {
     // Set up the text to be drawn
     // Make sure heapCorruptioBufferIndex is valid
-    HeapCorruptionInfo* heapCorruptionInfoPtr = &heapCorruptionInfo;
+    HeapCorruptionInfo *heapCorruptionInfoPtr = &heapCorruptionInfo;
     if (!heapCorruptionInfoPtr->verifyBufferIndex())
     {
         return;
     }
 
     // Get the used or free text
-    const char* usedOrFreeString;
+    const char *usedOrFreeString;
     if (isUsedPortion)
     {
         usedOrFreeString = "used";
@@ -229,31 +228,31 @@ static void initSmartHeapError(const void* address, bool isUsedPortion)
     int32_t index = heapCorruptionInfoPtr->getBufferIndex();
 
     index += snprintf(heapCorruptionInfoPtr->initBufferEntry(index),
-        heapCorruptionInfoPtr->getBufferSize() - index,
-        "Smart Heap (%s) corrupt at 0x%08" PRIX32 "\n",
-        usedOrFreeString,
-        reinterpret_cast<uint32_t>(address));
+                      heapCorruptionInfoPtr->getBufferSize() - index,
+                      "Smart Heap (%s) corrupt at 0x%08" PRIX32 "\n",
+                      usedOrFreeString,
+                      reinterpret_cast<uint32_t>(address));
 
     // Update the index
     heapCorruptionInfoPtr->setBufferIndex(index);
 }
 
 #ifdef TTYD_JP
-static void initMapHeapError(const void* address, uint16_t inUse)
+static void initMapHeapError(const void *address, uint16_t inUse)
 #else
-static void initMapHeapError(const void* address, uint16_t inUse, bool isBattleHeap)
+static void initMapHeapError(const void *address, uint16_t inUse, bool isBattleHeap)
 #endif
 {
     // Set up the text to be drawn
     // Make sure heapCorruptioBufferIndex is valid
-    HeapCorruptionInfo* heapCorruptionInfoPtr = &heapCorruptionInfo;
+    HeapCorruptionInfo *heapCorruptionInfoPtr = &heapCorruptionInfo;
     if (!heapCorruptionInfoPtr->verifyBufferIndex())
     {
         return;
     }
 
     // Get the used or free text
-    const char* usedOrFreeString;
+    const char *usedOrFreeString;
     if (inUse)
     {
         usedOrFreeString = "used";
@@ -264,45 +263,46 @@ static void initMapHeapError(const void* address, uint16_t inUse, bool isBattleH
     }
 
 #ifdef TTYD_JP
-    const char* format = "Map Heap (%s) corrupt at 0x%08" PRIX32 "\n";
+    const char *format = "Map Heap (%s) corrupt at 0x%08" PRIX32 "\n";
 #else
     // Get the battle text if checking the battle heap
-    const char* currentHeap = nullptr;
+    const char *currentHeap = nullptr;
 
     if (isBattleHeap)
     {
         currentHeap = "Battle ";
     }
 
-    const char* format = "%sMap Heap (%s) corrupt at 0x%08" PRIX32 "\n";
+    const char *format = "%sMap Heap (%s) corrupt at 0x%08" PRIX32 "\n";
 #endif
     int32_t index = heapCorruptionInfoPtr->getBufferIndex();
 
     index += snprintf(heapCorruptionInfoPtr->initBufferEntry(index),
-        heapCorruptionInfoPtr->getBufferSize() - index,
-        format,
+                      heapCorruptionInfoPtr->getBufferSize() - index,
+                      format,
 #ifndef TTYD_JP
-        currentHeap,
+                      currentHeap,
 #endif
-        usedOrFreeString,
-        reinterpret_cast<uint32_t>(address));
+                      usedOrFreeString,
+                      reinterpret_cast<uint32_t>(address));
 
     // Update the index
     heapCorruptionInfoPtr->setBufferIndex(index);
 }
 
-void checkHeaps() {
-    const gc::os::HeapInfo* heapArrayPtr = gc::os::OSAlloc_HeapArray;
-    const void* addressWithError;
+void checkHeaps()
+{
+    const gc::os::HeapInfo *heapArrayPtr = gc::os::OSAlloc_HeapArray;
+    const void *addressWithError;
 
     // Check the standard heaps
     const int32_t numHeaps = gc::os::OSAlloc_NumHeaps;
     for (int32_t i = 0; i < numHeaps; i++)
     {
-        const gc::os::HeapInfo* heapPtr = &heapArrayPtr[i];
+        const gc::os::HeapInfo *heapPtr = &heapArrayPtr[i];
 
         // Check the used entries
-        const gc::os::ChunkInfo* tempChunk = heapPtr->firstUsed;
+        const gc::os::ChunkInfo *tempChunk = heapPtr->firstUsed;
         addressWithError = checkIndividualStandardHeap(tempChunk);
         if (addressWithError)
         {
@@ -319,10 +319,10 @@ void checkHeaps() {
     }
 
     // Check the smart heap
-    const ttyd::memory::SmartWork* smartWorkPtr = ttyd::memory::_smartWorkPtr;
+    const ttyd::memory::SmartWork *smartWorkPtr = ttyd::memory::_smartWorkPtr;
 
     // Check the used entries
-    const ttyd::memory::SmartAllocationData* tempChunk = smartWorkPtr->pFirstUsed;
+    const ttyd::memory::SmartAllocationData *tempChunk = smartWorkPtr->pFirstUsed;
     addressWithError = checkIndividualSmartHeap(tempChunk);
     if (addressWithError)
     {
@@ -338,17 +338,16 @@ void checkHeaps() {
     }
 
     // Check the map heap
-    const ttyd::memory::MapAllocEntry* mapHeapPtr = ttyd::memory::mapalloc_base_ptr;
+    const ttyd::memory::MapAllocEntry *mapHeapPtr = ttyd::memory::mapalloc_base_ptr;
     addressWithError = checkIndividualMapHeap(mapHeapPtr);
-
 
     if (addressWithError)
     {
 #ifdef TTYD_JP
-        initMapHeapError(addressWithError, static_cast<const ttyd::memory::MapAllocEntry*>(addressWithError)->inUse);
+        initMapHeapError(addressWithError, static_cast<const ttyd::memory::MapAllocEntry *>(addressWithError)->inUse);
     }
 #else
-        initMapHeapError(addressWithError, static_cast<const ttyd::memory::MapAllocEntry*>(addressWithError)->inUse, false);
+        initMapHeapError(addressWithError, static_cast<const ttyd::memory::MapAllocEntry *>(addressWithError)->inUse, false);
     }
 
     // Check the battle map heap
@@ -356,7 +355,7 @@ void checkHeaps() {
     addressWithError = checkIndividualMapHeap(mapHeapPtr);
     if (addressWithError)
     {
-        initMapHeapError(addressWithError, static_cast<const ttyd::memory::MapAllocEntry*>(addressWithError)->inUse, true);
+        initMapHeapError(addressWithError, static_cast<const ttyd::memory::MapAllocEntry *>(addressWithError)->inUse, true);
     }
 #endif
 }
@@ -364,21 +363,21 @@ void checkHeaps() {
 void drawErrorMessages()
 {
     // Draw any heap corruption errors that occured this frame
-    HeapCorruptionInfo* heapCorruptionInfoPtr = &heapCorruptionInfo;
+    HeapCorruptionInfo *heapCorruptionInfoPtr = &heapCorruptionInfo;
     if (heapCorruptionInfoPtr->shouldDrawBuffer())
     {
         heapCorruptionInfoPtr->drawBuffer();
     }
 
     // Draw error text if npcNameToPtr returned an invalid pointer
-    NpcNameToPtrErrorInfo* npcNameToPtrErrorInfoPtr = &npcNameToPtrErrorInfo;
+    NpcNameToPtrErrorInfo *npcNameToPtrErrorInfoPtr = &npcNameToPtrErrorInfo;
     if (npcNameToPtrErrorInfoPtr->getTimer() > 0)
     {
         npcNameToPtrErrorInfoPtr->drawErrorMessage();
     }
 
     // Draw error text if animPoseMain would cause a crash
-    AnimPoseMainErrorInfo* animPoseMainErrorInfoPtr = &animPoseMainErrorInfo;
+    AnimPoseMainErrorInfo *animPoseMainErrorInfoPtr = &animPoseMainErrorInfo;
     if (animPoseMainErrorInfoPtr->getTimer() > 0)
     {
         animPoseMainErrorInfoPtr->drawErrorMessage();
@@ -388,17 +387,17 @@ void drawErrorMessages()
     errorTextPosY = ERROR_TEXT_DEFAULT_POS_Y;
 }
 
-ttyd::npcdrv::NpcEntry* checkForNpcNameToPtrError(const char* name)
+ttyd::npcdrv::NpcEntry *checkForNpcNameToPtrError(const char *name)
 {
     // Call the original function immediately, as its result is needed
-    ttyd::npcdrv::NpcEntry* ret = g_npcNameToPtr_trampoline(name);
+    ttyd::npcdrv::NpcEntry *ret = g_npcNameToPtr_trampoline(name);
 
     // Check if the returned pointer is valid
-    const ttyd::npcdrv::NpcWork* workPtr = ttyd::npcdrv::npcGetWorkPtr();
+    const ttyd::npcdrv::NpcWork *workPtr = ttyd::npcdrv::npcGetWorkPtr();
     if (ret >= &workPtr->entries[workPtr->npcMaxCount])
     {
         // Didn't find the correct NPC, so print error text
-        NpcNameToPtrErrorInfo* npcNameToPtrErrorInfoPtr = &npcNameToPtrErrorInfo;
+        NpcNameToPtrErrorInfo *npcNameToPtrErrorInfoPtr = &npcNameToPtrErrorInfo;
         npcNameToPtrErrorInfoPtr->setTimer(ttyd::system::sysMsec2Frame(5000));
         npcNameToPtrErrorInfoPtr->incrementCounter();
     }
@@ -412,7 +411,7 @@ void preventAnimPoseMainCrash(int32_t poseId)
     if (poseId < 0)
     {
         // poseId is invalid, so print error text
-        AnimPoseMainErrorInfo* animPoseMainErrorInfoPtr = &animPoseMainErrorInfo;
+        AnimPoseMainErrorInfo *animPoseMainErrorInfoPtr = &animPoseMainErrorInfo;
         animPoseMainErrorInfoPtr->setTimer(ttyd::system::sysMsec2Frame(5000));
         animPoseMainErrorInfoPtr->incrementCounter();
         return;

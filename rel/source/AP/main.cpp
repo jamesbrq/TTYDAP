@@ -6,13 +6,11 @@
 #include "ttyd/seqdrv.h"
 #include "ttyd/seq_mapchange.h"
 
-
 #include "evt_cmd.h"
 #include <cstdint>
 #include <cstring>
 
 using namespace ::ttyd::seq_mapchange;
-
 
 using namespace mod;
 using ::ttyd::item_data::itemDataTable;
