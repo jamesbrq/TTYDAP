@@ -26,7 +26,7 @@ using namespace ::ttyd::common;
 using ::ttyd::seqdrv::SeqIndex;
 using namespace ::mod::util;
 
-uint16_t GSWF_ARR[] = {
+const uint16_t GSWF_ARR[] = {
     // Any of these being enabled will disable them
     // Shop Tutorial
     0,
@@ -60,7 +60,7 @@ uint16_t GSWF_ARR[] = {
 
     // Ch.4 talk to shopkeep once
     1925};
-uint16_t GSWF_ARR_SIZE = sizeof(GSWF_ARR) / sizeof(GSWF_ARR[0]);
+constexpr int32_t GSWF_ARR_SIZE = sizeof(GSWF_ARR) / sizeof(GSWF_ARR[0]);
 
 namespace mod::owr
 {
@@ -104,7 +104,7 @@ namespace mod::owr
             ttyd::mario_party::marioPartyHello(gState->apSettings->startingPartner);
         }
 
-        uint16_t size = GSWF_ARR_SIZE;
+        int32_t size = GSWF_ARR_SIZE;
         for (int i = 0; i < size; i++)
         {
             ttyd::swdrv::swSet(GSWF_ARR[i]);
@@ -130,7 +130,7 @@ namespace mod::owr
             return;
 
         uint32_t combo = PadInput::PAD_L | PadInput::PAD_R | PadInput::PAD_START;
-        bool buttons = checkButtonComboEveryFrame(combo);
+        bool buttons = checkButtonCombo(combo);
         if (buttons)
         {
             uint32_t namePtr = 0x802c0298;

@@ -13,12 +13,12 @@ namespace mod::patch
         gc::OSCache::ICInvalidateRange(ptr, size);
     }
 
-    void writeStandardBranches(void *address, void functionStart(), void functionBranchBack())
+    void writeStandardBranches(void *address, void *functionStart, void *functionBranchBack)
     {
-        void *BranchBackAddress = reinterpret_cast<void *>(reinterpret_cast<uint32_t>(address) + 0x4);
+        void *branchBackAddress = reinterpret_cast<void *>(reinterpret_cast<uint32_t>(address) + 0x4);
 
-        writeBranch(address, reinterpret_cast<void *>(functionStart));
-        writeBranch(reinterpret_cast<void *>(functionBranchBack), BranchBackAddress);
+        writeBranch(address, functionStart);
+        writeBranch(functionBranchBack, branchBackAddress);
     }
 
     void writeBranch(void *ptr, void *destination)
