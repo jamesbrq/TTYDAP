@@ -24,7 +24,8 @@ EVT_DEFINE_USER_FUNC(checkChapterRequirements)
     int8_t count = 0;
     for (int i = 114; i <= 120; i++)
     {
-        count += mario_pouch::pouchCheckItem(i);
+        if (mario_pouch::pouchCheckItem(i) > 0)
+            count++;
     }
     if (count >= state.apSettings->requiredChapterClears)
         evtmgr_cmd::evtSetValue(evt, evt->evtArguments[0], 1);
@@ -40,7 +41,8 @@ EVT_DEFINE_USER_FUNC(checkChapterClears)
     int8_t count = 0;
     for (int i = 114; i <= 120; i++)
     {
-        count += mario_pouch::pouchCheckItem(i);
+        if (mario_pouch::pouchCheckItem(i) > 0)
+            count++;
     }
     evtmgr_cmd::evtSetValue(evt, evt->evtArguments[0], count);
     return 2;

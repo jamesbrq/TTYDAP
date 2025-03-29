@@ -344,8 +344,8 @@ namespace mod::owr
                                         }
                                         case ItemId::BOOTS:
                                         {
-                                            bool has_boots = ttyd::mario_pouch::pouchCheckItem(ItemId::BOOTS);
-                                            bool has_sboots = ttyd::mario_pouch::pouchCheckItem(ItemId::SUPER_BOOTS);
+                                            bool has_boots = ttyd::mario_pouch::pouchCheckItem(ItemId::BOOTS) > 0;
+                                            bool has_sboots = ttyd::mario_pouch::pouchCheckItem(ItemId::SUPER_BOOTS) > 0;
                                             if (!has_boots)
                                             {
                                                 g_pouchGetItem_trampoline(item);
@@ -364,8 +364,8 @@ namespace mod::owr
                                         }
                                         case ItemId::HAMMER:
                                         {
-                                            bool has_hammer = ttyd::mario_pouch::pouchCheckItem(ItemId::HAMMER);
-                                            bool has_shammer = ttyd::mario_pouch::pouchCheckItem(ItemId::SUPER_HAMMER);
+                                            bool has_hammer = ttyd::mario_pouch::pouchCheckItem(ItemId::HAMMER) > 0;
+                                            bool has_shammer = ttyd::mario_pouch::pouchCheckItem(ItemId::SUPER_HAMMER) > 0;
                                             if (!has_hammer)
                                             {
                                                 g_pouchGetItem_trampoline(item);
