@@ -98,8 +98,6 @@ void cPreventDiaryTextboxOptionSelection(const char *currentText, int32_t *store
         ThirdOption,
     };
 
-    int32_t newOption = selectedOption;
-
     // Only need to check if trying to read the diary
     if (strcmp(currentText, "stg6_rsh_diary_01_yn") == 0)
     {
@@ -107,17 +105,12 @@ void cPreventDiaryTextboxOptionSelection(const char *currentText, int32_t *store
         // Only needs to run when not on the train
         if (strcmp(_next_area, "rsh") != 0)
         {
-            if (selectedOption == DiaryTextboxOption::ThirdOption)
-            {
-                seqSetSeq(SeqIndex::kGameOver, nullptr, nullptr);
-            }
-
-            newOption = DiaryTextboxOption::SecondOption;
+            selectedOption = DiaryTextboxOption::SecondOption;
         }
     }
 
     // Restore the overwritten instruction
-    *storeAddress = newOption;
+    *storeAddress = selectedOption;
 }
 
 static void *fixMapProblems()

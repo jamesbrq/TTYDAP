@@ -184,7 +184,7 @@ namespace mod::owr
                                                          {
                                                              return "Oh my!<wait 100> Excuse me.\n<k>";
                                                          }
-                                                         if (!strcmp(msgKey, "stg6_rsh_diary_02"))
+                                                         if (!strcmp(msgKey, "stg6_rsh_diary_01"))
                                                          {
                                                              return "An unseen force prevents\nyou from opening the diary.<k>";
                                                          }
