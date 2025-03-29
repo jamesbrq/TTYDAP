@@ -58,6 +58,9 @@ uint16_t GSWF_ARR[] = {
     // Attempt to enter ch.4 pipe early
     1341,
 
+	//Goombella telling you about tattling
+    1805,
+
     // Ch.4 talk to shopkeep once
     1925
 };
@@ -181,9 +184,9 @@ namespace mod::owr
                                                      {
                                                          if (!strcmp(msgKey, "jolene_fukidashi"))
                                                          {
-                                                             return "Oh my!<wait 100> Excuse me.\n<k>";
+                                                             return "Oh my!<wait 100> Excuse me.\n<o>";
                                                          }
-														 if (!strcmp(msgKey, "stg6_rsh_diary_02"))
+														 if (!strcmp(msgKey, "stg6_rsh_diary_01"))
                                                          {
                                                              return "An unseen force prevents\nyou from opening the diary.<k>";
                                                          }
