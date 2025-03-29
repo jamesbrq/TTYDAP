@@ -58,6 +58,9 @@ const uint16_t GSWF_ARR[] = {
     // Attempt to enter ch.4 pipe early
     1341,
 
+	//Goombella telling you about tattling
+    1805,
+
     // Ch.4 talk to shopkeep once
     1925};
 constexpr int32_t GSWF_ARR_SIZE = sizeof(GSWF_ARR) / sizeof(GSWF_ARR[0]);
@@ -182,7 +185,7 @@ namespace mod::owr
                                                      {
                                                          if (!strcmp(msgKey, "jolene_fukidashi"))
                                                          {
-                                                             return "Oh my!<wait 100> Excuse me.\n<k>";
+                                                             return "Oh my!<wait 100> Excuse me.\n<o>";
                                                          }
                                                          if (!strcmp(msgKey, "stg6_rsh_diary_01"))
                                                          {

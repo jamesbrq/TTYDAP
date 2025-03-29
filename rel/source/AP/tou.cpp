@@ -835,8 +835,8 @@ void ApplyTouPatches()
     tou_06_init_evt[492] = GSW(1703);
     tou_06_init_evt[493] = 19;
     tou_06_init_evt[502] = GSW(1703);
-    tou_06_init_evt[503] = 1;
-    tou_06_init_evt[504] = 11;
+    tou_06_init_evt[504] = 1;
+    tou_06_init_evt[505] = 11;
     tou_06_init_evt[518] = 21;
 
     evt_champion[568] = GSW(1703);

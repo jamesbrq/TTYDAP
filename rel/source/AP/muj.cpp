@@ -710,17 +710,22 @@ RUN_CHILD_EVT(peton_init_muj_01_evt)
 RETURN()
 EVT_END()
 
-EVT_BEGIN(party_evt)
-USER_FUNC(evt_mario::evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
-USER_FUNC(evt_item::evt_item_entry, PTR("item01"), LW(3), LW(0), LW(1), LW(2), 16, GSWF(6081), 0)
-USER_FUNC(evt_item::evt_item_get_item, PTR("item01"))
-WAIT_MSEC(800)
-SET(GSW(1719), 6)
-USER_FUNC(evt_npc::evt_npc_set_position, PTR("me"), 0, -1000, 0)
-USER_FUNC(evt_cam::evt_cam3d_evt_off, 500, 11)
-USER_FUNC(evt_mario::evt_mario_key_onoff, 1)
-USER_FUNC(evt_snd::evt_snd_bgmon, 512, PTR("BGM_STG5_MUJ1"))
-RETURN()
+EVT_BEGIN(muj_party_evt)
+	USER_FUNC(evt_mario::evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
+	USER_FUNC(evt_item::evt_item_entry, PTR("item01"), LW(3), LW(0), LW(1), LW(2), 16, GSWF(6081), 0)
+	USER_FUNC(evt_item::evt_item_get_item, PTR("item01"))
+	WAIT_MSEC(800)
+	SET(GSW(1719), 6)
+	USER_FUNC(evt_npc::evt_npc_set_position, PTR("me"), 0, -1000, 0)
+	USER_FUNC(evt_cam::evt_cam3d_evt_off, 500, 11)
+	USER_FUNC(evt_mario::evt_mario_key_onoff, 1)
+	USER_FUNC(evt_snd::evt_snd_bgmon, 512, PTR("BGM_STG5_MUJ1"))
+	RETURN()
+EVT_END()
+
+EVT_BEGIN(muj_party_hook)
+    RUN_CHILD_EVT(muj_party_evt)
+    RETURN()
 EVT_END()
 // clang-format on
 
@@ -730,7 +735,7 @@ void ApplyMujPatches()
 
     sanders_nakama[150] = EVT_HELPER_CMD(2, 50);
     sanders_nakama[151] = EVT_HELPER_OP(LW(3));
-    patch::writePatch(&sanders_nakama[153], party_evt, sizeof(party_evt));
+    patch::writePatch(&sanders_nakama[153], muj_party_hook, sizeof(muj_party_hook));
 
     garawaru_init_muj_00[1] = GSW(1717);
     garawaru_init_muj_00[3] = 14;
@@ -963,7 +968,7 @@ void ApplyMujPatches()
     muj_02_init_evt[31] = GSW(1717);
     muj_02_init_evt[32] = 26;
     muj_02_init_evt[87] = GSW(1717);
-    muj_02_init_evt[88] = 18;
+    muj_02_init_evt[88] = 0; //Unused
 
     muj_03_event_01[1] = GSW(1719);
     muj_03_event_01[2] = 1;

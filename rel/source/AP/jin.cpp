@@ -92,7 +92,7 @@ void ApplyJinPatches()
     jin_00_init_evt[181] = GSW(1715);
     jin_00_init_evt[182] = 3;
 
-    ki_data_evt_01[15] = GSWF(6106);
+    ki_data_evt_01[15] = GSWF(6107);
 
     ranperu_toujou[327] = GSW(1715);
     ranperu_toujou[328] = 2;
