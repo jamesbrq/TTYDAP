@@ -58,7 +58,7 @@ const uint16_t GSWF_ARR[] = {
     // Attempt to enter ch.4 pipe early
     1341,
 
-	//Goombella telling you about tattling
+    // Goombella telling you about tattling
     1805,
 
     // Ch.4 talk to shopkeep once

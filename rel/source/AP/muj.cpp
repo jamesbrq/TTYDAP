@@ -968,7 +968,7 @@ void ApplyMujPatches()
     muj_02_init_evt[31] = GSW(1717);
     muj_02_init_evt[32] = 26;
     muj_02_init_evt[87] = GSW(1717);
-    muj_02_init_evt[88] = 0; //Unused
+    muj_02_init_evt[88] = 0; // Unused
 
     muj_03_event_01[1] = GSW(1719);
     muj_03_event_01[2] = 1;
