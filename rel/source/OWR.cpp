@@ -185,11 +185,11 @@ namespace mod::owr
                                                      {
                                                          if (!strcmp(msgKey, "jolene_fukidashi"))
                                                          {
-                                                             return "Oh my!<wait 100> Excuse me.\n<o>";
+                                                             return "Oh my!<wait 100> Excuse me.\n<k>";
                                                          }
                                                          if (!strcmp(msgKey, "stg6_rsh_diary_01"))
                                                          {
-                                                             return "An unseen force prevents\nyou from opening the diary.<k>";
+                                                             return "An unseen force prevents\nyou from opening the diary.<o>";
                                                          }
                                                          if (!strcmp(msgKey, "jolene_fukidashi_end"))
                                                          {
