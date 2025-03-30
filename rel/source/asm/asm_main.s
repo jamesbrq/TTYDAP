@@ -171,19 +171,15 @@ bPowerupblkReleaseReturn:
 	b 0
 
 bPeachPointer:
-	mr %r18, %r3
-	mr %r19, %r4
-	lis %r3, wp@h
-	ori %r3, %r3, wp@l
-	addi %r4, %r3, 0x12C
+	lis %r3, _next_map@h
+	ori %r4, %r3, _next_map@l
 	lis %r3, str_pik_04_802c075c@ha
 	addi %r3, %r3, str_pik_04_802c075c@l
 	bl strcmp
 	cmpwi %r3, 0x0
 	beq pikBreakfast
-	lis %r3, wp@h
-	ori %r3, %r3, wp@l
-	addi %r4, %r3, 0x12C
+	lis %r3, _next_map@h
+	ori %r4, %r3, _next_map@l
 	lis %r3, str_bom_02_802c0378@ha
 	addi %r3, %r3, str_bom_02_802c0378@l
 	bl strcmp
@@ -200,8 +196,14 @@ pikBreakfast:
 	lis %r6, 0xF840
 	ori %r6, %r6, 0x735E
 breakfastValueRestore:
-	mr %r3, %r18
-	mr %r4, %r19
+	lis %r3, wp_breakfast@h
+	ori %r3, %r3, wp_breakfast@l
+	lwz %r3, 0x0(%r3)
+	lwz %r3, 0x0(%r3)
+	lwz %r4, 0x0(%r3)
+	lis %r3, str_breakfast_802ed418@h
+	ori %r3, %r3, str_breakfast_802ed418@l
+	li %r5, 0x10
 bPeachReturn:
 	b 0
 

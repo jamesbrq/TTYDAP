@@ -76,5 +76,3 @@ void ApplyTouPatches();
 void ApplyTou2Patches();
 void ApplyUsuPatches();
 void ApplyWinPatches();
-
-char *strcpy_String(char *dest, const char *src);

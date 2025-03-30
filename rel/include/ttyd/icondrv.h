@@ -584,42 +584,7 @@ namespace ttyd::icondrv
             JOURNAL_IT,
 
             // Custom icons.
-            AP_ITEM,
-            SUPER_START,
-            PERFECT_POWER,
-            PERFECT_POWER_P,
-            TOT_TIMER_COLON,
-            TOT_TIMER_POINT,
-            TOT_BLANK,
-            PITY_STAR,
-            PITY_STAR_P,
-            HOTTEST_DOG,
-            SUPER_PEEKABOO,
-            BADGE_SELECTOR,
-            MARIO_EMBLEM,
-            YOSHI_EMBLEM,
-            BP_UP_ALT_1,
-            BP_UP_ALT_2,
-            BGM_MUTE,
-
-            YOSHI_EXTRA_ICONS,
-            YOSHI_EXTRA_HUD_ICONS = YOSHI_EXTRA_ICONS + 14,
-            MARIO_COSTUME_ICONS = YOSHI_EXTRA_HUD_ICONS + 14,
-            ATTACK_FX_LIME = MARIO_COSTUME_ICONS + 26,
-            ATTACK_FX_AQUA,
-            ATTACK_FX_PURPLE,
-            ATTACK_FX_FUCHSIA,
-            ATTACK_FX_BROWN,
-            MARIO_COSTUME_26,
-            MARIO_COSTUME_27,
-            YOSHI_COSTUME_21,
-            YOSHI_COSTUME_22,
-            YOSHI_COSTUME_23,
-            YOSHI_COSTUME_24,
-            YOSHI_COSTUME_21_HUD,
-            YOSHI_COSTUME_22_HUD,
-            YOSHI_COSTUME_23_HUD,
-            YOSHI_COSTUME_24_HUD,
+            AP_ITEM
         };
     }
 } // namespace ttyd::icondrv

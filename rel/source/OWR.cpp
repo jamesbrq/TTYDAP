@@ -178,20 +178,16 @@ namespace mod::owr
 		g_seqSetSeq_trampoline = patch::hookFunction(ttyd::seqdrv::seqSetSeq,
 													 [](SeqIndex seq, void *map_name, void *entrance_name)
 													  {
-														// Cast map_name to a const char* for string comparison
-														const char *mapNameStr = reinterpret_cast<const char *>(map_name);
+                                                        const char *mapNameStr = reinterpret_cast<const char *>(map_name);
 
-														// Check if the map name is "aaa_00"
-														if (mapNameStr && strcmp(mapNameStr, "aaa_00") == 0)
-														{
-															// Call the trampoline with "gor_01" instead
-															g_seqSetSeq_trampoline(seq, const_cast<void *>(static_cast<const void *>("gor_01")), entrance_name);
-														}
-														else
-														{
-															// Use original parameters
-															g_seqSetSeq_trampoline(seq, map_name, entrance_name);
-														}
+                                                        if (mapNameStr && strcmp(mapNameStr, "aaa_00") == 0)
+                                                        {
+                                                            g_seqSetSeq_trampoline(seq, const_cast<void *>(static_cast<const void *>("gor_01")), entrance_name);
+                                                        }
+                                                        else
+                                                        {
+                                                            g_seqSetSeq_trampoline(seq, map_name, entrance_name);
+                                                        }
 													  });
 
         g_msgSearch_trampoline = patch::hookFunction(ttyd::msgdrv::msgSearch,

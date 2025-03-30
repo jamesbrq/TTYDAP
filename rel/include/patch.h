@@ -56,4 +56,6 @@ namespace mod::patch
 
         return reinterpret_cast<Func>(trampoline);
     }
+
+    void writeIntWithCache(void *ptr, uint32_t value);
 } // namespace mod::patch

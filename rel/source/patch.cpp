@@ -85,4 +85,11 @@ namespace mod::patch
         writeBranch(original_start, new_start);
         writeBranch(new_end, reinterpret_cast<void *>(reinterpret_cast<int32_t>(original_start) + 4));
     }
+
+    void writeIntWithCache(void *ptr, uint32_t value)
+    {
+        uint32_t *p = reinterpret_cast<uint32_t *>(ptr);
+        *p = value;
+        clear_DC_IC_Cache(ptr, sizeof(uint32_t));
+    }
 } // namespace mod::patch

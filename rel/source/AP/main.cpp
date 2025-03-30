@@ -13,6 +13,7 @@
 using namespace ::ttyd::seq_mapchange;
 
 using namespace mod;
+using namespace mod::patch;
 using ::ttyd::item_data::itemDataTable;
 namespace ItemId = ::ttyd::common::ItemId;
 namespace IconType = ::ttyd::icondrv::IconType;
@@ -87,24 +88,25 @@ extern int32_t preventDiaryTextboxSelectionAddress[];
 
 void ApplyMainAssemblyPatches()
 {
-    statusWinDisp[425] = 0x386006A4; // li r3, 0x6A4 (GSW(1700))
-    statusWinDisp[487] = 0x386006A4; // li r3, 0x6A4 (GSW(1700))
+    writeIntWithCache(&statusWinDisp[425], 0x386006A4); // li r3, 0x6A4 (GSW(1700))
+    writeIntWithCache(&statusWinDisp[487], 0x386006A4); // li r3, 0x6A4 (GSW(1700))
 
-    winRootMain[40] = 0x386006A4; // li r3, 0x6A4 (GSW(1700))
-    winRootMain[82] = 0x386006A4; // li r3, 0x6A4 (GSW(1700))
+    writeIntWithCache(&winRootMain[40], 0x386006A4); // li r3, 0x6A4 (GSW(1700))
+    writeIntWithCache(&winRootMain[82], 0x386006A4); // li r3, 0x6A4 (GSW(1700))
 
-    compare_func3_r[30] = 0x38840833; // addi r4, r4, 0x833 GSW(1715)
-    compare_func3_r[32] = 0x2C030005; // cmpwi r3, 0x5
-    compare_func3_r[52] = 0x38840833; // addi r4, r4, 0x833 GSW(1715)
-    compare_func3_r[54] = 0x2C030005; // cmpwi r3, 0x5
+    writeIntWithCache(&compare_func3_r[30], 0x38840833); // addi r4, r4, 0x833 GSW(1715)
+    writeIntWithCache(&compare_func3_r[32], 0x2C030005); // cmpwi r3, 0x5
+    writeIntWithCache(&compare_func3_r[52], 0x38840833); // addi r4, r4, 0x833 GSW(1715)
+    writeIntWithCache(&compare_func3_r[54], 0x2C030005); // cmpwi r3, 0x5
 
-    compare_func3[30] = 0x38840833; // addi r4, r4, 0x833 GSW(1715)
-    compare_func3[32] = 0x2C030005; // cmpwi r3, 0x5
-    compare_func3[52] = 0x38840833; // addi r4, r4, 0x833 GSW(1715)
-    compare_func3[54] = 0x2C030005; // cmpwi r3, 0x5
+    writeIntWithCache(&compare_func3[30], 0x38840833); // addi r4, r4, 0x833 GSW(1715)
+    writeIntWithCache(&compare_func3[32], 0x2C030005); // cmpwi r3, 0x5
+    writeIntWithCache(&compare_func3[52], 0x38840833); // addi r4, r4, 0x833 GSW(1715)
+    writeIntWithCache(&compare_func3[54], 0x2C030005); // cmpwi r3, 0x5
 
-    mapGX[238] = 0x386006A4; // li r3, 0x6A4 (GSW(1700))
-    mapGX[240] = 0x2C030010; // cmpwi r3, 0xF
+    writeIntWithCache(&mapGX[238], 0x386006A4); // li r3, 0x6A4 (GSW(1700))
+    writeIntWithCache(&mapGX[240], 0x2C030010); // cmpwi r3, 0xF
+
     patch::writeBranchPair(&mapGX[91],
                            reinterpret_cast<void *>(bMapGXArrInject),
                            reinterpret_cast<void *>(bMapGXArrInjectReturn));
@@ -112,51 +114,50 @@ void ApplyMainAssemblyPatches()
                            reinterpret_cast<void *>(bMapGXArrIncrement),
                            reinterpret_cast<void *>(bMapGXArrIncrementReturn));
     patch::writeBranchPair(&mapGX[243], reinterpret_cast<void *>(bMapGXChSplit), reinterpret_cast<void *>(bMapGXChSplitReturn));
-    // Still need to update tubuDt array with correct values
 
-    winGetMapTplName[3] = 0x386006A5;  // li r3, 0x6A5 (GSW(1701))
-    winGetMapTplName[8] = 0x2C030001;  // cmpwi r3, 0x1
-    winGetMapTplName[12] = 0x386006A6; // li r3, 0x6A6 (GSW(1702))
-    winGetMapTplName[14] = 0x2C030001; // cmpwi r3, 0x1
-    winGetMapTplName[18] = 0x386006A7; // li r3, 0x6A7 (GSW(1703))
-    winGetMapTplName[20] = 0x2C030001; // cmpwi r3, 0x1
-    winGetMapTplName[24] = 0x386006A8; // li r3, 0x6A8 (GSW(1704))
-    winGetMapTplName[26] = 0x2C030001; // cmpwi r3, 0x2
-    winGetMapTplName[30] = 0x386006A9; // li r3, 0x6A9 (GSW(1705))
-    winGetMapTplName[32] = 0x2C03000A; // cmpwi r3, 0xA
-    winGetMapTplName[36] = 0x386006AA; // li r3, 0x6AA (GSW(1706))
-    winGetMapTplName[38] = 0x2C030002; // cmpwi r3, 0x2
-    winGetMapTplName[42] = 0x386006AB; // li r3, 0x6AB (GSW(1707))
-    winGetMapTplName[44] = 0x2C030001; // cmpwi r3, 0x1
+    writeIntWithCache(&winGetMapTplName[3], 0x386006A5);  // li r3, 0x6A5 (GSW(1701))
+    writeIntWithCache(&winGetMapTplName[8], 0x2C030001);  // cmpwi r3, 0x1
+    writeIntWithCache(&winGetMapTplName[12], 0x386006A6); // li r3, 0x6A6 (GSW(1702))
+    writeIntWithCache(&winGetMapTplName[14], 0x2C030001); // cmpwi r3, 0x1
+    writeIntWithCache(&winGetMapTplName[18], 0x386006A7); // li r3, 0x6A7 (GSW(1703))
+    writeIntWithCache(&winGetMapTplName[20], 0x2C030001); // cmpwi r3, 0x1
+    writeIntWithCache(&winGetMapTplName[24], 0x386006A8); // li r3, 0x6A8 (GSW(1704))
+    writeIntWithCache(&winGetMapTplName[26], 0x2C030001); // cmpwi r3, 0x2
+    writeIntWithCache(&winGetMapTplName[30], 0x386006A9); // li r3, 0x6A9 (GSW(1705))
+    writeIntWithCache(&winGetMapTplName[32], 0x2C03000A); // cmpwi r3, 0xA
+    writeIntWithCache(&winGetMapTplName[36], 0x386006AA); // li r3, 0x6AA (GSW(1706))
+    writeIntWithCache(&winGetMapTplName[38], 0x2C030002); // cmpwi r3, 0x2
+    writeIntWithCache(&winGetMapTplName[42], 0x386006AB); // li r3, 0x6AB (GSW(1707))
+    writeIntWithCache(&winGetMapTplName[44], 0x2C030001); // cmpwi r3, 0x1
 
-    winLogMain[196] = 0x386006A5; // li r3, 0x6A5 (GSW(1701))
-    winLogMain[198] = 0x2C030001; // cmpwi r3, 0x1
-    winLogMain[202] = 0x386006A6; // li r3, 0x6A6 (GSW(1702))
-    winLogMain[204] = 0x2C030001; // cmpwi r3, 0x1
-    winLogMain[208] = 0x386006A7; // li r3, 0x6A7 (GSW(1703))
-    winLogMain[210] = 0x2C030001; // cmpwi r3, 0x1
-    winLogMain[214] = 0x386006A8; // li r3, 0x6A8 (GSW(1704))
-    winLogMain[216] = 0x2C030001; // cmpwi r3, 0x1
-    winLogMain[220] = 0x386006A9; // li r3, 0x6A9 (GSW(1705))
-    winLogMain[222] = 0x2C03000A; // cmpwi r3, 0xA
-    winLogMain[226] = 0x386006AA; // li r3, 0x6AA (GSW(1706))
-    winLogMain[228] = 0x2C030002; // cmpwi r3, 0x2
-    winLogMain[232] = 0x386006AB; // li r3, 0x6AB (GSW(1707))
-    winLogMain[234] = 0x2C030001; // cmpwi r3, 0x1
-    winLogMain[259] = 0x386006A5; // li r3, 0x6A5 (GSW(1701))
-    winLogMain[261] = 0x2C030001; // cmpwi r3, 0x1
-    winLogMain[265] = 0x386006A6; // li r3, 0x6A6 (GSW(1702))
-    winLogMain[267] = 0x2C030001; // cmpwi r3, 0x1
-    winLogMain[271] = 0x386006A7; // li r3, 0x6A7 (GSW(1703))
-    winLogMain[273] = 0x2C030001; // cmpwi r3, 0x1
-    winLogMain[277] = 0x386006A8; // li r3, 0x6A8 (GSW(1704))
-    winLogMain[279] = 0x2C030001; // cmpwi r3, 0x1
-    winLogMain[283] = 0x386006A9; // li r3, 0x6A9 (GSW(1705))
-    winLogMain[285] = 0x2C03000A; // cmpwi r3, 0xA
-    winLogMain[289] = 0x386006AA; // li r3, 0x6AA (GSW(1706))
-    winLogMain[291] = 0x2C030002; // cmpwi r3, 0x2
-    winLogMain[295] = 0x386006AB; // li r3, 0x6AB (GSW(1707))
-    winLogMain[297] = 0x2C030001; // cmpwi r3, 0x1
+    writeIntWithCache(&winLogMain[196], 0x386006A5); // li r3, 0x6A5 (GSW(1701))
+    writeIntWithCache(&winLogMain[198], 0x2C030001); // cmpwi r3, 0x1
+    writeIntWithCache(&winLogMain[202], 0x386006A6); // li r3, 0x6A6 (GSW(1702))
+    writeIntWithCache(&winLogMain[204], 0x2C030001); // cmpwi r3, 0x1
+    writeIntWithCache(&winLogMain[208], 0x386006A7); // li r3, 0x6A7 (GSW(1703))
+    writeIntWithCache(&winLogMain[210], 0x2C030001); // cmpwi r3, 0x1
+    writeIntWithCache(&winLogMain[214], 0x386006A8); // li r3, 0x6A8 (GSW(1704))
+    writeIntWithCache(&winLogMain[216], 0x2C030001); // cmpwi r3, 0x1
+    writeIntWithCache(&winLogMain[220], 0x386006A9); // li r3, 0x6A9 (GSW(1705))
+    writeIntWithCache(&winLogMain[222], 0x2C03000A); // cmpwi r3, 0xA
+    writeIntWithCache(&winLogMain[226], 0x386006AA); // li r3, 0x6AA (GSW(1706))
+    writeIntWithCache(&winLogMain[228], 0x2C030002); // cmpwi r3, 0x2
+    writeIntWithCache(&winLogMain[232], 0x386006AB); // li r3, 0x6AB (GSW(1707))
+    writeIntWithCache(&winLogMain[234], 0x2C030001); // cmpwi r3, 0x1
+    writeIntWithCache(&winLogMain[259], 0x386006A5); // li r3, 0x6A5 (GSW(1701))
+    writeIntWithCache(&winLogMain[261], 0x2C030001); // cmpwi r3, 0x1
+    writeIntWithCache(&winLogMain[265], 0x386006A6); // li r3, 0x6A6 (GSW(1702))
+    writeIntWithCache(&winLogMain[267], 0x2C030001); // cmpwi r3, 0x1
+    writeIntWithCache(&winLogMain[271], 0x386006A7); // li r3, 0x6A7 (GSW(1703))
+    writeIntWithCache(&winLogMain[273], 0x2C030001); // cmpwi r3, 0x1
+    writeIntWithCache(&winLogMain[277], 0x386006A8); // li r3, 0x6A8 (GSW(1704))
+    writeIntWithCache(&winLogMain[279], 0x2C030001); // cmpwi r3, 0x1
+    writeIntWithCache(&winLogMain[283], 0x386006A9); // li r3, 0x6A9 (GSW(1705))
+    writeIntWithCache(&winLogMain[285], 0x2C03000A); // cmpwi r3, 0xA
+    writeIntWithCache(&winLogMain[289], 0x386006AA); // li r3, 0x6AA (GSW(1706))
+    writeIntWithCache(&winLogMain[291], 0x2C030002); // cmpwi r3, 0x2
+    writeIntWithCache(&winLogMain[295], 0x386006AB); // li r3, 0x6AB (GSW(1707))
+    writeIntWithCache(&winLogMain[297], 0x2C030001); // cmpwi r3, 0x1
 
     patch::writeBranchPair(&winLogMain[432],
                            reinterpret_cast<void *>(bWinLogArrInject),
@@ -165,68 +166,68 @@ void ApplyMainAssemblyPatches()
                            reinterpret_cast<void *>(bWinLogArrIncrement),
                            reinterpret_cast<void *>(bWinLogArrIncrementReturn));
 
-    winLogInit[53] = 0x386006A4;  // li r3, 0x6A4 (GSW(1700))
-    winLogInit[55] = 0x2C030000;  // cmpwi r3, 0x0
-    winLogInit[102] = 0x386006A4; // li r3, 0x6A4 (GSW(1700))
-    winLogInit[104] = 0x2C030000; // cmpwi r3, 0x0
-    winLogInit[151] = 0x386006A4; // li r3, 0x6A4 (GSW(1700))
-    winLogInit[153] = 0x2C030000; // cmpwi r3, 0x0
-    winLogInit[356] = 0x386006B8; // li r3, 0x6B8 (GSW(1720))
-    winLogInit[358] = 0x2C030001; // cmpwi r3, 0x1
-    winLogInit[362] = 0x386006AA; // li r3, 0x6AA (GSW(1706))
-    winLogInit[364] = 0x2C030026; // cmpwi r3, 0x26
-    winLogInit[670] = 0x3884082C; // addi r4, r4, 0x82C GSW(1708)
-    winLogInit[672] = 0x2C030009; // cmpwi r3, 0x9
-    winLogInit[687] = 0x3884082C; // addi r4, r4, 0x82C GSW(1708)
-    winLogInit[689] = 0x2C030010; // cmpwi r3, 0x10
+    writeIntWithCache(&winLogInit[53], 0x386006A4);  // li r3, 0x6A4 (GSW(1700))
+    writeIntWithCache(&winLogInit[55], 0x2C030000);  // cmpwi r3, 0x0
+    writeIntWithCache(&winLogInit[102], 0x386006A4); // li r3, 0x6A4 (GSW(1700))
+    writeIntWithCache(&winLogInit[104], 0x2C030000); // cmpwi r3, 0x0
+    writeIntWithCache(&winLogInit[151], 0x386006A4); // li r3, 0x6A4 (GSW(1700))
+    writeIntWithCache(&winLogInit[153], 0x2C030000); // cmpwi r3, 0x0
+    writeIntWithCache(&winLogInit[356], 0x386006B8); // li r3, 0x6B8 (GSW(1720))
+    writeIntWithCache(&winLogInit[358], 0x2C030001); // cmpwi r3, 0x1
+    writeIntWithCache(&winLogInit[362], 0x386006AA); // li r3, 0x6AA (GSW(1706))
+    writeIntWithCache(&winLogInit[364], 0x2C030026); // cmpwi r3, 0x26
+    writeIntWithCache(&winLogInit[670], 0x3884082C); // addi r4, r4, 0x82C GSW(1708)
+    writeIntWithCache(&winLogInit[672], 0x2C030009); // cmpwi r3, 0x9
+    writeIntWithCache(&winLogInit[687], 0x3884082C); // addi r4, r4, 0x82C GSW(1708)
+    writeIntWithCache(&winLogInit[689], 0x2C030010); // cmpwi r3, 0x10
 
-    monoshiriGX[231] = 0x38840833; // addi r4, r4, 0x833 GSW(1715)
-    monoshiriGX[233] = 0x2C030005; // cmpwi r3, 0x5
+    writeIntWithCache(&monoshiriGX[231], 0x38840833); // addi r4, r4, 0x833 GSW(1715)
+    writeIntWithCache(&monoshiriGX[233], 0x2C030005); // cmpwi r3, 0x5
 
-    monosiri_disp[376] = 0x38840833; // addi r4, r4, 0x833 GSW(1715)
-    monosiri_disp[378] = 0x2C030005; // cmpwi r3, 0x5
+    writeIntWithCache(&monosiri_disp[376], 0x38840833); // addi r4, r4, 0x833 GSW(1715)
+    writeIntWithCache(&monosiri_disp[378], 0x2C030005); // cmpwi r3, 0x5
 
-    winMain[184] = 0x386006A4; // li r3, 0x6A4 (GSW(1700))
-    winMain[186] = 0x2C030000; // cmpwi r3, 0x0
-    winMain[205] = 0x386006A4; // li r3, 0x6A4 (GSW(1700))
-    winMain[207] = 0x2C030000; // cmpwi r3, 0x0
-    winMain[232] = 0x38840824; // addi r4, r4, 0x824 GSW(1700)
-    winMain[234] = 0x2C030000; // cmpwi r3, 0x0
+    writeIntWithCache(&winMain[184], 0x386006A4); // li r3, 0x6A4 (GSW(1700))
+    writeIntWithCache(&winMain[186], 0x2C030000); // cmpwi r3, 0x0
+    writeIntWithCache(&winMain[205], 0x386006A4); // li r3, 0x6A4 (GSW(1700))
+    writeIntWithCache(&winMain[207], 0x2C030000); // cmpwi r3, 0x0
+    writeIntWithCache(&winMain[232], 0x38840824); // addi r4, r4, 0x824 GSW(1700)
+    writeIntWithCache(&winMain[234], 0x2C030000); // cmpwi r3, 0x0
 
-    BattleInformationSetDropMaterial[84] = 0x38830824; // addi r4, r3, 0x824 GSW(1700)
-    BattleInformationSetDropMaterial[89] = 0x2C030000; // cmpwi r3, 0x0
+    writeIntWithCache(&BattleInformationSetDropMaterial[84], 0x38830824); // addi r4, r3, 0x824 GSW(1700)
+    writeIntWithCache(&BattleInformationSetDropMaterial[89], 0x2C030000); // cmpwi r3, 0x0
 
-    _rule_disp[12] = 0x38840827; // addi r4, r4, 0x827 GSW(1703)
-    _rule_disp[14] = 0x2C03001C; // cmpwi r3, 0x1C
+    writeIntWithCache(&_rule_disp[12], 0x38840827); // addi r4, r4, 0x827 GSW(1703)
+    writeIntWithCache(&_rule_disp[14], 0x2C03001C); // cmpwi r3, 0x1C
 
-    tou_gamen_screen_tev_init[27] = 0x38840827; // addi r4, r4, 0x827 GSW(1703)
-    tou_gamen_screen_tev_init[48] = 0x2C030013; // cmpwi r3, 0x13
+    writeIntWithCache(&tou_gamen_screen_tev_init[27], 0x38840827); // addi r4, r4, 0x827 GSW(1703)
+    writeIntWithCache(&tou_gamen_screen_tev_init[48], 0x2C030013); // cmpwi r3, 0x13
 
-    setupDataLoad[23] = 0x38840824; // addi r4, r4, 0x824 GSW(1700)
+    writeIntWithCache(&setupDataLoad[23], 0x38840824); // addi r4, r4, 0x824 GSW(1700)
 
     patch::writeBranchBL(&badgeShop_bargainGeneration[7], reinterpret_cast<void *>(bChapterClearCheck));
-    badgeShop_bargainGeneration[8] = 0x2C030001; // cmpwi r3, 0x1
+    writeIntWithCache(&badgeShop_bargainGeneration[8], 0x2C030001); // cmpwi r3, 0x1
     patch::writeBranchBL(&badgeShop_bargainGeneration[34], reinterpret_cast<void *>(bChapterClearCheck));
-    badgeShop_bargainGeneration[35] = 0x2C030002; // cmpwi r3, 0x2
+    writeIntWithCache(&badgeShop_bargainGeneration[35], 0x2C030002); // cmpwi r3, 0x2
     patch::writeBranchBL(&badgeShop_bargainGeneration[61], reinterpret_cast<void *>(bChapterClearCheck));
-    badgeShop_bargainGeneration[62] = 0x2C030003; // cmpwi r3, 0x3
+    writeIntWithCache(&badgeShop_bargainGeneration[62], 0x2C030003); // cmpwi r3, 0x3
     patch::writeBranchBL(&badgeShop_bargainGeneration[88], reinterpret_cast<void *>(bChapterClearCheck));
-    badgeShop_bargainGeneration[89] = 0x2C030004; // cmpwi r3, 0x4
+    writeIntWithCache(&badgeShop_bargainGeneration[89], 0x2C030004); // cmpwi r3, 0x4
     patch::writeBranchBL(&badgeShop_bargainGeneration[115], reinterpret_cast<void *>(bChapterClearCheck));
-    badgeShop_bargainGeneration[116] = 0x2C030005; // cmpwi r3, 0x5
+    writeIntWithCache(&badgeShop_bargainGeneration[116], 0x2C030005); // cmpwi r3, 0x5
     patch::writeBranchBL(&badgeShop_bargainGeneration[142], reinterpret_cast<void *>(bChapterClearCheck));
-    badgeShop_bargainGeneration[143] = 0x2C030006; // cmpwi r3, 0x6
+    writeIntWithCache(&badgeShop_bargainGeneration[143], 0x2C030006); // cmpwi r3, 0x6
     patch::writeBranchBL(&badgeShop_bargainGeneration[169], reinterpret_cast<void *>(bChapterClearCheck));
-    badgeShop_bargainGeneration[170] = 0x2C030007; // cmpwi r3, 0x7
-    badgeShop_bargainGeneration[184] = 0x386006AC; // li r3, 0x6AC (GSW(1708))
-    badgeShop_bargainGeneration[187] = 0x2C030011; // cmpwi r3, 0x11
+    writeIntWithCache(&badgeShop_bargainGeneration[170], 0x2C030007); // cmpwi r3, 0x7
+    writeIntWithCache(&badgeShop_bargainGeneration[184], 0x386006AC); // li r3, 0x6AC (GSW(1708))
+    writeIntWithCache(&badgeShop_bargainGeneration[187], 0x2C030011); // cmpwi r3, 0x11
 
     patch::writeBranchBL(&johoya_data_make[11], reinterpret_cast<void *>(bJohoyaSeqAddition));
 
-    evt_shop_main_func[41] = 0x3884082A; // addi r4, r4, 0x82C GSW(1706)
-    evt_shop_main_func[43] = 0x2C030020; // cmpwi r3, 0x20
-    evt_shop_main_func[47] = 0x3884082A; // addi r4, r4, 0x82C GSW(1706)
-    evt_shop_main_func[49] = 0x2C030024; // cmpwi r3, 0x24
+    writeIntWithCache(&evt_shop_main_func[41], 0x3884082A); // addi r4, r4, 0x82C GSW(1706)
+    writeIntWithCache(&evt_shop_main_func[43], 0x2C030020); // cmpwi r3, 0x20
+    writeIntWithCache(&evt_shop_main_func[47], 0x3884082A); // addi r4, r4, 0x82C GSW(1706)
+    writeIntWithCache(&evt_shop_main_func[49], 0x2C030024); // cmpwi r3, 0x24
 
     patch::writeBranchBL(&uranaisi_data_make_next[11], reinterpret_cast<void *>(bJohoyaSeqAddition));
 
@@ -255,10 +256,10 @@ void ApplyMainAssemblyPatches()
                            reinterpret_cast<void *>(bPowerupblkRelease),
                            reinterpret_cast<void *>(bPowerupblkReleaseReturn));
 
-    mobj_kururing_floor[188] = 0x808301BB; // lwz r4, 0x1BA(r3)
+    writeIntWithCache(&mobj_kururing_floor[188], 0x808301BB); // lwz r4, 0x1BA(r3)
 
-    mobj_powerupblk[73] = 0x809F01D8;  // lwz r4, 0x1D8(r31)
-    mobj_powerupblk[110] = 0x809F01D8; // lwz r4, 0x1D8(r31)
+    writeIntWithCache(&mobj_powerupblk[73], 0x809F01D8);  // lwz r4, 0x1D8(r31)
+    writeIntWithCache(&mobj_powerupblk[110], 0x809F01D8); // lwz r4, 0x1D8(r31)
 
     patch::writeBranchPair(&breakfast[22], reinterpret_cast<void *>(bPeachPointer), reinterpret_cast<void *>(bPeachReturn));
 
