@@ -87,7 +87,7 @@ EVT_BEGIN(majorin_init_hook)
 EVT_END()
 
 EVT_BEGIN(win_00_init_evt_evt)
-	IF_EQUAL(GSW(1702), 13)
+	IF_LARGE_EQUAL(GSW(1702), 13)
 		IF_SMALL(GSW(1712), 2)
 			RUN_EVT(&mario_vs_witchtrio)
 		END_IF()
@@ -100,12 +100,13 @@ EVT_BEGIN(win_00_init_evt_hook)
 	GOTO(&win_00_init_evt[51])
 EVT_PATCH_END()
 
-EVT_BEGIN(party_evt)
+EVT_BEGIN(win_party_evt)
 	USER_FUNC(evt_mario::evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
-	USER_FUNC(evt_item::evt_item_entry, PTR("item01"), LW(3), LW(0), LW(1), LW(2), 16, GSWF(6076), 0)
+	USER_FUNC(evt_item::evt_item_entry, PTR("item01"), LW(3), LW(0), LW(1), LW(2), 16, GSWF(6078), 0)
 	USER_FUNC(evt_item::evt_item_get_item, PTR("item01"))
 	WAIT_MSEC(800)
 	SET(GSW(1702), 14)
+	SET(GSWF(2682), 1)
 	USER_FUNC(evt_npc::evt_npc_set_position, PTR(flurrie), 0, -1000, 0)
 	USER_FUNC(evt_cam::evt_cam3d_evt_off, 300, 11)
 	USER_FUNC(evt_mario::evt_mario_key_onoff, 1)
@@ -115,7 +116,12 @@ EVT_BEGIN(party_evt)
 	USER_FUNC(evt_snd::evt_snd_env_lpf, 0, 800)
 	RETURN()
 EVT_END()
-// clang-format on
+
+EVT_BEGIN(win_party_hook)
+	RUN_CHILD_EVT(win_party_evt)
+	RETURN()
+EVT_END()
+    // clang-format on
 
 void ApplyWinPatches()
 {
@@ -190,7 +196,7 @@ void ApplyWinPatches()
 
     clouda_nakama[1497] = EVT_HELPER_CMD(2, 50);
     clouda_nakama[1498] = EVT_HELPER_OP(LW(3));
-    patch::writePatch(&clouda_nakama[1500], party_evt, sizeof(party_evt));
+    patch::writePatch(&clouda_nakama[1500], win_party_hook, sizeof(win_party_hook));
 
     touch_door[1] = GSW(1702);
     touch_door[3] = 11;

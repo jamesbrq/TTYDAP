@@ -360,7 +360,7 @@ void ApplyItemDataTablePatches()
     itemDataTable[ItemId::INVALID_ITEM_0070].icon_id = IconType::MS_MOWZ;
     itemDataTable[ItemId::INVALID_ITEM_0071].name = "ap_item";
     itemDataTable[ItemId::INVALID_ITEM_0071].description = "ap_item";
-    itemDataTable[ItemId::INVALID_ITEM_0071].icon_id = IconType::MYSTERY;
+    itemDataTable[ItemId::INVALID_ITEM_0071].icon_id = IconType::AP_ITEM;
     itemDataTable[ItemId::INVALID_ITEM_PAPER_0053].name = "10_coins";
     itemDataTable[ItemId::INVALID_ITEM_PAPER_0053].description = "10_coins";
     itemDataTable[ItemId::INVALID_ITEM_PAPER_0053].icon_id = IconType::COIN;

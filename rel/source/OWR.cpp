@@ -5,6 +5,7 @@
 #include <gc/pad.h>
 #include <mod.h>
 #include <ttyd/common_types.h>
+#include <ttyd/evt_window.h>
 #include <ttyd/mario_party.h>
 #include <ttyd/mario_pouch.h>
 #include <ttyd/msgdrv.h>
@@ -77,6 +78,7 @@ namespace mod::owr
 
     void *(*g_itemEntry_trampoline)(const char *, uint32_t, uint32_t, int32_t, void *, float, float, float) = nullptr;
     bool (*g_OSLink_trampoline)(OSModuleInfo *, void *) = nullptr;
+    void (*g_seqSetSeq_trampoline)(SeqIndex, void *, void *) = nullptr;
     void (*g_stg0_00_init_trampoline)() = nullptr;
     uint32_t (*g_pouchGetItem_trampoline)(int32_t) = nullptr;
     const char *(*g_msgSearch_trampoline)(const char *) = nullptr;
@@ -114,23 +116,16 @@ namespace mod::owr
         }
     }
 
-    void OWR::AAAToGOR()
-    {
-        uint32_t aaa_00_Address = 0x802EDE78;
-        SeqIndex NextSeq = ttyd::seqdrv::seqGetNextSeq();
-        SeqIndex Load = ttyd::seqdrv::SeqIndex::kLoad;
-
-        if (NextSeq == Load)
-        {
-            strcpy_String(reinterpret_cast<char *>(aaa_00_Address), "gor_01");
-        }
-    }
-
     void OWR::HomewardWarp()
     {
         SeqIndex seq = ttyd::seqdrv::seqGetSeq();
+        void *winPtr = ttyd::evt_window::winGetPtr();
+        uint32_t winStatus = *reinterpret_cast<uint32_t *>(reinterpret_cast<char *>(winPtr) + 0x20);
         if (seq != SeqIndex::kGame)
             return;
+        if (winStatus != 0)
+            return;
+
 
         uint32_t combo = PadInput::PAD_L | PadInput::PAD_R | PadInput::PAD_START;
         bool buttons = checkButtonCombo(combo);
@@ -179,6 +174,25 @@ namespace mod::owr
                                                       }
                                                       return result;
                                                   });
+
+		g_seqSetSeq_trampoline = patch::hookFunction(ttyd::seqdrv::seqSetSeq,
+													 [](SeqIndex seq, void *map_name, void *entrance_name)
+													  {
+														// Cast map_name to a const char* for string comparison
+														const char *mapNameStr = reinterpret_cast<const char *>(map_name);
+
+														// Check if the map name is "aaa_00"
+														if (mapNameStr && strcmp(mapNameStr, "aaa_00") == 0)
+														{
+															// Call the trampoline with "gor_01" instead
+															g_seqSetSeq_trampoline(seq, const_cast<void *>(static_cast<const void *>("gor_01")), entrance_name);
+														}
+														else
+														{
+															// Use original parameters
+															g_seqSetSeq_trampoline(seq, map_name, entrance_name);
+														}
+													  });
 
         g_msgSearch_trampoline = patch::hookFunction(ttyd::msgdrv::msgSearch,
                                                      [](const char *msgKey)
@@ -394,7 +408,6 @@ namespace mod::owr
     void OWR::Update()
     {
         SequenceInit();
-        AAAToGOR();
         RecieveItems();
         HomewardWarp();
     }

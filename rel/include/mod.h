@@ -54,7 +54,7 @@ namespace mod
         void init();
         void updateEarly();
         void draw();
-        void (*mPFN_makeKey_trampoline)() = nullptr;
+        void (*mPFN_marioStMain_trampoline)() = nullptr;
         ConsoleSystem mConsole;
         owr::OWR owr_mod_;
     };

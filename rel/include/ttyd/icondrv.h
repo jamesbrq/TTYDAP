@@ -584,7 +584,7 @@ namespace ttyd::icondrv
             JOURNAL_IT,
 
             // Custom icons.
-            TOT_COIN_BLUE,
+            AP_ITEM,
             SUPER_START,
             PERFECT_POWER,
             PERFECT_POWER_P,

@@ -32,5 +32,7 @@ namespace ttyd::evt_window
         // unk_JP_US_EU_37_801524c8
         EVT_DECLARE_USER_FUNC(evt_snd_bgmon_f, 3)
         EVT_DECLARE_USER_FUNC(evt_snd_bgmon, 2)
+
+        void *winGetPtr();
     }
 } // namespace ttyd::evt_window

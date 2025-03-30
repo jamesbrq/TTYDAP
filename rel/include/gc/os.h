@@ -37,7 +37,6 @@ namespace gc::os
 
         void DCEnable();
         void DCInvalidateRange(void *base, uint32_t size);
-        void DCFlushRange(void *base, uint32_t size);
         void DCStoreRange(void *base, uint32_t size);
         void DCFlushRangeNoSync(void *base, uint32_t size);
         void DCStoreRangeNoSync(void *base, uint32_t size);

@@ -7,6 +7,7 @@
 #include <ttyd/animdrv.h>
 #include <ttyd/dispdrv.h>
 #include <ttyd/fontmgr.h>
+#include <ttyd/mariost.h>
 #include <ttyd/npcdrv.h>
 #include <ttyd/system.h>
 
@@ -31,7 +32,7 @@ namespace mod
     {
         gMod = this;
 
-        mPFN_makeKey_trampoline = patch::hookFunction(ttyd::system::makeKey, []() { gMod->updateEarly(); });
+        mPFN_marioStMain_trampoline = patch::hookFunction(ttyd::mariost::marioStMain, []() { gMod->updateEarly(); });
 
         g_npcNameToPtr_trampoline = patch::hookFunction(ttyd::npcdrv::npcNameToPtr, checkForNpcNameToPtrError);
         g_animPoseMain_trampoline = patch::hookFunction(ttyd::animdrv::animPoseMain, preventAnimPoseMainCrash);
@@ -81,7 +82,7 @@ namespace mod
         mConsole.update();
 
         // Call original function
-        mPFN_makeKey_trampoline();
+        mPFN_marioStMain_trampoline();
     }
 
     void Mod::draw()
