@@ -632,7 +632,7 @@ void ApplyMriPatches()
     open_bigtree[431] = GSW(1713);
     open_bigtree[432] = 1;
 
-    mario_see_you[198] = GSW(1702);
+    mario_see_you[198] = GSW(1713);
     mario_see_you[199] = 17;
 
     mri_minnnanokoe_evt[602] = 400;

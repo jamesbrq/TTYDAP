@@ -76,7 +76,7 @@ void ApplyDouPatches()
     watergate_handle[1] = GSW(1717);
     watergate_handle[2] = 5;
     watergate_handle[224] = GSW(1717);
-    watergate_handle[235] = 5;
+    watergate_handle[225] = 5;
 
     dou_03_init_evt[53] = GSW(1717);
     dou_03_init_evt[54] = 4;

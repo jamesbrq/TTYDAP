@@ -818,8 +818,8 @@ void ApplyUsuPatches()
     usu_00_koopa_second_evt[1260] = GSW(1717);
     usu_00_koopa_second_evt[1261] = 24;
 
-    evt_after_peach[125] = GSW(1704);
-    evt_after_peach[126] = 219;
+    evt_after_peach[125] = GSW(1715);
+    evt_after_peach[126] = 14;
 
     usu_00_init_evt[4] = GSW(1717);
     usu_00_init_evt[5] = 22;
@@ -925,8 +925,8 @@ void ApplyUsuPatches()
     aunt_talk[676] = 0;
 
     childA_talk[1] = GSW(1715);
-    childA_talk[3] = 200;
-    childA_talk[18] = 222;
+    childA_talk[3] = 2;
+    childA_talk[18] = 17;
     childA_talk[21] = 0;
     childA_talk[22] = 0;
     childA_talk[23] = 0;
