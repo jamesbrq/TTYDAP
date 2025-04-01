@@ -96,6 +96,11 @@ namespace mod::owr
 
         if (Seq != SeqIndex::kMapChange)
             return;
+        const OSModuleInfo *relPtr = _globalWorkPtr->relocationBase;
+        if (!relPtr)
+            return;
+        if (relPtr->id == RelId::DMO)
+            return;
 
         uint32_t SequencePosition = ttyd::swdrv::swByteGet(1700);
 
