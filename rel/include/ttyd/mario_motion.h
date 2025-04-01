@@ -2,6 +2,51 @@
 
 namespace ttyd::mario_motion
 {
+    enum class MarioMotion : uint16_t
+    {
+        kStay = 0,
+        kWalk,
+        kDash,
+        kJump,
+        kJumpNPC,
+        kJumpSw,
+        kJumpStand,
+        kJump2,
+        kJump3,
+        kJumpSmall,
+        kFall,
+        kFall2,
+        kUpstairs,
+        kLand,
+        kTalk,
+        kGetItem,
+        kHip,
+        kHip2,
+        kHammer,
+        kHammer2,
+        kJabara,
+        kSlit,
+        kRoll,
+        kKaze,
+        kPlane,
+        kShip,
+        kYoshi,
+        kCloud,
+        kVivian,
+        kDokan,
+        kGrasp,
+        kDamage,
+        kDamageToge,
+        kBottomless,
+        kForceReset,
+        kShadow,
+        kPartyUse, // Dummied out
+        kKpaSwim,
+        kKpaPowUp,
+        kKpaPowDown,
+        kDummy, // Dummied out
+    };
+
     extern "C"
     {
         void marioChgMoveMotion();
@@ -19,7 +64,7 @@ namespace ttyd::mario_motion
         // marioBoots
         // marioMotion
 
-        void marioChgMot(int motionId);
+        void marioChgMot(MarioMotion motion);
         void marioChgMotSub(int motionId, bool unk);
         void marioChgMot2(int motionId);
 

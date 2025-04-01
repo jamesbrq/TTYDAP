@@ -1,9 +1,7 @@
 #pragma once
 #include <cstdint>
-#include <gc/OSLink.h>
+#include <gc/OSModule.h>
 #include <StateManager.h>
-
-using gc::OSLink::OSModuleInfo;
 
 namespace mod::owr
 {

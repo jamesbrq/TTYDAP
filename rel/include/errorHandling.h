@@ -177,11 +177,11 @@ class HeapCorruptionInfo
     uint16_t bufferSize;
 };
 
-extern ttyd::npcdrv::NpcEntry *(*g_npcNameToPtr_trampoline)(const char *name);
+extern NpcEntry *(*g_npcNameToPtr_trampoline)(const char *name);
 extern void (*g_animPoseMain_trampoline)(int32_t poseId);
 
 void checkHeaps();
 void drawErrorMessages();
 
-ttyd::npcdrv::NpcEntry *checkForNpcNameToPtrError(const char *name);
+NpcEntry *checkForNpcNameToPtrError(const char *name);
 void preventAnimPoseMainCrash(int32_t poseId);

@@ -10,7 +10,7 @@ namespace ttyd::mapdata
     {
         void relSetBtlAddr(const char *areaName,
                            const void *battleInfos,
-                           const database::DatabaseDefinition *nameToInfoIdTable);
+                           const DatabaseDefinition *nameToInfoIdTable);
         void relSetEvtAddr(const char *mapName, const void *pInitEvtCode);
         void **areaDataPtr(const char *areaName);
         void **mapDataPtr(const char *mapName);

@@ -20,7 +20,7 @@ namespace ttyd::evt_npc
         const void *lostEvtCode;
         const void *returnEvtCode;
         const void *blowEvtCode;
-        npcdrv::NpcTerritoryType territoryType;
+        NpcTerritoryType territoryType;
         gc::vec3 territoryBase;
         gc::vec3 territorySizeHoming;
         float searchRange;
@@ -225,8 +225,8 @@ namespace ttyd::evt_npc
         // evt_npc_stop_for_event()
         EVT_DECLARE_USER_FUNC(evt_npc_stop_for_event, 0)
 
-        npcdrv::NpcEntry *evtNpcNameToPtr_NoAssert(evtmgr::EvtEntry *evt, const char *name);
-        npcdrv::NpcEntry *evtNpcNameToPtr(evtmgr::EvtEntry *evt, const char *name);
+        NpcEntry *evtNpcNameToPtr_NoAssert(evtmgr::EvtEntry *evt, const char *name);
+        NpcEntry *evtNpcNameToPtr(evtmgr::EvtEntry *evt, const char *name);
 
         // evt_npc_start_for_event()
         EVT_DECLARE_USER_FUNC(evt_npc_start_for_event, 0)

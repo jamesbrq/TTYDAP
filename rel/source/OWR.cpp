@@ -1,16 +1,20 @@
 #include <AP/rel_patch_definitions.h>
 #include <cstdint>
 #include <cstring>
-#include <gc/OSLink.h>
+#include <gc/OSModule.h>
 #include <gc/pad.h>
 #include <mod.h>
 #include <ttyd/common_types.h>
 #include <ttyd/evt_window.h>
+#include <ttyd/mario.h>
+#include <ttyd/mario_motion.h>
 #include <ttyd/mario_party.h>
 #include <ttyd/mario_pouch.h>
+#include <ttyd/mariost.h>
 #include <ttyd/msgdrv.h>
 #include <ttyd/party.h>
 #include <ttyd/seqdrv.h>
+#include <ttyd/seq_mapchange.h>
 #include <ttyd/string.h>
 #include <ttyd/swdrv.h>
 
@@ -19,13 +23,16 @@
 #include "patch.h"
 #include <ttyd/fontmgr.h>
 
-using gc::OSLink::OSModuleInfo;
 using gc::pad::PadInput;
-using ::ttyd::common::ItemData;
-using ::ttyd::common::ShopItemData;
-using namespace ::ttyd::common;
-using ::ttyd::seqdrv::SeqIndex;
-using namespace ::mod::util;
+using ttyd::common::ItemData;
+using ttyd::common::ShopItemData;
+using ttyd::seqdrv::SeqIndex;
+using ttyd::seq_mapchange::RelId;
+using ttyd::seq_mapchange::_next_area;
+using namespace mod::util;
+using namespace ttyd::common;
+using namespace ttyd::mario;
+using namespace ttyd::seqdrv;
 
 const uint16_t GSWF_ARR[] = {
     // Any of these being enabled will disable them
@@ -85,7 +92,7 @@ namespace mod::owr
 
     void OWR::SequenceInit()
     {
-        SeqIndex Seq = ttyd::seqdrv::seqGetNextSeq();
+        SeqIndex Seq = seqGetNextSeq();
 
         if (Seq != SeqIndex::kMapChange)
             return;
@@ -116,14 +123,37 @@ namespace mod::owr
         }
     }
 
+    bool checkIfInGame()
+    {
+        constexpr SeqIndex gameSeq = SeqIndex::kGame;
+        if (seqGetNextSeq() != gameSeq)
+        {
+            return false;
+        }
+
+        if (seqGetSeq() != gameSeq)
+        {
+            return false;
+        }
+
+        const OSModuleInfo *relPtr = _globalWorkPtr->relocationBase;
+        if (!relPtr)
+        {
+            return false;
+        }
+
+        return relPtr->id != RelId::DMO;
+    }
+
+
     void OWR::HomewardWarp()
     {
-        SeqIndex seq = ttyd::seqdrv::seqGetSeq();
-        void *winPtr = ttyd::evt_window::winGetPtr();
-        uint32_t winStatus = *reinterpret_cast<uint32_t *>(reinterpret_cast<char *>(winPtr) + 0x20);
-        if (seq != SeqIndex::kGame)
+        const Player *marioPtr = marioGetPtr();
+        if (marioPtr->characterId != 0)
             return;
-        if (winStatus != 0)
+        if (!checkIfInGame())
+            return;
+        if ((marioStGetSystemLevel() & 15) == 15)
             return;
 
 
@@ -131,6 +161,7 @@ namespace mod::owr
         bool buttons = checkButtonCombo(combo);
         if (buttons)
         {
+            ttyd::mario_motion::marioChgMot(ttyd::mario_motion::MarioMotion::kStay);
             uint32_t namePtr = 0x802c0298;
             void *mapName = reinterpret_cast<char *>(namePtr);
             ttyd::seqdrv::seqSetSeq(ttyd::seqdrv::SeqIndex::kMapChange, mapName, 0);
@@ -164,7 +195,7 @@ namespace mod::owr
         ApplyMainScriptPatches();
         ApplyItemDataTablePatches();
 
-        g_OSLink_trampoline = patch::hookFunction(gc::OSLink::OSLink,
+        g_OSLink_trampoline = patch::hookFunction(OSLink,
                                                   [](OSModuleInfo *new_module, void *bss)
                                                   {
                                                       bool result = g_OSLink_trampoline(new_module, bss);
@@ -199,7 +230,29 @@ namespace mod::owr
                                                          }
                                                          if (!strcmp(msgKey, "stg6_rsh_diary_01"))
                                                          {
-                                                             return "An unseen force prevents\nyou from opening the diary.<o>";
+                                                             // Change the text asking if you want to read the diary
+                                                             // Only needs to change when not on the train
+                                                             if (strcmp(_next_area, "rsh"))
+                                                             {
+                                                                 return "An unseen force prevents\nyou from opening the "
+                                                                        "diary.<o>";
+                                                             }
+                                                         }
+                                                         if (strcmp(msgKey, "stg6_rsh_diary_01_yn") == 0)
+                                                         {
+                                                             // Change the yes/no text answers for the diary
+                                                             // Only needs to change when not on the train
+                                                             if (strcmp(_next_area, "rsh") != 0)
+                                                             {
+                                                            #ifdef TTYD_JP
+                                                                 const char *message =
+                                                                     "<select 0 0 300 40>Dang\nShoot";
+                                                            #else
+                                                                 const char *message =
+                                                                     "<select 0 0 0 40>Dang\nShoot";
+                                                            #endif
+                                                                 return message;
+                                                             }
                                                          }
                                                          if (!strcmp(msgKey, "jolene_fukidashi_end"))
                                                          {

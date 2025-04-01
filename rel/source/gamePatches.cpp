@@ -126,7 +126,7 @@ static void *fixMapProblems()
         if (sequencePosition < 26)
         {
             // Clear the pointer used to check which animation Mario should use when greeting the Koopa
-            ttyd::npcdrv::fbatGetPointer()->wHitNpc = nullptr; // Mario will do no animation when the pointer is not set
+            fbatGetPointer()->wHitNpc = nullptr; // Mario will do no animation when the pointer is not set
         }
     }
     else if (strcmp(nextMapPtr, "rsh_05_a") == 0)
@@ -160,7 +160,7 @@ static void *fixMapProblems()
     }
 
     // The overwritten instruction sets r3 to the global work pointer, so return that
-    return ttyd::mariost::_globalWorkPtr;
+    return _globalWorkPtr;
 }
 
 void applyGameFixes()

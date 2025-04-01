@@ -32,9 +32,9 @@ namespace mod
     {
         gMod = this;
 
-        mPFN_marioStMain_trampoline = patch::hookFunction(ttyd::mariost::marioStMain, []() { gMod->updateEarly(); });
+        mPFN_marioStMain_trampoline = patch::hookFunction(marioStMain, []() { gMod->updateEarly(); });
 
-        g_npcNameToPtr_trampoline = patch::hookFunction(ttyd::npcdrv::npcNameToPtr, checkForNpcNameToPtrError);
+        g_npcNameToPtr_trampoline = patch::hookFunction(npcNameToPtr, checkForNpcNameToPtrError);
         g_animPoseMain_trampoline = patch::hookFunction(ttyd::animdrv::animPoseMain, preventAnimPoseMainCrash);
 
         applyGameFixes();

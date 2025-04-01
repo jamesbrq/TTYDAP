@@ -15,7 +15,7 @@ AnimPoseMainErrorInfo animPoseMainErrorInfo;
 HeapCorruptionInfo heapCorruptionInfo;
 float errorTextPosY = ERROR_TEXT_DEFAULT_POS_Y;
 
-ttyd::npcdrv::NpcEntry *(*g_npcNameToPtr_trampoline)(const char *name) = nullptr;
+NpcEntry *(*g_npcNameToPtr_trampoline)(const char *name) = nullptr;
 void (*g_animPoseMain_trampoline)(int32_t poseId) = nullptr;
 
 void HeapCorruptionInfo::drawBuffer()
@@ -387,13 +387,13 @@ void drawErrorMessages()
     errorTextPosY = ERROR_TEXT_DEFAULT_POS_Y;
 }
 
-ttyd::npcdrv::NpcEntry *checkForNpcNameToPtrError(const char *name)
+NpcEntry *checkForNpcNameToPtrError(const char *name)
 {
     // Call the original function immediately, as its result is needed
-    ttyd::npcdrv::NpcEntry *ret = g_npcNameToPtr_trampoline(name);
+   NpcEntry *ret = g_npcNameToPtr_trampoline(name);
 
     // Check if the returned pointer is valid
-    const ttyd::npcdrv::NpcWork *workPtr = ttyd::npcdrv::npcGetWorkPtr();
+    const NpcWork *workPtr = npcGetWorkPtr();
     if (ret >= &workPtr->entries[workPtr->npcMaxCount])
     {
         // Didn't find the correct NPC, so print error text
