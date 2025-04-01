@@ -762,7 +762,7 @@ void ApplyUsuPatches()
 
     patch::writePatch(&village_chief_talk[104], village_chief_talk_hook, sizeof(village_chief_talk_hook));
 
-    vivian_init[6] = GSW(1714);
+    vivian_init[6] = GSW(1721);
     vivian_init[8] = 0;
     vivian_init[9] = 0;
     vivian_init[30] = 0;
@@ -963,7 +963,7 @@ void ApplyUsuPatches()
 
     musume_talk[1] = GSW(1715);
     musume_talk[3] = 2;
-    musume_talk[18] = 10;
+    musume_talk[62] = 10;
 
     evt_mon_open[1] = GSW(1704);
     evt_mon_open[2] = 6;

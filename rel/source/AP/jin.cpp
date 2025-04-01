@@ -32,6 +32,7 @@ extern int32_t jin_08_init_evt[];
 extern int32_t evt_yuka[];
 extern int32_t jin_11_init_evt[];
 extern int32_t evt_usu_kagemario_party_kill_jin[];
+extern int32_t phase_event_fmario[];
 
 // Assembly
 extern int32_t jin_evt_kagemario_init[];
@@ -99,12 +100,16 @@ void ApplyJinPatches()
 
     irekawatta_mario[442] = EVT_HELPER_CMD(1, 4);
     irekawatta_mario[443] = EVT_HELPER_OP(&irekawatta_mario[454]);
+    irekawatta_mario[444] = 0;
     irekawatta_mario[481] = GSW(1715);
     irekawatta_mario[482] = 3;
 
     ranperu_lastbattle[370] = GSW(1715);
     ranperu_lastbattle[371] = 6;
 
+    hontonosugata_mario[913] = EVT_HELPER_CMD(1, 4);
+    hontonosugata_mario[914] = EVT_HELPER_OP(&hontonosugata_mario[928]);
+    hontonosugata_mario[915] = 0;
     hontonosugata_mario[929] = GSW(1715);
     hontonosugata_mario[930] = 7;
     hontonosugata_mario[932] = GSW(1715);
@@ -160,6 +165,8 @@ void ApplyJinPatches()
     jin_11_init_evt[41] = 1;
 
     evt_usu_kagemario_party_kill_jin[1] = GSW(1715); // Unused
+
+    phase_event_fmario[12] = 9999; //Unused
 
     jin_evt_kagemario_init[2] = 0x386006B3; // li r3, 0x6B3 (GSW(1715))
     jin_evt_kagemario_init[6] = 0x2C030003; // cmpwi r3, 0x3

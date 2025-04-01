@@ -268,6 +268,7 @@ void ApplyGor01Patches()
     gor_01_init_evt[308] = GSW(1705);
     gor_01_init_evt[309] = 1;
     gor_01_init_evt[321] = GSW(1700);
+    gor_01_init_evt[322] = 5;
     gor_01_init_evt[523] = GSW(1708);
     gor_01_init_evt[524] = 18;
 

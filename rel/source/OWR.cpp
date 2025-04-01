@@ -70,7 +70,8 @@ const uint16_t GSWF_ARR[] = {
     1805,
 
     // Ch.4 talk to shopkeep once
-    1925};
+    1925
+};
 constexpr int32_t GSWF_ARR_SIZE = sizeof(GSWF_ARR) / sizeof(GSWF_ARR[0]);
 
 namespace mod::owr
@@ -85,7 +86,7 @@ namespace mod::owr
 
     void *(*g_itemEntry_trampoline)(const char *, uint32_t, uint32_t, int32_t, void *, float, float, float) = nullptr;
     bool (*g_OSLink_trampoline)(OSModuleInfo *, void *) = nullptr;
-    void (*g_seqSetSeq_trampoline)(SeqIndex, void *, void *) = nullptr;
+    void (*g_seqSetSeq_trampoline)(SeqIndex seq, const char *map, const char *bero) = nullptr;
     void (*g_stg0_00_init_trampoline)() = nullptr;
     uint32_t (*g_pouchGetItem_trampoline)(int32_t) = nullptr;
     const char *(*g_msgSearch_trampoline)(const char *) = nullptr;
@@ -168,7 +169,7 @@ namespace mod::owr
         {
             ttyd::mario_motion::marioChgMot(ttyd::mario_motion::MarioMotion::kStay);
             uint32_t namePtr = 0x802c0298;
-            void *mapName = reinterpret_cast<char *>(namePtr);
+            const char *mapName = reinterpret_cast<char *>(namePtr);
             ttyd::seqdrv::seqSetSeq(ttyd::seqdrv::SeqIndex::kMapChange, mapName, 0);
         }
     }
@@ -212,17 +213,18 @@ namespace mod::owr
                                                   });
 
 		g_seqSetSeq_trampoline = patch::hookFunction(ttyd::seqdrv::seqSetSeq,
-													 [](SeqIndex seq, void *map_name, void *entrance_name)
+                                                     [](SeqIndex seq, const char *map, const char *bero)
 													  {
-                                                        const char *mapNameStr = reinterpret_cast<const char *>(map_name);
 
-                                                        if (mapNameStr && strcmp(mapNameStr, "aaa_00") == 0)
+                                                        if (map && strcmp(map, "aaa_00") == 0)
                                                         {
-                                                            g_seqSetSeq_trampoline(seq, const_cast<void *>(static_cast<const void *>("gor_01")), entrance_name);
+                                                            uint32_t namePtr = 0x802c0298;
+                                                            const char *mapName = reinterpret_cast<char *>(namePtr);
+                                                            g_seqSetSeq_trampoline(seq, mapName, bero);
                                                         }
                                                         else
                                                         {
-                                                            g_seqSetSeq_trampoline(seq, map_name, entrance_name);
+                                                            g_seqSetSeq_trampoline(seq, map, bero);
                                                         }
 													  });
 
@@ -232,6 +234,26 @@ namespace mod::owr
                                                          if (!strcmp(msgKey, "jolene_fukidashi"))
                                                          {
                                                              return "Oh my!<wait 100> Excuse me.\n<k>";
+                                                         }
+                                                         if (!strncmp(msgKey, "stg4_jin_19", 11) && strcmp(msgKey, "stg4_jin_19_select"))
+                                                         {
+                                                             return g_msgSearch_trampoline("stg4_jin_19_viv");
+                                                         }
+                                                         if (!strncmp(msgKey, "stg4_jin_33", 11))
+                                                         {
+                                                             return g_msgSearch_trampoline("stg4_jin_33_viv");
+                                                         }
+                                                         if (!strncmp(msgKey, "stg4_jin_34", 11))
+                                                         {
+                                                             return g_msgSearch_trampoline("stg4_jin_34_viv");
+                                                         }
+                                                         if (!strncmp(msgKey, "stg4_jin_36", 11))
+                                                         {
+                                                             return g_msgSearch_trampoline("stg4_jin_36_viv");
+                                                         }
+                                                         if (!strncmp(msgKey, "stg4_jin_38", 11))
+                                                         {
+                                                             return g_msgSearch_trampoline("stg4_jin_38_viv");
                                                          }
                                                          if (!strcmp(msgKey, "stg6_rsh_diary_01"))
                                                          {
@@ -344,7 +366,7 @@ namespace mod::owr
                                                              return "Boat Mode<k>";
                                                          }
                                                          return g_msgSearch_trampoline(msgKey);
-                                                     });
+													  });
 
         g_pouchGetItem_trampoline =
             patch::hookFunction(ttyd::mario_pouch::pouchGetItem,

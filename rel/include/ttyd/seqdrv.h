@@ -32,7 +32,7 @@ namespace ttyd::seqdrv
     {
         void seqInit_MARIOSTORY();
         void seqMain();
-        void seqSetSeq(SeqIndex seq, void *parameter0, void *parameter1);
+        void seqSetSeq(SeqIndex seq, const char *map, const char *bero);
         SeqIndex seqGetSeq();
         SeqIndex seqGetPrevSeq();
         SeqIndex seqGetNextSeq();
