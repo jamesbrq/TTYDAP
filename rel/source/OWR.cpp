@@ -244,13 +244,13 @@ namespace mod::owr
                                                              // Only needs to change when not on the train
                                                              if (strcmp(_next_area, "rsh") != 0)
                                                              {
-                                                            #ifdef TTYD_JP
+                                                         #ifdef TTYD_JP
                                                                  const char *message =
                                                                      "<select 0 0 300 40>Dang\nShoot";
-                                                            #else
+                                                         #else
                                                                  const char *message =
                                                                      "<select 0 0 0 40>Dang\nShoot";
-                                                            #endif
+                                                         #endif
                                                                  return message;
                                                              }
                                                          }
