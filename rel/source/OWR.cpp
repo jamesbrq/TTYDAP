@@ -70,7 +70,10 @@ const uint16_t GSWF_ARR[] = {
     1805,
 
     // Ch.4 talk to shopkeep once
-    1925
+    1925,
+
+    //ch.4 bird room lock
+    2231
 };
 constexpr int32_t GSWF_ARR_SIZE = sizeof(GSWF_ARR) / sizeof(GSWF_ARR[0]);
 
