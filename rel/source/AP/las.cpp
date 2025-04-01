@@ -1,5 +1,13 @@
 #include "evt_cmd.h"
+#include "patch.h"
 #include <AP/rel_patch_definitions.h>
+#include <ttyd/evt_case.h>
+#include <ttyd/evt_map.h>
+#include <ttyd/evt_mario.h>
+#include <ttyd/evt_msg.h>
+
+using namespace mod;
+using namespace ttyd;
 
 extern int32_t las_first_evt_00[];
 extern int32_t las_00_init_evt[];
@@ -48,6 +56,53 @@ extern int32_t last_evt_4[];
 extern int32_t las_shuryolight_init_29[];
 extern int32_t las_29_init_evt[];
 extern int32_t las_30_init_evt[];
+extern int32_t key_check_evt_22[];
+extern int32_t key_check_evt_25[];
+
+// clang-format off
+EVT_BEGIN(stairs_revert)
+    IF_LARGE_EQUAL(GSW(1708), 8)
+        USER_FUNC(evt_mario::evt_mario_key_onoff, 0)
+        IF_EQUAL(GSWF(6112), 1)
+            USER_FUNC(evt_msg::evt_msg_print, 0, PTR("raise_text"), 0, 0)
+            USER_FUNC(evt_msg::evt_msg_select, 0, PTR("raise_text_yn"))
+            IF_EQUAL(LW(0), 0)
+                SET(GSWF(6112), 0)
+            END_IF()
+        ELSE()
+            USER_FUNC(evt_msg::evt_msg_print, 0, PTR("lower_text"), 0, 0)
+            USER_FUNC(evt_msg::evt_msg_select, 0, PTR("lower_text_yn"))
+            IF_EQUAL(LW(0), 0)
+                SET(GSWF(6112), 1)
+            END_IF()
+        END_IF()
+    END_IF()
+    RETURN()
+EVT_END()
+
+EVT_BEGIN(las_10_init_evt_evt)
+    USER_FUNC(evt_map::evt_mapobj_flag_onoff, 1, 1, PTR("hosi_off"), 1)
+    USER_FUNC(evt_case::evt_run_case_evt, 9, 1, PTR("A_daiza1"), 0, PTR(stairs_revert), 0)
+    RETURN()
+EVT_END()
+
+EVT_BEGIN(las_10_init_evt_hook)
+    RUN_CHILD_EVT(las_10_init_evt_evt)
+    GOTO(&las_10_init_evt[85])
+EVT_PATCH_END()
+
+EVT_BEGIN(tenkyugi_evt2_evt)
+    USER_FUNC(evt_msg::evt_msg_print_party, PTR("stg8_las_35"))
+    SET(GSW(1708), 8)
+    SET(GSWF(6112), 1)
+    RETURN()
+EVT_END()
+
+EVT_BEGIN(tenkyugi_evt2_hook)
+    RUN_CHILD_EVT(tenkyugi_evt2_evt)
+    GOTO(&tenkyugi_evt2[113])
+EVT_PATCH_END()
+// clang-format on
 
 void ApplyLasPatches()
 {
@@ -109,8 +164,9 @@ void ApplyLasPatches()
     las_09_init_evt[249] = GSWF(6072);
     las_09_init_evt[250] = 1;
 
-    tenkyugi_evt2[111] = GSW(1708);
-    tenkyugi_evt2[112] = 8;
+    patch::writePatch(&tenkyugi_evt2[107], tenkyugi_evt2_hook, sizeof(tenkyugi_evt2_hook));
+    tenkyugi_evt2[111] = 0;
+    tenkyugi_evt2[112] = 0;
 
     kagi_8_on[1] = GSW(1708);
     kagi_8_on[2] = 7;
@@ -121,6 +177,7 @@ void ApplyLasPatches()
     daiza_evt[48] = GSW(1708);
     daiza_evt[49] = 7;
 
+    patch::writePatch(&las_10_init_evt[78], las_10_init_evt_hook, sizeof(las_10_init_evt_hook));
     las_10_init_evt[1] = GSW(1708);
     las_10_init_evt[2] = 7;
     las_10_init_evt[61] = GSW(1708);
@@ -161,6 +218,8 @@ void ApplyLasPatches()
     las_unlock_evt_22[1] = GSW(1708);
     las_unlock_evt_22[2] = 11;
 
+    key_check_evt_22[2] = 46;
+
     las_22_init_evt[19] = GSW(1708);
     las_22_init_evt[20] = 8;
     las_22_init_evt[26] = GSW(1708);
@@ -183,6 +242,8 @@ void ApplyLasPatches()
 
     las_24_init_evt[44] = GSW(1708);
     las_24_init_evt[45] = 13;
+
+    key_check_evt_25[2] = 46;
 
     las_unlock_evt_25[1] = GSW(1708);
     las_unlock_evt_25[2] = 14;

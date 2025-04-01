@@ -238,6 +238,10 @@ namespace mod::owr
                                                          {
                                                              return "Oh my!<wait 100> Excuse me.\n<k>";
                                                          }
+                                                         if (!strcmp(msgKey, "jolene_fukidashi_end"))
+                                                         {
+                                                             return "Well then.<wait 100> Shall we\nget going?\n<k>";
+                                                         }
                                                          if (!strncmp(msgKey, "stg4_jin_19", 11) && strcmp(msgKey, "stg4_jin_19_select"))
                                                          {
                                                              return g_msgSearch_trampoline("stg4_jin_19_viv");
@@ -284,9 +288,23 @@ namespace mod::owr
                                                                  return message;
                                                              }
                                                          }
-                                                         if (!strcmp(msgKey, "jolene_fukidashi_end"))
+                                                         if (!strcmp(msgKey, "raise_text"))
                                                          {
-                                                             return "Well then.<wait 100> Shall we\nget going?\n<k>";
+                                                             return "<system>Would you like to raise the\n floor level of the "
+                                                                    "hallway?\n<o>";
+                                                         }
+                                                         if (!strcmp(msgKey, "raise_text_yn"))
+                                                         {
+                                                             return "<select 0 1 0 40>Yes\nNo";
+                                                         }
+                                                         if (!strcmp(msgKey, "lower_text"))
+                                                         {
+                                                             return "<system>Would you like to lower the\n floor level of the "
+                                                                    "hallway?\n<o>";
+                                                         }
+                                                         if (!strcmp(msgKey, "lower_text_yn"))
+                                                         {
+                                                             return "<select 0 1 0 40>Yes\nNo";
                                                          }
                                                          if (!strcmp(msgKey, "goombella"))
                                                          {

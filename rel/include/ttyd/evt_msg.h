@@ -25,7 +25,7 @@ namespace ttyd::evt_msg
         EVT_DECLARE_USER_FUNC(evt_msg_print_insert, -1)
         // evt_msg_print_battle_party
         // evt_msg_print_party_add
-        // evt_msg_print_party
+        EVT_DECLARE_USER_FUNC(evt_msg_print_party, 1)
         EVT_DECLARE_USER_FUNC(evt_msg_print, 4)
         // _evt_msg_print
         // evt_msg_init
