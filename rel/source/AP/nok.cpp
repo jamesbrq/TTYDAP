@@ -4,6 +4,7 @@
 #include <ttyd/evt_mario.h>
 #include <ttyd/evt_msg.h>
 #include <ttyd/evt_npc.h>
+#include <ttyd/evt_party.h>
 
 using namespace mod;
 using namespace ttyd;

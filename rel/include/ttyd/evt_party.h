@@ -15,7 +15,6 @@ namespace ttyd::evt_party
         // evt_party_nokotaro_kick_hold
         // evt_party_nokotaro_kick
         // evt_party_yoshi_fly
-        // evt_party_yoshi_ride
         // L_evt_party_vivian_tail
         // evt_party_vivian_unhold
         // evt_party_vivian_hold
@@ -35,6 +34,7 @@ namespace ttyd::evt_party
         // evt_party_wait_landon
         // evt_party_move_pos2
         // evt_party_move_pos
+        EVT_DECLARE_USER_FUNC(evt_party_yoshi_ride, 2)
         EVT_DECLARE_USER_FUNC(evt_party_run, 1)
         // evt_party_stop
         // evt_party_set_dispdir

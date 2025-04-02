@@ -68,21 +68,28 @@ EVT_BEGIN(stairs_revert)
             USER_FUNC(evt_msg::evt_msg_select, 0, PTR("raise_text_yn"))
             IF_EQUAL(LW(0), 0)
                 SET(GSWF(6112), 0)
+                USER_FUNC(evt_msg::evt_msg_print_add, 0, PTR("raise_text2"))
+            ELSE()
+                USER_FUNC(evt_msg::evt_msg_continue)
             END_IF()
         ELSE()
             USER_FUNC(evt_msg::evt_msg_print, 0, PTR("lower_text"), 0, 0)
             USER_FUNC(evt_msg::evt_msg_select, 0, PTR("lower_text_yn"))
             IF_EQUAL(LW(0), 0)
                 SET(GSWF(6112), 1)
+                USER_FUNC(evt_msg::evt_msg_print_add, 0, PTR("lower_text2"))
+            ELSE()
+                USER_FUNC(evt_msg::evt_msg_continue)
             END_IF()
         END_IF()
+        USER_FUNC(evt_mario::evt_mario_key_onoff, 1)
     END_IF()
     RETURN()
 EVT_END()
 
 EVT_BEGIN(las_10_init_evt_evt)
     USER_FUNC(evt_map::evt_mapobj_flag_onoff, 1, 1, PTR("hosi_off"), 1)
-    USER_FUNC(evt_case::evt_run_case_evt, 9, 1, PTR("A_daiza1"), 0, PTR(stairs_revert), 0)
+    USER_FUNC(evt_case::evt_run_case_evt, 9, 1, PTR("A_daiza1"), 0, PTR(&stairs_revert), 0)
     RETURN()
 EVT_END()
 
@@ -178,6 +185,8 @@ void ApplyLasPatches()
     daiza_evt[49] = 7;
 
     patch::writePatch(&las_10_init_evt[78], las_10_init_evt_hook, sizeof(las_10_init_evt_hook));
+    las_10_init_evt[82] = 0;
+    las_10_init_evt[83] = 0;
     las_10_init_evt[1] = GSW(1708);
     las_10_init_evt[2] = 7;
     las_10_init_evt[61] = GSW(1708);
@@ -194,10 +203,10 @@ void ApplyLasPatches()
     las_19_init_evt[12] = 8;
     las_19_init_evt[37] = GSW(1708);
     las_19_init_evt[38] = 10;
-    las_19_init_evt[76] = GSW(1708);
-    las_19_init_evt[77] = 8;
-    las_19_init_evt[144] = GSW(1708);
-    las_19_init_evt[145] = 8;
+    las_19_init_evt[76] = GSWF(6112);
+    las_19_init_evt[77] = 1;
+    las_19_init_evt[144] = GSWF(6112);
+    las_19_init_evt[145] = 1;
 
     hosi_sw_check[291] = GSW(1708);
     hosi_sw_check[292] = 12;
@@ -207,10 +216,10 @@ void ApplyLasPatches()
 
     las_21_init_evt[1] = GSW(1708);
     las_21_init_evt[2] = 8;
-    las_21_init_evt[28] = GSW(1708);
-    las_21_init_evt[29] = 8;
-    las_21_init_evt[77] = GSW(1708);
-    las_21_init_evt[78] = 8;
+    las_21_init_evt[28] = GSWF(6112);
+    las_21_init_evt[29] = 1;
+    las_21_init_evt[77] = GSWF(6112);
+    las_21_init_evt[78] = 1;
 
     las_key_evt_22[1] = GSWF(6073);
     las_key_evt_22[2] = 1;
@@ -231,8 +240,8 @@ void ApplyLasPatches()
 
     las_23_init_evt[1] = GSW(1708);
     las_23_init_evt[2] = 8;
-    las_23_init_evt[28] = GSW(1708);
-    las_23_init_evt[29] = 8;
+    las_23_init_evt[28] = GSWF(6112);
+    las_23_init_evt[29] = 1;
 
     break_floor_evt[1] = GSW(1708);
     break_floor_evt[2] = 13;
@@ -250,10 +259,10 @@ void ApplyLasPatches()
 
     las_25_init_evt[1] = GSW(1708);
     las_25_init_evt[2] = 8;
-    las_25_init_evt[28] = GSW(1708);
-    las_25_init_evt[29] = 8;
-    las_25_init_evt[51] = GSW(1708);
-    las_25_init_evt[52] = 8;
+    las_25_init_evt[28] = GSWF(6112);
+    las_25_init_evt[29] = 1;
+    las_25_init_evt[51] = GSWF(6112);
+    las_25_init_evt[52] = 1;
 
     bonbaba_evt[795] = GSWF(6072);
     bonbaba_evt[796] = 1;

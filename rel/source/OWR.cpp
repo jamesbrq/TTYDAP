@@ -5,6 +5,7 @@
 #include <gc/pad.h>
 #include <mod.h>
 #include <ttyd/common_types.h>
+#include <ttyd/evt_mario.h>
 #include <ttyd/evt_window.h>
 #include <ttyd/mario.h>
 #include <ttyd/mario_motion.h>
@@ -92,6 +93,9 @@ namespace mod::owr
     void (*g_seqSetSeq_trampoline)(SeqIndex seq, const char *map, const char *bero) = nullptr;
     void (*g_stg0_00_init_trampoline)() = nullptr;
     uint32_t (*g_pouchGetItem_trampoline)(int32_t) = nullptr;
+    int32_t (*g_pouchRemoveItem_trampoline)(int32_t) = nullptr;
+    void (*g_partySetForceMove_trampoline)(ttyd::party::PartyEntry *ptr, float x, float z, float speed) = nullptr;
+    int32_t (*g_evt_mario_set_pose_trampoline)(ttyd::evtmgr::EvtEntry *evt, bool firstCall) = nullptr;
     const char *(*g_msgSearch_trampoline)(const char *) = nullptr;
 
     void OWR::SequenceInit()
@@ -218,8 +222,9 @@ namespace mod::owr
 		g_seqSetSeq_trampoline = patch::hookFunction(ttyd::seqdrv::seqSetSeq,
                                                      [](SeqIndex seq, const char *map, const char *bero)
 													  {
-
-                                                        if (map && strcmp(map, "aaa_00") == 0)
+                                                        if (map == reinterpret_cast<const char *>(1))
+                                                             g_seqSetSeq_trampoline(seq, map, bero);
+                                                        else if (map && strcmp(map, "aaa_00") == 0)
                                                         {
                                                             uint32_t namePtr = 0x802c0298;
                                                             const char *mapName = reinterpret_cast<char *>(namePtr);
@@ -290,8 +295,13 @@ namespace mod::owr
                                                          }
                                                          if (!strcmp(msgKey, "raise_text"))
                                                          {
-                                                             return "<system>Would you like to raise the\n floor level of the "
+                                                             return "<system>Would you like to raise the\nfloor level of the "
                                                                     "hallway?\n<o>";
+                                                         }
+                                                         if (!strcmp(msgKey, "raise_text2"))
+                                                         {
+                                                             return "<system><p>The floor was raised.\n"
+                                                                    "<k>";
                                                          }
                                                          if (!strcmp(msgKey, "raise_text_yn"))
                                                          {
@@ -299,8 +309,13 @@ namespace mod::owr
                                                          }
                                                          if (!strcmp(msgKey, "lower_text"))
                                                          {
-                                                             return "<system>Would you like to lower the\n floor level of the "
+                                                             return "<system>Would you like to lower the\nfloor level of the "
                                                                     "hallway?\n<o>";
+                                                         }
+                                                         if (!strcmp(msgKey, "lower_text2"))
+                                                         {
+                                                             return "<system><p>The floor was lowered.\n"
+                                                                    "<k>";
                                                          }
                                                          if (!strcmp(msgKey, "lower_text_yn"))
                                                          {
@@ -495,11 +510,122 @@ namespace mod::owr
                                             return_value = 1;
                                             break;
                                         }
+                                        case ItemId::COCONUT:
+                                        {
+                                            // If the player has already given the coconut to Flavio, then just give the coconut
+                                            // normally
+                                            if (ttyd::swdrv::swByteGet(1714) >= 4)
+                                            {
+                                                return g_pouchGetItem_trampoline(item);
+                                            }
+
+                                            // Loop through all of the important items until either the coconut or an empty slot
+                                            // is found
+                                            constexpr uint32_t loopCount = sizeof(ttyd::mario_pouch::PouchData::key_items) / sizeof(int16_t);
+                                            int16_t *keyItemsPtr = &ttyd::mario_pouch::pouchGetPtr()->key_items[0];
+
+                                            for (uint32_t i = 0; i < loopCount; i++)
+                                            {
+                                                const int32_t currentItem = keyItemsPtr[i];
+                                                if (currentItem == ItemId::COCONUT)
+                                                {
+                                                    // The player already has the coconut in their important items, so just give
+                                                    // it normally
+                                                    return g_pouchGetItem_trampoline(item);
+                                                }
+                                                else if (currentItem == ItemId::INVALID_NONE)
+                                                {
+                                                    // The player does not have the coconut and an empty slot was found, so
+                                                    // place the coconut here
+                                                    keyItemsPtr[i] = ItemId::COCONUT;
+                                                    return static_cast<uint32_t>(1);
+                                                }
+                                            }
+
+                                            // If this is reached, then the important items part of the inventory is somehow
+                                            // full, so do some failsafe or something
+                                            return_value = 0;
+                                            break;
+                                        }
                                         default:
-                                            return_value = g_pouchGetItem_trampoline(item);
+                                            return g_pouchGetItem_trampoline(item);
                                     }
                                     return return_value;
                                 });
+
+                                g_pouchRemoveItem_trampoline = patch::hookFunction(ttyd::mario_pouch::pouchRemoveItem, [](int32_t item_data)
+                                { 
+                                        bool coconut_found = false;
+                                        switch (item_data)
+                                        {
+                                            case ItemId::COCONUT:
+                                            {
+                                                if (ttyd::swdrv::swByteGet(1714) >= 4)
+                                                    return g_pouchRemoveItem_trampoline(item_data);
+
+                                                if (ttyd::mario_pouch::pouchCheckItem(ItemId::COCONUT) != 0)
+                                                    return g_pouchRemoveItem_trampoline(item_data); 
+
+                                                constexpr uint32_t loopCount = sizeof(ttyd::mario_pouch::PouchData::key_items) / sizeof(int16_t);
+                                                int16_t *keyItemsPtr = &ttyd::mario_pouch::pouchGetPtr()->key_items[0];
+
+                                                for (uint32_t i = 0; i < loopCount; i++)
+                                                {
+                                                    const int32_t currentItem = keyItemsPtr[i];
+                                                    if (coconut_found)
+                                                    {
+                                                        if (currentItem != ItemId::INVALID_NONE)
+                                                        {
+     
+                                                            keyItemsPtr[i - 1] = currentItem;
+                                                        }
+                                                        else
+                                                        {
+                                                            keyItemsPtr[i - 1] = ItemId::INVALID_NONE;
+                                                            return 1;
+                                                        }
+                                                    }
+                                                    else if (currentItem == ItemId::COCONUT)
+                                                    {
+                                                        keyItemsPtr[i] = ItemId::INVALID_NONE;
+                                                        coconut_found = true;
+                                                    }
+                                                }
+
+                                                // If this is reached, then the there is no coconut key item in the inventory
+                                                return g_pouchRemoveItem_trampoline(item_data);
+                                            }
+                                            default:
+                                                return g_pouchRemoveItem_trampoline(item_data);
+                                        }
+                                });
+
+                                g_partySetForceMove_trampoline =patch::hookFunction(ttyd::party::partySetForceMove,
+                                                        [](ttyd::party::PartyEntry *ptr, float x, float z, float speed)
+                                                        {
+                                                            const Player *marioPtr = marioGetPtr();
+                                                            if (marioPtr->characterId != 0)
+                                                                return;
+
+                                                            if (marioPtr->motionId == static_cast<uint32_t>(ttyd::mario_motion::MarioMotion::kYoshi))
+                                                                ttyd::mario_motion::marioChgMot(ttyd::mario_motion::MarioMotion::kStay);
+
+                                                            g_partySetForceMove_trampoline(ptr, x, z, speed);
+                                                        });
+
+                                g_evt_mario_set_pose_trampoline = patch::hookFunction(ttyd::evt_mario::evt_mario_set_pose,
+                                                        [](ttyd::evtmgr::EvtEntry *evt, bool firstCall)
+                                                        {
+                                                            const Player *marioPtr = marioGetPtr();
+                                                            if (marioPtr->characterId == 0)
+                                                            {
+                                                                if (marioPtr->motionId == static_cast<uint32_t>(ttyd::mario_motion::MarioMotion::kYoshi))
+                                                                    ttyd::mario_motion::marioChgMot(ttyd::mario_motion::MarioMotion::kStay);
+                                                            }
+                                                            return g_evt_mario_set_pose_trampoline(evt, firstCall);
+                                                        });
+
+
     }
 
     void OWR::Update()
@@ -583,6 +709,9 @@ namespace mod::owr
                 break;
             case ModuleId::TIK:
                 ApplyTikPatches();
+                break;
+            case ModuleId::LAS:
+                ApplyLasPatches();
                 break;
             default:
                 break;

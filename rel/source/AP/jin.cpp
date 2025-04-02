@@ -1,5 +1,9 @@
 #include "evt_cmd.h"
+#include "patch.h"
 #include <AP/rel_patch_definitions.h>
+
+using namespace mod;
+using namespace ttyd;
 
 extern int32_t door_teresa_n[];
 extern int32_t door_teresa_s[];
@@ -36,6 +40,17 @@ extern int32_t phase_event_fmario[];
 
 // Assembly
 extern int32_t jin_evt_kagemario_init[];
+
+// clang-format off
+EVT_BEGIN(jin_08_init_evt_evt)
+    RUN_EVT(&oumu_check)
+    SET(GSWF(2231), 1)
+    RETURN()
+EVT_END()
+
+EVT_BEGIN(jin_08_init_evt_hook)
+    RUN_CHILD_EVT(jin_08_init_evt_evt)
+EVT_PATCH_END()
 
 void ApplyJinPatches()
 {
@@ -149,12 +164,13 @@ void ApplyJinPatches()
 
     oumu_talk[7] = GSW(1715);
     oumu_talk[9] = 7;
-
+        
     oumu_check[114] = GSW(1715);
     oumu_check[115] = 0;
     oumu_check[117] = GSW(1715);
     oumu_check[118] = 5;
 
+    patch::writePatch(&jin_08_init_evt[134], jin_08_init_evt_hook, sizeof(jin_08_init_evt_hook));
     jin_08_init_evt[26] = GSWF(6049);
     jin_08_init_evt[27] = 1;
 

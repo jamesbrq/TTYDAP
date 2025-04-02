@@ -18,7 +18,7 @@ namespace ttyd::mario
         uint32_t unk_24;
         uint16_t unk_28;
         uint16_t pad_2a;
-        uint32_t unk_2c;
+        uint32_t motionId;
         uint16_t prevMotionId;
         uint16_t pad_32;
         uint32_t wMapTime;
@@ -137,7 +137,7 @@ namespace ttyd::mario
         // marioChgPaper
         // marioChgPoseTime
         // marioChgPose
-        // toDotMarioPose
+        uint32_t toDotMarioPose();
         // marioChgEvtPose
         // marioAnimeId
         // marioChkPushAnime

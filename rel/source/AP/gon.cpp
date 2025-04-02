@@ -20,10 +20,12 @@ extern int32_t evt_kaidan_pera[];
 extern int32_t evt_hashi_pera0[];
 extern int32_t evt_hashi_pera1[];
 extern int32_t evt_hashi[];
+extern int32_t gon_evt_chk_04[];
 extern int32_t gon_evt_unlock_04[];
 extern int32_t gon_key_get_04[];
 extern int32_t gon_04_init_evt[];
 extern int32_t evt_unlock00[];
+extern int32_t gon_evt_chk01_05[];
 extern int32_t evt_unlock01[];
 extern int32_t gon_key_get_05[];
 extern int32_t gon_05_init_evt[];
@@ -33,6 +35,7 @@ extern int32_t gon_06_init_evt[];
 extern int32_t out_func[];
 extern int32_t gon_item_evt_07[];
 extern int32_t gon_07_init_evt[];
+extern int32_t gon_evt_chk_08[];
 extern int32_t gon_evt_unlock_08[];
 extern int32_t gon_08_init_evt[];
 extern int32_t gon_10_init_evt[];
@@ -110,6 +113,8 @@ void ApplyGonPatches()
     evt_hashi[25] = GSWF(6004);
     evt_hashi[26] = 1;
 
+    gon_evt_chk_04[2] = 12;
+
     gon_evt_unlock_04[6] = GSWF(6005);
     gon_evt_unlock_04[7] = 1;
 
@@ -123,6 +128,8 @@ void ApplyGonPatches()
 
     evt_unlock00[6] = GSWF(6007);
     evt_unlock00[7] = 1;
+
+    gon_evt_chk01_05[2] = 12;
 
     evt_unlock01[6] = GSWF(6008);
     evt_unlock01[7] = 1;
@@ -159,6 +166,8 @@ void ApplyGonPatches()
 
     gon_07_init_evt[22] = GSWF(6012);
     gon_07_init_evt[23] = 1;
+
+    gon_evt_chk_08[2] = 12;
 
     gon_evt_unlock_08[6] = GSWF(6013);
     gon_evt_unlock_08[7] = 1;

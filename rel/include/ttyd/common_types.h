@@ -306,7 +306,7 @@ namespace ttyd::common
     {
         enum e
         {
-            INVALID_ITEM = 0,
+            INVALID_NONE = 0,
             STRANGE_SACK,
             INVALID_ITEM_PAPER_MODE_ICON,
             INVALID_ITEM_TUBE_MODE_ICON,

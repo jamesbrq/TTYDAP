@@ -177,7 +177,7 @@ namespace ttyd::party
         // partyEntryPos
         // partyEntry
         // partyEntryHello
-        // partySetForceMove
+        void partySetForceMove(PartyEntry *ptr, float x, float z, float speed);
         // partyStop
         // partyRun
         // partyCtrlOn
