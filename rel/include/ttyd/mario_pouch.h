@@ -87,7 +87,7 @@ namespace ttyd::mario_pouch
         // pouchUnEquipBadgeIndex
         int32_t pouchEquipBadgeIndex(int32_t index);
         // pouchGetStarPoint
-        // pouchRevisePartyParam
+        void pouchRevisePartyParam();
         void pouchReviseMarioParam();
         // pouchRemoveKeepItem
         // pouchAddKeepItem

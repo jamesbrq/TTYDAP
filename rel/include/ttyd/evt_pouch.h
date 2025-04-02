@@ -16,8 +16,8 @@ namespace ttyd::evt_pouch
         // evt_pouch_get_equipbadgecnt
         EVT_DECLARE_USER_FUNC(evt_pouch_get_havebadgecnt, 1)
         // evt_pouch_get_haveitemcnt
-        // evt_pouch_all_party_recovery
-        // evt_pouch_mario_recovery
+        EVT_DECLARE_USER_FUNC(evt_pouch_all_party_recovery, 1)
+        EVT_DECLARE_USER_FUNC(evt_pouch_mario_recovery, 1)
         EVT_DECLARE_USER_FUNC(evt_pouch_party_left, 1)
         EVT_DECLARE_USER_FUNC(evt_pouch_party_join, 1)
         EVT_DECLARE_USER_FUNC(evt_pouch_check_item, 2)

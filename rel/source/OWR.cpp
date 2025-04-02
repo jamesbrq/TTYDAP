@@ -6,6 +6,7 @@
 #include <mod.h>
 #include <ttyd/common_types.h>
 #include <ttyd/evt_mario.h>
+#include <ttyd/evt_pouch.h>
 #include <ttyd/evt_window.h>
 #include <ttyd/mario.h>
 #include <ttyd/mario_motion.h>
@@ -14,8 +15,8 @@
 #include <ttyd/mariost.h>
 #include <ttyd/msgdrv.h>
 #include <ttyd/party.h>
-#include <ttyd/seqdrv.h>
 #include <ttyd/seq_mapchange.h>
+#include <ttyd/seqdrv.h>
 #include <ttyd/string.h>
 #include <ttyd/swdrv.h>
 
@@ -33,6 +34,8 @@ using ttyd::seq_mapchange::_next_area;
 using namespace mod::util;
 using namespace ttyd::common;
 using namespace ttyd::mario;
+using namespace ttyd::mario_pouch;
+using namespace ttyd::evt_pouch;
 using namespace ttyd::seqdrv;
 
 const uint16_t GSWF_ARR[] = {
@@ -134,6 +137,15 @@ namespace mod::owr
         {
             ttyd::swdrv::swSet(GSWF_ARR[i]);
         }
+
+        // Perform a full recovery for Mario and the partners
+        pouchReviseMarioParam();
+        evt_pouch_mario_recovery(nullptr, false); // Parameters are unused for this function
+
+        // Must call pouchRevisePartyParam to properly set each partner's stats, otherwise they will each have a maximum of 10
+        // HP
+        pouchRevisePartyParam();
+        evt_pouch_all_party_recovery(nullptr, false); // Parameters are unused for this function
     }
 
     bool checkIfInGame()
