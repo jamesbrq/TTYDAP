@@ -8,6 +8,7 @@
 #include <ttyd/evt_npc.h>
 #include <ttyd/evt_paper.h>
 #include <ttyd/evt_snd.h>
+#include <ttyd/mri_puni.h>
 
 using namespace mod;
 using namespace ttyd;
@@ -583,6 +584,21 @@ EVT_BEGIN(mri_09_init_evt_hook)
 RUN_CHILD_EVT(mri_09_init_evt_evt)
 GOTO(&mri_09_init_evt[188])
 EVT_PATCH_END()
+
+EVT_BEGIN(guide_sister_evt)
+    SWITCH(LW(10))
+        CASE_BETWEEN(5, 13)
+        CASE_ETC()
+            USER_FUNC(mri_puni::evt_puni_set_mode, LW(10), 1)
+            USER_FUNC(mri_puni::evt_puni_flag_onoff, LW(10), 1, 8388608)
+    END_SWITCH()
+    RETURN()
+EVT_END()
+
+EVT_BEGIN(guide_sister_hook)
+    RUN_CHILD_EVT(guide_sister_evt)
+    GOTO(&guide_sister[703])
+EVT_PATCH_END()
 // clang-format on
 
 void ApplyMriPatches()
@@ -771,6 +787,7 @@ void ApplyMriPatches()
 
     guide_sister[651] = EVT_HELPER_CMD(2, 53);
     guide_sister[653] = 89;
+    patch::writePatch(&guide_sister[699], guide_sister_hook, sizeof(guide_sister_hook));
     guide_sister[761] = GSWF(6020);
     guide_sister[762] = 1;
 
