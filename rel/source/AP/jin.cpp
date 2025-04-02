@@ -51,6 +51,7 @@ EVT_END()
 EVT_BEGIN(jin_08_init_evt_hook)
     RUN_CHILD_EVT(jin_08_init_evt_evt)
 EVT_PATCH_END()
+// clang-format on
 
 void ApplyJinPatches()
 {

@@ -222,8 +222,11 @@ namespace mod::owr
 		g_seqSetSeq_trampoline = patch::hookFunction(ttyd::seqdrv::seqSetSeq,
                                                      [](SeqIndex seq, const char *map, const char *bero)
 													  {
+                                                        // Check if map is equal to 1 so we dont call a strcmp with an invalid pointer
                                                         if (map == reinterpret_cast<const char *>(1))
-                                                             g_seqSetSeq_trampoline(seq, map, bero);
+                                                        {
+                                                            g_seqSetSeq_trampoline(seq, map, bero);
+                                                        }
                                                         else if (map && strcmp(map, "aaa_00") == 0)
                                                         {
                                                             uint32_t namePtr = 0x802c0298;
@@ -578,10 +581,19 @@ namespace mod::owr
                                                         {
      
                                                             keyItemsPtr[i - 1] = currentItem;
+                                                            if (i == loopCount - 1)
+                                                            {
+                                                                keyItemsPtr[i] = ItemId::INVALID_NONE;
+                                                                return 1;
+                                                            }
                                                         }
                                                         else
                                                         {
                                                             keyItemsPtr[i - 1] = ItemId::INVALID_NONE;
+                                                            if (i == loopCount - 1)
+                                                            {
+                                                                keyItemsPtr[i] = ItemId::INVALID_NONE;
+                                                            }
                                                             return 1;
                                                         }
                                                     }
