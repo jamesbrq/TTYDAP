@@ -12,5 +12,5 @@ StateManager::StateManager()
 
 void StateManager::Init()
 {
-    gState->apSettings = reinterpret_cast<APSettings *>(0x80003210);
+    gState->apSettings = reinterpret_cast<APSettings *>(0x80003220);
 }
