@@ -58,6 +58,7 @@ extern int32_t pinkbom_talk[];
 extern int32_t master_2_talk[];
 extern int32_t evt_open_04_open[];
 extern int32_t evt_door_04_close[];
+extern int32_t evt_door_stg7_open[];
 extern int32_t tensou_init_event[];
 extern int32_t tensou_sw_event[];
 extern int32_t kurihakase_event[];
@@ -417,6 +418,10 @@ void ApplyTikPatches()
     evt_door_04_close[14] = 20;
     evt_door_04_close[69] = GSW(1707);
     evt_door_04_close[70] = 20;
+
+    evt_door_stg7_open[0] = EVT_HELPER_CMD(2, 26);
+    evt_door_stg7_open[1] = EVT_HELPER_OP(GSW(1707));
+    evt_door_stg7_open[2] = 6;
 
     tensou_init_event[4] = GSW(1700);
     tensou_init_event[6] = 0;  // Unused

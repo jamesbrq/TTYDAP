@@ -704,7 +704,6 @@ void ApplyMriPatches()
     meet_rival[2112] = GSW(1713);
     meet_rival[2113] = 3;
 
-    rival_nakama[1077] = EVT_HELPER_CMD(2, 53);
     rival_nakama[1125] = GSW(1713);
     rival_nakama[1126] = 5;
 
@@ -785,9 +784,6 @@ void ApplyMriPatches()
     bero_custom_00[4] = GSW(1713);
     bero_custom_00[5] = 4;
 
-    guide_sister[651] = EVT_HELPER_CMD(2, 53);
-    guide_sister[653] = 89;
-    patch::writePatch(&guide_sister[699], guide_sister_hook, sizeof(guide_sister_hook));
     guide_sister[761] = GSWF(6020);
     guide_sister[762] = 1;
 

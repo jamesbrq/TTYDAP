@@ -76,8 +76,11 @@ const uint16_t GSWF_ARR[] = {
     // Ch.4 talk to shopkeep once
     1925,
 
-    //ch.4 bird room lock
-    2231
+    // Ch.4 bird room lock
+    2231,
+
+    // Spawn General white
+    3880
 };
 constexpr int32_t GSWF_ARR_SIZE = sizeof(GSWF_ARR) / sizeof(GSWF_ARR[0]);
 
@@ -261,6 +264,10 @@ namespace mod::owr
                                                          if (!strcmp(msgKey, "jolene_fukidashi_end"))
                                                          {
                                                              return "Well then.<wait 100> Shall we\nget going?\n<k>";
+                                                         }
+                                                         if (!strcmp(msgKey, "madam_abort"))
+                                                         {
+                                                             return "<p>Oh silly me, I already have\nmy ring.<k>";
                                                          }
                                                          if (!strncmp(msgKey, "stg4_jin_19", 11) && strcmp(msgKey, "stg4_jin_19_select"))
                                                          {

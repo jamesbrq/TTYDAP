@@ -114,7 +114,7 @@ extern int32_t evt_great_moamoa[];
 extern int32_t rsh_06_init_evt[];
 extern int32_t rsh_06_a_init_evt[];
 
-const char madame[] = "\x83\x7D\x83\x5F\x83\x80";
+const char madam1[] = "\x83\x7D\x83\x5F\x83\x80";
 
 // Assembly
 extern int32_t rsh_prolog[];
@@ -628,46 +628,49 @@ GOTO(&init_konari_rsh_04[29])
 EVT_PATCH_END()
 
 EVT_BEGIN(talk_madam_ring_return_evt)
-IF_LARGE_EQUAL(GSW(1720), 1)
-IF_SMALL(GSW(1720), 8)
-USER_FUNC(evt_snd::evt_snd_bgmoff, 26624)
-RETURN()
-END_IF()
-END_IF()
-SWITCH(GSW(1706))
-CASE_BETWEEN(32, 36)
-USER_FUNC(evt_snd::evt_snd_bgmoff, 26624)
-CASE_END()
-CASE_ETC()
-USER_FUNC(evt_snd::evt_snd_bgmon, 160, 0)
-CASE_END()
-END_SWITCH()
-RETURN()
+    IF_LARGE_EQUAL(GSW(1720), 1)
+        IF_SMALL_EQUAL(GSW(1720), 8)
+            USER_FUNC(evt_snd::evt_snd_bgmoff, 26624)
+            RETURN()
+        END_IF()
+    END_IF()
+    SWITCH(GSW(1706))
+        CASE_BETWEEN(38, 48)
+            USER_FUNC(evt_snd::evt_snd_bgmoff, 26624)
+        CASE_ETC()
+            USER_FUNC(evt_snd::evt_snd_bgmon, 160, 0)
+    END_SWITCH()
+    RETURN()
 EVT_END()
 
 EVT_BEGIN(talk_madam_ring_return_hook1)
-RUN_CHILD_EVT(talk_madam_ring_return_evt)
-GOTO(&talk_madam_ring_return[65])
-EVT_PATCH_END()
+    RUN_CHILD_EVT(talk_madam_ring_return_evt)
+    RETURN()
+EVT_END()
 
-EVT_BEGIN(talk_madam_ring_return_hook2)
-RUN_CHILD_EVT(talk_madam_ring_return_evt)
-GOTO(&talk_madam_rsh_01[69])
+EVT_BEGIN(talk_madam_hook)
+    RUN_CHILD_EVT(talk_madam_ring_return_evt)
+    GOTO(&talk_madam_rsh_01[69])
 EVT_PATCH_END()
 
 EVT_BEGIN(talk_madam_ring_item)
-USER_FUNC(evt_msg::evt_msg_print, 0, PTR("stg6_rsh_201"), 0, PTR(madame))
-USER_FUNC(evt_mario::evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
-USER_FUNC(evt_item::evt_item_entry, PTR("item01"), LW(3), LW(0), LW(1), LW(2), 16, GSWF(6092), 0)
-USER_FUNC(evt_item::evt_item_get_item, PTR("item01"))
-WAIT_MSEC(800)
-USER_FUNC(evt_msg::evt_msg_print, 0, PTR("stg6_rsh_202"), 0, PTR(madame))
-RETURN()
+    IF_EQUAL(GSWF(6092), 0)
+        USER_FUNC(evt_msg::evt_msg_print, 0, PTR("stg6_rsh_201"), 0, PTR(madam1))
+        USER_FUNC(evt_mario::evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
+        USER_FUNC(evt_item::evt_item_entry, PTR("item01"), LW(3), LW(0), LW(1), LW(2), 16, GSWF(6092), 0)
+        USER_FUNC(evt_item::evt_item_get_item, PTR("item01"))
+        WAIT_MSEC(800)
+        USER_FUNC(evt_msg::evt_msg_print, 0, PTR("stg6_rsh_202"), 0, PTR(madam1))
+        RETURN()
+    ELSE()
+        USER_FUNC(evt_msg::evt_msg_print, 0, PTR("madam_abort"), 0, PTR(madam1))
+    END_IF()
+    RETURN()
 EVT_END()
 
-EVT_BEGIN(talk_madam_ring_return_hook3)
-RUN_CHILD_EVT(talk_madam_ring_item)
-GOTO(&talk_madam_ring_return[33])
+EVT_BEGIN(talk_madam_ring_return_hook2)
+    RUN_CHILD_EVT(talk_madam_ring_item)
+    GOTO(&talk_madam_ring_return[33])
 EVT_PATCH_END()
 // clang-format on
 
@@ -792,12 +795,15 @@ void ApplyRshPatches()
     patch::writePatch(&talk_madam_ring_return[45], talk_madam_ring_return_hook1, sizeof(talk_madam_ring_return_hook1));
     talk_madam_ring_return[18] = EVT_HELPER_CMD(2, 50);
     talk_madam_ring_return[19] = EVT_HELPER_OP(LW(3));
-    patch::writePatch(&talk_madam_ring_return[21], talk_madam_ring_return_hook3, sizeof(talk_madam_ring_return_hook3));
+    patch::writePatch(&talk_madam_ring_return[21], talk_madam_ring_return_hook2, sizeof(talk_madam_ring_return_hook2));
+    talk_madam_ring_return[25] = 0;
+    talk_madam_ring_return[26] = 0;
 
     talk_madam_rsh_01[1] = GSW(1706);
     talk_madam_rsh_01[2] = 8;
 
-    patch::writePatch(&talk_madam_rsh_01[48], talk_madam_ring_return_hook2, sizeof(talk_madam_ring_return_hook2));
+    patch::writePatch(&talk_madam_rsh_01[49], talk_madam_hook, sizeof(talk_madam_hook));
+    talk_madam_rsh_01[53] = 0;
     talk_madam_rsh_01[84] = GSW(1706);
     talk_madam_rsh_01[86] = 4;
     talk_madam_rsh_01[94] = 7;

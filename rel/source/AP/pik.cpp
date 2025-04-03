@@ -63,7 +63,7 @@ extern int32_t evt_roten[];
 extern int32_t pik_04_init_evt[];
 extern int32_t pik_talk_madam_ring_return[];
 
-const char madame2[] = "\x83\x7D\x83\x5F\x83\x80";
+const char madam2[] = "\x83\x7D\x83\x5F\x83\x80";
 
 // clang-format off
 EVT_BEGIN(miyageya_talk_evt)
@@ -201,18 +201,22 @@ RETURN()
 EVT_END()
 
 EVT_BEGIN(talk_madam_ring_item)
-USER_FUNC(evt_msg::evt_msg_print, 0, PTR("stg6_pik_04_07"), 0, PTR(madame2))
-USER_FUNC(evt_mario::evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
-USER_FUNC(evt_item::evt_item_entry, PTR("item01"), LW(3), LW(0), LW(1), LW(2), 16, GSWF(6092), 0)
-USER_FUNC(evt_item::evt_item_get_item, PTR("item01"))
-WAIT_MSEC(800)
-USER_FUNC(evt_msg::evt_msg_print, 0, PTR("stg6_pik_04_08"), 0, PTR(madame2))
-RETURN()
+    IF_EQUAL(GSWF(6092), 0)
+        USER_FUNC(evt_msg::evt_msg_print, 0, PTR("stg6_pik_04_07"), 0, PTR(madam2))
+        USER_FUNC(evt_mario::evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
+        USER_FUNC(evt_item::evt_item_entry, PTR("item01"), LW(3), LW(0), LW(1), LW(2), 16, GSWF(6092), 0)
+        USER_FUNC(evt_item::evt_item_get_item, PTR("item01"))
+        WAIT_MSEC(800)
+        USER_FUNC(evt_msg::evt_msg_print, 0, PTR("stg6_pik_04_08"), 0, PTR(madam2))
+    ELSE()
+        USER_FUNC(evt_msg::evt_msg_print, 0, PTR("madam_abort"), 0, PTR(madam2))
+    END_IF()
+    RETURN()
 EVT_END()
 
-EVT_BEGIN(pik_talk_madam_ring_return_hook3)
-RUN_CHILD_EVT(talk_madam_ring_item)
-GOTO(&pik_talk_madam_ring_return[33])
+EVT_BEGIN(pik_talk_madam_ring_return_hook)
+    RUN_CHILD_EVT(talk_madam_ring_item)
+    GOTO(&pik_talk_madam_ring_return[33])
 EVT_PATCH_END()
 
 EVT_BEGIN(pik_00_init_evt_evt)
@@ -239,9 +243,9 @@ void ApplyPikPatches()
 {
     pik_talk_madam_ring_return[18] = EVT_HELPER_CMD(2, 50);
     pik_talk_madam_ring_return[19] = EVT_HELPER_OP(LW(3));
-    patch::writePatch(&pik_talk_madam_ring_return[21],
-                      pik_talk_madam_ring_return_hook3,
-                      sizeof(pik_talk_madam_ring_return_hook3));
+    patch::writePatch(&pik_talk_madam_ring_return[21], pik_talk_madam_ring_return_hook, sizeof(pik_talk_madam_ring_return_hook));
+    pik_talk_madam_ring_return[25] = 0;
+    pik_talk_madam_ring_return[26] = 0;
 
     hom_10_evt_resha_start_pik_00[49] = GSW(1706);
     hom_10_evt_resha_start_pik_00[50] = 43;
@@ -274,7 +278,7 @@ void ApplyPikPatches()
     talk_konari[19] = 3;
 
     talk_madam[144] = GSW(1706);
-    talk_madam[145] = 51;
+    talk_madam[146] = 51;
     talk_madam[165] = GSW(1708);
     talk_madam[166] = 18;
 
