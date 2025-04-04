@@ -34,6 +34,8 @@ extern "C"
     void bPowerupblkReleaseReturn();
     void bPeachPointer();
     void bPeachReturn();
+    void bShopItemCheckFix();
+    void bShopItemCheckFixReturn();
 
     void asmPreventDiaryTextboxSelection();
     void cPreventDiaryTextboxOptionSelection(const char *currentText, int32_t *storeAddress, int32_t selectedOption);
@@ -41,6 +43,7 @@ extern "C"
 
 EVT_DECLARE_USER_FUNC(checkChapterRequirements, 1)
 EVT_DECLARE_USER_FUNC(checkChapterClears, 1)
+EVT_DECLARE_USER_FUNC(setShopFlags, 1)
 
 void ApplyAaaPatches();
 void ApplyAjiPatches();

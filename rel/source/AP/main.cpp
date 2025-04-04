@@ -1,16 +1,20 @@
 #include "patch.h"
+#include "ttyd/seq_mapchange.h"
+#include "ttyd/seqdrv.h"
 #include <AP/rel_patch_definitions.h>
 #include <ttyd/common_types.h>
+#include <ttyd/evtmgr_cmd.h>
 #include <ttyd/icondrv.h>
 #include <ttyd/item_data.h>
-#include "ttyd/seqdrv.h"
-#include "ttyd/seq_mapchange.h"
+#include <ttyd/swdrv.h>
 
 #include "evt_cmd.h"
 #include <cstdint>
 #include <cstring>
 
-using namespace ::ttyd::seq_mapchange;
+using namespace ttyd::seq_mapchange;
+using namespace ttyd::evtmgr_cmd;
+using namespace ttyd::swdrv;
 
 using namespace mod;
 using namespace mod::patch;
@@ -60,6 +64,7 @@ extern int32_t mobj_kururing_floor[];
 extern int32_t mobj_powerupblk[];
 extern int32_t evt_mobj_powerupblk[];
 extern int32_t breakfast[];
+extern int32_t evt_shop_setup[];
 // End of Assembly References
 
 // Script References
@@ -79,12 +84,50 @@ extern int32_t mail_evt_usu_01[];
 extern int32_t mail_evt_gor_01_2[];
 extern int32_t mail_evt_rsh_03_a_2[];
 extern int32_t mail_evt_pik_00[];
+
+uintptr_t goods[] = {
+    0x805f162c, 
+    0x80612510,
+    0x805c8738,
+    0x805be5b4,
+    0x805fb948,
+    0x805d5874,
+    0x805d0588,
+    0x805dc5b8,
+    0x805de110, 
+    0x805cbb14
+};
+
 extern int32_t mobj_save_blk_sysevt[];
 extern int32_t init_event[];
 extern int32_t evt_lecture_msg[];
 extern int32_t evt_msg_print_party[];
 extern int32_t evt_msg_print_party_add[];
 extern int32_t preventDiaryTextboxSelectionAddress[];
+
+EVT_DEFINE_USER_FUNC(setShopFlags)  
+{  
+   (void)isFirstCall;  
+   int shopWork = evtGetValue(evt, evt->evtArguments[0]);
+   void *shopWorkPtr = reinterpret_cast<void *>(shopWork);
+
+   uint32_t *itemIds = reinterpret_cast<uint32_t *>(*reinterpret_cast<int **>(static_cast<char *>(shopWorkPtr) + 0x08));
+   uint32_t selectedIndex = *reinterpret_cast<uint32_t *>(*reinterpret_cast<int **>(static_cast<char *>(shopWorkPtr) + 0x2C));
+   int gswfBase = 6200;
+
+   uintptr_t itemIdsAddress = reinterpret_cast<uintptr_t>(itemIds);
+   for (int i = 0; i < static_cast<int>(sizeof(goods) / sizeof(uintptr_t)); i++)
+   {
+       if (itemIdsAddress != goods[i])
+       {
+           gswfBase += 6;
+           continue;
+       }
+       break;
+   }
+   swSet(gswfBase + selectedIndex);
+   return 2;  
+}
 
 void ApplyMainAssemblyPatches()
 {
