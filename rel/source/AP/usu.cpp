@@ -8,6 +8,7 @@
 #include <ttyd/evt_mobj.h>
 #include <ttyd/evt_msg.h>
 #include <ttyd/evt_npc.h>
+#include <ttyd/evt_party.h>
 #include <ttyd/evt_snd.h>
 
 using namespace mod;
@@ -699,9 +700,15 @@ EVT_BEGIN(usu_party_evt)
 	USER_FUNC(evt_npc::evt_npc_set_position, PTR(vivian), 0, -1000, 0)
 	USER_FUNC(evt_cam::evt_cam3d_evt_off, 100, 11)
 	USER_FUNC(evt_mario::evt_mario_key_onoff, 1)
+	USER_FUNC(evt_party::evt_party_run, 0)
 	USER_FUNC(evt_snd::evt_snd_bgmon, 512, PTR("BGM_STG4_USU1"))
 	USER_FUNC(evt_snd::evt_snd_envon, 272, PTR("ENV_STG4_USU1"))
 	RETURN()
+EVT_END()
+
+EVT_BEGIN(usu_party_evt_hook)
+    RUN_CHILD_EVT(usu_party_evt)
+    RETURN()
 EVT_END()
 
 EVT_BEGIN(usu_evt_majin2_item)
@@ -781,7 +788,7 @@ void ApplyUsuPatches()
 
     usu00_vivian_joinup_event[548] = EVT_HELPER_CMD(2, 50);
     usu00_vivian_joinup_event[549] = EVT_HELPER_OP(LW(3));
-    patch::writePatch(&usu00_vivian_joinup_event[551], usu_party_evt, sizeof(usu_party_evt));
+    patch::writePatch(&usu00_vivian_joinup_event[551], usu_party_evt_hook, sizeof(usu_party_evt_hook));
 
     usu00_crowAB_talk_event[218] = GSW(1704);
     usu00_crowAB_talk_event[219] = 0; // Unused

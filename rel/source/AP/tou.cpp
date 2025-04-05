@@ -485,6 +485,7 @@ void ApplyTouPatches()
     evt_hotdog[52] = EVT_HELPER_OP(LW(3));
     patch::writePatch(&evt_hotdog[54], hotdog_item_hook, sizeof(hotdog_item_hook));
     evt_hotdog[65] = 0;
+    evt_hotdog[70] = 0;
 
     tou_01_init_evt[107] = GSW(1708);
     tou_01_init_evt[108] = 16;
@@ -1032,8 +1033,8 @@ void ApplyTouPatches()
     tou_11_init_evt[141] = 11;
     tou_11_init_evt[154] = 21;
 
-    tou_evt_block_broken_12[52] = GSWF(6038);
-    tou_evt_block_broken_12[53] = 1;
+    tou_evt_block_broken_12[53] = GSWF(6038);
+    tou_evt_block_broken_12[54] = 1;
 
     tou_init_michel_12[1] = GSW(1703);
     tou_init_michel_12[2] = 20;

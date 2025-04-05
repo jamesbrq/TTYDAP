@@ -42,14 +42,14 @@ extern int32_t hei_13_init_evt[];
 const char koops[] = "\x83\x6D\x83\x52\x83\x5E\x83\x8D\x83\x45";
 
 // clang-format off
-EVT_BEGIN(party_evt)
-USER_FUNC(evt_mario::evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
-USER_FUNC(evt_item::evt_item_entry, PTR("item01"), LW(3), LW(0), LW(1), LW(2), 16, GSWF(6077), 0)
-USER_FUNC(evt_item::evt_item_get_item, PTR("item01"))
-WAIT_MSEC(800)
-SET(GSW(1701), 10)
-USER_FUNC(evt_npc::evt_npc_set_position, PTR(koops), 0, -1000, 0)
-RETURN()
+EVT_BEGIN(hei_party_evt)
+    USER_FUNC(evt_mario::evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
+    USER_FUNC(evt_item::evt_item_entry, PTR("item01"), LW(3), LW(0), LW(1), LW(2), 16, GSWF(6077), 0)
+    USER_FUNC(evt_item::evt_item_get_item, PTR("item01"))
+    WAIT_MSEC(800)
+    SET(GSW(1701), 10)
+    USER_FUNC(evt_npc::evt_npc_set_position, PTR(koops), 0, -1000, 0)
+    RETURN()
 EVT_END()
 
 EVT_BEGIN(stones_evt)
@@ -126,7 +126,7 @@ void ApplyHeiPatches()
 
     nokotaro_get[37] = EVT_HELPER_CMD(2, 50);
     nokotaro_get[38] = EVT_HELPER_OP(LW(3));
-    patch::writePatch(&nokotaro_get[40], party_evt, sizeof(party_evt));
+    patch::writePatch(&nokotaro_get[40], hei_party_evt, sizeof(hei_party_evt));
 
     nokotaro_nakama[11] = GSW(1701);
     nokotaro_nakama[12] = 9;

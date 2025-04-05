@@ -4,6 +4,7 @@
 #include <ttyd/evt_item.h>
 #include <ttyd/evt_mario.h>
 #include <ttyd/evt_npc.h>
+#include <ttyd/evt_party.h>
 #include <ttyd/evt_snd.h>
 
 using namespace mod;
@@ -110,6 +111,7 @@ EVT_BEGIN(win_party_evt)
 	USER_FUNC(evt_npc::evt_npc_set_position, PTR(flurrie), 0, -1000, 0)
 	USER_FUNC(evt_cam::evt_cam3d_evt_off, 300, 11)
 	USER_FUNC(evt_mario::evt_mario_key_onoff, 1)
+	USER_FUNC(evt_party::evt_party_run, 0)
 	USER_FUNC(evt_snd::evt_snd_bgmon, 512, PTR("BGM_STG2_WIN1"))
 	USER_FUNC(evt_snd::evt_snd_bgmoff, 22528)
 	USER_FUNC(evt_snd::evt_snd_envon, 272, PTR("ENV_STG2_WIN2"))
