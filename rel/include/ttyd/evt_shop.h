@@ -16,10 +16,11 @@ namespace ttyd::evt_shop
         // item_data_db_arrange
         EVT_DECLARE_USER_FUNC(sell_pouchcheck_func, 0)
         EVT_DECLARE_USER_FUNC(name_price, 3)
+        EVT_DECLARE_USER_FUNC(get_buy_evt, 1)
+        EVT_DECLARE_USER_FUNC(get_ptr, 1)
         // get_fook_evt
         // get_ptr
         // set_buy_item_id
-        // get_buy_evt
         // get_msg
         // get_value
         // disp_off

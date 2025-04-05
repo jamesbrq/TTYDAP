@@ -34,8 +34,9 @@ extern "C"
     void bPowerupblkReleaseReturn();
     void bPeachPointer();
     void bPeachReturn();
-    void bShopItemCheckFix();
-    void bShopItemCheckFixReturn();
+    void bShopFlagCheck();
+    void bShopFlagCheckReturn();
+    void checkShopFlag(uint32_t item, uint32_t index);
 
     void asmPreventDiaryTextboxSelection();
     void cPreventDiaryTextboxOptionSelection(const char *currentText, int32_t *storeAddress, int32_t selectedOption);

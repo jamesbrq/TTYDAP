@@ -3,6 +3,7 @@
 #include "ttyd/seqdrv.h"
 #include <AP/rel_patch_definitions.h>
 #include <ttyd/common_types.h>
+#include <ttyd/evt_shop.h>
 #include <ttyd/evtmgr_cmd.h>
 #include <ttyd/icondrv.h>
 #include <ttyd/item_data.h>
@@ -15,10 +16,12 @@
 using namespace ttyd::seq_mapchange;
 using namespace ttyd::evtmgr_cmd;
 using namespace ttyd::swdrv;
+using namespace ttyd;
 
 using namespace mod;
 using namespace mod::patch;
-using ::ttyd::item_data::itemDataTable;
+
+using ttyd::item_data::itemDataTable;
 namespace ItemId = ::ttyd::common::ItemId;
 namespace IconType = ::ttyd::icondrv::IconType;
 
@@ -84,6 +87,7 @@ extern int32_t mail_evt_usu_01[];
 extern int32_t mail_evt_gor_01_2[];
 extern int32_t mail_evt_rsh_03_a_2[];
 extern int32_t mail_evt_pik_00[];
+extern int32_t main_buy_evt[];
 
 uintptr_t goods[] = {
     0x805f162c, 
@@ -105,29 +109,81 @@ extern int32_t evt_msg_print_party[];
 extern int32_t evt_msg_print_party_add[];
 extern int32_t preventDiaryTextboxSelectionAddress[];
 
+uintptr_t shopWorkPtr = 0x8041EB60;
+
 EVT_DEFINE_USER_FUNC(setShopFlags)  
 {  
    (void)isFirstCall;  
-   int shopWork = evtGetValue(evt, evt->evtArguments[0]);
-   void *shopWorkPtr = reinterpret_cast<void *>(shopWork);
+   char *shopWork = reinterpret_cast<char *>(evtGetValue(evt, evt->evtArguments[0]));
 
-   uint32_t *itemIds = reinterpret_cast<uint32_t *>(*reinterpret_cast<int **>(static_cast<char *>(shopWorkPtr) + 0x08));
-   uint32_t selectedIndex = *reinterpret_cast<uint32_t *>(*reinterpret_cast<int **>(static_cast<char *>(shopWorkPtr) + 0x2C));
+   uint32_t *itemIds = *reinterpret_cast<uint32_t **>(shopWork + 0x08);
+   uint16_t *itemFlags = reinterpret_cast<uint16_t *>(shopWork + 0x14);
+   uint32_t selectedIndex = *reinterpret_cast<uint32_t *>(shopWork + 0x2C);
+
    int gswfBase = 6200;
-
    uintptr_t itemIdsAddress = reinterpret_cast<uintptr_t>(itemIds);
-   for (int i = 0; i < static_cast<int>(sizeof(goods) / sizeof(uintptr_t)); i++)
+   int loopCount = static_cast<int>(sizeof(goods) / sizeof(uintptr_t));
+   for (int i = 0; i < loopCount; i++)
    {
        if (itemIdsAddress != goods[i])
        {
+           if (i == loopCount - 1)
+               return 2;
            gswfBase += 6;
            continue;
        }
        break;
    }
    swSet(gswfBase + selectedIndex);
+   if (itemIds[selectedIndex * 2] > 120)
+       return 2;
+   itemFlags[selectedIndex] |= 1;
    return 2;  
 }
+
+void checkShopFlag(uint32_t item, uint32_t index)
+{
+    if (item > 120)
+        return;
+    char *shopWork = *reinterpret_cast<char **>(shopWorkPtr);
+    uint32_t *itemIds = *reinterpret_cast<uint32_t **>(shopWork + 0x08);
+    uint16_t *itemFlags = reinterpret_cast<uint16_t *>(shopWork + 0x14);
+
+    int gswfBase = 6200;
+    uintptr_t itemIdsAddress = reinterpret_cast<uintptr_t>(itemIds);
+    int loopCount = static_cast<int>(sizeof(goods) / sizeof(uintptr_t));
+    for (int i = 0; i < loopCount; i++)
+    {
+        if (itemIdsAddress != goods[i])
+        {
+            if (i == loopCount - 1)
+                return;
+            gswfBase += 6;
+            continue;
+        }
+        break;
+    }
+    if (swGet(gswfBase + index))
+        itemFlags[index] |= 1;
+}
+
+// clang-format off
+EVT_BEGIN(main_buy_evt_evt)
+    USER_FUNC(evt_shop::get_ptr, LW(0))
+    USER_FUNC(setShopFlags, LW(0))
+    USER_FUNC(evt_shop::get_buy_evt, LW(1))
+    IF_NOT_EQUAL(LW(1), 0)
+        SET(LW(0), LW(12))
+        RUN_CHILD_EVT(LW(1))
+    END_IF()
+    RETURN()
+EVT_END()
+
+EVT_BEGIN(main_buy_evt_hook)
+    RUN_CHILD_EVT(main_buy_evt_evt)
+    RETURN()
+EVT_END()
+// clang-format on
 
 void ApplyMainAssemblyPatches()
 {
@@ -306,6 +362,13 @@ void ApplyMainAssemblyPatches()
 
     patch::writeBranchPair(&breakfast[22], reinterpret_cast<void *>(bPeachPointer), reinterpret_cast<void *>(bPeachReturn));
 
+    writeIntWithCache(&evt_shop_setup[82], 0x2C000079); // cmpwi r0, 0x79
+    writeIntWithCache(&evt_shop_setup[83], 0x418100FC); // blt +0xFC
+    patch::writeBranchPair(&evt_shop_setup[84],
+                           reinterpret_cast<void *>(bShopFlagCheck),
+                           reinterpret_cast<void *>(bShopFlagCheckReturn));
+    writeIntWithCache(&evt_shop_setup[85], 0x480000F4); // b +0xF4
+
     // sys_prolog[25] = 0x386006A4; // li r3, 0x6A4 (GSW(1700))
     // sys_prolog[28] = 0x2C030002; // cmpwi r3, 0x2
     // sys_prolog[25] = 0x386006A4; // li r3, 0x6A4 (GSW(1700))
@@ -377,6 +440,8 @@ void ApplyMainScriptPatches()
 
     evt_lecture_msg[107] = GSW(1700);
     evt_lecture_msg[108] = 17;
+
+    patch::writePatch(&main_buy_evt[352], main_buy_evt_hook, sizeof(main_buy_evt_hook));
 }
 
 void ApplyItemDataTablePatches()

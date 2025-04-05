@@ -28,6 +28,8 @@
 .global bPeachReturn
 .global usuBreakfast
 .global breakfastValueRestore
+.global bShopFlagCheck
+.global bShopFlagCheckReturn
 
 bMapGXArrInject:
 	lis %r3, win_log_mapGX_arr@ha
@@ -205,6 +207,13 @@ breakfastValueRestore:
 	ori %r3, %r3, str_breakfast_802ed418@l
 	li %r5, 0x10
 bPeachReturn:
+	b 0
+
+bShopFlagCheck:
+	mr %r3, %r0
+	mr %r4, %r27
+	bl checkShopFlag
+bShopFlagCheckReturn:
 	b 0
 
 win_log_mapGX_arr:
