@@ -393,7 +393,7 @@ void ApplyGor03Patches()
     gor_03_init_evt[59] = 11;
     patch::writePatch(&gor_03_init_evt[218], gor_03_init_evt_hook, sizeof(gor_03_init_evt_hook));
     gor_03_init_evt[365] = GSW(1703);
-    gor_03_init_evt[366] = 28;
+    gor_03_init_evt[366] = 99;
     gor_03_init_evt[610] = GSW(1709);
     gor_03_init_evt[611] = 0;
     gor_03_init_evt[616] = GSW(1709);

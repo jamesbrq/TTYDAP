@@ -121,6 +121,7 @@ namespace mod::owr
         if (SequencePosition != 0)
             return;
 
+        ttyd::swdrv::swByteSet(0, 1); // Set GSW(0) to 1 so that saving shows playtime
         ttyd::swdrv::swByteSet(1700, 16);
         ttyd::swdrv::swByteSet(1704, 1);
         ttyd::mario_pouch::pouchGetStarstone(0);

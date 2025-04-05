@@ -35,12 +35,12 @@ namespace ttyd::evt_mario
         EVT_DECLARE_USER_FUNC(evt_mario_chk_join_party, 2)
         EVT_DECLARE_USER_FUNC(evt_mario_get_party, 1)
         EVT_DECLARE_USER_FUNC(evt_mario_set_mode, 1)
+        EVT_DECLARE_USER_FUNC(evt_mario_get_mode, 1)
         // evt_peach_set_condition
         // evt_peach_transform_gundan_off
         // evt_peach_transform_gundan_on
         // evt_koopa_set_level
         // evt_koopa_get_level
-        // evt_mario_get_mode
         // evt_mario_get_state
         // evt_mario_wait_movable
         // evt_mario_wait_move_end

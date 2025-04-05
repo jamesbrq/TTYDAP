@@ -1,4 +1,7 @@
 #include "evt_cmd.h"
+#include "ttyd/evtmgr.h"
+#include "ttyd/evtmgr_cmd.h"
+#include "ttyd/swdrv.h"
 #include "patch.h"
 #include <AP/rel_patch_definitions.h>
 #include <ttyd/evt_aji.h>
@@ -7,9 +10,14 @@
 #include <ttyd/evt_mario.h>
 #include <ttyd/evt_msg.h>
 #include <ttyd/evt_npc.h>
+#include <ttyd/evt_shuryolight.h>
+#include <ttyd/evt_snd.h>
 
 using namespace mod;
 using namespace ttyd;
+using namespace ttyd::evtmgr;
+using namespace ttyd::evtmgr_cmd;
+using namespace ttyd::swdrv;
 
 extern int32_t bero_peach_data[];
 extern int32_t aji_first_evt[];
@@ -91,6 +99,10 @@ extern int32_t evt_machine[];
 extern int32_t aji_18_init_evt[];
 extern int32_t evt_hajimete[];
 extern int32_t aji_19_init_evt[];
+extern int32_t npcEnt_10[];
+extern int32_t shuryolight_pow_normal;
+extern int32_t shuryolight_head_normal;
+extern int32_t shuryolight_tue_normal;
 
 // Assembly
 extern int32_t check_kou_evt[];
@@ -100,6 +112,38 @@ const char npc1[] = "\x8C\xA4\x8B\x86\x88\xF5";
 const char npc2[] = "\x91\xE6\x8E\x4F\x90\xA8\x97\xCD\x8C\xA4\x8B\x86\x88\xF5";
 const char npc3[] = "\x82\xDD\x82\xCD\x82\xE8";
 const char npc4[] = "\x83\x6F\x83\x8A\x83\x41\x81\x5B\x83\x93\x83\x4A\x83\x58\x83\x5E\x83\x80";
+const char npcEnt3[] = "\x83\x6F\x83\x8A\x83\x41\x81\x5B\x83\x93\x83\x4A\x83\x58\x83\x5E\x83\x80";
+const char npcEnt4[] = "\x83\x56\x83\x85\x83\x8A\x83\x87\x81\x5B";
+
+EVT_DEFINE_USER_FUNC(checkIntermission)
+{
+    (void)isFirstCall;  
+    int currentSW = swByteGet(1711);
+    bool isIntermission = false;
+    if (currentSW >= 8 && currentSW <= 11)
+        isIntermission = true;
+    currentSW = swByteGet(1713);
+    if (currentSW >= 11 && currentSW <= 13)
+        isIntermission = true;
+    currentSW = swByteGet(1703);
+    if (currentSW >= 20 && currentSW <= 25)
+        isIntermission = true;
+    currentSW = swByteGet(1715);
+    if (currentSW >= 8 && currentSW <= 10)
+        isIntermission = true;
+    currentSW = swByteGet(1717);
+    if (currentSW >= 18 && currentSW <= 22)
+        isIntermission = true;
+    currentSW = swByteGet(1706);
+    if (currentSW >= 43 && currentSW <= 45)
+        isIntermission = true;
+    
+    if (isIntermission)
+        evtSetValue(evt, evt->evtArguments[0], 1);
+    else
+        evtSetValue(evt, evt->evtArguments[0], 0);
+    return 2;
+}
 
 // clang-format off
 EVT_BEGIN(aji_00_init_evt_evt)
@@ -117,6 +161,56 @@ EVT_BEGIN(aji_00_init_evt_hook)
 	RUN_CHILD_EVT(aji_00_init_evt_evt)
 	RETURN()
 EVT_END()
+
+EVT_BEGIN(aji_10_init_evt_evt1)
+    USER_FUNC(checkIntermission, LW(0))
+	IF_LARGE_EQUAL(LW(0), 1)
+        USER_FUNC(evt_snd::evt_snd_bgmon, 512, PTR("BGM_STG7_DUN1"))
+        USER_FUNC(evt_snd::evt_snd_envon, 272, PTR("ENV_STG7_AJI5"))
+    ELSE()
+        USER_FUNC(evt_snd::evt_snd_bgmon, 512, PTR("BGM_STG7_DUN2"))
+        USER_FUNC(evt_snd::evt_snd_envon, 272, PTR("ENV_STG7_AJI5"))
+	END_IF()
+	RETURN()
+EVT_END()
+
+EVT_BEGIN(aji_10_init_evt_hook1)
+	RUN_CHILD_EVT(aji_10_init_evt_evt1)
+	GOTO(&aji_10_init_evt[21])
+EVT_PATCH_END()
+
+EVT_BEGIN(aji_10_init_evt_evt2)
+    USER_FUNC(checkIntermission, LW(0))
+	IF_LARGE_EQUAL(LW(0), 1)
+        USER_FUNC(evt_npc::evt_npc_setup, PTR(&npcEnt_10))
+        USER_FUNC(evt_npc::evt_npc_check_delete, PTR(&npcEnt3))
+        USER_FUNC(evt_shuryolight::evt_shuryolight_init, PTR(&npcEnt4))
+        USER_FUNC(evt_shuryolight::evt_shuryolight_run_evt, PTR(&shuryolight_pow_normal), PTR(&shuryolight_head_normal), PTR(&shuryolight_tue_normal))
+	END_IF()
+	RETURN()
+EVT_END()
+
+EVT_BEGIN(aji_10_init_evt_hook2)
+	RUN_CHILD_EVT(aji_10_init_evt_evt2)
+	GOTO(&aji_10_init_evt[50])
+EVT_PATCH_END()
+
+EVT_BEGIN(aji_16_init_evt_evt)
+    USER_FUNC(checkIntermission, LW(0))
+	IF_LARGE_EQUAL(LW(0), 1)
+        USER_FUNC(evt_mario::evt_mario_kill_party, 0)
+        USER_FUNC(evt_mario::evt_mario_set_mode, 1)
+    ELSE()
+        USER_FUNC(evt_snd::evt_snd_bgmon, 512, PTR("BGM_EVT_PEACH1"))
+        USER_FUNC(evt_snd::evt_snd_envoff, 512)
+	END_IF()
+	RETURN()
+EVT_END()
+
+EVT_BEGIN(aji_16_init_evt_hook)
+	RUN_CHILD_EVT(aji_16_init_evt_evt)
+	GOTO(&aji_16_init_evt[140])
+EVT_PATCH_END()
 
 EVT_BEGIN(peach_evt_ele_2_evt)
 	IF_EQUAL(GSW(1703), 22)
@@ -478,10 +572,8 @@ void ApplyAjiPatches()
     syuryo_init[3] = GSW(1703);
     syuryo_init[4] = 23;
 
-    aji_10_init_evt[1] = GSW(1707);
-    aji_10_init_evt[2] = 1;
-    aji_10_init_evt[31] = GSW(1707);
-    aji_10_init_evt[32] = 1;
+    patch::writePatch(&aji_10_init_evt[30], aji_10_init_evt_hook2, sizeof(aji_10_init_evt_hook2));
+    aji_10_init_evt[34] = 0;
     patch::writePatch(&aji_10_init_evt[50], aji_10_init_evt_hook, sizeof(aji_10_init_evt_hook));
     aji_10_init_evt[219] = GSW(1707);
     aji_10_init_evt[220] = 16;
@@ -566,8 +658,8 @@ void ApplyAjiPatches()
     aji_16_init_evt[90] = 10;
     aji_16_init_evt[106] = GSW(1713);
     aji_16_init_evt[107] = 11;
-    aji_16_init_evt[123] = GSW(1707);
-    aji_16_init_evt[124] = 1;
+    patch::writePatch(&aji_16_init_evt[122], aji_16_init_evt_hook, sizeof(aji_16_init_evt_hook));
+    aji_16_init_evt[126] = 0;
 
     evt_emergency[1] = GSW(1707);
     evt_emergency[2] = 19;
