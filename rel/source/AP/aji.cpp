@@ -478,12 +478,12 @@ void ApplyAjiPatches()
     evt_zenmai[7] = GSW(1707);
     evt_zenmai[8] = 15;
 
-    aji_02_init_evt[427] = GSWF(6093);
-    aji_02_init_evt[437] = GSWF(6094);
-    aji_02_init_evt[447] = GSWF(6095);
-    aji_02_init_evt[457] = GSWF(6096);
-    aji_02_init_evt[481] = GSWF(6097);
-    aji_02_init_evt[505] = GSWF(6098);
+    aji_03_init_evt[427] = GSWF(6093);
+    aji_03_init_evt[437] = GSWF(6094);
+    aji_03_init_evt[447] = GSWF(6095);
+    aji_03_init_evt[457] = GSWF(6096);
+    aji_03_init_evt[481] = GSWF(6097);
+    aji_03_init_evt[505] = GSWF(6098);
 
     evt_item[1] = GSWF(6070);
     evt_item[2] = 1;
