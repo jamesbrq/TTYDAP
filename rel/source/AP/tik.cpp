@@ -421,7 +421,7 @@ void ApplyTikPatches()
 
     evt_door_stg7_open[0] = EVT_HELPER_CMD(2, 26);
     evt_door_stg7_open[1] = EVT_HELPER_OP(GSW(1707));
-    evt_door_stg7_open[2] = 6;
+    evt_door_stg7_open[2] = 10;
 
     tensou_init_event[4] = GSW(1700);
     tensou_init_event[6] = 0;  // Unused

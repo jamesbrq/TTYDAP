@@ -607,8 +607,9 @@ void ApplyMriPatches()
 {
     mri_countdown[1] = GSW(1713);
     mri_countdown[2] = 17;
-    mri_countdown[80] = GSW(1713);
-    mri_countdown[81] = 20; // This should probably be disabled.
+    mri_countdown[79] = 0;
+    mri_countdown[80] = 0;
+    mri_countdown[81] = 0;
 
     seal_bigtree[203] = GSW(1702);
     seal_bigtree[204] = 4;

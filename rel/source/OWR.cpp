@@ -4,6 +4,7 @@
 #include <gc/OSModule.h>
 #include <gc/pad.h>
 #include <mod.h>
+#include <ttyd/countdown.h>
 #include <ttyd/common_types.h>
 #include <ttyd/evt_mario.h>
 #include <ttyd/evt_pouch.h>
@@ -190,6 +191,7 @@ namespace mod::owr
         bool buttons = checkButtonCombo(combo);
         if (buttons)
         {
+            ttyd::countdown::countDownEnd();
             ttyd::mario_motion::marioChgMot(ttyd::mario_motion::MarioMotion::kStay);
             uint32_t namePtr = 0x802c0298;
             const char *mapName = reinterpret_cast<char *>(namePtr);

@@ -58,6 +58,9 @@ extern int32_t las_29_init_evt[];
 extern int32_t las_30_init_evt[];
 extern int32_t key_check_evt_22[];
 extern int32_t key_check_evt_25[];
+extern int32_t las_key_tbl_05[];
+extern int32_t las_key_tbl_22[];
+extern int32_t las_key_tbl_25[];
 
 // clang-format off
 EVT_BEGIN(stairs_revert)
@@ -237,6 +240,7 @@ void ApplyLasPatches()
     las_22_init_evt[116] = 1;
     las_22_init_evt[129] = GSW(1708);
     las_22_init_evt[130] = 11;
+    las_22_init_evt[134] = 46;
 
     las_23_init_evt[1] = GSW(1708);
     las_23_init_evt[2] = 8;
@@ -263,6 +267,7 @@ void ApplyLasPatches()
     las_25_init_evt[29] = 1;
     las_25_init_evt[51] = GSWF(6112);
     las_25_init_evt[52] = 1;
+    las_25_init_evt[112] = 46;
 
     bonbaba_evt[795] = GSWF(6072);
     bonbaba_evt[796] = 1;
@@ -335,4 +340,8 @@ void ApplyLasPatches()
 
     las_30_init_evt[1] = GSW(1708);
     las_30_init_evt[2] = 16;
+
+    las_key_tbl_05[0] = 46;
+    las_key_tbl_22[0] = 46;
+    las_key_tbl_25[0] = 46;
 }

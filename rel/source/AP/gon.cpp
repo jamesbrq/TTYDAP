@@ -44,6 +44,10 @@ extern int32_t gon_11_init_evt[];
 extern int32_t gon_chuchurina_sogu[];
 extern int32_t item_get00[];
 extern int32_t gon_12_init_evt[];
+extern int32_t gon_key_tbl_04[];
+extern int32_t gon_key_tbl00_05[];
+extern int32_t gon_key_tbl01_05[];
+extern int32_t gon_key_tbl_08[];
 
 // clang-format off
 EVT_BEGIN(gon_evt_majin2_item)
@@ -52,8 +56,8 @@ EVT_BEGIN(gon_evt_majin2_item)
 	USER_FUNC(evt_mario::evt_mario_key_onoff, 0)
 	USER_FUNC(evt_mobj::evt_mobj_wait_animation_end, PTR("box"))
 	USER_FUNC(evt_mario::evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
-	USER_FUNC(evt_item::evt_item_entry, PTR("item01"), LW(3), LW(0), LW(1), LW(2), 16, GSWF(6080), 0)
-	USER_FUNC(evt_item::evt_item_get_item, PTR("item01"))
+	USER_FUNC(evt_item::evt_item_entry, PTR("item02"), LW(3), LW(0), LW(1), LW(2), 16, GSWF(6080), 0)
+	USER_FUNC(evt_item::evt_item_get_item, PTR("item02"))
 	WAIT_MSEC(800)
 	SET(GSWF(6011), 1)
 	SET(GSWF(1493), 1)
@@ -125,6 +129,7 @@ void ApplyGonPatches()
     gon_04_init_evt[270] = 1;
     gon_04_init_evt[332] = GSWF(6005);
     gon_04_init_evt[333] = 1;
+    gon_04_init_evt[337] = 12;
 
     evt_unlock00[6] = GSWF(6007);
     evt_unlock00[7] = 1;
@@ -143,6 +148,7 @@ void ApplyGonPatches()
     gon_05_init_evt[276] = 1;
     gon_05_init_evt[295] = GSWF(6008);
     gon_05_init_evt[296] = 1;
+    gon_05_init_evt[300] = 12;
 
     tsuritenjo_event[126] = GSWF(6010);
     tsuritenjo_event[127] = 1;
@@ -174,6 +180,7 @@ void ApplyGonPatches()
 
     gon_08_init_evt[199] = GSWF(6013);
     gon_08_init_evt[200] = 1;
+    gon_08_init_evt[204] = 12;
 
     gon_10_init_evt[35] = GSWF(6014);
     gon_10_init_evt[36] = 1;
@@ -204,4 +211,9 @@ void ApplyGonPatches()
     gon_12_init_evt[7] = 1;
     gon_12_init_evt[31] = GSWF(6017);
     gon_12_init_evt[32] = 1;
+
+    gon_key_tbl_04[0] = 12;
+    gon_key_tbl00_05[0] = 12;
+    gon_key_tbl01_05[0] = 12;
+    gon_key_tbl_08[0] = 12;
 }

@@ -83,11 +83,11 @@ void ApplyDouPatches()
     dou_03_init_evt[69] = GSW(1717);
     dou_03_init_evt[70] = 5;
 
-    bigdoor_event_init[1] = GSW(1717);
-    bigdoor_event_init[2] = 4;
+    bigdoor_event_init[1] = GSW(6113);
+    bigdoor_event_init[2] = 1;
 
-    bigdoor_event[141] = GSW(1717);
-    bigdoor_event[142] = 4;
+    bigdoor_event[141] = GSW(6113);
+    bigdoor_event[142] = 1;
 
     peramajin_after[0] = EVT_HELPER_CMD(2, 50);
     peramajin_after[1] = EVT_HELPER_OP(LW(3));
