@@ -711,7 +711,8 @@ EVT_END()
 
 void ApplyMujPatches()
 {
-	// This sequence has to be written like this due to the LW(3) values overwriting the ones written directly into the ROM via AP
+    // This sequence has to be written like this due to the LW(3) values overwriting the ones written directly into the ROM via
+    // AP
     koburon_dead[0] = EVT_HELPER_CMD(1, 34);
     koburon_dead[1] = EVT_HELPER_OP(GSW(721));
     koburon_dead[2] = EVT_HELPER_CMD(1, 36);

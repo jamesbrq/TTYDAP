@@ -243,7 +243,11 @@ void ApplyPikPatches()
 {
     pik_talk_madam_ring_return[18] = EVT_HELPER_CMD(2, 50);
     pik_talk_madam_ring_return[19] = EVT_HELPER_OP(LW(3));
-    patch::writePatch(&pik_talk_madam_ring_return[21], pik_talk_madam_ring_return_hook, sizeof(pik_talk_madam_ring_return_hook));
+
+    patch::writePatch(&pik_talk_madam_ring_return[21],
+                      pik_talk_madam_ring_return_hook,
+                      sizeof(pik_talk_madam_ring_return_hook));
+
     pik_talk_madam_ring_return[25] = 0;
     pik_talk_madam_ring_return[26] = 0;
 

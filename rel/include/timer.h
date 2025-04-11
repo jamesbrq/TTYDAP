@@ -6,19 +6,11 @@ namespace mod
     class Timer
     {
        public:
-        Timer()
-        {
-        }
+        Timer() {}
 
-        void start()
-        {
-            mRunning = true;
-        }
+        void start() { mRunning = true; }
 
-        void stop()
-        {
-            mRunning = false;
-        }
+        void stop() { mRunning = false; }
 
         void tick()
         {
@@ -28,15 +20,9 @@ namespace mod
             }
         }
 
-        void setValue(const ValueType &value)
-        {
-            mValue = value;
-        }
+        void setValue(const ValueType &value) { mValue = value; }
 
-        ValueType getValue()
-        {
-            return mValue;
-        }
+        ValueType getValue() { return mValue; }
 
        private:
         bool mRunning = false;

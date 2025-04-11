@@ -117,7 +117,7 @@ const char npcEnt4[] = "\x83\x56\x83\x85\x83\x8A\x83\x87\x81\x5B";
 
 EVT_DEFINE_USER_FUNC(checkIntermission)
 {
-    (void)isFirstCall;  
+    (void)isFirstCall;
     int currentSW = swByteGet(1711);
     bool isIntermission = false;
     if (currentSW >= 8 && currentSW <= 11)
@@ -137,7 +137,7 @@ EVT_DEFINE_USER_FUNC(checkIntermission)
     currentSW = swByteGet(1706);
     if (currentSW >= 43 && currentSW <= 45)
         isIntermission = true;
-    
+
     if (isIntermission)
         evtSetValue(evt, evt->evtArguments[0], 1);
     else

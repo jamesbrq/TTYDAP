@@ -11,4 +11,4 @@ namespace ttyd::evt_shuryolight
         EVT_DECLARE_USER_FUNC(evt_shuryolight_init, 1)
         EVT_DECLARE_USER_FUNC(evt_shuryolight_run_evt, 3)
     }
-} // namespace ttyd::evt_case
+} // namespace ttyd::evt_shuryolight

@@ -123,7 +123,7 @@ EVT_BEGIN(win_party_hook)
 	RUN_CHILD_EVT(win_party_evt)
 	RETURN()
 EVT_END()
-    // clang-format on
+// clang-format on
 
 void ApplyWinPatches()
 {

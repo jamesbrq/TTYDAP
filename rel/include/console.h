@@ -74,10 +74,7 @@ namespace mod
     class ConsoleSystem
     {
        public:
-        ConsoleSystem(): mKeyboard(1)
-        {
-            gConsole = this;
-        }
+        ConsoleSystem(): mKeyboard(1) { gConsole = this; }
 
         void init();
         void update();

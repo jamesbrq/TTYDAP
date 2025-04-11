@@ -24,9 +24,7 @@ namespace mod
         mod->init();
     }
 
-    Mod::Mod()
-    {
-    }
+    Mod::Mod() {}
 
     void Mod::init()
     {

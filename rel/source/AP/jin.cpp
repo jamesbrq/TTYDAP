@@ -165,7 +165,7 @@ void ApplyJinPatches()
 
     oumu_talk[7] = GSW(1715);
     oumu_talk[9] = 7;
-        
+
     oumu_check[114] = GSW(1715);
     oumu_check[115] = 0;
     oumu_check[117] = GSW(1715);
@@ -183,7 +183,7 @@ void ApplyJinPatches()
 
     evt_usu_kagemario_party_kill_jin[1] = GSW(1715); // Unused
 
-    phase_event_fmario[12] = 9999; //Unused
+    phase_event_fmario[12] = 9999; // Unused
 
     jin_evt_kagemario_init[2] = 0x386006B3; // li r3, 0x6B3 (GSW(1715))
     jin_evt_kagemario_init[6] = 0x2C030003; // cmpwi r3, 0x3

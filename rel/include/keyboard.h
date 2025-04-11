@@ -105,14 +105,8 @@ namespace mod
         void setChannel(int channel);
         void update();
 
-        int getKeyDownCount()
-        {
-            return mKeysDownCount;
-        }
-        KeyCode getKeyDown(int index)
-        {
-            return mKeysDown[index];
-        }
+        int getKeyDownCount() { return mKeysDownCount; }
+        KeyCode getKeyDown(int index) { return mKeysDown[index]; }
         bool isKeyDown(KeyCode key)
         {
             for (int i = 0; i < mKeysDownCount; ++i)
@@ -125,14 +119,8 @@ namespace mod
             return false;
         }
 
-        int getKeyPressedCount()
-        {
-            return mKeysPressedCount;
-        }
-        KeyCode getKeyPressed(int index)
-        {
-            return mKeysPressed[index];
-        }
+        int getKeyPressedCount() { return mKeysPressedCount; }
+        KeyCode getKeyPressed(int index) { return mKeysPressed[index]; }
         bool isKeyPressed(KeyCode key)
         {
             for (int i = 0; i < mKeysPressedCount; ++i)
@@ -145,14 +133,8 @@ namespace mod
             return false;
         }
 
-        int getKeyReleasedCount()
-        {
-            return mKeysReleasedCount;
-        }
-        KeyCode getKeyReleased(int index)
-        {
-            return mKeysReleased[index];
-        }
+        int getKeyReleasedCount() { return mKeysReleasedCount; }
+        KeyCode getKeyReleased(int index) { return mKeysReleased[index]; }
         bool isKeyReleased(KeyCode key)
         {
             for (int i = 0; i < mKeysReleasedCount; ++i)

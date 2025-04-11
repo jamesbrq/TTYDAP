@@ -390,7 +390,7 @@ void drawErrorMessages()
 NpcEntry *checkForNpcNameToPtrError(const char *name)
 {
     // Call the original function immediately, as its result is needed
-   NpcEntry *ret = g_npcNameToPtr_trampoline(name);
+    NpcEntry *ret = g_npcNameToPtr_trampoline(name);
 
     // Check if the returned pointer is valid
     const NpcWork *workPtr = npcGetWorkPtr();

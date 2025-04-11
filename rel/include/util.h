@@ -7,8 +7,8 @@
 #define MOD_ARRAYSIZE(x) (sizeof((x)) / sizeof((x)[0]))
 
 #define MOD_CONCAT_IMPL(s1, s2) s1##s2
-#define MOD_CONCAT(s1, s2)      MOD_CONCAT_IMPL(s1, s2)
-#define MOD_ANONYMOUS(str)      MOD_CONCAT(str, __LINE__)
+#define MOD_CONCAT(s1, s2) MOD_CONCAT_IMPL(s1, s2)
+#define MOD_ANONYMOUS(str) MOD_CONCAT(str, __LINE__)
 
 #define MOD_ASSERT(x)                                                              \
     do                                                                             \

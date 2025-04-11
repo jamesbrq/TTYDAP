@@ -37,6 +37,4 @@ void _epilog()
     }
 }
 
-void _unresolved(void)
-{
-}
+void _unresolved(void) {}
