@@ -52,6 +52,7 @@ extern int32_t suifubomb_b_init[];
 extern int32_t suifubomb_b_regl[];
 extern int32_t suifubomb_b_talk[];
 extern int32_t suifubomb_c_init[];
+extern int32_t suifubomb_c_talk[];
 extern int32_t sanders_init_00[];
 extern int32_t korutesu_init[];
 extern int32_t tentyou_init[];
@@ -567,6 +568,41 @@ EVT_BEGIN(korutesu_init_hook)
 	RETURN()
 EVT_END()
 
+EVT_BEGIN(suifubomb_c_init_evt)
+	IF_LARGE_EQUAL(GSW(1705), 1)
+		IF_SMALL(GSW(1717), 24)
+			USER_FUNC(evt_npc::evt_npc_set_position, PTR("me"), 140, 15, 200)
+		END_IF()
+	END_IF()
+	RETURN()
+EVT_END()
+
+EVT_BEGIN(suifubomb_c_init_hook)
+	RUN_CHILD_EVT(suifubomb_c_init_evt)
+	RETURN()
+EVT_END()
+
+EVT_BEGIN(suifubomb_c_talk_evt)
+	IF_SMALL(GSW(1705), 7)
+		USER_FUNC(evt_msg::evt_msg_print, 0, PTR("gor_00_02_02"), 0, PTR("me"))
+		RETURN()
+	END_IF()
+	USER_FUNC(evt_msg::evt_msg_print, 0, PTR("keelhaul_return"), 0, PTR("me"))
+	USER_FUNC(evt_msg::evt_msg_select, 0, PTR("keelhaul_return_yn"))
+	IF_EQUAL(LW(0), 0)
+		USER_FUNC(evt_msg::evt_msg_print_add, 0, PTR("keelhaul_return_yes"))
+		USER_FUNC(evt_bero::evt_bero_mapchange, PTR("muj_01"), 0)
+	ELSE()
+		USER_FUNC(evt_msg::evt_msg_print_add, 0, PTR("keelhaul_return_no"))
+	END_IF()
+	RETURN()
+EVT_END()
+
+EVT_BEGIN(suifubomb_c_talk_hook)
+	RUN_CHILD_EVT(suifubomb_c_talk_evt)
+	RETURN()
+EVT_END()
+
 EVT_BEGIN(gor_00_init_evt1)
 	IF_EQUAL(GSW(1708), 18)
 		USER_FUNC(evt_bero::evt_bero_get_entername, LW(0))
@@ -797,9 +833,9 @@ void ApplyGor00Patches()
     patch::writePatch(&suifubomb_b_regl[0], suifubomb_b_regl_hook, sizeof(suifubomb_b_regl_hook));
     patch::writePatch(&suifubomb_b_talk[0], suifubomb_b_talk_evt, sizeof(suifubomb_b_talk_evt));
 
-    suifubomb_c_init[1] = GSW(1705);
-    suifubomb_c_init[3] = 1;
-    suifubomb_c_init[4] = 7;
+    patch::writePatch(&suifubomb_c_init[0], suifubomb_c_init_hook, sizeof(suifubomb_c_init_hook));
+
+	patch::writePatch(&suifubomb_c_talk[0], suifubomb_c_talk_hook, sizeof(suifubomb_c_talk_hook));
 
     sanders_init_00[1] = GSW(1705);
     sanders_init_00[3] = 1;

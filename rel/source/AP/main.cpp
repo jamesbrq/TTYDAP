@@ -68,6 +68,7 @@ extern int32_t mobj_powerupblk[];
 extern int32_t evt_mobj_powerupblk[];
 extern int32_t breakfast[];
 extern int32_t evt_shop_setup[];
+extern int32_t loadDraw[];
 // End of Assembly References
 
 // Script References
@@ -187,6 +188,8 @@ EVT_END()
 
 void ApplyMainAssemblyPatches()
 {
+    writeIntWithCache(&loadDraw[777], 0x480000C4); // li r3, 0x6A4 (GSW(1700))
+
     writeIntWithCache(&statusWinDisp[425], 0x386006A4); // li r3, 0x6A4 (GSW(1700))
     writeIntWithCache(&statusWinDisp[487], 0x386006A4); // li r3, 0x6A4 (GSW(1700))
 
