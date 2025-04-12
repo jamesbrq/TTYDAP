@@ -196,9 +196,9 @@ void ApplyWinPatches()
     clouda_irai[414] = GSW(1702);
     clouda_irai[415] = 12;
 
-    clouda_nakama[1497] = EVT_HELPER_CMD(2, 50);
-    clouda_nakama[1498] = EVT_HELPER_OP(LW(3));
-    patch::writePatch(&clouda_nakama[1500], win_party_hook, sizeof(win_party_hook));
+    clouda_nakama[1500] = EVT_HELPER_CMD(2, 50);
+    clouda_nakama[1501] = EVT_HELPER_OP(LW(3));
+    patch::writePatch(&clouda_nakama[1503], win_party_hook, sizeof(win_party_hook));
 
     touch_door[1] = GSW(1702);
     touch_door[3] = 11;

@@ -547,8 +547,8 @@ void ApplyGor02Patches()
     kurihakase_after3minutes[137] = 53;
 
     patch::writePatch(&gor_02_init_evt[0], gor_02_init_evt1_hook, sizeof(gor_02_init_evt1_hook));
-    gor_02_init_evt[46] = GSW(1717);
-    gor_02_init_evt[47] = 25;
+    gor_02_init_evt[46] = GSW(1700);
+    gor_02_init_evt[47] = 0;
     gor_02_init_evt[59] = GSW(1700);
     gor_02_init_evt[201] = GSW(1701);
     gor_02_init_evt[202] = 1;

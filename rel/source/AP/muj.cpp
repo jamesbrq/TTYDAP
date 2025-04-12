@@ -6,10 +6,13 @@
 #include <ttyd/evt_item.h>
 #include <ttyd/evt_map.h>
 #include <ttyd/evt_mario.h>
+#include <ttyd/mario_pouch.h>
 #include <ttyd/evt_msg.h>
 #include <ttyd/evt_npc.h>
 #include <ttyd/evt_snd.h>
+#include <common.h>
 
+using namespace ttyd::common;
 using namespace mod;
 using namespace ttyd;
 
@@ -105,8 +108,53 @@ extern int32_t muj_20_koopa_evt[];
 extern int32_t muj_20_init_evt[];
 extern int32_t koburon_dead[];
 extern int32_t muj_all_party_lecture[];
+extern int32_t make_itemsel_table[];
+
+const char marco[] = "\x83\x7D\x83\x8B\x83\x52";
 
 // clang-format off
+EVT_DEFINE_USER_FUNC(coconut_remove)
+{
+	(void)isFirstCall;
+	(void)evt;
+	bool coconut_found = false;
+    constexpr uint32_t loopCount = sizeof(ttyd::mario_pouch::PouchData::key_items) / sizeof(int16_t);
+    int16_t *keyItemsPtr = &ttyd::mario_pouch::pouchGetPtr()->key_items[0];
+
+    for (uint32_t i = 0; i < loopCount; i++)
+    {
+        const int32_t currentItem = keyItemsPtr[i];
+        if (coconut_found)
+        {
+            if (currentItem != ItemId::INVALID_NONE)
+            {
+     
+                keyItemsPtr[i - 1] = currentItem;
+                if (i == loopCount - 1)
+                {
+                    keyItemsPtr[i] = ItemId::INVALID_NONE;
+                    return 1;
+                }
+            }
+            else
+            {
+                keyItemsPtr[i - 1] = ItemId::INVALID_NONE;
+                if (i == loopCount - 1)
+                {
+                    keyItemsPtr[i] = ItemId::INVALID_NONE;
+                }
+                return 1;
+            }
+        }
+        else if (currentItem == ItemId::COCONUT)
+        {
+            keyItemsPtr[i] = ItemId::INVALID_NONE;
+            coconut_found = true;
+        }
+    }
+	return 2;
+}
+
 EVT_BEGIN(mony_talk_muj_00_evt)
 	IF_EQUAL(GSW(1709), 8)
 		USER_FUNC(evt_msg::evt_msg_print, 0, PTR("stg5_muj_146_02"), 0, PTR("me"))
@@ -352,6 +400,11 @@ EVT_BEGIN(marco_init_muj_01_hook)
 	RUN_CHILD_EVT(marco_init_muj_01_evt)
 	RETURN()
 EVT_END()
+
+EVT_BEGIN(marco_talk_coconut)
+	USER_FUNC(coconut_remove, 0)
+	EVT_HELPER_OP(0)
+EVT_PATCH_END()
 
 EVT_BEGIN(megane_init_muj_01_evt)
 	IF_LARGE_EQUAL(GSW(1719), 1)
@@ -695,7 +748,7 @@ EVT_BEGIN(muj_party_evt)
 	USER_FUNC(evt_item::evt_item_entry, PTR("item01"), LW(3), LW(0), LW(1), LW(2), 16, GSWF(6081), 0)
 	USER_FUNC(evt_item::evt_item_get_item, PTR("item01"))
 	WAIT_MSEC(800)
-	SET(GSW(1719), 6)
+	SET(GSW(1723), 2)
 	USER_FUNC(evt_npc::evt_npc_set_position, PTR("me"), 0, -1000, 0)
 	USER_FUNC(evt_cam::evt_cam3d_evt_off, 500, 11)
 	USER_FUNC(evt_mario::evt_mario_key_onoff, 1)
@@ -707,6 +760,17 @@ EVT_BEGIN(muj_party_hook)
 	RUN_CHILD_EVT(muj_party_evt)
 	RETURN()
 EVT_END()
+
+EVT_BEGIN(dokuroiwa_bomb_evt)
+	USER_FUNC(evt_hit::evt_hitobj_onoff, PTR("e_bero"), 1, 1)
+	USER_FUNC(evt_npc::evt_npc_set_position, PTR(&marco), 279, 0, -67)
+	RETURN()
+EVT_END()
+
+EVT_BEGIN(dokuroiwa_bomb_hook)
+	RUN_CHILD_EVT(dokuroiwa_bomb_evt)
+	GOTO(&dokuroiwa_bomb[8])
+EVT_PATCH_END()
 // clang-format on
 
 void ApplyMujPatches()
@@ -877,11 +941,12 @@ void ApplyMujPatches()
     marco_talk_muj_01[89] = GSW(1719);
     marco_talk_muj_01[90] = 3;
     marco_talk_muj_01[98] = 3;
+    patch::writePatch(&marco_talk_muj_01[290], marco_talk_coconut, sizeof(marco_talk_coconut));
     marco_talk_muj_01[358] = GSW(1719);
     marco_talk_muj_01[359] = 4;
-    marco_talk_muj_01[361] = 4;
-    marco_talk_muj_01[369] = 5;
-    marco_talk_muj_01[377] = 6;
+    marco_talk_muj_01[361] = 99; // Unused
+    marco_talk_muj_01[369] = 99; // Unused
+    marco_talk_muj_01[377] = 4;
     marco_talk_muj_01[831] = GSW(1719);
     marco_talk_muj_01[832] = 7;
     marco_talk_muj_01[836] = EVT_HELPER_CMD(0, 42);
@@ -1004,22 +1069,19 @@ void ApplyMujPatches()
     muj_04_init_evt[70] = GSW(1719);
     muj_04_init_evt[72] = 0;
 
-    sanders_nakama[163] = GSW(1719);
-    sanders_nakama[164] = 6;
-
     sanders_init_muj_05[1] = GSW(1719);
     sanders_init_muj_05[3] = 2;
     sanders_init_muj_05[9] = 2;
     sanders_init_muj_05[10] = 4;
     sanders_init_muj_05[22] = 5;
 
-    sanders_talk_sub[63] = GSW(1719);
-    sanders_talk_sub[64] = 5;
+    sanders_talk_sub[63] = GSW(1723);
+    sanders_talk_sub[64] = 1;
 
-    sanders_talk_muj_05[1] = GSW(1719);
-    sanders_talk_muj_05[3] = 2;
-    sanders_talk_muj_05[4] = 4;
-    sanders_talk_muj_05[38] = 5;
+    sanders_talk_muj_05[1] = GSWF(1723);
+    sanders_talk_muj_05[3] = 0;
+    sanders_talk_muj_05[4] = 0;
+    sanders_talk_muj_05[38] = 1;
 
     marco_init_muj_05[1] = GSW(1719);
     marco_init_muj_05[3] = 8;
@@ -1037,6 +1099,7 @@ void ApplyMujPatches()
     dokuroiwa_touch[23] = GSW(1719);
     dokuroiwa_touch[24] = 7;
 
+	patch::writePatch(&dokuroiwa_bomb[3], dokuroiwa_bomb_hook, sizeof(dokuroiwa_bomb_hook));
     dokuroiwa_bomb[302] = GSW(1717);
     dokuroiwa_bomb[303] = 1;
 
@@ -1149,4 +1212,10 @@ void ApplyMujPatches()
     muj_20_init_evt[225] = 8;
     muj_20_init_evt[334] = GSW(1708);
     muj_20_init_evt[335] = 18;
+
+	// Assembly Patches
+    patch::writeIntWithCache(&make_itemsel_table[14], 0x38000079); // li r0, 0x79
+    patch::writeIntWithCache(&make_itemsel_table[20], 0x380300A0); // addi r0, r3, 0xA0
+	patch::writeIntWithCache(&make_itemsel_table[22], 0x2C0000A6); // cmpwi r0, 0xA6 (Coconut)
+	patch::writeIntWithCache(&make_itemsel_table[23], 0x4082000C); // bne +0xC
 }

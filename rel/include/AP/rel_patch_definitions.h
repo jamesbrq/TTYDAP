@@ -46,6 +46,7 @@ EVT_DECLARE_USER_FUNC(checkChapterRequirements, 1)
 EVT_DECLARE_USER_FUNC(checkChapterClears, 1)
 EVT_DECLARE_USER_FUNC(setShopFlags, 1)
 EVT_DECLARE_USER_FUNC(checkIntermission, 1)
+EVT_DECLARE_USER_FUNC(coconut_remove, 1)
 
 void ApplyAaaPatches();
 void ApplyAjiPatches();

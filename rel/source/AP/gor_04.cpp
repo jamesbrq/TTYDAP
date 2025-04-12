@@ -22,14 +22,6 @@ extern int32_t gor_04_init_evt[];
 
 void ApplyGor04Patches()
 {
-    uint8_t value = swByteGet(1706);
-    uint32_t rsh_01_a_address = 0x805d7fa4;
-
-    if ((value >= 8 && value < 14) || (value >= 29 && value < 30))
-        ttyd::string::strcpy(reinterpret_cast<char *>(rsh_01_a_address), "rsh_01_b");
-    else if ((value >= 14 && value < 23) || (value >= 30 && value < 32))
-        ttyd::string::strcpy(reinterpret_cast<char *>(rsh_01_a_address), "rsh_01_c");
-
     hom_10_evt_resha_start_gor_04[49] = GSW(1706);
     hom_10_evt_resha_start_gor_04[50] = 43;
 
