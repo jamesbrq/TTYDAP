@@ -1,13 +1,14 @@
+#include "evt_cmd.h"
 #include "OWR.h"
 #include "patch.h"
-#include "evt_cmd.h"
-#include <AP/rel_patch_definitions.h>
-#include "ttyd/msgdrv.h"
-#include "ttyd/mario_pouch.h"
 #include "ttyd/evt_mario.h"
-#include <ttyd/item_data.h>
+#include "ttyd/mario_pouch.h"
+#include "ttyd/msgdrv.h"
+#include "ttyd/seq_logo.h"
+#include <AP/rel_patch_definitions.h>
 #include <ttyd/common_types.h>
 #include <ttyd/icondrv.h>
+#include <ttyd/item_data.h>
 
 #include <cstdint>
 
@@ -408,6 +409,7 @@ namespace mod::owr
         ApplyItemDataTablePatches();
 
         g_OSLink_trampoline = patch::hookFunction(OSLink, OSLinkHook);
+        gTrampoline_seq_logoMain = patch::hookFunction(ttyd::seq_logo::seq_logoMain, logoSkip);
         g_seqSetSeq_trampoline = patch::hookFunction(ttyd::seqdrv::seqSetSeq, seqSetSeqHook);
         g_msgSearch_trampoline = patch::hookFunction(ttyd::msgdrv::msgSearch, msgSearchHook);
         g_pouchGetItem_trampoline = patch::hookFunction(ttyd::mario_pouch::pouchGetItem, pouchGetItemHook);

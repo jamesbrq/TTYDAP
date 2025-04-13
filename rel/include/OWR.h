@@ -40,9 +40,11 @@ namespace mod::owr
     void partySetForceMoveHook(PartyEntry *ptr, float x, float z, float speed);
     int32_t evtMarioSetPoseHook(EvtEntry *evt, bool firstCall);
     const char *msgSearchHook(const char *msgKey);
+    void logoSkip(SeqInfo *index);
 
     extern bool (*g_OSLink_trampoline)(OSModuleInfo *, void *);
     extern void (*g_seqSetSeq_trampoline)(SeqIndex seq, const char *map, const char *bero);
+    extern void (*gTrampoline_seq_logoMain)(SeqInfo *info);
     extern uint32_t (*g_pouchGetItem_trampoline)(int32_t);
     extern void (*g_partySetForceMove_trampoline)(ttyd::party::PartyEntry *ptr, float x, float z, float speed);
     extern int32_t (*g_evt_mario_set_pose_trampoline)(ttyd::evtmgr::EvtEntry *evt, bool firstCall);

@@ -92,6 +92,7 @@ namespace mod::owr
     KEEP_VAR StateManager *gState = nullptr;
 
     KEEP_VAR bool (*g_OSLink_trampoline)(OSModuleInfo *, void *) = nullptr;
+    KEEP_VAR void (*gTrampoline_seq_logoMain)(SeqInfo *info) = nullptr;
     KEEP_VAR void (*g_seqSetSeq_trampoline)(SeqIndex seq, const char *map, const char *bero) = nullptr;
     KEEP_VAR uint32_t (*g_pouchGetItem_trampoline)(int32_t) = nullptr;
     KEEP_VAR void (*g_partySetForceMove_trampoline)(ttyd::party::PartyEntry *ptr, float x, float z, float speed) = nullptr;
@@ -616,6 +617,28 @@ namespace mod::owr
                 ttyd::mario_motion::marioChgMot(ttyd::mario_motion::MarioMotion::kStay);
         }
         return g_evt_mario_set_pose_trampoline(evt, firstCall);
+    }
+
+    // Skip logo
+    KEEP_FUNC void logoSkip(SeqInfo *info)
+    {
+        // Skip states from H&S fadeout wait directly to demo fadeout start
+        // TODO: Skip H&S
+        #if ((defined TTYD_US) || (defined TTYD_EU))
+        if (info->state == 8)
+        {
+            info->state = 17;
+        }
+        #elif defined TTYD_JP
+		// No H&S screen so states are different
+		// Skip from first logo fadeout wait directly
+		// TODO: More efficient logo skip
+		if (info->state == 3)
+		{
+			info->state = 9;
+		}
+        #endif
+        return gTrampoline_seq_logoMain(info);
     }
 
     void OWR::Update()
