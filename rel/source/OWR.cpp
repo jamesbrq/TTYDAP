@@ -657,16 +657,26 @@ namespace mod::owr
         // The vanilla rel is unlinked every time you go through a loading zone, so our custom one must be relinked
         const bool unlinked = relMgrPtr->unlinkRel();
 
-        // If going into a new area, then load the new rel
-        const char *nextArea = ttyd::seq_mapchange::_next_area;
-        const bool inNewArea = relMgrPtr->inNewArea(nextArea);
-        relMgrPtr->setPrevArea(nextArea);
+        // If the next area is tou_03, then force tou2.rel to be loaded
+        bool inNewArea;
+        if (strcmp(ttyd::seq_mapchange::_next_map, "tou_03") == 0)
+        {
+            inNewArea = true;
+            relMgrPtr->setPrevArea("tou2");
+        }
+        else
+        {
+            // If going into a new area, then load the new rel
+            const char *nextArea = ttyd::seq_mapchange::_next_area;
+            inNewArea = relMgrPtr->inNewArea(nextArea);
+            relMgrPtr->setPrevArea(nextArea);
+        }
 
         if (!unlinked || inNewArea)
         {
             relMgrPtr->unloadRel();
 
-            if (!relMgrPtr->loadRel(nextArea))
+            if (!relMgrPtr->loadRel(relMgrPtr->getPrevArea()))
             {
                 // Assume the desired rel is not included in this project
                 return;

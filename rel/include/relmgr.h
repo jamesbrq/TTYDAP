@@ -20,6 +20,8 @@ class RelMgr
     void unloadRel();
     void runInitRel();
 
+    const char *getPrevArea() const { return &this->prevArea[0]; }
+
     void setPrevArea(const char *area)
     {
         // Cast to uint32_t to simplify getting/setting the value
