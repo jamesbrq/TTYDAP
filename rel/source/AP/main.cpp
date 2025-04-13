@@ -60,7 +60,7 @@ EVT_END()
 const uintptr_t goods[] =
     {0x805f162c, 0x80612510, 0x805c8738, 0x805be5b4, 0x805fb948, 0x805d5874, 0x805d0588, 0x805dc5b8, 0x805de110, 0x805cbb14};
 
-KEEP_FUNC EVT_DEFINE_USER_FUNC(setShopFlags)
+EVT_DEFINE_USER_FUNC_KEEP(setShopFlags)
 {
     (void)isFirstCall;
     char *shopWork = reinterpret_cast<char *>(evtGetValue(evt, evt->evtArguments[0]));
