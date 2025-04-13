@@ -6,8 +6,6 @@
 
 #include <cstdint>
 
-typedef bool (*OSLink_Def)(OSModuleInfo *, void *);
-
 class RelMgr
 {
    public:

@@ -89,16 +89,10 @@ bool RelMgr::linkRel()
 
     // Link the rel file
 
-    // If `OSLink` has been hooked, then use `g_OSLink_trampoline` must be used, as `OSLink` is hooked with the code that calls
-    // this function, so using `OSLink` would create an infinite loop
-    OSLink_Def OSLinkPtr = mod::owr::g_OSLink_trampoline;
-    if (!OSLinkPtr)
-    {
-        OSLinkPtr = OSLink;
-    }
-
+    // Must use `Link` rather than `OSLink`, as `OSLink` is hooked with the code that calls this function, so using `OSLink`
+    // would create an infinite loop
     OSModuleInfo *relFile = this->relPtr;
-    if (!OSLinkPtr(relFile, this->bssPtr))
+    if (!Link(relFile, this->bssPtr, false))
     {
         // Try to unlink to be safe
         OSUnlink(relFile);

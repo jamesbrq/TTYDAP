@@ -629,7 +629,7 @@ namespace mod::owr
 
         RelMgr *relMgrPtr = &relMgr;
 
-        // The vanilla rel is unloaded every time you go through a loading zone, so our custom one must be relinked
+        // The vanilla rel is unlinked every time you go through a loading zone, so our custom one must be relinked
         const bool unlinked = relMgrPtr->unlinkRel();
 
         // If going into a new area, then load the new rel
