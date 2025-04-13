@@ -557,7 +557,7 @@ namespace mod::owr
             {
                 // If the player has already given the coconut to Flavio, then just give the coconut
                 // normally
-                if (ttyd::swdrv::swByteGet(1714) >= 4)
+                if (ttyd::swdrv::swByteGet(1719) >= 4)
                 {
                     return g_pouchGetItem_trampoline(item);
                 }
