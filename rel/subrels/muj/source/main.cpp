@@ -18,99 +18,99 @@
 using namespace ttyd::common;
 using namespace ttyd;
 
-extern int32_t nannpc_mode_setup;
-extern int32_t garawaru_init_muj_00[];
-extern int32_t odoodo_init_muj_00[];
-extern int32_t suifu_c_init[];
-extern int32_t suifu_c_talk[];
-extern int32_t suifu_d_init_muj_00[];
-extern int32_t suifu_d_talk_muj_00[];
-extern int32_t suifu_e_init[];
-extern int32_t suifu_e_talk[];
-extern int32_t korutesu_init_muj_00[];
-extern int32_t korutesu_talk_muj_00[];
-extern int32_t mony_talk_muj_00[];
-extern int32_t peton_talk_muj_00[];
-extern int32_t mujinto_hyochaku[];
-extern int32_t suifu_random_sub;
-extern int32_t dai3_shurai_sub[];
-extern int32_t dai3_shurai;
-extern int32_t kaizoku_vs_dai3[];
-extern int32_t dai3_beat_back[];
-extern int32_t leave_island[];
-extern int32_t into_muj_ship[];
-extern int32_t mony_peton_boarding[];
+extern int32_t muj_nannpc_mode_setup;
+extern int32_t muj_garawaru_init_00[];
+extern int32_t muj_odoodo_init_00[];
+extern int32_t muj_suifu_c_init[];
+extern int32_t muj_suifu_c_talk[];
+extern int32_t muj_suifu_d_init_00[];
+extern int32_t muj_suifu_d_talk_00[];
+extern int32_t muj_suifu_e_init[];
+extern int32_t muj_suifu_e_talk[];
+extern int32_t muj_korutesu_init_00[];
+extern int32_t muj_korutesu_talk_00[];
+extern int32_t muj_mony_talk_00[];
+extern int32_t muj_peton_talk_00[];
+extern int32_t muj_mujinto_hyochaku[];
+extern int32_t muj_suifu_random_sub;
+extern int32_t muj_dai3_shurai_sub[];
+extern int32_t muj_dai3_shurai;
+extern int32_t muj_kaizoku_vs_dai3[];
+extern int32_t muj_dai3_beat_back[];
+extern int32_t muj_leave_island[];
+extern int32_t muj_into_muj_ship[];
+extern int32_t muj_mony_peton_boarding[];
 extern int32_t muj_00_init_evt[];
-extern int32_t garawaru_init_muj_01[];
-extern int32_t garawaru_talk_muj_01[];
-extern int32_t marco_init_muj_01[];
-extern int32_t marco_talk_muj_01[];
-extern int32_t megane_init_muj_01[];
-extern int32_t megane_talk_muj_01[];
-extern int32_t odoodo_init_muj_01[];
-extern int32_t odoodo_talk_muj_01[];
-extern int32_t suifu_a_init_muj_01[];
-extern int32_t suifu_a_talk_muj_01[];
-extern int32_t suifu_bomb_init[];
-extern int32_t suifu_bomb_talk[];
-extern int32_t suifu_d_init_muj_01[];
-extern int32_t suifu_d_regl_muj_01[];
-extern int32_t suifu_d_talk_muj_01[];
-extern int32_t borosuifu_a_init[];
-extern int32_t borosuifu_a_talk[];
-extern int32_t borosuifu_b_init[];
-extern int32_t borosuifu_b_regl[];
-extern int32_t borosuifu_b_talk[];
-extern int32_t mony_init_muj_01[];
-extern int32_t peton_init_muj_01[];
-extern int32_t kyoshu_event[];
-extern int32_t nakamaware_event[];
-extern int32_t settoku_event[];
-extern int32_t settoku_event_main[];
+extern int32_t muj_garawaru_init_01[];
+extern int32_t muj_garawaru_talk_01[];
+extern int32_t muj_marco_init_01[];
+extern int32_t muj_marco_talk_01[];
+extern int32_t muj_megane_init_01[];
+extern int32_t muj_megane_talk_01[];
+extern int32_t muj_odoodo_init_01[];
+extern int32_t muj_odoodo_talk_01[];
+extern int32_t muj_suifu_a_init_01[];
+extern int32_t muj_suifu_a_talk_01[];
+extern int32_t muj_suifu_bomb_init[];
+extern int32_t muj_suifu_bomb_talk[];
+extern int32_t muj_suifu_d_init_01[];
+extern int32_t muj_suifu_d_regl_01[];
+extern int32_t muj_suifu_d_talk_01[];
+extern int32_t muj_borosuifu_a_init[];
+extern int32_t muj_borosuifu_a_talk[];
+extern int32_t muj_borosuifu_b_init[];
+extern int32_t muj_borosuifu_b_regl[];
+extern int32_t muj_borosuifu_b_talk[];
+extern int32_t muj_mony_init_01[];
+extern int32_t muj_peton_init_01[];
+extern int32_t muj_kyoshu_event[];
+extern int32_t muj_nakamaware_event[];
+extern int32_t muj_settoku_event[];
+extern int32_t muj_settoku_event_main[];
 extern int32_t muj_01_init_evt[];
-extern int32_t mony_init_muj_02[];
-extern int32_t mony_talk_muj_02[];
-extern int32_t peton_init_muj_02[];
-extern int32_t peton_talk_muj_02[];
+extern int32_t muj_mony_init_02[];
+extern int32_t muj_mony_talk_02[];
+extern int32_t muj_peton_init_02[];
+extern int32_t muj_peton_talk_02[];
 extern int32_t muj_02_init_evt[];
 extern int32_t muj_03_event_01[];
 extern int32_t muj_03_init_evt[];
-extern int32_t sanders_funto[];
-extern int32_t yashi_yure[];
+extern int32_t muj_sanders_funto[];
+extern int32_t muj_yashi_yure[];
 extern int32_t muj_04_init_evt[];
-extern int32_t sanders_nakama[];
-extern int32_t sanders_init_muj_05[];
-extern int32_t sanders_talk_sub[];
-extern int32_t sanders_talk_muj_05[];
-extern int32_t marco_init_muj_05[];
-extern int32_t marco_talk_muj_05[];
-extern int32_t sanders_kyushutsu_sub[];
-extern int32_t marco_and_jewel[];
-extern int32_t dokuroiwa_touch[];
-extern int32_t dokuroiwa_bomb[];
-extern int32_t dokuroiwa_init[];
-extern int32_t yure_yashi_ha1[];
-extern int32_t yure_yashi[];
+extern int32_t muj_sanders_nakama[];
+extern int32_t muj_sanders_init_05[];
+extern int32_t muj_sanders_talk_sub[];
+extern int32_t muj_sanders_talk_05[];
+extern int32_t muj_marco_init_05[];
+extern int32_t muj_marco_talk_05[];
+extern int32_t muj_sanders_kyushutsu_sub[];
+extern int32_t muj_marco_and_jewel[];
+extern int32_t muj_dokuroiwa_touch[];
+extern int32_t muj_dokuroiwa_bomb[];
+extern int32_t muj_dokuroiwa_init[];
+extern int32_t muj_yure_yashi_ha1[];
+extern int32_t muj_yure_yashi[];
 extern int32_t muj_05_init_evt[];
-extern int32_t megane_init_muj_10[];
-extern int32_t bero_in_event_muj_10[];
-extern int32_t nazo_event[];
-extern int32_t oidasare_event[];
+extern int32_t muj_megane_init_10[];
+extern int32_t muj_bero_in_event_10[];
+extern int32_t muj_nazo_event[];
+extern int32_t muj_oidasare_event[];
 extern int32_t unk_evt_muj_0002cb0c[];
 extern int32_t muj_10_init_evt[];
-extern int32_t warning_event[];
+extern int32_t muj_warning_event[];
 extern int32_t muj_11_init_evt[];
-extern int32_t bero_custom_muj_12[];
-extern int32_t korutesu_event[];
-extern int32_t korutesu_event_after[];
-extern int32_t kosho_event[];
+extern int32_t muj_bero_custom_12[];
+extern int32_t muj_korutesu_event[];
+extern int32_t muj_korutesu_event_after[];
+extern int32_t muj_kosho_event[];
 extern int32_t muj_12_init_evt[];
-extern int32_t onryo_event[];
+extern int32_t muj_onryo_event[];
 extern int32_t muj_20_koopa_evt[];
 extern int32_t muj_20_init_evt[];
-extern int32_t koburon_dead[];
+extern int32_t muj_koburon_dead[];
 extern int32_t muj_all_party_lecture[];
-extern int32_t make_itemsel_table[];
+extern int32_t muj_make_itemsel_table[];
 
 const char marco[] = "\x83\x7D\x83\x8B\x83\x52";
 
@@ -201,7 +201,7 @@ EVT_END()
 
 EVT_BEGIN(muj_00_init_evt_evt)
 	IF_EQUAL(GSW(1705), 9)
-		RUN_EVT(mujinto_hyochaku)
+		RUN_EVT(muj_mujinto_hyochaku)
 		USER_FUNC(evt_hit::evt_hitobj_onoff, PTR("A_b_bero01"), 1, 0)
 		SET(LW(0), 1)
 	END_IF()
@@ -209,12 +209,12 @@ EVT_BEGIN(muj_00_init_evt_evt)
 EVT_END()
 
 EVT_BEGIN(muj_00_init_evt_evt_2)
-	RUN_CHILD_EVT(&nannpc_mode_setup)
+	RUN_CHILD_EVT(&muj_nannpc_mode_setup)
 	USER_FUNC(evt_map::evt_mapobj_flag_onoff, 1, 0, PTR("S_c"), 1)
 	USER_FUNC(evt_hit::evt_hitobj_onoff, PTR("A_c"), 1, 1)
 	USER_FUNC(evt_hit::evt_hit_bind_mapobj, PTR("A_c"), PTR("S_c"))
-	RUN_EVT(&dai3_shurai)
-	RUN_EVT(&suifu_random_sub)
+	RUN_EVT(&muj_dai3_shurai)
+	RUN_EVT(&muj_suifu_random_sub)
 	USER_FUNC(evt_hit::evt_hitobj_onoff, PTR("A_b_bero01"), 1, 0)
 	RETURN()
 EVT_END()
@@ -624,12 +624,12 @@ EVT_END()
 
 EVT_BEGIN(muj_01_init_evt_evt)
 	IF_EQUAL(GSW(1705), 10)
-		RUN_EVT(nakamaware_event)
+		RUN_EVT(muj_nakamaware_event)
 		RETURN()
 	END_IF()
 	IF_EQUAL(GSW(1719), 1)
 		IF_EQUAL(GSWF(3129), 0)
-			RUN_EVT(settoku_event)
+			RUN_EVT(muj_settoku_event)
 			RETURN()
 		END_IF()
 	END_IF()
@@ -673,7 +673,7 @@ EVT_BEGIN(koburon_dead_evt)
 		USER_FUNC(evt_msg::evt_msg_print, 0, PTR("koburon_14"), 0, PTR("me"))
 		GOTO(99)
 	END_IF()
-	USER_FUNC(koburon_get_encount_info, LW(0))
+	USER_FUNC(muj_koburon_get_encount_info, LW(0))
 	SWITCH(LW(0))
 		CASE_OR(131072)
 		CASE_OR(262144)
@@ -771,7 +771,7 @@ EVT_END()
 
 EVT_BEGIN(dokuroiwa_bomb_hook)
 	RUN_CHILD_EVT(dokuroiwa_bomb_evt)
-	GOTO(&dokuroiwa_bomb[8])
+	GOTO(&muj_dokuroiwa_bomb[8])
 EVT_PATCH_END()
 // clang-format on
 
@@ -781,123 +781,123 @@ namespace mod
     {
         // This sequence has to be written like this due to the LW(3) values overwriting the ones written directly into the ROM
         // via AP
-        koburon_dead[0] = EVT_HELPER_CMD(1, 34);
-        koburon_dead[1] = EVT_HELPER_OP(GSW(721));
-        koburon_dead[2] = EVT_HELPER_CMD(1, 36);
-        koburon_dead[3] = EVT_HELPER_OP(0);
-        koburon_dead[4] = EVT_HELPER_CMD(2, 50);
-        koburon_dead[5] = EVT_HELPER_OP(LW(3));
-        koburon_dead[7] = EVT_HELPER_CMD(1, 36);
-        koburon_dead[8] = EVT_HELPER_OP(1);
-        koburon_dead[9] = EVT_HELPER_CMD(2, 50);
-        koburon_dead[10] = EVT_HELPER_OP(LW(3));
-        koburon_dead[12] = EVT_HELPER_CMD(1, 36);
-        koburon_dead[13] = EVT_HELPER_OP(2);
-        koburon_dead[14] = EVT_HELPER_CMD(2, 50);
-        koburon_dead[15] = EVT_HELPER_OP(LW(3));
-        koburon_dead[17] = EVT_HELPER_CMD(1, 36);
-        koburon_dead[18] = EVT_HELPER_OP(3);
-        koburon_dead[19] = EVT_HELPER_CMD(2, 50);
-        koburon_dead[20] = EVT_HELPER_OP(LW(3));
-        koburon_dead[22] = EVT_HELPER_CMD(1, 36);
-        koburon_dead[23] = EVT_HELPER_OP(4);
-        koburon_dead[24] = 0;
-        koburon_dead[25] = EVT_HELPER_CMD(2, 50);
-        koburon_dead[26] = EVT_HELPER_OP(LW(3));
-        koburon_dead[28] = EVT_HELPER_CMD(1, 36);
-        koburon_dead[29] = EVT_HELPER_OP(5);
-        koburon_dead[30] = EVT_HELPER_CMD(2, 50);
-        koburon_dead[31] = EVT_HELPER_OP(LW(3));
-        koburon_dead[33] = EVT_HELPER_CMD(1, 36);
-        koburon_dead[34] = EVT_HELPER_OP(6);
-        koburon_dead[35] = EVT_HELPER_CMD(2, 50);
-        koburon_dead[36] = EVT_HELPER_OP(LW(3));
-        koburon_dead[38] = EVT_HELPER_CMD(1, 36);
-        koburon_dead[39] = EVT_HELPER_OP(7);
-        koburon_dead[40] = 0;
-        koburon_dead[41] = EVT_HELPER_CMD(2, 50);
-        koburon_dead[42] = EVT_HELPER_OP(LW(3));
-        koburon_dead[44] = EVT_HELPER_CMD(0, 49);
+        muj_koburon_dead[0] = EVT_HELPER_CMD(1, 34);
+        muj_koburon_dead[1] = EVT_HELPER_OP(GSW(721));
+        muj_koburon_dead[2] = EVT_HELPER_CMD(1, 36);
+        muj_koburon_dead[3] = EVT_HELPER_OP(0);
+        muj_koburon_dead[4] = EVT_HELPER_CMD(2, 50);
+        muj_koburon_dead[5] = EVT_HELPER_OP(LW(3));
+        muj_koburon_dead[7] = EVT_HELPER_CMD(1, 36);
+        muj_koburon_dead[8] = EVT_HELPER_OP(1);
+        muj_koburon_dead[9] = EVT_HELPER_CMD(2, 50);
+        muj_koburon_dead[10] = EVT_HELPER_OP(LW(3));
+        muj_koburon_dead[12] = EVT_HELPER_CMD(1, 36);
+        muj_koburon_dead[13] = EVT_HELPER_OP(2);
+        muj_koburon_dead[14] = EVT_HELPER_CMD(2, 50);
+        muj_koburon_dead[15] = EVT_HELPER_OP(LW(3));
+        muj_koburon_dead[17] = EVT_HELPER_CMD(1, 36);
+        muj_koburon_dead[18] = EVT_HELPER_OP(3);
+        muj_koburon_dead[19] = EVT_HELPER_CMD(2, 50);
+        muj_koburon_dead[20] = EVT_HELPER_OP(LW(3));
+        muj_koburon_dead[22] = EVT_HELPER_CMD(1, 36);
+        muj_koburon_dead[23] = EVT_HELPER_OP(4);
+        muj_koburon_dead[24] = 0;
+        muj_koburon_dead[25] = EVT_HELPER_CMD(2, 50);
+        muj_koburon_dead[26] = EVT_HELPER_OP(LW(3));
+        muj_koburon_dead[28] = EVT_HELPER_CMD(1, 36);
+        muj_koburon_dead[29] = EVT_HELPER_OP(5);
+        muj_koburon_dead[30] = EVT_HELPER_CMD(2, 50);
+        muj_koburon_dead[31] = EVT_HELPER_OP(LW(3));
+        muj_koburon_dead[33] = EVT_HELPER_CMD(1, 36);
+        muj_koburon_dead[34] = EVT_HELPER_OP(6);
+        muj_koburon_dead[35] = EVT_HELPER_CMD(2, 50);
+        muj_koburon_dead[36] = EVT_HELPER_OP(LW(3));
+        muj_koburon_dead[38] = EVT_HELPER_CMD(1, 36);
+        muj_koburon_dead[39] = EVT_HELPER_OP(7);
+        muj_koburon_dead[40] = 0;
+        muj_koburon_dead[41] = EVT_HELPER_CMD(2, 50);
+        muj_koburon_dead[42] = EVT_HELPER_OP(LW(3));
+        muj_koburon_dead[44] = EVT_HELPER_CMD(0, 49);
 
-        patch::writePatch(&koburon_dead[45], koburon_dead_hook, sizeof(koburon_dead_hook));
+        patch::writePatch(&muj_koburon_dead[45], koburon_dead_hook, sizeof(koburon_dead_hook));
 
-        sanders_nakama[150] = EVT_HELPER_CMD(2, 50);
-        sanders_nakama[151] = EVT_HELPER_OP(LW(3));
-        patch::writePatch(&sanders_nakama[153], muj_party_hook, sizeof(muj_party_hook));
+        muj_sanders_nakama[150] = EVT_HELPER_CMD(2, 50);
+        muj_sanders_nakama[151] = EVT_HELPER_OP(LW(3));
+        patch::writePatch(&muj_sanders_nakama[153], muj_party_hook, sizeof(muj_party_hook));
 
-        garawaru_init_muj_00[1] = GSW(1717);
-        garawaru_init_muj_00[3] = 14;
-        garawaru_init_muj_00[4] = 15;
+        muj_garawaru_init_00[1] = GSW(1717);
+        muj_garawaru_init_00[3] = 14;
+        muj_garawaru_init_00[4] = 15;
 
-        odoodo_init_muj_00[1] = GSW(1717);
-        odoodo_init_muj_00[3] = 14;
-        odoodo_init_muj_00[4] = 15;
+        muj_odoodo_init_00[1] = GSW(1717);
+        muj_odoodo_init_00[3] = 14;
+        muj_odoodo_init_00[4] = 15;
 
-        suifu_c_init[1] = GSW(1717);
-        suifu_c_init[3] = 14;
-        suifu_c_init[4] = 15;
+        muj_suifu_c_init[1] = GSW(1717);
+        muj_suifu_c_init[3] = 14;
+        muj_suifu_c_init[4] = 15;
 
-        suifu_c_talk[1] = GSW(1717);
-        suifu_c_talk[3] = 13;
-        suifu_c_talk[11] = 14;
-        suifu_c_talk[12] = 15;
+        muj_suifu_c_talk[1] = GSW(1717);
+        muj_suifu_c_talk[3] = 13;
+        muj_suifu_c_talk[11] = 14;
+        muj_suifu_c_talk[12] = 15;
 
-        suifu_d_init_muj_00[1] = GSW(1717);
-        suifu_d_init_muj_00[3] = 14;
-        suifu_d_init_muj_00[4] = 15;
+        muj_suifu_d_init_00[1] = GSW(1717);
+        muj_suifu_d_init_00[3] = 14;
+        muj_suifu_d_init_00[4] = 15;
 
-        suifu_d_talk_muj_00[1] = GSW(1717);
-        suifu_d_talk_muj_00[3] = 13;
-        suifu_d_talk_muj_00[11] = 14;
-        suifu_d_talk_muj_00[12] = 15;
+        muj_suifu_d_talk_00[1] = GSW(1717);
+        muj_suifu_d_talk_00[3] = 13;
+        muj_suifu_d_talk_00[11] = 14;
+        muj_suifu_d_talk_00[12] = 15;
 
-        suifu_e_init[1] = GSW(1717);
-        suifu_e_init[3] = 14;
-        suifu_e_init[4] = 15;
+        muj_suifu_e_init[1] = GSW(1717);
+        muj_suifu_e_init[3] = 14;
+        muj_suifu_e_init[4] = 15;
 
-        suifu_e_talk[1] = GSW(1717);
-        suifu_e_talk[3] = 13;
-        suifu_e_talk[11] = 14;
-        suifu_e_talk[12] = 15;
+        muj_suifu_e_talk[1] = GSW(1717);
+        muj_suifu_e_talk[3] = 13;
+        muj_suifu_e_talk[11] = 14;
+        muj_suifu_e_talk[12] = 15;
 
-        korutesu_init_muj_00[1] = GSW(1717);
-        korutesu_init_muj_00[3] = 24;
+        muj_korutesu_init_00[1] = GSW(1717);
+        muj_korutesu_init_00[3] = 24;
 
-        korutesu_talk_muj_00[1] = GSW(1717);
-        korutesu_talk_muj_00[3] = 25;
+        muj_korutesu_talk_00[1] = GSW(1717);
+        muj_korutesu_talk_00[3] = 25;
 
-        patch::writePatch(&mony_talk_muj_00[0], mony_talk_muj_00_hook, sizeof(mony_talk_muj_00_hook));
+        patch::writePatch(&muj_mony_talk_00[0], mony_talk_muj_00_hook, sizeof(mony_talk_muj_00_hook));
 
-        patch::writePatch(&peton_talk_muj_00[0], peton_talk_muj_00_hook, sizeof(peton_talk_muj_00_hook));
+        patch::writePatch(&muj_peton_talk_00[0], peton_talk_muj_00_hook, sizeof(peton_talk_muj_00_hook));
 
-        mujinto_hyochaku[277] = GSW(1705);
-        mujinto_hyochaku[278] = 10;
+        muj_mujinto_hyochaku[277] = GSW(1705);
+        muj_mujinto_hyochaku[278] = 10;
 
-        dai3_shurai_sub[1096] = GSW(1717);
-        dai3_shurai_sub[1097] = 14;
+        muj_dai3_shurai_sub[1096] = GSW(1717);
+        muj_dai3_shurai_sub[1097] = 14;
 
-        kaizoku_vs_dai3[522] = GSW(1717);
-        kaizoku_vs_dai3[523] = 17;
+        muj_kaizoku_vs_dai3[522] = GSW(1717);
+        muj_kaizoku_vs_dai3[523] = 17;
 
-        dai3_beat_back[148] = GSW(1717);
-        dai3_beat_back[149] = 18;
+        muj_dai3_beat_back[148] = GSW(1717);
+        muj_dai3_beat_back[149] = 18;
 
-        leave_island[757] = GSW(1717);
-        leave_island[758] = 25;
+        muj_leave_island[757] = GSW(1717);
+        muj_leave_island[758] = 25;
 
-        into_muj_ship[161] = GSW(1709);
-        into_muj_ship[162] = 4;
-        into_muj_ship[164] = GSW(1709);
-        into_muj_ship[165] = 5;
+        muj_into_muj_ship[161] = GSW(1709);
+        muj_into_muj_ship[162] = 4;
+        muj_into_muj_ship[164] = GSW(1709);
+        muj_into_muj_ship[165] = 5;
 
-        mony_peton_boarding[4] = GSW(1709);
-        mony_peton_boarding[5] = 7;
-        mony_peton_boarding[11] = GSW(1709);
-        mony_peton_boarding[12] = 8;
-        mony_peton_boarding[45] = GSW(1709);
-        mony_peton_boarding[46] = 8;
-        mony_peton_boarding[111] = GSW(1709);
-        mony_peton_boarding[112] = 8;
+        muj_mony_peton_boarding[4] = GSW(1709);
+        muj_mony_peton_boarding[5] = 7;
+        muj_mony_peton_boarding[11] = GSW(1709);
+        muj_mony_peton_boarding[12] = 8;
+        muj_mony_peton_boarding[45] = GSW(1709);
+        muj_mony_peton_boarding[46] = 8;
+        muj_mony_peton_boarding[111] = GSW(1709);
+        muj_mony_peton_boarding[112] = 8;
 
         muj_00_init_evt[29] = GSW(1717);
         muj_00_init_evt[30] = 25;
@@ -928,97 +928,97 @@ namespace mod
         muj_00_init_evt[411] = 24;
         muj_00_init_evt[481] = 25;
 
-        patch::writePatch(&garawaru_init_muj_01[0], garawaru_init_muj_01_hook, sizeof(garawaru_init_muj_01_hook));
+        patch::writePatch(&muj_garawaru_init_01[0], garawaru_init_muj_01_hook, sizeof(garawaru_init_muj_01_hook));
 
-        patch::writePatch(&garawaru_talk_muj_01[0], garawaru_talk_muj_01_hook, sizeof(garawaru_talk_muj_01_hook));
+        patch::writePatch(&muj_garawaru_talk_01[0], garawaru_talk_muj_01_hook, sizeof(garawaru_talk_muj_01_hook));
 
-        patch::writePatch(&marco_init_muj_01[0], marco_init_muj_01_hook, sizeof(marco_init_muj_01_hook));
+        patch::writePatch(&muj_marco_init_01[0], marco_init_muj_01_hook, sizeof(marco_init_muj_01_hook));
 
-        marco_talk_muj_01[1] = GSW(1719);
-        marco_talk_muj_01[3] = 1;
-        marco_talk_muj_01[4] = 4;
-        marco_talk_muj_01[13] = GSW(1719);
-        marco_talk_muj_01[15] = 0;
-        marco_talk_muj_01[23] = 1;
-        marco_talk_muj_01[24] = 1;
-        marco_talk_muj_01[46] = 2;
-        marco_talk_muj_01[89] = GSW(1719);
-        marco_talk_muj_01[90] = 3;
-        marco_talk_muj_01[98] = 3;
-        patch::writePatch(&marco_talk_muj_01[290], marco_talk_coconut, sizeof(marco_talk_coconut));
-        marco_talk_muj_01[358] = GSW(1719);
-        marco_talk_muj_01[359] = 4;
-        marco_talk_muj_01[361] = 99; // Unused
-        marco_talk_muj_01[369] = 99; // Unused
-        marco_talk_muj_01[377] = 4;
-        marco_talk_muj_01[831] = GSW(1719);
-        marco_talk_muj_01[832] = 7;
-        marco_talk_muj_01[836] = EVT_HELPER_CMD(0, 42);
-        marco_talk_muj_01[837] = 0;
-        marco_talk_muj_01[838] = 0;
+        muj_marco_talk_01[1] = GSW(1719);
+        muj_marco_talk_01[3] = 1;
+        muj_marco_talk_01[4] = 4;
+        muj_marco_talk_01[13] = GSW(1719);
+        muj_marco_talk_01[15] = 0;
+        muj_marco_talk_01[23] = 1;
+        muj_marco_talk_01[24] = 1;
+        muj_marco_talk_01[46] = 2;
+        muj_marco_talk_01[89] = GSW(1719);
+        muj_marco_talk_01[90] = 3;
+        muj_marco_talk_01[98] = 3;
+        patch::writePatch(&muj_marco_talk_01[290], marco_talk_coconut, sizeof(marco_talk_coconut));
+        muj_marco_talk_01[358] = GSW(1719);
+        muj_marco_talk_01[359] = 4;
+        muj_marco_talk_01[361] = 99; // Unused
+        muj_marco_talk_01[369] = 99; // Unused
+        muj_marco_talk_01[377] = 4;
+        muj_marco_talk_01[831] = GSW(1719);
+        muj_marco_talk_01[832] = 7;
+        muj_marco_talk_01[836] = EVT_HELPER_CMD(0, 42);
+        muj_marco_talk_01[837] = 0;
+        muj_marco_talk_01[838] = 0;
 
-        patch::writePatch(&megane_init_muj_01[0], megane_init_muj_01_hook, sizeof(megane_init_muj_01_hook));
+        patch::writePatch(&muj_megane_init_01[0], megane_init_muj_01_hook, sizeof(megane_init_muj_01_hook));
 
-        megane_talk_muj_01[1] = GSW(1719);
-        megane_talk_muj_01[3] = 1;
-        megane_talk_muj_01[4] = 5;
-        megane_talk_muj_01[12] = 6;
-        megane_talk_muj_01[34] = 7;
-        megane_talk_muj_01[35] = 8;
-        megane_talk_muj_01[42] = EVT_HELPER_CMD(0, 42);
-        megane_talk_muj_01[43] = 0;
-        megane_talk_muj_01[44] = 0;
+        muj_megane_talk_01[1] = GSW(1719);
+        muj_megane_talk_01[3] = 1;
+        muj_megane_talk_01[4] = 5;
+        muj_megane_talk_01[12] = 6;
+        muj_megane_talk_01[34] = 7;
+        muj_megane_talk_01[35] = 8;
+        muj_megane_talk_01[42] = EVT_HELPER_CMD(0, 42);
+        muj_megane_talk_01[43] = 0;
+        muj_megane_talk_01[44] = 0;
 
-        patch::writePatch(&odoodo_init_muj_01[0], odoodo_init_muj_01_hook, sizeof(odoodo_init_muj_01_hook));
+        patch::writePatch(&muj_odoodo_init_01[0], odoodo_init_muj_01_hook, sizeof(odoodo_init_muj_01_hook));
 
-        odoodo_talk_muj_01[1] = GSW(1719);
-        odoodo_talk_muj_01[3] = 1;
-        odoodo_talk_muj_01[4] = 5;
-        odoodo_talk_muj_01[12] = 6;
-        odoodo_talk_muj_01[34] = 7;
-        odoodo_talk_muj_01[35] = 8;
-        odoodo_talk_muj_01[42] = EVT_HELPER_CMD(0, 42);
-        odoodo_talk_muj_01[43] = 0;
-        odoodo_talk_muj_01[44] = 0;
+        muj_odoodo_talk_01[1] = GSW(1719);
+        muj_odoodo_talk_01[3] = 1;
+        muj_odoodo_talk_01[4] = 5;
+        muj_odoodo_talk_01[12] = 6;
+        muj_odoodo_talk_01[34] = 7;
+        muj_odoodo_talk_01[35] = 8;
+        muj_odoodo_talk_01[42] = EVT_HELPER_CMD(0, 42);
+        muj_odoodo_talk_01[43] = 0;
+        muj_odoodo_talk_01[44] = 0;
 
-        patch::writePatch(&suifu_a_init_muj_01[0], suifu_a_init_muj_01_hook, sizeof(suifu_a_init_muj_01_hook));
+        patch::writePatch(&muj_suifu_a_init_01[0], suifu_a_init_muj_01_hook, sizeof(suifu_a_init_muj_01_hook));
 
-        patch::writePatch(&suifu_a_talk_muj_01[0], suifu_a_talk_muj_01_hook, sizeof(suifu_a_talk_muj_01_hook));
+        patch::writePatch(&muj_suifu_a_talk_01[0], suifu_a_talk_muj_01_hook, sizeof(suifu_a_talk_muj_01_hook));
 
-        patch::writePatch(&suifu_bomb_init[0], suifu_bomb_init_hook, sizeof(suifu_bomb_init_hook));
+        patch::writePatch(&muj_suifu_bomb_init[0], suifu_bomb_init_hook, sizeof(suifu_bomb_init_hook));
 
-        patch::writePatch(&suifu_bomb_talk[0], suifu_bomb_talk_hook, sizeof(suifu_bomb_talk_hook));
+        patch::writePatch(&muj_suifu_bomb_talk[0], suifu_bomb_talk_hook, sizeof(suifu_bomb_talk_hook));
 
-        suifu_d_init_muj_01[1] = GSW(1717);
-        suifu_d_init_muj_01[3] = 26;
+        muj_suifu_d_init_01[1] = GSW(1717);
+        muj_suifu_d_init_01[3] = 26;
 
-        suifu_d_regl_muj_01[1] = GSW(1717);
-        suifu_d_regl_muj_01[3] = 26;
+        muj_suifu_d_regl_01[1] = GSW(1717);
+        muj_suifu_d_regl_01[3] = 26;
 
-        patch::writePatch(&suifu_d_talk_muj_01[0], suifu_d_talk_muj_01_hook, sizeof(suifu_d_talk_muj_01_hook));
+        patch::writePatch(&muj_suifu_d_talk_01[0], suifu_d_talk_muj_01_hook, sizeof(suifu_d_talk_muj_01_hook));
 
-        borosuifu_a_init[1] = GSW(1717);
-        borosuifu_a_init[3] = 26;
+        muj_borosuifu_a_init[1] = GSW(1717);
+        muj_borosuifu_a_init[3] = 26;
 
-        patch::writePatch(&borosuifu_a_talk[0], borosuifu_a_talk_hook, sizeof(borosuifu_a_talk_hook));
+        patch::writePatch(&muj_borosuifu_a_talk[0], borosuifu_a_talk_hook, sizeof(borosuifu_a_talk_hook));
 
-        borosuifu_b_init[6] = GSW(1717);
-        borosuifu_b_init[8] = 26;
+        muj_borosuifu_b_init[6] = GSW(1717);
+        muj_borosuifu_b_init[8] = 26;
 
-        borosuifu_b_regl[1] = GSW(1717);
-        borosuifu_b_regl[3] = 26;
+        muj_borosuifu_b_regl[1] = GSW(1717);
+        muj_borosuifu_b_regl[3] = 26;
 
-        patch::writePatch(&borosuifu_b_talk[0], borosuifu_b_talk_hook, sizeof(borosuifu_b_talk_hook));
+        patch::writePatch(&muj_borosuifu_b_talk[0], borosuifu_b_talk_hook, sizeof(borosuifu_b_talk_hook));
 
-        patch::writePatch(&mony_init_muj_01[0], mony_init_muj_01_hook, sizeof(mony_init_muj_01_hook));
+        patch::writePatch(&muj_mony_init_01[0], mony_init_muj_01_hook, sizeof(mony_init_muj_01_hook));
 
-        patch::writePatch(&peton_init_muj_01[0], peton_init_muj_01_hook, sizeof(peton_init_muj_01_hook));
+        patch::writePatch(&muj_peton_init_01[0], peton_init_muj_01_hook, sizeof(peton_init_muj_01_hook));
 
-        kyoshu_event[182] = GSW(1705);
-        kyoshu_event[183] = 11;
+        muj_kyoshu_event[182] = GSW(1705);
+        muj_kyoshu_event[183] = 11;
 
-        settoku_event_main[68] = GSW(1719);
-        settoku_event_main[69] = 2;
+        muj_settoku_event_main[68] = GSW(1719);
+        muj_settoku_event_main[69] = 2;
 
         muj_01_init_evt[4] = GSW(1708);
         muj_01_init_evt[5] = 16;
@@ -1030,29 +1030,29 @@ namespace mod
         muj_01_init_evt[187] = GSW(1708);
         muj_01_init_evt[188] = 18;
 
-        mony_init_muj_02[6] = GSW(1709);
-        mony_init_muj_02[8] = 5;
-        mony_init_muj_02[9] = 6;
+        muj_mony_init_02[6] = GSW(1709);
+        muj_mony_init_02[8] = 5;
+        muj_mony_init_02[9] = 6;
 
-        peton_init_muj_02[6] = GSW(1709);
-        peton_init_muj_02[8] = 5;
-        peton_init_muj_02[9] = 6;
+        muj_peton_init_02[6] = GSW(1709);
+        muj_peton_init_02[8] = 5;
+        muj_peton_init_02[9] = 6;
 
-        mony_talk_muj_02[1] = GSW(1709);
-        mony_talk_muj_02[3] = 5;
-        mony_talk_muj_02[16] = GSW(1709);
-        mony_talk_muj_02[17] = 6;
-        mony_talk_muj_02[19] = 6;
-        mony_talk_muj_02[44] = GSW(1709);
-        mony_talk_muj_02[45] = 7;
+        muj_mony_talk_02[1] = GSW(1709);
+        muj_mony_talk_02[3] = 5;
+        muj_mony_talk_02[16] = GSW(1709);
+        muj_mony_talk_02[17] = 6;
+        muj_mony_talk_02[19] = 6;
+        muj_mony_talk_02[44] = GSW(1709);
+        muj_mony_talk_02[45] = 7;
 
-        peton_talk_muj_02[1] = GSW(1709);
-        peton_talk_muj_02[3] = 5;
-        peton_talk_muj_02[16] = GSW(1709);
-        peton_talk_muj_02[17] = 6;
-        peton_talk_muj_02[19] = 6;
-        peton_talk_muj_02[44] = GSW(1709);
-        peton_talk_muj_02[45] = 7;
+        muj_peton_talk_02[1] = GSW(1709);
+        muj_peton_talk_02[3] = 5;
+        muj_peton_talk_02[16] = GSW(1709);
+        muj_peton_talk_02[17] = 6;
+        muj_peton_talk_02[19] = 6;
+        muj_peton_talk_02[44] = GSW(1709);
+        muj_peton_talk_02[45] = 7;
 
         muj_02_init_evt[31] = GSW(1717);
         muj_02_init_evt[32] = 26;
@@ -1064,61 +1064,61 @@ namespace mod
 
         muj_03_init_evt[32] = 11;
 
-        sanders_funto[462] = GSW(1719);
-        sanders_funto[463] = 1;
+        muj_sanders_funto[462] = GSW(1719);
+        muj_sanders_funto[463] = 1;
 
-        yashi_yure[111] = GSWF(6090);
-        yashi_yure[238] = GSWF(6091);
+        muj_yashi_yure[111] = GSWF(6090);
+        muj_yashi_yure[238] = GSWF(6091);
 
         muj_04_init_evt[70] = GSW(1719);
         muj_04_init_evt[72] = 0;
 
-        sanders_init_muj_05[1] = GSW(1719);
-        sanders_init_muj_05[3] = 2;
-        sanders_init_muj_05[9] = 2;
-        sanders_init_muj_05[10] = 4;
-        sanders_init_muj_05[22] = 5;
+        muj_sanders_init_05[1] = GSW(1719);
+        muj_sanders_init_05[3] = 2;
+        muj_sanders_init_05[9] = 2;
+        muj_sanders_init_05[10] = 4;
+        muj_sanders_init_05[22] = 5;
 
-        sanders_talk_sub[63] = GSW(1723);
-        sanders_talk_sub[64] = 1;
+        muj_sanders_talk_sub[63] = GSW(1723);
+        muj_sanders_talk_sub[64] = 1;
 
-        sanders_talk_muj_05[1] = GSWF(1723);
-        sanders_talk_muj_05[3] = 0;
-        sanders_talk_muj_05[4] = 0;
-        sanders_talk_muj_05[38] = 1;
+        muj_sanders_talk_05[1] = GSWF(1723);
+        muj_sanders_talk_05[3] = 0;
+        muj_sanders_talk_05[4] = 0;
+        muj_sanders_talk_05[38] = 1;
 
-        marco_init_muj_05[1] = GSW(1719);
-        marco_init_muj_05[3] = 8;
+        muj_marco_init_05[1] = GSW(1719);
+        muj_marco_init_05[3] = 8;
 
-        marco_talk_muj_05[1] = GSW(1719);
-        marco_talk_muj_05[3] = 8;
-        marco_talk_muj_05[95] = GSWF(6108);
+        muj_marco_talk_05[1] = GSW(1719);
+        muj_marco_talk_05[3] = 8;
+        muj_marco_talk_05[95] = GSWF(6108);
 
-        sanders_kyushutsu_sub[7] = GSW(1719);
-        sanders_kyushutsu_sub[8] = 2;
+        muj_sanders_kyushutsu_sub[7] = GSW(1719);
+        muj_sanders_kyushutsu_sub[8] = 2;
 
-        marco_and_jewel[77] = GSW(1719);
-        marco_and_jewel[78] = 8;
+        muj_marco_and_jewel[77] = GSW(1719);
+        muj_marco_and_jewel[78] = 8;
 
-        dokuroiwa_touch[23] = GSW(1719);
-        dokuroiwa_touch[24] = 7;
+        muj_dokuroiwa_touch[23] = GSW(1719);
+        muj_dokuroiwa_touch[24] = 7;
 
-        patch::writePatch(&dokuroiwa_bomb[3], dokuroiwa_bomb_hook, sizeof(dokuroiwa_bomb_hook));
-        dokuroiwa_bomb[302] = GSW(1717);
-        dokuroiwa_bomb[303] = 1;
+        patch::writePatch(&muj_dokuroiwa_bomb[3], dokuroiwa_bomb_hook, sizeof(dokuroiwa_bomb_hook));
+        muj_dokuroiwa_bomb[302] = GSW(1717);
+        muj_dokuroiwa_bomb[303] = 1;
 
-        dokuroiwa_init[14] = GSW(1717);
-        dokuroiwa_init[15] = 1;
+        muj_dokuroiwa_init[14] = GSW(1717);
+        muj_dokuroiwa_init[15] = 1;
 
-        yure_yashi_ha1[84] = GSW(1719);
-        yure_yashi_ha1[85] = 2;
-        yure_yashi_ha1[173] = GSW(1719);
-        yure_yashi_ha1[174] = 2;
+        muj_yure_yashi_ha1[84] = GSW(1719);
+        muj_yure_yashi_ha1[85] = 2;
+        muj_yure_yashi_ha1[173] = GSW(1719);
+        muj_yure_yashi_ha1[174] = 2;
 
-        yure_yashi[46] = GSW(1719);
-        yure_yashi[47] = 2;
-        yure_yashi[78] = GSW(1719);
-        yure_yashi[79] = 2;
+        muj_yure_yashi[46] = GSW(1719);
+        muj_yure_yashi[47] = 2;
+        muj_yure_yashi[78] = GSW(1719);
+        muj_yure_yashi[79] = 2;
 
         muj_05_init_evt[1] = GSW(1719);
         muj_05_init_evt[3] = 1;
@@ -1129,18 +1129,18 @@ namespace mod
         muj_05_init_evt[86] = GSW(1709);
         muj_05_init_evt[87] = 5;
 
-        megane_init_muj_10[1] = GSW(1717);
-        megane_init_muj_10[3] = 8;
-        megane_init_muj_10[4] = 9;
+        muj_megane_init_10[1] = GSW(1717);
+        muj_megane_init_10[3] = 8;
+        muj_megane_init_10[4] = 9;
 
-        bero_in_event_muj_10[1] = GSW(1717);
-        bero_in_event_muj_10[2] = 15;
+        muj_bero_in_event_10[1] = GSW(1717);
+        muj_bero_in_event_10[2] = 15;
 
-        nazo_event[168] = GSW(1717);
-        nazo_event[169] = 8;
+        muj_nazo_event[168] = GSW(1717);
+        muj_nazo_event[169] = 8;
 
-        oidasare_event[147] = GSW(1717);
-        oidasare_event[148] = 11;
+        muj_oidasare_event[147] = GSW(1717);
+        muj_oidasare_event[148] = 11;
 
         unk_evt_muj_0002cb0c[79] = GSW(1717);
         unk_evt_muj_0002cb0c[80] = 16;
@@ -1168,26 +1168,26 @@ namespace mod
         muj_10_init_evt[184] = GSW(1717);
         muj_10_init_evt[185] = 15;
 
-        warning_event[31] = GSW(1717);
-        warning_event[32] = 9;
+        muj_warning_event[31] = GSW(1717);
+        muj_warning_event[32] = 9;
 
         muj_11_init_evt[1] = GSW(1717);
         muj_11_init_evt[2] = 10;
         muj_11_init_evt[28] = GSW(1717);
         muj_11_init_evt[29] = 8;
 
-        bero_custom_muj_12[1] = GSW(1717);
-        bero_custom_muj_12[3] = 9;
-        bero_custom_muj_12[57] = 14;
+        muj_bero_custom_12[1] = GSW(1717);
+        muj_bero_custom_12[3] = 9;
+        muj_bero_custom_12[57] = 14;
 
-        korutesu_event[606] = GSW(1717);
-        korutesu_event[607] = 10;
+        muj_korutesu_event[606] = GSW(1717);
+        muj_korutesu_event[607] = 10;
 
-        korutesu_event_after[132] = GSW(1717);
-        korutesu_event_after[133] = 10;
+        muj_korutesu_event_after[132] = GSW(1717);
+        muj_korutesu_event_after[133] = 10;
 
-        kosho_event[504] = GSW(1717);
-        kosho_event[505] = 15;
+        muj_kosho_event[504] = GSW(1717);
+        muj_kosho_event[505] = 15;
 
         muj_12_init_evt[8] = GSW(1717);
         muj_12_init_evt[9] = 10;
@@ -1198,12 +1198,12 @@ namespace mod
         muj_12_init_evt[50] = GSW(1717);
         muj_12_init_evt[51] = 14;
 
-        onryo_event[20] = GSW(1705);
-        onryo_event[21] = 8;
-        onryo_event[144] = GSW(1705);
-        onryo_event[145] = 8;
-        onryo_event[2235] = GSW(1705);
-        onryo_event[2236] = 9;
+        muj_onryo_event[20] = GSW(1705);
+        muj_onryo_event[21] = 8;
+        muj_onryo_event[144] = GSW(1705);
+        muj_onryo_event[145] = 8;
+        muj_onryo_event[2235] = GSW(1705);
+        muj_onryo_event[2236] = 9;
 
         muj_20_koopa_evt[122] = GSW(1715);
         muj_20_koopa_evt[123] = 11;
@@ -1218,10 +1218,10 @@ namespace mod
         muj_20_init_evt[335] = 18;
 
         // Assembly Patches
-        patch::writeIntWithCache(&make_itemsel_table[14], 0x38000079); // li r0, 0x79
-        patch::writeIntWithCache(&make_itemsel_table[20], 0x380300A0); // addi r0, r3, 0xA0
-        patch::writeIntWithCache(&make_itemsel_table[22], 0x2C0000A6); // cmpwi r0, 0xA6 (Coconut)
-        patch::writeIntWithCache(&make_itemsel_table[23], 0x4082000C); // bne +0xC
+        patch::writeIntWithCache(&muj_make_itemsel_table[14], 0x38000079); // li r0, 0x79
+        patch::writeIntWithCache(&muj_make_itemsel_table[20], 0x380300A0); // addi r0, r3, 0xA0
+        patch::writeIntWithCache(&muj_make_itemsel_table[22], 0x2C0000A6); // cmpwi r0, 0xA6 (Coconut)
+        patch::writeIntWithCache(&muj_make_itemsel_table[23], 0x4082000C); // bne +0xC
     }
 
     void exit() {}

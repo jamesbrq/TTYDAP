@@ -13,53 +13,53 @@ using namespace ttyd;
 
 extern int32_t las_first_evt_00[];
 extern int32_t las_00_init_evt[];
-extern int32_t senkaron_event[];
-extern int32_t kurokaron_init[];
-extern int32_t kurokaron_talk[];
+extern int32_t las_senkaron_event[];
+extern int32_t las_kurokaron_init[];
+extern int32_t las_kurokaron_talk[];
 extern int32_t las_key_evt_05[];
 extern int32_t las_unlock_evt_05[];
 extern int32_t las_05_init_evt[];
-extern int32_t door_matigai_evt[];
-extern int32_t door_seikai_evt[];
-extern int32_t mugen_kairou_init[];
+extern int32_t las_door_matigai_evt[];
+extern int32_t las_door_seikai_evt[];
+extern int32_t las_mugen_kairou_init[];
 extern int32_t las_first_evt_09[];
-extern int32_t majyorin_evt_main[];
+extern int32_t las_majyorin_evt_main[];
 extern int32_t las_09_init_evt[];
-extern int32_t tenkyugi_evt2[];
-extern int32_t kagi_8_on[];
-extern int32_t kagi_8_init[];
-extern int32_t daiza_evt[];
+extern int32_t las_tenkyugi_evt2[];
+extern int32_t las_kagi_8_on[];
+extern int32_t las_kagi_8_init[];
+extern int32_t las_daiza_evt[];
 extern int32_t las_10_init_evt[];
-extern int32_t cloud_evt[];
+extern int32_t las_cloud_evt[];
 extern int32_t las_19_init_evt[];
-extern int32_t hosi_sw_check[];
-extern int32_t hosi_init[];
+extern int32_t las_hosi_sw_check[];
+extern int32_t las_hosi_init[];
 extern int32_t las_21_init_evt[];
 extern int32_t las_key_evt_22[];
 extern int32_t las_unlock_evt_22[];
 extern int32_t las_22_init_evt[];
 extern int32_t las_23_init_evt[];
-extern int32_t break_floor_evt[];
-extern int32_t box_evt[];
+extern int32_t las_break_floor_evt[];
+extern int32_t las_box_evt[];
 extern int32_t las_24_init_evt[];
 extern int32_t las_unlock_evt_25[];
 extern int32_t las_25_init_evt[];
-extern int32_t bonbaba_evt[];
-extern int32_t bonbaba_init[];
+extern int32_t las_bonbaba_evt[];
+extern int32_t las_bonbaba_init[];
 extern int32_t las_26_init_evt[];
 extern int32_t las_syuryo_init[];
 extern int32_t las_first_evt_28[];
 extern int32_t las_koopa_evt[];
 extern int32_t las_shuryolight_init_28[];
 extern int32_t las_28_init_evt[];
-extern int32_t last_evt_3[];
-extern int32_t last_evt_3_2[];
-extern int32_t last_evt_4[];
+extern int32_t las_last_evt_3[];
+extern int32_t las_last_evt_3_2[];
+extern int32_t las_last_evt_4[];
 extern int32_t las_shuryolight_init_29[];
 extern int32_t las_29_init_evt[];
 extern int32_t las_30_init_evt[];
-extern int32_t key_check_evt_22[];
-extern int32_t key_check_evt_25[];
+extern int32_t las_key_check_evt_22[];
+extern int32_t las_key_check_evt_25[];
 extern int32_t las_key_tbl_05[];
 extern int32_t las_key_tbl_22[];
 extern int32_t las_key_tbl_25[];
@@ -112,7 +112,7 @@ EVT_END()
 
 EVT_BEGIN(tenkyugi_evt2_hook)
     RUN_CHILD_EVT(tenkyugi_evt2_evt)
-    GOTO(&tenkyugi_evt2[113])
+    GOTO(&las_tenkyugi_evt2[113])
 EVT_PATCH_END()
 // clang-format on
 
@@ -128,16 +128,16 @@ namespace mod
         las_00_init_evt[23] = GSW(1708);
         las_00_init_evt[24] = 2;
 
-        senkaron_event[1] = GSW(1708);
-        senkaron_event[2] = 2;
-        senkaron_event[843] = GSW(1708);
-        senkaron_event[844] = 3;
+        las_senkaron_event[1] = GSW(1708);
+        las_senkaron_event[2] = 2;
+        las_senkaron_event[843] = GSW(1708);
+        las_senkaron_event[844] = 3;
 
-        kurokaron_init[1] = GSW(1708);
-        kurokaron_init[2] = 2;
+        las_kurokaron_init[1] = GSW(1708);
+        las_kurokaron_init[2] = 2;
 
-        kurokaron_talk[3] = GSW(1708);
-        kurokaron_talk[4] = 2;
+        las_kurokaron_talk[3] = GSW(1708);
+        las_kurokaron_talk[4] = 2;
 
         las_key_evt_05[1] = GSWF(6071);
         las_key_evt_05[2] = 1;
@@ -152,22 +152,22 @@ namespace mod
         las_05_init_evt[40] = GSW(1708);
         las_05_init_evt[41] = 4;
 
-        door_matigai_evt[1] = GSW(1708);
-        door_matigai_evt[2] = 4;
+        las_door_matigai_evt[1] = GSW(1708);
+        las_door_matigai_evt[2] = 4;
 
-        door_seikai_evt[1] = GSW(1708);
-        door_seikai_evt[2] = 4;
-        door_seikai_evt[10] = GSW(1708);
-        door_seikai_evt[11] = 5;
+        las_door_seikai_evt[1] = GSW(1708);
+        las_door_seikai_evt[2] = 4;
+        las_door_seikai_evt[10] = GSW(1708);
+        las_door_seikai_evt[11] = 5;
 
-        mugen_kairou_init[3] = GSW(1708);
-        mugen_kairou_init[4] = 4;
+        las_mugen_kairou_init[3] = GSW(1708);
+        las_mugen_kairou_init[4] = 4;
 
         las_first_evt_09[195] = GSW(1708);
         las_first_evt_09[196] = 6;
 
-        majyorin_evt_main[632] = GSW(1708);
-        majyorin_evt_main[633] = 9;
+        las_majyorin_evt_main[632] = GSW(1708);
+        las_majyorin_evt_main[633] = 9;
 
         las_09_init_evt[16] = GSW(1708);
         las_09_init_evt[17] = 5;
@@ -178,18 +178,18 @@ namespace mod
         las_09_init_evt[249] = GSWF(6072);
         las_09_init_evt[250] = 1;
 
-        patch::writePatch(&tenkyugi_evt2[107], tenkyugi_evt2_hook, sizeof(tenkyugi_evt2_hook));
-        tenkyugi_evt2[111] = 0;
-        tenkyugi_evt2[112] = 0;
+        patch::writePatch(&las_tenkyugi_evt2[107], tenkyugi_evt2_hook, sizeof(tenkyugi_evt2_hook));
+        las_tenkyugi_evt2[111] = 0;
+        las_tenkyugi_evt2[112] = 0;
 
-        kagi_8_on[1] = GSW(1708);
-        kagi_8_on[2] = 7;
+        las_kagi_8_on[1] = GSW(1708);
+        las_kagi_8_on[2] = 7;
 
-        kagi_8_init[1] = GSW(1708);
-        kagi_8_init[2] = 7;
+        las_kagi_8_init[1] = GSW(1708);
+        las_kagi_8_init[2] = 7;
 
-        daiza_evt[48] = GSW(1708);
-        daiza_evt[49] = 7;
+        las_daiza_evt[48] = GSW(1708);
+        las_daiza_evt[49] = 7;
 
         patch::writePatch(&las_10_init_evt[78], las_10_init_evt_hook, sizeof(las_10_init_evt_hook));
         las_10_init_evt[82] = 0;
@@ -203,8 +203,8 @@ namespace mod
         las_10_init_evt[128] = GSW(1708);
         las_10_init_evt[129] = 8;
 
-        cloud_evt[1] = GSW(1708);
-        cloud_evt[2] = 10;
+        las_cloud_evt[1] = GSW(1708);
+        las_cloud_evt[2] = 10;
 
         las_19_init_evt[11] = GSW(1708);
         las_19_init_evt[12] = 8;
@@ -215,11 +215,11 @@ namespace mod
         las_19_init_evt[144] = GSWF(6112);
         las_19_init_evt[145] = 1;
 
-        hosi_sw_check[291] = GSW(1708);
-        hosi_sw_check[292] = 12;
+        las_hosi_sw_check[291] = GSW(1708);
+        las_hosi_sw_check[292] = 12;
 
-        hosi_init[1] = GSW(1708);
-        hosi_init[2] = 12;
+        las_hosi_init[1] = GSW(1708);
+        las_hosi_init[2] = 12;
 
         las_21_init_evt[1] = GSW(1708);
         las_21_init_evt[2] = 8;
@@ -234,7 +234,7 @@ namespace mod
         las_unlock_evt_22[1] = GSW(1708);
         las_unlock_evt_22[2] = 11;
 
-        key_check_evt_22[2] = 46;
+        las_key_check_evt_22[2] = 46;
 
         las_22_init_evt[19] = GSW(1708);
         las_22_init_evt[20] = 8;
@@ -251,16 +251,16 @@ namespace mod
         las_23_init_evt[28] = GSWF(6112);
         las_23_init_evt[29] = 1;
 
-        break_floor_evt[1] = GSW(1708);
-        break_floor_evt[2] = 13;
+        las_break_floor_evt[1] = GSW(1708);
+        las_break_floor_evt[2] = 13;
 
-        box_evt[26] = GSWF(6074);
-        box_evt[27] = 1;
+        las_box_evt[26] = GSWF(6074);
+        las_box_evt[27] = 1;
 
         las_24_init_evt[44] = GSW(1708);
         las_24_init_evt[45] = 13;
 
-        key_check_evt_25[2] = 46;
+        las_key_check_evt_25[2] = 46;
 
         las_unlock_evt_25[1] = GSW(1708);
         las_unlock_evt_25[2] = 14;
@@ -273,12 +273,12 @@ namespace mod
         las_25_init_evt[52] = 1;
         las_25_init_evt[112] = 46;
 
-        bonbaba_evt[795] = GSWF(6072);
-        bonbaba_evt[796] = 1;
+        las_bonbaba_evt[795] = GSWF(6072);
+        las_bonbaba_evt[796] = 1;
 
-        bonbaba_init[1] = GSWF(6072);
-        bonbaba_init[3] = 0;
-        bonbaba_init[25] = 1;
+        las_bonbaba_init[1] = GSWF(6072);
+        las_bonbaba_init[3] = 0;
+        las_bonbaba_init[25] = 1;
 
         las_26_init_evt[1] = GSWF(6072);
         las_26_init_evt[2] = 0;
@@ -323,17 +323,17 @@ namespace mod
         las_28_init_evt[99] = GSW(1708);
         las_28_init_evt[100] = 15;
 
-        last_evt_3[1339] = GSW(1708);
-        last_evt_3[1340] = 17;
+        las_last_evt_3[1339] = GSW(1708);
+        las_last_evt_3[1340] = 17;
 
-        last_evt_3_2[1822] = GSW(1708);
-        last_evt_3_2[1823] = 17;
+        las_last_evt_3_2[1822] = GSW(1708);
+        las_last_evt_3_2[1823] = 17;
 
-        last_evt_3_2[137] = 5;
-        last_evt_3_2[181] = 400;
+        las_last_evt_3_2[137] = 5;
+        las_last_evt_3_2[181] = 400;
 
-        last_evt_4[1821] = GSW(1708);
-        last_evt_4[1822] = 18;
+        las_last_evt_4[1821] = GSW(1708);
+        las_last_evt_4[1822] = 18;
 
         las_shuryolight_init_29[1] = GSW(1708);
         las_shuryolight_init_29[2] = 16;

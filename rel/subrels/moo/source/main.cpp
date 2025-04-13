@@ -14,8 +14,8 @@ extern int32_t moo_evt_first_00[];
 extern int32_t moo_00_init_evt[];
 extern int32_t moo_dokan_evt_02[];
 extern int32_t moo_02_init_evt[];
-extern int32_t mario_fly[];
-extern int32_t kanbu_fly[];
+extern int32_t moo_mario_fly[];
+extern int32_t moo_kanbu_fly[];
 extern int32_t moo_epilogue_evt[];
 extern int32_t moo_04_init_evt[];
 
@@ -30,7 +30,7 @@ EVT_BEGIN(moo_04_init_evt_evt)
     SWITCH(GSW(1707))
         CASE_SMALL(15)
             USER_FUNC(evt_cam::evt_cam3d_evt_set, 0, 134, 533, 0, 38, -8, 0, 11)
-            RUN_EVT(mario_fly)
+            RUN_EVT(moo_mario_fly)
             WAIT_FRM(1)
             SET(LW(0), 1)
             RETURN()
@@ -42,7 +42,7 @@ EVT_BEGIN(moo_04_init_evt_evt)
             USER_FUNC(evt_mario::evt_mario_set_pos, 0, -1000, 0)
             USER_FUNC(evt_party::evt_party_set_pos, 0, 0, -1000, 0)
             WAIT_FRM(1)
-            RUN_EVT(kanbu_fly)
+            RUN_EVT(moo_kanbu_fly)
             SET(LW(0), 1)
             RETURN()
         CASE_END()

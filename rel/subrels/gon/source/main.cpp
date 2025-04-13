@@ -13,38 +13,38 @@
 using namespace ttyd;
 
 extern int32_t gon_01_init_evt[];
-extern int32_t tegami_event[];
+extern int32_t gon_tegami_event[];
 extern int32_t gon_senkaron_event[];
 extern int32_t gon_key_get_03[];
 extern int32_t gon_03_init_evt[];
-extern int32_t leaderkaron_init_event[];
-extern int32_t evt_kaidan_pera[];
-extern int32_t evt_hashi_pera0[];
-extern int32_t evt_hashi_pera1[];
-extern int32_t evt_hashi[];
+extern int32_t gon_leaderkaron_init_event[];
+extern int32_t gon_evt_kaidan_pera[];
+extern int32_t gon_evt_hashi_pera0[];
+extern int32_t gon_evt_hashi_pera1[];
+extern int32_t gon_evt_hashi[];
 extern int32_t gon_evt_chk_04[];
 extern int32_t gon_evt_unlock_04[];
 extern int32_t gon_key_get_04[];
 extern int32_t gon_04_init_evt[];
-extern int32_t evt_unlock00[];
+extern int32_t gon_evt_unlock00[];
 extern int32_t gon_evt_chk01_05[];
-extern int32_t evt_unlock01[];
+extern int32_t gon_evt_unlock01[];
 extern int32_t gon_key_get_05[];
 extern int32_t gon_05_init_evt[];
-extern int32_t tsuritenjo_event[];
+extern int32_t gon_tsuritenjo_event[];
 extern int32_t gon_evt_majin2[];
 extern int32_t gon_06_init_evt[];
-extern int32_t out_func[];
+extern int32_t gon_out_func[];
 extern int32_t gon_item_evt_07[];
 extern int32_t gon_07_init_evt[];
 extern int32_t gon_evt_chk_08[];
 extern int32_t gon_evt_unlock_08[];
 extern int32_t gon_08_init_evt[];
 extern int32_t gon_10_init_evt[];
-extern int32_t gonbaba_event[];
+extern int32_t gon_gonbaba_event[];
 extern int32_t gon_11_init_evt[];
 extern int32_t gon_chuchurina_sogu[];
-extern int32_t item_get00[];
+extern int32_t gon_item_get00[];
 extern int32_t gon_12_init_evt[];
 extern int32_t gon_key_tbl_04[];
 extern int32_t gon_key_tbl00_05[];
@@ -84,8 +84,8 @@ namespace mod
         gon_01_init_evt[97] = GSW(1711);
         gon_01_init_evt[98] = 3;
 
-        tegami_event[17] = GSW(1711);
-        tegami_event[18] = 4;
+        gon_tegami_event[17] = GSW(1711);
+        gon_tegami_event[18] = 4;
 
         gon_senkaron_event[1] = GSW(1711);
         gon_senkaron_event[2] = 5;
@@ -102,24 +102,24 @@ namespace mod
         gon_03_init_evt[51] = GSWF(6002);
         gon_03_init_evt[52] = 1;
 
-        leaderkaron_init_event[6] = GSW(1711);
-        leaderkaron_init_event[7] = 5;
+        gon_leaderkaron_init_event[6] = GSW(1711);
+        gon_leaderkaron_init_event[7] = 5;
 
-        evt_kaidan_pera[73] = GSW(1711);
-        evt_kaidan_pera[74] = 6;
-        evt_kaidan_pera[76] = GSW(1711);
-        evt_kaidan_pera[77] = 6;
+        gon_evt_kaidan_pera[73] = GSW(1711);
+        gon_evt_kaidan_pera[74] = 6;
+        gon_evt_kaidan_pera[76] = GSW(1711);
+        gon_evt_kaidan_pera[77] = 6;
 
-        evt_hashi_pera0[9] = GSWF(6003);
-        evt_hashi_pera0[10] = 1;
+        gon_evt_hashi_pera0[9] = GSWF(6003);
+        gon_evt_hashi_pera0[10] = 1;
 
-        evt_hashi_pera1[9] = GSWF(6004);
-        evt_hashi_pera1[10] = 1;
+        gon_evt_hashi_pera1[9] = GSWF(6004);
+        gon_evt_hashi_pera1[10] = 1;
 
-        evt_hashi[1] = GSWF(6003);
-        evt_hashi[2] = 1;
-        evt_hashi[25] = GSWF(6004);
-        evt_hashi[26] = 1;
+        gon_evt_hashi[1] = GSWF(6003);
+        gon_evt_hashi[2] = 1;
+        gon_evt_hashi[25] = GSWF(6004);
+        gon_evt_hashi[26] = 1;
 
         gon_evt_chk_04[2] = 12;
 
@@ -135,13 +135,13 @@ namespace mod
         gon_04_init_evt[333] = 1;
         gon_04_init_evt[337] = 12;
 
-        evt_unlock00[6] = GSWF(6007);
-        evt_unlock00[7] = 1;
+        gon_evt_unlock00[6] = GSWF(6007);
+        gon_evt_unlock00[7] = 1;
 
         gon_evt_chk01_05[2] = 12;
 
-        evt_unlock01[6] = GSWF(6008);
-        evt_unlock01[7] = 1;
+        gon_evt_unlock01[6] = GSWF(6008);
+        gon_evt_unlock01[7] = 1;
 
         gon_key_get_05[1] = GSWF(6009);
         gon_key_get_05[2] = 1;
@@ -154,8 +154,8 @@ namespace mod
         gon_05_init_evt[296] = 1;
         gon_05_init_evt[300] = 12;
 
-        tsuritenjo_event[126] = GSWF(6010);
-        tsuritenjo_event[127] = 1;
+        gon_tsuritenjo_event[126] = GSWF(6010);
+        gon_tsuritenjo_event[127] = 1;
 
         gon_evt_majin2[0] = EVT_HELPER_CMD(2, 50);
         gon_evt_majin2[1] = EVT_HELPER_OP(LW(3));
@@ -166,8 +166,8 @@ namespace mod
         gon_06_init_evt[317] = GSWF(6011);
         gon_06_init_evt[318] = 1;
 
-        out_func[3] = GSWF(6012);
-        out_func[4] = 1;
+        gon_out_func[3] = GSWF(6012);
+        gon_out_func[4] = 1;
 
         gon_item_evt_07[1] = GSWF(6012);
         gon_item_evt_07[2] = 1;
@@ -189,10 +189,10 @@ namespace mod
         gon_10_init_evt[35] = GSWF(6014);
         gon_10_init_evt[36] = 1;
 
-        gonbaba_event[1384] = GSW(1711);
-        gonbaba_event[1385] = 7;
-        gonbaba_event[1387] = GSW(1711);
-        gonbaba_event[1388] = 8;
+        gon_gonbaba_event[1384] = GSW(1711);
+        gon_gonbaba_event[1385] = 7;
+        gon_gonbaba_event[1387] = GSW(1711);
+        gon_gonbaba_event[1388] = 8;
 
         gon_11_init_evt[6] = GSWF(6014);
         gon_11_init_evt[8] = 1;
@@ -208,8 +208,8 @@ namespace mod
         gon_chuchurina_sogu[64] = GSWF(6016);
         gon_chuchurina_sogu[65] = 1;
 
-        item_get00[33] = GSWF(6017);
-        item_get00[34] = 1;
+        gon_item_get00[33] = GSWF(6017);
+        gon_item_get00[34] = 1;
 
         gon_12_init_evt[6] = GSWF(6016);
         gon_12_init_evt[7] = 1;

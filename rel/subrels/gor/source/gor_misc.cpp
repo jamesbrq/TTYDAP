@@ -12,19 +12,19 @@
 using namespace mod;
 using namespace ttyd;
 
-extern int32_t luigi_gor_first_talk[];
+extern int32_t gor_luigi_gor_first_talk[];
 extern int32_t gor_10_init_evt[];
 extern int32_t gor_12_init_evt[];
 extern int32_t gor_11_init_evt[];
-extern int32_t christine_nakama[];
+extern int32_t gor_christine_nakama[];
 
 // Assembly
-extern int32_t irai_init_func[];
-extern int32_t keijiban_data_make[];
-extern int32_t monosiri_check[];
-extern int32_t evt_exchange_msg_set[];
-extern int32_t exchange_ret_tbl_no[];
-extern int32_t exchange_ryokin_medal[];
+extern int32_t gor_irai_init_func[];
+extern int32_t gor_keijiban_data_make[];
+extern int32_t gor_monosiri_check[];
+extern int32_t gor_evt_exchange_msg_set[];
+extern int32_t gor_exchange_ret_tbl_no[];
+extern int32_t gor_exchange_ryokin_medal[];
 
 const char goombella[] = "\x83\x4C\x83\x6D\x82\xB6\x82\xA2";
 
@@ -44,28 +44,28 @@ EVT_END()
 
 void ApplyGorMiscPatches()
 {
-    christine_nakama[707] = EVT_HELPER_CMD(2, 50);
-    christine_nakama[708] = EVT_HELPER_OP(LW(3));
-    patch::writePatch(&christine_nakama[710], party_evt, sizeof(party_evt));
+    gor_christine_nakama[707] = EVT_HELPER_CMD(2, 50);
+    gor_christine_nakama[708] = EVT_HELPER_OP(LW(3));
+    patch::writePatch(&gor_christine_nakama[710], party_evt, sizeof(party_evt));
 
-    luigi_gor_first_talk[18] = GSW(1708);
-    luigi_gor_first_talk[19] = 17;
-    luigi_gor_first_talk[44] = GSW(1700);
-    luigi_gor_first_talk[46] = 1;
-    luigi_gor_first_talk[47] = 1;
-    luigi_gor_first_talk[52] = 2;
-    luigi_gor_first_talk[53] = 2;
-    luigi_gor_first_talk[58] = 3;
-    luigi_gor_first_talk[59] = 3;
-    luigi_gor_first_talk[64] = 4;
-    luigi_gor_first_talk[65] = 4;
-    luigi_gor_first_talk[70] = 5;
-    luigi_gor_first_talk[71] = 5;
-    luigi_gor_first_talk[76] = 6;
-    luigi_gor_first_talk[77] = 6;
-    luigi_gor_first_talk[82] = 7;
-    luigi_gor_first_talk[83] = 7;
-    luigi_gor_first_talk[88] = 8;
+    gor_luigi_gor_first_talk[18] = GSW(1708);
+    gor_luigi_gor_first_talk[19] = 17;
+    gor_luigi_gor_first_talk[44] = GSW(1700);
+    gor_luigi_gor_first_talk[46] = 1;
+    gor_luigi_gor_first_talk[47] = 1;
+    gor_luigi_gor_first_talk[52] = 2;
+    gor_luigi_gor_first_talk[53] = 2;
+    gor_luigi_gor_first_talk[58] = 3;
+    gor_luigi_gor_first_talk[59] = 3;
+    gor_luigi_gor_first_talk[64] = 4;
+    gor_luigi_gor_first_talk[65] = 4;
+    gor_luigi_gor_first_talk[70] = 5;
+    gor_luigi_gor_first_talk[71] = 5;
+    gor_luigi_gor_first_talk[76] = 6;
+    gor_luigi_gor_first_talk[77] = 6;
+    gor_luigi_gor_first_talk[82] = 7;
+    gor_luigi_gor_first_talk[83] = 7;
+    gor_luigi_gor_first_talk[88] = 8;
 
     gor_10_init_evt[19] = GSW(1700);
 
@@ -74,16 +74,16 @@ void ApplyGorMiscPatches()
     gor_12_init_evt[24] = GSW(1708);
     gor_12_init_evt[25] = 18;
 
-    irai_init_func[33] = 0x386006A4;  // li r3, 0x6A4 (GSW(1700))
-    irai_init_func[43] = 0x2C030000;  // cmpwi r3, 0x0
-    irai_init_func[56] = 0x2C030000;  // cmpwi r3, 0x0
-    irai_init_func[64] = 0x2C030000;  // cmpwi r3, 0x0
-    irai_init_func[72] = 0x2C030000;  // cmpwi r3, 0x0
-    irai_init_func[80] = 0x2C030000;  // cmpwi r3, 0x0
-    irai_init_func[86] = 0x2C030000;  // cmpwi r3, 0x0
-    irai_init_func[90] = 0x2C030000;  // cmpwi r3, 0x0
-    irai_init_func[98] = 0x2C030000;  // cmpwi r3, 0x0
-    irai_init_func[106] = 0x2C030000; // cmpwi r3, 0x0
+    gor_irai_init_func[33] = 0x386006A4;  // li r3, 0x6A4 (GSW(1700))
+    gor_irai_init_func[43] = 0x2C030000;  // cmpwi r3, 0x0
+    gor_irai_init_func[56] = 0x2C030000;  // cmpwi r3, 0x0
+    gor_irai_init_func[64] = 0x2C030000;  // cmpwi r3, 0x0
+    gor_irai_init_func[72] = 0x2C030000;  // cmpwi r3, 0x0
+    gor_irai_init_func[80] = 0x2C030000;  // cmpwi r3, 0x0
+    gor_irai_init_func[86] = 0x2C030000;  // cmpwi r3, 0x0
+    gor_irai_init_func[90] = 0x2C030000;  // cmpwi r3, 0x0
+    gor_irai_init_func[98] = 0x2C030000;  // cmpwi r3, 0x0
+    gor_irai_init_func[106] = 0x2C030000; // cmpwi r3, 0x0
 
-    patch::writeBranchBL(&keijiban_data_make[11], reinterpret_cast<void *>(bJohoyaSeqAddition));
+    patch::writeBranchBL(&gor_keijiban_data_make[11], reinterpret_cast<void *>(bJohoyaSeqAddition));
 }

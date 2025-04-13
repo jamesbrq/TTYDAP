@@ -9,10 +9,10 @@ extern int32_t bom_00_init_evt[];
 extern int32_t bom_first_evt_01[];
 extern int32_t bom_init_soncho_01[];
 extern int32_t bom_talk_soncho_01[];
-extern int32_t talk_nitoro[];
-extern int32_t talk_pentrit[];
-extern int32_t talk_surary[];
-extern int32_t talk_murabito_d[];
+extern int32_t bom_talk_nitoro[];
+extern int32_t bom_talk_pentrit[];
+extern int32_t bom_talk_surary[];
+extern int32_t bom_talk_murabito_d[];
 extern int32_t bom_talk_murabito_e_01[];
 extern int32_t bom_talk_murabito_f_01[];
 extern int32_t bom_talk_murabito_g_01[];
@@ -22,7 +22,7 @@ extern int32_t bom_talk_white[];
 extern int32_t bom_musume_talk[];
 extern int32_t bom_minnnanokoe_evt[];
 extern int32_t bom_01_init_evt[];
-extern int32_t evt_taihou[];
+extern int32_t bom_evt_taihou[];
 extern int32_t bom_init_soncho_02[];
 extern int32_t bom_talk_soncho_02[];
 extern int32_t bom_talk_murabito_e_02[];
@@ -30,13 +30,13 @@ extern int32_t bom_talk_murabito_f_02[];
 extern int32_t bom_talk_murabito_g_02[];
 extern int32_t bom_talk_murabito_h_02[];
 extern int32_t bom_talk_murabito_i_02[];
-extern int32_t evt_white_bed[];
-extern int32_t kiza_talk[];
+extern int32_t bom_evt_white_bed[];
+extern int32_t bom_kiza_talk[];
 extern int32_t bom_02_init_evt[];
 
 // Assembly
-extern int32_t bom1000_jump[];
-extern int32_t jump_minnnanokoe[];
+extern int32_t bom_bom1000_jump[];
+extern int32_t bom_jump_minnnanokoe[];
 
 namespace mod
 {
@@ -63,25 +63,25 @@ namespace mod
         bom_talk_soncho_01[1] = GSW(1707);
         bom_talk_soncho_01[3] = 6;
 
-        talk_nitoro[1] = GSW(1707);
-        talk_nitoro[3] = 1;
-        talk_nitoro[11] = 5;
-        talk_nitoro[19] = 6;
+        bom_talk_nitoro[1] = GSW(1707);
+        bom_talk_nitoro[3] = 1;
+        bom_talk_nitoro[11] = 5;
+        bom_talk_nitoro[19] = 6;
 
-        talk_pentrit[1] = GSW(1707);
-        talk_pentrit[3] = 1;
-        talk_pentrit[11] = 5;
-        talk_pentrit[19] = 6;
+        bom_talk_pentrit[1] = GSW(1707);
+        bom_talk_pentrit[3] = 1;
+        bom_talk_pentrit[11] = 5;
+        bom_talk_pentrit[19] = 6;
 
-        talk_surary[1] = GSW(1707);
-        talk_surary[3] = 1;
-        talk_surary[11] = 5;
-        talk_surary[19] = 6;
+        bom_talk_surary[1] = GSW(1707);
+        bom_talk_surary[3] = 1;
+        bom_talk_surary[11] = 5;
+        bom_talk_surary[19] = 6;
 
-        talk_murabito_d[1] = GSW(1707);
-        talk_murabito_d[3] = 1;
-        talk_murabito_d[11] = 5;
-        talk_murabito_d[19] = 6;
+        bom_talk_murabito_d[1] = GSW(1707);
+        bom_talk_murabito_d[3] = 1;
+        bom_talk_murabito_d[11] = 5;
+        bom_talk_murabito_d[19] = 6;
 
         bom_talk_murabito_e_01[1] = GSW(1707);
         bom_talk_murabito_e_01[3] = 1;
@@ -126,8 +126,8 @@ namespace mod
         bom_01_init_evt[169] = GSW(1708);
         bom_01_init_evt[170] = 16;
 
-        evt_taihou[182] = GSW(1707);
-        evt_taihou[183] = 5;
+        bom_evt_taihou[182] = GSW(1707);
+        bom_evt_taihou[183] = 5;
 
         bom_init_soncho_02[1] = GSW(1707);
         bom_init_soncho_02[3] = 5;
@@ -165,12 +165,12 @@ namespace mod
         bom_talk_murabito_i_02[11] = 5;
         bom_talk_murabito_i_02[19] = 6;
 
-        evt_white_bed[492] = GSW(1707);
-        evt_white_bed[493] = 4;
+        bom_evt_white_bed[492] = GSW(1707);
+        bom_evt_white_bed[493] = 4;
 
-        kiza_talk[1] = GSW(1707);
-        kiza_talk[3] = 3;
-        kiza_talk[11] = 5;
+        bom_kiza_talk[1] = GSW(1707);
+        bom_kiza_talk[3] = 3;
+        bom_kiza_talk[11] = 5;
 
         bom_02_init_evt[11] = GSW(1708);
         bom_02_init_evt[12] = 16;
@@ -180,11 +180,11 @@ namespace mod
         bom_02_init_evt[155] = GSW(1708);
         bom_02_init_evt[156] = 16;
 
-        bom1000_jump[60] = 0x3883082C; // addi r4, r4, 0x82C GSW(1708)
-        bom1000_jump[90] = 0x2C030011; // cmpwi r3, 0x11
+        bom_bom1000_jump[60] = 0x3883082C; // addi r4, r4, 0x82C GSW(1708)
+        bom_bom1000_jump[90] = 0x2C030011; // cmpwi r3, 0x11
 
-        jump_minnnanokoe[44] = 0x3883082C; // addi r4, r4, 0x82C GSW(1708)
-        jump_minnnanokoe[76] = 0x2C030011; // cmpwi r3, 0x11
+        bom_jump_minnnanokoe[44] = 0x3883082C;  // addi r4, r4, 0x82C GSW(1708)
+        bom_jump_minnnanokoe[76] = 0x2C030011; // cmpwi r3, 0x11
     }
 
     void exit() {}

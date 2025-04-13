@@ -14,31 +14,31 @@
 using namespace ttyd;
 
 extern int32_t win_vivian_init[];
-extern int32_t maririn_init[];
-extern int32_t majorin_init[];
-extern int32_t witchtrio_momeru[];
-extern int32_t witchtrio_picture[];
-extern int32_t mario_vs_witchtrio[];
-extern int32_t witchtrio_lose[];
+extern int32_t win_maririn_init[];
+extern int32_t win_majorin_init[];
+extern int32_t win_witchtrio_momeru[];
+extern int32_t win_witchtrio_picture[];
+extern int32_t win_mario_vs_witchtrio[];
+extern int32_t win_witchtrio_lose[];
 extern int32_t win_00_init_evt[];
-extern int32_t evt_dokan1_message[];
-extern int32_t evt_dokan1[];
-extern int32_t guide_bigtree[];
+extern int32_t win_evt_dokan1_message[];
+extern int32_t win_evt_dokan1[];
+extern int32_t win_guide_bigtree[];
 extern int32_t win_peach_mail[];
 extern int32_t win_01_init_evt[];
-extern int32_t lookat_house[];
-extern int32_t cloud_lostitem[];
+extern int32_t win_lookat_house[];
+extern int32_t win_cloud_lostitem[];
 extern int32_t win_03_init_evt[];
-extern int32_t meet_clouda[];
-extern int32_t meet_clouda2[];
-extern int32_t clouda_irai[];
-extern int32_t clouda_nakama[];
-extern int32_t touch_door[];
+extern int32_t win_meet_clouda[];
+extern int32_t win_meet_clouda2[];
+extern int32_t win_clouda_irai[];
+extern int32_t win_clouda_nakama[];
+extern int32_t win_touch_door[];
 extern int32_t win_04_init_evt[];
-extern int32_t cloud_toujou[];
+extern int32_t win_cloud_toujou[];
 extern int32_t win_05_init_evt[];
 extern int32_t win_first_evt_dokan[];
-extern int32_t welcome_wonderforest[];
+extern int32_t win_welcome_wonderforest[];
 extern int32_t win_06_init_evt[];
 
 const char flurrie[] = "\x83\x4E\x83\x89\x83\x45\x83\x5F";
@@ -93,7 +93,7 @@ EVT_END()
 EVT_BEGIN(win_00_init_evt_evt)
 	IF_LARGE_EQUAL(GSW(1702), 13)
 		IF_SMALL(GSW(1712), 2)
-			RUN_EVT(&mario_vs_witchtrio)
+			RUN_EVT(&win_mario_vs_witchtrio)
 		END_IF()
 	END_IF()
 	RETURN()
@@ -133,20 +133,20 @@ namespace mod
     void main()
     {
         patch::writePatch(&win_vivian_init[5], win_vivian_init_hook, sizeof(win_vivian_init_hook));
-        patch::writePatch(&maririn_init[5], maririn_init_hook, sizeof(maririn_init_hook));
-        patch::writePatch(&majorin_init[5], majorin_init_hook, sizeof(majorin_init_hook));
+        patch::writePatch(&win_maririn_init[5], maririn_init_hook, sizeof(maririn_init_hook));
+        patch::writePatch(&win_majorin_init[5], majorin_init_hook, sizeof(majorin_init_hook));
 
-        witchtrio_momeru[862] = GSW(1712);
-        witchtrio_momeru[863] = 1;
+        win_witchtrio_momeru[862] = GSW(1712);
+        win_witchtrio_momeru[863] = 1;
 
-        witchtrio_picture[514] = GSW(1702);
-        witchtrio_picture[515] = 13;
+        win_witchtrio_picture[514] = GSW(1702);
+        win_witchtrio_picture[515] = 13;
 
-        mario_vs_witchtrio[548] = GSW(1712);
-        mario_vs_witchtrio[549] = 2;
+        win_mario_vs_witchtrio[548] = GSW(1712);
+        win_mario_vs_witchtrio[549] = 2;
 
-        witchtrio_lose[541] = GSW(1712);
-        witchtrio_lose[542] = 3;
+        win_witchtrio_lose[541] = GSW(1712);
+        win_witchtrio_lose[542] = 3;
 
         win_00_init_evt[22] = GSW(1713);
         win_00_init_evt[23] = 11;
@@ -162,14 +162,14 @@ namespace mod
         win_00_init_evt[58] = GSW(1712);
         win_00_init_evt[59] = 3;
 
-        evt_dokan1_message[39] = GSW(1702);
-        evt_dokan1_message[40] = 8;
+        win_evt_dokan1_message[39] = GSW(1702);
+        win_evt_dokan1_message[40] = 8;
 
-        evt_dokan1[1] = GSW(1702);
-        evt_dokan1[2] = 7;
+        win_evt_dokan1[1] = GSW(1702);
+        win_evt_dokan1[2] = 7;
 
-        guide_bigtree[155] = GSW(1702);
-        guide_bigtree[156] = 2;
+        win_guide_bigtree[155] = GSW(1702);
+        win_guide_bigtree[156] = 2;
 
         win_peach_mail[247] = GSW(1713);
         win_peach_mail[248] = 18;
@@ -179,11 +179,11 @@ namespace mod
         win_01_init_evt[27] = GSW(1713);
         win_01_init_evt[28] = 17;
 
-        lookat_house[33] = GSW(1702);
-        lookat_house[34] = 9;
+        win_lookat_house[33] = GSW(1702);
+        win_lookat_house[34] = 9;
 
-        cloud_lostitem[200] = GSW(1702);
-        cloud_lostitem[201] = 7;
+        win_cloud_lostitem[200] = GSW(1702);
+        win_cloud_lostitem[201] = 7;
 
         win_03_init_evt[79] = GSW(1702);
         win_03_init_evt[80] = 8;
@@ -192,25 +192,25 @@ namespace mod
         win_03_init_evt[94] = GSW(1702);
         win_03_init_evt[95] = 6;
 
-        meet_clouda[70] = GSW(1702);
-        meet_clouda[71] = 10;
+        win_meet_clouda[70] = GSW(1702);
+        win_meet_clouda[71] = 10;
 
-        meet_clouda2[135] = GSW(1702);
-        meet_clouda2[136] = 11;
+        win_meet_clouda2[135] = GSW(1702);
+        win_meet_clouda2[136] = 11;
 
-        clouda_irai[414] = GSW(1702);
-        clouda_irai[415] = 12;
+        win_clouda_irai[414] = GSW(1702);
+        win_clouda_irai[415] = 12;
 
-        clouda_nakama[1500] = EVT_HELPER_CMD(2, 50);
-        clouda_nakama[1501] = EVT_HELPER_OP(LW(3));
-        patch::writePatch(&clouda_nakama[1503], win_party_hook, sizeof(win_party_hook));
+        win_clouda_nakama[1500] = EVT_HELPER_CMD(2, 50);
+        win_clouda_nakama[1501] = EVT_HELPER_OP(LW(3));
+        patch::writePatch(&win_clouda_nakama[1503], win_party_hook, sizeof(win_party_hook));
 
-        touch_door[1] = GSW(1702);
-        touch_door[3] = 11;
-        touch_door[7] = 11;
-        touch_door[11] = 12;
-        touch_door[12] = 12;
-        touch_door[16] = 13;
+        win_touch_door[1] = GSW(1702);
+        win_touch_door[3] = 11;
+        win_touch_door[7] = 11;
+        win_touch_door[11] = 12;
+        win_touch_door[12] = 12;
+        win_touch_door[16] = 13;
 
         win_04_init_evt[34] = GSW(1702);
         win_04_init_evt[35] = 9;
@@ -223,8 +223,8 @@ namespace mod
         win_04_init_evt[81] = GSW(1702);
         win_04_init_evt[82] = 5;
 
-        cloud_toujou[111] = GSW(1702);
-        cloud_toujou[112] = 6;
+        win_cloud_toujou[111] = GSW(1702);
+        win_cloud_toujou[112] = 6;
 
         win_05_init_evt[35] = GSW(1702);
         win_05_init_evt[36] = 5;
@@ -232,8 +232,8 @@ namespace mod
         win_first_evt_dokan[1] = GSW(1702);
         win_first_evt_dokan[2] = 0;
 
-        welcome_wonderforest[239] = GSW(1702);
-        welcome_wonderforest[240] = 1;
+        win_welcome_wonderforest[239] = GSW(1702);
+        win_welcome_wonderforest[240] = 1;
 
         win_06_init_evt[1] = GSW(1702);
         win_06_init_evt[2] = 1;

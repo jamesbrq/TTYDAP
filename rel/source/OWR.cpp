@@ -116,6 +116,8 @@ namespace mod::owr
             return;
 
         ttyd::swdrv::swByteSet(1700, 16);
+        ttyd::swdrv::swByteSet(1701, 3);
+        ttyd::swdrv::swByteSet(1702, 13);
         ttyd::swdrv::swByteSet(1704, 1);
         ttyd::mario_pouch::pouchGetStarstone(0);
 

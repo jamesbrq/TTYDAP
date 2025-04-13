@@ -4,8 +4,8 @@
 
 extern "C"
 {
-    EVT_DECLARE_USER_FUNC(evt_tou_get_ranking, 1)
-    EVT_DECLARE_USER_FUNC(koburon_get_encount_info, 1)
+    EVT_DECLARE_USER_FUNC(tou_evt_tou_get_ranking, 1)
+    EVT_DECLARE_USER_FUNC(muj_koburon_get_encount_info, 1)
 
     void bMapGXArrInject();
     void bMapGXArrInjectReturn();

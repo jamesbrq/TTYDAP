@@ -12,76 +12,71 @@
 #include <cstdint>
 
 // Assembly References
-extern int32_t statusWinDisp[];
-extern int32_t winRootMain[];
-extern int32_t compare_func3_r[];
-extern int32_t compare_func3[];
-extern int32_t mapGX[];
-extern int32_t winGetMapTplName[];
-extern int32_t winLogMain[];
-extern int32_t winLogInit[];
-extern int32_t monoshiriGX[];
-extern int32_t monosiri_disp[];
-extern int32_t winMain[];
-extern int32_t irai_init_func[];
-extern int32_t gra_evt_kagemario_init[];
-extern int32_t jin_evt_kagemario_init[];
-extern int32_t usu_evt_kagemario_init[];
-extern int32_t rsh_prolog[];
-extern int32_t check_kou_evt[];
-extern int32_t mario_chk[];
-extern int32_t BattleInformationSetDropMaterial[];
-extern int32_t _rule_disp[];
-extern int32_t tou_gamen_screen_tev_init[];
-extern int32_t bom1000_jump[];
-extern int32_t jump_minnnanokoe[];
-extern int32_t setupDataLoad[];
-extern int32_t badgeShop_bargainGeneration[];
-extern int32_t johoya_data_make[];
-extern int32_t keijiban_data_make[];
-extern int32_t evt_shop_main_func[];
-extern int32_t uranaisi_data_make_next[];
-extern int32_t uranaisi_data_make_starpiece[];
-extern int32_t uranaisi_data_make_supercoin[];
-extern int32_t sys_prolog[];
-extern int32_t winMgrSelectEntry[];
-extern int32_t evt_badgeShop_starmaniac_get_kind_cnt[];
-extern int32_t badgeShop_get[];
-extern int32_t badgeShop_add[];
-extern int32_t evt_mobj_kururing_floor[];
-extern int32_t mobj_kururing_floor[];
-extern int32_t mobj_powerupblk[];
+extern int32_t main_statusWinDisp[];
+extern int32_t main_winRootMain[];
+extern int32_t main_compare_func3_r[];
+extern int32_t main_compare_func3[];
+extern int32_t main_mapGX[];
+extern int32_t main_winGetMapTplName[];
+extern int32_t main_winLogMain[];
+extern int32_t main_winLogInit[];
+extern int32_t main_monoshiriGX[];
+extern int32_t main_monosiri_disp[];
+extern int32_t main_winMain[];
+extern int32_t main_irai_init_func[];
+extern int32_t main_rsh_prolog[];
+extern int32_t main_BattleInformationSetDropMaterial[];
+extern int32_t main_rule_disp[];
+extern int32_t main_tou_gamen_screen_tev_init[];
+extern int32_t main_bom1000_jump[];
+extern int32_t main_jump_minnnanokoe[];
+extern int32_t main_setupDataLoad[];
+extern int32_t main_badgeShop_bargainGeneration[];
+extern int32_t main_johoya_data_make[];
+extern int32_t main_keijiban_data_make[];
+extern int32_t main_evt_shop_main_func[];
+extern int32_t main_uranaisi_data_make_next[];
+extern int32_t main_uranaisi_data_make_starpiece[];
+extern int32_t main_uranaisi_data_make_supercoin[];
+extern int32_t main_sys_prolog[];
+extern int32_t main_winMgrSelectEntry[];
+extern int32_t main_evt_badgeShop_starmaniac_get_kind_cnt[];
+extern int32_t main_badgeShop_get[];
+extern int32_t main_badgeShop_add[];
+extern int32_t main_evt_mobj_kururing_floor[];
+extern int32_t main_mobj_kururing_floor[];
+extern int32_t main_mobj_powerupblk[];
 extern int32_t evt_mobj_powerupblk[];
-extern int32_t breakfast[];
-extern int32_t evt_shop_setup[];
+extern int32_t main_breakfast[];
+extern int32_t main_evt_shop_setup[];
 extern int32_t loadDraw[];
 // End of Assembly References
 
 // Script References
-extern int32_t mail_evt_nok_01[];
-extern int32_t mail_evt_gor_03[];
-extern int32_t mail_evt_gor_02[];
-extern int32_t mail_evt_gor_01[];
-extern int32_t mail_evt_gor_04[];
-extern int32_t mail_evt_rsh_03_a[];
-extern int32_t mail_evt_hom_00[];
-extern int32_t mail_evt_gor_02_2[];
-extern int32_t mail_evt_bom_01[];
-extern int32_t mail_evt_tik_00[];
-extern int32_t mail_evt_win_01[];
-extern int32_t mail_evt_tou_01[];
-extern int32_t mail_evt_usu_01[];
-extern int32_t mail_evt_gor_01_2[];
-extern int32_t mail_evt_rsh_03_a_2[];
-extern int32_t mail_evt_pik_00[];
+extern int32_t main_mail_evt_nok_01[];
+extern int32_t main_mail_evt_gor_03[];
+extern int32_t main_mail_evt_gor_02[];
+extern int32_t main_mail_evt_gor_01[];
+extern int32_t main_mail_evt_gor_04[];
+extern int32_t main_mail_evt_rsh_03_a[];
+extern int32_t main_mail_evt_hom_00[];
+extern int32_t main_mail_evt_gor_02_2[];
+extern int32_t main_mail_evt_bom_01[];
+extern int32_t main_mail_evt_tik_00[];
+extern int32_t main_mail_evt_win_01[];
+extern int32_t main_mail_evt_tou_01[];
+extern int32_t main_mail_evt_usu_01[];
+extern int32_t main_mail_evt_gor_01_2[];
+extern int32_t main_mail_evt_rsh_03_a_2[];
+extern int32_t main_mail_evt_pik_00[];
 extern int32_t main_buy_evt[];
 
-extern int32_t mobj_save_blk_sysevt[];
-extern int32_t init_event[];
+extern int32_t main_mobj_save_blk_sysevt[];
+extern int32_t main_init_event[];
 extern int32_t evt_lecture_msg[];
 extern int32_t evt_msg_print_party[];
 extern int32_t evt_msg_print_party_add[];
-extern int32_t preventDiaryTextboxSelectionAddress[];
+extern int32_t main_preventDiaryTextboxSelectionAddress[];
 
 using namespace mod::patch;
 
@@ -91,157 +86,157 @@ namespace mod::owr
     {
         writeIntWithCache(&loadDraw[777], 0x480000C4); // li r3, 0x6A4 (GSW(1700))
 
-        writeIntWithCache(&statusWinDisp[425], 0x386006A4); // li r3, 0x6A4 (GSW(1700))
-        writeIntWithCache(&statusWinDisp[487], 0x386006A4); // li r3, 0x6A4 (GSW(1700))
+        writeIntWithCache(&main_statusWinDisp[425], 0x386006A4); // li r3, 0x6A4 (GSW(1700))
+        writeIntWithCache(&main_statusWinDisp[487], 0x386006A4); // li r3, 0x6A4 (GSW(1700))
 
-        writeIntWithCache(&winRootMain[40], 0x386006A4); // li r3, 0x6A4 (GSW(1700))
-        writeIntWithCache(&winRootMain[82], 0x386006A4); // li r3, 0x6A4 (GSW(1700))
+        writeIntWithCache(&main_winRootMain[40], 0x386006A4); // li r3, 0x6A4 (GSW(1700))
+        writeIntWithCache(&main_winRootMain[82], 0x386006A4); // li r3, 0x6A4 (GSW(1700))
 
-        writeIntWithCache(&compare_func3_r[30], 0x38840833); // addi r4, r4, 0x833 GSW(1715)
-        writeIntWithCache(&compare_func3_r[32], 0x2C030005); // cmpwi r3, 0x5
-        writeIntWithCache(&compare_func3_r[52], 0x38840833); // addi r4, r4, 0x833 GSW(1715)
-        writeIntWithCache(&compare_func3_r[54], 0x2C030005); // cmpwi r3, 0x5
+        writeIntWithCache(&main_compare_func3_r[30], 0x38840833); // addi r4, r4, 0x833 GSW(1715)
+        writeIntWithCache(&main_compare_func3_r[32], 0x2C030005); // cmpwi r3, 0x5
+        writeIntWithCache(&main_compare_func3_r[52], 0x38840833); // addi r4, r4, 0x833 GSW(1715)
+        writeIntWithCache(&main_compare_func3_r[54], 0x2C030005); // cmpwi r3, 0x5
 
-        writeIntWithCache(&compare_func3[30], 0x38840833); // addi r4, r4, 0x833 GSW(1715)
-        writeIntWithCache(&compare_func3[32], 0x2C030005); // cmpwi r3, 0x5
-        writeIntWithCache(&compare_func3[52], 0x38840833); // addi r4, r4, 0x833 GSW(1715)
-        writeIntWithCache(&compare_func3[54], 0x2C030005); // cmpwi r3, 0x5
+        writeIntWithCache(&main_compare_func3[30], 0x38840833); // addi r4, r4, 0x833 GSW(1715)
+        writeIntWithCache(&main_compare_func3[32], 0x2C030005); // cmpwi r3, 0x5
+        writeIntWithCache(&main_compare_func3[52], 0x38840833); // addi r4, r4, 0x833 GSW(1715)
+        writeIntWithCache(&main_compare_func3[54], 0x2C030005); // cmpwi r3, 0x5
 
-        writeIntWithCache(&mapGX[238], 0x386006A4); // li r3, 0x6A4 (GSW(1700))
-        writeIntWithCache(&mapGX[240], 0x2C030010); // cmpwi r3, 0xF
+        writeIntWithCache(&main_mapGX[238], 0x386006A4); // li r3, 0x6A4 (GSW(1700))
+        writeIntWithCache(&main_mapGX[240], 0x2C030010); // cmpwi r3, 0xF
 
-        patch::writeBranchPair(&mapGX[91],
+        patch::writeBranchPair(&main_mapGX[91],
                                reinterpret_cast<void *>(bMapGXArrInject),
                                reinterpret_cast<void *>(bMapGXArrInjectReturn));
 
-        patch::writeBranchPair(&mapGX[235],
+        patch::writeBranchPair(&main_mapGX[235],
                                reinterpret_cast<void *>(bMapGXArrIncrement),
                                reinterpret_cast<void *>(bMapGXArrIncrementReturn));
 
-        patch::writeBranchPair(&mapGX[243],
+        patch::writeBranchPair(&main_mapGX[243],
                                reinterpret_cast<void *>(bMapGXChSplit),
                                reinterpret_cast<void *>(bMapGXChSplitReturn));
 
-        writeIntWithCache(&winGetMapTplName[3], 0x386006A5);  // li r3, 0x6A5 (GSW(1701))
-        writeIntWithCache(&winGetMapTplName[8], 0x2C030001);  // cmpwi r3, 0x1
-        writeIntWithCache(&winGetMapTplName[12], 0x386006A6); // li r3, 0x6A6 (GSW(1702))
-        writeIntWithCache(&winGetMapTplName[14], 0x2C030001); // cmpwi r3, 0x1
-        writeIntWithCache(&winGetMapTplName[18], 0x386006A7); // li r3, 0x6A7 (GSW(1703))
-        writeIntWithCache(&winGetMapTplName[20], 0x2C030001); // cmpwi r3, 0x1
-        writeIntWithCache(&winGetMapTplName[24], 0x386006A8); // li r3, 0x6A8 (GSW(1704))
-        writeIntWithCache(&winGetMapTplName[26], 0x2C030001); // cmpwi r3, 0x2
-        writeIntWithCache(&winGetMapTplName[30], 0x386006A9); // li r3, 0x6A9 (GSW(1705))
-        writeIntWithCache(&winGetMapTplName[32], 0x2C03000A); // cmpwi r3, 0xA
-        writeIntWithCache(&winGetMapTplName[36], 0x386006AA); // li r3, 0x6AA (GSW(1706))
-        writeIntWithCache(&winGetMapTplName[38], 0x2C030002); // cmpwi r3, 0x2
-        writeIntWithCache(&winGetMapTplName[42], 0x386006AB); // li r3, 0x6AB (GSW(1707))
-        writeIntWithCache(&winGetMapTplName[44], 0x2C030001); // cmpwi r3, 0x1
+        writeIntWithCache(&main_winGetMapTplName[3], 0x386006A5); // li r3, 0x6A5 (GSW(1701))
+        writeIntWithCache(&main_winGetMapTplName[8], 0x2C030001); // cmpwi r3, 0x1
+        writeIntWithCache(&main_winGetMapTplName[12], 0x386006A6); // li r3, 0x6A6 (GSW(1702))
+        writeIntWithCache(&main_winGetMapTplName[14], 0x2C030001); // cmpwi r3, 0x1main_winLogMain
+        writeIntWithCache(&main_winGetMapTplName[18], 0x386006A7); // li r3, 0x6A7 (GSW(1703))
+        writeIntWithCache(&main_winGetMapTplName[20], 0x2C030001); // cmpwi r3, 0x1
+        writeIntWithCache(&main_winGetMapTplName[24], 0x386006A8); // li r3, 0x6A8 (GSW(1704))
+        writeIntWithCache(&main_winGetMapTplName[26], 0x2C030001); // cmpwi r3, 0x2
+        writeIntWithCache(&main_winGetMapTplName[30], 0x386006A9); // li r3, 0x6A9 (GSW(1705))
+        writeIntWithCache(&main_winGetMapTplName[32], 0x2C03000A); // cmpwi r3, 0xA
+        writeIntWithCache(&main_winGetMapTplName[36], 0x386006AA); // li r3, 0x6AA (GSW(1706))
+        writeIntWithCache(&main_winGetMapTplName[38], 0x2C030002); // cmpwi r3, 0x2
+        writeIntWithCache(&main_winGetMapTplName[42], 0x386006AB); // li r3, 0x6AB (GSW(1707))
+        writeIntWithCache(&main_winGetMapTplName[44], 0x2C030001); // cmpwi r3, 0x1
 
-        writeIntWithCache(&winLogMain[196], 0x386006A5); // li r3, 0x6A5 (GSW(1701))
-        writeIntWithCache(&winLogMain[198], 0x2C030001); // cmpwi r3, 0x1
-        writeIntWithCache(&winLogMain[202], 0x386006A6); // li r3, 0x6A6 (GSW(1702))
-        writeIntWithCache(&winLogMain[204], 0x2C030001); // cmpwi r3, 0x1
-        writeIntWithCache(&winLogMain[208], 0x386006A7); // li r3, 0x6A7 (GSW(1703))
-        writeIntWithCache(&winLogMain[210], 0x2C030001); // cmpwi r3, 0x1
-        writeIntWithCache(&winLogMain[214], 0x386006A8); // li r3, 0x6A8 (GSW(1704))
-        writeIntWithCache(&winLogMain[216], 0x2C030001); // cmpwi r3, 0x1
-        writeIntWithCache(&winLogMain[220], 0x386006A9); // li r3, 0x6A9 (GSW(1705))
-        writeIntWithCache(&winLogMain[222], 0x2C03000A); // cmpwi r3, 0xA
-        writeIntWithCache(&winLogMain[226], 0x386006AA); // li r3, 0x6AA (GSW(1706))
-        writeIntWithCache(&winLogMain[228], 0x2C030002); // cmpwi r3, 0x2
-        writeIntWithCache(&winLogMain[232], 0x386006AB); // li r3, 0x6AB (GSW(1707))
-        writeIntWithCache(&winLogMain[234], 0x2C030001); // cmpwi r3, 0x1
-        writeIntWithCache(&winLogMain[259], 0x386006A5); // li r3, 0x6A5 (GSW(1701))
-        writeIntWithCache(&winLogMain[261], 0x2C030001); // cmpwi r3, 0x1
-        writeIntWithCache(&winLogMain[265], 0x386006A6); // li r3, 0x6A6 (GSW(1702))
-        writeIntWithCache(&winLogMain[267], 0x2C030001); // cmpwi r3, 0x1
-        writeIntWithCache(&winLogMain[271], 0x386006A7); // li r3, 0x6A7 (GSW(1703))
-        writeIntWithCache(&winLogMain[273], 0x2C030001); // cmpwi r3, 0x1
-        writeIntWithCache(&winLogMain[277], 0x386006A8); // li r3, 0x6A8 (GSW(1704))
-        writeIntWithCache(&winLogMain[279], 0x2C030001); // cmpwi r3, 0x1
-        writeIntWithCache(&winLogMain[283], 0x386006A9); // li r3, 0x6A9 (GSW(1705))
-        writeIntWithCache(&winLogMain[285], 0x2C03000A); // cmpwi r3, 0xA
-        writeIntWithCache(&winLogMain[289], 0x386006AA); // li r3, 0x6AA (GSW(1706))
-        writeIntWithCache(&winLogMain[291], 0x2C030002); // cmpwi r3, 0x2
-        writeIntWithCache(&winLogMain[295], 0x386006AB); // li r3, 0x6AB (GSW(1707))
-        writeIntWithCache(&winLogMain[297], 0x2C030001); // cmpwi r3, 0x1
+        writeIntWithCache(&main_winLogMain[196], 0x386006A5); // li r3, 0x6A5 (GSW(1701))
+        writeIntWithCache(&main_winLogMain[198], 0x2C030001); // cmpwi r3, 0x1
+        writeIntWithCache(&main_winLogMain[202], 0x386006A6); // li r3, 0x6A6 (GSW(1702))
+        writeIntWithCache(&main_winLogMain[204], 0x2C030001); // cmpwi r3, 0x1
+        writeIntWithCache(&main_winLogMain[208], 0x386006A7); // li r3, 0x6A7 (GSW(1703))
+        writeIntWithCache(&main_winLogMain[210], 0x2C030001); // cmpwi r3, 0x1
+        writeIntWithCache(&main_winLogMain[214], 0x386006A8); // li r3, 0x6A8 (GSW(1704))
+        writeIntWithCache(&main_winLogMain[216], 0x2C030001); // cmpwi r3, 0x1
+        writeIntWithCache(&main_winLogMain[220], 0x386006A9); // li r3, 0x6A9 (GSW(1705))
+        writeIntWithCache(&main_winLogMain[222], 0x2C03000A); // cmpwi r3, 0xA
+        writeIntWithCache(&main_winLogMain[226], 0x386006AA); // li r3, 0x6AA (GSW(1706))
+        writeIntWithCache(&main_winLogMain[228], 0x2C030002); // cmpwi r3, 0x2
+        writeIntWithCache(&main_winLogMain[232], 0x386006AB); // li r3, 0x6AB (GSW(1707))
+        writeIntWithCache(&main_winLogMain[234], 0x2C030001); // cmpwi r3, 0x1
+        writeIntWithCache(&main_winLogMain[259], 0x386006A5); // li r3, 0x6A5 (GSW(1701))
+        writeIntWithCache(&main_winLogMain[261], 0x2C030001); // cmpwi r3, 0x1
+        writeIntWithCache(&main_winLogMain[265], 0x386006A6); // li r3, 0x6A6 (GSW(1702))
+        writeIntWithCache(&main_winLogMain[267], 0x2C030001); // cmpwi r3, 0x1
+        writeIntWithCache(&main_winLogMain[271], 0x386006A7); // li r3, 0x6A7 (GSW(1703))
+        writeIntWithCache(&main_winLogMain[273], 0x2C030001); // cmpwi r3, 0x1
+        writeIntWithCache(&main_winLogMain[277], 0x386006A8); // li r3, 0x6A8 (GSW(1704))
+        writeIntWithCache(&main_winLogMain[279], 0x2C030001); // cmpwi r3, 0x1
+        writeIntWithCache(&main_winLogMain[283], 0x386006A9); // li r3, 0x6A9 (GSW(1705))
+        writeIntWithCache(&main_winLogMain[285], 0x2C03000A); // cmpwi r3, 0xA
+        writeIntWithCache(&main_winLogMain[289], 0x386006AA); // li r3, 0x6AA (GSW(1706))
+        writeIntWithCache(&main_winLogMain[291], 0x2C030002); // cmpwi r3, 0x2
+        writeIntWithCache(&main_winLogMain[295], 0x386006AB); // li r3, 0x6AB (GSW(1707))
+        writeIntWithCache(&main_winLogMain[297], 0x2C030001); // cmpwi r3, 0x1
 
-        patch::writeBranchPair(&winLogMain[432],
+        patch::writeBranchPair(&main_winLogMain[432],
                                reinterpret_cast<void *>(bWinLogArrInject),
                                reinterpret_cast<void *>(bWinLogArrInjectReturn));
 
-        patch::writeBranchPair(&winLogMain[505],
+        patch::writeBranchPair(&main_winLogMain[505],
                                reinterpret_cast<void *>(bWinLogArrIncrement),
                                reinterpret_cast<void *>(bWinLogArrIncrementReturn));
 
-        writeIntWithCache(&winLogInit[53], 0x386006A4);  // li r3, 0x6A4 (GSW(1700))
-        writeIntWithCache(&winLogInit[55], 0x2C030000);  // cmpwi r3, 0x0
-        writeIntWithCache(&winLogInit[102], 0x386006A4); // li r3, 0x6A4 (GSW(1700))
-        writeIntWithCache(&winLogInit[104], 0x2C030000); // cmpwi r3, 0x0
-        writeIntWithCache(&winLogInit[151], 0x386006A4); // li r3, 0x6A4 (GSW(1700))
-        writeIntWithCache(&winLogInit[153], 0x2C030000); // cmpwi r3, 0x0
-        writeIntWithCache(&winLogInit[356], 0x386006B8); // li r3, 0x6B8 (GSW(1720))
-        writeIntWithCache(&winLogInit[358], 0x2C030001); // cmpwi r3, 0x1
-        writeIntWithCache(&winLogInit[362], 0x386006AA); // li r3, 0x6AA (GSW(1706))
-        writeIntWithCache(&winLogInit[364], 0x2C030026); // cmpwi r3, 0x26
-        writeIntWithCache(&winLogInit[670], 0x3884082C); // addi r4, r4, 0x82C GSW(1708)
-        writeIntWithCache(&winLogInit[672], 0x2C030009); // cmpwi r3, 0x9
-        writeIntWithCache(&winLogInit[687], 0x3884082C); // addi r4, r4, 0x82C GSW(1708)
-        writeIntWithCache(&winLogInit[689], 0x2C030010); // cmpwi r3, 0x10
+        writeIntWithCache(&main_winLogInit[53], 0x386006A4);  // li r3, 0x6A4 (GSW(1700))
+        writeIntWithCache(&main_winLogInit[55], 0x2C030000);  // cmpwi r3, 0x0
+        writeIntWithCache(&main_winLogInit[102], 0x386006A4); // li r3, 0x6A4 (GSW(1700))
+        writeIntWithCache(&main_winLogInit[104], 0x2C030000); // cmpwi r3, 0x0
+        writeIntWithCache(&main_winLogInit[151], 0x386006A4); // li r3, 0x6A4 (GSW(1700))
+        writeIntWithCache(&main_winLogInit[153], 0x2C030000); // cmpwi r3, 0x0
+        writeIntWithCache(&main_winLogInit[356], 0x386006B8); // li r3, 0x6B8 (GSW(1720))
+        writeIntWithCache(&main_winLogInit[358], 0x2C030001); // cmpwi r3, 0x1
+        writeIntWithCache(&main_winLogInit[362], 0x386006AA); // li r3, 0x6AA (GSW(1706))
+        writeIntWithCache(&main_winLogInit[364], 0x2C030026); // cmpwi r3, 0x26
+        writeIntWithCache(&main_winLogInit[670], 0x3884082C); // addi r4, r4, 0x82C GSW(1708)
+        writeIntWithCache(&main_winLogInit[672], 0x2C030009); // cmpwi r3, 0x9
+        writeIntWithCache(&main_winLogInit[687], 0x3884082C); // addi r4, r4, 0x82C GSW(1708)
+        writeIntWithCache(&main_winLogInit[689], 0x2C030010); // cmpwi r3, 0x10
 
-        writeIntWithCache(&monoshiriGX[231], 0x38840833); // addi r4, r4, 0x833 GSW(1715)
-        writeIntWithCache(&monoshiriGX[233], 0x2C030005); // cmpwi r3, 0x5
+        writeIntWithCache(&main_monoshiriGX[231], 0x38840833); // addi r4, r4, 0x833 GSW(1715)
+        writeIntWithCache(&main_monoshiriGX[233], 0x2C030005); // cmpwi r3, 0x5
 
-        writeIntWithCache(&monosiri_disp[376], 0x38840833); // addi r4, r4, 0x833 GSW(1715)
-        writeIntWithCache(&monosiri_disp[378], 0x2C030005); // cmpwi r3, 0x5
+        writeIntWithCache(&main_monosiri_disp[376], 0x38840833); // addi r4, r4, 0x833 GSW(1715)
+        writeIntWithCache(&main_monosiri_disp[378], 0x2C030005); // cmpwi r3, 0x5
 
-        writeIntWithCache(&winMain[184], 0x386006A4); // li r3, 0x6A4 (GSW(1700))
-        writeIntWithCache(&winMain[186], 0x2C030000); // cmpwi r3, 0x0
-        writeIntWithCache(&winMain[205], 0x386006A4); // li r3, 0x6A4 (GSW(1700))
-        writeIntWithCache(&winMain[207], 0x2C030000); // cmpwi r3, 0x0
-        writeIntWithCache(&winMain[232], 0x38840824); // addi r4, r4, 0x824 GSW(1700)
-        writeIntWithCache(&winMain[234], 0x2C030000); // cmpwi r3, 0x0
+        writeIntWithCache(&main_winMain[184], 0x386006A4); // li r3, 0x6A4 (GSW(1700))
+        writeIntWithCache(&main_winMain[186], 0x2C030000); // cmpwi r3, 0x0
+        writeIntWithCache(&main_winMain[205], 0x386006A4); // li r3, 0x6A4 (GSW(1700))
+        writeIntWithCache(&main_winMain[207], 0x2C030000); // cmpwi r3, 0x0
+        writeIntWithCache(&main_winMain[232], 0x38840824); // addi r4, r4, 0x824 GSW(1700)
+        writeIntWithCache(&main_winMain[234], 0x2C030000); // cmpwi r3, 0x0
 
-        writeIntWithCache(&BattleInformationSetDropMaterial[84], 0x38830824); // addi r4, r3, 0x824 GSW(1700)
-        writeIntWithCache(&BattleInformationSetDropMaterial[89], 0x2C030000); // cmpwi r3, 0x0
+        writeIntWithCache(&main_BattleInformationSetDropMaterial[84], 0x38830824); // addi r4, r3, 0x824 GSW(1700)
+        writeIntWithCache(&main_BattleInformationSetDropMaterial[89], 0x2C030000); // cmpwi r3, 0x0
 
-        writeIntWithCache(&_rule_disp[12], 0x38840827); // addi r4, r4, 0x827 GSW(1703)
-        writeIntWithCache(&_rule_disp[14], 0x2C03001C); // cmpwi r3, 0x1C
+        writeIntWithCache(&main_rule_disp[12], 0x38840827); // addi r4, r4, 0x827 GSW(1703)
+        writeIntWithCache(&main_rule_disp[14], 0x2C03001C); // cmpwi r3, 0x1C
 
-        writeIntWithCache(&tou_gamen_screen_tev_init[27], 0x38840827); // addi r4, r4, 0x827 GSW(1703)
-        writeIntWithCache(&tou_gamen_screen_tev_init[48], 0x2C030013); // cmpwi r3, 0x13
+        writeIntWithCache(&main_tou_gamen_screen_tev_init[27], 0x38840827); // addi r4, r4, 0x827 GSW(1703)
+        writeIntWithCache(&main_tou_gamen_screen_tev_init[48], 0x2C030013); // cmpwi r3, 0x13
 
-        writeIntWithCache(&setupDataLoad[23], 0x38840824); // addi r4, r4, 0x824 GSW(1700)
+        writeIntWithCache(&main_setupDataLoad[23], 0x38840824); // addi r4, r4, 0x824 GSW(1700)
 
-        patch::writeBranchBL(&badgeShop_bargainGeneration[7], reinterpret_cast<void *>(bChapterClearCheck));
-        writeIntWithCache(&badgeShop_bargainGeneration[8], 0x2C030001); // cmpwi r3, 0x1
-        patch::writeBranchBL(&badgeShop_bargainGeneration[34], reinterpret_cast<void *>(bChapterClearCheck));
-        writeIntWithCache(&badgeShop_bargainGeneration[35], 0x2C030002); // cmpwi r3, 0x2
-        patch::writeBranchBL(&badgeShop_bargainGeneration[61], reinterpret_cast<void *>(bChapterClearCheck));
-        writeIntWithCache(&badgeShop_bargainGeneration[62], 0x2C030003); // cmpwi r3, 0x3
-        patch::writeBranchBL(&badgeShop_bargainGeneration[88], reinterpret_cast<void *>(bChapterClearCheck));
-        writeIntWithCache(&badgeShop_bargainGeneration[89], 0x2C030004); // cmpwi r3, 0x4
-        patch::writeBranchBL(&badgeShop_bargainGeneration[115], reinterpret_cast<void *>(bChapterClearCheck));
-        writeIntWithCache(&badgeShop_bargainGeneration[116], 0x2C030005); // cmpwi r3, 0x5
-        patch::writeBranchBL(&badgeShop_bargainGeneration[142], reinterpret_cast<void *>(bChapterClearCheck));
-        writeIntWithCache(&badgeShop_bargainGeneration[143], 0x2C030006); // cmpwi r3, 0x6
-        patch::writeBranchBL(&badgeShop_bargainGeneration[169], reinterpret_cast<void *>(bChapterClearCheck));
-        writeIntWithCache(&badgeShop_bargainGeneration[170], 0x2C030007); // cmpwi r3, 0x7
-        writeIntWithCache(&badgeShop_bargainGeneration[184], 0x386006AC); // li r3, 0x6AC (GSW(1708))
-        writeIntWithCache(&badgeShop_bargainGeneration[187], 0x2C030011); // cmpwi r3, 0x11
+        patch::writeBranchBL(&main_badgeShop_bargainGeneration[7], reinterpret_cast<void *>(bChapterClearCheck));
+        writeIntWithCache(&main_badgeShop_bargainGeneration[8], 0x2C030001); // cmpwi r3, 0x1
+        patch::writeBranchBL(&main_badgeShop_bargainGeneration[34], reinterpret_cast<void *>(bChapterClearCheck));
+        writeIntWithCache(&main_badgeShop_bargainGeneration[35], 0x2C030002); // cmpwi r3, 0x2
+        patch::writeBranchBL(&main_badgeShop_bargainGeneration[61], reinterpret_cast<void *>(bChapterClearCheck));
+        writeIntWithCache(&main_badgeShop_bargainGeneration[62], 0x2C030003); // cmpwi r3, 0x3
+        patch::writeBranchBL(&main_badgeShop_bargainGeneration[88], reinterpret_cast<void *>(bChapterClearCheck));
+        writeIntWithCache(&main_badgeShop_bargainGeneration[89], 0x2C030004); // cmpwi r3, 0x4
+        patch::writeBranchBL(&main_badgeShop_bargainGeneration[115], reinterpret_cast<void *>(bChapterClearCheck));
+        writeIntWithCache(&main_badgeShop_bargainGeneration[116], 0x2C030005); // cmpwi r3, 0x5
+        patch::writeBranchBL(&main_badgeShop_bargainGeneration[142], reinterpret_cast<void *>(bChapterClearCheck));
+        writeIntWithCache(&main_badgeShop_bargainGeneration[143], 0x2C030006); // cmpwi r3, 0x6
+        patch::writeBranchBL(&main_badgeShop_bargainGeneration[169], reinterpret_cast<void *>(bChapterClearCheck));
+        writeIntWithCache(&main_badgeShop_bargainGeneration[170], 0x2C030007); // cmpwi r3, 0x7
+        writeIntWithCache(&main_badgeShop_bargainGeneration[184], 0x386006AC); // li r3, 0x6AC (GSW(1708))
+        writeIntWithCache(&main_badgeShop_bargainGeneration[187], 0x2C030011); // cmpwi r3, 0x11
 
-        patch::writeBranchBL(&johoya_data_make[11], reinterpret_cast<void *>(bJohoyaSeqAddition));
+        patch::writeBranchBL(&main_johoya_data_make[11], reinterpret_cast<void *>(bJohoyaSeqAddition));
 
-        writeIntWithCache(&evt_shop_main_func[41], 0x3884082A); // addi r4, r4, 0x82C GSW(1706)
-        writeIntWithCache(&evt_shop_main_func[43], 0x2C030020); // cmpwi r3, 0x20
-        writeIntWithCache(&evt_shop_main_func[47], 0x3884082A); // addi r4, r4, 0x82C GSW(1706)
-        writeIntWithCache(&evt_shop_main_func[49], 0x2C030024); // cmpwi r3, 0x24
+        writeIntWithCache(&main_evt_shop_main_func[41], 0x3884082A); // addi r4, r4, 0x82C GSW(1706)
+        writeIntWithCache(&main_evt_shop_main_func[43], 0x2C030020); // cmpwi r3, 0x20
+        writeIntWithCache(&main_evt_shop_main_func[47], 0x3884082A); // addi r4, r4, 0x82C GSW(1706)
+        writeIntWithCache(&main_evt_shop_main_func[49], 0x2C030024); // cmpwi r3, 0x24
 
-        patch::writeBranchBL(&uranaisi_data_make_next[11], reinterpret_cast<void *>(bJohoyaSeqAddition));
+        patch::writeBranchBL(&main_uranaisi_data_make_next[11], reinterpret_cast<void *>(bJohoyaSeqAddition));
 
-        patch::writeBranchBL(&uranaisi_data_make_starpiece[11], reinterpret_cast<void *>(bJohoyaSeqAddition));
+        patch::writeBranchBL(&main_uranaisi_data_make_starpiece[11], reinterpret_cast<void *>(bJohoyaSeqAddition));
 
-        patch::writeBranchBL(&uranaisi_data_make_supercoin[11], reinterpret_cast<void *>(bJohoyaSeqAddition));
+        patch::writeBranchBL(&main_uranaisi_data_make_supercoin[11], reinterpret_cast<void *>(bJohoyaSeqAddition));
 
         patch::writeBranchPair(&evt_msg_print_party[30],
                                reinterpret_cast<void *>(bPrintPartyErrorFix),
@@ -251,11 +246,11 @@ namespace mod::owr
                                reinterpret_cast<void *>(bPrintPartyAddErrorFix),
                                reinterpret_cast<void *>(bPrintPartyAddErrorFixReturn));
 
-        patch::writeBranchPair(&evt_mobj_kururing_floor[39],
+        patch::writeBranchPair(&main_evt_mobj_kururing_floor[39],
                                reinterpret_cast<void *>(bKururingFloorCapture),
                                reinterpret_cast<void *>(bKururingFloorCaptureReturn));
 
-        patch::writeBranchPair(&evt_mobj_kururing_floor[60],
+        patch::writeBranchPair(&main_evt_mobj_kururing_floor[60],
                                reinterpret_cast<void *>(bKururingFloorRelease),
                                reinterpret_cast<void *>(bKururingFloorReleaseReturn));
 
@@ -267,21 +262,23 @@ namespace mod::owr
                                reinterpret_cast<void *>(bPowerupblkRelease),
                                reinterpret_cast<void *>(bPowerupblkReleaseReturn));
 
-        writeIntWithCache(&mobj_kururing_floor[188], 0x808301BB); // lwz r4, 0x1BA(r3)
+        writeIntWithCache(&main_mobj_kururing_floor[188], 0x808301BB); // lwz r4, 0x1BA(r3)
 
-        writeIntWithCache(&mobj_powerupblk[73], 0x809F01D8);  // lwz r4, 0x1D8(r31)
-        writeIntWithCache(&mobj_powerupblk[110], 0x809F01D8); // lwz r4, 0x1D8(r31)
+        writeIntWithCache(&main_mobj_powerupblk[73], 0x809F01D8); // lwz r4, 0x1D8(r31)
+        writeIntWithCache(&main_mobj_powerupblk[110], 0x809F01D8); // lwz r4, 0x1D8(r31)
 
-        patch::writeBranchPair(&breakfast[22], reinterpret_cast<void *>(bPeachPointer), reinterpret_cast<void *>(bPeachReturn));
+        patch::writeBranchPair(&main_breakfast[22],
+                               reinterpret_cast<void *>(bPeachPointer),
+                               reinterpret_cast<void *>(bPeachReturn));
 
-        writeIntWithCache(&evt_shop_setup[82], 0x2C000079); // cmpwi r0, 0x79
-        writeIntWithCache(&evt_shop_setup[83], 0x418100FC); // blt +0xFC
+        writeIntWithCache(&main_evt_shop_setup[82], 0x2C000079); // cmpwi r0, 0x79
+        writeIntWithCache(&main_evt_shop_setup[83], 0x418100FC); // blt +0xFC
 
-        patch::writeBranchPair(&evt_shop_setup[84],
+        patch::writeBranchPair(&main_evt_shop_setup[84],
                                reinterpret_cast<void *>(bShopFlagCheck),
                                reinterpret_cast<void *>(bShopFlagCheckReturn));
 
-        writeIntWithCache(&evt_shop_setup[85], 0x480000F4); // b +0xF4
+        writeIntWithCache(&main_evt_shop_setup[85], 0x480000F4); // b +0xF4
 
         // sys_prolog[25] = 0x386006A4; // li r3, 0x6A4 (GSW(1700))
         // sys_prolog[28] = 0x2C030002; // cmpwi r3, 0x2
@@ -296,61 +293,61 @@ namespace mod::owr
 
     void ApplyMainScriptPatches()
     {
-        mail_evt_nok_01[40] = GSW(1701);
-        mail_evt_nok_01[41] = 4;
+        main_mail_evt_nok_01[40] = GSW(1701);
+        main_mail_evt_nok_01[41] = 4;
 
-        mail_evt_gor_03[41] = GSW(1709);
-        mail_evt_gor_03[42] = 3;
+        main_mail_evt_gor_03[41] = GSW(1709);
+        main_mail_evt_gor_03[42] = 3;
 
-        mail_evt_gor_02[41] = GSW(1703);
-        mail_evt_gor_02[42] = 31;
+        main_mail_evt_gor_02[41] = GSW(1703);
+        main_mail_evt_gor_02[42] = 31;
 
-        mail_evt_gor_01[40] = GSW(1705);
-        mail_evt_gor_01[41] = 6;
+        main_mail_evt_gor_01[40] = GSW(1705);
+        main_mail_evt_gor_01[41] = 6;
 
-        mail_evt_gor_04[51] = GSW(1709);
-        mail_evt_gor_04[52] = 11;
+        main_mail_evt_gor_04[51] = GSW(1709);
+        main_mail_evt_gor_04[52] = 11;
 
-        mail_evt_rsh_03_a[40] = GSW(1706);
-        mail_evt_rsh_03_a[41] = 32;
+        main_mail_evt_rsh_03_a[40] = GSW(1706);
+        main_mail_evt_rsh_03_a[41] = 32;
 
-        mail_evt_hom_00[40] = GSW(1720);
-        mail_evt_hom_00[41] = 8;
+        main_mail_evt_hom_00[40] = GSW(1720);
+        main_mail_evt_hom_00[41] = 8;
 
-        mail_evt_gor_02_2[40] = GSW(1706);
-        mail_evt_gor_02_2[41] = 52;
+        main_mail_evt_gor_02_2[40] = GSW(1706);
+        main_mail_evt_gor_02_2[41] = 52;
 
-        mail_evt_bom_01[40] = GSW(1707);
-        mail_evt_bom_01[41] = 3;
+        main_mail_evt_bom_01[40] = GSW(1707);
+        main_mail_evt_bom_01[41] = 3;
 
-        mail_evt_tik_00[51] = GSW(1707);
-        mail_evt_tik_00[52] = 21;
+        main_mail_evt_tik_00[51] = GSW(1707);
+        main_mail_evt_tik_00[52] = 21;
 
-        mail_evt_win_01[40] = GSW(1702);
-        mail_evt_win_01[41] = 14;
+        main_mail_evt_win_01[40] = GSW(1702);
+        main_mail_evt_win_01[41] = 14;
 
-        mail_evt_tou_01[40] = GSW(1703);
-        mail_evt_tou_01[41] = 11;
+        main_mail_evt_tou_01[40] = GSW(1703);
+        main_mail_evt_tou_01[41] = 11;
 
-        mail_evt_usu_01[40] = GSWF(6043);
-        mail_evt_usu_01[41] = 1;
+        main_mail_evt_usu_01[40] = GSWF(6043);
+        main_mail_evt_usu_01[41] = 1;
 
-        mail_evt_gor_01_2[41] = GSW(1717);
-        mail_evt_gor_01_2[42] = 29;
+        main_mail_evt_gor_01_2[41] = GSW(1717);
+        main_mail_evt_gor_01_2[42] = 29;
 
-        mail_evt_rsh_03_a_2[40] = GSW(1706);
-        mail_evt_rsh_03_a_2[41] = 23;
+        main_mail_evt_rsh_03_a_2[40] = GSW(1706);
+        main_mail_evt_rsh_03_a_2[41] = 23;
 
-        mail_evt_pik_00[40] = GSW(1707);
-        mail_evt_pik_00[41] = 3;
+        main_mail_evt_pik_00[40] = GSW(1707);
+        main_mail_evt_pik_00[41] = 3;
 
-        mobj_save_blk_sysevt[25] = GSW(1700);
-        mobj_save_blk_sysevt[26] = 7;
+        main_mobj_save_blk_sysevt[25] = GSW(1700);
+        main_mobj_save_blk_sysevt[26] = 7;
 
-        init_event[61] = GSW(1715);
-        init_event[62] = 3;
-        init_event[64] = GSW(1715);
-        init_event[65] = 7;
+        main_init_event[61] = GSW(1715);
+        main_init_event[62] = 3;
+        main_init_event[64] = GSW(1715);
+        main_init_event[65] = 7;
 
         evt_lecture_msg[107] = GSW(1700);
         evt_lecture_msg[108] = 17;

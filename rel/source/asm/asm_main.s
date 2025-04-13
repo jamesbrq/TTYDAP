@@ -199,8 +199,8 @@ pikBreakfast:
 	lis %r6, 0xF840
 	ori %r6, %r6, 0x735E
 breakfastValueRestore:
-	lis %r3, wp_breakfast@h
-	ori %r3, %r3, wp_breakfast@l
+	lis %r3, main_wp_breakfast@h
+	ori %r3, %r3, main_wp_breakfast@l
 	lwz %r3, 0x0(%r3)
 	lwz %r3, 0x0(%r3)
 	lwz %r4, 0x0(%r3)
