@@ -39,9 +39,9 @@ const char doopliss[] = "\x82\xC9\x82\xB9\x83\x7D\x83\x8A\x83\x49";
 // clang-format off
 EVT_BEGIN(evt_machibuse_evt)
 	IF_SMALL(GSWF(6044), 1)
-		USER_FUNC(evt_msg::evt_msg_print, 0, PTR("stg4_gra_03"), 0, PTR(doopliss))
+		USER_FUNC(evt_msg::evt_msg_print, 0, PTR("stg4_gra_03"), 0, PTR(&doopliss))
 	ELSE()
-		USER_FUNC(evt_msg::evt_msg_print, 0, PTR("stg4_gra_09"), 0, PTR(doopliss))
+		USER_FUNC(evt_msg::evt_msg_print, 0, PTR("stg4_gra_09"), 0, PTR(&doopliss))
 	END_IF()
 	GOTO(&evt_machibuse[423])
 EVT_PATCH_END()
