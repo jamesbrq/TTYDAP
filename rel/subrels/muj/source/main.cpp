@@ -1092,6 +1092,8 @@ namespace mod
 
         muj_marco_talk_05[1] = GSW(1719);
         muj_marco_talk_05[3] = 8;
+        muj_marco_talk_05[17] = GSWF(6108);
+        muj_marco_talk_05[23] = EVT_HELPER_CMD(2, 29);
         muj_marco_talk_05[95] = GSWF(6108);
 
         muj_sanders_kyushutsu_sub[7] = GSW(1719);
