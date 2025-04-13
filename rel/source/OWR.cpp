@@ -231,7 +231,7 @@ namespace mod::owr
             return g_seqSetSeq_trampoline(seq, map, bero);
         }
 
-        if (map && strcmp(map, "rsh_01_a") == 0)
+        if (map && !strcmp(map, "rsh_01_a"))
         {
             uint8_t value = ttyd::swdrv::swByteGet(1706);
 
@@ -240,7 +240,7 @@ namespace mod::owr
             else if ((value >= 14 && value < 23) || (value >= 30 && value < 32))
                 map = "rsh_01_c";
         }
-        if (map && strcmp(map, "rsh_02_a") == 0)
+        if (map && !strcmp(map, "rsh_02_a"))
         {
             uint8_t value = ttyd::swdrv::swByteGet(1706);
 
@@ -249,25 +249,19 @@ namespace mod::owr
             else if ((value >= 14 && value < 23) || (value >= 30 && value < 32))
                 map = "rsh_02_c";
         }
-        // Check if map is equal to 1 so we dont call a strcmp with an invalid pointer
-        if (map == reinterpret_cast<const char *>(1))
-        {
-            return g_seqSetSeq_trampoline(seq, map, bero);
-        }
-        if (map && strcmp(map, "aaa_00") == 0)
+        if (map && !strcmp(map, "aaa_00"))
         {
             uint32_t namePtr = 0x802c0298;
             const char *mapName = reinterpret_cast<char *>(namePtr);
             return g_seqSetSeq_trampoline(seq, mapName, bero);
         }
-        else if (map && strstr(map, "rsh") != 0 && bero != reinterpret_cast<const char *>(0))
+        else if (map && !strncmp(map, "rsh", 3))
         {
             if (ttyd::swdrv::swByteGet(1706) < 43)
             {
-                if (bero && (strcmp(bero, "nidome") == 0 || strcmp(bero, "nidome_start") == 0))
+                if (bero && (!strcmp(bero, "nidome") || !strcmp(bero, "nidome_start")))
                 {
-                    const char *beroName = reinterpret_cast<char *>(0);
-                    return g_seqSetSeq_trampoline(seq, map, beroName);
+                    return g_seqSetSeq_trampoline(seq, map, 0);
                 }
             }
         }
