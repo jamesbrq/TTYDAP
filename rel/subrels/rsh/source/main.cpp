@@ -452,9 +452,6 @@ RETURN()
 EVT_END()
 
 EVT_BEGIN(rsh_04_init_evt_evt)
-	IF_SMALL(GSW(1706), 37)
-		SET(GSWF(3578), 0)
-	END_IF()
 	IF_LARGE_EQUAL(GSW(1720), 1)
 		IF_SMALL(GSW(1720), 8)
 			RETURN()
@@ -654,7 +651,7 @@ EVT_BEGIN(talk_madam_hook)
     GOTO(&talk_madam_rsh_01[69])
 EVT_PATCH_END()
 
-EVT_BEGIN(talk_madam_ring_item)
+EVT_BEGIN(rsh_talk_madam_ring_item)
     IF_EQUAL(GSWF(6092), 0)
         USER_FUNC(evt_msg::evt_msg_print, 0, PTR("stg6_rsh_201"), 0, PTR(madam1))
         USER_FUNC(evt_mario::evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
@@ -670,7 +667,7 @@ EVT_BEGIN(talk_madam_ring_item)
 EVT_END()
 
 EVT_BEGIN(talk_madam_ring_return_hook2)
-    RUN_CHILD_EVT(talk_madam_ring_item)
+    RUN_CHILD_EVT(rsh_talk_madam_ring_item)
     GOTO(&talk_madam_ring_return[33])
 EVT_PATCH_END()
 // clang-format on
@@ -934,6 +931,7 @@ namespace mod
         evt_access_entry[2] = 49;
 
         patch::writePatch(&rsh_02_init_evt[0], rsh_02_init_evt_hook, sizeof(rsh_02_init_evt_hook));
+        rsh_02_init_evt[4] = 0;
         rsh_02_init_evt[63] = GSW(1706);
         rsh_02_init_evt[64] = 3;
         rsh_02_init_evt[66] = GSW(1706);

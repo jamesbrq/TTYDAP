@@ -2,13 +2,16 @@
 #include "evt_cmd.h"
 #include "patch.h"
 #include "AP/rel_patch_definitions.h"
+#include "ttyd/evt_cam.h"
 #include "ttyd/evt_msg.h"
+#include "ttyd/evt_pouch.h"
 
 #include <cstdint>
 
 using namespace ttyd;
 
 extern int32_t evt_machibuse[];
+extern int32_t evt_nameent[];
 extern int32_t gra_00_init_evt[];
 extern int32_t gra_01_init_evt[];
 extern int32_t shopmaster_pig_init[];
@@ -42,6 +45,20 @@ EVT_BEGIN(evt_machibuse_evt)
 	END_IF()
 	GOTO(&evt_machibuse[423])
 EVT_PATCH_END()
+
+EVT_BEGIN(evt_nameent_evt)
+	USER_FUNC(evt_cam::evt_cam_letter_box_onoff, 0, 0)
+    USER_FUNC(evt_pouch::evt_pouch_check_item, 68, LW(1))
+    IF_EQUAL(LW(1), 0)
+        SET(LW(0), 2)
+    END_IF()
+    RETURN()
+EVT_END()
+
+EVT_BEGIN(evt_nameent_hook)
+    RUN_CHILD_EVT(evt_nameent_evt)
+    GOTO(&evt_nameent[40])
+EVT_PATCH_END()
 // clang-format on
 
 namespace mod
@@ -57,6 +74,8 @@ namespace mod
         evt_machibuse[477] = 5;
         evt_machibuse[538] = GSWF(6044);
         evt_machibuse[540] = 1;
+
+        patch::writePatch(&evt_nameent[36], evt_nameent_hook, sizeof(evt_nameent_hook));
 
         gra_00_init_evt[47] = 11;
         gra_00_init_evt[65] = GSW(1715);

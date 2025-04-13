@@ -202,7 +202,7 @@ USER_FUNC(evt_mario::evt_mario_key_onoff, 1)
 RETURN()
 EVT_END()
 
-EVT_BEGIN(talk_madam_ring_item)
+EVT_BEGIN(pik_talk_madam_ring_item)
     IF_EQUAL(GSWF(6092), 0)
         USER_FUNC(evt_msg::evt_msg_print, 0, PTR("stg6_pik_04_07"), 0, PTR(madam2))
         USER_FUNC(evt_mario::evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
@@ -217,7 +217,7 @@ EVT_BEGIN(talk_madam_ring_item)
 EVT_END()
 
 EVT_BEGIN(pik_talk_madam_ring_return_hook)
-    RUN_CHILD_EVT(talk_madam_ring_item)
+    RUN_CHILD_EVT(pik_talk_madam_ring_item)
     GOTO(&pik_talk_madam_ring_return[33])
 EVT_PATCH_END()
 
