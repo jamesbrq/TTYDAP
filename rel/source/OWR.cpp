@@ -622,22 +622,22 @@ namespace mod::owr
     // Skip logo
     KEEP_FUNC void logoSkip(SeqInfo *info)
     {
+#ifdef TTYD_JP
+        // No H&S screen so states are different
+        // Skip from first logo fadeout wait directly
+        // TODO: More efficient logo skip
+        if (info->state == 3)
+        {
+            info->state = 9;
+        }
+#else
         // Skip states from H&S fadeout wait directly to demo fadeout start
         // TODO: Skip H&S
-        #if ((defined TTYD_US) || (defined TTYD_EU))
         if (info->state == 8)
         {
             info->state = 17;
         }
-        #elif defined TTYD_JP
-		// No H&S screen so states are different
-		// Skip from first logo fadeout wait directly
-		// TODO: More efficient logo skip
-		if (info->state == 3)
-		{
-			info->state = 9;
-		}
-        #endif
+#endif
         return gTrampoline_seq_logoMain(info);
     }
 
@@ -650,16 +650,14 @@ namespace mod::owr
 
     void OWR::OnModuleLoaded(OSModuleInfo *module_info)
     {
-        (void)module_info;
-
         RelMgr *relMgrPtr = &relMgr;
 
         // The vanilla rel is unlinked every time you go through a loading zone, so our custom one must be relinked
         const bool unlinked = relMgrPtr->unlinkRel();
 
-        // If the next area is tou_03, then force tou2.rel to be loaded
+        // If the game's vanilla tou2.rel was just linked, then force our custom tou2.rel to be loaded
         bool inNewArea;
-        if (strcmp(ttyd::seq_mapchange::_next_map, "tou_03") == 0)
+        if (module_info->id == RelId::TOU2)
         {
             inNewArea = true;
             relMgrPtr->setPrevArea("tou2");
