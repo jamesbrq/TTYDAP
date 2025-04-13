@@ -4,6 +4,8 @@
 #include <gc/OSModule.h>
 #include <gc/pad.h>
 #include <mod.h>
+#include "relmgr.h"
+#include "visibility.h"
 #include <ttyd/countdown.h>
 #include <ttyd/common_types.h>
 #include <ttyd/evt_mario.h>
@@ -86,18 +88,15 @@ constexpr int32_t GSWF_ARR_SIZE = sizeof(GSWF_ARR) / sizeof(GSWF_ARR[0]);
 
 namespace mod::owr
 {
-    ItemData *item_db = common::kItemDataArr;
-    OWR *gSelf = nullptr;
-    StateManager *gState = nullptr;
+    KEEP_VAR OWR *gSelf = nullptr;
+    KEEP_VAR StateManager *gState = nullptr;
 
-    OWR::OWR() {}
-
-    bool (*g_OSLink_trampoline)(OSModuleInfo *, void *) = nullptr;
-    void (*g_seqSetSeq_trampoline)(SeqIndex seq, const char *map, const char *bero) = nullptr;
-    uint32_t (*g_pouchGetItem_trampoline)(int32_t) = nullptr;
-    void (*g_partySetForceMove_trampoline)(ttyd::party::PartyEntry *ptr, float x, float z, float speed) = nullptr;
-    int32_t (*g_evt_mario_set_pose_trampoline)(ttyd::evtmgr::EvtEntry *evt, bool firstCall) = nullptr;
-    const char *(*g_msgSearch_trampoline)(const char *) = nullptr;
+    KEEP_VAR bool (*g_OSLink_trampoline)(OSModuleInfo *, void *) = nullptr;
+    KEEP_VAR void (*g_seqSetSeq_trampoline)(SeqIndex seq, const char *map, const char *bero) = nullptr;
+    KEEP_VAR uint32_t (*g_pouchGetItem_trampoline)(int32_t) = nullptr;
+    KEEP_VAR void (*g_partySetForceMove_trampoline)(ttyd::party::PartyEntry *ptr, float x, float z, float speed) = nullptr;
+    KEEP_VAR int32_t (*g_evt_mario_set_pose_trampoline)(ttyd::evtmgr::EvtEntry *evt, bool firstCall) = nullptr;
+    KEEP_VAR const char *(*g_msgSearch_trampoline)(const char *) = nullptr;
 
     void OWR::SequenceInit()
     {
@@ -208,7 +207,7 @@ namespace mod::owr
         }
     }
 
-    bool OSLinkHook(OSModuleInfo *new_module, void *bss)
+    KEEP_FUNC bool OSLinkHook(OSModuleInfo *new_module, void *bss)
     {
         bool result = g_OSLink_trampoline(new_module, bss);
         if (new_module != nullptr && result)
@@ -218,7 +217,7 @@ namespace mod::owr
         return result;
     }
 
-    void seqSetSeqHook(SeqIndex seq, const char *map, const char *bero)
+    KEEP_FUNC void seqSetSeqHook(SeqIndex seq, const char *map, const char *bero)
     {
         // Check if map is equal to 1 so we dont call a strcmp with an invalid pointer
         if (map == reinterpret_cast<const char *>(1))
@@ -269,7 +268,7 @@ namespace mod::owr
         return g_seqSetSeq_trampoline(seq, map, bero);
     }
 
-    const char *msgSearchHook(const char *msgKey)
+    KEEP_FUNC const char *msgSearchHook(const char *msgKey)
     {
         if (!strcmp(msgKey, "jolene_fukidashi"))
         {
@@ -454,7 +453,7 @@ namespace mod::owr
         return g_msgSearch_trampoline(msgKey);
     }
 
-    uint32_t pouchGetItemHook(int32_t item)
+    KEEP_FUNC uint32_t pouchGetItemHook(int32_t item)
     {
         uint32_t return_value = 0;
         switch (item)
@@ -601,7 +600,7 @@ namespace mod::owr
         return return_value;
     }
 
-    void partySetForceMoveHook(ttyd::party::PartyEntry *ptr, float x, float z, float speed)
+    KEEP_FUNC void partySetForceMoveHook(ttyd::party::PartyEntry *ptr, float x, float z, float speed)
     {
         const Player *marioPtr = marioGetPtr();
         if (marioPtr->characterId == 0)
@@ -612,7 +611,7 @@ namespace mod::owr
         return g_partySetForceMove_trampoline(ptr, x, z, speed);
     }
 
-    int32_t evtMarioSetPoseHook(ttyd::evtmgr::EvtEntry *evt, bool firstCall)
+    KEEP_FUNC int32_t evtMarioSetPoseHook(ttyd::evtmgr::EvtEntry *evt, bool firstCall)
     {
         const Player *marioPtr = marioGetPtr();
         if (marioPtr->characterId == 0)
@@ -621,28 +620,6 @@ namespace mod::owr
                 ttyd::mario_motion::marioChgMot(ttyd::mario_motion::MarioMotion::kStay);
         }
         return g_evt_mario_set_pose_trampoline(evt, firstCall);
-    }
-
-    void OWR::Init()
-    {
-        gSelf = this;
-        gState = &gSelf->state;
-
-        ApplyMainAssemblyPatches();
-        ApplyMainScriptPatches();
-        ApplyItemDataTablePatches();
-
-        g_OSLink_trampoline = patch::hookFunction(OSLink, OSLinkHook);
-
-        g_seqSetSeq_trampoline = patch::hookFunction(ttyd::seqdrv::seqSetSeq, seqSetSeqHook);
-
-        g_msgSearch_trampoline = patch::hookFunction(ttyd::msgdrv::msgSearch, msgSearchHook);
-
-        g_pouchGetItem_trampoline = patch::hookFunction(ttyd::mario_pouch::pouchGetItem, pouchGetItemHook);
-
-        g_partySetForceMove_trampoline = patch::hookFunction(ttyd::party::partySetForceMove, partySetForceMoveHook);
-
-        g_evt_mario_set_pose_trampoline = patch::hookFunction(ttyd::evt_mario::evt_mario_set_pose, evtMarioSetPoseHook);
     }
 
     void OWR::Update()
@@ -654,85 +631,31 @@ namespace mod::owr
 
     void OWR::OnModuleLoaded(OSModuleInfo *module_info)
     {
-        if (module_info == nullptr)
-            return;
-        switch (module_info->id)
+        (void)module_info;
+
+        RelMgr *relMgrPtr = &relMgr;
+
+        // The vanilla rel is unloaded every time you go through a loading zone, so our custom one must be relinked
+        const bool unlinked = relMgrPtr->unlinkRel();
+
+        // If going into a new area, then load the new rel
+        const char *nextArea = ttyd::seq_mapchange::_next_area;
+        const bool inNewArea = relMgrPtr->inNewArea(nextArea);
+        relMgrPtr->setPrevArea(nextArea);
+
+        if (!unlinked || inNewArea)
         {
-            case ModuleId::GOR:
-                ApplyGorPatches();
-                break;
-            case ModuleId::HEI:
-                ApplyHeiPatches();
-                break;
-            case ModuleId::GON:
-                ApplyGonPatches();
-                break;
-            case ModuleId::NOK:
-                ApplyNokPatches();
-                break;
-            case ModuleId::WIN:
-                ApplyWinPatches();
-                break;
-            case ModuleId::MRI:
-                ApplyMriPatches();
-                break;
-            case ModuleId::TOU:
-                ApplyTouPatches();
-                break;
-            case ModuleId::TOU2:
-                ApplyTou2Patches();
-                break;
-            case ModuleId::USU:
-                ApplyUsuPatches();
-                break;
-            case ModuleId::GRA:
-                ApplyGraPatches();
-                break;
-            case ModuleId::JIN:
-                ApplyJinPatches();
-                break;
-            case ModuleId::MUJ:
-                ApplyMujPatches();
-                break;
-            case ModuleId::DOU:
-                ApplyDouPatches();
-                break;
-            case ModuleId::RSH:
-                ApplyRshPatches();
-                break;
-            case ModuleId::EKI:
-                ApplyEkiPatches();
-                break;
-            case ModuleId::END:
-                ApplyEndPatches();
-                break;
-            case ModuleId::HOM:
-                ApplyHomPatches();
-                break;
-            case ModuleId::PIK:
-                ApplyPikPatches();
-                break;
-            case ModuleId::BOM:
-                ApplyBomPatches();
-                break;
-            case ModuleId::AJI:
-                ApplyAjiPatches();
-                break;
-            case ModuleId::AAA:
-                ApplyAaaPatches();
-                break;
-            case ModuleId::KPA:
-                ApplyKpaPatches();
-                break;
-            case ModuleId::TIK:
-                ApplyTikPatches();
-                break;
-            case ModuleId::LAS:
-                ApplyLasPatches();
-                break;
-            default:
-                break;
+            relMgrPtr->unloadRel();
+
+            if (!relMgrPtr->loadRel(nextArea))
+            {
+                // Assume the desired rel is not included in this project
+                return;
+            }
         }
+
+        // Relink the rel to reapply its patches
+        relMgrPtr->linkRel();
     }
 
     void OWR::DrawString(const char *data, float x, float y, uint32_t color, float scale)

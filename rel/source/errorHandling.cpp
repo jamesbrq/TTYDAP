@@ -1,6 +1,8 @@
 #include "errorHandling.h"
 #include "util.h"
 #include "OWR.h"
+#include "mod.h"
+#include "visibility.h"
 #include "gc/os.h"
 #include "ttyd/memory.h"
 #include "ttyd/npcdrv.h"
@@ -10,13 +12,13 @@
 #include <cstdio>
 #include <cinttypes>
 
-NpcNameToPtrErrorInfo npcNameToPtrErrorInfo;
-AnimPoseMainErrorInfo animPoseMainErrorInfo;
-HeapCorruptionInfo heapCorruptionInfo;
-float errorTextPosY = ERROR_TEXT_DEFAULT_POS_Y;
+KEEP_VAR float errorTextPosY = 0.f;
+KEEP_VAR NpcNameToPtrErrorInfo *npcNameToPtrErrorInfoPtr = nullptr;
+KEEP_VAR AnimPoseMainErrorInfo *animPoseMainErrorInfoPtr = nullptr;
+KEEP_VAR HeapCorruptionInfo *heapCorruptionInfoPtr = nullptr;
 
-NpcEntry *(*g_npcNameToPtr_trampoline)(const char *name) = nullptr;
-void (*g_animPoseMain_trampoline)(int32_t poseId) = nullptr;
+KEEP_VAR NpcEntry *(*g_npcNameToPtr_trampoline)(const char *name) = nullptr;
+KEEP_VAR void (*g_animPoseMain_trampoline)(int32_t poseId) = nullptr;
 
 void HeapCorruptionInfo::drawBuffer()
 {
@@ -174,7 +176,7 @@ static void initStandardHeapError(const void *address, int32_t heapIndex, bool i
 {
     // Set up the text to be drawn
     // Make sure heapCorruptioBufferIndex is valid
-    HeapCorruptionInfo *heapCorruptionInfoPtr = &heapCorruptionInfo;
+    HeapCorruptionInfo *heapCorruptionInfoPtr = heapCorruptionInfoPtr;
     if (!heapCorruptionInfoPtr->verifyBufferIndex())
     {
         return;
@@ -208,7 +210,7 @@ static void initSmartHeapError(const void *address, bool isUsedPortion)
 {
     // Set up the text to be drawn
     // Make sure heapCorruptioBufferIndex is valid
-    HeapCorruptionInfo *heapCorruptionInfoPtr = &heapCorruptionInfo;
+    HeapCorruptionInfo *heapCorruptionInfoPtr = heapCorruptionInfoPtr;
     if (!heapCorruptionInfoPtr->verifyBufferIndex())
     {
         return;
@@ -245,7 +247,7 @@ static void initMapHeapError(const void *address, uint16_t inUse, bool isBattleH
 {
     // Set up the text to be drawn
     // Make sure heapCorruptioBufferIndex is valid
-    HeapCorruptionInfo *heapCorruptionInfoPtr = &heapCorruptionInfo;
+    HeapCorruptionInfo *heapCorruptionInfoPtr = heapCorruptionInfoPtr;
     if (!heapCorruptionInfoPtr->verifyBufferIndex())
     {
         return;
@@ -362,32 +364,34 @@ void checkHeaps()
 
 void drawErrorMessages()
 {
+    mod::Mod *modPtr = mod::gMod;
+
     // Draw any heap corruption errors that occured this frame
-    HeapCorruptionInfo *heapCorruptionInfoPtr = &heapCorruptionInfo;
+    HeapCorruptionInfo *heapCorruptionInfoPtr = &modPtr->heapCorruptionInfo;
     if (heapCorruptionInfoPtr->shouldDrawBuffer())
     {
         heapCorruptionInfoPtr->drawBuffer();
     }
 
     // Draw error text if npcNameToPtr returned an invalid pointer
-    NpcNameToPtrErrorInfo *npcNameToPtrErrorInfoPtr = &npcNameToPtrErrorInfo;
-    if (npcNameToPtrErrorInfoPtr->getTimer() > 0)
+    NpcNameToPtrErrorInfo *npcNameToPtrErrorInfo = npcNameToPtrErrorInfoPtr;
+    if (npcNameToPtrErrorInfo->getTimer() > 0)
     {
-        npcNameToPtrErrorInfoPtr->drawErrorMessage();
+        npcNameToPtrErrorInfo->drawErrorMessage();
     }
 
     // Draw error text if animPoseMain would cause a crash
-    AnimPoseMainErrorInfo *animPoseMainErrorInfoPtr = &animPoseMainErrorInfo;
-    if (animPoseMainErrorInfoPtr->getTimer() > 0)
+    AnimPoseMainErrorInfo *animPoseMainErrorInfo = animPoseMainErrorInfoPtr;
+    if (animPoseMainErrorInfo->getTimer() > 0)
     {
-        animPoseMainErrorInfoPtr->drawErrorMessage();
+        animPoseMainErrorInfo->drawErrorMessage();
     }
 
     // Reset errorTextPosY for use on the next frame
     errorTextPosY = ERROR_TEXT_DEFAULT_POS_Y;
 }
 
-NpcEntry *checkForNpcNameToPtrError(const char *name)
+KEEP_FUNC NpcEntry *checkForNpcNameToPtrError(const char *name)
 {
     // Call the original function immediately, as its result is needed
     NpcEntry *ret = g_npcNameToPtr_trampoline(name);
@@ -397,23 +401,23 @@ NpcEntry *checkForNpcNameToPtrError(const char *name)
     if (ret >= &workPtr->entries[workPtr->npcMaxCount])
     {
         // Didn't find the correct NPC, so print error text
-        NpcNameToPtrErrorInfo *npcNameToPtrErrorInfoPtr = &npcNameToPtrErrorInfo;
-        npcNameToPtrErrorInfoPtr->setTimer(ttyd::system::sysMsec2Frame(5000));
-        npcNameToPtrErrorInfoPtr->incrementCounter();
+        NpcNameToPtrErrorInfo *npcNameToPtrErrorInfo = npcNameToPtrErrorInfoPtr;
+        npcNameToPtrErrorInfo->setTimer(ttyd::system::sysMsec2Frame(5000));
+        npcNameToPtrErrorInfo->incrementCounter();
     }
 
     return ret;
 }
 
-void preventAnimPoseMainCrash(int32_t poseId)
+KEEP_FUNC void preventAnimPoseMainCrash(int32_t poseId)
 {
     // Make sure poseId is valid
     if (poseId < 0)
     {
         // poseId is invalid, so print error text
-        AnimPoseMainErrorInfo *animPoseMainErrorInfoPtr = &animPoseMainErrorInfo;
-        animPoseMainErrorInfoPtr->setTimer(ttyd::system::sysMsec2Frame(5000));
-        animPoseMainErrorInfoPtr->incrementCounter();
+        AnimPoseMainErrorInfo *animPoseMainErrorInfo = animPoseMainErrorInfoPtr;
+        animPoseMainErrorInfo->setTimer(ttyd::system::sysMsec2Frame(5000));
+        animPoseMainErrorInfo->incrementCounter();
         return;
     }
 

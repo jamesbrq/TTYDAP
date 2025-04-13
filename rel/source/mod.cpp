@@ -1,90 +1,45 @@
 #include "errorHandling.h"
-#include "gamePatches.h"
 #include "mod.h"
 #include "patch.h"
+#include "relmgr.h"
+#include "visibility.h"
+#include "ttyd/dispdrv.h"
+
 #include <cstdio>
 #include <cstring>
-#include <ttyd/animdrv.h>
-#include <ttyd/dispdrv.h>
-#include <ttyd/fontmgr.h>
-#include <ttyd/mariost.h>
-#include <ttyd/npcdrv.h>
-#include <ttyd/system.h>
-
-ModInitFunction *ModInitFunction::sFirst = nullptr;
-ModUpdateFunction *ModUpdateFunction::sFirst = nullptr;
 
 namespace mod
 {
-    Mod *gMod = nullptr;
+    KEEP_VAR Mod *gMod = nullptr;
+    KEEP_VAR void (*mPFN_marioStMain_trampoline)() = nullptr;
 
     void main()
     {
-        Mod *mod = new Mod();
-        mod->init();
+        // Run the init rel to handle function hooks/patches/etc
+        relMgr.runInitRel();
     }
 
-    Mod::Mod() {}
+    void exit() {}
 
-    void Mod::init()
-    {
-        gMod = this;
-
-        mPFN_marioStMain_trampoline = patch::hookFunction(marioStMain, []() { gMod->updateEarly(); });
-
-        g_npcNameToPtr_trampoline = patch::hookFunction(npcNameToPtr, checkForNpcNameToPtrError);
-        g_animPoseMain_trampoline = patch::hookFunction(ttyd::animdrv::animPoseMain, preventAnimPoseMainCrash);
-
-        applyGameFixes();
-        applyVariousGamePatches();
-
-        // Initialize typesetting early
-        ttyd::fontmgr::fontmgrTexSetup();
-        patch::hookFunction(ttyd::fontmgr::fontmgrTexSetup, []() {});
-
-        mConsole.init();
-
-        // Run spread initializations
-        for (ModInitFunction *p = ModInitFunction::sFirst; p; p = p->next)
-        {
-            p->initFunction();
-        }
-
-        owr_mod_.Init();
-    }
-
-    void Mod::updateEarly()
+    KEEP_FUNC void updateEarly()
     {
         // Check the game heaps for errors
         checkHeaps();
 
-        owr_mod_.Update();
-        // Run spread update functions
-        for (ModUpdateFunction *p = ModUpdateFunction::sFirst; p; p = p->next)
-        {
-            p->updateFunction();
-        }
+        gMod->owr_mod_.Update();
 
         // Register draw command
-        ttyd::dispdrv::dispEntry(
-            ttyd::dispdrv::CameraId::kDebug3d,
-            1,
-            0.f,
-            [](ttyd::dispdrv::CameraId layerId, void *user)
-            {
-                (void)layerId;
-                reinterpret_cast<Mod *>(user)->draw();
-            },
-            this);
+        ttyd::dispdrv::dispEntry(ttyd::dispdrv::CameraId::kDebug3d, 1, 0.f, draw, nullptr);
 
-        mConsole.update();
-
-        // Call original function
+        // Call the original function
         mPFN_marioStMain_trampoline();
     }
 
-    void Mod::draw()
+    KEEP_FUNC void draw(ttyd::dispdrv::CameraId layerId, void *user)
     {
+        (void)layerId;
+        (void)user;
+
         // Draw any error messages that occured this frame
         drawErrorMessages();
     }

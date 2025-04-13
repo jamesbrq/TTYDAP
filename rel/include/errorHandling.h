@@ -1,6 +1,7 @@
 #pragma once
 
 #include "gc/os.h"
+#include "cxx.h"
 #include "ttyd/npcdrv.h"
 
 #include <cstdint>
@@ -120,6 +121,11 @@ class HeapCorruptionInfo
     int16_t heapIndex;
     uint16_t bufferSize;
 };
+
+extern float errorTextPosY;
+extern NpcNameToPtrErrorInfo *npcNameToPtrErrorInfoPtr;
+extern AnimPoseMainErrorInfo *animPoseMainErrorInfoPtr;
+extern HeapCorruptionInfo *heapCorruptionInfoPtr;
 
 extern NpcEntry *(*g_npcNameToPtr_trampoline)(const char *name);
 extern void (*g_animPoseMain_trampoline)(int32_t poseId);

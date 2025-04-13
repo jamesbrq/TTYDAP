@@ -2,6 +2,7 @@
 
 .global asmCrashScreenDecrementYPosStart
 .global asmCrashScreenDecrementYPosBranchBack
+# asmCrashScreenDecrementYPosStart and asmCrashScreenDecrementYPosBranchBack need to be used in at least one subrel, so they cannot be set to hidden
 
 asmCrashScreenDecrementYPosStart:
 bl cCrashScreenDecrementYPos

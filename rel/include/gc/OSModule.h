@@ -46,7 +46,7 @@ extern "C"
     // Link
     bool OSLink(OSModuleInfo *module, void *bss);
     // Undo
-    // OSUnlink
+    bool OSUnlink(OSModuleInfo *module);
     // __OSModuleInit
 }
 

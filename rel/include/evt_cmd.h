@@ -1,12 +1,16 @@
 #pragma once
 
+#include "visibility.h"
+
 #include <cstdint>
 
 #define EVT_BEGIN(name) const int32_t name[] = {
+#define EVT_BEGIN_KEEP(name) KEEP_VAR int32_t name[] = {
 #define EVT_END() \
     0x1           \
     }             \
     ;
+
 #define EVT_PATCH_END() \
     }                   \
     ;

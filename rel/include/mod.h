@@ -1,62 +1,29 @@
 #pragma once
 
 #include "util.h"
-#include "console.h"
 #include "OWR.h"
+#include "errorHandling.h"
+#include <ttyd/dispdrv.h>
 
 #include <cstdint>
 
-struct ModInitFunction
-{
-    ModInitFunction(void (*f)())
-    {
-        next = sFirst;
-        sFirst = this;
-        initFunction = f;
-    }
-
-    ModInitFunction *next;
-    void (*initFunction)();
-
-    static ModInitFunction *sFirst;
-};
-
-struct ModUpdateFunction
-{
-    ModUpdateFunction(void (*f)())
-    {
-        next = sFirst;
-        sFirst = this;
-        updateFunction = f;
-    }
-
-    ModUpdateFunction *next;
-    void (*updateFunction)();
-
-    static ModUpdateFunction *sFirst;
-};
-
-#define MOD_INTERNAL_ADD_FUNCTION(type)                                \
-    static void MOD_ANONYMOUS(mod_if_func)();                          \
-    static type MOD_ANONYMOUS(mod_if_obj)(MOD_ANONYMOUS(mod_if_func)); \
-    static void MOD_ANONYMOUS(mod_if_func)()
-
-#define MOD_INIT_FUNCTION() MOD_INTERNAL_ADD_FUNCTION(ModInitFunction)
-#define MOD_UPDATE_FUNCTION() MOD_INTERNAL_ADD_FUNCTION(ModUpdateFunction)
-
 namespace mod
 {
-
     class Mod
     {
        public:
-        Mod();
-        void init();
-        void updateEarly();
-        void draw();
-        void (*mPFN_marioStMain_trampoline)() = nullptr;
-        ConsoleSystem mConsole;
+        Mod() {}
+        ~Mod() {}
+
         owr::OWR owr_mod_;
+        NpcNameToPtrErrorInfo npcNameToPtrErrorInfo;
+        AnimPoseMainErrorInfo animPoseMainErrorInfo;
+        HeapCorruptionInfo heapCorruptionInfo;
     };
+
     extern Mod *gMod;
+    extern void (*mPFN_marioStMain_trampoline)();
+
+    void updateEarly();
+    void draw(ttyd::dispdrv::CameraId layerId, void *user);
 } // namespace mod

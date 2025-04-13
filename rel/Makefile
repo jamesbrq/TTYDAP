@@ -4,7 +4,7 @@
 .SUFFIXES:
 #---------------------------------------------------------------------------------
 ifeq ($(strip $(DEVKITPPC)),)
-$(error "Please set DEVKITPPC in your environment. export DEVKITPPC=<path to>devkitPPC")
+$(error "Please set DEVKITPPC in your environment. export DEVKITPPC=<path to>/devkitPPC")
 endif
 
 ifeq ($(shell which elf2rel),)
@@ -13,8 +13,17 @@ endif
 
 include $(DEVKITPPC)/gamecube_rules
 
-export GCIPACK	:=	python $(realpath ../../gcipack/gcipack.py)
-export ELF2REL	:=	elf2rel
+# This will be the resulting .rel file - No spaces
+OUTPUT_FILENAME := mod
+
+# DON'T TOUCH UNLESS YOU KNOW WHAT YOU'RE DOING
+export ALL_SHARED := all_source
+
+export ROOT_DIR ?= $(CURDIR)
+export JSON_READ := python $(realpath ../../bin/json_read.py)
+export ELF2REL := elf2rel
+
+MAPPER := python $(realpath ../../bin/relmapper.py)
 
 ifeq ($(VERSION),)
 all: us jp eu
@@ -27,8 +36,8 @@ eu:
 
 clean:
 	@$(MAKE) --no-print-directory clean_target VERSION=us
-	@$(MAKE) --no-print-directory clean_target VERSION=eu
 	@$(MAKE) --no-print-directory clean_target VERSION=jp
+	@$(MAKE) --no-print-directory clean_target VERSION=eu
 
 .PHONY: all clean us jp eu
 else
@@ -39,11 +48,11 @@ else
 # SOURCES is a list of directories containing source code
 # INCLUDES is a list of directories containing extra header files
 #---------------------------------------------------------------------------------
-TARGET		:=	$(notdir $(CURDIR)).$(VERSION)
+TARGET		:=	$(OUTPUT_FILENAME).$(VERSION)
 BUILD		:=	build.$(VERSION)
-SOURCES		:=	source $(wildcard source/*)
-DATA		:=	data  
-INCLUDES	:=	include
+SOURCES		:=	source $(wildcard source/*) $(ALL_SHARED) $(wildcard $(ALL_SHARED)/*)
+DATA		:=	data
+INCLUDES	:=	$(CURDIR)/include
 
 #---------------------------------------------------------------------------------
 # options for code generation
@@ -51,10 +60,10 @@ INCLUDES	:=	include
 
 MACHDEP		= -mno-sdata -mgcn -DGEKKO -mcpu=750 -meabi -mhard-float
 
-CFLAGS		= -nostdlib -ffreestanding -ffunction-sections -fdata-sections -g -Oz -Wall -Wextra $(MACHDEP) $(INCLUDE)
-CXXFLAGS	= -fno-exceptions -fno-rtti -std=gnu++17 $(CFLAGS)
+CFLAGS		= -nostdlib -ffreestanding -ffunction-sections -fdata-sections -g -Oz -fvisibility=hidden -Wall -Wextra -Wno-uninitialized $(MACHDEP) $(INCLUDE)
+CXXFLAGS	= -fno-exceptions -fno-rtti -std=gnu++23 $(CFLAGS)
 
-LDFLAGS		= -r -e _prolog -u _prolog -u _epilog -u _unresolved -Wl,--gc-sections -nostdlib -g $(MACHDEP) -Wl,-Map,$(notdir $@).map
+LDFLAGS		= -r -e _prolog -u _prolog -u _epilog -u _unresolved -Wl,--gc-sections,--gc-keep-exported -nostdlib -g $(MACHDEP) -Wl,-Map,$(notdir $@).map
 
 # Platform options
 ifeq ($(VERSION),us)
@@ -124,16 +133,21 @@ export HFILES := $(addsuffix .h,$(subst .,_,$(BINFILES)))
 
 # For REL linking
 export LDFILES		:= $(foreach dir,$(SOURCES),$(notdir $(wildcard $(dir)/*.ld)))
-export MAPFILE		:= $(CURDIR)/include/ttyd.$(VERSION).lst
-export BANNERFILE	:= $(CURDIR)/banner.raw
-export ICONFILE		:= $(CURDIR)/icon.raw
+export MAPFILE		:= $(ROOT_DIR)/$(BUILD)/temp.$(VERSION).lst
+export MODIDS		:= $(abspath ../bin/modids.json)
+export BASE_MAPFILE	:= $(realpath include/ttyd.$(VERSION).lst)
+
+export ROOT_BUILD	:= $(abspath $(BUILD))
+export SUBREL		:= $(notdir $(wildcard subrels/*))
+export SUBREL_CLEAN	:= $(addsuffix /clean,$(SUBREL))
+export SUBRELS		:= $(foreach dir,$(SUBREL),$(ROOT_DIR)/subrels/$(dir)/$(dir).$(VERSION).rel)
 
 #---------------------------------------------------------------------------------
 # build a list of include paths
 #---------------------------------------------------------------------------------
-export INCLUDE	:=	$(foreach dir,$(INCLUDES),-I$(CURDIR)/$(dir)) \
+export INCLUDE	:=	$(foreach dir,$(INCLUDES),-I$(dir)) \
 			$(foreach dir,$(LIBDIRS),-I$(dir)/include) \
-			-I$(CURDIR)/$(BUILD) \
+			-I$(ROOT_DIR)/$(BUILD) \
 			-I$(LIBOGC_INC)
 
 #---------------------------------------------------------------------------------
@@ -148,12 +162,16 @@ export OUTPUT	:=	$(CURDIR)/$(TARGET)
 #---------------------------------------------------------------------------------
 $(BUILD):
 	@[ -d $@ ] || mkdir -p $@
+	@mkdir -p $@/rels
 	@$(MAKE) --no-print-directory -C $(BUILD) -f $(CURDIR)/Makefile
 
 #---------------------------------------------------------------------------------
-clean_target:
-	@echo clean ... $(VERSION)
-	@rm -fr $(BUILD) $(OUTPUT).elf $(OUTPUT).dol $(OUTPUT).rel $(OUTPUT).gci
+clean_target: $(SUBREL_CLEAN)
+	@echo clean ... $(OUTPUT_FILENAME) $(VERSION)
+	@rm -fr $(BUILD) $(OUTPUT).elf $(OUTPUT).dol $(OUTPUT).rel
+
+$(SUBREL_CLEAN):
+	@$(MAKE) -C $(abspath subrels/$(patsubst %/,%,$(dir $@))) clean_target
 
 #---------------------------------------------------------------------------------
 else
@@ -163,20 +181,26 @@ DEPENDS	:=	$(OFILES:.o=.d)
 #---------------------------------------------------------------------------------
 # main targets
 #---------------------------------------------------------------------------------
-$(OUTPUT).gci: $(OUTPUT).rel $(BANNERFILE) $(ICONFILE)
-$(OUTPUT).rel: $(OUTPUT).elf $(MAPFILE)
+$(OUTPUT).rel: $(OUTPUT).elf $(MAPFILE) $(SUBREL)
 $(OUTPUT).elf: $(LDFILES) $(OFILES)
 
 $(OFILES_SOURCES) : $(HFILES)
 
+$(MAPFILE): $(OUTPUT).elf $(BASE_MAPFILE) $(MODIDS)
+	@echo module mapping ... $(notdir $@)
+	@$(MAPPER) -o $(MAPFILE) -i $(BASE_MAPFILE) -m $(MODIDS) $(OUTPUT).elf
+
+$(SUBREL): $(MAPFILE)
+	@echo making $@ ...
+	@$(MAKE) -C $(abspath $(ROOT_DIR)/subrels/$@)
+	@echo $@ ... Done
+
 # REL linking
 %.rel: %.elf
 	@echo output ... $(notdir $@)
-	@$(ELF2REL) $< $(MAPFILE) $@
-	
-%.gci: %.rel
-	@echo packing ... $(notdir $@)
-	@$(GCIPACK) $< "rel" "TTYDAP" "TTYDAP" $(BANNERFILE) $(ICONFILE) $(GAMECODE)
+	@$(ELF2REL) $< $(abspath $(MAPFILE)) $@ --rel-id $(shell $(JSON_READ) $(MODIDS) "$(OUTPUT_FILENAME)")
+	@echo renaming $(notdir $@) to $(OUTPUT_FILENAME).rel
+	@cp $@ $(ROOT_BUILD)/rels/$(OUTPUT_FILENAME).rel
 	
 #---------------------------------------------------------------------------------
 # This rule links in binary data with the .jpg extension

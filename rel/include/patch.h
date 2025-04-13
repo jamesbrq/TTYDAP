@@ -1,5 +1,7 @@
 #pragma once
 
+#include "cxx.h"
+
 #include <cstdint>
 
 namespace mod::patch
@@ -41,7 +43,6 @@ namespace mod::patch
     Func hookFunction(Func function, Dest destination)
     {
         uint32_t *instructions = reinterpret_cast<uint32_t *>(function);
-
         uint32_t *trampoline = new uint32_t[2];
 
         // Original instruction

@@ -1,4 +1,5 @@
 .global asmFixBlooperCrash2
+# asmFixBlooperCrash2 needs to be used in at least one subrel, so it cannot be set to hidden
 
 asmFixBlooperCrash2:
 # Check if BattleGetUnitPtr returned a proper pointer
