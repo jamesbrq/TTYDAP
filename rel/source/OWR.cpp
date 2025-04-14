@@ -79,11 +79,9 @@ const uint16_t GSWF_ARR[] = {
     // Ch.4 talk to shopkeep once
     1925,
 
-    // Ch.4 bird room lock
-    2231,
-
     // Spawn General white
-    3880};
+    3880
+};
 constexpr int32_t GSWF_ARR_SIZE = sizeof(GSWF_ARR) / sizeof(GSWF_ARR[0]);
 
 namespace mod::owr
@@ -118,7 +116,6 @@ namespace mod::owr
 
         ttyd::swdrv::swByteSet(1700, 16);
         ttyd::swdrv::swByteSet(1701, 3);
-        ttyd::swdrv::swByteSet(1702, 13);
         ttyd::swdrv::swByteSet(1704, 1);
         ttyd::mario_pouch::pouchGetStarstone(0);
 
