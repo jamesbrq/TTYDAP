@@ -113,6 +113,10 @@ extern int32_t muj_all_party_lecture[];
 extern int32_t muj_make_itemsel_table[];
 
 const char marco[] = "\x83\x7D\x83\x8B\x83\x52";
+const char sanders_tribe_01[] = "\x83\x54\x83\x93\x83\x5F\x81\x5B\x83\x58\x82\xD6\x82\xEB\x82\xD6\x82\xEB";
+const char sanders_tribe_02[] = "\x83\x54\x83\x93\x83\x5F\x81\x5B\x83\x58\x82\xCB\x82\xDE\x82\xE9";
+const char sanders_tribe_02[] = "\x83\x54\x83\x93\x83\x5F\x81\x5B\x83\x58\x82\xCB\x82\xDE\x82\xE9";
+const char sanders_05[] = "\x83\x54\x83\x93\x83\x5F\x81\x5B\x83\x58";
 
 // clang-format off
 EVT_DEFINE_USER_FUNC(coconut_remove)
@@ -773,6 +777,30 @@ EVT_BEGIN(dokuroiwa_bomb_hook)
 	RUN_CHILD_EVT(dokuroiwa_bomb_evt)
 	GOTO(&muj_dokuroiwa_bomb[8])
 EVT_PATCH_END()
+
+EVT_BEGIN(muj_sanders_init_05_evt)
+	IF_SMALL(GSW(1719), 2)
+		USER_FUNC(evt_npc::evt_npc_set_tribe, PTR("me"), PTR(&sanders_05))
+		RETURN()
+	END_IF()
+	SWITCH(GSW(1723))
+		CASE_EQUAL(0)
+			USER_FUNC(evt_npc::evt_npc_set_position, PTR("me"), -114, 22, 22)
+			USER_FUNC(evt_npc::evt_npc_set_tribe, PTR("me"), PTR(&sanders_tribe_01))
+		CASE_EQUAL(1)
+			USER_FUNC(evt_npc::evt_npc_reaction_flag_onoff, 1, PTR("me"), 2)
+			USER_FUNC(evt_npc::evt_npc_change_interrupt, PTR("me"), 8, PTR(&muj_sanders_nakama))
+			USER_FUNC(evt_npc::evt_npc_set_position, PTR("me"), -114, 22, 22)
+			USER_FUNC(evt_npc::evt_npc_set_tribe, PTR("me"), PTR(&sanders_tribe_02))
+			USER_FUNC(evt_npc::evt_npc_flag_onoff, 0, PTR(&sanders_05), 512)
+	END_SWITCH()
+	RETURN()
+EVT_END()
+
+EVT_BEGIN(muj_sanders_init_05_hook)
+	RUN_CHILD_EVT(muj_sanders_init_05_evt)
+	RETURN()
+EVT_END()
 // clang-format on
 
 namespace mod
@@ -1073,11 +1101,7 @@ namespace mod
         muj_04_init_evt[70] = GSW(1719);
         muj_04_init_evt[72] = 0;
 
-        muj_sanders_init_05[1] = GSW(1719);
-        muj_sanders_init_05[3] = 2;
-        muj_sanders_init_05[9] = 2;
-        muj_sanders_init_05[10] = 4;
-        muj_sanders_init_05[22] = 5;
+        patch::writePatch(&muj_sanders_init_05[0], muj_sanders_init_05_hook, sizeof(muj_sanders_init_05_hook));
 
         muj_sanders_talk_sub[63] = GSW(1723);
         muj_sanders_talk_sub[64] = 1;
