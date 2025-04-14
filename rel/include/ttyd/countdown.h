@@ -9,4 +9,4 @@ namespace ttyd::countdown
         void countDownStop();
         void countDownEnd();
     }
-} // namespace ttyd::dvdmgr
+} // namespace ttyd::countdown

@@ -1,6 +1,7 @@
 #include "errorHandling.h"
 #include "util.h"
 #include "OWR.h"
+#include "visibility.h"
 #include "gc/os.h"
 #include "ttyd/memory.h"
 #include "ttyd/npcdrv.h"
@@ -10,13 +11,13 @@
 #include <cstdio>
 #include <cinttypes>
 
-NpcNameToPtrErrorInfo npcNameToPtrErrorInfo;
-AnimPoseMainErrorInfo animPoseMainErrorInfo;
-HeapCorruptionInfo heapCorruptionInfo;
-float errorTextPosY = ERROR_TEXT_DEFAULT_POS_Y;
+KEEP_VAR float errorTextPosY = 0.f;
+KEEP_VAR NpcNameToPtrErrorInfo *npcNameToPtrErrorInfoPtr = nullptr;
+KEEP_VAR AnimPoseMainErrorInfo *animPoseMainErrorInfoPtr = nullptr;
+KEEP_VAR HeapCorruptionInfo *heapCorruptionInfoPtr = nullptr;
 
-NpcEntry *(*g_npcNameToPtr_trampoline)(const char *name) = nullptr;
-void (*g_animPoseMain_trampoline)(int32_t poseId) = nullptr;
+KEEP_VAR NpcEntry *(*g_npcNameToPtr_trampoline)(const char *name) = nullptr;
+KEEP_VAR void (*g_animPoseMain_trampoline)(int32_t poseId) = nullptr;
 
 void HeapCorruptionInfo::drawBuffer()
 {
@@ -174,8 +175,8 @@ static void initStandardHeapError(const void *address, int32_t heapIndex, bool i
 {
     // Set up the text to be drawn
     // Make sure heapCorruptioBufferIndex is valid
-    HeapCorruptionInfo *heapCorruptionInfoPtr = &heapCorruptionInfo;
-    if (!heapCorruptionInfoPtr->verifyBufferIndex())
+    HeapCorruptionInfo *heapCorruptionInfo = heapCorruptionInfoPtr;
+    if (!heapCorruptionInfo->verifyBufferIndex())
     {
         return;
     }
@@ -191,25 +192,25 @@ static void initStandardHeapError(const void *address, int32_t heapIndex, bool i
         usedOrFreeString = "free";
     }
 
-    int32_t index = heapCorruptionInfoPtr->getBufferIndex();
+    int32_t index = heapCorruptionInfo->getBufferIndex();
 
-    index += snprintf(heapCorruptionInfoPtr->initBufferEntry(index),
-                      heapCorruptionInfoPtr->getBufferSize() - index,
+    index += snprintf(heapCorruptionInfo->initBufferEntry(index),
+                      heapCorruptionInfo->getBufferSize() - index,
                       "Main Heap %" PRId32 " (%s) corrupt at 0x%08" PRIX32 "\r\n",
                       heapIndex,
                       usedOrFreeString,
                       reinterpret_cast<uint32_t>(address));
 
     // Update the index
-    heapCorruptionInfoPtr->setBufferIndex(index);
+    heapCorruptionInfo->setBufferIndex(index);
 }
 
 static void initSmartHeapError(const void *address, bool isUsedPortion)
 {
     // Set up the text to be drawn
     // Make sure heapCorruptioBufferIndex is valid
-    HeapCorruptionInfo *heapCorruptionInfoPtr = &heapCorruptionInfo;
-    if (!heapCorruptionInfoPtr->verifyBufferIndex())
+    HeapCorruptionInfo *heapCorruptionInfo = heapCorruptionInfoPtr;
+    if (!heapCorruptionInfo->verifyBufferIndex())
     {
         return;
     }
@@ -225,16 +226,16 @@ static void initSmartHeapError(const void *address, bool isUsedPortion)
         usedOrFreeString = "free";
     }
 
-    int32_t index = heapCorruptionInfoPtr->getBufferIndex();
+    int32_t index = heapCorruptionInfo->getBufferIndex();
 
-    index += snprintf(heapCorruptionInfoPtr->initBufferEntry(index),
-                      heapCorruptionInfoPtr->getBufferSize() - index,
+    index += snprintf(heapCorruptionInfo->initBufferEntry(index),
+                      heapCorruptionInfo->getBufferSize() - index,
                       "Smart Heap (%s) corrupt at 0x%08" PRIX32 "\n",
                       usedOrFreeString,
                       reinterpret_cast<uint32_t>(address));
 
     // Update the index
-    heapCorruptionInfoPtr->setBufferIndex(index);
+    heapCorruptionInfo->setBufferIndex(index);
 }
 
 #ifdef TTYD_JP
@@ -245,8 +246,8 @@ static void initMapHeapError(const void *address, uint16_t inUse, bool isBattleH
 {
     // Set up the text to be drawn
     // Make sure heapCorruptioBufferIndex is valid
-    HeapCorruptionInfo *heapCorruptionInfoPtr = &heapCorruptionInfo;
-    if (!heapCorruptionInfoPtr->verifyBufferIndex())
+    HeapCorruptionInfo *heapCorruptionInfo = heapCorruptionInfoPtr;
+    if (!heapCorruptionInfo->verifyBufferIndex())
     {
         return;
     }
@@ -275,10 +276,10 @@ static void initMapHeapError(const void *address, uint16_t inUse, bool isBattleH
 
     const char *format = "%sMap Heap (%s) corrupt at 0x%08" PRIX32 "\n";
 #endif
-    int32_t index = heapCorruptionInfoPtr->getBufferIndex();
+    int32_t index = heapCorruptionInfo->getBufferIndex();
 
-    index += snprintf(heapCorruptionInfoPtr->initBufferEntry(index),
-                      heapCorruptionInfoPtr->getBufferSize() - index,
+    index += snprintf(heapCorruptionInfo->initBufferEntry(index),
+                      heapCorruptionInfo->getBufferSize() - index,
                       format,
 #ifndef TTYD_JP
                       currentHeap,
@@ -287,7 +288,7 @@ static void initMapHeapError(const void *address, uint16_t inUse, bool isBattleH
                       reinterpret_cast<uint32_t>(address));
 
     // Update the index
-    heapCorruptionInfoPtr->setBufferIndex(index);
+    heapCorruptionInfo->setBufferIndex(index);
 }
 
 void checkHeaps()
@@ -363,57 +364,57 @@ void checkHeaps()
 void drawErrorMessages()
 {
     // Draw any heap corruption errors that occured this frame
-    HeapCorruptionInfo *heapCorruptionInfoPtr = &heapCorruptionInfo;
-    if (heapCorruptionInfoPtr->shouldDrawBuffer())
+    HeapCorruptionInfo *heapCorruptionInfo = heapCorruptionInfoPtr;
+    if (heapCorruptionInfo->shouldDrawBuffer())
     {
-        heapCorruptionInfoPtr->drawBuffer();
+        heapCorruptionInfo->drawBuffer();
     }
 
     // Draw error text if npcNameToPtr returned an invalid pointer
-    NpcNameToPtrErrorInfo *npcNameToPtrErrorInfoPtr = &npcNameToPtrErrorInfo;
-    if (npcNameToPtrErrorInfoPtr->getTimer() > 0)
+    NpcNameToPtrErrorInfo *npcNameToPtrErrorInfo = npcNameToPtrErrorInfoPtr;
+    if (npcNameToPtrErrorInfo->getTimer() > 0)
     {
-        npcNameToPtrErrorInfoPtr->drawErrorMessage();
+        npcNameToPtrErrorInfo->drawErrorMessage();
     }
 
     // Draw error text if animPoseMain would cause a crash
-    AnimPoseMainErrorInfo *animPoseMainErrorInfoPtr = &animPoseMainErrorInfo;
-    if (animPoseMainErrorInfoPtr->getTimer() > 0)
+    AnimPoseMainErrorInfo *animPoseMainErrorInfo = animPoseMainErrorInfoPtr;
+    if (animPoseMainErrorInfo->getTimer() > 0)
     {
-        animPoseMainErrorInfoPtr->drawErrorMessage();
+        animPoseMainErrorInfo->drawErrorMessage();
     }
 
     // Reset errorTextPosY for use on the next frame
     errorTextPosY = ERROR_TEXT_DEFAULT_POS_Y;
 }
 
-NpcEntry *checkForNpcNameToPtrError(const char *name)
+KEEP_FUNC NpcEntry *checkForNpcNameToPtrError(const char *name)
 {
     // Call the original function immediately, as its result is needed
-   NpcEntry *ret = g_npcNameToPtr_trampoline(name);
+    NpcEntry *ret = g_npcNameToPtr_trampoline(name);
 
     // Check if the returned pointer is valid
     const NpcWork *workPtr = npcGetWorkPtr();
     if (ret >= &workPtr->entries[workPtr->npcMaxCount])
     {
         // Didn't find the correct NPC, so print error text
-        NpcNameToPtrErrorInfo *npcNameToPtrErrorInfoPtr = &npcNameToPtrErrorInfo;
-        npcNameToPtrErrorInfoPtr->setTimer(ttyd::system::sysMsec2Frame(5000));
-        npcNameToPtrErrorInfoPtr->incrementCounter();
+        NpcNameToPtrErrorInfo *npcNameToPtrErrorInfo = npcNameToPtrErrorInfoPtr;
+        npcNameToPtrErrorInfo->setTimer(ttyd::system::sysMsec2Frame(5000));
+        npcNameToPtrErrorInfo->incrementCounter();
     }
 
     return ret;
 }
 
-void preventAnimPoseMainCrash(int32_t poseId)
+KEEP_FUNC void preventAnimPoseMainCrash(int32_t poseId)
 {
     // Make sure poseId is valid
     if (poseId < 0)
     {
         // poseId is invalid, so print error text
-        AnimPoseMainErrorInfo *animPoseMainErrorInfoPtr = &animPoseMainErrorInfo;
-        animPoseMainErrorInfoPtr->setTimer(ttyd::system::sysMsec2Frame(5000));
-        animPoseMainErrorInfoPtr->incrementCounter();
+        AnimPoseMainErrorInfo *animPoseMainErrorInfo = animPoseMainErrorInfoPtr;
+        animPoseMainErrorInfo->setTimer(ttyd::system::sysMsec2Frame(5000));
+        animPoseMainErrorInfo->incrementCounter();
         return;
     }
 

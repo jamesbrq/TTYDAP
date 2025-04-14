@@ -45,4 +45,3 @@ namespace gc
     };
 } // namespace gc
 #endif
-

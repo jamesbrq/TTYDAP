@@ -4,8 +4,8 @@
 
 extern "C"
 {
-    EVT_DECLARE_USER_FUNC(evt_tou_get_ranking, 1)
-    EVT_DECLARE_USER_FUNC(koburon_get_encount_info, 1)
+    EVT_DECLARE_USER_FUNC(tou_evt_tou_get_ranking, 1)
+    EVT_DECLARE_USER_FUNC(muj_koburon_get_encount_info, 1)
 
     void bMapGXArrInject();
     void bMapGXArrInjectReturn();
@@ -37,48 +37,10 @@ extern "C"
     void bShopFlagCheck();
     void bShopFlagCheckReturn();
     void checkShopFlag(uint32_t item, uint32_t index);
-
-    void asmPreventDiaryTextboxSelection();
-    void cPreventDiaryTextboxOptionSelection(const char *currentText, int32_t *storeAddress, int32_t selectedOption);
 }
 
-EVT_DECLARE_USER_FUNC(checkChapterRequirements, 1)
 EVT_DECLARE_USER_FUNC(checkChapterClears, 1)
+EVT_DECLARE_USER_FUNC(checkChapterRequirements, 1)
 EVT_DECLARE_USER_FUNC(setShopFlags, 1)
 EVT_DECLARE_USER_FUNC(checkIntermission, 1)
 EVT_DECLARE_USER_FUNC(coconut_remove, 1)
-
-void ApplyAaaPatches();
-void ApplyAjiPatches();
-void ApplyBomPatches();
-void ApplyDouPatches();
-void ApplyEkiPatches();
-void ApplyEndPatches();
-void ApplyGonPatches();
-void ApplyGorPatches();
-void ApplyGor00Patches();
-void ApplyGor01Patches();
-void ApplyGor02Patches();
-void ApplyGor03Patches();
-void ApplyGor04Patches();
-void ApplyGorMiscPatches();
-void ApplyGraPatches();
-void ApplyHeiPatches();
-void ApplyHomPatches();
-void ApplyJinPatches();
-void ApplyKpaPatches();
-void ApplyLasPatches();
-void ApplyMainScriptPatches();
-void ApplyMainAssemblyPatches();
-void ApplyItemDataTablePatches();
-void ApplyMooPatches();
-void ApplyMriPatches();
-void ApplyMujPatches();
-void ApplyNokPatches();
-void ApplyPikPatches();
-void ApplyRshPatches();
-void ApplyTikPatches();
-void ApplyTouPatches();
-void ApplyTou2Patches();
-void ApplyUsuPatches();
-void ApplyWinPatches();

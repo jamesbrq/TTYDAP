@@ -6,6 +6,8 @@
 .set IH_STACKFRAME_SIZE, 0x20 + 0x2c8
 
 .globl patchInstructionHookSaveContextAndHandle
+.hidden patchInstructionHookSaveContextAndHandle
+
 patchInstructionHookSaveContextAndHandle:
 	# Entry state:
 	# * r1 is set up for a stackframe of size IH_STACKFRAME_SIZE

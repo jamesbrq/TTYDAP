@@ -43,10 +43,13 @@ extern "C"
     // OSNotifyLink
     // OSNotifyUnlink
     // Relocate
-    // Link
+
+    // `OSLink` calls this function to handle its work
+    bool Link(OSModuleInfo *module, void *bss, bool useFixedLinking);
+
     bool OSLink(OSModuleInfo *module, void *bss);
     // Undo
-    // OSUnlink
+    bool OSUnlink(OSModuleInfo *module);
     // __OSModuleInit
 }
 

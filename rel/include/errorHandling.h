@@ -1,6 +1,7 @@
 #pragma once
 
 #include "gc/os.h"
+#include "cxx.h"
 #include "ttyd/npcdrv.h"
 
 #include <cstdint>
@@ -10,38 +11,19 @@
 class NpcNameToPtrErrorInfo
 {
    public:
-    NpcNameToPtrErrorInfo()
-    {
-    }
+    NpcNameToPtrErrorInfo() {}
 
-    ~NpcNameToPtrErrorInfo()
-    {
-    }
+    ~NpcNameToPtrErrorInfo() {}
 
-    uint32_t getCounter() const
-    {
-        return this->counter;
-    }
+    uint32_t getCounter() const { return this->counter; }
 
-    void incrementCounter()
-    {
-        this->counter++;
-    }
+    void incrementCounter() { this->counter++; }
 
-    void resetCounter()
-    {
-        this->counter = 0;
-    }
+    void resetCounter() { this->counter = 0; }
 
-    uint32_t getTimer() const
-    {
-        return this->timer;
-    }
+    uint32_t getTimer() const { return this->timer; }
 
-    void setTimer(uint32_t time)
-    {
-        this->timer = static_cast<uint16_t>(time);
-    }
+    void setTimer(uint32_t time) { this->timer = static_cast<uint16_t>(time); }
 
     void drawErrorMessage();
 
@@ -53,38 +35,19 @@ class NpcNameToPtrErrorInfo
 class AnimPoseMainErrorInfo
 {
    public:
-    AnimPoseMainErrorInfo()
-    {
-    }
+    AnimPoseMainErrorInfo() {}
 
-    ~AnimPoseMainErrorInfo()
-    {
-    }
+    ~AnimPoseMainErrorInfo() {}
 
-    uint32_t getCounter() const
-    {
-        return this->counter;
-    }
+    uint32_t getCounter() const { return this->counter; }
 
-    void incrementCounter()
-    {
-        this->counter++;
-    }
+    void incrementCounter() { this->counter++; }
 
-    void resetCounter()
-    {
-        this->counter = 0;
-    }
+    void resetCounter() { this->counter = 0; }
 
-    uint32_t getTimer() const
-    {
-        return this->timer;
-    }
+    uint32_t getTimer() const { return this->timer; }
 
-    void setTimer(uint32_t time)
-    {
-        this->timer = static_cast<uint16_t>(time);
-    }
+    void setTimer(uint32_t time) { this->timer = static_cast<uint16_t>(time); }
 
     void drawErrorMessage();
 
@@ -115,20 +78,11 @@ class HeapCorruptionInfo
         }
     }
 
-    ~HeapCorruptionInfo()
-    {
-        this->freeBuffer();
-    }
+    ~HeapCorruptionInfo() { this->freeBuffer(); }
 
-    char *getBufferPtr()
-    {
-        return this->buffer;
-    }
+    char *getBufferPtr() { return this->buffer; }
 
-    bool shouldDrawBuffer() const
-    {
-        return this->buffer != nullptr;
-    }
+    bool shouldDrawBuffer() const { return this->buffer != nullptr; }
 
     char *initBuffer()
     {
@@ -148,15 +102,9 @@ class HeapCorruptionInfo
         return &buf[index];
     }
 
-    int32_t getBufferIndex() const
-    {
-        return this->heapIndex;
-    }
+    int32_t getBufferIndex() const { return this->heapIndex; }
 
-    void setBufferIndex(int32_t index)
-    {
-        this->heapIndex = static_cast<int16_t>(index);
-    }
+    void setBufferIndex(int32_t index) { this->heapIndex = static_cast<int16_t>(index); }
 
     bool verifyBufferIndex() const
     {
@@ -164,10 +112,7 @@ class HeapCorruptionInfo
         return (index >= 0) && (index < (64 * this->bufferSize));
     }
 
-    uint32_t getBufferSize() const
-    {
-        return this->bufferSize;
-    }
+    uint32_t getBufferSize() const { return this->bufferSize; }
 
     void drawBuffer();
 
@@ -176,6 +121,11 @@ class HeapCorruptionInfo
     int16_t heapIndex;
     uint16_t bufferSize;
 };
+
+extern float errorTextPosY;
+extern NpcNameToPtrErrorInfo *npcNameToPtrErrorInfoPtr;
+extern AnimPoseMainErrorInfo *animPoseMainErrorInfoPtr;
+extern HeapCorruptionInfo *heapCorruptionInfoPtr;
 
 extern NpcEntry *(*g_npcNameToPtr_trampoline)(const char *name);
 extern void (*g_animPoseMain_trampoline)(int32_t poseId);

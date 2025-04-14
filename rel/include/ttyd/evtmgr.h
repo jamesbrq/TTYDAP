@@ -1,5 +1,7 @@
 #pragma once
 
+#include "visibility.h"
+
 #include <cstdint>
 
 namespace ttyd::evtmgr
@@ -118,6 +120,7 @@ namespace ttyd::evtmgr
     int32_t name(ttyd::evtmgr::EvtEntry *evt, bool isFirstCall);
 
 #define EVT_DEFINE_USER_FUNC(name) int32_t name(ttyd::evtmgr::EvtEntry *evt, bool isFirstCall)
+#define EVT_DEFINE_USER_FUNC_KEEP(name) KEEP_FUNC int32_t name(ttyd::evtmgr::EvtEntry *evt, bool isFirstCall)
 
 #define EVT_DECLARE(name) extern const int32_t name[];
 } // namespace ttyd::evtmgr

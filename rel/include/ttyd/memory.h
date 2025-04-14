@@ -38,6 +38,18 @@ namespace ttyd::memory
         uint8_t unk[0x14];
     } __attribute__((__packed__));
 
+    enum HeapType : int32_t
+    {
+        HEAP_DEFAULT = 0,
+        HEAP_MAP,
+        HEAP_EXT,
+        HEAP_EFFECT,
+#ifdef TTYD_JP
+        HEAP_BATTLE,
+#endif
+        HEAP_SMART,
+    };
+
     static_assert(sizeof(SmartAllocationData) == 0x1C);
     static_assert(sizeof(SmartWork) == 0xE01C);
     static_assert(sizeof(MapAllocEntry) == 0x20);
@@ -54,8 +66,8 @@ namespace ttyd::memory
 
         // memInit
         // memClear
-        void *__memAlloc(uint32_t heap, uint32_t size);
-        void __memFree(uint32_t heap, void *ptr);
+        void *__memAlloc(int32_t heap, uint32_t size);
+        void __memFree(int32_t heap, void *ptr);
         // _mapAlloc
         // _mapAllocTail
         // _mapFree

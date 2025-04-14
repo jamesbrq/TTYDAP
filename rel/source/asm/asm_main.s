@@ -1,4 +1,6 @@
 .global win_log_mapGX_arr
+.hidden win_log_mapGX_arr
+
 .global bMapGXArrInject
 .global bMapGXArrInjectReturn
 .global bMapGXArrIncrement
@@ -10,7 +12,6 @@
 .global bWinLogArrIncrement
 .global bWinLogArrIncrementReturn
 .global bChapterClearCheck
-.global bChapterClearCheckReturn
 .global bJohoyaSeqAddition
 .global bPrintPartyErrorFix
 .global bPrintPartyErrorFixReturn
@@ -26,10 +27,10 @@
 .global bPowerupblkReleaseReturn
 .global bPeachPointer
 .global bPeachReturn
-.global usuBreakfast
-.global breakfastValueRestore
 .global bShopFlagCheck
 .global bShopFlagCheckReturn
+
+# All of the global symbols in this file excluding win_log_mapGX_arr need to be used in at least one subrel, so they cannot be set to hidden
 
 bMapGXArrInject:
 	lis %r3, win_log_mapGX_arr@ha
@@ -198,8 +199,8 @@ pikBreakfast:
 	lis %r6, 0xF840
 	ori %r6, %r6, 0x735E
 breakfastValueRestore:
-	lis %r3, wp_breakfast@h
-	ori %r3, %r3, wp_breakfast@l
+	lis %r3, main_wp_breakfast@h
+	ori %r3, %r3, main_wp_breakfast@l
 	lwz %r3, 0x0(%r3)
 	lwz %r3, 0x0(%r3)
 	lwz %r4, 0x0(%r3)
