@@ -80,8 +80,7 @@ const uint16_t GSWF_ARR[] = {
     1925,
 
     // Spawn General white
-    3880
-};
+    3880};
 constexpr int32_t GSWF_ARR_SIZE = sizeof(GSWF_ARR) / sizeof(GSWF_ARR[0]);
 
 namespace mod::owr
@@ -514,54 +513,56 @@ namespace mod::owr
             }
             case ItemId::BOOTS:
             {
-                bool has_boots = ttyd::mario_pouch::pouchCheckItem(ItemId::BOOTS) > 0;
-                bool has_sboots = ttyd::mario_pouch::pouchCheckItem(ItemId::SUPER_BOOTS) > 0;
+                const bool has_boots = ttyd::mario_pouch::pouchCheckItem(ItemId::BOOTS) > 0;
                 if (!has_boots)
                 {
                     g_pouchGetItem_trampoline(item);
                     return_value = 1;
                     break;
                 }
+
+                const bool has_sboots = ttyd::mario_pouch::pouchCheckItem(ItemId::SUPER_BOOTS) > 0;
                 if (!has_sboots)
                 {
                     ttyd::mario_pouch::pouchGetItem(ItemId::SUPER_BOOTS);
                     return_value = 1;
                     break;
                 }
+
                 ttyd::mario_pouch::pouchGetItem(ItemId::ULTRA_BOOTS);
                 return_value = 1;
                 break;
             }
             case ItemId::HAMMER:
             {
-                bool has_hammer = ttyd::mario_pouch::pouchCheckItem(ItemId::HAMMER) > 0;
-                bool has_shammer = ttyd::mario_pouch::pouchCheckItem(ItemId::SUPER_HAMMER) > 0;
+                const bool has_hammer = ttyd::mario_pouch::pouchCheckItem(ItemId::HAMMER) > 0;
                 if (!has_hammer)
                 {
                     g_pouchGetItem_trampoline(item);
                     break;
                 }
+
+                const bool has_shammer = ttyd::mario_pouch::pouchCheckItem(ItemId::SUPER_HAMMER) > 0;
                 if (!has_shammer)
                 {
                     ttyd::mario_pouch::pouchGetItem(ItemId::SUPER_HAMMER);
                     return_value = 1;
                     break;
                 }
+
                 ttyd::mario_pouch::pouchGetItem(ItemId::ULTRA_HAMMER);
                 return_value = 1;
                 break;
             }
             case ItemId::COCONUT:
             {
-                // If the player has already given the coconut to Flavio, then just give the coconut
-                // normally
+                // If the player has already given the coconut to Flavio, then just give the coconut normally
                 if (ttyd::swdrv::swByteGet(1719) >= 4)
                 {
                     return g_pouchGetItem_trampoline(item);
                 }
 
-                // Loop through all of the important items until either the coconut or an empty slot
-                // is found
+                // Loop through all of the important items until either the coconut or an empty slot is found
                 constexpr uint32_t loopCount = sizeof(ttyd::mario_pouch::PouchData::key_items) / sizeof(int16_t);
                 int16_t *keyItemsPtr = &ttyd::mario_pouch::pouchGetPtr()->key_items[0];
 
@@ -570,21 +571,19 @@ namespace mod::owr
                     const int32_t currentItem = keyItemsPtr[i];
                     if (currentItem == ItemId::COCONUT)
                     {
-                        // The player already has the coconut in their important items, so just give
-                        // it normally
+                        // The player already has the coconut in their important items, so just give it normally
                         return g_pouchGetItem_trampoline(item);
                     }
                     else if (currentItem == ItemId::INVALID_NONE)
                     {
-                        // The player does not have the coconut and an empty slot was found, so
-                        // place the coconut here
+                        // The player does not have the coconut and an empty slot was found, so place the coconut here
                         keyItemsPtr[i] = ItemId::COCONUT;
                         return static_cast<uint32_t>(1);
                     }
                 }
 
-                // If this is reached, then the important items part of the inventory is somehow
-                // full, so do some failsafe or something
+                // If this is reached, then the important items part of the inventory is somehow full, so do some failsafe or
+                // something
                 return_value = 0;
                 break;
             }
@@ -650,8 +649,6 @@ namespace mod::owr
         RelMgr *relMgrPtr = &relMgr;
 
         // The vanilla rel is unlinked every time you go through a loading zone, so our custom one must be relinked
-        const bool unlinked = relMgrPtr->unlinkRel();
-
         // If the game's vanilla tou2.rel was just linked, then force our custom tou2.rel to be loaded
         bool inNewArea;
         if (module_info->id == RelId::TOU2)
@@ -666,6 +663,9 @@ namespace mod::owr
             inNewArea = relMgrPtr->inNewArea(nextArea);
             relMgrPtr->setPrevArea(nextArea);
         }
+
+        // Unlinking the rel now uses less instructions than doing so before checking for tou2
+        const bool unlinked = relMgrPtr->unlinkRel();
 
         if (!unlinked || inNewArea)
         {
