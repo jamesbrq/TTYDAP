@@ -14,6 +14,7 @@
 #include "common.h"
 
 #include <cstdint>
+#include <cstring>
 
 using namespace ttyd::common;
 using namespace ttyd;
@@ -117,49 +118,49 @@ const char sanders_tribe_01[] = "\x83\x54\x83\x93\x83\x5F\x81\x5B\x83\x58\x82\xD
 const char sanders_tribe_02[] = "\x83\x54\x83\x93\x83\x5F\x81\x5B\x83\x58\x82\xCB\x82\xDE\x82\xE9";
 const char sanders_05[] = "\x83\x54\x83\x93\x83\x5F\x81\x5B\x83\x58";
 
-// clang-format off
 EVT_DEFINE_USER_FUNC(coconut_remove)
 {
-	(void)isFirstCall;
-	(void)evt;
-	bool coconut_found = false;
+    (void)isFirstCall;
+    (void)evt;
+
+    // Loop through all of the important items until either the coconut or an empty slot is found
     constexpr uint32_t loopCount = sizeof(ttyd::mario_pouch::PouchData::key_items) / sizeof(int16_t);
     int16_t *keyItemsPtr = &ttyd::mario_pouch::pouchGetPtr()->key_items[0];
+    bool foundCoconut = false;
 
     for (uint32_t i = 0; i < loopCount; i++)
     {
         const int32_t currentItem = keyItemsPtr[i];
-        if (coconut_found)
+        if (currentItem == ItemId::INVALID_NONE)
         {
-            if (currentItem != ItemId::INVALID_NONE)
-            {
-     
-                keyItemsPtr[i - 1] = currentItem;
-                if (i == loopCount - 1)
-                {
-                    keyItemsPtr[i] = ItemId::INVALID_NONE;
-                    return 1;
-                }
-            }
-            else
-            {
-                keyItemsPtr[i - 1] = ItemId::INVALID_NONE;
-                if (i == loopCount - 1)
-                {
-                    keyItemsPtr[i] = ItemId::INVALID_NONE;
-                }
-                return 1;
-            }
+            // The coconut is not in the important items, so do some failsafe or something
+            break;
         }
-        else if (currentItem == ItemId::COCONUT)
+        else if (currentItem != ItemId::COCONUT)
         {
-            keyItemsPtr[i] = ItemId::INVALID_NONE;
-            coconut_found = true;
+            continue;
         }
+
+        // Found where the coconut is, so move the rest of the items up one slot
+        const uint32_t remainingSize = loopCount - i - 1;
+        memcpy(&keyItemsPtr[i], &keyItemsPtr[i + 1], remainingSize * sizeof(int16_t));
+
+        // Make sure the last slot is empty, in the event that the important items inventory was full prior to removing the
+        // coconut
+        keyItemsPtr[loopCount - 1] = ItemId::INVALID_NONE;
+        foundCoconut = true;
+        break;
     }
-	return 2;
+
+    if (!foundCoconut)
+    {
+        // The coconut is not in the important items, so do some failsafe or something
+    }
+
+    return 2;
 }
 
+// clang-format off
 EVT_BEGIN(mony_talk_muj_00_evt)
 	IF_EQUAL(GSW(1709), 8)
 		USER_FUNC(evt_msg::evt_msg_print, 0, PTR("stg5_muj_146_02"), 0, PTR("me"))
