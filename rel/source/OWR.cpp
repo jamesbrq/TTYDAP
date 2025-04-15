@@ -80,8 +80,7 @@ const uint16_t GSWF_ARR[] = {
     1925,
 
     // Spawn General white
-    3880
-};
+    3880};
 constexpr int32_t GSWF_ARR_SIZE = sizeof(GSWF_ARR) / sizeof(GSWF_ARR[0]);
 
 namespace mod::owr
@@ -650,8 +649,6 @@ namespace mod::owr
         RelMgr *relMgrPtr = &relMgr;
 
         // The vanilla rel is unlinked every time you go through a loading zone, so our custom one must be relinked
-        const bool unlinked = relMgrPtr->unlinkRel();
-
         // If the game's vanilla tou2.rel was just linked, then force our custom tou2.rel to be loaded
         bool inNewArea;
         if (module_info->id == RelId::TOU2)
@@ -666,6 +663,9 @@ namespace mod::owr
             inNewArea = relMgrPtr->inNewArea(nextArea);
             relMgrPtr->setPrevArea(nextArea);
         }
+
+        // Unlinking the rel now uses less instructions than doing so before checking for tou2
+        const bool unlinked = relMgrPtr->unlinkRel();
 
         if (!unlinked || inNewArea)
         {
