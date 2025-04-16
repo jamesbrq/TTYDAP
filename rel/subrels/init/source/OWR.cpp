@@ -71,6 +71,7 @@ extern int32_t main_mail_evt_gor_01_2[];
 extern int32_t main_mail_evt_rsh_03_a_2[];
 extern int32_t main_mail_evt_pik_00[];
 extern int32_t main_buy_evt[];
+extern int32_t main_buy_evt_evt[];
 
 extern int32_t main_mobj_save_blk_sysevt[];
 extern int32_t main_init_event[];
@@ -80,6 +81,13 @@ extern int32_t evt_msg_print_party_add[];
 extern int32_t main_preventDiaryTextboxSelectionAddress[];
 
 using namespace mod::patch;
+
+// clang-format off
+EVT_BEGIN(main_buy_evt_hook)
+    RUN_CHILD_EVT(main_buy_evt_evt)
+    RETURN()
+EVT_END()
+// clang-format on
 
 namespace mod::owr
 {
@@ -118,8 +126,8 @@ namespace mod::owr
                                reinterpret_cast<void *>(bMapGXChSplit),
                                reinterpret_cast<void *>(bMapGXChSplitReturn));
 
-        writeIntWithCache(&main_winGetMapTplName[3], 0x386006A5); // li r3, 0x6A5 (GSW(1701))
-        writeIntWithCache(&main_winGetMapTplName[8], 0x2C030001); // cmpwi r3, 0x1
+        writeIntWithCache(&main_winGetMapTplName[3], 0x386006A5);  // li r3, 0x6A5 (GSW(1701))
+        writeIntWithCache(&main_winGetMapTplName[8], 0x2C030001);  // cmpwi r3, 0x1
         writeIntWithCache(&main_winGetMapTplName[12], 0x386006A6); // li r3, 0x6A6 (GSW(1702))
         writeIntWithCache(&main_winGetMapTplName[14], 0x2C030001); // cmpwi r3, 0x1main_winLogMain
         writeIntWithCache(&main_winGetMapTplName[18], 0x386006A7); // li r3, 0x6A7 (GSW(1703))
@@ -265,7 +273,7 @@ namespace mod::owr
 
         writeIntWithCache(&main_mobj_kururing_floor[188], 0x808301BB); // lwz r4, 0x1BA(r3)
 
-        writeIntWithCache(&main_mobj_powerupblk[73], 0x809F01D8); // lwz r4, 0x1D8(r31)
+        writeIntWithCache(&main_mobj_powerupblk[73], 0x809F01D8);  // lwz r4, 0x1D8(r31)
         writeIntWithCache(&main_mobj_powerupblk[110], 0x809F01D8); // lwz r4, 0x1D8(r31)
 
         patch::writeBranchPair(&main_breakfast[22],
@@ -353,7 +361,7 @@ namespace mod::owr
         evt_lecture_msg[107] = GSW(1700);
         evt_lecture_msg[108] = 17;
 
-        patch::writePatch(&main_buy_evt[352], main_buy_evt_hook, main_buy_evt_hook_size);
+        patch::writePatch(&main_buy_evt[352], main_buy_evt_hook, sizeof(main_buy_evt_hook));
     }
 
     void ApplyItemDataTablePatches()

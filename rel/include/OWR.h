@@ -50,9 +50,6 @@ namespace mod::owr
     extern int32_t (*g_evt_mario_set_pose_trampoline)(ttyd::evtmgr::EvtEntry *evt, bool firstCall);
     extern const char *(*g_msgSearch_trampoline)(const char *);
 
-    extern int32_t main_buy_evt_hook[];
-    extern uint16_t main_buy_evt_hook_size;
-
     extern const char *goombellaName;
     extern const char *goombellaDescription;
     extern const char *koopsName;
