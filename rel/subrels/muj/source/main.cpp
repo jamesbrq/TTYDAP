@@ -1108,7 +1108,7 @@ namespace mod
 
         muj_sanders_talk_05[1] = GSWF(1723);
         muj_sanders_talk_05[3] = 0;
-        muj_sanders_talk_05[4] = 0; 
+        muj_sanders_talk_05[4] = 0;
         muj_sanders_talk_05[38] = 1;
 
         muj_marco_init_05[1] = GSW(1719);
