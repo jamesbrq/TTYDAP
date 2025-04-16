@@ -1,16 +1,18 @@
-#include "patch.h"
-#include "evt_cmd.h"
 #include "AP/rel_patch_definitions.h"
-#include "visibility.h"
-#include "ttyd/seqdrv.h"
+#include "common.h"
+#include "evt_cmd.h"
+#include "patch.h"
 #include "ttyd/evtmgr_cmd.h"
-#include "ttyd/swdrv.h"
-#include <ttyd/evt_shop.h>
 #include "ttyd/mario_pouch.h"
+#include "ttyd/seqdrv.h"
+#include "ttyd/swdrv.h"
+#include "visibility.h"
+#include <ttyd/evt_shop.h>
 
 #include <cstdint>
 
 using namespace ttyd::evtmgr_cmd;
+using namespace ttyd::common;
 using namespace ttyd::swdrv;
 
 namespace mod::owr
@@ -84,29 +86,15 @@ EVT_DEFINE_USER_FUNC_KEEP(setShopFlags)
         break;
     }
     swSet(gswfBase + selectedIndex);
-    if (itemIds[selectedIndex * 2] > 120)
+    if (itemIds[selectedIndex * 2] > 125)
         return 2;
     itemFlags[selectedIndex] |= 1;
     return 2;
 }
 
-EVT_DEFINE_USER_FUNC_KEEP(checkChapterClears)
-{
-    (void)isFirstCall;
-
-    int8_t count = 0;
-    for (int i = 114; i <= 120; i++)
-    {
-        if (ttyd::mario_pouch::pouchCheckItem(i) > 0)
-            count++;
-    }
-    ttyd::evtmgr_cmd::evtSetValue(evt, evt->evtArguments[0], count);
-    return 2;
-}
-
 void checkShopFlag(uint32_t item, uint32_t index)
 {
-    if (item > 120)
+    if (item > 125)
         return;
 
     uintptr_t shopWorkPtr = 0x8041EB60;

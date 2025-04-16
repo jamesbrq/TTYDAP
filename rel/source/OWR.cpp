@@ -190,9 +190,7 @@ namespace mod::owr
 
     void OWR::RecieveItems()
     {
-        SeqIndex CurrentIndex = ttyd::seqdrv::seqGetSeq();
-
-        if (CurrentIndex != SeqIndex::kGame)
+        if (!checkIfInGame())
             return;
 
         uintptr_t item_pointer = 0x803DB864;
@@ -642,6 +640,7 @@ namespace mod::owr
         SequenceInit();
         RecieveItems();
         HomewardWarp();
+        gState->apSettings->inGame = static_cast<uint8_t>(checkIfInGame());
     }
 
     void OWR::OnModuleLoaded(OSModuleInfo *module_info)

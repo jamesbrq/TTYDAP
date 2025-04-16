@@ -11,9 +11,10 @@ namespace mod::owr
         uint8_t yoshiColor;
         uint8_t apEnabled;
         char *yoshiName;
+        uint8_t inGame;
     };
 
-    static_assert(sizeof(APSettings) == 0x8);
+    static_assert(sizeof(APSettings) == 0xC);
 
     class StateManager
     {

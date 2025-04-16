@@ -245,6 +245,7 @@ void ApplyGor01Patches()
     gor_marco_hitorigoto[1] = GSW(1705);
     gor_marco_hitorigoto[2] = 1;
 
+    gor_01_shop_setup[16] = PTR(&gor_goods_list);
     gor_01_shop_setup[124] = PTR(&gor_goods_list);
     gor_01_shop_setup[129] = PTR(&gor_goods_list);
     gor_01_shop_setup[134] = PTR(&gor_goods_list);

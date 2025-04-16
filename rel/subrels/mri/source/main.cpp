@@ -711,6 +711,7 @@ namespace mod
         mri_meet_rival[2112] = GSW(1713);
         mri_meet_rival[2113] = 3;
 
+        mri_rival_nakama[1077] = EVT_HELPER_CMD(2, 53);
         mri_rival_nakama[1125] = GSW(1713);
         mri_rival_nakama[1126] = 5;
 
@@ -798,7 +799,10 @@ namespace mod
         mri_03_init_evt[128] = GSWF(6020);
         mri_03_init_evt[130] = 0;
         mri_03_init_evt[131] = 0;
-        mri_03_init_evt[186] = EVT_HELPER_CMD(0, 2);
+        mri_03_init_evt[186] = EVT_HELPER_CMD(1, 4);
+        mri_03_init_evt[187] = EVT_HELPER_OP(&mri_03_init_evt[198]);
+        mri_03_init_evt[199] = GSWF(6020);
+        mri_03_init_evt[200] = 0;
 
         patch::writePatch(&mri_bero_custom[0], bero_custom_hook, sizeof(bero_custom_hook));
 

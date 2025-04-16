@@ -1,11 +1,14 @@
-#include "subrel_gor.h"
+#include "AP/rel_patch_definitions.h"
 #include "evt_cmd.h"
 #include "patch.h"
-#include "AP/rel_patch_definitions.h"
+#include "subrel_gor.h"
 #include "ttyd/evt_cam.h"
 #include "ttyd/evt_item.h"
 #include "ttyd/evt_mario.h"
 #include "ttyd/evt_npc.h"
+#include "ttyd/evtmgr_cmd.h"
+#include "ttyd/mario_pouch.h"
+
 
 #include <cstdint>
 
@@ -29,6 +32,20 @@ extern int32_t gor_exchange_ryokin_medal[];
 const char goombella[] = "\x83\x4C\x83\x6D\x82\xB6\x82\xA2";
 
 // clang-format off
+EVT_DEFINE_USER_FUNC(checkChapterClears)
+{
+    (void)isFirstCall;
+
+    int8_t count = 0;
+    for (int i = 114; i <= 120; i++)
+    {
+        if (ttyd::mario_pouch::pouchCheckItem(i) > 0)
+            count++;
+    }
+    ttyd::evtmgr_cmd::evtSetValue(evt, evt->evtArguments[0], count);
+    return 2;
+}
+
 EVT_BEGIN(party_evt)
 	USER_FUNC(evt_mario::evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
 	USER_FUNC(evt_item::evt_item_entry, PTR("item01"), LW(3), LW(0), LW(1), LW(2), 16, GSWF(6076), 0)

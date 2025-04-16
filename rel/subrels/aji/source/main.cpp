@@ -711,7 +711,7 @@ namespace mod
         aji_17_init_evt[99] = GSW(1706);
         aji_17_init_evt[100] = 44;
         aji_17_init_evt[116] = GSW(1707);
-        aji_17_init_evt[117] = 18;
+        aji_17_init_evt[117] = 99;
         patch::writePatch(&aji_17_init_evt[166], aji_17_init_evt_hook, sizeof(aji_17_init_evt_hook));
         aji_17_init_evt[198] = GSW(1708);
         aji_17_init_evt[199] = 18;

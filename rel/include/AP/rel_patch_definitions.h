@@ -36,10 +36,11 @@ extern "C"
     void bPeachReturn();
     void bShopFlagCheck();
     void bShopFlagCheckReturn();
+    void bCoconutCheck();
+    void bCoconutCheckReturn();
     void checkShopFlag(uint32_t item, uint32_t index);
 }
 
-EVT_DECLARE_USER_FUNC(checkChapterClears, 1)
 EVT_DECLARE_USER_FUNC(checkChapterRequirements, 1)
 EVT_DECLARE_USER_FUNC(setShopFlags, 1)
 EVT_DECLARE_USER_FUNC(checkIntermission, 1)

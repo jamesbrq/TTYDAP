@@ -1108,7 +1108,7 @@ namespace mod
 
         muj_sanders_talk_05[1] = GSWF(1723);
         muj_sanders_talk_05[3] = 0;
-        muj_sanders_talk_05[4] = 0;
+        muj_sanders_talk_05[4] = 0; 
         muj_sanders_talk_05[38] = 1;
 
         muj_marco_init_05[1] = GSW(1719);
@@ -1117,7 +1117,9 @@ namespace mod
         muj_marco_talk_05[1] = GSW(1719);
         muj_marco_talk_05[3] = 8;
         muj_marco_talk_05[17] = GSWF(6108);
-        muj_marco_talk_05[23] = EVT_HELPER_CMD(2, 29);
+        muj_marco_talk_05[24] = GSWF(6108);
+        muj_marco_talk_05[36] = GSWF(6108);
+        muj_marco_talk_05[37] = 1;
         muj_marco_talk_05[95] = GSWF(6108);
 
         muj_sanders_kyushutsu_sub[7] = GSW(1719);
@@ -1247,7 +1249,7 @@ namespace mod
         patch::writeIntWithCache(&muj_make_itemsel_table[14], 0x38000079); // li r0, 0x79
         patch::writeIntWithCache(&muj_make_itemsel_table[20], 0x380300A0); // addi r0, r3, 0xA0
         patch::writeIntWithCache(&muj_make_itemsel_table[22], 0x2C0000A6); // cmpwi r0, 0xA6 (Coconut)
-        patch::writeIntWithCache(&muj_make_itemsel_table[23], 0x4082000C); // bne +0xC
+        patch::writeIntWithCache(&muj_make_itemsel_table[23], 0x40820010); // bne +0xC
     }
 
     void exit() {}

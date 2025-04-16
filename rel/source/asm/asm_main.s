@@ -29,6 +29,8 @@
 .global bPeachReturn
 .global bShopFlagCheck
 .global bShopFlagCheckReturn
+.global bCoconutCheck
+.global bCoconutCheckReturn
 
 # All of the global symbols in this file excluding win_log_mapGX_arr need to be used in at least one subrel, so they cannot be set to hidden
 
