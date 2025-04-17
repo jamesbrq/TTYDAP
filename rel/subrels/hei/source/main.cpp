@@ -182,7 +182,7 @@ namespace mod
         hei_evt_anm_kan[23] = GSWF(6102);
         hei_evt_anm_kan[45] = GSWF(6102);
 
-        hei_13_init_evt[72] = 11;
+        hei_13_init_evt[72] = 1;
     }
 
     void exit() {}

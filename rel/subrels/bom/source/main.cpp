@@ -1,8 +1,19 @@
-#include "subrel_bom.h"
-#include "evt_cmd.h"
 #include "AP/rel_patch_definitions.h"
+#include "common.h"
+#include "evt_cmd.h"
+#include "patch.h"
+#include "subrel_bom.h"
+#include "ttyd/evt_item.h"
+#include "ttyd/evt_mario.h"
+#include "ttyd/evt_msg.h"
+#include "ttyd/evt_pouch.h"
+#include "ttyd/evt_snd.h"
 
 #include <cstdint>
+
+using namespace ttyd;
+using namespace mod;
+using namespace ttyd::common;
 
 extern int32_t bom_first_evt_00[];
 extern int32_t bom_00_init_evt[];
@@ -37,6 +48,40 @@ extern int32_t bom_02_init_evt[];
 // Assembly
 extern int32_t bom_bom1000_jump[];
 extern int32_t bom_jump_minnnanokoe[];
+
+// clang-format off
+EVT_BEGIN(bom_talk_soncho_02_evt)
+    IF_EQUAL(GSWF(6114), 1)
+        RUN_CHILD_EVT(&bom_evt_taihou)
+        RETURN()
+    END_IF()
+    USER_FUNC(evt_msg::evt_msg_print, 0, PTR("goldbob_guide"), 0, PTR("me"))
+    USER_FUNC(evt_pouch::evt_pouch_check_item, ItemId::GOLDBOB_GUIDE, LW(0))
+    IF_EQUAL(LW(0), 0)
+        USER_FUNC(evt_mario::evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
+        USER_FUNC(evt_snd::evt_snd_sfxon_3d, PTR("SFX_VOICE_MARIO_NO1"), LW(0), LW(1), LW(2), 0)
+        USER_FUNC(evt_mario::evt_mario_set_pose, PTR("M_N_B"))
+        WAIT_MSEC(1000)
+        USER_FUNC(evt_msg::evt_msg_print, 0, PTR("no_goldbob_guide"), 0, PTR("me"))
+    ELSE()
+        USER_FUNC(evt_mario::evt_mario_set_pose, PTR("M_C_3"))
+        USER_FUNC(evt_mario::evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
+        ADD(LW(0), 20)
+        ADD(LW(1), 15)
+        USER_FUNC(evt_item::evt_item_entry, PTR("dummy"), ItemId::GOLDBOB_GUIDE, LW(0), LW(1), LW(2), 17, -1, 0)
+        WAIT_MSEC(1000)
+        USER_FUNC(evt_mario::evt_mario_set_pose, PTR("M_S_1"))
+        USER_FUNC(evt_item::evt_item_delete, PTR("dummy"))
+        USER_FUNC(evt_msg::evt_msg_print, 0, PTR("give_goldbob_guide"), 0, PTR("me"))
+        SET(GSWF(6114), 1)
+        USER_FUNC(evt_pouch::evt_pouch_remove_item, ItemId::GOLDBOB_GUIDE, LW(0))
+    END_IF()
+    IF_EQUAL(GSWF(6114), 1)
+        RUN_CHILD_EVT(&bom_evt_taihou)
+    END_IF()
+    RETURN()
+EVT_END()
+// clang-format on
 
 namespace mod
 {
@@ -138,7 +183,8 @@ namespace mod
         bom_talk_soncho_02[323] = GSW(1707);
         bom_talk_soncho_02[324] = 3;
         bom_talk_soncho_02[334] = 4;
-        bom_talk_soncho_02[410] = 6;
+        bom_talk_soncho_02[410] = 5;
+        bom_talk_soncho_02[412] = EVT_HELPER_OP(bom_talk_soncho_02_evt);
 
         bom_talk_murabito_e_02[238] = GSW(1707);
         bom_talk_murabito_e_02[240] = 1;

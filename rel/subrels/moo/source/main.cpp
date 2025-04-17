@@ -81,6 +81,11 @@ namespace mod
         moo_04_init_evt[1] = GSW(1708);
         moo_04_init_evt[2] = 18;
         patch::writePatch(&moo_04_init_evt[15], moo_04_init_evt_hook, sizeof(moo_04_init_evt_hook));
+        moo_04_init_evt[25] = 0;
+        moo_04_init_evt[26] = 0;
+        moo_04_init_evt[28] = 0;
+        moo_04_init_evt[74] = EVT_HELPER_CMD(0, 49);
+        moo_04_init_evt[217] = 0;
     }
 
     void exit() {}

@@ -98,7 +98,7 @@ namespace mod
         gon_03_init_evt[30] = GSW(1711);
         gon_03_init_evt[31] = 5;
         gon_03_init_evt[45] = GSW(1711);
-        gon_03_init_evt[46] = 4;
+        gon_03_init_evt[46] = 0; // Unused
         gon_03_init_evt[51] = GSWF(6002);
         gon_03_init_evt[52] = 1;
 
@@ -131,6 +131,8 @@ namespace mod
 
         gon_04_init_evt[269] = GSWF(6006);
         gon_04_init_evt[270] = 1;
+        gon_04_init_evt[319] = PTR("MOBJ_Lv3BigBlock");
+        gon_04_init_evt[328] = PTR("MOBJ_Lv3BigBlock");
         gon_04_init_evt[332] = GSWF(6005);
         gon_04_init_evt[333] = 1;
         gon_04_init_evt[337] = 12;

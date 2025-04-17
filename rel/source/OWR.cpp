@@ -67,6 +67,9 @@ const uint16_t GSWF_ARR[] = {
     // Merlon Up Arrow
     1203,
 
+    // Podley speach
+    1214,
+
     // Pianta shop back door
     1230,
 
@@ -78,6 +81,9 @@ const uint16_t GSWF_ARR[] = {
 
     // Ch.4 talk to shopkeep once
     1925,
+
+    // Goldbob Approval
+    3874,
 
     // Spawn General white
     3880};
@@ -182,6 +188,7 @@ namespace mod::owr
         {
             ttyd::countdown::countDownEnd();
             ttyd::mario_motion::marioChgMot(ttyd::mario_motion::MarioMotion::kStay);
+            ttyd::swdrv::swClear(2388); // We clear the flag for being registered for a match in ch.3 so we can re-register later
             uint32_t namePtr = 0x802c0298;
             const char *mapName = reinterpret_cast<char *>(namePtr);
             ttyd::seqdrv::seqSetSeq(ttyd::seqdrv::SeqIndex::kMapChange, mapName, 0);
@@ -222,22 +229,22 @@ namespace mod::owr
             return g_seqSetSeq_trampoline(seq, map, bero);
         }
 
-        if (map && !strcmp(map, "rsh_01_a"))
+        if (map && strcmp(map, "rsh_01_a") == 0)
         {
             uint8_t value = ttyd::swdrv::swByteGet(1706);
 
             if ((value >= 8 && value < 14) || (value >= 29 && value < 30))
                 map = "rsh_01_b";
-            else if ((value >= 14 && value < 23) || (value >= 30 && value < 32))
+            else if ((value >= 14 && value < 22) || (value >= 30 && value < 31))
                 map = "rsh_01_c";
         }
-        if (map && !strcmp(map, "rsh_02_a"))
+        if (map && strcmp(map, "rsh_02_a") == 0)
         {
             uint8_t value = ttyd::swdrv::swByteGet(1706);
 
             if ((value >= 8 && value < 14) || (value >= 29 && value < 30))
                 map = "rsh_02_b";
-            else if ((value >= 14 && value < 23) || (value >= 30 && value < 32))
+            else if ((value >= 14 && value < 22) || (value >= 30 && value < 31))
                 map = "rsh_02_c";
         }
         if (map && !strcmp(map, "aaa_00"))
@@ -246,11 +253,11 @@ namespace mod::owr
             const char *mapName = reinterpret_cast<char *>(namePtr);
             return g_seqSetSeq_trampoline(seq, mapName, bero);
         }
-        else if (map && !strncmp(map, "rsh", 3))
+        else if (map && strncmp(map, "rsh", 3) == 0)
         {
             if (ttyd::swdrv::swByteGet(1706) < 43)
             {
-                if (bero && (!strcmp(bero, "nidome") || !strcmp(bero, "nidome_start")))
+                if (bero && (strcmp(bero, "nidome") == 0 || !strcmp(bero, "nidome_start") == 0))
                 {
                     return g_seqSetSeq_trampoline(seq, map, 0);
                 }
@@ -288,6 +295,18 @@ namespace mod::owr
         if (!strcmp(msgKey, "keelhaul_return_no"))
         {
             return "<p>I'll be here if you ever\nneed to get back.<k>";
+        }
+        if (!strcmp(msgKey, "goldbob_guide"))
+        {
+            return "I'm going to need to see\nthe Goldbob Guide if you are going\nto use the cannon.\n<k>";
+        }
+        if (!strcmp(msgKey, "no_goldbob_guide"))
+        {
+            return "Sorry pal, no guide\nno cannon.\n<k>";
+        }
+        if (!strcmp(msgKey, "give_goldbob_guide"))
+        {
+            return "Thanks, let's begin then.\n<k>";
         }
         if (!strncmp(msgKey, "stg4_jin_19", 11) && strcmp(msgKey, "stg4_jin_19_select"))
         {

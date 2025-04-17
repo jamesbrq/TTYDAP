@@ -28,7 +28,7 @@ namespace ttyd::evt_item
         // evt_item_flag_off
         // evt_item_flag_on
         // evt_item_delete_check
-        // evt_item_delete
+        EVT_DECLARE_USER_FUNC(evt_item_delete, 1)
         EVT_DECLARE_USER_FUNC(evt_item_entry, 8)
     }
 } // namespace ttyd::evt_item

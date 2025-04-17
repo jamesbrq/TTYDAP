@@ -77,13 +77,13 @@ namespace mod
 
         patch::writePatch(&gra_evt_nameent[36], evt_nameent_hook, sizeof(evt_nameent_hook));
 
-        gra_00_init_evt[47] = 11;
+        gra_00_init_evt[47] = 1;
         gra_00_init_evt[65] = GSW(1715);
         gra_00_init_evt[67] = 4;
         gra_00_init_evt[68] = 4;
 
         gra_01_init_evt[84] = GSW(1715); // Unused
-        gra_01_init_evt[77] = 11;
+        gra_01_init_evt[77] = 1;
 
         gra_shopmaster_pig_init[1] = GSW(1715);
         gra_shopmaster_pig_init[3] = 2;
@@ -102,7 +102,7 @@ namespace mod
         gra_02_init_evt[57] = GSW(1714);
         gra_02_init_evt[58] = 1;
 
-        gra_03_init_evt[15] = 11;
+        gra_03_init_evt[15] = 1;
 
         gra_04_tree_open_evt[37] = GSW(1714);
         gra_04_tree_open_evt[38] = 2;
@@ -122,7 +122,7 @@ namespace mod
         gra_evt_break_floor[1] = GSW(1714);
         gra_evt_break_floor[2] = 4;
 
-        gra_05_init_evt[15] = 11;
+        gra_05_init_evt[15] = 1;
         gra_05_init_evt[39] = GSW(1714);
         gra_05_init_evt[40] = 3;
         gra_05_init_evt[81] = GSW(1714);
