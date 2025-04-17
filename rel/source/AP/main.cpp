@@ -40,8 +40,9 @@ namespace mod::owr
     KEEP_VAR const char *paperModeNameDescription = "paper_mode";
     KEEP_VAR const char *tubeModeNameDescription = "tube_mode";
     KEEP_VAR const char *boatModeNameDescription = "boat_mode";
+} // namespace mod::owr
 
-    // clang-format off
+// clang-format off
 EVT_BEGIN_KEEP(main_buy_evt_evt)
     USER_FUNC(ttyd::evt_shop::get_ptr, LW(0))
     USER_FUNC(setShopFlags, LW(0))
@@ -52,15 +53,7 @@ EVT_BEGIN_KEEP(main_buy_evt_evt)
     END_IF()
     RETURN()
 EVT_END()
-
-EVT_BEGIN_KEEP(main_buy_evt_hook)
-    RUN_CHILD_EVT(main_buy_evt_evt)
-    RETURN()
-EVT_END()
-    // clang-format on
-
-    KEEP_VAR uint16_t main_buy_evt_hook_size = sizeof(main_buy_evt_hook);
-} // namespace mod::owr
+// clang-format on
 
 static const char *goods[] =
     {"gor_01", "gor_03", "tik_00", "nok_00", "mri_07", "tou_01", "usu_01", "muj_01", "rsh_03", "bom_02"};

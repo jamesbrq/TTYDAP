@@ -1249,7 +1249,7 @@ namespace mod
         patch::writeIntWithCache(&muj_make_itemsel_table[14], 0x38000079); // li r0, 0x79
         patch::writeIntWithCache(&muj_make_itemsel_table[20], 0x380300A0); // addi r0, r3, 0xA0
         patch::writeIntWithCache(&muj_make_itemsel_table[22], 0x2C0000A6); // cmpwi r0, 0xA6 (Coconut)
-        patch::writeIntWithCache(&muj_make_itemsel_table[23], 0x40820010); // bne +0x10
+        patch::writeIntWithCache(&muj_make_itemsel_table[23], 0x40A20010); // bne+ +0x10
     }
 
     void exit() {}
