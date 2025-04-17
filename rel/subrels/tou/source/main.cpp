@@ -313,6 +313,41 @@ EVT_BEGIN(hotdog_item_hook)
 	RUN_CHILD_EVT(hotdog_item)
 	GOTO(&tou_evt_hotdog[78])
 EVT_PATCH_END()
+
+EVT_BEGIN(tou_evt_tougi2_evt)
+	USER_FUNC(evt_msg::evt_msg_select, 0, PTR("stg3_tou_33_yn"))
+    IF_EQUAL(LW(0), 0)
+        USER_FUNC(evt_mario::evt_mario_get_party, LW(0))
+        SWITCH(LW(0))
+            CASE_EQUAL(1)
+                USER_FUNC(evt_msg::evt_msg_print_add, 0, PTR("stg3_tou_34_kur"))
+            CASE_EQUAL(2)
+                USER_FUNC(evt_msg::evt_msg_print_add, 0, PTR("stg3_tou_34_nok"))
+            CASE_EQUAL(5)
+                USER_FUNC(evt_msg::evt_msg_print_add, 0, PTR("stg3_tou_34_win"))
+            CASE_ETC()
+                USER_FUNC(evt_msg::evt_msg_print_add, 0, PTR("stg3_tou_34_kur"))
+        END_SWITCH()
+    ELSE()
+        USER_FUNC(evt_mario::evt_mario_get_party, LW(0))
+        SWITCH(LW(0))
+            CASE_EQUAL(1)
+                USER_FUNC(evt_msg::evt_msg_print_add, 0, PTR("stg3_tou_34_kur"))
+            CASE_EQUAL(2)
+                USER_FUNC(evt_msg::evt_msg_print_add, 0, PTR("stg3_tou_34_nok"))
+            CASE_EQUAL(5)
+                USER_FUNC(evt_msg::evt_msg_print_add, 0, PTR("stg3_tou_34_win"))
+            CASE_ETC()
+                USER_FUNC(evt_msg::evt_msg_print_add, 0, PTR("stg3_tou_34_kur"))
+        END_SWITCH()
+    END_IF()
+    RETURN()
+EVT_END()
+
+EVT_BEGIN(tou_evt_tougi2_hook)
+	RUN_CHILD_EVT(tou_evt_tougi2_evt)
+	GOTO(&tou_evt_tougi2[239])
+EVT_PATCH_END()
 // clang-format on
 
 namespace mod
@@ -514,6 +549,137 @@ namespace mod
         tou_evt_move_g[52] = 3;
         tou_evt_move_g[54] = GSW(1703);
         tou_evt_move_g[55] = 3;
+
+        tou_init_gard1[1] = GSW(1703);
+        tou_init_gard1[3] = 3;
+        tou_init_gard1[11] = 27;
+
+        tou_talk_gard1[1] = GSW(1703);
+        tou_talk_gard1[3] = 2;
+        tou_talk_gard1[11] = 3;
+        tou_talk_gard1[21] = 5;
+        tou_talk_gard1[29] = 27;
+
+        tou_init_gard2[1] = GSW(1703);
+        tou_init_gard2[3] = 3;
+        tou_init_gard2[11] = 27;
+
+        tou_talk_gard2[1] = GSW(1703);
+        tou_talk_gard2[3] = 2;
+        tou_talk_gard2[11] = 3;
+        tou_talk_gard2[21] = 5;
+        tou_talk_gard2[29] = 27;
+
+        tou_init_madam_02[1] = GSW(1703);
+        tou_init_madam_02[3] = 28;
+        tou_init_madam_02[11] = 28;
+
+        tou_talk_madam_02[1] = GSW(1703);
+        tou_talk_madam_02[3] = 5;
+        tou_talk_madam_02[11] = 20;
+
+        tou_talk_repo[1] = GSW(1703);
+        tou_talk_repo[3] = 5;
+        tou_talk_repo[11] = 20;
+
+        tou_talk_cam1[1] = GSW(1703);
+        tou_talk_cam1[3] = 5;
+        tou_talk_cam1[11] = 20;
+
+        tou_init_cam2[1] = GSW(1703);
+        tou_init_cam2[2] = 2;
+
+        tou_talk_cam2[1] = GSW(1703);
+        tou_talk_cam2[3] = 5;
+        tou_talk_cam2[11] = 20;
+
+        tou_talk_kino4[1] = GSW(1703);
+        tou_talk_kino4[3] = 5;
+        tou_talk_kino4[11] = 20;
+
+        tou_talk_kino5[4] = GSW(1703);
+        tou_talk_kino5[6] = 5;
+        tou_talk_kino5[14] = 20;
+
+        tou_talk_kinopiko[1] = GSW(1703);
+        tou_talk_kinopiko[3] = 5;
+        tou_talk_kinopiko[11] = 20;
+
+        tou_talk_kinopio_f[1] = GSW(1703);
+        tou_talk_kinopio_f[3] = 5;
+        tou_talk_kinopio_f[11] = 20;
+
+        tou_init_chu[1] = GSW(1703);
+        tou_init_chu[3] = 13;
+
+        tou_talk_chu[1] = GSW(1703);
+        tou_talk_chu[3] = 5;
+        tou_talk_chu[11] = 20;
+
+        tou_init_champ[1] = GSW(1703);
+        tou_init_champ[3] = 27;
+
+        tou_talk_champ[1] = GSW(1703);
+        tou_talk_champ[3] = 27;
+
+        tou_init_shikowa[1] = GSW(1703);
+        tou_init_shikowa[3] = 27;
+
+        tou_talk_shikowa[1] = GSW(1703);
+        tou_talk_shikowa[3] = 27;
+
+        tou_init_uranoko[1] = GSW(1703);
+        tou_init_uranoko[3] = 27;
+
+        tou_talk_uranoko_02[1] = GSW(1703);
+        tou_talk_uranoko_02[3] = 27;
+
+        tou_init_ironA[7] = GSW(1703);
+        tou_init_ironA[9] = 27;
+
+        tou_talk_ironA[1] = GSW(1703);
+        tou_talk_ironA[3] = 27;
+
+        tou_init_ironB[7] = GSW(1703);
+        tou_init_ironB[9] = 27;
+
+        tou_talk_ironB[1] = GSW(1703);
+        tou_talk_ironB[3] = 27;
+
+        tou_init_borodo[1] = GSW(1703);
+        tou_init_borodo[3] = 27;
+
+        tou_talk_borodo[1] = GSW(1703);
+        tou_talk_borodo[3] = 27;
+
+        patch::writePatch(&tou_evt_tougi2[182], tou_evt_tougi2_evt, sizeof(tou_evt_tougi2_evt));
+        tou_evt_tougi2[273] = GSW(1703);
+        tou_evt_tougi2[274] = 2;
+
+        tou_evt_momikucha[7] = GSW(1703);
+        tou_evt_momikucha[8] = 7;
+
+        tou_evt_poster_8[4] = GSWF(6028);
+        tou_evt_poster_8[5] = 0;
+
+        tou_02_init_evt[1] = GSW(1703);
+        tou_02_init_evt[3] = 1;
+        tou_02_init_evt[4] = 11;
+        tou_02_init_evt[17] = 21;
+        tou_02_init_evt[79] = GSW(1703);
+        tou_02_init_evt[80] = 3;
+        tou_02_init_evt[93] = GSW(1703);
+        tou_02_init_evt[94] = 28;
+        tou_02_init_evt[111] = GSW(1703);
+        tou_02_init_evt[112] = 27;
+        tou_02_init_evt[131] = GSW(1703);
+        tou_02_init_evt[132] = 27;
+        tou_02_init_evt[283] = GSWF(6028);
+        tou_02_init_evt[285] = 1;
+        tou_02_init_evt[599] = GSWF(6028);
+        tou_02_init_evt[601] = 1;
+        tou_02_init_evt[897] = GSWF(6028);
+        tou_02_init_evt[898] = 0;
 
         tou_init_g_1[17] = EVT_HELPER_CMD(0, 2);
 

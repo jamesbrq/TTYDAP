@@ -39,7 +39,6 @@ extern int32_t main_evt_shop_main_func[];
 extern int32_t main_uranaisi_data_make_next[];
 extern int32_t main_uranaisi_data_make_starpiece[];
 extern int32_t main_uranaisi_data_make_supercoin[];
-extern int32_t main_sys_prolog[];
 extern int32_t main_winMgrSelectEntry[];
 extern int32_t main_evt_badgeShop_starmaniac_get_kind_cnt[];
 extern int32_t main_badgeShop_get[];
@@ -51,6 +50,11 @@ extern int32_t evt_mobj_powerupblk[];
 extern int32_t main_breakfast[];
 extern int32_t main_evt_shop_setup[];
 extern int32_t loadDraw[];
+extern int32_t main_battle_exit[];
+extern int32_t main_seq_battleInit[];
+extern int32_t main__psndSFXOn[];
+extern int32_t main_psndBGMOff_f_d[];
+extern int32_t main_psndBGMOn_f_d[];
 // End of Assembly References
 
 // Script References
@@ -289,15 +293,35 @@ namespace mod::owr
 
         writeIntWithCache(&main_evt_shop_setup[85], 0x480000F4); // b +0xF4
 
-        // sys_prolog[25] = 0x386006A4; // li r3, 0x6A4 (GSW(1700))
-        // sys_prolog[28] = 0x2C030002; // cmpwi r3, 0x2
-        // sys_prolog[25] = 0x386006A4; // li r3, 0x6A4 (GSW(1700))
-        // sys_prolog[28] = 0x2C030002; // cmpwi r3, 0x2
-        // sys_prolog[25] = 0x386006A4; // li r3, 0x6A4 (GSW(1700))
-        // sys_prolog[28] = 0x2C030002; // cmpwi r3, 0x2
-        // sys_prolog[25] = 0x386006A4; // li r3, 0x6A4 (GSW(1700))
-        // sys_prolog[28] = 0x2C030002; // cmpwi r3, 0x2
-        //  FINISH ^
+        writeIntWithCache(&main_battle_exit[76], 0x38840831); // addi r4, r4, 0x831 GSW(1713)
+        writeIntWithCache(&main_battle_exit[78], 0x2C030008); // cmpwi r3, 0x8
+        writeIntWithCache(&main_battle_exit[82], 0x38840831); // addi r4, r4, 0x831 GSW(1713)
+        writeIntWithCache(&main_battle_exit[84], 0x2C03000A); // cmpwi r3, 0xA
+        writeIntWithCache(&main_battle_exit[94], 0x3884082B); // addi r4, r4, 0x82B GSW(1707)
+        writeIntWithCache(&main_battle_exit[96], 0x2C030012); // cmpwi r3, 0x12
+
+        writeIntWithCache(&main_seq_battleInit[10], 0x38830831); // addi r4, r3, 0x831 GSW(1713)
+        writeIntWithCache(&main_seq_battleInit[13], 0x2C030008); // cmpwi r3, 0x8
+        writeIntWithCache(&main_seq_battleInit[17], 0x38840831); // addi r4, r4, 0x831 GSW(1713)
+        writeIntWithCache(&main_seq_battleInit[19], 0x2C03000A); // cmpwi r3, 0xA
+        writeIntWithCache(&main_seq_battleInit[23], 0x3884082B); // addi r4, r4, 0x82B GSW(1707)
+        writeIntWithCache(&main_seq_battleInit[25], 0x2C030012); // cmpwi r3, 0x12
+
+        writeIntWithCache(&main__psndSFXOn[71], 0x38840824); // addi r4, r4, 0x824 GSW(1700)
+
+        writeIntWithCache(&main_psndBGMOff_f_d[28], 0x38840831); // addi r4, r4, 0x831 GSW(1713)
+        writeIntWithCache(&main_psndBGMOff_f_d[30], 0x2C030008); // cmpwi r3, 0x8
+        writeIntWithCache(&main_psndBGMOff_f_d[34], 0x38840831); // addi r4, r4, 0x831 GSW(1713)
+        writeIntWithCache(&main_psndBGMOff_f_d[36], 0x2C03000A); // cmpwi r3, 0xA
+
+        writeIntWithCache(&main_psndBGMOn_f_d[71], 0x38840835); // addi r4, r4, 0x835 GSW(1717)
+        writeIntWithCache(&main_psndBGMOn_f_d[73], 0x2C03000E);  // cmpwi r3, 0xE
+        writeIntWithCache(&main_psndBGMOn_f_d[77], 0x38840835); // addi r4, r4, 0x835 GSW(1717)
+        writeIntWithCache(&main_psndBGMOn_f_d[79], 0x2C030011);  // cmpwi r3, 0x11
+        writeIntWithCache(&main_psndBGMOn_f_d[88], 0x38840831); // addi r4, r4, 0x831 GSW(1713)
+        writeIntWithCache(&main_psndBGMOn_f_d[90], 0x2C030008); // cmpwi r3, 0x8
+        writeIntWithCache(&main_psndBGMOn_f_d[94], 0x38840831); // addi r4, r4, 0x831 GSW(1713)
+        writeIntWithCache(&main_psndBGMOn_f_d[96], 0x2C03000A); // cmpwi r3, 0xA
     }
 
     void ApplyMainScriptPatches()

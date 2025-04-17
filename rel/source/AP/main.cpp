@@ -2,14 +2,17 @@
 #include "common.h"
 #include "evt_cmd.h"
 #include "patch.h"
+#include "string.h"
 #include "ttyd/evtmgr_cmd.h"
 #include "ttyd/mario_pouch.h"
+#include "ttyd/seq_mapchange.h"
 #include "ttyd/seqdrv.h"
 #include "ttyd/swdrv.h"
 #include "visibility.h"
 #include <ttyd/evt_shop.h>
 
 #include <cstdint>
+#include <cstring>
 
 using namespace ttyd::evtmgr_cmd;
 using namespace ttyd::common;
@@ -52,35 +55,40 @@ EVT_BEGIN_KEEP(main_buy_evt_evt)
 EVT_END()
 // clang-format on
 
-const uintptr_t goods[] =
-    {0x805f162c, 0x80612510, 0x805c8738, 0x805be5b4, 0x805fb948, 0x805d5874, 0x805d0588, 0x805dc5b8, 0x805de110, 0x805cbb14};
+static const char *goods[] =
+    {"gor_01", "gor_03", "tik_00", "nok_00", "mri_07", "tou_01", "usu_01", "muj_01", "rsh_03", "bom_02"};
 
 EVT_DEFINE_USER_FUNC_KEEP(setShopFlags)
 {
     (void)isFirstCall;
-    char *shopWork = reinterpret_cast<char *>(evtGetValue(evt, evt->evtArguments[0]));
-
-    uint32_t *itemIds = *reinterpret_cast<uint32_t **>(shopWork + 0x08);
-    uint16_t *itemFlags = reinterpret_cast<uint16_t *>(shopWork + 0x14);
-    uint32_t selectedIndex = *reinterpret_cast<uint32_t *>(shopWork + 0x2C);
 
     int gswfBase = 6200;
-    uintptr_t itemIdsAddress = reinterpret_cast<uintptr_t>(itemIds);
-    int loopCount = static_cast<int>(sizeof(goods) / sizeof(uintptr_t));
+    const char *nextMapPtr = &ttyd::seq_mapchange::_next_map[0];
+    constexpr int loopCount = static_cast<int>(sizeof(goods) / sizeof(goods[0]));
+
     for (int i = 0; i < loopCount; i++)
     {
-        if (itemIdsAddress != goods[i])
+        if (strncmp(nextMapPtr, goods[i], 6) != 0)
         {
             if (i == loopCount - 1)
                 return 2;
+
             gswfBase += 6;
             continue;
         }
         break;
     }
+
+    char *shopWork = reinterpret_cast<char *>(evtGetValue(evt, evt->evtArguments[0]));
+    uint32_t *itemIds = *reinterpret_cast<uint32_t **>(shopWork + 0x08);
+    uint16_t *itemFlags = reinterpret_cast<uint16_t *>(shopWork + 0x14);
+    uint32_t selectedIndex = *reinterpret_cast<uint32_t *>(shopWork + 0x2C);
+
     swSet(gswfBase + selectedIndex);
+
     if (itemIds[selectedIndex * 2] > 125)
         return 2;
+
     itemFlags[selectedIndex] |= 1;
     return 2;
 }
@@ -90,25 +98,27 @@ void checkShopFlag(uint32_t item, uint32_t index)
     if (item > 125)
         return;
 
-    uintptr_t shopWorkPtr = 0x8041EB60;
-    char *shopWork = *reinterpret_cast<char **>(shopWorkPtr);
-    uint32_t *itemIds = *reinterpret_cast<uint32_t **>(shopWork + 0x08);
-    uint16_t *itemFlags = reinterpret_cast<uint16_t *>(shopWork + 0x14);
-
     int gswfBase = 6200;
-    uintptr_t itemIdsAddress = reinterpret_cast<uintptr_t>(itemIds);
-    int loopCount = static_cast<int>(sizeof(goods) / sizeof(uintptr_t));
+    const char *nextMapPtr = &ttyd::seq_mapchange::_next_map[0];
+    constexpr int loopCount = static_cast<int>(sizeof(goods) / sizeof(goods[0]));
+
     for (int i = 0; i < loopCount; i++)
     {
-        if (itemIdsAddress != goods[i])
+        if (strncmp(nextMapPtr, goods[i], 6) != 0)
         {
             if (i == loopCount - 1)
                 return;
+
             gswfBase += 6;
             continue;
         }
         break;
     }
+
+    uintptr_t shopWorkPtr = 0x8041EB60;
+    char *shopWork = *reinterpret_cast<char **>(shopWorkPtr);
+    uint16_t *itemFlags = reinterpret_cast<uint16_t *>(shopWork + 0x14);
+
     if (swGet(gswfBase + index))
         itemFlags[index] |= 1;
 }

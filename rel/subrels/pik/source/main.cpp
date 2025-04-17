@@ -239,6 +239,23 @@ EVT_BEGIN(pik_00_init_hook)
 	RUN_CHILD_EVT(pik_00_init_evt_evt)
 	GOTO(&pik_00_init_evt[316])
 EVT_PATCH_END()
+
+EVT_BEGIN(pik_02_init_evt_evt)
+	IF_LARGE_EQUAL(GSW(1707), 26)
+		IF_SMALL_EQUAL(GSW(1707), 27)
+			RETURN()
+		END_IF()
+	END_IF()
+    IF_SMALL(GSW(1706), 40)
+        RUN_EVT(&pik_evt_garnet)
+    END_IF()
+	RETURN()
+EVT_END()
+
+EVT_BEGIN(pik_02_init_evt_hook)
+	RUN_CHILD_EVT(pik_02_init_evt_evt)
+	GOTO(&pik_02_init_evt[106])
+EVT_PATCH_END()
 // clang-format on
 
 namespace mod
@@ -264,6 +281,7 @@ namespace mod
         pik_talk_ekiin[1] = GSW(1706);
         pik_talk_ekiin[2] = 43;
 
+        pik_talk_papa_taihou_kyoka[321] = GSWF(6115);
         pik_talk_papa_taihou_kyoka[394] = GSW(1707);
         pik_talk_papa_taihou_kyoka[395] = 5;
 
@@ -272,6 +290,7 @@ namespace mod
         pik_talk_papa[109] = 2;
         pik_talk_papa[116] = EVT_HELPER_CMD(1, 41);
         pik_talk_papa[117] = 3;
+        pik_talk_papa[119] = GSWF(6115);
 
         pik_talk_mama[261] = GSW(1707);
         pik_talk_mama[263] = 1;
@@ -421,8 +440,9 @@ namespace mod
         pik_02_init_evt[23] = 17;
         pik_02_init_evt[43] = GSW(1706);
         pik_02_init_evt[44] = 41;
-        pik_02_init_evt[101] = GSW(1706);
-        pik_02_init_evt[102] = 40;
+        patch::writePatch(&pik_02_init_evt[100], pik_02_init_evt_hook, sizeof(pik_02_init_evt_hook));
+        pik_02_init_evt[104] = 0;
+        pik_02_init_evt[105] = 0;
         pik_02_init_evt[107] = GSW(1706);
         pik_02_init_evt[108] = 42;
         pik_02_init_evt[139] = GSW(1707);

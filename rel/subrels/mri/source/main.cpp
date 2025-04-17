@@ -67,6 +67,7 @@ extern int32_t mri_puni_3_init[];
 extern int32_t mri_puni_3_talk[];
 extern int32_t mri_bero_custom_00[];
 extern int32_t mri_guide_sister[];
+extern int32_t mri_key_table01[];
 extern int32_t mri_03_init_evt[];
 extern int32_t mri_bero_custom[];
 extern int32_t mri_chibitoge_init_04[];
@@ -533,6 +534,23 @@ EVT_BEGIN(mri_01_init_evt_hook2)
 	GOTO(&mri_01_init_evt[202])
 EVT_PATCH_END()
 
+EVT_BEGIN(mri_01_init_evt_evt2)
+	IF_LARGE_EQUAL(GSW(1703), 25)
+		IF_SMALL_EQUAL(GSW(1703), 27)
+			RETURN()
+		END_IF()
+	END_IF()
+    IF_EQUAL(GSW(1713), 1)
+        RUN_EVT(&mri_bigtree_firstbattle)
+    END_IF()
+	RETURN()
+EVT_END()
+
+EVT_BEGIN(mri_01_init_evt_hook3)
+	RUN_CHILD_EVT(mri_01_init_evt_evt2)
+	GOTO(&mri_01_init_evt[190])
+EVT_PATCH_END()
+
 EVT_BEGIN(bero_custom_evt)
 	IF_LARGE_EQUAL(GSW(1713), 4)
 		IF_SMALL(GSWF(6022), 1)
@@ -744,8 +762,9 @@ namespace mod
         mri_01_init_evt[7] = GSW(1703);
         mri_01_init_evt[8] = 26;
         patch::writePatch(&mri_01_init_evt[126], mri_01_init_evt_hook, sizeof(mri_01_init_evt_hook));
-        mri_01_init_evt[185] = GSW(1713);
-        mri_01_init_evt[186] = 1;
+        patch::writePatch(&mri_01_init_evt[184], mri_01_init_evt_hook3, sizeof(mri_01_init_evt_hook3));
+        mri_01_init_evt[188] = 0;
+        mri_01_init_evt[189] = 0;
         mri_01_init_evt[191] = GSW(1713);
         mri_01_init_evt[192] = 2;
         patch::writePatch(&mri_01_init_evt[196], mri_01_init_evt_hook2, sizeof(mri_01_init_evt_hook2));
@@ -794,6 +813,11 @@ namespace mod
 
         mri_guide_sister[761] = GSWF(6020);
         mri_guide_sister[762] = 1;
+        mri_guide_sister[651] = EVT_HELPER_CMD(2, 53);
+        mri_guide_sister[653] = 89;
+
+        mri_key_table01[0] = 17;
+        mri_key_table01[1] = -1;
 
         patch::writePatch(&mri_03_init_evt[50], mri_03_init_evt_hook, sizeof(mri_03_init_evt_hook));
         mri_03_init_evt[128] = GSWF(6020);

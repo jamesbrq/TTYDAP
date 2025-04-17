@@ -1177,7 +1177,8 @@ namespace mod
         rsh_talk_konari_04[1] = GSW(1706);
         rsh_talk_konari_04[3] = 8;
         rsh_talk_konari_04[11] = 9;
-        rsh_talk_konari_04[19] = 11;
+        rsh_talk_konari_04[18] = EVT_HELPER_CMD(1, 40);
+        rsh_talk_konari_04[19] = 12;
         rsh_talk_konari_04[24] = GSW(1706);
         rsh_talk_konari_04[25] = 10;
         rsh_talk_konari_04[27] = GSW(1706);

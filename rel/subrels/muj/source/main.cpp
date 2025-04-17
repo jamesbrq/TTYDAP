@@ -1090,7 +1090,7 @@ namespace mod
         muj_03_event_01[1] = GSW(1719);
         muj_03_event_01[2] = 1;
 
-        muj_03_init_evt[32] = 11;
+        muj_03_init_evt[32] = 1;
 
         muj_sanders_funto[462] = GSW(1719);
         muj_sanders_funto[463] = 1;

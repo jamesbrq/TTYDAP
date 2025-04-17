@@ -177,7 +177,7 @@ namespace mod
 
         dou_11_init_evt[42] = GSW(1717);
         dou_11_init_evt[44] = 6;
-        dou_11_init_evt[60] = 11;
+        dou_11_init_evt[60] = 1;
         dou_11_init_evt[74] = GSW(1717);
         dou_11_init_evt[75] = 6;
         dou_11_init_evt[109] = GSW(1717);
