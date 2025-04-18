@@ -30,7 +30,6 @@
 
 using gc::pad::PadInput;
 using ttyd::common::ItemData;
-using ttyd::common::ShopItemData;
 using ttyd::seq_mapchange::_next_area;
 using ttyd::seq_mapchange::RelId;
 using ttyd::seqdrv::SeqIndex;
@@ -248,7 +247,7 @@ namespace mod::owr
             else if ((value >= 14 && value < 22) || (value >= 30 && value < 31))
                 map = "rsh_02_c";
         }
-        if (map && !strcmp(map, "aaa_00"))
+        if (map && strcmp(map, "aaa_00") == 0)
         {
             uint32_t namePtr = 0x802c0298;
             const char *mapName = reinterpret_cast<char *>(namePtr);
@@ -258,7 +257,7 @@ namespace mod::owr
         {
             if (ttyd::swdrv::swByteGet(1706) < 43)
             {
-                if (bero && (strcmp(bero, "nidome") == 0 || !strcmp(bero, "nidome_start") == 0))
+                if (bero && (strcmp(bero, "nidome") == 0 || strcmp(bero, "nidome_start") == 0))
                 {
                     return g_seqSetSeq_trampoline(seq, map, 0);
                 }

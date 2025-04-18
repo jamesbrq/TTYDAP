@@ -41,6 +41,18 @@ EVT_BEGIN(hom_00_init_evt_hook)
     RUN_CHILD_EVT(hom_00_init_evt_evt)
     RETURN()
 EVT_END()
+
+EVT_BEGIN(hom_evt_train_evt)
+    SET(GSW(1720), 9)
+    SET(GSW(1706), 30)
+    WAIT_FRM(1)
+    RETURN()
+EVT_END()
+
+EVT_BEGIN(hom_evt_train_hook)
+    RUN_CHILD_EVT(hom_evt_train_evt)
+    GOTO(&hom_evt_train[256])
+EVT_PATCH_END()
 // clang-format on
 
 namespace mod
@@ -73,8 +85,8 @@ namespace mod
         hom_evt_train_door[1] = GSW(1720);
         hom_evt_train_door[3] = 8;
 
-        hom_evt_train[252] = GSW(1706);
-        hom_evt_train[253] = 30;
+        patch::writePatch(&hom_evt_train[251], hom_evt_train_hook, sizeof(hom_evt_train_hook));
+        hom_evt_train[255] = 0;
 
         hom_evt_hom_touchaku[452] = GSW(1720);
         hom_evt_hom_touchaku[453] = 1;

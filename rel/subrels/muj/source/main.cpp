@@ -801,6 +801,34 @@ EVT_BEGIN(muj_sanders_init_05_hook)
 	RUN_CHILD_EVT(muj_sanders_init_05_evt)
 	RETURN()
 EVT_END()
+
+EVT_BEGIN(muj_yashi_yure_evt1)
+	IF_EQUAL(GSWF(6090), 0)
+		USER_FUNC(evt_item::evt_item_entry, PTR("yashi00"), LW(0), 0, -1000, 0, 16, GSWF(6090), 0)
+	ELSE()
+		USER_FUNC(evt_item::evt_item_entry, PTR("yashi00"), 166, 0, -1000, 0, 16, -1, 0)
+	END_IF()
+	RETURN()
+EVT_END()
+
+EVT_BEGIN(muj_yashi_yure_hook1)
+	RUN_CHILD_EVT(muj_yashi_yure_evt1)
+	GOTO(&muj_yashi_yure[113])
+EVT_PATCH_END()
+
+EVT_BEGIN(muj_yashi_yure_evt2)
+	IF_EQUAL(GSWF(6091), 0)
+		USER_FUNC(evt_item::evt_item_entry, PTR("yashi01"), LW(0), 0, -1000, 0, 16, GSWF(6091), 0)
+	ELSE()
+		USER_FUNC(evt_item::evt_item_entry, PTR("yashi01"), 166, 0, -1000, 0, 16, -1, 0)
+	END_IF()
+	RETURN()
+EVT_END()
+
+EVT_BEGIN(muj_yashi_yure_hook2)
+	RUN_CHILD_EVT(muj_yashi_yure_evt2)
+	GOTO(&muj_yashi_yure[240])
+EVT_PATCH_END()
 // clang-format on
 
 namespace mod
@@ -1095,8 +1123,16 @@ namespace mod
         muj_sanders_funto[462] = GSW(1719);
         muj_sanders_funto[463] = 1;
 
-        muj_yashi_yure[111] = GSWF(6090);
-        muj_yashi_yure[238] = GSWF(6091);
+		muj_yashi_yure[103] = 0;
+        muj_yashi_yure[104] = EVT_HELPER_CMD(2, 50);
+        muj_yashi_yure[105] = EVT_HELPER_OP(LW(0));
+        patch::writePatch(&muj_yashi_yure[107], muj_yashi_yure_hook1, sizeof(muj_yashi_yure_hook1));
+        muj_yashi_yure[111] = 0;
+        muj_yashi_yure[230] = 0;
+        muj_yashi_yure[231] = EVT_HELPER_CMD(2, 50);
+        muj_yashi_yure[232] = EVT_HELPER_OP(LW(0));
+        patch::writePatch(&muj_yashi_yure[234], muj_yashi_yure_hook1, sizeof(muj_yashi_yure_hook1));
+        muj_yashi_yure[238] = 0;
 
         muj_04_init_evt[70] = GSW(1719);
         muj_04_init_evt[72] = 0;

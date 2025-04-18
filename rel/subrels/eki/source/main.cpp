@@ -37,8 +37,8 @@ extern int32_t eki_06_init_evt[];
 
 // clang-format off
 EVT_BEGIN(evt_elv_evt)
+    USER_FUNC(evt_mario::evt_mario_key_onoff, 0)
 	IF_SMALL(GSW(1720), 4)
-		USER_FUNC(evt_mario::evt_mario_key_onoff, 0)
 		USER_FUNC(evt_pouch::evt_pouch_check_item, 26, LW(0))
 		IF_SMALL_EQUAL(LW(0), 0)
 			USER_FUNC(evt_msg::evt_msg_print, 0, PTR("stg6_eki_06"), 0, 0)
