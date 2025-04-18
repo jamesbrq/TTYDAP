@@ -372,7 +372,7 @@ void ApplyGor03Patches()
     gor_yuureturn_rtn[80] = GSW(1708);
     gor_yuureturn_rtn[81] = 19;
 
-    gor_kuzi_keiziban_normal[356] = GSWF(1709);
+    gor_kuzi_keiziban_normal[356] = GSWF(6100);
 
     gor_peach_mail_03[238] = GSW(1703);
     gor_peach_mail_03[239] = 29;

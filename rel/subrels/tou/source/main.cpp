@@ -652,7 +652,7 @@ namespace mod
         tou_talk_borodo[1] = GSW(1703);
         tou_talk_borodo[3] = 27;
 
-        patch::writePatch(&tou_evt_tougi2[182], tou_evt_tougi2_evt, sizeof(tou_evt_tougi2_evt));
+        patch::writePatch(&tou_evt_tougi2[182], tou_evt_tougi2_hook, sizeof(tou_evt_tougi2_hook));
         tou_evt_tougi2[273] = GSW(1703);
         tou_evt_tougi2[274] = 2;
 

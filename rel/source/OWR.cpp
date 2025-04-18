@@ -122,6 +122,7 @@ namespace mod::owr
         ttyd::swdrv::swByteSet(1700, 16);
         ttyd::swdrv::swByteSet(1701, 3);
         ttyd::swdrv::swByteSet(1704, 1);
+        ttyd::swdrv::swByteSet(1712, 1);
         ttyd::mario_pouch::pouchGetStarstone(0);
 
         if (gState->apSettings->apEnabled)
