@@ -316,9 +316,9 @@ namespace mod::owr
         writeIntWithCache(&main_psndBGMOff_f_d[36], 0x2C03000A); // cmpwi r3, 0xA
 
         writeIntWithCache(&main_psndBGMOn_f_d[71], 0x38840835); // addi r4, r4, 0x835 GSW(1717)
-        writeIntWithCache(&main_psndBGMOn_f_d[73], 0x2C03000E);  // cmpwi r3, 0xE
+        writeIntWithCache(&main_psndBGMOn_f_d[73], 0x2C03000E); // cmpwi r3, 0xE
         writeIntWithCache(&main_psndBGMOn_f_d[77], 0x38840835); // addi r4, r4, 0x835 GSW(1717)
-        writeIntWithCache(&main_psndBGMOn_f_d[79], 0x2C030011);  // cmpwi r3, 0x11
+        writeIntWithCache(&main_psndBGMOn_f_d[79], 0x2C030011); // cmpwi r3, 0x11
         writeIntWithCache(&main_psndBGMOn_f_d[88], 0x38840831); // addi r4, r4, 0x831 GSW(1713)
         writeIntWithCache(&main_psndBGMOn_f_d[90], 0x2C030008); // cmpwi r3, 0x8
         writeIntWithCache(&main_psndBGMOn_f_d[94], 0x38840831); // addi r4, r4, 0x831 GSW(1713)
@@ -449,7 +449,9 @@ namespace mod::owr
         g_partySetForceMove_trampoline = patch::hookFunction(ttyd::party::partySetForceMove, partySetForceMoveHook);
         g_evt_mario_set_pose_trampoline = patch::hookFunction(ttyd::evt_mario::evt_mario_set_pose, evtMarioSetPoseHook);
         g_statusWinDisp_trampoline = patch::hookFunction(ttyd::statuswindow::statusWinDisp, DisplayStarPowerNumber);
-        g_gaugeDisp_trampoline = patch::hookFunction(ttyd::statuswindow::gaugeDisp, DisplayStarPowerOrbs);
         g_pouchGetStarstone_trampoline = patch::hookFunction(ttyd::mario_pouch::pouchGetStarstone, SetMaxSP);
+
+        // Hook gaugeDisp with a standard branch since the original function does not need to be called
+        patch::writeBranch(ttyd::statuswindow::gaugeDisp, DisplayStarPowerOrbs);
     }
 } // namespace mod::owr
