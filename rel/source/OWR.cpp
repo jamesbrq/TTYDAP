@@ -6,6 +6,7 @@
 #include <gc/OSModule.h>
 #include <gc/pad.h>
 #include <mod.h>
+#include "util.h"
 #include <ttyd/common_types.h>
 #include <ttyd/countdown.h>
 #include <ttyd/evt_mario.h>
@@ -108,7 +109,6 @@ namespace mod::owr
     KEEP_VAR int32_t (*g_evt_mario_set_pose_trampoline)(ttyd::evtmgr::EvtEntry *evt, bool firstCall) = nullptr;
     KEEP_VAR const char *(*g_msgSearch_trampoline)(const char *) = nullptr;
     KEEP_VAR void (*g_statusWinDisp_trampoline)(void) = nullptr;
-    KEEP_VAR void (*g_gaugeDisp_trampoline)(double, double, int32_t) = nullptr;
     KEEP_VAR void (*g_pouchGetStarstone_trampoline)(int32_t) = nullptr;
 
     void OWR::SequenceInit()
@@ -198,8 +198,13 @@ namespace mod::owr
         {
             ttyd::countdown::countDownEnd();
             ttyd::mario_motion::marioChgMot(ttyd::mario_motion::MarioMotion::kStay);
-            ttyd::swdrv::swClear(2388); // We clear the flag for being registered for a match in ch.3 so we can re-register later
-            ttyd::swdrv::swClear(2383); // Also clear the flag for the champion match
+
+            // We clear the flag for being registered for a match in ch.3 so we can re-register later
+            ttyd::swdrv::swClear(2388);
+
+            // Also clear the flag for the champion match
+            ttyd::swdrv::swClear(2383);
+
             uint32_t namePtr = 0x802c0298;
             const char *mapName = reinterpret_cast<char *>(namePtr);
             ttyd::seqdrv::seqSetSeq(ttyd::seqdrv::SeqIndex::kMapChange, mapName, 0);
@@ -693,36 +698,45 @@ namespace mod::owr
         return gTrampoline_seq_logoMain(info);
     }
 
-    KEEP_FUNC void DisplayStarPowerOrbs(double x, double y, int32_t star_power)
+    KEEP_FUNC void DisplayStarPowerOrbs(float x, float y, int32_t star_power)
     {
+        using namespace ttyd::icondrv;
+        using namespace ttyd::statuswindow;
+
         int32_t max_star_power = pouchGetMaxAP();
 
         if (max_star_power > 800)
             max_star_power = 800;
+
         if (star_power > max_star_power)
             star_power = max_star_power;
+
         if (star_power < 0)
             star_power = 0;
 
-        int32_t full_orbs = star_power / 100;
-        int32_t remainder = star_power % 100;
+        const int32_t full_orbs = star_power / 100;
+        const int32_t remainder = star_power % 100;
         int32_t part_frame = remainder * 15 / 99;
+
         if (remainder > 0 && star_power > 0 && part_frame == 0)
             part_frame = 1;
 
         if (part_frame != 0)
         {
-            gc::vec3 pos = {static_cast<float>(x + 32.f * full_orbs), static_cast<float>(y), 0.f};
-            ttyd::icondrv::iconDispGx(1.f, &pos, 0x10, ttyd::statuswindow::gauge_wakka[part_frame]);
+            gc::vec3 pos = {x + 32.f * intToFloat(full_orbs), y, 0.f};
+            iconDispGx(1.f, &pos, 0x10, gauge_wakka[part_frame]);
         }
+
         // Draw grey orbs up to the max amount of SP / 100 (rounded up, max of 8).
+        const uint16_t *gaugeBackPtr = &gauge_back[0];
+        const float posY = y + 12.f;
+
         for (int32_t i = 0; i < (max_star_power + 99) / 100; ++i)
         {
-            gc::vec3 pos = {static_cast<float>(x + 32.f * i), static_cast<float>(y + 12.f), 0.f};
-            uint16_t icon = i < full_orbs ? ttyd::statuswindow::gauge_back[i] : 0x1c7;
-            ttyd::icondrv::iconDispGx(1.f, &pos, 0x10, icon);
+            gc::vec3 pos = {x + 32.f * intToFloat(i), posY, 0.f};
+            const uint16_t icon = i < full_orbs ? static_cast<IconType::e>(gaugeBackPtr[i]) : IconType::e::SP_ORB_EMPTY;
+            iconDispGx(1.f, &pos, 0x10, icon);
         }
-        return g_gaugeDisp_trampoline(x, y, star_power);
     }
 
     // Displays the Star Power in 0.01 units numerically below the status window.
@@ -735,13 +749,16 @@ namespace mod::owr
         // Don't try to display SP if the status bar is not on-screen.
         float menu_height =
             *reinterpret_cast<float *>(reinterpret_cast<uintptr_t>(ttyd::statuswindow::g_StatusWindowWork) + 0x24);
+
         if (menu_height < 100.f || menu_height > 330.f)
             return;
 
         gc::mtx34 matrix;
-        uint32_t color = ~0U;
-        int32_t current_AP = pouchGetAP();
         gc::mtx::PSMTXTrans(&matrix, 192.f, menu_height - 100.f, 0.f);
+
+        const int32_t current_AP = pouchGetAP();
+        uint32_t color = ~0U;
+
         ttyd::icondrv::iconNumberDispGx(&matrix, current_AP, /* is_small = */ 1, &color);
         return g_statusWinDisp_trampoline();
     }
