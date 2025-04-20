@@ -5,6 +5,7 @@
 #include "visibility.h"
 #include "gc/pad.h"
 #include "ttyd/system.h"
+#include "ttyd/party.h"
 #include "ttyd/mario_pouch.h"
 #include "ttyd/memory.h"
 #include "ttyd/swdrv.h"
@@ -16,6 +17,8 @@
 
 #include <cstdint>
 #include <cstring>
+
+using namespace mod::util;
 
 KEEP_FUNC uint32_t autoMashText(gc::pad::PadId controllerId)
 {
@@ -84,6 +87,17 @@ KEEP_FUNC void *fixPouchInitMemoryLeak(int32_t heap, uint32_t size)
         // The memory has not been allocated, so allocate it
         return ttyd::memory::__memAlloc(heap, size);
     }
+}
+
+KEEP_FUNC ttyd::party::PartyEntry *cFixEvtMapSetFlagCrash(ttyd::party::PartyEntry *partyPtr, bool shouldSpawnPartner)
+{
+    // Bring out a partner/follower if no partner/follower is currently out
+    if (partyPtr)
+    {
+        return partyPtr;
+    }
+
+    return ttyd::party::partyGetPtr(spawnFailsafePartnerOrFollower(shouldSpawnPartner));
 }
 
 KEEP_FUNC void cPreventDiaryTextboxOptionSelection(const char *currentText, int32_t *storeAddress, int32_t selectedOption)

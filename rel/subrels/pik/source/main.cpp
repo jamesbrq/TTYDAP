@@ -411,6 +411,9 @@ namespace mod
         pik_01_init_evt[314] = GSW(1708);
         pik_01_init_evt[315] = 19;
         patch::writePatch(&pik_01_init_evt[342], pik_01_init_evt_hook, sizeof(pik_01_init_evt_hook));
+        pik_01_init_evt[346] = 0;
+        pik_01_init_evt[347] = 0;
+        pik_01_init_evt[348] = 0;
         pik_01_init_evt[429] = GSW(1707);
         pik_01_init_evt[430] = 16;
         pik_01_init_evt[438] = GSW(1707);

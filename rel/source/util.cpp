@@ -1,10 +1,16 @@
 #include "util.h"
+#include "ttyd/party.h"
+#include "ttyd/mario.h"
+#include "ttyd/mario_party.h"
 #include "gc/pad.h"
 #include "ttyd/system.h"
 #include "ttyd/fontmgr.h"
 
 #include <cstdint>
 #include <cstring>
+
+using namespace ttyd::party;
+using namespace ttyd::mario_party;
 
 namespace mod::util
 {
@@ -26,6 +32,96 @@ namespace mod::util
     bool checkButtonComboEveryFrame(uint32_t combo)
     {
         return (ttyd::system::keyGetButton(gc::pad::PadId::CONTROLLER_ONE) & combo) == combo;
+    }
+
+    PartySlotId spawnFailsafePartnerOrFollower(bool shouldSpawnPartner)
+    {
+        const ttyd::mario::Player *playerPtr = ttyd::mario::marioGetPtr();
+        PartyMembers previousOut;
+
+        if (shouldSpawnPartner)
+        {
+            // Get the previous partner out
+            previousOut = playerPtr->prevPartnerId;
+        }
+        else
+        {
+            // Get the previous follower out
+            previousOut = playerPtr->prevFollowerId;
+        }
+
+        // Check if a partner/follower was previously out
+        if (previousOut != PartyMembers::kNone)
+        {
+            // A partner/follower was previously out, so bring them back out
+            return spawnPartnerOrFollower(previousOut);
+        }
+        else if (shouldSpawnPartner)
+        {
+            // No partner was previously out, so bring out Goombella
+            return spawnPartnerOrFollower(getFirstPartner());
+        }
+        else
+        {
+            // No follower was previously out, so bring out Flavio
+            return spawnPartnerOrFollower(PartyMembers::kFlavio);
+        }
+    }
+
+    PartyMembers getFirstPartner()
+    {
+        for (int i = 0; i < (int)(sizeof(PartyMembers) / sizeof(PartyMembers::kGoombella)); i++)
+        {
+            if (partyChkJoin(static_cast<PartyMembers>(i)))
+                return static_cast<PartyMembers>(i);
+        }
+        return PartyMembers::kGoombella;
+    }
+
+    PartySlotId spawnPartnerOrFollower(PartyMembers id)
+    {
+        // Make sure the partner/follower is valid
+        if ((id <= PartyMembers::kNone) || (id > PartyMembers::kMsMowzFollower))
+        {
+            return PartySlotId::kNone;
+        }
+
+        PartySlotId slotId;
+
+        // If spawning a partner, make sure they are enabled when marioPartyEntry is called
+        if ((id >= PartyMembers::kGoombella) && (id <= PartyMembers::kMsMowz))
+        {
+            // Check if the selected partner is in the partner menu
+            const bool partnerInPauseMenu = partyChkJoin(id);
+
+            // Make sure the selected partner is in the partner menu, as otherwise marioPartyEntry will not spawn them
+            partyJoin(id);
+
+            // Spawn the partner
+            slotId = marioPartyEntry(id);
+
+            // If the selected partner was not in the partner menu, then remove them
+            if (!partnerInPauseMenu)
+            {
+                partyLeft(id);
+            }
+        }
+        else
+        {
+            // Spawn the follower
+            slotId = marioPartyEntry(id);
+        }
+
+        // Make sure the partner/follower spawned properly
+        if (slotId <= PartySlotId::kNone)
+        {
+            return slotId;
+        }
+
+        // Make sure the partner/follower is moving
+        partyRun(partyGetPtr(slotId));
+
+        return slotId;
     }
 
     uint32_t ptrIsValid(void *ptr)

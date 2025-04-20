@@ -8,10 +8,10 @@ namespace ttyd::mario_party
         // unk_JP_US_EU_32
 
         // Set party member by kind. Returns slot used.
-        int marioPartyEntry(int partyKindId);
+        PartySlotId marioPartyEntry(PartyMembers partyKindId);
 
         // Set party member by kind with hello animation. Returns slot used.
-        int marioPartyHello(int partyKindId);
+        int marioPartyHello(PartyMembers partyKindId);
 
         // Remove main party if present. Returns whether there was one.
         bool marioPartyGoodbye();
@@ -29,13 +29,13 @@ namespace ttyd::mario_party
         int marioGetExtraPartyId();
 
         // Add party kind to pouch.
-        void partyJoin(int partyKindId);
+        void partyJoin(PartyMembers partyKindId);
 
         // Remove party kind from pouch.
-        void partyLeft(int partyKindId);
+        void partyLeft(PartyMembers partyKindId);
 
         // Check whether the given party kind has already joined.
-        bool partyChkJoin(int partyKindId);
+        bool partyChkJoin(PartyMembers partyKindId);
 
         // Get current HP for party kind.
         int partyGetHp(int partyKindId);

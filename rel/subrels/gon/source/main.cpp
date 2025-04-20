@@ -163,8 +163,8 @@ namespace mod
         gon_evt_majin2[1] = EVT_HELPER_OP(LW(3));
         patch::writePatch(&gon_evt_majin2[3], gon_evt_majin2_item, sizeof(gon_evt_majin2_item));
 
-        gon_06_init_evt[6] = GSWF(6012);
-        gon_06_init_evt[7] = 1;
+        gon_06_init_evt[6] = GSW(1711);
+        gon_06_init_evt[7] = 99; // Unused
         gon_06_init_evt[317] = GSWF(6011);
         gon_06_init_evt[318] = 1;
 

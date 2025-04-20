@@ -17,7 +17,7 @@ namespace gc::mtx
         void PSMTXRotTrig(mat3x4 *dst, char axis, float sin, float cos);
         // local: __PSMTXRotAxisRadInternal
         void PSMTXRotAxisRad(mat3x4 *dst, gc::vec3 *axis);
-        void PSMTXTrans(mat3x4 *dst, float tx, float ty, float tz);
+        void PSMTXTrans(mtx34 *dst, float tx, float ty, float tz);
         void PSMTXTransApply(mat3x4 *src, mat3x4 *dst, float tx, float ty, float tz);
         void PSMTXScale(mat3x4 *dst, float sx, float sy, float sz);
         void PSMTXScaleApply(mat3x4 *src, mat3x4 *dst, float sx, float sy, float sz);

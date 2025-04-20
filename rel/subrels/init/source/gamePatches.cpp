@@ -47,6 +47,27 @@ void applyGameFixes()
 
     mod::patch::writeBranchBL(blooperCrash1Address, asmFixBlooperCrash1);
     mod::patch::writeBranchBL(blooperCrash2Address, asmFixBlooperCrash2);
+
+        // Fix crashes that can occur when evt_map_blend_set_flag is trying to apply effects to partners/followers when one is not
+    // out
+#ifdef TTYD_US
+    constexpr uint32_t evtMapBlendSetFlagPartnerCrashAddress = 0x800389C4;
+    constexpr uint32_t evtMapBlendSetFlagFollowerCrashAddress = 0x80038A0C;
+#elif defined TTYD_JP
+    constexpr uint32_t evtMapBlendSetFlagPartnerCrashAddress = 0x80038328;
+    constexpr uint32_t evtMapBlendSetFlagFollowerCrashAddress = 0x80038370;
+#elif defined TTYD_EU
+    constexpr uint32_t evtMapBlendSetFlagPartnerCrashAddress = 0x80038AAC;
+    constexpr uint32_t evtMapBlendSetFlagFollowerCrashAddress = 0x80038AF4;
+#endif
+
+    mod::patch::writeStandardBranches(reinterpret_cast<void *>(evtMapBlendSetFlagPartnerCrashAddress),
+                          asmFixEvtMapBlendSetFlagPartnerCrashStart,
+                          asmFixEvtMapBlendSetFlagPartnerCrashBranchBack);
+
+    mod::patch::writeStandardBranches(reinterpret_cast<void *>(evtMapBlendSetFlagFollowerCrashAddress),
+                          asmFixEvtMapBlendSetFlagFollowerCrashStart,
+                          asmFixEvtMapBlendSetFlagFollowerCrashBranchBack);
 }
 
 void applyVariousGamePatches()

@@ -2,6 +2,7 @@
 #include "OWR.h"
 #include "patch.h"
 #include "ttyd/evt_mario.h"
+#include "ttyd/statuswindow.h"
 #include "ttyd/mario_pouch.h"
 #include "ttyd/msgdrv.h"
 #include "ttyd/seq_logo.h"
@@ -13,7 +14,7 @@
 #include <cstdint>
 
 // Assembly References
-extern int32_t main_statusWinDisp[];
+extern int32_t statusWinDisp[];
 extern int32_t main_winRootMain[];
 extern int32_t main_compare_func3_r[];
 extern int32_t main_compare_func3[];
@@ -99,8 +100,8 @@ namespace mod::owr
     {
         writeIntWithCache(&loadDraw[777], 0x480000C4); // li r3, 0x6A4 (GSW(1700))
 
-        writeIntWithCache(&main_statusWinDisp[425], 0x386006A4); // li r3, 0x6A4 (GSW(1700))
-        writeIntWithCache(&main_statusWinDisp[487], 0x386006A4); // li r3, 0x6A4 (GSW(1700))
+        writeIntWithCache(&statusWinDisp[425], 0x386006A4); // li r3, 0x6A4 (GSW(1700))
+        writeIntWithCache(&statusWinDisp[487], 0x386006A4); // li r3, 0x6A4 (GSW(1700))
 
         writeIntWithCache(&main_winRootMain[40], 0x386006A4); // li r3, 0x6A4 (GSW(1700))
         writeIntWithCache(&main_winRootMain[82], 0x386006A4); // li r3, 0x6A4 (GSW(1700))
@@ -447,5 +448,8 @@ namespace mod::owr
         g_pouchGetItem_trampoline = patch::hookFunction(ttyd::mario_pouch::pouchGetItem, pouchGetItemHook);
         g_partySetForceMove_trampoline = patch::hookFunction(ttyd::party::partySetForceMove, partySetForceMoveHook);
         g_evt_mario_set_pose_trampoline = patch::hookFunction(ttyd::evt_mario::evt_mario_set_pose, evtMarioSetPoseHook);
+        g_statusWinDisp_trampoline = patch::hookFunction(ttyd::statuswindow::statusWinDisp, DisplayStarPowerNumber);
+        g_gaugeDisp_trampoline = patch::hookFunction(ttyd::statuswindow::gaugeDisp, DisplayStarPowerOrbs);
+        g_pouchGetStarstone_trampoline = patch::hookFunction(ttyd::mario_pouch::pouchGetStarstone, SetMaxSP);
     }
 } // namespace mod::owr

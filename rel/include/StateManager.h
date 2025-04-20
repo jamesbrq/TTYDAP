@@ -1,13 +1,14 @@
 #pragma once
 
 #include <cstdint>
+#include <ttyd/party.h>
 
 namespace mod::owr
 {
     struct APSettings
     {
         uint8_t requiredChapterClears;
-        uint8_t startingPartner;
+        ttyd::party::PartyMembers startingPartner;
         uint8_t yoshiColor;
         uint8_t apEnabled;
         char *yoshiName;

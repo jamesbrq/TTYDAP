@@ -1,6 +1,7 @@
 #pragma once
 
 #include <gc/os.h>
+#include "ttyd/party.h"
 
 #include <cstdint>
 
@@ -18,6 +19,8 @@
             gc::os::OSPanic(__FILE__, __LINE__, "Mod assertion failed: %s\n", #x); \
         }                                                                          \
     } while (false)
+
+using namespace ttyd::party;
 
 namespace mod::util
 {
@@ -38,6 +41,10 @@ namespace mod::util
     bool checkButtonCombo(uint32_t combo);
     bool checkButtonsEveryFrame(uint32_t buttons);
     bool checkButtonComboEveryFrame(uint32_t combo);
+
+    PartySlotId spawnPartnerOrFollower(PartyMembers id);
+    PartySlotId spawnFailsafePartnerOrFollower(bool shouldSpawnPartner);
+    PartyMembers getFirstPartner();
 
     uint32_t ptrIsValid(void *ptr);
     float intToFloat(int32_t value);

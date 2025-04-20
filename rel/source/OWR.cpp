@@ -1,16 +1,17 @@
+#include "relmgr.h"
+#include "visibility.h"
 #include <AP/rel_patch_definitions.h>
 #include <cstdint>
 #include <cstring>
 #include <gc/OSModule.h>
 #include <gc/pad.h>
 #include <mod.h>
-#include "relmgr.h"
-#include "visibility.h"
-#include <ttyd/countdown.h>
 #include <ttyd/common_types.h>
+#include <ttyd/countdown.h>
 #include <ttyd/evt_mario.h>
 #include <ttyd/evt_pouch.h>
 #include <ttyd/evt_window.h>
+#include <ttyd/icondrv.h>
 #include <ttyd/mario.h>
 #include <ttyd/mario_motion.h>
 #include <ttyd/mario_party.h>
@@ -20,6 +21,7 @@
 #include <ttyd/party.h>
 #include <ttyd/seq_mapchange.h>
 #include <ttyd/seqdrv.h>
+#include <ttyd/statuswindow.h>
 #include <ttyd/string.h>
 #include <ttyd/swdrv.h>
 
@@ -37,6 +39,8 @@ using namespace mod::util;
 using namespace ttyd::common;
 using namespace ttyd::mario;
 using namespace ttyd::mario_pouch;
+using namespace ttyd::icondrv;
+using namespace ttyd::statuswindow;
 using namespace ttyd::evt_pouch;
 using namespace ttyd::seqdrv;
 
@@ -103,6 +107,9 @@ namespace mod::owr
     KEEP_VAR void (*g_partySetForceMove_trampoline)(ttyd::party::PartyEntry *ptr, float x, float z, float speed) = nullptr;
     KEEP_VAR int32_t (*g_evt_mario_set_pose_trampoline)(ttyd::evtmgr::EvtEntry *evt, bool firstCall) = nullptr;
     KEEP_VAR const char *(*g_msgSearch_trampoline)(const char *) = nullptr;
+    KEEP_VAR void (*g_statusWinDisp_trampoline)(void) = nullptr;
+    KEEP_VAR void (*g_gaugeDisp_trampoline)(double, double, int32_t) = nullptr;
+    KEEP_VAR void (*g_pouchGetStarstone_trampoline)(int32_t) = nullptr;
 
     void OWR::SequenceInit()
     {
@@ -129,7 +136,7 @@ namespace mod::owr
 
         if (gState->apSettings->apEnabled)
         {
-            ttyd::mario_pouch::pouchSetPartyColor(static_cast<uint8_t>(ttyd::party::PartyMembers::Yoshi),
+            ttyd::mario_pouch::pouchSetPartyColor(static_cast<uint8_t>(ttyd::party::PartyMembers::kYoshi),
                                                   gState->apSettings->yoshiColor);
             ttyd::mario_pouch::pouchSetYoshiName(gState->apSettings->yoshiName);
 
@@ -178,7 +185,7 @@ namespace mod::owr
     void OWR::HomewardWarp()
     {
         const Player *marioPtr = marioGetPtr();
-        if (marioPtr->characterId != 0)
+        if (marioPtr->characterId != MarioCharacters::kMario)
             return;
         if (!checkIfInGame())
             return;
@@ -210,7 +217,7 @@ namespace mod::owr
 
         if (value != 0)
         {
-            ttyd::mario_pouch::pouchGetItem(value);
+            pouchGetItem(value);
             memset(reinterpret_cast<void *>(item_pointer), 0, sizeof(item_pointer));
         }
     }
@@ -227,13 +234,25 @@ namespace mod::owr
 
     KEEP_FUNC void seqSetSeqHook(SeqIndex seq, const char *map, const char *bero)
     {
+        // Make sure the map is valid
+        if (!map)
+        {
+            return g_seqSetSeq_trampoline(seq, map, bero);
+        }
+
         // Check if map is equal to 1 so we dont call a strcmp with an invalid pointer
         if (map == reinterpret_cast<const char *>(1))
         {
             return g_seqSetSeq_trampoline(seq, map, bero);
         }
 
-        if (map && strcmp(map, "rsh_01_a") == 0)
+        // Give Zess T. the conctact lens upon entering westside
+        if (strcmp(map, "gor_03") == 0)
+        {
+            ttyd::swdrv::swSet(1188);
+        }
+
+        if (strcmp(map, "rsh_01_a") == 0)
         {
             uint8_t value = ttyd::swdrv::swByteGet(1706);
 
@@ -242,7 +261,7 @@ namespace mod::owr
             else if ((value >= 14 && value < 22) || (value >= 30 && value < 31))
                 map = "rsh_01_c";
         }
-        if (map && strcmp(map, "rsh_02_a") == 0)
+        else if (strcmp(map, "rsh_02_a") == 0)
         {
             uint8_t value = ttyd::swdrv::swByteGet(1706);
 
@@ -251,13 +270,13 @@ namespace mod::owr
             else if ((value >= 14 && value < 22) || (value >= 30 && value < 31))
                 map = "rsh_02_c";
         }
-        if (map && strcmp(map, "aaa_00") == 0)
+        else if (strcmp(map, "aaa_00") == 0)
         {
             uint32_t namePtr = 0x802c0298;
             const char *mapName = reinterpret_cast<char *>(namePtr);
             return g_seqSetSeq_trampoline(seq, mapName, bero);
         }
-        if (map && strncmp(map, "rsh", 3) == 0)
+        else if (strncmp(map, "rsh", 3) == 0)
         {
             if (ttyd::swdrv::swByteGet(1706) < 43)
             {
@@ -267,24 +286,29 @@ namespace mod::owr
                 }
             }
         }
-        if (map && gState->apSettings->palaceSkip != 0 && strcmp(map, "las_00") == 0)
+
+        if (gState->apSettings->palaceSkip != 0)
         {
-            if (ttyd::swdrv::swByteGet(1708) < 14)
-                ttyd::swdrv::swByteSet(1706, 14);
-            uint32_t namePtr = 0x802c0a94; // las_27
-            const char *mapName = reinterpret_cast<char *>(namePtr);
-            uint32_t beroPtr = 0x802e7de4; // w_bero
-            const char *beroName = reinterpret_cast<char *>(beroPtr);
-            return g_seqSetSeq_trampoline(seq, mapName, beroName);
+            if (strcmp(map, "las_00") == 0)
+            {
+                if (ttyd::swdrv::swByteGet(1708) < 14)
+                    ttyd::swdrv::swByteSet(1706, 14);
+                uint32_t namePtr = 0x802c0a94; // las_27
+                const char *mapName = reinterpret_cast<char *>(namePtr);
+                uint32_t beroPtr = 0x802e7de4; // w_bero
+                const char *beroName = reinterpret_cast<char *>(beroPtr);
+                return g_seqSetSeq_trampoline(seq, mapName, beroName);
+            }
+            else if (strcmp(map, "las_25") == 0)
+            {
+                uint32_t namePtr = 0x802c02f8; // tik_05
+                const char *mapName = reinterpret_cast<char *>(namePtr);
+                uint32_t beroPtr = 0x802e8bd8; // n_bero
+                const char *beroName = reinterpret_cast<char *>(beroPtr);
+                return g_seqSetSeq_trampoline(seq, mapName, beroName);
+            }
         }
-        if (map && gState->apSettings->palaceSkip != 0 && strcmp(map, "las_25") == 0)
-        {
-            uint32_t namePtr = 0x802c02f8; // tik_05
-            const char *mapName = reinterpret_cast<char *>(namePtr);
-            uint32_t beroPtr = 0x802e8bd8; // n_bero
-            const char *beroName = reinterpret_cast<char *>(beroPtr);
-            return g_seqSetSeq_trampoline(seq, mapName, beroName);
-        }
+
         return g_seqSetSeq_trampoline(seq, map, bero);
     }
 
@@ -492,50 +516,43 @@ namespace mod::owr
         {
             case ItemId::SUPER_LUIGI:
             {
-                uint8_t member = static_cast<uint8_t>(ttyd::party::PartyMembers::Goombella);
-                ttyd::mario_party::partyJoin(member);
+                ttyd::mario_party::partyJoin(PartyMembers::kGoombella);
                 return_value = 1;
                 break;
             }
             case ItemId::SUPER_LUIGI_2:
             {
-                uint8_t member = static_cast<uint8_t>(ttyd::party::PartyMembers::Koops);
-                ttyd::mario_party::partyJoin(member);
+                ttyd::mario_party::partyJoin(PartyMembers::kKoops);
                 return_value = 1;
                 break;
             }
             case ItemId::SUPER_LUIGI_3:
             {
-                uint8_t member = static_cast<uint8_t>(ttyd::party::PartyMembers::Flurrie);
-                ttyd::mario_party::partyJoin(member);
+                ttyd::mario_party::partyJoin(PartyMembers::kFlurrie);
                 return_value = 1;
                 break;
             }
             case ItemId::SUPER_LUIGI_4:
             {
-                uint8_t member = static_cast<uint8_t>(ttyd::party::PartyMembers::Yoshi);
-                ttyd::mario_party::partyJoin(member);
+                ttyd::mario_party::partyJoin(PartyMembers::kYoshi);
                 return_value = 1;
                 break;
             }
             case ItemId::SUPER_LUIGI_5:
             {
-                uint8_t member = static_cast<uint8_t>(ttyd::party::PartyMembers::Vivian);
-                ttyd::mario_party::partyJoin(member);
+                ttyd::mario_party::partyJoin(PartyMembers::kVivian);
                 return_value = 1;
                 break;
             }
             case ItemId::INVALID_ITEM_006F:
             {
-                uint8_t member = static_cast<uint8_t>(ttyd::party::PartyMembers::Bobbery);
-                ttyd::mario_party::partyJoin(member);
+                ttyd::mario_party::partyJoin(PartyMembers::kBobbery);
                 return_value = 1;
                 break;
             }
             case ItemId::INVALID_ITEM_0070:
             {
-                uint8_t member = static_cast<uint8_t>(ttyd::party::PartyMembers::MsMowz);
-                ttyd::mario_party::partyJoin(member);
+                ttyd::mario_party::partyJoin(PartyMembers::kMsMowz);
                 return_value = 1;
                 break;
             }
@@ -546,13 +563,13 @@ namespace mod::owr
             }
             case ItemId::INVALID_ITEM_PAPER_0053:
             {
-                ttyd::mario_pouch::pouchAddCoin(10);
+                pouchAddCoin(10);
                 return_value = 1;
                 break;
             }
             case ItemId::BOOTS:
             {
-                const bool has_boots = ttyd::mario_pouch::pouchCheckItem(ItemId::BOOTS) > 0;
+                const bool has_boots = pouchCheckItem(ItemId::BOOTS) > 0;
                 if (!has_boots)
                 {
                     g_pouchGetItem_trampoline(item);
@@ -560,36 +577,36 @@ namespace mod::owr
                     break;
                 }
 
-                const bool has_sboots = ttyd::mario_pouch::pouchCheckItem(ItemId::SUPER_BOOTS) > 0;
+                const bool has_sboots = pouchCheckItem(ItemId::SUPER_BOOTS) > 0;
                 if (!has_sboots)
                 {
-                    ttyd::mario_pouch::pouchGetItem(ItemId::SUPER_BOOTS);
+                    pouchGetItem(ItemId::SUPER_BOOTS);
                     return_value = 1;
                     break;
                 }
 
-                ttyd::mario_pouch::pouchGetItem(ItemId::ULTRA_BOOTS);
+                pouchGetItem(ItemId::ULTRA_BOOTS);
                 return_value = 1;
                 break;
             }
             case ItemId::HAMMER:
             {
-                const bool has_hammer = ttyd::mario_pouch::pouchCheckItem(ItemId::HAMMER) > 0;
+                const bool has_hammer = pouchCheckItem(ItemId::HAMMER) > 0;
                 if (!has_hammer)
                 {
                     g_pouchGetItem_trampoline(item);
                     break;
                 }
 
-                const bool has_shammer = ttyd::mario_pouch::pouchCheckItem(ItemId::SUPER_HAMMER) > 0;
+                const bool has_shammer = pouchCheckItem(ItemId::SUPER_HAMMER) > 0;
                 if (!has_shammer)
                 {
-                    ttyd::mario_pouch::pouchGetItem(ItemId::SUPER_HAMMER);
+                    pouchGetItem(ItemId::SUPER_HAMMER);
                     return_value = 1;
                     break;
                 }
 
-                ttyd::mario_pouch::pouchGetItem(ItemId::ULTRA_HAMMER);
+                pouchGetItem(ItemId::ULTRA_HAMMER);
                 return_value = 1;
                 break;
             }
@@ -602,8 +619,8 @@ namespace mod::owr
                 }
 
                 // Loop through all of the important items until either the coconut or an empty slot is found
-                constexpr uint32_t loopCount = sizeof(ttyd::mario_pouch::PouchData::key_items) / sizeof(int16_t);
-                int16_t *keyItemsPtr = &ttyd::mario_pouch::pouchGetPtr()->key_items[0];
+                constexpr uint32_t loopCount = sizeof(PouchData::key_items) / sizeof(int16_t);
+                int16_t *keyItemsPtr = &pouchGetPtr()->key_items[0];
 
                 for (uint32_t i = 0; i < loopCount; i++)
                 {
@@ -635,9 +652,9 @@ namespace mod::owr
     KEEP_FUNC void partySetForceMoveHook(ttyd::party::PartyEntry *ptr, float x, float z, float speed)
     {
         const Player *marioPtr = marioGetPtr();
-        if (marioPtr->characterId == 0)
+        if (marioPtr->characterId == MarioCharacters::kMario)
         {
-            if (marioPtr->motionId == static_cast<uint32_t>(ttyd::mario_motion::MarioMotion::kYoshi))
+            if (marioPtr->currentMotionId == ttyd::mario_motion::MarioMotion::kYoshi)
                 ttyd::mario_motion::marioChgMot(ttyd::mario_motion::MarioMotion::kStay);
         }
         return g_partySetForceMove_trampoline(ptr, x, z, speed);
@@ -646,9 +663,9 @@ namespace mod::owr
     KEEP_FUNC int32_t evtMarioSetPoseHook(ttyd::evtmgr::EvtEntry *evt, bool firstCall)
     {
         const Player *marioPtr = marioGetPtr();
-        if (marioPtr->characterId == 0)
+        if (marioPtr->characterId == MarioCharacters::kMario)
         {
-            if (marioPtr->motionId == static_cast<uint32_t>(ttyd::mario_motion::MarioMotion::kYoshi))
+            if (marioPtr->currentMotionId == ttyd::mario_motion::MarioMotion::kYoshi)
                 ttyd::mario_motion::marioChgMot(ttyd::mario_motion::MarioMotion::kStay);
         }
         return g_evt_mario_set_pose_trampoline(evt, firstCall);
@@ -674,6 +691,71 @@ namespace mod::owr
         }
 #endif
         return gTrampoline_seq_logoMain(info);
+    }
+
+    KEEP_FUNC void DisplayStarPowerOrbs(double x, double y, int32_t star_power)
+    {
+        int32_t max_star_power = pouchGetMaxAP();
+
+        if (max_star_power > 800)
+            max_star_power = 800;
+        if (star_power > max_star_power)
+            star_power = max_star_power;
+        if (star_power < 0)
+            star_power = 0;
+
+        int32_t full_orbs = star_power / 100;
+        int32_t remainder = star_power % 100;
+        int32_t part_frame = remainder * 15 / 99;
+        if (remainder > 0 && star_power > 0 && part_frame == 0)
+            part_frame = 1;
+
+        if (part_frame != 0)
+        {
+            gc::vec3 pos = {static_cast<float>(x + 32.f * full_orbs), static_cast<float>(y), 0.f};
+            ttyd::icondrv::iconDispGx(1.f, &pos, 0x10, ttyd::statuswindow::gauge_wakka[part_frame]);
+        }
+        // Draw grey orbs up to the max amount of SP / 100 (rounded up, max of 8).
+        for (int32_t i = 0; i < (max_star_power + 99) / 100; ++i)
+        {
+            gc::vec3 pos = {static_cast<float>(x + 32.f * i), static_cast<float>(y + 12.f), 0.f};
+            uint16_t icon = i < full_orbs ? ttyd::statuswindow::gauge_back[i] : 0x1c7;
+            ttyd::icondrv::iconDispGx(1.f, &pos, 0x10, icon);
+        }
+        return g_gaugeDisp_trampoline(x, y, star_power);
+    }
+
+    // Displays the Star Power in 0.01 units numerically below the status window.
+    KEEP_FUNC void DisplayStarPowerNumber()
+    {
+        // Don't display SP if no Star Powers have been unlocked yet.
+        if (pouchGetMaxAP() <= 0)
+            return;
+
+        // Don't try to display SP if the status bar is not on-screen.
+        float menu_height =
+            *reinterpret_cast<float *>(reinterpret_cast<uintptr_t>(ttyd::statuswindow::g_StatusWindowWork) + 0x24);
+        if (menu_height < 100.f || menu_height > 330.f)
+            return;
+
+        gc::mtx34 matrix;
+        uint32_t color = ~0U;
+        int32_t current_AP = pouchGetAP();
+        gc::mtx::PSMTXTrans(&matrix, 192.f, menu_height - 100.f, 0.f);
+        ttyd::icondrv::iconNumberDispGx(&matrix, current_AP, /* is_small = */ 1, &color);
+        return g_statusWinDisp_trampoline();
+    }
+
+    // Make sure that the new MaxAP is greater than or equal to the current AP
+    KEEP_FUNC void SetMaxSP(int star)
+    {
+        PouchData *pouchData = pouchGetPtr();
+        int16_t maxSP = pouchData->max_sp;
+        int16_t newMaxSP = star * 100;
+        g_pouchGetStarstone_trampoline(star);
+        if (newMaxSP < maxSP)
+            pouchData->max_sp = maxSP;
+        return;
     }
 
     void OWR::Update()

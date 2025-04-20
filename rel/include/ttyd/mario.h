@@ -1,29 +1,50 @@
 #pragma once
 
+#include "ttyd/mario_motion.h"
+#include "gc/types.h"
+
 #include <cstdint>
 #include <cstddef>
 
+namespace ttyd::party
+{
+    enum class PartyMembers : uint8_t;
+}
+
 namespace ttyd::mario
 {
+    enum class MarioCharacters : int8_t
+    {
+        kMario = 0,
+        kPeach,
+        kBowser,
+    };
+
+    // The Player struct was defined using the US version, but has been adjusted to work with the JP version as well
+    // The Player struct is also 100% identical between US and EU
     struct Player
     {
         uint32_t flags1;
         uint32_t flags2;
         uint32_t unk_8;
         uint32_t flags3;
-        uint8_t gap_10[8];
+        uint32_t flags4;
+        uint8_t gap_14[4];
         const char *animName;
         uint32_t unk_1c;
         uint32_t unk_20;
         uint32_t unk_24;
         uint16_t unk_28;
         uint16_t pad_2a;
-        uint32_t motionId;
-        uint16_t prevMotionId;
+        uint16_t unk_2c;
+        ttyd::mario_motion::MarioMotion currentMotionId;
+        ttyd::mario_motion::MarioMotion prevMotionId;
         uint16_t pad_32;
         uint32_t wMapTime;
-        uint32_t wUnkCounter;
-        int8_t characterId;
+        uint8_t unk_38;
+        int8_t wKey;
+        uint16_t unk_3a;
+        MarioCharacters characterId;
         int8_t colorId;
         uint8_t unk_3e;
         int8_t wWallTimer;
@@ -33,7 +54,7 @@ namespace ttyd::mario
         uint32_t unk_44;
         uint32_t wYawnTimer;
         uint16_t wInvincibleTimer;
-        uint16_t unk_4e;
+        int16_t unk_4e;
         uint16_t wAirTimer;
         uint16_t pad_52;
         uint8_t gap_54[40];
@@ -41,17 +62,17 @@ namespace ttyd::mario
         float wJumpAccelerationY;
         float unk_84;
         float unk_88;
-        float playerPosition[3];
-        float wModelPosition[3];
-        float wAnimPosition[3];
+        gc::vec3 playerPosition;
+        gc::vec3 wModelPosition;
+        gc::vec3 wAnimPosition;
         uint8_t gap_b0[20];
         float wRotationY;
-        float wSizeVector[3];
-        float wLastGroundPosition[3];
-        float unkPosition[3];
-        float wCameraPosition[3];
+        gc::vec3 wSizeVector;
+        gc::vec3 wLastGroundPosition;
+        gc::vec3 unkPosition;
+        gc::vec3 wCameraPosition;
         uint8_t gap_f8[24];
-        float wPlayerPosition2[3];
+        gc::vec3 wPlayerPosition2;
         uint8_t gap_11c[16];
         float wJumpApopasis;
         uint32_t unk_130;
@@ -60,23 +81,29 @@ namespace ttyd::mario
         float wCamZoom;
         float wCamPan;
         uint8_t gap_150[48];
-        float wPlayerTarget;
+        float wPlayerBaseSpeed;
         float unk_184;
         float unk_188;
         float wPlayerEffectiveSpeed;
+
+#ifndef TTYD_JP
         float unk_190;
+#endif
+
         float wControlStickSensitivity;
         float wControlStickAngle;
-        float viewDirectionForwardWorld;
-        float playerDirectionWorld;
+        float unk_19c;
+        float wPlayerAngleCurrent;
         float wPlayerAngle;
         float unk_1a8;
-        float playerDisplayDirectionCurrent;
-        float playerDisplayDirectionTarget;
+        float wPlayerDirectionCurrent;
+        float wPlayerDirection;
         uint32_t unk_1b4;
-        float wPlayerCollisionBox[3];
-        float wPlayerCollisionRelated[3];
-        uint8_t gap_1d0[20];
+        gc::vec3 wPlayerCollisionBox;
+        gc::vec3 wPlayerCollisionRelated;
+        uint8_t gap_1d0[8];
+        void *touchNpcPtr;
+        uint8_t gap_1dc[8];
         void *wObjInteract;
         void *wObjStandOn;
         void *wObjJumpFrom;
@@ -88,13 +115,18 @@ namespace ttyd::mario
         void *wObjHammer;
         void *wObjHazardRespawn;
         void *wUnkObj6;
-        uint8_t gap_210[52];
+        uint8_t gap_210[24];
+        float playerGravity;
+        uint8_t gap_22c[24];
         uint8_t unk_244;
-        uint8_t partyId[2];
-        uint8_t prevPartyId[2];
+        ttyd::party::PartyMembers partnerId;
+        ttyd::party::PartyMembers followerId;
+        ttyd::party::PartyMembers prevPartnerId;
+        ttyd::party::PartyMembers prevFollowerId;
         uint8_t unk_249;
         uint16_t wPauseButtonBuffer;
-        uint32_t unk_24c;
+        uint16_t unk_24c;
+        uint16_t unk_24e;
         uint16_t unk_250;
         uint8_t wStickDir1;
         uint8_t wStickDir2;
@@ -102,20 +134,33 @@ namespace ttyd::mario
         uint8_t wSubStickDir2;
         uint8_t wPauseLeftTrigger;
         uint8_t wPauseRightTrigger;
-        uint32_t unk_258;
+        uint8_t unk_258;
+        uint8_t unk_259;
+        uint16_t unk_25a;
         uint32_t unk_25c;
+
+#ifdef TTYD_JP
+        uint8_t gap_260[68];
+#else
         uint8_t gap_260[88];
+#endif
+
         float wMultiVal1;
         float wYoshiHoverHeight;
         float wCamVal1;
         float wHazardSpeed;
-        uint8_t gap_2c8[28];
-        float wResetPosition[3];
+        uint8_t gap_2c8[24];
+        uint32_t wbReloadMapOnBottomless;
+        gc::vec3 bottomlessResetPosition;
         uint32_t unk_2f0;
         uint32_t unk_2f4;
     } __attribute__((__packed__));
 
+#ifdef TTYD_JP
+    static_assert(sizeof(Player) == 0x2E0);
+#else
     static_assert(sizeof(Player) == 0x2F8);
+#endif
 
     extern "C"
     {

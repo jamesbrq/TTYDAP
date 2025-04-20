@@ -41,6 +41,9 @@ namespace mod::owr
     int32_t evtMarioSetPoseHook(EvtEntry *evt, bool firstCall);
     const char *msgSearchHook(const char *msgKey);
     void logoSkip(SeqInfo *index);
+    void DisplayStarPowerNumber();
+    void DisplayStarPowerOrbs(double x, double y, int32_t star_power);
+    void SetMaxSP(int32_t star);
 
     extern bool (*g_OSLink_trampoline)(OSModuleInfo *, void *);
     extern void (*g_seqSetSeq_trampoline)(SeqIndex seq, const char *map, const char *bero);
@@ -49,6 +52,9 @@ namespace mod::owr
     extern void (*g_partySetForceMove_trampoline)(ttyd::party::PartyEntry *ptr, float x, float z, float speed);
     extern int32_t (*g_evt_mario_set_pose_trampoline)(ttyd::evtmgr::EvtEntry *evt, bool firstCall);
     extern const char *(*g_msgSearch_trampoline)(const char *);
+    extern void (*g_statusWinDisp_trampoline)(void);
+    extern void (*g_gaugeDisp_trampoline)(double, double, int32_t);
+    extern void (*g_pouchGetStarstone_trampoline)(int32_t);
 
     extern const char *goombellaName;
     extern const char *goombellaDescription;

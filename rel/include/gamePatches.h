@@ -1,6 +1,7 @@
 #pragma once
 
 #include "gc/pad.h"
+#include "ttyd/party.h"
 
 #include <cstdint>
 
