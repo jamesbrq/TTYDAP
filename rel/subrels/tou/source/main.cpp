@@ -388,7 +388,7 @@ EVT_PATCH_END()
 EVT_BEGIN(tou_05_init_evt_evt1)
     USER_FUNC(evt_bero::evt_bero_get_entername, LW(0))
     IF_EQUAL(GSW(1703), 4)
-        IF_NOT_EQUAL(LW(0), PTR("fall"))
+        IF_STR_EQUAL(LW(0), PTR("fall"))
             USER_FUNC(evt_case::evt_run_case_evt, 9, 1, PTR("a_p_tukue"), 0, PTR(&tou_talk_gans), 0)
             RETURN()
         END_IF()
@@ -405,7 +405,7 @@ EVT_PATCH_END()
 EVT_BEGIN(tou_05_init_evt_evt2)
     USER_FUNC(evt_bero::evt_bero_get_entername, LW(0))
     IF_SMALL(GSW(1703), 4)
-        IF_NOT_EQUAL(LW(0), PTR("fall"))
+        IF_STR_NOT_EQUAL(LW(0), PTR("fall"))
             SET(LW(0), 1)
             IF_EQUAL(GSWF(2375), 0)
                 RUN_EVT(&tou_evt_sensyu)
@@ -906,6 +906,9 @@ namespace mod
         tou_05_init_evt[132] = GSW(1703);
         tou_05_init_evt[133] = 18;
         patch::writePatch(&tou_05_init_evt[174], tou_05_init_evt_hook1, sizeof(tou_05_init_evt_hook1));
+        tou_05_init_evt[178] = 0;
+        tou_05_init_evt[181] = 0;
+        tou_05_init_evt[183] = 0;
         tou_05_init_evt[194] = GSWF(6030);
         tou_05_init_evt[195] = 1;
         patch::writePatch(&tou_05_init_evt[255], tou_05_init_evt_hook2, sizeof(tou_05_init_evt_hook2));
