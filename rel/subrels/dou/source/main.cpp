@@ -87,10 +87,10 @@ namespace mod
         dou_03_init_evt[69] = GSW(1717);
         dou_03_init_evt[70] = 5;
 
-        dou_bigdoor_event_init[1] = GSW(6113);
+        dou_bigdoor_event_init[1] = GSWF(6113);
         dou_bigdoor_event_init[2] = 1;
 
-        dou_bigdoor_event[141] = GSW(6113);
+        dou_bigdoor_event[141] = GSWF(6113);
         dou_bigdoor_event[142] = 1;
 
         dou_peramajin_after[0] = EVT_HELPER_CMD(2, 50);
