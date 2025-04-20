@@ -727,6 +727,18 @@ EVT_BEGIN(usu_evt_majin2_item)
 	USER_FUNC(evt_mario::evt_mario_key_onoff, 1)
 	RETURN()
 EVT_END()
+
+EVT_BEGIN(usu_00_koopa_second_evt_evt)
+	SET(GSW(1717), 24)
+	IF_SMALL(GSW(1705), 11)
+		SET(GSW(1705), 11)
+	END_IF()
+	RETURN()
+EVT_END()
+
+EVT_BEGIN(usu_00_koopa_second_evt_hook)
+	RUN_CHILD_EVT(usu_00_koopa_second_evt_evt)
+EVT_PATCH_END()
 // clang-format on
 
 namespace mod

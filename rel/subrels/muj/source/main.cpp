@@ -1110,6 +1110,8 @@ namespace mod
         muj_peton_talk_02[44] = GSW(1709);
         muj_peton_talk_02[45] = 7;
 
+        muj_02_init_evt[8] = 0;
+        muj_02_init_evt[9] = 0;
         muj_02_init_evt[31] = GSW(1717);
         muj_02_init_evt[32] = 26;
         muj_02_init_evt[87] = GSW(1717);
@@ -1131,7 +1133,7 @@ namespace mod
         muj_yashi_yure[230] = 0;
         muj_yashi_yure[231] = EVT_HELPER_CMD(2, 50);
         muj_yashi_yure[232] = EVT_HELPER_OP(LW(0));
-        patch::writePatch(&muj_yashi_yure[234], muj_yashi_yure_hook1, sizeof(muj_yashi_yure_hook1));
+        patch::writePatch(&muj_yashi_yure[234], muj_yashi_yure_hook2, sizeof(muj_yashi_yure_hook2));
         muj_yashi_yure[238] = 0;
 
         muj_04_init_evt[70] = GSW(1719);

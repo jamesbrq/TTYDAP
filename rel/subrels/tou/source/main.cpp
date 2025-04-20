@@ -3,8 +3,10 @@
 #include "patch.h"
 #include "AP/rel_patch_definitions.h"
 #include "ttyd/evt_bero.h"
+#include "ttyd/evt_case.h"
 #include "ttyd/evt_eff.h"
 #include "ttyd/evt_item.h"
+#include "ttyd/evt_map.h"
 #include "ttyd/evt_mario.h"
 #include "ttyd/evt_pouch.h"
 #include "ttyd/evt_msg.h"
@@ -116,6 +118,7 @@ extern int32_t tou_init_gans[];
 extern int32_t tou_talk_gans[];
 extern int32_t tou_init_kinoshikowa[];
 extern int32_t tou_talk_kinoshikowa[];
+extern int32_t tou_evt_sensyu[];
 extern int32_t tou_evt_sensyu2[];
 extern int32_t tou_evt_nozoki[];
 extern int32_t tou_05_init_evt[];
@@ -348,6 +351,77 @@ EVT_BEGIN(tou_evt_tougi2_hook)
 	RUN_CHILD_EVT(tou_evt_tougi2_evt)
 	GOTO(&tou_evt_tougi2[239])
 EVT_PATCH_END()
+
+EVT_BEGIN(babyyoshi_select_evt)
+    IF_EQUAL(GSWF(6079), 1)
+        SET(LW(1), 1)
+        RETURN()
+    END_IF()
+    SWITCH(LW(0))
+        CASE_EQUAL(0)
+            SET(LW(0), PTR("c_babyyoshi"))
+        CASE_EQUAL(1)
+            SET(LW(0), PTR("c_babyyoshi2"))
+        CASE_EQUAL(2)
+            SET(LW(0), PTR("c_babyyoshi3"))
+        CASE_EQUAL(3)
+            SET(LW(0), PTR("c_babyyoshi4"))
+        CASE_EQUAL(4)
+            SET(LW(0), PTR("c_babyyoshi5"))
+        CASE_EQUAL(5)
+            SET(LW(0), PTR("c_babyyoshi6"))
+        CASE_EQUAL(6)
+            SET(LW(0), PTR("c_babyyoshi7"))
+    END_SWITCH()
+    SET(LW(1), 0)
+    RETURN()
+EVT_END()
+
+EVT_BEGIN(babyyoshi_select_hook)
+	RUN_CHILD_EVT(babyyoshi_select_evt)
+    IF_EQUAL(LW(1), 1)
+        RETURN()
+    END_IF()
+	GOTO(&tou_evt_tou_chibi_yoshi[43])
+EVT_PATCH_END()
+
+EVT_BEGIN(tou_05_init_evt_evt1)
+    USER_FUNC(evt_bero::evt_bero_get_entername, LW(0))
+    IF_EQUAL(GSW(1703), 4)
+        IF_NOT_EQUAL(LW(0), PTR("fall"))
+            USER_FUNC(evt_case::evt_run_case_evt, 9, 1, PTR("a_p_tukue"), 0, PTR(&tou_talk_gans), 0)
+            RETURN()
+        END_IF()
+    END_IF()
+    USER_FUNC(evt_map::evt_mapobj_flag_onoff, 1, 1, PTR("kami_1"), 1)
+    RETURN()
+EVT_END()
+
+EVT_BEGIN(tou_05_init_evt_hook1)
+	RUN_CHILD_EVT(tou_05_init_evt_evt1)
+	GOTO(&tou_05_init_evt[193])
+EVT_PATCH_END()
+
+EVT_BEGIN(tou_05_init_evt_evt2)
+    USER_FUNC(evt_bero::evt_bero_get_entername, LW(0))
+    IF_SMALL(GSW(1703), 4)
+        IF_NOT_EQUAL(LW(0), PTR("fall"))
+            SET(LW(0), 1)
+            IF_EQUAL(GSWF(2375), 0)
+                RUN_EVT(&tou_evt_sensyu)
+            ELSE()
+                SET(GSWF(2375), 0)
+                RUN_EVT(&tou_evt_sensyu2)
+            END_IF()
+        END_IF()
+    END_IF()
+    RETURN()
+EVT_END()
+
+EVT_BEGIN(tou_05_init_evt_hook2)
+	RUN_CHILD_EVT(tou_05_init_evt_evt2)
+	GOTO(&tou_05_init_evt[274])
+EVT_PATCH_END()
 // clang-format on
 
 namespace mod
@@ -385,10 +459,13 @@ namespace mod
         tou_evt_tou_match_make_default[171] = 19;
         tou_evt_tou_match_make_default[176] = 0;
 
+        tou_evt_tou_match_after_default[3] = EVT_HELPER_CMD(2, 28);
         tou_evt_tou_match_after_default[31] = GSW(1703);
         tou_evt_tou_match_after_default[32] = 11;
         tou_evt_tou_match_after_default[34] = GSW(1703);
         tou_evt_tou_match_after_default[35] = 12;
+        tou_evt_tou_match_after_default[1192] = EVT_HELPER_CMD(1, 4);
+        tou_evt_tou_match_after_default[1193] = EVT_HELPER_OP(&tou_evt_tou_match_after_default[1204]);
         tou_evt_tou_match_after_default[1316] = GSW(1703);
         tou_evt_tou_match_after_default[1317] = 28;
         tou_evt_tou_match_after_default[1380] = GSW(1703);
@@ -828,12 +905,10 @@ namespace mod
 
         tou_05_init_evt[132] = GSW(1703);
         tou_05_init_evt[133] = 18;
-        tou_05_init_evt[175] = GSW(1703);
-        tou_05_init_evt[176] = 4;
+        patch::writePatch(&tou_05_init_evt[174], tou_05_init_evt_hook1, sizeof(tou_05_init_evt_hook1));
         tou_05_init_evt[194] = GSWF(6030);
         tou_05_init_evt[195] = 1;
-        tou_05_init_evt[256] = GSW(1703);
-        tou_05_init_evt[257] = 4;
+        patch::writePatch(&tou_05_init_evt[255], tou_05_init_evt_hook2, sizeof(tou_05_init_evt_hook2));
         tou_05_init_evt[298] = GSW(1703);
         tou_05_init_evt[299] = 19;
         tou_05_init_evt[311] = GSW(1703);
@@ -1040,6 +1115,7 @@ namespace mod
 
         tou_evt_tou_chibi_yoshi[0] = 0;
         tou_evt_tou_chibi_yoshi[1] = 0;
+        patch::writePatch(&tou_evt_tou_chibi_yoshi[5], babyyoshi_select_hook, sizeof(babyyoshi_select_hook));
         patch::writePatch(&tou_evt_tou_chibi_yoshi[73], yoshi_gswf_evt, sizeof(yoshi_gswf_evt));
         tou_evt_tou_chibi_yoshi[396] = EVT_HELPER_CMD(2, 50);
         tou_evt_tou_chibi_yoshi[397] = EVT_HELPER_OP(LW(3));
@@ -1059,6 +1135,8 @@ namespace mod
         tou_10_init_evt[106] = 1;
         tou_10_init_evt[123] = GSW(1703);
         tou_10_init_evt[125] = 6;
+        tou_10_init_evt[144] = EVT_HELPER_CMD(1, 4);
+        tou_10_init_evt[145] = EVT_HELPER_OP(&tou_10_init_evt[153]);
         tou_10_init_evt[176] = GSW(1703);
         tou_10_init_evt[177] = 28;
         tou_10_init_evt[197] = GSW(1703);

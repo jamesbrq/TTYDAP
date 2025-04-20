@@ -91,23 +91,23 @@ namespace ttyd::evt_mobj
         // evt_mobj_set_camid
         EVT_DECLARE_USER_FUNC(evt_mobj_wait_animation_end, 1)
         EVT_DECLARE_USER_FUNC(evt_mobj_switch_red, 7)
-        // evt_mobj_set_anim
+        EVT_DECLARE_USER_FUNC(evt_mobj_set_anim, 2)
         // evt_mobj_set_gravity_bound
         // evt_mobj_exec_cancel
         // evt_mobj_set_z_position
         // evt_mobj_set_y_position
         // evt_mobj_set_x_position
-        // evt_mobj_set_position
         // evt_mobj_get_z_position
         // evt_mobj_get_y_position
         // evt_mobj_get_x_position
+        EVT_DECLARE_USER_FUNC(evt_mobj_set_position, 4)
         EVT_DECLARE_USER_FUNC(evt_mobj_get_position, 4)
+        EVT_DECLARE_USER_FUNC(evt_mobj_entry, 2)
         // evt_mobj_set_scale
         // evt_mobj_get_kindname
         // evt_mobj_flag_onoff
         // evt_mobj_check
         // evt_mobj_delete
-        // evt_mobj_entry
 
         // .data
         extern int32_t mobj_save_blk_sysevt[1];

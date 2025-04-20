@@ -3,8 +3,11 @@
 #include "patch.h"
 #include "AP/rel_patch_definitions.h"
 #include "ttyd/evt_bero.h"
+#include "ttyd/evt_case.h"
 #include "ttyd/evt_item.h"
+#include "ttyd/evt_map.h"
 #include "ttyd/evt_mario.h"
+#include "ttyd/evt_mobj.h"
 #include "ttyd/evt_msg.h"
 #include "ttyd/evt_npc.h"
 #include "ttyd/evt_snd.h"
@@ -241,8 +244,8 @@ EVT_BEGIN(pik_00_init_hook)
 EVT_PATCH_END()
 
 EVT_BEGIN(pik_02_init_evt_evt)
-	IF_LARGE_EQUAL(GSW(1707), 26)
-		IF_SMALL_EQUAL(GSW(1707), 27)
+	IF_LARGE_EQUAL(GSW(1707), 17)
+		IF_SMALL_EQUAL(GSW(1707), 18)
 			RETURN()
 		END_IF()
 	END_IF()
@@ -255,6 +258,28 @@ EVT_END()
 EVT_BEGIN(pik_02_init_evt_hook)
 	RUN_CHILD_EVT(pik_02_init_evt_evt)
 	GOTO(&pik_02_init_evt[106])
+EVT_PATCH_END()
+
+EVT_BEGIN(pik_01_init_evt_evt)
+	IF_SMALL(GSW(1706), 39)
+        IF_EQUAL(LF(0), 0)
+            USER_FUNC(evt_mobj::evt_mobj_entry, PTR("lock"), PTR("MOBJ_Lock"))
+            USER_FUNC(evt_mobj::evt_mobj_set_position, PTR("lock"), 226, 30, -216)
+            USER_FUNC(evt_mobj::evt_mobj_set_anim, PTR("lock"), PTR("Z_1"))
+            USER_FUNC(pik_set_r)
+            SET(LW(0), 1)
+            RUN_CHILD_EVT(&evt_bero::bero_case_switch_off)
+            USER_FUNC(evt_case::evt_run_case_evt, 9, 1, PTR("a_harigami"), 0, PTR(&pik_evt_powan), 0)
+            RETURN()
+        END_IF()
+    END_IF()
+    USER_FUNC(evt_map::evt_mapobj_flag_onoff, 0, 1, PTR("kami"), 1)
+    RETURN()
+EVT_END()
+
+EVT_BEGIN(pik_01_init_evt_hook)
+	RUN_CHILD_EVT(pik_01_init_evt_evt)
+	GOTO(&pik_01_init_evt[382])
 EVT_PATCH_END()
 // clang-format on
 
@@ -282,8 +307,9 @@ namespace mod
         pik_talk_ekiin[2] = 43;
 
         pik_talk_papa_taihou_kyoka[321] = GSWF(6115);
-        pik_talk_papa_taihou_kyoka[394] = GSW(1707);
-        pik_talk_papa_taihou_kyoka[395] = 5;
+        pik_talk_papa_taihou_kyoka[393] = 0;
+        pik_talk_papa_taihou_kyoka[394] = 0;
+        pik_talk_papa_taihou_kyoka[395] = 0;
 
         pik_talk_papa[99] = GSW(1707);
         pik_talk_papa[101] = 1;
@@ -384,8 +410,7 @@ namespace mod
         pik_01_init_evt[58] = 16;
         pik_01_init_evt[314] = GSW(1708);
         pik_01_init_evt[315] = 19;
-        pik_01_init_evt[343] = GSW(1706);
-        pik_01_init_evt[344] = 39;
+        patch::writePatch(&pik_01_init_evt[342], pik_01_init_evt_hook, sizeof(pik_01_init_evt_hook));
         pik_01_init_evt[429] = GSW(1707);
         pik_01_init_evt[430] = 16;
         pik_01_init_evt[438] = GSW(1707);

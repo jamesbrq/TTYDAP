@@ -106,7 +106,7 @@ namespace mod
         bom_init_soncho_01[3] = 5;
 
         bom_talk_soncho_01[1] = GSW(1707);
-        bom_talk_soncho_01[3] = 6;
+        bom_talk_soncho_01[3] = 17;
 
         bom_talk_nitoro[1] = GSW(1707);
         bom_talk_nitoro[3] = 1;

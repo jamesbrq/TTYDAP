@@ -34,6 +34,7 @@ extern int32_t jin_07_init_evt[];
 extern int32_t jin_evt_open_jin[];
 extern int32_t jin_oumu_talk[];
 extern int32_t jin_oumu_check[];
+extern int32_t jin_bero_entry_data_08[];
 extern int32_t jin_08_init_evt[];
 extern int32_t jin_evt_yuka[];
 extern int32_t jin_11_init_evt[];
@@ -45,7 +46,7 @@ extern int32_t jin_evt_kagemario_init[];
 
 // clang-format off
 EVT_BEGIN(jin_08_init_evt_evt)
-    RUN_EVT(&jin_oumu_check)
+    SET(LW(0), PTR(&jin_bero_entry_data_08))
     SET(GSWF(2231), 1)
     RETURN()
 EVT_END()
@@ -122,7 +123,7 @@ namespace mod
         jin_irekawatta_mario[443] = EVT_HELPER_OP(&jin_irekawatta_mario[454]);
         jin_irekawatta_mario[444] = 0;
         jin_irekawatta_mario[481] = GSW(1715);
-        jin_irekawatta_mario[482] = 3;
+        jin_irekawatta_mario[482] = 4;
 
         jin_ranperu_lastbattle[370] = GSW(1715);
         jin_ranperu_lastbattle[371] = 6;
@@ -175,7 +176,8 @@ namespace mod
         jin_oumu_check[117] = GSW(1715);
         jin_oumu_check[118] = 5;
 
-        patch::writePatch(&jin_08_init_evt[134], jin_08_init_evt_hook, sizeof(jin_08_init_evt_hook));
+        patch::writePatch(&jin_08_init_evt[13], jin_08_init_evt_hook, sizeof(jin_08_init_evt_hook));
+        jin_08_init_evt[15] = 0;
         jin_08_init_evt[26] = GSWF(6049);
         jin_08_init_evt[27] = 1;
 

@@ -12,6 +12,7 @@ namespace mod::owr
         uint8_t apEnabled;
         char *yoshiName;
         uint8_t inGame;
+        uint8_t palaceSkip;
     };
 
     static_assert(sizeof(APSettings) == 0xC);

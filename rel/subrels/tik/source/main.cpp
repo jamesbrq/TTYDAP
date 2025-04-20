@@ -404,7 +404,6 @@ namespace mod
 
         tik_evt_open_04_open[1] = GSW(1700);
         tik_evt_open_04_open[3] = 0; // Unused
-        tik_evt_open_04_open[58] = 0; // Unused
 
         tik_evt_door_04_close[13] = GSW(1707);
         tik_evt_door_04_close[14] = 20;
@@ -422,7 +421,7 @@ namespace mod
         tik_tensou_init_event[101] = 20;
 
         tik_tensou_sw_event[5] = GSW(1707);
-        tik_tensou_sw_event[6] = 20;
+        tik_tensou_sw_event[6] = 99; // Unused
         tik_tensou_sw_event[39] = GSW(1708);
         tik_tensou_sw_event[40] = 19;
 

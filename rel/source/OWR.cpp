@@ -81,6 +81,9 @@ const uint16_t GSWF_ARR[] = {
     // Ch.4 talk to shopkeep once
     1925,
 
+    // Ch.3 jolene hallway cutscene
+    2445,
+
     // Goldbob Approval
     3874,
 
@@ -189,6 +192,7 @@ namespace mod::owr
             ttyd::countdown::countDownEnd();
             ttyd::mario_motion::marioChgMot(ttyd::mario_motion::MarioMotion::kStay);
             ttyd::swdrv::swClear(2388); // We clear the flag for being registered for a match in ch.3 so we can re-register later
+            ttyd::swdrv::swClear(2383); // Also clear the flag for the champion match
             uint32_t namePtr = 0x802c0298;
             const char *mapName = reinterpret_cast<char *>(namePtr);
             ttyd::seqdrv::seqSetSeq(ttyd::seqdrv::SeqIndex::kMapChange, mapName, 0);
@@ -253,7 +257,7 @@ namespace mod::owr
             const char *mapName = reinterpret_cast<char *>(namePtr);
             return g_seqSetSeq_trampoline(seq, mapName, bero);
         }
-        else if (map && strncmp(map, "rsh", 3) == 0)
+        if (map && strncmp(map, "rsh", 3) == 0)
         {
             if (ttyd::swdrv::swByteGet(1706) < 43)
             {
@@ -262,6 +266,24 @@ namespace mod::owr
                     return g_seqSetSeq_trampoline(seq, map, 0);
                 }
             }
+        }
+        if (map && gState->apSettings->palaceSkip != 0 && strcmp(map, "las_00") == 0)
+        {
+            if (ttyd::swdrv::swByteGet(1708) < 14)
+                ttyd::swdrv::swByteSet(1706, 14);
+            uint32_t namePtr = 0x802c0a94; // las_27
+            const char *mapName = reinterpret_cast<char *>(namePtr);
+            uint32_t beroPtr = 0x802e7de4; // w_bero
+            const char *beroName = reinterpret_cast<char *>(beroPtr);
+            return g_seqSetSeq_trampoline(seq, mapName, beroName);
+        }
+        if (map && gState->apSettings->palaceSkip != 0 && strcmp(map, "las_25") == 0)
+        {
+            uint32_t namePtr = 0x802c02f8; // tik_05
+            const char *mapName = reinterpret_cast<char *>(namePtr);
+            uint32_t beroPtr = 0x802e8bd8; // n_bero
+            const char *beroName = reinterpret_cast<char *>(beroPtr);
+            return g_seqSetSeq_trampoline(seq, mapName, beroName);
         }
         return g_seqSetSeq_trampoline(seq, map, bero);
     }

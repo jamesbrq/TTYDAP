@@ -2,6 +2,7 @@
 #include "evt_cmd.h"
 #include "patch.h"
 #include "AP/rel_patch_definitions.h"
+#include "ttyd/evt_mario.h"
 #include "ttyd/evt_msg.h"
 #include "ttyd/evt_npc.h"
 
@@ -130,6 +131,29 @@ EVT_BEGIN(bomhei_talk_evt)
 	USER_FUNC(evt_msg::evt_msg_print, 0, PTR("gor_01_031_05"), 0, PTR("me"))
 	RETURN()
 EVT_END()
+
+EVT_BEGIN(gor_master_talk_evt)
+	IF_EQUAL(GSWF(6099), 1)
+        USER_FUNC(evt_msg::evt_msg_print, 0, PTR("mac_4_076"), 0, PTR("me"))
+        SET(LW(3), 1)
+    ELSE()
+        SET(GF(5), 0)
+        USER_FUNC(evt_mario::evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
+        IF_SMALL(LW(0), 320)
+            SET(GF(5), 1)
+        END_IF()
+        SET(LW(3), 0)
+    END_IF()
+    RETURN()
+EVT_END()
+
+EVT_BEGIN(gor_master_talk_hook)
+	RUN_CHILD_EVT(gor_master_talk_evt)
+    IF_EQUAL(LW(3), 1)
+        RETURN()
+    END_IF()
+    GOTO(&gor_master_talk[137])
+EVT_PATCH_END()
 // clang-format on
 
 void ApplyGor01Patches()
@@ -163,7 +187,9 @@ void ApplyGor01Patches()
     gor_master_talk[99] = GSW(1705);
     gor_master_talk[101] = 1;
     gor_master_talk[109] = 2;
+    gor_master_talk[119] = EVT_HELPER_CMD(1, 41);
     gor_master_talk[120] = 3;
+    patch::writePatch(&gor_master_talk[121], gor_master_talk_hook, sizeof(gor_master_talk_hook));
     gor_master_talk[483] = GSWF(6099);
     gor_master_talk[544] = GSW(1705);
     gor_master_talk[545] = 4;
