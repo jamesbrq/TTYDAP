@@ -70,7 +70,7 @@ namespace mod::util
 
     PartyMembers getFirstPartner()
     {
-        for (int i = 0; i < (int)(sizeof(PartyMembers) / sizeof(PartyMembers::kGoombella)); i++)
+        for (int i = static_cast<int>(PartyMembers::kGoombella); i <= static_cast<int>(PartyMembers::kMsMowz); i++)
         {
             if (partyChkJoin(static_cast<PartyMembers>(i)))
                 return static_cast<PartyMembers>(i);

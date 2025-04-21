@@ -297,7 +297,7 @@ namespace mod::owr
             if (strcmp(map, "las_00") == 0)
             {
                 if (ttyd::swdrv::swByteGet(1708) < 14)
-                    ttyd::swdrv::swByteSet(1706, 14);
+                    ttyd::swdrv::swByteSet(1708, 14);
                 uint32_t namePtr = 0x802c0a94; // las_27
                 const char *mapName = reinterpret_cast<char *>(namePtr);
                 uint32_t beroPtr = 0x802e7de4; // w_bero
