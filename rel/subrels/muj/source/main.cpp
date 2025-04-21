@@ -142,8 +142,8 @@ EVT_DEFINE_USER_FUNC(coconut_remove)
         }
 
         // Found where the coconut is, so move the rest of the items up one slot
-        const uint32_t remainingSize = loopCount - i - 1;
-        memcpy(&keyItemsPtr[i], &keyItemsPtr[i + 1], remainingSize * sizeof(int16_t));
+        const uint32_t remainingSize = (loopCount - i - 1) * sizeof(int16_t);
+        memmove(&keyItemsPtr[i], &keyItemsPtr[i + 1], remainingSize);
 
         // Make sure the last slot is empty, in the event that the important items inventory was full prior to removing the
         // coconut
@@ -1125,7 +1125,7 @@ namespace mod
         muj_sanders_funto[462] = GSW(1719);
         muj_sanders_funto[463] = 1;
 
-		muj_yashi_yure[103] = 0;
+        muj_yashi_yure[103] = 0;
         muj_yashi_yure[104] = EVT_HELPER_CMD(2, 50);
         muj_yashi_yure[105] = EVT_HELPER_OP(LW(0));
         patch::writePatch(&muj_yashi_yure[107], muj_yashi_yure_hook1, sizeof(muj_yashi_yure_hook1));

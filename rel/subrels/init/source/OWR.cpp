@@ -449,7 +449,7 @@ namespace mod::owr
         g_partySetForceMove_trampoline = patch::hookFunction(ttyd::party::partySetForceMove, partySetForceMoveHook);
         g_evt_mario_set_pose_trampoline = patch::hookFunction(ttyd::evt_mario::evt_mario_set_pose, evtMarioSetPoseHook);
         g_statusWinDisp_trampoline = patch::hookFunction(ttyd::statuswindow::statusWinDisp, DisplayStarPowerNumber);
-        g_pouchGetStarstone_trampoline = patch::hookFunction(ttyd::mario_pouch::pouchGetStarstone, SetMaxSP);
+        g_pouchGetStarstone_trampoline = patch::hookFunction(ttyd::mario_pouch::pouchGetStarStone, SetMaxSP);
 
         // Hook gaugeDisp with a standard branch since the original function does not need to be called
         patch::writeBranch(ttyd::statuswindow::gaugeDisp, DisplayStarPowerOrbs);

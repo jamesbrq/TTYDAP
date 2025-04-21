@@ -1,5 +1,6 @@
 .global asmFixEvtMapBlendSetFlagPartnerCrashStart
 .global asmFixEvtMapBlendSetFlagPartnerCrashBranchBack
+# asmFixEvtMapBlendSetFlagPartnerCrashStart and asmFixEvtMapBlendSetFlagPartnerCrashBranchBack need to be used in at least one subrel, so they cannot be set to hidden
 
 asmFixEvtMapBlendSetFlagPartnerCrashStart:
 # r3 already contains partnerPtr

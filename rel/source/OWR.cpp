@@ -132,7 +132,7 @@ namespace mod::owr
         ttyd::swdrv::swByteSet(1701, 3);
         ttyd::swdrv::swByteSet(1704, 1);
         ttyd::swdrv::swByteSet(1712, 1);
-        ttyd::mario_pouch::pouchGetStarstone(0);
+        ttyd::mario_pouch::pouchGetStarStone(0);
 
         if (gState->apSettings->apEnabled)
         {
@@ -574,46 +574,41 @@ namespace mod::owr
             }
             case ItemId::BOOTS:
             {
-                const bool has_boots = pouchCheckItem(ItemId::BOOTS) > 0;
-                if (!has_boots)
+                switch (pouchGetJumpLv())
                 {
-                    g_pouchGetItem_trampoline(item);
-                    return_value = 1;
-                    break;
+                    case PouchJumpLevel::JUMP_LEVEL_NONE:
+                    {
+                        return g_pouchGetItem_trampoline(item);
+                    }
+                    case PouchJumpLevel::JUMP_LEVEL_NORMAL:
+                    {
+                        return g_pouchGetItem_trampoline(ItemId::SUPER_BOOTS);
+                    }
+                    case PouchJumpLevel::JUMP_LEVEL_SUPER:
+                    default:
+                    {
+                        return g_pouchGetItem_trampoline(ItemId::ULTRA_BOOTS);
+                    }
                 }
-
-                const bool has_sboots = pouchCheckItem(ItemId::SUPER_BOOTS) > 0;
-                if (!has_sboots)
-                {
-                    pouchGetItem(ItemId::SUPER_BOOTS);
-                    return_value = 1;
-                    break;
-                }
-
-                pouchGetItem(ItemId::ULTRA_BOOTS);
-                return_value = 1;
-                break;
             }
             case ItemId::HAMMER:
             {
-                const bool has_hammer = pouchCheckItem(ItemId::HAMMER) > 0;
-                if (!has_hammer)
+                switch (pouchGetHammerLv())
                 {
-                    g_pouchGetItem_trampoline(item);
-                    break;
+                    case PouchHammerLevel::HAMMER_LEVEL_NONE:
+                    {
+                        return g_pouchGetItem_trampoline(item);
+                    }
+                    case PouchHammerLevel::HAMMER_LEVEL_NORMAL:
+                    {
+                        return g_pouchGetItem_trampoline(ItemId::SUPER_HAMMER);
+                    }
+                    case PouchHammerLevel::HAMMER_LEVEL_SUPER:
+                    default:
+                    {
+                        return g_pouchGetItem_trampoline(ItemId::ULTRA_HAMMER);
+                    }
                 }
-
-                const bool has_shammer = pouchCheckItem(ItemId::SUPER_HAMMER) > 0;
-                if (!has_shammer)
-                {
-                    pouchGetItem(ItemId::SUPER_HAMMER);
-                    return_value = 1;
-                    break;
-                }
-
-                pouchGetItem(ItemId::ULTRA_HAMMER);
-                return_value = 1;
-                break;
             }
             case ItemId::COCONUT:
             {
@@ -637,8 +632,12 @@ namespace mod::owr
                     }
                     else if (currentItem == ItemId::INVALID_NONE)
                     {
-                        // The player does not have the coconut and an empty slot was found, so place the coconut here
-                        keyItemsPtr[i] = ItemId::COCONUT;
+                        // The player does not have the coconut and an empty slot was found, so the coconut can be added
+                        // Move all of the important items down one slot
+                        memmove(&keyItemsPtr[1], &keyItemsPtr[0], (loopCount - 1) * sizeof(int16_t));
+
+                        // Place the coconut in the first slot
+                        keyItemsPtr[0] = ItemId::COCONUT;
                         return static_cast<uint32_t>(1);
                     }
                 }

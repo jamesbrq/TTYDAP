@@ -58,19 +58,23 @@ namespace mod::util
         }
         else if (shouldSpawnPartner)
         {
-            // No partner was previously out, so bring out Goombella
+            // No partner was previously out, so bring out a partner that the player has obtained
             return spawnPartnerOrFollower(getFirstPartner());
         }
         else
         {
-            // No follower was previously out, so bring out Flavio
-            return spawnPartnerOrFollower(PartyMembers::kFlavio);
+            // No follower was previously out, so bring out a random one
+            constexpr uint32_t range =
+                static_cast<uint32_t>(PartyMembers::kMsMowzFollower) - static_cast<uint32_t>(PartyMembers::kEgg) + 1;
+
+            const uint32_t follower = ttyd::system::irand(range) + static_cast<uint32_t>(PartyMembers::kEgg);
+            return spawnPartnerOrFollower(static_cast<PartyMembers>(follower));
         }
     }
 
     PartyMembers getFirstPartner()
     {
-        for (int i = 0; i < (int)(sizeof(PartyMembers) / sizeof(PartyMembers::kGoombella)); i++)
+        for (int i = static_cast<int>(PartyMembers::kGoombella); i <= static_cast<int>(PartyMembers::kMsMowz); i++)
         {
             if (partyChkJoin(static_cast<PartyMembers>(i)))
                 return static_cast<PartyMembers>(i);
