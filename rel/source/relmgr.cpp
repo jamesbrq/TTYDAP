@@ -16,7 +16,7 @@ RelMgr relMgr;
 bool RelMgr::loadRel(const char *relToLoad, int32_t heap)
 {
     // Only run if a rel is not currently loaded
-    if (this->relLoaded)
+    if (this->relIsLoaded())
     {
         return false;
     }
@@ -45,10 +45,10 @@ bool RelMgr::loadRel(const char *relToLoad, int32_t heap)
     }
 
     // Allocate memory for the rel
-    uint8_t *relData = reinterpret_cast<uint8_t *>(__memAlloc(heap, fileSize));
+    OSModuleInfo *relFile = reinterpret_cast<OSModuleInfo *>(__memAlloc(heap, fileSize));
 
     // Read the rel from the disc
-    const int32_t result = DVDReadPrio(&fileInfo, relData, fileSize, 0, 0);
+    const int32_t result = DVDReadPrio(&fileInfo, relFile, fileSize, 0, 0);
 
     // Close the rel, as it's no longer needed
     DVDClose(&fileInfo);
@@ -56,12 +56,11 @@ bool RelMgr::loadRel(const char *relToLoad, int32_t heap)
     // Make sure the rel was successfully read
     if (result <= 0)
     {
-        __memFree(heap, relData);
+        __memFree(heap, relFile);
         return false;
     }
 
-    // Get the REL's BSS size and allocate memory for it
-    OSModuleInfo *relFile = reinterpret_cast<OSModuleInfo *>(relData);
+    // Get the rel's bss size and allocate memory for it
     uint32_t bssSize = relFile->bssSize;
 
     // If bssSize is 0, then use an arbitrary size
@@ -69,20 +68,20 @@ bool RelMgr::loadRel(const char *relToLoad, int32_t heap)
     {
         bssSize = 1;
     }
+
     uint8_t *bssArea = reinterpret_cast<uint8_t *>(__memAlloc(heap, bssSize));
 
     // Finished loading the rel
     this->relPtr = relFile;
     this->bssPtr = bssArea;
     this->setHeap(heap);
-    this->relLoaded = true;
     return true;
 }
 
 bool RelMgr::linkRel()
 {
     // Only run if a rel is currently loaded
-    if (!this->relLoaded)
+    if (!this->relIsLoaded())
     {
         return false;
     }
@@ -110,7 +109,7 @@ bool RelMgr::linkRel()
 bool RelMgr::unlinkRel()
 {
     // Only run if a rel is currently loaded
-    if (!this->relLoaded)
+    if (!this->relIsLoaded())
     {
         return false;
     }
@@ -133,7 +132,7 @@ bool RelMgr::unlinkRel()
 void RelMgr::unloadRel()
 {
     // Only run if a rel is currently loaded
-    if (!this->relLoaded)
+    if (!this->relIsLoaded())
     {
         return;
     }
@@ -144,7 +143,6 @@ void RelMgr::unloadRel()
 
     this->relPtr = nullptr;
     this->bssPtr = nullptr;
-    this->relLoaded = false;
 }
 
 void RelMgr::runInitRel()

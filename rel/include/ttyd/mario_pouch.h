@@ -6,6 +6,22 @@ namespace ttyd::mario_pouch
 {
     extern "C"
     {
+        enum class PouchHammerLevel : int32_t
+        {
+            HAMMER_LEVEL_NONE = 0, // The player has no Hammer
+            HAMMER_LEVEL_NORMAL,   // The player has the Normal Hammer
+            HAMMER_LEVEL_SUPER,    // The player has the Super Hammer
+            HAMMER_LEVEL_ULTRA,    // The player has the Ultra Hammer
+        };
+
+        enum class PouchJumpLevel : int32_t
+        {
+            JUMP_LEVEL_NONE = 0, // The player has no Boots
+            JUMP_LEVEL_NORMAL,   // The player has the Normal Boots
+            JUMP_LEVEL_SUPER,    // The player has the Super Boots
+            JUMP_LEVEL_ULTRA,    // The player has the Ultra Boots
+        };
+
         struct PouchPartyData
         {
             uint16_t flags;
@@ -16,8 +32,6 @@ namespace ttyd::mario_pouch
             int16_t attack_level;
             int16_t tech_level;
         };
-
-        static_assert(sizeof(PouchPartyData) == 0xe);
 
         struct PouchData
         {
@@ -63,24 +77,25 @@ namespace ttyd::mario_pouch
             int8_t unk_5d0[4];
         };
 
+        static_assert(sizeof(PouchPartyData) == 0xe);
         static_assert(sizeof(PouchData) == 0x5d4);
 
         const char *pouchGetYoshiName();
         void pouchSetYoshiName(const char *name);
         void pouchSetPartyColor(int32_t party_member, int32_t color); // 4 = Yoshi
         int32_t pouchGetPartyColor(int32_t party_member);
-        void pouchGetStarstone(int32_t stone);
         // pouchCheckMail
         // pouchOpenMail
         // pouchReceiveMail
         // pouchReceiveMailCount
+        void pouchGetStarStone(int32_t stone);
         // pouchAddKpaScore
         // pouchGetKpaScore
         // pouchAddKpaCoin
         // pouchGetKpaCoin
         // pouchMajinaiInit
         // pouchArriveBadge
-        // unk050[US|JP] zz_800d3234_
+        // N_pouchUnEquipBadgeID
         int32_t pouchEquipBadgeID(int16_t badge_id);
         // pouchEquipCheckBadgeIndex
         int32_t pouchEquipCheckBadge(int16_t badge_id);
@@ -92,8 +107,8 @@ namespace ttyd::mario_pouch
         // pouchRemoveKeepItem
         // pouchAddKeepItem
         // pouchGetPartyAttackLv
-        // pouchGetHammerLv
-        // pouchGetJumpLv
+        PouchHammerLevel pouchGetHammerLv();
+        PouchJumpLevel pouchGetJumpLv();
         // pouchSetAudienceNum
         // pouchGetAudienceNum
         int32_t pouchGetMaxAP();
@@ -123,7 +138,7 @@ namespace ttyd::mario_pouch
         // comp_aiueo_r
         int32_t comp_kind(int16_t *lhs, int16_t *rhs);
         // comp_aiueo
-        // unk051[US|JP] zz_800d48b0_
+        // unk_800d48b0
         int32_t pouchRemoveItemIndex(int32_t item_type, int32_t index);
         int32_t pouchRemoveItem(int32_t item_type);
         int32_t pouchCheckItem(int32_t item_type);
@@ -134,7 +149,7 @@ namespace ttyd::mario_pouch
         int32_t pouchGetHaveBadgeCnt();
         // pouchGetKeepItemCnt
         int32_t pouchGetHaveItemCnt();
-        // ?pouchEquipBadge
+        // L_pouchEquipBadge
         // pouchHaveBadge
         // pouchKeepItem
         int32_t pouchHaveItem(int32_t index);
