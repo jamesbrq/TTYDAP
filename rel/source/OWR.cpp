@@ -702,6 +702,10 @@ namespace mod::owr
         using namespace ttyd::icondrv;
         using namespace ttyd::statuswindow;
 
+        gc::vec3 pos;
+        pos.y = y;
+        pos.z = 0.f;
+
         int32_t max_star_power = pouchGetMaxAP();
 
         if (max_star_power > 800)
@@ -722,17 +726,23 @@ namespace mod::owr
 
         if (part_frame != 0)
         {
-            gc::vec3 pos = {x + 32.f * intToFloat(full_orbs), y, 0.f};
+            pos.x = x + 32.f * intToFloat(full_orbs);
+            // pos.y = y;
+            // pos.z = 0.f;
+
             iconDispGx(1.f, &pos, 0x10, gauge_wakka[part_frame]);
         }
 
         // Draw grey orbs up to the max amount of SP / 100 (rounded up, max of 8).
         const uint16_t *gaugeBackPtr = &gauge_back[0];
-        const float posY = y + 12.f;
+        pos.y += 12.f;
 
         for (int32_t i = 0; i < (max_star_power + 99) / 100; ++i)
         {
-            gc::vec3 pos = {x + 32.f * intToFloat(i), posY, 0.f};
+            pos.x = x + 32.f * intToFloat(i);
+            // pos.y = posY;
+            // pos.z = 0.f;
+
             const uint16_t icon = i < full_orbs ? static_cast<IconType::e>(gaugeBackPtr[i]) : IconType::e::SP_ORB_EMPTY;
             iconDispGx(1.f, &pos, 0x10, icon);
         }

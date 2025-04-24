@@ -41,14 +41,13 @@ class RelMgr
     void setHeap(int32_t newHeap) { this->heap = static_cast<uint8_t>(newHeap); }
     int32_t getHeap() const { return static_cast<int32_t>(this->heap); }
 
-    bool relIsLoaded() const { return this->relLoaded; }
+    bool relIsLoaded() const { return this->relPtr != nullptr; }
 
    private:
     OSModuleInfo *relPtr;
     void *bssPtr;
     char prevArea[5];
     uint8_t heap;
-    bool relLoaded;
 };
 
 extern RelMgr relMgr;
