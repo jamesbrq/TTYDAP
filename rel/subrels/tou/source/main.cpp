@@ -444,6 +444,7 @@ namespace mod
         tou_evt_tou_match_make_default_sub[226] = 28;
         tou_evt_tou_match_make_default_sub[312] = GSW(1703);
         tou_evt_tou_match_make_default_sub[313] = 28;
+        tou_evt_tou_match_make_default_sub[371] = 99; // UNUSED
         tou_evt_tou_match_make_default_sub[388] = GSW(1703);
         tou_evt_tou_match_make_default_sub[389] = 28;
 
