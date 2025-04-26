@@ -10,6 +10,7 @@
 #include <ttyd/common_types.h>
 #include <ttyd/icondrv.h>
 #include <ttyd/item_data.h>
+#include <ttyd/win_item.h>
 
 #include <cstdint>
 
@@ -450,6 +451,7 @@ namespace mod::owr
         g_evt_mario_set_pose_trampoline = patch::hookFunction(ttyd::evt_mario::evt_mario_set_pose, evtMarioSetPoseHook);
         g_statusWinDisp_trampoline = patch::hookFunction(ttyd::statuswindow::statusWinDisp, DisplayStarPowerNumber);
         g_pouchGetStarstone_trampoline = patch::hookFunction(ttyd::mario_pouch::pouchGetStarstone, SetMaxSP);
+        g_winItemMain_trampoline = patch::hookFunction(ttyd::win_item::winItemMain, WinItemMainHook);
 
         // Hook gaugeDisp with a standard branch since the original function does not need to be called
         patch::writeBranch(ttyd::statuswindow::gaugeDisp, DisplayStarPowerOrbs);
