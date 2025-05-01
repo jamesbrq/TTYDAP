@@ -182,7 +182,7 @@ namespace mod::owr
             return false;
         }
 
-        return relPtr->id != RelId::DMO;
+        return (relPtr->id != RelId::DMO);
     }
 
     void OWR::HomewardWarp()
@@ -789,10 +789,10 @@ namespace mod::owr
 
     void OWR::Update()
     {
+        gState->apSettings->inGame = static_cast<uint8_t>(checkIfInGame());
         SequenceInit();
         RecieveItems();
         HomewardWarp();
-        gState->apSettings->inGame = static_cast<uint8_t>(checkIfInGame());
     }
 
     void OWR::OnModuleLoaded(OSModuleInfo *module_info)
