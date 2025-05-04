@@ -148,22 +148,13 @@ void RelMgr::unloadRel()
 void RelMgr::runInitRel()
 {
     // Load the init rel, allocating to the ext heap to avoid fragmentation in the default heap
-    if (!this->loadRel("init", HeapType::HEAP_EXT))
-    {
-        return;
-    }
+    this->loadRel("init", HeapType::HEAP_EXT);
 
     // Link the init rel and run its prolog function
-    if (!this->linkRel())
-    {
-        return;
-    }
+    this->linkRel();
 
     // Nothing else is needed from the init rel, so it can be unlinked
-    if (!this->unlinkRel())
-    {
-        return;
-    }
+    this->unlinkRel();
 
     // Cleanup
     this->unloadRel();
