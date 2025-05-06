@@ -188,22 +188,22 @@ namespace mod
         gon_08_init_evt[200] = 1;
         gon_08_init_evt[204] = 12;
 
-        gon_10_init_evt[35] = GSWF(6014);
-        gon_10_init_evt[36] = 1;
+        gon_10_init_evt[35] = GSW(1711);
+        gon_10_init_evt[36] = 7;
 
         gon_gonbaba_event[1384] = GSW(1711);
         gon_gonbaba_event[1385] = 7;
         gon_gonbaba_event[1387] = GSW(1711);
         gon_gonbaba_event[1388] = 8;
 
-        gon_11_init_evt[6] = GSWF(6014);
-        gon_11_init_evt[8] = 1;
-        gon_11_init_evt[14] = GSWF(6014);
-        gon_11_init_evt[16] = 1;
-        gon_11_init_evt[47] = GSWF(6014);
-        gon_11_init_evt[48] = 1;
-        gon_11_init_evt[90] = GSWF(6014);
-        gon_11_init_evt[91] = 1;
+        gon_11_init_evt[6] = GSW(1711);
+        gon_11_init_evt[8] = 7;
+        gon_11_init_evt[14] = GSW(1711);
+        gon_11_init_evt[16] = 7;
+        gon_11_init_evt[47] = GSW(1711);
+        gon_11_init_evt[48] = 7;
+        gon_11_init_evt[90] = GSW(1711);
+        gon_11_init_evt[91] = 7;
 
         gon_chuchurina_sogu[1] = GSWF(6016);
         gon_chuchurina_sogu[2] = 1;

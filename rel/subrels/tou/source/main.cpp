@@ -1139,8 +1139,8 @@ namespace mod
         tou_10_init_evt[106] = 1;
         tou_10_init_evt[123] = GSW(1703);
         tou_10_init_evt[125] = 6;
-        tou_10_init_evt[144] = EVT_HELPER_CMD(1, 4);
-        tou_10_init_evt[145] = EVT_HELPER_OP(&tou_10_init_evt[153]);
+        tou_10_init_evt[135] = EVT_HELPER_CMD(1, 4);
+        tou_10_init_evt[136] = EVT_HELPER_OP(&tou_10_init_evt[159]);
         tou_10_init_evt[176] = GSW(1703);
         tou_10_init_evt[177] = 28;
         tou_10_init_evt[197] = GSW(1703);

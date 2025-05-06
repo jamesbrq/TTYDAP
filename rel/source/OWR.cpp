@@ -89,6 +89,9 @@ const uint16_t GSWF_ARR[] = {
     // Ch.3 jolene hallway cutscene
     2445,
 
+    //Ch.3 poison cake
+    2451,
+
     // Post ch.3 stuff
     2496,
 
