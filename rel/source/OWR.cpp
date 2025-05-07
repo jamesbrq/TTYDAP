@@ -148,6 +148,9 @@ namespace mod::owr
 
             ttyd::mario_party::partyJoin(gState->apSettings->startingPartner);
             ttyd::mario_party::marioPartyHello(gState->apSettings->startingPartner);
+
+            if (gState->apSettings->openWestside)
+                ttyd::swdrv::swSet(1188);
         }
 
         int32_t size = GSWF_ARR_SIZE;
