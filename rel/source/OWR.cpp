@@ -824,7 +824,7 @@ namespace mod::owr
         // Unlinking the rel now uses less instructions than doing so before checking for tou2
         const bool unlinked = relMgrPtr->unlinkRel();
 
-        if (!unlinked || inNewArea)
+        if (inNewArea || !unlinked)
         {
             relMgrPtr->unloadRel();
 
