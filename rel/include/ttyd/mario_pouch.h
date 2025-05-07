@@ -105,7 +105,7 @@ namespace ttyd::mario_pouch
         void pouchRevisePartyParam();
         void pouchReviseMarioParam();
         // pouchRemoveKeepItem
-        // pouchAddKeepItem
+        int32_t pouchAddKeepItem(int32_t item_type);
         // pouchGetPartyAttackLv
         PouchHammerLevel pouchGetHammerLv();
         PouchJumpLevel pouchGetJumpLv();
