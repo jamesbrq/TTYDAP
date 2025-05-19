@@ -286,9 +286,12 @@ namespace mod::owr
         }
         else if (strcmp(map, "aaa_00") == 0)
         {
-            uint32_t namePtr = 0x802c0298;
-            const char *mapName = reinterpret_cast<char *>(namePtr);
-            return g_seqSetSeq_trampoline(seq, mapName, bero);
+            if (ttyd::swdrv::swByteGet(1708) < 17)
+            {
+                uint32_t namePtr = 0x802c0298;
+                const char *mapName = reinterpret_cast<char *>(namePtr);
+                return g_seqSetSeq_trampoline(seq, mapName, bero);
+            }
         }
         else if (strncmp(map, "rsh", 3) == 0)
         {
