@@ -226,12 +226,18 @@ namespace mod::owr
             return;
 
         uintptr_t item_pointer = 0x803DB864;
-        uint32_t *item = reinterpret_cast<uint32_t *>(item_pointer);
-        int value = *item;
+        int32_t *item = reinterpret_cast<int32_t *>(item_pointer);
+        int32_t value = *item;
 
         if (value != 0)
         {
-            pouchGetItem(value);
+            // Try to give the item
+            if (!pouchGetItem(value))
+            {
+                // Couldn't give the item, so try to send it to storage
+                pouchAddKeepItem(value);
+            }
+
             memset(reinterpret_cast<void *>(item_pointer), 0, sizeof(item_pointer));
         }
     }
@@ -590,7 +596,7 @@ namespace mod::owr
                 {
                     case PouchJumpLevel::JUMP_LEVEL_NONE:
                     {
-                        return g_pouchGetItem_trampoline(item);
+                        return g_pouchGetItem_trampoline(ItemId::BOOTS);
                     }
                     case PouchJumpLevel::JUMP_LEVEL_NORMAL:
                     {
@@ -609,7 +615,7 @@ namespace mod::owr
                 {
                     case PouchHammerLevel::HAMMER_LEVEL_NONE:
                     {
-                        return g_pouchGetItem_trampoline(item);
+                        return g_pouchGetItem_trampoline(ItemId::HAMMER);
                     }
                     case PouchHammerLevel::HAMMER_LEVEL_NORMAL:
                     {
@@ -650,7 +656,7 @@ namespace mod::owr
 
                         // Place the coconut in the first slot
                         keyItemsPtr[0] = ItemId::COCONUT;
-                        return static_cast<uint32_t>(1);
+                        return 1;
                     }
                 }
 
@@ -827,7 +833,7 @@ namespace mod::owr
         // Unlinking the rel now uses less instructions than doing so before checking for tou2
         const bool unlinked = relMgrPtr->unlinkRel();
 
-        if (!unlinked || inNewArea)
+        if (inNewArea || !unlinked)
         {
             relMgrPtr->unloadRel();
 
