@@ -96,6 +96,12 @@ const uint16_t GSWF_ARR[] = {
     // Ch.3 jolene hallway cutscene
     2445,
 
+    //Ch.3 poison cake
+    2451,
+
+    // Post ch.3 stuff
+    2496,
+
     // Goldbob Approval
     3874,
 
@@ -140,7 +146,7 @@ namespace mod::owr
         ttyd::swdrv::swByteSet(1701, 3);
         ttyd::swdrv::swByteSet(1704, 1);
         ttyd::swdrv::swByteSet(1712, 1);
-        ttyd::mario_pouch::pouchGetStarstone(0);
+        ttyd::mario_pouch::pouchGetStarStone(0);
 
         if (gState->apSettings->apEnabled)
         {
@@ -150,6 +156,9 @@ namespace mod::owr
 
             ttyd::mario_party::partyJoin(gState->apSettings->startingPartner);
             ttyd::mario_party::marioPartyHello(gState->apSettings->startingPartner);
+
+            if (gState->apSettings->openWestside)
+                ttyd::swdrv::swSet(1188);
         }
 
         int32_t size = GSWF_ARR_SIZE;
@@ -187,7 +196,7 @@ namespace mod::owr
             return false;
         }
 
-        return relPtr->id != RelId::DMO;
+        return (relPtr->id != RelId::DMO);
     }
 
     void OWR::HomewardWarp()
@@ -225,12 +234,18 @@ namespace mod::owr
             return;
 
         uintptr_t item_pointer = 0x803DB864;
-        uint32_t *item = reinterpret_cast<uint32_t *>(item_pointer);
-        int value = *item;
+        int32_t *item = reinterpret_cast<int32_t *>(item_pointer);
+        int32_t value = *item;
 
         if (value != 0)
         {
-            pouchGetItem(value);
+            // Try to give the item
+            if (!pouchGetItem(value))
+            {
+                // Couldn't give the item, so try to send it to storage
+                pouchAddKeepItem(value);
+            }
+
             memset(reinterpret_cast<void *>(item_pointer), 0, sizeof(item_pointer));
         }
     }
@@ -265,6 +280,14 @@ namespace mod::owr
             ttyd::swdrv::swSet(1188);
         }
 
+        // Set cutscene flag for Don Pianta if player leaves westside
+        if (ttyd::swdrv::swByteGet(1709) >= 3)
+            ttyd::swdrv::swSet(6000);
+
+        // Advance Boggly Woods sequence if the great tree is opened
+        if (ttyd::swdrv::swByteGet(1713) >= 1)
+            ttyd::swdrv::swByteSet(1702, 6);
+
         if (strcmp(map, "rsh_01_a") == 0)
         {
             uint8_t value = ttyd::swdrv::swByteGet(1706);
@@ -285,9 +308,12 @@ namespace mod::owr
         }
         else if (strcmp(map, "aaa_00") == 0)
         {
-            uint32_t namePtr = 0x802c0298;
-            const char *mapName = reinterpret_cast<char *>(namePtr);
-            return g_seqSetSeq_trampoline(seq, mapName, bero);
+            if (ttyd::swdrv::swByteGet(1708) < 17)
+            {
+                uint32_t namePtr = 0x802c0298;
+                const char *mapName = reinterpret_cast<char *>(namePtr);
+                return g_seqSetSeq_trampoline(seq, mapName, bero);
+            }
         }
         else if (strncmp(map, "rsh", 3) == 0)
         {
@@ -582,46 +608,41 @@ namespace mod::owr
             }
             case ItemId::BOOTS:
             {
-                const bool has_boots = pouchCheckItem(ItemId::BOOTS) > 0;
-                if (!has_boots)
+                switch (pouchGetJumpLv())
                 {
-                    g_pouchGetItem_trampoline(item);
-                    return_value = 1;
-                    break;
+                    case PouchJumpLevel::JUMP_LEVEL_NONE:
+                    {
+                        return g_pouchGetItem_trampoline(ItemId::BOOTS);
+                    }
+                    case PouchJumpLevel::JUMP_LEVEL_NORMAL:
+                    {
+                        return g_pouchGetItem_trampoline(ItemId::SUPER_BOOTS);
+                    }
+                    case PouchJumpLevel::JUMP_LEVEL_SUPER:
+                    default:
+                    {
+                        return g_pouchGetItem_trampoline(ItemId::ULTRA_BOOTS);
+                    }
                 }
-
-                const bool has_sboots = pouchCheckItem(ItemId::SUPER_BOOTS) > 0;
-                if (!has_sboots)
-                {
-                    pouchGetItem(ItemId::SUPER_BOOTS);
-                    return_value = 1;
-                    break;
-                }
-
-                pouchGetItem(ItemId::ULTRA_BOOTS);
-                return_value = 1;
-                break;
             }
             case ItemId::HAMMER:
             {
-                const bool has_hammer = pouchCheckItem(ItemId::HAMMER) > 0;
-                if (!has_hammer)
+                switch (pouchGetHammerLv())
                 {
-                    g_pouchGetItem_trampoline(item);
-                    break;
+                    case PouchHammerLevel::HAMMER_LEVEL_NONE:
+                    {
+                        return g_pouchGetItem_trampoline(ItemId::HAMMER);
+                    }
+                    case PouchHammerLevel::HAMMER_LEVEL_NORMAL:
+                    {
+                        return g_pouchGetItem_trampoline(ItemId::SUPER_HAMMER);
+                    }
+                    case PouchHammerLevel::HAMMER_LEVEL_SUPER:
+                    default:
+                    {
+                        return g_pouchGetItem_trampoline(ItemId::ULTRA_HAMMER);
+                    }
                 }
-
-                const bool has_shammer = pouchCheckItem(ItemId::SUPER_HAMMER) > 0;
-                if (!has_shammer)
-                {
-                    pouchGetItem(ItemId::SUPER_HAMMER);
-                    return_value = 1;
-                    break;
-                }
-
-                pouchGetItem(ItemId::ULTRA_HAMMER);
-                return_value = 1;
-                break;
             }
             case ItemId::COCONUT:
             {
@@ -645,9 +666,13 @@ namespace mod::owr
                     }
                     else if (currentItem == ItemId::INVALID_NONE)
                     {
-                        // The player does not have the coconut and an empty slot was found, so place the coconut here
-                        keyItemsPtr[i] = ItemId::COCONUT;
-                        return static_cast<uint32_t>(1);
+                        // The player does not have the coconut and an empty slot was found, so the coconut can be added
+                        // Move all of the important items down one slot
+                        memmove(&keyItemsPtr[1], &keyItemsPtr[0], (loopCount - 1) * sizeof(int16_t));
+
+                        // Place the coconut in the first slot
+                        keyItemsPtr[0] = ItemId::COCONUT;
+                        return 1;
                     }
                 }
 
@@ -711,6 +736,10 @@ namespace mod::owr
         using namespace ttyd::icondrv;
         using namespace ttyd::statuswindow;
 
+        gc::vec3 pos;
+        pos.y = y;
+        pos.z = 0.f;
+
         int32_t max_star_power = pouchGetMaxAP();
 
         if (max_star_power > 800)
@@ -731,17 +760,23 @@ namespace mod::owr
 
         if (part_frame != 0)
         {
-            gc::vec3 pos = {x + 32.f * intToFloat(full_orbs), y, 0.f};
+            pos.x = x + 32.f * intToFloat(full_orbs);
+            // pos.y = y;
+            // pos.z = 0.f;
+
             iconDispGx(1.f, &pos, 0x10, gauge_wakka[part_frame]);
         }
 
         // Draw grey orbs up to the max amount of SP / 100 (rounded up, max of 8).
         const uint16_t *gaugeBackPtr = &gauge_back[0];
-        const float posY = y + 12.f;
+        pos.y += 12.f;
 
         for (int32_t i = 0; i < (max_star_power + 99) / 100; ++i)
         {
-            gc::vec3 pos = {x + 32.f * intToFloat(i), posY, 0.f};
+            pos.x = x + 32.f * intToFloat(i);
+            // pos.y = posY;
+            // pos.z = 0.f;
+
             const uint16_t icon = i < full_orbs ? static_cast<IconType::e>(gaugeBackPtr[i]) : IconType::e::SP_ORB_EMPTY;
             iconDispGx(1.f, &pos, 0x10, icon);
         }
@@ -843,10 +878,10 @@ namespace mod::owr
 
     void OWR::Update()
     {
+        gState->apSettings->inGame = static_cast<uint8_t>(checkIfInGame());
         SequenceInit();
         RecieveItems();
         HomewardWarp();
-        gState->apSettings->inGame = static_cast<uint8_t>(checkIfInGame());
     }
 
     void OWR::OnModuleLoaded(OSModuleInfo *module_info)
@@ -872,7 +907,7 @@ namespace mod::owr
         // Unlinking the rel now uses less instructions than doing so before checking for tou2
         const bool unlinked = relMgrPtr->unlinkRel();
 
-        if (!unlinked || inNewArea)
+        if (inNewArea || !unlinked)
         {
             relMgrPtr->unloadRel();
 

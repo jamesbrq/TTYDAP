@@ -444,6 +444,7 @@ namespace mod
         tou_evt_tou_match_make_default_sub[226] = 28;
         tou_evt_tou_match_make_default_sub[312] = GSW(1703);
         tou_evt_tou_match_make_default_sub[313] = 28;
+        tou_evt_tou_match_make_default_sub[371] = 99; // UNUSED
         tou_evt_tou_match_make_default_sub[388] = GSW(1703);
         tou_evt_tou_match_make_default_sub[389] = 28;
 
@@ -1138,8 +1139,8 @@ namespace mod
         tou_10_init_evt[106] = 1;
         tou_10_init_evt[123] = GSW(1703);
         tou_10_init_evt[125] = 6;
-        tou_10_init_evt[144] = EVT_HELPER_CMD(1, 4);
-        tou_10_init_evt[145] = EVT_HELPER_OP(&tou_10_init_evt[153]);
+        tou_10_init_evt[135] = EVT_HELPER_CMD(1, 4);
+        tou_10_init_evt[136] = EVT_HELPER_OP(&tou_10_init_evt[159]);
         tou_10_init_evt[176] = GSW(1703);
         tou_10_init_evt[177] = 28;
         tou_10_init_evt[197] = GSW(1703);

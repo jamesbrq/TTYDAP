@@ -14,6 +14,8 @@ namespace mod::owr
         char *yoshiName;
         uint8_t inGame;
         uint8_t palaceSkip;
+        uint8_t openWestside;
+        uint8_t peekaboo;
     };
 
     static_assert(sizeof(APSettings) == 0xC);

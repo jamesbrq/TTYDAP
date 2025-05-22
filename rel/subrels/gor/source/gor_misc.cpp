@@ -9,7 +9,6 @@
 #include "ttyd/evtmgr_cmd.h"
 #include "ttyd/mario_pouch.h"
 
-
 #include <cstdint>
 
 using namespace mod;
@@ -31,7 +30,6 @@ extern int32_t gor_exchange_ryokin_medal[];
 
 const char goombella[] = "\x83\x4C\x83\x6D\x82\xB6\x82\xA2";
 
-// clang-format off
 EVT_DEFINE_USER_FUNC(checkChapterClears)
 {
     (void)isFirstCall;
@@ -46,6 +44,7 @@ EVT_DEFINE_USER_FUNC(checkChapterClears)
     return 2;
 }
 
+// clang-format off
 EVT_BEGIN(party_evt)
 	USER_FUNC(evt_mario::evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
 	USER_FUNC(evt_item::evt_item_entry, PTR("item01"), LW(3), LW(0), LW(1), LW(2), 16, GSWF(6076), 0)

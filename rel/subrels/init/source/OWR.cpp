@@ -57,6 +57,7 @@ extern int32_t main_seq_battleInit[];
 extern int32_t main__psndSFXOn[];
 extern int32_t main_psndBGMOff_f_d[];
 extern int32_t main_psndBGMOn_f_d[];
+extern int32_t main_BattleDrawEnemyHP[];
 // End of Assembly References
 
 // Script References
@@ -324,6 +325,12 @@ namespace mod::owr
         writeIntWithCache(&main_psndBGMOn_f_d[90], 0x2C030008); // cmpwi r3, 0x8
         writeIntWithCache(&main_psndBGMOn_f_d[94], 0x38840831); // addi r4, r4, 0x831 GSW(1713)
         writeIntWithCache(&main_psndBGMOn_f_d[96], 0x2C03000A); // cmpwi r3, 0xA
+
+        patch::writeBranchPair(&main_BattleDrawEnemyHP[27],
+                               reinterpret_cast<void *>(bCheckPeekaboo),
+                               reinterpret_cast<void *>(bCheckPeekabooReturn));
+
+        writeIntWithCache(&main_BattleDrawEnemyHP[28], 0x2C030001); // cmpwi r3, 0x1
     }
 
     void ApplyMainScriptPatches()

@@ -1,5 +1,6 @@
 .global asmFixEvtMapBlendSetFlagFollowerCrashStart
 .global asmFixEvtMapBlendSetFlagFollowerCrashBranchBack
+# asmFixEvtMapBlendSetFlagFollowerCrashStart and asmFixEvtMapBlendSetFlagFollowerCrashBranchBack need to be used in at least one subrel, so they cannot be set to hidden
 
 asmFixEvtMapBlendSetFlagFollowerCrashStart:
 # r3 already contains followerPtr
