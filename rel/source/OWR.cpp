@@ -148,6 +148,9 @@ namespace mod::owr
         ttyd::swdrv::swByteSet(1712, 1);
         ttyd::mario_pouch::pouchGetStarStone(0);
 
+        // Give Return Pipe.
+        ttyd::mario_pouch::pouchGetItem(ItemId::INVALID_ITEM_PAPER_0054);
+
         if (gState->apSettings->apEnabled)
         {
             ttyd::mario_pouch::pouchSetPartyColor(static_cast<uint8_t>(ttyd::party::PartyMembers::kYoshi),
