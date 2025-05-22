@@ -219,6 +219,19 @@ bShopFlagCheck:
 bShopFlagCheckReturn:
 	b 0
 
+bCheckPeekaboo:
+	li %r3, 0x0
+	lwz %r0, 0x1720(%r28)
+	rlwinm. %r0, %r0, 0, 7, 7
+	bne checkPeekabooOption
+	li %r3, 0x1
+	b checkPeekabooEarlyReturn
+checkPeekabooOption:
+	b checkPeekaboo
+checkPeekabooEarlyReturn:
+bCheckPeekabooReturn:
+	b 0
+
 win_log_mapGX_arr:
 	.2byte 0x06A4
 	.2byte 0x06A4

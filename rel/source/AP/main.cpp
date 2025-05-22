@@ -3,6 +3,7 @@
 #include "evt_cmd.h"
 #include "patch.h"
 #include "string.h"
+#include "OWR.h"
 #include "ttyd/evtmgr_cmd.h"
 #include "ttyd/mario_pouch.h"
 #include "ttyd/seq_mapchange.h"
@@ -17,6 +18,7 @@
 using namespace ttyd::evtmgr_cmd;
 using namespace ttyd::common;
 using namespace ttyd::swdrv;
+using namespace mod::owr;
 
 namespace mod::owr
 {
@@ -121,4 +123,11 @@ void checkShopFlag(uint32_t item, uint32_t index)
 
     if (swGet(gswfBase + index))
         itemFlags[index] |= 1;
+}
+
+uint8_t checkPeekaboo()
+{
+    if (!gState->apSettings->peekaboo)
+        return 0;
+    return 1;
 }

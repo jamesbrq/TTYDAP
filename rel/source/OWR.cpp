@@ -272,6 +272,14 @@ namespace mod::owr
             ttyd::swdrv::swSet(1188);
         }
 
+        // Set cutscene flag for Don Pianta if player leaves westside
+        if (ttyd::swdrv::swByteGet(1709) >= 3)
+            ttyd::swdrv::swSet(6000);
+
+        // Advance Boggly Woods sequence if the great tree is opened
+        if (ttyd::swdrv::swByteGet(1713) >= 1)
+            ttyd::swdrv::swByteSet(1702, 6);
+
         if (strcmp(map, "rsh_01_a") == 0)
         {
             uint8_t value = ttyd::swdrv::swByteGet(1706);
