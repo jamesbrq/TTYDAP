@@ -829,8 +829,8 @@ namespace mod::owr
             case 10:
                 if ((menu->buttonsPressed & gc::pad::PadInput::PAD_A) &&
                     marioGetPtr()->characterId == MarioCharacters::kMario &&
-                    // TODO: Move this to a unique item; using Mailbox SP for now.
-                    menu->itemSubmenuId == 1 && menu->keyItemIds[menu->itemsCursorIdx[1]] == ItemId::MAILBOX_SP)
+                    menu->itemSubmenuId == 1 && 
+                    menu->keyItemIds[menu->itemsCursorIdx[1]] == ItemId::INVALID_ITEM_PAPER_0054)
                 {
                     ttyd::evtmgr::evtEntry(const_cast<int32_t *>(confirm_pipe_evt), 0, 0);
                     return -2;
