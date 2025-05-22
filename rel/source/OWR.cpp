@@ -96,7 +96,7 @@ const uint16_t GSWF_ARR[] = {
     // Ch.3 jolene hallway cutscene
     2445,
 
-    //Ch.3 poison cake
+    // Ch.3 poison cake
     2451,
 
     // Post ch.3 stuff
@@ -826,7 +826,6 @@ namespace mod::owr
     {
         (void)isFirstCall;
 
-        // TODO: Use enums!
         if (ttyd::evtmgr_cmd::evtGetValue(evt, evt->evtArguments[0]) == 0)
         {
             ttyd::countdown::countDownEnd();
@@ -866,8 +865,7 @@ namespace mod::owr
         {
             case 10:
                 if ((menu->buttonsPressed & gc::pad::PadInput::PAD_A) &&
-                    marioGetPtr()->characterId == MarioCharacters::kMario &&
-                    menu->itemSubmenuId == 1 && 
+                    marioGetPtr()->characterId == MarioCharacters::kMario && menu->itemSubmenuId == 1 &&
                     menu->keyItemIds[menu->itemsCursorIdx[1]] == ItemId::INVALID_ITEM_PAPER_0054)
                 {
                     ttyd::evtmgr::evtEntry(const_cast<int32_t *>(confirm_pipe_evt), 0, 0);
