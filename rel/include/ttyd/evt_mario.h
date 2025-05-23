@@ -83,7 +83,6 @@ namespace ttyd::evt_mario
         // evt_mario_set_hosei_xyz
         // evt_mario_get_pos
         // evt_mario_set_camid
-        // evt_mario_init_camid
         // evt_mario_cam_y_off
         // evt_mario_cam_y_on
         // evt_mario_cam_keep_off
@@ -93,6 +92,7 @@ namespace ttyd::evt_mario
         // evt_mario_bgmode_off
         // evt_mario_bgmode_on
         // evt_mario_set_enable_key
+        EVT_DECLARE_USER_FUNC(evt_mario_init_camid, 0)
         EVT_DECLARE_USER_FUNC(evt_mario_key_onoff, 1)
         EVT_DECLARE_USER_FUNC(evt_mario_cont_onoff, 1)
         // evt_mario_trigflag_onoff

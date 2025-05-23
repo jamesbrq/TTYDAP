@@ -861,6 +861,9 @@ namespace mod::owr
         gState->apSettings->inGame = static_cast<uint8_t>(checkIfInGame());
         SequenceInit();
         RecieveItems();
+
+        if (gState->apSettings->peekaboo)
+            memset(reinterpret_cast<void *>(0x8012EE64), 0, sizeof(uint32_t)); // NOP instruction in battleCheckUnitMonosiriFlag
     }
 
     void OWR::OnModuleLoaded(OSModuleInfo *module_info)

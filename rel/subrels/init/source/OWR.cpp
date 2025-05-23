@@ -2,11 +2,18 @@
 #include "OWR.h"
 #include "patch.h"
 #include "ttyd/evt_mario.h"
-#include "ttyd/statuswindow.h"
+#include "ttyd/evt_memcard.h"
+#include "ttyd/evt_party.h"
+#include "ttyd/evtmgr_cmd.h"
 #include "ttyd/mario_pouch.h"
 #include "ttyd/msgdrv.h"
 #include "ttyd/seq_logo.h"
+#include "ttyd/seq_mapchange.h"
+#include "ttyd/seqdrv.h"
+#include "ttyd/statuswindow.h"
+#include "ttyd/swdrv.h"
 #include <AP/rel_patch_definitions.h>
+#include <string.h>
 #include <ttyd/common_types.h>
 #include <ttyd/icondrv.h>
 #include <ttyd/item_data.h>
@@ -79,6 +86,7 @@ extern int32_t main_mail_evt_rsh_03_a_2[];
 extern int32_t main_mail_evt_pik_00[];
 extern int32_t main_buy_evt[];
 extern int32_t main_buy_evt_evt[];
+extern int32_t main_evt_sub_starstone[];
 
 extern int32_t main_mobj_save_blk_sysevt[];
 extern int32_t main_init_event[];
@@ -87,14 +95,70 @@ extern int32_t evt_msg_print_party[];
 extern int32_t evt_msg_print_party_add[];
 extern int32_t main_preventDiaryTextboxSelectionAddress[];
 
+using ttyd::seq_mapchange::_next_area;
+using ttyd::seq_mapchange::_next_map;
 using namespace mod::patch;
+using namespace mod::owr;
+
+EVT_DECLARE_USER_FUNC(handleIntermissionSkip, 1)
+EVT_DEFINE_USER_FUNC(handleIntermissionSkip)
+{
+    (void)isFirstCall;
+
+    if (!gState->apSettings->apEnabled)
+    {
+        ttyd::evtmgr_cmd::evtSetValue(evt, evt->evtArguments[0], 0);
+        return 2;
+    }
+
+    if (!strcmp(_next_area, "gon"))
+        ttyd::swdrv::swByteSet(1711, 17);
+    else if (!strcmp(_next_area, "mri"))
+        ttyd::swdrv::swByteSet(1713, 20);
+    else if (!strncmp(_next_area, "tou", 3))
+        ttyd::swdrv::swByteSet(1703, 31);
+    else if (!strcmp(_next_area, "jin"))
+        ttyd::swdrv::swByteSet(1715, 17);
+    else if (!strcmp(_next_area, "muj"))
+        ttyd::swdrv::swByteSet(1717, 29);
+    else if (!strcmp(_next_area, "pik"))
+        ttyd::swdrv::swByteSet(1706, 53);
+    else if (!strcmp(_next_area, "aji"))
+        ttyd::swdrv::swByteSet(1707, 21);
+
+    ttyd::evtmgr_cmd::evtSetValue(evt, evt->evtArguments[0], 1);
+    ttyd::seqdrv::seqSetSeq(ttyd::seqdrv::SeqIndex::kMapChange, _next_map, 0);
+    return 2;
+}
 
 // clang-format off
 EVT_BEGIN(main_buy_evt_hook)
     RUN_CHILD_EVT(main_buy_evt_evt)
     RETURN()
 EVT_END()
+
+EVT_BEGIN(main_evt_sub_starstone_evt)
+    SET(LF(10), 0)
+    USER_FUNC(ttyd::evt_memcard::unk_evt_803bac3c)
+    USER_FUNC(ttyd::evt_mario::evt_mario_init_camid)
+    USER_FUNC(ttyd::evt_party::evt_party_init_camid, 0) 
+    USER_FUNC(handleIntermissionSkip, LW(1))
+    IF_EQUAL(LW(1), 1)
+        USER_FUNC(ttyd::evt_mario::evt_mario_key_onoff, 1)
+    END_IF()
+    RETURN()
+EVT_PATCH_END()
+
+EVT_BEGIN(main_evt_sub_starstone_hook)
+    RUN_CHILD_EVT(main_evt_sub_starstone_evt)
+    IF_EQUAL(LF(8), 0)
+        GOTO(&main_evt_sub_starstone[831])
+    END_IF()
+    RETURN()
+EVT_PATCH_END()
 // clang-format on
+
+
 
 namespace mod::owr
 {
@@ -325,12 +389,6 @@ namespace mod::owr
         writeIntWithCache(&main_psndBGMOn_f_d[90], 0x2C030008); // cmpwi r3, 0x8
         writeIntWithCache(&main_psndBGMOn_f_d[94], 0x38840831); // addi r4, r4, 0x831 GSW(1713)
         writeIntWithCache(&main_psndBGMOn_f_d[96], 0x2C03000A); // cmpwi r3, 0xA
-
-        patch::writeBranchPair(&main_BattleDrawEnemyHP[27],
-                               reinterpret_cast<void *>(bCheckPeekaboo),
-                               reinterpret_cast<void *>(bCheckPeekabooReturn));
-
-        writeIntWithCache(&main_BattleDrawEnemyHP[28], 0x2C030001); // cmpwi r3, 0x1
     }
 
     void ApplyMainScriptPatches()
@@ -395,6 +453,8 @@ namespace mod::owr
         evt_lecture_msg[108] = 17;
 
         patch::writePatch(&main_buy_evt[352], main_buy_evt_hook, sizeof(main_buy_evt_hook));
+
+        patch::writePatch(&main_evt_sub_starstone[821], main_evt_sub_starstone_hook, sizeof(main_evt_sub_starstone_hook));
     }
 
     void ApplyItemDataTablePatches()

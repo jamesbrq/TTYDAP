@@ -38,10 +38,7 @@ extern "C"
     void bShopFlagCheckReturn();
     void bCoconutCheck();
     void bCoconutCheckReturn();
-    void bCheckPeekaboo();
-    void bCheckPeekabooReturn();
     void checkShopFlag(uint32_t item, uint32_t index);
-    uint8_t checkPeekaboo();
 }
 
 EVT_DECLARE_USER_FUNC(checkChapterRequirements, 1)

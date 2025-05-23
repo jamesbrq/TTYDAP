@@ -126,10 +126,3 @@ void checkShopFlag(uint32_t item, uint32_t index)
     if (swGet(gswfBase + index))
         itemFlags[index] |= 1;
 }
-
-uint8_t checkPeekaboo()
-{
-    if (!gState->apSettings->peekaboo)
-        return 0;
-    return 1;
-}

@@ -49,6 +49,7 @@ namespace ttyd::evt_party
         // evt_party_force_reset_outofscreen
         EVT_DECLARE_USER_FUNC(evt_party_set_camid, 2)
         EVT_DECLARE_USER_FUNC(evt_party_cont_onoff, 2)
+        EVT_DECLARE_USER_FUNC(evt_party_init_camid, 1)
         // evt_party_init_camid
         // unk_JP_US_EU_27_800eb9cc
         // evt_party_dispflg_onoff

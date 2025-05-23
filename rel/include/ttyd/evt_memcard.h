@@ -10,6 +10,7 @@ namespace ttyd::evt_memcard
     {
         // .text
         EVT_DECLARE_USER_FUNC(memcard_write, 0)
+        EVT_DECLARE_USER_FUNC(unk_evt_803bac3c, 0)
         // memcard_file_existance
         // memcard_ipl
         // memcard_header_write
