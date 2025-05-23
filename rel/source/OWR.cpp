@@ -10,8 +10,11 @@
 #include <ttyd/common_types.h>
 #include <ttyd/countdown.h>
 #include <ttyd/evt_mario.h>
+#include <ttyd/evt_msg.h>
 #include <ttyd/evt_pouch.h>
 #include <ttyd/evt_window.h>
+#include <ttyd/evtmgr.h>
+#include <ttyd/evtmgr_cmd.h>
 #include <ttyd/icondrv.h>
 #include <ttyd/mario.h>
 #include <ttyd/mario_motion.h>
@@ -25,6 +28,8 @@
 #include <ttyd/statuswindow.h>
 #include <ttyd/string.h>
 #include <ttyd/swdrv.h>
+#include <ttyd/win_main.h>
+#include <ttyd/win_root.h>
 
 #include "common.h"
 #include "OWR.h"
@@ -42,6 +47,8 @@ using namespace ttyd::mario;
 using namespace ttyd::mario_pouch;
 using namespace ttyd::icondrv;
 using namespace ttyd::statuswindow;
+using namespace ttyd::evt_mario;
+using namespace ttyd::evt_msg;
 using namespace ttyd::evt_pouch;
 using namespace ttyd::seqdrv;
 
@@ -89,7 +96,7 @@ const uint16_t GSWF_ARR[] = {
     // Ch.3 jolene hallway cutscene
     2445,
 
-    //Ch.3 poison cake
+    // Ch.3 poison cake
     2451,
 
     // Post ch.3 stuff
@@ -116,6 +123,7 @@ namespace mod::owr
     KEEP_VAR const char *(*g_msgSearch_trampoline)(const char *) = nullptr;
     KEEP_VAR void (*g_statusWinDisp_trampoline)(void) = nullptr;
     KEEP_VAR void (*g_pouchGetStarstone_trampoline)(int32_t) = nullptr;
+    KEEP_VAR int32_t (*g_winItemMain_trampoline)(ttyd::win_root::WinPauseMenu *menu) = nullptr;
 
     void OWR::SequenceInit()
     {
@@ -139,6 +147,9 @@ namespace mod::owr
         ttyd::swdrv::swByteSet(1704, 1);
         ttyd::swdrv::swByteSet(1712, 1);
         ttyd::mario_pouch::pouchGetStarStone(0);
+
+        // Give Return Pipe.
+        ttyd::mario_pouch::pouchGetItem(ItemId::INVALID_ITEM_PAPER_0054);
 
         if (gState->apSettings->apEnabled)
         {
@@ -488,6 +499,14 @@ namespace mod::owr
         {
             return "AP Item<k>";
         }
+        if (!strcmp(msgKey, "return_pipe"))
+        {
+            return "Return Pipe<k>";
+        }
+        if (!strcmp(msgKey, "return_pipe_description"))
+        {
+            return "This pipe can return you to\nRogueport.<k>";
+        }
         if (!strcmp(msgKey, "10_coins"))
         {
             return "10 Coins<k>";
@@ -779,6 +798,62 @@ namespace mod::owr
         if (newMaxSP < maxSP)
             pouchData->max_sp = maxSP;
         return;
+    }
+
+    EVT_DECLARE_USER_FUNC(handlePipeConfirmResponse, 1)
+    EVT_DEFINE_USER_FUNC(handlePipeConfirmResponse)
+    {
+        (void)isFirstCall;
+
+        if (ttyd::evtmgr_cmd::evtGetValue(evt, evt->evtArguments[0]) == 0)
+        {
+            ttyd::countdown::countDownEnd();
+            ttyd::mario_motion::marioChgMot(ttyd::mario_motion::MarioMotion::kStay);
+
+            // We clear the flag for being registered for a match in ch.3 so we can re-register later
+            ttyd::swdrv::swClear(2388);
+
+            // Also clear the flag for the champion match
+            ttyd::swdrv::swClear(2383);
+
+            uint32_t namePtr = 0x802c0298;
+            const char *mapName = reinterpret_cast<char *>(namePtr);
+            ttyd::seqdrv::seqSetSeq(ttyd::seqdrv::SeqIndex::kMapChange, mapName, 0);
+        }
+
+        return 2;
+    }
+
+    // clang-format off
+    EVT_BEGIN(confirm_pipe_evt)
+        USER_FUNC(evt_mario_normalize)
+        USER_FUNC(evt_mario_key_onoff, 0)
+        USER_FUNC(evt_msg_print, 1, PTR("<system>\n<p>\nWarp home now?\n<o>"), 0, 0)
+        USER_FUNC(evt_msg_select, 1, PTR("<select 0 1 0 40>\nYes\nNo"))
+        USER_FUNC(evt_msg_continue)
+        USER_FUNC(handlePipeConfirmResponse, LW(0))
+        USER_FUNC(evt_mario_key_onoff, 1)
+        RETURN()
+    EVT_END()
+    // clang-format on
+
+    // Hook item menu update function to handle interactions with added key items.
+    KEEP_FUNC int32_t WinItemMainHook(ttyd::win_root::WinPauseMenu *menu)
+    {
+        switch (menu->itemMenuState)
+        {
+            case 10:
+                if ((menu->buttonsPressed & gc::pad::PadInput::PAD_A) &&
+                    marioGetPtr()->characterId == MarioCharacters::kMario && menu->itemSubmenuId == 1 &&
+                    menu->keyItemIds[menu->itemsCursorIdx[1]] == ItemId::INVALID_ITEM_PAPER_0054)
+                {
+                    ttyd::evtmgr::evtEntry(const_cast<int32_t *>(confirm_pipe_evt), 0, 0);
+                    return -2;
+                }
+                break;
+        }
+
+        return g_winItemMain_trampoline(menu);
     }
 
     void OWR::Update()
