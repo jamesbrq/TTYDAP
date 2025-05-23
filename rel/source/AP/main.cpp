@@ -38,6 +38,8 @@ namespace mod::owr
     KEEP_VAR const char *mowzDescription = "mowz_desc";
     KEEP_VAR const char *apItemNameDescription = "ap_item";
     KEEP_VAR const char *tenCoinsNameDescription = "10_coins";
+    KEEP_VAR const char *returnPipeName = "return_pipe";
+    KEEP_VAR const char *returnPipeDescription = "return_pipe_description";
     KEEP_VAR const char *planeModeNameDescription = "plane_mode";
     KEEP_VAR const char *paperModeNameDescription = "paper_mode";
     KEEP_VAR const char *tubeModeNameDescription = "tube_mode";

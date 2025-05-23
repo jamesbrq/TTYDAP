@@ -584,7 +584,8 @@ namespace ttyd::icondrv
             JOURNAL_IT,
 
             // Custom icons.
-            AP_ITEM
+            AP_ITEM,
+            RETURN_PIPE
         };
     }
 
