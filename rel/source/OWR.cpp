@@ -528,6 +528,14 @@ namespace mod::owr
         {
             return "AP Item<k>";
         }
+        if (!strcmp(msgKey, "return_pipe"))
+        {
+            return "Return Pipe<k>";
+        }
+        if (!strcmp(msgKey, "return_pipe_description"))
+        {
+            return "This pipe can return you to\nRogueport.<k>";
+        }
         if (!strcmp(msgKey, "10_coins"))
         {
             return "10 Coins<k>";

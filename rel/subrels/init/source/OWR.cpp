@@ -430,6 +430,9 @@ namespace mod::owr
         itemDataTable[ItemId::INVALID_ITEM_PAPER_0053].name = tenCoinsNameDescription;
         itemDataTable[ItemId::INVALID_ITEM_PAPER_0053].description = tenCoinsNameDescription;
         itemDataTable[ItemId::INVALID_ITEM_PAPER_0053].icon_id = IconType::COIN;
+        itemDataTable[ItemId::INVALID_ITEM_PAPER_0054].name = returnPipeName;
+        itemDataTable[ItemId::INVALID_ITEM_PAPER_0054].description = returnPipeDescription;
+        itemDataTable[ItemId::INVALID_ITEM_PAPER_0054].icon_id = IconType::RETURN_PIPE;
         itemDataTable[ItemId::INVALID_ITEM_PLANE_MODE_ICON].name = planeModeNameDescription;
         itemDataTable[ItemId::INVALID_ITEM_PLANE_MODE_ICON].description = planeModeNameDescription;
         itemDataTable[ItemId::INVALID_ITEM_PAPER_MODE_ICON].name = paperModeNameDescription;

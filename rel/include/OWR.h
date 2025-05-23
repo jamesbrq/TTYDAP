@@ -74,6 +74,8 @@ namespace mod::owr
     extern const char *mowzDescription;
     extern const char *apItemNameDescription;
     extern const char *tenCoinsNameDescription;
+    extern const char *returnPipeName;
+    extern const char *returnPipeDescription;
     extern const char *planeModeNameDescription;
     extern const char *paperModeNameDescription;
     extern const char *tubeModeNameDescription;
