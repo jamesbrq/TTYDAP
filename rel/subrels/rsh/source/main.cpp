@@ -1085,7 +1085,7 @@ namespace mod
         rsh_evt_daijisouna_kami[205] = 26;
 
         rsh_init_syashou_04[1] = GSW(1706);
-        rsh_init_syashou_04[3] = 18;
+        rsh_init_syashou_04[3] = 1;
         rsh_init_syashou_04[4] = 19;
         rsh_init_syashou_04[12] = 32;
         rsh_init_syashou_04[13] = 36;
@@ -1239,7 +1239,7 @@ namespace mod
         rsh_04_init_evt[64] = GSW(1706);
         rsh_04_init_evt[65] = 20;
         rsh_04_init_evt[73] = GSW(1706);
-        rsh_04_init_evt[74] = 32;
+        rsh_04_init_evt[74] = 0; // Unused
         rsh_04_init_evt[82] = GSW(1706);
         rsh_04_init_evt[83] = 38;
         rsh_04_init_evt[85] = GSW(1706);

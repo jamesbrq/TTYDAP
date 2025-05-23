@@ -144,6 +144,7 @@ namespace mod::owr
 
         ttyd::swdrv::swByteSet(1700, 16);
         ttyd::swdrv::swByteSet(1701, 3);
+        ttyd::swdrv::swByteSet(1703, 1);
         ttyd::swdrv::swByteSet(1704, 1);
         ttyd::swdrv::swByteSet(1712, 1);
         ttyd::mario_pouch::pouchGetStarStone(0);
@@ -824,10 +825,32 @@ namespace mod::owr
         return 2;
     }
 
+    EVT_DECLARE_USER_FUNC(checkValidPipeSequence, 1)
+    EVT_DEFINE_USER_FUNC(checkValidPipeSequence)
+    {
+        (void)isFirstCall;
+
+        int ch5 = ttyd::swdrv::swByteGet(1717);
+        int ch6 = ttyd::swdrv::swByteGet(1706);
+
+        if (10 <= ch5 <= 18)
+            ttyd::evtmgr_cmd::evtSetValue(evt, evt->evtArguments[0], 1);
+
+        if (42 <= ch6 <= 43)
+            ttyd::evtmgr_cmd::evtSetValue(evt, evt->evtArguments[0], 1);
+
+        return 2;
+    }
+
     // clang-format off
     EVT_BEGIN(confirm_pipe_evt)
         USER_FUNC(evt_mario_normalize)
         USER_FUNC(evt_mario_key_onoff, 0)
+        USER_FUNC(checkValidPipeSequence, LW(0))
+        IF_EQUAL(LW(0), 1)
+            USER_FUNC(evt_msg_print, 1, PTR("<system>\n<p>\nThe Warp Pipe is currently\nunavailable.<k>"), 0, 0)
+            RETURN()
+        END_IF()
         USER_FUNC(evt_msg_print, 1, PTR("<system>\n<p>\nWarp home now?\n<o>"), 0, 0)
         USER_FUNC(evt_msg_select, 1, PTR("<select 0 1 0 40>\nYes\nNo"))
         USER_FUNC(evt_msg_continue)
@@ -861,9 +884,6 @@ namespace mod::owr
         gState->apSettings->inGame = static_cast<uint8_t>(checkIfInGame());
         SequenceInit();
         RecieveItems();
-
-        if (gState->apSettings->peekaboo)
-            memset(reinterpret_cast<void *>(0x8012EE64), 0, sizeof(uint32_t)); // NOP instruction in battleCheckUnitMonosiriFlag
     }
 
     void OWR::OnModuleLoaded(OSModuleInfo *module_info)

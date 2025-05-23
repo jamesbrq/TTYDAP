@@ -64,7 +64,7 @@ extern int32_t main_seq_battleInit[];
 extern int32_t main__psndSFXOn[];
 extern int32_t main_psndBGMOff_f_d[];
 extern int32_t main_psndBGMOn_f_d[];
-extern int32_t main_BattleDrawEnemyHP[];
+extern int32_t main_battleCheckUnitMonosiriFlag[];
 // End of Assembly References
 
 // Script References
@@ -389,6 +389,9 @@ namespace mod::owr
         writeIntWithCache(&main_psndBGMOn_f_d[90], 0x2C030008); // cmpwi r3, 0x8
         writeIntWithCache(&main_psndBGMOn_f_d[94], 0x38840831); // addi r4, r4, 0x831 GSW(1713)
         writeIntWithCache(&main_psndBGMOn_f_d[96], 0x2C03000A); // cmpwi r3, 0xA
+
+        if (mod::owr::gState->apSettings->peekaboo)
+            writeIntWithCache(&main_battleCheckUnitMonosiriFlag[10], 0x60000000); // NOP
     }
 
     void ApplyMainScriptPatches()

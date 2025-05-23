@@ -217,7 +217,7 @@ void ApplyGor03Patches()
     gor_maffiaboss_maffiaboss[483] = 1;
 
     gor_maffiaboss_teshita_irai[249] = GSW(1709);
-    gor_maffiaboss_teshita_irai[250] = 4;
+    gor_maffiaboss_teshita_irai[250] = 5;
 
     gor_maffiaboss_train_ticket[797] = GSW(1709);
     gor_maffiaboss_train_ticket[798] = 10;

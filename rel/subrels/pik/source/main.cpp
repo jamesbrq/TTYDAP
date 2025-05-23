@@ -455,7 +455,7 @@ namespace mod
         patch::writePatch(&pik_evt_daiza_02[3], evt_daiza_hook, sizeof(evt_daiza_hook));
 
         pik_02_koopa_evt[1207] = GSW(1707);
-        pik_02_koopa_evt[1208] = 18;
+        pik_02_koopa_evt[1208] = 21;
 
         pik_nise_starstone_init[1] = GSW(1706);
         pik_nise_starstone_init[2] = 51;

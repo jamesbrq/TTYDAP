@@ -15,6 +15,7 @@ extern int32_t gor_jugemu_a_talk[];
 extern int32_t gor_kinopiko_b_talk_04[];
 extern int32_t gor_luigi_init_04[];
 extern int32_t gor_luigi_npcEnt_04[];
+extern int32_t gor_evt_hikousen[];
 extern int32_t gor_04_init_evt[];
 
 void ApplyGor04Patches()
@@ -65,6 +66,9 @@ void ApplyGor04Patches()
     gor_luigi_npcEnt_04[1] = GSW(1710); // HOOK
     gor_luigi_npcEnt_04[3] = 6;
     gor_luigi_npcEnt_04[4] = 7;
+
+    gor_evt_hikousen[131] = GSW(1703);
+    gor_evt_hikousen[132] = 1;
 
     gor_04_init_evt[1] = GSW(1715);
     gor_04_init_evt[2] = 10;
