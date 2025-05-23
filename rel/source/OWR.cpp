@@ -191,35 +191,6 @@ namespace mod::owr
         return (relPtr->id != RelId::DMO);
     }
 
-    void OWR::HomewardWarp()
-    {
-        const Player *marioPtr = marioGetPtr();
-        if (marioPtr->characterId != MarioCharacters::kMario)
-            return;
-        if (!checkIfInGame())
-            return;
-        if ((marioStGetSystemLevel() & 15) == 15)
-            return;
-
-        uint32_t combo = PadInput::PAD_L | PadInput::PAD_R | PadInput::PAD_START;
-        bool buttons = checkButtonCombo(combo);
-        if (buttons)
-        {
-            ttyd::countdown::countDownEnd();
-            ttyd::mario_motion::marioChgMot(ttyd::mario_motion::MarioMotion::kStay);
-
-            // We clear the flag for being registered for a match in ch.3 so we can re-register later
-            ttyd::swdrv::swClear(2388);
-
-            // Also clear the flag for the champion match
-            ttyd::swdrv::swClear(2383);
-
-            uint32_t namePtr = 0x802c0298;
-            const char *mapName = reinterpret_cast<char *>(namePtr);
-            ttyd::seqdrv::seqSetSeq(ttyd::seqdrv::SeqIndex::kMapChange, mapName, 0);
-        }
-    }
-
     void OWR::RecieveItems()
     {
         if (!checkIfInGame())
@@ -815,7 +786,6 @@ namespace mod::owr
         gState->apSettings->inGame = static_cast<uint8_t>(checkIfInGame());
         SequenceInit();
         RecieveItems();
-        HomewardWarp();
     }
 
     void OWR::OnModuleLoaded(OSModuleInfo *module_info)
