@@ -16,9 +16,13 @@ namespace mod::owr
         uint8_t palaceSkip;
         uint8_t openWestside;
         uint8_t peekaboo;
+        uint8_t intermissions;
+        uint8_t startingHP;
+        uint8_t startingFP;
+        uint8_t startingBP;
     };
 
-    static_assert(sizeof(APSettings) == 0xC);
+    static_assert(sizeof(APSettings) == 0x10);
 
     class StateManager
     {

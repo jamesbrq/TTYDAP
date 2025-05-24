@@ -10,7 +10,6 @@ namespace ttyd::evt_memcard
     {
         // .text
         EVT_DECLARE_USER_FUNC(memcard_write, 0)
-        EVT_DECLARE_USER_FUNC(unk_evt_803bac3c, 0)
         // memcard_file_existance
         // memcard_ipl
         // memcard_header_write
@@ -32,6 +31,6 @@ namespace ttyd::evt_memcard
         extern int32_t evt_memcard_delete[1];
         extern int32_t evt_memcard_copy[1];
         extern int32_t evt_memcard_save[1];
-        extern int32_t unk_0x803bac3c[1];
+        extern int32_t unk_evt_803bac3c[1];
     }
 } // namespace ttyd::evt_memcard

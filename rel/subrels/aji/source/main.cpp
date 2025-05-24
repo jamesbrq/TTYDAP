@@ -658,8 +658,9 @@ namespace mod
         aji_16_init_evt[38] = 11;
         aji_16_init_evt[69] = GSW(1711);
         aji_16_init_evt[70] = 9;
+        aji_16_init_evt[88] = EVT_HELPER_CMD(2, 24);
         aji_16_init_evt[89] = GSW(1711);
-        aji_16_init_evt[90] = 10;
+        aji_16_init_evt[90] = 9;
         aji_16_init_evt[106] = GSW(1713);
         aji_16_init_evt[107] = 11;
         patch::writePatch(&aji_16_init_evt[122], aji_16_init_evt_hook, sizeof(aji_16_init_evt_hook));

@@ -926,7 +926,7 @@ void ApplyGor00Patches()
     gor_00_init_evt[302] = GSW(1708);
     gor_00_init_evt[303] = 18;
     gor_00_init_evt[308] = GSW(1717);
-    gor_00_init_evt[309] = 26;
+    gor_00_init_evt[309] = 99; // Unused
     gor_00_init_evt[314] = GSW(1709);
     gor_00_init_evt[315] = 2;
     patch::writePatch(&gor_00_init_evt[329], gor_00_init_evt2_hook, sizeof(gor_00_init_evt2_hook));

@@ -1,16 +1,17 @@
-#include "subrel_tou.h"
+#include "AP/rel_patch_definitions.h"
 #include "evt_cmd.h"
 #include "patch.h"
-#include "AP/rel_patch_definitions.h"
+#include "subrel_tou.h"
 #include "ttyd/evt_bero.h"
 #include "ttyd/evt_case.h"
 #include "ttyd/evt_eff.h"
+#include "ttyd/evt_hit.h"
 #include "ttyd/evt_item.h"
 #include "ttyd/evt_map.h"
 #include "ttyd/evt_mario.h"
-#include "ttyd/evt_pouch.h"
 #include "ttyd/evt_msg.h"
 #include "ttyd/evt_npc.h"
+#include "ttyd/evt_pouch.h"
 
 #include <cstdint>
 
@@ -256,6 +257,8 @@ EVT_BEGIN(yoshi_gswf_evt)
 EVT_PATCH_END()
 
 EVT_BEGIN(tou_04_init_evt_evt)
+    SET(LW(0), 5)
+    RUN_CHILD_EVT(evt_bero::bero_case_switch_on)
     SET(LW(0), 7)
     RUN_CHILD_EVT(evt_bero::bero_case_switch_on)
     USER_FUNC(tou_evt_tou_get_ranking, LW(0))
@@ -421,6 +424,25 @@ EVT_END()
 EVT_BEGIN(tou_05_init_evt_hook2)
 	RUN_CHILD_EVT(tou_05_init_evt_evt2)
 	GOTO(&tou_05_init_evt[274])
+EVT_PATCH_END()
+
+EVT_BEGIN(tou_05_init_evt_evt3)
+    SET(LW(0), PTR("hikidasi_N"))
+    SET(LW(1), PTR("a_hikidasi_N"))
+    USER_FUNC(evt_hit::evt_hit_bind_mapobj, LW(1), LW(0))
+    USER_FUNC(evt_case::evt_run_case_evt, 9, 1, LW(1), 0, PTR(&tou_evt_hiki_open), 0)
+    IF_LARGE_EQUAL(GSW(1703), 18)
+        SET(LW(0), PTR("hikidasi_H"))
+        SET(LW(1), PTR("a_hikidasi_H"))
+        USER_FUNC(evt_hit::evt_hit_bind_mapobj, LW(1), LW(0))
+        USER_FUNC(evt_case::evt_run_case_evt, 9, 1, LW(1), 0, PTR(&tou_evt_hiki_open), 0)
+    END_IF()
+    RETURN()
+EVT_END()
+
+EVT_BEGIN(tou_05_init_evt_hook3)
+	RUN_CHILD_EVT(tou_05_init_evt_evt3)
+	GOTO(&tou_05_init_evt[171])
 EVT_PATCH_END()
 // clang-format on
 
@@ -799,7 +821,7 @@ namespace mod
 
         tou_move_g_4[28] = GSW(1703);
         tou_move_g_4[30] = 4;
-        tou_move_g_4[32] = 7;
+        tou_move_g_4[32] = 99; // Unused
         tou_move_g_4[39] = 18;
         tou_move_g_4[71] = 19;
         tou_move_g_4[72] = 27;
@@ -904,8 +926,9 @@ namespace mod
         tou_evt_nozoki[691] = GSWF(6030);
         tou_evt_nozoki[692] = 1;
 
-        tou_05_init_evt[132] = GSW(1703);
-        tou_05_init_evt[133] = 18;
+        patch::writePatch(&tou_05_init_evt[131], tou_05_init_evt_hook3, sizeof(tou_05_init_evt_hook3));
+        tou_05_init_evt[135] = 0;
+        tou_05_init_evt[136] = 0;
         patch::writePatch(&tou_05_init_evt[174], tou_05_init_evt_hook1, sizeof(tou_05_init_evt_hook1));
         tou_05_init_evt[178] = 0;
         tou_05_init_evt[181] = 0;

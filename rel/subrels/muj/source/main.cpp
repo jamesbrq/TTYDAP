@@ -1092,7 +1092,7 @@ namespace mod
         muj_mony_talk_02[17] = 6;
         muj_mony_talk_02[19] = 6;
         muj_mony_talk_02[44] = GSW(1709);
-        muj_mony_talk_02[45] = 7;
+        muj_mony_talk_02[45] = 9;
 
         muj_peton_talk_02[1] = GSW(1709);
         muj_peton_talk_02[3] = 5;
@@ -1100,7 +1100,7 @@ namespace mod
         muj_peton_talk_02[17] = 6;
         muj_peton_talk_02[19] = 6;
         muj_peton_talk_02[44] = GSW(1709);
-        muj_peton_talk_02[45] = 7;
+        muj_peton_talk_02[45] = 9;
 
         muj_02_init_evt[8] = 0;
         muj_02_init_evt[9] = 0;

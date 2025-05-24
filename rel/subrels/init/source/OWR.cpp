@@ -1,6 +1,7 @@
 #include "evt_cmd.h"
 #include "OWR.h"
 #include "patch.h"
+#include "ttyd/evt_bero.h"
 #include "ttyd/evt_mario.h"
 #include "ttyd/evt_memcard.h"
 #include "ttyd/evt_party.h"
@@ -95,39 +96,69 @@ extern int32_t evt_msg_print_party[];
 extern int32_t evt_msg_print_party_add[];
 extern int32_t main_preventDiaryTextboxSelectionAddress[];
 
+extern char starstone_current_map[32];
+
 using ttyd::seq_mapchange::_next_area;
 using ttyd::seq_mapchange::_next_map;
+using namespace ttyd;
 using namespace mod::patch;
 using namespace mod::owr;
 
-EVT_DECLARE_USER_FUNC(handleIntermissionSkip, 1)
+EVT_DECLARE_USER_FUNC(handleIntermissionSkip, 3)
 EVT_DEFINE_USER_FUNC(handleIntermissionSkip)
 {
     (void)isFirstCall;
 
-    if (!gState->apSettings->apEnabled)
+    if (!gState->apSettings->intermissions)
     {
-        ttyd::evtmgr_cmd::evtSetValue(evt, evt->evtArguments[0], 0);
+        evtmgr_cmd::evtSetValue(evt, evt->evtArguments[0], 0);
         return 2;
     }
 
-    if (!strcmp(_next_area, "gon"))
-        ttyd::swdrv::swByteSet(1711, 17);
-    else if (!strcmp(_next_area, "mri"))
-        ttyd::swdrv::swByteSet(1713, 20);
-    else if (!strncmp(_next_area, "tou", 3))
-        ttyd::swdrv::swByteSet(1703, 31);
-    else if (!strcmp(_next_area, "jin"))
-        ttyd::swdrv::swByteSet(1715, 17);
-    else if (!strcmp(_next_area, "muj"))
-        ttyd::swdrv::swByteSet(1717, 29);
-    else if (!strcmp(_next_area, "pik"))
-        ttyd::swdrv::swByteSet(1706, 53);
-    else if (!strcmp(_next_area, "aji"))
-        ttyd::swdrv::swByteSet(1707, 21);
+    if (!strncmp(starstone_current_map, "gon", 3))
+    {
+        swdrv::swByteSet(1711, 17);
+        evtmgr_cmd::evtSetValue(evt, evt->evtArguments[1], PTR("gon_10"));
+        evtmgr_cmd::evtSetValue(evt, evt->evtArguments[2], PTR("w_bero"));
+    }
+    else if (!strncmp(starstone_current_map, "mri", 3))
+    {
+        swdrv::swByteSet(1713, 20);
+        evtmgr_cmd::evtSetValue(evt, evt->evtArguments[1], PTR("mri_00"));
+        evtmgr_cmd::evtSetValue(evt, evt->evtArguments[2], PTR("w_bero"));
+    }
+    else if (!strncmp(starstone_current_map, "tou", 3))
+    {
+        swdrv::swByteSet(1703, 31);
+        evtmgr_cmd::evtSetValue(evt, evt->evtArguments[1], PTR("tou_04"));
+        evtmgr_cmd::evtSetValue(evt, evt->evtArguments[2], PTR("w_bero"));
+    }
+    else if (!strncmp(starstone_current_map, "jin", 3))
+    {
+        swdrv::swByteSet(1715, 17);
+        evtmgr_cmd::evtSetValue(evt, evt->evtArguments[1], PTR("jin_00"));
+        evtmgr_cmd::evtSetValue(evt, evt->evtArguments[2], PTR("s_bero"));
+    }
+    else if (!strncmp(starstone_current_map, "muj", 3))
+    {
+        swdrv::swByteSet(1717, 29);
+        evtmgr_cmd::evtSetValue(evt, evt->evtArguments[1], PTR("muj_11"));
+        evtmgr_cmd::evtSetValue(evt, evt->evtArguments[2], PTR("w_bero"));
+    }
+    else if (!strncmp(starstone_current_map, "pik", 3))
+    {
+        swdrv::swByteSet(1706, 53);
+        evtmgr_cmd::evtSetValue(evt, evt->evtArguments[1], PTR("pik_03"));
+        evtmgr_cmd::evtSetValue(evt, evt->evtArguments[2], PTR("next"));
+    }
+    else if (!strncmp(starstone_current_map, "aji", 3))
+    {
+        swdrv::swByteSet(1707, 21);
+        evtmgr_cmd::evtSetValue(evt, evt->evtArguments[1], PTR("aji_18"));
+        evtmgr_cmd::evtSetValue(evt, evt->evtArguments[2], PTR("w_bero"));
+    }
 
-    ttyd::evtmgr_cmd::evtSetValue(evt, evt->evtArguments[0], 1);
-    ttyd::seqdrv::seqSetSeq(ttyd::seqdrv::SeqIndex::kMapChange, _next_map, 0);
+    evtmgr_cmd::evtSetValue(evt, evt->evtArguments[0], 1);
     return 2;
 }
 
@@ -139,19 +170,20 @@ EVT_END()
 
 EVT_BEGIN(main_evt_sub_starstone_evt)
     SET(LF(10), 0)
-    USER_FUNC(ttyd::evt_memcard::unk_evt_803bac3c)
-    USER_FUNC(ttyd::evt_mario::evt_mario_init_camid)
-    USER_FUNC(ttyd::evt_party::evt_party_init_camid, 0) 
-    USER_FUNC(handleIntermissionSkip, LW(1))
+    RUN_CHILD_EVT(&evt_memcard::unk_evt_803bac3c)
+    USER_FUNC(evt_mario::evt_mario_init_camid)
+    USER_FUNC(evt_party::evt_party_init_camid, 0) 
+    USER_FUNC(handleIntermissionSkip, LW(1), LW(2), LW(3))
     IF_EQUAL(LW(1), 1)
-        USER_FUNC(ttyd::evt_mario::evt_mario_key_onoff, 1)
+        USER_FUNC(evt_mario::evt_mario_key_onoff, 1)
+        USER_FUNC(evt_bero::evt_bero_mapchange, LW(2), LW(3))
     END_IF()
     RETURN()
 EVT_PATCH_END()
 
 EVT_BEGIN(main_evt_sub_starstone_hook)
     RUN_CHILD_EVT(main_evt_sub_starstone_evt)
-    IF_EQUAL(LF(8), 0)
+    IF_EQUAL(LW(1), 0)
         GOTO(&main_evt_sub_starstone[831])
     END_IF()
     RETURN()
@@ -351,7 +383,7 @@ namespace mod::owr
                                reinterpret_cast<void *>(bPeachPointer),
                                reinterpret_cast<void *>(bPeachReturn));
 
-        writeIntWithCache(&main_evt_shop_setup[82], 0x2C000079); // cmpwi r0, 0x79
+        writeIntWithCache(&main_evt_shop_setup[82], 0x2C00007D); // cmpwi r0, 0x79
         writeIntWithCache(&main_evt_shop_setup[83], 0x418100FC); // blt +0xFC
 
         patch::writeBranchPair(&main_evt_shop_setup[84],
@@ -462,9 +494,9 @@ namespace mod::owr
 
     void ApplyItemDataTablePatches()
     {
-        using ttyd::item_data::itemDataTable;
-        namespace ItemId = ::ttyd::common::ItemId;
-        namespace IconType = ::ttyd::icondrv::IconType;
+        using item_data::itemDataTable;
+        namespace ItemId = ::common::ItemId;
+        namespace IconType = ::icondrv::IconType;
 
         itemDataTable[ItemId::SUPER_LUIGI].name = goombellaName;
         itemDataTable[ItemId::SUPER_LUIGI].description = goombellaDescription;
@@ -516,17 +548,17 @@ namespace mod::owr
         ApplyItemDataTablePatches();
 
         g_OSLink_trampoline = patch::hookFunction(OSLink, OSLinkHook);
-        gTrampoline_seq_logoMain = patch::hookFunction(ttyd::seq_logo::seq_logoMain, logoSkip);
-        g_seqSetSeq_trampoline = patch::hookFunction(ttyd::seqdrv::seqSetSeq, seqSetSeqHook);
-        g_msgSearch_trampoline = patch::hookFunction(ttyd::msgdrv::msgSearch, msgSearchHook);
-        g_pouchGetItem_trampoline = patch::hookFunction(ttyd::mario_pouch::pouchGetItem, pouchGetItemHook);
-        g_partySetForceMove_trampoline = patch::hookFunction(ttyd::party::partySetForceMove, partySetForceMoveHook);
-        g_evt_mario_set_pose_trampoline = patch::hookFunction(ttyd::evt_mario::evt_mario_set_pose, evtMarioSetPoseHook);
-        g_statusWinDisp_trampoline = patch::hookFunction(ttyd::statuswindow::statusWinDisp, DisplayStarPowerNumber);
-        g_pouchGetStarstone_trampoline = patch::hookFunction(ttyd::mario_pouch::pouchGetStarStone, SetMaxSP);
-        g_winItemMain_trampoline = patch::hookFunction(ttyd::win_item::winItemMain, WinItemMainHook);
+        gTrampoline_seq_logoMain = patch::hookFunction(seq_logo::seq_logoMain, logoSkip);
+        g_seqSetSeq_trampoline = patch::hookFunction(seqdrv::seqSetSeq, seqSetSeqHook);
+        g_msgSearch_trampoline = patch::hookFunction(msgdrv::msgSearch, msgSearchHook);
+        g_pouchGetItem_trampoline = patch::hookFunction(mario_pouch::pouchGetItem, pouchGetItemHook);
+        g_partySetForceMove_trampoline = patch::hookFunction(party::partySetForceMove, partySetForceMoveHook);
+        g_evt_mario_set_pose_trampoline = patch::hookFunction(evt_mario::evt_mario_set_pose, evtMarioSetPoseHook);
+        g_statusWinDisp_trampoline = patch::hookFunction(statuswindow::statusWinDisp, DisplayStarPowerNumber);
+        g_pouchGetStarstone_trampoline = patch::hookFunction(mario_pouch::pouchGetStarStone, SetMaxSP);
+        g_winItemMain_trampoline = patch::hookFunction(win_item::winItemMain, WinItemMainHook);
 
         // Hook gaugeDisp with a standard branch since the original function does not need to be called
-        patch::writeBranch(ttyd::statuswindow::gaugeDisp, DisplayStarPowerOrbs);
+        patch::writeBranch(statuswindow::gaugeDisp, DisplayStarPowerOrbs);
     }
 } // namespace mod::owr

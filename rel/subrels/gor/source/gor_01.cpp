@@ -244,8 +244,8 @@ void ApplyGor01Patches()
 
     gor_thief_init[1] = GSW(1700);
 
-    gor_thief_talk[1] = GSW(1700); // Thief Speach
-    gor_thief_talk[4] = 17;        // Thief Speach
+    gor_thief_talk[1] = GSW(1700);
+    gor_thief_talk[4] = 17;
     gor_thief_talk[89] = EVT_HELPER_CMD(0, 42);
     gor_thief_talk[90] = EVT_HELPER_CMD(0, 0);
     gor_thief_talk[99] = EVT_HELPER_CMD(0, 49);
@@ -254,14 +254,14 @@ void ApplyGor01Patches()
 
     gor_christine_nakama_before[1] = GSW(1700);
 
-    gor_luigi_f1_fade_check[1] = GSW(1710); // Luigi color??
+    gor_luigi_f1_fade_check[1] = GSW(1710);
     gor_luigi_f1_fade_check[3] = 2;
     gor_luigi_f1_fade_check[4] = 3;
     gor_luigi_f1_fade_check[6] = 4;
     gor_luigi_f1_fade_check[7] = 5;
     gor_luigi_f1_fade_check[23] = 7;
 
-    gor_luigi_f1_fade_check[1] = GSW(1710); // Luigi color 2??
+    gor_luigi_f1_fade_check[1] = GSW(1710);
     gor_luigi_f1_fade_check[3] = 2;
     gor_luigi_f1_fade_check[4] = 3;
     gor_luigi_f1_fade_check[6] = 4;

@@ -99,7 +99,7 @@ const uint16_t GSWF_ARR[] = {
     // Ch.3 poison cake
     2451,
 
-    // Post ch.3 stuff
+    // Post ch.3 guard
     2496,
 
     // Goldbob Approval
@@ -175,6 +175,15 @@ namespace mod::owr
         pouchReviseMarioParam();
         evt_pouch_mario_recovery(nullptr, false); // Parameters are unused for this function
 
+        // Starting Stats
+        PouchData *pouch = ttyd::mario_pouch::pouchGetPtr();
+        pouch->max_hp = gState->apSettings->startingHP;
+        pouch->current_hp = gState->apSettings->startingHP;
+        pouch->max_fp = gState->apSettings->startingFP;
+        pouch->current_fp = gState->apSettings->startingFP;
+        pouch->total_bp = gState->apSettings->startingBP;
+        pouch->unallocated_bp = gState->apSettings->startingBP;
+
         // Must call pouchRevisePartyParam to properly set each partner's stats, otherwise they will each have a maximum of 10
         // HP
         pouchRevisePartyParam();
@@ -208,20 +217,25 @@ namespace mod::owr
         if (!checkIfInGame())
             return;
 
-        uintptr_t item_pointer = 0x803DB864;
-        int32_t *item = reinterpret_cast<int32_t *>(item_pointer);
-        int32_t value = *item;
+        uintptr_t length_pointer = 0x80000FFC;
+        uintptr_t item_pointer = 0x80001000;
 
-        if (value != 0)
+        uint32_t length = *reinterpret_cast<uint32_t *>(length_pointer);
+        int16_t *items = reinterpret_cast<int16_t *>(item_pointer);
+
+        if (length > 0)
         {
-            // Try to give the item
-            if (!pouchGetItem(value))
+            for (uint32_t i = 0; i < length; i++)
             {
-                // Couldn't give the item, so try to send it to storage
-                pouchAddKeepItem(value);
+                // Try to give the item
+                if (!pouchGetItem(items[i]))
+                {
+                    // Couldn't give the item, so try to send it to storage
+                    pouchAddKeepItem(items[i]);
+                }
+                items[i] = 0;
             }
-
-            memset(reinterpret_cast<void *>(item_pointer), 0, sizeof(item_pointer));
+            memset(reinterpret_cast<void *>(length_pointer), 0, sizeof(uint32_t));
         }
     }
 
@@ -817,6 +831,9 @@ namespace mod::owr
             // Also clear the flag for the champion match
             ttyd::swdrv::swClear(2383);
 
+            // Set current pit floor to 0
+            ttyd::swdrv::swByteSet(1321, 0);
+
             uint32_t namePtr = 0x802c0298;
             const char *mapName = reinterpret_cast<char *>(namePtr);
             ttyd::seqdrv::seqSetSeq(ttyd::seqdrv::SeqIndex::kMapChange, mapName, 0);
@@ -833,10 +850,11 @@ namespace mod::owr
         int ch5 = ttyd::swdrv::swByteGet(1717);
         int ch6 = ttyd::swdrv::swByteGet(1706);
 
-        if (10 <= ch5 <= 18)
-            ttyd::evtmgr_cmd::evtSetValue(evt, evt->evtArguments[0], 1);
+        if (10 <= ch5 && ch5 <= 18)
+            if (!strcmp(_next_area, "muj"))
+                ttyd::evtmgr_cmd::evtSetValue(evt, evt->evtArguments[0], 1);
 
-        if (42 <= ch6 <= 43)
+        if (42 <= ch6 && ch6 <= 43)
             ttyd::evtmgr_cmd::evtSetValue(evt, evt->evtArguments[0], 1);
 
         return 2;
@@ -849,6 +867,7 @@ namespace mod::owr
         USER_FUNC(checkValidPipeSequence, LW(0))
         IF_EQUAL(LW(0), 1)
             USER_FUNC(evt_msg_print, 1, PTR("<system>\n<p>\nThe Warp Pipe is currently\nunavailable.<k>"), 0, 0)
+            USER_FUNC(evt_mario_key_onoff, 1)
             RETURN()
         END_IF()
         USER_FUNC(evt_msg_print, 1, PTR("<system>\n<p>\nWarp home now?\n<o>"), 0, 0)

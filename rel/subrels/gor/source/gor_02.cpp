@@ -477,11 +477,11 @@ void ApplyGor02Patches()
 
     patch::writePatch(&gor_tozokudan2_talk[53], tozokudan2_talk_hook, sizeof(tozokudan2_talk_hook));
 
-    gor_sanders_init_02[6] = GSW(1705); // Bobbery Init
+    gor_sanders_init_02[6] = GSW(1705);
     gor_sanders_init_02[8] = 2;
     gor_sanders_init_02[16] = 5;
 
-    gor_sanders_talk_02[1] = GSW(1705); // Bobbery Speach
+    gor_sanders_talk_02[1] = GSW(1705);
     gor_sanders_talk_02[3] = 2;
     gor_sanders_talk_02[13] = 2;
     gor_sanders_talk_02[77] = GSW(1705);

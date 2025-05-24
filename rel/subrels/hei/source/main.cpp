@@ -113,6 +113,18 @@ namespace mod
         hei_00_init_evt[32] = 2;
         hei_00_init_evt[37] = GSW(1711);
         hei_00_init_evt[38] = 1;
+        hei_00_init_evt[68] = 0;
+        hei_00_init_evt[69] = 0;
+        hei_00_init_evt[70] = 0;
+        hei_00_init_evt[71] = 0;
+        hei_00_init_evt[72] = 0;
+        hei_00_init_evt[73] = 0;
+        hei_00_init_evt[74] = 0;
+        hei_00_init_evt[75] = 0;
+        hei_00_init_evt[76] = 0;
+        hei_00_init_evt[77] = 0;
+        hei_00_init_evt[78] = 0;
+        hei_00_init_evt[79] = 0;
         hei_00_init_evt[107] = GSW(1711);
         hei_00_init_evt[108] = 1;
         patch::writePatch(&hei_00_init_evt[169], stones_hook, sizeof(stones_hook));

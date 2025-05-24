@@ -560,7 +560,7 @@ namespace mod
         tik_07_init_evt[297] = GSW(1707);
         tik_07_init_evt[298] = 1;
         tik_07_init_evt[316] = GSW(1715);
-        tik_07_init_evt[317] = 14;
+        tik_07_init_evt[317] = 99; // Unused
 
         tik_08_init_evt[19] = GSW(1704);
         tik_08_init_evt[20] = 0;

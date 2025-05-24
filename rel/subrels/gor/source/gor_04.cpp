@@ -75,7 +75,7 @@ void ApplyGor04Patches()
     gor_04_init_evt[49] = GSW(1715);
     gor_04_init_evt[50] = 10;
     gor_04_init_evt[185] = GSW(1706);
-    gor_04_init_evt[186] = 49;
+    gor_04_init_evt[186] = 99; // Unused
     gor_04_init_evt[191] = GSW(1715);
     gor_04_init_evt[192] = 10;
     gor_04_init_evt[222] = GSW(1706);

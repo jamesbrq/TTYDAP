@@ -224,18 +224,18 @@ void ApplyGor03Patches()
 
     patch::writePatch(&gor_maffiaboss_talk_common[3],
                       maffiaboss_talk_common_evt,
-                      sizeof(maffiaboss_talk_common_evt)); // Don Piata speach
+                      sizeof(maffiaboss_talk_common_evt));
 
     gor_maffiaboss_casino_init[1] = GSW(1709);
     gor_maffiaboss_casino_init[3] = 9;
 
     patch::writePatch(&gor_maffiaboss_casino_talk[0],
                       maffiaboss_casino_talk_evt,
-                      sizeof(maffiaboss_casino_talk_evt)); // Don Piata casino speach
+                      sizeof(maffiaboss_casino_talk_evt));
 
-    patch::writePatch(&gor_maffia1_talk[0], maffia1_talk_evt, sizeof(maffia1_talk_evt)); // Mafia 1 speach
-    patch::writePatch(&gor_maffia2_talk[0], maffia2_talk_evt, sizeof(maffia2_talk_evt)); // Mafia 2 speach
-    patch::writePatch(&gor_maffia3_talk[0], maffia3_talk_evt, sizeof(maffia3_talk_evt)); // Mafia 3 speach
+    patch::writePatch(&gor_maffia1_talk[0], maffia1_talk_evt, sizeof(maffia1_talk_evt));
+    patch::writePatch(&gor_maffia2_talk[0], maffia2_talk_evt, sizeof(maffia2_talk_evt));
+    patch::writePatch(&gor_maffia3_talk[0], maffia3_talk_evt, sizeof(maffia3_talk_evt));
 
     gor_mony_init_03[1] = GSW(1709);
     gor_mony_init_03[3] = -1;
@@ -396,7 +396,7 @@ void ApplyGor03Patches()
     gor_03_init_evt[59] = 11;
     patch::writePatch(&gor_03_init_evt[218], gor_03_init_evt_hook, sizeof(gor_03_init_evt_hook));
     gor_03_init_evt[365] = GSW(1703);
-    gor_03_init_evt[366] = 99;
+    gor_03_init_evt[366] = 99; // Unused
     gor_03_init_evt[610] = GSW(1709);
     gor_03_init_evt[611] = 0;
     gor_03_init_evt[616] = GSW(1709);
