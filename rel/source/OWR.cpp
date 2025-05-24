@@ -603,11 +603,6 @@ namespace mod::owr
                 ttyd::mario_party::partyJoin(PartyMembers::kVivian);
                 return 1;
             }
-            case ItemId::INVALID_ITEM_PAPER_0054:
-            {
-                // Give the return pipe without running pouchReAddReturnPipe
-                return g_pouchGetItem_trampoline(item);
-            }
             case ItemId::INVALID_ITEM_006F:
             {
                 ttyd::mario_party::partyJoin(PartyMembers::kBobbery);
@@ -621,6 +616,11 @@ namespace mod::owr
             case ItemId::INVALID_ITEM_0071:
             {
                 return 1;
+            }
+            case ItemId::INVALID_ITEM_PAPER_0054:
+            {
+                // Give the return pipe without running pouchReAddReturnPipe
+                return g_pouchGetItem_trampoline(item);
             }
             case ItemId::INVALID_ITEM_PAPER_0053:
             {
