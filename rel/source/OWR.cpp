@@ -570,7 +570,7 @@ namespace mod::owr
         // Only re-add it if it was previously in the inventory, as it won't be when initially starting a new file
         if (pouchRemoveItem(ItemId::INVALID_ITEM_PAPER_0054))
         {
-            g_pouchGetItem_trampoline(ItemId::INVALID_ITEM_PAPER_0054);
+            pouchGetItem(ItemId::INVALID_ITEM_PAPER_0054);
         }
     }
 
