@@ -914,9 +914,7 @@ namespace mod::owr
     {
         (void)isFirstCall;
 
-        int ch5 = ttyd::swdrv::swByteGet(1717);
-        int ch6 = ttyd::swdrv::swByteGet(1706);
-
+        const int ch5 = ttyd::swdrv::swByteGet(1717);
         if (10 <= ch5 && ch5 <= 18)
         {
             if (!strcmp(_next_area, "muj"))
@@ -924,7 +922,9 @@ namespace mod::owr
                 ttyd::evtmgr_cmd::evtSetValue(evt, evt->evtArguments[0], 1);
             }
         }
-        else if (42 <= ch6 && ch6 <= 43)
+
+        const int ch6 = ttyd::swdrv::swByteGet(1706);
+        if (42 <= ch6 && ch6 <= 43)
         {
             ttyd::evtmgr_cmd::evtSetValue(evt, evt->evtArguments[0], 1);
         }
