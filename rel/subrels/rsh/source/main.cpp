@@ -3,14 +3,17 @@
 #include "patch.h"
 #include "AP/rel_patch_definitions.h"
 #include "ttyd/evt_bero.h"
+#include "ttyd/evt_cam.h"
 #include "ttyd/evt_case.h"
 #include "ttyd/evt_item.h"
 #include "ttyd/evt_map.h"
 #include "ttyd/evt_mario.h"
 #include "ttyd/evt_msg.h"
 #include "ttyd/evt_npc.h"
+#include "ttyd/evt_pouch.h"
 #include "ttyd/evt_snd.h"
 #include "ttyd/evt_sub.h"
+#include "ttyd/evt_window.h"
 
 #include <cstdint>
 
@@ -114,6 +117,9 @@ extern int32_t rsh_hom_10_evt_resha_start_06[];
 extern int32_t rsh_evt_great_moamoa[];
 extern int32_t rsh_06_init_evt[];
 extern int32_t rsh_06_a_init_evt[];
+extern int32_t rsh_item_tbl2[];
+extern int32_t rsh_item_tbl_04[];
+extern int32_t rsh_item_tbl2_04[];
 
 const char madam1[] = "\x83\x7D\x83\x5F\x83\x80";
 
@@ -670,6 +676,65 @@ EVT_BEGIN(talk_madam_ring_return_hook2)
 	RUN_CHILD_EVT(rsh_talk_madam_ring_item)
 	GOTO(&rsh_talk_madam_ring_return[33])
 EVT_PATCH_END()
+
+EVT_BEGIN(rsh_talk_yuurei_diary_check)
+    USER_FUNC(evt_msg::evt_msg_print, 0, PTR("stg6_rsh_135"), 0, 0)
+	USER_FUNC(evt_pouch::evt_pouch_check_item, 78, LW(0))
+    IF_EQUAL(LW(0), 0)
+        USER_FUNC(evt_msg::evt_msg_print, 0, PTR("no_diary"), 0, 0)
+        USER_FUNC(evt_snd::evt_snd_bgmoff, 513)
+        RETURN()
+    END_IF()
+    USER_FUNC(evt_window::evt_win_item_select, 0, PTR(&rsh_item_tbl2), LW(1), 0)
+    RETURN()
+EVT_END()
+
+EVT_BEGIN(rsh_talk_yuurei_hook)
+	RUN_CHILD_EVT(rsh_talk_yuurei_diary_check)
+    IF_SMALL(LW(0), 1)
+        RETURN()
+    END_IF()
+	GOTO(&rsh_talk_yuurei[85])
+EVT_PATCH_END()
+
+EVT_BEGIN(rsh_evt_daijisouna_kami_paper_check)
+    USER_FUNC(evt_msg::evt_msg_print, 0, PTR("stg6_rsh_172"), 0, PTR("me"))
+	USER_FUNC(evt_pouch::evt_pouch_check_item, 80, LW(0))
+    IF_EQUAL(LW(0), 0)
+        USER_FUNC(evt_msg::evt_msg_print, 0, PTR("no_paper"), 0, PTR("me"))
+        USER_FUNC(evt_cam::evt_cam3d_evt_off, 500, 11)
+        RETURN()
+    END_IF()
+    USER_FUNC(evt_window::evt_win_item_select, 0, PTR(&rsh_item_tbl_04), LW(1), 0)
+    RETURN()
+EVT_END()
+
+EVT_BEGIN(rsh_evt_daijisouna_kami_hook)
+	RUN_CHILD_EVT(rsh_evt_daijisouna_kami_paper_check)
+    IF_SMALL(LW(0), 1)
+        RETURN()
+    END_IF()
+	GOTO(&rsh_evt_daijisouna_kami[67])
+EVT_PATCH_END()
+
+EVT_BEGIN(rsh_talk_syashou_04_blanket_check)
+    USER_FUNC(evt_msg::evt_msg_print, 0, PTR("stg6_rsh_142"), 0, 0)
+	USER_FUNC(evt_pouch::evt_pouch_check_item, 79, LW(0))
+    IF_EQUAL(LW(0), 0)
+        USER_FUNC(evt_msg::evt_msg_print, 0, PTR("no_blanket"), 0, 0)
+        RETURN()
+    END_IF()
+    USER_FUNC(evt_window::evt_win_item_select, 0, PTR(&rsh_item_tbl2_04), LW(1), 0)
+    RETURN()
+EVT_END()
+
+EVT_BEGIN(rsh_talk_syashou_04_hook)
+	RUN_CHILD_EVT(rsh_talk_syashou_04_blanket_check)
+    IF_SMALL(LW(0), 1)
+        RETURN()
+    END_IF()
+	GOTO(&rsh_talk_syashou_04[204])
+EVT_PATCH_END()
 // clang-format on
 
 namespace mod
@@ -880,9 +945,12 @@ namespace mod
         rsh_talk_yuurei[18] = GSW(1706);
         rsh_talk_yuurei[19] = 16;
         rsh_talk_yuurei[55] = GSW(1706);
-        rsh_talk_yuurei[56] = 17;
-        rsh_talk_yuurei[64] = 19;
+        rsh_talk_yuurei[56] = 18;
+        rsh_talk_yuurei[64] = 18;
         rsh_talk_yuurei[72] = 20;
+        patch::writePatch(&rsh_talk_yuurei[73], rsh_talk_yuurei_hook, sizeof(rsh_talk_yuurei_hook));
+        rsh_talk_yuurei[82] = 0;
+        rsh_talk_yuurei[83] = 0;
         rsh_talk_yuurei[368] = GSW(1706);
         rsh_talk_yuurei[369] = 20;
         rsh_talk_yuurei[379] = 21;
@@ -1081,6 +1149,9 @@ namespace mod
         rsh_evt_shorui_funshitu[358] = GSW(1706);
         rsh_evt_shorui_funshitu[359] = 24;
 
+        patch::writePatch(&rsh_evt_daijisouna_kami[55], rsh_evt_daijisouna_kami_hook, sizeof(rsh_evt_daijisouna_kami_hook));
+        rsh_evt_daijisouna_kami[64] = 0;
+        rsh_evt_daijisouna_kami[65] = 0;
         rsh_evt_daijisouna_kami[204] = GSW(1706);
         rsh_evt_daijisouna_kami[205] = 26;
 
@@ -1112,6 +1183,9 @@ namespace mod
         rsh_talk_syashou_04[175] = 19;
         rsh_talk_syashou_04[183] = 20;
         rsh_talk_syashou_04[191] = 21;
+        patch::writePatch(&rsh_talk_syashou_04[192], rsh_talk_syashou_04_hook, sizeof(rsh_talk_syashou_04_hook));
+        rsh_talk_syashou_04[201] = 0;
+        rsh_talk_syashou_04[202] = 0;
         rsh_talk_syashou_04[282] = GSW(1706);
         rsh_talk_syashou_04[283] = 21;
         rsh_talk_syashou_04[290] = 22;
@@ -1272,8 +1346,8 @@ namespace mod
         rsh_talk_waitless_05[1] = GSW(1706);
         rsh_talk_waitless_05[2] = 35;
 
-        rsh_evt_ghost_diary[1] = GSW(1706);
-        rsh_evt_ghost_diary[2] = 19;
+        rsh_evt_ghost_diary[1] = GSWF(6116);
+        rsh_evt_ghost_diary[2] = 1;
 
         rsh_05_init_evt[1] = GSW(1720);
         rsh_05_init_evt[3] = 1;
@@ -1291,8 +1365,8 @@ namespace mod
         rsh_05_a_init_evt[49] = 33;
         rsh_05_a_init_evt[56] = 33;
         rsh_05_a_init_evt[67] = 34;
-        rsh_05_a_init_evt[88] = GSW(1706);
-        rsh_05_a_init_evt[89] = 19;
+        rsh_05_a_init_evt[88] = GSWF(6116);
+        rsh_05_a_init_evt[89] = 1;
 
         rsh_hom_10_evt_resha_start_06[49] = GSW(1706);
         rsh_hom_10_evt_resha_start_06[50] = 43;

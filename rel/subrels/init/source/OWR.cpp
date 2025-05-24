@@ -528,6 +528,7 @@ namespace mod::owr
         itemDataTable[ItemId::INVALID_ITEM_PAPER_0054].name = returnPipeName;
         itemDataTable[ItemId::INVALID_ITEM_PAPER_0054].description = returnPipeDescription;
         itemDataTable[ItemId::INVALID_ITEM_PAPER_0054].icon_id = IconType::RETURN_PIPE;
+        itemDataTable[ItemId::INVALID_ITEM_PAPER_0054].type_sort_order = 1;
         itemDataTable[ItemId::INVALID_ITEM_PLANE_MODE_ICON].name = planeModeNameDescription;
         itemDataTable[ItemId::INVALID_ITEM_PLANE_MODE_ICON].description = planeModeNameDescription;
         itemDataTable[ItemId::INVALID_ITEM_PAPER_MODE_ICON].name = paperModeNameDescription;

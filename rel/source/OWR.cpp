@@ -12,6 +12,7 @@
 #include <ttyd/evt_mario.h>
 #include <ttyd/evt_msg.h>
 #include <ttyd/evt_pouch.h>
+#include <ttyd/evt_snd.h>
 #include <ttyd/evt_window.h>
 #include <ttyd/evtmgr.h>
 #include <ttyd/evtmgr_cmd.h>
@@ -23,6 +24,7 @@
 #include <ttyd/mariost.h>
 #include <ttyd/msgdrv.h>
 #include <ttyd/party.h>
+#include <ttyd/pmario_sound.h>
 #include <ttyd/seq_mapchange.h>
 #include <ttyd/seqdrv.h>
 #include <ttyd/statuswindow.h>
@@ -401,6 +403,18 @@ namespace mod::owr
         if (!strncmp(msgKey, "stg4_jin_38", 11))
         {
             return g_msgSearch_trampoline("stg4_jin_38_viv");
+        }
+        if (!strcmp(msgKey, "no_diary"))
+        {
+            return "<p><col 000000a0><shake>I need my diary.\n</shake></col>\n<k>";
+        }
+        if (!strcmp(msgKey, "no_paper"))
+        {
+            return "<p>Gonna need that paper.\n<k>";
+        }
+        if (!strcmp(msgKey, "no_blanket"))
+        {
+            return "<p>I really need that blanket.\n<k>";
         }
         if (!strcmp(msgKey, "stg6_rsh_diary_01"))
         {
@@ -833,6 +847,9 @@ namespace mod::owr
 
             // Set current pit floor to 0
             ttyd::swdrv::swByteSet(1321, 0);
+
+            // Stop current music from certain areas
+            ttyd::pmario_sound::psndBGMOff(513);
 
             uint32_t namePtr = 0x802c0298;
             const char *mapName = reinterpret_cast<char *>(namePtr);
