@@ -154,10 +154,12 @@ namespace mod::owr
         // Give Return Pipe.
         ttyd::mario_pouch::pouchGetItem(ItemId::INVALID_ITEM_PAPER_0054);
 
-        if (gState->apSettings->apEnabled)
+        const bool apEnabled = static_cast<bool>(gState->apSettings->apEnabled);
+        if (apEnabled)
         {
             ttyd::mario_pouch::pouchSetPartyColor(static_cast<uint8_t>(ttyd::party::PartyMembers::kYoshi),
                                                   gState->apSettings->yoshiColor);
+
             ttyd::mario_pouch::pouchSetYoshiName(gState->apSettings->yoshiName);
 
             ttyd::mario_party::partyJoin(gState->apSettings->startingPartner);
@@ -177,19 +179,22 @@ namespace mod::owr
         pouchReviseMarioParam();
         evt_pouch_mario_recovery(nullptr, false); // Parameters are unused for this function
 
-        // Starting Stats
-        PouchData *pouch = ttyd::mario_pouch::pouchGetPtr();
-        pouch->base_max_hp = gState->apSettings->startingHP;
-        pouch->current_hp = gState->apSettings->startingHP;
-        pouch->base_max_fp = gState->apSettings->startingFP;
-        pouch->current_fp = gState->apSettings->startingFP;
-        pouch->total_bp = gState->apSettings->startingBP;
-        pouch->unallocated_bp = gState->apSettings->startingBP;
-
         // Must call pouchRevisePartyParam to properly set each partner's stats, otherwise they will each have a maximum of 10
         // HP
         pouchRevisePartyParam();
         evt_pouch_all_party_recovery(nullptr, false); // Parameters are unused for this function
+
+        if (apEnabled)
+        {
+            // Starting Stats
+            PouchData *pouch = ttyd::mario_pouch::pouchGetPtr();
+            pouch->base_max_hp = gState->apSettings->startingHP;
+            pouch->current_hp = gState->apSettings->startingHP;
+            pouch->base_max_fp = gState->apSettings->startingFP;
+            pouch->current_fp = gState->apSettings->startingFP;
+            pouch->total_bp = gState->apSettings->startingBP;
+            pouch->unallocated_bp = gState->apSettings->startingBP;
+        }
     }
 
     bool checkIfInGame()
@@ -559,101 +564,130 @@ namespace mod::owr
         return g_msgSearch_trampoline(msgKey);
     }
 
+    inline void pouchReAddReturnPipe()
+    {
+        // Remove the return pipe from the inventory, and then re-add it
+        // Only re-add it if it was previously in the inventory, as it won't be when initially starting a new file
+        if (pouchRemoveItem(ItemId::INVALID_ITEM_PAPER_0054))
+        {
+            g_pouchGetItem_trampoline(ItemId::INVALID_ITEM_PAPER_0054);
+        }
+    }
+
     KEEP_FUNC uint32_t pouchGetItemHook(int32_t item)
     {
-        uint32_t return_value = 0;
         switch (item)
         {
             case ItemId::SUPER_LUIGI:
             {
                 ttyd::mario_party::partyJoin(PartyMembers::kGoombella);
-                return_value = 1;
-                break;
+                return 1;
             }
             case ItemId::SUPER_LUIGI_2:
             {
                 ttyd::mario_party::partyJoin(PartyMembers::kKoops);
-                return_value = 1;
-                break;
+                return 1;
             }
             case ItemId::SUPER_LUIGI_3:
             {
                 ttyd::mario_party::partyJoin(PartyMembers::kFlurrie);
-                return_value = 1;
-                break;
+                return 1;
             }
             case ItemId::SUPER_LUIGI_4:
             {
                 ttyd::mario_party::partyJoin(PartyMembers::kYoshi);
-                return_value = 1;
-                break;
+                return 1;
             }
             case ItemId::SUPER_LUIGI_5:
             {
                 ttyd::mario_party::partyJoin(PartyMembers::kVivian);
-                return_value = 1;
-                break;
+                return 1;
+            }
+            case ItemId::INVALID_ITEM_PAPER_0054:
+            {
+                // Give the return pipe without running pouchReAddReturnPipe
+                return g_pouchGetItem_trampoline(item);
             }
             case ItemId::INVALID_ITEM_006F:
             {
                 ttyd::mario_party::partyJoin(PartyMembers::kBobbery);
-                return_value = 1;
-                break;
+                return 1;
             }
             case ItemId::INVALID_ITEM_0070:
             {
                 ttyd::mario_party::partyJoin(PartyMembers::kMsMowz);
-                return_value = 1;
-                break;
+                return 1;
             }
             case ItemId::INVALID_ITEM_0071:
             {
-                return_value = 1;
-                break;
+                return 1;
             }
             case ItemId::INVALID_ITEM_PAPER_0053:
             {
                 pouchAddCoin(10);
-                return_value = 1;
-                break;
+                return 1;
             }
             case ItemId::BOOTS:
             {
+                uint32_t ret;
+
                 switch (pouchGetJumpLv())
                 {
                     case PouchJumpLevel::JUMP_LEVEL_NONE:
                     {
-                        return g_pouchGetItem_trampoline(ItemId::BOOTS);
+                        ret = g_pouchGetItem_trampoline(ItemId::BOOTS);
+                        break;
                     }
                     case PouchJumpLevel::JUMP_LEVEL_NORMAL:
                     {
-                        return g_pouchGetItem_trampoline(ItemId::SUPER_BOOTS);
+                        ret = g_pouchGetItem_trampoline(ItemId::SUPER_BOOTS);
+                        break;
                     }
                     case PouchJumpLevel::JUMP_LEVEL_SUPER:
                     default:
                     {
-                        return g_pouchGetItem_trampoline(ItemId::ULTRA_BOOTS);
+                        ret = g_pouchGetItem_trampoline(ItemId::ULTRA_BOOTS);
+                        break;
                     }
                 }
+
+                // Regive the return pipe to make sure its always at the top of the inventory
+                if (ret)
+                {
+                    pouchReAddReturnPipe();
+                }
+                return ret;
             }
             case ItemId::HAMMER:
             {
+                uint32_t ret;
+
                 switch (pouchGetHammerLv())
                 {
                     case PouchHammerLevel::HAMMER_LEVEL_NONE:
                     {
-                        return g_pouchGetItem_trampoline(ItemId::HAMMER);
+                        ret = g_pouchGetItem_trampoline(ItemId::HAMMER);
+                        break;
                     }
                     case PouchHammerLevel::HAMMER_LEVEL_NORMAL:
                     {
-                        return g_pouchGetItem_trampoline(ItemId::SUPER_HAMMER);
+                        ret = g_pouchGetItem_trampoline(ItemId::SUPER_HAMMER);
+                        break;
                     }
                     case PouchHammerLevel::HAMMER_LEVEL_SUPER:
                     default:
                     {
-                        return g_pouchGetItem_trampoline(ItemId::ULTRA_HAMMER);
+                        ret = g_pouchGetItem_trampoline(ItemId::ULTRA_HAMMER);
+                        break;
                     }
                 }
+
+                // Regive the return pipe to make sure its always at the top of the inventory
+                if (ret)
+                {
+                    pouchReAddReturnPipe();
+                }
+                return ret;
             }
             case ItemId::COCONUT:
             {
@@ -683,19 +717,32 @@ namespace mod::owr
 
                         // Place the coconut in the first slot
                         keyItemsPtr[0] = ItemId::COCONUT;
+
+                        // Regive the return pipe to make sure its always at the top of the inventory
+                        pouchReAddReturnPipe();
                         return 1;
                     }
                 }
 
                 // If this is reached, then the important items part of the inventory is somehow full, so do some failsafe or
                 // something
-                return_value = 0;
-                break;
+                return 0;
             }
             default:
-                return g_pouchGetItem_trampoline(item);
+            {
+                // Give the item
+                const uint32_t ret = g_pouchGetItem_trampoline(item);
+
+                // If the given item is an important item, then regive the return pipe to make sure its always at the top of the
+                // inventory
+                if (ret && (item <= ItemId::CRYSTAL_STAR))
+                {
+                    pouchReAddReturnPipe();
+                }
+
+                return ret;
+            }
         }
-        return return_value;
     }
 
     KEEP_FUNC void partySetForceMoveHook(ttyd::party::PartyEntry *ptr, float x, float z, float speed)
@@ -854,6 +901,9 @@ namespace mod::owr
             uint32_t namePtr = 0x802c0298;
             const char *mapName = reinterpret_cast<char *>(namePtr);
             ttyd::seqdrv::seqSetSeq(ttyd::seqdrv::SeqIndex::kMapChange, mapName, 0);
+
+            // Prevent giving back control to the player
+            ttyd::evtmgr_cmd::evtSetValue(evt, evt->evtArguments[0], 100);
         }
 
         return 2;
@@ -868,11 +918,16 @@ namespace mod::owr
         int ch6 = ttyd::swdrv::swByteGet(1706);
 
         if (10 <= ch5 && ch5 <= 18)
+        {
             if (!strcmp(_next_area, "muj"))
+            {
                 ttyd::evtmgr_cmd::evtSetValue(evt, evt->evtArguments[0], 1);
-
-        if (42 <= ch6 && ch6 <= 43)
+            }
+        }
+        else if (42 <= ch6 && ch6 <= 43)
+        {
             ttyd::evtmgr_cmd::evtSetValue(evt, evt->evtArguments[0], 1);
+        }
 
         return 2;
     }
@@ -891,7 +946,9 @@ namespace mod::owr
         USER_FUNC(evt_msg_select, 1, PTR("<select 0 1 0 40>\nYes\nNo"))
         USER_FUNC(evt_msg_continue)
         USER_FUNC(handlePipeConfirmResponse, LW(0))
-        USER_FUNC(evt_mario_key_onoff, 1)
+        IF_NOT_EQUAL(LW(0), 100)
+            USER_FUNC(evt_mario_key_onoff, 1)
+        END_IF()
         RETURN()
     EVT_END()
     // clang-format on
@@ -902,14 +959,21 @@ namespace mod::owr
         switch (menu->itemMenuState)
         {
             case 10:
-                if ((menu->buttonsPressed & gc::pad::PadInput::PAD_A) &&
-                    marioGetPtr()->characterId == MarioCharacters::kMario && menu->itemSubmenuId == 1 &&
-                    menu->keyItemIds[menu->itemsCursorIdx[1]] == ItemId::INVALID_ITEM_PAPER_0054)
+            {
+                if ((menu->itemSubmenuId == 1) &&
+                    (menu->keyItemIds[menu->itemsCursorIdx[1]] == ItemId::INVALID_ITEM_PAPER_0054) &&
+                    (menu->buttonsPressed & gc::pad::PadInput::PAD_A) &&
+                    (marioGetPtr()->characterId == MarioCharacters::kMario))
                 {
                     ttyd::evtmgr::evtEntry(const_cast<int32_t *>(confirm_pipe_evt), 0, 0);
                     return -2;
                 }
                 break;
+            }
+            default:
+            {
+                break;
+            }
         }
 
         return g_winItemMain_trampoline(menu);
