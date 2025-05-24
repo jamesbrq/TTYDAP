@@ -190,8 +190,6 @@ EVT_BEGIN(main_evt_sub_starstone_hook)
 EVT_PATCH_END()
 // clang-format on
 
-
-
 namespace mod::owr
 {
     void ApplyMainAssemblyPatches()

@@ -901,9 +901,6 @@ namespace mod::owr
             uint32_t namePtr = 0x802c0298;
             const char *mapName = reinterpret_cast<char *>(namePtr);
             ttyd::seqdrv::seqSetSeq(ttyd::seqdrv::SeqIndex::kMapChange, mapName, 0);
-
-            // Prevent giving back control to the player
-            ttyd::evtmgr_cmd::evtSetValue(evt, evt->evtArguments[0], 100);
         }
 
         return 2;
@@ -946,7 +943,7 @@ namespace mod::owr
         USER_FUNC(evt_msg_select, 1, PTR("<select 0 1 0 40>\nYes\nNo"))
         USER_FUNC(evt_msg_continue)
         USER_FUNC(handlePipeConfirmResponse, LW(0))
-        IF_NOT_EQUAL(LW(0), 100)
+        IF_NOT_EQUAL(LW(0), 0)
             USER_FUNC(evt_mario_key_onoff, 1)
         END_IF()
         RETURN()
