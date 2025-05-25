@@ -192,8 +192,10 @@ namespace mod::owr
             // Starting Stats
             PouchData *pouch = ttyd::mario_pouch::pouchGetPtr();
             pouch->base_max_hp = gState->apSettings->startingHP;
+            pouch->max_hp = gState->apSettings->startingHP;
             pouch->current_hp = gState->apSettings->startingHP;
             pouch->base_max_fp = gState->apSettings->startingFP;
+            pouch->max_fp = gState->apSettings->startingFP;
             pouch->current_fp = gState->apSettings->startingFP;
             pouch->total_bp = gState->apSettings->startingBP;
             pouch->unallocated_bp = gState->apSettings->startingBP;
