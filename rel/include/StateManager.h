@@ -20,9 +20,10 @@ namespace mod::owr
         uint8_t startingHP;
         uint8_t startingFP;
         uint8_t startingBP;
+        uint8_t runFill;
     };
 
-    static_assert(sizeof(APSettings) == 0x10);
+    static_assert(sizeof(APSettings) == 0x14);
 
     class StateManager
     {

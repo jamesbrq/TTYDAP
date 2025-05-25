@@ -38,6 +38,8 @@ extern "C"
     void bShopFlagCheckReturn();
     void bCoconutCheck();
     void bCoconutCheckReturn();
+    void bGreenZoneMaxInit();
+    void bGreenZoneMaxInitReturn();
     void checkShopFlag(uint32_t item, uint32_t index);
 }
 

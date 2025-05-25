@@ -1157,7 +1157,7 @@ namespace mod
 
         rsh_init_syashou_04[1] = GSW(1706);
         rsh_init_syashou_04[3] = 1;
-        rsh_init_syashou_04[4] = 19;
+        rsh_init_syashou_04[4] = 31;
         rsh_init_syashou_04[12] = 32;
         rsh_init_syashou_04[13] = 36;
 

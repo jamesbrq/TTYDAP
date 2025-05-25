@@ -139,7 +139,7 @@ EVT_DEFINE_USER_FUNC_KEEP(handleIntermissionSkip)
     {
         ttyd::swdrv::swByteSet(1713, 20);
         ttyd::evtmgr_cmd::evtSetValue(evt, evt->evtArguments[1], PTR("mri_00"));
-        ttyd::evtmgr_cmd::evtSetValue(evt, evt->evtArguments[2], PTR("w_bero"));
+        ttyd::evtmgr_cmd::evtSetValue(evt, evt->evtArguments[2], PTR("e_bero"));
     }
     else if (!strcmp(_next_area, "tou"))
     {
@@ -157,7 +157,7 @@ EVT_DEFINE_USER_FUNC_KEEP(handleIntermissionSkip)
     {
         ttyd::swdrv::swByteSet(1717, 29);
         ttyd::evtmgr_cmd::evtSetValue(evt, evt->evtArguments[1], PTR("muj_11"));
-        ttyd::evtmgr_cmd::evtSetValue(evt, evt->evtArguments[2], PTR("w_bero"));
+        ttyd::evtmgr_cmd::evtSetValue(evt, evt->evtArguments[2], PTR("e_bero"));
     }
     else if (!strcmp(_next_area, "pik"))
     {

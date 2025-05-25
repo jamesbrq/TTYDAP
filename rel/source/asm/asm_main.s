@@ -31,6 +31,8 @@
 .global bShopFlagCheckReturn
 .global bCoconutCheck
 .global bCoconutCheckReturn
+.global bGreenZoneMaxInit
+.global bGreenZoneMaxInitReturn
 
 # All of the global symbols in this file excluding win_log_mapGX_arr need to be used in at least one subrel, so they cannot be set to hidden
 
@@ -217,6 +219,14 @@ bShopFlagCheck:
 	mr %r4, %r27
 	bl checkShopFlag
 bShopFlagCheckReturn:
+	b 0
+
+bGreenZoneMaxInit:
+	lis %r4, 0x42CF
+	ori %r4, %r4, 0x0000
+	stw %r4, 0x18(%r31)
+	li %r4, 0x0
+bGreenZoneMaxInitReturn:
 	b 0
 
 win_log_mapGX_arr:

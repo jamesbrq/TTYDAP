@@ -89,6 +89,7 @@ extern int32_t main_buy_evt[];
 extern int32_t main_buy_evt_evt[];
 extern int32_t main_evt_sub_starstone[];
 extern int32_t main_evt_sub_starstone_evt[];
+extern int32_t main_init_param_80137004[];
 
 extern int32_t main_mobj_save_blk_sysevt[];
 extern int32_t main_init_event[];
@@ -352,6 +353,13 @@ namespace mod::owr
 
         if (mod::owr::gState->apSettings->peekaboo)
             writeIntWithCache(&main_battleCheckUnitMonosiriFlag[10], 0x60000000); // NOP
+
+        if (gState->apSettings->runFill)
+        {
+            patch::writeBranchPair(&main_init_param_80137004[126],
+                                   reinterpret_cast<void *>(bGreenZoneMaxInit),
+                                   reinterpret_cast<void *>(bGreenZoneMaxInitReturn));
+        }
     }
 
     void ApplyMainScriptPatches()

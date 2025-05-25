@@ -132,6 +132,12 @@ namespace mod::owr
 
     void OWR::SequenceInit()
     {
+        // Give Return Pipe. We call this before checking the initial sequence for
+        // backwards compatibility with versions below v0.3.0
+        // This can be deprecated in the future
+        if (!ttyd::mario_pouch::pouchCheckItem(ItemId::INVALID_ITEM_PAPER_0054))
+            ttyd::mario_pouch::pouchGetItem(ItemId::INVALID_ITEM_PAPER_0054);
+
         SeqIndex Seq = seqGetNextSeq();
 
         if (Seq != SeqIndex::kMapChange)
@@ -286,7 +292,7 @@ namespace mod::owr
             ttyd::swdrv::swSet(6000);
 
         // Advance Boggly Woods sequence if the great tree is opened
-        if (ttyd::swdrv::swByteGet(1713) >= 1)
+        if (ttyd::swdrv::swByteGet(1713) >= 1 && ttyd::swdrv::swByteGet(1702) < 6)
             ttyd::swdrv::swByteSet(1702, 6);
 
         if (strcmp(map, "rsh_01_a") == 0)
