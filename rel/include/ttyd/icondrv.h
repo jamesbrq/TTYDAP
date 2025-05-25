@@ -592,6 +592,6 @@ namespace ttyd::icondrv
     extern "C"
     {
         void iconNumberDispGx(gc::mtx34 *matrix, int32_t number, int32_t is_small, uint32_t *color);
-        void iconDispGx(double unk0, gc::vec3 *pos, int16_t unk2, uint16_t icon);
+        void iconDispGx(float scale, gc::vec3 *pos, int16_t unk2, uint16_t icon);
     }
 } // namespace ttyd::icondrv

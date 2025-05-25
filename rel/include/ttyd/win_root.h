@@ -305,7 +305,7 @@ namespace ttyd::win_root
         void winZClear();
         void winKageGX(float x, float y, float z, float scale, WinPauseMenu *menu, uint32_t *color);
         uint32_t winSortWait(WinPauseMenu *menu);
-        void winSortEntry(double x, double y, WinPauseMenu *menu, int sortType);
+        void winSortEntry(float x, float y, WinPauseMenu *menu, int sortType);
         // winSortGX
         // winSortMain
         // sort_8_2_func
@@ -360,7 +360,7 @@ namespace ttyd::win_root
         void winMsgEntry(WinPauseMenu *menu, int32_t item_id, const char *msg, const char *name);
         // winMsgDisp
         // winMsgMain
-        void winBgGX(double x, double y, WinPauseMenu *menu, int32_t type);
+        void winBgGX(float x, float y, WinPauseMenu *menu, int32_t type);
         // winBgMain
         void winRootDisp(ttyd::dispdrv::CameraId camera, ttyd::win_root::WinPauseMenu *menu);
         // winRootMain
