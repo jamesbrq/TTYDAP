@@ -868,12 +868,15 @@ namespace mod::owr
     KEEP_FUNC void SetMaxSP(int star)
     {
         PouchData *pouchData = pouchGetPtr();
-        int16_t maxSP = pouchData->max_sp;
-        int16_t newMaxSP = star * 100;
+        const int32_t maxSP = pouchData->max_sp;
+
         g_pouchGetStarstone_trampoline(star);
+
+        const int32_t newMaxSP = star * 100;
         if (newMaxSP < maxSP)
-            pouchData->max_sp = maxSP;
-        return;
+        {
+            pouchData->max_sp = static_cast<int16_t>(maxSP);
+        }
     }
 
     EVT_DECLARE_USER_FUNC(handlePipeConfirmResponse, 1)
