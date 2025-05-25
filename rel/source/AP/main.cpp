@@ -5,6 +5,10 @@
 #include "string.h"
 #include "OWR.h"
 #include "ttyd/evtmgr_cmd.h"
+#include "ttyd/evt_mario.h"
+#include "ttyd/evt_party.h"
+#include "ttyd/evt_bero.h"
+#include "ttyd/evt_memcard.h"
 #include "ttyd/mario_pouch.h"
 #include "ttyd/seq_mapchange.h"
 #include "ttyd/seqdrv.h"
@@ -18,7 +22,9 @@
 using namespace ttyd::evtmgr_cmd;
 using namespace ttyd::common;
 using namespace ttyd::swdrv;
+using namespace ttyd::seq_mapchange;
 using namespace mod::owr;
+using namespace ttyd;
 
 namespace mod::owr
 {
@@ -55,6 +61,21 @@ EVT_BEGIN_KEEP(main_buy_evt_evt)
         SET(LW(0), LW(12))
         RUN_CHILD_EVT(LW(1))
     END_IF()
+    RETURN()
+EVT_END()
+
+EVT_BEGIN_KEEP(main_evt_sub_starstone_evt)
+    USER_FUNC(handleIntermissionSkip, LW(1), LW(2), LW(3), LF(8))
+    IF_EQUAL(LW(1), 1)
+        USER_FUNC(evt_mario::evt_mario_key_onoff, 1)
+        USER_FUNC(evt_bero::evt_bero_mapchange, LW(2), LW(3))
+        RETURN()
+    END_IF()
+    SET(LF(10), 0)
+    RUN_CHILD_EVT(&evt_memcard::unk_evt_803bac3c)
+    USER_FUNC(evt_mario::evt_mario_init_camid)
+    USER_FUNC(evt_party::evt_party_init_camid, 0)
+    SET(LW(1), 0)
     RETURN()
 EVT_END()
 // clang-format on
@@ -94,6 +115,64 @@ EVT_DEFINE_USER_FUNC_KEEP(setShopFlags)
         return 2;
 
     itemFlags[selectedIndex] |= 1;
+    return 2;
+}
+
+EVT_DEFINE_USER_FUNC_KEEP(handleIntermissionSkip)
+{
+    (void)isFirstCall;
+
+    const bool intermissions = static_cast<bool>(gState->apSettings->intermissions);
+    if (!intermissions || ttyd::evtmgr_cmd::evtGetValue(evt, evt->evtArguments[3]) == 1)
+    {
+        ttyd::evtmgr_cmd::evtSetValue(evt, evt->evtArguments[0], 0);
+        return 2;
+    }
+
+    if (!strcmp(_next_area, "gon"))
+    {
+        ttyd::swdrv::swByteSet(1711, 17);
+        ttyd::evtmgr_cmd::evtSetValue(evt, evt->evtArguments[1], PTR("gon_10"));
+        ttyd::evtmgr_cmd::evtSetValue(evt, evt->evtArguments[2], PTR("w_bero"));
+    }
+    else if (!strcmp(_next_area, "mri"))
+    {
+        ttyd::swdrv::swByteSet(1713, 20);
+        ttyd::evtmgr_cmd::evtSetValue(evt, evt->evtArguments[1], PTR("mri_00"));
+        ttyd::evtmgr_cmd::evtSetValue(evt, evt->evtArguments[2], PTR("w_bero"));
+    }
+    else if (!strcmp(_next_area, "tou"))
+    {
+        ttyd::swdrv::swByteSet(1703, 31);
+        ttyd::evtmgr_cmd::evtSetValue(evt, evt->evtArguments[1], PTR("tou_04"));
+        ttyd::evtmgr_cmd::evtSetValue(evt, evt->evtArguments[2], PTR("w_bero"));
+    }
+    else if (!strcmp(_next_area, "jin"))
+    {
+        ttyd::swdrv::swByteSet(1715, 17);
+        ttyd::evtmgr_cmd::evtSetValue(evt, evt->evtArguments[1], PTR("jin_00"));
+        ttyd::evtmgr_cmd::evtSetValue(evt, evt->evtArguments[2], PTR("s_bero"));
+    }
+    else if (!strcmp(_next_area, "muj"))
+    {
+        ttyd::swdrv::swByteSet(1717, 29);
+        ttyd::evtmgr_cmd::evtSetValue(evt, evt->evtArguments[1], PTR("muj_11"));
+        ttyd::evtmgr_cmd::evtSetValue(evt, evt->evtArguments[2], PTR("w_bero"));
+    }
+    else if (!strcmp(_next_area, "pik"))
+    {
+        ttyd::swdrv::swByteSet(1706, 53);
+        ttyd::evtmgr_cmd::evtSetValue(evt, evt->evtArguments[1], PTR("pik_03"));
+        ttyd::evtmgr_cmd::evtSetValue(evt, evt->evtArguments[2], PTR("next"));
+    }
+    else if (!strcmp(_next_area, "aji"))
+    {
+        ttyd::swdrv::swByteSet(1707, 21);
+        ttyd::evtmgr_cmd::evtSetValue(evt, evt->evtArguments[1], PTR("aji_18"));
+        ttyd::evtmgr_cmd::evtSetValue(evt, evt->evtArguments[2], PTR("w_bero"));
+    }
+
+    ttyd::evtmgr_cmd::evtSetValue(evt, evt->evtArguments[0], 1);
     return 2;
 }
 

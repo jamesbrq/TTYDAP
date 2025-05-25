@@ -9,8 +9,11 @@
 #include "util.h"
 #include <ttyd/common_types.h>
 #include <ttyd/countdown.h>
+#include <ttyd/evt_bero.h>
 #include <ttyd/evt_mario.h>
+#include <ttyd/evt_memcard.h>
 #include <ttyd/evt_msg.h>
+#include <ttyd/evt_party.h>
 #include <ttyd/evt_pouch.h>
 #include <ttyd/evt_snd.h>
 #include <ttyd/evt_window.h>

@@ -88,6 +88,7 @@ extern int32_t main_mail_evt_pik_00[];
 extern int32_t main_buy_evt[];
 extern int32_t main_buy_evt_evt[];
 extern int32_t main_evt_sub_starstone[];
+extern int32_t main_evt_sub_starstone_evt[];
 
 extern int32_t main_mobj_save_blk_sysevt[];
 extern int32_t main_init_event[];
@@ -104,80 +105,9 @@ using namespace ttyd;
 using namespace mod::patch;
 using namespace mod::owr;
 
-EVT_DECLARE_USER_FUNC(handleIntermissionSkip, 4)
-EVT_DEFINE_USER_FUNC(handleIntermissionSkip)
-{
-    (void)isFirstCall;
-
-    if (gState->apSettings->intermissions != 0|| evtmgr_cmd::evtGetValue(evt, evt->evtArguments[3]) == 1)
-    {
-        evtmgr_cmd::evtSetValue(evt, evt->evtArguments[0], 0);
-        return 2;
-    }
-
-    if (!strncmp(starstone_current_map, "gon", 3))
-    {
-        swdrv::swByteSet(1711, 17);
-        evtmgr_cmd::evtSetValue(evt, evt->evtArguments[1], PTR("gon_10"));
-        evtmgr_cmd::evtSetValue(evt, evt->evtArguments[2], PTR("w_bero"));
-    }
-    else if (!strncmp(starstone_current_map, "mri", 3))
-    {
-        swdrv::swByteSet(1713, 20);
-        evtmgr_cmd::evtSetValue(evt, evt->evtArguments[1], PTR("mri_00"));
-        evtmgr_cmd::evtSetValue(evt, evt->evtArguments[2], PTR("w_bero"));
-    }
-    else if (!strncmp(starstone_current_map, "tou", 3))
-    {
-        swdrv::swByteSet(1703, 31);
-        evtmgr_cmd::evtSetValue(evt, evt->evtArguments[1], PTR("tou_04"));
-        evtmgr_cmd::evtSetValue(evt, evt->evtArguments[2], PTR("w_bero"));
-    }
-    else if (!strncmp(starstone_current_map, "jin", 3))
-    {
-        swdrv::swByteSet(1715, 17);
-        evtmgr_cmd::evtSetValue(evt, evt->evtArguments[1], PTR("jin_00"));
-        evtmgr_cmd::evtSetValue(evt, evt->evtArguments[2], PTR("s_bero"));
-    }
-    else if (!strncmp(starstone_current_map, "muj", 3))
-    {
-        swdrv::swByteSet(1717, 29);
-        evtmgr_cmd::evtSetValue(evt, evt->evtArguments[1], PTR("muj_11"));
-        evtmgr_cmd::evtSetValue(evt, evt->evtArguments[2], PTR("w_bero"));
-    }
-    else if (!strncmp(starstone_current_map, "pik", 3))
-    {
-        swdrv::swByteSet(1706, 53);
-        evtmgr_cmd::evtSetValue(evt, evt->evtArguments[1], PTR("pik_03"));
-        evtmgr_cmd::evtSetValue(evt, evt->evtArguments[2], PTR("next"));
-    }
-    else if (!strncmp(starstone_current_map, "aji", 3))
-    {
-        swdrv::swByteSet(1707, 21);
-        evtmgr_cmd::evtSetValue(evt, evt->evtArguments[1], PTR("aji_18"));
-        evtmgr_cmd::evtSetValue(evt, evt->evtArguments[2], PTR("w_bero"));
-    }
-
-    evtmgr_cmd::evtSetValue(evt, evt->evtArguments[0], 1);
-    return 2;
-}
-
 // clang-format off
 EVT_BEGIN(main_buy_evt_hook)
     RUN_CHILD_EVT(main_buy_evt_evt)
-    RETURN()
-EVT_END()
-
-EVT_BEGIN(main_evt_sub_starstone_evt)
-    SET(LF(10), 0)
-    RUN_CHILD_EVT(&evt_memcard::unk_evt_803bac3c)
-    USER_FUNC(evt_mario::evt_mario_init_camid)
-    USER_FUNC(evt_party::evt_party_init_camid, 0) 
-    USER_FUNC(handleIntermissionSkip, LW(1), LW(2), LW(3), LF(8))
-    IF_EQUAL(LW(1), 1)
-        USER_FUNC(evt_mario::evt_mario_key_onoff, 1)
-        USER_FUNC(evt_bero::evt_bero_mapchange, LW(2), LW(3))
-    END_IF()
     RETURN()
 EVT_END()
 
@@ -189,8 +119,6 @@ EVT_BEGIN(main_evt_sub_starstone_hook)
     RETURN()
 EVT_PATCH_END()
 // clang-format on
-
-
 
 namespace mod::owr
 {
