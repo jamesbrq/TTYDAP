@@ -109,7 +109,7 @@ EVT_DEFINE_USER_FUNC(handleIntermissionSkip)
 {
     (void)isFirstCall;
 
-    if (!gState->apSettings->intermissions || evtmgr_cmd::evtGetValue(evt, evt->evtArguments[3]) == 1)
+    if (gState->apSettings->intermissions != 0|| evtmgr_cmd::evtGetValue(evt, evt->evtArguments[3]) == 1)
     {
         evtmgr_cmd::evtSetValue(evt, evt->evtArguments[0], 0);
         return 2;
