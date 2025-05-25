@@ -104,12 +104,12 @@ using namespace ttyd;
 using namespace mod::patch;
 using namespace mod::owr;
 
-EVT_DECLARE_USER_FUNC(handleIntermissionSkip, 3)
+EVT_DECLARE_USER_FUNC(handleIntermissionSkip, 4)
 EVT_DEFINE_USER_FUNC(handleIntermissionSkip)
 {
     (void)isFirstCall;
 
-    if (!gState->apSettings->intermissions)
+    if (!gState->apSettings->intermissions || evtmgr_cmd::evtGetValue(evt, evt->evtArguments[3]) == 1)
     {
         evtmgr_cmd::evtSetValue(evt, evt->evtArguments[0], 0);
         return 2;
@@ -173,13 +173,13 @@ EVT_BEGIN(main_evt_sub_starstone_evt)
     RUN_CHILD_EVT(&evt_memcard::unk_evt_803bac3c)
     USER_FUNC(evt_mario::evt_mario_init_camid)
     USER_FUNC(evt_party::evt_party_init_camid, 0) 
-    USER_FUNC(handleIntermissionSkip, LW(1), LW(2), LW(3))
+    USER_FUNC(handleIntermissionSkip, LW(1), LW(2), LW(3), LF(8))
     IF_EQUAL(LW(1), 1)
         USER_FUNC(evt_mario::evt_mario_key_onoff, 1)
         USER_FUNC(evt_bero::evt_bero_mapchange, LW(2), LW(3))
     END_IF()
     RETURN()
-EVT_PATCH_END()
+EVT_END()
 
 EVT_BEGIN(main_evt_sub_starstone_hook)
     RUN_CHILD_EVT(main_evt_sub_starstone_evt)
