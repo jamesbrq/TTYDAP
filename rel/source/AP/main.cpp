@@ -1,14 +1,17 @@
 #include "AP/rel_patch_definitions.h"
 #include "common.h"
 #include "evt_cmd.h"
+#include "OWR.h"
 #include "patch.h"
 #include "string.h"
-#include "OWR.h"
-#include "ttyd/evtmgr_cmd.h"
-#include "ttyd/evt_mario.h"
-#include "ttyd/evt_party.h"
+#include "ttyd/battle_audience.h"
+#include "ttyd/battle_event_cmd.h"
+#include "ttyd/evt_audience.h"
 #include "ttyd/evt_bero.h"
+#include "ttyd/evt_mario.h"
 #include "ttyd/evt_memcard.h"
+#include "ttyd/evt_party.h"
+#include "ttyd/evtmgr_cmd.h"
 #include "ttyd/mario_pouch.h"
 #include "ttyd/seq_mapchange.h"
 #include "ttyd/seqdrv.h"
@@ -52,6 +55,8 @@ namespace mod::owr
     KEEP_VAR const char *boatModeNameDescription = "boat_mode";
 } // namespace mod::owr
 
+extern int32_t btlataudevtPresentItem_Get[];
+
 // clang-format off
 EVT_BEGIN_KEEP(main_buy_evt_evt)
     USER_FUNC(ttyd::evt_shop::get_ptr, LW(0))
@@ -76,6 +81,16 @@ EVT_BEGIN_KEEP(main_evt_sub_starstone_evt)
     USER_FUNC(evt_mario::evt_mario_init_camid)
     USER_FUNC(evt_party::evt_party_init_camid, 0)
     SET(LW(1), 0)
+    RETURN()
+EVT_END()
+
+EVT_BEGIN_KEEP(main_partyChristineAttack_Monosiri_evt)
+    USER_FUNC(ttyd::evt_audience::evt_audience_ap_recovery)
+    USER_FUNC(ttyd::battle_event_cmd::btlevtcmd_InviteApInfoReport)
+    USER_FUNC(checkTattleItem, LW(0))
+    IF_EQUAL(LW(0), 1)
+        RUN_CHILD_EVT(&btlataudevtPresentItem_Get)
+    END_IF()
     RETURN()
 EVT_END()
 // clang-format on
@@ -176,6 +191,15 @@ EVT_DEFINE_USER_FUNC_KEEP(handleIntermissionSkip)
     return 2;
 }
 
+EVT_DEFINE_USER_FUNC_KEEP(checkTattleItem) 
+{
+    (void)isFirstCall;
+
+    evtmgr_cmd::evtSetValue(evt, evt->evtArguments[0], static_cast<uint8_t>(gState->newTattle));
+    gState->newTattle = false;
+    return 2;
+}
+
 void checkShopFlag(uint32_t item, uint32_t index)
 {
     if (item > 125)
@@ -204,4 +228,15 @@ void checkShopFlag(uint32_t item, uint32_t index)
 
     if (swGet(gswfBase + index))
         itemFlags[index] |= 1;
+}
+
+void monosiriItemCheck(int unit_id)
+{
+    if (ttyd::swdrv::swGet(unit_id + 0x117A) || gState->apSettings->tattlesanity == 0)
+        return;
+
+    gState->newTattle = true;
+    ttyd::battle_audience::BattleAudience_SetPresentTargetUnitId(2); // Partner
+    ttyd::battle_audience::BattleAudience_SetPresentItemNo(gState->tattleItems[unit_id - 1]);
+    ttyd::battle_audience::BattleAudience_SetPresentItemType(0); // Non-damaging items
 }

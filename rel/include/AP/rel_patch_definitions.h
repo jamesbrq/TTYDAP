@@ -40,11 +40,16 @@ extern "C"
     void bCoconutCheckReturn();
     void bGreenZoneMaxInit();
     void bGreenZoneMaxInitReturn();
+    void bMonosiriItemCheck();
+    void bMonosiriItemCheckReturn();
     void checkShopFlag(uint32_t item, uint32_t index);
+    void monosiriItemCheck(int unit_id);
 }
 
 EVT_DECLARE_USER_FUNC(checkChapterRequirements, 1)
+EVT_DECLARE_USER_FUNC(doorStarsCheck, 0)
 EVT_DECLARE_USER_FUNC(setShopFlags, 1)
 EVT_DECLARE_USER_FUNC(handleIntermissionSkip, 4)
 EVT_DECLARE_USER_FUNC(checkIntermission, 1)
 EVT_DECLARE_USER_FUNC(coconut_remove, 1)
+EVT_DECLARE_USER_FUNC(checkTattleItem, 1)

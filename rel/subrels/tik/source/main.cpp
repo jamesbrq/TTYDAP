@@ -1,6 +1,7 @@
 #include "subrel_tik.h"
 #include "evt_cmd.h"
 #include "mod.h"
+#include "OWR.h"
 #include "patch.h"
 #include "AP/rel_patch_definitions.h"
 #include "ttyd/evt_bero.h"
@@ -12,9 +13,12 @@
 #include "ttyd/evt_msg.h"
 #include "ttyd/evt_npc.h"
 #include "ttyd/evtmgr_cmd.h"
+#include "ttyd/mapdrv.h"
 #include "ttyd/mario_pouch.h"
 
 #include <cstdint>
+#include <cstring>
+#include <cstdio>
 
 using namespace ttyd;
 
@@ -79,17 +83,32 @@ EVT_DEFINE_USER_FUNC(checkChapterRequirements)
 {
     (void)isFirstCall;
 
-    auto &state = mod::gMod->owr_mod_.state;
     int8_t count = 0;
     for (int i = 114; i <= 120; i++)
     {
         if (mario_pouch::pouchCheckItem(i) > 0)
             count++;
     }
-    if (count >= state.apSettings->requiredChapterClears)
+    if (count >= mod::owr::gState->apSettings->requiredChapterClears)
         evtmgr_cmd::evtSetValue(evt, evt->evtArguments[0], 1);
     else
         evtmgr_cmd::evtSetValue(evt, evt->evtArguments[0], 0);
+    return 2;
+}
+
+EVT_DEFINE_USER_FUNC(doorStarsCheck)
+{
+    (void)isFirstCall;
+    (void)evt;
+
+    static char animNameBuffer[16];
+    char *animName = animNameBuffer;
+
+    for (uint8_t i = 0; i < (sizeof(mod::owr::gState->apSettings->requiredStars) / sizeof(uint8_t)); i++)
+    {
+        sprintf(animName, "anm_hosi_%u", mod::owr::gState->apSettings->requiredStars[i]);
+        mapdrv::mapPlayAnimationLv(animName, 2, 0);
+    }
     return 2;
 }
 
@@ -327,6 +346,7 @@ EVT_END()
 
 EVT_BEGIN(tik_05_init_evt_evt)
 	IF_SMALL(GSW(1708), 1)
+		USER_FUNC(doorStarsCheck)
 		USER_FUNC(checkChapterRequirements, LW(0))
 		IF_EQUAL(LW(0), 1)
 			USER_FUNC(evt_case::evt_run_case_evt, 0, 1, PTR("a_dai"), 0, PTR(&tik_mahojin_event7), 0)

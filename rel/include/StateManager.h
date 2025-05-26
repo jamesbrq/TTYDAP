@@ -21,9 +21,11 @@ namespace mod::owr
         uint8_t startingFP;
         uint8_t startingBP;
         uint8_t runFill;
+        uint8_t requiredStars[7];
+        uint8_t tattlesanity;
     };
 
-    static_assert(sizeof(APSettings) == 0x14);
+    static_assert(sizeof(APSettings) == 0x1C);
 
     class StateManager
     {
@@ -31,5 +33,7 @@ namespace mod::owr
         void Init();
         StateManager();
         APSettings *apSettings;
+        uint16_t *tattleItems;
+        bool newTattle = false;
     };
 } // namespace mod::owr

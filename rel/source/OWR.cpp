@@ -939,7 +939,6 @@ namespace mod::owr
 
     // clang-format off
     EVT_BEGIN(confirm_pipe_evt)
-        USER_FUNC(evt_mario_normalize)
         USER_FUNC(evt_mario_key_onoff, 0)
         USER_FUNC(checkValidPipeSequence, LW(0))
         IF_EQUAL(LW(0), 1)
@@ -951,7 +950,9 @@ namespace mod::owr
         USER_FUNC(evt_msg_select, 1, PTR("<select 0 1 0 40>\nYes\nNo"))
         USER_FUNC(evt_msg_continue)
         USER_FUNC(handlePipeConfirmResponse, LW(0))
-        IF_NOT_EQUAL(LW(0), 0)
+        IF_EQUAL(LW(0), 0)
+            USER_FUNC(evt_mario_normalize)
+        ELSE()
             USER_FUNC(evt_mario_key_onoff, 1)
         END_IF()
         RETURN()

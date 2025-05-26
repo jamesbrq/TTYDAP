@@ -90,6 +90,9 @@ extern int32_t main_buy_evt_evt[];
 extern int32_t main_evt_sub_starstone[];
 extern int32_t main_evt_sub_starstone_evt[];
 extern int32_t main_init_param_80137004[];
+extern int32_t main_battleSetUnitMonosiriFlag[];
+extern int32_t main_partyChristineAttack_Monosiri[];
+extern int32_t main_partyChristineAttack_Monosiri_evt[];
 
 extern int32_t main_mobj_save_blk_sysevt[];
 extern int32_t main_init_event[];
@@ -118,6 +121,11 @@ EVT_BEGIN(main_evt_sub_starstone_hook)
         GOTO(&main_evt_sub_starstone[831])
     END_IF()
     RETURN()
+EVT_PATCH_END()
+
+EVT_BEGIN(main_partyChristineAttack_Monosiri_hook)
+    RUN_CHILD_EVT(main_partyChristineAttack_Monosiri_evt)
+    GOTO(&main_partyChristineAttack_Monosiri[392])
 EVT_PATCH_END()
 // clang-format on
 
@@ -360,6 +368,10 @@ namespace mod::owr
                                    reinterpret_cast<void *>(bGreenZoneMaxInit),
                                    reinterpret_cast<void *>(bGreenZoneMaxInitReturn));
         }
+
+        patch::writeBranchPair(&main_battleSetUnitMonosiriFlag[6],
+                               reinterpret_cast<void *>(bMonosiriItemCheck),
+                               reinterpret_cast<void *>(bMonosiriItemCheckReturn));
     }
 
     void ApplyMainScriptPatches()
@@ -426,6 +438,10 @@ namespace mod::owr
         patch::writePatch(&main_buy_evt[352], main_buy_evt_hook, sizeof(main_buy_evt_hook));
 
         patch::writePatch(&main_evt_sub_starstone[821], main_evt_sub_starstone_hook, sizeof(main_evt_sub_starstone_hook));
+
+        patch::writePatch(&main_partyChristineAttack_Monosiri[388],
+                          main_partyChristineAttack_Monosiri_hook,
+                          sizeof(main_partyChristineAttack_Monosiri_hook));
     }
 
     void ApplyItemDataTablePatches()

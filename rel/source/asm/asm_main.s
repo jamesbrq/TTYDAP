@@ -33,6 +33,8 @@
 .global bCoconutCheckReturn
 .global bGreenZoneMaxInit
 .global bGreenZoneMaxInitReturn
+.global bMonosiriItemCheck
+.global bMonosiriItemCheckReturn
 
 # All of the global symbols in this file excluding win_log_mapGX_arr need to be used in at least one subrel, so they cannot be set to hidden
 
@@ -227,6 +229,12 @@ bGreenZoneMaxInit:
 	stw %r4, 0x18(%r31)
 	li %r4, 0x0
 bGreenZoneMaxInitReturn:
+	b 0
+
+bMonosiriItemCheck:
+	mr %r27, %r3
+	bl monosiriItemCheck
+bMonosiriItemCheckReturn:
 	b 0
 
 win_log_mapGX_arr:
