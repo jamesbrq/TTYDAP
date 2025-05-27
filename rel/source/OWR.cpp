@@ -204,13 +204,12 @@ namespace mod::owr
 
     bool checkIfInGame()
     {
-        constexpr SeqIndex gameSeq = SeqIndex::kGame;
-        if (seqGetNextSeq() != gameSeq)
+        if (seqGetNextSeq() != SeqIndex::kGame && seqGetNextSeq() != SeqIndex::kBattle)
         {
             return false;
         }
 
-        if (seqGetSeq() != gameSeq)
+        if (seqGetSeq() != SeqIndex::kGame && seqGetSeq() != SeqIndex::kBattle)
         {
             return false;
         }

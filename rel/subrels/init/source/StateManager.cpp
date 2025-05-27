@@ -14,5 +14,5 @@ StateManager::StateManager()
 void StateManager::Init()
 {
     gState->apSettings = reinterpret_cast<APSettings *>(0x80003220);
-    gState->tattleItems = reinterpret_cast<uint16_t *>(0x80003C00);
+    gState->tattleItems = reinterpret_cast<uint16_t *>(0x80003B00);
 }
