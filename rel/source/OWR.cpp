@@ -17,6 +17,7 @@
 #include <ttyd/evt_pouch.h>
 #include <ttyd/evt_snd.h>
 #include <ttyd/evt_window.h>
+#include <ttyd/evt_lecture.h>
 #include <ttyd/evtmgr.h>
 #include <ttyd/evtmgr_cmd.h>
 #include <ttyd/icondrv.h>
@@ -55,6 +56,7 @@ using namespace ttyd::statuswindow;
 using namespace ttyd::evt_mario;
 using namespace ttyd::evt_msg;
 using namespace ttyd::evt_pouch;
+using namespace ttyd::evt_lecture;
 using namespace ttyd::seqdrv;
 
 const uint16_t GSWF_ARR[] = {
@@ -207,12 +209,14 @@ namespace mod::owr
 
     bool checkIfInGame()
     {
-        if (seqGetNextSeq() != SeqIndex::kGame && seqGetNextSeq() != SeqIndex::kBattle)
+        const ttyd::seqdrv::SeqIndex nextSeq = seqGetNextSeq();
+        if ((nextSeq != SeqIndex::kGame) && (nextSeq != SeqIndex::kBattle))
         {
             return false;
         }
 
-        if (seqGetSeq() != SeqIndex::kGame && seqGetSeq() != SeqIndex::kBattle)
+        const ttyd::seqdrv::SeqIndex currentSeq = seqGetSeq();
+        if ((currentSeq != SeqIndex::kGame) && (currentSeq != SeqIndex::kBattle))
         {
             return false;
         }
@@ -941,6 +945,7 @@ namespace mod::owr
 
     // clang-format off
     EVT_BEGIN(confirm_pipe_evt)
+        USER_FUNC(lect_set_systemlevel, 1)
         USER_FUNC(evt_mario_key_onoff, 0)
         USER_FUNC(checkValidPipeSequence, LW(0))
         IF_EQUAL(LW(0), 1)
@@ -957,6 +962,7 @@ namespace mod::owr
         ELSE()
             USER_FUNC(evt_mario_key_onoff, 1)
         END_IF()
+        USER_FUNC(lect_set_systemlevel, 0)
         RETURN()
     EVT_END()
     // clang-format on
@@ -972,7 +978,9 @@ namespace mod::owr
                     (menu->keyItemIds[menu->itemsCursorIdx[1]] == ItemId::INVALID_ITEM_PAPER_0054) &&
                     (marioGetPtr()->characterId == MarioCharacters::kMario))
                 {
-                    ttyd::evtmgr::evtEntry(const_cast<int32_t *>(confirm_pipe_evt), 0, 0);
+                    // Params taken from `evtEntryType` call in `mobjRunEvent` for running `mobj_save_blk_sysevt`, as using
+                    // `evtEntry` causes message selection boxes to not show up when system level is raised
+                    ttyd::evtmgr::evtEntryType(const_cast<int32_t *>(confirm_pipe_evt), 30, 0, 26);
                     return -2;
                 }
                 break;
