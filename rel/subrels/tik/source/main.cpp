@@ -456,7 +456,7 @@ namespace mod
         tik_00_init_evt[177] = 18;
 
         tik_dokan_2_in_evt[1] = GSW(1700);
-        tik_dokan_2_in_evt[2] = 17;
+        tik_dokan_2_in_evt[2] = 99; // Unused
         tik_dokan_2_in_evt[4] = GSWF(6056);
         tik_dokan_2_in_evt[5] = 1;
 

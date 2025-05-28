@@ -107,6 +107,9 @@ const uint16_t GSWF_ARR[] = {
     // Post ch.3 guard
     2496,
 
+    // Returned from ch.2
+    2884,
+
     // Goldbob Approval
     3874,
 
