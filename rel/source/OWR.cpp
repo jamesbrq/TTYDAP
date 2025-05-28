@@ -951,6 +951,7 @@ namespace mod::owr
         IF_EQUAL(LW(0), 1)
             USER_FUNC(evt_msg_print, 1, PTR("<system>\n<p>\nThe Warp Pipe is currently\nunavailable.<k>"), 0, 0)
             USER_FUNC(evt_mario_key_onoff, 1)
+            USER_FUNC(lect_set_systemlevel, 0)
             RETURN()
         END_IF()
         USER_FUNC(evt_msg_print, 1, PTR("<system>\n<p>\nWarp home now?\n<o>"), 0, 0)
