@@ -980,7 +980,8 @@ namespace mod::owr
                     (marioGetPtr()->characterId == MarioCharacters::kMario))
                 {
                     // Params taken from `evtEntryType` call in `mobjRunEvent` for running `mobj_save_blk_sysevt`, as using
-                    // `evtEntry` causes message selection boxes to not show up when system level is raised
+                    // `evtEntry` causes message selection boxes to not show up when the system level is raised, and certain
+                    // `types` cause the script to only run once the pause menu is fully closed
                     ttyd::evtmgr::evtEntryType(const_cast<int32_t *>(confirm_pipe_evt), 30, 0, 26);
                     return -2;
                 }
