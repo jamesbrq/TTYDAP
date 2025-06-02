@@ -1118,6 +1118,8 @@ namespace mod::owr
         {
             case 10: // map open
             {
+                if (!gState->apSettings->fastTravel)
+                    break;
                 if (menu->mapCursorIdx < 0) // no location selected
                     break;
                 if (menu->buttonsPressed & gc::pad::PadInput::PAD_A && marioGetPtr()->characterId == MarioCharacters::kMario)
