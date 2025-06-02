@@ -1,12 +1,16 @@
 .global win_log_mapGX_arr
 .hidden win_log_mapGX_arr
 
+.global bMapGXArrPtrInit
+.global bMapGXArrPtrInitReturn
 .global bMapGXArrInject
 .global bMapGXArrInjectReturn
 .global bMapGXArrIncrement
 .global bMapGXArrIncrementReturn
 .global bMapGXChSplit
 .global bMapGXChSplitReturn
+.global bWinLogArrPtrInit
+.global bWinLogArrPtrInitReturn
 .global bWinLogArrInject
 .global bWinLogArrInjectReturn
 .global bWinLogArrIncrement
@@ -38,9 +42,14 @@
 
 # All of the global symbols in this file excluding win_log_mapGX_arr need to be used in at least one subrel, so they cannot be set to hidden
 
-bMapGXArrInject:
+bMapGXArrPtrInit:
+	addi %r30, %r3, 0x7918 #Original Instruction
 	lis %r3, win_log_mapGX_arr@ha
 	addi %r28, %r3, win_log_mapGX_arr@l
+bMapGXArrPtrInitReturn:
+	b 0
+
+bMapGXArrInject:
 	lhz %r3, 0x0(%r28)
 bMapGXArrInjectReturn:
 	b 0
@@ -58,9 +67,14 @@ bMapGXChSplit:
 bMapGXChSplitReturn:
 	b 0
 
-bWinLogArrInject:
+bWinLogArrPtrInit:
+	fadds %f27, %f0, %f7 #Original Instruction
 	lis %r3, win_log_mapGX_arr@ha
 	addi %r10, %r3, win_log_mapGX_arr@l
+bWinLogArrPtrInitReturn:
+	b 0
+
+bWinLogArrInject:
 	lhz %r3, 0x0(%r10)
 bWinLogArrInjectReturn:
 	b 0
@@ -271,15 +285,15 @@ win_log_mapGX_arr:
 	.2byte 0x06A7
 	.2byte 0x06A7
 	.2byte 0x06A8
-	.2byte 0x06A8
-	.2byte 0x06A8
-	.2byte 0x06A8
-	.2byte 0x06A8
-	.2byte 0x06A8
-	.2byte 0x06A8
-	.2byte 0x06A8
-	.2byte 0x06A8
-	.2byte 0x06A8
+	.2byte 0x06B3
+	.2byte 0x06B3
+	.2byte 0x06B3
+	.2byte 0x06B3
+	.2byte 0x06B3
+	.2byte 0x06B3
+	.2byte 0x06B3
+	.2byte 0x06B3
+	.2byte 0x06B3
 	.2byte 0x06B2
 	.2byte 0x06B2
 	.2byte 0x06B2
