@@ -549,6 +549,7 @@ namespace mod::owr
         g_statusWinDisp_trampoline = patch::hookFunction(statuswindow::statusWinDisp, DisplayStarPowerNumber);
         g_pouchGetStarstone_trampoline = patch::hookFunction(mario_pouch::pouchGetStarStone, SetMaxSP);
         g_winItemMain_trampoline = patch::hookFunction(win_item::winItemMain, WinItemMainHook);
+        g_winLogMain_trampoline = patch::hookFunction(win_log::main_winLogMain, WinLogMainHook);
 
         // Hook gaugeDisp with a standard branch since the original function does not need to be called
         patch::writeBranch(statuswindow::gaugeDisp, DisplayStarPowerOrbs);

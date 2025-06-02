@@ -27,6 +27,8 @@ namespace ttyd::win_log
         static_assert(sizeof(MapMarker) == 0xC);
 
         extern MapMarker mapMarkers[0x5D];
+
+        int32_t main_winLogMain(ttyd::win_root::WinPauseMenu *menu);
     }
 
 } // namespace ttyd::win_log
