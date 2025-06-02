@@ -19,6 +19,7 @@
 #include <ttyd/icondrv.h>
 #include <ttyd/item_data.h>
 #include <ttyd/win_item.h>
+#include <ttyd/win_log.h>
 
 #include <cstdint>
 
@@ -154,6 +155,10 @@ namespace mod::owr
         writeIntWithCache(&main_mapGX[238], 0x386006A4); // li r3, 0x6A4 (GSW(1700))
         writeIntWithCache(&main_mapGX[240], 0x2C030010); // cmpwi r3, 0xF
 
+        patch::writeBranchPair(&main_mapGX[90],
+                               reinterpret_cast<void *>(bMapGXArrPtrInit),
+                               reinterpret_cast<void *>(bMapGXArrPtrInitReturn));
+
         patch::writeBranchPair(&main_mapGX[91],
                                reinterpret_cast<void *>(bMapGXArrInject),
                                reinterpret_cast<void *>(bMapGXArrInjectReturn));
@@ -209,6 +214,10 @@ namespace mod::owr
         writeIntWithCache(&main_winLogMain[291], 0x2C030002); // cmpwi r3, 0x2
         writeIntWithCache(&main_winLogMain[295], 0x386006AB); // li r3, 0x6AB (GSW(1707))
         writeIntWithCache(&main_winLogMain[297], 0x2C030001); // cmpwi r3, 0x1
+
+        patch::writeBranchPair(&main_winLogMain[431],
+                               reinterpret_cast<void *>(bWinLogArrPtrInit),
+                               reinterpret_cast<void *>(bWinLogArrPtrInitReturn));
 
         patch::writeBranchPair(&main_winLogMain[432],
                                reinterpret_cast<void *>(bWinLogArrInject),
@@ -491,6 +500,35 @@ namespace mod::owr
         itemDataTable[ItemId::INVALID_ITEM_BOAT_MODE_ICON].description = boatModeNameDescription;
     }
 
+    void ApplyMapMarkerPatches()
+    {
+        using win_log::mapMarkers;
+
+        mapMarkers[0].required_sequence = 0;                                 // gor GSW(1700)
+        for (int i = 1; i <= 3; i++) mapMarkers[i].required_sequence = 11;   // tik GSW(1700)
+        mapMarkers[4].required_sequence = 1;                                 // hei GSW(1701)
+        for (int i = 5; i <= 8; i++) mapMarkers[i].required_sequence = 3;    // nok GSW(1701)
+        for (int i = 9; i <= 12; i++) mapMarkers[i].required_sequence = 2;   // gon GSW(1711)
+        mapMarkers[13].required_sequence = 1;                                // win GSW(1702)
+        for (int i = 14; i <= 15; i++) mapMarkers[i].required_sequence = 3;  // mri GSW(1702)
+        for (int i = 16; i <= 18; i++) mapMarkers[i].required_sequence = 10; // hou GSW(1702) flurries house, so actually win
+        for (int i = 19; i <= 31; i++) mapMarkers[i].required_sequence = 2;  // tou GSW(1703)
+        mapMarkers[32].required_sequence = 2;                                // usu GSW(1704)
+        for (int i = 33; i <= 41; i++) mapMarkers[i].required_sequence = 1;  // gra GSW(1715)
+        // NOTE: sequence is before entering the steeple because we want to use gra_06 (just outside) as a warp point
+        for (int i = 42; i <= 47; i++) mapMarkers[i].required_sequence = 6; // jin GSW(1714)
+        for (int i = 48; i <= 57; i++) mapMarkers[i].required_sequence = 9; // muj GSW(1705)
+        for (int i = 58; i <= 60; i++) mapMarkers[i].required_sequence = 2; // dou GSW(1717)
+        // NOTE: sequence is before entering riverside because we want to use hom_00 (just outside) as a warp point
+        for (int i = 61; i <= 68; i++) mapMarkers[i].required_sequence = 1;  // eki GSW(1720)
+        for (int i = 69; i <= 73; i++) mapMarkers[i].required_sequence = 38; // pik GSW(1706)
+        for (int i = 74; i <= 76; i++) mapMarkers[i].required_sequence = 40; // sin GSW(1706) poshley sanctum so actually pik
+        mapMarkers[77].required_sequence = 2;                                // bom GSW(1707)
+        for (int i = 78; i <= 85; i++) mapMarkers[i].required_sequence = 6;  // moo GSW(1707)
+        for (int i = 86; i <= 89; i++) mapMarkers[i].required_sequence = 9;  // aji GSW(1707)
+        for (int i = 90; i <= 92; i++) mapMarkers[i].required_sequence = 2;  // las GSW(1708)
+    }
+
     OWR::OWR()
     {
         gSelf = this;
@@ -499,6 +537,7 @@ namespace mod::owr
         ApplyMainAssemblyPatches();
         ApplyMainScriptPatches();
         ApplyItemDataTablePatches();
+        ApplyMapMarkerPatches();
 
         g_OSLink_trampoline = patch::hookFunction(OSLink, OSLinkHook);
         gTrampoline_seq_logoMain = patch::hookFunction(seq_logo::seq_logoMain, logoSkip);
