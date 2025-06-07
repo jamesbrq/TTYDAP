@@ -1,13 +1,9 @@
 #pragma once
 
-#include <gc/types.h>
+#include "gc/types.h"
+#include "ttyd/win_root.h"
 
 #include <cstdint>
-
-namespace ttyd::win_root
-{
-    struct WinPauseMenu;
-}
 
 namespace ttyd::win_main
 {
@@ -49,7 +45,7 @@ namespace ttyd::win_main
         // winCheck
         // winReInit
         // winInit
-        win_root::WinPauseMenu *main_winGetPtr();
+        ttyd::win_root::WinPauseMenu *main_winGetPtr();
     }
 
 } // namespace ttyd::win_main
