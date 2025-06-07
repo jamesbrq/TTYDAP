@@ -1004,34 +1004,43 @@ namespace mod::owr
     }
 
     // clang-format off
-    #define WARP_EVT(name, type) EVT_BEGIN(name) \
-        USER_FUNC(lect_set_systemlevel, 1) \
-        USER_FUNC(evt_mario_key_onoff, 0) \
-        USER_FUNC(checkValidWarpSequence, LW(0)) \
-        IF_EQUAL(LW(0), 1) \
-            USER_FUNC(getWarpUnavailableText, type, LW(0)) \
-            USER_FUNC(evt_msg_print, 1, LW(0), 0, 0) \
-            USER_FUNC(evt_mario_key_onoff, 1) \
-            USER_FUNC(lect_set_systemlevel, 0) \
-            RETURN() \
-        END_IF() \
-        USER_FUNC(getWarpConfirmText, type, LW(0)) \
-        USER_FUNC(evt_msg_print, 1, LW(0), 0, 0) \
-        USER_FUNC(evt_msg_select, 1, PTR("<select 0 1 0 40>\nYes\nNo")) \
-        USER_FUNC(evt_msg_continue) \
-        USER_FUNC(handleWarpConfirmResponse, LW(0), type) \
-        IF_EQUAL(LW(0), 0) \
-            USER_FUNC(evt_mario_normalize) \
-        ELSE() \
-            USER_FUNC(evt_mario_key_onoff, 1) \
-        END_IF() \
-        USER_FUNC(lect_set_systemlevel, 0) \
-        RETURN() \
+    EVT_BEGIN(custom_warp_evt)
+        USER_FUNC(lect_set_systemlevel, 1)
+        USER_FUNC(evt_mario_key_onoff, 0)
+        USER_FUNC(checkValidWarpSequence, LW(0))
+        IF_EQUAL(LW(0), 1)
+            USER_FUNC(getWarpUnavailableText, LW(1), LW(0))
+            USER_FUNC(evt_msg_print, 1, LW(0), 0, 0)
+            USER_FUNC(evt_mario_key_onoff, 1)
+            USER_FUNC(lect_set_systemlevel, 0)
+            RETURN()
+        END_IF()
+        USER_FUNC(getWarpConfirmText, LW(1), LW(0))
+        USER_FUNC(evt_msg_print, 1, LW(0), 0, 0)
+        USER_FUNC(evt_msg_select, 1, PTR("<select 0 1 0 40>\nYes\nNo"))
+        USER_FUNC(evt_msg_continue)
+        USER_FUNC(handleWarpConfirmResponse, LW(0), LW(1))
+        IF_EQUAL(LW(0), 0)
+            USER_FUNC(evt_mario_normalize)
+        ELSE()
+            USER_FUNC(evt_mario_key_onoff, 1)
+        END_IF()
+        USER_FUNC(lect_set_systemlevel, 0)
+        RETURN()
+    EVT_END()
+
+    EVT_BEGIN(confirm_pipe_evt)
+        SET(LW(1), static_cast<int32_t>(WarpType::WARP_PIPE))
+        RUN_CHILD_EVT(custom_warp_evt)
+        RETURN()
+    EVT_END()
+
+    EVT_BEGIN(confirm_travel_evt)
+        SET(LW(1), static_cast<int32_t>(WarpType::FAST_TRAVEL))
+        RUN_CHILD_EVT(custom_warp_evt)
+        RETURN()
     EVT_END()
     // clang-format on
-
-    WARP_EVT(confirm_pipe_evt, static_cast<int32_t>(WarpType::WARP_PIPE))
-    WARP_EVT(confirm_travel_evt, static_cast<int32_t>(WarpType::FAST_TRAVEL))
 
     // Hook item menu update function to handle interactions with added key items.
     KEEP_FUNC int32_t WinItemMainHook(ttyd::win_root::WinPauseMenu *menu)
