@@ -9,16 +9,12 @@ extern "C"
 
     void bMapGXArrPtrInit();
     void bMapGXArrPtrInitReturn();
-    void bMapGXArrInject();
-    void bMapGXArrInjectReturn();
     void bMapGXArrIncrement();
     void bMapGXArrIncrementReturn();
     void bMapGXChSplit();
     void bMapGXChSplitReturn();
     void bWinLogArrPtrInit();
     void bWinLogArrPtrInitReturn();
-    void bWinLogArrInject();
-    void bWinLogArrInjectReturn();
     void bWinLogArrIncrement();
     void bWinLogArrIncrementReturn();
     void bChapterClearCheck();

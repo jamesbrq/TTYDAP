@@ -161,9 +161,7 @@ namespace mod::owr
                                reinterpret_cast<void *>(bMapGXArrPtrInitReturn));
 
         // use ptr to win_log_mapGX_arr for sequence checks inside loop
-        patch::writeBranchPair(&main_mapGX[91],
-                               reinterpret_cast<void *>(bMapGXArrInject),
-                               reinterpret_cast<void *>(bMapGXArrInjectReturn));
+        writeIntWithCache(&main_mapGX[91], 0xA07C0000); // lhz r3,0(r28)
 
         // increment ptr to win_log_mapGX_arr at end of loop
         patch::writeBranchPair(&main_mapGX[235],
@@ -224,9 +222,7 @@ namespace mod::owr
                                reinterpret_cast<void *>(bWinLogArrPtrInitReturn));
 
         // use ptr to win_log_mapGX_arr for sequence checks inside loop
-        patch::writeBranchPair(&main_winLogMain[432],
-                               reinterpret_cast<void *>(bWinLogArrInject),
-                               reinterpret_cast<void *>(bWinLogArrInjectReturn));
+        writeIntWithCache(&main_winLogMain[432], 0xA06A0000); // lhz r3,0(r10)
 
         // increment ptr to win_log_mapGX_arr at end of loop
         patch::writeBranchPair(&main_winLogMain[505],

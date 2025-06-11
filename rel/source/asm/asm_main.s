@@ -3,16 +3,12 @@
 
 .global bMapGXArrPtrInit
 .global bMapGXArrPtrInitReturn
-.global bMapGXArrInject
-.global bMapGXArrInjectReturn
 .global bMapGXArrIncrement
 .global bMapGXArrIncrementReturn
 .global bMapGXChSplit
 .global bMapGXChSplitReturn
 .global bWinLogArrPtrInit
 .global bWinLogArrPtrInitReturn
-.global bWinLogArrInject
-.global bWinLogArrInjectReturn
 .global bWinLogArrIncrement
 .global bWinLogArrIncrementReturn
 .global bChapterClearCheck
@@ -50,12 +46,6 @@ bMapGXArrPtrInit:
 bMapGXArrPtrInitReturn:
 	b 0
 
-# intended to be run at the beginning of every loop in main_mapGX
-bMapGXArrInject:
-	lhz %r3, 0x0(%r28)
-bMapGXArrInjectReturn:
-	b 0
-
 # intended to be run at the end of every loop in main_mapGX
 bMapGXArrIncrement:
 	addi %r30, %r30, 0xC #Original Intruction
@@ -76,12 +66,6 @@ bWinLogArrPtrInit:
 	lis %r3, win_log_mapGX_arr@ha
 	addi %r10, %r3, win_log_mapGX_arr@l
 bWinLogArrPtrInitReturn:
-	b 0
-
-# intended to be run at the beginning of every loop in main_winLogMain
-bWinLogArrInject:
-	lhz %r3, 0x0(%r10)
-bWinLogArrInjectReturn:
 	b 0
 
 # intended to be run at the end of every loop in main_winLogMain
