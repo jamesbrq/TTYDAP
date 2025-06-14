@@ -7,14 +7,14 @@ extern "C"
     EVT_DECLARE_USER_FUNC(tou_evt_tou_get_ranking, 1)
     EVT_DECLARE_USER_FUNC(muj_koburon_get_encount_info, 1)
 
-    void bMapGXArrPtrInit();
-    void bMapGXArrPtrInitReturn();
+    void bMapGXArrInject();
+    void bMapGXArrInjectReturn();
     void bMapGXArrIncrement();
     void bMapGXArrIncrementReturn();
     void bMapGXChSplit();
     void bMapGXChSplitReturn();
-    void bWinLogArrPtrInit();
-    void bWinLogArrPtrInitReturn();
+    void bWinLogArrInject();
+    void bWinLogArrInjectReturn();
     void bWinLogArrIncrement();
     void bWinLogArrIncrementReturn();
     void bChapterClearCheck();
