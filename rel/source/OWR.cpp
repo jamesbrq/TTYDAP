@@ -64,6 +64,8 @@ using namespace ttyd::evt_lecture;
 using namespace ttyd::seqdrv;
 using namespace mod::custom_warp;
 
+char warpTextBuffer[64];
+
 const uint16_t GSWF_ARR[] = {
     // Any of these being enabled will disable them
     // Shop Tutorial
@@ -965,12 +967,20 @@ namespace mod::owr
         (void)isFirstCall;
 
         const WarpType warpType = static_cast<WarpType>(ttyd::evtmgr_cmd::evtGetValue(evt, evt->evtArguments[0]));
-        const char *text = "<system>\n<p>\nThe Warp Pipe is currently\nunavailable.<k>";
+        const char *text;
 
-        if (warpType == WarpType::FAST_TRAVEL)
-            text = "<system>\n<p>\nFast travel is currently\nunavailable.<k>";
+        if (warpType == WarpType::RETURN_PIPE)
+        {
+            text = "The Return Pipe";
+        }
+        else
+        {
+            text = "Fast travel";
+        }
 
-        ttyd::evtmgr_cmd::evtSetValue(evt, evt->evtArguments[1], reinterpret_cast<uint32_t>(text));
+        snprintf(warpTextBuffer, sizeof(warpTextBuffer), "<system>\n<p>\n%s is currently\nunavailable.<k>", text);
+
+        ttyd::evtmgr_cmd::evtSetValue(evt, evt->evtArguments[1], reinterpret_cast<uint32_t>(&warpTextBuffer[0]));
         return 2;
     }
 
@@ -978,28 +988,22 @@ namespace mod::owr
     EVT_DEFINE_USER_FUNC(getWarpConfirmText)
     {
         (void)isFirstCall;
-
         const WarpType warpType = static_cast<WarpType>(ttyd::evtmgr_cmd::evtGetValue(evt, evt->evtArguments[0]));
-        static char warp_confirm_text_buffer[64];
 
-        if (warpType == WarpType::WARP_PIPE)
+        if (warpType == WarpType::RETURN_PIPE)
         {
             // Use snprintf to make sure that the string does not cause a buffer overflow and that it is properly null
             // terminated. Mainly only doing this in the event that the buffer and/or string are changed later on.
-            snprintf(warp_confirm_text_buffer, sizeof(warp_confirm_text_buffer), "<system>\n<p>\nWarp home now?\n<o>");
+            snprintf(warpTextBuffer, sizeof(warpTextBuffer), "<system>\n<p>\nWarp home now?\n<o>");
         }
         else
         {
             // memory location points to key used to find the title of the location on the journal map
             const char *location_name = ttyd::msgdrv::msgSearch(ttyd::win_log::main_win_log_name);
-
-            snprintf(warp_confirm_text_buffer,
-                     sizeof(warp_confirm_text_buffer),
-                     "<system>\n<p>\nFast travel to\n%s?\n<o>",
-                     location_name);
+            snprintf(warpTextBuffer, sizeof(warpTextBuffer), "<system>\n<p>\nFast travel to\n%s?\n<o>", location_name);
         }
 
-        ttyd::evtmgr_cmd::evtSetValue(evt, evt->evtArguments[1], reinterpret_cast<uint32_t>(&warp_confirm_text_buffer[0]));
+        ttyd::evtmgr_cmd::evtSetValue(evt, evt->evtArguments[1], reinterpret_cast<uint32_t>(&warpTextBuffer[0]));
         return 2;
     }
 
@@ -1030,7 +1034,7 @@ namespace mod::owr
     EVT_END()
 
     EVT_BEGIN(confirm_pipe_evt)
-        SET(LW(10), static_cast<int32_t>(WarpType::WARP_PIPE))
+        SET(LW(10), static_cast<int32_t>(WarpType::RETURN_PIPE))
         RUN_CHILD_EVT(custom_warp_evt)
         RETURN()
     EVT_END()

@@ -10,7 +10,7 @@ namespace mod::custom_warp
 {
     enum class WarpType : int32_t
     {
-        WARP_PIPE = 0,
+        RETURN_PIPE = 0,
         FAST_TRAVEL,
     };
 
