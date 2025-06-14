@@ -1,13 +1,10 @@
 #pragma once
 
-#include <ttyd/dispdrv.h>
+#include "ttyd/dispdrv.h"
+#include "ttyd/win_root.h"
 
 #include <cstdint>
 
-namespace ttyd::win_root
-{
-    struct WinPauseMenu;
-}
 namespace ttyd::winmgr
 {
     struct WinMgrEntry;
