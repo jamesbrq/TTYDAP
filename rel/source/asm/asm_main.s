@@ -7,8 +7,6 @@
 .global bMapGXArrIncrementReturn
 .global bMapGXArrFlagCheck
 .global bMapGXArrFlagCheckReturn
-.global bMapGXChSplit
-.global bMapGXChSplitReturn
 .global bWinLogArrInject
 .global bWinLogArrInjectReturn
 .global bWinLogArrIncrement
