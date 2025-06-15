@@ -155,14 +155,15 @@ namespace mod::owr
         writeIntWithCache(&main_mapGX[238], 0x386006A4); // li r3, 0x6A4 (GSW(1700))
         writeIntWithCache(&main_mapGX[240], 0x2C030010); // cmpwi r3, 0xF
 
+        // setup ptr to win_log_mapGX_arr before loop
         patch::writeBranchPair(&main_mapGX[90],
-                               reinterpret_cast<void *>(bMapGXArrPtrInit),
-                               reinterpret_cast<void *>(bMapGXArrPtrInitReturn));
-
-        patch::writeBranchPair(&main_mapGX[91],
                                reinterpret_cast<void *>(bMapGXArrInject),
                                reinterpret_cast<void *>(bMapGXArrInjectReturn));
 
+        // use ptr to win_log_mapGX_arr for sequence checks inside loop
+        writeIntWithCache(&main_mapGX[91], 0xA07C0000); // lhz r3,0(r28)
+
+        // increment ptr to win_log_mapGX_arr at end of loop
         patch::writeBranchPair(&main_mapGX[235],
                                reinterpret_cast<void *>(bMapGXArrIncrement),
                                reinterpret_cast<void *>(bMapGXArrIncrementReturn));
@@ -215,14 +216,15 @@ namespace mod::owr
         writeIntWithCache(&main_winLogMain[295], 0x386006AB); // li r3, 0x6AB (GSW(1707))
         writeIntWithCache(&main_winLogMain[297], 0x2C030001); // cmpwi r3, 0x1
 
+        // setup ptr to win_log_mapGX_arr before loop
         patch::writeBranchPair(&main_winLogMain[431],
-                               reinterpret_cast<void *>(bWinLogArrPtrInit),
-                               reinterpret_cast<void *>(bWinLogArrPtrInitReturn));
-
-        patch::writeBranchPair(&main_winLogMain[432],
                                reinterpret_cast<void *>(bWinLogArrInject),
                                reinterpret_cast<void *>(bWinLogArrInjectReturn));
 
+        // use ptr to win_log_mapGX_arr for sequence checks inside loop
+        writeIntWithCache(&main_winLogMain[432], 0xA06A0000); // lhz r3,0(r10)
+
+        // increment ptr to win_log_mapGX_arr at end of loop
         patch::writeBranchPair(&main_winLogMain[505],
                                reinterpret_cast<void *>(bWinLogArrIncrement),
                                reinterpret_cast<void *>(bWinLogArrIncrementReturn));

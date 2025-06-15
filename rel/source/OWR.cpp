@@ -1,13 +1,11 @@
 #include "relmgr.h"
 #include "visibility.h"
 #include <AP/rel_patch_definitions.h>
-#include <cstdint>
-#include <cstring>
-#include <cstdio>
 #include <gc/OSModule.h>
 #include <gc/pad.h>
 #include <mod.h>
 #include "util.h"
+#include "customWarp.h"
 #include <ttyd/common_types.h>
 #include <ttyd/countdown.h>
 #include <ttyd/evt_bero.h>
@@ -38,11 +36,15 @@
 #include <ttyd/win_log.h>
 #include <ttyd/win_main.h>
 #include <ttyd/win_root.h>
+#include <ttyd/fontmgr.h>
 
 #include "common.h"
 #include "OWR.h"
 #include "patch.h"
-#include <ttyd/fontmgr.h>
+
+#include <cstdint>
+#include <cstring>
+#include <cstdio>
 
 using gc::pad::PadInput;
 using ttyd::common::ItemData;
@@ -60,6 +62,9 @@ using namespace ttyd::evt_msg;
 using namespace ttyd::evt_pouch;
 using namespace ttyd::evt_lecture;
 using namespace ttyd::seqdrv;
+using namespace mod::custom_warp;
+
+char warpTextBuffer[64];
 
 const uint16_t GSWF_ARR[] = {
     // Any of these being enabled will disable them
@@ -893,58 +898,8 @@ namespace mod::owr
         }
     }
 
-    struct FastTravelPair
-    {
-        const char *map_name;
-        const char *bero;
-    };
-    const FastTravelPair getFastTravelPair()
-    {
-        const char *map_prefix = ttyd::win_log::mapMarkers[ttyd::win_main::main_winGetPtr()->mapCursorIdx].map_prefix;
-        if (strcmp(map_prefix, "tik") == 0)
-            return {"tik_01", "dokan_2"};
-        if (strcmp(map_prefix, "hei") == 0)
-            return {"hei_00", "dokan_2"};
-        if (strcmp(map_prefix, "nok") == 0)
-            return {"nok_00", "w_bero"};
-        if (strcmp(map_prefix, "gon") == 0)
-            return {"gon_00", "w_bero"};
-        if (strcmp(map_prefix, "win") == 0)
-            return {"win_06", "dokan1"}; // not a typo
-        if (strcmp(map_prefix, "mri") == 0)
-            return {"mri_00", "w_bero"};
-        if (strcmp(map_prefix, "hou") == 0)
-            return {"win_04", "w_bero"};
-        if (strcmp(map_prefix, "tou") == 0)
-            return {"tou_01", nullptr}; // triggers the blimp entrance by default
-        if (strcmp(map_prefix, "usu") == 0)
-            return {"usu_00", "dokan_1"};
-        if (strcmp(map_prefix, "gra") == 0)
-            return {"gra_00", "w_bero"};
-        if (strcmp(map_prefix, "jin") == 0)
-            return {"gra_06", "sw_bero"};
-        if (strcmp(map_prefix, "muj") == 0)
-            return {"muj_00", "e_bero"};
-        if (strcmp(map_prefix, "dou") == 0)
-            return {"dou_00", "w_bero"};
-        if (strcmp(map_prefix, "eki") == 0)
-            return {"hom_00", "n_bero_1"};
-        if (strcmp(map_prefix, "pik") == 0)
-            return {"pik_00", "n_bero"};
-        if (strcmp(map_prefix, "sin") == 0)
-            return {"pik_02", "s_bero"};
-        if (strcmp(map_prefix, "bom") == 0)
-            return {"bom_02", "w_bero"};
-        if (strcmp(map_prefix, "moo") == 0)
-            return {"moo_00", nullptr}; // first time landing on the moon also uses null
-        if (strcmp(map_prefix, "aji") == 0)
-            return {"aji_00", "w_bero"};
-        if (strcmp(map_prefix, "las") == 0)
-            return {"las_00", "w_bero"};
-        return {"gor_01", "s_bero"};
-    }
-
-    enum class WarpType : uint8_t
+    EVT_DECLARE_USER_FUNC(handleWarpConfirmResponse, 2)
+    EVT_DEFINE_USER_FUNC(handleWarpConfirmResponse)
     {
         WARP_PIPE,
         FAST_TRAVEL,
@@ -979,7 +934,7 @@ namespace mod::owr
             WarpType warpType = static_cast<WarpType>(ttyd::evtmgr_cmd::evtGetValue(evt, evt->evtArguments[1]));
             if (warpType == WarpType::FAST_TRAVEL)
             {
-                const FastTravelPair fastTravelPair = getFastTravelPair();
+                const FastTravelPair fastTravelPair = FastTravelPair::getFastTravelPair();
                 mapName = fastTravelPair.map_name;
                 bero = fastTravelPair.bero;
             }
@@ -1010,6 +965,52 @@ namespace mod::owr
             ttyd::evtmgr_cmd::evtSetValue(evt, evt->evtArguments[0], 1);
         }
 
+        return 2;
+    }
+
+    EVT_DECLARE_USER_FUNC(getWarpUnavailableText, 2)
+    EVT_DEFINE_USER_FUNC(getWarpUnavailableText)
+    {
+        (void)isFirstCall;
+
+        const WarpType warpType = static_cast<WarpType>(ttyd::evtmgr_cmd::evtGetValue(evt, evt->evtArguments[0]));
+        const char *text;
+
+        if (warpType == WarpType::RETURN_PIPE)
+        {
+            text = "The Return Pipe";
+        }
+        else
+        {
+            text = "Fast travel";
+        }
+
+        snprintf(warpTextBuffer, sizeof(warpTextBuffer), "<system>\n<p>\n%s is currently\nunavailable.<k>", text);
+
+        ttyd::evtmgr_cmd::evtSetValue(evt, evt->evtArguments[1], reinterpret_cast<uint32_t>(&warpTextBuffer[0]));
+        return 2;
+    }
+
+    EVT_DECLARE_USER_FUNC(getWarpConfirmText, 2)
+    EVT_DEFINE_USER_FUNC(getWarpConfirmText)
+    {
+        (void)isFirstCall;
+        const WarpType warpType = static_cast<WarpType>(ttyd::evtmgr_cmd::evtGetValue(evt, evt->evtArguments[0]));
+
+        if (warpType == WarpType::RETURN_PIPE)
+        {
+            // Use snprintf to make sure that the string does not cause a buffer overflow and that it is properly null
+            // terminated. Mainly only doing this in the event that the buffer and/or string are changed later on.
+            snprintf(warpTextBuffer, sizeof(warpTextBuffer), "<system>\n<p>\nWarp home now?\n<o>");
+        }
+        else
+        {
+            // memory location points to key used to find the title of the location on the journal map
+            const char *location_name = ttyd::msgdrv::msgSearch(ttyd::win_log::main_win_log_name);
+            snprintf(warpTextBuffer, sizeof(warpTextBuffer), "<system>\n<p>\nFast travel to\n%s?\n<o>", location_name);
+        }
+
+        ttyd::evtmgr_cmd::evtSetValue(evt, evt->evtArguments[1], reinterpret_cast<uint32_t>(&warpTextBuffer[0]));
         return 2;
     }
 
@@ -1054,60 +1055,86 @@ namespace mod::owr
     }
 
     // clang-format off
-    #define WARP_EVT(name, type) EVT_BEGIN(name) \
+    EVT_BEGIN(custom_warp_evt)
         USER_FUNC(lect_set_systemlevel, 1)
-        USER_FUNC(evt_mario_key_onoff, 0) \
-        USER_FUNC(checkValidWarpSequence, LW(0)) \
-        IF_EQUAL(LW(0), 1) \
-            USER_FUNC(getWarpUnavailableText, type, LW(0)) \
-            USER_FUNC(evt_msg_print, 1, LW(0), 0, 0) \
-            USER_FUNC(evt_mario_key_onoff, 1) \
-            RETURN() \
-        END_IF() \
-        USER_FUNC(getWarpConfirmText, type, LW(0)) \
-        USER_FUNC(evt_msg_print, 1, LW(0), 0, 0) \
-        USER_FUNC(evt_msg_select, 1, PTR("<select 0 1 0 40>\nYes\nNo")) \
-        USER_FUNC(evt_msg_continue) \
-        USER_FUNC(handleWarpConfirmResponse, LW(0), type) \
-        IF_EQUAL(LW(0), 0) \
-            USER_FUNC(evt_mario_normalize) \
-        ELSE() \
-            USER_FUNC(evt_mario_key_onoff, 1) \
-        END_IF() \
+        USER_FUNC(evt_mario_key_onoff, 0)
+        USER_FUNC(checkValidWarpSequence, LW(0))
+        IF_EQUAL(LW(0), 1)
+            USER_FUNC(getWarpUnavailableText, LW(10), LW(0))
+            USER_FUNC(evt_msg_print, 1, LW(0), 0, 0)
+            USER_FUNC(evt_mario_key_onoff, 1)
+            USER_FUNC(lect_set_systemlevel, 0)
+            RETURN()
+        END_IF()
+        USER_FUNC(getWarpConfirmText, LW(10), LW(0))
+        USER_FUNC(evt_msg_print, 1, LW(0), 0, 0)
+        USER_FUNC(evt_msg_select, 1, PTR("<select 0 1 0 40>\nYes\nNo"))
+        USER_FUNC(evt_msg_continue)
+        USER_FUNC(handleWarpConfirmResponse, LW(0), LW(10))
+        IF_EQUAL(LW(0), 0)
+            USER_FUNC(evt_mario_normalize)
+        ELSE()
+            USER_FUNC(evt_mario_key_onoff, 1)
+        END_IF()
         USER_FUNC(lect_set_systemlevel, 0)
         RETURN() \
     EVT_END()
 
-    WARP_EVT(confirm_pipe_evt, static_cast<uint8_t>(WarpType::WARP_PIPE))
-    WARP_EVT(confirm_travel_evt, static_cast<uint8_t>(WarpType::FAST_TRAVEL))
+    EVT_BEGIN(confirm_pipe_evt)
+        SET(LW(10), static_cast<int32_t>(WarpType::RETURN_PIPE))
+        RUN_CHILD_EVT(custom_warp_evt)
+        RETURN()
+    EVT_END()
+
+    EVT_BEGIN(confirm_travel_evt)
+        SET(LW(10), static_cast<int32_t>(WarpType::FAST_TRAVEL))
+        RUN_CHILD_EVT(custom_warp_evt)
+        RETURN()
+    EVT_END()
     // clang-format on
 
     // Hook item menu update function to handle interactions with added key items.
     KEEP_FUNC int32_t WinItemMainHook(ttyd::win_root::WinPauseMenu *menu)
     {
-        switch (menu->itemMenuState)
+        if (menu->itemMenuState == 10)
         {
-            case 10:
+            if ((menu->buttonsPressed & gc::pad::PadInput::PAD_A) && (menu->itemSubmenuId == 1) &&
+                (menu->keyItemIds[menu->itemsCursorIdx[1]] == ItemId::INVALID_ITEM_PAPER_0054) &&
+                (marioGetPtr()->characterId == MarioCharacters::kMario))
             {
-                if ((menu->buttonsPressed & gc::pad::PadInput::PAD_A) && (menu->itemSubmenuId == 1) &&
-                    (menu->keyItemIds[menu->itemsCursorIdx[1]] == ItemId::INVALID_ITEM_PAPER_0054) &&
-                    (marioGetPtr()->characterId == MarioCharacters::kMario))
-                {
-                    // Params taken from `evtEntryType` call in `mobjRunEvent` for running `mobj_save_blk_sysevt`, as using
-                    // `evtEntry` causes message selection boxes to not show up when the system level is raised, and certain
-                    // `types` cause the script to only run once the pause menu is fully closed
-                    ttyd::evtmgr::evtEntryType(const_cast<int32_t *>(confirm_pipe_evt), 30, 0, 26);
-                    return -2;
-                }
-                break;
-            }
-            default:
-            {
-                break;
+                // Params taken from `evtEntryType` call in `mobjRunEvent` for running `mobj_save_blk_sysevt`, as using
+                // `evtEntry` causes message selection boxes to not show up when the system level is raised, and certain `types`
+                // cause the script to only run once the pause menu is fully closed
+                ttyd::evtmgr::evtEntryType(const_cast<int32_t *>(confirm_pipe_evt), 30, 0, 26);
+                return -2;
             }
         }
 
         return g_winItemMain_trampoline(menu);
+    }
+
+    // Hook journal menu to fast travel from the map
+    KEEP_FUNC int32_t WinLogMainHook(ttyd::win_root::WinPauseMenu *menu)
+    {
+        if (menu->logMenuState == 10) // map open
+        {
+            if (!gState->apSettings->fastTravel)
+                return g_winLogMain_trampoline(menu);
+
+            if (menu->mapCursorIdx < 0) // no location selected
+                return g_winLogMain_trampoline(menu);
+
+            if ((menu->buttonsPressed & gc::pad::PadInput::PAD_A) && (marioGetPtr()->characterId == MarioCharacters::kMario))
+            {
+                // Params taken from `evtEntryType` call in `mobjRunEvent` for running `mobj_save_blk_sysevt`, as using
+                // `evtEntry` causes message selection boxes to not show up when the system level is raised, and certain `types`
+                // cause the script to only run once the pause menu is fully closed
+                ttyd::evtmgr::evtEntryType(const_cast<int32_t *>(confirm_travel_evt), 30, 0, 26);
+                return -2;
+            }
+        }
+
+        return g_winLogMain_trampoline(menu);
     }
 
     // Hook journal menu to fast travel from the map
