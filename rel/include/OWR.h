@@ -46,6 +46,7 @@ namespace mod::owr
     void DisplayStarPowerOrbs(float x, float y, int32_t star_power);
     void SetMaxSP(int32_t star);
     int32_t WinItemMainHook(ttyd::win_root::WinPauseMenu *menu);
+    int32_t WinLogMainHook(ttyd::win_root::WinPauseMenu *menu);
 
     extern bool (*g_OSLink_trampoline)(OSModuleInfo *, void *);
     extern void (*g_seqSetSeq_trampoline)(SeqIndex seq, const char *map, const char *bero);
@@ -57,6 +58,7 @@ namespace mod::owr
     extern void (*g_statusWinDisp_trampoline)(void);
     extern void (*g_pouchGetStarstone_trampoline)(int32_t);
     extern int32_t (*g_winItemMain_trampoline)(ttyd::win_root::WinPauseMenu *menu);
+    extern int32_t (*g_winLogMain_trampoline)(ttyd::win_root::WinPauseMenu *menu);
 
     extern const char *goombellaName;
     extern const char *goombellaDescription;
