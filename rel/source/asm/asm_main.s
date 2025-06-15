@@ -42,7 +42,6 @@
 
 # All of the global symbols in this file excluding win_log_mapGX_arr need to be used in at least one subrel, so they cannot be set to hidden
 
-# intended to be run once before the loop in main_mapGX
 bMapGXArrPtrInit:
 	addi %r30, %r3, 0x7918 #Original Instruction
 	lis %r3, win_log_mapGX_arr@ha
@@ -50,13 +49,11 @@ bMapGXArrPtrInit:
 bMapGXArrPtrInitReturn:
 	b 0
 
-# intended to be run at the beginning of every loop in main_mapGX
 bMapGXArrInject:
 	lhz %r3, 0x0(%r28)
 bMapGXArrInjectReturn:
 	b 0
 
-# intended to be run at the end of every loop in main_mapGX
 bMapGXArrIncrement:
 	addi %r30, %r30, 0xC #Original Intruction
 	addi %r28, %r28, 0x2
@@ -70,7 +67,6 @@ bMapGXChSplit:
 bMapGXChSplitReturn:
 	b 0
 
-# intended to be run once before the loop in main_winLogMain
 bWinLogArrPtrInit:
 	fadds %f27, %f0, %f7 #Original Instruction
 	lis %r3, win_log_mapGX_arr@ha
@@ -78,13 +74,11 @@ bWinLogArrPtrInit:
 bWinLogArrPtrInitReturn:
 	b 0
 
-# intended to be run at the beginning of every loop in main_winLogMain
 bWinLogArrInject:
 	lhz %r3, 0x0(%r10)
 bWinLogArrInjectReturn:
 	b 0
 
-# intended to be run at the end of every loop in main_winLogMain
 bWinLogArrIncrement:
 	addi %r27, %r27, 0xC #Original Intruction
 	addi %r10, %r10, 0x2
