@@ -5,12 +5,16 @@
 .global bMapGXArrInjectReturn
 .global bMapGXArrIncrement
 .global bMapGXArrIncrementReturn
+.global bMapGXArrFlagCheck
+.global bMapGXArrFlagCheckReturn
 .global bMapGXChSplit
 .global bMapGXChSplitReturn
 .global bWinLogArrInject
 .global bWinLogArrInjectReturn
 .global bWinLogArrIncrement
 .global bWinLogArrIncrementReturn
+.global bWinLogArrFlagCheck
+.global bWinLogArrFlagCheckReturn
 .global bChapterClearCheck
 .global bJohoyaSeqAddition
 .global bPrintPartyErrorFix
@@ -38,37 +42,50 @@
 
 # All of the global symbols in this file excluding win_log_mapGX_arr need to be used in at least one subrel, so they cannot be set to hidden
 
+# intended to be run once before the loop in main_mapGX
 bMapGXArrInject:
+	addi %r30, %r3, 0x7918 #Original Instruction
 	lis %r3, win_log_mapGX_arr@ha
 	addi %r28, %r3, win_log_mapGX_arr@l
-	lhz %r3, 0x0(%r28)
 bMapGXArrInjectReturn:
 	b 0
 
+# intended to be run at the end of every loop in main_mapGX
 bMapGXArrIncrement:
 	addi %r30, %r30, 0xC #Original Intruction
-	addi %r28, %r28, 0x2
+	addi %r28, %r28, 0x1
 bMapGXArrIncrementReturn:
 	b 0
 
-bMapGXChSplit:
-	li %r3, 0x06AF
-	bl swByteGet
-	cmpwi %r3, 0x3
-bMapGXChSplitReturn:
+# intended to be run when GSW(0) is checked
+bMapGXArrFlagCheck:
+	lbz %r3, 0x0(%r28)
+	addi %r3, %r3, 0x189C
+	bl swGet
+bMapGXArrFlagCheckReturn:
 	b 0
 
+# intended to be run once before the loop in main_winLogMain
 bWinLogArrInject:
+	fadds %f27, %f0, %f7 #Original Instruction
 	lis %r3, win_log_mapGX_arr@ha
 	addi %r10, %r3, win_log_mapGX_arr@l
-	lhz %r3, 0x0(%r10)
 bWinLogArrInjectReturn:
 	b 0
 
+# intended to be run at the end of every loop in main_winLogMain
 bWinLogArrIncrement:
 	addi %r27, %r27, 0xC #Original Intruction
-	addi %r10, %r10, 0x2
+	addi %r10, %r10, 0x1
 bWinLogArrIncrementReturn:
+	b 0
+
+# intended to be run when GSW(0) is checked
+bWinLogArrFlagCheck:
+	lbz %r3, 0x0(%r10)
+	addi %r3, %r3, 0x189C
+	bl swGet
+bWinLogArrFlagCheckReturn:
 	b 0
 
 bChapterClearCheck:
@@ -238,96 +255,96 @@ bMonosiriItemCheckReturn:
 	b 0
 
 win_log_mapGX_arr:
-	.2byte 0x06A4
-	.2byte 0x06A4
-	.2byte 0x06A4
-	.2byte 0x06A4
-	.2byte 0x06A5
-	.2byte 0x06A5
-	.2byte 0x06A5
-	.2byte 0x06A5
-	.2byte 0x06A5
-	.2byte 0x06AF
-	.2byte 0x06AF
-	.2byte 0x06AF
-	.2byte 0x06AF
-	.2byte 0x06A6
-	.2byte 0x06A6
-	.2byte 0x06A6
-	.2byte 0x06A6
-	.2byte 0x06A6
-	.2byte 0x06A6
-	.2byte 0x06A7
-	.2byte 0x06A7
-	.2byte 0x06A7
-	.2byte 0x06A7
-	.2byte 0x06A7
-	.2byte 0x06A7
-	.2byte 0x06A7
-	.2byte 0x06A7
-	.2byte 0x06A7
-	.2byte 0x06A7
-	.2byte 0x06A7
-	.2byte 0x06A7
-	.2byte 0x06A7
-	.2byte 0x06A8
-	.2byte 0x06A8
-	.2byte 0x06A8
-	.2byte 0x06A8
-	.2byte 0x06A8
-	.2byte 0x06A8
-	.2byte 0x06A8
-	.2byte 0x06A8
-	.2byte 0x06A8
-	.2byte 0x06A8
-	.2byte 0x06B2
-	.2byte 0x06B2
-	.2byte 0x06B2
-	.2byte 0x06B2
-	.2byte 0x06B2
-	.2byte 0x06B2
-	.2byte 0x06A9
-	.2byte 0x06A9
-	.2byte 0x06A9
-	.2byte 0x06A9
-	.2byte 0x06A9
-	.2byte 0x06A9
-	.2byte 0x06A9
-	.2byte 0x06A9
-	.2byte 0x06A9
-	.2byte 0x06A9
-	.2byte 0x06B5
-	.2byte 0x06B5
-	.2byte 0x06B5
-	.2byte 0x06B8
-	.2byte 0x06B8
-	.2byte 0x06B8
-	.2byte 0x06B8
-	.2byte 0x06B8
-	.2byte 0x06B8
-	.2byte 0x06B8
-	.2byte 0x06B8
-	.2byte 0x06AA
-	.2byte 0x06AA
-	.2byte 0x06AA
-	.2byte 0x06AA
-	.2byte 0x06AA
-	.2byte 0x06AA
-	.2byte 0x06AA
-	.2byte 0x06AA
-	.2byte 0x06AB
-	.2byte 0x06AB
-	.2byte 0x06AB
-	.2byte 0x06AB
-	.2byte 0x06AB
-	.2byte 0x06AB
-	.2byte 0x06AB
-	.2byte 0x06AB
-	.2byte 0x06AB
-	.2byte 0x06AB
-	.2byte 0x06AB
-	.2byte 0x06AB
-	.2byte 0x06AB
-	.2byte 0x06AC
-	.2byte 0x06AC
-	.2byte 0x06AC
+	.byte 0x0
+	.byte 0x1
+	.byte 0x1
+	.byte 0x1
+	.byte 0x2
+	.byte 0x3
+	.byte 0x3
+	.byte 0x3
+	.byte 0x3
+	.byte 0x4
+	.byte 0x4
+	.byte 0x4
+	.byte 0x4
+	.byte 0x5
+	.byte 0x6
+	.byte 0x6
+	.byte 0x7
+	.byte 0x7
+	.byte 0x7
+	.byte 0x8
+	.byte 0x8
+	.byte 0x8
+	.byte 0x8
+	.byte 0x8
+	.byte 0x8
+	.byte 0x8
+	.byte 0x8
+	.byte 0x8
+	.byte 0x8
+	.byte 0x8
+	.byte 0x8
+	.byte 0x8
+	.byte 0x9
+	.byte 0xA
+	.byte 0xA
+	.byte 0xA
+	.byte 0xA
+	.byte 0xA
+	.byte 0xA
+	.byte 0xA
+	.byte 0xA
+	.byte 0xA
+	.byte 0xB
+	.byte 0xB
+	.byte 0xB
+	.byte 0xB
+	.byte 0xB
+	.byte 0xB
+	.byte 0xC
+	.byte 0xC
+	.byte 0xC
+	.byte 0xC
+	.byte 0xC
+	.byte 0xC
+	.byte 0xC
+	.byte 0xC
+	.byte 0xC
+	.byte 0xC
+	.byte 0xD
+	.byte 0xD
+	.byte 0xD
+	.byte 0xE
+	.byte 0xE
+	.byte 0xE
+	.byte 0xE
+	.byte 0xE
+	.byte 0xE
+	.byte 0xE
+	.byte 0xE
+	.byte 0xF
+	.byte 0xF
+	.byte 0xF
+	.byte 0xF
+	.byte 0xF
+	.byte 0x10
+	.byte 0x10
+	.byte 0x10
+	.byte 0x11
+	.byte 0x12
+	.byte 0x12
+	.byte 0x12
+	.byte 0x12
+	.byte 0x12
+	.byte 0x12
+	.byte 0x12
+	.byte 0x12
+	.byte 0x13
+	.byte 0x13
+	.byte 0x13
+	.byte 0x13
+	.byte 0x14
+	.byte 0x14
+	.byte 0x14
