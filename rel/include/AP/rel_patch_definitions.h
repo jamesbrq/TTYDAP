@@ -11,12 +11,14 @@ extern "C"
     void bMapGXArrInjectReturn();
     void bMapGXArrIncrement();
     void bMapGXArrIncrementReturn();
-    void bMapGXChSplit();
-    void bMapGXChSplitReturn();
+    void bMapGXArrFlagCheck();
+    void bMapGXArrFlagCheckReturn();
     void bWinLogArrInject();
     void bWinLogArrInjectReturn();
     void bWinLogArrIncrement();
     void bWinLogArrIncrementReturn();
+    void bWinLogArrFlagCheck();
+    void bWinLogArrFlagCheckReturn();
     void bChapterClearCheck();
     void bChapterClearCheckReturn();
     void bJohoyaSeqAddition();

@@ -123,7 +123,10 @@ const uint16_t GSWF_ARR[] = {
     3874,
 
     // Spawn General white
-    3880};
+    3880,
+    
+    // Visited Rogueport
+    6300};
 constexpr int32_t GSWF_ARR_SIZE = sizeof(GSWF_ARR) / sizeof(GSWF_ARR[0]);
 
 namespace mod::owr
@@ -275,6 +278,52 @@ namespace mod::owr
         return result;
     }
 
+    void setFirstVisitSW(const char* map)
+    {
+        if (strncmp(map, "gor", 3) == 0)
+            ttyd::swdrv::swSet(6300);
+        else if (strncmp(map, "tik", 3) == 0)
+            ttyd::swdrv::swSet(6301);
+        else if (strncmp(map, "hei", 3) == 0)
+            ttyd::swdrv::swSet(6302);
+        else if (strncmp(map, "nok", 3) == 0)
+            ttyd::swdrv::swSet(6303);
+        else if (strncmp(map, "gon", 3) == 0)
+            ttyd::swdrv::swSet(6304);
+        else if (strcmp(map, "win_06") == 0)
+            ttyd::swdrv::swSet(6305);
+        else if (strncmp(map, "mri", 3) == 0)
+            ttyd::swdrv::swSet(6306);
+        else if (strcmp(map, "win_04") == 0)
+            ttyd::swdrv::swSet(6307);
+        else if (strncmp(map, "tou", 3) == 0)
+            ttyd::swdrv::swSet(6308);
+        else if (strncmp(map, "usu", 3) == 0)
+            ttyd::swdrv::swSet(6309);
+        else if (strncmp(map, "gra", 3) == 0)
+            ttyd::swdrv::swSet(6310);
+        else if (strncmp(map, "jin", 3) == 0)
+            ttyd::swdrv::swSet(6311);
+        else if (strncmp(map, "muj", 3) == 0)
+            ttyd::swdrv::swSet(6312);
+        else if (strncmp(map, "dou", 3) == 0)
+            ttyd::swdrv::swSet(6313);
+        else if (strncmp(map, "eki", 3) == 0)
+            ttyd::swdrv::swSet(6314);
+        else if (strcmp(map, "pik_00") == 0 || strcmp(map, "pik_01") == 0)
+            ttyd::swdrv::swSet(6315);
+        else if (strcmp(map, "pik_02") == 0)
+            ttyd::swdrv::swSet(6316);
+        else if (strncmp(map, "bom", 3) == 0)
+            ttyd::swdrv::swSet(6317);
+        else if (strncmp(map, "moo", 3) == 0)
+            ttyd::swdrv::swSet(6318);
+        else if (strncmp(map, "aji", 3) == 0)
+            ttyd::swdrv::swSet(6319);
+        else if (strncmp(map, "las", 3) == 0)
+            ttyd::swdrv::swSet(6320);
+    }
+
     KEEP_FUNC void seqSetSeqHook(SeqIndex seq, const char *map, const char *bero)
     {
         // Make sure the map is valid
@@ -288,6 +337,8 @@ namespace mod::owr
         {
             return g_seqSetSeq_trampoline(seq, map, bero);
         }
+
+        setFirstVisitSW(map); // Set GSWF flag on first visit to a map
 
         // Give Zess T. the conctact lens upon entering westside
         if (strcmp(map, "gor_03") == 0)

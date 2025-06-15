@@ -161,21 +161,23 @@ namespace mod::owr
                                reinterpret_cast<void *>(bMapGXArrInjectReturn));
 
         // use ptr to win_log_mapGX_arr for sequence checks inside loop
-        writeIntWithCache(&main_mapGX[91], 0xA07C0000); // lhz r3,0(r28)
+        patch::writeBranchPair(&main_mapGX[92],
+                               reinterpret_cast<void *>(bMapGXArrFlagCheck),
+                               reinterpret_cast<void *>(bMapGXArrFlagCheckReturn));
+
+        writeIntWithCache(&main_mapGX[94], 0x2C030001); // cmpwi r3, 0x1
 
         // increment ptr to win_log_mapGX_arr at end of loop
         patch::writeBranchPair(&main_mapGX[235],
                                reinterpret_cast<void *>(bMapGXArrIncrement),
                                reinterpret_cast<void *>(bMapGXArrIncrementReturn));
 
-        patch::writeBranchPair(&main_mapGX[243],
-                               reinterpret_cast<void *>(bMapGXChSplit),
-                               reinterpret_cast<void *>(bMapGXChSplitReturn));
+        writeIntWithCache(&main_mapGX[239], 0x60000000); // NOP
 
         writeIntWithCache(&main_winGetMapTplName[3], 0x386006A5);  // li r3, 0x6A5 (GSW(1701))
         writeIntWithCache(&main_winGetMapTplName[8], 0x2C030001);  // cmpwi r3, 0x1
         writeIntWithCache(&main_winGetMapTplName[12], 0x386006A6); // li r3, 0x6A6 (GSW(1702))
-        writeIntWithCache(&main_winGetMapTplName[14], 0x2C030001); // cmpwi r3, 0x1main_winLogMain
+        writeIntWithCache(&main_winGetMapTplName[14], 0x2C030001); // cmpwi r3, 0x1
         writeIntWithCache(&main_winGetMapTplName[18], 0x386006A7); // li r3, 0x6A7 (GSW(1703))
         writeIntWithCache(&main_winGetMapTplName[20], 0x2C030001); // cmpwi r3, 0x1
         writeIntWithCache(&main_winGetMapTplName[24], 0x386006A8); // li r3, 0x6A8 (GSW(1704))
@@ -222,7 +224,11 @@ namespace mod::owr
                                reinterpret_cast<void *>(bWinLogArrInjectReturn));
 
         // use ptr to win_log_mapGX_arr for sequence checks inside loop
-        writeIntWithCache(&main_winLogMain[432], 0xA06A0000); // lhz r3,0(r10)
+        patch::writeBranchPair(&main_winLogMain[433],
+                               reinterpret_cast<void *>(bWinLogArrFlagCheck),
+                               reinterpret_cast<void *>(bWinLogArrFlagCheckReturn));
+
+        writeIntWithCache(&main_winLogMain[435], 0x2C030001); // cmpwi r3, 0x1
 
         // increment ptr to win_log_mapGX_arr at end of loop
         patch::writeBranchPair(&main_winLogMain[505],
