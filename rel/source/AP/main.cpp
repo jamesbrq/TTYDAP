@@ -154,25 +154,25 @@ EVT_DEFINE_USER_FUNC_KEEP(handleIntermissionSkip)
     {
         ttyd::swdrv::swByteSet(1713, 20);
         ttyd::evtmgr_cmd::evtSetValue(evt, evt->evtArguments[1], PTR("mri_00"));
-        ttyd::evtmgr_cmd::evtSetValue(evt, evt->evtArguments[2], PTR("e_bero"));
+        ttyd::evtmgr_cmd::evtSetValue(evt, evt->evtArguments[2], PTR("ne_bero"));
     }
     else if (!strcmp(_next_area, "tou"))
     {
         ttyd::swdrv::swByteSet(1703, 31);
-        ttyd::evtmgr_cmd::evtSetValue(evt, evt->evtArguments[1], PTR("tou_04"));
-        ttyd::evtmgr_cmd::evtSetValue(evt, evt->evtArguments[2], PTR("w_bero"));
+        ttyd::evtmgr_cmd::evtSetValue(evt, evt->evtArguments[1], PTR("tou_01"));
+        ttyd::evtmgr_cmd::evtSetValue(evt, evt->evtArguments[2], PTR("a_door_mon"));
     }
     else if (!strcmp(_next_area, "jin"))
     {
         ttyd::swdrv::swByteSet(1715, 17);
         ttyd::evtmgr_cmd::evtSetValue(evt, evt->evtArguments[1], PTR("jin_00"));
-        ttyd::evtmgr_cmd::evtSetValue(evt, evt->evtArguments[2], PTR("s_bero"));
+        ttyd::evtmgr_cmd::evtSetValue(evt, evt->evtArguments[2], PTR("n_bero_2"));
     }
     else if (!strcmp(_next_area, "muj"))
     {
         ttyd::swdrv::swByteSet(1717, 29);
-        ttyd::evtmgr_cmd::evtSetValue(evt, evt->evtArguments[1], PTR("muj_11"));
-        ttyd::evtmgr_cmd::evtSetValue(evt, evt->evtArguments[2], PTR("e_bero"));
+        ttyd::evtmgr_cmd::evtSetValue(evt, evt->evtArguments[1], PTR("muj_01"));
+        ttyd::evtmgr_cmd::evtSetValue(evt, evt->evtArguments[2], PTR("n_bero_02"));
     }
     else if (!strcmp(_next_area, "pik"))
     {
@@ -184,7 +184,7 @@ EVT_DEFINE_USER_FUNC_KEEP(handleIntermissionSkip)
     {
         ttyd::swdrv::swByteSet(1707, 21);
         ttyd::evtmgr_cmd::evtSetValue(evt, evt->evtArguments[1], PTR("aji_18"));
-        ttyd::evtmgr_cmd::evtSetValue(evt, evt->evtArguments[2], PTR("w_bero"));
+        ttyd::evtmgr_cmd::evtSetValue(evt, evt->evtArguments[2], PTR("e_bero"));
     }
 
     ttyd::evtmgr_cmd::evtSetValue(evt, evt->evtArguments[0], 1);

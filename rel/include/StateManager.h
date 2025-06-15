@@ -21,9 +21,9 @@ namespace mod::owr
         uint8_t startingFP;
         uint8_t startingBP;
         uint8_t runFill;
-        uint8_t fastTravel;
         uint8_t requiredStars[7];
         uint8_t tattlesanity;
+        uint8_t fastTravel;
     };
 
     static_assert(sizeof(APSettings) == 0x1C);

@@ -300,15 +300,15 @@ namespace mod::owr
             ttyd::swdrv::swSet(6308);
         else if (strncmp(map, "usu", 3) == 0)
             ttyd::swdrv::swSet(6309);
-        else if (strncmp(map, "gra", 3) == 0)
+        else if (strcmp(map, "gra_00") == 0)
             ttyd::swdrv::swSet(6310);
-        else if (strncmp(map, "jin", 3) == 0)
+        else if (strcmp(map, "gra_06") == 0)
             ttyd::swdrv::swSet(6311);
         else if (strncmp(map, "muj", 3) == 0)
             ttyd::swdrv::swSet(6312);
         else if (strncmp(map, "dou", 3) == 0)
             ttyd::swdrv::swSet(6313);
-        else if (strncmp(map, "eki", 3) == 0)
+        else if (strncmp(map, "hom", 3) == 0)
             ttyd::swdrv::swSet(6314);
         else if (strcmp(map, "pik_00") == 0 || strcmp(map, "pik_01") == 0)
             ttyd::swdrv::swSet(6315);
@@ -962,8 +962,9 @@ namespace mod::owr
             // We clear the flag for being registered for a match in ch.3 so we can re-register later
             ttyd::swdrv::swClear(2388);
 
-            // Also clear the flag for the champion match
-            ttyd::swdrv::swClear(2383);
+            // Also clear the flags for the champion match
+            ttyd::swdrv::swClear(2383); // Match reservation flag
+            ttyd::swdrv::swClear(2381); // Hallway escort flag
 
             // Set current pit floor to 0
             ttyd::swdrv::swByteSet(1321, 0);
