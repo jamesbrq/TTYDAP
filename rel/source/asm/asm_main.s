@@ -239,16 +239,31 @@ bShopFlagCheckReturn:
 	b 0
 
 bGreenZoneMaxInit:
+	lwz %r4, 0x1cc8(%r29)
+	cmpwi %r4, 0x1
+	bne bGreenZoneMaxInitNorm
 	lis %r4, 0x42CF
 	ori %r4, %r4, 0x0000
 	stw %r4, 0x18(%r31)
+	b bGreenZoneMaxInitEnd
+bGreenZoneMaxInitNorm:
+	stfs %f0, 0x18(%r31)
+bGreenZoneMaxInitEnd:
 	li %r4, 0x0
 bGreenZoneMaxInitReturn:
 	b 0
 
 bMonosiriItemCheck:
-	mr %r27, %r3
+	stwu %r1, -0x80(%r1)
+	mflr %r0
+	stw %r0, 0x84(%r1)
+	stmw %r3, 0x8(%r1)
 	bl monosiriItemCheck
+	lmw %r3, 0x8(%r1)
+	lwz %r0, 0x84(%r1)
+	mtlr %r0
+	addi %r1, %r1, 0x80
+	mr %r27, %r3
 bMonosiriItemCheckReturn:
 	b 0
 
