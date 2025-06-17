@@ -905,7 +905,7 @@ namespace mod
 
         tou_init_gans[1] = GSW(1703);
         tou_init_gans[3] = 4;
-        tou_init_gans[15] = 5;
+        tou_init_gans[15] = 16;
 
         tou_talk_gans[172] = GSW(1703);
         tou_talk_gans[173] = 4;
