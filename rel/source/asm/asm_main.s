@@ -37,6 +37,8 @@
 .global bGreenZoneMaxInitReturn
 .global bMonosiriItemCheck
 .global bMonosiriItemCheckReturn
+.global bMonosiriBucket
+.global bMonosiriBucketReturn
 
 # All of the global symbols in this file excluding win_log_mapGX_arr need to be used in at least one subrel, so they cannot be set to hidden
 
@@ -267,6 +269,16 @@ bMonosiriItemCheck:
 bMonosiriItemCheckReturn:
 	b 0
 
+bMonosiriBucket:
+	lis %r3, monosiriSWArr@ha
+	addi %r3, %r3, monosiriSWArr@l
+	add %r3, %r3, %r28
+	lhz %r3, 0x0(%r3)
+	bl swByteGet
+	lwz %r0, 0x0(%r26) #Original Instruction
+bMonosiriBucketReturn:
+	b 0
+
 win_log_mapGX_arr:
 	.byte 0x0
 	.byte 0x1
@@ -361,3 +373,13 @@ win_log_mapGX_arr:
 	.byte 0x14
 	.byte 0x14
 	.byte 0x14
+
+monosiriSWArr:
+	.2byte 0x6A4
+	.2byte 0x6AF
+	.2byte 0x6B1
+	.2byte 0x6A7
+	.2byte 0x6B5
+	.2byte 0x6AA
+	.2byte 0x6AB
+	.2byte 0x6AC

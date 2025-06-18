@@ -44,6 +44,8 @@ extern "C"
     void bGreenZoneMaxInitReturn();
     void bMonosiriItemCheck();
     void bMonosiriItemCheckReturn();
+    void bMonosiriBucket();
+    void bMonosiriBucketReturn();
     void checkShopFlag(uint32_t item, uint32_t index);
     void monosiriItemCheck(int unit_id);
 }

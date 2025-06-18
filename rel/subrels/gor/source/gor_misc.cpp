@@ -7,10 +7,12 @@
 #include "ttyd/evt_mario.h"
 #include "ttyd/evt_npc.h"
 #include "ttyd/evtmgr_cmd.h"
+#include "ttyd/gor_02.h"
 #include "ttyd/mario_pouch.h"
 
 #include <cstdint>
 
+using ttyd::gor_02::gor_follow;
 using namespace mod;
 using namespace ttyd;
 
@@ -29,6 +31,18 @@ extern int32_t gor_exchange_ret_tbl_no[];
 extern int32_t gor_exchange_ryokin_medal[];
 
 const char goombella[] = "\x83\x4C\x83\x6D\x82\xB6\x82\xA2";
+
+// Array of new story thresholds for each chapter
+uint32_t new_thresholds[8] = {
+    99, // Unused
+    8,  // Ch.1
+    11, // Ch.2
+    20, // Ch.3
+    10, // Ch.5
+    42, // Ch.6
+    16, // Ch.7
+    18  // Ch.8
+};
 
 EVT_DEFINE_USER_FUNC(checkChapterClears)
 {
@@ -102,4 +116,16 @@ void ApplyGorMiscPatches()
     gor_irai_init_func[106] = 0x2C030000; // cmpwi r3, 0x0
 
     patch::writeBranchBL(&gor_keijiban_data_make[11], reinterpret_cast<void *>(bJohoyaSeqAddition));
+
+    
+    for (int i = 0; i < 8; i++)
+    {
+        gor_follow[i].story_threshold = new_thresholds[i];
+    }
+
+    patch::writeBranchPair(&gor_monosiri_check[14],
+                           reinterpret_cast<void *>(bMonosiriBucket),
+                           reinterpret_cast<void *>(bMonosiriBucketReturn));
+
+    patch::writeIntWithCache(&gor_monosiri_check[16], 0x41800068); // blt +0x68
 }
