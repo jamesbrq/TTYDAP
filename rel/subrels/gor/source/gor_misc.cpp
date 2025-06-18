@@ -34,7 +34,7 @@ const char goombella[] = "\x83\x4C\x83\x6D\x82\xB6\x82\xA2";
 
 // Array of new story thresholds for each chapter
 uint32_t new_thresholds[8] = {
-    99, // Unused
+    1, // Blooper
     8,  // Ch.1
     11, // Ch.2
     20, // Ch.3
