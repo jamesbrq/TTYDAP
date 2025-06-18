@@ -1,13 +1,16 @@
 #include "subrel_gor.h"
 #include "evt_cmd.h"
+#include "OWR.h"
 #include "patch.h"
 #include "AP/rel_patch_definitions.h"
 #include "ttyd/evt_cam.h"
+#include "ttyd/evt_item.h"
 #include "ttyd/evt_map.h"
 #include "ttyd/evt_mario.h"
 #include "ttyd/evt_msg.h"
 #include "ttyd/evt_npc.h"
 #include "ttyd/evt_snd.h"
+#include "ttyd/evtmgr_cmd.h"
 
 #include <cstdint>
 
@@ -49,9 +52,17 @@ extern int32_t gor_epigraphy_map_after_stage4[];
 extern int32_t gor_epigraphy_map_after_stage5[];
 extern int32_t gor_epigraphy_map_after_stage6[];
 extern int32_t gor_kurihakase_after3minutes[];
+extern int32_t gor_evt_monosiri[];
 extern int32_t gor_02_init_evt[];
 
 // clang-format off
+EVT_DEFINE_USER_FUNC(getMonosiriItem)
+{
+	(void)isFirstCall;
+	evtmgr_cmd::evtSetValue(evt, evt->evtArguments[1], owr::gState->tattleItems[evtmgr_cmd::evtGetValue(evt, evt->evtArguments[0]) - 1]);
+	return 2;
+}
+
 EVT_BEGIN(kuribo4_talk_evt)
 	USER_FUNC(evt_msg::evt_msg_print, 0, PTR("gor_02_030_02"), 0, PTR("me"))
 	RETURN()
@@ -456,6 +467,20 @@ EVT_BEGIN(luigi_init_hook)
 	RUN_CHILD_EVT(luigi_init_evt)
 	RETURN()
 EVT_END()
+
+EVT_BEGIN(gor_evt_monosiri_item)
+	USER_FUNC(getMonosiriItem, LW(1), LW(3))
+	USER_FUNC(evt_mario::evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
+	USER_FUNC(evt_item::evt_item_entry, PTR("item01"), LW(3), LW(0), LW(1), LW(2), 16, -1, 0)
+	USER_FUNC(evt_item::evt_item_get_item, PTR("item01"))
+	WAIT_MSEC(800)
+	USER_FUNC(evt_mario::evt_mario_key_onoff,  1)
+	RETURN()
+EVT_END()
+
+EVT_BEGIN(gor_evt_monosiri_hook)
+	RUN_CHILD_EVT(gor_evt_monosiri_item)
+EVT_PATCH_END()
 // clang-format on
 
 void ApplyGor02Patches()
@@ -548,6 +573,9 @@ void ApplyGor02Patches()
 
     gor_kurihakase_after3minutes[136] = GSW(1706);
     gor_kurihakase_after3minutes[137] = 53;
+
+	patch::writePatch(&gor_evt_monosiri[18], gor_evt_monosiri_hook, sizeof(gor_evt_monosiri_hook));
+    gor_evt_monosiri[19] = 0;
 
     patch::writePatch(&gor_02_init_evt[0], gor_02_init_evt1_hook, sizeof(gor_02_init_evt1_hook));
     gor_02_init_evt[46] = GSW(1700);

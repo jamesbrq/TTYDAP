@@ -1,5 +1,5 @@
-instruction = 0x806190D0
-base = 0x80618EC8
+instruction = 0x8060796C
+base = 0x80607924
 
 offset = int((instruction - base) / 4)
 rel = 0x0001488c

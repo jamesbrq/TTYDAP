@@ -10,3 +10,4 @@ void ApplyGor04Patches();
 void ApplyGorMiscPatches();
 
 EVT_DECLARE_USER_FUNC(checkChapterClears, 1)
+EVT_DECLARE_USER_FUNC(getMonosiriItem, 2)
