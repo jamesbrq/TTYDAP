@@ -1,14 +1,15 @@
+#include "customWarp.h"
 #include "relmgr.h"
+#include "util.h"
 #include "visibility.h"
 #include <AP/rel_patch_definitions.h>
 #include <gc/OSModule.h>
 #include <gc/pad.h>
 #include <mod.h>
-#include "util.h"
-#include "customWarp.h"
 #include <ttyd/common_types.h>
 #include <ttyd/countdown.h>
 #include <ttyd/evt_bero.h>
+#include <ttyd/evt_lecture.h>
 #include <ttyd/evt_mario.h>
 #include <ttyd/evt_memcard.h>
 #include <ttyd/evt_msg.h>
@@ -16,9 +17,10 @@
 #include <ttyd/evt_pouch.h>
 #include <ttyd/evt_snd.h>
 #include <ttyd/evt_window.h>
-#include <ttyd/evt_lecture.h>
 #include <ttyd/evtmgr.h>
 #include <ttyd/evtmgr_cmd.h>
+#include <ttyd/fontmgr.h>
+#include <ttyd/gx.h>
 #include <ttyd/icondrv.h>
 #include <ttyd/mario.h>
 #include <ttyd/mario_motion.h>
@@ -33,18 +35,19 @@
 #include <ttyd/statuswindow.h>
 #include <ttyd/string.h>
 #include <ttyd/swdrv.h>
+#include <ttyd/system.h>
 #include <ttyd/win_log.h>
 #include <ttyd/win_main.h>
 #include <ttyd/win_root.h>
-#include <ttyd/fontmgr.h>
+#include <ttyd/windowdrv.h>
 
 #include "common.h"
 #include "OWR.h"
 #include "patch.h"
 
 #include <cstdint>
-#include <cstring>
 #include <cstdio>
+#include <cstring>
 
 using gc::pad::PadInput;
 using ttyd::common::ItemData;
@@ -133,6 +136,11 @@ namespace mod::owr
 {
     KEEP_VAR OWR *gSelf = nullptr;
     KEEP_VAR StateManager *gState = nullptr;
+
+    // Global variables for numeric window parameters
+    KEEP_VAR uint32_t g_numericMin = 0;
+    KEEP_VAR uint32_t g_numericMax = 99;
+    KEEP_VAR uint32_t g_numericInitial = 0;
 
     KEEP_VAR bool (*g_OSLink_trampoline)(OSModuleInfo *, void *) = nullptr;
     KEEP_VAR void (*gTrampoline_seq_logoMain)(SeqInfo *info) = nullptr;
@@ -265,6 +273,187 @@ namespace mod::owr
                 items[i] = 0;
             }
             memset(reinterpret_cast<void *>(length_pointer), 0, sizeof(uint32_t));
+        }
+    }
+
+    // Helper function to set numeric range
+    KEEP_FUNC void setNumericRange(uint32_t minVal, uint32_t maxVal, uint32_t initialVal)
+    {
+        g_numericMin = minVal;
+        g_numericMax = maxVal;
+        g_numericInitial = initialVal;
+    }
+
+    // Numeric window display function
+    KEEP_FUNC void numericWindow_Disp(ttyd::dispdrv::CameraId cameraId, Window *window)
+    {
+        // Only render for 2D camera
+        if (cameraId != ttyd::dispdrv::CameraId::k2d)
+        {
+            return;
+        }
+
+        MsgData *msgData = window->msgData->ptr;
+
+        // Set up fog (same as selectWindow_Disp)
+        ttyd::gx::GXSetFog(0, &unk_80429584, 0.0f, 0.0f, 0.0f, 0.0f);
+
+        // Get window alpha from subType
+        uint32_t alpha = window->subType & 0xFF;
+
+        // Set up color with alpha
+        uint32_t color = dat_804205fc;
+        color = (color & 0xFFFFFF00) | alpha;
+
+        // Get window dimensions
+        float x = window->x;
+        float y = window->y;
+        float width = window->width;
+        float height = window->height;
+
+        // Draw window frame
+        ttyd::windowdrv::windowDispGX_Waku_col(0, x, y, width, height, 30.0f, &color);
+
+        // Display the numeric value using msgDisp
+        ttyd::msgdrv::msgDisp(window->msgData, x + 40.0f, y - 25.0f, alpha);
+
+        // Calculate and update smooth cursor animation
+        float targetY = y - static_cast<float>(MSG_CURRENT_OPT(msgData) * 0x1F + 0x3A);
+        float currentY = MSG_BOTTOM_Y(msgData);
+        float newY = currentY + 0.3f * (targetY - currentY);
+        MSG_BOTTOM_Y(msgData) = newY;
+
+        // Draw selection indicator/cursor
+        float cursorPos[2] = {x + 2.0f, newY};
+        iconDispGxAlpha(cursorPos, 0x14, 0x1F8, alpha);
+    }
+
+    // Numeric window main function
+    KEEP_FUNC void numericWindow_Main(Window *window)
+    {
+        MsgData *msgData = window->msgData->ptr;
+
+        // Call msgMain like selectWindow_Main does
+        msgMain(window->msgData);
+
+        // Handle window state transitions
+        switch (window->windowType)
+        {
+            case 5: // Fade in
+                window->subType += 0x19;
+                if (window->subType >= 0xFF)
+                {
+                    window->subType = 0xFF;
+                    window->windowType = 1; // Switch to active state
+                }
+                break;
+
+            case 1:
+            { // Active input state
+                // Store current value to detect changes
+                uint32_t oldValue = MSG_CURRENT_VALUE(msgData);
+
+                // Use TTYD system functions for input
+                uint32_t buttonsHeld = ttyd::system::keyGetButton(gc::pad::PadId::CONTROLLER_ONE);
+                uint32_t buttonsTrg = ttyd::system::keyGetButtonTrg(gc::pad::PadId::CONTROLLER_ONE);
+                uint32_t buttonRep = ttyd::system::keyGetButtonRep(gc::pad::PadId::CONTROLLER_ONE);
+
+                // Also check directional input (handles analog stick as directional)
+                uint32_t dirTrg = ttyd::system::keyGetDirTrg(gc::pad::PadId::CONTROLLER_ONE);
+                uint32_t dirRep = ttyd::system::keyGetDirRep(gc::pad::PadId::CONTROLLER_ONE);
+
+                // Check for UP input (increase value) - D-Pad or analog stick
+                bool upPressed = (buttonsTrg & gc::pad::PadInput::PAD_DPAD_UP) || (dirTrg & gc::pad::PadInput::PAD_DPAD_UP);
+                bool upRepeating = (buttonRep & gc::pad::PadInput::PAD_DPAD_UP) || (dirRep & gc::pad::PadInput::PAD_DPAD_UP);
+
+                // Check for DOWN input (decrease value) - D-Pad or analog stick
+                bool downPressed =
+                    (buttonsTrg & gc::pad::PadInput::PAD_DPAD_DOWN) || (dirTrg & gc::pad::PadInput::PAD_DPAD_DOWN);
+                bool downRepeating =
+                    (buttonRep & gc::pad::PadInput::PAD_DPAD_DOWN) || (dirRep & gc::pad::PadInput::PAD_DPAD_DOWN);
+
+                // Handle UP input (increase value)
+                if (upPressed || upRepeating)
+                {
+                    if (MSG_CURRENT_VALUE(msgData) < MSG_MAX_VALUE(msgData))
+                    {
+                        MSG_CURRENT_VALUE(msgData)++;
+                        MSG_CURRENT_OPT(msgData) = static_cast<uint8_t>(MSG_CURRENT_VALUE(msgData));
+                    }
+                    else
+                    {
+                        // Wrap to minimum value
+                        MSG_CURRENT_VALUE(msgData) = MSG_MIN_VALUE(msgData);
+                        MSG_CURRENT_OPT(msgData) = static_cast<uint8_t>(MSG_CURRENT_VALUE(msgData));
+                    }
+                }
+
+                // Handle DOWN input (decrease value)
+                if (downPressed || downRepeating)
+                {
+                    if (MSG_CURRENT_VALUE(msgData) > MSG_MIN_VALUE(msgData))
+                    {
+                        MSG_CURRENT_VALUE(msgData)--;
+                        MSG_CURRENT_OPT(msgData) = static_cast<uint8_t>(MSG_CURRENT_VALUE(msgData));
+                    }
+                    else
+                    {
+                        // Wrap to maximum value
+                        MSG_CURRENT_VALUE(msgData) = MSG_MAX_VALUE(msgData);
+                        MSG_CURRENT_OPT(msgData) = static_cast<uint8_t>(MSG_CURRENT_VALUE(msgData));
+                    }
+                }
+
+                // Play sound if value changed
+                if (oldValue != MSG_CURRENT_VALUE(msgData))
+                {
+                    ttyd::pmario_sound::psndSFXOn(0x20005); // Selection move sound
+                }
+
+                // Handle A button (confirm)
+                if (buttonsTrg & gc::pad::PadInput::PAD_A)
+                {
+                    MSG_SELECTED_OPT(msgData) = MSG_CURRENT_OPT(msgData);
+                    window->windowType = 7; // Switch to exit state
+                    ttyd::pmario_sound::psndSFXOn(0x20013); // Confirm sound
+                }
+
+                // Handle B button (cancel)
+                if (buttonsTrg & gc::pad::PadInput::PAD_B)
+                {
+                    MSG_SELECTED_OPT(msgData) = 255; // Set to invalid to indicate cancel
+                    window->windowType = 7;          // Switch to exit state
+                    ttyd::pmario_sound::psndSFXOn(0x20012);              // Cancel sound
+                }
+                break;
+            }
+
+            case 7: // Fade out
+                if (window->subType == 0)
+                {
+                    window->windowType = 4; // Mark as complete
+                    window->flags &= ~0x2;  // Clear active flag
+                }
+                else
+                {
+                    window->subType -= 0x19;
+                    if (window->subType <= 0)
+                    {
+                        window->subType = 0;
+                    }
+                }
+                break;
+        }
+
+        // Add to display queue
+        if (window->windowType != 4)
+        {
+            float depth = 400.0f - static_cast<float>(window->subType);
+            ttyd::dispdrv::dispEntry(ttyd::dispdrv::CameraId::k2d,
+                                     0,
+                                     depth,
+                                     reinterpret_cast<ttyd::dispdrv::PFN_dispCallback>(numericWindow_Disp),
+                                     window);
         }
     }
 
