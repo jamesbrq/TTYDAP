@@ -8,12 +8,14 @@
 #include <ttyd/evtmgr.h>
 #include <ttyd/party.h>
 #include <ttyd/win_root.h>
+#include <ttyd/msgdrv.h>
 
 #include <cstdint>
 
 using namespace ttyd::seqdrv;
 using namespace ttyd::party;
 using namespace ttyd::evtmgr;
+using namespace ttyd::msgdrv;
 
 namespace mod::owr
 {
@@ -47,6 +49,12 @@ namespace mod::owr
     void SetMaxSP(int32_t star);
     int32_t WinItemMainHook(ttyd::win_root::WinPauseMenu *menu);
     int32_t WinLogMainHook(ttyd::win_root::WinPauseMenu *menu);
+    void numericWindow_Disp(Window *window);
+    void numericWindow_Main(Window *window);
+    void setNumericRange(uint32_t minVal, uint32_t maxVal, uint32_t initialVal);
+    int32_t msgWindow_Entry_Hook(const char *msgText, int32_t unused, int32_t windowType);
+
+    EVT_DECLARE_USER_FUNC(evt_msg_numeric, 4);
 
     extern bool (*g_OSLink_trampoline)(OSModuleInfo *, void *);
     extern void (*g_seqSetSeq_trampoline)(SeqIndex seq, const char *map, const char *bero);
@@ -59,6 +67,7 @@ namespace mod::owr
     extern void (*g_pouchGetStarstone_trampoline)(int32_t);
     extern int32_t (*g_winItemMain_trampoline)(ttyd::win_root::WinPauseMenu *menu);
     extern int32_t (*g_winLogMain_trampoline)(ttyd::win_root::WinPauseMenu *menu);
+    extern int32_t (*g_msgWindow_Entry_trampoline)(const char *, int32_t, int32_t);
 
     extern const char *goombellaName;
     extern const char *goombellaDescription;
