@@ -7,6 +7,7 @@
 #include "ttyd/evt_party.h"
 #include "ttyd/evtmgr_cmd.h"
 #include "ttyd/mario_pouch.h"
+#include "ttyd/msgdrv.h"
 #include "ttyd/seq_logo.h"
 #include "ttyd/seq_mapchange.h"
 #include "ttyd/seqdrv.h"
@@ -521,7 +522,7 @@ namespace mod::owr
         g_OSLink_trampoline = patch::hookFunction(OSLink, OSLinkHook);
         gTrampoline_seq_logoMain = patch::hookFunction(seq_logo::seq_logoMain, logoSkip);
         g_seqSetSeq_trampoline = patch::hookFunction(seqdrv::seqSetSeq, seqSetSeqHook);
-        g_msgSearch_trampoline = patch::hookFunction(msgSearch, msgSearchHook);
+        g_msgSearch_trampoline = patch::hookFunction(msgdrv::msgSearch, msgSearchHook);
         g_pouchGetItem_trampoline = patch::hookFunction(mario_pouch::pouchGetItem, pouchGetItemHook);
         g_partySetForceMove_trampoline = patch::hookFunction(party::partySetForceMove, partySetForceMoveHook);
         g_evt_mario_set_pose_trampoline = patch::hookFunction(evt_mario::evt_mario_set_pose, evtMarioSetPoseHook);
@@ -529,7 +530,6 @@ namespace mod::owr
         g_pouchGetStarstone_trampoline = patch::hookFunction(mario_pouch::pouchGetStarStone, SetMaxSP);
         g_winItemMain_trampoline = patch::hookFunction(win_item::winItemMain, WinItemMainHook);
         g_winLogMain_trampoline = patch::hookFunction(win_log::main_winLogMain, WinLogMainHook);
-        g_msgWindow_Entry_trampoline = patch::hookFunction(msgdrv::msgWindow_Entry, msgWindow_Entry_Hook);
 
         // Hook gaugeDisp with a standard branch since the original function does not need to be called
         patch::writeBranch(statuswindow::gaugeDisp, DisplayStarPowerOrbs);

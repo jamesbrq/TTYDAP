@@ -1,15 +1,14 @@
-#include "customWarp.h"
 #include "relmgr.h"
-#include "util.h"
 #include "visibility.h"
 #include <AP/rel_patch_definitions.h>
 #include <gc/OSModule.h>
 #include <gc/pad.h>
 #include <mod.h>
+#include "util.h"
+#include "customWarp.h"
 #include <ttyd/common_types.h>
 #include <ttyd/countdown.h>
 #include <ttyd/evt_bero.h>
-#include <ttyd/evt_lecture.h>
 #include <ttyd/evt_mario.h>
 #include <ttyd/evt_memcard.h>
 #include <ttyd/evt_msg.h>
@@ -17,16 +16,16 @@
 #include <ttyd/evt_pouch.h>
 #include <ttyd/evt_snd.h>
 #include <ttyd/evt_window.h>
+#include <ttyd/evt_lecture.h>
 #include <ttyd/evtmgr.h>
 #include <ttyd/evtmgr_cmd.h>
-#include <ttyd/fontmgr.h>
-#include <ttyd/gx.h>
 #include <ttyd/icondrv.h>
 #include <ttyd/mario.h>
 #include <ttyd/mario_motion.h>
 #include <ttyd/mario_party.h>
 #include <ttyd/mario_pouch.h>
 #include <ttyd/mariost.h>
+#include <ttyd/msgdrv.h>
 #include <ttyd/party.h>
 #include <ttyd/pmario_sound.h>
 #include <ttyd/seq_mapchange.h>
@@ -34,19 +33,18 @@
 #include <ttyd/statuswindow.h>
 #include <ttyd/string.h>
 #include <ttyd/swdrv.h>
-#include <ttyd/system.h>
 #include <ttyd/win_log.h>
 #include <ttyd/win_main.h>
 #include <ttyd/win_root.h>
-#include <ttyd/windowdrv.h>
+#include <ttyd/fontmgr.h>
 
 #include "common.h"
 #include "OWR.h"
 #include "patch.h"
 
 #include <cstdint>
-#include <cstdio>
 #include <cstring>
+#include <cstdio>
 
 using gc::pad::PadInput;
 using ttyd::common::ItemData;
@@ -136,11 +134,6 @@ namespace mod::owr
     KEEP_VAR OWR *gSelf = nullptr;
     KEEP_VAR StateManager *gState = nullptr;
 
-    // Global variables for numeric window parameters
-    KEEP_VAR uint32_t g_numericMin = 0;
-    KEEP_VAR uint32_t g_numericMax = 99;
-    KEEP_VAR uint32_t g_numericInitial = 0;
-
     KEEP_VAR bool (*g_OSLink_trampoline)(OSModuleInfo *, void *) = nullptr;
     KEEP_VAR void (*gTrampoline_seq_logoMain)(SeqInfo *info) = nullptr;
     KEEP_VAR void (*g_seqSetSeq_trampoline)(SeqIndex seq, const char *map, const char *bero) = nullptr;
@@ -152,7 +145,6 @@ namespace mod::owr
     KEEP_VAR void (*g_pouchGetStarstone_trampoline)(int32_t) = nullptr;
     KEEP_VAR int32_t (*g_winItemMain_trampoline)(ttyd::win_root::WinPauseMenu *menu) = nullptr;
     KEEP_VAR int32_t (*g_winLogMain_trampoline)(ttyd::win_root::WinPauseMenu *menu) = nullptr;
-    KEEP_VAR int32_t (*g_msgWindow_Entry_trampoline)(const char *, int32_t, int32_t) = nullptr;
 
     void OWR::SequenceInit()
     {
@@ -273,270 +265,6 @@ namespace mod::owr
                 items[i] = 0;
             }
             memset(reinterpret_cast<void *>(length_pointer), 0, sizeof(uint32_t));
-        }
-    }
-
-    // Hooked msgWindow_Entry function
-    KEEP_FUNC int32_t msgWindow_Entry_Hook(const char *msgText, int32_t unused, int32_t windowType)
-    {
-        // Check if this is our numeric window type
-        if (windowType == 6)
-        {
-            // Call original function first to set up basic window
-            int32_t windowId = g_msgWindow_Entry_trampoline(msgText, unused, 5); // Use type 5 as base
-
-            // Get window pointer and modify for numeric input
-            Window *window = ttyd::windowdrv::windowGetPointer(windowId);
-            MsgData *msgData = window->msgData->ptr;
-
-            // Override the main function
-            window->mainFunc = numericWindow_Main;
-
-            // Set up numeric window dimensions (smaller than selection window)
-            uint16_t msgWidth = MSG_WIDTH(msgData);
-            if (msgWidth < 150)
-                msgWidth = 150; // Minimum width
-
-            float halfWidth = static_cast<float>(-msgWidth) / 2.0f;
-            window->x = halfWidth;
-            window->width = static_cast<float>(msgWidth);
-            window->height = 80.0f; // Fixed height for numeric input
-
-            // Initialize numeric values
-            MSG_MIN_VALUE(msgData) = g_numericMin;
-            MSG_MAX_VALUE(msgData) = g_numericMax;
-            MSG_CURRENT_VALUE(msgData) = g_numericInitial;
-            MSG_CURRENT_OPT(msgData) = static_cast<uint8_t>(g_numericInitial);
-            MSG_SELECTED_OPT(msgData) = static_cast<uint8_t>(g_numericInitial);
-
-            // Calculate initial cursor position
-            float centerY = window->y - static_cast<float>(g_numericInitial * 0x1F + 0x3A);
-            MSG_BOTTOM_Y(msgData) = centerY;
-
-            return windowId;
-        }
-
-        // Not our window type, call original function
-        return g_msgWindow_Entry_trampoline(msgText, unused, windowType);
-    }
-
-    // Helper function to set numeric range
-    KEEP_FUNC void setNumericRange(uint32_t minVal, uint32_t maxVal, uint32_t initialVal)
-    {
-        g_numericMin = minVal;
-        g_numericMax = maxVal;
-        g_numericInitial = initialVal;
-    }
-
-    // Numeric window display function
-    KEEP_FUNC void numericWindow_Disp( Window *window)
-    {
-        if (!window || !window->msgData || !window->msgData->ptr)
-        {
-            return;
-        }
-
-        MsgData *msgData = window->msgData->ptr;
-
-        // Set up fog (same as selectWindow_Disp)
-        ttyd::gx::GXSetFog(0, &unk_80429584, 0.0f, 0.0f, 0.0f, 0.0f);
-
-        // Get window alpha from subType
-        uint32_t alpha = window->subType & 0xFF;
-        uint32_t color = (dat_804205fc & 0xFFFFFF00) | alpha;
-
-        // Get window dimensions
-        float x = window->x;
-        float y = window->y;
-        float width = window->width;
-        float height = window->height;
-
-        // Draw window frame
-        ttyd::windowdrv::windowDispGX_Waku_col(0, x, y, width, height, 30.0f, &color);
-
-        // FIXED: Create and display the numeric text dynamically
-        char numericText[128];
-        uint32_t currentVal = MSG_CURRENT_VALUE(msgData);
-        uint32_t minVal = MSG_MIN_VALUE(msgData);
-        uint32_t maxVal = MSG_MAX_VALUE(msgData);
-
-        createNumericMessageText(numericText, sizeof(numericText), currentVal, minVal, maxVal);
-
-        // Create temporary msgData for the numeric display
-        // This is a hack - we'll use the DrawString function instead
-
-        // Draw static text
-        OWR::DrawString("Enter value:", x + 20.0f, y - 20.0f, 0xFFFFFFFF, 1.0f);
-
-        // Draw the current number prominently
-        char numberStr[32];
-        snprintf(numberStr, sizeof(numberStr), "%d", currentVal);
-        OWR::DrawString(numberStr, x + width / 2 - 20.0f, y - 50.0f, 0xFFFF00FF, 1.5f); // Yellow, larger
-
-        // Draw range info
-        char rangeStr[64];
-        snprintf(rangeStr, sizeof(rangeStr), "(%d - %d)", minVal, maxVal);
-        OWR::DrawString(rangeStr, x + 20.0f, y - 75.0f, 0xCCCCCCFF, 0.8f);
-
-        // Draw controls hint
-        OWR::DrawString("D-Pad: Change, A: OK, B: Cancel", x + 10.0f, y - 95.0f, 0xAAAAAAAA, 0.7f);
-
-        // Calculate and update smooth cursor animation (optional visual effect)
-        float targetY = y - 50.0f; // Position near the number
-        float currentY = MSG_BOTTOM_Y(msgData);
-        float newY = currentY + 0.3f * (targetY - currentY);
-        MSG_BOTTOM_Y(msgData) = newY;
-
-        // Draw selection indicator/cursor next to the number
-        float cursorPos[2] = {x + width / 2 - 40.0f, newY};
-        iconDispGxAlpha(cursorPos, 0x14, 0x1F8, alpha);
-    }
-
-    KEEP_FUNC void numericWindow_Main(Window *window)
-    {
-        if (!window || !window->msgData || !window->msgData->ptr)
-        {
-            printf("ERROR: Invalid window data in numericWindow_Main_Fixed!\n");
-            return;
-        }
-
-        MsgData *msgData = window->msgData->ptr;
-
-        // Call msgMain like selectWindow_Main does
-        msgMain(window->msgData);
-
-        printf("Window state: %d, subType: %d\n", window->windowType, window->subType);
-
-        switch (window->windowType)
-        {
-            case 5: // Fade in
-                window->subType += 0x19;
-                if (window->subType >= 0xFF)
-                {
-                    window->subType = 0xFF;
-                    window->windowType = 1; // Switch to active state
-                    printf("Window fade in complete, switching to active\n");
-                }
-                break;
-
-            case 1:
-            { // Active input state
-                printf("Window active, current value: %d\n", MSG_CURRENT_VALUE(msgData));
-
-                // Store current value to detect changes
-                uint32_t oldValue = MSG_CURRENT_VALUE(msgData);
-
-                // Get input
-                uint32_t buttonsTrg = ttyd::system::keyGetButtonTrg(gc::pad::PadId::CONTROLLER_ONE);
-                uint32_t buttonRep = ttyd::system::keyGetButtonRep(gc::pad::PadId::CONTROLLER_ONE);
-                uint32_t dirTrg = ttyd::system::keyGetDirTrg(gc::pad::PadId::CONTROLLER_ONE);
-                uint32_t dirRep = ttyd::system::keyGetDirRep(gc::pad::PadId::CONTROLLER_ONE);
-
-                printf("Input: buttonsTrg=0x%X, dirTrg=0x%X\n", buttonsTrg, dirTrg);
-
-                // Check for UP input
-                bool upPressed = (buttonsTrg & gc::pad::PadInput::PAD_DPAD_UP) || (dirTrg & gc::pad::PadInput::PAD_DPAD_UP);
-                bool upRepeating = (buttonRep & gc::pad::PadInput::PAD_DPAD_UP) || (dirRep & gc::pad::PadInput::PAD_DPAD_UP);
-
-                // Check for DOWN input
-                bool downPressed =
-                    (buttonsTrg & gc::pad::PadInput::PAD_DPAD_DOWN) || (dirTrg & gc::pad::PadInput::PAD_DPAD_DOWN);
-                bool downRepeating =
-                    (buttonRep & gc::pad::PadInput::PAD_DPAD_DOWN) || (dirRep & gc::pad::PadInput::PAD_DPAD_DOWN);
-
-                // Handle UP input
-                if (upPressed || upRepeating)
-                {
-                    printf("UP pressed\n");
-                    if (MSG_CURRENT_VALUE(msgData) < MSG_MAX_VALUE(msgData))
-                    {
-                        MSG_CURRENT_VALUE(msgData)++;
-                    }
-                    else
-                    {
-                        MSG_CURRENT_VALUE(msgData) = MSG_MIN_VALUE(msgData); // Wrap to minimum
-                    }
-                    MSG_CURRENT_OPT(msgData) = static_cast<uint8_t>(MSG_CURRENT_VALUE(msgData));
-                }
-
-                // Handle DOWN input
-                if (downPressed || downRepeating)
-                {
-                    printf("DOWN pressed\n");
-                    if (MSG_CURRENT_VALUE(msgData) > MSG_MIN_VALUE(msgData))
-                    {
-                        MSG_CURRENT_VALUE(msgData)--;
-                    }
-                    else
-                    {
-                        MSG_CURRENT_VALUE(msgData) = MSG_MAX_VALUE(msgData); // Wrap to maximum
-                    }
-                    MSG_CURRENT_OPT(msgData) = static_cast<uint8_t>(MSG_CURRENT_VALUE(msgData));
-                }
-
-                // Play sound if value changed
-                if (oldValue != MSG_CURRENT_VALUE(msgData))
-                {
-                    printf("Value changed from %d to %d\n", oldValue, MSG_CURRENT_VALUE(msgData));
-                    ttyd::pmario_sound::psndSFXOn(0x20005);
-                }
-
-                // Handle A button (confirm)
-                if (buttonsTrg & gc::pad::PadInput::PAD_A)
-                {
-                    printf("A button pressed - confirming with value %d\n", MSG_CURRENT_VALUE(msgData));
-                    MSG_SELECTED_OPT(msgData) = MSG_CURRENT_OPT(msgData);
-                    window->windowType = 7; // Switch to exit state
-                    ttyd::pmario_sound::psndSFXOn(0x20013);
-                }
-
-                // Handle B button (cancel)
-                if (buttonsTrg & gc::pad::PadInput::PAD_B)
-                {
-                    printf("B button pressed - cancelling\n");
-                    MSG_SELECTED_OPT(msgData) = 255; // Invalid to indicate cancel
-                    window->windowType = 7;          // Switch to exit state
-                    ttyd::pmario_sound::psndSFXOn(0x20012);
-                }
-                break;
-            }
-
-            case 7: // Fade out
-                printf("Window fading out, subType: %d\n", window->subType);
-                if (window->subType <= 0)
-                {
-                    printf("Fade out complete, marking as complete\n");
-                    window->windowType = 4; // Mark as complete
-                    window->flags &= ~0x2;  // Clear active flag
-                }
-                else
-                {
-                    window->subType -= 0x19;
-                    if (window->subType <= 0)
-                    {
-                        window->subType = 0;
-                    }
-                }
-                break;
-
-            case 4: // Complete
-                printf("Window marked as complete\n");
-                break;
-
-            default:
-                printf("Unknown window state: %d\n", window->windowType);
-                break;
-        }
-
-        // Add to display queue
-        if (window->windowType != 4)
-        {
-            float depth = 400.0f - static_cast<float>(window->subType);
-            ttyd::dispdrv::dispEntry(ttyd::dispdrv::CameraId::k2d,
-                                     0,
-                                     depth,
-                                     reinterpret_cast<ttyd::dispdrv::PFN_dispCallback>(numericWindow_Disp),
-                                     window);
         }
     }
 
@@ -1323,7 +1051,7 @@ namespace mod::owr
         else
         {
             // memory location points to key used to find the title of the location on the journal map
-            const char *location_name = msgSearch(ttyd::win_log::main_win_log_name);
+            const char *location_name = ttyd::msgdrv::msgSearch(ttyd::win_log::main_win_log_name);
             snprintf(warpTextBuffer, sizeof(warpTextBuffer), "<system>\n<p>\nFast travel to\n%s?\n<o>", location_name);
         }
 
@@ -1369,68 +1097,6 @@ namespace mod::owr
         RETURN()
     EVT_END()
     // clang-format on
-
-    EVT_DEFINE_USER_FUNC_KEEP(evt_msg_numeric)
-    {
-        using namespace ttyd::evtmgr_cmd;
-
-        if (isFirstCall)
-        {
-            // Parameters: message, min, max, initial
-            const char *msgPtr = reinterpret_cast<const char *>(evtGetValue(evt, evt->evtArguments[0]));
-            uint32_t minValue = static_cast<uint32_t>(evtGetValue(evt, evt->evtArguments[1]));
-            uint32_t maxValue = static_cast<uint32_t>(evtGetValue(evt, evt->evtArguments[2]));
-            uint32_t initialValue = static_cast<uint32_t>(evtGetValue(evt, evt->evtArguments[3]));
-
-            // Set up numeric window using your existing functions
-            mod::owr::setNumericRange(minValue, maxValue, initialValue);
-
-            // Create numeric input window (type 6) using your hook
-            int32_t windowId = mod::owr::msgWindow_Entry_Hook(msgPtr, 0, 6);
-
-            // Store window ID in the same field as evt_msg_print
-            evt->wActiveMsgWindowId = windowId;
-
-            return 0; // Continue execution next frame
-        }
-
-        // Check if window is still active
-        if (ttyd::windowdrv::windowCheckID(evt->wActiveMsgWindowId) != 0)
-        {
-            return 0; // Still active, continue waiting
-        }
-
-        // Window closed - get the final selected value
-        Window *window = ttyd::windowdrv::windowGetPointer(evt->wActiveMsgWindowId);
-        if (window && window->msgData && window->msgData->ptr)
-        {
-            ttyd::msgdrv::MsgData *msgData = window->msgData->ptr;
-
-            int32_t result;
-            if (MSG_SELECTED_OPT(msgData) == 255)
-            {
-                result = -1; // Cancelled
-            }
-            else
-            {
-                result = static_cast<int32_t>(MSG_CURRENT_VALUE(msgData));
-            }
-
-            // Store result in LW(0) - using lwData array
-            evt->lwData[0] = result;
-        }
-        else
-        {
-            // Fallback if window data is invalid
-            evt->lwData[0] = -1;
-        }
-
-        // Clean up - window should auto-delete but ensure it's gone
-        ttyd::windowdrv::windowDeleteID(evt->wActiveMsgWindowId);
-        evt->wActiveMsgWindowId = 0;
-
-        return 2; // Function completed
-    }
 
     // Hook item menu update function to handle interactions with added key items.
     KEEP_FUNC int32_t WinItemMainHook(ttyd::win_root::WinPauseMenu *menu)

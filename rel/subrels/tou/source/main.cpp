@@ -1,6 +1,5 @@
 #include "AP/rel_patch_definitions.h"
 #include "evt_cmd.h"
-#include "OWR.h"
 #include "patch.h"
 #include "subrel_tou.h"
 #include "ttyd/evt_bero.h"
@@ -120,7 +119,6 @@ extern int32_t tou_init_gans[];
 extern int32_t tou_talk_gans[];
 extern int32_t tou_init_kinoshikowa[];
 extern int32_t tou_talk_kinoshikowa[];
-extern int32_t tou_npcEnt_05[];
 extern int32_t tou_evt_sensyu[];
 extern int32_t tou_evt_sensyu2[];
 extern int32_t tou_evt_nozoki[];
@@ -446,16 +444,6 @@ EVT_BEGIN(tou_05_init_evt_hook3)
 	RUN_CHILD_EVT(tou_05_init_evt_evt3)
 	GOTO(&tou_05_init_evt[171])
 EVT_PATCH_END()
-
-EVT_BEGIN(tou_05_talk_gans_evt)
-    IF_SMALL_EQUAL(GSW(1703), 4)
-        RUN_CHILD_EVT(&tou_talk_gans)
-        RETURN()
-    END_IF()
-    USER_FUNC(evt_mario::evt_mario_key_onoff, 0)
-    USER_FUNC(mod::owr::evt_msg_numeric, PTR("Numeric input test"), 1, 10, 5)
-    RETURN()
-EVT_END()
 // clang-format on
 
 namespace mod
@@ -927,8 +915,6 @@ namespace mod
 
         tou_talk_kinoshikowa[373] = GSW(1703);
         tou_talk_kinoshikowa[375] = 20;
-
-        patch::writeIntWithCache(&tou_npcEnt_05[5], reinterpret_cast<uint32_t>(&tou_05_talk_gans_evt));
 
         tou_evt_sensyu2[194] = GSW(1703);
         tou_evt_sensyu2[195] = 5;
