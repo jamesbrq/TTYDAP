@@ -62,6 +62,7 @@ using namespace ttyd::evt_msg;
 using namespace ttyd::evt_pouch;
 using namespace ttyd::evt_lecture;
 using namespace ttyd::seqdrv;
+using namespace ttyd::msgdrv;
 using namespace mod::custom_warp;
 
 char warpTextBuffer[64];
@@ -133,6 +134,7 @@ namespace mod::owr
 {
     KEEP_VAR OWR *gSelf = nullptr;
     KEEP_VAR StateManager *gState = nullptr;
+    KEEP_VAR NumSelectWindow *g_active_numselect_window = nullptr;
 
     KEEP_VAR bool (*g_OSLink_trampoline)(OSModuleInfo *, void *) = nullptr;
     KEEP_VAR void (*gTrampoline_seq_logoMain)(SeqInfo *info) = nullptr;
@@ -145,6 +147,8 @@ namespace mod::owr
     KEEP_VAR void (*g_pouchGetStarstone_trampoline)(int32_t) = nullptr;
     KEEP_VAR int32_t (*g_winItemMain_trampoline)(ttyd::win_root::WinPauseMenu *menu) = nullptr;
     KEEP_VAR int32_t (*g_winLogMain_trampoline)(ttyd::win_root::WinPauseMenu *menu) = nullptr;
+    KEEP_VAR void (*g_msgAnalize_trampoline)(MessageData *msg_data, const char *text) = nullptr;
+    KEEP_VAR void (*g_msgMain_trampoline)(MessageData *msg_data) = nullptr;
 
     void OWR::SequenceInit()
     {
@@ -266,6 +270,84 @@ namespace mod::owr
             }
             memset(reinterpret_cast<void *>(length_pointer), 0, sizeof(uint32_t));
         }
+    }
+
+    // msgAnalize hook - injects NUMSELECT commands
+    void MsgAnalizeHook(MessageData *msg_data, const char *text)
+    {
+        // Quick check - if no numselect tags, just call original
+        if (!strstr(text, "<numselect"))
+        {
+            return g_msgAnalize_trampoline(msg_data, text);
+        }
+
+        // Call original first to process normal text
+        g_msgAnalize_trampoline(msg_data, text);
+
+        // Post-process: find numselect tags and inject commands
+        TextCommand *commands = (TextCommand *)((char *)msg_data + 0x5C);
+
+        const char *pos = text;
+        while ((pos = strstr(pos, "<numselect")) != nullptr)
+        {
+            const char *end = strchr(pos, '>');
+            if (!end)
+                break;
+
+            // Parse parameters: <numselect min,max,initial>
+            int min_val = 0, max_val = 99, initial_val = 0;
+            sscanf(pos + 10, " %d,%d,%d", &min_val, &max_val, &initial_val);
+
+            // Calculate insertion point (simplified - just append for now)
+            int insert_pos = msg_data->command_count;
+
+            // Make room and insert NUMSELECT command
+            if (insert_pos < 1000)
+            { // Safety check
+                memmove(&commands[insert_pos + 1],
+                        &commands[insert_pos],
+                        (msg_data->command_count - insert_pos) * sizeof(TextCommand));
+
+                commands[insert_pos].flags = 0;
+                commands[insert_pos].type = 0xFFF0; // NUMSELECT command type
+                commands[insert_pos].char_or_param1 = (uint16_t)min_val;
+                commands[insert_pos].param2 = (int16_t)max_val;
+                commands[insert_pos].param3 = (int16_t)initial_val;
+                commands[insert_pos].timing = 0;
+                commands[insert_pos].scale = 1.0f;
+                commands[insert_pos].shadow_offset = 0.0f;
+
+                msg_data->command_count++;
+            }
+            pos = end + 1;
+        }
+    }
+
+    // msgMain hook - handles NUMSELECT commands and window updates
+    void MsgMainHook(MessageData *msg_data_ptr)
+    {
+        MessageData *msg_data = (MessageData *)msg_data_ptr;
+
+        // Check for NUMSELECT command
+        if (!g_active_numselect_window && msg_data->current_command_index < msg_data->command_count)
+        {
+            TextCommand *cmd = &msg_data->commands[msg_data->current_command_index];
+            if (cmd->type == 0xFFF0)
+            { // NUMSELECT command
+                createNumSelectWindow(msg_data, cmd);
+                return;
+            }
+        }
+
+        // Update active numselect window
+        if (g_active_numselect_window)
+        {
+            numSelectWindow_Main(g_active_numselect_window);
+            return;
+        }
+
+        // Normal message processing
+        g_msgMain_trampoline(msg_data_ptr);
     }
 
     KEEP_FUNC bool OSLinkHook(OSModuleInfo *new_module, void *bss)
@@ -1051,7 +1133,7 @@ namespace mod::owr
         else
         {
             // memory location points to key used to find the title of the location on the journal map
-            const char *location_name = ttyd::msgdrv::msgSearch(ttyd::win_log::main_win_log_name);
+            const char *location_name = msgSearch(ttyd::win_log::main_win_log_name);
             snprintf(warpTextBuffer, sizeof(warpTextBuffer), "<system>\n<p>\nFast travel to\n%s?\n<o>", location_name);
         }
 
