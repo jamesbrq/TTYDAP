@@ -531,7 +531,7 @@ namespace mod::owr
         g_winItemMain_trampoline = patch::hookFunction(win_item::winItemMain, WinItemMainHook);
         g_winLogMain_trampoline = patch::hookFunction(win_log::main_winLogMain, WinLogMainHook);
         g_msgAnalize_trampoline = patch::hookFunction(msgdrv::msgAnalize, MsgAnalizeHook);
-        g_msgMain_trampoline = patch::hookFunction(msgdrv::msgMain, MsgMainHook);
+        g_msgWindow_Entry_trampoline = patch::hookFunction(msgdrv::msgWindow_Entry, msgWindow_Entry_Hook);
 
         // Hook gaugeDisp with a standard branch since the original function does not need to be called
         patch::writeBranch(statuswindow::gaugeDisp, DisplayStarPowerOrbs);

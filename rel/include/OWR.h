@@ -11,6 +11,7 @@
 
 #include <cstdint>
 #include <ttyd/msgdrv.h>
+#include <ttyd/windowdrv.h>
 
 using namespace ttyd::seqdrv;
 using namespace ttyd::party;
@@ -34,9 +35,19 @@ namespace mod::owr
         StateManager state;
     };
 
+    struct NumericInputData
+    {
+        bool active;
+        int initialValue;
+        int currentValue;
+        int minValue;
+        int maxValue;
+        int stepSize;
+    };
+
     extern OWR *gSelf;
     extern StateManager *gState;
-    extern NumSelectWindow *g_active_numselect_window;
+    extern NumericInputData g_numericInput;
 
     bool OSLinkHook(OSModuleInfo *new_module, void *bss);
     void seqSetSeqHook(SeqIndex seq, const char *map, const char *bero);
@@ -51,22 +62,24 @@ namespace mod::owr
     int32_t WinItemMainHook(ttyd::win_root::WinPauseMenu *menu);
     int32_t WinLogMainHook(ttyd::win_root::WinPauseMenu *menu);
     void MsgAnalizeHook(MessageData *msg_data_ptr, const char *text);
-    void MsgMainHook(MessageData *msg_data_ptr);
+    int msgWindow_Entry_Hook(const char *message, int unk1, int windowType);
+    int numericWindow_Main(ttyd::windowdrv::Window *window);
+    void numericWindow_Disp(ttyd::dispdrv::CameraId cameraId, void *user);
 
 
     extern bool (*g_OSLink_trampoline)(OSModuleInfo *, void *);
-    extern void (*g_seqSetSeq_trampoline)(SeqIndex seq, const char *map, const char *bero);
-    extern void (*gTrampoline_seq_logoMain)(SeqInfo *info);
+    extern void (*g_seqSetSeq_trampoline)(SeqIndex, const char *, const char *);
+    extern void (*gTrampoline_seq_logoMain)(SeqInfo *);
     extern uint32_t (*g_pouchGetItem_trampoline)(int32_t);
-    extern void (*g_partySetForceMove_trampoline)(ttyd::party::PartyEntry *ptr, float x, float z, float speed);
-    extern int32_t (*g_evt_mario_set_pose_trampoline)(ttyd::evtmgr::EvtEntry *evt, bool firstCall);
+    extern void (*g_partySetForceMove_trampoline)(ttyd::party::PartyEntry *, float, float, float);
+    extern int32_t (*g_evt_mario_set_pose_trampoline)(ttyd::evtmgr::EvtEntry *, bool);
     extern const char *(*g_msgSearch_trampoline)(const char *);
     extern void (*g_statusWinDisp_trampoline)(void);
     extern void (*g_pouchGetStarstone_trampoline)(int32_t);
-    extern int32_t (*g_winItemMain_trampoline)(ttyd::win_root::WinPauseMenu *menu);
-    extern int32_t (*g_winLogMain_trampoline)(ttyd::win_root::WinPauseMenu *menu);
-    extern void (*g_msgAnalize_trampoline)(MessageData *msg_data, const char *text);
-    extern void (*g_msgMain_trampoline)(MessageData *msg_data);
+    extern int32_t (*g_winItemMain_trampoline)(ttyd::win_root::WinPauseMenu *);
+    extern int32_t (*g_winLogMain_trampoline)(ttyd::win_root::WinPauseMenu *);
+    extern void (*g_msgAnalize_trampoline)(MessageData *, const char *);
+    extern int (*g_msgWindow_Entry_trampoline)(const char *, int, int);
 
     extern const char *goombellaName;
     extern const char *goombellaDescription;

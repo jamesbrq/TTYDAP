@@ -1,14 +1,16 @@
+#include "customWarp.h"
 #include "relmgr.h"
+#include "util.h"
 #include "visibility.h"
 #include <AP/rel_patch_definitions.h>
+#include <gc/gx.h>
 #include <gc/OSModule.h>
 #include <gc/pad.h>
 #include <mod.h>
-#include "util.h"
-#include "customWarp.h"
 #include <ttyd/common_types.h>
 #include <ttyd/countdown.h>
 #include <ttyd/evt_bero.h>
+#include <ttyd/evt_lecture.h>
 #include <ttyd/evt_mario.h>
 #include <ttyd/evt_memcard.h>
 #include <ttyd/evt_msg.h>
@@ -16,9 +18,9 @@
 #include <ttyd/evt_pouch.h>
 #include <ttyd/evt_snd.h>
 #include <ttyd/evt_window.h>
-#include <ttyd/evt_lecture.h>
 #include <ttyd/evtmgr.h>
 #include <ttyd/evtmgr_cmd.h>
+#include <ttyd/fontmgr.h>
 #include <ttyd/icondrv.h>
 #include <ttyd/mario.h>
 #include <ttyd/mario_motion.h>
@@ -33,18 +35,19 @@
 #include <ttyd/statuswindow.h>
 #include <ttyd/string.h>
 #include <ttyd/swdrv.h>
+#include <ttyd/system.h>
 #include <ttyd/win_log.h>
 #include <ttyd/win_main.h>
 #include <ttyd/win_root.h>
-#include <ttyd/fontmgr.h>
+#include <ttyd/windowdrv.h>
 
 #include "common.h"
 #include "OWR.h"
 #include "patch.h"
 
 #include <cstdint>
-#include <cstring>
 #include <cstdio>
+#include <cstring>
 
 using gc::pad::PadInput;
 using ttyd::common::ItemData;
@@ -62,6 +65,7 @@ using namespace ttyd::evt_msg;
 using namespace ttyd::evt_pouch;
 using namespace ttyd::evt_lecture;
 using namespace ttyd::seqdrv;
+using namespace ttyd::system;
 using namespace ttyd::msgdrv;
 using namespace mod::custom_warp;
 
@@ -134,7 +138,7 @@ namespace mod::owr
 {
     KEEP_VAR OWR *gSelf = nullptr;
     KEEP_VAR StateManager *gState = nullptr;
-    KEEP_VAR NumSelectWindow *g_active_numselect_window = nullptr;
+    KEEP_VAR NumericInputData g_numericInput = {};
 
     KEEP_VAR bool (*g_OSLink_trampoline)(OSModuleInfo *, void *) = nullptr;
     KEEP_VAR void (*gTrampoline_seq_logoMain)(SeqInfo *info) = nullptr;
@@ -148,7 +152,7 @@ namespace mod::owr
     KEEP_VAR int32_t (*g_winItemMain_trampoline)(ttyd::win_root::WinPauseMenu *menu) = nullptr;
     KEEP_VAR int32_t (*g_winLogMain_trampoline)(ttyd::win_root::WinPauseMenu *menu) = nullptr;
     KEEP_VAR void (*g_msgAnalize_trampoline)(MessageData *msg_data, const char *text) = nullptr;
-    KEEP_VAR void (*g_msgMain_trampoline)(MessageData *msg_data) = nullptr;
+    KEEP_VAR int (*g_msgWindow_Entry_trampoline)(const char *message, int unk1, int windowType) = nullptr;
 
     void OWR::SequenceInit()
     {
@@ -272,8 +276,58 @@ namespace mod::owr
         }
     }
 
+    // Hook for msgWindow_Entry to add numeric window support
+    KEEP_FUNC int msgWindow_Entry_Hook(const char *message, int unk1, int windowType)
+    {
+        // Call original function first
+        int windowId = g_msgWindow_Entry_trampoline(message, unk1, windowType);
+
+        // Get the created window
+        ttyd::windowdrv::Window *window = ttyd::windowdrv::windowGetPointer(windowId);
+        if (!window || !window->msgData)
+        {
+            return windowId;
+        }
+
+        // Check if this window needs numeric input handling
+        MessageData *msgData = (MessageData *)window->msgData->pMemory;
+
+        // Look for NUMSELECT commands in the message data
+        for (uint32_t i = 0; i < msgData->command_count; i++)
+        {
+            TextCommand *cmd = &msgData->commands[i];
+
+            if (cmd->type == 0xFFF0)
+            {
+                // Setup numeric state from command
+                g_numericInput.initialValue = (int16_t)cmd->char_or_param1;
+                g_numericInput.minValue = cmd->param2;
+                g_numericInput.maxValue = cmd->param3;
+                g_numericInput.stepSize = (cmd->flags & 0xFF) ? cmd->flags : 1;
+                g_numericInput.currentValue = g_numericInput.initialValue;
+                g_numericInput.active = true;
+
+                // Override window functions for numeric input
+                window->mainFunc = (void *)numericWindow_Main;
+                window->param = 6;
+
+                // Position and size the numeric window
+                window->x = -100.0f; // Center horizontally
+                window->y = 0.0f;    // Center vertically
+                window->width = 200.0f;
+                window->height = 80.0f;
+
+                // Mark command as processed
+                cmd->flags |= 0x80000000;
+                break; // Only handle first NUMSELECT command
+            }
+        }
+
+        return windowId;
+    }
+
     // msgAnalize hook - injects NUMSELECT commands
-    void MsgAnalizeHook(MessageData *msg_data, const char *text)
+    KEEP_FUNC void MsgAnalizeHook(MessageData *msg_data, const char *text)
     {
         // Quick check - if no numselect tags, just call original
         if (!strstr(text, "<numselect"))
@@ -286,17 +340,20 @@ namespace mod::owr
 
         // Post-process: find numselect tags and inject commands
         TextCommand *commands = (TextCommand *)((char *)msg_data + 0x5C);
-
         const char *pos = text;
+
         while ((pos = strstr(pos, "<numselect")) != nullptr)
         {
             const char *end = strchr(pos, '>');
             if (!end)
                 break;
 
-            // Parse parameters: <numselect min,max,initial>
-            int min_val = 0, max_val = 99, initial_val = 0;
-            sscanf(pos + 10, " %d,%d,%d", &min_val, &max_val, &initial_val);
+            // Parse parameters: <numselect min max initial stepsize>
+            int min_val = 0, max_val = 99, initial_val = 0, step_val = 1;
+
+            // Skip "<numselect" and parse 4 space-separated parameters
+            const char *params = pos + 10;
+            sscanf(params, " %d %d %d %d", &min_val, &max_val, &initial_val, &step_val);
 
             // Calculate insertion point (simplified - just append for now)
             int insert_pos = msg_data->command_count;
@@ -308,46 +365,159 @@ namespace mod::owr
                         &commands[insert_pos],
                         (msg_data->command_count - insert_pos) * sizeof(TextCommand));
 
-                commands[insert_pos].flags = 0;
-                commands[insert_pos].type = 0xFFF0; // NUMSELECT command type
-                commands[insert_pos].char_or_param1 = (uint16_t)min_val;
-                commands[insert_pos].param2 = (int16_t)max_val;
-                commands[insert_pos].param3 = (int16_t)initial_val;
+                commands[insert_pos].flags = step_val;
+                commands[insert_pos].type = 0xFFF0;
+                commands[insert_pos].char_or_param1 = (uint16_t)initial_val;
+                commands[insert_pos].param2 = (int16_t)min_val;
+                commands[insert_pos].param3 = (int16_t)max_val;
                 commands[insert_pos].timing = 0;
                 commands[insert_pos].scale = 1.0f;
                 commands[insert_pos].shadow_offset = 0.0f;
 
                 msg_data->command_count++;
             }
+
             pos = end + 1;
         }
     }
 
-    // msgMain hook - handles NUMSELECT commands and window updates
-    void MsgMainHook(MessageData *msg_data_ptr)
+    KEEP_FUNC int numericWindow_Main(ttyd::windowdrv::Window *window)
     {
-        MessageData *msg_data = (MessageData *)msg_data_ptr;
+        int originalValue = g_numericInput.currentValue;
 
-        // Check for NUMSELECT command
-        if (!g_active_numselect_window && msg_data->current_command_index < msg_data->command_count)
+        // Call msgMain for base functionality - pass SmartAllocationData*
+        msgMain(window->msgData);
+
+        // Handle window state transitions
+        switch (window->windowState)
         {
-            TextCommand *cmd = &msg_data->commands[msg_data->current_command_index];
-            if (cmd->type == 0xFFF0)
-            { // NUMSELECT command
-                createNumSelectWindow(msg_data, cmd);
-                return;
+            case 5: // Fade in
+                window->alpha += 25;
+                if (window->alpha >= 255)
+                {
+                    window->alpha = 255;
+                    window->windowState = 1; // Active state
+                }
+                break;
+
+            case 1: // Active - handle numeric input
+            {
+                // Check for up input (increase value)
+                if (keyGetButtonTrg(0) & 0x08 || keyGetDirTrg(0) & 0x1000)
+                {
+                    if (g_numericInput.currentValue + g_numericInput.stepSize <= g_numericInput.maxValue)
+                    {
+                        g_numericInput.currentValue += g_numericInput.stepSize;
+                    }
+                }
+                else if (keyGetButtonRep(0) & 0x08 || keyGetDirRep(0) & 0x1000)
+                {
+                    if (g_numericInput.currentValue + g_numericInput.stepSize <= g_numericInput.maxValue)
+                    {
+                        g_numericInput.currentValue += g_numericInput.stepSize;
+                    }
+                }
+
+                // Check for down input (decrease value)
+                if (keyGetButtonTrg(0) & 0x04 || keyGetDirTrg(0) & 0x2000)
+                {
+                    if (g_numericInput.currentValue - g_numericInput.stepSize >= g_numericInput.minValue)
+                    {
+                        g_numericInput.currentValue -= g_numericInput.stepSize;
+                    }
+                }
+                else if (keyGetButtonRep(0) & 0x04 || keyGetDirRep(0) & 0x2000)
+                {
+                    if (g_numericInput.currentValue - g_numericInput.stepSize >= g_numericInput.minValue)
+                    {
+                        g_numericInput.currentValue -= g_numericInput.stepSize;
+                    }
+                }
+
+                // Bounds checking
+                if (g_numericInput.currentValue < g_numericInput.minValue)
+                {
+                    g_numericInput.currentValue = g_numericInput.minValue;
+                }
+                if (g_numericInput.currentValue > g_numericInput.maxValue)
+                {
+                    g_numericInput.currentValue = g_numericInput.maxValue;
+                }
+
+                // Play sound if value changed
+                if (originalValue != g_numericInput.currentValue)
+                {
+                    ttyd::pmario_sound::psndSFXOn(0x20005); // Cursor move sound
+                }
+
+                // Check for A button (confirm)
+                if (keyGetButtonTrg(0) & 0x200)
+                {
+                    window->windowState = 7; // Close state
+                    ttyd::pmario_sound::psndSFXOn(0x20013); // Confirm sound
+                }
+
+                // Check for B button (cancel)
+                if (keyGetButtonTrg(0) & 0x100)
+                {
+                    g_numericInput.currentValue = g_numericInput.initialValue;
+                    window->windowState = 7; // Close state
+                    ttyd::pmario_sound::psndSFXOn(0x20012); // Cancel sound
+                }
             }
+            break;
+
+            case 7: // Fade out
+                if (window->alpha <= 0)
+                {
+                    window->windowState = 4;       // Finished
+                    window->flags &= ~2;           // Remove active flag
+                    g_numericInput.active = false; // Clean up
+                    return 1;                      // Signal completion
+                }
+                else
+                {
+                    window->alpha -= 25;
+                    if (window->alpha < 0)
+                        window->alpha = 0;
+                }
+                break;
         }
 
-        // Update active numselect window
-        if (g_active_numselect_window)
-        {
-            numSelectWindow_Main(g_active_numselect_window);
-            return;
-        }
+        // Register for display
+        float priority = 400.0f - (float)window->alpha;
+        ttyd::dispdrv::dispEntry(ttyd::dispdrv::CameraId::k2d, 0, priority, numericWindow_Disp, window);
 
-        // Normal message processing
-        g_msgMain_trampoline(msg_data_ptr);
+        return 0; // Continue running
+    }
+
+    KEEP_FUNC void numericWindow_Disp(ttyd::dispdrv::CameraId cameraId, void *user)
+    {
+        (void)cameraId;
+
+        ttyd::windowdrv::Window *window = (ttyd::windowdrv::Window *)user;
+
+        // Set up graphics state (same as selection window)
+        uint32_t fogParams = 0x80420660;
+        gc::gx::GXSetFog(0, &fogParams);
+
+        // Draw window background
+        uint8_t alpha = window->alpha & 0xFF;
+        ttyd::windowdrv::windowDispGX_Waku_col(0, window->x, window->y, window->width, window->height, 30.0f, alpha);
+
+        // Calculate text position (centered in window)
+        float textX = window->x + window->width / 2;
+        float textY = window->y + window->height / 2;
+
+        // Use msgDisp to render the current numeric value
+        // msgDisp will handle the text rendering using the message system
+        ttyd::msgdrv::msgDisp(window->msgData, textX, textY, alpha);
+
+        // Draw up/down arrows to indicate interaction
+        gc::vec3 pos = {window->x + window->width / 2, window->y, 0.0f};
+        ttyd::icondrv::iconDispGx(1.0f, &pos, 0x10, IconType::MENU_UP_POINTER);
+        pos.y += window->height; // Move down for the down pointer
+        ttyd::icondrv::iconDispGx(1.0f, &pos, 0x10, IconType::MENU_DOWN_POINTER);
     }
 
     KEEP_FUNC bool OSLinkHook(OSModuleInfo *new_module, void *bss)
@@ -1139,6 +1309,64 @@ namespace mod::owr
 
         ttyd::evtmgr_cmd::evtSetValue(evt, evt->evtArguments[1], reinterpret_cast<uint32_t>(&warpTextBuffer[0]));
         return 2;
+    }
+
+    EVT_DECLARE_USER_FUNC(evt_msg_numeric, 2)
+    EVT_DEFINE_USER_FUNC_KEEP(evt_msg_numselect)
+    {
+        // Get parameters from event arguments
+        const int msgKey = ttyd::evtmgr_cmd::evtGetValue(evt, evt->evtArguments[0]);
+
+        if (isFirstCall)
+        {
+            // First call - create the numeric window
+            const char *messageText;
+
+            // Get message text (same logic as other message events)
+            if (!(msgKey & 1))
+            {
+                messageText = ttyd::msgdrv::msgSearch(reinterpret_cast<const char *>(msgKey));
+            }
+            else
+            {
+                // Direct text pointer
+                messageText = reinterpret_cast<const char *>(msgKey);
+            }
+
+            // Create numeric window using msgWindow_Entry
+            // The msgAnalyze hook will detect <numselect> tags and set up the window
+            int windowID = ttyd::msgdrv::msgWindow_Entry(messageText, 0, 0);
+
+            // Store window ID in event's lwData for later checking
+            evt->lwData[15] = windowID; // Use last LW slot for our window ID
+
+            return 0; // Continue - window is opening
+        }
+
+        // Subsequent calls - check if window is still active
+        int windowID = evt->lwData[15];
+
+        if (ttyd::windowdrv::windowCheckID(windowID) != 0)
+        {
+            return 0; // Continue waiting - window still open
+        }
+
+        // Window closed - get the selected numeric value
+        int selectedValue = g_numericInput.currentValue;
+
+        // Store result in second event argument
+        ttyd::evtmgr_cmd::evtSetValue(evt, evt->evtArguments[1], selectedValue);
+
+        // Clean up window
+        ttyd::windowdrv::windowDeleteID(windowID);
+
+        // Clear our stored window ID
+        evt->lwData[15] = 0;
+
+        // Clean up our global state
+        g_numericInput.active = false;
+
+        return 2; // Event complete
     }
 
     // clang-format off

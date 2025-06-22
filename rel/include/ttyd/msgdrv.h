@@ -1,6 +1,7 @@
 #pragma once
 
 #include <cstdint>
+#include <ttyd/memory.h>
 
 namespace ttyd::msgdrv
 {
@@ -26,25 +27,6 @@ namespace ttyd::msgdrv
         TextCommand commands[];         // 0x5C+ - Array of text commands
     };
 
-    struct NumSelectWindow
-    {
-        uint16_t state;                // 0x00 - Window state
-        uint16_t flags;                // 0x02 - Window flags
-        int16_t depth_offset;          // 0x04 - Depth for layering
-        int16_t alpha;                 // 0x06 - Alpha for fade effects (0-255)
-        MessageData *parent_msg_data;  // 0x08 - Parent message that triggered this window
-        float pos_x;                   // 0x0C - X position
-        float pos_y;                   // 0x10 - Y position
-        float width;                   // 0x14 - Window width
-        float height;                  // 0x18 - Window height
-        int current_value;             // 0x1C - Current selected number
-        int min_value;                 // 0x20 - Minimum allowed value
-        int max_value;                 // 0x24 - Maximum allowed value
-        int initial_value;             // 0x28 - Starting value
-        MessageData *display_msg_data; // 0x2C - MessageData for rendering the number
-        // Total size: 0x30 (48 bytes)
-    };
-
     extern "C"
     {
         // selectWindow_Disp
@@ -57,17 +39,17 @@ namespace ttyd::msgdrv
         // msgWindow_Continue
         // msgWindow_Add
         // msgWindow_Delete
-        // msgWindow_Entry
         // msgIconStr2ID
         // msgGetCommand
         // _ismbblead
+        int msgWindow_Entry(const char *message, int unk1, int windowType);
         const char *msgSearch(const char *msgKey);
         // msg_compare
         // ?msgGetWork
         void msgAnalize(MessageData *msg_data, const char *text);
         // msgDispKeyWait_render
-        // msgDisp
-        void msgMain(MessageData *msg_data);
+        void msgDisp(ttyd::memory::SmartAllocationData *msg_data, float x, float y, uint8_t alpha);
+        void msgMain(ttyd::memory::SmartAllocationData *msg_data);
         // msgLoad
         // msgInit
     }
