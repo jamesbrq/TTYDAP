@@ -133,6 +133,63 @@ EVT_DEFINE_USER_FUNC_KEEP(setShopFlags)
     return 2;
 }
 
+EVT_DEFINE_USER_FUNC_KEEP(evt_msg_numselect)
+{
+    // Get parameters from event arguments
+    const int msgKey = ttyd::evtmgr_cmd::evtGetValue(evt, evt->evtArguments[0]);
+
+    if (isFirstCall)
+    {
+        // First call - create the numeric window
+        const char *messageText;
+
+        // Get message text (same logic as other message events)
+        if (!(msgKey & 1))
+        {
+            messageText = ttyd::msgdrv::msgSearch(reinterpret_cast<const char *>(msgKey));
+        }
+        else
+        {
+            // Direct text pointer
+            messageText = reinterpret_cast<const char *>(msgKey);
+        }
+
+        // Create numeric window using msgWindow_Entry
+        // The msgAnalyze hook will detect <numselect> tags and set up the window
+        int windowID = ttyd::msgdrv::msgWindow_Entry(messageText, 0, 0);
+
+        // Store window ID in event's lwData for later checking
+        evt->lwData[15] = windowID; // Use last LW slot for our window ID
+
+        return 0; // Continue - window is opening
+    }
+
+    // Subsequent calls - check if window is still active
+    int windowID = evt->lwData[15];
+
+    if (ttyd::windowdrv::windowCheckID(windowID) != 0)
+    {
+        return 0; // Continue waiting - window still open
+    }
+
+    // Window closed - get the selected numeric value
+    int selectedValue = g_numericInput.currentValue;
+
+    // Store result in second event argument
+    ttyd::evtmgr_cmd::evtSetValue(evt, evt->evtArguments[1], selectedValue);
+
+    // Clean up window
+    ttyd::windowdrv::windowDeleteID(windowID);
+
+    // Clear our stored window ID
+    evt->lwData[15] = 0;
+
+    // Clean up our global state
+    g_numericInput.active = false;
+
+    return 2; // Event complete
+}
+
 EVT_DEFINE_USER_FUNC_KEEP(handleIntermissionSkip)
 {
     (void)isFirstCall;
