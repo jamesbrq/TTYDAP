@@ -67,6 +67,7 @@ using namespace ttyd::evt_lecture;
 using namespace ttyd::seqdrv;
 using namespace ttyd::system;
 using namespace ttyd::msgdrv;
+using namespace ttyd::fontmgr;
 using namespace mod::custom_warp;
 
 char warpTextBuffer[64];
@@ -276,6 +277,79 @@ namespace mod::owr
         }
     }
 
+    uint16_t convertAsciiToWideChar(char ascii_char)
+    {
+        // From assembly: 3C 63 00 01 | 38 03 82 1F
+        // addis r3, r3, 0x1 | subi r0, r3, 0x7de1
+        // This equals: (ascii + 0x10000) - 0x7DE1 = ascii + 0x821F
+
+        if (ascii_char >= '0' && ascii_char <= '9')
+        {
+            return (uint16_t)(ascii_char + 0x821F);
+        }
+        return 0;
+    }
+
+    uint16_t getCharacterSearchResult(char character)
+    {
+        if (character >= '0' && character <= '9')
+        {
+            uint16_t wideChar = convertAsciiToWideChar(character);
+            return kanjiSearch(wideChar);
+        }
+        else
+        {
+            return hankakuSearch((uint8_t)character);
+        }
+    }
+
+    void replaceMultipleCharacters(ttyd::memory::SmartAllocationData *smartData, uint32_t startIndex, int value)
+    {
+        MessageData *msgData = (MessageData *)smartData->pMemory;
+        char newChars[3];
+
+        if (value < 10)
+            sprintf(newChars, "  %d", value);
+        else if (value < 100)
+            sprintf(newChars, " %d", value);
+        else
+            sprintf(newChars, "%d", value);
+
+        int len = strlen(newChars);
+
+        for (int i = 0; i < len; i++)
+        {
+            if ((startIndex + i) >= msgData->command_count)
+                break;
+
+            TextCommand *cmd = &msgData->commands[startIndex + i];
+
+            if (cmd->type < 0xFFF4)
+            {
+                char c = newChars[i];
+
+                // Handle numbers, spaces, and other ASCII characters
+                if ((c >= '0' && c <= '9') || c == ' ' || (c >= 'A' && c <= 'Z') || (c >= 'a' && c <= 'z'))
+                {
+                    uint16_t searchResult = getCharacterSearchResult(c);
+
+                    cmd->type = searchResult;
+                    cmd->char_or_param1 = searchResult;
+
+                    // Update character flags
+                    if (c == ' ')
+                    {
+                        cmd->flags &= ~0x08; // Clear character flag for spaces
+                    }
+                    else
+                    {
+                        cmd->flags |= 0x08; // Set character flag for visible chars
+                    }
+                }
+            }
+        }
+    }
+
     // Hook for msgWindow_Entry to add numeric window support
     KEEP_FUNC int msgWindow_Entry_Hook(const char *message, int unk1, int windowType)
     {
@@ -284,13 +358,17 @@ namespace mod::owr
 
         // Get the created window
         ttyd::windowdrv::Window *window = ttyd::windowdrv::windowGetPointer(windowId);
-        if (!window || !window->msgData)
+        if (!window || !window->msgData || !window->msgData->pMemory)
         {
             return windowId;
         }
 
-        // Check if this window needs numeric input handling
+        // Additional safety check - verify the memory is properly initialized
         MessageData *msgData = (MessageData *)window->msgData->pMemory;
+        if (!msgData || msgData->command_count == 0 || msgData->command_count > 1000) // Sanity check
+        {
+            return windowId;
+        }
 
         // Look for NUMSELECT commands in the message data
         for (uint32_t i = 0; i < msgData->command_count; i++)
@@ -306,6 +384,7 @@ namespace mod::owr
                 g_numericInput.stepSize = (cmd->flags & 0xFF) ? cmd->flags : 1;
                 g_numericInput.currentValue = g_numericInput.initialValue;
                 g_numericInput.active = true;
+                g_numericInput.window_id = windowId;
 
                 // Override window functions for numeric input
                 window->mainFunc = (void *)numericWindow_Main;
@@ -502,7 +581,7 @@ namespace mod::owr
                 // Check for B button (cancel)
                 if (keyGetButtonTrg(0) & 0x100)
                 {
-                    g_numericInput.currentValue = g_numericInput.initialValue;
+                    g_numericInput.currentValue = -1;
                     window->windowState = 7; // Close state
                     ttyd::pmario_sound::psndSFXOn(0x20012); // Cancel sound
                 }
@@ -514,7 +593,7 @@ namespace mod::owr
                 {
                     window->windowState = 4;       // Finished
                     window->flags &= ~2;           // Remove active flag
-                    g_numericInput.active = false; // Clean up
+                    g_numericInput.selectedValue = g_numericInput.currentValue; // Store final value
                     return 1;                      // Signal completion
                 }
                 else
@@ -536,30 +615,48 @@ namespace mod::owr
     KEEP_FUNC void numericWindow_Disp(ttyd::dispdrv::CameraId cameraId, void *user)
     {
         (void)cameraId;
-
         ttyd::windowdrv::Window *window = (ttyd::windowdrv::Window *)user;
 
         // Set up graphics state (same as selection window)
-        uint32_t fogParams = 0x80420660;
-        gc::gx::GXSetFog(0, &fogParams);
+        gc::gx::GXColor fogColor = {0x66, 0x06, 0x42, 0x80}; // Based on constant 0x80420660
+        gc::gx::GXSetFog(0, 0.0f, 0.0f, 0.0f, 0.0f, &fogColor);
 
-        // Draw window background
+        // Fix color handling - use proper RGBA white with alpha
         uint8_t alpha = window->alpha & 0xFF;
-        ttyd::windowdrv::windowDispGX_Waku_col(0, window->x, window->y, window->width, window->height, 30.0f, alpha);
+        uint32_t frameColor = 0xFFFFFF00 | alpha; // White RGB + alpha channel
+
+        // Call windowDispGX_Waku_col exactly like selectWindow_Disp
+        ttyd::windowdrv::windowDispGX_Waku_col(0,              // waku_type
+                                               &frameColor,    // color pointer
+                                               window->x,      // f1 - x position
+                                               window->y,      // f2 - y position
+                                               window->width,  // f3 - width
+                                               window->height, // f4 - height
+                                               30.0f           // f5 - depth (same as selectWindow_Disp)
+        );
 
         // Calculate text position (centered in window)
-        float textX = window->x + window->width / 2;
-        float textY = window->y + window->height / 2;
+        float textX = window->x + window->width / 2 - 15.0f;
+        float textY = window->y - window->height / 2;
 
         // Use msgDisp to render the current numeric value
         // msgDisp will handle the text rendering using the message system
+
+        replaceMultipleCharacters(window->msgData, 2, g_numericInput.currentValue);
+
         ttyd::msgdrv::msgDisp(window->msgData, textX, textY, alpha);
 
-        // Draw up/down arrows to indicate interaction
-        gc::vec3 pos = {window->x + window->width / 2, window->y, 0.0f};
-        ttyd::icondrv::iconDispGx(1.0f, &pos, 0x10, IconType::MENU_UP_POINTER);
-        pos.y += window->height; // Move down for the down pointer
-        ttyd::icondrv::iconDispGx(1.0f, &pos, 0x10, IconType::MENU_DOWN_POINTER);
+        // Draw up/down arrows with better positioning
+        gc::vec3 upArrowPos = {window->x + window->width / 2, // Center horizontally
+                               window->y - 15.0f,             // Above window
+                               0.0f};
+
+        gc::vec3 downArrowPos = {window->x + window->width / 2,     // Center horizontally
+                                 window->y - window->height - 15.0f, // Below window with small gap
+                                 0.0f};
+
+        ttyd::icondrv::iconDispGx(0.8f, &upArrowPos, 0x10, IconType::MENU_UP_POINTER);
+        ttyd::icondrv::iconDispGx(0.8f, &downArrowPos, 0x10, IconType::MENU_DOWN_POINTER);
     }
 
     KEEP_FUNC bool OSLinkHook(OSModuleInfo *new_module, void *bss)

@@ -42,7 +42,9 @@ namespace mod::owr
         int currentValue;
         int minValue;
         int maxValue;
+        int selectedValue;
         int stepSize;
+        int window_id;
     };
 
     extern OWR *gSelf;
@@ -65,7 +67,6 @@ namespace mod::owr
     int msgWindow_Entry_Hook(const char *message, int unk1, int windowType);
     int numericWindow_Main(ttyd::windowdrv::Window *window);
     void numericWindow_Disp(ttyd::dispdrv::CameraId cameraId, void *user);
-
 
     extern bool (*g_OSLink_trampoline)(OSModuleInfo *, void *);
     extern void (*g_seqSetSeq_trampoline)(SeqIndex, const char *, const char *);

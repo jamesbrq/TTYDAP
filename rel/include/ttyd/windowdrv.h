@@ -10,7 +10,7 @@ namespace ttyd::windowdrv
     {
         uint16_t windowState;       // 0x00 - Current state of window
         uint16_t flags;             // 0x02 - Window flags
-        uint16_t alpha;             // 0x04 - Alpha value during fade transitions
+        int16_t alpha;             // 0x04 - Alpha value during fade transitions
         uint16_t padding_06;        // 0x06
         uint32_t param;             // 0x08 - Window parameter
         float x;                    // 0x0C - X position
@@ -27,7 +27,7 @@ namespace ttyd::windowdrv
 
     extern "C"
     {
-        void windowDispGX_Waku_col(int32_t cameraId, float x, float y, float width, float height, float order, uint8_t alpha);
+        void windowDispGX_Waku_col(int32_t cameraId, uint32_t *color, float x, float y, float width, float height, float depth);
         Window *windowGetPointer(int window_id);
         void windowDeleteID(int window_id);
         int windowCheckID(int window_id);
