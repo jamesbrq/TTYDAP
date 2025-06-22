@@ -151,7 +151,7 @@ namespace mod::owr
     KEEP_VAR void (*g_pouchGetStarstone_trampoline)(int32_t) = nullptr;
     KEEP_VAR int32_t (*g_winItemMain_trampoline)(ttyd::win_root::WinPauseMenu *menu) = nullptr;
     KEEP_VAR int32_t (*g_winLogMain_trampoline)(ttyd::win_root::WinPauseMenu *menu) = nullptr;
-    KEEP_VAR void (*g_msgAnalize_trampoline)(MessageData *msg_data, const char *text) = nullptr;
+    KEEP_VAR void (*g_msgAnalize_trampoline)(ttyd::memory::SmartAllocationData *smartAlloc, const char *text) = nullptr;
     KEEP_VAR int (*g_msgWindow_Entry_trampoline)(const char *message, int unk1, int windowType) = nullptr;
 
     void OWR::SequenceInit()
@@ -327,22 +327,51 @@ namespace mod::owr
     }
 
     // msgAnalize hook - injects NUMSELECT commands
-    KEEP_FUNC void MsgAnalizeHook(MessageData *msg_data, const char *text)
+    KEEP_FUNC void MsgAnalizeHook(ttyd::memory::SmartAllocationData *smartAlloc, const char *text)
     {
+        // CRITICAL: Validate inputs before doing ANYTHING
+        if (!smartAlloc || !text)
+        {
+            return; // Invalid parameters
+        }
+
+        // Get MessageData from SmartAllocationData
+        MessageData *msg_data = (MessageData *)smartAlloc->pMemory;
+        if (!msg_data)
+        {
+            return; // Invalid MessageData pointer
+        }
+
         // Quick check - if no numselect tags, just call original
         if (!strstr(text, "<numselect"))
         {
-            return g_msgAnalize_trampoline(msg_data, text);
+            return g_msgAnalize_trampoline(smartAlloc, text);
         }
 
         // Call original first to process normal text
-        g_msgAnalize_trampoline(msg_data, text);
+        g_msgAnalize_trampoline(smartAlloc, text);
 
-        // Post-process: find numselect tags and inject commands
+        // CRITICAL: Validate MessageData structure after original processing
+        if (msg_data->command_count > 1000)
+        {
+            return; // Structure appears corrupted, abort
+        }
+
+        // Validate that we can safely access the commands array
+        // Check GameCube memory range
+        uintptr_t addr = (uintptr_t)msg_data;
+        if (addr < 0x80000000 || addr > 0x82000000)
+        {
+            return; // Outside valid GameCube memory range
+        }
+
+        // Get commands array - offset 0x5C from MessageData start
         TextCommand *commands = (TextCommand *)((char *)msg_data + 0x5C);
-        const char *pos = text;
 
-        while ((pos = strstr(pos, "<numselect")) != nullptr)
+        const char *pos = text;
+        int tags_processed = 0;
+
+        while ((pos = strstr(pos, "<numselect")) != nullptr && tags_processed < 3)
         {
             const char *end = strchr(pos, '>');
             if (!end)
@@ -353,29 +382,42 @@ namespace mod::owr
 
             // Skip "<numselect" and parse 4 space-separated parameters
             const char *params = pos + 10;
-            sscanf(params, " %d %d %d %d", &min_val, &max_val, &initial_val, &step_val);
+            int parsed = sscanf(params, " %d %d %d %d", &min_val, &max_val, &initial_val, &step_val);
 
-            // Calculate insertion point (simplified - just append for now)
+            // Validate parameters
+            if (parsed < 3 || min_val > max_val || step_val <= 0)
+            {
+                pos = end + 1;
+                continue;
+            }
+
+            // Calculate insertion point (append to end)
             int insert_pos = msg_data->command_count;
 
-            // Make room and insert NUMSELECT command
-            if (insert_pos < 1000)
-            { // Safety check
-                memmove(&commands[insert_pos + 1],
-                        &commands[insert_pos],
-                        (msg_data->command_count - insert_pos) * sizeof(TextCommand));
-
-                commands[insert_pos].flags = step_val;
-                commands[insert_pos].type = 0xFFF0;
-                commands[insert_pos].char_or_param1 = (uint16_t)initial_val;
-                commands[insert_pos].param2 = (int16_t)min_val;
-                commands[insert_pos].param3 = (int16_t)max_val;
-                commands[insert_pos].timing = 0;
-                commands[insert_pos].scale = 1.0f;
-                commands[insert_pos].shadow_offset = 0.0f;
-
-                msg_data->command_count++;
+            // Safety check: ensure we don't overflow
+            if (insert_pos >= 999)
+            {
+                break; // Too many commands
             }
+
+            // Make room and insert NUMSELECT command
+            memmove(&commands[insert_pos + 1],
+                    &commands[insert_pos],
+                    (msg_data->command_count - insert_pos) * sizeof(TextCommand));
+
+            // Initialize new command
+            memset(&commands[insert_pos], 0, sizeof(TextCommand));
+            commands[insert_pos].flags = step_val;
+            commands[insert_pos].type = 0xFFF0;
+            commands[insert_pos].char_or_param1 = (uint16_t)initial_val;
+            commands[insert_pos].param2 = (int16_t)min_val;
+            commands[insert_pos].param3 = (int16_t)max_val;
+            commands[insert_pos].timing = 0;
+            commands[insert_pos].scale = 1.0f;
+            commands[insert_pos].shadow_offset = 0.0f;
+
+            msg_data->command_count++;
+            tags_processed++;
 
             pos = end + 1;
         }

@@ -61,7 +61,7 @@ namespace mod::owr
     void SetMaxSP(int32_t star);
     int32_t WinItemMainHook(ttyd::win_root::WinPauseMenu *menu);
     int32_t WinLogMainHook(ttyd::win_root::WinPauseMenu *menu);
-    void MsgAnalizeHook(MessageData *msg_data_ptr, const char *text);
+    void MsgAnalizeHook(ttyd::memory::SmartAllocationData *smartAlloc, const char *text);
     int msgWindow_Entry_Hook(const char *message, int unk1, int windowType);
     int numericWindow_Main(ttyd::windowdrv::Window *window);
     void numericWindow_Disp(ttyd::dispdrv::CameraId cameraId, void *user);
@@ -78,7 +78,7 @@ namespace mod::owr
     extern void (*g_pouchGetStarstone_trampoline)(int32_t);
     extern int32_t (*g_winItemMain_trampoline)(ttyd::win_root::WinPauseMenu *);
     extern int32_t (*g_winLogMain_trampoline)(ttyd::win_root::WinPauseMenu *);
-    extern void (*g_msgAnalize_trampoline)(MessageData *, const char *);
+    extern void (*g_msgAnalize_trampoline)(ttyd::memory::SmartAllocationData *, const char *);
     extern int (*g_msgWindow_Entry_trampoline)(const char *, int, int);
 
     extern const char *goombellaName;

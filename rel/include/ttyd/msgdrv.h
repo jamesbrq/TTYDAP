@@ -46,7 +46,7 @@ namespace ttyd::msgdrv
         const char *msgSearch(const char *msgKey);
         // msg_compare
         // ?msgGetWork
-        void msgAnalize(MessageData *msg_data, const char *text);
+        void msgAnalize(ttyd::memory::SmartAllocationData *msg_data, const char *text);
         // msgDispKeyWait_render
         void msgDisp(ttyd::memory::SmartAllocationData *msg_data, float x, float y, uint8_t alpha);
         void msgMain(ttyd::memory::SmartAllocationData *msg_data);
