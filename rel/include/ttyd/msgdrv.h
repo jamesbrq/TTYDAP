@@ -7,34 +7,33 @@ namespace ttyd::msgdrv
 {
     struct TextCommand
     {
-        uint32_t flags;      // 0x00 - Main data/color value
-        uint16_t type;    // 0x04 - Command type
-        int16_t char_or_param1; // 0x06 - First parameter (often Y coordinate)
-        int16_t param2;     // 0x08 - Second parameter (often X coordinate)
-        int16_t param3;     // 0x0A - Third parameter (width/additional data)
-        uint32_t reserved1; // 0x0C - Reserved/padding
-        float scale;        // 0x10 - Scale factor
-        float rotation;     // 0x14 - Rotation angle
+        uint32_t flags;
+        uint16_t type;
+        int16_t char_or_param1;
+        int16_t param2;
+        int16_t param3;
+        uint32_t reserved1;
+        float scale;
+        float rotation;
     };
 
-    // Message display context structure
     struct MessageData
     {
         uint32_t field_00;
-        uint32_t flags; // 0x04
+        uint32_t flags;
         uint32_t field_08;
         uint32_t field_0C;
-        uint32_t command_count; // 0x10 - Number of commands
+        uint32_t command_count;
         uint32_t field_14;
-        uint64_t timestamp; // 0x18 - Used for timing effects
+        uint64_t timestamp;
         uint32_t field_20;
         uint32_t field_24;
-        uint32_t currentLine; // 0x28 - Current line being processed
+        uint32_t currentLine;
         uint32_t field_2C;
         uint32_t field_30;
         uint32_t field_34;
         uint32_t field_38;
-        TextCommand commands[]; // 0x3C - Array of text commands
+        TextCommand commands[];
     };
 
     extern "C"

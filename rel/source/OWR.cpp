@@ -280,182 +280,131 @@ namespace mod::owr
     KEEP_FUNC void replaceMultipleCharacters(ttyd::memory::SmartAllocationData *smartData, uint32_t startIndex, int value)
     {
         MessageData *msgData = (MessageData *)smartData->pMemory;
-        char newChars[2];
-        if (value < 10)
-            sprintf(newChars, " %d", value);
-        else
-            sprintf(newChars, "%d", value);
+        char newChars[3];
+        sprintf(newChars, value < 10 ? " %d" : "%d", value);
 
         int len = strlen(newChars);
-        for (int i = 0; i < len; i++)
+        for (int i = 0; i < len && (startIndex + i) < msgData->command_count; i++)
         {
-            if ((startIndex + i) >= msgData->command_count)
-                break;
-
             TextCommand *cmd = &msgData->commands[startIndex + i];
-            if (cmd->type < 0xFFF4)
-            {
-                // First command is our <numselect> command so the x and y positions need to be fixed
-                if (i == 0)
-                {
-                    cmd->char_or_param1 = 0;
-                    cmd->param2 = -10;
-                }
+            if (cmd->type >= 0xFFF4)
+                continue;
 
-                char c = newChars[i];
-                // Handle numbers and spaces only
-                if (c == ' ')
-                {
-                    cmd->type = 0x0000;  // Space character
-                    cmd->flags &= ~0x08; // Clear character flag for spaces
-                }
-                else if (c >= '0' && c <= '9')
-                {
-                    cmd->type = 0x0053 + (c - '0'); // Numbers 0-9 starting at 0x0053
-                    cmd->flags |= 0x08;             // Set character flag for visible chars
-                }
+            if (i == 0)
+            {
+                cmd->char_or_param1 = 0;
+                cmd->param2 = -10;
+            }
+
+            char c = newChars[i];
+            if (c == ' ')
+            {
+                cmd->type = 0x0000;
+                cmd->flags &= ~0x08;
+            }
+            else if (c >= '0' && c <= '9')
+            {
+                cmd->type = 0x0053 + (c - '0');
+                cmd->flags |= 0x08;
             }
         }
     }
 
-    // Hook for msgWindow_Entry to add numeric window support
     KEEP_FUNC int msgWindow_Entry_Hook(const char *message, int unk1, int windowType)
     {
-        // Call original function first
         int windowId = g_msgWindow_Entry_trampoline(message, unk1, windowType);
 
-        // Get the created window
         ttyd::windowdrv::Window *window = ttyd::windowdrv::windowGetPointer(windowId);
-        if (!window || !window->msgData || !window->msgData->pMemory)
-        {
-            return windowId;
-        }
-
-        // Additional safety check - verify the memory is properly initialized
-        MessageData *msgData = (MessageData *)window->msgData->pMemory;
-        if (!msgData || msgData->command_count == 0 || msgData->command_count > 1000) // Sanity check
-        {
-            return windowId;
-        }
-
-        // Look for NUMSELECT commands in the message data
-        for (uint32_t i = 0; i < msgData->command_count; i++)
-        {
-            TextCommand *cmd = &msgData->commands[i];
-
-            if (cmd->type == 0xFFF0)
-            {
-                // Setup numeric state from command
-                g_numericInput.initialValue = (int16_t)cmd->char_or_param1;
-                g_numericInput.minValue = cmd->param2;
-                g_numericInput.maxValue = cmd->param3;
-                g_numericInput.stepSize = (cmd->flags & 0xFF) ? cmd->flags : 1;
-                g_numericInput.currentValue = g_numericInput.initialValue;
-                g_numericInput.active = true;
-                g_numericInput.window_id = windowId;
-
-                // Override window functions for numeric input
-                window->mainFunc = (void *)numericWindow_Main;
-                window->param = 6;
-
-                // Position and size the numeric window
-                window->x = -100.0f; // Center horizontally
-                window->y = 0.0f;    // Center vertically
-                window->width = 200.0f;
-                window->height = 80.0f;
-
-                // Mark command as processed
-                cmd->flags |= 0x80000000;
-                break; // Only handle first NUMSELECT command
-            }
-        }
-
+    if (!window?.msgData?.pMemory)
         return windowId;
+
+    MessageData *msgData = (MessageData *)window->msgData->pMemory;
+    if (!msgData || msgData->command_count == 0 || msgData->command_count > 1000)
+        return windowId;
+
+    for (uint32_t i = 0; i < msgData->command_count; i++)
+    {
+        TextCommand *cmd = &msgData->commands[i];
+        if (cmd->type != 0xFFF0)
+            continue;
+
+        // Setup numeric input state
+        g_numericInput.initialValue = (int16_t)cmd->char_or_param1;
+        g_numericInput.minValue = cmd->param2;
+        g_numericInput.maxValue = cmd->param3;
+        g_numericInput.stepSize = (cmd->flags & 0xFF) ? cmd->flags : 1;
+        g_numericInput.currentValue = g_numericInput.initialValue;
+        g_numericInput.active = true;
+        g_numericInput.window_id = windowId;
+
+        // Configure window
+        window->mainFunc = (void *)numericWindow_Main;
+        window->param = 6;
+        window->x = -100.0f;
+        window->y = 0.0f;
+        window->width = 200.0f;
+        window->height = 80.0f;
+
+        cmd->flags |= 0x80000000;
+        break;
     }
 
-    // msgAnalize hook - injects NUMSELECT commands
+    return windowId;
+    }
+
     KEEP_FUNC void MsgAnalizeHook(ttyd::memory::SmartAllocationData *smartAlloc, const char *text)
     {
-        // CRITICAL: Validate inputs before doing ANYTHING
         if (!smartAlloc || !text)
-        {
-            return; // Invalid parameters
-        }
+            return;
 
-        // Call original first to process normal text
         g_msgAnalize_trampoline(smartAlloc, text);
 
-        // Quick check - if no numselect tags, we're done
         if (!strstr(text, "<numselect"))
-        {
             return;
-        }
 
-        // Get MessageData from SmartAllocationData
         MessageData *msg_data = (MessageData *)smartAlloc->pMemory;
-        if (!msg_data)
-        {
-            return; // Invalid MessageData pointer
-        }
+        if (!msg_data || msg_data->command_count > 1000)
+            return;
 
-        // CRITICAL: Validate MessageData structure after original processing
-        if (msg_data->command_count > 1000)
-        {
-            return; // Structure appears corrupted, abort
-        }
-
-        // Validate that we can safely access the commands array
-        // Check GameCube memory range
         uintptr_t addr = (uintptr_t)msg_data;
         if (addr < 0x80000000 || addr > 0x82000000)
-        {
-            return; // Outside valid GameCube memory range
-        }
+            return;
 
-        // Get commands array - offset 0x3C from MessageData start
         TextCommand *commands = (TextCommand *)((char *)msg_data + 0x3C);
-
         const char *pos = text;
         int tags_processed = 0;
 
-        while ((pos = strstr(pos, "<numselect")) != nullptr && tags_processed < 3)
+        while ((pos = strstr(pos, "<numselect")) && tags_processed < 3)
         {
             const char *end = strchr(pos, '>');
             if (!end)
                 break;
 
-            // Parse parameters: <numselect min max initial stepsize>
             int min_val = 0, max_val = 99, initial_val = 0, step_val = 1;
-
-            // Skip "<numselect" and parse 4 space-separated parameters
             const char *params = pos + 10;
             int parsed = sscanf(params, " %d %d %d %d", &min_val, &max_val, &initial_val, &step_val);
 
-            // Validate parameters
             if (parsed < 3 || min_val > max_val || step_val <= 0)
             {
                 pos = end + 1;
                 continue;
             }
 
-            // Find the correct insertion point - before END command (0xFFFF)
+            // Find insertion point before END command
             uint32_t insert_pos = msg_data->command_count;
             for (uint32_t i = 0; i < msg_data->command_count; i++)
             {
-                if (commands[i].type == 0xFFFF) // END command
+                if (commands[i].type == 0xFFFF)
                 {
                     insert_pos = i;
                     break;
                 }
             }
 
-            // Safety check: ensure we don't overflow
             if (insert_pos >= 999)
-            {
-                break; // Too many commands
-            }
+                break;
 
-            // Make room and insert NUMSELECT command
+            // Insert new command
             if (insert_pos < msg_data->command_count)
             {
                 memmove(&commands[insert_pos + 1],
@@ -463,176 +412,114 @@ namespace mod::owr
                         (msg_data->command_count - insert_pos) * sizeof(TextCommand));
             }
 
-            // Initialize new command
-            memset(&commands[insert_pos], 0, sizeof(TextCommand));
-            commands[insert_pos].flags = step_val;                      // Store step size in flags field
-            commands[insert_pos].type = 0xFFF0;                         // NUMSELECT command
-            commands[insert_pos].char_or_param1 = (int16_t)initial_val; // Initial value
-            commands[insert_pos].param2 = (int16_t)min_val;             // Minimum value
-            commands[insert_pos].param3 = (int16_t)max_val;             // Maximum value
-            commands[insert_pos].scale = 1.0f;
-            commands[insert_pos].rotation = 0.0f;
+            TextCommand *newCmd = &commands[insert_pos];
+            memset(newCmd, 0, sizeof(TextCommand));
+            newCmd->flags = step_val;
+            newCmd->type = 0xFFF0;
+            newCmd->char_or_param1 = (int16_t)initial_val;
+            newCmd->param2 = (int16_t)min_val;
+            newCmd->param3 = (int16_t)max_val;
+            newCmd->scale = 1.0f;
+            newCmd->rotation = 0.0f;
 
             msg_data->command_count++;
             tags_processed++;
-
             pos = end + 1;
         }
     }
 
+    static void handleNumericInput()
+    {
+        uint32_t btnTrg = keyGetButtonTrg(0);
+        uint32_t btnRep = keyGetButtonRep(0);
+        uint32_t dirTrg = keyGetDirTrg(0);
+        uint32_t dirRep = keyGetDirRep(0);
+
+        bool upPressed = (btnTrg | btnRep) & 0x08 || (dirTrg | dirRep) & 0x1000;
+        bool downPressed = (btnTrg | btnRep) & 0x04 || (dirTrg | dirRep) & 0x2000;
+
+        int oldValue = g_numericInput.currentValue;
+
+        if (upPressed && g_numericInput.currentValue + g_numericInput.stepSize <= g_numericInput.maxValue)
+            g_numericInput.currentValue += g_numericInput.stepSize;
+
+        if (downPressed && g_numericInput.currentValue - g_numericInput.stepSize >= g_numericInput.minValue)
+            g_numericInput.currentValue -= g_numericInput.stepSize;
+
+        // Clamp values
+        g_numericInput.currentValue = std::clamp(g_numericInput.currentValue, g_numericInput.minValue, g_numericInput.maxValue);
+
+        if (oldValue != g_numericInput.currentValue)
+            ttyd::pmario_sound::psndSFXOn(0x20005);
+    }
+
     KEEP_FUNC int numericWindow_Main(ttyd::windowdrv::Window *window)
     {
-        int originalValue = g_numericInput.currentValue;
-
-        // Call msgMain for base functionality - pass SmartAllocationData*
         msgMain(window->msgData);
 
-        // Handle window state transitions
         switch (window->windowState)
         {
             case 5: // Fade in
-                window->alpha += 25;
+                window->alpha = std::min(255, window->alpha + 25);
                 if (window->alpha >= 255)
-                {
-                    window->alpha = 255;
-                    window->windowState = 1; // Active state
-                }
+                    window->windowState = 1;
                 break;
 
-            case 1: // Active - handle numeric input
-            {
-                // Check for up input (increase value)
-                if (keyGetButtonTrg(0) & 0x08 || keyGetDirTrg(0) & 0x1000)
-                {
-                    if (g_numericInput.currentValue + g_numericInput.stepSize <= g_numericInput.maxValue)
-                    {
-                        g_numericInput.currentValue += g_numericInput.stepSize;
-                    }
-                }
-                else if (keyGetButtonRep(0) & 0x08 || keyGetDirRep(0) & 0x1000)
-                {
-                    if (g_numericInput.currentValue + g_numericInput.stepSize <= g_numericInput.maxValue)
-                    {
-                        g_numericInput.currentValue += g_numericInput.stepSize;
-                    }
-                }
+            case 1: // Active
+                handleNumericInput();
 
-                // Check for down input (decrease value)
-                if (keyGetButtonTrg(0) & 0x04 || keyGetDirTrg(0) & 0x2000)
-                {
-                    if (g_numericInput.currentValue - g_numericInput.stepSize >= g_numericInput.minValue)
-                    {
-                        g_numericInput.currentValue -= g_numericInput.stepSize;
-                    }
-                }
-                else if (keyGetButtonRep(0) & 0x04 || keyGetDirRep(0) & 0x2000)
-                {
-                    if (g_numericInput.currentValue - g_numericInput.stepSize >= g_numericInput.minValue)
-                    {
-                        g_numericInput.currentValue -= g_numericInput.stepSize;
-                    }
-                }
-
-                // Bounds checking
-                if (g_numericInput.currentValue < g_numericInput.minValue)
-                {
-                    g_numericInput.currentValue = g_numericInput.minValue;
-                }
-                if (g_numericInput.currentValue > g_numericInput.maxValue)
-                {
-                    g_numericInput.currentValue = g_numericInput.maxValue;
-                }
-
-                // Play sound if value changed
-                if (originalValue != g_numericInput.currentValue)
-                {
-                    ttyd::pmario_sound::psndSFXOn(0x20005); // Cursor move sound
-                }
-
-                // A button - store current value
-                if (keyGetButtonTrg(0) & 0x200)
+                if (keyGetButtonTrg(0) & 0x200) // A button
                 {
                     g_numericInput.selectedValue = g_numericInput.currentValue;
                     window->windowState = 7;
-                    ttyd::pmario_sound::psndSFXOn(0x20013); // Confirm sound
+                    ttyd::pmario_sound::psndSFXOn(0x20013);
                 }
-
-                // B button - store -1 (cancelled)
-                if (keyGetButtonTrg(0) & 0x100)
+                else if (keyGetButtonTrg(0) & 0x100) // B button
                 {
                     g_numericInput.selectedValue = -1;
                     window->windowState = 7;
-                    ttyd::pmario_sound::psndSFXOn(0x20012); // Cancel sound
+                    ttyd::pmario_sound::psndSFXOn(0x20012);
                 }
-            }
-            break;
+                break;
 
             case 7: // Fade out
                 if (window->alpha <= 0)
                 {
-                    window->windowState = 4;       // Finished
-                    window->flags &= ~2;           // Remove active flag
-                    g_numericInput.selectedValue = g_numericInput.currentValue; // Store final value
-                    return 1;                      // Signal completion
+                    window->windowState = 4;
+                    window->flags &= ~2;
+                    g_numericInput.selectedValue = g_numericInput.currentValue;
+                    return 1;
                 }
-                else
-                {
-                    window->alpha -= 25;
-                    if (window->alpha < 0)
-                        window->alpha = 0;
-                }
+                window->alpha = std::max(0, window->alpha - 25);
                 break;
         }
 
-        // Register for display
         float priority = 400.0f - (float)window->alpha;
         ttyd::dispdrv::dispEntry(ttyd::dispdrv::CameraId::k2d, 0, priority, numericWindow_Disp, window);
-
-        return 0; // Continue running
+        return 0;
     }
 
     KEEP_FUNC void numericWindow_Disp(ttyd::dispdrv::CameraId cameraId, void *user)
     {
-        (void)cameraId;
         ttyd::windowdrv::Window *window = (ttyd::windowdrv::Window *)user;
 
-        // Set up graphics state (same as selection window)
-        gc::gx::GXColor fogColor = {0x66, 0x06, 0x42, 0x80}; // Based on constant 0x80420660
+        gc::gx::GXColor fogColor = {0x66, 0x06, 0x42, 0x80};
         gc::gx::GXSetFog(0, 0.0f, 0.0f, 0.0f, 0.0f, &fogColor);
 
-        // Fix color handling - use proper RGBA white with alpha
         uint8_t alpha = window->alpha & 0xFF;
-        uint32_t frameColor = 0xFFFFFF00 | alpha; // White RGB + alpha channel
+        uint32_t frameColor = 0xFFFFFF00 | alpha;
 
-        // Call windowDispGX_Waku_col exactly like selectWindow_Disp
-        ttyd::windowdrv::windowDispGX_Waku_col(0,              // waku_type
-                                               &frameColor,    // color pointer
-                                               window->x,      // f1 - x position
-                                               window->y,      // f2 - y position
-                                               window->width,  // f3 - width
-                                               window->height, // f4 - height
-                                               30.0f           // f5 - depth (same as selectWindow_Disp)
-        );
+        ttyd::windowdrv::windowDispGX_Waku_col(0, &frameColor, window->x, window->y, window->width, window->height, 30.0f);
 
-        // Calculate text position (centered in window)
         float textX = window->x + (window->width / 2) - 15.0f;
         float textY = window->y - (window->height / 4) + 2.0f;
 
-        // Use msgDisp to render the current numeric value
-        // msgDisp will handle the text rendering using the message system
-
         replaceMultipleCharacters(window->msgData, 0, g_numericInput.currentValue);
-
         ttyd::msgdrv::msgDisp(window->msgData, textX, textY, alpha);
 
-        // Draw up/down arrows with better positioning
-        gc::vec3 upArrowPos = {window->x + window->width / 2, // Center horizontally
-                               window->y - 15.0f,             // Above window
-                               0.0f};
-
-        gc::vec3 downArrowPos = {window->x + window->width / 2,     // Center horizontally
-                                 window->y - window->height - 20.0f, // Below window with small gap
-                                 0.0f};
+        // Draw arrows
+        gc::vec3 upArrowPos = {window->x + window->width / 2, window->y - 15.0f, 0.0f};
+        gc::vec3 downArrowPos = {window->x + window->width / 2, window->y - window->height - 20.0f, 0.0f};
 
         ttyd::icondrv::iconDispGx(0.8f, &upArrowPos, 0x10, IconType::MENU_UP_POINTER);
         ttyd::icondrv::iconDispGx(0.8f, &downArrowPos, 0x10, IconType::MENU_DOWN_POINTER);
