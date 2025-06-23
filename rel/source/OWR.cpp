@@ -277,74 +277,42 @@ namespace mod::owr
         }
     }
 
-    uint16_t convertAsciiToWideChar(char ascii_char)
-    {
-        // From assembly: 3C 63 00 01 | 38 03 82 1F
-        // addis r3, r3, 0x1 | subi r0, r3, 0x7de1
-        // This equals: (ascii + 0x10000) - 0x7DE1 = ascii + 0x821F
-
-        if (ascii_char >= '0' && ascii_char <= '9')
-        {
-            return (uint16_t)(ascii_char + 0x821F);
-        }
-        return 0;
-    }
-
-    uint16_t getCharacterSearchResult(char character)
-    {
-        if (character >= '0' && character <= '9')
-        {
-            uint16_t wideChar = convertAsciiToWideChar(character);
-            return kanjiSearch(wideChar);
-        }
-        else
-        {
-            return hankakuSearch((uint8_t)character);
-        }
-    }
-
-    void replaceMultipleCharacters(ttyd::memory::SmartAllocationData *smartData, uint32_t startIndex, int value)
+    KEEP_FUNC void replaceMultipleCharacters(ttyd::memory::SmartAllocationData *smartData, uint32_t startIndex, int value)
     {
         MessageData *msgData = (MessageData *)smartData->pMemory;
-        char newChars[3];
-
+        char newChars[2];
         if (value < 10)
-            sprintf(newChars, "  %d", value);
-        else if (value < 100)
             sprintf(newChars, " %d", value);
         else
             sprintf(newChars, "%d", value);
 
         int len = strlen(newChars);
-
         for (int i = 0; i < len; i++)
         {
             if ((startIndex + i) >= msgData->command_count)
                 break;
 
             TextCommand *cmd = &msgData->commands[startIndex + i];
-
             if (cmd->type < 0xFFF4)
             {
-                char c = newChars[i];
-
-                // Handle numbers, spaces, and other ASCII characters
-                if ((c >= '0' && c <= '9') || c == ' ' || (c >= 'A' && c <= 'Z') || (c >= 'a' && c <= 'z'))
+                // First command is our <numselect> command so the x and y positions need to be fixed
+                if (i == 0)
                 {
-                    uint16_t searchResult = getCharacterSearchResult(c);
+                    cmd->char_or_param1 = 0;
+                    cmd->param2 = -10;
+                }
 
-                    cmd->type = searchResult;
-                    cmd->char_or_param1 = searchResult;
-
-                    // Update character flags
-                    if (c == ' ')
-                    {
-                        cmd->flags &= ~0x08; // Clear character flag for spaces
-                    }
-                    else
-                    {
-                        cmd->flags |= 0x08; // Set character flag for visible chars
-                    }
+                char c = newChars[i];
+                // Handle numbers and spaces only
+                if (c == ' ')
+                {
+                    cmd->type = 0x0000;  // Space character
+                    cmd->flags &= ~0x08; // Clear character flag for spaces
+                }
+                else if (c >= '0' && c <= '9')
+                {
+                    cmd->type = 0x0053 + (c - '0'); // Numbers 0-9 starting at 0x0053
+                    cmd->flags |= 0x08;             // Set character flag for visible chars
                 }
             }
         }
@@ -414,21 +382,21 @@ namespace mod::owr
             return; // Invalid parameters
         }
 
+        // Call original first to process normal text
+        g_msgAnalize_trampoline(smartAlloc, text);
+
+        // Quick check - if no numselect tags, we're done
+        if (!strstr(text, "<numselect"))
+        {
+            return;
+        }
+
         // Get MessageData from SmartAllocationData
         MessageData *msg_data = (MessageData *)smartAlloc->pMemory;
         if (!msg_data)
         {
             return; // Invalid MessageData pointer
         }
-
-        // Quick check - if no numselect tags, just call original
-        if (!strstr(text, "<numselect"))
-        {
-            return g_msgAnalize_trampoline(smartAlloc, text);
-        }
-
-        // Call original first to process normal text
-        g_msgAnalize_trampoline(smartAlloc, text);
 
         // CRITICAL: Validate MessageData structure after original processing
         if (msg_data->command_count > 1000)
@@ -444,8 +412,8 @@ namespace mod::owr
             return; // Outside valid GameCube memory range
         }
 
-        // Get commands array - offset 0x5C from MessageData start
-        TextCommand *commands = (TextCommand *)((char *)msg_data + 0x5C);
+        // Get commands array - offset 0x3C from MessageData start
+        TextCommand *commands = (TextCommand *)((char *)msg_data + 0x3C);
 
         const char *pos = text;
         int tags_processed = 0;
@@ -470,8 +438,16 @@ namespace mod::owr
                 continue;
             }
 
-            // Calculate insertion point (append to end)
-            int insert_pos = msg_data->command_count;
+            // Find the correct insertion point - before END command (0xFFFF)
+            uint32_t insert_pos = msg_data->command_count;
+            for (uint32_t i = 0; i < msg_data->command_count; i++)
+            {
+                if (commands[i].type == 0xFFFF) // END command
+                {
+                    insert_pos = i;
+                    break;
+                }
+            }
 
             // Safety check: ensure we don't overflow
             if (insert_pos >= 999)
@@ -480,20 +456,22 @@ namespace mod::owr
             }
 
             // Make room and insert NUMSELECT command
-            memmove(&commands[insert_pos + 1],
-                    &commands[insert_pos],
-                    (msg_data->command_count - insert_pos) * sizeof(TextCommand));
+            if (insert_pos < msg_data->command_count)
+            {
+                memmove(&commands[insert_pos + 1],
+                        &commands[insert_pos],
+                        (msg_data->command_count - insert_pos) * sizeof(TextCommand));
+            }
 
             // Initialize new command
             memset(&commands[insert_pos], 0, sizeof(TextCommand));
-            commands[insert_pos].flags = step_val;
-            commands[insert_pos].type = 0xFFF0;
-            commands[insert_pos].char_or_param1 = (uint16_t)initial_val;
-            commands[insert_pos].param2 = (int16_t)min_val;
-            commands[insert_pos].param3 = (int16_t)max_val;
-            commands[insert_pos].timing = 0;
+            commands[insert_pos].flags = step_val;                      // Store step size in flags field
+            commands[insert_pos].type = 0xFFF0;                         // NUMSELECT command
+            commands[insert_pos].char_or_param1 = (int16_t)initial_val; // Initial value
+            commands[insert_pos].param2 = (int16_t)min_val;             // Minimum value
+            commands[insert_pos].param3 = (int16_t)max_val;             // Maximum value
             commands[insert_pos].scale = 1.0f;
-            commands[insert_pos].shadow_offset = 0.0f;
+            commands[insert_pos].rotation = 0.0f;
 
             msg_data->command_count++;
             tags_processed++;
@@ -571,18 +549,19 @@ namespace mod::owr
                     ttyd::pmario_sound::psndSFXOn(0x20005); // Cursor move sound
                 }
 
-                // Check for A button (confirm)
+                // A button - store current value
                 if (keyGetButtonTrg(0) & 0x200)
                 {
-                    window->windowState = 7; // Close state
+                    g_numericInput.selectedValue = g_numericInput.currentValue;
+                    window->windowState = 7;
                     ttyd::pmario_sound::psndSFXOn(0x20013); // Confirm sound
                 }
 
-                // Check for B button (cancel)
+                // B button - store -1 (cancelled)
                 if (keyGetButtonTrg(0) & 0x100)
                 {
-                    g_numericInput.currentValue = -1;
-                    window->windowState = 7; // Close state
+                    g_numericInput.selectedValue = -1;
+                    window->windowState = 7;
                     ttyd::pmario_sound::psndSFXOn(0x20012); // Cancel sound
                 }
             }
@@ -636,13 +615,13 @@ namespace mod::owr
         );
 
         // Calculate text position (centered in window)
-        float textX = window->x + window->width / 2 - 15.0f;
-        float textY = window->y - window->height / 2;
+        float textX = window->x + (window->width / 2) - 15.0f;
+        float textY = window->y - (window->height / 4) + 2.0f;
 
         // Use msgDisp to render the current numeric value
         // msgDisp will handle the text rendering using the message system
 
-        replaceMultipleCharacters(window->msgData, 2, g_numericInput.currentValue);
+        replaceMultipleCharacters(window->msgData, 0, g_numericInput.currentValue);
 
         ttyd::msgdrv::msgDisp(window->msgData, textX, textY, alpha);
 
@@ -652,7 +631,7 @@ namespace mod::owr
                                0.0f};
 
         gc::vec3 downArrowPos = {window->x + window->width / 2,     // Center horizontally
-                                 window->y - window->height - 15.0f, // Below window with small gap
+                                 window->y - window->height - 20.0f, // Below window with small gap
                                  0.0f};
 
         ttyd::icondrv::iconDispGx(0.8f, &upArrowPos, 0x10, IconType::MENU_UP_POINTER);

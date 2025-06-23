@@ -7,24 +7,34 @@ namespace ttyd::msgdrv
 {
     struct TextCommand
     {
-        uint32_t flags;          // 0x00 - Command flags
-        uint16_t type;           // 0x04 - Command type (character code or special command)
-        uint16_t char_or_param1; // 0x06 - Character code or first parameter
-        int16_t param2;          // 0x08 - Second parameter
-        int16_t param3;          // 0x0A - Third parameter
-        uint32_t timing;         // 0x0C - Timing information
-        float scale;             // 0x10 - Text scale
-        float shadow_offset;     // 0x14 - Shadow offset
+        uint32_t flags;      // 0x00 - Main data/color value
+        uint16_t type;    // 0x04 - Command type
+        int16_t char_or_param1; // 0x06 - First parameter (often Y coordinate)
+        int16_t param2;     // 0x08 - Second parameter (often X coordinate)
+        int16_t param3;     // 0x0A - Third parameter (width/additional data)
+        uint32_t reserved1; // 0x0C - Reserved/padding
+        float scale;        // 0x10 - Scale factor
+        float rotation;     // 0x14 - Rotation angle
     };
 
+    // Message display context structure
     struct MessageData
     {
-        uint32_t flags;                 // 0x00 - Message flags (including pause flag)
-        uint32_t padding1[14];          // 0x04-0x38 - Various message system data
-        uint32_t command_count;         // 0x3C - Number of text commands
-        uint32_t current_command_index; // 0x40 - Current processing position
-        uint32_t padding2[6];           // 0x44-0x58 - More message data
-        TextCommand commands[];         // 0x5C+ - Array of text commands
+        uint32_t field_00;
+        uint32_t flags; // 0x04
+        uint32_t field_08;
+        uint32_t field_0C;
+        uint32_t command_count; // 0x10 - Number of commands
+        uint32_t field_14;
+        uint64_t timestamp; // 0x18 - Used for timing effects
+        uint32_t field_20;
+        uint32_t field_24;
+        uint32_t currentLine; // 0x28 - Current line being processed
+        uint32_t field_2C;
+        uint32_t field_30;
+        uint32_t field_34;
+        uint32_t field_38;
+        TextCommand commands[]; // 0x3C - Array of text commands
     };
 
     extern "C"

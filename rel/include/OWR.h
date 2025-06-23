@@ -67,6 +67,7 @@ namespace mod::owr
     int msgWindow_Entry_Hook(const char *message, int unk1, int windowType);
     int numericWindow_Main(ttyd::windowdrv::Window *window);
     void numericWindow_Disp(ttyd::dispdrv::CameraId cameraId, void *user);
+    void replaceMultipleCharacters(ttyd::memory::SmartAllocationData *smartData, uint32_t startIndex, int value);
 
     extern bool (*g_OSLink_trampoline)(OSModuleInfo *, void *);
     extern void (*g_seqSetSeq_trampoline)(SeqIndex, const char *, const char *);
