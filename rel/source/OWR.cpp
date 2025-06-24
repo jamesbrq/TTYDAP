@@ -48,6 +48,7 @@
 #include <cstdint>
 #include <cstdio>
 #include <cstring>
+#include <algorithm>
 
 using gc::pad::PadInput;
 using ttyd::common::ItemData;
@@ -312,44 +313,51 @@ namespace mod::owr
 
     KEEP_FUNC int msgWindow_Entry_Hook(const char *message, int unk1, int windowType)
     {
+        // Call original function first
         int windowId = g_msgWindow_Entry_trampoline(message, unk1, windowType);
 
+        // Get the created window
         ttyd::windowdrv::Window *window = ttyd::windowdrv::windowGetPointer(windowId);
-    if (!window?.msgData?.pMemory)
+        if (!window || !window->msgData || !window->msgData->pMemory)
+        {
+            return windowId;
+        }
+
+        // Additional safety check - verify the memory is properly initialized
+        MessageData *msgData = (MessageData *)window->msgData->pMemory;
+        if (!msgData || msgData->command_count == 0 || msgData->command_count > 1000) // Sanity check
+        {
+            return windowId;
+        }
+
+        for (uint32_t i = 0; i < msgData->command_count; i++)
+        {
+            TextCommand *cmd = &msgData->commands[i];
+            if (cmd->type != 0xFFF0)
+                continue;
+
+            // Setup numeric input state
+            g_numericInput.initialValue = (int16_t)cmd->char_or_param1;
+            g_numericInput.minValue = cmd->param2;
+            g_numericInput.maxValue = cmd->param3;
+            g_numericInput.stepSize = (cmd->flags & 0xFF) ? cmd->flags : 1;
+            g_numericInput.currentValue = g_numericInput.initialValue;
+            g_numericInput.active = true;
+            g_numericInput.window_id = windowId;
+
+            // Configure window
+            window->mainFunc = (void *)numericWindow_Main;
+            window->param = 6;
+            window->x = -100.0f;
+            window->y = 0.0f;
+            window->width = 200.0f;
+            window->height = 80.0f;
+
+            cmd->flags |= 0x80000000;
+            break;
+        }
+
         return windowId;
-
-    MessageData *msgData = (MessageData *)window->msgData->pMemory;
-    if (!msgData || msgData->command_count == 0 || msgData->command_count > 1000)
-        return windowId;
-
-    for (uint32_t i = 0; i < msgData->command_count; i++)
-    {
-        TextCommand *cmd = &msgData->commands[i];
-        if (cmd->type != 0xFFF0)
-            continue;
-
-        // Setup numeric input state
-        g_numericInput.initialValue = (int16_t)cmd->char_or_param1;
-        g_numericInput.minValue = cmd->param2;
-        g_numericInput.maxValue = cmd->param3;
-        g_numericInput.stepSize = (cmd->flags & 0xFF) ? cmd->flags : 1;
-        g_numericInput.currentValue = g_numericInput.initialValue;
-        g_numericInput.active = true;
-        g_numericInput.window_id = windowId;
-
-        // Configure window
-        window->mainFunc = (void *)numericWindow_Main;
-        window->param = 6;
-        window->x = -100.0f;
-        window->y = 0.0f;
-        window->width = 200.0f;
-        window->height = 80.0f;
-
-        cmd->flags |= 0x80000000;
-        break;
-    }
-
-    return windowId;
     }
 
     KEEP_FUNC void MsgAnalizeHook(ttyd::memory::SmartAllocationData *smartAlloc, const char *text)
@@ -446,8 +454,10 @@ namespace mod::owr
         if (downPressed && g_numericInput.currentValue - g_numericInput.stepSize >= g_numericInput.minValue)
             g_numericInput.currentValue -= g_numericInput.stepSize;
 
-        // Clamp values
-        g_numericInput.currentValue = std::clamp(g_numericInput.currentValue, g_numericInput.minValue, g_numericInput.maxValue);
+        if (g_numericInput.currentValue < g_numericInput.minValue)
+            g_numericInput.currentValue = g_numericInput.minValue;
+        else if (g_numericInput.currentValue > g_numericInput.maxValue)
+            g_numericInput.currentValue = g_numericInput.maxValue;
 
         if (oldValue != g_numericInput.currentValue)
             ttyd::pmario_sound::psndSFXOn(0x20005);
@@ -487,7 +497,6 @@ namespace mod::owr
                 {
                     window->windowState = 4;
                     window->flags &= ~2;
-                    g_numericInput.selectedValue = g_numericInput.currentValue;
                     return 1;
                 }
                 window->alpha = std::max(0, window->alpha - 25);
@@ -501,6 +510,7 @@ namespace mod::owr
 
     KEEP_FUNC void numericWindow_Disp(ttyd::dispdrv::CameraId cameraId, void *user)
     {
+        (void)cameraId;
         ttyd::windowdrv::Window *window = (ttyd::windowdrv::Window *)user;
 
         gc::gx::GXColor fogColor = {0x66, 0x06, 0x42, 0x80};
@@ -683,6 +693,56 @@ namespace mod::owr
         if (!strcmp(msgKey, "jolene_fukidashi_end"))
         {
             return "Well then.<wait 100> Shall we\nget going?\n<k>";
+        }
+        if (!strcmp(msgKey, "grubba_bribe"))
+        {
+            return "Well, well, well! If it ain't\nmy star fighter! Hoo-WEE!\n<k>\n<p>\nListen here... I been watchin'\nyou "
+                   "climb them ranks, and let\nme tell ya somethin'...\n<k>\n<p>\nYou got potential, son! Real\nchampionship "
+                   "material! But\nthis ranking business...\n<k>\n<p>\nWell, it can be slower than\nmolasses sometimes, if "
+                   "you\ncatch my drift...\n<k>\n<p>\nNow, between you and me,\nold Grubba's got some...\npull around these "
+                   "parts.\n<k>\n<p>\nWhat do ya say we make a little\ngentleman's agreement?\n<k>\n<p>\nHow many ranks you "
+                   "want to move?\nUp or down, doesn't matter!\nJust pick a number!\n<o>";
+        }
+        if (!strcmp(msgKey, "grubba_rank_same"))
+        {
+            return "<p>\nHold on there, son! You're\nalready at that rank!\n<k>\n<p>\nWhat are ya tryin' to pull\nhere? Heh "
+                   "heh...\n<k>\n<p>\nCome back when you actually\nwant to move somewhere!\n<k>";
+        }
+        if (!strcmp(msgKey, "grubba_pay"))
+        {
+            return "<p>\nSo you're talkin' about movin'\nthat many ranks, eh?\n<k>\n<p>\nThat'll cost ya about %d coins.\nNo "
+                   "problem "
+                   "for old Grubba!\n<k>\n<p>\nYou'd be movin' faster than\na Buzzy Beetle up a pipe!\n<k>\n<p>\nAin't nobody "
+                   "gotta know about\nour little arrangement, you\nread me here?\n<o>";
+        }
+        if (!strcmp(msgKey, "grubba_pay_prompt"))
+        {
+            return "<select 0 2 0 60>\nYou got yourself a deal!\nThat ain't right, Grubba.";
+        }
+        if (!strcmp(msgKey, "grubba_no_coins"))
+        {
+            return "<p>\nWell, I'll be! Looks like\nyou're a little light in the\npockets there, son!\n<k>\n<p>\nHeh heh... Can't "
+                   "squeeze blood\nfrom a turnip, as they say!\n<k>\n<p>\nTell ya what... Go earn yourself\nsome more coin, "
+                   "then come back\nand see old Grubba!\n<k>\n<p>\nA deal this good ain't gonna\nlast forever, you hear?\n<k>";
+        }
+        if (!strcmp(msgKey, "grubba_pay_accept"))
+        {
+            return "<p>\nHoo-WEE! Now that's what I like\nto hear, son!\n<k>\n<p>\nJust hand over them coins and...\nBAM! You'll be "
+                   "movin' ranks\nfaster than you can say...\n<k>\n<p>\n\"Great Gonzales\"!\nAin't that just "
+                   "DYNAMITE?\n<k>\n<p>\nPleasure doin' business with ya!\nNow get back in there and\nshow 'em what for!\n<k>";
+        }
+        if (!strcmp(msgKey, "grubba_pay_accept_no"))
+        {
+            return "<p>\nWell, I'll be... Heh heh...\nYou got some real integrity\nthere, son!\n<k>\n<p>\nCan't say I don't respect "
+                   "a\nfighter with principles...\nEven if it ain't good business!\n<k>\n<p>\nTell ya what... The offer's "
+                   "always\non the table if you change your\nmind, you hear?\n<k>\n<p>\nNow get back in there and show\n'em "
+                   "what the Great Gonzales\nis made of! Hoo-WEE!\n<k>";
+        }
+        if (!strcmp(msgKey, "grubba_pay_reject"))
+        {
+            return "<p>\nAw, come on now! Don't be\nsuch a penny-pincher!\n<k>\n<p>\nA fighter's gotta invest in\nhis future if he "
+                   "wants to\nmake it to the big time!\n<k>\n<p>\nBut I get it, son... Times are\ntough all over. Come back "
+                   "when\nyou got some coin to spare!\n<k>";
         }
         if (!strcmp(msgKey, "madam_abort"))
         {

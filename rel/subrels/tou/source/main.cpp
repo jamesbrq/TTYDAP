@@ -3,6 +3,7 @@
 #include "OWR.h"
 #include "patch.h"
 #include "subrel_tou.h"
+#include "ttyd/evtmgr_cmd.h"
 #include "ttyd/evt_bero.h"
 #include "ttyd/evt_case.h"
 #include "ttyd/evt_eff.h"
@@ -13,10 +14,14 @@
 #include "ttyd/evt_msg.h"
 #include "ttyd/evt_npc.h"
 #include "ttyd/evt_pouch.h"
+#include "ttyd/evt_window.h"
+#include "ttyd/swdrv.h"
+#include "ttyd/tou.h"
 
 #include <cstdint>
 
 using namespace ttyd;
+using namespace ttyd::tou;
 
 extern int32_t tou_evt_open_tou[];
 extern int32_t tou_talk_gardman[];
@@ -190,6 +195,28 @@ extern int32_t tou_chk[];
 
 const char jolene[] = "\x83\x4C\x83\x6D\x83\x56\x83\x52\x83\x8F";
 const char grubba[] = "\x83\x4B\x83\x93\x83\x58";
+
+EVT_DECLARE_USER_FUNC(setRanking, 1)
+EVT_DEFINE_USER_FUNC(setRanking)
+{
+    (void)isFirstCall;
+    int target_count = ttyd::evtmgr_cmd::evtGetValue(evt, evt->evtArguments[0]);
+    if (!tou_rank_wp || !tou_rank_wp->entries || target_count < 0)
+        return 2; 
+
+    RankingEntry *entries = (RankingEntry *)tou_rank_wp->entries;
+
+    for (int i = 0; i < tou_rank_wp->count; i++)
+    {
+        entries[i].flags &= ~FLAG_STOP;
+
+    }
+
+    entries[target_count].flags |= FLAG_STOP;
+    ttyd::swdrv::swByteSet(1717, target_count);
+
+    return 2;
+}
 
 // clang-format off
 EVT_BEGIN(talk_sakaba_evt)
@@ -454,17 +481,43 @@ EVT_BEGIN(tou_05_talk_gans_evt)
         RETURN()
     END_IF()
     USER_FUNC(evt_mario::evt_mario_key_onoff, 0)
-    USER_FUNC(evt_msg::evt_msg_print, 1, PTR("Select your number<o>"), 0, PTR(&grubba))
+    // Insert BGM here
+    USER_FUNC(evt_msg::evt_msg_print, 0, PTR("grubba_bribe"), 0, PTR(&grubba))
     USER_FUNC(evt_msg_numselect, PTR("<numselect 1 20 20 1>\n20"), LW(0))
-    IF_SMALL(LW(0), 20)
-        USER_FUNC(evt_msg::evt_msg_print_add, 1, PTR("<p>\nSmaller Than 20\n<k>"))
-        USER_FUNC(evt_mario::evt_mario_key_onoff, 1)
-        RETURN()
+    IF_LARGE(LW(0), 0)
+        SET(LW(1), LW(0))
+        USER_FUNC(tou_evt_tou_get_ranking, LW(2))
+        IF_EQUAL(LW(2), LW(1))
+            USER_FUNC(evt_msg::evt_msg_print_add, 0, PTR("grubba_rank_same"))
+            USER_FUNC(evt_mario::evt_mario_key_onoff, 1)
+            RETURN()
+        SUB(LW(2), LW(1))
+        MUL(LW(2), 20)
+        IF_SMALL(LW(2), 0)
+            MUL(LW(2), -1)
+        END_IF()
+        USER_FUNC(evt_window::evt_win_coin_on, 0, LW(10))
+        USER_FUNC(evt_msg::evt_msg_print_add_insert, 0, PTR("grubba_pay"), LW(2))
+        USER_FUNC(evt_msg::evt_msg_select, 0, PTR("grubba_pay_prompt"))
+        IF_EQUAL(LW(0), 0)
+            USER_FUNC(evt_pouch::evt_pouch_get_coin, LW(3))
+            IF_SMALL(LW(3), LW(2))
+                USER_FUNC(evt_msg::evt_msg_print_add, 0, PTR("grubba_no_coins"))
+                USER_FUNC(evt_window::evt_win_coin_off, LW(10))
+            ELSE()
+                MUL(LW(2), -1)
+                USER_FUNC(evt_pouch::evt_pouch_add_coin, LW(2))
+                USER_FUNC(evt_msg::evt_msg_print_add, 0, PTR("grubba_pay_accept"))
+                USER_FUNC(evt_window::evt_win_coin_off, LW(10))
+                USER_FUNC(setRanking, LW(1))
+            END_IF()
+        ELSE()
+            USER_FUNC(evt_msg::evt_msg_print_add, 0, PTR("grubba_pay_accept_no"))
+        END_IF()
     ELSE()
-        USER_FUNC(evt_msg::evt_msg_print_add, 1, PTR("<p>\nLarger Than 20\n<k>"))
-        USER_FUNC(evt_mario::evt_mario_key_onoff, 1)
-        RETURN()
+        USER_FUNC(evt_msg::evt_msg_print_add, 1, PTR("grubba_pay_reject"))
     END_IF()
+    // Revert BGM here
     USER_FUNC(evt_mario::evt_mario_key_onoff, 1)
     RETURN()
 EVT_END()
