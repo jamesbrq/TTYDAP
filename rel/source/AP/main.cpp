@@ -138,10 +138,8 @@ EVT_DEFINE_USER_FUNC_KEEP(evt_msg_numselect)
 {
     if (isFirstCall)
     {
-        // Direct text pointer
         const char *messageText = reinterpret_cast<const char *>(ttyd::evtmgr_cmd::evtGetValue(evt, evt->evtArguments[0]));
 
-        // Create numeric window using msgWindow_Entry
         // The msgAnalyze hook will detect <numselect> tags and set up the window
         ttyd::msgdrv::msgWindow_Entry(messageText, 0, 0);
 
@@ -150,7 +148,7 @@ EVT_DEFINE_USER_FUNC_KEEP(evt_msg_numselect)
 
     if (ttyd::windowdrv::windowCheckID(g_numericInput.window_id) != 0)
     {
-        return 0; // Continue waiting - window still open
+        return 0; // Continue waiting - window still opening
     }
 
     // Store result in second event argument
