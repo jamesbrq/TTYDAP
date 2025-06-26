@@ -139,27 +139,23 @@ EVT_DEFINE_USER_FUNC_KEEP(evt_msg_numselect)
     if (isFirstCall)
     {
         const char *messageText = reinterpret_cast<const char *>(ttyd::evtmgr_cmd::evtGetValue(evt, evt->evtArguments[0]));
-
-        // The msgAnalyze hook will detect <numselect> tags and set up the window
         ttyd::msgdrv::msgWindow_Entry(messageText, 0, 0);
-
         return 0; // Continue - window is opening
     }
 
-    if (ttyd::windowdrv::windowCheckID(g_numericInput.window_id) != 0)
+    // Check if the numeric input is still active
+    if (g_numericInput.active)
     {
-        return 0; // Continue waiting - window still opening
+        return 0; // Continue waiting - user hasn't made a selection yet
     }
 
-    // Store result in second event argument
+    // User has made a selection (A or B pressed)
     ttyd::evtmgr_cmd::evtSetValue(evt, evt->evtArguments[1], g_numericInput.selectedValue);
 
-    // Clean up window
     ttyd::windowdrv::windowDeleteID(g_numericInput.window_id);
 
     // Clean up our global state
     g_numericInput = {};
-
     return 2; // Event complete
 }
 

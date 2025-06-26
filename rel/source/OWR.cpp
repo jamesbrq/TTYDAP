@@ -392,6 +392,13 @@ namespace mod::owr
             const char *params = pos + 10;
             int parsed = sscanf(params, " %d %d %d %d", &min_val, &max_val, &initial_val, &step_val);
 
+            int initial = ttyd::swdrv::swByteGet(1724);
+            if (initial > 0)
+            {
+                initial_val = ttyd::swdrv::swByteGet(1724);
+                ttyd::swdrv::swByteSet(1724, 0);
+            }
+
             if (parsed < 3 || min_val > max_val || step_val <= 0)
             {
                 pos = end + 1;
@@ -478,17 +485,17 @@ namespace mod::owr
             case 1: // Active
                 handleNumericInput();
 
-                if (keyGetButtonTrg(0) & 0x200) // A button
+                if (keyGetButtonTrg(0) & 0x100) // A button
                 {
                     g_numericInput.selectedValue = g_numericInput.currentValue;
                     window->windowState = 7;
-                    ttyd::pmario_sound::psndSFXOn(0x20013);
+                    ttyd::pmario_sound::psndSFXOn(0x20012);
                 }
-                else if (keyGetButtonTrg(0) & 0x100) // B button
+                else if (keyGetButtonTrg(0) & 0x200) // B button
                 {
                     g_numericInput.selectedValue = -1;
                     window->windowState = 7;
-                    ttyd::pmario_sound::psndSFXOn(0x20012);
+                    ttyd::pmario_sound::psndSFXOn(0x20013);
                 }
                 break;
 
@@ -497,6 +504,7 @@ namespace mod::owr
                 {
                     window->windowState = 4;
                     window->flags &= ~2;
+                    g_numericInput.active = false;
                     return 1;
                 }
                 window->alpha = std::max(0, window->alpha - 25);
@@ -710,7 +718,7 @@ namespace mod::owr
         }
         if (!strcmp(msgKey, "grubba_pay"))
         {
-            return "<p>\nSo you're talkin' about movin'\nthat many ranks, eh?\n<k>\n<p>\nThat'll cost ya about %d coins.\nNo "
+            return "<p>\nSo you're talkin' about movin'\nthat many ranks, eh?\n<k>\n<p>\nThat'll cost ya about <NUM> coin<S>.\nNo "
                    "problem "
                    "for old Grubba!\n<k>\n<p>\nYou'd be movin' faster than\na Buzzy Beetle up a pipe!\n<k>\n<p>\nAin't nobody "
                    "gotta know about\nour little arrangement, you\nread me here?\n<o>";
@@ -1462,6 +1470,8 @@ namespace mod::owr
     void OWR::Update()
     {
         gState->apSettings->inGame = static_cast<uint8_t>(checkIfInGame());
+        if (gState->apSettings->touConditions)
+            ttyd::swdrv::swClear(2443);
         SequenceInit();
         RecieveItems();
     }

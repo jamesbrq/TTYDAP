@@ -180,6 +180,7 @@ extern int32_t tou_evt_nusumi[];
 extern int32_t tou_evt_first[];
 extern int32_t tou_13_init_evt[];
 extern int32_t tou_all_party_lecture[];
+extern int32_t tou_rankingControll[];
 
 // Assembly
 extern int32_t tou_disp_proc[];
@@ -200,20 +201,45 @@ EVT_DECLARE_USER_FUNC(setRanking, 1)
 EVT_DEFINE_USER_FUNC(setRanking)
 {
     (void)isFirstCall;
-    int target_count = ttyd::evtmgr_cmd::evtGetValue(evt, evt->evtArguments[0]);
-    if (!tou_rank_wp || !tou_rank_wp->entries || target_count < 0)
-        return 2; 
+    int target_rank = ttyd::evtmgr_cmd::evtGetValue(evt, evt->evtArguments[0]);
 
-    RankingEntry *entries = (RankingEntry *)tou_rank_wp->entries;
+    RankingData *ranking_data = tou_rank_wp;
+    RankingEntry *entries = ranking_data->entries;
 
-    for (int i = 0; i < tou_rank_wp->count; i++)
+    int player_index = -1;
+    for (int i = 0; i < ranking_data->count; i++)
     {
-        entries[i].flags &= ~FLAG_STOP;
-
+        if (entries[i].player_id == 0x14)
+        {
+            player_index = i;
+            break;
+        }
     }
 
-    entries[target_count].flags |= FLAG_STOP;
-    ttyd::swdrv::swByteSet(1717, target_count);
+    if (player_index == -1)
+    {
+        return 2; // Player not found
+    }
+
+    if (target_rank < player_index)
+        for (int i = player_index - 1; i >= 0; i--)
+        {
+            if (i < target_rank)
+                break;
+            entries[i].flags |= FLAG_WIN;
+        }
+    else
+    {
+        for (int i = player_index + 1; i <= ranking_data->count; i++)
+        {
+            if (i > target_rank)
+                break;
+            entries[i].flags &= ~FLAG_WIN;
+        }
+    }
+
+    ttyd::swdrv::swSet(2443); // Set win condition flag so we fight the next rank
+    ttyd::tou::tou_rankingControll();
 
     return 2;
 }
@@ -483,21 +509,31 @@ EVT_BEGIN(tou_05_talk_gans_evt)
     USER_FUNC(evt_mario::evt_mario_key_onoff, 0)
     // Insert BGM here
     USER_FUNC(evt_msg::evt_msg_print, 0, PTR("grubba_bribe"), 0, PTR(&grubba))
-    USER_FUNC(evt_msg_numselect, PTR("<numselect 1 20 20 1>\n20"), LW(0))
-    IF_LARGE(LW(0), 0)
+    USER_FUNC(tou_evt_tou_get_ranking, LW(2))
+    SET(GSW(1724), LW(2))
+    IF_SMALL(GSWF(6075), 1)
+        SET(LW(14), PTR("<numselect 11 20 20 1>\n%d"))
+    ELSE()
+        SET(LW(14), PTR("<numselect 1 20 20 1>\n%d"))
+    END_IF()
+    USER_FUNC(evt_msg::evt_msg_fill_num, 1, LW(14), LW(14), LW(2))
+    USER_FUNC(evt_msg_numselect, LW(14), LW(0))
+    IF_LARGE_EQUAL(LW(0), 0)
         SET(LW(1), LW(0))
         USER_FUNC(tou_evt_tou_get_ranking, LW(2))
         IF_EQUAL(LW(2), LW(1))
             USER_FUNC(evt_msg::evt_msg_print_add, 0, PTR("grubba_rank_same"))
             USER_FUNC(evt_mario::evt_mario_key_onoff, 1)
             RETURN()
+        END_IF()
         SUB(LW(2), LW(1))
         MUL(LW(2), 20)
         IF_SMALL(LW(2), 0)
             MUL(LW(2), -1)
         END_IF()
         USER_FUNC(evt_window::evt_win_coin_on, 0, LW(10))
-        USER_FUNC(evt_msg::evt_msg_print_add, 0, PTR("grubba_pay"))
+        USER_FUNC(evt_msg::evt_msg_fill_num, 0, LW(14), PTR("grubba_pay"), LW(2))
+        USER_FUNC(evt_msg::evt_msg_print_add, 1, LW(14))
         USER_FUNC(evt_msg::evt_msg_select, 0, PTR("grubba_pay_prompt"))
         IF_EQUAL(LW(0), 0)
             USER_FUNC(evt_pouch::evt_pouch_get_coin, LW(3))
@@ -513,9 +549,10 @@ EVT_BEGIN(tou_05_talk_gans_evt)
             END_IF()
         ELSE()
             USER_FUNC(evt_msg::evt_msg_print_add, 0, PTR("grubba_pay_accept_no"))
+            USER_FUNC(evt_window::evt_win_coin_off, LW(10))
         END_IF()
     ELSE()
-        USER_FUNC(evt_msg::evt_msg_print_add, 1, PTR("grubba_pay_reject"))
+        USER_FUNC(evt_msg::evt_msg_print_add, 0, PTR("grubba_pay_reject"))
     END_IF()
     // Revert BGM here
     USER_FUNC(evt_mario::evt_mario_key_onoff, 1)
