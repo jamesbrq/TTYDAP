@@ -562,13 +562,14 @@ namespace mod::owr
             {
                 handleNumericInput();
 
-                if (keyGetButtonTrg(0) & 0x100) // A button
+                const uint32_t btnTrg = keyGetButtonTrg(0);
+                if (btnTrg & 0x100) // A button
                 {
                     numericInputPtr->selectedValue = numericInputPtr->currentValue;
                     window->windowState = 7;
                     ttyd::pmario_sound::psndSFXOn(0x20012);
                 }
-                else if (keyGetButtonTrg(0) & 0x200) // B button
+                else if (btnTrg & 0x200) // B button
                 {
                     numericInputPtr->selectedValue = -1;
                     window->windowState = 7;
