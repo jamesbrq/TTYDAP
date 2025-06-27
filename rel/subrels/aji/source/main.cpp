@@ -397,7 +397,7 @@ namespace mod
         aji_ele_2[5] = 11;
 
         aji_evt_elv_init[1] = GSW(1707);
-        aji_evt_elv_init[3] = 16;
+        aji_evt_elv_init[3] = 99; // Unused
         aji_evt_elv_init[67] = GSW(1707);
         aji_evt_elv_init[68] = 10;
         aji_evt_elv_init[162] = GSW(1707);

@@ -575,7 +575,7 @@ void ApplyGor02Patches()
     gor_kurihakase_after3minutes[137] = 53;
 
 	patch::writePatch(&gor_evt_monosiri[18], gor_evt_monosiri_hook, sizeof(gor_evt_monosiri_hook));
-    gor_evt_monosiri[19] = 0;
+    gor_evt_monosiri[20] = 0;
 
     patch::writePatch(&gor_02_init_evt[0], gor_02_init_evt1_hook, sizeof(gor_02_init_evt1_hook));
     gor_02_init_evt[46] = GSW(1700);

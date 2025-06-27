@@ -284,7 +284,7 @@ namespace mod::owr
             ttyd::swdrv::swSet(6300);
         else if (strncmp(map, "tik", 3) == 0)
             ttyd::swdrv::swSet(6301);
-        else if (strncmp(map, "hei", 3) == 0)
+        else if (strcmp(map, "hei_00") == 0)
             ttyd::swdrv::swSet(6302);
         else if (strncmp(map, "nok", 3) == 0)
             ttyd::swdrv::swSet(6303);
@@ -353,6 +353,10 @@ namespace mod::owr
         // Advance Boggly Woods sequence if the great tree is opened
         if (ttyd::swdrv::swByteGet(1713) >= 1 && ttyd::swdrv::swByteGet(1702) < 6)
             ttyd::swdrv::swByteSet(1702, 6);
+
+        // Advance Punio tik sequence if warped out of early
+        if (ttyd::swdrv::swByteGet(1718) >= 3 && strncmp(map, "win", 3))
+            ttyd::swdrv::swByteSet(1718, 5);
 
         if (strcmp(map, "rsh_01_a") == 0)
         {
