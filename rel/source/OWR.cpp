@@ -487,10 +487,10 @@ namespace mod::owr
 
     static void handleNumericInput()
     {
-        const uint32_t btnTrg = keyGetButtonTrg(0);
-        const uint32_t btnRep = keyGetButtonRep(0);
-        const uint32_t dirTrg = keyGetDirTrg(0);
-        const uint32_t dirRep = keyGetDirRep(0);
+        const uint32_t btnTrg = keyGetButtonTrg(gc::pad::PadId::CONTROLLER_ONE);
+        const uint32_t btnRep = keyGetButtonRep(gc::pad::PadId::CONTROLLER_ONE);
+        const uint32_t dirTrg = keyGetDirTrg(gc::pad::PadId::CONTROLLER_ONE);
+        const uint32_t dirRep = keyGetDirRep(gc::pad::PadId::CONTROLLER_ONE);
 
         const bool upPressed = ((btnTrg | btnRep) & 0x08) || ((dirTrg | dirRep) & 0x1000);
         const bool downPressed = ((btnTrg | btnRep) & 0x04) || ((dirTrg | dirRep) & 0x2000);
@@ -562,14 +562,14 @@ namespace mod::owr
             {
                 handleNumericInput();
 
-                const uint32_t btnTrg = keyGetButtonTrg(0);
-                if (btnTrg & 0x100) // A button
+                const uint32_t btnTrg = keyGetButtonTrg(gc::pad::PadId::CONTROLLER_ONE);
+                if (btnTrg & gc::pad::PadInput::PAD_A)
                 {
                     numericInputPtr->selectedValue = numericInputPtr->currentValue;
                     window->windowState = 7;
                     ttyd::pmario_sound::psndSFXOn(0x20012);
                 }
-                else if (btnTrg & 0x200) // B button
+                else if (btnTrg & gc::pad::PadInput::PAD_B)
                 {
                     numericInputPtr->selectedValue = -1;
                     window->windowState = 7;
