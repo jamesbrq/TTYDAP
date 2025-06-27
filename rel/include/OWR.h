@@ -8,10 +8,11 @@
 #include <ttyd/party.h>
 #include <ttyd/seqdrv.h>
 #include <ttyd/win_root.h>
-
-#include <cstdint>
 #include <ttyd/msgdrv.h>
 #include <ttyd/windowdrv.h>
+
+#include <cstdint>
+#include <cstring>
 
 using namespace ttyd::seqdrv;
 using namespace ttyd::party;
@@ -29,7 +30,6 @@ namespace mod::owr
         void OnModuleLoaded(OSModuleInfo *module_info);
         void SequenceInit();
         void DrawString(const char *data, float x, float y, uint32_t color, float scale = 1.0f);
-        void HomewardWarp();
         void RecieveItems();
 
         StateManager state;
@@ -37,14 +37,16 @@ namespace mod::owr
 
     struct NumericInputData
     {
+        int32_t window_id;
+        int16_t initialValue;
+        int16_t currentValue;
+        int16_t selectedValue;
+        int16_t minValue;
+        int16_t maxValue;
+        uint8_t stepSize;
         bool active;
-        int initialValue;
-        int currentValue;
-        int minValue;
-        int maxValue;
-        int selectedValue;
-        int stepSize;
-        int window_id;
+
+        void clearState() { memset(this, 0, sizeof(NumericInputData)); }
     };
 
     extern OWR *gSelf;
@@ -71,7 +73,7 @@ namespace mod::owr
 
     extern bool (*g_OSLink_trampoline)(OSModuleInfo *, void *);
     extern void (*g_seqSetSeq_trampoline)(SeqIndex, const char *, const char *);
-    extern void (*gTrampoline_seq_logoMain)(SeqInfo *);
+    extern void (*g_seq_logoMain_trampoline)(SeqInfo *);
     extern uint32_t (*g_pouchGetItem_trampoline)(int32_t);
     extern void (*g_partySetForceMove_trampoline)(ttyd::party::PartyEntry *, float, float, float);
     extern int32_t (*g_evt_mario_set_pose_trampoline)(ttyd::evtmgr::EvtEntry *, bool);

@@ -144,18 +144,18 @@ EVT_DEFINE_USER_FUNC_KEEP(evt_msg_numselect)
     }
 
     // Check if the numeric input is still active
-    if (g_numericInput.active)
+    NumericInputData *numericInputPtr = &g_numericInput;
+    if (numericInputPtr->active)
     {
         return 0; // Continue waiting - user hasn't made a selection yet
     }
 
     // User has made a selection (A or B pressed)
-    ttyd::evtmgr_cmd::evtSetValue(evt, evt->evtArguments[1], g_numericInput.selectedValue);
-
-    ttyd::windowdrv::windowDeleteID(g_numericInput.window_id);
+    ttyd::evtmgr_cmd::evtSetValue(evt, evt->evtArguments[1], numericInputPtr->selectedValue);
+    ttyd::windowdrv::windowDeleteID(numericInputPtr->window_id);
 
     // Clean up our global state
-    g_numericInput = {};
+    numericInputPtr->clearState();
     return 2; // Event complete
 }
 
@@ -217,7 +217,7 @@ EVT_DEFINE_USER_FUNC_KEEP(handleIntermissionSkip)
     return 2;
 }
 
-EVT_DEFINE_USER_FUNC_KEEP(checkTattleItem) 
+EVT_DEFINE_USER_FUNC_KEEP(checkTattleItem)
 {
     (void)isFirstCall;
 
