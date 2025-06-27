@@ -355,8 +355,12 @@ namespace mod::owr
             ttyd::swdrv::swByteSet(1702, 6);
 
         // Advance Punio tik sequence if warped out of early
-        if (ttyd::swdrv::swByteGet(1718) >= 3 && strncmp(map, "win", 3))
+        if (ttyd::swdrv::swByteGet(1718) >= 3 && strncmp(map, "win", 3) == 0)
             ttyd::swdrv::swByteSet(1718, 5);
+
+        // Enable post chapter 2 checks right when the chapter is beaten
+        if (ttyd::swdev::swByteGet(1713) >= 11 && strncmp(map, "mri", 3) == 0)
+            ttyd::swdrv::swSet(2884);
 
         if (strcmp(map, "rsh_01_a") == 0)
         {
