@@ -593,7 +593,7 @@ namespace mod::owr
             }
         }
 
-        const float priority = 400.0f - intToFloat(static_cast<int32_t>(window->alpha));
+        const float priority = 400.0f - intToFloat(static_cast<int32_t>(windowAlpha));
         ttyd::dispdrv::dispEntry(ttyd::dispdrv::CameraId::k2d, 0, priority, numericWindow_Disp, window);
         return 0;
     }
@@ -622,8 +622,8 @@ namespace mod::owr
         gc::vec3 upArrowPos(windowPosX, (window->y - 15.0f), 0.0f);
         gc::vec3 downArrowPos(windowPosX, ((window->y - window->height) - 20.0f), 0.0f);
 
-        ttyd::icondrv::iconDispGx(0.8f, &upArrowPos, 0x10, IconType::MENU_UP_POINTER);
-        ttyd::icondrv::iconDispGx(0.8f, &downArrowPos, 0x10, IconType::MENU_DOWN_POINTER);
+        ttyd::icondrv::iconDispGxAlpha(0.8f, &upArrowPos, 0x10, IconType::MENU_UP_POINTER, alpha);
+        ttyd::icondrv::iconDispGxAlpha(0.8f, &downArrowPos, 0x10, IconType::MENU_DOWN_POINTER, alpha);
     }
 
     KEEP_FUNC bool OSLinkHook(OSModuleInfo *new_module, void *bss)
