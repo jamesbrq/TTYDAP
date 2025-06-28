@@ -41,7 +41,7 @@ namespace ttyd::mario
         ttyd::mario_motion::MarioMotion prevMotionId;
         uint16_t pad_32;
         uint32_t wMapTime;
-        uint8_t unk_38;
+        int8_t wCtrl;
         int8_t wKey;
         uint16_t unk_3a;
         MarioCharacters characterId;
@@ -209,7 +209,7 @@ namespace ttyd::mario
         // marioCtrlOn
         // marioCtrlOff
         // marioKeyOffChk
-        // marioCtrlOffChk
+        int8_t marioCtrlOffChk();
         // marioFBattlePost
         // marioFBattlePrepare
         // marioChkCtrl

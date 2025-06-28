@@ -116,7 +116,7 @@ const uint16_t GSWF_ARR[] = {
     1925,
 
     // Sir Swoop cutscene
-    //2413,
+    // 2413,
 
     // Ch.3 jolene hallway cutscene
     2445,
@@ -148,6 +148,7 @@ namespace mod::owr
 
     KEEP_VAR bool (*g_OSLink_trampoline)(OSModuleInfo *, void *) = nullptr;
     KEEP_VAR void (*g_seq_logoMain_trampoline)(SeqInfo *info) = nullptr;
+    KEEP_VAR void (*g_seq_gameInit_trampoline)(SeqInfo *info) = nullptr;
     KEEP_VAR void (*g_seqSetSeq_trampoline)(SeqIndex seq, const char *map, const char *bero) = nullptr;
     KEEP_VAR uint32_t (*g_pouchGetItem_trampoline)(int32_t) = nullptr;
     KEEP_VAR void (*g_partySetForceMove_trampoline)(ttyd::party::PartyEntry *ptr, float x, float z, float speed) = nullptr;
@@ -699,8 +700,6 @@ namespace mod::owr
             return g_seqSetSeq_trampoline(seq, map, bero);
         }
 
-        setFirstVisitSW(map); // Set GSWF flag on first visit to a map
-
         // Give Zess T. the conctact lens upon entering westside
         if (strcmp(map, "gor_03") == 0)
         {
@@ -784,6 +783,18 @@ namespace mod::owr
         }
 
         return g_seqSetSeq_trampoline(seq, map, bero);
+    }
+
+    // runs after map changes
+    KEEP_FUNC void seq_gameInitHook(SeqInfo *info)
+    {
+        ttyd::mario::Player *player = marioGetPtr();
+        // only visit a location if you are mario, and it's not a cutscene
+        if (player->characterId == MarioCharacters::kMario && !ttyd::mario::marioCtrlOffChk())
+        {
+            setFirstVisitSW(ttyd::seq_mapchange::_next_map); // Set GSWF flag on first visit to a map
+        }
+        g_seq_gameInit_trampoline(info);
     }
 
     KEEP_FUNC const char *msgSearchHook(const char *msgKey)

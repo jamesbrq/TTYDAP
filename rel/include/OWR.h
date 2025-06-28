@@ -60,6 +60,7 @@ namespace mod::owr
     int32_t evtMarioSetPoseHook(EvtEntry *evt, bool firstCall);
     const char *msgSearchHook(const char *msgKey);
     void logoSkip(SeqInfo *index);
+    void seq_gameInitHook(SeqInfo *index);
     void DisplayStarPowerNumber();
     void DisplayStarPowerOrbs(float x, float y, int32_t star_power);
     void SetMaxSP(int32_t star);
@@ -74,6 +75,7 @@ namespace mod::owr
     extern bool (*g_OSLink_trampoline)(OSModuleInfo *, void *);
     extern void (*g_seqSetSeq_trampoline)(SeqIndex, const char *, const char *);
     extern void (*g_seq_logoMain_trampoline)(SeqInfo *);
+    extern void (*g_seq_gameInit_trampoline)(SeqInfo *);
     extern uint32_t (*g_pouchGetItem_trampoline)(int32_t);
     extern void (*g_partySetForceMove_trampoline)(ttyd::party::PartyEntry *, float, float, float);
     extern int32_t (*g_evt_mario_set_pose_trampoline)(ttyd::evtmgr::EvtEntry *, bool);
