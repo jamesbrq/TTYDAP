@@ -20,7 +20,7 @@ namespace ttyd::evt_msg
         // evt_msg_close
         // evt_msg_repeat
         EVT_DECLARE_USER_FUNC(evt_msg_continue, 0)
-        // evt_msg_print_add_insert
+        EVT_DECLARE_USER_FUNC(evt_msg_print_add_insert, 3)
         EVT_DECLARE_USER_FUNC(evt_msg_print_add, 2)
         EVT_DECLARE_USER_FUNC(evt_msg_print_insert, -1)
         // evt_msg_print_battle_party

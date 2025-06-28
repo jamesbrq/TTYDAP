@@ -520,7 +520,7 @@ namespace mod::owr
         ApplyItemDataTablePatches();
 
         g_OSLink_trampoline = patch::hookFunction(OSLink, OSLinkHook);
-        gTrampoline_seq_logoMain = patch::hookFunction(seq_logo::seq_logoMain, logoSkip);
+        g_seq_logoMain_trampoline = patch::hookFunction(seq_logo::seq_logoMain, logoSkip);
         g_seqSetSeq_trampoline = patch::hookFunction(seqdrv::seqSetSeq, seqSetSeqHook);
         g_msgSearch_trampoline = patch::hookFunction(msgdrv::msgSearch, msgSearchHook);
         g_pouchGetItem_trampoline = patch::hookFunction(mario_pouch::pouchGetItem, pouchGetItemHook);
@@ -530,6 +530,8 @@ namespace mod::owr
         g_pouchGetStarstone_trampoline = patch::hookFunction(mario_pouch::pouchGetStarStone, SetMaxSP);
         g_winItemMain_trampoline = patch::hookFunction(win_item::winItemMain, WinItemMainHook);
         g_winLogMain_trampoline = patch::hookFunction(win_log::main_winLogMain, WinLogMainHook);
+        g_msgAnalize_trampoline = patch::hookFunction(msgdrv::msgAnalize, MsgAnalizeHook);
+        g_msgWindow_Entry_trampoline = patch::hookFunction(msgdrv::msgWindow_Entry, msgWindow_Entry_Hook);
 
         // Hook gaugeDisp with a standard branch since the original function does not need to be called
         patch::writeBranch(statuswindow::gaugeDisp, DisplayStarPowerOrbs);

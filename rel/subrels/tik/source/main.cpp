@@ -19,6 +19,7 @@
 #include <cstdint>
 #include <cstring>
 #include <cstdio>
+#include <cinttypes>
 
 using namespace ttyd;
 
@@ -106,7 +107,7 @@ EVT_DEFINE_USER_FUNC(doorStarsCheck)
 
     for (uint8_t i = 0; i < (sizeof(mod::owr::gState->apSettings->requiredStars) / sizeof(uint8_t)); i++)
     {
-        sprintf(animName, "anm_hosi_%u", mod::owr::gState->apSettings->requiredStars[i]);
+        sprintf(animName, "anm_hosi_%" PRIu32, mod::owr::gState->apSettings->requiredStars[i]);
         mapdrv::mapPlayAnimationLv(animName, 2, 0);
     }
     return 2;
@@ -435,7 +436,7 @@ namespace mod
         tik_evt_door_stg7_open[2] = 10;
 
         tik_tensou_init_event[4] = GSW(1700);
-        tik_tensou_init_event[6] = 0; // Unused
+        tik_tensou_init_event[6] = 0;  // Unused
         tik_tensou_init_event[23] = 0; // Unused
         tik_tensou_init_event[100] = GSW(1707);
         tik_tensou_init_event[101] = 20;

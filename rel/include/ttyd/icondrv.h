@@ -593,5 +593,6 @@ namespace ttyd::icondrv
     {
         void iconNumberDispGx(gc::mtx34 *matrix, int32_t number, int32_t is_small, uint32_t *color);
         void iconDispGx(float scale, gc::vec3 *pos, int16_t unk2, uint16_t icon);
+        void iconDispGxAlpha(float scale, gc::vec3 *pos, int16_t unk2, uint16_t icon, uint8_t alpha);
     }
 } // namespace ttyd::icondrv

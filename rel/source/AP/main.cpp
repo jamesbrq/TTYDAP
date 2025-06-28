@@ -21,6 +21,7 @@
 
 #include <cstdint>
 #include <cstring>
+#include <cstdio>
 
 using namespace ttyd::evtmgr_cmd;
 using namespace ttyd::common;
@@ -133,6 +134,31 @@ EVT_DEFINE_USER_FUNC_KEEP(setShopFlags)
     return 2;
 }
 
+EVT_DEFINE_USER_FUNC_KEEP(evt_msg_numselect)
+{
+    if (isFirstCall)
+    {
+        const char *messageText = reinterpret_cast<const char *>(ttyd::evtmgr_cmd::evtGetValue(evt, evt->evtArguments[0]));
+        ttyd::msgdrv::msgWindow_Entry(messageText, 0, 0);
+        return 0; // Continue - window is opening
+    }
+
+    // Check if the numeric input is still active
+    NumericInputData *numericInputPtr = &g_numericInput;
+    if (numericInputPtr->active)
+    {
+        return 0; // Continue waiting - user hasn't made a selection yet
+    }
+
+    // User has made a selection (A or B pressed)
+    ttyd::evtmgr_cmd::evtSetValue(evt, evt->evtArguments[1], numericInputPtr->selectedValue);
+    ttyd::windowdrv::windowDeleteID(numericInputPtr->window_id);
+
+    // Clean up our global state
+    numericInputPtr->clearState();
+    return 2; // Event complete
+}
+
 EVT_DEFINE_USER_FUNC_KEEP(handleIntermissionSkip)
 {
     (void)isFirstCall;
@@ -191,7 +217,7 @@ EVT_DEFINE_USER_FUNC_KEEP(handleIntermissionSkip)
     return 2;
 }
 
-EVT_DEFINE_USER_FUNC_KEEP(checkTattleItem) 
+EVT_DEFINE_USER_FUNC_KEEP(checkTattleItem)
 {
     (void)isFirstCall;
 
