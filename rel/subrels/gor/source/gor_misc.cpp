@@ -128,4 +128,9 @@ void ApplyGorMiscPatches()
                            reinterpret_cast<void *>(bMonosiriBucketReturn));
 
     patch::writeIntWithCache(&gor_monosiri_check[16], 0x41800068); // blt +0x68
+    patch::writeIntWithCache(&gor_monosiri_check[19], 0x60000000); // NOP
+    patch::writeIntWithCache(&gor_monosiri_check[21], 0x60000000); // NOP
+    patch::writeIntWithCache(&gor_monosiri_check[33], 0x60000000); // NOP
+    patch::writeIntWithCache(&gor_monosiri_check[41], 0x60000000); // NOP
+    patch::writeIntWithCache(&gor_monosiri_check[44], 0x281C0017); // cmplwi r28, 0x17
 }

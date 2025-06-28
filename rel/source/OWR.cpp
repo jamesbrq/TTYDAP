@@ -115,6 +115,9 @@ const uint16_t GSWF_ARR[] = {
     // Ch.4 talk to shopkeep once
     1925,
 
+    // Sir Swoop cutscene
+    //2413,
+
     // Ch.3 jolene hallway cutscene
     2445,
 
@@ -717,7 +720,7 @@ namespace mod::owr
             ttyd::swdrv::swByteSet(1718, 5);
 
         // Enable post chapter 2 checks right when the chapter is beaten
-        if (ttyd::swdev::swByteGet(1713) >= 11 && strncmp(map, "mri", 3) == 0)
+        if (ttyd::swdrv::swByteGet(1713) >= 11 && strncmp(map, "mri", 3) == 0)
             ttyd::swdrv::swSet(2884);
 
         if (strcmp(map, "rsh_01_a") == 0)
@@ -1564,7 +1567,7 @@ namespace mod::owr
         apSettingsPtr->inGame = static_cast<uint8_t>(checkIfInGame());
 
         if (apSettingsPtr->touConditions)
-            ttyd::swdrv::swClear(2443);
+            ttyd::swdrv::swSet(2443);
 
         SequenceInit();
         RecieveItems();

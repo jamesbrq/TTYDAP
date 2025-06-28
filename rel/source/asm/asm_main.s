@@ -272,17 +272,18 @@ bMonosiriItemCheckReturn:
 bMonosiriBucket:
 	lis %r3, monosiriSWArr@ha
 	addi %r3, %r3, monosiriSWArr@l
-	add %r3, %r3, %r28
-	lhz %r3, 0x0(%r3)
-	cmpwi %r28, 0x0
-	bne bMonosiriBucketNorm
+	mulli %r0, %r28, 0xC
+	add %r26, %r3, %r0
+	lwz %r3, 0x0(%r26)
+	cmpwi %r3, 0x1000
+	blt bMonosiriBucketNorm
 	bl swGet
 	b bMonosiriBucketEnd
 bMonosiriBucketNorm:
 	bl swByteGet
 bMonosiriBucketEnd:
 	mr %r30, %r3
-	lwz %r0, 0x0(%r26) #Original Instruction
+	lwz %r0, 0x8(%r26)
 bMonosiriBucketReturn:
 	b 0
 
@@ -382,16 +383,6 @@ win_log_mapGX_arr:
 	.byte 0x14
 
 monosiriSWArr:
-	.2byte 0x17A8
-	.2byte 0x6AF
-	.2byte 0x6B1
-	.2byte 0x6A7
-	.2byte 0x6B5
-	.2byte 0x6AA
-	.2byte 0x6AB
-	.2byte 0x6AC
-
-monosiriSWArr2:
 	.4byte 0x000017A8
 	.4byte 0x00000008
 	.4byte 0x00000001
