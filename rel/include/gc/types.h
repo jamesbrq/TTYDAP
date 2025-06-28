@@ -18,7 +18,16 @@ namespace gc
     struct vec3
     {
         float x, y, z;
-    };
+
+        vec3() {}
+
+        vec3(float newX, float newY, float newZ)
+        {
+            this->x = newX;
+            this->y = newY;
+            this->z = newZ;
+        }
+    } __attribute__((__packed__));
 
     static_assert(sizeof(vec3) == 0xC);
 

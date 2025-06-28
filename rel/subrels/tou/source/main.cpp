@@ -19,6 +19,8 @@
 #include "ttyd/tou.h"
 
 #include <cstdint>
+#include <cstdio>
+#include <cinttypes>
 
 using namespace ttyd;
 using namespace ttyd::tou;
@@ -226,7 +228,7 @@ EVT_DEFINE_USER_FUNC(setRanking)
         {
             if (i < target_rank)
                 break;
-            entries[i].flags |= FLAG_WIN;
+            entries[i].flags |= TOU_FLAG_WIN;
         }
     else
     {
@@ -234,7 +236,7 @@ EVT_DEFINE_USER_FUNC(setRanking)
         {
             if (i > target_rank)
                 break;
-            entries[i].flags &= ~FLAG_WIN;
+            entries[i].flags &= ~TOU_FLAG_WIN;
         }
     }
 
@@ -512,9 +514,9 @@ EVT_BEGIN(tou_05_talk_gans_evt)
     USER_FUNC(tou_evt_tou_get_ranking, LW(2))
     SET(GSW(1724), LW(2))
     IF_SMALL(GSWF(6075), 1)
-        SET(LW(14), PTR("<numselect 11 20 20 1>\n%d"))
+        SET(LW(14), PTR("<numselect 11 20 20 1>\n%" PRId32))
     ELSE()
-        SET(LW(14), PTR("<numselect 1 20 20 1>\n%d"))
+        SET(LW(14), PTR("<numselect 1 20 20 1>\n%" PRId32))
     END_IF()
     USER_FUNC(evt_msg::evt_msg_fill_num, 1, LW(14), LW(14), LW(2))
     USER_FUNC(evt_msg_numselect, LW(14), LW(0))

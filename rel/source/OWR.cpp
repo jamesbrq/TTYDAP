@@ -46,8 +46,9 @@
 #include "patch.h"
 
 #include <cstdint>
-#include <cstdio>
 #include <cstring>
+#include <cstdio>
+#include <cinttypes>
 #include <algorithm>
 
 using gc::pad::PadInput;
@@ -131,7 +132,7 @@ const uint16_t GSWF_ARR[] = {
 
     // Spawn General white
     3880,
-    
+
     // Visited Rogueport
     6300};
 constexpr int32_t GSWF_ARR_SIZE = sizeof(GSWF_ARR) / sizeof(GSWF_ARR[0]);
@@ -140,10 +141,10 @@ namespace mod::owr
 {
     KEEP_VAR OWR *gSelf = nullptr;
     KEEP_VAR StateManager *gState = nullptr;
-    KEEP_VAR NumericInputData g_numericInput = {};
+    KEEP_VAR NumericInputData g_numericInput;
 
     KEEP_VAR bool (*g_OSLink_trampoline)(OSModuleInfo *, void *) = nullptr;
-    KEEP_VAR void (*gTrampoline_seq_logoMain)(SeqInfo *info) = nullptr;
+    KEEP_VAR void (*g_seq_logoMain_trampoline)(SeqInfo *info) = nullptr;
     KEEP_VAR void (*g_seqSetSeq_trampoline)(SeqIndex seq, const char *map, const char *bero) = nullptr;
     KEEP_VAR uint32_t (*g_pouchGetItem_trampoline)(int32_t) = nullptr;
     KEEP_VAR void (*g_partySetForceMove_trampoline)(ttyd::party::PartyEntry *ptr, float x, float z, float speed) = nullptr;
@@ -280,14 +281,17 @@ namespace mod::owr
 
     KEEP_FUNC void replaceMultipleCharacters(ttyd::memory::SmartAllocationData *smartData, uint32_t startIndex, int value)
     {
-        MessageData *msgData = (MessageData *)smartData->pMemory;
         char newChars[3];
-        sprintf(newChars, value < 10 ? " %d" : "%d", value);
+        snprintf(newChars, sizeof(newChars), value < 10 ? " %" PRId32 : "%" PRId32, value);
+        int32_t len = strlen(newChars);
 
-        int len = strlen(newChars);
-        for (int i = 0; i < len && (startIndex + i) < msgData->command_count; i++)
+        MessageData *msgData = reinterpret_cast<MessageData *>(smartData->pMemory);
+        const uint32_t commandCount = msgData->command_count;
+        TextCommand *commandsPtr = &msgData->commands[0];
+
+        for (int32_t i = 0; (i < len) && ((startIndex + i) < commandCount); i++)
         {
-            TextCommand *cmd = &msgData->commands[startIndex + i];
+            TextCommand *cmd = &commandsPtr[startIndex + i];
             if (cmd->type >= 0xFFF4)
                 continue;
 
@@ -297,16 +301,21 @@ namespace mod::owr
                 cmd->param2 = -10;
             }
 
-            char c = newChars[i];
-            if (c == ' ')
+            // Failsafe: Make sure index doesn't exceed newChars
+            if (i < static_cast<int32_t>(sizeof(newChars)))
             {
-                cmd->type = 0x0000;
-                cmd->flags &= ~0x08;
-            }
-            else if (c >= '0' && c <= '9')
-            {
-                cmd->type = 0x0053 + (c - '0');
-                cmd->flags |= 0x08;
+                const char c = newChars[i];
+
+                if (c == ' ')
+                {
+                    cmd->type = 0x0000;
+                    cmd->flags &= ~0x08;
+                }
+                else if (c >= '0' && c <= '9')
+                {
+                    cmd->type = 0x0053 + (c - '0');
+                    cmd->flags |= 0x08;
+                }
             }
         }
     }
@@ -318,35 +327,58 @@ namespace mod::owr
 
         // Get the created window
         ttyd::windowdrv::Window *window = ttyd::windowdrv::windowGetPointer(windowId);
-        if (!window || !window->msgData || !window->msgData->pMemory)
+
+        // Make sure the window was properly created
+        if (!window)
+        {
+            return windowId;
+        }
+
+        ttyd::memory::SmartAllocationData *msgDataPtr = window->msgData;
+        if (!msgDataPtr)
+        {
+            return windowId;
+        }
+
+        void *memoryPtr = msgDataPtr->pMemory;
+        if (!memoryPtr)
         {
             return windowId;
         }
 
         // Additional safety check - verify the memory is properly initialized
-        MessageData *msgData = (MessageData *)window->msgData->pMemory;
-        if (!msgData || msgData->command_count == 0 || msgData->command_count > 1000) // Sanity check
+        MessageData *msgData = reinterpret_cast<MessageData *>(memoryPtr);
+        if (!msgData) // Sanity check
         {
             return windowId;
         }
 
-        for (uint32_t i = 0; i < msgData->command_count; i++)
+        const uint32_t commandCount = msgData->command_count;
+        if ((commandCount == 0) || (commandCount > 1000)) // Sanity check
         {
-            TextCommand *cmd = &msgData->commands[i];
+            return windowId;
+        }
+
+        TextCommand *commandsPtr = &msgData->commands[0];
+        NumericInputData *numericInputPtr = &g_numericInput;
+
+        for (uint32_t i = 0; i < commandCount; i++)
+        {
+            TextCommand *cmd = &commandsPtr[i];
             if (cmd->type != 0xFFF0)
                 continue;
 
             // Setup numeric input state
-            g_numericInput.initialValue = (int16_t)cmd->char_or_param1;
-            g_numericInput.minValue = cmd->param2;
-            g_numericInput.maxValue = cmd->param3;
-            g_numericInput.stepSize = (cmd->flags & 0xFF) ? cmd->flags : 1;
-            g_numericInput.currentValue = g_numericInput.initialValue;
-            g_numericInput.active = true;
-            g_numericInput.window_id = windowId;
+            numericInputPtr->initialValue = cmd->char_or_param1;
+            numericInputPtr->minValue = cmd->param2;
+            numericInputPtr->maxValue = cmd->param3;
+            numericInputPtr->stepSize = (cmd->flags & 0xFF) ? cmd->flags : 1;
+            numericInputPtr->currentValue = numericInputPtr->initialValue;
+            numericInputPtr->active = true;
+            numericInputPtr->window_id = windowId;
 
             // Configure window
-            window->mainFunc = (void *)numericWindow_Main;
+            window->mainFunc = reinterpret_cast<void *>(numericWindow_Main);
             window->param = 6;
             window->x = -100.0f;
             window->y = 0.0f;
@@ -363,51 +395,62 @@ namespace mod::owr
     KEEP_FUNC void MsgAnalizeHook(ttyd::memory::SmartAllocationData *smartAlloc, const char *text)
     {
         if (!smartAlloc || !text)
+        {
             return;
+        }
 
         g_msgAnalize_trampoline(smartAlloc, text);
 
         if (!strstr(text, "<numselect"))
+        {
             return;
+        }
 
-        MessageData *msg_data = (MessageData *)smartAlloc->pMemory;
-        if (!msg_data || msg_data->command_count > 1000)
+        MessageData *msg_data = reinterpret_cast<MessageData *>(smartAlloc->pMemory);
+        if (!msg_data || (msg_data->command_count > 1000))
+        {
             return;
+        }
 
-        uintptr_t addr = (uintptr_t)msg_data;
-        if (addr < 0x80000000 || addr > 0x82000000)
+        if (!util::ptrIsValid(msg_data))
+        {
             return;
+        }
 
-        TextCommand *commands = (TextCommand *)((char *)msg_data + 0x3C);
+        TextCommand *commands = reinterpret_cast<TextCommand *>((reinterpret_cast<uintptr_t>(msg_data) + 0x3C));
         const char *pos = text;
-        int tags_processed = 0;
+        int32_t tags_processed = 0;
 
-        while ((pos = strstr(pos, "<numselect")) && tags_processed < 3)
+        while ((pos = strstr(pos, "<numselect")) && (tags_processed < 3))
         {
             const char *end = strchr(pos, '>');
             if (!end)
                 break;
 
-            int min_val = 0, max_val = 99, initial_val = 0, step_val = 1;
+            int32_t min_val = 0, max_val = 99, initial_val = 0, step_val = 1;
             const char *params = pos + 10;
-            int parsed = sscanf(params, " %d %d %d %d", &min_val, &max_val, &initial_val, &step_val);
 
-            int initial = ttyd::swdrv::swByteGet(1724);
+            const int32_t parsed =
+                sscanf(params, " %" PRId32 " %" PRId32 " %" PRId32 " %" PRId32, &min_val, &max_val, &initial_val, &step_val);
+
+            const int32_t initial = ttyd::swdrv::swByteGet(1724);
             if (initial > 0)
             {
                 initial_val = ttyd::swdrv::swByteGet(1724);
                 ttyd::swdrv::swByteSet(1724, 0);
             }
 
-            if (parsed < 3 || min_val > max_val || step_val <= 0)
+            if ((parsed < 3) || (min_val > max_val) || (step_val <= 0))
             {
                 pos = end + 1;
                 continue;
             }
 
             // Find insertion point before END command
-            uint32_t insert_pos = msg_data->command_count;
-            for (uint32_t i = 0; i < msg_data->command_count; i++)
+            const uint32_t commandCount = msg_data->command_count;
+            uint32_t insert_pos = commandCount;
+
+            for (uint32_t i = 0; i < commandCount; i++)
             {
                 if (commands[i].type == 0xFFFF)
                 {
@@ -420,24 +463,23 @@ namespace mod::owr
                 break;
 
             // Insert new command
-            if (insert_pos < msg_data->command_count)
+            if (insert_pos < commandCount)
             {
-                memmove(&commands[insert_pos + 1],
-                        &commands[insert_pos],
-                        (msg_data->command_count - insert_pos) * sizeof(TextCommand));
+                memmove(&commands[insert_pos + 1], &commands[insert_pos], (commandCount - insert_pos) * sizeof(TextCommand));
             }
 
             TextCommand *newCmd = &commands[insert_pos];
             memset(newCmd, 0, sizeof(TextCommand));
+
             newCmd->flags = step_val;
             newCmd->type = 0xFFF0;
-            newCmd->char_or_param1 = (int16_t)initial_val;
-            newCmd->param2 = (int16_t)min_val;
-            newCmd->param3 = (int16_t)max_val;
+            newCmd->char_or_param1 = static_cast<int16_t>(initial_val);
+            newCmd->param2 = static_cast<int16_t>(min_val);
+            newCmd->param3 = static_cast<int16_t>(max_val);
             newCmd->scale = 1.0f;
-            newCmd->rotation = 0.0f;
+            // newCmd->rotation = 0.0f;
 
-            msg_data->command_count++;
+            msg_data->command_count = commandCount + 1;
             tags_processed++;
             pos = end + 1;
         }
@@ -445,73 +487,113 @@ namespace mod::owr
 
     static void handleNumericInput()
     {
-        uint32_t btnTrg = keyGetButtonTrg(0);
-        uint32_t btnRep = keyGetButtonRep(0);
-        uint32_t dirTrg = keyGetDirTrg(0);
-        uint32_t dirRep = keyGetDirRep(0);
+        const uint32_t btnTrg = keyGetButtonTrg(gc::pad::PadId::CONTROLLER_ONE);
+        const uint32_t btnRep = keyGetButtonRep(gc::pad::PadId::CONTROLLER_ONE);
+        const uint32_t dirTrg = keyGetDirTrg(gc::pad::PadId::CONTROLLER_ONE);
+        const uint32_t dirRep = keyGetDirRep(gc::pad::PadId::CONTROLLER_ONE);
 
-        bool upPressed = (btnTrg | btnRep) & 0x08 || (dirTrg | dirRep) & 0x1000;
-        bool downPressed = (btnTrg | btnRep) & 0x04 || (dirTrg | dirRep) & 0x2000;
+        const bool upPressed = ((btnTrg | btnRep) & 0x08) || ((dirTrg | dirRep) & 0x1000);
+        const bool downPressed = ((btnTrg | btnRep) & 0x04) || ((dirTrg | dirRep) & 0x2000);
 
-        int oldValue = g_numericInput.currentValue;
+        NumericInputData *numericInputPtr = &g_numericInput;
+        int32_t currentValue = numericInputPtr->currentValue;
+        const int32_t oldValue = currentValue;
+        const int32_t minValue = numericInputPtr->minValue;
+        const int32_t maxValue = numericInputPtr->maxValue;
+        const int32_t stepSize = static_cast<int32_t>(numericInputPtr->stepSize);
 
-        if (upPressed && g_numericInput.currentValue + g_numericInput.stepSize <= g_numericInput.maxValue)
-            g_numericInput.currentValue += g_numericInput.stepSize;
+        if (upPressed)
+        {
+            if ((currentValue + stepSize) <= maxValue)
+            {
+                currentValue += stepSize;
+            }
+        }
+        else if (downPressed)
+        {
+            if ((currentValue - stepSize) >= minValue)
+            {
+                currentValue -= stepSize;
+            }
+        }
+        else
+        {
+            return;
+        }
 
-        if (downPressed && g_numericInput.currentValue - g_numericInput.stepSize >= g_numericInput.minValue)
-            g_numericInput.currentValue -= g_numericInput.stepSize;
+        if (currentValue < minValue)
+        {
+            currentValue = numericInputPtr->minValue;
+        }
+        else if (currentValue > maxValue)
+        {
+            currentValue = maxValue;
+        }
 
-        if (g_numericInput.currentValue < g_numericInput.minValue)
-            g_numericInput.currentValue = g_numericInput.minValue;
-        else if (g_numericInput.currentValue > g_numericInput.maxValue)
-            g_numericInput.currentValue = g_numericInput.maxValue;
+        numericInputPtr->currentValue = static_cast<int16_t>(currentValue);
 
-        if (oldValue != g_numericInput.currentValue)
+        if (oldValue != currentValue)
+        {
             ttyd::pmario_sound::psndSFXOn(0x20005);
+        }
     }
 
     KEEP_FUNC int numericWindow_Main(ttyd::windowdrv::Window *window)
     {
         msgMain(window->msgData);
 
+        NumericInputData *numericInputPtr = &g_numericInput;
+        int32_t windowAlpha = window->alpha;
+
         switch (window->windowState)
         {
             case 5: // Fade in
-                window->alpha = std::min(255, window->alpha + 25);
-                if (window->alpha >= 255)
-                    window->windowState = 1;
-                break;
+            {
+                windowAlpha = std::min(255, windowAlpha + 25);
+                window->alpha = static_cast<int16_t>(windowAlpha);
 
+                if (windowAlpha >= 255)
+                {
+                    window->windowState = 1;
+                }
+                break;
+            }
             case 1: // Active
+            {
                 handleNumericInput();
 
-                if (keyGetButtonTrg(0) & 0x100) // A button
+                const uint32_t btnTrg = keyGetButtonTrg(gc::pad::PadId::CONTROLLER_ONE);
+                if (btnTrg & gc::pad::PadInput::PAD_A)
                 {
-                    g_numericInput.selectedValue = g_numericInput.currentValue;
+                    numericInputPtr->selectedValue = numericInputPtr->currentValue;
                     window->windowState = 7;
                     ttyd::pmario_sound::psndSFXOn(0x20012);
                 }
-                else if (keyGetButtonTrg(0) & 0x200) // B button
+                else if (btnTrg & gc::pad::PadInput::PAD_B)
                 {
-                    g_numericInput.selectedValue = -1;
+                    numericInputPtr->selectedValue = -1;
                     window->windowState = 7;
                     ttyd::pmario_sound::psndSFXOn(0x20013);
                 }
                 break;
-
+            }
             case 7: // Fade out
-                if (window->alpha <= 0)
+            {
+                if (windowAlpha <= 0)
                 {
                     window->windowState = 4;
                     window->flags &= ~2;
-                    g_numericInput.active = false;
+                    numericInputPtr->active = false;
                     return 1;
                 }
-                window->alpha = std::max(0, window->alpha - 25);
+
+                windowAlpha = std::max(0, windowAlpha - 25);
+                window->alpha = static_cast<int16_t>(windowAlpha);
                 break;
+            }
         }
 
-        float priority = 400.0f - (float)window->alpha;
+        const float priority = 400.0f - intToFloat(static_cast<int32_t>(windowAlpha));
         ttyd::dispdrv::dispEntry(ttyd::dispdrv::CameraId::k2d, 0, priority, numericWindow_Disp, window);
         return 0;
     }
@@ -519,28 +601,29 @@ namespace mod::owr
     KEEP_FUNC void numericWindow_Disp(ttyd::dispdrv::CameraId cameraId, void *user)
     {
         (void)cameraId;
-        ttyd::windowdrv::Window *window = (ttyd::windowdrv::Window *)user;
 
-        gc::gx::GXColor fogColor = {0x66, 0x06, 0x42, 0x80};
+        gc::gx::GXColor fogColor(0x66, 0x06, 0x42, 0x80);
         gc::gx::GXSetFog(0, 0.0f, 0.0f, 0.0f, 0.0f, &fogColor);
 
-        uint8_t alpha = window->alpha & 0xFF;
+        const ttyd::windowdrv::Window *window = reinterpret_cast<ttyd::windowdrv::Window *>(user);
+        const uint8_t alpha = window->alpha & 0xFF;
         uint32_t frameColor = 0xFFFFFF00 | alpha;
 
         ttyd::windowdrv::windowDispGX_Waku_col(0, &frameColor, window->x, window->y, window->width, window->height, 30.0f);
-
-        float textX = window->x + (window->width / 2) - 15.0f;
-        float textY = window->y - (window->height / 4) + 2.0f;
-
         replaceMultipleCharacters(window->msgData, 0, g_numericInput.currentValue);
+
+        const float widthHalf = window->width / 2.f;
+        const float textX = window->x + (widthHalf - 15.0f);
+        const float textY = window->y - ((window->height / 4.f) + 2.0f);
         ttyd::msgdrv::msgDisp(window->msgData, textX, textY, alpha);
 
         // Draw arrows
-        gc::vec3 upArrowPos = {window->x + window->width / 2, window->y - 15.0f, 0.0f};
-        gc::vec3 downArrowPos = {window->x + window->width / 2, window->y - window->height - 20.0f, 0.0f};
+        const float windowPosX = window->x + widthHalf;
+        gc::vec3 upArrowPos(windowPosX, (window->y - 15.0f), 0.0f);
+        gc::vec3 downArrowPos(windowPosX, ((window->y - window->height) - 20.0f), 0.0f);
 
-        ttyd::icondrv::iconDispGx(0.8f, &upArrowPos, 0x10, IconType::MENU_UP_POINTER);
-        ttyd::icondrv::iconDispGx(0.8f, &downArrowPos, 0x10, IconType::MENU_DOWN_POINTER);
+        ttyd::icondrv::iconDispGxAlpha(0.8f, &upArrowPos, 0x10, IconType::MENU_UP_POINTER, alpha);
+        ttyd::icondrv::iconDispGxAlpha(0.8f, &downArrowPos, 0x10, IconType::MENU_DOWN_POINTER, alpha);
     }
 
     KEEP_FUNC bool OSLinkHook(OSModuleInfo *new_module, void *bss)
@@ -553,7 +636,7 @@ namespace mod::owr
         return result;
     }
 
-    void setFirstVisitSW(const char* map)
+    void setFirstVisitSW(const char *map)
     {
         if (strncmp(map, "gor", 3) == 0)
             ttyd::swdrv::swSet(6300);
@@ -718,10 +801,9 @@ namespace mod::owr
         }
         if (!strcmp(msgKey, "grubba_pay"))
         {
-            return "<p>\nSo you're talkin' about movin'\nthat many ranks, eh?\n<k>\n<p>\nThat'll cost ya about <NUM> coin<S>.\nNo "
-                   "problem "
-                   "for old Grubba!\n<k>\n<p>\nYou'd be movin' faster than\na Buzzy Beetle up a pipe!\n<k>\n<p>\nAin't nobody "
-                   "gotta know about\nour little arrangement, you\nread me here?\n<o>";
+            return "<p>\nSo you're talkin' about movin'\nthat many ranks, eh?\n<k>\n<p>\nThat'll cost ya about <NUM> "
+                   "coin<S>.\nNo problem for old Grubba!\n<k>\n<p>\nYou'd be movin' faster than\na Buzzy Beetle up a "
+                   "pipe!\n<k>\n<p>\nAin't nobody gotta know about\nour little arrangement, you\nread me here?\n<o>";
         }
         if (!strcmp(msgKey, "grubba_pay_prompt"))
         {
@@ -729,28 +811,29 @@ namespace mod::owr
         }
         if (!strcmp(msgKey, "grubba_no_coins"))
         {
-            return "<p>\nWell, I'll be! Looks like\nyou're a little light in the\npockets there, son!\n<k>\n<p>\nHeh heh... Can't "
-                   "squeeze blood\nfrom a turnip, as they say!\n<k>\n<p>\nTell ya what... Go earn yourself\nsome more coin, "
-                   "then come back\nand see old Grubba!\n<k>\n<p>\nA deal this good ain't gonna\nlast forever, you hear?\n<k>";
+            return "<p>\nWell, I'll be! Looks like\nyou're a little light in the\npockets there, son!\n<k>\n<p>\nHeh heh... "
+                   "Can't squeeze blood\nfrom a turnip, as they say!\n<k>\n<p>\nTell ya what... Go earn yourself\nsome more "
+                   "coin, then come back\nand see old Grubba!\n<k>\n<p>\nA deal this good ain't gonna\nlast forever, you "
+                   "hear?\n<k>";
         }
         if (!strcmp(msgKey, "grubba_pay_accept"))
         {
-            return "<p>\nHoo-WEE! Now that's what I like\nto hear, son!\n<k>\n<p>\nJust hand over them coins and...\nBAM! You'll be "
-                   "movin' ranks\nfaster than you can say...\n<k>\n<p>\n\"Great Gonzales\"!\nAin't that just "
+            return "<p>\nHoo-WEE! Now that's what I like\nto hear, son!\n<k>\n<p>\nJust hand over them coins and...\nBAM! "
+                   "You'll be movin' ranks\nfaster than you can say...\n<k>\n<p>\n\"Great Gonzales\"!\nAin't that just "
                    "DYNAMITE?\n<k>\n<p>\nPleasure doin' business with ya!\nNow get back in there and\nshow 'em what for!\n<k>";
         }
         if (!strcmp(msgKey, "grubba_pay_accept_no"))
         {
-            return "<p>\nWell, I'll be... Heh heh...\nYou got some real integrity\nthere, son!\n<k>\n<p>\nCan't say I don't respect "
-                   "a\nfighter with principles...\nEven if it ain't good business!\n<k>\n<p>\nTell ya what... The offer's "
-                   "always\non the table if you change your\nmind, you hear?\n<k>\n<p>\nNow get back in there and show\n'em "
-                   "what the Great Gonzales\nis made of! Hoo-WEE!\n<k>";
+            return "<p>\nWell, I'll be... Heh heh...\nYou got some real integrity\nthere, son!\n<k>\n<p>\nCan't say I don't "
+                   "respect a\nfighter with principles...\nEven if it ain't good business!\n<k>\n<p>\nTell ya what... The "
+                   "offer's always\non the table if you change your\nmind, you hear?\n<k>\n<p>\nNow get back in there and "
+                   "show\n'em what the Great Gonzales\nis made of! Hoo-WEE!\n<k>";
         }
         if (!strcmp(msgKey, "grubba_pay_reject"))
         {
-            return "<p>\nAw, come on now! Don't be\nsuch a penny-pincher!\n<k>\n<p>\nA fighter's gotta invest in\nhis future if he "
-                   "wants to\nmake it to the big time!\n<k>\n<p>\nBut I get it, son... Times are\ntough all over. Come back "
-                   "when\nyou got some coin to spare!\n<k>";
+            return "<p>\nAw, come on now! Don't be\nsuch a penny-pincher!\n<k>\n<p>\nA fighter's gotta invest in\nhis future "
+                   "if he wants to\nmake it to the big time!\n<k>\n<p>\nBut I get it, son... Times are\ntough all over. Come "
+                   "back when\nyou got some coin to spare!\n<k>";
         }
         if (!strcmp(msgKey, "madam_abort"))
         {
@@ -1181,7 +1264,7 @@ namespace mod::owr
             info->state = 17;
         }
 #endif
-        return gTrampoline_seq_logoMain(info);
+        return g_seq_logoMain_trampoline(info);
     }
 
     KEEP_FUNC void DisplayStarPowerOrbs(float x, float y, int32_t star_power)
@@ -1469,9 +1552,12 @@ namespace mod::owr
 
     void OWR::Update()
     {
-        gState->apSettings->inGame = static_cast<uint8_t>(checkIfInGame());
-        if (gState->apSettings->touConditions)
+        APSettings *apSettingsPtr = gState->apSettings;
+        apSettingsPtr->inGame = static_cast<uint8_t>(checkIfInGame());
+
+        if (apSettingsPtr->touConditions)
             ttyd::swdrv::swClear(2443);
+
         SequenceInit();
         RecieveItems();
     }

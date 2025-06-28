@@ -520,7 +520,7 @@ namespace mod::owr
         ApplyItemDataTablePatches();
 
         g_OSLink_trampoline = patch::hookFunction(OSLink, OSLinkHook);
-        gTrampoline_seq_logoMain = patch::hookFunction(seq_logo::seq_logoMain, logoSkip);
+        g_seq_logoMain_trampoline = patch::hookFunction(seq_logo::seq_logoMain, logoSkip);
         g_seqSetSeq_trampoline = patch::hookFunction(seqdrv::seqSetSeq, seqSetSeqHook);
         g_msgSearch_trampoline = patch::hookFunction(msgdrv::msgSearch, msgSearchHook);
         g_pouchGetItem_trampoline = patch::hookFunction(mario_pouch::pouchGetItem, pouchGetItemHook);

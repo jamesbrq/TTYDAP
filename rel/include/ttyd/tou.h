@@ -1,5 +1,7 @@
 #pragma once
 
+#include <cstdint>
+
 namespace ttyd::tou
 {
     struct RankingEntry
@@ -13,18 +15,18 @@ namespace ttyd::tou
 
     struct RankingData
     {
-        int count;  // Number of entries
+        int count;             // Number of entries
         RankingEntry *entries; // Array of ranking entries
     };
 
-    const uint16_t FLAG_WIN = 0x01;      // Bit 0: Win flag
-    const uint16_t FLAG_INACTIVE = 0x02; // Bit 1: Inactive/skip entry
-    const uint16_t FLAG_STOP = 0x04;     // Bit 2: Stop counting flag
-
-    #define tou_rank_wp (*(RankingData **)0x805cc0d0)
+#define TOU_FLAG_WIN 0x01;      // Bit 0: Win flag
+#define TOU_FLAG_INACTIVE 0x02; // Bit 1: Inactive/skip entry
+#define TOU_FLAG_STOP 0x04;     // Bit 2: Stop counting flag
 
     extern "C"
     {
+        extern RankingData *tou_rank_wp;
+
         void tou_rankingControll();
     }
-    } // namespace ttyd::tou
+} // namespace ttyd::tou
