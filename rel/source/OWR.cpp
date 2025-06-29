@@ -656,7 +656,8 @@ namespace mod::owr
             ttyd::swdrv::swSet(6305);
         else if (strncmp(map, "mri", 3) == 0)
             ttyd::swdrv::swSet(6306);
-        else if (strcmp(map, "win_04") == 0)
+        else if (!ttyd::mario::marioCtrlOffChk() && // marioCtrlOffChk because of flurries missing necklace cutscene
+                 strcmp(map, "win_04") == 0)
             ttyd::swdrv::swSet(6307);
         else if (strncmp(map, "tou", 3) == 0)
             ttyd::swdrv::swSet(6308);
@@ -788,9 +789,8 @@ namespace mod::owr
     // runs after map changes
     KEEP_FUNC void seq_gameInitHook(SeqInfo *info)
     {
-        ttyd::mario::Player *player = marioGetPtr();
-        // only visit a location if you are mario, and it's not a cutscene
-        if (player->characterId == MarioCharacters::kMario && !ttyd::mario::marioCtrlOffChk())
+        // only visit a location if you are mario
+        if (marioGetPtr()->characterId == MarioCharacters::kMario)
         {
             setFirstVisitSW(ttyd::seq_mapchange::_next_map); // Set GSWF flag on first visit to a map
         }
