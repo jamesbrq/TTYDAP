@@ -283,6 +283,12 @@ bMonosiriBucketNorm:
 	bl swByteGet
 bMonosiriBucketEnd:
 	mr %r30, %r3
+	li %r3, 0x1
+	bl partyChkJoin
+	cmpwi %r3, 0x1
+	beq bGoombellaSkip
+	li %r30, 0x0
+bGoombellaSkip:
 	lwz %r0, 0x8(%r26)
 bMonosiriBucketReturn:
 	b 0
