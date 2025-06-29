@@ -667,10 +667,10 @@ namespace mod::owr
             ttyd::swdrv::swSet(6310);
         else if (strcmp(map, "gra_06") == 0)
             ttyd::swdrv::swSet(6311);
+        else if (strcmp(map, "muj_05") == 0 || strncmp(map, "dou", 3) == 0)
+            ttyd::swdrv::swSet(6313);
         else if (strncmp(map, "muj", 3) == 0)
             ttyd::swdrv::swSet(6312);
-        else if (strncmp(map, "dou", 3) == 0)
-            ttyd::swdrv::swSet(6313);
         else if (strncmp(map, "hom", 3) == 0)
             ttyd::swdrv::swSet(6314);
         else if (strcmp(map, "pik_00") == 0 || strcmp(map, "pik_01") == 0)
