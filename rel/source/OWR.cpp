@@ -652,7 +652,7 @@ namespace mod::owr
             ttyd::swdrv::swSet(6303);
         else if (strncmp(map, "gon", 3) == 0)
             ttyd::swdrv::swSet(6304);
-        else if (strcmp(map, "win_06") == 0)
+        else if (strncmp(map, "win", 3) == 0 && strcmp(map, "win_04") != 0 && strcmp(map, "win_05") != 0)
             ttyd::swdrv::swSet(6305);
         else if (strncmp(map, "mri", 3) == 0)
             ttyd::swdrv::swSet(6306);
