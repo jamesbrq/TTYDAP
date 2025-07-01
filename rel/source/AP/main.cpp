@@ -6,6 +6,7 @@
 #include "string.h"
 #include "ttyd/battle_audience.h"
 #include "ttyd/battle_event_cmd.h"
+#include "ttyd/battle_unit.h"
 #include "ttyd/evt_audience.h"
 #include "ttyd/evt_bero.h"
 #include "ttyd/evt_mario.h"
@@ -262,7 +263,9 @@ void monosiriItemCheck(int unit_id)
         return;
 
     gState->newTattle = true;
-    ttyd::battle_audience::BattleAudience_SetPresentTargetUnitId(2); // Partner
+    // TODO: Modify BattleAudienceDetectTargetPlayer() call to get specifically goombella
+    ttyd::battle_audience::BattleAudience_SetPresentTargetUnitId(
+        ttyd::battle_unit::BtlUnit_GetUnitId(BattleAudienceDetectTargetPlayer())); // Get either Mario or Goombella
     ttyd::battle_audience::BattleAudience_SetPresentItemNo(gState->tattleItems[unit_id - 1]);
     ttyd::battle_audience::BattleAudience_SetPresentItemType(0); // Non-damaging items
 }
