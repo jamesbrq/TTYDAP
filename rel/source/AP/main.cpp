@@ -27,6 +27,7 @@
 
 using namespace ttyd::evtmgr_cmd;
 using namespace ttyd::common;
+using namespace ttyd::battle;
 using namespace ttyd::swdrv;
 using namespace ttyd::seq_mapchange;
 using namespace mod::owr;
@@ -266,7 +267,7 @@ void monosiriItemCheck(int unit_id)
     gState->newTattle = true;
     // TODO: Modify BattleAudienceDetectTargetPlayer() call to get specifically goombella
     ttyd::battle_audience::BattleAudience_SetPresentTargetUnitId(
-        ttyd::battle_unit::BtlUnit_GetUnitId(BattleGetPartyPtr())); // Goombella
+        ttyd::battle_unit::BtlUnit_GetUnitId(BattleGetPartyPtr(_battleWorkPtr))); // Goombella
     ttyd::battle_audience::BattleAudience_SetPresentItemNo(gState->tattleItems[unit_id - 1]);
     ttyd::battle_audience::BattleAudience_SetPresentItemType(0); // Non-damaging items
 }

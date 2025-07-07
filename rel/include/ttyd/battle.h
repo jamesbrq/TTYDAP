@@ -4,7 +4,8 @@ namespace ttyd::battle
 {
     extern "C"
     {
-        void *BattleGetPartyPtr();
+        extern void *_battleWorkPtr;
+        void *BattleGetPartyPtr(void *ptr);
 
     }
 } // namespace ttyd::battle
