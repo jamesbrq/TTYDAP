@@ -46,12 +46,17 @@ extern "C"
     void bMonosiriItemCheckReturn();
     void bMonosiriBucket();
     void bMonosiriBucketReturn();
+    void bHpColorBack();
+    void bHpColorBackReturn();
+    void bHpColorFront();
+    void bHpColorFrontReturn();
     void checkShopFlag(uint32_t item, uint32_t index);
     void monosiriItemCheck(int unit_id);
 }
 
 EVT_DECLARE_USER_FUNC(checkChapterRequirements, 1)
 EVT_DECLARE_USER_FUNC(doorStarsCheck, 0)
+EVT_DECLARE_USER_FUNC(pitCheckpointBuffer, 1)
 EVT_DECLARE_USER_FUNC(setShopFlags, 1)
 EVT_DECLARE_USER_FUNC(handleIntermissionSkip, 4)
 EVT_DECLARE_USER_FUNC(checkIntermission, 1)

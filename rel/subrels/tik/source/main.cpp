@@ -15,6 +15,7 @@
 #include "ttyd/evtmgr_cmd.h"
 #include "ttyd/mapdrv.h"
 #include "ttyd/mario_pouch.h"
+#include "ttyd/swdrv.h"
 
 #include <cstdint>
 #include <cstring>
@@ -73,6 +74,7 @@ extern int32_t tik_lastdungeon_init[];
 extern int32_t tik_lastdungeon[];
 extern int32_t tik_mahojin_event7[];
 extern int32_t tik_05_init_evt[];
+extern int32_t tik_06_init_evt[];
 extern int32_t tik_peach_mail[];
 extern int32_t tik_07_init_evt[];
 extern int32_t tik_08_init_evt[];
@@ -110,6 +112,20 @@ EVT_DEFINE_USER_FUNC(doorStarsCheck)
         sprintf(animName, "anm_hosi_%" PRIu32, mod::owr::gState->apSettings->requiredStars[i]);
         mapdrv::mapPlayAnimationLv(animName, 2, 0);
     }
+    return 2;
+}
+
+EVT_DEFINE_USER_FUNC(pitCheckpointBuffer)
+{
+    (void)isFirstCall;
+
+    static char selectBuffer[32];
+    char *selectPrompt = selectBuffer;
+    int value = ttyd::swdrv::swByteGet(33) - (ttyd::swdrv::swByteGet(33) % 10);
+    ttyd::swdrv::swByteSet(1724, value);
+    sprintf(selectPrompt, "<numselect 10 %d 10 10>\n100", value);
+
+	evtmgr_cmd::evtSetValue(evt, evt->evtArguments[0], (uint32_t)selectPrompt);
     return 2;
 }
 
@@ -401,6 +417,32 @@ EVT_BEGIN(tik_evt_majin2_item)
 	USER_FUNC(evt_mario::evt_mario_key_onoff, 1)
 	RETURN()
 EVT_END()
+
+EVT_BEGIN(tik_pit_checkpoint_evt)
+	USER_FUNC(evt_mario::evt_mario_key_onoff, 0)
+	USER_FUNC(evt_mario::evt_mario_normalize)
+	IF_SMALL(GSWF(6117), 1)
+		USER_FUNC(evt_msg::evt_msg_print, 0, PTR("pit_checkpoint_explain"), 0, 0)
+		SET(GSWF(6117), 1)
+	END_IF()
+	IF_SMALL(GSW(33), 10)
+		USER_FUNC(evt_msg::evt_msg_print, 0, PTR("pit_checkpoint_deny"), 0, 0)
+		USER_FUNC(evt_mario::evt_mario_key_onoff, 1)
+		RETURN()
+	END_IF()
+	USER_FUNC(evt_msg::evt_msg_print, 0, PTR("pit_checkpoint"), 0, 0)
+	USER_FUNC(pitCheckpointBuffer, LW(14))
+	USER_FUNC(evt_msg_numselect, LW(14), LW(0))
+	IF_SMALL_EQUAL(LW(0), 0)
+		USER_FUNC(evt_mario::evt_mario_key_onoff, 1)
+		RETURN()
+	END_IF()
+	SUB(LW(0), 1)
+	SET(GSW(1321), LW(0))
+	USER_FUNC(evt_msg::evt_msg_print_add, 0, PTR("pit_checkpoint_set"))
+	USER_FUNC(evt_mario::evt_mario_key_onoff, 1)
+	RETURN()
+EVT_END()
 // clang-format on
 
 namespace mod
@@ -570,6 +612,8 @@ namespace mod
         patch::writePatch(&tik_05_init_evt[58], tik_05_init_evt_hook, sizeof(tik_05_init_evt_hook));
         tik_05_init_evt[62] = 0;
         patch::writePatch(&tik_05_init_evt[145], tik_05_init_evt_hook2, sizeof(tik_05_init_evt_hook2));
+
+        tik_06_init_evt[25] = PTR(&tik_pit_checkpoint_evt);
 
         tik_peach_mail[178] = GSW(1715);
         tik_peach_mail[179] = 15;

@@ -284,15 +284,15 @@ namespace mod::owr
 
     KEEP_FUNC void replaceMultipleCharacters(ttyd::memory::SmartAllocationData *smartData, uint32_t startIndex, int value)
     {
-        char newChars[3];
-        snprintf(newChars, sizeof(newChars), value < 10 ? " %" PRId32 : "%" PRId32, value);
-        int32_t len = strlen(newChars);
+        char newChars[4];
+        snprintf(newChars, sizeof(newChars), "%3d", value); // Always 3 characters
 
         MessageData *msgData = reinterpret_cast<MessageData *>(smartData->pMemory);
         const uint32_t commandCount = msgData->command_count;
         TextCommand *commandsPtr = &msgData->commands[0];
 
-        for (int32_t i = 0; (i < len) && ((startIndex + i) < commandCount); i++)
+        // Replace exactly 3 characters starting from startIndex
+        for (int i = 0; i < 3 && (startIndex + i) < commandCount; i++)
         {
             TextCommand *cmd = &commandsPtr[startIndex + i];
             if (cmd->type >= 0xFFF4)
@@ -304,21 +304,16 @@ namespace mod::owr
                 cmd->param2 = -10;
             }
 
-            // Failsafe: Make sure index doesn't exceed newChars
-            if (i < static_cast<int32_t>(sizeof(newChars)))
+            char c = newChars[i];
+            if (c == ' ')
             {
-                const char c = newChars[i];
-
-                if (c == ' ')
-                {
-                    cmd->type = 0x0000;
-                    cmd->flags &= ~0x08;
-                }
-                else if (c >= '0' && c <= '9')
-                {
-                    cmd->type = 0x0053 + (c - '0');
-                    cmd->flags |= 0x08;
-                }
+                cmd->type = 0x0000;
+                cmd->flags &= ~(0x08 | 0x02);
+            }
+            else if (c >= '0' && c <= '9')
+            {
+                cmd->type = 0x0053 + (c - '0');
+                cmd->flags = 0x08;
             }
         }
     }
@@ -615,9 +610,9 @@ namespace mod::owr
         ttyd::windowdrv::windowDispGX_Waku_col(0, &frameColor, window->x, window->y, window->width, window->height, 30.0f);
         replaceMultipleCharacters(window->msgData, 0, g_numericInput.currentValue);
 
-        const float widthHalf = window->width / 2.f;
-        const float textX = window->x + (widthHalf - 15.0f);
-        const float textY = window->y - ((window->height / 4.f) + 2.0f);
+        const float widthHalf = window->width / 2.0f;
+        const float textX = window->x + (widthHalf - 30.0f);
+        const float textY = window->y - ((window->height / 4.0f));
         ttyd::msgdrv::msgDisp(window->msgData, textX, textY, alpha);
 
         // Draw arrows
@@ -722,6 +717,48 @@ namespace mod::owr
         // Enable post chapter 2 checks right when the chapter is beaten
         if (ttyd::swdrv::swByteGet(1713) >= 11 && strncmp(map, "mri", 3) == 0)
             ttyd::swdrv::swSet(2884);
+
+        // Update the map name if entering the pit with a checkpoint
+        if (strcmp(ttyd::seq_mapchange::_next_area, "tik") == 0 && strncmp(map, "jon", 3) == 0)
+        {
+            switch (ttyd::swdrv::swByteGet(1321))
+            {
+                case 0: // No checkpoint
+                    break;
+                case 9:
+                    map = "jon_03";
+                    break;
+                case 19:
+                    map = "jon_03";
+                    break;
+                case 29:
+                    map = "jon_03";
+                    break;
+                case 39:
+                    map = "jon_03";
+                    break;
+                case 49:
+                    map = "jon_04";
+                    break;
+                case 59:
+                    map = "jon_04";
+                    break;
+                case 69:
+                    map = "jon_04";
+                    break;
+                case 79:
+                    map = "jon_05";
+                    break;
+                case 89:
+                    map = "jon_05";
+                    break;
+                case 99:
+                    map = "jon_06";
+                    break;
+                default:
+                    break;
+            }
+        }
 
         if (strcmp(map, "rsh_01_a") == 0)
         {
@@ -845,6 +882,23 @@ namespace mod::owr
             return "<p>\nAw, come on now! Don't be\nsuch a penny-pincher!\n<k>\n<p>\nA fighter's gotta invest in\nhis future "
                    "if he wants to\nmake it to the big time!\n<k>\n<p>\nBut I get it, son... Times are\ntough all over. Come "
                    "back when\nyou got some coin to spare!\n<k>";
+        }
+        if (!strcmp(msgKey, "pit_checkpoint_explain"))
+        {
+            return "<system>\nEvery 10 floors cleared\nin the pit will unlock a\ncheckpoint.\n<k>\n<p>\n"
+                   "Selecting a checkpoint will\nsend you to that floor the\nnext time you take the pipe.\n<k>";
+        }
+        if (!strcmp(msgKey, "pit_checkpoint"))
+        {
+            return "<system>\nSelect a floor you would like\nto start from the next\ntime you enter the pit.\n<o>";
+        }
+        if (!strcmp(msgKey, "pit_checkpoint_deny"))
+        {
+            return "<system>\nYou have not unlocked\nany pit checkpoints.\n<k>";
+        }
+        if (!strcmp(msgKey, "pit_checkpoint_set"))
+        {
+            return "<p>\nYour pit checkpoint\nhas been set.\n<k>";
         }
         if (!strcmp(msgKey, "madam_abort"))
         {
@@ -1565,6 +1619,14 @@ namespace mod::owr
     {
         APSettings *apSettingsPtr = gState->apSettings;
         apSettingsPtr->inGame = static_cast<uint8_t>(checkIfInGame());
+
+        int8_t count = 0;
+        for (int i = 114; i <= 120; i++)
+        {
+            if (ttyd::mario_pouch::pouchCheckItem(i) > 0)
+                count++;
+        }
+        apSettingsPtr->collectedStars = count;
 
         if (apSettingsPtr->touConditions)
             ttyd::swdrv::swSet(2443);

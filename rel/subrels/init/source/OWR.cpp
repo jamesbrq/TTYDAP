@@ -67,6 +67,7 @@ extern int32_t main__psndSFXOn[];
 extern int32_t main_psndBGMOff_f_d[];
 extern int32_t main_psndBGMOn_f_d[];
 extern int32_t main_battleCheckUnitMonosiriFlag[];
+extern int32_t main_BattleDrawEnemyHPBar[];
 // End of Assembly References
 
 // Script References
@@ -391,6 +392,14 @@ namespace mod::owr
         patch::writeBranchPair(&main_battleSetUnitMonosiriFlag[6],
                                reinterpret_cast<void *>(bMonosiriItemCheck),
                                reinterpret_cast<void *>(bMonosiriItemCheckReturn));
+
+        patch::writeBranchPair(&main_BattleDrawEnemyHPBar[22],
+                               reinterpret_cast<void *>(bHpColorBack),
+                               reinterpret_cast<void *>(bHpColorBackReturn));
+
+        patch::writeBranchPair(&main_BattleDrawEnemyHPBar[90],
+                               reinterpret_cast<void *>(bHpColorFront),
+                               reinterpret_cast<void *>(bHpColorFrontReturn));
     }
 
     void ApplyMainScriptPatches()

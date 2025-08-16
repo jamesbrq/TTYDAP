@@ -514,9 +514,9 @@ EVT_BEGIN(tou_05_talk_gans_evt)
     USER_FUNC(tou_evt_tou_get_ranking, LW(2))
     SET(GSW(1724), LW(2))
     IF_SMALL(GSWF(6075), 1)
-        SET(LW(14), PTR("<numselect 11 20 20 1>\n%" PRId32))
+        SET(LW(14), PTR("<numselect 11 20 20 1>\n %" PRId32))// Min, Max, Start, Step
     ELSE()
-        SET(LW(14), PTR("<numselect 1 20 20 1>\n%" PRId32))
+        SET(LW(14), PTR("<numselect 1 20 20 1>\n %" PRId32))// Min, Max, Start, Step
     END_IF()
     USER_FUNC(evt_msg::evt_msg_fill_num, 1, LW(14), LW(14), LW(2))
     USER_FUNC(evt_msg_numselect, LW(14), LW(0))

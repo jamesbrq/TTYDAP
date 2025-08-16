@@ -39,6 +39,10 @@
 .global bMonosiriItemCheckReturn
 .global bMonosiriBucket
 .global bMonosiriBucketReturn
+.global bHpColorBack
+.global bHpColorBackReturn
+.global bHpColorFront
+.global bHpColorFrontReturn
 
 # All of the global symbols in this file excluding win_log_mapGX_arr need to be used in at least one subrel, so they cannot be set to hidden
 
@@ -291,6 +295,50 @@ bMonosiriBucketEnd:
 bGoombellaSkip:
 	lwz %r0, 0x8(%r26)
 bMonosiriBucketReturn:
+	b 0
+
+bHpColorBack:
+	stwu %r1, -0x80(%r1)
+	mflr %r3
+	stmw %r3, 0x8(%r1)
+	lwz %r3, 0x4(%r29)
+	addi %r3, %r3, 0x117A
+	bl swGet
+	cmpwi %r3, 0x1
+	beq bHpColorBackGreen
+	lwz %r0, 0x0(%r30)
+	b bHpColorBackEnd
+bHpColorBackGreen:
+	lis %r0, 0x22FF
+	ori %r0, %r0, 0xFFFF
+bHpColorBackEnd:
+	lmw %r3, 0x8(%r1)
+	mtlr %r3
+	li %r3, 0x11
+	addi %r1, %r1, 0x80
+bHpColorBackReturn:
+	b 0
+
+bHpColorFront:
+	stwu %r1, -0x80(%r1)
+	mflr %r3
+	stmw %r3, 0x8(%r1)
+	lwz %r3, 0x4(%r29)
+	addi %r3, %r3, 0x117A
+	bl swGet
+	cmpwi %r3, 0x1
+	beq bHpColorFrontGreen
+	lwz %r0, 0x0(%r30)
+	b bHpColorFrontEnd
+bHpColorFrontGreen:
+	lis %r0, 0x22FF
+	ori %r0, %r0, 0xFFFF
+bHpColorFrontEnd:
+	lmw %r3, 0x8(%r1)
+	mtlr %r3
+	li %r3, 0x12
+	addi %r1, %r1, 0x80
+bHpColorFrontReturn:
 	b 0
 
 win_log_mapGX_arr:

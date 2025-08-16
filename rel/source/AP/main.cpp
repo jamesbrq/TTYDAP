@@ -265,7 +265,6 @@ void monosiriItemCheck(int unit_id)
         return;
 
     gState->newTattle = true;
-    // TODO: Modify BattleAudienceDetectTargetPlayer() call to get specifically goombella
     ttyd::battle_audience::BattleAudience_SetPresentTargetUnitId(
         ttyd::battle_unit::BtlUnit_GetUnitId(BattleGetPartyPtr(_battleWorkPtr))); // Goombella
     ttyd::battle_audience::BattleAudience_SetPresentItemNo(gState->tattleItems[unit_id - 1]);
