@@ -517,6 +517,9 @@ namespace mod::owr
         itemDataTable[ItemId::INVALID_ITEM_TUBE_MODE_ICON].description = tubeModeNameDescription;
         itemDataTable[ItemId::INVALID_ITEM_BOAT_MODE_ICON].name = boatModeNameDescription;
         itemDataTable[ItemId::INVALID_ITEM_BOAT_MODE_ICON].description = boatModeNameDescription;
+
+        // Key Renames
+        //itemDataTable[ItemId::ELEVATOR_KEY_001A].name = elevatorKeyName;
     }
 
     OWR::OWR()

@@ -1104,6 +1104,12 @@ namespace mod::owr
         {
             return "Boat Mode<k>";
         }
+
+        //Key Renames
+        if (!strcmp(msgKey, "elevator_key_name"))
+        {
+            return "Elevator Key(Riverside)<k>";
+        }
         return g_msgSearch_trampoline(msgKey);
     }
 

@@ -57,6 +57,9 @@ namespace mod::owr
     KEEP_VAR const char *paperModeNameDescription = "paper_mode";
     KEEP_VAR const char *tubeModeNameDescription = "tube_mode";
     KEEP_VAR const char *boatModeNameDescription = "boat_mode";
+
+    // Key Renames
+    KEEP_VAR const char *elevatorKeyName = "elevator_key_name";
 } // namespace mod::owr
 
 extern int32_t btlataudevtPresentItem_Get[];

@@ -107,5 +107,6 @@ namespace mod::owr
     extern const char *paperModeNameDescription;
     extern const char *tubeModeNameDescription;
     extern const char *boatModeNameDescription;
+    extern const char *elevatorKeyName;
 
 } // namespace mod::owr
