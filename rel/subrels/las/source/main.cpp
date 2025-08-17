@@ -1,5 +1,6 @@
 #include "subrel_las.h"
 #include "evt_cmd.h"
+#include "OWR.h"
 #include "patch.h"
 #include "AP/rel_patch_definitions.h"
 #include "ttyd/evt_case.h"
@@ -53,10 +54,12 @@ extern int32_t las_koopa_evt[];
 extern int32_t las_shuryolight_init_28[];
 extern int32_t las_28_init_evt[];
 extern int32_t las_last_evt_3[];
+extern int32_t las_last_evt_3_1[];
 extern int32_t las_last_evt_3_2[];
 extern int32_t las_last_evt_4[];
 extern int32_t las_shuryolight_init_29[];
 extern int32_t las_29_init_evt[];
+extern int32_t las_bero_entry_data_30[];
 extern int32_t las_30_init_evt[];
 extern int32_t las_key_check_evt_22[];
 extern int32_t las_key_check_evt_25[];
@@ -348,6 +351,13 @@ namespace mod
         las_key_tbl_05[0] = 46;
         las_key_tbl_22[0] = 46;
         las_key_tbl_25[0] = 46;
+
+        if (mod::owr::gState->apSettings->shadowSkip)
+        {
+            las_bero_entry_data_30[26] = PTR("sekai_yami2");
+            las_last_evt_3_1[517] = PTR("las_29");
+            las_last_evt_3_1[518] = PTR("minnnanokoe");
+        }
     }
 
     void exit() {}
