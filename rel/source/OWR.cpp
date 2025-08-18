@@ -1626,7 +1626,7 @@ namespace mod::owr
         APSettings *apSettingsPtr = gState->apSettings;
         apSettingsPtr->inGame = static_cast<uint8_t>(checkIfInGame());
 
-        int8_t count = 0;
+        uint8_t count = 0;
         for (int i = 114; i <= 120; i++)
         {
             if (ttyd::mario_pouch::pouchCheckItem(i) > 0)
