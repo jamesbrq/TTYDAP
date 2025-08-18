@@ -1,5 +1,6 @@
 #include "subrel_gor.h"
 #include "evt_cmd.h"
+#include "OWR.h"
 #include "patch.h"
 #include "AP/rel_patch_definitions.h"
 #include "ttyd/evt_bero.h"
@@ -884,7 +885,15 @@ void ApplyGor00Patches()
     gor_gundan1000tai_afterbattle[1182] = GSW(1700);
 
     gor_shukko_event[490] = GSW(1705);
-    gor_shukko_event[491] = 7;
+
+	if (mod::owr::gState->apSettings->cutsceneSkip)
+	{
+        gor_shukko_event[491] = 9;
+        gor_shukko_event[494] = PTR("muj_00");
+        gor_shukko_event[495] = 0;
+	}
+    else
+        gor_shukko_event[491] = 7;
 
     gor_gorotsuki_kikan[235] = GSW(1717);
     gor_gorotsuki_kikan[236] = 26;

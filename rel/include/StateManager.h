@@ -26,7 +26,7 @@ namespace mod::owr
         uint8_t fastTravel;
         uint8_t touConditions;
         uint8_t collectedStars;
-        uint8_t shadowSkip;
+        uint8_t cutsceneSkip;
     };
 
     static_assert(sizeof(APSettings) == 0x20);

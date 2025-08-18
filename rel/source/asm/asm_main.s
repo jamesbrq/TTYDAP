@@ -43,6 +43,7 @@
 .global bHpColorBackReturn
 .global bHpColorFront
 .global bHpColorFrontReturn
+.global bMonosiriBucketExtra
 
 # All of the global symbols in this file excluding win_log_mapGX_arr need to be used in at least one subrel, so they cannot be set to hidden
 
@@ -297,6 +298,27 @@ bGoombellaSkip:
 bMonosiriBucketReturn:
 	b 0
 
+bMonosiriBucketExtra:
+	stwu %r1, -0x16(%r1)
+	mflr %r4 
+	stw %r4, 0x20(%r1)
+	bl swGet
+	cmpwi %r3, 0x0
+	bne bMonosiriBucketExtraSkip
+	li %r3, 0x1
+	bl partyChkJoin
+	cmpwi %r3, 0x1
+	bne bMonosiriBucketExtraStop
+	li %r3, 0x0
+	b bMonosiriBucketExtraSkip
+bMonosiriBucketExtraStop:
+	li %r3, 0x1
+bMonosiriBucketExtraSkip:
+	lwz %r4, 0x20(%r1)
+	mtlr %r4
+	addi %r1, %r1, 0x16
+	blr
+
 bHpColorBack:
 	stwu %r1, -0x80(%r1)
 	mflr %r3
@@ -500,12 +522,12 @@ monosiriSWArr:
 	.4byte 0x000006AC
 	.4byte 0x00000084
 	.4byte 0x00000010
-	.4byte 0x000006AC
+	.4byte 0x000006B0
 	.4byte 0x00000085
-	.4byte 0x00000009
-	.4byte 0x000006AC
+	.4byte 0x00000002
+	.4byte 0x000006B0
 	.4byte 0x00000086
-	.4byte 0x00000009
+	.4byte 0x00000002
 	.4byte 0x000006AC
 	.4byte 0x00000087
 	.4byte 0x00000009

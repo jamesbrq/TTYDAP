@@ -110,6 +110,7 @@ extern int32_t tou_move_g_2[];
 extern int32_t tou_init_g_4[];
 extern int32_t tou_talk_g_4[];
 extern int32_t tou_move_g_4[];
+extern int32_t tou_move_g_6[];
 extern int32_t tou_talk_g_7[];
 extern int32_t tou_talk_g_8[];
 extern int32_t tou_talk_g_9[];
@@ -594,7 +595,7 @@ namespace mod
         tou_evt_tou_match_make_default[159] = 0;
         tou_evt_tou_match_make_default[164] = 0;
         tou_evt_tou_match_make_default[165] = 0;
-        tou_evt_tou_match_make_default[170] = 14;
+        tou_evt_tou_match_make_default[170] = 16;
         tou_evt_tou_match_make_default[171] = 19;
         tou_evt_tou_match_make_default[176] = 0;
 
@@ -941,6 +942,10 @@ namespace mod
         tou_move_g_4[39] = 18;
         tou_move_g_4[71] = 19;
         tou_move_g_4[72] = 27;
+
+        tou_move_g_6[9] = GSW(1703);
+        tou_move_g_6[10] = EVT_HELPER_CMD(1, 41);
+        tou_move_g_6[11] = 14;
 
         tou_talk_g_7[1] = GSW(1703);
         tou_talk_g_7[3] = 7;

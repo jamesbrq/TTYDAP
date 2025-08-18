@@ -518,6 +518,14 @@ namespace mod::owr
         itemDataTable[ItemId::INVALID_ITEM_BOAT_MODE_ICON].name = boatModeNameDescription;
         itemDataTable[ItemId::INVALID_ITEM_BOAT_MODE_ICON].description = boatModeNameDescription;
 
+        // Buy/Sell Prices
+        for (int i = ItemId::POWER_JUMP; i < ItemId::MAX_ITEM_ID; i++)
+        {
+            int divisor = (itemDataTable[i].sell_price >= 250) ? 6 : (itemDataTable[i].sell_price >= 100) ? 4 : 2;
+            itemDataTable[i].sell_price = ((itemDataTable[i].sell_price / divisor + 2) / 5) * 5;
+            itemDataTable[i].buy_price = itemDataTable[i].discount_price = itemDataTable[i].sell_price * 2;
+        }
+
         // Key Renames
         //itemDataTable[ItemId::ELEVATOR_KEY_001A].name = elevatorKeyName;
     }

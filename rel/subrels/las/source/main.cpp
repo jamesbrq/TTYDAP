@@ -352,7 +352,7 @@ namespace mod
         las_key_tbl_22[0] = 46;
         las_key_tbl_25[0] = 46;
 
-        if (mod::owr::gState->apSettings->shadowSkip)
+        if (mod::owr::gState->apSettings->cutsceneSkip)
         {
             las_bero_entry_data_30[26] = PTR("sekai_yami2");
             las_last_evt_3_1[517] = PTR("las_29");

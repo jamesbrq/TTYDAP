@@ -113,6 +113,8 @@ namespace mod::util
         else
         {
             // Spawn the follower
+            if (id == PartyMembers::kFlurrieFollower)
+                id = PartyMembers::kFlavio; // Failsafe for Flurrie due to ch.6 softlock
             slotId = marioPartyEntry(id);
         }
 

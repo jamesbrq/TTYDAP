@@ -46,6 +46,7 @@ extern "C"
     void bMonosiriItemCheckReturn();
     void bMonosiriBucket();
     void bMonosiriBucketReturn();
+    void bMonosiriBucketExtra();
     void bHpColorBack();
     void bHpColorBackReturn();
     void bHpColorFront();

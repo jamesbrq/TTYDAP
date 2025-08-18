@@ -36,7 +36,7 @@ namespace ttyd::evt_party
         // evt_party_move_pos
         EVT_DECLARE_USER_FUNC(evt_party_yoshi_ride, 2)
         EVT_DECLARE_USER_FUNC(evt_party_run, 1)
-        // evt_party_stop
+        EVT_DECLARE_USER_FUNC(evt_party_stop, 1)
         // evt_party_set_dispdir
         // evt_party_get_dispdir
         // evt_party_set_dir_pos

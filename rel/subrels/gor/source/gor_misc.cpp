@@ -133,4 +133,8 @@ void ApplyGorMiscPatches()
     patch::writeIntWithCache(&gor_monosiri_check[33], 0x60000000); // NOP
     patch::writeIntWithCache(&gor_monosiri_check[41], 0x60000000); // NOP
     patch::writeIntWithCache(&gor_monosiri_check[44], 0x281C0017); // cmplwi r28, 0x17
+
+    patch::writeBranchBL(&gor_monosiri_check[51], reinterpret_cast<void *>(bMonosiriBucketExtra));
+    patch::writeBranchBL(&gor_monosiri_check[69], reinterpret_cast<void *>(bMonosiriBucketExtra));
+    patch::writeBranchBL(&gor_monosiri_check[87], reinterpret_cast<void *>(bMonosiriBucketExtra));
 }

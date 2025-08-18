@@ -1,11 +1,14 @@
 #include "AP/rel_patch_definitions.h"
 #include "common.h"
 #include "evt_cmd.h"
+#include "OWR.h"
 #include "patch.h"
 #include "subrel_bom.h"
+#include "ttyd/evt_bero.h"
 #include "ttyd/evt_item.h"
 #include "ttyd/evt_mario.h"
 #include "ttyd/evt_msg.h"
+#include "ttyd/evt_party.h"
 #include "ttyd/evt_pouch.h"
 #include "ttyd/evt_snd.h"
 
@@ -20,6 +23,7 @@ extern int32_t bom_00_init_evt[];
 extern int32_t bom_first_evt_01[];
 extern int32_t bom_init_soncho_01[];
 extern int32_t bom_talk_soncho_01[];
+extern int32_t bom_evt_taihou_1[];
 extern int32_t bom_talk_nitoro[];
 extern int32_t bom_talk_pentrit[];
 extern int32_t bom_talk_surary[];
@@ -33,7 +37,7 @@ extern int32_t bom_talk_white[];
 extern int32_t bom_musume_talk[];
 extern int32_t bom_minnnanokoe_evt[];
 extern int32_t bom_01_init_evt[];
-extern int32_t bom_evt_taihou[];
+extern int32_t bom_evt_taihou_2[];
 extern int32_t bom_init_soncho_02[];
 extern int32_t bom_talk_soncho_02[];
 extern int32_t bom_talk_murabito_e_02[];
@@ -52,7 +56,7 @@ extern int32_t bom_jump_minnnanokoe[];
 // clang-format off
 EVT_BEGIN(bom_talk_soncho_02_evt)
     IF_EQUAL(GSWF(6114), 1)
-        RUN_CHILD_EVT(&bom_evt_taihou)
+        RUN_CHILD_EVT(&bom_evt_taihou_2)
         RETURN()
     END_IF()
     USER_FUNC(evt_msg::evt_msg_print, 0, PTR("goldbob_guide"), 0, PTR("me"))
@@ -77,10 +81,29 @@ EVT_BEGIN(bom_talk_soncho_02_evt)
         USER_FUNC(evt_pouch::evt_pouch_remove_item, ItemId::GOLDBOB_GUIDE, LW(0))
     END_IF()
     IF_EQUAL(GSWF(6114), 1)
-        RUN_CHILD_EVT(&bom_evt_taihou)
+        RUN_CHILD_EVT(&bom_evt_taihou_2)
     END_IF()
     RETURN()
 EVT_END()
+
+EVT_BEGIN(bom_evt_white_bed_evt)
+    USER_FUNC(evt_party::evt_party_stop, 0)
+    IF_SMALL(GSW(1707), 3)
+        USER_FUNC(evt_msg::evt_msg_print, 1, PTR("<system>\nHe seems to be asleep.\n<k>"), 0, PTR("me"))
+        SET(LW(0), 0)
+    ELSE()
+        USER_FUNC(evt_msg::evt_msg_print, 0, PTR("stg7_bom_43"), 0, PTR("me"))
+        SET(LW(0), 1)
+    END_IF()
+    RETURN()
+EVT_END()
+
+EVT_BEGIN(bom_evt_white_bed_hook)
+    RUN_CHILD_EVT(bom_evt_white_bed_evt)
+    IF_SMALL(LW(0), 1)
+        RETURN()
+    END_IF()
+EVT_PATCH_END()
 // clang-format on
 
 namespace mod
@@ -108,6 +131,12 @@ namespace mod
         bom_talk_soncho_01[1] = GSW(1707);
         bom_talk_soncho_01[3] = 17;
 
+        if (mod::owr::gState->apSettings->cutsceneSkip)
+        {
+            bom_evt_taihou_1[6] = EVT_HELPER_CMD(1, 4);
+            bom_evt_taihou_1[7] = EVT_HELPER_OP(&bom_evt_taihou_1[2436]);
+        }
+        
         bom_talk_nitoro[1] = GSW(1707);
         bom_talk_nitoro[3] = 1;
         bom_talk_nitoro[11] = 5;
@@ -171,8 +200,8 @@ namespace mod
         bom_01_init_evt[169] = GSW(1708);
         bom_01_init_evt[170] = 16;
 
-        bom_evt_taihou[182] = GSW(1707);
-        bom_evt_taihou[183] = 5;
+        bom_evt_taihou_2[182] = GSW(1707);
+        bom_evt_taihou_2[183] = 5;
 
         bom_init_soncho_02[1] = GSW(1707);
         bom_init_soncho_02[3] = 5;
@@ -211,6 +240,7 @@ namespace mod
         bom_talk_murabito_i_02[11] = 5;
         bom_talk_murabito_i_02[19] = 6;
 
+        patch::writePatch(&bom_evt_white_bed[3], bom_evt_white_bed_hook, sizeof(bom_evt_white_bed_hook));
         bom_evt_white_bed[492] = GSW(1707);
         bom_evt_white_bed[493] = 4;
 

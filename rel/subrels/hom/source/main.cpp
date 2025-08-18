@@ -5,6 +5,7 @@
 #include "ttyd/evt_case.h"
 #include "ttyd/evt_hit.h"
 #include "ttyd/evt_map.h"
+#include "ttyd/evt_msg.h"
 
 #include <cstdint>
 
@@ -53,14 +54,38 @@ EVT_BEGIN(hom_evt_train_hook)
     RUN_CHILD_EVT(hom_evt_train_evt)
     GOTO(&hom_evt_train[256])
 EVT_PATCH_END()
+
+EVT_BEGIN(hom_talk_ekiin1_evt)
+    IF_SMALL(GSWF(6118), 1)
+        RUN_CHILD_EVT(&hom_evt_carry_up_bridge)
+        RETURN()
+    END_IF()
+    SWITCH(GSW(1720))
+        CASE_SMALL(8)
+            USER_FUNC(evt_msg::evt_msg_print, 0, PTR("stg6_hom_11"), 0, PTR("me"))
+        CASE_END()
+        CASE_SMALL(9)
+            USER_FUNC(evt_msg::evt_msg_print, 0, PTR("stg6_hom_12"), 0, PTR("me"))
+        CASE_END()
+        CASE_ETC()
+            USER_FUNC(evt_msg::evt_msg_print, 0, PTR("stg6_hom_13"), 0, PTR("me"))
+        CASE_END()
+    END_SWITCH()
+    RETURN()
+EVT_END()
+
+EVT_BEGIN(hom_talk_ekiin1_hook)
+	RUN_CHILD_EVT(hom_talk_ekiin1_evt)
+	RETURN()
+EVT_END()
 // clang-format on
 
 namespace mod
 {
     void main()
     {
-        hom_evt_carry_up_bridge[82] = GSW(1720);
-        hom_evt_carry_up_bridge[83] = 2;
+        hom_evt_carry_up_bridge[82] = GSWF(6118);
+        hom_evt_carry_up_bridge[83] = 1;
 
         hom_init_powan_toron_konari_papa_gurume[1] = GSW(1720);
         hom_init_powan_toron_konari_papa_gurume[3] = 8;
