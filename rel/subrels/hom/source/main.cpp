@@ -92,10 +92,7 @@ namespace mod
         hom_init_powan_toron_konari_papa_gurume[12] = GSW(1720);
         hom_init_powan_toron_konari_papa_gurume[13] = 1;
 
-        hom_talk_ekiin1[1] = GSW(1720);
-        hom_talk_ekiin1[3] = 2;
-        hom_talk_ekiin1[7] = 8;
-        hom_talk_ekiin1[15] = 9;
+        patch::writePatch(&hom_talk_ekiin1[0], hom_talk_ekiin1_hook, sizeof(hom_talk_ekiin1_hook));
 
         hom_init_ekiin2[1] = GSW(1720);
         hom_init_ekiin2[3] = 8;
