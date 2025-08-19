@@ -746,7 +746,7 @@ namespace mod
         aji_check_kou_evt[30] = 0x2C030018; // cmpwi r3, 0x18
 
         aji_mario_chk[173] = 0x3884082B; // addi r4, r4, 0x82B GSW(1707)
-        aji_mario_chk[175] = 0x2C03000D; // cmpwi r3, 0xD
+        aji_mario_chk[175] = 0x2C03000C; // cmpwi r3, 0xC
     }
 
     void exit() {}
