@@ -102,9 +102,6 @@ EVT_BEGIN_KEEP(main_partyChristineAttack_Monosiri_evt)
 EVT_END()
 // clang-format on
 
-static const char *goods[] =
-    {"gor_01", "gor_03", "tik_00", "nok_00", "mri_07", "tou_01", "usu_01", "muj_01", "rsh_03", "bom_02"};
-
 EVT_DEFINE_USER_FUNC_KEEP(setShopFlags)
 {
     (void)isFirstCall;
