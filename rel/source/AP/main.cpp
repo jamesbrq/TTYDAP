@@ -108,11 +108,11 @@ EVT_DEFINE_USER_FUNC_KEEP(setShopFlags)
 
     int gswfBase = 6200;
     const char *nextMapPtr = &ttyd::seq_mapchange::_next_map[0];
-    constexpr int loopCount = static_cast<int>(sizeof(goods) / sizeof(goods[0]));
+    constexpr int loopCount = static_cast<int>(sizeof(mod::owr::goods) / sizeof(mod::owr::goods[0]));
 
     for (int i = 0; i < loopCount; i++)
     {
-        if (strncmp(nextMapPtr, goods[i], 6) != 0)
+        if (strncmp(nextMapPtr, mod::owr::goods[i], 6) != 0)
         {
             if (i == loopCount - 1)
                 return 2;
@@ -236,11 +236,11 @@ void checkShopFlag(uint32_t item, uint32_t index)
 
     int gswfBase = 6200;
     const char *nextMapPtr = &ttyd::seq_mapchange::_next_map[0];
-    constexpr int loopCount = static_cast<int>(sizeof(goods) / sizeof(goods[0]));
+    constexpr int loopCount = static_cast<int>(sizeof(mod::owr::goods) / sizeof(mod::owr::goods[0]));
 
     for (int i = 0; i < loopCount; i++)
     {
-        if (strncmp(nextMapPtr, goods[i], 6) != 0)
+        if (strncmp(nextMapPtr, mod::owr::goods[i], 6) != 0)
         {
             if (i == loopCount - 1)
                 return;
