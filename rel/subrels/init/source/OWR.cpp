@@ -10,6 +10,7 @@
 #include "ttyd/msgdrv.h"
 #include "ttyd/seq_logo.h"
 #include "ttyd/seq_mapchange.h"
+#include "ttyd/seq_game.h"
 #include "ttyd/seqdrv.h"
 #include "ttyd/statuswindow.h"
 #include "ttyd/swdrv.h"
@@ -541,6 +542,7 @@ namespace mod::owr
 
         g_OSLink_trampoline = patch::hookFunction(OSLink, OSLinkHook);
         g_seq_logoMain_trampoline = patch::hookFunction(seq_logo::seq_logoMain, logoSkip);
+        g_seq_gameInit_trampoline = patch::hookFunction(seq_game::seq_gameInit, seq_gameInitHook);
         g_seqSetSeq_trampoline = patch::hookFunction(seqdrv::seqSetSeq, seqSetSeqHook);
         g_msgSearch_trampoline = patch::hookFunction(msgdrv::msgSearch, msgSearchHook);
         g_pouchGetItem_trampoline = patch::hookFunction(mario_pouch::pouchGetItem, pouchGetItemHook);

@@ -116,7 +116,7 @@ const uint16_t GSWF_ARR[] = {
     1925,
 
     // Sir Swoop cutscene
-    //2413,
+    // 2413,
 
     // Ch.3 jolene hallway cutscene
     2445,
@@ -148,6 +148,7 @@ namespace mod::owr
 
     KEEP_VAR bool (*g_OSLink_trampoline)(OSModuleInfo *, void *) = nullptr;
     KEEP_VAR void (*g_seq_logoMain_trampoline)(SeqInfo *info) = nullptr;
+    KEEP_VAR void (*g_seq_gameInit_trampoline)(SeqInfo *info) = nullptr;
     KEEP_VAR void (*g_seqSetSeq_trampoline)(SeqIndex seq, const char *map, const char *bero) = nullptr;
     KEEP_VAR uint32_t (*g_pouchGetItem_trampoline)(int32_t) = nullptr;
     KEEP_VAR void (*g_partySetForceMove_trampoline)(ttyd::party::PartyEntry *ptr, float x, float z, float speed) = nullptr;
@@ -646,11 +647,12 @@ namespace mod::owr
             ttyd::swdrv::swSet(6303);
         else if (strncmp(map, "gon", 3) == 0)
             ttyd::swdrv::swSet(6304);
-        else if (strcmp(map, "win_06") == 0)
+        else if (strncmp(map, "win", 3) == 0 && strcmp(map, "win_04") != 0 && strcmp(map, "win_05") != 0)
             ttyd::swdrv::swSet(6305);
         else if (strncmp(map, "mri", 3) == 0)
             ttyd::swdrv::swSet(6306);
-        else if (strcmp(map, "win_04") == 0)
+        else if (!ttyd::mario::marioCtrlOffChk() && // marioCtrlOffChk because of flurries missing necklace cutscene
+                 strcmp(map, "win_04") == 0)
             ttyd::swdrv::swSet(6307);
         else if (strncmp(map, "tou", 3) == 0)
             ttyd::swdrv::swSet(6308);
@@ -660,10 +662,10 @@ namespace mod::owr
             ttyd::swdrv::swSet(6310);
         else if (strcmp(map, "gra_06") == 0)
             ttyd::swdrv::swSet(6311);
+        else if (strcmp(map, "muj_05") == 0 || strncmp(map, "dou", 3) == 0)
+            ttyd::swdrv::swSet(6313);
         else if (strncmp(map, "muj", 3) == 0)
             ttyd::swdrv::swSet(6312);
-        else if (strncmp(map, "dou", 3) == 0)
-            ttyd::swdrv::swSet(6313);
         else if (strncmp(map, "hom", 3) == 0)
             ttyd::swdrv::swSet(6314);
         else if (strcmp(map, "pik_00") == 0 || strcmp(map, "pik_01") == 0)
@@ -693,8 +695,6 @@ namespace mod::owr
         {
             return g_seqSetSeq_trampoline(seq, map, bero);
         }
-
-        setFirstVisitSW(map); // Set GSWF flag on first visit to a map
 
         // Give Zess T. the conctact lens upon entering westside
         if (strcmp(map, "gor_03") == 0)
@@ -821,6 +821,17 @@ namespace mod::owr
         }
 
         return g_seqSetSeq_trampoline(seq, map, bero);
+    }
+
+    // runs after map changes
+    KEEP_FUNC void seq_gameInitHook(SeqInfo *info)
+    {
+        // only visit a location if you are mario
+        if (marioGetPtr()->characterId == MarioCharacters::kMario)
+        {
+            setFirstVisitSW(ttyd::seq_mapchange::_next_map); // Set GSWF flag on first visit to a map
+        }
+        g_seq_gameInit_trampoline(info);
     }
 
     KEEP_FUNC const char *msgSearchHook(const char *msgKey)
