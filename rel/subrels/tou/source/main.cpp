@@ -1293,6 +1293,7 @@ namespace mod
         tou_10_init_evt[198] = 28;
         tou_10_init_evt[222] = GSWF(6036);
         tou_10_init_evt[223] = 1;
+        tou_10_init_evt[232] = GSWF(6036);
         tou_10_init_evt[236] = GSW(1703);
         tou_10_init_evt[237] = 11;
 

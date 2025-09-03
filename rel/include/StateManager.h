@@ -27,6 +27,8 @@ namespace mod::owr
         uint8_t touConditions;
         uint8_t collectedStars;
         uint8_t cutsceneSkip;
+        uint8_t expMultiplier;
+        uint8_t startingLevel;
     };
 
     static_assert(sizeof(APSettings) == 0x20);

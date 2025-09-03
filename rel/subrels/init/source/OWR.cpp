@@ -69,6 +69,7 @@ extern int32_t main_psndBGMOff_f_d[];
 extern int32_t main_psndBGMOn_f_d[];
 extern int32_t main_battleCheckUnitMonosiriFlag[];
 extern int32_t main_BattleDrawEnemyHPBar[];
+extern int32_t btlseqEnd[];
 // End of Assembly References
 
 // Script References
@@ -401,6 +402,10 @@ namespace mod::owr
         patch::writeBranchPair(&main_BattleDrawEnemyHPBar[90],
                                reinterpret_cast<void *>(bHpColorFront),
                                reinterpret_cast<void *>(bHpColorFrontReturn));
+
+        patch::writeBranchPair(&btlseqEnd[354],
+                               reinterpret_cast<void *>(bExpMultiplier),
+                               reinterpret_cast<void *>(bExpMultiplierReturn));
     }
 
     void ApplyMainScriptPatches()

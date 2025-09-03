@@ -230,6 +230,7 @@ namespace mod::owr
             pouch->current_fp = gState->apSettings->startingFP;
             pouch->total_bp = gState->apSettings->startingBP;
             pouch->unallocated_bp = gState->apSettings->startingBP;
+            pouch->level = gState->apSettings->startingLevel;
         }
     }
 

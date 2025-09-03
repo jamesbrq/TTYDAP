@@ -44,6 +44,8 @@
 .global bHpColorFront
 .global bHpColorFrontReturn
 .global bMonosiriBucketExtra
+.global bExpMultiplier
+.global bExpMultiplierReturn
 
 # All of the global symbols in this file excluding win_log_mapGX_arr need to be used in at least one subrel, so they cannot be set to hidden
 
@@ -363,6 +365,12 @@ bHpColorFrontEnd:
 bHpColorFrontReturn:
 	b 0
 
+bExpMultiplier:
+	bl applyExpMultiplier
+	sth %r3, 0x8(%r28)
+bExpMultiplierReturn:
+	b 0
+
 win_log_mapGX_arr:
 	.byte 0x0
 	.byte 0x1
@@ -468,9 +476,21 @@ monosiriSWArr:
 	.4byte 0x000006A5
 	.4byte 0x00000014
 	.4byte 0x00000009
+	.4byte 0x00001110
+	.4byte 0x00000011
+	.4byte 0x00000001
+	.4byte 0x000006A5
+	.4byte 0x00000012
+	.4byte 0x00000006
+	.4byte 0x000006A5
+	.4byte 0x00000013
+	.4byte 0x00000007
 	.4byte 0x000006AF
 	.4byte 0x00000016
 	.4byte 0x00000005
+	.4byte 0x00001110
+	.4byte 0x00000016
+	.4byte 0x00000001
 	.4byte 0x000006AF
 	.4byte 0x00000017
 	.4byte 0x00000008
@@ -486,6 +506,21 @@ monosiriSWArr:
 	.4byte 0x000006B1
 	.4byte 0x00000022
 	.4byte 0x0000000B
+	.4byte 0x000006A7
+	.4byte 0x00000025
+	.4byte 0x00000003
+	.4byte 0x000006A7
+	.4byte 0x00000026
+	.4byte 0x00000003
+	.4byte 0x000006A7
+	.4byte 0x0000002C
+	.4byte 0x00000003
+	.4byte 0x000006A7
+	.4byte 0x0000002D
+	.4byte 0x00000003
+	.4byte 0x000006A7
+	.4byte 0x00000040
+	.4byte 0x0000000E
 	.4byte 0x000006A7
 	.4byte 0x00000041
 	.4byte 0x00000014
@@ -507,6 +542,9 @@ monosiriSWArr:
 	.4byte 0x000006AB
 	.4byte 0x0000001C
 	.4byte 0x00000010
+	.4byte 0x000006A6
+	.4byte 0x0000001C
+	.4byte 0x00000001
 	.4byte 0x000006AB
 	.4byte 0x00000078
 	.4byte 0x00000010
@@ -525,8 +563,17 @@ monosiriSWArr:
 	.4byte 0x000006B0
 	.4byte 0x00000085
 	.4byte 0x00000002
+	.4byte 0x000006AC
+	.4byte 0x00000085
+	.4byte 0x00000009
 	.4byte 0x000006B0
 	.4byte 0x00000086
+	.4byte 0x00000002
+	.4byte 0x000006AC
+	.4byte 0x00000086
+	.4byte 0x00000009
+	.4byte 0x000006B3
+	.4byte 0x00000087
 	.4byte 0x00000002
 	.4byte 0x000006AC
 	.4byte 0x00000087

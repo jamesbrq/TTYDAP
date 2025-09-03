@@ -89,7 +89,7 @@ namespace mod
 
         tou2_evt_match[55] = GSW(1703);
         tou2_evt_match[56] = 28;
-        patch::writePatch(&tou2_evt_match[113], tou2_evt_match_hook, sizeof(tou2_evt_match_hook));
+        patch::writePatch(&tou2_evt_match[110], tou2_evt_match_hook, sizeof(tou2_evt_match_hook));
         tou2_evt_match[139] = GSW(1703);
         tou2_evt_match[140] = 28;
         tou2_evt_match[235] = GSW(1703);

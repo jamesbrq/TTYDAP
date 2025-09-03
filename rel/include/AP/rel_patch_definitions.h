@@ -51,8 +51,11 @@ extern "C"
     void bHpColorBackReturn();
     void bHpColorFront();
     void bHpColorFrontReturn();
+    void bExpMultiplier();
+    void bExpMultiplierReturn();
     void checkShopFlag(uint32_t item, uint32_t index);
     void monosiriItemCheck(int unit_id);
+    int applyExpMultiplier(int exp);
 }
 
 EVT_DECLARE_USER_FUNC(checkChapterRequirements, 1)
