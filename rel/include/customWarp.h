@@ -60,7 +60,7 @@ namespace mod::custom_warp
                 return {"muj_00", "e_bero"};
 
             if (strcmp(map_prefix, "dou") == 0)
-                return {"dou_00", "w_bero"};
+                return {"muj_05", "w_bero"};
 
             if (strcmp(map_prefix, "eki") == 0)
                 return {"hom_00", "n_bero_1"};
