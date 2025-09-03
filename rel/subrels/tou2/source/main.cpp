@@ -1,8 +1,15 @@
-#include "subrel_tou2.h"
-#include "evt_cmd.h"
 #include "AP/rel_patch_definitions.h"
+#include "evt_cmd.h"
+#include "OWR.h"
+#include "patch.h"
+#include "subrel_tou2.h"
+#include "ttyd/evt_npc.h"
+#include "ttyd/evtmgr_cmd.h"
 
 #include <cstdint>
+
+using namespace ttyd;
+using namespace mod;
 
 extern int32_t tou2_init_kinosikowa[];
 extern int32_t tou2_npc_entry[];
@@ -38,6 +45,34 @@ extern int32_t tou2_evt_tou_get_rule_msg2[];
 extern int32_t tou2_rankingInit[];
 extern int32_t tou2_screen_init[];
 
+EVT_DECLARE_USER_FUNC(tou2_condtions_check, 1)
+EVT_DEFINE_USER_FUNC(tou2_condtions_check) 
+{
+    (void)isFirstCall;
+    evtmgr_cmd::evtSetValue(evt, evt->evtArguments[0], owr::gState->apSettings->touConditions);
+    return 2;
+}
+
+// clang-format off
+EVT_BEGIN(tou2_evt_match_evt)
+    USER_FUNC(tou2_condtions_check, LW(0))
+    IF_EQUAL(LW(0), 1)
+        USER_FUNC(evt_npc::evt_npc_get_battle_result, LW(0))
+        IF_EQUAL(LW(0), 1)
+            SET(GSWF(2443), 1)
+        END_IF()
+    END_IF()
+    SET(GSWF(2388), 0)
+    RETURN()
+EVT_END()
+
+
+EVT_BEGIN(tou2_evt_match_hook)
+    RUN_CHILD_EVT(tou2_evt_match_evt)
+EVT_PATCH_END()
+// clang-format on
+
+
 namespace mod
 {
     void main()
@@ -54,6 +89,7 @@ namespace mod
 
         tou2_evt_match[55] = GSW(1703);
         tou2_evt_match[56] = 28;
+        patch::writePatch(&tou2_evt_match[113], tou2_evt_match_hook, sizeof(tou2_evt_match_hook));
         tou2_evt_match[139] = GSW(1703);
         tou2_evt_match[140] = 28;
         tou2_evt_match[235] = GSW(1703);

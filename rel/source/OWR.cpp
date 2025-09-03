@@ -1634,9 +1634,6 @@ namespace mod::owr
         }
         apSettingsPtr->collectedStars = count;
 
-        if (apSettingsPtr->touConditions)
-            ttyd::swdrv::swSet(2443);
-
         SequenceInit();
         RecieveItems();
     }
