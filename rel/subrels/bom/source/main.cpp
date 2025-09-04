@@ -137,6 +137,8 @@ namespace mod
         {
             bom_evt_taihou_1[6] = EVT_HELPER_CMD(1, 4);
             bom_evt_taihou_1[7] = EVT_HELPER_OP(&bom_evt_taihou_1[2436]);
+            bom_evt_taihou_1[9] = 0;
+            bom_evt_taihou_1[11] = 0;
         }
         
         bom_talk_nitoro[1] = GSW(1707);
