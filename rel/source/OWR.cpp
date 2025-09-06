@@ -1080,11 +1080,11 @@ namespace mod::owr
         }
         if (!strcmp(msgKey, "mowz"))
         {
-            return "Ms.Mowz";
+            return "Ms. Mowz";
         }
         if (!strcmp(msgKey, "mowz_desc"))
         {
-            return "Ms.Mowz<k>";
+            return "Ms. Mowz<k>";
         }
         if (!strcmp(msgKey, "ap_item"))
         {
