@@ -29,6 +29,7 @@ namespace mod::owr
         uint8_t cutsceneSkip;
         uint8_t expMultiplier;
         uint8_t startingLevel;
+        uint8_t deathLink;
     };
 
     static_assert(sizeof(APSettings) == 0x20);

@@ -10,12 +10,14 @@
 #include <ttyd/common_types.h>
 #include <ttyd/countdown.h>
 #include <ttyd/evt_bero.h>
+#include <ttyd/evt_fade.h>
 #include <ttyd/evt_lecture.h>
 #include <ttyd/evt_mario.h>
 #include <ttyd/evt_memcard.h>
 #include <ttyd/evt_msg.h>
 #include <ttyd/evt_party.h>
 #include <ttyd/evt_pouch.h>
+#include <ttyd/evt_seq.h>
 #include <ttyd/evt_snd.h>
 #include <ttyd/evt_window.h>
 #include <ttyd/evtmgr.h>
@@ -1587,6 +1589,12 @@ namespace mod::owr
         RUN_CHILD_EVT(custom_warp_evt)
         RETURN()
     EVT_END()
+
+    EVT_BEGIN(deathlink_evt)
+        USER_FUNC(ttyd::evt_fade::evt_fade_set_mapchange_type, 1, -1, 600, -1, -1)
+        USER_FUNC(ttyd::evt_seq::evt_seq_set_seq, 5, 0, 0)
+        RETURN()
+    EVT_END()
     // clang-format on
 
     // Hook item menu update function to handle interactions with added key items.
@@ -1645,6 +1653,12 @@ namespace mod::owr
                 count++;
         }
         apSettingsPtr->collectedStars = count;
+
+        if (apSettingsPtr->deathLink)
+        {
+            apSettingsPtr->deathLink = 0;
+            ttyd::evtmgr::evtEntryType(const_cast<int32_t *>(mod::owr::deathlink_evt), 30, 0, 26);
+        }
 
         SequenceInit();
         RecieveItems();
