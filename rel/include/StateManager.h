@@ -7,32 +7,33 @@ namespace mod::owr
 {
     struct APSettings
     {
-        uint8_t requiredChapterClears;
-        ttyd::party::PartyMembers startingPartner;
-        uint8_t yoshiColor;
-        uint8_t apEnabled;
-        char *yoshiName;
-        uint8_t inGame;
-        uint8_t palaceSkip;
-        uint8_t openWestside;
-        uint8_t peekaboo;
-        uint8_t intermissions;
-        uint8_t startingHP;
-        uint8_t startingFP;
-        uint8_t startingBP;
-        uint8_t runFill;
-        uint8_t requiredStars[7];
-        uint8_t tattlesanity;
-        uint8_t fastTravel;
-        uint8_t touConditions;
-        uint8_t collectedStars;
-        uint8_t cutsceneSkip;
-        uint8_t expMultiplier;
-        uint8_t startingLevel;
-        uint8_t deathLink;
+        uint8_t requiredChapterClears; //0x0
+        ttyd::party::PartyMembers startingPartner; //0x1
+        uint8_t yoshiColor;         // 0x2
+        uint8_t apEnabled;          // 0x3
+        char *yoshiName;            // 0x4
+        uint8_t inGame;             // 0x8
+        uint8_t palaceSkip;         // 0x9
+        uint8_t openWestside;       // 0xA
+        uint8_t peekaboo;           // 0xB
+        uint8_t intermissions;      // 0xC
+        uint8_t startingHP;         // 0xD
+        uint8_t startingFP;         // 0xE
+        uint8_t startingBP;         // 0xF
+        uint8_t runFill;            // 0x10
+        uint8_t requiredStars[7];   // 0x11
+        uint8_t tattlesanity;       // 0x18
+        uint8_t fastTravel;         // 0x19
+        uint8_t touConditions;      // 0x1A
+        uint8_t collectedStars;     // 0x1B
+        uint8_t cutsceneSkip;       // 0x1C
+        uint8_t expMultiplier;      // 0x1D
+        uint8_t startingLevel;      // 0x1E
+        uint8_t deathLinkTriggered; // 0x1F
+        uint8_t deathLinkSent;      // 0x20
     };
 
-    static_assert(sizeof(APSettings) == 0x20);
+    static_assert(sizeof(APSettings) == 0x24);
 
     class StateManager
     {
@@ -42,5 +43,6 @@ namespace mod::owr
         APSettings *apSettings;
         uint16_t *tattleItems;
         bool newTattle = false;
+        bool firstDeath = false;
     };
 } // namespace mod::owr

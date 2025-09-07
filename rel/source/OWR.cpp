@@ -686,7 +686,15 @@ namespace mod::owr
     }
 
     KEEP_FUNC void seqSetSeqHook(SeqIndex seq, const char *map, const char *bero)
-    {
+    {   
+        if (seq == SeqIndex::kGameOver && !gState->firstDeath)
+        {
+            gState->apSettings->deathLinkSent = 1;
+            gState->firstDeath = true;
+        }
+        if (seq == SeqIndex::kTitle && gState->firstDeath)
+            gState->firstDeath = false;
+
         // Make sure the map is valid
         if (!map)
         {
@@ -1477,7 +1485,7 @@ namespace mod::owr
                 bero = fastTravelPair.bero;
             }
 
-            ttyd::seqdrv::seqSetSeq(ttyd::seqdrv::SeqIndex::kMapChange, mapName, bero);
+            ttyd::seqdrv::seqSetSeq(SeqIndex::kMapChange, mapName, bero);
         }
 
         return 2;
@@ -1568,10 +1576,12 @@ namespace mod::owr
         USER_FUNC(evt_msg_print, 1, LW(0), 0, 0)
         USER_FUNC(evt_msg_select, 1, PTR("<select 0 1 0 40>\nYes\nNo"))
         USER_FUNC(evt_msg_continue)
-        USER_FUNC(handleWarpConfirmResponse, LW(0), LW(10))
         IF_EQUAL(LW(0), 0)
             USER_FUNC(evt_mario_normalize)
-        ELSE()
+            WAIT_MSEC(500) // Wait 500 msec since the normalize is not instant in paper mode
+        END_IF()
+        USER_FUNC(handleWarpConfirmResponse, LW(0), LW(10))
+        IF_EQUAL(LW(0), 1)
             USER_FUNC(evt_mario_key_onoff, 1)
         END_IF()
         USER_FUNC(lect_set_systemlevel, 0)
@@ -1654,9 +1664,9 @@ namespace mod::owr
         }
         apSettingsPtr->collectedStars = count;
 
-        if (apSettingsPtr->deathLink)
+        if (apSettingsPtr->deathLinkTriggered)
         {
-            apSettingsPtr->deathLink = 0;
+            apSettingsPtr->deathLinkTriggered = 0;
             ttyd::evtmgr::evtEntryType(const_cast<int32_t *>(mod::owr::deathlink_evt), 30, 0, 26);
         }
 
