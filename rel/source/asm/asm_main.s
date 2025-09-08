@@ -573,8 +573,8 @@ monosiriSWArr:
 	.4byte 0x00000086
 	.4byte 0x00000009
 	.4byte 0x000006B3
-	.4byte 0x00000087
-	.4byte 0x00000002
+	.4byte 0x0000004D
+	.4byte 0x00000008
 	.4byte 0x000006AC
 	.4byte 0x00000087
 	.4byte 0x00000009

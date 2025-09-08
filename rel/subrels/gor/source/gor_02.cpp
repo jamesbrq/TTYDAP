@@ -9,6 +9,7 @@
 #include "ttyd/evt_mario.h"
 #include "ttyd/evt_msg.h"
 #include "ttyd/evt_npc.h"
+#include "ttyd/evt_pouch.h"
 #include "ttyd/evt_snd.h"
 #include "ttyd/evtmgr_cmd.h"
 
@@ -485,6 +486,25 @@ EVT_END()
 EVT_BEGIN(gor_evt_monosiri_hook)
 	RUN_CHILD_EVT(gor_evt_monosiri_item)
 EVT_PATCH_END()
+
+EVT_BEGIN(gor_sanders_talk_evt)
+	USER_FUNC(evt_pouch::evt_pouch_check_item, 69, LW(0))
+	IF_LARGE_EQUAL(LW(0), 1)
+		USER_FUNC(evt_npc::evt_npc_flag_onoff, 1, PTR("me"), 1073741856)
+		USER_FUNC(evt_msg::evt_msg_print, 0, PTR("mac_4_077"), 0, PTR("me"))
+		RETURN()
+	END_IF()
+	USER_FUNC(evt_msg::evt_msg_print, 1, PTR("If only I had a letter\nfrom my wife...\n<k>"), 0, PTR("me"))
+	RETURN()
+EVT_END()
+
+EVT_BEGIN(gor_sanders_talk_hook)
+	RUN_CHILD_EVT(gor_sanders_talk_evt)
+	IF_LARGE_EQUAL(LW(0), 1)
+		GOTO(&gor_sanders_talk_02[101])
+	END_IF()
+	RETURN()
+EVT_PATCH_END()
 // clang-format on
 
 void ApplyGor02Patches()
@@ -517,6 +537,8 @@ void ApplyGor02Patches()
     gor_sanders_talk_02[78] = 3;
     gor_sanders_talk_02[81] = 3;
     gor_sanders_talk_02[89] = 4;
+    patch::writePatch(&gor_sanders_talk_02[90], gor_sanders_talk_hook, sizeof(gor_sanders_talk_hook));
+    gor_sanders_talk_02[100] = 0;
     gor_sanders_talk_02[569] = GSW(1705);
     gor_sanders_talk_02[570] = 5;
 
