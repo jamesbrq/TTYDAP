@@ -523,6 +523,7 @@ namespace mod::owr
         itemDataTable[ItemId::INVALID_ITEM_TUBE_MODE_ICON].description = tubeModeNameDescription;
         itemDataTable[ItemId::INVALID_ITEM_BOAT_MODE_ICON].name = boatModeNameDescription;
         itemDataTable[ItemId::INVALID_ITEM_BOAT_MODE_ICON].description = boatModeNameDescription;
+        itemDataTable[ItemId::WHACKA_BUMP].sell_price = 30;
 
         // Buy/Sell Prices
         for (int i = ItemId::POWER_JUMP; i < ItemId::MAX_ITEM_ID; i++)
