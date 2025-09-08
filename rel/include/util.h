@@ -49,6 +49,7 @@ namespace mod::util
     uint32_t ptrIsValid(void *ptr);
     float intToFloat(int32_t value);
     float getTextMultilineIncrement(const char *text, float scale, uint32_t additionalLines);
+    uint16_t getStageRankFromLevel(uint16_t level);
 
     template<typename Ptr>
     uint32_t ptrIsValid(Ptr ptr)
