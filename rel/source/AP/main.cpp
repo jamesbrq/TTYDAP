@@ -204,6 +204,8 @@ EVT_DEFINE_USER_FUNC_KEEP(handleIntermissionSkip)
     else if (!strcmp(_next_area, "muj"))
     {
         ttyd::swdrv::swByteSet(1717, 29);
+        if (ttyd::swdrv::swByteGet(1705) < 7)
+            ttyd::swdrv::swByteSet(1705, 10);
         ttyd::evtmgr_cmd::evtSetValue(evt, evt->evtArguments[1], PTR("muj_01"));
         ttyd::evtmgr_cmd::evtSetValue(evt, evt->evtArguments[2], PTR("n_bero_02"));
     }
