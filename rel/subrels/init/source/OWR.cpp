@@ -406,6 +406,18 @@ namespace mod::owr
         patch::writeBranchPair(&btlseqEnd[354],
                                reinterpret_cast<void *>(bExpMultiplier),
                                reinterpret_cast<void *>(bExpMultiplierReturn));
+
+        win_log::mapMarkers[64].map_prefix = rshNode;
+        win_log::mapMarkers[64].isLocation = 1;
+        win_log::mapMarkers[64].unk_0x05 = 0;
+
+        int16_t tempPos = win_log::mapMarkers[92].y_pos;
+        win_log::mapMarkers[92].y_pos = win_log::mapMarkers[91].y_pos;
+
+        win_log::mapMarkers[91].map_prefix = las_09Node;
+        win_log::mapMarkers[91].isLocation = 1;
+        win_log::mapMarkers[91].unk_0x05 = 0;
+        win_log::mapMarkers[91].y_pos = tempPos - 12;
     }
 
     void ApplyMainScriptPatches()
@@ -534,7 +546,7 @@ namespace mod::owr
         }
 
         // Key Renames
-        //itemDataTable[ItemId::ELEVATOR_KEY_001A].name = elevatorKeyName;
+        itemDataTable[ItemId::ELEVATOR_KEY_001A].name = elevatorKeyName;
     }
 
     OWR::OWR()

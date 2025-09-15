@@ -59,6 +59,8 @@ namespace mod::owr
     KEEP_VAR const char *paperModeNameDescription = "paper_mode";
     KEEP_VAR const char *tubeModeNameDescription = "tube_mode";
     KEEP_VAR const char *boatModeNameDescription = "boat_mode";
+    KEEP_VAR const char *rshNode = "rsh";
+    KEEP_VAR const char *las_09Node = "las_09";
 
     // Key Renames
     KEEP_VAR const char *elevatorKeyName = "elevator_key_name";

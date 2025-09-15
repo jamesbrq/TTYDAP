@@ -683,6 +683,10 @@ namespace mod::owr
             ttyd::swdrv::swSet(6319);
         else if (strncmp(map, "las", 3) == 0)
             ttyd::swdrv::swSet(6320);
+        else if (strncmp(map, "rsh", 3) == 0)
+            ttyd::swdrv::swSet(6321);
+        else if (strcmp(map, "las_09") == 0)
+            ttyd::swdrv::swSet(6322);
     }
 
     KEEP_FUNC void seqSetSeqHook(SeqIndex seq, const char *map, const char *bero)
@@ -1132,6 +1136,25 @@ namespace mod::owr
         {
             return "Elevator Key(Riverside)<k>";
         }
+
+        // Map Nodes
+        if (!strcmp(msgKey, "menu_monosiri_rsh"))
+        {
+            return "Excess Express";
+        }
+        if (!strcmp(msgKey, "menu_monosiri_las_09"))
+        {
+            return "Riddle Tower";
+        }
+        if (!strcmp(msgKey, "menu_map_rsh"))
+        {
+            return "A Train";
+        }
+        if (!strcmp(msgKey, "menu_map_las_09"))
+        {
+            return "The Riddle Tower";
+        }
+
         return g_msgSearch_trampoline(msgKey);
     }
 

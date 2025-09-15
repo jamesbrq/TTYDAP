@@ -110,6 +110,8 @@ namespace mod::owr
     extern const char *tubeModeNameDescription;
     extern const char *boatModeNameDescription;
     extern const char *elevatorKeyName;
+    extern const char *rshNode;
+    extern const char *las_09Node;
 
     static const char *goods[] =
         {"gor_01", "gor_03", "tik_00", "nok_00", "mri_07", "tou_01", "usu_01", "muj_01", "rsh_03", "bom_02"};

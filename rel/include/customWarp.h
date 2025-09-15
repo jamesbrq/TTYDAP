@@ -65,6 +65,9 @@ namespace mod::custom_warp
             if (strcmp(map_prefix, "eki") == 0)
                 return {"hom_00", "n_bero_1"};
 
+            if (strcmp(map_prefix, "rsh") == 0)
+                return {"rsh_01_a", "s_bero"};
+
             if (strcmp(map_prefix, "pik") == 0)
                 return {"pik_00", "n_bero"};
 
@@ -82,6 +85,9 @@ namespace mod::custom_warp
 
             if (strcmp(map_prefix, "las") == 0)
                 return {"las_00", "w_bero"};
+
+            if (strcmp(map_prefix, "las_09") == 0)
+                return {"las_09", "w_bero"};
 
             return {"gor_01", "s_bero"};
         }
