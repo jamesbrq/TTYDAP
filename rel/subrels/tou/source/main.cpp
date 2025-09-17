@@ -233,7 +233,7 @@ EVT_DEFINE_USER_FUNC(setRanking)
         }
     else
     {
-        for (int i = player_index + 1; i <= ranking_data->count; i++)
+        for (int i = player_index + 1; i < ranking_data->count; i++)
         {
             if (i > target_rank)
                 break;
