@@ -1127,7 +1127,7 @@ namespace mod::owr
         if (!strcmp(msgKey, "return_pipe_desc"))
         {
             return "A magic pipe that returns you\n"
-                   "to Rogueport Plaza from afar.";
+                   "to Rogueport from afar.";
         }
         if (!strcmp(msgKey, "10_coins"))
         {

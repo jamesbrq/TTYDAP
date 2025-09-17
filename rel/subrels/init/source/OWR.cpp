@@ -518,7 +518,7 @@ namespace mod::owr
         itemDataTable[ItemId::INVALID_ITEM_0070].description = "btl_hlp_cmd_operation_party7"; // A master thief who can steal anything from anyone!
         itemDataTable[ItemId::INVALID_ITEM_0070].icon_id = IconType::MS_MOWZ;
         itemDataTable[ItemId::INVALID_ITEM_0071].name = apItemName;
-        itemDataTable[ItemId::INVALID_ITEM_0071].description = apItemName;
+        itemDataTable[ItemId::INVALID_ITEM_0071].description = apItemDescription;
         itemDataTable[ItemId::INVALID_ITEM_0071].icon_id = IconType::AP_ITEM;
         itemDataTable[ItemId::INVALID_ITEM_PAPER_0053].name = tenCoinsName;
         itemDataTable[ItemId::INVALID_ITEM_PAPER_0053].description = tenCoinsDescription;
