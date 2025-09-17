@@ -37,28 +37,20 @@ using mod::owr::goods;
 
 namespace mod::owr
 {
-    KEEP_VAR const char *goombellaName = "goombella";
-    KEEP_VAR const char *goombellaDescription = "goombella_desc";
-    KEEP_VAR const char *koopsName = "koops";
-    KEEP_VAR const char *koopsDescription = "koops_desc";
-    KEEP_VAR const char *flurrieName = "flurrie";
-    KEEP_VAR const char *flurrieDescription = "flurrie_desc";
-    KEEP_VAR const char *yoshiName = "yoshi";
-    KEEP_VAR const char *yoshiDescription = "yoshi_desc";
-    KEEP_VAR const char *vivianName = "vivian";
-    KEEP_VAR const char *vivianDescription = "vivian_desc";
-    KEEP_VAR const char *bobberyName = "bobbery";
-    KEEP_VAR const char *bobberyDescription = "bobbery_desc";
-    KEEP_VAR const char *mowzName = "mowz";
-    KEEP_VAR const char *mowzDescription = "mowz_desc";
-    KEEP_VAR const char *apItemNameDescription = "ap_item";
-    KEEP_VAR const char *tenCoinsNameDescription = "10_coins";
+    KEEP_VAR const char *apItemName = "ap_item";
+    KEEP_VAR const char *apItemDescription = "ap_item_desc";
+    KEEP_VAR const char *tenCoinsName = "10_coins";
+    KEEP_VAR const char *tenCoinsDescription = "10_coins_desc";
     KEEP_VAR const char *returnPipeName = "return_pipe";
-    KEEP_VAR const char *returnPipeDescription = "return_pipe_description";
-    KEEP_VAR const char *planeModeNameDescription = "plane_mode";
-    KEEP_VAR const char *paperModeNameDescription = "paper_mode";
-    KEEP_VAR const char *tubeModeNameDescription = "tube_mode";
-    KEEP_VAR const char *boatModeNameDescription = "boat_mode";
+    KEEP_VAR const char *returnPipeDescription = "return_pipe_desc";
+    KEEP_VAR const char *planeModeName = "plane_mode";
+    KEEP_VAR const char *planeModeDescription = "plane_mode_desc";
+    KEEP_VAR const char *paperModeName = "paper_mode";
+    KEEP_VAR const char *paperModeDescription = "paper_mode_desc";
+    KEEP_VAR const char *tubeModeName = "tube_mode";
+    KEEP_VAR const char *tubeModeDescription = "tube_mode_desc";
+    KEEP_VAR const char *boatModeName = "boat_mode";
+    KEEP_VAR const char *boatModeDescription = "boat_mode_desc";
     KEEP_VAR const char *rshNode = "rsh";
     KEEP_VAR const char *las_09Node = "las_09";
 
