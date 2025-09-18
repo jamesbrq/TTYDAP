@@ -101,7 +101,24 @@ namespace mod::owr
     extern const char *tubeModeDescription;
     extern const char *boatModeName;
     extern const char *boatModeDescription;
-    extern const char *elevatorKeyName;
+    extern const char *elevatorKeyRiversideName;
+    extern const char *cardKey1Name;
+    extern const char *cardKey2Name;
+    extern const char *cardKey3Name;
+    extern const char *cardKey4Name;
+    extern const char *palaceKeyTowerName;
+    extern const char *elevatorKey1Name;
+    extern const char *elevatorKey2Name;
+    extern const char *stationKey1Name;
+    extern const char *stationKey2Name;
+    extern const char *storageKey1Name;
+    extern const char *storageKey2Name;
+    extern const char *blackKeyPlaneName;
+    extern const char *blackKeyPaperName;
+    extern const char *blackKeyTubeName;
+    extern const char *blackKeyBoatName;
+    extern const char *progressiveBootsName;
+    extern const char *progressiveHammerName;
     extern const char *rshNode;
     extern const char *las_09Node;
 

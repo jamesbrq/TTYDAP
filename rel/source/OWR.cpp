@@ -1171,9 +1171,79 @@ namespace mod::owr
         }
 
         //Key Renames
-        if (!strcmp(msgKey, "elevator_key_name"))
+        if (!strcmp(msgKey, "elevator_key_riverside"))
         {
-            return "Elevator Key(Riverside)<k>";
+            return "Elevator Key (Riverside)";
+        }
+        if (!strcmp(msgKey, "card_key_1"))
+        {
+            return "Card Key 1";
+        }
+        if (!strcmp(msgKey, "card_key_2"))
+        {
+            return "Card Key 2";
+        }
+        if (!strcmp(msgKey, "card_key_3"))
+        {
+            return "Card Key 3";
+        }
+        if (!strcmp(msgKey, "card_key_4"))
+        {
+            return "Card Key 4";
+        }
+        if (!strcmp(msgKey, "palace_key_tower"))
+        {
+            return "Palace Key (Tower)";
+        }
+        if (!strcmp(msgKey, "elevator_key_1"))
+        {
+            return "Elevator Key 1";
+        }
+        if (!strcmp(msgKey, "elevator_key_2"))
+        {
+            return "Elevator Key 2";
+        }
+        if (!strcmp(msgKey, "station_key_1"))
+        {
+            return "Station Key 1";
+        }
+        if (!strcmp(msgKey, "station_key_2"))
+        {
+            return "Station Key 2";
+        }
+        if (!strcmp(msgKey, "storage_key_1"))
+        {
+            return "Storage Key 1";
+        }
+        if (!strcmp(msgKey, "storage_key_2"))
+        {
+            return "Storage Key 2";
+        }
+        if (!strcmp(msgKey, "black_key_plane"))
+        {
+            return "Black Key (Plane)";
+        }
+        if (!strcmp(msgKey, "black_key_paper"))
+        {
+            return "Black Key (Paper)";
+        }
+        if (!strcmp(msgKey, "black_key_tube"))
+        {
+            return "Black Key (Tube)";
+        }
+        if (!strcmp(msgKey, "black_key_boat"))
+        {
+            return "Black Key (Boat)";
+        }
+
+        //Progressive Renames
+        if (!strcmp(msgKey, "progressive_boots"))
+        {
+            return "Progressive Boots";
+        }
+        if (!strcmp(msgKey, "progressive_hammer"))
+        {
+            return "Progressive Hammer";
         }
 
         // Map Nodes

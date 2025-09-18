@@ -55,7 +55,27 @@ namespace mod::owr
     KEEP_VAR const char *las_09Node = "las_09";
 
     // Key Renames
-    KEEP_VAR const char *elevatorKeyName = "elevator_key_name";
+    KEEP_VAR const char *elevatorKeyRiversideName = "elevator_key_riverside";
+    KEEP_VAR const char *cardKey1Name = "card_key_1";
+    KEEP_VAR const char *cardKey2Name = "card_key_2";
+    KEEP_VAR const char *cardKey3Name = "card_key_3";
+    KEEP_VAR const char *cardKey4Name = "card_key_4";
+    KEEP_VAR const char *palaceKeyTowerName = "palace_key_tower";
+    KEEP_VAR const char *elevatorKey1Name = "elevator_key_1";
+    KEEP_VAR const char *elevatorKey2Name = "elevator_key_2";
+    KEEP_VAR const char *stationKey1Name = "station_key_1";
+    KEEP_VAR const char *stationKey2Name = "station_key_2";
+    KEEP_VAR const char *storageKey1Name = "storage_key_1";
+    KEEP_VAR const char *storageKey2Name = "storage_key_2";
+    KEEP_VAR const char *blackKeyPlaneName = "black_key_plane";
+    KEEP_VAR const char *blackKeyPaperName = "black_key_paper";
+    KEEP_VAR const char *blackKeyTubeName = "black_key_tube";
+    KEEP_VAR const char *blackKeyBoatName = "black_key_boat";
+
+    //Progressive Renames
+    KEEP_VAR const char *progressiveBootsName = "progressive_boots";
+    KEEP_VAR const char *progressiveHammerName = "progressive_hammer";
+
 } // namespace mod::owr
 
 extern int32_t btlataudevtPresentItem_Get[];

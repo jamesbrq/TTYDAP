@@ -546,7 +546,27 @@ namespace mod::owr
         }
 
         // Key Renames
-        itemDataTable[ItemId::ELEVATOR_KEY_001A].name = elevatorKeyName;
+        itemDataTable[ItemId::ELEVATOR_KEY_001A].name = elevatorKeyRiversideName;
+        itemDataTable[ItemId::CARD_KEY_001D].name = cardKey1Name;
+        itemDataTable[ItemId::CARD_KEY_001E].name = cardKey2Name;
+        itemDataTable[ItemId::CARD_KEY_001F].name = cardKey3Name;
+        itemDataTable[ItemId::CARD_KEY_0020].name = cardKey4Name;
+        itemDataTable[ItemId::PALACE_KEY_0026].name = palaceKeyTowerName;
+        itemDataTable[ItemId::ELEVATOR_KEY_001B].name = elevatorKey1Name;
+        itemDataTable[ItemId::ELEVATOR_KEY_001C].name = elevatorKey2Name;
+        itemDataTable[ItemId::STATION_KEY_0018].name = stationKey1Name;
+        itemDataTable[ItemId::STATION_KEY_0019].name = stationKey2Name;
+        itemDataTable[ItemId::STORAGE_KEY_0012].name = storageKey1Name;
+        itemDataTable[ItemId::STORAGE_KEY_0013].name = storageKey2Name;
+        itemDataTable[ItemId::BLACK_KEY_0021].name = blackKeyPlaneName;
+        itemDataTable[ItemId::BLACK_KEY_0022].name = blackKeyPaperName;
+        itemDataTable[ItemId::BLACK_KEY_0023].name = blackKeyTubeName;
+        itemDataTable[ItemId::BLACK_KEY_0024].name = blackKeyBoatName;
+
+        //Progressive Renames
+        itemDataTable[ItemId::BOOTS].name = progressiveBootsName;
+        itemDataTable[ItemId::HAMMER].name = progressiveHammerName;
+
     }
 
     OWR::OWR()
