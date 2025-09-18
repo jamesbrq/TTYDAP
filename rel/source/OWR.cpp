@@ -1171,9 +1171,9 @@ namespace mod::owr
         }
 
         //Key Renames
-        if (!strcmp(msgKey, "elevator_key_riverside"))
+        if (!strcmp(msgKey, "elevator_key_station"))
         {
-            return "Elevator Key (Riverside)";
+            return "Elevator Key (Station)";
         }
         if (!strcmp(msgKey, "card_key_1"))
         {

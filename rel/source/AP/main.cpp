@@ -55,7 +55,7 @@ namespace mod::owr
     KEEP_VAR const char *las_09Node = "las_09";
 
     // Key Renames
-    KEEP_VAR const char *elevatorKeyRiversideName = "elevator_key_riverside";
+    KEEP_VAR const char *elevatorKeyStationName = "elevator_key_station";
     KEEP_VAR const char *cardKey1Name = "card_key_1";
     KEEP_VAR const char *cardKey2Name = "card_key_2";
     KEEP_VAR const char *cardKey3Name = "card_key_3";

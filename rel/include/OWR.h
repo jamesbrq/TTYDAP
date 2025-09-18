@@ -101,7 +101,7 @@ namespace mod::owr
     extern const char *tubeModeDescription;
     extern const char *boatModeName;
     extern const char *boatModeDescription;
-    extern const char *elevatorKeyRiversideName;
+    extern const char *elevatorKeyStationName;
     extern const char *cardKey1Name;
     extern const char *cardKey2Name;
     extern const char *cardKey3Name;

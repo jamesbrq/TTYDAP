@@ -546,7 +546,7 @@ namespace mod::owr
         }
 
         // Key Renames
-        itemDataTable[ItemId::ELEVATOR_KEY_001A].name = elevatorKeyRiversideName;
+        itemDataTable[ItemId::ELEVATOR_KEY_001A].name = elevatorKeyStationName;
         itemDataTable[ItemId::CARD_KEY_001D].name = cardKey1Name;
         itemDataTable[ItemId::CARD_KEY_001E].name = cardKey2Name;
         itemDataTable[ItemId::CARD_KEY_001F].name = cardKey3Name;
