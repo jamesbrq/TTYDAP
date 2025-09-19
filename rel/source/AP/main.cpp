@@ -281,3 +281,8 @@ int applyExpMultiplier(int exp)
 {
     return exp * gState->apSettings->expMultiplier;
 }
+
+int getBlockVisibility(int blockType)
+{
+    return gState->apSettings->blockVisibility == 1 ? blockType == 11 || blockType == 12 ? 1 : blockType : blockType;
+}

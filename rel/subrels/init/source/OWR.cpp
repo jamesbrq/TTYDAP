@@ -8,6 +8,7 @@
 #include "ttyd/evtmgr_cmd.h"
 #include "ttyd/mario_pouch.h"
 #include "ttyd/msgdrv.h"
+#include "ttyd/pmario_sound.h"
 #include "ttyd/seq_logo.h"
 #include "ttyd/seq_mapchange.h"
 #include "ttyd/seq_game.h"
@@ -19,8 +20,10 @@
 #include <ttyd/common_types.h>
 #include <ttyd/icondrv.h>
 #include <ttyd/item_data.h>
+#include <ttyd/system.h>
 #include <ttyd/win_item.h>
 #include <ttyd/win_log.h>
+#include <gc/rand.h>
 
 #include <cstdint>
 
@@ -70,6 +73,7 @@ extern int32_t main_psndBGMOn_f_d[];
 extern int32_t main_battleCheckUnitMonosiriFlag[];
 extern int32_t main_BattleDrawEnemyHPBar[];
 extern int32_t btlseqEnd[];
+extern int32_t evt_mobj_brick[];
 // End of Assembly References
 
 // Script References
@@ -109,6 +113,8 @@ extern char starstone_current_map[32];
 
 using ttyd::seq_mapchange::_next_area;
 using ttyd::seq_mapchange::_next_map;
+using ttyd::system::irand;
+using ttyd::pmario_sound::psbgmlist;
 using namespace ttyd;
 using namespace mod::patch;
 using namespace mod::owr;
@@ -406,7 +412,44 @@ namespace mod::owr
         patch::writeBranchPair(&btlseqEnd[354],
                                reinterpret_cast<void *>(bExpMultiplier),
                                reinterpret_cast<void *>(bExpMultiplierReturn));
+        
+        patch::writeBranchPair(&evt_mobj_brick[29],
+                               reinterpret_cast<void *>(bBlockVisibility),
+                               reinterpret_cast<void *>(bBlockVisibilityReturn));
 
+        if (gState->apSettings->music == 2)
+        {
+            uint32_t old = gc::rand::next;
+            gc::rand::next = *(uint32_t *)0x80003244;
+            const char *namePointers[262];
+
+            // Extract name pointers
+            for (int i = 0; i < 262; i++)
+            {
+                namePointers[i] = psbgmlist[i].name;
+            }
+
+            // Fisher-Yates shuffle using irand
+            for (int i = 261; i > 0; i--)
+            {
+                int j = irand(i + 1); // Returns 0 to i
+
+                // Swap elements
+                const char *temp = namePointers[i];
+                namePointers[i] = namePointers[j];
+                namePointers[j] = temp;
+            }
+
+            // Assign back to BGM list
+            for (int i = 0; i < 262; i++)
+            {
+                psbgmlist[i].name = namePointers[i];
+            }
+
+            gc::rand::next = old;
+        }
+
+        // Add map markers for fast travel
         win_log::mapMarkers[64].map_prefix = rshNode;
         win_log::mapMarkers[64].isLocation = 1;
         win_log::mapMarkers[64].unk_0x05 = 0;
