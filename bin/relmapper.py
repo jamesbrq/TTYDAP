@@ -13,7 +13,10 @@ import os
 import re
 import struct
 import sys
-from typing import ByteString, ClassVar, List, Union
+try:
+    from typing import ByteString
+except ImportError:
+    from collections.abc import Buffer as ByteString
 
 __author__ = "kipcode66"
 __copyright__ = "Copyright 2022, kipcode66"
