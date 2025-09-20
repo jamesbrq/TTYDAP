@@ -17,7 +17,5 @@ namespace ttyd::pmario_sound
         int psndSFXOn(int channelFlags);
 
         void *psbgm;
-
-        BGMListEntry psbgmlist[262];
     }
 }
