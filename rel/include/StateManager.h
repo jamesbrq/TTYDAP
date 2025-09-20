@@ -31,9 +31,13 @@ namespace mod::owr
         uint8_t startingLevel;      // 0x1E
         uint8_t deathLinkTriggered; // 0x1F
         uint8_t deathLinkSent;      // 0x20
+        uint8_t music;              // 0x21
+        uint8_t blockVisibility;    // 0x22
+        uint8_t padding_1;          // 0x23
+        uint32_t musicSeed;         // 0x24
     };
 
-    static_assert(sizeof(APSettings) == 0x24);
+    static_assert(sizeof(APSettings) == 0x28);
 
     class StateManager
     {

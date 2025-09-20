@@ -1802,6 +1802,9 @@ namespace mod::owr
             ttyd::evtmgr::evtEntryType(const_cast<int32_t *>(mod::owr::deathlink_evt), 30, 0, 26);
         }
 
+        if (apSettingsPtr->music == 1)
+            for (int i = 0; i <= 1; i++) ttyd::pmario_sound::psndBGMOff_f_d(512 + i, 0, 1);
+
         SequenceInit();
         RecieveItems();
     }
