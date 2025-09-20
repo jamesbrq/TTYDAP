@@ -46,6 +46,8 @@
 .global bMonosiriBucketExtra
 .global bExpMultiplier
 .global bExpMultiplierReturn
+.global bBlockVisibility
+.global bBlockVisibilityReturn
 
 # All of the global symbols in this file excluding win_log_mapGX_arr need to be used in at least one subrel, so they cannot be set to hidden
 
@@ -369,6 +371,18 @@ bExpMultiplier:
 	bl applyExpMultiplier
 	sth %r3, 0x8(%r28)
 bExpMultiplierReturn:
+	b 0
+
+bBlockVisibility:
+	stwu %r1, -104(%r1)
+	stmw %r3, 8(%r1)
+	lwz %r3, 0x14(%r26)
+	bl getBlockVisibility
+	mr %r27, %r3
+	lmw %r28, 92(%r1)
+	lmw %r3, 8(%r1)
+	addi %r1, %r1, 104
+bBlockVisibilityReturn:
 	b 0
 
 win_log_mapGX_arr:

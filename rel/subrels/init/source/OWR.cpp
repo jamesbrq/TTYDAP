@@ -8,6 +8,7 @@
 #include "ttyd/evtmgr_cmd.h"
 #include "ttyd/mario_pouch.h"
 #include "ttyd/msgdrv.h"
+#include "ttyd/pmario_sound.h"
 #include "ttyd/seq_logo.h"
 #include "ttyd/seq_mapchange.h"
 #include "ttyd/seq_game.h"
@@ -19,6 +20,7 @@
 #include <ttyd/common_types.h>
 #include <ttyd/icondrv.h>
 #include <ttyd/item_data.h>
+#include <ttyd/system.h>
 #include <ttyd/win_item.h>
 #include <ttyd/win_log.h>
 
@@ -70,6 +72,7 @@ extern int32_t main_psndBGMOn_f_d[];
 extern int32_t main_battleCheckUnitMonosiriFlag[];
 extern int32_t main_BattleDrawEnemyHPBar[];
 extern int32_t btlseqEnd[];
+extern int32_t evt_mobj_brick[];
 // End of Assembly References
 
 // Script References
@@ -106,12 +109,22 @@ extern int32_t evt_msg_print_party_add[];
 extern int32_t main_preventDiaryTextboxSelectionAddress[];
 
 extern char starstone_current_map[32];
+extern uint32_t main_next;
+extern ttyd::pmario_sound::BGMListEntry main_psbgmlist[262];
 
 using ttyd::seq_mapchange::_next_area;
 using ttyd::seq_mapchange::_next_map;
+using ttyd::system::irand;
 using namespace ttyd;
 using namespace mod::patch;
 using namespace mod::owr;
+
+uint32_t invalidParams[] = {0x802CC81C, 0x802CC8BC, 0x802CD500, 0x802CD668, 0x802CD694, 0x802CD77C, 0x802CD7B0, 0x802CD7E4,
+                            0x802CD810, 0x802CD944, 0x802CD9D4, 0x802CDA00, 0x802CDAEC, 0x802CDB48, 0x802CDB78, 0x802CDBA8,
+                            0x802CDC78, 0x802CDCA8, 0x802CDD6C, 0x802CDE0C, 0x802CE1CC, 0x802CE1FC, 0x802CE22C, 0x802CE25C,
+                            0x802CE28C, 0x802CE2C0, 0x802CE2F0, 0x802CE33C, 0x802CE370, 0x802CE3A4, 0x802CE3D8, 0x802CE408,
+                            0x802CE438, 0x802CE47C, 0x802CE4AC, 0x802CE4D8, 0x802CE504, 0x802CE530, 0x802CE598, 0x802CE5D0,
+                            0x802CE600, 0x802CE62C, 0x802CE660, 0x802CE690, 0x802CE6C0, 0x802CE6F4, 0x802CE724, 0x802CE7E4, 0x804218C8};
 
 // clang-format off
 EVT_BEGIN(main_buy_evt_hook)
@@ -406,7 +419,61 @@ namespace mod::owr
         patch::writeBranchPair(&btlseqEnd[354],
                                reinterpret_cast<void *>(bExpMultiplier),
                                reinterpret_cast<void *>(bExpMultiplierReturn));
+        
+        patch::writeBranchPair(&evt_mobj_brick[29],
+                               reinterpret_cast<void *>(bBlockVisibility),
+                               reinterpret_cast<void *>(bBlockVisibilityReturn));
 
+        if (gState->apSettings->music == 2)
+        {
+            uint32_t old = main_next;
+            main_next = *(uint32_t *)0x80003244;
+
+            int validIndices[259];
+            int validCount = 0;
+
+            for (int i = 3; i < 262; i++)
+            {
+                for (unsigned int j = 0; j < sizeof(invalidParams) / sizeof(uint32_t); j++)
+                {
+                    if (reinterpret_cast<uint32_t>(main_psbgmlist[i].filename) == invalidParams[j])
+                    {
+                        break;
+                    }
+                    if (j == (sizeof(invalidParams) / sizeof(uint32_t)) - 1)
+                    {
+                        validIndices[validCount] = i;
+                        validCount++;
+                    }
+                }
+            }
+
+            if (validCount > 1)
+            {
+                const char *namePointers[validCount];
+                for (int i = 0; i < validCount; i++)
+                {
+                    namePointers[i] = main_psbgmlist[validIndices[i]].name;
+                }
+
+                for (int i = validCount - 1; i > 0; i--)
+                {
+                    int j = irand(i + 1);
+                    const char *temp = namePointers[i];
+                    namePointers[i] = namePointers[j];
+                    namePointers[j] = temp;
+                }
+
+                for (int i = 0; i < validCount; i++)
+                {
+                    main_psbgmlist[validIndices[i]].name = namePointers[i];
+                }
+            }
+
+            main_next = old;
+        }
+
+        // Add map markers for fast travel
         win_log::mapMarkers[64].map_prefix = rshNode;
         win_log::mapMarkers[64].isLocation = 1;
         win_log::mapMarkers[64].unk_0x05 = 0;
