@@ -233,6 +233,7 @@ namespace mod::owr
             pouch->total_bp = gState->apSettings->startingBP;
             pouch->unallocated_bp = gState->apSettings->startingBP;
             pouch->level = gState->apSettings->startingLevel;
+            pouch->rank = getStageRankFromLevel(gState->apSettings->startingLevel);
         }
     }
 
