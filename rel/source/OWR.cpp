@@ -233,6 +233,7 @@ namespace mod::owr
             pouch->total_bp = gState->apSettings->startingBP;
             pouch->unallocated_bp = gState->apSettings->startingBP;
             pouch->level = gState->apSettings->startingLevel;
+            pouch->rank = getStageRankFromLevel(gState->apSettings->startingLevel);
         }
     }
 
@@ -857,86 +858,148 @@ namespace mod::owr
         }
         if (!strcmp(msgKey, "jolene_fukidashi_end"))
         {
-            return "Well then.<wait 100> Shall we\nget going?\n<k>";
+            return "Well then.<wait 100> Shall we\n"
+                   "get going?\n<k>";
         }
         if (!strcmp(msgKey, "grubba_bribe"))
         {
-            return "Well, well, well! If it ain't\nmy star fighter! Hoo-WEE!\n<k>\n<p>\nListen here... I been watchin'\nyou "
-                   "climb them ranks, and let\nme tell ya somethin'...\n<k>\n<p>\nYou got potential, son! Real\nchampionship "
-                   "material! But\nthis ranking business...\n<k>\n<p>\nWell, it can be slower than\nmolasses sometimes, if "
-                   "you\ncatch my drift...\n<k>\n<p>\nNow, between you and me,\nold Grubba's got some...\npull around these "
-                   "parts.\n<k>\n<p>\nWhat do ya say we make a little\ngentleman's agreement?\n<k>\n<p>\nHow many ranks you "
-                   "want to move?\nUp or down, doesn't matter!\nJust pick a number!\n<o>";
+            return "Well, well, well! If it ain't\n"
+                   "my star fighter! Hoo-WEE!\n<k>\n<p>\n"
+                   "Listen here... I been watchin'\n"
+                   "you climb them ranks, and let\n"
+                   "me tell ya somethin'...\n<k>\n<p>\n"
+                   "You got potential, son! Real\n"
+                   "championship material! But\n"
+                   "this ranking business...\n<k>\n<p>\n"
+                   "Well, it can be slower than\n"
+                   "molasses sometimes, if you\n"
+                   "catch my drift...\n<k>\n<p>\n"
+                   "Now, between you and me,\n"
+                   "old Grubba's got some...\n"
+                   "pull around these parts.\n<k>\n<p>\n"
+                   "What do ya say we make a little\n"
+                   "gentleman's agreement?\n<k>\n<p>\n"
+                   "How many ranks you want to move?\n"
+                   "Up or down, doesn't matter!\n"
+                   "Just pick a number!\n<o>";
         }
         if (!strcmp(msgKey, "grubba_rank_same"))
         {
-            return "<p>\nHold on there, son! You're\nalready at that rank!\n<k>\n<p>\nWhat are ya tryin' to pull\nhere? Heh "
-                   "heh...\n<k>\n<p>\nCome back when you actually\nwant to move somewhere!\n<k>";
+            return "<p>\nHold on there, son! You're\n"
+                   "already at that rank!\n<k>\n<p>\n"
+                   "What are ya tryin' to pull\n"
+                   "here? Heh heh...\n<k>\n<p>\n"
+                   "Come back when you actually\n"
+                   "want to move somewhere!\n<k>";
         }
         if (!strcmp(msgKey, "grubba_pay"))
         {
-            return "<p>\nSo you're talkin' about movin'\nthat many ranks, eh?\n<k>\n<p>\nThat'll cost ya about <NUM> "
-                   "coin<S>.\nNo problem for old Grubba!\n<k>\n<p>\nYou'd be movin' faster than\na Buzzy Beetle up a "
-                   "pipe!\n<k>\n<p>\nAin't nobody gotta know about\nour little arrangement, you\nread me here?\n<o>";
+            return "<p>\nSo you're talkin' about movin'\n"
+                   "that many ranks, eh?\n<k>\n<p>\n"
+                   "That'll cost ya about <NUM> coin<S>.\n"
+                   "No problem for old Grubba!\n<k>\n<p>\n"
+                   "You'd be movin' faster than\n"
+                   "a Buzzy Beetle up a pipe!\n<k>\n<p>\n"
+                   "Ain't nobody gotta know about\n"
+                   "our little arrangement, you\n"
+                   "read me here?\n<o>";
         }
         if (!strcmp(msgKey, "grubba_pay_prompt"))
         {
-            return "<select 0 2 0 60>\nYou got yourself a deal!\nThat ain't right, Grubba.";
+            return "<select 0 2 0 60>\nYou got yourself a deal!\n"
+                   "That ain't right, Grubba.";
         }
         if (!strcmp(msgKey, "grubba_no_coins"))
         {
-            return "<p>\nWell, I'll be! Looks like\nyou're a little light in the\npockets there, son!\n<k>\n<p>\nHeh heh... "
-                   "Can't squeeze blood\nfrom a turnip, as they say!\n<k>\n<p>\nTell ya what... Go earn yourself\nsome more "
-                   "coin, then come back\nand see old Grubba!\n<k>\n<p>\nA deal this good ain't gonna\nlast forever, you "
-                   "hear?\n<k>";
+            return "<p>\nWell, I'll be! Looks like\n"
+                   "you're a little light in the\n"
+                   "pockets there, son!\n<k>\n<p>\n"
+                   "Heh heh... Can't squeeze blood\n"
+                   "from a turnip, as they say!\n<k>\n<p>\n"
+                   "Tell ya what... Go earn yourself\n"
+                   "some more coin, then come back\n"
+                   "and see old Grubba!\n<k>\n<p>\n"
+                   "A deal this good ain't gonna\n"
+                   "last forever, you hear?\n<k>";
         }
         if (!strcmp(msgKey, "grubba_pay_accept"))
         {
-            return "<p>\nHoo-WEE! Now that's what I like\nto hear, son!\n<k>\n<p>\nJust hand over them coins and...\nBAM! "
-                   "You'll be movin' ranks\nfaster than you can say...\n<k>\n<p>\n\"Great Gonzales\"!\nAin't that just "
-                   "DYNAMITE?\n<k>\n<p>\nPleasure doin' business with ya!\nNow get back in there and\nshow 'em what for!\n<k>";
+            return "<p>\nHoo-WEE! Now that's what I like\n"
+                   "to hear, son!\n<k>\n<p>\n"
+                   "Just hand over them coins and...\n"
+                   "BAM! You'll be movin' ranks\n"
+                   "faster than you can say...\n<k>\n<p>\n"
+                   "\"Great Gonzales\"!\n"
+                   "Ain't that just DYNAMITE?\n<k>\n<p>\n"
+                   "Pleasure doin' business with ya!\n"
+                   "Now get back in there and\n"
+                   "show 'em what for!\n<k>";
         }
         if (!strcmp(msgKey, "grubba_pay_accept_no"))
         {
-            return "<p>\nWell, I'll be... Heh heh...\nYou got some real integrity\nthere, son!\n<k>\n<p>\nCan't say I don't "
-                   "respect a\nfighter with principles...\nEven if it ain't good business!\n<k>\n<p>\nTell ya what... The "
-                   "offer's always\non the table if you change your\nmind, you hear?\n<k>\n<p>\nNow get back in there and "
-                   "show\n'em what the Great Gonzales\nis made of! Hoo-WEE!\n<k>";
+            return "<p>\nWell, I'll be... Heh heh...\n"
+                   "You got some real integrity\n"
+                   "there, son!\n<k>\n<p>\n"
+                   "Can't say I don't respect a\n"
+                   "fighter with principles...\n"
+                   "Even if it ain't good business!\n<k>\n<p>\n"
+                   "Tell ya what... The offer's always\n"
+                   "on the table if you change your\n"
+                   "mind, you hear?\n<k>\n<p>\n"
+                   "Now get back in there and show\n"
+                   "'em what the Great Gonzales\n"
+                   "is made of! Hoo-WEE!\n<k>";
         }
         if (!strcmp(msgKey, "grubba_pay_reject"))
         {
-            return "<p>\nAw, come on now! Don't be\nsuch a penny-pincher!\n<k>\n<p>\nA fighter's gotta invest in\nhis future "
-                   "if he wants to\nmake it to the big time!\n<k>\n<p>\nBut I get it, son... Times are\ntough all over. Come "
-                   "back when\nyou got some coin to spare!\n<k>";
+            return "<p>\nAw, come on now! Don't be\n"
+                   "such a penny-pincher!\n<k>\n<p>\n"
+                   "A fighter's gotta invest in\n"
+                   "his future if he wants to\n"
+                   "make it to the big time!\n<k>\n<p>\n"
+                   "But I get it, son... Times are\n"
+                   "tough all over. Come back when\n"
+                   "you got some coin to spare!\n<k>";
         }
         if (!strcmp(msgKey, "pit_checkpoint_explain"))
         {
-            return "<system>\nEvery 10 floors cleared\nin the pit will unlock a\ncheckpoint.\n<k>\n<p>\n"
-                   "Selecting a checkpoint will\nsend you to that floor the\nnext time you take the pipe.\n<k>";
+            return "<system>\nEvery 10 floors cleared\n"
+                   "in the pit will unlock a\n"
+                   "checkpoint.\n<k>\n<p>\n"
+                   "Selecting a checkpoint will\n"
+                   "send you to that floor the\n"
+                   "next time you take the pipe.\n<k>";
         }
         if (!strcmp(msgKey, "pit_checkpoint"))
         {
-            return "<system>\nSelect a floor you would like\nto start from the next\ntime you enter the pit.\n<o>";
+            return "<system>\nSelect a floor you would like\n"
+                   "to start from the next\n"
+                   "time you enter the pit.\n<o>";
         }
         if (!strcmp(msgKey, "pit_checkpoint_deny"))
         {
-            return "<system>\nYou have not unlocked\nany pit checkpoints.\n<k>";
+            return "<system>\nYou have not unlocked\n"
+                   "any pit checkpoints.\n<k>";
         }
         if (!strcmp(msgKey, "pit_checkpoint_set"))
         {
-            return "<p>\nYour pit checkpoint\nhas been set.\n<k>";
+            return "<p>\nYour pit checkpoint\n"
+                   "has been set.\n<k>";
         }
         if (!strcmp(msgKey, "madam_abort"))
         {
-            return "<p>Oh silly me, I already have\nmy ring.<k>";
+            return "<p>Oh silly me, I already have\n"
+                    "my ring.\n<k>";
         }
         if (!strcmp(msgKey, "keelhaul_return"))
         {
-            return "Would you like to go back to\nKeelhaul Key?\n<o>";
+            return "Would you like to go back to\n"
+                   "Keelhaul Key?\n<o>";
         }
         if (!strcmp(msgKey, "keelhaul_return_yn"))
         {
-            return "<select 0 0 0 40>Yes\nNo";
+            return "<select 0 0 0 40>Yes\n"
+                   "No";
         }
         if (!strcmp(msgKey, "keelhaul_return_yes"))
         {
@@ -944,15 +1007,19 @@ namespace mod::owr
         }
         if (!strcmp(msgKey, "keelhaul_return_no"))
         {
-            return "<p>I'll be here if you ever\nneed to get back.<k>";
+            return "<p>I'll be here if you ever\n"
+                   "need to get back.\n<k>";
         }
         if (!strcmp(msgKey, "goldbob_guide"))
         {
-            return "I'm going to need to see\nthe Goldbob Guide if you are going\nto use the cannon.\n<k>";
+            return "I'm going to need to see\n"
+                   "the Goldbob Guide if you are going\n"
+                   "to use the cannon.\n<k>";
         }
         if (!strcmp(msgKey, "no_goldbob_guide"))
         {
-            return "Sorry pal, no guide\nno cannon.\n<k>";
+            return "Sorry pal. No guide,\n"
+                   "no cannon.\n<k>";
         }
         if (!strcmp(msgKey, "give_goldbob_guide"))
         {
@@ -996,8 +1063,8 @@ namespace mod::owr
             // Only needs to change when not on the train
             if (strcmp(_next_area, "rsh"))
             {
-                return "An unseen force prevents\nyou from opening the "
-                       "diary.<o>";
+                return "An unseen force prevents\n"
+                       "you from opening the diary.\n<o>";
             }
         }
         if (strcmp(msgKey, "stg6_rsh_diary_01_yn") == 0)
@@ -1007,17 +1074,19 @@ namespace mod::owr
             if (strcmp(_next_area, "rsh") != 0)
             {
 #ifdef TTYD_JP
-                const char *message = "<select 0 0 300 40>Dang\nShoot";
+                const char *message = "<select 0 0 300 40>Dang\n"
+                                      "Shoot";
 #else
-                const char *message = "<select 0 0 0 40>Dang\nShoot";
+                const char *message = "<select 0 0 0 40>Dang\n"
+                                      "Shoot";
 #endif
                 return message;
             }
         }
         if (!strcmp(msgKey, "raise_text"))
         {
-            return "<system>Would you like to raise the\nfloor level of the "
-                   "hallway?\n<o>";
+            return "<system>Would you like to raise the\n"
+                   "floor level of the hallway?\n<o>";
         }
         if (!strcmp(msgKey, "raise_text2"))
         {
@@ -1026,12 +1095,13 @@ namespace mod::owr
         }
         if (!strcmp(msgKey, "raise_text_yn"))
         {
-            return "<select 0 1 0 40>Yes\nNo";
+            return "<select 0 1 0 40>Yes\n"
+                   "No";
         }
         if (!strcmp(msgKey, "lower_text"))
         {
-            return "<system>Would you like to lower the\nfloor level of the "
-                   "hallway?\n<o>";
+            return "<system>Would you like to lower the\n"
+                   "floor level of the hallway?\n<o>";
         }
         if (!strcmp(msgKey, "lower_text2"))
         {
@@ -1040,101 +1110,141 @@ namespace mod::owr
         }
         if (!strcmp(msgKey, "lower_text_yn"))
         {
-            return "<select 0 1 0 40>Yes\nNo";
-        }
-        if (!strcmp(msgKey, "goombella"))
-        {
-            return "Goombella";
-        }
-        if (!strcmp(msgKey, "goombella_desc"))
-        {
-            return "Goombella<k>";
-        }
-        if (!strcmp(msgKey, "koops"))
-        {
-            return "Koops";
-        }
-        if (!strcmp(msgKey, "koops_desc"))
-        {
-            return "Koops<k>";
-        }
-        if (!strcmp(msgKey, "flurrie"))
-        {
-            return "Flurrie";
-        }
-        if (!strcmp(msgKey, "flurrie_desc"))
-        {
-            return "Flurrie<k>";
-        }
-        if (!strcmp(msgKey, "yoshi"))
-        {
-            return "Yoshi";
-        }
-        if (!strcmp(msgKey, "yoshi_desc"))
-        {
-            return "Yoshi<k>";
-        }
-        if (!strcmp(msgKey, "vivian"))
-        {
-            return "Vivian";
-        }
-        if (!strcmp(msgKey, "vivian_desc"))
-        {
-            return "Vivian<k>";
-        }
-        if (!strcmp(msgKey, "bobbery"))
-        {
-            return "Bobbery";
-        }
-        if (!strcmp(msgKey, "bobbery_desc"))
-        {
-            return "Bobbery<k>";
-        }
-        if (!strcmp(msgKey, "mowz"))
-        {
-            return "Ms. Mowz";
-        }
-        if (!strcmp(msgKey, "mowz_desc"))
-        {
-            return "Ms. Mowz<k>";
+            return "<select 0 1 0 40>Yes\n"
+                   "No";
         }
         if (!strcmp(msgKey, "ap_item"))
         {
-            return "AP Item<k>";
+            return "AP Item";
+        }
+        if (!strcmp(msgKey, "ap_item_desc"))
+        {
+            return "AP Item";
         }
         if (!strcmp(msgKey, "return_pipe"))
         {
-            return "Return Pipe<k>";
+            return "Return Pipe";
         }
-        if (!strcmp(msgKey, "return_pipe_description"))
+        if (!strcmp(msgKey, "return_pipe_desc"))
         {
-            return "This pipe can return you to\nRogueport.<k>";
+            return "A magic pipe that returns you\n"
+                   "to Rogueport from afar.";
         }
         if (!strcmp(msgKey, "10_coins"))
         {
-            return "10 Coins<k>";
+            return "10 Coins";
+        }
+        if (!strcmp(msgKey, "10_coins_desc"))
+        {
+            return "A handful of coins.";
         }
         if (!strcmp(msgKey, "plane_mode"))
         {
-            return "Plane Mode<k>";
+            return "Plane Mode";
+        }
+        if (!strcmp(msgKey, "plane_mode_desc"))
+        {
+            return "Plane Mode";
         }
         if (!strcmp(msgKey, "paper_mode"))
         {
-            return "Paper Mode<k>";
+            return "Paper Mode";
+        }
+        if (!strcmp(msgKey, "paper_mode_desc"))
+        {
+            return "Paper Mode";
         }
         if (!strcmp(msgKey, "tube_mode"))
         {
-            return "Tube Mode<k>";
+            return "Tube Mode";
+        }
+        if (!strcmp(msgKey, "tube_mode_desc"))
+        {
+            return "Tube Mode";
         }
         if (!strcmp(msgKey, "boat_mode"))
         {
-            return "Boat Mode<k>";
+            return "Boat Mode";
+        }
+        if (!strcmp(msgKey, "boat_mode_desc"))
+        {
+            return "Boat Mode";
         }
 
         //Key Renames
-        if (!strcmp(msgKey, "elevator_key_name"))
+        if (!strcmp(msgKey, "elevator_key_station"))
         {
-            return "Elevator Key(Riverside)<k>";
+            return "Elevator Key (Station)";
+        }
+        if (!strcmp(msgKey, "card_key_1"))
+        {
+            return "Card Key 1";
+        }
+        if (!strcmp(msgKey, "card_key_2"))
+        {
+            return "Card Key 2";
+        }
+        if (!strcmp(msgKey, "card_key_3"))
+        {
+            return "Card Key 3";
+        }
+        if (!strcmp(msgKey, "card_key_4"))
+        {
+            return "Card Key 4";
+        }
+        if (!strcmp(msgKey, "palace_key_tower"))
+        {
+            return "Palace Key (Tower)";
+        }
+        if (!strcmp(msgKey, "elevator_key_1"))
+        {
+            return "Elevator Key 1";
+        }
+        if (!strcmp(msgKey, "elevator_key_2"))
+        {
+            return "Elevator Key 2";
+        }
+        if (!strcmp(msgKey, "station_key_1"))
+        {
+            return "Station Key 1";
+        }
+        if (!strcmp(msgKey, "station_key_2"))
+        {
+            return "Station Key 2";
+        }
+        if (!strcmp(msgKey, "storage_key_1"))
+        {
+            return "Storage Key 1";
+        }
+        if (!strcmp(msgKey, "storage_key_2"))
+        {
+            return "Storage Key 2";
+        }
+        if (!strcmp(msgKey, "black_key_plane"))
+        {
+            return "Black Key (Plane)";
+        }
+        if (!strcmp(msgKey, "black_key_paper"))
+        {
+            return "Black Key (Paper)";
+        }
+        if (!strcmp(msgKey, "black_key_tube"))
+        {
+            return "Black Key (Tube)";
+        }
+        if (!strcmp(msgKey, "black_key_boat"))
+        {
+            return "Black Key (Boat)";
+        }
+
+        //Progressive Renames
+        if (!strcmp(msgKey, "progressive_boots"))
+        {
+            return "Progressive Boots";
+        }
+        if (!strcmp(msgKey, "progressive_hammer"))
+        {
+            return "Progressive Hammer";
         }
 
         // Map Nodes
@@ -1148,11 +1258,17 @@ namespace mod::owr
         }
         if (!strcmp(msgKey, "menu_map_rsh"))
         {
-            return "A Train";
+            return "The ultimate in locomotive\n"
+                   "travel, famed not only for\n"
+                   "its stunning appearance, but\n"
+                   "its comfortable rides as well.";
         }
         if (!strcmp(msgKey, "menu_map_las_09"))
         {
-            return "The Riddle Tower";
+            return "A mysterious tower located\n"
+                   "inside the Palace of Shadow.\n"
+                   "Each of its many rooms\n";
+                   "contains a riddle.";
         }
 
         return g_msgSearch_trampoline(msgKey);

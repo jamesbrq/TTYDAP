@@ -162,4 +162,16 @@ namespace mod::util
         const float lineCount = intToFloat(numLines + additionalLines);
         return lineCount * (32.f * scale);
     }
+
+    uint16_t getStageRankFromLevel(uint16_t level)
+    {
+        if (level >= 30)
+            return 3;
+        else if (level >= 20)
+            return 2;
+        else if (level >= 10)
+            return 1;
+        else
+            return 0;
+    }
 } // namespace mod::util

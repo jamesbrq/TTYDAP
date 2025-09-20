@@ -37,33 +37,45 @@ using mod::owr::goods;
 
 namespace mod::owr
 {
-    KEEP_VAR const char *goombellaName = "goombella";
-    KEEP_VAR const char *goombellaDescription = "goombella_desc";
-    KEEP_VAR const char *koopsName = "koops";
-    KEEP_VAR const char *koopsDescription = "koops_desc";
-    KEEP_VAR const char *flurrieName = "flurrie";
-    KEEP_VAR const char *flurrieDescription = "flurrie_desc";
-    KEEP_VAR const char *yoshiName = "yoshi";
-    KEEP_VAR const char *yoshiDescription = "yoshi_desc";
-    KEEP_VAR const char *vivianName = "vivian";
-    KEEP_VAR const char *vivianDescription = "vivian_desc";
-    KEEP_VAR const char *bobberyName = "bobbery";
-    KEEP_VAR const char *bobberyDescription = "bobbery_desc";
-    KEEP_VAR const char *mowzName = "mowz";
-    KEEP_VAR const char *mowzDescription = "mowz_desc";
-    KEEP_VAR const char *apItemNameDescription = "ap_item";
-    KEEP_VAR const char *tenCoinsNameDescription = "10_coins";
+    KEEP_VAR const char *apItemName = "ap_item";
+    KEEP_VAR const char *apItemDescription = "ap_item_desc";
+    KEEP_VAR const char *tenCoinsName = "10_coins";
+    KEEP_VAR const char *tenCoinsDescription = "10_coins_desc";
     KEEP_VAR const char *returnPipeName = "return_pipe";
-    KEEP_VAR const char *returnPipeDescription = "return_pipe_description";
-    KEEP_VAR const char *planeModeNameDescription = "plane_mode";
-    KEEP_VAR const char *paperModeNameDescription = "paper_mode";
-    KEEP_VAR const char *tubeModeNameDescription = "tube_mode";
-    KEEP_VAR const char *boatModeNameDescription = "boat_mode";
+    KEEP_VAR const char *returnPipeDescription = "return_pipe_desc";
+    KEEP_VAR const char *planeModeName = "plane_mode";
+    KEEP_VAR const char *planeModeDescription = "plane_mode_desc";
+    KEEP_VAR const char *paperModeName = "paper_mode";
+    KEEP_VAR const char *paperModeDescription = "paper_mode_desc";
+    KEEP_VAR const char *tubeModeName = "tube_mode";
+    KEEP_VAR const char *tubeModeDescription = "tube_mode_desc";
+    KEEP_VAR const char *boatModeName = "boat_mode";
+    KEEP_VAR const char *boatModeDescription = "boat_mode_desc";
     KEEP_VAR const char *rshNode = "rsh";
     KEEP_VAR const char *las_09Node = "las_09";
 
     // Key Renames
-    KEEP_VAR const char *elevatorKeyName = "elevator_key_name";
+    KEEP_VAR const char *elevatorKeyStationName = "elevator_key_station";
+    KEEP_VAR const char *cardKey1Name = "card_key_1";
+    KEEP_VAR const char *cardKey2Name = "card_key_2";
+    KEEP_VAR const char *cardKey3Name = "card_key_3";
+    KEEP_VAR const char *cardKey4Name = "card_key_4";
+    KEEP_VAR const char *palaceKeyTowerName = "palace_key_tower";
+    KEEP_VAR const char *elevatorKey1Name = "elevator_key_1";
+    KEEP_VAR const char *elevatorKey2Name = "elevator_key_2";
+    KEEP_VAR const char *stationKey1Name = "station_key_1";
+    KEEP_VAR const char *stationKey2Name = "station_key_2";
+    KEEP_VAR const char *storageKey1Name = "storage_key_1";
+    KEEP_VAR const char *storageKey2Name = "storage_key_2";
+    KEEP_VAR const char *blackKeyPlaneName = "black_key_plane";
+    KEEP_VAR const char *blackKeyPaperName = "black_key_paper";
+    KEEP_VAR const char *blackKeyTubeName = "black_key_tube";
+    KEEP_VAR const char *blackKeyBoatName = "black_key_boat";
+
+    //Progressive Renames
+    KEEP_VAR const char *progressiveBootsName = "progressive_boots";
+    KEEP_VAR const char *progressiveHammerName = "progressive_hammer";
+
 } // namespace mod::owr
 
 extern int32_t btlataudevtPresentItem_Get[];
