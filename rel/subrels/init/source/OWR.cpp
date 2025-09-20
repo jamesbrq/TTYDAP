@@ -563,45 +563,45 @@ namespace mod::owr
         namespace ItemId = ::common::ItemId;
         namespace IconType = ::icondrv::IconType;
 
-        itemDataTable[ItemId::SUPER_LUIGI].name = goombellaName;
-        itemDataTable[ItemId::SUPER_LUIGI].description = goombellaDescription;
-        itemDataTable[ItemId::SUPER_LUIGI].icon_id = IconType::GOOMBELLA;
-        itemDataTable[ItemId::SUPER_LUIGI_2].name = koopsName;
-        itemDataTable[ItemId::SUPER_LUIGI_2].description = koopsDescription;
+        itemDataTable[ItemId::SUPER_LUIGI].name = "name_party0"; // Goombella
+        itemDataTable[ItemId::SUPER_LUIGI].description = "btl_hlp_cmd_operation_party1"; // A pro at Headbonking! She looks up enemy stats and HP.
+        itemDataTable[ItemId::SUPER_LUIGI].icon_id = IconType::GOOMBELLA; 
+        itemDataTable[ItemId::SUPER_LUIGI_2].name = "name_party1"; // Koops
+        itemDataTable[ItemId::SUPER_LUIGI_2].description = "btl_hlp_cmd_operation_party2"; // A shell-attack master! He has a Defense of 1.
         itemDataTable[ItemId::SUPER_LUIGI_2].icon_id = IconType::KOOPS;
-        itemDataTable[ItemId::SUPER_LUIGI_3].name = flurrieName;
-        itemDataTable[ItemId::SUPER_LUIGI_3].description = flurrieDescription;
+        itemDataTable[ItemId::SUPER_LUIGI_3].name = "name_party4"; // Flurrie
+        itemDataTable[ItemId::SUPER_LUIGI_3].description = "btl_hlp_cmd_operation_party3"; // A double threat with her bulk and gale-force breath!
         itemDataTable[ItemId::SUPER_LUIGI_3].icon_id = IconType::FLURRIE;
-        itemDataTable[ItemId::SUPER_LUIGI_4].name = yoshiName;
-        itemDataTable[ItemId::SUPER_LUIGI_4].description = yoshiDescription;
-        itemDataTable[ItemId::SUPER_LUIGI_4].icon_id = IconType::YOSHI_GREEN;
-        itemDataTable[ItemId::SUPER_LUIGI_5].name = vivianName;
-        itemDataTable[ItemId::SUPER_LUIGI_5].description = vivianDescription;
+        itemDataTable[ItemId::SUPER_LUIGI_4].name = "name_party3"; // Yoshi
+        itemDataTable[ItemId::SUPER_LUIGI_4].description = "btl_hlp_cmd_operation_party4"; // A hotshot at multiple attacks that each deal low damage.
+        itemDataTable[ItemId::SUPER_LUIGI_4].icon_id = IconType::YOSHI_GREEN + gState->apSettings->yoshiColor;
+        itemDataTable[ItemId::SUPER_LUIGI_5].name = "name_party5"; // Vivian
+        itemDataTable[ItemId::SUPER_LUIGI_5].description = "btl_hlp_cmd_operation_party5"; // An expert at fire attacks and dodge moves!
         itemDataTable[ItemId::SUPER_LUIGI_5].icon_id = IconType::VIVIAN;
-        itemDataTable[ItemId::INVALID_ITEM_006F].name = bobberyName;
-        itemDataTable[ItemId::INVALID_ITEM_006F].description = bobberyDescription;
+        itemDataTable[ItemId::INVALID_ITEM_006F].name = "name_party2"; // Bobbery
+        itemDataTable[ItemId::INVALID_ITEM_006F].description = "btl_hlp_cmd_operation_party6"; // A demolitions expert with a taste for massive explosions!
         itemDataTable[ItemId::INVALID_ITEM_006F].icon_id = IconType::BOBBERY;
-        itemDataTable[ItemId::INVALID_ITEM_0070].name = mowzName;
-        itemDataTable[ItemId::INVALID_ITEM_0070].description = mowzDescription;
+        itemDataTable[ItemId::INVALID_ITEM_0070].name = "name_party6"; // Ms. Mowz
+        itemDataTable[ItemId::INVALID_ITEM_0070].description = "btl_hlp_cmd_operation_party7"; // A master thief who can steal anything from anyone!
         itemDataTable[ItemId::INVALID_ITEM_0070].icon_id = IconType::MS_MOWZ;
-        itemDataTable[ItemId::INVALID_ITEM_0071].name = apItemNameDescription;
-        itemDataTable[ItemId::INVALID_ITEM_0071].description = apItemNameDescription;
+        itemDataTable[ItemId::INVALID_ITEM_0071].name = apItemName;
+        itemDataTable[ItemId::INVALID_ITEM_0071].description = apItemDescription;
         itemDataTable[ItemId::INVALID_ITEM_0071].icon_id = IconType::AP_ITEM;
-        itemDataTable[ItemId::INVALID_ITEM_PAPER_0053].name = tenCoinsNameDescription;
-        itemDataTable[ItemId::INVALID_ITEM_PAPER_0053].description = tenCoinsNameDescription;
+        itemDataTable[ItemId::INVALID_ITEM_PAPER_0053].name = tenCoinsName;
+        itemDataTable[ItemId::INVALID_ITEM_PAPER_0053].description = tenCoinsDescription;
         itemDataTable[ItemId::INVALID_ITEM_PAPER_0053].icon_id = IconType::COIN;
         itemDataTable[ItemId::INVALID_ITEM_PAPER_0054].name = returnPipeName;
         itemDataTable[ItemId::INVALID_ITEM_PAPER_0054].description = returnPipeDescription;
         itemDataTable[ItemId::INVALID_ITEM_PAPER_0054].icon_id = IconType::RETURN_PIPE;
         itemDataTable[ItemId::INVALID_ITEM_PAPER_0054].type_sort_order = 1;
-        itemDataTable[ItemId::INVALID_ITEM_PLANE_MODE_ICON].name = planeModeNameDescription;
-        itemDataTable[ItemId::INVALID_ITEM_PLANE_MODE_ICON].description = planeModeNameDescription;
-        itemDataTable[ItemId::INVALID_ITEM_PAPER_MODE_ICON].name = paperModeNameDescription;
-        itemDataTable[ItemId::INVALID_ITEM_PAPER_MODE_ICON].description = paperModeNameDescription;
-        itemDataTable[ItemId::INVALID_ITEM_TUBE_MODE_ICON].name = tubeModeNameDescription;
-        itemDataTable[ItemId::INVALID_ITEM_TUBE_MODE_ICON].description = tubeModeNameDescription;
-        itemDataTable[ItemId::INVALID_ITEM_BOAT_MODE_ICON].name = boatModeNameDescription;
-        itemDataTable[ItemId::INVALID_ITEM_BOAT_MODE_ICON].description = boatModeNameDescription;
+        itemDataTable[ItemId::INVALID_ITEM_PLANE_MODE_ICON].name = planeModeName;
+        itemDataTable[ItemId::INVALID_ITEM_PLANE_MODE_ICON].description = planeModeDescription;
+        itemDataTable[ItemId::INVALID_ITEM_PAPER_MODE_ICON].name = paperModeName;
+        itemDataTable[ItemId::INVALID_ITEM_PAPER_MODE_ICON].description = paperModeDescription;
+        itemDataTable[ItemId::INVALID_ITEM_TUBE_MODE_ICON].name = tubeModeName;
+        itemDataTable[ItemId::INVALID_ITEM_TUBE_MODE_ICON].description = tubeModeDescription;
+        itemDataTable[ItemId::INVALID_ITEM_BOAT_MODE_ICON].name = boatModeName;
+        itemDataTable[ItemId::INVALID_ITEM_BOAT_MODE_ICON].description = tubeModeDescription;
         itemDataTable[ItemId::WHACKA_BUMP].sell_price = 30;
 
         // Buy/Sell Prices
@@ -613,7 +613,27 @@ namespace mod::owr
         }
 
         // Key Renames
-        itemDataTable[ItemId::ELEVATOR_KEY_001A].name = elevatorKeyName;
+        itemDataTable[ItemId::ELEVATOR_KEY_001A].name = elevatorKeyStationName;
+        itemDataTable[ItemId::CARD_KEY_001D].name = cardKey1Name;
+        itemDataTable[ItemId::CARD_KEY_001E].name = cardKey2Name;
+        itemDataTable[ItemId::CARD_KEY_001F].name = cardKey3Name;
+        itemDataTable[ItemId::CARD_KEY_0020].name = cardKey4Name;
+        itemDataTable[ItemId::PALACE_KEY_0026].name = palaceKeyTowerName;
+        itemDataTable[ItemId::ELEVATOR_KEY_001B].name = elevatorKey1Name;
+        itemDataTable[ItemId::ELEVATOR_KEY_001C].name = elevatorKey2Name;
+        itemDataTable[ItemId::STATION_KEY_0018].name = stationKey1Name;
+        itemDataTable[ItemId::STATION_KEY_0019].name = stationKey2Name;
+        itemDataTable[ItemId::STORAGE_KEY_0012].name = storageKey1Name;
+        itemDataTable[ItemId::STORAGE_KEY_0013].name = storageKey2Name;
+        itemDataTable[ItemId::BLACK_KEY_0021].name = blackKeyPlaneName;
+        itemDataTable[ItemId::BLACK_KEY_0022].name = blackKeyPaperName;
+        itemDataTable[ItemId::BLACK_KEY_0023].name = blackKeyTubeName;
+        itemDataTable[ItemId::BLACK_KEY_0024].name = blackKeyBoatName;
+
+        //Progressive Renames
+        itemDataTable[ItemId::BOOTS].name = progressiveBootsName;
+        itemDataTable[ItemId::HAMMER].name = progressiveHammerName;
+
     }
 
     OWR::OWR()
