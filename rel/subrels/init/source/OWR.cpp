@@ -611,7 +611,10 @@ namespace mod::owr
             itemDataTable[i].sell_price = ((itemDataTable[i].sell_price / divisor + 2) / 5) * 5;
             itemDataTable[i].buy_price = itemDataTable[i].discount_price = itemDataTable[i].sell_price * 2;
         }
-
+      
+        if (gState->apSettings->firstAttack)
+            itemDataTable[ItemId::FIRST_ATTACK].bp_cost = 0;
+      
         // Key Renames
         itemDataTable[ItemId::ELEVATOR_KEY_001A].name = elevatorKeyStationName;
         itemDataTable[ItemId::CARD_KEY_001D].name = cardKey1Name;
@@ -633,7 +636,6 @@ namespace mod::owr
         //Progressive Renames
         itemDataTable[ItemId::BOOTS].name = progressiveBootsName;
         itemDataTable[ItemId::HAMMER].name = progressiveHammerName;
-
     }
 
     OWR::OWR()

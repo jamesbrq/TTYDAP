@@ -33,7 +33,7 @@ namespace mod::owr
         uint8_t deathLinkSent;      // 0x20
         uint8_t music;              // 0x21
         uint8_t blockVisibility;    // 0x22
-        uint8_t padding_1;          // 0x23
+        uint8_t firstAttack;        // 0x23
         uint32_t musicSeed;         // 0x24
     };
 
