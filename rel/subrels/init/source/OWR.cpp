@@ -614,6 +614,9 @@ namespace mod::owr
 
         // Key Renames
         itemDataTable[ItemId::ELEVATOR_KEY_001A].name = elevatorKeyName;
+
+        if (gState->apSettings->firstAttack)
+            itemDataTable[ItemId::FIRST_ATTACK].bp_cost = 0;
     }
 
     OWR::OWR()
