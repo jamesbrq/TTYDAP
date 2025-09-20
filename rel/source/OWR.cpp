@@ -1257,11 +1257,17 @@ namespace mod::owr
         }
         if (!strcmp(msgKey, "menu_map_rsh"))
         {
-            return "A Train";
+            return "The ultimate in locomotive\n"
+                   "travel, famed not only for\n"
+                   "its stunning appearance, but\n"
+                   "its comfortable rides as well.";
         }
         if (!strcmp(msgKey, "menu_map_las_09"))
         {
-            return "The Riddle Tower";
+            return "A mysterious tower located\n"
+                   "inside the Palace of Shadow.\n"
+                   "Each of its many rooms\n";
+                   "contains a riddle.";
         }
 
         return g_msgSearch_trampoline(msgKey);
