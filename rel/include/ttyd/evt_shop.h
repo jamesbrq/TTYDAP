@@ -42,5 +42,6 @@ namespace ttyd::evt_shop
         // help_disp
         // help_main
         // name_disp
+        extern uint32_t *evt_shop_wp;
     }
 } // namespace ttyd::evt_shop

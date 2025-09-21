@@ -2,6 +2,7 @@
 
 #include <cstdint>
 #include <ttyd/party.h>
+#include <ttyd/msgdrv.h>
 
 namespace mod::owr
 {
@@ -46,6 +47,7 @@ namespace mod::owr
         StateManager();
         APSettings *apSettings;
         uint16_t *tattleItems;
+        uint32_t state_msgWork[17];
         bool newTattle = false;
         bool firstDeath = false;
     };

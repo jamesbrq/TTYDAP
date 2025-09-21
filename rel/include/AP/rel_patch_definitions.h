@@ -55,10 +55,13 @@ extern "C"
     void bExpMultiplierReturn();
     void bBlockVisibility();
     void bBlockVisibilityReturn();
+    void bShopDesc();
+    void bShopDescReturn();
     void checkShopFlag(uint32_t item, uint32_t index);
     void monosiriItemCheck(int unit_id);
     int applyExpMultiplier(int exp);
     int getBlockVisibility(int blockType);
+    const char *shopItemDescription(const char *itemDescription);
 }
 
 EVT_DECLARE_USER_FUNC(checkChapterRequirements, 1)

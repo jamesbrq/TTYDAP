@@ -13,6 +13,7 @@ import os
 import re
 import struct
 import sys
+from typing import ClassVar, List, Union
 try:
     from typing import ByteString
 except ImportError:

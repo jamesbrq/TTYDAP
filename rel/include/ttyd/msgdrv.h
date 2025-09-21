@@ -59,7 +59,9 @@ namespace ttyd::msgdrv
         // msgDispKeyWait_render
         void msgDisp(ttyd::memory::SmartAllocationData *msg_data, float x, float y, uint8_t alpha);
         void msgMain(ttyd::memory::SmartAllocationData *msg_data);
-        // msgLoad
-        // msgInit
+        void msgLoad(const char *filename, int tableIndex);
+        void msgInit();
+        extern uint32_t *msgw;
+        extern uint32_t msgWork[9];
     }
 } // namespace ttyd::msgdrv

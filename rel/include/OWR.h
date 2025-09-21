@@ -68,6 +68,7 @@ namespace mod::owr
     int32_t WinLogMainHook(ttyd::win_root::WinPauseMenu *menu);
     void MsgAnalizeHook(ttyd::memory::SmartAllocationData *smartAlloc, const char *text);
     int msgWindow_Entry_Hook(const char *message, int unk1, int windowType);
+    void _load_Hook(const char *mapName, const char *entranceName, const char *beroName);
     int numericWindow_Main(ttyd::windowdrv::Window *window);
     void numericWindow_Disp(ttyd::dispdrv::CameraId cameraId, void *user);
     void replaceMultipleCharacters(ttyd::memory::SmartAllocationData *smartData, uint32_t startIndex, int value);
@@ -86,6 +87,7 @@ namespace mod::owr
     extern int32_t (*g_winLogMain_trampoline)(ttyd::win_root::WinPauseMenu *);
     extern void (*g_msgAnalize_trampoline)(ttyd::memory::SmartAllocationData *, const char *);
     extern int (*g_msgWindow_Entry_trampoline)(const char *, int, int);
+    extern void (*g__load_trampoline)(const char *, const char *, const char *);
 
     extern const char *apItemName;
     extern const char *apItemDescription;
@@ -121,8 +123,4 @@ namespace mod::owr
     extern const char *progressiveHammerName;
     extern const char *rshNode;
     extern const char *las_09Node;
-
-    static const char *goods[] =
-        {"gor_01", "gor_03", "tik_00", "nok_00", "mri_07", "tou_01", "usu_01", "muj_01", "rsh_03", "bom_02"};
-
 } // namespace mod::owr

@@ -48,6 +48,8 @@
 .global bExpMultiplierReturn
 .global bBlockVisibility
 .global bBlockVisibilityReturn
+.global bShopDesc
+.global bShopDescReturn
 
 # All of the global symbols in this file excluding win_log_mapGX_arr need to be used in at least one subrel, so they cannot be set to hidden
 
@@ -384,6 +386,12 @@ bBlockVisibility:
 	addi %r1, %r1, 104
 bBlockVisibilityReturn:
 	b 0
+
+bShopDesc:
+	bl shopItemDescription
+	bl msgSearch
+bShopDescReturn:
+ 	b 0
 
 win_log_mapGX_arr:
 	.byte 0x0

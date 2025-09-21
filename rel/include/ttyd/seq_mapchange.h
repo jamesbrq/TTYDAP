@@ -59,7 +59,7 @@ namespace ttyd::seq_mapchange
         extern char _next_area[32];
 
         // _relUnLoad
-        // _load
+        void _load(const char *mapName, const char *entranceName, const char *beroName);
         // _unload
         // seq_mapChangeMain
         // seq_mapChangeExit

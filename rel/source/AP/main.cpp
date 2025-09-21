@@ -22,8 +22,8 @@
 #include <ttyd/evt_shop.h>
 
 #include <cstdint>
-#include <cstring>
 #include <cstdio>
+#include <cstring>
 
 using namespace ttyd::evtmgr_cmd;
 using namespace ttyd::common;
@@ -32,8 +32,6 @@ using namespace ttyd::swdrv;
 using namespace ttyd::seq_mapchange;
 using namespace mod::owr;
 using namespace ttyd;
-
-using mod::owr::goods;
 
 namespace mod::owr
 {
@@ -79,6 +77,11 @@ namespace mod::owr
 } // namespace mod::owr
 
 extern int32_t btlataudevtPresentItem_Get[];
+
+static const char *goods[] =
+    {"gor_01", "gor_03", "tik_00", "nok_00", "mri_07", "tou_01", "usu_01", "muj_01", "rsh_03", "bom_02"};
+
+static char result[100];
 
 // clang-format off
 EVT_BEGIN_KEEP(main_buy_evt_evt)
@@ -297,4 +300,26 @@ int applyExpMultiplier(int exp)
 int getBlockVisibility(int blockType)
 {
     return gState->apSettings->blockVisibility == 1 ? blockType == 11 || blockType == 12 ? 1 : blockType : blockType;
+}
+
+const char* shopItemDescription(const char* itemDescription)
+{
+    char *base = reinterpret_cast<char *>(evt_shop::evt_shop_wp);
+    uint32_t *itemIds = *reinterpret_cast<uint32_t **>(base + 0x08);
+    uint32_t selectedIndex = *reinterpret_cast<uint32_t *>(base + 0x2C);
+
+    if (itemIds[selectedIndex * 2] != 0x71) // AP Item
+        return itemDescription;
+
+    const char *nextMapPtr = &ttyd::seq_mapchange::_next_map[0];
+    constexpr int loopCount = static_cast<int>(sizeof(goods) / sizeof(goods[0]));
+
+    for (int i = 0; i < loopCount; i++)
+    {
+        if (strncmp(nextMapPtr, goods[i], 6) != 0)
+            continue;
+        snprintf(result, sizeof(result), "ap_%s_%d", goods[i], selectedIndex);
+        return result;
+    }
+    return itemDescription;
 }

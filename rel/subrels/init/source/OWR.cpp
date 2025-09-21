@@ -73,6 +73,7 @@ extern int32_t main_battleCheckUnitMonosiriFlag[];
 extern int32_t main_BattleDrawEnemyHPBar[];
 extern int32_t btlseqEnd[];
 extern int32_t evt_mobj_brick[];
+extern int32_t help_disp[];
 // End of Assembly References
 
 // Script References
@@ -394,6 +395,23 @@ namespace mod::owr
         writeIntWithCache(&main_psndBGMOn_f_d[94], 0x38840831); // addi r4, r4, 0x831 GSW(1713)
         writeIntWithCache(&main_psndBGMOn_f_d[96], 0x2C03000A); // cmpwi r3, 0xA
 
+        // Expand msgSearch to check 4 tables
+        uint32_t* msgSearchPtr = (uint32_t*)ttyd::msgdrv::msgSearch;
+        writeIntWithCache(&msgSearchPtr[44], 0x2C1B0004); // cmpwi r27, 0x4
+
+        uint32_t *msgLoadPtr = (uint32_t *)ttyd::msgdrv::msgLoad;
+        writeIntWithCache(&msgLoadPtr[85], 0x60000000); // NOP
+
+        uint32_t *msgWindow_DispPtr = (uint32_t *)0x80080260;
+        writeIntWithCache(&msgWindow_DispPtr[407], 0x80630040); // lwz r3, 0x40(r3)
+        writeIntWithCache(&msgWindow_DispPtr[420], 0x80630040); // lwz r3, 0x40(r3)
+
+        msgdrv::msgw = gState->state_msgWork;
+
+        patch::writeBranchPair(&help_disp[21], 
+                               reinterpret_cast<void *>(bShopDesc), 
+                               reinterpret_cast<void *>(bShopDescReturn));
+
         if (mod::owr::gState->apSettings->peekaboo)
             writeIntWithCache(&main_battleCheckUnitMonosiriFlag[10], 0x60000000); // NOP
 
@@ -661,6 +679,7 @@ namespace mod::owr
         g_winLogMain_trampoline = patch::hookFunction(win_log::main_winLogMain, WinLogMainHook);
         g_msgAnalize_trampoline = patch::hookFunction(msgdrv::msgAnalize, MsgAnalizeHook);
         g_msgWindow_Entry_trampoline = patch::hookFunction(msgdrv::msgWindow_Entry, msgWindow_Entry_Hook);
+        g__load_trampoline = patch::hookFunction(seq_mapchange::_load, _load_Hook);
 
         // Hook gaugeDisp with a standard branch since the original function does not need to be called
         patch::writeBranch(statuswindow::gaugeDisp, DisplayStarPowerOrbs);

@@ -9,6 +9,8 @@ StateManager::StateManager()
 {
     gState = this;
     gState->Init();
+    for (int i = 0; i < 8; i++) gState->state_msgWork[i] = ttyd::msgdrv::msgWork[i]; // msgWork.entries[0] && msgWork.entries[1]
+    gState->state_msgWork[16] = ttyd::msgdrv::msgWork[8]; // msgWork.animBase
 }
 
 void StateManager::Init()
