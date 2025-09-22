@@ -89,6 +89,20 @@ namespace mod::owr
     extern int (*g_msgWindow_Entry_trampoline)(const char *, int, int);
     extern void (*g__load_trampoline)(const char *, const char *, const char *);
 
+    extern const char *goombellaName;
+    extern const char *goombellaDescription;
+    extern const char *koopsName;
+    extern const char *koopsDescription;
+    extern const char *flurrieName;
+    extern const char *flurrieDescription;
+    extern const char *yoshiName;
+    extern const char *yoshiDescription;
+    extern const char *vivianName;
+    extern const char *vivianDescription;
+    extern const char *bobberyName;
+    extern const char *bobberyDescription;
+    extern const char *mowzName;
+    extern const char *mowzDescription;
     extern const char *apItemName;
     extern const char *apItemDescription;
     extern const char *tenCoinsName;

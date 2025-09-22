@@ -915,9 +915,11 @@ namespace mod
         usu_shop_woman_talk[1] = GSWF(1925);
         usu_shop_woman_talk[2] = 0;
         usu_shop_woman_talk[3] = 0;
-        usu_shop_woman_talk[135] = EVT_HELPER_CMD(0, 33);
+        usu_shop_woman_talk[135] = EVT_HELPER_CMD(0, 2);
+        usu_shop_woman_talk[136] = EVT_HELPER_CMD(0, 33);
 
-        patch::writePatch(&usu_shop_woman_talk[136], shop_woman_talk_hook, sizeof(shop_woman_talk_hook));
+        patch::writePatch(&usu_shop_woman_talk[137], shop_woman_talk_hook, sizeof(shop_woman_talk_hook));
+        usu_shop_woman_talk[142] = 0;
 
         usu_kizayarou_init[6] = GSW(1715);
         usu_kizayarou_init[8] = 2;

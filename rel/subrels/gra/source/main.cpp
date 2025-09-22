@@ -77,6 +77,7 @@ namespace mod
 
         patch::writePatch(&gra_evt_nameent[36], evt_nameent_hook, sizeof(evt_nameent_hook));
 
+        gra_00_init_evt[43] = 0;
         gra_00_init_evt[47] = 1;
         gra_00_init_evt[65] = GSW(1715);
         gra_00_init_evt[67] = 4;

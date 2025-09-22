@@ -35,6 +35,20 @@ using namespace ttyd;
 
 namespace mod::owr
 {
+    KEEP_VAR const char *goombellaName = "name_party0";
+    KEEP_VAR const char *goombellaDescription = "btl_hlp_cmd_operation_party1";
+    KEEP_VAR const char *koopsName = "name_party1";
+    KEEP_VAR const char *koopsDescription = "btl_hlp_cmd_operation_party2";
+    KEEP_VAR const char *flurrieName = "name_party4";
+    KEEP_VAR const char *flurrieDescription = "btl_hlp_cmd_operation_party3";
+    KEEP_VAR const char *yoshiName = "name_party3";
+    KEEP_VAR const char *yoshiDescription = "btl_hlp_cmd_operation_party4";
+    KEEP_VAR const char *vivianName = "name_party5";
+    KEEP_VAR const char *vivianDescription = "btl_hlp_cmd_operation_party5";
+    KEEP_VAR const char *bobberyName = "name_party2";
+    KEEP_VAR const char *bobberyDescription = "btl_hlp_cmd_operation_party6";
+    KEEP_VAR const char *mowzName = "name_party6";
+    KEEP_VAR const char *mowzDescription = "btl_hlp_cmd_operation_party7";
     KEEP_VAR const char *apItemName = "ap_item";
     KEEP_VAR const char *apItemDescription = "ap_item_desc";
     KEEP_VAR const char *tenCoinsName = "10_coins";
@@ -299,7 +313,14 @@ int applyExpMultiplier(int exp)
 
 int getBlockVisibility(int blockType)
 {
-    return gState->apSettings->blockVisibility == 1 ? blockType == 11 || blockType == 12 ? 1 : blockType : blockType;
+    if (gState->apSettings->blockVisibility == 1)
+    {
+        if (blockType == 11 || blockType == 12)
+        {
+            return 1;
+        }
+    }
+    return blockType;
 }
 
 const char* shopItemDescription(const char* itemDescription)

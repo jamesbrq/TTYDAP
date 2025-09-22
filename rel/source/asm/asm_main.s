@@ -376,16 +376,16 @@ bExpMultiplierReturn:
 	b 0
 
 bBlockVisibility:
-	stwu %r1, -104(%r1)
-	stmw %r3, 8(%r1)
-	lwz %r3, 0x14(%r26)
-	bl getBlockVisibility
-	mr %r27, %r3
-	lmw %r28, 92(%r1)
-	lmw %r3, 8(%r1)
-	addi %r1, %r1, 104
+    mr %r30, %r3
+    stwu %r1, -104(%r1)
+    stmw %r4, 12(%r1)
+    mr %r3, %r27
+    bl getBlockVisibility
+    lmw %r4, 12(%r1)
+    mr %r27, %r3
+    addi %r1, %r1, 104
 bBlockVisibilityReturn:
-	b 0
+    b 0
 
 bShopDesc:
 	bl shopItemDescription

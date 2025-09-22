@@ -438,7 +438,7 @@ namespace mod::owr
                                reinterpret_cast<void *>(bExpMultiplier),
                                reinterpret_cast<void *>(bExpMultiplierReturn));
         
-        patch::writeBranchPair(&evt_mobj_brick[29],
+        patch::writeBranchPair(&evt_mobj_brick[30],
                                reinterpret_cast<void *>(bBlockVisibility),
                                reinterpret_cast<void *>(bBlockVisibilityReturn));
 
@@ -581,26 +581,26 @@ namespace mod::owr
         namespace ItemId = ::common::ItemId;
         namespace IconType = ::icondrv::IconType;
 
-        itemDataTable[ItemId::SUPER_LUIGI].name = "name_party0"; // Goombella
-        itemDataTable[ItemId::SUPER_LUIGI].description = "btl_hlp_cmd_operation_party1"; // A pro at Headbonking! She looks up enemy stats and HP.
+        itemDataTable[ItemId::SUPER_LUIGI].name = goombellaName; // Goombella
+        itemDataTable[ItemId::SUPER_LUIGI].description = goombellaDescription; // A pro at Headbonking! She looks up enemy stats and HP.
         itemDataTable[ItemId::SUPER_LUIGI].icon_id = IconType::GOOMBELLA; 
-        itemDataTable[ItemId::SUPER_LUIGI_2].name = "name_party1"; // Koops
-        itemDataTable[ItemId::SUPER_LUIGI_2].description = "btl_hlp_cmd_operation_party2"; // A shell-attack master! He has a Defense of 1.
+        itemDataTable[ItemId::SUPER_LUIGI_2].name = koopsName; // Koops
+        itemDataTable[ItemId::SUPER_LUIGI_2].description = koopsDescription; // A shell-attack master! He has a Defense of 1.
         itemDataTable[ItemId::SUPER_LUIGI_2].icon_id = IconType::KOOPS;
-        itemDataTable[ItemId::SUPER_LUIGI_3].name = "name_party4"; // Flurrie
-        itemDataTable[ItemId::SUPER_LUIGI_3].description = "btl_hlp_cmd_operation_party3"; // A double threat with her bulk and gale-force breath!
+        itemDataTable[ItemId::SUPER_LUIGI_3].name = flurrieName; // Flurrie
+        itemDataTable[ItemId::SUPER_LUIGI_3].description = flurrieDescription; // A double threat with her bulk and gale-force breath!
         itemDataTable[ItemId::SUPER_LUIGI_3].icon_id = IconType::FLURRIE;
-        itemDataTable[ItemId::SUPER_LUIGI_4].name = "name_party3"; // Yoshi
-        itemDataTable[ItemId::SUPER_LUIGI_4].description = "btl_hlp_cmd_operation_party4"; // A hotshot at multiple attacks that each deal low damage.
+        itemDataTable[ItemId::SUPER_LUIGI_4].name = yoshiName; // Yoshi
+        itemDataTable[ItemId::SUPER_LUIGI_4].description = yoshiDescription; // A hotshot at multiple attacks that each deal low damage.
         itemDataTable[ItemId::SUPER_LUIGI_4].icon_id = IconType::YOSHI_GREEN + gState->apSettings->yoshiColor;
-        itemDataTable[ItemId::SUPER_LUIGI_5].name = "name_party5"; // Vivian
-        itemDataTable[ItemId::SUPER_LUIGI_5].description = "btl_hlp_cmd_operation_party5"; // An expert at fire attacks and dodge moves!
+        itemDataTable[ItemId::SUPER_LUIGI_5].name = vivianName; // Vivian
+        itemDataTable[ItemId::SUPER_LUIGI_5].description = vivianDescription; // An expert at fire attacks and dodge moves!
         itemDataTable[ItemId::SUPER_LUIGI_5].icon_id = IconType::VIVIAN;
-        itemDataTable[ItemId::INVALID_ITEM_006F].name = "name_party2"; // Bobbery
-        itemDataTable[ItemId::INVALID_ITEM_006F].description = "btl_hlp_cmd_operation_party6"; // A demolitions expert with a taste for massive explosions!
+        itemDataTable[ItemId::INVALID_ITEM_006F].name = bobberyName; // Bobbery
+        itemDataTable[ItemId::INVALID_ITEM_006F].description = bobberyDescription; // A demolitions expert with a taste for massive explosions!
         itemDataTable[ItemId::INVALID_ITEM_006F].icon_id = IconType::BOBBERY;
-        itemDataTable[ItemId::INVALID_ITEM_0070].name = "name_party6"; // Ms. Mowz
-        itemDataTable[ItemId::INVALID_ITEM_0070].description = "btl_hlp_cmd_operation_party7"; // A master thief who can steal anything from anyone!
+        itemDataTable[ItemId::INVALID_ITEM_0070].name = mowzName; // Ms. Mowz
+        itemDataTable[ItemId::INVALID_ITEM_0070].description = mowzDescription; // A master thief who can steal anything from anyone!
         itemDataTable[ItemId::INVALID_ITEM_0070].icon_id = IconType::MS_MOWZ;
         itemDataTable[ItemId::INVALID_ITEM_0071].name = apItemName;
         itemDataTable[ItemId::INVALID_ITEM_0071].description = apItemDescription;
