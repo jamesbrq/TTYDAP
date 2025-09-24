@@ -315,10 +315,8 @@ int getBlockVisibility(int blockType)
 {
     if (gState->apSettings->blockVisibility == 1)
     {
-        if (blockType == 11 || blockType == 12)
-        {
-            return 1;
-        }
+        if (blockType >= 10)
+            return blockType - 10;
     }
     return blockType;
 }
