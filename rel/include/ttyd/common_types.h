@@ -660,8 +660,7 @@ namespace ttyd::common
             HIDDEN_EMPTY = 10,
             HIDDEN_NORMAL = 11,
             HIDDEN_RED = 12,
-            HIDDEN_TEN_COIN = 13
-
+            HIDDEN_TEN_COIN = 13,
         };
     }
 
