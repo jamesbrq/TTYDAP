@@ -75,13 +75,13 @@ namespace mod::custom_warp
                 return {"pik_02", "s_bero"};
 
             if (strcmp(map_prefix, "bom") == 0)
-                return {"bom_02", "w_bero"};
+                return {"bom_01", "w_bero"};
 
             if (strcmp(map_prefix, "moo") == 0)
                 return {"moo_00", nullptr}; // first time landing on the moon also uses null
 
             if (strcmp(map_prefix, "aji") == 0)
-                return {"aji_00", "w_bero"};
+                return {"aji_19", "w_bero"};
 
             if (strcmp(map_prefix, "las") == 0)
                 return {"las_00", "w_bero"};
