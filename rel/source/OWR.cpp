@@ -85,9 +85,10 @@ const uint16_t GSWF_ARR[] = {
     37,
     38,
 
-    // Save block and heart block tutorials
+    // Save block, heart block, and item tutorials
     233,
     234,
+    235,
 
     // Zess T. blocking gate enable
     1187,
