@@ -29,6 +29,7 @@ namespace ttyd::evt_sub
         // evt_sub_animgroup_async
         EVT_DECLARE_USER_FUNC(evt_sub_get_language, 1)
         EVT_DECLARE_USER_FUNC(evt_sub_get_mapname, 1)
+        EVT_DECLARE_USER_FUNC(evt_sub_starstone, 0)
         // evt_sub_load_progresstime
         // evt_sub_save_playtime
         // N_evt_sub_status_gauge_force_update

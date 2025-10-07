@@ -74,6 +74,8 @@ extern int32_t main_BattleDrawEnemyHPBar[];
 extern int32_t btlseqEnd[];
 extern int32_t evt_mobj_brick[];
 extern int32_t help_disp[];
+extern int32_t _mapLoad[];
+extern int32_t itemMain[];
 // End of Assembly References
 
 // Script References
@@ -95,12 +97,13 @@ extern int32_t main_mail_evt_rsh_03_a_2[];
 extern int32_t main_mail_evt_pik_00[];
 extern int32_t main_buy_evt[];
 extern int32_t main_buy_evt_evt[];
-extern int32_t main_evt_sub_starstone[];
+extern int32_t evt_sub_starstone[];
 extern int32_t main_evt_sub_starstone_evt[];
 extern int32_t main_init_param_80137004[];
 extern int32_t main_battleSetUnitMonosiriFlag[];
 extern int32_t main_partyChristineAttack_Monosiri[];
 extern int32_t main_partyChristineAttack_Monosiri_evt[];
+extern int32_t starstone_end_evt[];
 
 extern int32_t main_mobj_save_blk_sysevt[];
 extern int32_t main_init_event[];
@@ -136,9 +139,16 @@ EVT_END()
 EVT_BEGIN(main_evt_sub_starstone_hook)
     RUN_CHILD_EVT(main_evt_sub_starstone_evt)
     IF_EQUAL(LW(1), 0)
-        GOTO(&main_evt_sub_starstone[831])
+        GOTO(&evt_sub_starstone[831])
     END_IF()
     RETURN()
+EVT_PATCH_END()
+
+EVT_BEGIN(main_evt_sub_starstone_end_hook)
+    IF_EQUAL(GSWF(6119), 1)
+        RUN_CHILD_EVT(starstone_end_evt)
+        RETURN()
+    END_IF()
 EVT_PATCH_END()
 
 EVT_BEGIN(main_partyChristineAttack_Monosiri_hook)
@@ -442,6 +452,10 @@ namespace mod::owr
                                reinterpret_cast<void *>(bBlockVisibility),
                                reinterpret_cast<void *>(bBlockVisibilityReturn));
 
+        patch::writeBranchPair(&itemMain[216],
+                               reinterpret_cast<void *>(bItemStarstoneCheck),
+                               reinterpret_cast<void *>(bItemStarstoneCheckReturn));
+
         if (gState->apSettings->music == 2)
         {
             uint32_t old = main_next;
@@ -568,7 +582,9 @@ namespace mod::owr
 
         patch::writePatch(&main_buy_evt[352], main_buy_evt_hook, sizeof(main_buy_evt_hook));
 
-        patch::writePatch(&main_evt_sub_starstone[821], main_evt_sub_starstone_hook, sizeof(main_evt_sub_starstone_hook));
+        patch::writePatch(&evt_sub_starstone[535], main_evt_sub_starstone_end_hook, sizeof(main_evt_sub_starstone_end_hook));
+
+        patch::writePatch(&evt_sub_starstone[821], main_evt_sub_starstone_hook, sizeof(main_evt_sub_starstone_hook));
 
         patch::writePatch(&main_partyChristineAttack_Monosiri[388],
                           main_partyChristineAttack_Monosiri_hook,

@@ -57,11 +57,14 @@ extern "C"
     void bBlockVisibilityReturn();
     void bShopDesc();
     void bShopDescReturn();
+    void bItemStarstoneCheck();
+    void bItemStarstoneCheckReturn();
     void checkShopFlag(uint32_t item, uint32_t index);
     void monosiriItemCheck(int unit_id);
     int applyExpMultiplier(int exp);
     int getBlockVisibility(int blockType);
     const char *shopItemDescription(const char *itemDescription);
+    int itemHandleStarstone(void *itemPtr);
 }
 
 EVT_DECLARE_USER_FUNC(checkChapterRequirements, 1)
@@ -73,3 +76,5 @@ EVT_DECLARE_USER_FUNC(checkIntermission, 1)
 EVT_DECLARE_USER_FUNC(coconut_remove, 1)
 EVT_DECLARE_USER_FUNC(checkTattleItem, 1)
 EVT_DECLARE_USER_FUNC(evt_msg_numselect, 2)
+EVT_DECLARE_USER_FUNC(starstoneParamInit, 2)
+EVT_DECLARE_USER_FUNC(starstoneParamClean, 0)

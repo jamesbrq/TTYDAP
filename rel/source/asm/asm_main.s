@@ -50,6 +50,8 @@
 .global bBlockVisibilityReturn
 .global bShopDesc
 .global bShopDescReturn
+.global bItemStarstoneCheck
+.global bItemStarstoneCheckReturn
 
 # All of the global symbols in this file excluding win_log_mapGX_arr need to be used in at least one subrel, so they cannot be set to hidden
 
@@ -392,6 +394,25 @@ bShopDesc:
 	bl msgSearch
 bShopDescReturn:
  	b 0
+
+bItemStarstoneCheck:
+    mflr %r0
+    stw %r0, 4(%r1)
+    stwu %r1, -0x88(%r1)
+    stmw %r3, 0x8(%r1)
+    bl itemHandleStarstone
+    cmpwi %r3, 0x1
+    beq bItemStarstoneSkip
+    lmw %r3, 0x8(%r1)
+    mr %r3, %r29
+    bl itemseq_GetItem
+bItemStarstoneSkip:
+    lmw %r3, 0x8(%r1)
+    lwz %r0, 0x8C(%r1)
+    mtlr %r0
+    addi %r1, %r1, 0x88
+bItemStarstoneCheckReturn:
+    b 0
 
 win_log_mapGX_arr:
 	.byte 0x0

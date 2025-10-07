@@ -10,9 +10,13 @@
 #include "ttyd/battle_unit.h"
 #include "ttyd/evt_audience.h"
 #include "ttyd/evt_bero.h"
+#include "ttyd/evt_eff.h"
 #include "ttyd/evt_mario.h"
 #include "ttyd/evt_memcard.h"
 #include "ttyd/evt_party.h"
+#include "ttyd/evt_snd.h"
+#include "ttyd/evt_sub.h"
+#include "ttyd/evtmgr.h"
 #include "ttyd/evtmgr_cmd.h"
 #include "ttyd/mario_pouch.h"
 #include "ttyd/seq_mapchange.h"
@@ -131,6 +135,29 @@ EVT_BEGIN_KEEP(main_partyChristineAttack_Monosiri_evt)
     IF_EQUAL(LW(0), 1)
         RUN_CHILD_EVT(&btlataudevtPresentItem_Get)
     END_IF()
+    RETURN()
+EVT_END()
+
+EVT_BEGIN_KEEP(starstone_item_evt)
+    USER_FUNC(starstoneParamInit, LW(0), LW(1))
+    SET(GSWF(6119), 1)
+    USER_FUNC(evt_snd::evt_snd_bgmoff_f, 512, 2000)
+    USER_FUNC(evt_snd::evt_snd_bgmoff, 513)
+    USER_FUNC(evt_snd::evt_snd_envoff_f, 512, 2000)
+    RUN_CHILD_EVT(evt_sub::evt_sub_starstone)
+EVT_END()
+
+EVT_BEGIN_KEEP(starstone_end_evt)
+    USER_FUNC(evt_snd::evt_snd_bgmoff, 513)
+    USER_FUNC(starstoneParamClean)
+    SET(GSWF(6119), 0)
+    IF_NOT_EQUAL(LW(11), 1)
+        USER_FUNC(evt_snd::evt_snd_bgmon, 288, 0)
+        RETURN()
+    END_IF()
+    USER_FUNC(evt_eff::evt_eff_delete, PTR("sub_hikari"))
+    USER_FUNC(evt_eff::evt_eff_delete, PTR("sub_bg"))
+    USER_FUNC(evt_mario::evt_mario_key_onoff, 1)
     RETURN()
 EVT_END()
 // clang-format on
@@ -343,4 +370,42 @@ const char* shopItemDescription(const char* itemDescription)
         return result;
     }
     return itemDescription;
+}
+
+int itemHandleStarstone(void* itemPtr)
+{
+    if (!itemPtr)
+        return 0;
+
+    if (gState->starItemPtr == itemPtr)
+        return 1;
+
+    gState->starItemPtr = itemPtr;
+    int itemId = *(int *)((char *)itemPtr + 4);
+    if (itemId < 114 || itemId > 120)
+        return 0;
+    ttyd::evtmgr::evtEntry(const_cast<int32_t *>(starstone_item_evt), 0, 0);
+    return 1;
+}
+
+EVT_DEFINE_USER_FUNC_KEEP(starstoneParamInit)
+{
+    (void)isFirstCall;
+    void *itemPtr = gState->starItemPtr;
+    if (!itemPtr)
+        return 0;
+
+    int itemId = *(int *)((char *)itemPtr + 0x4);
+    char *itemName = (char *)((char *)itemPtr + 0xC);
+    ttyd::evtmgr_cmd::evtSetValue(evt, evt->evtArguments[0], itemId - 113);
+    ttyd::evtmgr_cmd::evtSetValue(evt, evt->evtArguments[1], PTR(itemName));
+    return 2;
+}
+
+EVT_DEFINE_USER_FUNC_KEEP(starstoneParamClean)
+{
+    (void)isFirstCall;
+    (void)evt;
+    gState->starItemPtr = nullptr;
+    return 2;
 }

@@ -50,5 +50,6 @@ namespace mod::owr
         uint32_t state_msgWork[17];
         bool newTattle = false;
         bool firstDeath = false;
+        void *starItemPtr = nullptr;
     };
 } // namespace mod::owr
