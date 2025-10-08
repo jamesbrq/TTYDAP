@@ -92,7 +92,7 @@ EVT_DEFINE_USER_FUNC(checkChapterRequirements)
         if (mario_pouch::pouchCheckItem(i) > 0)
             count++;
     }
-    if (count >= mod::owr::gState->apSettings->requiredChapterClears)
+    if (count >= mod::owr::gState->apSettings->palaceStars)
         evtmgr_cmd::evtSetValue(evt, evt->evtArguments[0], 1);
     else
         evtmgr_cmd::evtSetValue(evt, evt->evtArguments[0], 0);

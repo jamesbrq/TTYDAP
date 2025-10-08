@@ -10,14 +10,19 @@
 #include "ttyd/battle_unit.h"
 #include "ttyd/evt_audience.h"
 #include "ttyd/evt_bero.h"
+#include "ttyd/evt_cam.h"
 #include "ttyd/evt_eff.h"
+#include "ttyd/evt_item.h"
+#include "ttyd/evt_lecture.h"
 #include "ttyd/evt_mario.h"
 #include "ttyd/evt_memcard.h"
+#include "ttyd/evt_msg.h"
 #include "ttyd/evt_party.h"
 #include "ttyd/evt_snd.h"
 #include "ttyd/evt_sub.h"
 #include "ttyd/evtmgr.h"
 #include "ttyd/evtmgr_cmd.h"
+#include "ttyd/mario_cam.h"
 #include "ttyd/mario_pouch.h"
 #include "ttyd/seq_mapchange.h"
 #include "ttyd/seqdrv.h"
@@ -145,18 +150,46 @@ EVT_BEGIN_KEEP(starstone_item_evt)
     USER_FUNC(evt_snd::evt_snd_bgmoff, 513)
     USER_FUNC(evt_snd::evt_snd_envoff_f, 512, 2000)
     RUN_CHILD_EVT(evt_sub::evt_sub_starstone)
+    RETURN()
 EVT_END()
 
 EVT_BEGIN_KEEP(starstone_end_evt)
     USER_FUNC(evt_snd::evt_snd_bgmoff, 513)
-    USER_FUNC(starstoneParamClean)
-    SET(GSWF(6119), 0)
-    IF_NOT_EQUAL(LW(11), 1)
+    IF_NOT_EQUAL(GSWF(6119), 1)
         USER_FUNC(evt_snd::evt_snd_bgmon, 288, 0)
+        USER_FUNC(evt_snd::evt_snd_bgmon, 512, PTR("BGM_EVT_STAGE_CLEAR1"))
         RETURN()
     END_IF()
-    USER_FUNC(evt_eff::evt_eff_delete, PTR("sub_hikari"))
+    USER_FUNC(starstoneParamClean)
+    USER_FUNC(evt_item::evt_item_delete, LW(7))
+    USER_FUNC(evt_eff::evt_eff_softdelete, PTR("sub_hikari"))
     USER_FUNC(evt_eff::evt_eff_delete, PTR("sub_bg"))
+    USER_FUNC(evt_mario::evt_mario_set_pose, PTR("M_S_1"))
+    USER_FUNC(evt_cam::evt_cam3d_evt_off, 500, 11)
+    USER_FUNC(evt_party::evt_party_run, 0)
+    USER_FUNC(evt_mario::evt_mario_key_onoff, 1)
+    RETURN()
+EVT_END()
+
+EVT_BEGIN_KEEP(starstone_cam_z)
+    USER_FUNC(evt_cam::evt_cam_get_pos, 4, LW(10), LW(11), LW(12))
+    IF_SMALL(LW(12), LW(3))
+        USER_FUNC(evt_cam::evt_cam3d_evt_set_rel, 0, 50, -397, 0, 70, 25, 2000, 11)
+    ELSE()
+        USER_FUNC(evt_cam::evt_cam3d_evt_set_rel, 0, 50, 397, 0, 70, 25, 2000, 11)
+    END_IF()
+    RETURN()
+EVT_END()
+
+EVT_BEGIN_KEEP(bero_las_28_deny)
+    USER_FUNC(evt_mario::evt_mario_key_onoff, 0)
+    USER_FUNC(lasStarsCheck, LW(7), LW(13))
+    IF_EQUAL(LW(7), 1)
+        USER_FUNC(evt_msg::evt_msg_print, 1, PTR("<system>\nYou do not have the\nrequired amount of crystal\nstars to proceed.\n<k>"), 0, 0)
+        USER_FUNC(evt_mario::evt_mario_key_onoff, 1)
+        RETURN()
+    END_IF()
+    RUN_CHILD_EVT(&evt_bero::bero_case_init_check)
     USER_FUNC(evt_mario::evt_mario_key_onoff, 1)
     RETURN()
 EVT_END()
@@ -380,10 +413,10 @@ int itemHandleStarstone(void* itemPtr)
     if (gState->starItemPtr == itemPtr)
         return 1;
 
-    gState->starItemPtr = itemPtr;
     int itemId = *(int *)((char *)itemPtr + 4);
     if (itemId < 114 || itemId > 120)
         return 0;
+    gState->starItemPtr = itemPtr;
     ttyd::evtmgr::evtEntry(const_cast<int32_t *>(starstone_item_evt), 0, 0);
     return 1;
 }
@@ -406,6 +439,29 @@ EVT_DEFINE_USER_FUNC_KEEP(starstoneParamClean)
 {
     (void)isFirstCall;
     (void)evt;
+
+    // Set GSWF flag
+    swSet(*(uint32_t *)((char *)gState->starItemPtr + 0x8));
+
+    // Set state to 9 (deletion state)
+    *(unsigned short *)((char *)gState->starItemPtr + 0x24) = 9;
+    *(unsigned short *)((char *)gState->starItemPtr + 0x26) = 0;
+    ttyd::mario_cam::marioSetCamId(4);
+
     gState->starItemPtr = nullptr;
+    return 2;
+}
+
+EVT_DEFINE_USER_FUNC_KEEP(lasStarsCheck)
+{
+    (void)isFirstCall;
+    if (strcmp(reinterpret_cast<const char*>(ttyd::evtmgr_cmd::evtGetValue(evt, evt->evtArguments[1])), "las_28") != 0)
+    {
+        ttyd::evtmgr_cmd::evtSetValue(evt, evt->evtArguments[0], 0);
+        return 2;
+    }
+    ttyd::evtmgr_cmd::evtSetValue(evt,
+                                  evt->evtArguments[0],
+                                  gState->apSettings->collectedStars >= gState->apSettings->goalStars ? 0 : 1);
     return 2;
 }

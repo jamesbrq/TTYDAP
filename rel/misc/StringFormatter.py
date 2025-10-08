@@ -178,6 +178,34 @@ strings_dict = {
 
     "boat_mode_desc": "Boat Mode",
 
+    "stg1_gon_33_18": ("<system>\nYou got a Crystal Star!\n"
+                       "<k>\n<p>\n"
+                       "And you learned the special\nmove Earth Tremor!\n<k>"),
+
+    "stg2_mri_e25_03": ("<system>\nYou got a Crystal Star!\n"
+                        "<k>\n<p>\n"
+                        "And you learned the special\nmove, Clock Out!\n<k>"),
+
+    "stg3_tou_475": ("<system>\nYou got a Crystal Star!\n"
+                     "<k>\n<p>\n"
+                     "And you learned the special\nmove Power Lift!\n<k>"),
+
+    "stg4_jin_39": ("<system>\nYou got a Crystal Star!\n"
+                    "<k>\n<p>\n"
+                    "And you learned the special\nmove Art Attack!\n<k>"),
+
+    "stg5_dou_29_01": ("<system>\nYou got a Crystal Star!\n"
+                       "<k>\n<p>\n"
+                       "And you learned the special\nmove Sweet Feast!\n<k>"),
+
+    "stg6_pik_20": ("<system>\nYou got a Crystal Star!\n"
+                    "<k>\n<p>\n"
+                    "And you learned the special\nmove Showstopper!\n<k>"),
+
+    "stg7_aji_42_02": ("<system>\nYou got a Crystal Star!\n"
+                       "<k>\n<p>\n"
+                       "And you learned the special\nmove Supernova!\n<k>"),
+
     # Key Renames
     "elevator_key_station": "Elevator Key (Station)",
 
@@ -231,3 +259,5 @@ strings_dict = {
                         "Each of its many rooms\n"
                         "contains a riddle."),
 }
+
+create_string_table("mod.txt")

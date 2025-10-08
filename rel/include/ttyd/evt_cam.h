@@ -24,13 +24,14 @@ namespace ttyd::evt_cam
         // evt_cam3d_road_shift_onoff
         // evt_cam3d_evt_set_rel_dir
         // evt_cam3d_evt_set_npc_rel
-        // evt_cam3d_evt_set_rel
+        EVT_DECLARE_USER_FUNC(evt_cam3d_evt_set_rel, 8)
         EVT_DECLARE_USER_FUNC(evt_cam3d_evt_set, 8)
         // evt_cam3d_evt_set_at
         // evt_cam3d_evt_zoom_in
         // evt_cam_shake
         // evt_cam_get_at
         // evt_cam_get_pos
+        EVT_DECLARE_USER_FUNC(evt_cam_get_pos, 4)
         EVT_DECLARE_USER_FUNC(evt_cam_ctrl_onoff, 2)
     }
 } // namespace ttyd::evt_cam

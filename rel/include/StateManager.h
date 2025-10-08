@@ -8,7 +8,7 @@ namespace mod::owr
 {
     struct APSettings
     {
-        uint8_t requiredChapterClears; //0x0
+        uint8_t palaceStars;                       // 0x0
         ttyd::party::PartyMembers startingPartner; //0x1
         uint8_t yoshiColor;         // 0x2
         uint8_t apEnabled;          // 0x3
@@ -36,9 +36,10 @@ namespace mod::owr
         uint8_t blockVisibility;    // 0x22
         uint8_t firstAttack;        // 0x23
         uint32_t musicSeed;         // 0x24
+        uint8_t goalStars;         // 0x28
     };
 
-    static_assert(sizeof(APSettings) == 0x28);
+    static_assert(sizeof(APSettings) == 0x2C);
 
     class StateManager
     {

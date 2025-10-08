@@ -76,6 +76,7 @@ extern int32_t evt_mobj_brick[];
 extern int32_t help_disp[];
 extern int32_t _mapLoad[];
 extern int32_t itemMain[];
+extern int32_t evt_cam3d_evt_set_rel[];
 // End of Assembly References
 
 // Script References
@@ -104,6 +105,8 @@ extern int32_t main_battleSetUnitMonosiriFlag[];
 extern int32_t main_partyChristineAttack_Monosiri[];
 extern int32_t main_partyChristineAttack_Monosiri_evt[];
 extern int32_t starstone_end_evt[];
+extern int32_t starstone_cam_z[];
+extern int32_t bero_las_28_deny[];
 
 extern int32_t main_mobj_save_blk_sysevt[];
 extern int32_t main_init_event[];
@@ -144,16 +147,28 @@ EVT_BEGIN(main_evt_sub_starstone_hook)
     RETURN()
 EVT_PATCH_END()
 
+EVT_BEGIN(main_partyChristineAttack_Monosiri_hook)
+    RUN_CHILD_EVT(main_partyChristineAttack_Monosiri_evt)
+    GOTO(&main_partyChristineAttack_Monosiri[392])
+EVT_PATCH_END()
+
 EVT_BEGIN(main_evt_sub_starstone_end_hook)
+    RUN_CHILD_EVT(starstone_end_evt)
     IF_EQUAL(GSWF(6119), 1)
-        RUN_CHILD_EVT(starstone_end_evt)
+        SET(GSWF(6119), 0)
         RETURN()
     END_IF()
 EVT_PATCH_END()
 
-EVT_BEGIN(main_partyChristineAttack_Monosiri_hook)
-    RUN_CHILD_EVT(main_partyChristineAttack_Monosiri_evt)
-    GOTO(&main_partyChristineAttack_Monosiri[392])
+EVT_BEGIN(starstone_cam_z_hook)
+    RUN_CHILD_EVT(starstone_cam_z)
+EVT_PATCH_END()
+
+EVT_BEGIN(bero_las_28_deny_hook)
+    RUN_CHILD_EVT(bero_las_28_deny)
+    IF_EQUAL(LW(7), 1)
+        RETURN()
+    END_IF()
 EVT_PATCH_END()
 // clang-format on
 
@@ -396,6 +411,14 @@ namespace mod::owr
         writeIntWithCache(&main_psndBGMOff_f_d[34], 0x38840831); // addi r4, r4, 0x831 GSW(1713)
         writeIntWithCache(&main_psndBGMOff_f_d[36], 0x2C03000A); // cmpwi r3, 0xA
 
+        patch::writeBranchPair(&main_psndBGMOff_f_d[83],
+                               reinterpret_cast<void *>(bStarstoneBgmKeep),
+                               reinterpret_cast<void *>(bStarstoneBgmKeepReturn));
+        
+        patch::writeBranchPair(&main_psndBGMOff_f_d[121],
+                               reinterpret_cast<void *>(bStarstoneBgmKeepFinal),
+                               reinterpret_cast<void *>(bStarstoneBgmKeepFinalReturn));
+
         writeIntWithCache(&main_psndBGMOn_f_d[71], 0x38840835); // addi r4, r4, 0x835 GSW(1717)
         writeIntWithCache(&main_psndBGMOn_f_d[73], 0x2C03000E); // cmpwi r3, 0xE
         writeIntWithCache(&main_psndBGMOn_f_d[77], 0x38840835); // addi r4, r4, 0x835 GSW(1717)
@@ -582,13 +605,25 @@ namespace mod::owr
 
         patch::writePatch(&main_buy_evt[352], main_buy_evt_hook, sizeof(main_buy_evt_hook));
 
+        patch::writePatch(&evt_sub_starstone[235], starstone_cam_z_hook, sizeof(starstone_cam_z_hook));
+        evt_sub_starstone[238] = 0;
+        evt_sub_starstone[239] = 0;
+        evt_sub_starstone[241] = 0;
+        evt_sub_starstone[242] = 0;
+        evt_sub_starstone[243] = 0;
+        evt_sub_starstone[244] = 0;
+
         patch::writePatch(&evt_sub_starstone[535], main_evt_sub_starstone_end_hook, sizeof(main_evt_sub_starstone_end_hook));
+        evt_sub_starstone[545] = 0;
 
         patch::writePatch(&evt_sub_starstone[821], main_evt_sub_starstone_hook, sizeof(main_evt_sub_starstone_hook));
 
         patch::writePatch(&main_partyChristineAttack_Monosiri[388],
                           main_partyChristineAttack_Monosiri_hook,
                           sizeof(main_partyChristineAttack_Monosiri_hook));
+
+        patch::writePatch(&evt_bero::bero_case_exec_door[0], bero_las_28_deny_hook, sizeof(bero_las_28_deny_hook));
+        evt_bero::bero_case_exec_door[7] = 0;
     }
 
     void ApplyItemDataTablePatches()

@@ -59,6 +59,10 @@ extern "C"
     void bShopDescReturn();
     void bItemStarstoneCheck();
     void bItemStarstoneCheckReturn();
+    void bStarstoneBgmKeep();
+    void bStarstoneBgmKeepReturn();
+    void bStarstoneBgmKeepFinal();
+    void bStarstoneBgmKeepFinalReturn();
     void checkShopFlag(uint32_t item, uint32_t index);
     void monosiriItemCheck(int unit_id);
     int applyExpMultiplier(int exp);
@@ -78,3 +82,4 @@ EVT_DECLARE_USER_FUNC(checkTattleItem, 1)
 EVT_DECLARE_USER_FUNC(evt_msg_numselect, 2)
 EVT_DECLARE_USER_FUNC(starstoneParamInit, 2)
 EVT_DECLARE_USER_FUNC(starstoneParamClean, 0)
+EVT_DECLARE_USER_FUNC(lasStarsCheck, 2)

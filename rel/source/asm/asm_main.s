@@ -52,6 +52,10 @@
 .global bShopDescReturn
 .global bItemStarstoneCheck
 .global bItemStarstoneCheckReturn
+.global bStarstoneBgmKeep
+.global bStarstoneBgmKeepReturn
+.global bStarstoneBgmKeepFinal
+.global bStarstoneBgmKeepFinalReturn
 
 # All of the global symbols in this file excluding win_log_mapGX_arr need to be used in at least one subrel, so they cannot be set to hidden
 
@@ -397,7 +401,7 @@ bShopDescReturn:
 
 bItemStarstoneCheck:
     mflr %r0
-    stw %r0, 4(%r1)
+    stw %r0, 0x4(%r1)
     stwu %r1, -0x88(%r1)
     stmw %r3, 0x8(%r1)
     bl itemHandleStarstone
@@ -413,6 +417,40 @@ bItemStarstoneSkip:
     addi %r1, %r1, 0x88
 bItemStarstoneCheckReturn:
     b 0
+
+bStarstoneBgmKeep:
+    stwu %r1, -0x88(%r1)
+    stmw %r3, 0x8(%r1)
+    li %r3, 0x17E7
+    bl swGet
+    cmpwi %r3, 0x1
+    beq bStarstoneBgmZero
+    li %r0, 0x2
+    b bStarstoneBgmSkip
+bStarstoneBgmZero:
+    li %r0, 0x0
+bStarstoneBgmSkip:
+    lmw %r3, 0x8(%r1)
+    addi %r1, %r1, 0x88
+bStarstoneBgmKeepReturn:
+	b 0
+
+bStarstoneBgmKeepFinal:
+    stwu %r1, -0x88(%r1)
+    stmw %r3, 0x8(%r1)
+    li %r3, 0x17E7
+    bl swGet
+    cmpwi %r3, 0x1
+    beq bStarstoneBgmKeepFinalZero
+    li %r0, 0x2
+    b bStarstoneBgmKeepFinalSkip
+bStarstoneBgmKeepFinalZero:
+    li %r0, 0x0
+bStarstoneBgmKeepFinalSkip:
+    lmw %r3, 0x8(%r1)
+    addi %r1, %r1, 0x88
+bStarstoneBgmKeepFinalReturn:
+	b 0
 
 win_log_mapGX_arr:
 	.byte 0x0
