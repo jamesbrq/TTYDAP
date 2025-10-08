@@ -76,7 +76,6 @@ extern int32_t evt_mobj_brick[];
 extern int32_t help_disp[];
 extern int32_t _mapLoad[];
 extern int32_t itemMain[];
-extern int32_t evt_cam3d_evt_set_rel[];
 // End of Assembly References
 
 // Script References
@@ -105,8 +104,8 @@ extern int32_t main_battleSetUnitMonosiriFlag[];
 extern int32_t main_partyChristineAttack_Monosiri[];
 extern int32_t main_partyChristineAttack_Monosiri_evt[];
 extern int32_t starstone_end_evt[];
+extern int32_t bero_las_deny[];
 extern int32_t starstone_cam_z[];
-extern int32_t bero_las_28_deny[];
 
 extern int32_t main_mobj_save_blk_sysevt[];
 extern int32_t main_init_event[];
@@ -164,8 +163,8 @@ EVT_BEGIN(starstone_cam_z_hook)
     RUN_CHILD_EVT(starstone_cam_z)
 EVT_PATCH_END()
 
-EVT_BEGIN(bero_las_28_deny_hook)
-    RUN_CHILD_EVT(bero_las_28_deny)
+EVT_BEGIN(bero_las_deny_hook)
+    RUN_CHILD_EVT(bero_las_deny)
     IF_EQUAL(LW(7), 1)
         RETURN()
     END_IF()
@@ -622,7 +621,7 @@ namespace mod::owr
                           main_partyChristineAttack_Monosiri_hook,
                           sizeof(main_partyChristineAttack_Monosiri_hook));
 
-        patch::writePatch(&evt_bero::bero_case_exec_door[0], bero_las_28_deny_hook, sizeof(bero_las_28_deny_hook));
+        patch::writePatch(&evt_bero::bero_case_exec_door[0], bero_las_deny_hook, sizeof(bero_las_deny_hook));
         evt_bero::bero_case_exec_door[7] = 0;
     }
 
