@@ -106,6 +106,7 @@ extern int32_t main_partyChristineAttack_Monosiri_evt[];
 extern int32_t starstone_end_evt[];
 extern int32_t bero_las_deny[];
 extern int32_t starstone_cam_z[];
+extern int32_t starstone_eff_z[];
 
 extern int32_t main_mobj_save_blk_sysevt[];
 extern int32_t main_init_event[];
@@ -161,6 +162,10 @@ EVT_PATCH_END()
 
 EVT_BEGIN(starstone_cam_z_hook)
     RUN_CHILD_EVT(starstone_cam_z)
+EVT_PATCH_END()
+
+EVT_BEGIN(starstone_eff_z_hook)
+    RUN_CHILD_EVT(starstone_eff_z)
 EVT_PATCH_END()
 
 EVT_BEGIN(bero_las_deny_hook)
@@ -611,6 +616,9 @@ namespace mod::owr
         evt_sub_starstone[242] = 0;
         evt_sub_starstone[243] = 0;
         evt_sub_starstone[244] = 0;
+
+        patch::writePatch(&evt_sub_starstone[420], starstone_eff_z_hook, sizeof(starstone_eff_z_hook));
+        evt_sub_starstone[422] = 0;
 
         patch::writePatch(&evt_sub_starstone[535], main_evt_sub_starstone_end_hook, sizeof(main_evt_sub_starstone_end_hook));
         evt_sub_starstone[545] = 0;
