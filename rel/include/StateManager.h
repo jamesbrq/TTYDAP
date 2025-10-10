@@ -52,5 +52,6 @@ namespace mod::owr
         bool newTattle = false;
         bool firstDeath = false;
         void *starItemPtr = nullptr;
+        const char *starstoneName = nullptr;
     };
 } // namespace mod::owr

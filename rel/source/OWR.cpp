@@ -1275,7 +1275,7 @@ namespace mod::owr
         const int ch5 = ttyd::swdrv::swByteGet(1717);
         if (10 <= ch5 && ch5 <= 18)
         {
-            if (!strcmp(_next_area, "muj"))
+            if (!strcmp(_next_area, "muj") || !strcmp(_next_area, "dou"))
             {
                 ttyd::evtmgr_cmd::evtSetValue(evt, evt->evtArguments[0], 1);
             }

@@ -63,12 +63,15 @@ extern "C"
     void bStarstoneBgmKeepReturn();
     void bStarstoneBgmKeepFinal();
     void bStarstoneBgmKeepFinalReturn();
+    void bMobjStarstoneRotation();
+    void bMobjStarstoneRotationReturn();
     void checkShopFlag(uint32_t item, uint32_t index);
     void monosiriItemCheck(int unit_id);
     int applyExpMultiplier(int exp);
     int getBlockVisibility(int blockType);
     const char *shopItemDescription(const char *itemDescription);
     int itemHandleStarstone(void *itemPtr);
+    void powerupBlkStarstoneRotation(const char *itemName, int itemId);
 }
 
 EVT_DECLARE_USER_FUNC(checkChapterRequirements, 1)
@@ -84,3 +87,4 @@ EVT_DECLARE_USER_FUNC(starstoneParamInit, 2)
 EVT_DECLARE_USER_FUNC(starstoneParamClean, 0)
 EVT_DECLARE_USER_FUNC(lasStarsCheck, 2)
 EVT_DECLARE_USER_FUNC(marioGetRot, 1)
+EVT_DECLARE_USER_FUNC(getStarstoneName, 1)

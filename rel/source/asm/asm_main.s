@@ -56,6 +56,8 @@
 .global bStarstoneBgmKeepReturn
 .global bStarstoneBgmKeepFinal
 .global bStarstoneBgmKeepFinalReturn
+.global bMobjStarstoneRotation
+.global bMobjStarstoneRotationReturn
 
 # All of the global symbols in this file excluding win_log_mapGX_arr need to be used in at least one subrel, so they cannot be set to hidden
 
@@ -442,7 +444,7 @@ bStarstoneBgmKeepFinal:
     bl swGet
     cmpwi %r3, 0x1
     beq bStarstoneBgmKeepFinalZero
-    li %r0, 0x2
+    li %r0, 0x4
     b bStarstoneBgmKeepFinalSkip
 bStarstoneBgmKeepFinalZero:
     li %r0, 0x0
@@ -450,6 +452,18 @@ bStarstoneBgmKeepFinalSkip:
     lmw %r3, 0x8(%r1)
     addi %r1, %r1, 0x88
 bStarstoneBgmKeepFinalReturn:
+	b 0
+
+bMobjStarstoneRotation:
+    stwu %r1, -0x88(%r1)
+    stmw %r3, 0x8(%r1)
+    addi %r3, %r30, 0x604
+    lwz %r4, 0x1D8(%r31)
+    bl powerupBlkStarstoneRotation
+    lmw %r3, 0x8(%r1)
+    addi %r1, %r1, 0x88
+	lwz %r3, 0x1dc(%r31)
+bMobjStarstoneRotationReturn:
 	b 0
 
 win_log_mapGX_arr:

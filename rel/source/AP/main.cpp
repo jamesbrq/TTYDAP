@@ -145,6 +145,8 @@ EVT_END()
 
 EVT_BEGIN_KEEP(starstone_item_evt)
     USER_FUNC(starstoneParamInit, LW(0), LW(1))
+    USER_FUNC(marioGetRot, LW(2))
+    USER_FUNC(evt_sub::stone_ry, LW(1), LW(2))
     SET(GSWF(6119), 1)
     USER_FUNC(evt_snd::evt_snd_bgmoff_f, 512, 2000)
     USER_FUNC(evt_snd::evt_snd_bgmoff, 513)
@@ -224,6 +226,21 @@ EVT_BEGIN_KEEP(starstone_eff_z)
         CASE_ETC()
             ADD(LW(2), -10)
     END_SWITCH()
+    RETURN()
+EVT_END()
+
+EVT_BEGIN_KEEP(starstone_rotation_evt)
+    USER_FUNC(getStarstoneName, LW(1))
+    USER_FUNC(marioGetRot, LW(2))
+    USER_FUNC(evt_sub::stone_ry, LW(1), LW(2))
+    RETURN()
+EVT_END()
+
+EVT_BEGIN_KEEP(starstone_interpolate_angle)
+    SETF(LW(9), LW(3))
+    USER_FUNC(marioGetRot, LW(10))
+    SET(LW(11), 3600)
+    SUB(LW(11), LW(10))
     RETURN()
 EVT_END()
 // clang-format on
@@ -503,5 +520,21 @@ EVT_DEFINE_USER_FUNC_KEEP(marioGetRot)
 {
     (void)isFirstCall;
     ttyd::evtmgr_cmd::evtSetFloat(evt, evt->evtArguments[0], mario::marioGetPtr()->unk_19c + 1.0f);
+    return 2;
+}
+
+void powerupBlkStarstoneRotation(const char *itemName, int itemId)
+{
+    if (itemId < 114 || itemId > 120)
+        return;
+
+    gState->starstoneName = itemName;
+    ttyd::evtmgr::evtEntry(const_cast<int32_t *>(starstone_rotation_evt), 0, 0);
+}
+
+EVT_DEFINE_USER_FUNC_KEEP(getStarstoneName)
+{
+    (void)isFirstCall;
+    ttyd::evtmgr_cmd::evtSetValue(evt, evt->evtArguments[0], PTR(gState->starstoneName));
     return 2;
 }

@@ -18,7 +18,6 @@ namespace ttyd::evt_sub
         // stageclear_wait
         // stone_bg_open
         // stone_bg
-        // stone_ry
         // evt_sub_get_coin
         // coingetDisp
         // evt_sub_countdown_set_restart_time
@@ -27,9 +26,11 @@ namespace ttyd::evt_sub
         // evt_sub_countdown_get_status
         // evt_sub_countdown_start
         // evt_sub_animgroup_async
+        EVT_DECLARE_USER_FUNC(stone_ry, 2)
         EVT_DECLARE_USER_FUNC(evt_sub_get_language, 1)
         EVT_DECLARE_USER_FUNC(evt_sub_get_mapname, 1)
         EVT_DECLARE_USER_FUNC(evt_sub_starstone, 0)
+        EVT_DECLARE_USER_FUNC(evt_sub_intpl_msec_init, 4)
         // evt_sub_load_progresstime
         // evt_sub_save_playtime
         // N_evt_sub_status_gauge_force_update
@@ -56,7 +57,6 @@ namespace ttyd::evt_sub
         // evt_sub_spline_init
         // evt_sub_intpl_msec_get_value_para
         // evt_sub_intpl_msec_get_value
-        // evt_sub_intpl_msec_init
         // evt_sub_intpl_get_float
         // evt_sub_intpl_init_float
         // evt_sub_intpl_get_value_para

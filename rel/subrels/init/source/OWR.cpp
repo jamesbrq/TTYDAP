@@ -107,6 +107,7 @@ extern int32_t starstone_end_evt[];
 extern int32_t bero_las_deny[];
 extern int32_t starstone_cam_z[];
 extern int32_t starstone_eff_z[];
+extern int32_t starstone_interpolate_angle[];
 
 extern int32_t main_mobj_save_blk_sysevt[];
 extern int32_t main_init_event[];
@@ -166,6 +167,10 @@ EVT_PATCH_END()
 
 EVT_BEGIN(starstone_eff_z_hook)
     RUN_CHILD_EVT(starstone_eff_z)
+EVT_PATCH_END()
+
+EVT_BEGIN(starstone_interpolate_hook)
+    RUN_CHILD_EVT(starstone_interpolate_angle)
 EVT_PATCH_END()
 
 EVT_BEGIN(bero_las_deny_hook)
@@ -375,6 +380,10 @@ namespace mod::owr
         patch::writeBranchPair(&evt_mobj_powerupblk[52],
                                reinterpret_cast<void *>(bPowerupblkRelease),
                                reinterpret_cast<void *>(bPowerupblkReleaseReturn));
+
+        patch::writeBranchPair(&main_mobj_powerupblk[79],
+                               reinterpret_cast<void *>(bMobjStarstoneRotation),
+                               reinterpret_cast<void *>(bMobjStarstoneRotationReturn));
 
         writeIntWithCache(&main_mobj_kururing_floor[188], 0x808301BB); // lwz r4, 0x1BA(r3)
 
@@ -616,6 +625,10 @@ namespace mod::owr
         evt_sub_starstone[242] = 0;
         evt_sub_starstone[243] = 0;
         evt_sub_starstone[244] = 0;
+
+        patch::writePatch(&evt_sub_starstone[259], starstone_interpolate_hook, sizeof(starstone_interpolate_hook));
+        evt_sub_starstone[261] = 0;
+        evt_sub_starstone[266] = LW(11);
 
         patch::writePatch(&evt_sub_starstone[420], starstone_eff_z_hook, sizeof(starstone_eff_z_hook));
         evt_sub_starstone[422] = 0;
