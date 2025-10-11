@@ -44,6 +44,7 @@ extern int32_t tou2_evt_tou_get_rule_info[];
 extern int32_t tou2_evt_tou_get_rule_msg2[];
 extern int32_t tou2_rankingInit[];
 extern int32_t tou2_screen_init[];
+extern int32_t tou2_evt_boss_stone_r[];
 
 EVT_DECLARE_USER_FUNC(tou2_condtions_check, 1)
 EVT_DEFINE_USER_FUNC(tou2_condtions_check) 
@@ -242,6 +243,12 @@ namespace mod
 
         tou2_screen_init[72] = 0x38840827; // addi r4, r4, 0x827 GSW(1703)
         tou2_screen_init[76] = 0x2C03001C; // cmpwi r3, 0x1C
+
+        patch::writeBranchPair(&tou2_evt_boss_stone_r[13],
+                               reinterpret_cast<void *>(bStoneCh3RotationPtr),
+                               reinterpret_cast<void *>(bStoneCh3RotationPtrReturn));
+        patch::writeIntWithCache(&tou2_evt_boss_stone_r[14], 0x60000000); // NOP
+        patch::writeIntWithCache(&tou2_evt_boss_stone_r[15], 0x60000000); // NOP
     }
 
     void exit() {}

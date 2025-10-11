@@ -65,6 +65,24 @@ extern "C"
     void bStarstoneBgmKeepFinalReturn();
     void bMobjStarstoneRotation();
     void bMobjStarstoneRotationReturn();
+    void bStoneRotationPointerCheck();
+    void bStoneRotationPointerCheckReturn();
+    void bStoneRotationPointerCheck2();
+    void bStoneRotationPointerCheckReturn2();
+    void bStoneRotationPointerCheck3();
+    void bStoneRotationPointerCheckReturn3();
+    void bStoneRotationPointerCheck4();
+    void bStoneRotationPointerCheckReturn4();
+    void bStoneRotationPointerCheck5();
+    void bStoneRotationPointerCheckReturn5();
+    void bStoneBgPointerCheck();
+    void bStoneBgPointerCheckReturn();
+    void bStoneBgPointerCheck2();
+    void bStoneBgPointerCheckReturn2();
+    void bStoneCh2RotationPtr();
+    void bStoneCh2RotationPtrReturn();
+    void bStoneCh3RotationPtr();
+    void bStoneCh3RotationPtrReturn();
     void checkShopFlag(uint32_t item, uint32_t index);
     void monosiriItemCheck(int unit_id);
     int applyExpMultiplier(int exp);
@@ -88,3 +106,5 @@ EVT_DECLARE_USER_FUNC(starstoneParamClean, 0)
 EVT_DECLARE_USER_FUNC(lasStarsCheck, 2)
 EVT_DECLARE_USER_FUNC(marioGetRot, 1)
 EVT_DECLARE_USER_FUNC(getStarstoneName, 1)
+EVT_DECLARE_USER_FUNC(pouchStarstoneItem, 2)
+EVT_DECLARE_USER_FUNC(setIconRenderPriority, 1)

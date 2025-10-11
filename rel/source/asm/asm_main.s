@@ -58,6 +58,24 @@
 .global bStarstoneBgmKeepFinalReturn
 .global bMobjStarstoneRotation
 .global bMobjStarstoneRotationReturn
+.global bStoneRotationPointerCheck
+.global bStoneRotationPointerCheckReturn
+.global bStoneRotationPointerCheck2
+.global bStoneRotationPointerCheckReturn2
+.global bStoneRotationPointerCheck3
+.global bStoneRotationPointerCheckReturn3
+.global bStoneRotationPointerCheck4
+.global bStoneRotationPointerCheckReturn4
+.global bStoneRotationPointerCheck5
+.global bStoneRotationPointerCheckReturn5
+.global bStoneBgPointerCheck
+.global bStoneBgPointerCheckReturn
+.global bStoneBgPointerCheck2
+.global bStoneBgPointerCheckReturn2
+.global bStoneCh2RotationPtr
+.global bStoneCh2RotationPtrReturn
+.global bStoneCh3RotationPtr
+.global bStoneCh3RotationPtrReturn
 
 # All of the global symbols in this file excluding win_log_mapGX_arr need to be used in at least one subrel, so they cannot be set to hidden
 
@@ -464,6 +482,93 @@ bMobjStarstoneRotation:
     addi %r1, %r1, 0x88
 	lwz %r3, 0x1dc(%r31)
 bMobjStarstoneRotationReturn:
+	b 0
+
+bStoneRotationPointerCheck:
+	cmpwi %r8, 0x0
+	beq bStoneRotationPointerCheckZero
+	lwz %r7, 0xC(%r8)
+	b bStoneRotationPointerCheckSkip
+bStoneRotationPointerCheckZero:
+	li %r7, 0x0
+bStoneRotationPointerCheckSkip:
+bStoneRotationPointerCheckReturn:
+	b 0
+
+bStoneRotationPointerCheck2:
+	cmpwi %r7, 0x0
+	beq bStoneRotationPointerCheckZero2
+	lwz %r6, 0xC(%r7)
+	b bStoneRotationPointerCheckSkip2
+bStoneRotationPointerCheckZero2:
+	li %r6, 0x0
+bStoneRotationPointerCheckSkip2:
+bStoneRotationPointerCheckReturn2:
+	b 0
+
+bStoneRotationPointerCheck3:
+	cmpwi %r7, 0x0
+	beq bStoneRotationPointerCheckSkip3
+	sth %r6, 0x4(%r7)
+bStoneRotationPointerCheckSkip3:
+bStoneRotationPointerCheckReturn3:
+	b 0
+
+bStoneRotationPointerCheck4:
+	cmpwi %r8, 0x0
+	beq bStoneRotationPointerCheckZero4
+	lwz %r4, 0xc(%r8)
+	b bStoneRotationPointerCheckSkip4
+bStoneRotationPointerCheckZero4:
+	li %r4, 0x0
+bStoneRotationPointerCheckSkip4:
+bStoneRotationPointerCheckReturn4:
+	b 0
+
+bStoneRotationPointerCheck5:
+	cmpwi %r8, 0x0
+	beq bStoneRotationPointerCheckSkip5
+	stfs %f0, 0x1c(%r4)
+bStoneRotationPointerCheckSkip5:
+bStoneRotationPointerCheckReturn5:
+	b 0
+
+bStoneBgPointerCheck:
+	cmpwi %r4, 0x0
+	beq bStoneBgPointerCheckZero
+	lwz %r4, 0xc(%r4)
+	b bStoneBgPointerCheckSkip
+bStoneBgPointerCheckZero:
+	li %r4, 0x0
+bStoneBgPointerCheckSkip:
+bStoneBgPointerCheckReturn:
+	b 0
+
+bStoneBgPointerCheck2:
+	cmpwi %r4, 0x0
+	beq bStoneBgPointerCheckSkip2
+	stw %r0, 0x38(%r4)
+bStoneBgPointerCheckSkip2:
+bStoneBgPointerCheckReturn2:
+	b 0
+
+bStoneCh2RotationPtr:
+	cmpwi %r4, 0x0
+	beq bStoneCh2RotationPtrSkip
+	lwz %r4, 0xc(%r4)
+	stfs %f31, 0x1c(%r4)
+bStoneCh2RotationPtrSkip:
+bStoneCh2RotationPtrReturn:
+	b 0
+
+bStoneCh3RotationPtr:
+	cmpwi %r30, 0x0
+	beq bStoneCh3RotationPtrSkip
+	lwz %r4, 0xc(%r30)
+	stfs %f1, 0x1c(%r4)
+bStoneCh3RotationPtrSkip:
+	li %r3, 0x2
+bStoneCh3RotationPtrReturn:
 	b 0
 
 win_log_mapGX_arr:

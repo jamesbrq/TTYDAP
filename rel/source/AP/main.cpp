@@ -22,6 +22,8 @@
 #include "ttyd/evt_sub.h"
 #include "ttyd/evtmgr.h"
 #include "ttyd/evtmgr_cmd.h"
+#include "ttyd/icondrv.h"
+#include "ttyd/itemdrv.h"
 #include "ttyd/mario_cam.h"
 #include "ttyd/mario_pouch.h"
 #include "ttyd/seq_mapchange.h"
@@ -238,9 +240,22 @@ EVT_END()
 
 EVT_BEGIN_KEEP(starstone_interpolate_angle)
     SETF(LW(9), LW(3))
-    USER_FUNC(marioGetRot, LW(10))
-    SET(LW(11), 3600)
-    SUB(LW(11), LW(10))
+    USER_FUNC(marioGetRot, LW(11))
+    SET(LW(12), 3600)
+    SUB(LW(12), LW(11))
+    RETURN()
+EVT_END()
+
+EVT_BEGIN_KEEP(starstone_item_handler)
+    USER_FUNC(evt_mario::evt_mario_key_onoff, 0)
+    USER_FUNC(evt_party::evt_party_stop, 0)
+    USER_FUNC(pouchStarstoneItem, LW(2), LW(1))
+    RETURN()
+EVT_END()
+
+EVT_BEGIN_KEEP(starstone_item_z)
+    USER_FUNC(evt_sub::stone_bg, LW(7))
+    USER_FUNC(setIconRenderPriority, LW(7))
     RETURN()
 EVT_END()
 // clang-format on
@@ -536,5 +551,33 @@ EVT_DEFINE_USER_FUNC_KEEP(getStarstoneName)
 {
     (void)isFirstCall;
     ttyd::evtmgr_cmd::evtSetValue(evt, evt->evtArguments[0], PTR(gState->starstoneName));
+    return 2;
+}
+
+EVT_DEFINE_USER_FUNC_KEEP(pouchStarstoneItem)
+{
+    (void)isFirstCall;
+    if (!gState->starItemPtr)
+        gState->starItemPtr = itemdrv::itemNameToPtr((const char*)ttyd::evtmgr_cmd::evtGetValue(evt, evt->evtArguments[1]));
+    int itemId = *(int *)((char *)gState->starItemPtr + 4);
+    if (itemId < 114 || itemId > 120)
+    {
+        mario_pouch::pouchGetItem(itemId);
+        ttyd::evtmgr_cmd::evtSetValue(evt, evt->evtArguments[0], 0x80307224);
+        return 2;
+    }
+    ttyd::evtmgr_cmd::evtSetValue(evt, evt->evtArguments[0], 0x80307114);
+    return 2;
+}
+
+EVT_DEFINE_USER_FUNC_KEEP(setIconRenderPriority)
+{
+    (void)isFirstCall;
+    void* iconPtr = icondrv::iconNameToPtr((const char*)evtmgr_cmd::evtGetValue(evt, evt->evtArguments[0]));
+    if (iconPtr)
+    {
+        uint16_t *flags = (uint16_t *)iconPtr;
+        *flags |= 0x0100;
+    }
     return 2;
 }

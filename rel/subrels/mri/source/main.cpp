@@ -135,12 +135,14 @@ extern int32_t mri_11_init_evt[];
 extern int32_t mri_12_init_evt[];
 extern int32_t mri_punipuni_ball00_init[];
 extern int32_t mri_punipuni_ball00[];
-extern int32_t mri_yuka_check[];
+extern int32_t mri_yuka_check_13[];
 extern int32_t mri_yuka_event[];
 extern int32_t mri_13_init_evt[];
 extern int32_t mri_first_time_w_bero_14[];
 extern int32_t mri_dai3_kanbu[];
 extern int32_t mri_time_bomb[];
+extern int32_t mri_starstone_rotate_func[];
+extern int32_t mri_yuka_check_14[];
 extern int32_t mri_14_init_evt[];
 extern int32_t mri_dai3_battle[];
 extern int32_t mri_15_init_evt[];
@@ -1050,8 +1052,9 @@ namespace mod
         mri_punipuni_ball00[18] = GSW(1713);
         mri_punipuni_ball00[19] = 6;
 
-        mri_yuka_check[44] = GSW(1713);
-        mri_yuka_check[45] = 6;
+        mri_yuka_check_13[44] = GSW(1713);
+        mri_yuka_check_13[45] = 6;
+        mri_yuka_check_13[123] = 1;
 
         mri_yuka_event[402] = GSW(1713);
         mri_yuka_event[403] = 6;
@@ -1072,6 +1075,8 @@ namespace mod
 
         mri_time_bomb[921] = GSW(1713);
         mri_time_bomb[922] = 8;
+
+        mri_yuka_check_14[92] = 1;
 
         mri_14_init_evt[33] = GSW(1713);
         mri_14_init_evt[34] = 6;
@@ -1135,6 +1140,13 @@ namespace mod
         mri_19_init_evt[39] = GSW(1713);
         mri_19_init_evt[41] = 8;
         mri_19_init_evt[42] = 9;
+
+        // Assembly
+        patch::writeBranchPair(&mri_starstone_rotate_func[26], 
+            reinterpret_cast<void *>(bStoneCh2RotationPtr), 
+            reinterpret_cast<void *>(bStoneCh2RotationPtrReturn));
+        patch::writeIntWithCache(&mri_starstone_rotate_func[27], 0x60000000); // NOP
+
     }
 
     void exit() {}

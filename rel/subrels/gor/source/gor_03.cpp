@@ -11,6 +11,7 @@ using namespace mod;
 using namespace ttyd;
 
 extern int32_t gor_maffiaboss_ticket_check[];
+extern int32_t gor_maffiaboss_ticket_put[];
 extern int32_t gor_maffiaboss_init[];
 extern int32_t gor_maffiaboss_maffiaboss[];
 extern int32_t gor_maffiaboss_teshita_irai[];
@@ -206,6 +207,13 @@ void ApplyGor03Patches()
 {
     gor_maffiaboss_ticket_check[231] = GSW(1709);
     gor_maffiaboss_ticket_check[232] = 3;
+
+    // TODO Fix music issues in don piantas office
+    /* gor_maffiaboss_ticket_put[14] = EVT_HELPER_CMD(1, 4);
+    gor_maffiaboss_ticket_put[15] = EVT_HELPER_OP(&gor_maffiaboss_ticket_put[26]);
+    gor_maffiaboss_ticket_put[16] = 0;
+    gor_maffiaboss_ticket_put[17] = 0;
+    gor_maffiaboss_ticket_put[18] = 0; */
 
     gor_maffiaboss_init[1] = GSW(1709);
     gor_maffiaboss_init[3] = 2;

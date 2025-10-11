@@ -26,6 +26,7 @@ namespace ttyd::evt_sub
         // evt_sub_countdown_get_status
         // evt_sub_countdown_start
         // evt_sub_animgroup_async
+        EVT_DECLARE_USER_FUNC(stone_bg, 1)
         EVT_DECLARE_USER_FUNC(stone_ry, 2)
         EVT_DECLARE_USER_FUNC(evt_sub_get_language, 1)
         EVT_DECLARE_USER_FUNC(evt_sub_get_mapname, 1)

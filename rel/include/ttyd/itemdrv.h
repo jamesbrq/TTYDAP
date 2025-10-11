@@ -26,6 +26,7 @@ namespace ttyd::itemdrv
         // itemNearDistCheck
         // itemHitCheck
         // itemNameToPtr
+        void *itemNameToPtr(const char *itemName);
         // itemDelete
 
         void *itemEntry(const char *name,

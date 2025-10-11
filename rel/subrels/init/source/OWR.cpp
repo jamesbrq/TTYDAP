@@ -76,6 +76,8 @@ extern int32_t evt_mobj_brick[];
 extern int32_t help_disp[];
 extern int32_t _mapLoad[];
 extern int32_t itemMain[];
+extern int32_t stone_ry[];
+extern int32_t stone_bg[];
 // End of Assembly References
 
 // Script References
@@ -108,6 +110,8 @@ extern int32_t bero_las_deny[];
 extern int32_t starstone_cam_z[];
 extern int32_t starstone_eff_z[];
 extern int32_t starstone_interpolate_angle[];
+extern int32_t starstone_item_handler[];
+extern int32_t starstone_item_z[];
 
 extern int32_t main_mobj_save_blk_sysevt[];
 extern int32_t main_init_event[];
@@ -171,6 +175,15 @@ EVT_PATCH_END()
 
 EVT_BEGIN(starstone_interpolate_hook)
     RUN_CHILD_EVT(starstone_interpolate_angle)
+EVT_PATCH_END()
+
+EVT_BEGIN(starstone_item_handler_hook)
+    RUN_CHILD_EVT(starstone_item_handler)
+    GOTO(LW(2))
+EVT_PATCH_END()
+
+EVT_BEGIN(starstone_item_z_hook)
+    RUN_CHILD_EVT(starstone_item_z)
 EVT_PATCH_END()
 
 EVT_BEGIN(bero_las_deny_hook)
@@ -492,6 +505,34 @@ namespace mod::owr
                                reinterpret_cast<void *>(bItemStarstoneCheck),
                                reinterpret_cast<void *>(bItemStarstoneCheckReturn));
 
+        patch::writeBranchPair(&stone_ry[23],
+                               reinterpret_cast<void *>(bStoneRotationPointerCheck),
+                               reinterpret_cast<void *>(bStoneRotationPointerCheckReturn));
+
+        patch::writeBranchPair(&stone_ry[28],
+                               reinterpret_cast<void *>(bStoneRotationPointerCheck2),
+                               reinterpret_cast<void *>(bStoneRotationPointerCheckReturn2));
+
+        patch::writeBranchPair(&stone_ry[33],
+                               reinterpret_cast<void *>(bStoneRotationPointerCheck3),
+                               reinterpret_cast<void *>(bStoneRotationPointerCheckReturn3));
+
+        patch::writeBranchPair(&stone_ry[35],
+                               reinterpret_cast<void *>(bStoneRotationPointerCheck4),
+                               reinterpret_cast<void *>(bStoneRotationPointerCheckReturn4));
+
+        patch::writeBranchPair(&stone_ry[41],
+                               reinterpret_cast<void *>(bStoneRotationPointerCheck5),
+                               reinterpret_cast<void *>(bStoneRotationPointerCheckReturn5));
+
+        patch::writeBranchPair(&stone_bg[26],
+                               reinterpret_cast<void *>(bStoneBgPointerCheck),
+                               reinterpret_cast<void *>(bStoneBgPointerCheckReturn));
+
+        patch::writeBranchPair(&stone_bg[28],
+                               reinterpret_cast<void *>(bStoneBgPointerCheck2),
+                               reinterpret_cast<void *>(bStoneBgPointerCheckReturn2));
+
         if (gState->apSettings->music == 2)
         {
             uint32_t old = main_next;
@@ -618,6 +659,9 @@ namespace mod::owr
 
         patch::writePatch(&main_buy_evt[352], main_buy_evt_hook, sizeof(main_buy_evt_hook));
 
+        patch::writePatch(&evt_sub_starstone[0], starstone_item_handler_hook, sizeof(starstone_item_handler_hook));
+        evt_sub_starstone[4] = 0;
+
         patch::writePatch(&evt_sub_starstone[235], starstone_cam_z_hook, sizeof(starstone_cam_z_hook));
         evt_sub_starstone[238] = 0;
         evt_sub_starstone[239] = 0;
@@ -628,7 +672,10 @@ namespace mod::owr
 
         patch::writePatch(&evt_sub_starstone[259], starstone_interpolate_hook, sizeof(starstone_interpolate_hook));
         evt_sub_starstone[261] = 0;
-        evt_sub_starstone[266] = LW(11);
+        evt_sub_starstone[266] = LW(12);
+
+        patch::writePatch(&evt_sub_starstone[439], starstone_item_z_hook, sizeof(starstone_item_z_hook));
+        evt_sub_starstone[441] = 0;
 
         patch::writePatch(&evt_sub_starstone[420], starstone_eff_z_hook, sizeof(starstone_eff_z_hook));
         evt_sub_starstone[422] = 0;
