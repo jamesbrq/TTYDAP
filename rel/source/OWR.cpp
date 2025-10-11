@@ -677,7 +677,7 @@ namespace mod::owr
             ttyd::swdrv::swSet(6315);
         else if (strcmp(map, "pik_02") == 0)
             ttyd::swdrv::swSet(6316);
-        else if (strncmp(map, "bom", 3) == 0)
+        else if (strcmp(map, "bom_01") == 0 || strcmp(map, "bom_02") == 0)
             ttyd::swdrv::swSet(6317);
         else if (strncmp(map, "moo", 3) == 0)
             ttyd::swdrv::swSet(6318);
