@@ -737,7 +737,7 @@ namespace mod::owr
         itemDataTable[ItemId::INVALID_ITEM_TUBE_MODE_ICON].name = tubeModeName;
         itemDataTable[ItemId::INVALID_ITEM_TUBE_MODE_ICON].description = tubeModeDescription;
         itemDataTable[ItemId::INVALID_ITEM_BOAT_MODE_ICON].name = boatModeName;
-        itemDataTable[ItemId::INVALID_ITEM_BOAT_MODE_ICON].description = tubeModeDescription;
+        itemDataTable[ItemId::INVALID_ITEM_BOAT_MODE_ICON].description = boatModeDescription;
         itemDataTable[ItemId::WHACKA_BUMP].sell_price = 30;
 
         // Buy/Sell Prices
