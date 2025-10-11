@@ -436,16 +436,25 @@ int applyExpMultiplier(int exp)
     return exp * gState->apSettings->expMultiplier;
 }
 
-int getBlockVisibility(int blockType)
+int getBlockVisibility(int brickType)
 {
     if (gState->apSettings->blockVisibility == 1)
     {
-        if (blockType == 11 || blockType == 12)
+        switch (brickType)
         {
-            return 1;
+            case BrickType::HIDDEN_EMPTY:
+                return BrickType::EMPTY;
+            case BrickType::HIDDEN_NORMAL:
+                return BrickType::NORMAL;
+            case BrickType::HIDDEN_RED:
+                return BrickType::RED;
+            case BrickType::HIDDEN_TEN_COIN:
+                return BrickType::TEN_COIN;
+            default:
+                return brickType;
         }
     }
-    return blockType;
+    return brickType;
 }
 
 const char* shopItemDescription(const char* itemDescription)

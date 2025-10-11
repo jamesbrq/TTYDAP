@@ -649,6 +649,21 @@ namespace ttyd::common
         };
     }
 
+    namespace BrickType
+    {
+        enum e
+        {
+            EMPTY,
+            NORMAL,
+            RED,
+            TEN_COIN,
+            HIDDEN_EMPTY = 10,
+            HIDDEN_NORMAL = 11,
+            HIDDEN_RED = 12,
+            HIDDEN_TEN_COIN = 13,
+        };
+    }
+
     struct AttackParams
     {
         const char *name_msg;
