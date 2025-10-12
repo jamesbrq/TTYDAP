@@ -1078,6 +1078,9 @@ namespace mod::owr
             }
             default:
             {
+                if (ItemId::DIAMOND_STAR <= item && item <= ItemId ::CRYSTAL_STAR)
+                    pouchGetStarStone(item - 113);
+
                 // Give the item
                 const uint32_t ret = g_pouchGetItem_trampoline(item);
 

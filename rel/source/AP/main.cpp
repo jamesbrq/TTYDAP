@@ -25,6 +25,7 @@
 #include "ttyd/icondrv.h"
 #include "ttyd/itemdrv.h"
 #include "ttyd/mario_cam.h"
+#include "ttyd/mario_motion.h"
 #include "ttyd/mario_pouch.h"
 #include "ttyd/seq_mapchange.h"
 #include "ttyd/seqdrv.h"
@@ -174,6 +175,7 @@ EVT_BEGIN_KEEP(starstone_end_evt)
     USER_FUNC(evt_party::evt_party_run, 0)
     USER_FUNC(evt_lecture::lect_set_systemlevel, 0)
     USER_FUNC(evt_mario::evt_mario_key_onoff, 1)
+    USER_FUNC(starstoneRunItemEvent)
     RETURN()
 EVT_END()
 
@@ -491,7 +493,8 @@ int itemHandleStarstone(void* itemPtr)
     if (itemId < 114 || itemId > 120)
         return 0;
     gState->starItemPtr = itemPtr;
-    ttyd::evtmgr::evtEntry(const_cast<int32_t *>(starstone_item_evt), 0, 0);
+    ttyd::evtmgr::evtEntryType(const_cast<int32_t *>(starstone_item_evt), 30, 0, 26);
+    ttyd::mario_motion::marioChgMot(ttyd::mario_motion::MarioMotion::kStay);
     return 1;
 }
 
@@ -515,13 +518,16 @@ EVT_DEFINE_USER_FUNC_KEEP(starstoneParamClean)
     (void)evt;
 
     // Set GSWF flag
-    swSet(*(uint32_t *)((char *)gState->starItemPtr + 0x8));
+    int32_t itemFlag = *(int32_t *)((char *)gState->starItemPtr + 0x8);
+    if (itemFlag >= 0)
+        swSet(itemFlag);
 
     // Set state to 9 (deletion state)
     *(unsigned short *)((char *)gState->starItemPtr + 0x24) = 9;
     *(unsigned short *)((char *)gState->starItemPtr + 0x26) = 0;
     ttyd::mario_cam::marioSetCamId(4);
 
+    gState->starstoneFunctionPtr = *(int32_t **)((char *)gState->starItemPtr + 0x20);
     gState->starItemPtr = nullptr;
     return 2;
 }
@@ -569,13 +575,8 @@ EVT_DEFINE_USER_FUNC_KEEP(pouchStarstoneItem)
     if (!gState->starItemPtr)
         gState->starItemPtr = itemdrv::itemNameToPtr((const char*)ttyd::evtmgr_cmd::evtGetValue(evt, evt->evtArguments[1]));
     int itemId = *(int *)((char *)gState->starItemPtr + 4);
-    if (itemId < 114 || itemId > 120)
-    {
-        mario_pouch::pouchGetItem(itemId);
-        ttyd::evtmgr_cmd::evtSetValue(evt, evt->evtArguments[0], 0x80307224);
-        return 2;
-    }
-    ttyd::evtmgr_cmd::evtSetValue(evt, evt->evtArguments[0], 0x80307114);
+    mario_pouch::pouchGetItem(itemId);
+    ttyd::evtmgr_cmd::evtSetValue(evt, evt->evtArguments[0], 0x80307224);
     return 2;
 }
 
@@ -588,5 +589,27 @@ EVT_DEFINE_USER_FUNC_KEEP(setIconRenderPriority)
         uint16_t *flags = (uint16_t *)iconPtr;
         *flags |= 0x0100;
     }
+    return 2;
+}
+
+EVT_DEFINE_USER_FUNC_KEEP(starstoneRunItemEvent)
+{
+    (void)isFirstCall;
+    (void)evt;
+    if (!gState->starstoneFunctionPtr)
+        return 2;
+    ttyd::evtmgr::evtEntry(gState->starstoneFunctionPtr, 0, 0);
+    gState->starstoneFunctionPtr = nullptr;
+    return 2;
+}
+
+EVT_DEFINE_USER_FUNC_KEEP(starstoneCheckMarioOnGround)
+{
+    (void)isFirstCall;
+    (void)evt;
+    if (!gState->starstoneFunctionPtr)
+        return 2;
+    ttyd::evtmgr::evtEntry(gState->starstoneFunctionPtr, 0, 0);
+    gState->starstoneFunctionPtr = nullptr;
     return 2;
 }
