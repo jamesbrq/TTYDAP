@@ -325,6 +325,7 @@ EVT_DEFINE_USER_FUNC_KEEP(evt_msg_numselect)
 EVT_DEFINE_USER_FUNC_KEEP(handleIntermissionSkip)
 {
     (void)isFirstCall;
+    gState->starItemPtr = nullptr;
 
     const bool intermissions = static_cast<bool>(gState->apSettings->intermissions);
     if (!intermissions || ttyd::evtmgr_cmd::evtGetValue(evt, evt->evtArguments[3]) == 1)
@@ -574,7 +575,7 @@ EVT_DEFINE_USER_FUNC_KEEP(pouchStarstoneItem)
     (void)isFirstCall;
     if (!gState->starItemPtr)
         gState->starItemPtr = itemdrv::itemNameToPtr((const char*)ttyd::evtmgr_cmd::evtGetValue(evt, evt->evtArguments[1]));
-    int itemId = *(int *)((char *)gState->starItemPtr + 4);
+    int itemId = *(int *)((char *)gState->starItemPtr + 0x4);
     mario_pouch::pouchGetItem(itemId);
     ttyd::evtmgr_cmd::evtSetValue(evt, evt->evtArguments[0], 0x80307224);
     return 2;
