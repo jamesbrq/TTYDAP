@@ -1276,6 +1276,12 @@ namespace mod::owr
     {
         (void)isFirstCall;
 
+        const int ch2 = ttyd::swdrv::swByteGet(1713);
+        if (7 <= ch2 && ch2 <= 11)
+        {
+            ttyd::evtmgr_cmd::evtSetValue(evt, evt->evtArguments[0], 1);
+        }
+
         const int ch5 = ttyd::swdrv::swByteGet(1717);
         if (10 <= ch5 && ch5 <= 18)
         {
