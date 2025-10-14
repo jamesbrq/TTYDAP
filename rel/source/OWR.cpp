@@ -684,12 +684,12 @@ namespace mod::owr
             ttyd::swdrv::swSet(6318);
         else if (strncmp(map, "aji", 3) == 0)
             ttyd::swdrv::swSet(6319);
-        else if (strcmp(map, "las_09") == 0)
-            ttyd::swdrv::swSet(6322);
         else if (strncmp(map, "las", 3) == 0)
             ttyd::swdrv::swSet(6320);
         else if (strncmp(map, "rsh", 3) == 0)
             ttyd::swdrv::swSet(6321);
+        else if (strcmp(map, "las_09") == 0)
+            ttyd::swdrv::swSet(6322);
     }
 
     KEEP_FUNC void seqSetSeqHook(SeqIndex seq, const char *map, const char *bero)
@@ -701,12 +701,6 @@ namespace mod::owr
         }
         if (seq == SeqIndex::kTitle && gState->firstDeath)
             gState->firstDeath = false;
-
-        // Clear starstone item pointers to avoid issues
-        gState->starItemPtr = nullptr;
-        gState->starstoneName = nullptr;
-        gState->starstoneFunctionPtr = nullptr;
-
 
         // Make sure the map is valid
         if (!map)
