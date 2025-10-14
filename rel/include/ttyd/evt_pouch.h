@@ -30,9 +30,9 @@ namespace ttyd::evt_pouch
         EVT_DECLARE_USER_FUNC(N_evt_pouch_remove_item_index, 3)
         EVT_DECLARE_USER_FUNC(evt_pouch_remove_item, 2)
         EVT_DECLARE_USER_FUNC(evt_pouch_add_item, 2)
+        EVT_DECLARE_USER_FUNC(evt_pouch_get_starpiece, 1)
+        EVT_DECLARE_USER_FUNC(evt_pouch_add_starpiece, 1)
         // evt_pouch_get_starstone
-        // evt_pouch_add_starpiece
-        // evt_pouch_get_starpiece
         // evt_pouch_set_supercoin
         // evt_pouch_get_supercoin
         // evt_pouch_set_coin

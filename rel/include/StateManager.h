@@ -48,6 +48,7 @@ namespace mod::owr
         StateManager();
         APSettings *apSettings;
         uint16_t *tattleItems;
+        uint16_t *maniacItems;
         uint32_t state_msgWork[17];
         bool newTattle = false;
         bool firstDeath = false;
