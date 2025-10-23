@@ -1094,7 +1094,7 @@ namespace mod
         tou_06_init_evt[270] = 1;
         tou_06_init_evt[312] = GSWF(6032);
         tou_06_init_evt[313] = 1;
-        tou_06_init_evt[330] = GSWF(6032);
+        tou_06_init_evt[330] = GSWF(6034);
         tou_06_init_evt[331] = 1;
         tou_06_init_evt[486] = GSWF(6035);
         tou_06_init_evt[487] = 1;
