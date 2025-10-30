@@ -230,7 +230,7 @@ strings_dict = {
 
     "starmaniac_evt_08": "<select 0 1 0 40>\nSure!\nNo Thanks",
 
-    "starmaniac_evt_09": ("<p>\nWhat?<wait 250> Changed your mind?\n"
+    "starmaniac_evt_09": ("<p>\nWhat?<wait 250> Changed your mind?"
                           "<wait 250> \nYou aren't very decisive,\n"
                           "are you, guy?\n<k>"),
 
