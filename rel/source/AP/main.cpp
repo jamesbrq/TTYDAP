@@ -329,7 +329,6 @@ EVT_DEFINE_USER_FUNC_KEEP(handleIntermissionSkip)
     gState->starstoneName = nullptr;
     gState->starstoneFunctionPtr = nullptr;
 
-
     const bool intermissions = static_cast<bool>(gState->apSettings->intermissions);
     if (!intermissions || ttyd::evtmgr_cmd::evtGetValue(evt, evt->evtArguments[3]) == 1)
     {
