@@ -39,6 +39,7 @@ namespace mod::owr
         uint8_t goalStars;          // 0x28
         uint8_t goal;               // 0x29
         uint8_t starShuffle;        // 0x2A
+        uint8_t dazzle;             // 0x2B
     };
 
     static_assert(sizeof(APSettings) == 0x2C);

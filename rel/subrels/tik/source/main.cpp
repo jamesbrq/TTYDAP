@@ -523,7 +523,8 @@ LBL(0)
 	USER_FUNC(evt_pouch::evt_pouch_get_starpiece, LW(0))
 	IF_SMALL(LW(0), LW(4))
 		USER_FUNC(evt_window::evt_win_coin_off, LW(12))
-		USER_FUNC(evt_msg::evt_msg_print_add, 0, PTR("starmaniac_evt_13")) // Not enough star pieces line
+		USER_FUNC(evt_msg::evt_msg_fill_num, 0, LW(14), PTR("starmaniac_evt_13"), LW(4)) // Fill in price
+		USER_FUNC(evt_msg::evt_msg_print_add, 1, LW(14)) // Not enough star pieces line
 		USER_FUNC(tik::unk_tik_00000598)
 		RETURN()
 	END_IF()
@@ -763,7 +764,8 @@ namespace mod
         tik_evt_majin2[1] = EVT_HELPER_OP(LW(3));
         patch::writePatch(&tik_evt_majin2[3], tik_evt_majin2_item, sizeof(tik_evt_majin2_item));
 
-		patch::writePatch(&tik_starmaniac_talk[0], tik_starmaniac_talk_hook, sizeof(tik_starmaniac_talk_hook));
+		if (mod::owr::gState->apSettings->dazzle == 1)
+			patch::writePatch(&tik_starmaniac_talk[0], tik_starmaniac_talk_hook, sizeof(tik_starmaniac_talk_hook));
     }
 
     void exit() {}
