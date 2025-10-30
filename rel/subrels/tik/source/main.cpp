@@ -12,10 +12,13 @@
 #include "ttyd/evt_mobj.h"
 #include "ttyd/evt_msg.h"
 #include "ttyd/evt_npc.h"
+#include "ttyd/evt_pouch.h"
+#include "ttyd/evt_window.h"
 #include "ttyd/evtmgr_cmd.h"
 #include "ttyd/mapdrv.h"
 #include "ttyd/mario_pouch.h"
 #include "ttyd/swdrv.h"
+#include "ttyd/tik.h"
 
 #include <cstdint>
 #include <cstring>
@@ -81,6 +84,9 @@ extern int32_t tik_08_init_evt[];
 extern int32_t tik_15_init_evt[];
 extern int32_t tik_18_init_evt[];
 extern int32_t tik_evt_majin2[];
+extern int32_t tik_starmaniac_talk[];
+
+int maniacPrices[] = {1, 2, 3, 4, 4, 4, 5, 6, 6, 7, 8, 10, 10, 15, 15};
 
 EVT_DEFINE_USER_FUNC(checkChapterRequirements)
 {
@@ -126,6 +132,24 @@ EVT_DEFINE_USER_FUNC(pitCheckpointBuffer)
     sprintf(selectPrompt, "<numselect 10 %d 10 10>\n100", value);
 
 	evtmgr_cmd::evtSetValue(evt, evt->evtArguments[0], (uint32_t)selectPrompt);
+    return 2;
+}
+
+EVT_DEFINE_USER_FUNC(getManiacItem)
+{
+    (void)isFirstCall;
+
+    int itemNum = evtmgr_cmd::evtGetValue(evt, evt->evtArguments[0]);
+    evtmgr_cmd::evtSetValue(evt, evt->evtArguments[1], (uint32_t)mod::owr::gState->maniacItems[itemNum - 1]);
+    return 2;
+}
+
+EVT_DEFINE_USER_FUNC(getManiacPrice)
+{
+    (void)isFirstCall;
+
+    int itemNum = evtmgr_cmd::evtGetValue(evt, evt->evtArguments[0]);
+    evtmgr_cmd::evtSetValue(evt, evt->evtArguments[1], maniacPrices[itemNum - 1]);
     return 2;
 }
 
@@ -444,7 +468,99 @@ EVT_BEGIN(tik_pit_checkpoint_evt)
 	USER_FUNC(evt_mario::evt_mario_key_onoff, 1)
 	RETURN()
 EVT_END()
-// clang-format on
+
+EVT_BEGIN(starmaniac_item_get)
+	USER_FUNC(evt_mario::evt_mario_get_pos, 0, LW(0), LW(1), LW(3))
+	USER_FUNC(getManiacItem, LW(2), LW(4))
+	USER_FUNC(evt_item::evt_item_entry, PTR("maniac_item"), LW(4), LW(0), LW(1), LW(3), 16, -1, 0)
+	USER_FUNC(evt_item::evt_item_get_item, PTR("maniac_item"))
+	WAIT_MSEC(800)
+	USER_FUNC(evt_item::evt_item_delete, PTR("maniac_item"))
+	SET(GSW(1726), LW(2))
+	RETURN()
+EVT_END()
+
+EVT_BEGIN(tik_starmaniac_talk_evt)
+	IF_LARGE_EQUAL(GSW(1726), 15)
+		USER_FUNC(evt_msg::evt_msg_print, 0, PTR("starmaniac_evt_02"), 0, PTR("me")) // Out of items
+		RETURN()
+	END_IF()
+	USER_FUNC(tik::unk_tik_000005c0)
+	IF_EQUAL(GSWF(1325), 0)
+		USER_FUNC(evt_msg::evt_msg_print, 0, PTR("starmaniac_evt_00"), 0, PTR("me")) // Character intro line
+		SET(GSWF(1325), 1)
+	ELSE()
+		USER_FUNC(evt_msg::evt_msg_print, 0, PTR("starmaniac_evt_01"), 0, PTR("me")) // Regular purchase line
+	END_IF()
+	USER_FUNC(evt_msg::evt_msg_select, 0, PTR("starmaniac_03")) // YesNo text
+	IF_EQUAL(LW(0), 1)
+		USER_FUNC(evt_msg::evt_msg_print_add, 0, PTR("starmaniac_05")) // Decline line
+		USER_FUNC(tik::unk_tik_00000598)
+		RETURN()
+	END_IF()
+	USER_FUNC(evt_pouch::evt_pouch_get_starpiece, LW(0))
+	IF_SMALL_EQUAL(LW(0), 0)
+		USER_FUNC(evt_msg::evt_msg_print_add, 0, PTR("starmaniac_06")) // No star pieces line
+		USER_FUNC(tik::unk_tik_00000598)
+		RETURN()
+	END_IF()
+	USER_FUNC(evt_msg::evt_msg_continue)
+	SET(LW(2), GSW(1726))
+	USER_FUNC(evt_window::evt_win_coin_on, 2, LW(12))
+	SET(LW(3), PTR("starmaniac_evt_07")) // Price declaration line
+LBL(0)
+	ADD(LW(2), 1)
+	USER_FUNC(getManiacPrice, LW(2), LW(4))
+	USER_FUNC(evt_msg::evt_msg_fill_num, 0, LW(14), LW(3), LW(4)) // Fill in price
+	USER_FUNC(evt_msg::evt_msg_print, 1, LW(14), 0, PTR("me"))
+	USER_FUNC(evt_msg::evt_msg_select, 0, PTR("starmaniac_evt_08")) //YesNo line
+	IF_EQUAL(LW(0), 1)
+		USER_FUNC(evt_window::evt_win_coin_off, LW(12))
+		USER_FUNC(evt_msg::evt_msg_print_add, 0, PTR("starmaniac_evt_09")) // Decline line
+		USER_FUNC(tik::unk_tik_00000598)
+		RETURN()
+	END_IF()
+	USER_FUNC(evt_pouch::evt_pouch_get_starpiece, LW(0))
+	IF_SMALL(LW(0), LW(4))
+		USER_FUNC(evt_window::evt_win_coin_off, LW(12))
+		USER_FUNC(evt_msg::evt_msg_print_add, 0, PTR("starmaniac_evt_13")) // Not enough star pieces line
+		USER_FUNC(tik::unk_tik_00000598)
+		RETURN()
+	END_IF()
+	MUL(LW(4), -1)
+	USER_FUNC(evt_pouch::evt_pouch_add_starpiece, LW(4))
+	USER_FUNC(evt_window::evt_win_coin_wait, LW(12))
+	WAIT_MSEC(500)
+	USER_FUNC(evt_msg::evt_msg_print_add, 0, PTR("starmaniac_evt_10")) // Here you go line
+	RUN_CHILD_EVT(starmaniac_item_get)
+	IF_LARGE_EQUAL(GSW(1726), 15)
+		USER_FUNC(evt_window::evt_win_coin_off, LW(12))
+		USER_FUNC(evt_msg::evt_msg_print, 0, PTR("starmaniac_evt_14"), 0, PTR("me")) // Out of items
+		USER_FUNC(tik::unk_tik_00000598)
+		RETURN()
+	END_IF()
+	ADD(LW(2), 1)
+	USER_FUNC(getManiacPrice, LW(2), LW(4))
+	USER_FUNC(evt_pouch::evt_pouch_get_starpiece, LW(0))
+	IF_SMALL(LW(0), LW(4))
+		USER_FUNC(evt_window::evt_win_coin_off, LW(12))
+		USER_FUNC(evt_msg::evt_msg_fill_num, 0, LW(14), PTR("starmaniac_evt_12"), LW(4)) // Fill in price
+		USER_FUNC(evt_msg::evt_msg_print, 1, LW(14), 0, PTR("me")) // Not enough star pieces line
+		USER_FUNC(tik::unk_tik_00000598)
+		RETURN()
+	END_IF()
+	SUB(LW(2), 1)
+	SET(LW(3), PTR("starmaniac_evt_11")) // Purchase again line
+	GOTO(0)
+	RETURN()
+EVT_END()
+	
+
+EVT_BEGIN(tik_starmaniac_talk_hook)
+	RUN_CHILD_EVT(tik_starmaniac_talk_evt)
+	RETURN()
+EVT_END()
+    // clang-format on
 
 namespace mod
 {
@@ -454,7 +570,7 @@ namespace mod
         tik_uranaisi_next_evt[2] = 21;
 
         unk_evt_tik_0000f448[3] = GSW(1700);
-        unk_evt_tik_0000f448[4] = 17;
+        unk_evt_tik_0000f448[4] = 0;
 
         patch::writePatch(&tik_kuribo5_talk[0], kuribo5_talk_hook, sizeof(kuribo5_talk_hook));
 
@@ -646,6 +762,8 @@ namespace mod
         tik_evt_majin2[0] = EVT_HELPER_CMD(2, 50);
         tik_evt_majin2[1] = EVT_HELPER_OP(LW(3));
         patch::writePatch(&tik_evt_majin2[3], tik_evt_majin2_item, sizeof(tik_evt_majin2_item));
+
+		patch::writePatch(&tik_starmaniac_talk[0], tik_starmaniac_talk_hook, sizeof(tik_starmaniac_talk_hook));
     }
 
     void exit() {}

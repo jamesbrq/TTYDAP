@@ -206,6 +206,66 @@ strings_dict = {
                        "<k>\n<p>\n"
                        "And you learned the special\nmove Supernova!\n<k>"),
 
+    # Dazzle Star Piece Trader
+    "starmaniac_evt_00": ("My name is Dazzle!<wait 250> And I\n"
+                          "collect Star Pieces!<wait 250> The more\n"
+                          "I collect, the happier I am!\n<k>\n<p>\n"
+                          "So, guy,<wait 250> if you have any\n"
+                          "Star Pieces, I'll trade you my\n"
+                          "items for them! <wait 250>Yay!\n<k>\n<p>\n"
+                          "Come on!<wait 250> Let's trade!\n<o>"),
+
+    "starmaniac_evt_01": ("My name is Dazzle!<wait 250> And I'll\n"
+                          "trade my items for any\n"
+                          "Star Pieces you have!\n<o>"),
+
+    "starmaniac_evt_02": ("Do you want to trade Star\n"
+                          "Pieces for items?\n<k>\n<p>\n"
+                          "Oh, but I'm all out of items...\n"
+                          "<wait 250> \nI'm so sorry, guy!\n<k>"),
+
+    "starmaniac_evt_07": ("<p>\nI'll trade you an item\n"
+                          "for <NUM> Star Piece<S>!\n<k>\n<p>\n"
+                          "Are you sure you want it?\n<o>"),
+
+    "starmaniac_evt_08": "<select 0 1 0 40>\nSure!\nNo Thanks",
+
+    "starmaniac_evt_09": ("<p>\nWhat?<wait 250> Changed your mind?\n"
+                          "<wait 250> \nYou aren't very decisive,\n"
+                          "are you, guy?\n<k>"),
+
+    "starmaniac_evt_10": ("<p>\nYESSS!<wait 250> Thanks to you, guy,\n"
+                          "my Star Piece collection is\n"
+                          "even bigger now! <wait 250>YESSS!\n<k>\n<p>\n"
+                          "Here's your item!\n<k>"),
+
+    "starmaniac_evt_11": ("Thanks again, guy!<wait 250> \n"
+                          "Maybe we can trade again?\n<k>\n<p>\n"
+                          "I'll trade my next item\n"
+                          "for <NUM> Star Piece<S>!\n"
+                          "Are you sure you want it?\n<o>"),
+
+    "starmaniac_evt_12": ("Look like you don't have\n"
+                          "enough star pieces for\n"
+                          "my next item.\n<k>\n<p>\n"
+                          "Come back when you have\n"
+                          "at least <NUM> star piece<S>.\n<k>"),
+
+    "starmaniac_evt_13": ("<p>\nLook like you don't have\n"
+                          "enough star pieces for\n"
+                          "that item.\n<k>\n<p>\n"
+                          "Come back when you have\n"
+                          "at least <NUM> star piece<S>.\n<k>"),
+
+    "starmaniac_evt_14": ("YESSS!<wait 250> You bought\n"
+                      "everything, guy!<wait 250> \n"
+                      "My collection is COMPLETE!\n<k>\n<p>\n"
+                      "Thanks to you, I now have\n"
+                      "the BIGGEST Star Piece\n"
+                      "collection ever!<wait 250> YESSS!\n<k>\n<p>\n"
+                      "You're the best, guy!<wait 250> \n"
+                      "Come visit me anytime!\n<k>"),
+
     # Key Renames
     "elevator_key_station": "Elevator Key (Station)",
 
