@@ -4,6 +4,7 @@
 #include "AP/rel_patch_definitions.h"
 #include "ttyd/evt_hit.h"
 #include "ttyd/evt_map.h"
+#include "ttyd/evt_mario.h"
 #include "ttyd/evt_mobj.h"
 #include "ttyd/evt_msg.h"
 #include "ttyd/evt_npc.h"
@@ -790,6 +791,16 @@ namespace mod
         mri_02_init_evt[137] = GSWF(6018);
         mri_02_init_evt[138] = 1;
 
+        mri_elder_rescue[38] = EVT_HELPER_OP(&evt_mario::evt_mario_get_pos);
+        mri_elder_rescue[39] = 0;
+        mri_elder_rescue[43] = 0;
+        mri_elder_rescue[44] = 0;
+        mri_elder_rescue[45] = 0;
+        mri_elder_rescue[47] = 0;
+        mri_elder_rescue[735] = 0;
+        mri_elder_rescue[736] = 0;
+        mri_elder_rescue[737] = 0;
+        mri_elder_rescue[739] = 0;
         mri_elder_rescue[761] = GSWF(6019);
         mri_elder_rescue[762] = 1;
 

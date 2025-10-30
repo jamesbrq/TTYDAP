@@ -149,6 +149,7 @@ extern int32_t tou_talk_hammerbros[];
 extern int32_t tou_talk_uranoko_08[];
 extern int32_t tou_evt_1st_leagu[];
 extern int32_t tou_evt_toile_door[];
+extern int32_t tou_evt_sensyu_08[];
 extern int32_t tou_08_init_evt[];
 extern int32_t tou_09_init_evt[];
 extern int32_t tou_init_kino[];
@@ -561,6 +562,17 @@ EVT_BEGIN(tou_05_talk_gans_evt)
     USER_FUNC(evt_mario::evt_mario_key_onoff, 1)
     RETURN()
 EVT_END()
+
+EVT_BEGIN(tou_08_init_evt_evt)
+    IF_NOT_EQUAL(GSW(1708), 18)
+        RUN_EVT(&tou_evt_sensyu_08)
+    END_IF()
+    RETURN()
+EVT_END()
+
+EVT_BEGIN(tou_08_init_evt_hook)
+	RUN_CHILD_EVT(tou_08_init_evt_evt)
+EVT_PATCH_END()
 // clang-format on
 
 namespace mod
@@ -1182,6 +1194,7 @@ namespace mod
         tou_08_init_evt[70] = 0;
         tou_08_init_evt[188] = GSW(1703);
         tou_08_init_evt[190] = 4;
+        patch::writePatch(&tou_08_init_evt[198], tou_08_init_evt_hook, sizeof(tou_08_init_evt_hook));
         tou_08_init_evt[202] = GSW(1703);
         tou_08_init_evt[204] = 1;
         tou_08_init_evt[205] = 11;
