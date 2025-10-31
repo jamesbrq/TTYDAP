@@ -262,6 +262,29 @@ namespace mod::owr
         return (relPtr->id != RelId::DMO);
     }
 
+    bool checkIfInGameNotBattle()
+    {
+        const ttyd::seqdrv::SeqIndex nextSeq = seqGetNextSeq();
+        if (nextSeq != SeqIndex::kGame)
+        {
+            return false;
+        }
+
+        const ttyd::seqdrv::SeqIndex currentSeq = seqGetSeq();
+        if (currentSeq != SeqIndex::kGame)
+        {
+            return false;
+        }
+
+        const OSModuleInfo *relPtr = _globalWorkPtr->relocationBase;
+        if (!relPtr)
+        {
+            return false;
+        }
+
+        return (relPtr->id != RelId::DMO);
+    }
+
     void OWR::RecieveItems()
     {
         if (!checkIfInGame())
@@ -282,6 +305,30 @@ namespace mod::owr
                 {
                     // Couldn't give the item, so try to send it to storage
                     pouchAddKeepItem(items[i]);
+                }
+
+                if (items[i] >= 114 && items[i] <= 120)
+                {
+                    uint8_t count = 0;
+                    for (int i = 114; i <= 120; i++)
+                    {
+                        if (ttyd::mario_pouch::pouchCheckItem(i) > 0)
+                            count++;
+                    }
+                    if (gState->apSettings->goal == 2 && count >= gState->apSettings->goalStars &&
+                        ttyd::swdrv::swGet(6120) == 0)
+                    {
+                        if (checkIfInGameNotBattle())
+                        {
+                            ttyd::swdrv::swSet(6120);
+                            ttyd::seqdrv::seqSetSeq(SeqIndex::kMapChange, "end_00", 0);
+                        }
+                        else
+                        {
+                            // Defer the sequence change until we are back in the game
+                            ttyd::swdrv::swSet(6121);
+                        }
+                    }
                 }
                 items[i] = 0;
             }
@@ -1463,6 +1510,9 @@ namespace mod::owr
 
         if (apSettingsPtr->music == 1)
             for (int i = 0; i <= 1; i++) ttyd::pmario_sound::psndBGMOff_f_d(512 + i, 0, 1);
+
+        if (checkIfInGameNotBattle() && ttyd::swdrv::swGet(6121) == 1 && ttyd::swdrv::swGet(6120) != 1)
+            ttyd::seqdrv::seqSetSeq(SeqIndex::kMapChange, "end_00", 0);
 
         SequenceInit();
         RecieveItems();

@@ -176,6 +176,7 @@ EVT_BEGIN_KEEP(starstone_end_evt)
     USER_FUNC(evt_lecture::lect_set_systemlevel, 0)
     USER_FUNC(evt_mario::evt_mario_key_onoff, 1)
     USER_FUNC(starstoneRunItemEvent)
+    USER_FUNC(starstoneCheckGoalComplete)
     RETURN()
 EVT_END()
 
@@ -328,6 +329,23 @@ EVT_DEFINE_USER_FUNC_KEEP(handleIntermissionSkip)
     gState->starItemPtr = nullptr;
     gState->starstoneName = nullptr;
     gState->starstoneFunctionPtr = nullptr;
+
+    uint8_t count = 0;
+    for (int i = 114; i <= 120; i++)
+    {
+        if (ttyd::mario_pouch::pouchCheckItem(i) > 0)
+            count++;
+    }
+
+    if (gState->apSettings->goal == 2 && count >= gState->apSettings->goalStars && ttyd::swdrv::swGet(6120) == 0 &&
+        ttyd::evtmgr_cmd::evtGetValue(evt, evt->evtArguments[3]) != 1)
+    {
+        ttyd::swdrv::swSet(6120);
+        ttyd::evtmgr_cmd::evtSetValue(evt, evt->evtArguments[1], PTR("end_00"));
+        ttyd::evtmgr_cmd::evtSetValue(evt, evt->evtArguments[2], 0);
+        ttyd::evtmgr_cmd::evtSetValue(evt, evt->evtArguments[0], 1);
+        return 2;
+    }
 
     const bool intermissions = static_cast<bool>(gState->apSettings->intermissions);
     if (!intermissions || ttyd::evtmgr_cmd::evtGetValue(evt, evt->evtArguments[3]) == 1)
@@ -606,13 +624,20 @@ EVT_DEFINE_USER_FUNC_KEEP(starstoneRunItemEvent)
     return 2;
 }
 
-EVT_DEFINE_USER_FUNC_KEEP(starstoneCheckMarioOnGround)
+EVT_DEFINE_USER_FUNC_KEEP(starstoneCheckGoalComplete)
 {
     (void)isFirstCall;
     (void)evt;
-    if (!gState->starstoneFunctionPtr)
-        return 2;
-    ttyd::evtmgr::evtEntry(gState->starstoneFunctionPtr, 0, 0);
-    gState->starstoneFunctionPtr = nullptr;
+    uint8_t count = 0;
+    for (int i = 114; i <= 120; i++)
+    {
+        if (ttyd::mario_pouch::pouchCheckItem(i) > 0)
+            count++;
+    }
+    if (gState->apSettings->goal == 2 && count >= gState->apSettings->goalStars && ttyd::swdrv::swGet(6120) == 0)
+    {
+        ttyd::swdrv::swSet(6120);
+        ttyd::seqdrv::seqSetSeq(SeqIndex::kMapChange, "end_00", 0);
+    }
     return 2;
 }

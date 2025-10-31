@@ -643,6 +643,13 @@ namespace mod
         tou_talk_sakaba[275] = EVT_HELPER_CMD(0, 49);
         patch::writePatch(&tou_talk_sakaba[276], talk_sakaba_hook, sizeof(talk_sakaba_hook));
 
+        tou_talk_hot[4] = EVT_HELPER_CMD(1, 94);
+        tou_talk_hot[5] = EVT_HELPER_OP(&tou_evt_hotdog);
+        tou_talk_hot[7] = 0;
+        tou_talk_hot[12] = EVT_HELPER_CMD(1, 94);
+        tou_talk_hot[13] = EVT_HELPER_OP(&tou_evt_hotdog);
+        tou_talk_hot[15] = 0;
+
         tou_init_papa_01[1] = GSW(1706);
         tou_init_papa_01[3] = 1;
 
