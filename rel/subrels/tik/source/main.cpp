@@ -764,7 +764,7 @@ namespace mod
         tik_evt_majin2[1] = EVT_HELPER_OP(LW(3));
         patch::writePatch(&tik_evt_majin2[3], tik_evt_majin2_item, sizeof(tik_evt_majin2_item));
 
-		if (mod::owr::gState->apSettings->dazzle == 1)
+		if (mod::owr::gState->apSettings->dazzle > 1)
 			patch::writePatch(&tik_starmaniac_talk[0], tik_starmaniac_talk_hook, sizeof(tik_starmaniac_talk_hook));
     }
 
