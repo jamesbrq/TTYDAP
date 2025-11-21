@@ -82,8 +82,8 @@ namespace mod
         dou_watergate_handle[224] = GSW(1717);
         dou_watergate_handle[225] = 5;
 
-        dou_03_init_evt[53] = GSW(1717);
-        dou_03_init_evt[54] = 4;
+        dou_03_init_evt[53] = GSWF(6113);
+        dou_03_init_evt[54] = 1;
         dou_03_init_evt[69] = GSW(1717);
         dou_03_init_evt[70] = 5;
 

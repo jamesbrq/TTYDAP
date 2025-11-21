@@ -13,7 +13,6 @@ extern int32_t jon_zonbaba_first_event[];
 
 // clang-format off
 EVT_BEGIN(jon_zonbaba_first_event_evt)
-    SET(GSW(1708), 18)
     USER_FUNC(evt_bero::evt_bero_mapchange, PTR("end_00"), 0)
     RETURN()
 EVT_END()
