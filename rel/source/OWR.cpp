@@ -189,6 +189,15 @@ namespace mod::owr
         ttyd::swdrv::swByteSet(1712, 1);
         ttyd::mario_pouch::pouchGetStarStone(0);
 
+        if (gState->apSettings->cutsceneSkip)
+        {
+            ttyd::swdrv::swByteSet(1702, 8);
+            ttyd::swdrv::swByteSet(1703, 4);
+            ttyd::swdrv::swByteSet(1704, 2);
+            ttyd::swdrv::swByteSet(1707, 2);
+            ttyd::swdrv::swByteSet(1718, 2);
+        }
+
         // Give Return Pipe.
         ttyd::mario_pouch::pouchGetItem(ItemId::INVALID_ITEM_PAPER_0054);
 
@@ -766,7 +775,7 @@ namespace mod::owr
             return g_seqSetSeq_trampoline(seq, map, bero);
         }
 
-        // Give Zess T. the conctact lens upon entering westside
+        // Give Zess T. the contact lens upon entering westside
         if (strcmp(map, "gor_03") == 0)
         {
             ttyd::swdrv::swSet(1188);
