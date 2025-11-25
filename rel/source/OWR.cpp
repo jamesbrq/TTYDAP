@@ -797,6 +797,10 @@ namespace mod::owr
         if (ttyd::swdrv::swByteGet(1713) >= 11 && strncmp(map, "mri", 3) == 0)
             ttyd::swdrv::swSet(2884);
 
+        // Advance Ch.5 prologue if post-cortez
+        if (ttyd::swdrv::swByteGet(1717) >= 10 && ttyd::swdrv::swByteGet(1705) < 7 && strncmp(map, "muj", 3) != 0 && strncmp(map, "dou", 3) != 0)
+            ttyd::swdrv::swByteSet(1705, 11);
+
         // Update the map name if entering the pit with a checkpoint
         if (strcmp(ttyd::seq_mapchange::_next_area, "tik") == 0 && strncmp(map, "jon", 3) == 0)
         {

@@ -1045,7 +1045,6 @@ namespace mod
         rsh_talk_cook[212] = 3;
         rsh_talk_cook[234] = 4;
         rsh_talk_cook[242] = 7;
-        rsh_talk_cook[250] = 8;
         rsh_talk_cook[261] = 14;
         rsh_talk_cook[269] = 21;
         rsh_talk_cook[277] = 22;

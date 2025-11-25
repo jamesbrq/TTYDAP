@@ -76,6 +76,8 @@
 .global bStoneCh2RotationPtrReturn
 .global bStoneCh3RotationPtr
 .global bStoneCh3RotationPtrReturn
+.global bPuniMainNullFix
+.global bPuniMainNullFixReturn
 
 # All of the global symbols in this file excluding win_log_mapGX_arr need to be used in at least one subrel, so they cannot be set to hidden
 
@@ -569,6 +571,13 @@ bStoneCh3RotationPtr:
 bStoneCh3RotationPtrSkip:
 	li %r3, 0x2
 bStoneCh3RotationPtrReturn:
+	b 0
+
+bPuniMainNullFix:
+	lwz %r3, 0x1D0(%r31)
+	cmpwi %r3, 0x0
+	addi %r3, %r3, 0x12C
+bPuniMainNullFixReturn:
 	b 0
 
 win_log_mapGX_arr:

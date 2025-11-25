@@ -125,6 +125,8 @@ namespace mod
         jin_irekawatta_mario[481] = GSW(1715);
         jin_irekawatta_mario[482] = 4;
 
+        jin_ranperu_lastbattle[330] = 0; // UNUSED
+        jin_ranperu_lastbattle[331] = 0;
         jin_ranperu_lastbattle[370] = GSW(1715);
         jin_ranperu_lastbattle[371] = 6;
 

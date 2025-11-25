@@ -252,7 +252,7 @@ EVT_END()
 EVT_BEGIN_KEEP(starstone_item_handler)
     USER_FUNC(evt_mario::evt_mario_key_onoff, 0)
     USER_FUNC(evt_party::evt_party_stop, 0)
-    USER_FUNC(pouchStarstoneItem, LW(2), LW(1))
+    USER_FUNC(pouchStarstoneItem, LW(2), LW(1), LW(0))
     RETURN()
 EVT_END()
 
@@ -382,7 +382,7 @@ EVT_DEFINE_USER_FUNC_KEEP(handleIntermissionSkip)
     {
         ttyd::swdrv::swByteSet(1717, 29);
         if (ttyd::swdrv::swByteGet(1705) < 7)
-            ttyd::swdrv::swByteSet(1705, 10);
+            ttyd::swdrv::swByteSet(1705, 11);
         ttyd::evtmgr_cmd::evtSetValue(evt, evt->evtArguments[1], PTR("muj_01"));
         ttyd::evtmgr_cmd::evtSetValue(evt, evt->evtArguments[2], PTR("n_bero_02"));
     }
@@ -596,7 +596,8 @@ EVT_DEFINE_USER_FUNC_KEEP(pouchStarstoneItem)
     if (!gState->starItemPtr)
         gState->starItemPtr = itemdrv::itemNameToPtr((const char*)ttyd::evtmgr_cmd::evtGetValue(evt, evt->evtArguments[1]));
     int itemId = *(int *)((char *)gState->starItemPtr + 0x4);
-    mario_pouch::pouchGetItem(itemId);
+    if (ttyd::evtmgr_cmd::evtGetValue(evt, evt->evtArguments[2]) != -1)
+        mario_pouch::pouchGetItem(itemId);
     ttyd::evtmgr_cmd::evtSetValue(evt, evt->evtArguments[0], 0x80307224);
     return 2;
 }

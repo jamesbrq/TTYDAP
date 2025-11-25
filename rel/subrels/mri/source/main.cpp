@@ -17,6 +17,7 @@
 using namespace ttyd;
 
 extern int32_t mri_countdown[];
+extern int32_t mri_unk_mri_000130ec[];
 extern int32_t mri_seal_bigtree[];
 extern int32_t mri_seal_bigtree2[];
 extern int32_t mri_guide_init_00[];
@@ -1157,7 +1158,11 @@ namespace mod
             reinterpret_cast<void *>(bStoneCh2RotationPtr), 
             reinterpret_cast<void *>(bStoneCh2RotationPtrReturn));
         patch::writeIntWithCache(&mri_starstone_rotate_func[27], 0x60000000); // NOP
-
+        
+        patch::writeBranchPair(&mri_unk_mri_000130ec[96], 
+            reinterpret_cast<void *>(bPuniMainNullFix), 
+            reinterpret_cast<void *>(bPuniMainNullFixReturn));
+        patch::writeIntWithCache(&mri_unk_mri_000130ec[97], 0x41820008); // beq $+8
     }
 
     void exit() {}
