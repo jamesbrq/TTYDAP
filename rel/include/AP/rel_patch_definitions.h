@@ -83,6 +83,8 @@ extern "C"
     void bStoneCh2RotationPtrReturn();
     void bStoneCh3RotationPtr();
     void bStoneCh3RotationPtrReturn();
+    void bPuniMainNullFix();
+    void bPuniMainNullFixReturn();
     void checkShopFlag(uint32_t item, uint32_t index);
     void monosiriItemCheck(int unit_id);
     int applyExpMultiplier(int exp);
