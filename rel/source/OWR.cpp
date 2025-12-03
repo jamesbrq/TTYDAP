@@ -191,11 +191,42 @@ namespace mod::owr
 
         if (gState->apSettings->cutsceneSkip)
         {
-            ttyd::swdrv::swByteSet(1702, 8);
+            ttyd::swdrv::swByteSet(1701, 5);
+            ttyd::swdrv::swByteSet(1702, 11);
             ttyd::swdrv::swByteSet(1703, 4);
-            ttyd::swdrv::swByteSet(1704, 2);
+            ttyd::swdrv::swByteSet(1704, 7);
             ttyd::swdrv::swByteSet(1707, 2);
+            ttyd::swdrv::swByteSet(1715, 1);
             ttyd::swdrv::swByteSet(1718, 2);
+            ttyd::swdrv::swByteSet(1723, 1);
+            ttyd::swdrv::swSet(1193); //Rougeport Pre-Old Letter Check Part 1
+            ttyd::swdrv::swSet(1194); //Rougeport Pre-Old Letter Check Part 2
+            ttyd::swdrv::swSet(1204); //Rougeport Talking to Merlon Outside
+            ttyd::swdrv::swSet(1236); //Rougeport Pre-Blimp Ticket
+            ttyd::swdrv::swSet(1237); //Rougeport Lucky Lottery Tutorial
+            ttyd::swdrv::swSet(1325); //Rougeport Sewers Dazzle Introduction
+            ttyd::swdrv::swSet(1342); //Rougeport Sewers Rip Cheato Introduction
+            ttyd::swdrv::swSet(1353); //Rougeport Sewers Black Chest Cutscene
+            ttyd::swdrv::swSet(1494); //Hooktail's Castle Black Chest Cutscene
+            ttyd::swdrv::swSet(1781); //Petal Meadows Pre-Koops
+            ttyd::swdrv::swSet(1782); //Petal Meadows Post Koops
+            ttyd::swdrv::swSet(1932); //Twilight Town Black Chest Cutscene
+            ttyd::swdrv::swSet(2392); //Glitz Pit Minor League Crew Introductions
+            ttyd::swdrv::swSet(2395); //Glitz Pit Goomba Bros. Intro
+            ttyd::swdrv::swSet(2397); //Glitz Pit Armored Harriers Intro
+            ttyd::swdrv::swSet(2398); //Glitz Pit Armored Harriers 1st Win
+            ttyd::swdrv::swSet(2399); //Glitz Pit Rawk Hawk Intro
+            ttyd::swdrv::swSet(2400); //Glitz Pit Rawk Hawk 1st Win
+            ttyd::swdrv::swSet(2413); //Glitz Pit Sir Swoop Registers
+            ttyd::swdrv::swSet(2513); //Glitz Pit Rawk Hawk Banter
+            ttyd::swdrv::swSet(2514); //Glitz Pit Rawk Hawk Half HP
+            ttyd::swdrv::swSet(2515); //Glitz Pit Rawk Hawk Desperation Phase
+            ttyd::swdrv::swSet(2516); //Glitz Pit Rawk Hawk Hanging from Ceiling
+            ttyd::swdrv::swSet(2982); //Pirate's Grotto Saw Toads on Boat
+            ttyd::swdrv::swSet(3131); //Post Keelhaul Key Bridge Cutscene
+            ttyd::swdrv::swSet(3136); //Pre-Keelhaul Key Embers at Pirate's Grotto Entrance
+            ttyd::swdrv::swSet(3574); //Riverside Station Stationmaster Toad Cutscene
+            ttyd::swdrv::swSet(3884); //Path to Fahr Outpost Intro
         }
 
         // Give Return Pipe.
@@ -797,6 +828,10 @@ namespace mod::owr
         if (ttyd::swdrv::swByteGet(1713) >= 11 && strncmp(map, "mri", 3) == 0)
             ttyd::swdrv::swSet(2884);
 
+        // Advance Ch.5 prologue if post-cortez
+        if (ttyd::swdrv::swByteGet(1717) >= 10 && ttyd::swdrv::swByteGet(1705) < 7 && strncmp(map, "muj", 3) != 0 && strncmp(map, "dou", 3) != 0)
+            ttyd::swdrv::swByteSet(1705, 11);
+
         // Update the map name if entering the pit with a checkpoint
         if (strcmp(ttyd::seq_mapchange::_next_area, "tik") == 0 && strncmp(map, "jon", 3) == 0)
         {
@@ -1136,6 +1171,16 @@ namespace mod::owr
                 // If this is reached, then the important items part of the inventory is somehow full, so do some failsafe or
                 // something
                 return 0;
+            }
+            case ItemId::UP_ARROW:
+            {
+                //If the player obtains Up Arrow, then automatically turn it in to Merlon if Cutscene Skip is on
+                if (gState->apSettings->cutsceneSkip)
+                {
+                    ttyd::swdrv::swSet(1186);
+                    return 1;
+                }
+                return g_pouchGetItem_trampoline(item)
             }
             default:
             {
@@ -1525,6 +1570,45 @@ namespace mod::owr
 
         SequenceInit();
         RecieveItems();
+
+        if (gState->apSettings->cutsceneSkip)
+        {
+            if (ttyd::swdrv::swByteGet(1711) == 1) //Hooktail's Castle Intro
+            ttyd::swdrv::swByteSet(1711, 3);
+
+            if (ttyd::swdrv::swByteGet(1718) == 3) //Rougeport Sewers Punio Post Passageway Opened
+            ttyd::swdrv::swByteSet(1711, 5);
+
+            if (ttyd::swdrv::swByteGet(1713) == 3) //The Great Tree Ms. Mouz Knocks Out X-Naut
+            ttyd::swdrv::swByteSet(1713, 4);
+
+            if (ttyd::swdrv::swByteGet(1703) == 15) //Glitz Pit Air Vent (Champ's Room -> Grubba's Office)
+            ttyd::swdrv::swByteSet(1703, 17);
+
+            if (ttyd::swdrv::swByteGet(1714) == 5) //Creepy Steeple Intro
+            ttyd::swdrv::swByteSet(1714, 6);
+
+            if (ttyd::swdrv::swByteGet(1717) == 1) //Pirate's Grotto Post Entry
+            ttyd::swdrv::swByteSet(1717, 3);
+
+            if (ttyd::swdrv::swByteGet(1717) == 7) //Pirate's Grotto Pre-Cortez
+            ttyd::swdrv::swByteSet(1717, 9);
+
+            if (ttyd::swdrv::swByteGet(1709) == 5) //Keelhaul Key Frankie's 100 I Love Yous
+            ttyd::swdrv::swByteSet(1709, 6);
+
+            if (ttyd::swdrv::swByteGet(1709) == 10) //Rougeport Westside Post Train Ticket Check
+            ttyd::swdrv::swByteSet(1709, 11);
+
+            if (ttyd::swdrv::swByteGet(1706) == 38) //Poshley Heights Pre-Garnet Star
+            ttyd::swdrv::swByteSet(1706, 40);
+
+            if (ttyd::swdrv::swByteGet(1707) == 7) //X-Naut Fortress Entry
+            ttyd::swdrv::swByteSet(1707, 8);
+
+            if (ttyd::swdrv::swByteGet(1708) == 14) //Palace of Shadow Pre-Grodus
+            ttyd::swdrv::swByteSet(1708, 15);  
+        }
     }
 
     void OWR::OnModuleLoaded(OSModuleInfo *module_info)
