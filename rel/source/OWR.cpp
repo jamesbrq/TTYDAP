@@ -1217,7 +1217,7 @@ namespace mod::owr
                     ttyd::swdrv::swSet(1186);
                     return 1;
                 }
-                return g_pouchGetItem_trampoline(item)
+                return g_pouchGetItem_trampoline(item);
             }
             default:
             {
