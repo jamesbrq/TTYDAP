@@ -65,7 +65,7 @@ namespace mod::util
         {
             // No follower was previously out, so bring out a random one
             constexpr uint32_t range =
-                static_cast<uint32_t>(PartyMembers::kCraw) - static_cast<uint32_t>(PartyMembers::kEgg) + 1;
+                static_cast<uint32_t>(PartyMembers::kMsMowzFollower) - static_cast<uint32_t>(PartyMembers::kEgg) + 1;
 
             const uint32_t follower = ttyd::system::irand(range) + static_cast<uint32_t>(PartyMembers::kEgg);
             return spawnPartnerOrFollower(static_cast<PartyMembers>(follower));
@@ -113,8 +113,8 @@ namespace mod::util
         else
         {
             // Spawn the follower
-            if (id == PartyMembers::kFlurrieFollower)
-                id = PartyMembers::kFlavio; // Failsafe for Flurrie due to ch.6 softlock
+            if (id == PartyMembers::kFlurrieFollower || id == PartyMembers::kVivianFollower)
+                id = PartyMembers::kFlavio; // Failsafe due to ch.6 softlock
             slotId = marioPartyEntry(id);
         }
 

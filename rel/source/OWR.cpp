@@ -847,6 +847,13 @@ namespace mod::owr
             }
         }
 
+        if (strncmp(map, "mri", 3) == 0)
+        {
+            PartyEntry *followerPtr = partyGetPtr(PartySlotId::kFollower);
+            if (followerPtr->currentMemberId != PartyMembers::kPunio)
+                spawnPartnerOrFollower(PartyMembers::kPunio);
+        }
+
         if (strcmp(map, "rsh_01_a") == 0)
         {
             uint8_t value = ttyd::swdrv::swByteGet(1706);
