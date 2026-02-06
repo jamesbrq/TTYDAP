@@ -4,6 +4,7 @@
 #include "patch.h"
 #include "AP/rel_patch_definitions.h"
 #include "ttyd/evt_case.h"
+#include "ttyd/evt_item.h"
 #include "ttyd/evt_map.h"
 #include "ttyd/evt_mario.h"
 #include "ttyd/evt_msg.h"
@@ -117,6 +118,19 @@ EVT_BEGIN(tenkyugi_evt2_hook)
     RUN_CHILD_EVT(tenkyugi_evt2_evt)
     GOTO(&las_tenkyugi_evt2[113])
 EVT_PATCH_END()
+
+EVT_BEGIN(las_05_init_evt_evt)
+    USER_FUNC(evt_item::evt_item_entry, PTR("key"), 46, 0, 0, 0, 0, -1, PTR(&las_key_evt_05))
+    RETURN()
+EVT_END()
+
+EVT_BEGIN(las_05_init_evt_hook)
+    IF_EQUAL(GSWF(6123), 1)
+        IF_EQUAL(GSWF(6071), 0)
+            RUN_CHILD_EVT(las_05_init_evt_evt)
+        END_IF()
+    END_IF()
+EVT_PATCH_END()
 // clang-format on
 
 namespace mod
@@ -133,8 +147,8 @@ namespace mod
 
         las_senkaron_event[1] = GSW(1708);
         las_senkaron_event[2] = 2;
-        las_senkaron_event[843] = GSW(1708);
-        las_senkaron_event[844] = 3;
+        las_senkaron_event[843] = GSWF(6123);
+        las_senkaron_event[844] = 1;
 
         las_kurokaron_init[1] = GSW(1708);
         las_kurokaron_init[2] = 2;
@@ -148,10 +162,12 @@ namespace mod
         las_unlock_evt_05[1] = GSW(1708);
         las_unlock_evt_05[2] = 4;
 
-        las_05_init_evt[19] = GSW(1708);
-        las_05_init_evt[20] = 2;
-        las_05_init_evt[26] = GSW(1708);
-        las_05_init_evt[27] = 3;
+        las_05_init_evt[19] = GSWF(6123);
+        las_05_init_evt[20] = 0;
+        patch::writePatch(&las_05_init_evt[25], las_05_init_evt_hook, sizeof(las_05_init_evt_hook));
+        las_05_init_evt[36] = 0;
+        las_05_init_evt[37] = 0;
+        las_05_init_evt[38] = 0;
         las_05_init_evt[40] = GSW(1708);
         las_05_init_evt[41] = 4;
 

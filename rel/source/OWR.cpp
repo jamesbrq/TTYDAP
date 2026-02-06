@@ -835,10 +835,6 @@ namespace mod::owr
         if (ttyd::swdrv::swByteGet(1709) >= 3)
             ttyd::swdrv::swSet(6000);
 
-        // Advance Boggly Woods sequence if the great tree is opened
-        if (ttyd::swdrv::swByteGet(1713) >= 1 && ttyd::swdrv::swByteGet(1702) < 8)
-            ttyd::swdrv::swByteSet(1702, 8);
-
         // Advance Punio tik sequence if warped out of early
         if (ttyd::swdrv::swByteGet(1718) >= 3 && strncmp(map, "win", 3) == 0)
             ttyd::swdrv::swByteSet(1718, 5);
@@ -1615,6 +1611,10 @@ namespace mod::owr
 
         if (checkIfInGameNotBattle() && ttyd::swdrv::swGet(6121) == 1 && ttyd::swdrv::swGet(6120) != 1)
             ttyd::seqdrv::seqSetSeq(SeqIndex::kMapChange, "end_00", 0);
+
+        // Advance Boggly Woods sequence if the great tree is opened
+        if (ttyd::swdrv::swByteGet(1713) >= 1 && ttyd::swdrv::swByteGet(1702) < 8)
+            ttyd::swdrv::swByteSet(1702, 8);
 
         if (gState->apSettings->cutsceneSkip)
         {
