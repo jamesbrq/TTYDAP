@@ -198,16 +198,18 @@ namespace mod::owr
             ttyd::swdrv::swByteSet(1707, 2);
             ttyd::swdrv::swByteSet(1715, 1);
             ttyd::swdrv::swByteSet(1718, 2);
-            ttyd::swdrv::swByteSet(1723, 1);
+            ttyd::swdrv::swByteSet(1719, 1);
             ttyd::swdrv::swSet(1193); //Rougeport Pre-Old Letter Check Part 1
             ttyd::swdrv::swSet(1194); //Rougeport Pre-Old Letter Check Part 2
             ttyd::swdrv::swSet(1204); //Rougeport Talking to Merlon Outside
-            ttyd::swdrv::swSet(1236); //Rougeport Pre-Blimp Ticket
+            ttyd::swdrv::swSet(1212); //Rougeport Gus Introduction
+            ttyd::swdrv::swSet(1236); //Rougeport Don Pianta Pre-Blimp Ticket
             ttyd::swdrv::swSet(1237); //Rougeport Lucky Lottery Tutorial
             ttyd::swdrv::swSet(1325); //Rougeport Sewers Dazzle Introduction
-            ttyd::swdrv::swSet(1342); //Rougeport Sewers Rip Cheato Introduction
+            ttyd::swdrv::swSet(1342); //Rougeport Sewers Rip Cheato Introduction 1
             ttyd::swdrv::swSet(1353); //Rougeport Sewers Black Chest Cutscene
-            ttyd::swdrv::swSet(1494); //Hooktail's Castle Black Chest Cutscene
+            ttyd::swdrv::swSet(1371); //Rougeport Sewers Rip Cheato Introduction 2
+            ttyd::swdrv::swSet(1492); //Hooktail's Castle Black Chest Cutscene
             ttyd::swdrv::swSet(1781); //Petal Meadows Pre-Koops
             ttyd::swdrv::swSet(1782); //Petal Meadows Post Koops
             ttyd::swdrv::swSet(1932); //Twilight Town Black Chest Cutscene
@@ -217,16 +219,28 @@ namespace mod::owr
             ttyd::swdrv::swSet(2398); //Glitz Pit Armored Harriers 1st Win
             ttyd::swdrv::swSet(2399); //Glitz Pit Rawk Hawk Intro
             ttyd::swdrv::swSet(2400); //Glitz Pit Rawk Hawk 1st Win
+            ttyd::swdrv::swSet(2401); //Glitz Pit Entered Promoter's Office from Air Vent
             ttyd::swdrv::swSet(2413); //Glitz Pit Sir Swoop Registers
             ttyd::swdrv::swSet(2513); //Glitz Pit Rawk Hawk Banter
             ttyd::swdrv::swSet(2514); //Glitz Pit Rawk Hawk Half HP
             ttyd::swdrv::swSet(2515); //Glitz Pit Rawk Hawk Desperation Phase
             ttyd::swdrv::swSet(2516); //Glitz Pit Rawk Hawk Hanging from Ceiling
+            ttyd::swdrv::swSet(2847); //The Great Tree 10 Jabbi Introduction
+            ttyd::swdrv::swSet(2855); //The Great Tree 100 Jabbi Introduction
             ttyd::swdrv::swSet(2982); //Pirate's Grotto Saw Toads on Boat
+            ttyd::swdrv::swSet(3129); //Keelhaul Key Talked to Flavio about Bobbery
             ttyd::swdrv::swSet(3131); //Post Keelhaul Key Bridge Cutscene
             ttyd::swdrv::swSet(3136); //Pre-Keelhaul Key Embers at Pirate's Grotto Entrance
+            ttyd::swdrv::swSet(3429); //Toodles Asks for Help
+            ttyd::swdrv::swSet(3430); //Agreed to Help Toodles
+            ttyd::swdrv::swSet(3431); //Excess Express Waitress Asks for Help
+            ttyd::swdrv::swSet(3432); //Agreed to Help the Excess Express Waitress
+            ttyd::swdrv::swSet(3438); //Excess Express Talked to Conductor on First Night
             ttyd::swdrv::swSet(3574); //Riverside Station Stationmaster Toad Cutscene
             ttyd::swdrv::swSet(3884); //Path to Fahr Outpost Intro
+            ttyd::swdrv::swSet(4330); //Riddle Tower 3rd Floor 1st Entry
+            ttyd::swdrv::swSet(6016); //Hooktail's Castle Meeting Ms. Mowz
+            ttyd::swdrv::swSet(6023); //The Great Tree Zig-Zag Room Jabbi Running Away
         }
 
         // Give Return Pipe.
@@ -1579,14 +1593,26 @@ namespace mod::owr
             if (ttyd::swdrv::swByteGet(1718) == 3) //Rougeport Sewers Punio Post Passageway Opened
             ttyd::swdrv::swByteSet(1711, 5);
 
-            if (ttyd::swdrv::swByteGet(1713) == 3) //The Great Tree Ms. Mouz Knocks Out X-Naut
+            if (ttyd::swdrv::swByteGet(1713) == 3) //The Great Tree Ms. Mowz Knocks Out X-Naut
             ttyd::swdrv::swByteSet(1713, 4);
+
+            if (ttyd::swdrv::swByteGet(1713) == 6) //The Great Tree Crump Wandering Around
+            ttyd::swdrv::swByteSet(1713, 7);
+
+            if (ttyd::swdrv::swGet(2400) == 1) //Glitz Pit Rawk Hawk Defeated
+            ttyd::swdrv::swByteSet(1703, 14);
 
             if (ttyd::swdrv::swByteGet(1703) == 15) //Glitz Pit Air Vent (Champ's Room -> Grubba's Office)
             ttyd::swdrv::swByteSet(1703, 17);
 
+            if (ttyd::swdrv::swByteGet(1703) == 18) //Glitz Pit Finding Grubba's Paper in Desk
+            ttyd::swdrv::swByteSet(1703, 19);
+
             if (ttyd::swdrv::swByteGet(1714) == 5) //Creepy Steeple Intro
             ttyd::swdrv::swByteSet(1714, 6);
+
+            if (ttyd::swdrv::swByteGet(1719) == 2) //Keelhaul Key After Saving Bobbery from Tree
+            ttyd::swdrv::swByteSet(1719, 3);
 
             if (ttyd::swdrv::swByteGet(1717) == 1) //Pirate's Grotto Post Entry
             ttyd::swdrv::swByteSet(1717, 3);
@@ -1600,14 +1626,35 @@ namespace mod::owr
             if (ttyd::swdrv::swByteGet(1709) == 10) //Rougeport Westside Post Train Ticket Check
             ttyd::swdrv::swByteSet(1709, 11);
 
+            if (ttyd::swdrv::swByteGet(1706) == 2) //Excess Express Long Intro
+            ttyd::swdrv::swByteSet(1706, 6);
+
+            if (ttyd::swdrv::swByteGet(1706) == 7) //Excess Express Talking to Pennington
+            ttyd::swdrv::swByteSet(1706, 10);
+
+            if (ttyd::swdrv::swByteGet(1706) == 11) //Excess Express Agreed to Help Bub the Bob-omb
+            ttyd::swdrv::swByteSet(1706, 12);
+
+            if (ttyd::swdrv::swByteGet(1720) == 4) //Riverside Station Seeing Smorgs
+            ttyd::swdrv::swByteSet(1720, 5);
+
+            if (ttyd::swdrv::swByteGet(1706) == 33) //Excess Express Pre-Smorg
+            ttyd::swdrv::swByteSet(1706, 35);
+
             if (ttyd::swdrv::swByteGet(1706) == 38) //Poshley Heights Pre-Garnet Star
             ttyd::swdrv::swByteSet(1706, 40);
 
             if (ttyd::swdrv::swByteGet(1707) == 7) //X-Naut Fortress Entry
             ttyd::swdrv::swByteSet(1707, 8);
 
+            if (ttyd::swdrv::swByteGet(1708) == 1) //Palace of Shadow Intro
+            ttyd::swdrv::swByteSet(1708, 2);
+
+            if (ttyd::swdrv::swByteGet(1708) == 5) //Riddle Tower Intro
+            ttyd::swdrv::swByteSet(1708, 6);
+
             if (ttyd::swdrv::swByteGet(1708) == 14) //Palace of Shadow Pre-Grodus
-            ttyd::swdrv::swByteSet(1708, 15);  
+            ttyd::swdrv::swByteSet(1708, 15);
         }
     }
 
