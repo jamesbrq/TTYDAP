@@ -759,17 +759,17 @@ namespace mod
         tik_15_init_evt[42] = GSW(1717);
         tik_15_init_evt[43] = 18;
 
-		if (mod::owr::gState->apSettings->bluePipeToggle == 1)
+		if (mod::owr::gState->apSettings->bluePipeToggle == 0)
 		{
             int startPos = 86;
             int endPos = 103;
-            for (startPos; startPos <= endPos; startPos++) 
-				tik_16_init_evt[startPos] = 0;
+            for (int i = startPos; i <= endPos; i++) 
+				tik_16_init_evt[i] = 0;
 
             startPos = 96;
             endPos = 113;
-			for (startPos; startPos <= endPos; startPos++) 
-				tik_17_init_evt[startPos] = 0;
+            for (int i = startPos; i <= endPos; i++) 
+				tik_17_init_evt[i] = 0;
 
 		}
 

@@ -28,7 +28,7 @@ strings_dict = {
                      "pull around these parts.\n<k>\n<p>\n"
                      "What do ya say we make a little\n"
                      "gentleman's agreement?\n<k>\n<p>\n"
-                     "How many ranks you want to move?\n"
+                     "How many ranks you want to\nmove?"
                      "Up or down, doesn't matter!\n"
                      "Just pick a number!\n<o>"),
 

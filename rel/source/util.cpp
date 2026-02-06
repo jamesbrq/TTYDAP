@@ -65,7 +65,7 @@ namespace mod::util
         {
             // No follower was previously out, so bring out a random one
             constexpr uint32_t range =
-                static_cast<uint32_t>(PartyMembers::kMsMowzFollower) - static_cast<uint32_t>(PartyMembers::kEgg) + 1;
+                static_cast<uint32_t>(PartyMembers::kCraw) - static_cast<uint32_t>(PartyMembers::kEgg) + 1;
 
             const uint32_t follower = ttyd::system::irand(range) + static_cast<uint32_t>(PartyMembers::kEgg);
             return spawnPartnerOrFollower(static_cast<PartyMembers>(follower));

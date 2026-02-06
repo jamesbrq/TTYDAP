@@ -407,8 +407,8 @@ namespace mod::owr
                                reinterpret_cast<void *>(bPeachPointer),
                                reinterpret_cast<void *>(bPeachReturn));
 
-        writeIntWithCache(&main_evt_shop_setup[82], 0x2C00007D); // cmpwi r0, 0x79
-        writeIntWithCache(&main_evt_shop_setup[83], 0x418100FC); // blt +0xFC
+        writeIntWithCache(&main_evt_shop_setup[82], 0x2C000000); // cmpwi r0, 0x0
+        writeIntWithCache(&main_evt_shop_setup[83], 0x418200FC); // beq +0xFC
 
         patch::writeBranchPair(&main_evt_shop_setup[84],
                                reinterpret_cast<void *>(bShopFlagCheck),
