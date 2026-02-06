@@ -40,19 +40,38 @@ namespace mod::owr
         uint8_t goal;               // 0x29
         uint8_t starShuffle;        // 0x2A
         uint8_t dazzle;             // 0x2B
+        uint8_t reserved;           // 0x2C
+        uint8_t shopPurchaseLimit;  // 0x2D
+        uint8_t grubbaBribeDirection; // 0x2E
+        uint8_t grubbaBribeCost;    // 0x2F
+        uint8_t bluePipeToggle;     // 0x30
     };
 
-    static_assert(sizeof(APSettings) == 0x2C);
+    static_assert(sizeof(APSettings) == 0x34);
+
+    constexpr size_t NAME_LEN = 32;
+
+   struct EntranceData
+    {
+        char srcMap[NAME_LEN];
+        char srcBero[NAME_LEN];
+        char destMap[NAME_LEN];
+        char destBero[NAME_LEN];
+    };
+
+   static_assert(sizeof(EntranceData) == NAME_LEN * 4);
 
     class StateManager
     {
        public:
         void Init();
         StateManager();
+        bool LoadEntranceData();
         APSettings *apSettings;
         uint16_t *tattleItems;
         uint16_t *maniacItems;
         uint32_t state_msgWork[17];
+        EntranceData entranceData[256];
         bool newTattle = false;
         bool firstDeath = false;
         void *starItemPtr = nullptr;

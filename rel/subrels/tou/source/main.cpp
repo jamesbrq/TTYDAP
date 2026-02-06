@@ -531,9 +531,37 @@ EVT_BEGIN(tou_05_talk_gans_evt)
             RETURN()
         END_IF()
         SUB(LW(2), LW(1))
-        MUL(LW(2), 20)
+        SET(LW(3), GSW(1728)) // grubbaBribeCost setting
+        SET(LW(4), LW(2))
+        MUL(LW(2), LW(3))
         IF_SMALL(LW(2), 0)
             MUL(LW(2), -1)
+        END_IF()
+        SWITCH(GSW(1727))
+            CASE_EQUAL(0) // Up Only
+                IF_SMALL(LW(4), 0)
+                    SET(LW(2), 0)
+            CASE_END()
+            CASE_EQUAL(1) // Down Only
+                IF_LARGE(LW(4), 0)
+                    SET(LW(2), 0)
+            CASE_END()
+            CASE_ETC() // Both
+            CASE_END()
+        END_SWITCH()
+        IF_EQUAL(LW(2), 0)
+            USER_FUNC(evt_msg::evt_msg_print, 0, PTR("grubba_pay_free"), 0, PTR(&grubba))
+            USER_FUNC(evt_msg::evt_msg_select, 0, PTR("grubba_pay_prompt"))
+            IF_EQUAL(LW(0), 0)
+                USER_FUNC(evt_msg::evt_msg_print_add, 0, PTR("grubba_pay_accept_free"))
+                USER_FUNC(setRanking, LW(1))
+                USER_FUNC(evt_mario::evt_mario_key_onoff, 1)
+                RETURN()
+            ELSE()
+                USER_FUNC(evt_msg::evt_msg_print_add, 0, PTR("grubba_pay_accept_no"))
+                USER_FUNC(evt_mario::evt_mario_key_onoff, 1)
+                RETURN()
+            END_IF()
         END_IF()
         USER_FUNC(evt_window::evt_win_coin_on, 0, LW(10))
         USER_FUNC(evt_msg::evt_msg_fill_num, 0, LW(14), PTR("grubba_pay"), LW(2))
@@ -1282,6 +1310,8 @@ namespace mod
         tou_evt_block_10[2] = 1;
 
         patch::writePatch(&tou_10_evt_1st_leagu[148], jolene_egg_hook, sizeof(jolene_egg_hook));
+        if (mod::owr::gState->apSettings->cutsceneSkip)
+            tou_10_evt_1st_leagu[231] = PTR("tou_08");
 
         tou_evt_tou_chibi_yoshi[0] = 0;
         tou_evt_tou_chibi_yoshi[1] = 0;

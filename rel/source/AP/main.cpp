@@ -291,8 +291,27 @@ EVT_DEFINE_USER_FUNC_KEEP(setShopFlags)
 
     swSet(gswfBase + selectedIndex);
 
-    if (itemIds[selectedIndex * 2] > 125)
-        return 2;
+    switch (gState->apSettings->shopPurchaseLimit)
+    {
+        case 0: // Infinite
+            if (itemIds[selectedIndex * 2] > 125)
+                return 2;
+            break;
+        case 1: // Consumables Only
+            if (itemIds[selectedIndex * 2] > 125 && itemIds[selectedIndex * 2] < 236)
+                return 2;
+            break;
+        case 2: // Badges Only
+            if (itemIds[selectedIndex * 2] > 239)
+                return 2;
+            break;
+        case 3: // Limited
+            if (itemIds[selectedIndex * 2] > 125)
+                break;
+            return 2;
+        default:
+            break;
+    })
 
     itemFlags[selectedIndex] |= 1;
     return 2;
@@ -414,8 +433,27 @@ EVT_DEFINE_USER_FUNC_KEEP(checkTattleItem)
 
 void checkShopFlag(uint32_t item, uint32_t index)
 {
-    if (item > 125)
-        return;
+    switch (gState->apSettings->shopPurchaseLimit)
+    {
+        case 0: // Infinite
+            if (itemIds[selectedIndex * 2] > 125)
+                return;
+            break;
+        case 1: // Consumables Only
+            if (itemIds[selectedIndex * 2] > 125 && itemIds[selectedIndex * 2] < 236)
+                return;
+            break;
+        case 2: // Badges Only
+            if (itemIds[selectedIndex * 2] > 239)
+                return;
+            break;
+        case 3: // Limited
+            if (itemIds[selectedIndex * 2] > 125)
+                break;
+            return;
+        default:
+            break;
+    })
 
     int gswfBase = 6200;
     const char *nextMapPtr = &ttyd::seq_mapchange::_next_map[0];
