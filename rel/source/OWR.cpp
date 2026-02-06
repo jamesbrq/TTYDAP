@@ -1635,6 +1635,15 @@ namespace mod::owr
             if (ttyd::swdrv::swByteGet(1706) == 11) //Excess Express Agreed to Help Bub the Bob-omb
             ttyd::swdrv::swByteSet(1706, 12);
 
+            if (ttyd::swdrv::swByteGet(1706) == 15) //Excess Express Agreed to Help the Conductor
+            ttyd::swdrv::swByteSet(1706, 18);
+
+            if (ttyd::swdrv::swByteGet(1706) == 23) //Excess Express Talked to Pennington & Ratooey Businessman
+            ttyd::swdrv::swByteSet(1706, 24);
+
+            if (ttyd::swdrv::swByteGet(1706) == 26) //Excess Express Examined Paper in Cabin 005
+            ttyd::swdrv::swByteSet(1706, 27);
+
             if (ttyd::swdrv::swByteGet(1720) == 4) //Riverside Station Seeing Smorgs
             ttyd::swdrv::swByteSet(1720, 5);
 
