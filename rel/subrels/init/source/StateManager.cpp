@@ -1,9 +1,12 @@
 #include "StateManager.h"
 #include "OWR.h"
+#include "gc/dvd.h"
 
 #include <cstdint>
+#include <cstdio>
 
 using namespace mod::owr;
+using namespace gc::dvd;
 
 StateManager::StateManager()
 {
