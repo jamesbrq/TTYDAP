@@ -1656,9 +1656,6 @@ namespace mod::owr
             if (ttyd::swdrv::swByteGet(1707) == 7) //X-Naut Fortress Entry
             ttyd::swdrv::swByteSet(1707, 8);
 
-            if (ttyd::swdrv::swByteGet(1708) == 1) //Palace of Shadow Intro
-            ttyd::swdrv::swByteSet(1708, 2);
-
             if (ttyd::swdrv::swByteGet(1708) == 5) //Riddle Tower Intro
             ttyd::swdrv::swByteSet(1708, 6);
 
