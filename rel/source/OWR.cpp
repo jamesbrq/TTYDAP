@@ -189,6 +189,10 @@ namespace mod::owr
         ttyd::swdrv::swByteSet(1712, 1);
         ttyd::mario_pouch::pouchGetStarStone(0);
 
+        // Store settings in GSW's so they are easier to access in scripts
+        ttyd::swdrv::swByteSet(1727, gState->apSettings->grubbaBribeDirection);
+        ttyd::swdrv::swByteSet(1728, gState->apSettings->grubbaBribeCost);
+
         if (gState->apSettings->cutsceneSkip)
         {
             ttyd::swdrv::swByteSet(1702, 8);
@@ -861,6 +865,24 @@ namespace mod::owr
             else if ((value >= 14 && value < 22) || (value >= 30 && value < 31))
                 map = "rsh_02_c";
         }
+        else if (strcmp(map, "rsh_03_a") == 0)
+        {
+            uint8_t value = ttyd::swdrv::swByteGet(1706);
+
+            if ((value >= 8 && value < 14) || (value >= 29 && value < 30))
+                map = "rsh_03_b";
+            else if ((value >= 14 && value < 22) || (value >= 30 && value < 31))
+                map = "rsh_03_c";
+        }
+        else if (strcmp(map, "rsh_04_a") == 0)
+        {
+            uint8_t value = ttyd::swdrv::swByteGet(1706);
+
+            if ((value >= 8 && value < 14) || (value >= 29 && value < 30))
+                map = "rsh_04_b";
+            else if ((value >= 14 && value < 22) || (value >= 30 && value < 31))
+                map = "rsh_04_c";
+        }
         else if (strcmp(map, "aaa_00") == 0)
         {
             if (ttyd::swdrv::swByteGet(1708) < 17)
@@ -1514,6 +1536,10 @@ namespace mod::owr
                 count++;
         }
         apSettingsPtr->collectedStars = count;
+
+        if (apSettingsPtr->collectedStars >= apSettingsPtr->palaceStars && ttyd::swdrv::swByteGet(1708) == 0)
+            if (apSettingsPtr->cutsceneSkip)
+                ttyd::swdrv::swByteSet(1708, 2);
 
         if (apSettingsPtr->deathLinkTriggered)
         {

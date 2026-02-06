@@ -63,6 +63,22 @@ strings_dict = {
                         "A deal this good ain't gonna\n"
                         "last forever, you hear?\n<k>"),
 
+    "grubba_pay_free": ("<p>\nNow here's the best part,\n"
+                        "son... This one's on the\n"
+                        "house! FREE of charge!\n<k>\n<p>\n"
+                        "Old Grubba's feelin' generous\n"
+                        "today! Hoo-WEE!\n<k>\n<p>\n"
+                        "So whaddya say? Ready to\n"
+                        "move on up?\n<o>"),
+
+    "grubba_pay_accept_free": ("<p>\nHoo-WEE! That's the spirit,\n"
+                               "son! I like your style!\n<k>\n<p>\n"
+                               "And since it ain't costin' you\n"
+                               "a single coin... Well, that's\n"
+                               "what I call a STEAL!\n<k>\n<p>\n"
+                               "Now get back in there and\n"
+                               "show 'em what for!\n<k>"),
+
     "grubba_pay_accept": ("<p>\nHoo-WEE! Now that's what I like\n"
                           "to hear, son!\n<k>\n<p>\n"
                           "Just hand over them coins and...\n"

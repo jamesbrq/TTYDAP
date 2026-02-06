@@ -82,6 +82,8 @@ extern int32_t tik_peach_mail[];
 extern int32_t tik_07_init_evt[];
 extern int32_t tik_08_init_evt[];
 extern int32_t tik_15_init_evt[];
+extern int32_t tik_16_init_evt[];
+extern int32_t tik_17_init_evt[];
 extern int32_t tik_18_init_evt[];
 extern int32_t tik_evt_majin2[];
 extern int32_t tik_starmaniac_talk[];
@@ -756,6 +758,20 @@ namespace mod
         tik_15_init_evt[30] = 8;
         tik_15_init_evt[42] = GSW(1717);
         tik_15_init_evt[43] = 18;
+
+		if (mod::owr::gState->apSettings->bluePipeToggle == 1)
+		{
+            int startPos = 86;
+            int endPos = 103;
+            for (startPos; startPos <= endPos; startPos++) 
+				tik_16_init_evt[startPos] = 0;
+
+            startPos = 96;
+            endPos = 113;
+			for (startPos; startPos <= endPos; startPos++) 
+				tik_17_init_evt[startPos] = 0;
+
+		}
 
         tik_18_init_evt[53] = GSW(1717);
         tik_18_init_evt[54] = 18;
