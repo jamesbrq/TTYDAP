@@ -847,6 +847,84 @@ namespace mod::owr
         if (ttyd::swdrv::swByteGet(1717) >= 10 && ttyd::swdrv::swByteGet(1705) < 7 && strncmp(map, "muj", 3) != 0 && strncmp(map, "dou", 3) != 0)
             ttyd::swdrv::swByteSet(1705, 11);
 
+        if (gState->apSettings->cutsceneSkip)
+        {
+            if (ttyd::swdrv::swByteGet(1711) == 1) // Hooktail's Castle Intro
+                ttyd::swdrv::swByteSet(1711, 3);
+
+            if (ttyd::swdrv::swByteGet(1718) == 3) // Rougeport Sewers Punio Post Passageway Opened
+                ttyd::swdrv::swByteSet(1702, 5);
+
+            if (ttyd::swdrv::swByteGet(1713) == 3) // The Great Tree Ms. Mowz Knocks Out X-Naut
+                ttyd::swdrv::swByteSet(1713, 4);
+
+            if (ttyd::swdrv::swByteGet(1713) == 6) // The Great Tree Crump Wandering Around
+                ttyd::swdrv::swByteSet(1713, 7);
+
+            if (ttyd::swdrv::swGet(2400) == 1) // Glitz Pit Rawk Hawk Defeated
+                ttyd::swdrv::swByteSet(1703, 14);
+
+            if (ttyd::swdrv::swByteGet(1703) == 15) // Glitz Pit Air Vent (Champ's Room -> Grubba's Office)
+                ttyd::swdrv::swByteSet(1703, 17);
+
+            if (ttyd::swdrv::swByteGet(1703) == 18) // Glitz Pit Finding Grubba's Paper in Desk
+                ttyd::swdrv::swByteSet(1703, 19);
+
+            if (ttyd::swdrv::swByteGet(1714) == 5) // Creepy Steeple Intro
+                ttyd::swdrv::swByteSet(1714, 6);
+
+            if (ttyd::swdrv::swByteGet(1719) == 2) // Keelhaul Key After Saving Bobbery from Tree
+                ttyd::swdrv::swByteSet(1719, 3);
+
+            if (ttyd::swdrv::swByteGet(1717) == 1) // Pirate's Grotto Post Entry
+                ttyd::swdrv::swByteSet(1717, 3);
+
+            if (ttyd::swdrv::swByteGet(1717) == 7) // Pirate's Grotto Pre-Cortez
+                ttyd::swdrv::swByteSet(1717, 9);
+
+            if (ttyd::swdrv::swByteGet(1709) == 5) // Keelhaul Key Frankie's 100 I Love Yous
+                ttyd::swdrv::swByteSet(1709, 6);
+
+            if (ttyd::swdrv::swByteGet(1709) == 10) // Rougeport Westside Post Train Ticket Check
+                ttyd::swdrv::swByteSet(1709, 11);
+
+            if (ttyd::swdrv::swByteGet(1706) == 2) // Excess Express Long Intro
+                ttyd::swdrv::swByteSet(1706, 6);
+
+            if (ttyd::swdrv::swByteGet(1706) == 7) // Excess Express Talking to Pennington
+                ttyd::swdrv::swByteSet(1706, 10);
+
+            if (ttyd::swdrv::swByteGet(1706) == 11) // Excess Express Agreed to Help Bub the Bob-omb
+                ttyd::swdrv::swByteSet(1706, 12);
+
+            if (ttyd::swdrv::swByteGet(1706) == 15) // Excess Express Agreed to Help the Conductor
+                ttyd::swdrv::swByteSet(1706, 18);
+
+            if (ttyd::swdrv::swByteGet(1706) == 23) // Excess Express Talked to Pennington & Ratooey Businessman
+                ttyd::swdrv::swByteSet(1706, 24);
+
+            if (ttyd::swdrv::swByteGet(1706) == 26) // Excess Express Examined Paper in Cabin 005
+                ttyd::swdrv::swByteSet(1706, 27);
+
+            if (ttyd::swdrv::swByteGet(1720) == 4) // Riverside Station Seeing Smorgs
+                ttyd::swdrv::swByteSet(1720, 5);
+
+            if (ttyd::swdrv::swByteGet(1706) == 33) // Excess Express Pre-Smorg
+                ttyd::swdrv::swByteSet(1706, 35);
+
+            if (ttyd::swdrv::swByteGet(1706) == 38) // Poshley Heights Pre-Garnet Star
+                ttyd::swdrv::swByteSet(1706, 40);
+
+            if (ttyd::swdrv::swByteGet(1707) == 7) // X-Naut Fortress Entry
+                ttyd::swdrv::swByteSet(1707, 8);
+
+            if (ttyd::swdrv::swByteGet(1708) == 5) // Riddle Tower Intro
+                ttyd::swdrv::swByteSet(1708, 6);
+
+            if (ttyd::swdrv::swByteGet(1708) == 14) // Palace of Shadow Pre-Grodus
+                ttyd::swdrv::swByteSet(1708, 15);
+        }
+
         // Update the map name if entering the pit with a checkpoint
         if (strcmp(ttyd::seq_mapchange::_next_area, "tik") == 0 && strncmp(map, "jon", 3) == 0)
         {
@@ -1623,84 +1701,6 @@ namespace mod::owr
         // Advance Boggly Woods sequence if the great tree is opened
         if (ttyd::swdrv::swByteGet(1713) >= 1 && ttyd::swdrv::swByteGet(1702) < 8)
             ttyd::swdrv::swByteSet(1702, 8);
-
-        if (gState->apSettings->cutsceneSkip)
-        {
-            if (ttyd::swdrv::swByteGet(1711) == 1) // Hooktail's Castle Intro
-                ttyd::swdrv::swByteSet(1711, 3);
-
-            if (ttyd::swdrv::swByteGet(1718) == 3) // Rougeport Sewers Punio Post Passageway Opened
-                ttyd::swdrv::swByteSet(1711, 5);
-
-            if (ttyd::swdrv::swByteGet(1713) == 3) // The Great Tree Ms. Mowz Knocks Out X-Naut
-                ttyd::swdrv::swByteSet(1713, 4);
-
-            if (ttyd::swdrv::swByteGet(1713) == 6) // The Great Tree Crump Wandering Around
-                ttyd::swdrv::swByteSet(1713, 7);
-
-            if (ttyd::swdrv::swGet(2400) == 1) // Glitz Pit Rawk Hawk Defeated
-                ttyd::swdrv::swByteSet(1703, 14);
-
-            if (ttyd::swdrv::swByteGet(1703) == 15) // Glitz Pit Air Vent (Champ's Room -> Grubba's Office)
-                ttyd::swdrv::swByteSet(1703, 17);
-
-            if (ttyd::swdrv::swByteGet(1703) == 18) // Glitz Pit Finding Grubba's Paper in Desk
-                ttyd::swdrv::swByteSet(1703, 19);
-
-            if (ttyd::swdrv::swByteGet(1714) == 5) // Creepy Steeple Intro
-                ttyd::swdrv::swByteSet(1714, 6);
-
-            if (ttyd::swdrv::swByteGet(1719) == 2) // Keelhaul Key After Saving Bobbery from Tree
-                ttyd::swdrv::swByteSet(1719, 3);
-
-            if (ttyd::swdrv::swByteGet(1717) == 1) // Pirate's Grotto Post Entry
-                ttyd::swdrv::swByteSet(1717, 3);
-
-            if (ttyd::swdrv::swByteGet(1717) == 7) // Pirate's Grotto Pre-Cortez
-                ttyd::swdrv::swByteSet(1717, 9);
-
-            if (ttyd::swdrv::swByteGet(1709) == 5) // Keelhaul Key Frankie's 100 I Love Yous
-                ttyd::swdrv::swByteSet(1709, 6);
-
-            if (ttyd::swdrv::swByteGet(1709) == 10) // Rougeport Westside Post Train Ticket Check
-                ttyd::swdrv::swByteSet(1709, 11);
-
-            if (ttyd::swdrv::swByteGet(1706) == 2) // Excess Express Long Intro
-                ttyd::swdrv::swByteSet(1706, 6);
-
-            if (ttyd::swdrv::swByteGet(1706) == 7) // Excess Express Talking to Pennington
-                ttyd::swdrv::swByteSet(1706, 10);
-
-            if (ttyd::swdrv::swByteGet(1706) == 11) // Excess Express Agreed to Help Bub the Bob-omb
-                ttyd::swdrv::swByteSet(1706, 12);
-
-            if (ttyd::swdrv::swByteGet(1706) == 15) // Excess Express Agreed to Help the Conductor
-                ttyd::swdrv::swByteSet(1706, 18);
-
-            if (ttyd::swdrv::swByteGet(1706) == 23) // Excess Express Talked to Pennington & Ratooey Businessman
-                ttyd::swdrv::swByteSet(1706, 24);
-
-            if (ttyd::swdrv::swByteGet(1706) == 26) // Excess Express Examined Paper in Cabin 005
-                ttyd::swdrv::swByteSet(1706, 27);
-
-            if (ttyd::swdrv::swByteGet(1720) == 4) // Riverside Station Seeing Smorgs
-                ttyd::swdrv::swByteSet(1720, 5);
-
-            if (ttyd::swdrv::swByteGet(1706) == 33) // Excess Express Pre-Smorg
-                ttyd::swdrv::swByteSet(1706, 35);
-
-            if (ttyd::swdrv::swByteGet(1706) == 38) // Poshley Heights Pre-Garnet Star
-                ttyd::swdrv::swByteSet(1706, 40);
-
-            if (ttyd::swdrv::swByteGet(1707) == 7) // X-Naut Fortress Entry
-                ttyd::swdrv::swByteSet(1707, 8);
-
-            if (ttyd::swdrv::swByteGet(1708) == 5) // Riddle Tower Intro
-                ttyd::swdrv::swByteSet(1708, 6);
-
-            if (ttyd::swdrv::swByteGet(1708) == 14) // Palace of Shadow Pre-Grodus
-                ttyd::swdrv::swByteSet(1708, 15);
-        }
 
         SequenceInit();
         RecieveItems();
