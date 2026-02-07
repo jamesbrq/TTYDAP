@@ -222,7 +222,6 @@ namespace mod::owr
             ttyd::swdrv::swSet(2397); // Glitz Pit Armored Harriers Intro
             ttyd::swdrv::swSet(2398); // Glitz Pit Armored Harriers 1st Win
             ttyd::swdrv::swSet(2399); // Glitz Pit Rawk Hawk Intro
-            ttyd::swdrv::swSet(2400); // Glitz Pit Rawk Hawk 1st Win
             ttyd::swdrv::swSet(2401); // Glitz Pit Entered Promoter's Office from Air Vent
             ttyd::swdrv::swSet(2413); // Glitz Pit Sir Swoop Registers
             ttyd::swdrv::swSet(2513); // Glitz Pit Rawk Hawk Banter
@@ -860,9 +859,6 @@ namespace mod::owr
 
             if (ttyd::swdrv::swByteGet(1713) == 6) // The Great Tree Crump Wandering Around
                 ttyd::swdrv::swByteSet(1713, 7);
-
-            if (ttyd::swdrv::swGet(2400) == 1) // Glitz Pit Rawk Hawk Defeated
-                ttyd::swdrv::swByteSet(1703, 14);
 
             if (ttyd::swdrv::swByteGet(1703) == 15) // Glitz Pit Air Vent (Champ's Room -> Grubba's Office)
                 ttyd::swdrv::swByteSet(1703, 17);
