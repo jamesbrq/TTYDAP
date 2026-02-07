@@ -852,13 +852,13 @@ namespace mod::owr
                 ttyd::swdrv::swByteSet(1711, 3);
 
             if (ttyd::swdrv::swByteGet(1718) == 3) // Rougeport Sewers Punio Post Passageway Opened
-                ttyd::swdrv::swByteSet(1702, 5);
+                ttyd::swdrv::swByteSet(1718, 5);
 
             if (ttyd::swdrv::swByteGet(1713) == 3) // The Great Tree Ms. Mowz Knocks Out X-Naut
                 ttyd::swdrv::swByteSet(1713, 4);
 
-            if (ttyd::swdrv::swByteGet(1713) == 6) // The Great Tree Crump Wandering Around
-                ttyd::swdrv::swByteSet(1713, 7);
+            if (ttyd::swdrv::swGet(2400) == 1) && (ttyd::swdrv::swByteGet(1703) == 12) // Glitz Pit Rawk Hawk Defeated
+                ttyd::swdrv::swByteSet(1703, 14);
 
             if (ttyd::swdrv::swByteGet(1703) == 15) // Glitz Pit Air Vent (Champ's Room -> Grubba's Office)
                 ttyd::swdrv::swByteSet(1703, 17);
