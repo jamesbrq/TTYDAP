@@ -6,6 +6,8 @@ namespace ttyd::system
 {
     extern "C"
     {
+        extern uint32_t main_next;
+
         void *memcpy_as4(void *dst, const void *src, uint32_t size);
         // mtxGetRotationElement
 

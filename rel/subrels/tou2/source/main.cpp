@@ -3,6 +3,8 @@
 #include "OWR.h"
 #include "patch.h"
 #include "subrel_tou2.h"
+#include "ttyd/battle_unit.h"
+#include "ttyd/battle_database_common.h"
 #include "ttyd/evt_npc.h"
 #include "ttyd/evtmgr_cmd.h"
 
@@ -10,6 +12,9 @@
 
 using namespace ttyd;
 using namespace mod;
+using namespace mod::owr;
+using namespace ttyd::battle_unit;
+using namespace ttyd::battle_database_common;
 
 extern int32_t tou2_init_kinosikowa[];
 extern int32_t tou2_npc_entry[];
@@ -216,6 +221,20 @@ namespace mod
         tou2_phase_event[220] = 14;
         tou2_phase_event[372] = GSW(1703);
         tou2_phase_event[373] = 14;
+
+        for (int i = kBtlGrpRange_tou_tou.start; i <= kBtlGrpRange_tou_tou.end; i++)
+        {
+            if (gState->apSettings->enemyRandomizer == 0)
+                break;
+            BattleGroupSetup *battleGroup = battleGroupList[i];
+            EnemyLoadout &loadout = gState->enemyLoadouts[i];
+            for (int32_t j = 0; j < battleGroup->num_enemies; j++)
+            {
+                BattleUnitSetup &unit = battleGroup->enemy_data[j];
+                unit.unit_kind_params = GetUnitKindById(loadout.enemyIds[j]);
+                unit.position.y = GetEnemyYPosition(loadout.enemyIds[j]);
+            }
+        }
 
         // Assembly
         tou2_disp_proc[18] = 0x38840827; // addi r4, r4, 0x827 GSW(1703)

@@ -15,6 +15,10 @@ class RelMgr
     // For `relToLoad`, do not include the file path nor the extension
     bool loadRel(const char *relToLoad, int32_t heap = ttyd::memory::HeapType::HEAP_DEFAULT);
 
+    // Loads and links custom.rel permanently on the default heap.
+    // Not tracked by relPtr/bssPtr, so the temp rel lifecycle won't unload it.
+    bool loadCustomRel();
+
     bool linkRel();
     bool unlinkRel();
     void unloadRel();

@@ -3,6 +3,8 @@
 #include "OWR.h"
 #include "patch.h"
 #include "AP/rel_patch_definitions.h"
+#include "ttyd/battle_unit.h"
+#include "ttyd/battle_database_common.h"
 #include "ttyd/evt_case.h"
 #include "ttyd/evt_item.h"
 #include "ttyd/evt_map.h"
@@ -12,6 +14,9 @@
 #include <cstdint>
 
 using namespace ttyd;
+using namespace mod::owr;
+using namespace ttyd::battle_unit;
+using namespace ttyd::battle_database_common;
 
 extern int32_t las_first_evt_00[];
 extern int32_t las_00_init_evt[];
@@ -373,6 +378,20 @@ namespace mod
             las_bero_entry_data_30[26] = PTR("sekai_yami2");
             las_last_evt_3_1[517] = PTR("las_29");
             las_last_evt_3_1[518] = PTR("minnnanokoe");
+        }
+
+        for (int i = kBtlGrpRange_las_las.start; i <= kBtlGrpRange_las_las.end; i++)
+        {
+            if (gState->apSettings->enemyRandomizer == 0)
+                break;
+            BattleGroupSetup *battleGroup = battleGroupList[i];
+            EnemyLoadout &loadout = gState->enemyLoadouts[i];
+            for (int32_t j = 0; j < battleGroup->num_enemies; j++)
+            {
+                BattleUnitSetup &unit = battleGroup->enemy_data[j];
+                unit.unit_kind_params = GetUnitKindById(loadout.enemyIds[j]);
+                unit.position.y = GetEnemyYPosition(loadout.enemyIds[j]);
+            }
         }
     }
 

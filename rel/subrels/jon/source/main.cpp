@@ -3,11 +3,16 @@
 #include "OWR.h"
 #include "patch.h"
 #include "AP/rel_patch_definitions.h"
+#include "ttyd/battle_unit.h"
+#include "ttyd/battle_database_common.h"
 #include "ttyd/evt_bero.h"
 
 #include <cstdint>
 
 using namespace ttyd;
+using namespace mod::owr;
+using namespace ttyd::battle_unit;
+using namespace ttyd::battle_database_common;
 
 extern int32_t jon_zonbaba_first_event[];
 
@@ -30,6 +35,20 @@ namespace mod
         {
             patch::writePatch(&jon_zonbaba_first_event[672], jon_zonbaba_first_event_hook, sizeof(jon_zonbaba_first_event_hook));
             jon_zonbaba_first_event[674] = 0;
+        }
+
+        for (int i = kBtlGrpRange_jon_jon.start; i <= kBtlGrpRange_jon_jon.end; i++)
+        {
+            if (gState->apSettings->enemyRandomizer == 0)
+                break;
+            BattleGroupSetup *battleGroup = battleGroupList[i];
+            EnemyLoadout &loadout = gState->enemyLoadouts[i];
+            for (int32_t j = 0; j < battleGroup->num_enemies; j++)
+            {
+                BattleUnitSetup &unit = battleGroup->enemy_data[j];
+                unit.unit_kind_params = GetUnitKindById(loadout.enemyIds[j]);
+                unit.position.y = GetEnemyYPosition(loadout.enemyIds[j]);
+            }
         }
     }
 

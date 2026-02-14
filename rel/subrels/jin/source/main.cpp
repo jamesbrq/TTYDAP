@@ -1,11 +1,17 @@
-#include "subrel_jin.h"
-#include "evt_cmd.h"
-#include "patch.h"
 #include "AP/rel_patch_definitions.h"
+#include "evt_cmd.h"
+#include "OWR.h"
+#include "patch.h"
+#include "subrel_jin.h"
+#include "ttyd/battle_unit.h"
+#include "ttyd/battle_database_common.h"
 
 #include <cstdint>
 
 using namespace ttyd;
+using namespace mod::owr;
+using namespace ttyd::battle_unit;
+using namespace ttyd::battle_database_common;
 
 extern int32_t jin_door_teresa_n[];
 extern int32_t jin_door_teresa_s[];
@@ -193,6 +199,21 @@ namespace mod
 
         jin_phase_event_fmario[12] = 9999; // Unused
 
+        for (int i = kBtlGrpRange_jin_jin.start; i <= kBtlGrpRange_jin_jin.end; i++)
+        {
+            if (gState->apSettings->enemyRandomizer == 0)
+                break;
+            BattleGroupSetup *battleGroup = battleGroupList[i];
+            EnemyLoadout &loadout = gState->enemyLoadouts[i];
+            for (int32_t j = 0; j < battleGroup->num_enemies; j++)
+            {
+                BattleUnitSetup &unit = battleGroup->enemy_data[j];
+                unit.unit_kind_params = GetUnitKindById(loadout.enemyIds[j]);
+                unit.position.y = GetEnemyYPosition(loadout.enemyIds[j]);
+            }
+        }
+
+        // Assembly
         jin_evt_kagemario_init[2] = 0x386006B3; // li r3, 0x6B3 (GSW(1715))
         jin_evt_kagemario_init[6] = 0x2C030003; // cmpwi r3, 0x3
         jin_evt_kagemario_init[8] = 0x2C030007; // cmpwi r3, 0x7

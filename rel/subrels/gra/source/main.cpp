@@ -1,7 +1,10 @@
-#include "subrel_gra.h"
-#include "evt_cmd.h"
-#include "patch.h"
 #include "AP/rel_patch_definitions.h"
+#include "evt_cmd.h"
+#include "OWR.h"
+#include "patch.h"
+#include "subrel_gra.h"
+#include "ttyd/battle_unit.h"
+#include "ttyd/battle_database_common.h"
 #include "ttyd/evt_cam.h"
 #include "ttyd/evt_msg.h"
 #include "ttyd/evt_pouch.h"
@@ -9,6 +12,9 @@
 #include <cstdint>
 
 using namespace ttyd;
+using namespace mod::owr;
+using namespace ttyd::battle_unit;
+using namespace ttyd::battle_database_common;
 
 extern int32_t gra_evt_machibuse[];
 extern int32_t gra_evt_nameent[];
@@ -141,6 +147,20 @@ namespace mod
         gra_06_init_evt[133] = 6;
 
         gra_evt_usu_kagemario_party_kill[1] = GSW(1714); // Unused
+
+        for (int i = kBtlGrpRange_gra_gra.start; i <= kBtlGrpRange_gra_gra.end; i++)
+        {
+            if (gState->apSettings->enemyRandomizer == 0)
+                break;
+            BattleGroupSetup *battleGroup = battleGroupList[i];
+            EnemyLoadout &loadout = gState->enemyLoadouts[i];
+            for (int32_t j = 0; j < battleGroup->num_enemies; j++)
+            {
+                BattleUnitSetup &unit = battleGroup->enemy_data[j];
+                unit.unit_kind_params = GetUnitKindById(loadout.enemyIds[j]);
+                unit.position.y = GetEnemyYPosition(loadout.enemyIds[j]);
+            }
+        }
 
         // These are swByteGet
         gra_evt_kagemario_init[2] = 0x386006B3; // li r3, 0x6B3 (GSW(1715))

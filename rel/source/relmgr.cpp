@@ -145,6 +145,67 @@ void RelMgr::unloadRel()
     this->bssPtr = nullptr;
 }
 
+bool RelMgr::loadCustomRel()
+{
+    // Open custom.rel from disc
+    DVDFileInfo fileInfo;
+    if (!DVDOpen("/mod/custom.rel", &fileInfo))
+    {
+        return false;
+    }
+
+    // Get the size of the rel, aligned to DVD_READ_SIZE
+    uint32_t fileSize = fileInfo.length;
+    fileSize = (fileSize + DVD_READ_SIZE - 1) & ~(DVD_READ_SIZE - 1);
+
+    // Allocate memory for the rel on the default heap
+    constexpr int32_t heap = HeapType::HEAP_DEFAULT;
+    OSModuleInfo *relFile = reinterpret_cast<OSModuleInfo *>(__memAlloc(heap, fileSize));
+    if (relFile == nullptr)
+    {
+        DVDClose(&fileInfo);
+        return false;
+    }
+
+    // Read the rel from the disc
+    const int32_t result = DVDReadPrio(&fileInfo, relFile, fileSize, 0, 0);
+    DVDClose(&fileInfo);
+
+    if (result <= 0)
+    {
+        __memFree(heap, relFile);
+        return false;
+    }
+
+    // Allocate BSS
+    uint32_t bssSize = relFile->bssSize;
+    if (bssSize == 0)
+    {
+        bssSize = 1;
+    }
+
+    uint8_t *bssArea = reinterpret_cast<uint8_t *>(__memAlloc(heap, bssSize));
+    if (bssArea == nullptr)
+    {
+        __memFree(heap, relFile);
+        return false;
+    }
+
+    // Link the rel into the module list
+    if (!Link(relFile, bssArea, false))
+    {
+        OSUnlink(relFile);
+        __memFree(heap, bssArea);
+        __memFree(heap, relFile);
+        return false;
+    }
+
+    // Prevent relocations from being reprocessed when other modules link later
+    relFile->impSize = 0;
+
+    return true;
+}
+
 void RelMgr::runInitRel()
 {
     // Load the init rel, allocating to the ext heap to avoid fragmentation in the default heap

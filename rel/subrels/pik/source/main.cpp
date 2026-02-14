@@ -1,7 +1,10 @@
-#include "subrel_pik.h"
-#include "evt_cmd.h"
-#include "patch.h"
 #include "AP/rel_patch_definitions.h"
+#include "evt_cmd.h"
+#include "OWR.h"
+#include "patch.h"
+#include "subrel_pik.h"
+#include "ttyd/battle_unit.h"
+#include "ttyd/battle_database_common.h"
 #include "ttyd/evt_bero.h"
 #include "ttyd/evt_case.h"
 #include "ttyd/evt_item.h"
@@ -15,6 +18,9 @@
 #include <cstdint>
 
 using namespace ttyd;
+using namespace mod::owr;
+using namespace ttyd::battle_unit;
+using namespace ttyd::battle_database_common;
 
 extern int32_t pik_hom_10_evt_resha_start_00[];
 extern int32_t pik_evt_train[];
@@ -511,6 +517,20 @@ namespace mod
         pik_04_init_evt[13] = 18;
         pik_04_init_evt[142] = GSW(1708);
         pik_04_init_evt[143] = 18;
+
+        for (int i = kBtlGrpRange_pik_pik.start; i <= kBtlGrpRange_pik_pik.end; i++)
+        {
+            if (gState->apSettings->enemyRandomizer == 0)
+                break;
+            BattleGroupSetup *battleGroup = battleGroupList[i];
+            EnemyLoadout &loadout = gState->enemyLoadouts[i];
+            for (int32_t j = 0; j < battleGroup->num_enemies; j++)
+            {
+                BattleUnitSetup &unit = battleGroup->enemy_data[j];
+                unit.unit_kind_params = GetUnitKindById(loadout.enemyIds[j]);
+                unit.position.y = GetEnemyYPosition(loadout.enemyIds[j]);
+            }
+        }
     }
 
     void exit() {}

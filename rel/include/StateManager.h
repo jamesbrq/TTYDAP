@@ -3,6 +3,7 @@
 #include <cstdint>
 #include <ttyd/party.h>
 #include <ttyd/msgdrv.h>
+#include <ttyd/battle_unit.h>
 
 namespace mod::owr
 {
@@ -45,6 +46,9 @@ namespace mod::owr
         uint8_t grubbaBribeDirection; // 0x2E
         uint8_t grubbaBribeCost;    // 0x2F
         uint8_t bluePipeToggle;     // 0x30
+        uint8_t enemyRandomizer;   // 0x31
+        uint8_t enemyStatScaling;   // 0x32
+        uint8_t shuffleChapterStats; // 0x33
     };
 
     static_assert(sizeof(APSettings) == 0x34);
@@ -61,17 +65,28 @@ namespace mod::owr
 
    static_assert(sizeof(EntranceData) == NAME_LEN * 4);
 
+   struct EnemyLoadout
+   {
+       uint8_t enemyCount;
+       uint8_t enemyIds[5];
+   };
+
+   static_assert(sizeof(EnemyLoadout) == 0x6);
+
     class StateManager
     {
        public:
         void Init();
         StateManager();
-        bool LoadEntranceData();
+        size_t LoadEntranceData();
+        size_t LoadEnemyData();
         APSettings *apSettings;
         uint16_t *tattleItems;
         uint16_t *maniacItems;
         uint32_t state_msgWork[17];
         EntranceData entranceData[256];
+        EnemyLoadout enemyLoadouts[NUM_BATTLE_GROUPS];
+        size_t entranceDataCount;
         bool newTattle = false;
         bool firstDeath = false;
         void *starItemPtr = nullptr;

@@ -4,11 +4,13 @@
 #include <AP/rel_patch_definitions.h>
 #include <gc/OSModule.h>
 #include <StateManager.h>
+#include <ttyd/battle_database_common.h>
+#include <ttyd/battle_unit.h>
 #include <ttyd/evtmgr.h>
+#include <ttyd/msgdrv.h>
 #include <ttyd/party.h>
 #include <ttyd/seqdrv.h>
 #include <ttyd/win_root.h>
-#include <ttyd/msgdrv.h>
 #include <ttyd/windowdrv.h>
 
 #include <cstdint>
@@ -18,6 +20,8 @@ using namespace ttyd::seqdrv;
 using namespace ttyd::party;
 using namespace ttyd::evtmgr;
 using namespace ttyd::msgdrv;
+using namespace ttyd::battle_unit;
+using namespace ttyd::battle_database_common;
 
 namespace mod::owr
 {
@@ -72,6 +76,8 @@ namespace mod::owr
     int numericWindow_Main(ttyd::windowdrv::Window *window);
     void numericWindow_Disp(ttyd::dispdrv::CameraId cameraId, void *user);
     void replaceMultipleCharacters(ttyd::memory::SmartAllocationData *smartData, uint32_t startIndex, int value);
+    BattleWorkUnit *BtlUnit_Entry_Hook(BattleUnitSetup *setup);
+    void ScaleUnitStats(BattleUnitKind *unit, RelId rel);
 
     extern bool (*g_OSLink_trampoline)(OSModuleInfo *, void *);
     extern void (*g_seqSetSeq_trampoline)(SeqIndex, const char *, const char *);
@@ -88,6 +94,7 @@ namespace mod::owr
     extern void (*g_msgAnalize_trampoline)(ttyd::memory::SmartAllocationData *, const char *);
     extern int (*g_msgWindow_Entry_trampoline)(const char *, int, int);
     extern void (*g__load_trampoline)(const char *, const char *, const char *);
+    extern BattleWorkUnit *(*g_BtlUnit_Entry_trampoline)(BattleUnitSetup *);
 
     extern const char *goombellaName;
     extern const char *goombellaDescription;

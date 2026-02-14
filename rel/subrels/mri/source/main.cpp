@@ -1,7 +1,10 @@
-#include "subrel_mri.h"
-#include "evt_cmd.h"
-#include "patch.h"
 #include "AP/rel_patch_definitions.h"
+#include "evt_cmd.h"
+#include "OWR.h"
+#include "patch.h"
+#include "subrel_mri.h"
+#include "ttyd/battle_unit.h"
+#include "ttyd/battle_database_common.h"
 #include "ttyd/evt_hit.h"
 #include "ttyd/evt_map.h"
 #include "ttyd/evt_mario.h"
@@ -15,6 +18,9 @@
 #include <cstdint>
 
 using namespace ttyd;
+using namespace mod::owr;
+using namespace ttyd::battle_unit;
+using namespace ttyd::battle_database_common;
 
 extern int32_t mri_countdown[];
 extern int32_t mri_unk_mri_000130ec[];
@@ -1152,6 +1158,20 @@ namespace mod
         mri_19_init_evt[39] = GSW(1713);
         mri_19_init_evt[41] = 8;
         mri_19_init_evt[42] = 9;
+
+        for (int i = kBtlGrpRange_mri_mri.start; i <= kBtlGrpRange_mri_mri.end; i++)
+        {
+            if (gState->apSettings->enemyRandomizer == 0)
+                break;
+            BattleGroupSetup *battleGroup = battleGroupList[i];
+            EnemyLoadout &loadout = gState->enemyLoadouts[i];
+            for (int32_t j = 0; j < battleGroup->num_enemies; j++)
+            {
+                BattleUnitSetup &unit = battleGroup->enemy_data[j];
+                unit.unit_kind_params = GetUnitKindById(loadout.enemyIds[j]);
+                unit.position.y = GetEnemyYPosition(loadout.enemyIds[j]);
+            }
+        }
 
         // Assembly
         patch::writeBranchPair(&mri_starstone_rotate_func[26], 

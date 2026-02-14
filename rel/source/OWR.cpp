@@ -72,6 +72,8 @@ using namespace ttyd::seqdrv;
 using namespace ttyd::system;
 using namespace ttyd::msgdrv;
 using namespace ttyd::fontmgr;
+using namespace ttyd::battle_unit;
+using namespace ttyd::battle_database_common;
 using namespace mod::custom_warp;
 
 char warpTextBuffer[64];
@@ -164,6 +166,7 @@ namespace mod::owr
     KEEP_VAR void (*g_msgAnalize_trampoline)(ttyd::memory::SmartAllocationData *smartAlloc, const char *text) = nullptr;
     KEEP_VAR int (*g_msgWindow_Entry_trampoline)(const char *message, int unk1, int windowType) = nullptr;
     KEEP_VAR void (*g__load_trampoline)(const char *mapName, const char *entranceName, const char *beroName) = nullptr;
+    KEEP_VAR ttyd::battle_unit::BattleWorkUnit *(*g_BtlUnit_Entry_trampoline)(BattleUnitSetup *) = nullptr;
 
     void OWR::SequenceInit()
     {
@@ -181,6 +184,10 @@ namespace mod::owr
 
         if (SequencePosition != 0)
             return;
+
+        // Shuffle chapter stats before anything else
+        if (gState->apSettings->shuffleChapterStats == 1)
+            ShuffleBattleStats();
 
         ttyd::swdrv::swByteSet(1700, 16);
         ttyd::swdrv::swByteSet(1701, 3);
@@ -797,6 +804,47 @@ namespace mod::owr
             ttyd::swdrv::swSet(6321);
     }
 
+    // Get destination map and bero given source map and bero
+    // Returns true if found, false if not found
+    KEEP_FUNC bool getDestination(EntranceData *entranceData,
+                                  size_t count,
+                                  const char *srcMap,
+                                  const char *srcBero,
+                                  const char **outDestMap,
+                                  const char **outDestBero)
+    {
+        // Convert "None" to empty string for comparison
+        const char *searchBero = (strcmp(srcBero, "None") == 0) ? "" : srcBero;
+
+        for (size_t i = 0; i < count; ++i)
+        {
+            // Check if srcMap matches
+            if (strcmp(entranceData[i].srcMap, srcMap) != 0)
+                continue;
+
+            // Check if srcBero matches (treating "None" as "")
+            const char *entrySrcBero = (strcmp(entranceData[i].srcBero, "None") == 0) ? "" : entranceData[i].srcBero;
+            if (strcmp(entrySrcBero, searchBero) != 0)
+                continue;
+
+            // Found a match
+            *outDestMap = entranceData[i].destMap;
+
+            // Convert "None" to empty string for destBero output
+            if (strcmp(entranceData[i].destBero, "None") == 0)
+            {
+                *outDestBero = "";
+            }
+            else
+            {
+                *outDestBero = entranceData[i].destBero;
+            }
+
+            return true;
+        }
+        return false;
+    }
+
     KEEP_FUNC void seqSetSeqHook(SeqIndex seq, const char *map, const char *bero)
     {   
         if (seq == SeqIndex::kGameOver && !gState->firstDeath)
@@ -823,6 +871,14 @@ namespace mod::owr
         {
             return g_seqSetSeq_trampoline(seq, map, bero);
         }
+
+        /* const char *destMap = nullptr;
+        const char *destBero = nullptr;
+        if (getDestination(gState->entranceData, gState->entranceDataCount, map, bero, &destMap, &destBero))
+        {
+            map = destMap;
+            bero = destBero;
+        }*/
 
         // Give Zess T. the contact lens upon entering westside
         if (strcmp(map, "gor_03") == 0)
@@ -852,7 +908,7 @@ namespace mod::owr
                 ttyd::swdrv::swByteSet(1711, 3);
 
             if (ttyd::swdrv::swByteGet(1718) == 3) // Rougeport Sewers Punio Post Passageway Opened
-                ttyd::swdrv::swByteSet(1702, 5);
+                ttyd::swdrv::swByteSet(1718, 5);
 
             if (ttyd::swdrv::swByteGet(1713) == 3) // The Great Tree Ms. Mowz Knocks Out X-Naut
                 ttyd::swdrv::swByteSet(1713, 4);
@@ -1076,6 +1132,29 @@ namespace mod::owr
         for (int i = 8; i < 16; i++) gState->state_msgWork[i] = 0;
         ttyd::msgdrv::msgLoad("mod", 2);
         ttyd::msgdrv::msgLoad("desc", 3);
+    }
+    
+    KEEP_FUNC BattleWorkUnit *BtlUnit_Entry_Hook(BattleUnitSetup *setup)
+    {
+        const OSModuleInfo *relPtr = _globalWorkPtr->relocationBase;
+        if (!relPtr)
+            return g_BtlUnit_Entry_trampoline(setup);
+        RelId currentRel = static_cast<RelId>(relPtr->id);
+        ScaleUnitStats(setup->unit_kind_params, currentRel);
+        return g_BtlUnit_Entry_trampoline(setup);
+    }
+
+    KEEP_FUNC void ScaleUnitStats(BattleUnitKind *unit, RelId rel)
+    {
+        if ((gState->apSettings->enemyRandomizer == 0 && gState->apSettings->shuffleChapterStats == 0) ||
+            gState->apSettings->enemyStatScaling == 0)
+            return;
+        const BattleStatRelValues *statRelValues = GetBattleStats(rel);
+        BattleUnitKind *unit_kind = GetUnitKindById(unit->unit_type);
+        if (!unit_kind || rel == RelId::JON)
+            return;
+        unit->max_hp = statRelValues->base_hp;
+        unit->level = statRelValues->level;
     }
 
     KEEP_FUNC const char *msgSearchHook(const char *msgKey)

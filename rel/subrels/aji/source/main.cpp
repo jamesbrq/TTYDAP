@@ -1,10 +1,10 @@
-#include "subrel_aji.h"
-#include "evt_cmd.h"
-#include "ttyd/evtmgr.h"
-#include "ttyd/evtmgr_cmd.h"
-#include "ttyd/swdrv.h"
-#include "patch.h"
 #include "AP/rel_patch_definitions.h"
+#include "evt_cmd.h"
+#include "OWR.h"
+#include "patch.h"
+#include "subrel_aji.h"
+#include "ttyd/battle_database_common.h"
+#include "ttyd/battle_unit.h"
 #include "ttyd/evt_aji.h"
 #include "ttyd/evt_bero.h"
 #include "ttyd/evt_case.h"
@@ -13,13 +13,20 @@
 #include "ttyd/evt_npc.h"
 #include "ttyd/evt_shuryolight.h"
 #include "ttyd/evt_snd.h"
+#include "ttyd/evtmgr.h"
+#include "ttyd/evtmgr_cmd.h"
+#include "ttyd/swdrv.h"
 
 #include <cstdint>
 
+using namespace mod::owr;
 using namespace ttyd;
 using namespace ttyd::evtmgr;
 using namespace ttyd::evtmgr_cmd;
 using namespace ttyd::swdrv;
+using namespace ttyd::battle_unit;
+using namespace ttyd::battle_database_common;
+
 
 extern int32_t aji_bero_peach_data[];
 extern int32_t aji_first_evt[];
@@ -738,6 +745,18 @@ namespace mod
 
         aji_19_init_evt[43] = GSW(1707);
         aji_19_init_evt[44] = 8;
+
+        for (int i = kBtlGrpRange_aji_aji.start; i <= kBtlGrpRange_aji_aji.end; i++)
+        {
+            BattleGroupSetup* battleGroup = battleGroupList[i];
+            EnemyLoadout &loadout = gState->enemyLoadouts[i];
+            for (int32_t j = 0; j < battleGroup->num_enemies; j++)
+            {
+                BattleUnitSetup &unit = battleGroup->enemy_data[j];
+                unit.unit_kind_params = GetUnitKindById(loadout.enemyIds[j]);
+                unit.position.y = GetEnemyYPosition(loadout.enemyIds[j]);
+            }
+        }
 
         // Assembly
         aji_check_kou_evt[13] = 0x38840827; // addi r4, r4, 0x827 GSW(1703)

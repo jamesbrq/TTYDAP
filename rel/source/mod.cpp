@@ -15,6 +15,9 @@ namespace mod
 
     void main()
     {
+        // Load and link custom.rel permanently
+        relMgr.loadCustomRel();
+
         // Run the init rel to handle function hooks/patches/etc
         relMgr.runInitRel();
     }

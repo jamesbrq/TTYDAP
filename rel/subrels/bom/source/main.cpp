@@ -4,6 +4,8 @@
 #include "OWR.h"
 #include "patch.h"
 #include "subrel_bom.h"
+#include "ttyd/battle_unit.h"
+#include "ttyd/battle_database_common.h"
 #include "ttyd/evt_bero.h"
 #include "ttyd/evt_item.h"
 #include "ttyd/evt_mario.h"
@@ -16,7 +18,10 @@
 
 using namespace ttyd;
 using namespace mod;
+using namespace mod::owr;
 using namespace ttyd::common;
+using namespace ttyd::battle_unit;
+using namespace ttyd::battle_database_common;
 
 extern int32_t bom_first_evt_00[];
 extern int32_t bom_00_init_evt[];
@@ -260,6 +265,21 @@ namespace mod
         bom_02_init_evt[155] = GSW(1708);
         bom_02_init_evt[156] = 16;
 
+        for (int i = kBtlGrpRange_bom_bom.start; i <= kBtlGrpRange_bom_bom.end; i++)
+        {
+            if (gState->apSettings->enemyRandomizer == 0)
+                break;
+            BattleGroupSetup *battleGroup = battleGroupList[i];
+            EnemyLoadout &loadout = gState->enemyLoadouts[i];
+            for (int32_t j = 0; j < battleGroup->num_enemies; j++)
+            {
+                BattleUnitSetup &unit = battleGroup->enemy_data[j];
+                unit.unit_kind_params = GetUnitKindById(loadout.enemyIds[j]);
+                unit.position.y = GetEnemyYPosition(loadout.enemyIds[j]);
+            }
+        }
+
+        // Assembly
         bom_bom1000_jump[60] = 0x3883082C; // addi r4, r4, 0x82C GSW(1708)
         bom_bom1000_jump[90] = 0x2C030011; // cmpwi r3, 0x11
 

@@ -798,6 +798,7 @@ namespace mod::owr
         g_msgAnalize_trampoline = patch::hookFunction(msgdrv::msgAnalize, MsgAnalizeHook);
         g_msgWindow_Entry_trampoline = patch::hookFunction(msgdrv::msgWindow_Entry, msgWindow_Entry_Hook);
         g__load_trampoline = patch::hookFunction(seq_mapchange::_load, _load_Hook);
+        g_BtlUnit_Entry_trampoline = patch::hookFunction(battle_unit::BtlUnit_Entry, BtlUnit_Entry_Hook);
 
         // Hook gaugeDisp with a standard branch since the original function does not need to be called
         patch::writeBranch(statuswindow::gaugeDisp, DisplayStarPowerOrbs);

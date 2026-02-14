@@ -1,23 +1,29 @@
-#include "subrel_muj.h"
-#include "evt_cmd.h"
-#include "patch.h"
 #include "AP/rel_patch_definitions.h"
+#include "common.h"
+#include "evt_cmd.h"
+#include "OWR.h"
+#include "patch.h"
+#include "subrel_muj.h"
+#include "ttyd/battle_unit.h"
+#include "ttyd/battle_database_common.h"
 #include "ttyd/evt_cam.h"
 #include "ttyd/evt_hit.h"
 #include "ttyd/evt_item.h"
 #include "ttyd/evt_map.h"
 #include "ttyd/evt_mario.h"
-#include "ttyd/mario_pouch.h"
 #include "ttyd/evt_msg.h"
 #include "ttyd/evt_npc.h"
 #include "ttyd/evt_snd.h"
-#include "common.h"
+#include "ttyd/mario_pouch.h"
 
 #include <cstdint>
 #include <cstring>
 
-using namespace ttyd::common;
 using namespace ttyd;
+using namespace mod::owr;
+using namespace ttyd::battle_unit;
+using namespace ttyd::battle_database_common;
+using namespace ttyd::common;
 
 extern int32_t muj_nannpc_mode_setup;
 extern int32_t muj_garawaru_init_00[];
@@ -1274,6 +1280,20 @@ namespace mod
         muj_20_init_evt[225] = 8;
         muj_20_init_evt[334] = GSW(1708);
         muj_20_init_evt[335] = 18;
+
+		for (int i = kBtlGrpRange_muj_muj.start; i <= kBtlGrpRange_muj_muj.end; i++)
+        {
+            if (gState->apSettings->enemyRandomizer == 0)
+                break;
+            BattleGroupSetup *battleGroup = battleGroupList[i];
+            EnemyLoadout &loadout = gState->enemyLoadouts[i];
+            for (int32_t j = 0; j < battleGroup->num_enemies; j++)
+            {
+                BattleUnitSetup &unit = battleGroup->enemy_data[j];
+                unit.unit_kind_params = GetUnitKindById(loadout.enemyIds[j]);
+                unit.position.y = GetEnemyYPosition(loadout.enemyIds[j]);
+            }
+        }
 
         // Assembly Patches
         patch::writeIntWithCache(&muj_make_itemsel_table[14], 0x38000079); // li r0, 0x79

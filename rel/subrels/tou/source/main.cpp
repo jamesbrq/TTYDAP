@@ -1310,8 +1310,10 @@ namespace mod
 
         patch::writePatch(&tou_10_evt_1st_leagu[148], jolene_egg_hook, sizeof(jolene_egg_hook));
         if (mod::owr::gState->apSettings->cutsceneSkip)
+        {
             tou_10_evt_1st_leagu[54] = 37;
             tou_10_evt_1st_leagu[231] = PTR("tou_08");
+        }
 
         tou_evt_tou_chibi_yoshi[0] = 0;
         tou_evt_tou_chibi_yoshi[1] = 0;
