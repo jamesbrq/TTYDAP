@@ -246,17 +246,18 @@ namespace mod
         win_06_init_evt[65] = GSW(1702);
         win_06_init_evt[66] = 0;
 
-        for (int i = kBtlGrpRange_win_win.start; i <= kBtlGrpRange_win_win.end; i++)
+        if (gState->apSettings->enemyRandomizer)
         {
-            if (gState->apSettings->enemyRandomizer == 0)
-                break;
-            BattleGroupSetup *battleGroup = battleGroupList[i];
-            EnemyLoadout &loadout = gState->enemyLoadouts[i];
-            for (int32_t j = 0; j < battleGroup->num_enemies; j++)
+            for (int i = kBtlGrpRange_win_win.start; i <= kBtlGrpRange_win_win.end; i++)
             {
-                BattleUnitSetup &unit = battleGroup->enemy_data[j];
-                unit.unit_kind_params = GetUnitKindById(loadout.enemyIds[j]);
-                unit.position.y = GetEnemyYPosition(loadout.enemyIds[j]);
+                BattleGroupSetup *battleGroup = battleGroupList[i];
+                EnemyLoadout &loadout = gState->enemyLoadouts[i];
+                for (int32_t j = 0; j < battleGroup->num_enemies; j++)
+                {
+                    BattleUnitSetup &unit = battleGroup->enemy_data[j];
+                    unit.unit_kind_params = GetUnitKindById(loadout.enemyIds[j]);
+                    unit.position.y = GetEnemyYPosition(loadout.enemyIds[j]);
+                }
             }
         }
     }

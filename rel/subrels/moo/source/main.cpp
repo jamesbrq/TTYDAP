@@ -93,17 +93,18 @@ namespace mod
         moo_04_init_evt[74] = EVT_HELPER_CMD(0, 49);
         moo_04_init_evt[217] = 0;
 
-        for (int i = kBtlGrpRange_moo_moo.start; i <= kBtlGrpRange_moo_moo.end; i++)
+        if (gState->apSettings->enemyRandomizer)
         {
-            if (gState->apSettings->enemyRandomizer == 0)
-                break;
-            BattleGroupSetup *battleGroup = battleGroupList[i];
-            EnemyLoadout &loadout = gState->enemyLoadouts[i];
-            for (int32_t j = 0; j < battleGroup->num_enemies; j++)
+            for (int i = kBtlGrpRange_moo_moo.start; i <= kBtlGrpRange_moo_moo.end; i++)
             {
-                BattleUnitSetup &unit = battleGroup->enemy_data[j];
-                unit.unit_kind_params = GetUnitKindById(loadout.enemyIds[j]);
-                unit.position.y = GetEnemyYPosition(loadout.enemyIds[j]);
+                BattleGroupSetup *battleGroup = battleGroupList[i];
+                EnemyLoadout &loadout = gState->enemyLoadouts[i];
+                for (int32_t j = 0; j < battleGroup->num_enemies; j++)
+                {
+                    BattleUnitSetup &unit = battleGroup->enemy_data[j];
+                    unit.unit_kind_params = GetUnitKindById(loadout.enemyIds[j]);
+                    unit.position.y = GetEnemyYPosition(loadout.enemyIds[j]);
+                }
             }
         }
     }

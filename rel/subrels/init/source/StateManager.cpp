@@ -18,6 +18,7 @@ StateManager::StateManager()
     for (int i = 0; i < 8; i++) gState->state_msgWork[i] = ttyd::msgdrv::msgWork[i]; // msgWork.entries[0] && msgWork.entries[1]
     gState->state_msgWork[16] = ttyd::msgdrv::msgWork[8]; // msgWork.animBase
     gState->LoadEnemyData();
+    gState->entranceDataCount = gState->LoadEntranceData();
 }
 
 void StateManager::Init()
@@ -32,6 +33,7 @@ size_t StateManager::LoadEntranceData()
     // Set up the filepath
     char buf[64];
     snprintf(buf, sizeof(buf), "/msg/US/warp.txt");
+
     // Open the file
     DVDFileInfo fileInfo;
     if (!DVDOpen(buf, &fileInfo))

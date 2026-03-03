@@ -813,8 +813,18 @@ namespace mod::owr
                                   const char **outDestMap,
                                   const char **outDestBero)
     {
-        // Convert "None" to empty string for comparison
-        const char *searchBero = (strcmp(srcBero, "None") == 0) ? "" : srcBero;
+        if (!srcBero)
+        {
+            srcBero = "null";
+        }
+
+        if (!entranceData || !srcMap || !outDestMap || !outDestBero || gState->fastTraveling)
+        {
+            return false;
+        }
+
+        // Convert "null" to empty string for comparison
+        const char *searchBero = (strcmp(srcBero, "null") == 0) ? "" : srcBero;
 
         for (size_t i = 0; i < count; ++i)
         {
@@ -822,8 +832,8 @@ namespace mod::owr
             if (strcmp(entranceData[i].srcMap, srcMap) != 0)
                 continue;
 
-            // Check if srcBero matches (treating "None" as "")
-            const char *entrySrcBero = (strcmp(entranceData[i].srcBero, "None") == 0) ? "" : entranceData[i].srcBero;
+            // Check if srcBero matches (treating "null" as "")
+            const char *entrySrcBero = (strcmp(entranceData[i].srcBero, "null") == 0) ? "" : entranceData[i].srcBero;
             if (strcmp(entrySrcBero, searchBero) != 0)
                 continue;
 
@@ -831,7 +841,7 @@ namespace mod::owr
             *outDestMap = entranceData[i].destMap;
 
             // Convert "None" to empty string for destBero output
-            if (strcmp(entranceData[i].destBero, "None") == 0)
+            if (strcmp(entranceData[i].destBero, "null") == 0)
             {
                 *outDestBero = "";
             }
@@ -872,13 +882,15 @@ namespace mod::owr
             return g_seqSetSeq_trampoline(seq, map, bero);
         }
 
-        /* const char *destMap = nullptr;
+        const char *destMap = nullptr;
         const char *destBero = nullptr;
         if (getDestination(gState->entranceData, gState->entranceDataCount, map, bero, &destMap, &destBero))
         {
             map = destMap;
             bero = destBero;
-        }*/
+        }
+
+        gState->fastTraveling = false;
 
         // Give Zess T. the contact lens upon entering westside
         if (strcmp(map, "gor_03") == 0)
@@ -913,7 +925,7 @@ namespace mod::owr
             if (ttyd::swdrv::swByteGet(1713) == 3) // The Great Tree Ms. Mowz Knocks Out X-Naut
                 ttyd::swdrv::swByteSet(1713, 4);
 
-            if (ttyd::swdrv::swGet(2400) == 1) && (ttyd::swdrv::swByteGet(1703) == 12) // Glitz Pit Rawk Hawk Defeated
+            if (ttyd::swdrv::swGet(2400) == 1 && ttyd::swdrv::swByteGet(1703) == 12) // Glitz Pit Rawk Hawk Defeated
                 ttyd::swdrv::swByteSet(1703, 14);
 
             if (ttyd::swdrv::swByteGet(1703) == 15) // Glitz Pit Air Vent (Champ's Room -> Grubba's Office)
@@ -1572,6 +1584,7 @@ namespace mod::owr
                 bero = fastTravelPair.bero;
             }
 
+            gState->fastTraveling = true;
             ttyd::seqdrv::seqSetSeq(SeqIndex::kMapChange, mapName, bero);
         }
 
@@ -1752,7 +1765,7 @@ namespace mod::owr
         uint8_t count = 0;
         for (int i = 114; i <= 120; i++)
         {
-            if (ttyd::mario_pouch::pouchCheckItem(i) > 0)
+            if (pouchCheckItem(i) > 0)
                 count++;
         }
         apSettingsPtr->collectedStars = count;

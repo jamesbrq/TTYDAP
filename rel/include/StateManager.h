@@ -41,7 +41,7 @@ namespace mod::owr
         uint8_t goal;               // 0x29
         uint8_t starShuffle;        // 0x2A
         uint8_t dazzle;             // 0x2B
-        uint8_t reserved;           // 0x2C
+        uint8_t entranceRandomizer; // 0x2C
         uint8_t shopPurchaseLimit;  // 0x2D
         uint8_t grubbaBribeDirection; // 0x2E
         uint8_t grubbaBribeCost;    // 0x2F
@@ -84,11 +84,12 @@ namespace mod::owr
         uint16_t *tattleItems;
         uint16_t *maniacItems;
         uint32_t state_msgWork[17];
-        EntranceData entranceData[256];
+        EntranceData entranceData[600];
         EnemyLoadout enemyLoadouts[NUM_BATTLE_GROUPS];
         size_t entranceDataCount;
         bool newTattle = false;
         bool firstDeath = false;
+        bool fastTraveling = false;
         void *starItemPtr = nullptr;
         const char *starstoneName = nullptr;
         int32_t *starstoneFunctionPtr = nullptr;
