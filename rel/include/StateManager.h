@@ -46,12 +46,17 @@ namespace mod::owr
         uint8_t grubbaBribeDirection; // 0x2E
         uint8_t grubbaBribeCost;    // 0x2F
         uint8_t bluePipeToggle;     // 0x30
-        uint8_t enemyRandomizer;   // 0x31
+        uint8_t enemyRandomizer;    // 0x31
         uint8_t enemyStatScaling;   // 0x32
         uint8_t shuffleChapterStats; // 0x33
+        uint8_t padding[4];          // 0x34-0x37 This space has data
+        uint8_t badgeBP;             // 0x38
+        uint8_t badgeFP;             // 0x39
+        uint8_t partnerFP;           // 0x3A
+
     };
 
-    static_assert(sizeof(APSettings) == 0x34);
+    static_assert(sizeof(APSettings) == 0x3C);
 
     constexpr size_t NAME_LEN = 32;
 

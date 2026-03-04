@@ -710,6 +710,12 @@ monosiriSWArr:
 	.4byte 0x0000001E
 	.4byte 0x0000000B
 	.4byte 0x000006B0
+	.4byte 0x0000001F
+	.4byte 0x00000002
+	.4byte 0x000006B0
+	.4byte 0x00000020
+	.4byte 0x00000002
+	.4byte 0x000006B0
 	.4byte 0x00000021
 	.4byte 0x00000002
 	.4byte 0x000006B1

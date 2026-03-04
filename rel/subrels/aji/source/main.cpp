@@ -755,8 +755,8 @@ namespace mod
                 for (int32_t j = 0; j < battleGroup->num_enemies; j++)
                 {
                     BattleUnitSetup &unit = battleGroup->enemy_data[j];
-                    unit.unit_kind_params = GetUnitKindById(loadout.enemyIds[j]);
                     unit.position.y = GetEnemyYPosition(loadout.enemyIds[j]);
+                    unit.unit_kind_params = GetUnitKindById(loadout.enemyIds[j]);
                 }
             }
         }

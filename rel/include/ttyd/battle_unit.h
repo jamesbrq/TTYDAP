@@ -117,6 +117,7 @@ namespace ttyd::battle_unit
         extern BattleUnitKind unit_kamec_white;
         extern BattleUnitKind unit_kamec_white_bunsin;
         extern BattleUnitKind unit_borodo_king;
+        extern BattleUnitKind unit_basabasa_green;
         extern BattleUnitKind unit_nokonoko_fighter;
         extern BattleUnitKind unit_patapata_fighter;
         extern BattleUnitKind unit_crimson_togemet;
@@ -353,7 +354,7 @@ namespace ttyd::battle_unit
                     return &unit_dokugassun;
 
                 case 0xA7:
-                    return &unit_basabasa_chururu;
+                    return &unit_basabasa_green;
 
                 case 0xA8:
                     return &unit_giant_bomb;

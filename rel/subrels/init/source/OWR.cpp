@@ -1,6 +1,7 @@
 #include "evt_cmd.h"
 #include "OWR.h"
 #include "patch.h"
+#include "ttyd/battle_database_common.h"
 #include "ttyd/evt_bero.h"
 #include "ttyd/evt_mario.h"
 #include "ttyd/evt_memcard.h"
@@ -9,9 +10,9 @@
 #include "ttyd/mario_pouch.h"
 #include "ttyd/msgdrv.h"
 #include "ttyd/pmario_sound.h"
+#include "ttyd/seq_game.h"
 #include "ttyd/seq_logo.h"
 #include "ttyd/seq_mapchange.h"
-#include "ttyd/seq_game.h"
 #include "ttyd/seqdrv.h"
 #include "ttyd/statuswindow.h"
 #include "ttyd/swdrv.h"
@@ -124,10 +125,13 @@ extern char starstone_current_map[32];
 extern uint32_t main_next;
 extern ttyd::pmario_sound::BGMListEntry main_psbgmlist[262];
 
+extern BattleWeapon* partnerBattleWeaponArr[];
+
 using ttyd::seq_mapchange::_next_area;
 using ttyd::seq_mapchange::_next_map;
 using ttyd::system::irand;
 using namespace ttyd;
+using namespace ttyd::battle_database_common;
 using namespace mod::patch;
 using namespace mod::owr;
 
@@ -772,6 +776,129 @@ namespace mod::owr
         //Progressive Renames
         itemDataTable[ItemId::BOOTS].name = progressiveBootsName;
         itemDataTable[ItemId::HAMMER].name = progressiveHammerName;
+
+        const int len = 89;
+        uint32_t old = main_next;
+        main_next = *(uint32_t *)0x80003244;
+        switch (gState->apSettings->badgeBP)
+        {
+            case 1:
+            {
+                int8_t costs[len] = {};
+
+                for (int i = 0; i < len; i++)
+                {
+                    costs[i] = itemDataTable[ItemId::POWER_JUMP + i].bp_cost;
+                }
+
+                for (int i = len - 1; i > 0; i--)
+                {
+                    int j = irand(i + 1);
+                    int8_t tmp = costs[i];
+                    costs[i] = costs[j];
+                    costs[j] = tmp;
+                }
+
+                for (int i = 0; i < len; i++)
+                {
+                    itemDataTable[ItemId::POWER_JUMP + i].bp_cost = costs[i];
+                }
+
+                break;
+            }
+
+            case 2:
+            {
+                for (int i = 0; i < len; i++)
+                {
+                    itemDataTable[ItemId::POWER_JUMP + i].bp_cost = static_cast<int8_t>(irand(6) + 1);
+                }
+                break;
+            }
+
+            default:
+                break;
+        }
+
+switch (gState->apSettings->badgeFP)
+        {
+            case 1:
+            {
+                int8_t fpCosts[len] = {};
+                int validCount = 0;
+                for (int i = 0; i < len; i++)
+                {
+                    BattleWeapon *wp = itemDataTable[ItemId::POWER_JUMP + i].weapon_params;
+                    if (wp)
+                        fpCosts[validCount++] = wp->base_fp_cost;
+                }
+                for (int i = validCount - 1; i > 0; i--)
+                {
+                    int j = irand(i + 1);
+                    int8_t tmp = fpCosts[i];
+                    fpCosts[i] = fpCosts[j];
+                    fpCosts[j] = tmp;
+                }
+                int idx = 0;
+                for (int i = 0; i < len; i++)
+                {
+                    BattleWeapon *wp = itemDataTable[ItemId::POWER_JUMP + i].weapon_params;
+                    if (wp)
+                        wp->base_fp_cost = fpCosts[idx++];
+                }
+                break;
+            }
+            case 2:
+            {
+                for (int i = 0; i < len; i++)
+                {
+                    BattleWeapon *wp = itemDataTable[ItemId::POWER_JUMP + i].weapon_params;
+                    if (wp)
+                        wp->base_fp_cost = static_cast<int8_t>(irand(6) + 1);
+                }
+                break;
+            }
+            default:
+                break;
+        }
+
+        switch (gState->apSettings->partnerFP)
+        {
+            case 1:
+            {
+                int8_t fpCosts[21] = {};
+                for (int i = 0; i < 21; i++)
+                {
+                    fpCosts[i] = partnerBattleWeaponArr[i]->base_fp_cost;
+                }
+                for (int i = 20; i > 0; i--)
+                {
+                    int j = irand(i + 1);
+                    int8_t tmp = fpCosts[i];
+                    fpCosts[i] = fpCosts[j];
+                    fpCosts[j] = tmp;
+                }
+                for (int i = 0; i < 21; i++)
+                {
+                    partnerBattleWeaponArr[i]->base_fp_cost = fpCosts[i];
+                }
+                break;
+            }
+
+            case 2:
+            {
+                for (int i = 0; i < 21; i++)
+                {
+                    partnerBattleWeaponArr[i]->base_fp_cost = static_cast<int8_t>(irand(6) + 1);
+                }
+                break;
+            }
+
+            default:
+                break;
+        }
+
+        main_next = old;
     }
 
     OWR::OWR()
