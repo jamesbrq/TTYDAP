@@ -820,7 +820,7 @@ namespace mod::owr
                 break;
         }
 
-switch (gState->apSettings->badgeFP)
+        switch (gState->apSettings->badgeFP)
         {
             case 1:
             {
@@ -867,10 +867,14 @@ switch (gState->apSettings->badgeFP)
             case 1:
             {
                 int8_t fpCosts[21] = {};
-                for (int i = 0; i < 21; i++)
+                for (int i = 0; i < 7; i++)
                 {
-                    fpCosts[i] = partnerBattleWeaponArr[i]->base_fp_cost;
+                    for (int j = 1; j < 4; j++)
+                    {
+                        fpCosts[(i * 3) + (j - 1)] = partnerBattleWeaponArr[(i * 4) + j]->base_fp_cost;
+                    }
                 }
+
                 for (int i = 20; i > 0; i--)
                 {
                     int j = irand(i + 1);
@@ -878,18 +882,24 @@ switch (gState->apSettings->badgeFP)
                     fpCosts[i] = fpCosts[j];
                     fpCosts[j] = tmp;
                 }
+
                 for (int i = 0; i < 21; i++)
                 {
-                    partnerBattleWeaponArr[i]->base_fp_cost = fpCosts[i];
+                    int partnerIndex = i / 3;
+                    int weaponIndex = (i % 3) + 1;
+                    partnerBattleWeaponArr[(partnerIndex * 4) + weaponIndex]->base_fp_cost = fpCosts[i];
                 }
                 break;
             }
 
             case 2:
             {
-                for (int i = 0; i < 21; i++)
+                for (int i = 0; i < 7; i++)
                 {
-                    partnerBattleWeaponArr[i]->base_fp_cost = static_cast<int8_t>(irand(6) + 1);
+                    for (int j = 1; j < 4; j++)
+                    {
+                        partnerBattleWeaponArr[(i * 4) + j]->base_fp_cost = static_cast<int8_t>(irand(6) + 1);
+                    }
                 }
                 break;
             }
