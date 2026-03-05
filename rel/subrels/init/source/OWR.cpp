@@ -811,7 +811,7 @@ namespace mod::owr
             {
                 for (int i = 0; i < len; i++)
                 {
-                    itemDataTable[ItemId::POWER_JUMP + i].bp_cost = static_cast<int8_t>(irand(6) + 1);
+                    itemDataTable[ItemId::POWER_JUMP + i].bp_cost = static_cast<int8_t>(irand(7));
                 }
                 break;
             }
@@ -854,7 +854,7 @@ namespace mod::owr
                 {
                     BattleWeapon *wp = itemDataTable[ItemId::POWER_JUMP + i].weapon_params;
                     if (wp)
-                        wp->base_fp_cost = static_cast<int8_t>(irand(6) + 1);
+                        wp->base_fp_cost = static_cast<int8_t>(irand(7));
                 }
                 break;
             }
@@ -898,7 +898,7 @@ namespace mod::owr
                 {
                     for (int j = 1; j < 4; j++)
                     {
-                        partnerBattleWeaponArr[(i * 4) + j]->base_fp_cost = static_cast<int8_t>(irand(6) + 1);
+                        partnerBattleWeaponArr[(i * 4) + j]->base_fp_cost = static_cast<int8_t>(irand(7));
                     }
                 }
                 break;
