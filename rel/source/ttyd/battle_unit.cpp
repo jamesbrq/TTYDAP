@@ -10,6 +10,7 @@ namespace ttyd::battle_unit
                                            {GRA, 6, 15},
                                            {HEI, 4, 7},
                                            {JIN, 6, 16},
+                                           {LAS, 12, 28},
                                            {MOO, 10, 25},
                                            {MRI, 5, 11},
                                            {MUJ, 7, 18},
