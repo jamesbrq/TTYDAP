@@ -21,6 +21,8 @@ namespace gc::os
 
     extern "C"
     {
+        ChunkInfo *DLInsert(ChunkInfo *list, ChunkInfo *chunk);
+
         extern HeapInfo *OSAlloc_HeapArray;
         extern int OSAlloc_NumHeaps;
     }

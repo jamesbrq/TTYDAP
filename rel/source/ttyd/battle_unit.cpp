@@ -2,19 +2,19 @@
 
 namespace ttyd::battle_unit
 {
-    BattleStatRelValues g_battleStats[] = {{AJI, 10, 26},
-                                           {BOM, 10, 25},
-                                           {DOU, 8, 19},
-                                           {EKI, 8, 21},
+    BattleStatRelValues g_battleStats[] = {{AJI, 9, 28},
+                                           {BOM, 9, 26},
+                                           {DOU, 8, 10},
+                                           {EKI, 8, 23},
                                            {GON, 4, 8},
                                            {GRA, 6, 15},
                                            {HEI, 4, 7},
                                            {JIN, 6, 16},
-                                           {LAS, 12, 28},
-                                           {MOO, 10, 25},
+                                           {LAS, 10, 30},
+                                           {MOO, 9, 28},
                                            {MRI, 5, 11},
-                                           {MUJ, 7, 18},
-                                           {PIK, 8, 23},
+                                           {MUJ, 7, 20},
+                                           {PIK, 8, 24},
                                            {TIK, 2, 6},
                                            {TOU, 6, 13},
                                            {TOU2, 6, 13},
@@ -37,14 +37,14 @@ namespace ttyd::battle_unit
         const int count = g_battleStatsCount;
         uint32_t old = ttyd::system::main_next;
         ttyd::system::main_next = *(uint32_t *)0x80003244;
-        int origHp[16];
-        int origLv[16];
+        int origHp[17];
+        int origLv[17];
         for (int i = 0; i < count; ++i)
         {
             origHp[i] = g_battleStats[i].base_hp;
             origLv[i] = g_battleStats[i].level;
         }
-        int indices[16];
+        int indices[17];
         for (int i = 0; i < count; ++i) indices[i] = i;
         for (int i = count - 1; i > 0; --i)
         {

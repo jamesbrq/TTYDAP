@@ -843,7 +843,7 @@ namespace mod::owr
             // Convert "None" to empty string for destBero output
             if (strcmp(entranceData[i].destBero, "null") == 0)
             {
-                *outDestBero = "";
+                *outDestBero = nullptr;
             }
             else
             {
@@ -1163,7 +1163,7 @@ namespace mod::owr
             return;
         const BattleStatRelValues *statRelValues = GetBattleStats(rel);
         BattleUnitKind *unit_kind = GetUnitKindById(unit->unit_type);
-        if (!unit_kind || rel == RelId::JON)
+        if (!unit_kind || !statRelValues || rel == RelId::JON)
             return;
         unit->max_hp = statRelValues->base_hp;
         unit->level = statRelValues->level;

@@ -1,4 +1,5 @@
 #include "relmgr.h"
+#include "rel_shrink.h"
 #include "OWR.h"
 #include "gc/dvd.h"
 #include "gc/os.h"
@@ -200,8 +201,7 @@ bool RelMgr::loadCustomRel()
         return false;
     }
 
-    // Prevent relocations from being reprocessed when other modules link later
-    relFile->impSize = 0;
+    MakeRelFixed(heap, relFile);
 
     return true;
 }
