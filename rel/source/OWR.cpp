@@ -818,9 +818,19 @@ namespace mod::owr
             srcBero = "null";
         }
 
-        if (!entranceData || !srcMap || !outDestMap || !outDestBero || gState->fastTraveling)
+        if (!entranceData || !srcMap || !outDestMap || !outDestBero || gState->fastTraveling || !gState->apSettings->inGame)
         {
             return false;
+        }
+
+        // If srcMap starts with "rsh", only match on the first 6 characters
+        char mapBuf[16];
+        const char *mapToCompare = srcMap;
+        if (strncmp(srcMap, "rsh", 3) == 0 && strlen(srcMap) > 6)
+        {
+            strncpy(mapBuf, srcMap, 6);
+            mapBuf[6] = '\0';
+            mapToCompare = mapBuf;
         }
 
         // Convert "null" to empty string for comparison
@@ -829,7 +839,7 @@ namespace mod::owr
         for (size_t i = 0; i < count; ++i)
         {
             // Check if srcMap matches
-            if (strcmp(entranceData[i].srcMap, srcMap) != 0)
+            if (strcmp(entranceData[i].srcMap, mapToCompare) != 0)
                 continue;
 
             // Check if srcBero matches (treating "null" as "")
