@@ -258,7 +258,6 @@ namespace mod
         las_unlock_evt_22[1] = GSW(1708);
         las_unlock_evt_22[2] = 11;
 
-        las_key_check_evt_22[2] = 46;
 
         las_22_init_evt[19] = GSW(1708);
         las_22_init_evt[20] = 8;
@@ -268,7 +267,6 @@ namespace mod
         las_22_init_evt[116] = 1;
         las_22_init_evt[129] = GSW(1708);
         las_22_init_evt[130] = 11;
-        las_22_init_evt[134] = 46;
 
         las_23_init_evt[1] = GSW(1708);
         las_23_init_evt[2] = 8;
@@ -284,7 +282,6 @@ namespace mod
         las_24_init_evt[44] = GSW(1708);
         las_24_init_evt[45] = 13;
 
-        las_key_check_evt_25[2] = 46;
 
         las_unlock_evt_25[1] = GSW(1708);
         las_unlock_evt_25[2] = 14;
@@ -295,7 +292,6 @@ namespace mod
         las_25_init_evt[29] = 1;
         las_25_init_evt[51] = GSWF(6112);
         las_25_init_evt[52] = 1;
-        las_25_init_evt[112] = 46;
 
         las_bonbaba_evt[795] = GSWF(6072);
         las_bonbaba_evt[796] = 1;
@@ -368,10 +364,6 @@ namespace mod
 
         las_30_init_evt[1] = GSW(1708);
         las_30_init_evt[2] = 16;
-
-        las_key_tbl_05[0] = 46;
-        las_key_tbl_22[0] = 46;
-        las_key_tbl_25[0] = 46;
 
         if (mod::owr::gState->apSettings->cutsceneSkip)
         {

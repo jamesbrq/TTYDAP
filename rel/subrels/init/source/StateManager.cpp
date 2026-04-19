@@ -94,6 +94,11 @@ size_t StateManager::LoadEntranceData()
         if (len >= NAME_LEN)
             entranceData[entriesLoaded].destMap[NAME_LEN - 1] = '\0';
         ptr += len + 1;
+        // If destMap starts with "rsh", append "_a"
+        if (strncmp(entranceData[entriesLoaded].destMap, "rsh", 3) == 0)
+        {
+            strcat(entranceData[entriesLoaded].destMap, "_a");
+        }
         // Read destBero
         len = strlen(ptr);
         if (ptr + len >= end)
