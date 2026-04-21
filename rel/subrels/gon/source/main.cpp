@@ -127,6 +127,7 @@ namespace mod
         gon_evt_hashi[25] = GSWF(6004);
         gon_evt_hashi[26] = 1;
 
+        gon_evt_chk_04[2] = 12;
 
         gon_evt_unlock_04[6] = GSWF(6005);
         gon_evt_unlock_04[7] = 1;
@@ -140,10 +141,12 @@ namespace mod
         gon_04_init_evt[328] = PTR("MOBJ_Lv3BigBlock");
         gon_04_init_evt[332] = GSWF(6005);
         gon_04_init_evt[333] = 1;
+        gon_04_init_evt[337] = 12;
 
         gon_evt_unlock00[6] = GSWF(6007);
         gon_evt_unlock00[7] = 1;
 
+        gon_evt_chk01_05[2] = 12;
 
         gon_evt_unlock01[6] = GSWF(6008);
         gon_evt_unlock01[7] = 1;
@@ -157,6 +160,7 @@ namespace mod
         gon_05_init_evt[276] = 1;
         gon_05_init_evt[295] = GSWF(6008);
         gon_05_init_evt[296] = 1;
+        gon_05_init_evt[300] = 12;
 
         gon_tsuritenjo_event[126] = GSWF(6010);
         gon_tsuritenjo_event[127] = 1;
@@ -181,12 +185,14 @@ namespace mod
         gon_07_init_evt[22] = GSWF(6012);
         gon_07_init_evt[23] = 1;
 
+        gon_evt_chk_08[2] = 12;
 
         gon_evt_unlock_08[6] = GSWF(6013);
         gon_evt_unlock_08[7] = 1;
 
         gon_08_init_evt[199] = GSWF(6013);
         gon_08_init_evt[200] = 1;
+        gon_08_init_evt[204] = 12;
 
         gon_10_init_evt[35] = GSW(1711);
         gon_10_init_evt[36] = 7;
@@ -217,6 +223,11 @@ namespace mod
         gon_12_init_evt[7] = 1;
         gon_12_init_evt[31] = GSWF(6017);
         gon_12_init_evt[32] = 1;
+
+        gon_key_tbl_04[0] = 12;
+        gon_key_tbl00_05[0] = 12;
+        gon_key_tbl01_05[0] = 12;
+        gon_key_tbl_08[0] = 12;
 
         if (gState->apSettings->enemyRandomizer)
         {
