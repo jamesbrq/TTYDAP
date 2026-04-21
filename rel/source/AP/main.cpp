@@ -18,6 +18,7 @@
 #include "ttyd/evt_memcard.h"
 #include "ttyd/evt_msg.h"
 #include "ttyd/evt_party.h"
+#include "ttyd/evt_shop.h"
 #include "ttyd/evt_snd.h"
 #include "ttyd/evt_sub.h"
 #include "ttyd/evtmgr.h"
@@ -30,8 +31,8 @@
 #include "ttyd/seq_mapchange.h"
 #include "ttyd/seqdrv.h"
 #include "ttyd/swdrv.h"
+#include "ttyd/tou.h"
 #include "visibility.h"
-#include <ttyd/evt_shop.h>
 
 #include <cstdint>
 #include <cstdio>
@@ -388,6 +389,8 @@ EVT_DEFINE_USER_FUNC_KEEP(handleIntermissionSkip)
         ttyd::swdrv::swByteSet(1703, 31);
         ttyd::evtmgr_cmd::evtSetValue(evt, evt->evtArguments[1], PTR("tou_01"));
         ttyd::evtmgr_cmd::evtSetValue(evt, evt->evtArguments[2], PTR("a_door_mon"));
+        ttyd::tou::tou_rankingReset();
+        ttyd::swdrv::swSet(2500);
     }
     else if (!strcmp(_next_area, "jin"))
     {

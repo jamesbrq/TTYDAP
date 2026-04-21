@@ -780,57 +780,81 @@ namespace mod::owr
         const int len = 89;
         uint32_t old = main_next;
         main_next = *(uint32_t *)0x80003244;
+
+        // Flat weights for costs 0..6: [1, 2, 4, 4, 4, 3, 2]
+        // Distribution: 0~5%, 1~10%, 2~20%, 3~20%, 4~20%, 5~15%, 6~10%
+        auto randBellCost = []() -> int8_t
+        {
+            static const int cum[7] = {1, 3, 7, 11, 15, 18, 20};
+            int r = irand(20);
+            for (int i = 0; i < 7; i++)
+            {
+                if (r < cum[i])
+                    return static_cast<int8_t>(i);
+            }
+            return 6; // unreachable, defensive
+        };
+
         switch (gState->apSettings->badgeBP)
         {
             case 1:
             {
-                int8_t costs[len] = {};
-
+                int8_t costs[len];
+                int slots[len];
+                int validCount = 0;
                 for (int i = 0; i < len; i++)
                 {
-                    costs[i] = itemDataTable[ItemId::POWER_JUMP + i].bp_cost;
+                    int8_t c = itemDataTable[ItemId::POWER_JUMP + i].bp_cost;
+                    if (c != 0)
+                    {
+                        costs[validCount] = c;
+                        slots[validCount] = i;
+                        validCount++;
+                    }
                 }
-
-                for (int i = len - 1; i > 0; i--)
+                for (int i = validCount - 1; i > 0; i--)
                 {
                     int j = irand(i + 1);
                     int8_t tmp = costs[i];
                     costs[i] = costs[j];
                     costs[j] = tmp;
                 }
-
-                for (int i = 0; i < len; i++)
+                for (int i = 0; i < validCount; i++)
                 {
-                    itemDataTable[ItemId::POWER_JUMP + i].bp_cost = costs[i];
+                    itemDataTable[ItemId::POWER_JUMP + slots[i]].bp_cost = costs[i];
                 }
-
                 break;
             }
-
             case 2:
             {
                 for (int i = 0; i < len; i++)
                 {
-                    itemDataTable[ItemId::POWER_JUMP + i].bp_cost = static_cast<int8_t>(irand(7));
+                    if (itemDataTable[ItemId::POWER_JUMP + i].bp_cost != 0)
+                    {
+                        itemDataTable[ItemId::POWER_JUMP + i].bp_cost = randBellCost();
+                    }
                 }
                 break;
             }
-
             default:
                 break;
         }
-
         switch (gState->apSettings->badgeFP)
         {
             case 1:
             {
-                int8_t fpCosts[len] = {};
+                int8_t fpCosts[len];
+                int slots[len];
                 int validCount = 0;
                 for (int i = 0; i < len; i++)
                 {
                     BattleWeapon *wp = itemDataTable[ItemId::POWER_JUMP + i].weapon_params;
-                    if (wp)
-                        fpCosts[validCount++] = wp->base_fp_cost;
+                    if (wp && wp->base_fp_cost != 0)
+                    {
+                        fpCosts[validCount] = wp->base_fp_cost;
+                        slots[validCount] = i;
+                        validCount++;
+                    }
                 }
                 for (int i = validCount - 1; i > 0; i--)
                 {
@@ -839,12 +863,10 @@ namespace mod::owr
                     fpCosts[i] = fpCosts[j];
                     fpCosts[j] = tmp;
                 }
-                int idx = 0;
-                for (int i = 0; i < len; i++)
+                for (int i = 0; i < validCount; i++)
                 {
-                    BattleWeapon *wp = itemDataTable[ItemId::POWER_JUMP + i].weapon_params;
-                    if (wp)
-                        wp->base_fp_cost = fpCosts[idx++];
+                    BattleWeapon *wp = itemDataTable[ItemId::POWER_JUMP + slots[i]].weapon_params;
+                    wp->base_fp_cost = fpCosts[i];
                 }
                 break;
             }
@@ -853,57 +875,66 @@ namespace mod::owr
                 for (int i = 0; i < len; i++)
                 {
                     BattleWeapon *wp = itemDataTable[ItemId::POWER_JUMP + i].weapon_params;
-                    if (wp)
-                        wp->base_fp_cost = static_cast<int8_t>(irand(7));
+                    if (wp && wp->base_fp_cost != 0)
+                    {
+                        wp->base_fp_cost = randBellCost();
+                    }
                 }
                 break;
             }
             default:
                 break;
         }
-
         switch (gState->apSettings->partnerFP)
         {
             case 1:
             {
-                int8_t fpCosts[21] = {};
+                int8_t fpCosts[21];
+                int slotP[21];
+                int slotW[21];
+                int validCount = 0;
                 for (int i = 0; i < 7; i++)
                 {
                     for (int j = 1; j < 4; j++)
                     {
-                        fpCosts[(i * 3) + (j - 1)] = partnerBattleWeaponArr[(i * 4) + j]->base_fp_cost;
+                        int8_t c = partnerBattleWeaponArr[(i * 4) + j]->base_fp_cost;
+                        if (c != 0)
+                        {
+                            fpCosts[validCount] = c;
+                            slotP[validCount] = i;
+                            slotW[validCount] = j;
+                            validCount++;
+                        }
                     }
                 }
-
-                for (int i = 20; i > 0; i--)
+                for (int i = validCount - 1; i > 0; i--)
                 {
                     int j = irand(i + 1);
                     int8_t tmp = fpCosts[i];
                     fpCosts[i] = fpCosts[j];
                     fpCosts[j] = tmp;
                 }
-
-                for (int i = 0; i < 21; i++)
+                for (int i = 0; i < validCount; i++)
                 {
-                    int partnerIndex = i / 3;
-                    int weaponIndex = (i % 3) + 1;
-                    partnerBattleWeaponArr[(partnerIndex * 4) + weaponIndex]->base_fp_cost = fpCosts[i];
+                    partnerBattleWeaponArr[(slotP[i] * 4) + slotW[i]]->base_fp_cost = fpCosts[i];
                 }
                 break;
             }
-
             case 2:
             {
                 for (int i = 0; i < 7; i++)
                 {
                     for (int j = 1; j < 4; j++)
                     {
-                        partnerBattleWeaponArr[(i * 4) + j]->base_fp_cost = static_cast<int8_t>(irand(7));
+                        BattleWeapon *wp = partnerBattleWeaponArr[(i * 4) + j];
+                        if (wp->base_fp_cost != 0)
+                        {
+                            wp->base_fp_cost = randBellCost();
+                        }
                     }
                 }
                 break;
             }
-
             default:
                 break;
         }

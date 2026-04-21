@@ -86,34 +86,34 @@ namespace ttyd::evt_bero
         // N_evt_bero_set_mario_bottomless_respawn_pos_on_bero_entry
 
         // .data
-        extern int32_t default_entevt[1];
-        extern int32_t default_outevt[1];
+        extern int32_t default_entevt[];
+        extern int32_t default_outevt[];
         extern BeroEntry bero_null;
-        extern int32_t evt_bero_nonride_check[1];
-        extern int32_t bero_open_door_play_se[1];
-        extern int32_t bero_close_door_play_se[1];
-        extern int32_t bero_play_enter_anime[1];
-        extern int32_t bero_play_out_anime[1];
-        extern int32_t bero_case_init_check[1];
-        extern int32_t bero_case_exec_none[1];
-        extern int32_t bero_case_exec_road[1];
-        extern int32_t bero_case_exec_door[1];
-        extern int32_t bero_case_exec_pipe_sub[1];
-        extern int32_t bero_case_exec_pipe[1];
-        extern int32_t bero_case_exec_gate[1];
-        extern int32_t bero_case_entry[1];
-        extern int32_t bero_case_entry_sub[1];
-        extern int32_t bero_case_switch_on[1];
-        extern int32_t bero_case_switch_off[1];
-        extern int32_t evt_bero_info_run_none[1];
-        extern int32_t evt_bero_info_run_road[1];
-        extern int32_t evt_bero_info_run_door[1];
-        extern int32_t evt_bero_info_run_pipe_sub00[1];
-        extern int32_t evt_bero_info_run_pipe[1];
-        extern int32_t evt_bero_info_run_gate[1];
-        extern int32_t evt_bero_info_run[1];
-        extern int32_t evt_bero_initial_pos[1];
-        extern int32_t evt_bero_mario_enter[1];
+        extern int32_t evt_bero_nonride_check[];
+        extern int32_t bero_open_door_play_se[];
+        extern int32_t bero_close_door_play_se[];
+        extern int32_t bero_play_enter_anime[];
+        extern int32_t bero_play_out_anime[];
+        extern int32_t bero_case_init_check[];
+        extern int32_t bero_case_exec_none[];
+        extern int32_t bero_case_exec_road[];
+        extern int32_t bero_case_exec_door[];
+        extern int32_t bero_case_exec_pipe_sub[];
+        extern int32_t bero_case_exec_pipe[];
+        extern int32_t bero_case_exec_gate[];
+        extern int32_t bero_case_entry[];
+        extern int32_t bero_case_entry_sub[];
+        extern int32_t bero_case_switch_on[];
+        extern int32_t bero_case_switch_off[];
+        extern int32_t evt_bero_info_run_none[];
+        extern int32_t evt_bero_info_run_road[];
+        extern int32_t evt_bero_info_run_door[];
+        extern int32_t evt_bero_info_run_pipe_sub00[];
+        extern int32_t evt_bero_info_run_pipe[];
+        extern int32_t evt_bero_info_run_gate[];
+        extern int32_t evt_bero_info_run[];
+        extern int32_t evt_bero_initial_pos[];
+        extern int32_t evt_bero_mario_enter[];
 
         // .bss
         extern BeroEntry *BeroINFOARR[16];

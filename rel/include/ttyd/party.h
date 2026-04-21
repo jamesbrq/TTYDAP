@@ -116,7 +116,7 @@ namespace ttyd::party
         // partyEntryMain
         // partyGetHeight
         uint32_t yoshiSetColor();
-        // partyKill2
+        void partyKill2(int slot);
         // partyKill
         // partyGoodbye
         // partyEntryPos

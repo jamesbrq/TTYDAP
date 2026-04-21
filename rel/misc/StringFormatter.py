@@ -112,6 +112,92 @@ strings_dict = {
                           "tough all over. Come back when\n"
                           "you got some coin to spare!\n<k>"),
 
+    # Jolene Bribe - mirrors Grubba's structure but in Jolene's
+    # formal, businesslike, faintly condescending tone.
+    "jolene_bribe": ("Ah.<wait 100> Mr. Gonzales.\n"
+                     "A moment of your time.\n<k>\n<p>\n"
+                     "Since assuming management of\n"
+                     "this establishment, I have been\n"
+                     "reviewing the books...\n<k>\n<p>\n"
+                     "and I must say, my predecessor's\n"
+                     "methods were... creative.\n<k>\n<p>\n"
+                     "Grubba maintained certain\n"
+                     "arrangements with his fighters.\n"
+                     "Off the record, of course.\n<k>\n<p>\n"
+                     "I am a practical woman,\n"
+                     "Mr. Gonzales. The Glitz Pit\n"
+                     "must remain profitable.\n<k>\n<p>\n"
+                     "So I am prepared to honor\n"
+                     "those arrangements.\n<k>\n<p>\n"
+                     "Which rank would you care to\n"
+                     "occupy? Up, down, it makes\n"
+                     "no difference to me.\n<o>"),
+
+    "jolene_rank_same": ("<p>\nMr. Gonzales, please.\n"
+                         "You already hold that rank.\n<k>\n<p>\n"
+                         "I do not have time for games.\n<k>\n<p>\n"
+                         "Return when you have made\n"
+                         "a genuine decision.\n<k>"),
+
+    "jolene_pay": ("<p>\nI see. That particular\n"
+                   "adjustment will require...\n<k>\n<p>\n"
+                   "<NUM> coin<S>.\n"
+                   "A reasonable fee, I believe.\n<k>\n<p>\n"
+                   "The paperwork will be handled\n"
+                   "discreetly. This conversation\n"
+                   "did not occur.\n<k>\n<p>\n"
+                   "Do we have an understanding?\n<o>"),
+
+    "jolene_pay_prompt": ("<select 0 2 0 60>\nWe have an understanding.\n"
+                          "I'd rather not, Jolene."),
+
+    "jolene_no_coins": ("<p>\nMr. Gonzales.\n"
+                        "I have counted your coins.\n<k>\n<p>\n"
+                        "You are short. Considerably.\n<k>\n<p>\n"
+                        "I do not extend credit, and\n"
+                        "I do not negotiate my rates.\n<k>\n<p>\n"
+                        "Return when your finances\n"
+                        "are in order.\n<k>"),
+
+    "jolene_pay_free": ("<p>\nAs it happens, that\n"
+                        "particular adjustment\n"
+                        "will cost you nothing.\n<k>\n<p>\n"
+                        "Consider it a professional\n"
+                        "courtesy. Shall I proceed?\n<o>"),
+
+    "jolene_pay_accept_free": ("<p>\nExcellent.\n"
+                               "The change has been made.\n<k>\n<p>\n"
+                               "No coins, no paperwork,\n"
+                               "no conversation.\n<k>\n<p>\n"
+                               "I trust you will find your\n"
+                               "new standing agreeable.\n<k>"),
+
+    "jolene_pay_accept": ("<p>\nExcellent.\n"
+                          "The coins, if you please.\n<k>\n<p>\n"
+                          "...Thank you. The adjustment\n"
+                          "has been entered into the\n"
+                          "official record.\n<k>\n<p>\n"
+                          "Or rather, it has not.\n"
+                          "That is the point.\n<k>\n<p>\n"
+                          "A pleasure, Mr. Gonzales.\n"
+                          "Do return if you require\n"
+                          "further adjustments.\n<k>"),
+
+    "jolene_pay_accept_no": ("<p>\nI see.\n"
+                             "A principled refusal.\n<k>\n<p>\n"
+                             "How refreshingly naive.\n<k>\n<p>\n"
+                             "The offer remains open,\n"
+                             "should you reconsider.\n<k>\n<p>\n"
+                             "Good day, Mr. Gonzales.\n<k>"),
+
+    "jolene_pay_reject": ("<p>\nA shame.\n"
+                          "I had taken you for a man\n"
+                          "who understands economics.\n<k>\n<p>\n"
+                          "No matter. The offer stands\n"
+                          "whenever you are prepared\n"
+                          "to be reasonable.\n<k>\n<p>\n"
+                          "Good day.\n<k>"),
+
     "pit_checkpoint_explain": ("<system>\nEvery 10 floors cleared\n"
                                "in the pit will unlock a\n"
                                "checkpoint.\n<k>\n<p>\n"

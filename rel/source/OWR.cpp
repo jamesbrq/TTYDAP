@@ -254,6 +254,9 @@ namespace mod::owr
             ttyd::swdrv::swSet(6035); // Storage Room Ms.Mowz Cutscene
         }
 
+        if (gState->apSettings->enemyRandomizer != 0)
+            ttyd::swdrv::swSet(2509); // Ch.3 first strike flag
+
         // Give Return Pipe.
         ttyd::mario_pouch::pouchGetItem(ItemId::INVALID_ITEM_PAPER_0054);
 
@@ -923,6 +926,10 @@ namespace mod::owr
         // Advance Ch.5 prologue if post-cortez
         if (ttyd::swdrv::swByteGet(1717) >= 10 && ttyd::swdrv::swByteGet(1705) < 7 && strncmp(map, "muj", 3) != 0 && strncmp(map, "dou", 3) != 0)
             ttyd::swdrv::swByteSet(1705, 11);
+
+        const ttyd::mario::Player *playerPtr = ttyd::mario::marioGetPtr();
+        if (strncmp(map, "tou", 3) == 0 && ttyd::swdrv::swGet(6075) == 1 && playerPtr->prevFollowerId == ttyd::party::PartyMembers::kEgg)
+            ttyd::party::partyKill2(1);
 
         if (gState->apSettings->cutsceneSkip)
         {

@@ -1,6 +1,6 @@
 #pragma once
 
-#define NUM_BATTLE_GROUPS 532
+#define NUM_BATTLE_GROUPS 504
 #define UNIT_KIND_TABLE_SIZE 0xE7
 
 #include <ttyd/battle_database_common.h>
@@ -415,7 +415,6 @@ namespace ttyd::battle_unit
             }
         }
 
-
         // Battle group setups
         extern BattleGroupSetup btlgrp_aji_aji_01_01_off_1;
         extern BattleGroupSetup btlgrp_aji_aji_01_02_off_1;
@@ -435,7 +434,6 @@ namespace ttyd::battle_unit
         extern BattleGroupSetup btlgrp_aji_aji_15_01_off_1;
         extern BattleGroupSetup btlgrp_aji_aji_mbmkII;
         extern BattleGroupSetup btlgrp_aji_aji_zako;
-        extern BattleGroupSetup btlgrp_bom_bom_00_01_off_1;
         extern BattleGroupSetup btlgrp_bom_bom_03_01_off_1;
         extern BattleGroupSetup btlgrp_bom_bom_03_01_off_2;
         extern BattleGroupSetup btlgrp_bom_bom_03_03_off_1;
@@ -445,7 +443,6 @@ namespace ttyd::battle_unit
         extern BattleGroupSetup btlgrp_bom_bom_04_02_off_1;
         extern BattleGroupSetup btlgrp_bom_bom_04_02_off_2;
         extern BattleGroupSetup btlgrp_bom_bom_04_03_off_1;
-        extern BattleGroupSetup btlgrp_dou_dou_00_01_off_1;
         extern BattleGroupSetup btlgrp_dou_dou_01_01_off_01;
         extern BattleGroupSetup btlgrp_dou_dou_02_01_off_01;
         extern BattleGroupSetup btlgrp_dou_dou_02_02_off_01;
@@ -804,7 +801,6 @@ namespace ttyd::battle_unit
         extern BattleGroupSetup btlgrp_las_las_29_black_peach_1;
         extern BattleGroupSetup btlgrp_las_las_29_black_peach_2;
         extern BattleGroupSetup btlgrp_las_las_bunbaba;
-        extern BattleGroupSetup btlgrp_moo_moo_00_01_off_1;
         extern BattleGroupSetup btlgrp_moo_moo_01_01_off_1;
         extern BattleGroupSetup btlgrp_moo_moo_01_02_off_1;
         extern BattleGroupSetup btlgrp_moo_moo_01_02_off_2;
@@ -845,7 +841,6 @@ namespace ttyd::battle_unit
         extern BattleGroupSetup btlgrp_mri_mri_20_02;
         extern BattleGroupSetup btlgrp_mri_mri_20_03;
         extern BattleGroupSetup btlgrp_mri_mri_mb;
-        extern BattleGroupSetup btlgrp_muj_muj_00_01;
         extern BattleGroupSetup btlgrp_muj_muj_01_01;
         extern BattleGroupSetup btlgrp_muj_muj_02_01_off_01;
         extern BattleGroupSetup btlgrp_muj_muj_02_01_off_02;
@@ -889,41 +884,17 @@ namespace ttyd::battle_unit
         extern BattleGroupSetup btlgrp_tik_tik_04_02_off_1;
         extern BattleGroupSetup btlgrp_tik_tik_04_02_on_1;
         extern BattleGroupSetup btlgrp_tik_tik_04_02_on_2;
-        extern BattleGroupSetup btlgrp_tik_tik_04_03_off_1;
-        extern BattleGroupSetup btlgrp_tik_tik_04_03_off_2;
-        extern BattleGroupSetup btlgrp_tik_tik_04_03_off_3;
-        extern BattleGroupSetup btlgrp_tik_tik_04_04_off_1;
-        extern BattleGroupSetup btlgrp_tik_tik_04_04_off_2;
-        extern BattleGroupSetup btlgrp_tik_tik_04_04_off_3;
         extern BattleGroupSetup btlgrp_tik_tik_07_01_off_1;
         extern BattleGroupSetup btlgrp_tik_tik_07_01_off_2;
         extern BattleGroupSetup btlgrp_tik_tik_07_02_off_1;
         extern BattleGroupSetup btlgrp_tik_tik_07_02_off_2;
-        extern BattleGroupSetup btlgrp_tik_tik_07_03_off_1;
-        extern BattleGroupSetup btlgrp_tik_tik_07_03_off_2;
-        extern BattleGroupSetup btlgrp_tik_tik_07_03_off_3;
-        extern BattleGroupSetup btlgrp_tik_tik_07_04_off_1;
-        extern BattleGroupSetup btlgrp_tik_tik_07_04_off_2;
-        extern BattleGroupSetup btlgrp_tik_tik_07_04_off_3;
         extern BattleGroupSetup btlgrp_tik_tik_15_01_off_1;
         extern BattleGroupSetup btlgrp_tik_tik_15_02_off_1;
         extern BattleGroupSetup btlgrp_tik_tik_15_03_off_1;
-        extern BattleGroupSetup btlgrp_tik_tik_15_04_off_1;
-        extern BattleGroupSetup btlgrp_tik_tik_15_04_off_2;
-        extern BattleGroupSetup btlgrp_tik_tik_15_04_off_3;
-        extern BattleGroupSetup btlgrp_tik_tik_15_05_off_1;
-        extern BattleGroupSetup btlgrp_tik_tik_15_05_off_2;
-        extern BattleGroupSetup btlgrp_tik_tik_15_05_off_3;
         extern BattleGroupSetup btlgrp_tik_tik_18_01_off_1;
         extern BattleGroupSetup btlgrp_tik_tik_18_01_off_2;
         extern BattleGroupSetup btlgrp_tik_tik_18_02_off_1;
         extern BattleGroupSetup btlgrp_tik_tik_18_02_off_2;
-        extern BattleGroupSetup btlgrp_tik_tik_18_03_off_1;
-        extern BattleGroupSetup btlgrp_tik_tik_18_03_off_2;
-        extern BattleGroupSetup btlgrp_tik_tik_18_03_off_3;
-        extern BattleGroupSetup btlgrp_tik_tik_18_04_off_1;
-        extern BattleGroupSetup btlgrp_tik_tik_18_04_off_2;
-        extern BattleGroupSetup btlgrp_tik_tik_18_04_off_3;
         extern BattleGroupSetup btlgrp_tik_tik_20_01_off_1;
         extern BattleGroupSetup btlgrp_tik_tik_20_02_off_1;
         extern BattleGroupSetup btlgrp_tik_tik_20_03_off_1;
@@ -986,125 +957,124 @@ namespace ttyd::battle_unit
             &btlgrp_aji_aji_01_06_off_1,  &btlgrp_aji_aji_01_07_off_1,  &btlgrp_aji_aji_01_08_off_1,
             &btlgrp_aji_aji_04_01_off_1,  &btlgrp_aji_aji_06_01_off_1,  &btlgrp_aji_aji_08_01_off_1,
             &btlgrp_aji_aji_09_01_off_1,  &btlgrp_aji_aji_10_01_off_1,  &btlgrp_aji_aji_13_01_off_1,
-            &btlgrp_aji_aji_13_02_off_1,  &btlgrp_aji_aji_15_01_off_1,  &btlgrp_bom_bom_00_01_off_1,
-            &btlgrp_bom_bom_03_01_off_1,  &btlgrp_bom_bom_03_01_off_2,  &btlgrp_bom_bom_03_03_off_1,
-            &btlgrp_bom_bom_03_03_off_2,  &btlgrp_bom_bom_04_01_off_1,  &btlgrp_bom_bom_04_01_off_2,
-            &btlgrp_bom_bom_04_02_off_1,  &btlgrp_bom_bom_04_02_off_2,  &btlgrp_bom_bom_04_03_off_1,
-            &btlgrp_dou_dou_00_01_off_1,  &btlgrp_dou_dou_01_01_off_01, &btlgrp_dou_dou_02_01_off_01,
-            &btlgrp_dou_dou_02_02_off_01, &btlgrp_dou_dou_03_01_off_01, &btlgrp_dou_dou_03_99_off_01,
-            &btlgrp_dou_dou_03_02_off_01, &btlgrp_dou_dou_03_03_off_01, &btlgrp_dou_dou_05_01_off_01,
-            &btlgrp_dou_dou_05_02_off_01, &btlgrp_dou_dou_06_01_off_01, &btlgrp_dou_dou_06_02_off_01,
-            &btlgrp_dou_dou_06_03_off_01, &btlgrp_dou_dou_07_01_off_01, &btlgrp_dou_dou_08_01_off_01,
-            &btlgrp_dou_dou_09_01_off_01, &btlgrp_dou_dou_09_02_off_01, &btlgrp_dou_dou_12_01_off_01,
-            &btlgrp_dou_dou_12_99_off_01, &btlgrp_dou_dou_13_01_off_01, &btlgrp_dou_dou_13_99_off_01,
-            &btlgrp_eki_eki_06_01_off_1,  &btlgrp_eki_eki_02_01_off_1,  &btlgrp_eki_eki_02_02_off_1,
-            &btlgrp_eki_eki_02_03_off_1,  &btlgrp_eki_eki_03_01_off_1,  &btlgrp_eki_eki_03_02_off_1,
-            &btlgrp_eki_eki_03_03_off_1,  &btlgrp_eki_eki_03_05_off_1,  &btlgrp_eki_eki_03_07_off_1,
-            &btlgrp_eki_eki_04_01_off_1,  &btlgrp_eki_eki_04_02_off_1,  &btlgrp_eki_eki_04_06_off_1,
-            &btlgrp_eki_eki_04_03_off_1,  &btlgrp_eki_eki_04_04_off_1,  &btlgrp_eki_eki_04_05_off_1,
-            &btlgrp_gon_gon_02_02_off_1,  &btlgrp_gon_gon_02_03_off_1,  &btlgrp_gon_gon_02_04_off_1,
-            &btlgrp_gon_gon_03_01_off_1,  &btlgrp_gon_gon_04_01_off_1,  &btlgrp_gon_gon_04_02_off_1,
-            &btlgrp_gon_gon_04_03_off_1,  &btlgrp_gon_gon_06_03_off_1,  &btlgrp_gon_gon_06_04_off_1,
-            &btlgrp_gon_gon_08_01_off_1,  &btlgrp_gon_gon_08_03_off_1,  &btlgrp_gon_gon_08_05_off_1,
-            &btlgrp_gon_gon_09_01_off_1,  &btlgrp_gon_gon_09_02_off_1,  &btlgrp_gon_gon_09_04_off_1,
-            &btlgrp_gon_gon_10_01_off_1,  &btlgrp_gon_gon_10_02_off_1,  &btlgrp_gon_gon_10_03_off_1,
-            &btlgrp_gra_gra_01_01_off_1,  &btlgrp_gra_gra_01_01_on_1,   &btlgrp_gra_gra_01_01_on_2,
-            &btlgrp_gra_gra_01_01_on_3,   &btlgrp_gra_gra_01_03_off_1,  &btlgrp_gra_gra_01_03_on_1,
-            &btlgrp_gra_gra_01_03_on_2,   &btlgrp_gra_gra_01_03_on_3,   &btlgrp_gra_gra_01_04_off_1,
-            &btlgrp_gra_gra_01_04_on_1,   &btlgrp_gra_gra_01_04_on_2,   &btlgrp_gra_gra_01_04_on_3,
-            &btlgrp_gra_gra_03_01_off_1,  &btlgrp_gra_gra_03_01_off_2,  &btlgrp_gra_gra_03_04_off_1,
-            &btlgrp_gra_gra_03_04_off_2,  &btlgrp_gra_gra_03_04_off_3,  &btlgrp_gra_gra_03_05_off_1,
-            &btlgrp_gra_gra_03_05_off_2,  &btlgrp_gra_gra_03_05_off_3,  &btlgrp_gra_gra_04_02_off_1,
-            &btlgrp_gra_gra_04_02_off_2,  &btlgrp_gra_gra_04_02_off_3,  &btlgrp_gra_gra_05_01_off_1,
-            &btlgrp_gra_gra_05_01_off_2,  &btlgrp_gra_gra_05_03_off_1,  &btlgrp_gra_gra_05_03_off_2,
-            &btlgrp_gra_gra_05_03_off_3,  &btlgrp_hei_hei_01_01_off_1,  &btlgrp_hei_hei_02_02_off_1,
-            &btlgrp_hei_hei_02_03_off_1,  &btlgrp_hei_hei_02_04_off_1,  &btlgrp_hei_hei_03_01_off_1,
-            &btlgrp_hei_hei_04_01_off_1,  &btlgrp_hei_hei_04_01_off_2,  &btlgrp_hei_hei_04_02_off_1,
-            &btlgrp_hei_hei_04_02_off_2,  &btlgrp_hei_hei_05_01_off_1,  &btlgrp_hei_hei_06_02_off_1,
-            &btlgrp_hei_hei_06_03_off_1,  &btlgrp_hei_hei_06_03_off_2,  &btlgrp_hei_hei_07_01_off_1,
-            &btlgrp_hei_hei_08_01_off_1,  &btlgrp_hei_hei_09_01_off_1,  &btlgrp_hei_hei_09_01_off_2,
-            &btlgrp_hei_hei_09_03_off_1,  &btlgrp_hei_hei_09_03_off_2,  &btlgrp_hei_hei_11_01_off_1,
-            &btlgrp_hei_hei_11_01_off_2,  &btlgrp_hei_hei_11_03_off_1,  &btlgrp_hei_hei_11_03_off_2,
-            &btlgrp_hei_hei_12_01_off_1,  &btlgrp_hei_hei_13_02_off_1,  &btlgrp_hei_hei_13_02_on_1,
-            &btlgrp_hei_hei_13_02_on_2,   &btlgrp_hei_hei_13_02_on_3,   &btlgrp_hei_hei_13_03_off_1,
-            &btlgrp_hei_hei_13_03_on_1,   &btlgrp_hei_hei_13_03_on_2,   &btlgrp_hei_hei_13_04_off_1,
-            &btlgrp_hei_hei_13_04_on_1,   &btlgrp_hei_hei_13_04_on_2,   &btlgrp_jin_jin_00_01_off_1,
-            &btlgrp_jin_jin_00_01_off_2,  &btlgrp_jin_jin_00_01_off_3,  &btlgrp_jin_jin_00_01_off_4,
-            &btlgrp_jin_jin_01_01_off_1,  &btlgrp_jin_jin_01_01_off_2,  &btlgrp_jin_jin_01_01_off_3,
-            &btlgrp_jin_jin_01_03_off_1,  &btlgrp_jin_jin_01_03_off_2,  &btlgrp_jin_jin_01_03_off_3,
-            &btlgrp_jin_jin_03_01_off_1,  &btlgrp_jin_jin_03_02_off_1,  &btlgrp_jin_jin_07_01_off_1,
-            &btlgrp_jin_jin_07_01_off_2,  &btlgrp_jin_jin_07_02_off_1,  &btlgrp_jin_jin_07_02_off_2,
-            &btlgrp_jin_jin_09_01_off_1,  &btlgrp_jin_jin_10_01_off_1,  &btlgrp_jin_jin_10_02_off_1,
-            &btlgrp_jin_jin_10_03_off_1,  &btlgrp_jin_jin_10_04_off_1,  &btlgrp_jin_jin_10_05_off_1,
-            &btlgrp_jin_jin_10_06_off_1,  &btlgrp_jon_jon_01_01_off_1,  &btlgrp_jon_jon_01_01_off_2,
-            &btlgrp_jon_jon_01_01_off_3,  &btlgrp_jon_jon_01_02_off_1,  &btlgrp_jon_jon_01_02_off_2,
-            &btlgrp_jon_jon_01_02_off_3,  &btlgrp_jon_jon_01_03_off_1,  &btlgrp_jon_jon_01_03_off_2,
-            &btlgrp_jon_jon_01_03_off_3,  &btlgrp_jon_jon_01_04_off_1,  &btlgrp_jon_jon_01_04_off_2,
-            &btlgrp_jon_jon_01_04_off_3,  &btlgrp_jon_jon_01_05_off_1,  &btlgrp_jon_jon_01_05_off_2,
-            &btlgrp_jon_jon_01_05_off_3,  &btlgrp_jon_jon_11_01_off_1,  &btlgrp_jon_jon_11_01_off_2,
-            &btlgrp_jon_jon_11_01_off_3,  &btlgrp_jon_jon_11_02_off_1,  &btlgrp_jon_jon_11_02_off_2,
-            &btlgrp_jon_jon_11_02_off_3,  &btlgrp_jon_jon_11_03_off_1,  &btlgrp_jon_jon_11_03_off_2,
-            &btlgrp_jon_jon_11_03_off_3,  &btlgrp_jon_jon_11_04_off_1,  &btlgrp_jon_jon_11_04_off_2,
-            &btlgrp_jon_jon_11_04_off_3,  &btlgrp_jon_jon_11_05_off_1,  &btlgrp_jon_jon_11_05_off_2,
-            &btlgrp_jon_jon_11_05_off_3,  &btlgrp_jon_jon_21_01_off_1,  &btlgrp_jon_jon_21_01_off_2,
-            &btlgrp_jon_jon_21_01_off_3,  &btlgrp_jon_jon_21_02_off_1,  &btlgrp_jon_jon_21_02_off_2,
-            &btlgrp_jon_jon_21_02_off_3,  &btlgrp_jon_jon_21_03_off_1,  &btlgrp_jon_jon_21_03_off_2,
-            &btlgrp_jon_jon_21_03_off_3,  &btlgrp_jon_jon_21_04_off_1,  &btlgrp_jon_jon_21_04_off_2,
-            &btlgrp_jon_jon_21_04_off_3,  &btlgrp_jon_jon_21_05_off_1,  &btlgrp_jon_jon_21_05_off_2,
-            &btlgrp_jon_jon_21_05_off_3,  &btlgrp_jon_jon_31_01_off_1,  &btlgrp_jon_jon_31_01_off_2,
-            &btlgrp_jon_jon_31_01_off_3,  &btlgrp_jon_jon_31_02_off_1,  &btlgrp_jon_jon_31_02_off_2,
-            &btlgrp_jon_jon_31_02_off_3,  &btlgrp_jon_jon_31_03_off_1,  &btlgrp_jon_jon_31_03_off_2,
-            &btlgrp_jon_jon_31_03_off_3,  &btlgrp_jon_jon_31_04_off_1,  &btlgrp_jon_jon_31_04_off_2,
-            &btlgrp_jon_jon_31_04_off_3,  &btlgrp_jon_jon_31_05_off_1,  &btlgrp_jon_jon_31_05_off_2,
-            &btlgrp_jon_jon_31_05_off_3,  &btlgrp_jon_jon_41_01_off_1,  &btlgrp_jon_jon_41_01_off_2,
-            &btlgrp_jon_jon_41_01_off_3,  &btlgrp_jon_jon_41_02_off_1,  &btlgrp_jon_jon_41_02_off_2,
-            &btlgrp_jon_jon_41_02_off_3,  &btlgrp_jon_jon_41_03_off_1,  &btlgrp_jon_jon_41_03_off_2,
-            &btlgrp_jon_jon_41_03_off_3,  &btlgrp_jon_jon_41_04_off_1,  &btlgrp_jon_jon_41_04_off_2,
-            &btlgrp_jon_jon_41_04_off_3,  &btlgrp_jon_jon_41_05_off_1,  &btlgrp_jon_jon_41_05_off_2,
-            &btlgrp_jon_jon_41_05_off_3,  &btlgrp_jon_jon_51_01_off_1,  &btlgrp_jon_jon_51_01_off_2,
-            &btlgrp_jon_jon_51_01_off_3,  &btlgrp_jon_jon_51_02_off_1,  &btlgrp_jon_jon_51_02_off_2,
-            &btlgrp_jon_jon_51_02_off_3,  &btlgrp_jon_jon_51_03_off_1,  &btlgrp_jon_jon_51_03_off_2,
-            &btlgrp_jon_jon_51_03_off_3,  &btlgrp_jon_jon_51_04_off_1,  &btlgrp_jon_jon_51_04_off_2,
-            &btlgrp_jon_jon_51_04_off_3,  &btlgrp_jon_jon_51_05_off_1,  &btlgrp_jon_jon_51_05_off_2,
-            &btlgrp_jon_jon_51_05_off_3,  &btlgrp_jon_jon_61_01_off_1,  &btlgrp_jon_jon_61_01_off_2,
-            &btlgrp_jon_jon_61_01_off_3,  &btlgrp_jon_jon_61_02_off_1,  &btlgrp_jon_jon_61_02_off_2,
-            &btlgrp_jon_jon_61_02_off_3,  &btlgrp_jon_jon_61_03_off_1,  &btlgrp_jon_jon_61_03_off_2,
-            &btlgrp_jon_jon_61_03_off_3,  &btlgrp_jon_jon_61_04_off_1,  &btlgrp_jon_jon_61_04_off_2,
-            &btlgrp_jon_jon_61_04_off_3,  &btlgrp_jon_jon_61_05_off_1,  &btlgrp_jon_jon_61_05_off_2,
-            &btlgrp_jon_jon_61_05_off_3,  &btlgrp_jon_jon_71_01_off_1,  &btlgrp_jon_jon_71_01_off_2,
-            &btlgrp_jon_jon_71_01_off_3,  &btlgrp_jon_jon_71_02_off_1,  &btlgrp_jon_jon_71_02_off_2,
-            &btlgrp_jon_jon_71_02_off_3,  &btlgrp_jon_jon_71_03_off_1,  &btlgrp_jon_jon_71_03_off_2,
-            &btlgrp_jon_jon_71_03_off_3,  &btlgrp_jon_jon_71_04_off_1,  &btlgrp_jon_jon_71_04_off_2,
-            &btlgrp_jon_jon_71_04_off_3,  &btlgrp_jon_jon_71_05_off_1,  &btlgrp_jon_jon_71_05_off_2,
-            &btlgrp_jon_jon_71_05_off_3,  &btlgrp_jon_jon_81_01_off_1,  &btlgrp_jon_jon_81_01_off_2,
-            &btlgrp_jon_jon_81_01_off_3,  &btlgrp_jon_jon_81_02_off_1,  &btlgrp_jon_jon_81_02_off_2,
-            &btlgrp_jon_jon_81_02_off_3,  &btlgrp_jon_jon_81_03_off_1,  &btlgrp_jon_jon_81_03_off_2,
-            &btlgrp_jon_jon_81_03_off_3,  &btlgrp_jon_jon_81_04_off_1,  &btlgrp_jon_jon_81_04_off_2,
-            &btlgrp_jon_jon_81_04_off_3,  &btlgrp_jon_jon_81_05_off_1,  &btlgrp_jon_jon_81_05_off_2,
-            &btlgrp_jon_jon_81_05_off_3,  &btlgrp_jon_jon_91_01_off_1,  &btlgrp_jon_jon_91_01_off_2,
-            &btlgrp_jon_jon_91_01_off_3,  &btlgrp_jon_jon_91_02_off_1,  &btlgrp_jon_jon_91_02_off_2,
-            &btlgrp_jon_jon_91_02_off_3,  &btlgrp_jon_jon_91_03_off_1,  &btlgrp_jon_jon_91_03_off_2,
-            &btlgrp_jon_jon_91_03_off_3,  &btlgrp_jon_jon_91_04_off_1,  &btlgrp_jon_jon_91_04_off_2,
-            &btlgrp_jon_jon_91_04_off_3,  &btlgrp_jon_jon_91_05_off_1,  &btlgrp_jon_jon_91_05_off_2,
-            &btlgrp_jon_jon_91_05_off_3,  &btlgrp_las_las_05_01,        &btlgrp_las_las_17_01_off_1,
-            &btlgrp_las_las_17_02_off_1,  &btlgrp_las_las_17_03_off_1,  &btlgrp_las_las_17_04_off_1,
-            &btlgrp_las_las_01_01_off_1,  &btlgrp_las_las_01_02_off_1,  &btlgrp_las_las_01_03_off_1,
-            &btlgrp_las_las_01_01_off_2,  &btlgrp_las_las_01_02_off_2,  &btlgrp_las_las_01_03_off_2,
-            &btlgrp_las_las_02_01_off_1,  &btlgrp_las_las_02_02_off_1,  &btlgrp_las_las_02_03_off_1,
-            &btlgrp_las_las_02_04_off_1,  &btlgrp_las_las_02_05_off_1,  &btlgrp_las_las_02_06_off_1,
-            &btlgrp_las_las_02_99_off_1,  &btlgrp_las_las_03_01_off_1,  &btlgrp_las_las_03_02_off_1,
-            &btlgrp_las_las_03_03_off_1,  &btlgrp_las_las_03_01_off_2,  &btlgrp_las_las_03_02_off_2,
-            &btlgrp_las_las_03_03_off_2,  &btlgrp_las_las_04_01_off_1,  &btlgrp_las_las_06_01_off_1,
-            &btlgrp_las_las_06_02_off_1,  &btlgrp_las_las_06_03_off_1,  &btlgrp_las_las_06_04_off_1,
-            &btlgrp_las_las_06_05_off_1,  &btlgrp_las_las_06_06_off_1,  &btlgrp_las_las_06_99_off_1,
-            &btlgrp_las_las_07_01_off_1,  &btlgrp_las_las_07_02_off_1,  &btlgrp_las_las_07_03_off_1,
-            &btlgrp_las_las_09_01_off_1,  &btlgrp_las_las_09_02_off_1,  &btlgrp_las_las_19_01_off_1,
-            &btlgrp_las_las_19_02_off_1,  &btlgrp_las_las_19_03_off_1,  &btlgrp_las_las_20_01_off_1,
-            &btlgrp_las_las_21_01_off_1,  &btlgrp_las_las_21_02_off_1,  &btlgrp_las_las_22_01_off_1,
-            &btlgrp_las_las_22_02_off_1,  &btlgrp_las_las_22_03_off_1,  &btlgrp_las_las_24_01_off_1,
-            &btlgrp_las_las_25_01_off_1,  &btlgrp_las_las_25_02_off_1,  &btlgrp_las_las_25_03_off_1,
-            &btlgrp_las_las_25_04_off_1,  &btlgrp_las_las_25_05_off_1,  &btlgrp_las_las_25_06_off_1,
-            &btlgrp_moo_moo_00_01_off_1,  &btlgrp_moo_moo_01_01_off_1,  &btlgrp_moo_moo_01_02_off_1,
+            &btlgrp_aji_aji_13_02_off_1,  &btlgrp_aji_aji_15_01_off_1,  &btlgrp_bom_bom_03_01_off_1,
+            &btlgrp_bom_bom_03_01_off_2,  &btlgrp_bom_bom_03_03_off_1,  &btlgrp_bom_bom_03_03_off_2,
+            &btlgrp_bom_bom_04_01_off_1,  &btlgrp_bom_bom_04_01_off_2,  &btlgrp_bom_bom_04_02_off_1,
+            &btlgrp_bom_bom_04_02_off_2,  &btlgrp_bom_bom_04_03_off_1,  &btlgrp_dou_dou_01_01_off_01,
+            &btlgrp_dou_dou_02_01_off_01, &btlgrp_dou_dou_02_02_off_01, &btlgrp_dou_dou_03_01_off_01,
+            &btlgrp_dou_dou_03_99_off_01, &btlgrp_dou_dou_03_02_off_01, &btlgrp_dou_dou_03_03_off_01,
+            &btlgrp_dou_dou_05_01_off_01, &btlgrp_dou_dou_05_02_off_01, &btlgrp_dou_dou_06_01_off_01,
+            &btlgrp_dou_dou_06_02_off_01, &btlgrp_dou_dou_06_03_off_01, &btlgrp_dou_dou_07_01_off_01,
+            &btlgrp_dou_dou_08_01_off_01, &btlgrp_dou_dou_09_01_off_01, &btlgrp_dou_dou_09_02_off_01,
+            &btlgrp_dou_dou_12_01_off_01, &btlgrp_dou_dou_12_99_off_01, &btlgrp_dou_dou_13_01_off_01,
+            &btlgrp_dou_dou_13_99_off_01, &btlgrp_eki_eki_06_01_off_1,  &btlgrp_eki_eki_02_01_off_1,
+            &btlgrp_eki_eki_02_02_off_1,  &btlgrp_eki_eki_02_03_off_1,  &btlgrp_eki_eki_03_01_off_1,
+            &btlgrp_eki_eki_03_02_off_1,  &btlgrp_eki_eki_03_03_off_1,  &btlgrp_eki_eki_03_05_off_1,
+            &btlgrp_eki_eki_03_07_off_1,  &btlgrp_eki_eki_04_01_off_1,  &btlgrp_eki_eki_04_02_off_1,
+            &btlgrp_eki_eki_04_06_off_1,  &btlgrp_eki_eki_04_03_off_1,  &btlgrp_eki_eki_04_04_off_1,
+            &btlgrp_eki_eki_04_05_off_1,  &btlgrp_gon_gon_02_02_off_1,  &btlgrp_gon_gon_02_03_off_1,
+            &btlgrp_gon_gon_02_04_off_1,  &btlgrp_gon_gon_03_01_off_1,  &btlgrp_gon_gon_04_01_off_1,
+            &btlgrp_gon_gon_04_02_off_1,  &btlgrp_gon_gon_04_03_off_1,  &btlgrp_gon_gon_06_03_off_1,
+            &btlgrp_gon_gon_06_04_off_1,  &btlgrp_gon_gon_08_01_off_1,  &btlgrp_gon_gon_08_03_off_1,
+            &btlgrp_gon_gon_08_05_off_1,  &btlgrp_gon_gon_09_01_off_1,  &btlgrp_gon_gon_09_02_off_1,
+            &btlgrp_gon_gon_09_04_off_1,  &btlgrp_gon_gon_10_01_off_1,  &btlgrp_gon_gon_10_02_off_1,
+            &btlgrp_gon_gon_10_03_off_1,  &btlgrp_gra_gra_01_01_off_1,  &btlgrp_gra_gra_01_01_on_1,
+            &btlgrp_gra_gra_01_01_on_2,   &btlgrp_gra_gra_01_01_on_3,   &btlgrp_gra_gra_01_03_off_1,
+            &btlgrp_gra_gra_01_03_on_1,   &btlgrp_gra_gra_01_03_on_2,   &btlgrp_gra_gra_01_03_on_3,
+            &btlgrp_gra_gra_01_04_off_1,  &btlgrp_gra_gra_01_04_on_1,   &btlgrp_gra_gra_01_04_on_2,
+            &btlgrp_gra_gra_01_04_on_3,   &btlgrp_gra_gra_03_01_off_1,  &btlgrp_gra_gra_03_01_off_2,
+            &btlgrp_gra_gra_03_04_off_1,  &btlgrp_gra_gra_03_04_off_2,  &btlgrp_gra_gra_03_04_off_3,
+            &btlgrp_gra_gra_03_05_off_1,  &btlgrp_gra_gra_03_05_off_2,  &btlgrp_gra_gra_03_05_off_3,
+            &btlgrp_gra_gra_04_02_off_1,  &btlgrp_gra_gra_04_02_off_2,  &btlgrp_gra_gra_04_02_off_3,
+            &btlgrp_gra_gra_05_01_off_1,  &btlgrp_gra_gra_05_01_off_2,  &btlgrp_gra_gra_05_03_off_1,
+            &btlgrp_gra_gra_05_03_off_2,  &btlgrp_gra_gra_05_03_off_3,  &btlgrp_hei_hei_01_01_off_1,
+            &btlgrp_hei_hei_02_02_off_1,  &btlgrp_hei_hei_02_03_off_1,  &btlgrp_hei_hei_02_04_off_1,
+            &btlgrp_hei_hei_03_01_off_1,  &btlgrp_hei_hei_04_01_off_1,  &btlgrp_hei_hei_04_01_off_2,
+            &btlgrp_hei_hei_04_02_off_1,  &btlgrp_hei_hei_04_02_off_2,  &btlgrp_hei_hei_05_01_off_1,
+            &btlgrp_hei_hei_06_02_off_1,  &btlgrp_hei_hei_06_03_off_1,  &btlgrp_hei_hei_06_03_off_2,
+            &btlgrp_hei_hei_07_01_off_1,  &btlgrp_hei_hei_08_01_off_1,  &btlgrp_hei_hei_09_01_off_1,
+            &btlgrp_hei_hei_09_01_off_2,  &btlgrp_hei_hei_09_03_off_1,  &btlgrp_hei_hei_09_03_off_2,
+            &btlgrp_hei_hei_11_01_off_1,  &btlgrp_hei_hei_11_01_off_2,  &btlgrp_hei_hei_11_03_off_1,
+            &btlgrp_hei_hei_11_03_off_2,  &btlgrp_hei_hei_12_01_off_1,  &btlgrp_hei_hei_13_02_off_1,
+            &btlgrp_hei_hei_13_02_on_1,   &btlgrp_hei_hei_13_02_on_2,   &btlgrp_hei_hei_13_02_on_3,
+            &btlgrp_hei_hei_13_03_off_1,  &btlgrp_hei_hei_13_03_on_1,   &btlgrp_hei_hei_13_03_on_2,
+            &btlgrp_hei_hei_13_04_off_1,  &btlgrp_hei_hei_13_04_on_1,   &btlgrp_hei_hei_13_04_on_2,
+            &btlgrp_jin_jin_00_01_off_1,  &btlgrp_jin_jin_00_01_off_2,  &btlgrp_jin_jin_00_01_off_3,
+            &btlgrp_jin_jin_00_01_off_4,  &btlgrp_jin_jin_01_01_off_1,  &btlgrp_jin_jin_01_01_off_2,
+            &btlgrp_jin_jin_01_01_off_3,  &btlgrp_jin_jin_01_03_off_1,  &btlgrp_jin_jin_01_03_off_2,
+            &btlgrp_jin_jin_01_03_off_3,  &btlgrp_jin_jin_03_01_off_1,  &btlgrp_jin_jin_03_02_off_1,
+            &btlgrp_jin_jin_07_01_off_1,  &btlgrp_jin_jin_07_01_off_2,  &btlgrp_jin_jin_07_02_off_1,
+            &btlgrp_jin_jin_07_02_off_2,  &btlgrp_jin_jin_09_01_off_1,  &btlgrp_jin_jin_10_01_off_1,
+            &btlgrp_jin_jin_10_02_off_1,  &btlgrp_jin_jin_10_03_off_1,  &btlgrp_jin_jin_10_04_off_1,
+            &btlgrp_jin_jin_10_05_off_1,  &btlgrp_jin_jin_10_06_off_1,  &btlgrp_jon_jon_01_01_off_1,
+            &btlgrp_jon_jon_01_01_off_2,  &btlgrp_jon_jon_01_01_off_3,  &btlgrp_jon_jon_01_02_off_1,
+            &btlgrp_jon_jon_01_02_off_2,  &btlgrp_jon_jon_01_02_off_3,  &btlgrp_jon_jon_01_03_off_1,
+            &btlgrp_jon_jon_01_03_off_2,  &btlgrp_jon_jon_01_03_off_3,  &btlgrp_jon_jon_01_04_off_1,
+            &btlgrp_jon_jon_01_04_off_2,  &btlgrp_jon_jon_01_04_off_3,  &btlgrp_jon_jon_01_05_off_1,
+            &btlgrp_jon_jon_01_05_off_2,  &btlgrp_jon_jon_01_05_off_3,  &btlgrp_jon_jon_11_01_off_1,
+            &btlgrp_jon_jon_11_01_off_2,  &btlgrp_jon_jon_11_01_off_3,  &btlgrp_jon_jon_11_02_off_1,
+            &btlgrp_jon_jon_11_02_off_2,  &btlgrp_jon_jon_11_02_off_3,  &btlgrp_jon_jon_11_03_off_1,
+            &btlgrp_jon_jon_11_03_off_2,  &btlgrp_jon_jon_11_03_off_3,  &btlgrp_jon_jon_11_04_off_1,
+            &btlgrp_jon_jon_11_04_off_2,  &btlgrp_jon_jon_11_04_off_3,  &btlgrp_jon_jon_11_05_off_1,
+            &btlgrp_jon_jon_11_05_off_2,  &btlgrp_jon_jon_11_05_off_3,  &btlgrp_jon_jon_21_01_off_1,
+            &btlgrp_jon_jon_21_01_off_2,  &btlgrp_jon_jon_21_01_off_3,  &btlgrp_jon_jon_21_02_off_1,
+            &btlgrp_jon_jon_21_02_off_2,  &btlgrp_jon_jon_21_02_off_3,  &btlgrp_jon_jon_21_03_off_1,
+            &btlgrp_jon_jon_21_03_off_2,  &btlgrp_jon_jon_21_03_off_3,  &btlgrp_jon_jon_21_04_off_1,
+            &btlgrp_jon_jon_21_04_off_2,  &btlgrp_jon_jon_21_04_off_3,  &btlgrp_jon_jon_21_05_off_1,
+            &btlgrp_jon_jon_21_05_off_2,  &btlgrp_jon_jon_21_05_off_3,  &btlgrp_jon_jon_31_01_off_1,
+            &btlgrp_jon_jon_31_01_off_2,  &btlgrp_jon_jon_31_01_off_3,  &btlgrp_jon_jon_31_02_off_1,
+            &btlgrp_jon_jon_31_02_off_2,  &btlgrp_jon_jon_31_02_off_3,  &btlgrp_jon_jon_31_03_off_1,
+            &btlgrp_jon_jon_31_03_off_2,  &btlgrp_jon_jon_31_03_off_3,  &btlgrp_jon_jon_31_04_off_1,
+            &btlgrp_jon_jon_31_04_off_2,  &btlgrp_jon_jon_31_04_off_3,  &btlgrp_jon_jon_31_05_off_1,
+            &btlgrp_jon_jon_31_05_off_2,  &btlgrp_jon_jon_31_05_off_3,  &btlgrp_jon_jon_41_01_off_1,
+            &btlgrp_jon_jon_41_01_off_2,  &btlgrp_jon_jon_41_01_off_3,  &btlgrp_jon_jon_41_02_off_1,
+            &btlgrp_jon_jon_41_02_off_2,  &btlgrp_jon_jon_41_02_off_3,  &btlgrp_jon_jon_41_03_off_1,
+            &btlgrp_jon_jon_41_03_off_2,  &btlgrp_jon_jon_41_03_off_3,  &btlgrp_jon_jon_41_04_off_1,
+            &btlgrp_jon_jon_41_04_off_2,  &btlgrp_jon_jon_41_04_off_3,  &btlgrp_jon_jon_41_05_off_1,
+            &btlgrp_jon_jon_41_05_off_2,  &btlgrp_jon_jon_41_05_off_3,  &btlgrp_jon_jon_51_01_off_1,
+            &btlgrp_jon_jon_51_01_off_2,  &btlgrp_jon_jon_51_01_off_3,  &btlgrp_jon_jon_51_02_off_1,
+            &btlgrp_jon_jon_51_02_off_2,  &btlgrp_jon_jon_51_02_off_3,  &btlgrp_jon_jon_51_03_off_1,
+            &btlgrp_jon_jon_51_03_off_2,  &btlgrp_jon_jon_51_03_off_3,  &btlgrp_jon_jon_51_04_off_1,
+            &btlgrp_jon_jon_51_04_off_2,  &btlgrp_jon_jon_51_04_off_3,  &btlgrp_jon_jon_51_05_off_1,
+            &btlgrp_jon_jon_51_05_off_2,  &btlgrp_jon_jon_51_05_off_3,  &btlgrp_jon_jon_61_01_off_1,
+            &btlgrp_jon_jon_61_01_off_2,  &btlgrp_jon_jon_61_01_off_3,  &btlgrp_jon_jon_61_02_off_1,
+            &btlgrp_jon_jon_61_02_off_2,  &btlgrp_jon_jon_61_02_off_3,  &btlgrp_jon_jon_61_03_off_1,
+            &btlgrp_jon_jon_61_03_off_2,  &btlgrp_jon_jon_61_03_off_3,  &btlgrp_jon_jon_61_04_off_1,
+            &btlgrp_jon_jon_61_04_off_2,  &btlgrp_jon_jon_61_04_off_3,  &btlgrp_jon_jon_61_05_off_1,
+            &btlgrp_jon_jon_61_05_off_2,  &btlgrp_jon_jon_61_05_off_3,  &btlgrp_jon_jon_71_01_off_1,
+            &btlgrp_jon_jon_71_01_off_2,  &btlgrp_jon_jon_71_01_off_3,  &btlgrp_jon_jon_71_02_off_1,
+            &btlgrp_jon_jon_71_02_off_2,  &btlgrp_jon_jon_71_02_off_3,  &btlgrp_jon_jon_71_03_off_1,
+            &btlgrp_jon_jon_71_03_off_2,  &btlgrp_jon_jon_71_03_off_3,  &btlgrp_jon_jon_71_04_off_1,
+            &btlgrp_jon_jon_71_04_off_2,  &btlgrp_jon_jon_71_04_off_3,  &btlgrp_jon_jon_71_05_off_1,
+            &btlgrp_jon_jon_71_05_off_2,  &btlgrp_jon_jon_71_05_off_3,  &btlgrp_jon_jon_81_01_off_1,
+            &btlgrp_jon_jon_81_01_off_2,  &btlgrp_jon_jon_81_01_off_3,  &btlgrp_jon_jon_81_02_off_1,
+            &btlgrp_jon_jon_81_02_off_2,  &btlgrp_jon_jon_81_02_off_3,  &btlgrp_jon_jon_81_03_off_1,
+            &btlgrp_jon_jon_81_03_off_2,  &btlgrp_jon_jon_81_03_off_3,  &btlgrp_jon_jon_81_04_off_1,
+            &btlgrp_jon_jon_81_04_off_2,  &btlgrp_jon_jon_81_04_off_3,  &btlgrp_jon_jon_81_05_off_1,
+            &btlgrp_jon_jon_81_05_off_2,  &btlgrp_jon_jon_81_05_off_3,  &btlgrp_jon_jon_91_01_off_1,
+            &btlgrp_jon_jon_91_01_off_2,  &btlgrp_jon_jon_91_01_off_3,  &btlgrp_jon_jon_91_02_off_1,
+            &btlgrp_jon_jon_91_02_off_2,  &btlgrp_jon_jon_91_02_off_3,  &btlgrp_jon_jon_91_03_off_1,
+            &btlgrp_jon_jon_91_03_off_2,  &btlgrp_jon_jon_91_03_off_3,  &btlgrp_jon_jon_91_04_off_1,
+            &btlgrp_jon_jon_91_04_off_2,  &btlgrp_jon_jon_91_04_off_3,  &btlgrp_jon_jon_91_05_off_1,
+            &btlgrp_jon_jon_91_05_off_2,  &btlgrp_jon_jon_91_05_off_3,  &btlgrp_las_las_05_01,
+            &btlgrp_las_las_17_01_off_1,  &btlgrp_las_las_17_02_off_1,  &btlgrp_las_las_17_03_off_1,
+            &btlgrp_las_las_17_04_off_1,  &btlgrp_las_las_01_01_off_1,  &btlgrp_las_las_01_02_off_1,
+            &btlgrp_las_las_01_03_off_1,  &btlgrp_las_las_01_01_off_2,  &btlgrp_las_las_01_02_off_2,
+            &btlgrp_las_las_01_03_off_2,  &btlgrp_las_las_02_01_off_1,  &btlgrp_las_las_02_02_off_1,
+            &btlgrp_las_las_02_03_off_1,  &btlgrp_las_las_02_04_off_1,  &btlgrp_las_las_02_05_off_1,
+            &btlgrp_las_las_02_06_off_1,  &btlgrp_las_las_02_99_off_1,  &btlgrp_las_las_03_01_off_1,
+            &btlgrp_las_las_03_02_off_1,  &btlgrp_las_las_03_03_off_1,  &btlgrp_las_las_03_01_off_2,
+            &btlgrp_las_las_03_02_off_2,  &btlgrp_las_las_03_03_off_2,  &btlgrp_las_las_04_01_off_1,
+            &btlgrp_las_las_06_01_off_1,  &btlgrp_las_las_06_02_off_1,  &btlgrp_las_las_06_03_off_1,
+            &btlgrp_las_las_06_04_off_1,  &btlgrp_las_las_06_05_off_1,  &btlgrp_las_las_06_06_off_1,
+            &btlgrp_las_las_06_99_off_1,  &btlgrp_las_las_07_01_off_1,  &btlgrp_las_las_07_02_off_1,
+            &btlgrp_las_las_07_03_off_1,  &btlgrp_las_las_09_01_off_1,  &btlgrp_las_las_09_02_off_1,
+            &btlgrp_las_las_19_01_off_1,  &btlgrp_las_las_19_02_off_1,  &btlgrp_las_las_19_03_off_1,
+            &btlgrp_las_las_20_01_off_1,  &btlgrp_las_las_21_01_off_1,  &btlgrp_las_las_21_02_off_1,
+            &btlgrp_las_las_22_01_off_1,  &btlgrp_las_las_22_02_off_1,  &btlgrp_las_las_22_03_off_1,
+            &btlgrp_las_las_24_01_off_1,  &btlgrp_las_las_25_01_off_1,  &btlgrp_las_las_25_02_off_1,
+            &btlgrp_las_las_25_03_off_1,  &btlgrp_las_las_25_04_off_1,  &btlgrp_las_las_25_05_off_1,
+            &btlgrp_las_las_25_06_off_1,  &btlgrp_moo_moo_01_01_off_1,  &btlgrp_moo_moo_01_02_off_1,
             &btlgrp_moo_moo_01_02_off_2,  &btlgrp_moo_moo_01_03_off_1,  &btlgrp_moo_moo_01_04_off_1,
             &btlgrp_moo_moo_01_04_off_2,  &btlgrp_moo_moo_01_04_off_3,  &btlgrp_moo_moo_01_05_off_1,
             &btlgrp_moo_moo_02_01_off_1,  &btlgrp_moo_moo_02_02_off_1,  &btlgrp_moo_moo_02_03_off_1,
@@ -1118,47 +1088,38 @@ namespace ttyd::battle_unit
             &btlgrp_mri_mri_18_02,        &btlgrp_mri_mri_18_03,        &btlgrp_mri_mri_19_01,
             &btlgrp_mri_mri_19_02,        &btlgrp_mri_mri_19_04,        &btlgrp_mri_mri_20_02,
             &btlgrp_mri_mri_20_03,        &btlgrp_muj_muj_01_01,        &btlgrp_muj_muj_05_01,
-            &btlgrp_muj_muj_05_02,        &btlgrp_muj_muj_00_01,        &btlgrp_muj_muj_02_01_off_01,
-            &btlgrp_muj_muj_02_01_off_02, &btlgrp_muj_muj_02_01_off_03, &btlgrp_muj_muj_02_01_off_04,
-            &btlgrp_muj_muj_02_04_off_01, &btlgrp_muj_muj_02_04_off_02, &btlgrp_muj_muj_02_04_off_03,
-            &btlgrp_muj_muj_02_07_off_01, &btlgrp_muj_muj_02_07_off_02, &btlgrp_muj_muj_02_07_off_03,
-            &btlgrp_muj_muj_03_01_off_01, &btlgrp_muj_muj_03_01_off_02, &btlgrp_muj_muj_03_01_off_03,
-            &btlgrp_muj_muj_03_02_off_01, &btlgrp_muj_muj_03_02_off_02, &btlgrp_muj_muj_03_02_off_03,
-            &btlgrp_muj_muj_03_04_off_01, &btlgrp_muj_muj_03_04_off_02, &btlgrp_muj_muj_03_04_off_03,
-            &btlgrp_pik_pik_06_01_off_1,  &btlgrp_pik_pik_06_02_off_1,  &btlgrp_pik_pik_06_03_off_1,
-            &btlgrp_pik_pik_06_04_off_1,  &btlgrp_pik_pik_06_05_off_1,  &btlgrp_pik_pik_06_06_off_1,
-            &btlgrp_pik_pik_06_07_off_1,  &btlgrp_pik_pik_06_08_off_1,  &btlgrp_pik_pik_06_09_off_1,
-            &btlgrp_tik_tik_01_02_off_1,  &btlgrp_tik_tik_04_01_off_1,  &btlgrp_tik_tik_04_01_on_1,
-            &btlgrp_tik_tik_04_01_on_2,   &btlgrp_tik_tik_04_02_off_1,  &btlgrp_tik_tik_04_02_on_1,
-            &btlgrp_tik_tik_04_02_on_2,   &btlgrp_tik_tik_04_03_off_1,  &btlgrp_tik_tik_04_03_off_2,
-            &btlgrp_tik_tik_04_03_off_3,  &btlgrp_tik_tik_04_04_off_1,  &btlgrp_tik_tik_04_04_off_2,
-            &btlgrp_tik_tik_04_04_off_3,  &btlgrp_tik_tik_07_01_off_1,  &btlgrp_tik_tik_07_01_off_2,
-            &btlgrp_tik_tik_07_02_off_1,  &btlgrp_tik_tik_07_02_off_2,  &btlgrp_tik_tik_07_03_off_1,
-            &btlgrp_tik_tik_07_03_off_2,  &btlgrp_tik_tik_07_03_off_3,  &btlgrp_tik_tik_07_04_off_1,
-            &btlgrp_tik_tik_07_04_off_2,  &btlgrp_tik_tik_07_04_off_3,  &btlgrp_tik_tik_15_01_off_1,
-            &btlgrp_tik_tik_15_02_off_1,  &btlgrp_tik_tik_15_03_off_1,  &btlgrp_tik_tik_15_04_off_1,
-            &btlgrp_tik_tik_15_04_off_2,  &btlgrp_tik_tik_15_04_off_3,  &btlgrp_tik_tik_15_05_off_1,
-            &btlgrp_tik_tik_15_05_off_2,  &btlgrp_tik_tik_15_05_off_3,  &btlgrp_tik_tik_18_01_off_1,
-            &btlgrp_tik_tik_18_01_off_2,  &btlgrp_tik_tik_18_02_off_1,  &btlgrp_tik_tik_18_02_off_2,
-            &btlgrp_tik_tik_18_03_off_1,  &btlgrp_tik_tik_18_03_off_2,  &btlgrp_tik_tik_18_03_off_3,
-            &btlgrp_tik_tik_18_04_off_1,  &btlgrp_tik_tik_18_04_off_2,  &btlgrp_tik_tik_18_04_off_3,
-            &btlgrp_tik_tik_20_01_off_1,  &btlgrp_tik_tik_20_02_off_1,  &btlgrp_tik_tik_20_03_off_1,
-            &btlgrp_tik_tik_20_04_off_1,  &btlgrp_tik_tik_20_05_off_1,  &btlgrp_tik_tik_20_06_off_1,
-            &btlgrp_tou_tou_rank_19,      &btlgrp_tou_tou_rank_18,      &btlgrp_tou_tou_rank_17,
-            &btlgrp_tou_tou_rank_16,      &btlgrp_tou_tou_rank_15,      &btlgrp_tou_tou_rank_14,
-            &btlgrp_tou_tou_rank_13,      &btlgrp_tou_tou_rank_12,      &btlgrp_tou_tou_rank_11,
-            &btlgrp_tou_tou_rank_9,       &btlgrp_tou_tou_rank_8,       &btlgrp_tou_tou_rank_7,
-            &btlgrp_tou_tou_rank_6,       &btlgrp_tou_tou_rank_5,       &btlgrp_tou_tou_rank_4,
-            &btlgrp_tou_tou_rank_3,       &btlgrp_tou_tou_rank_2,       &btlgrp_tou_tou_rank_1,
-            &btlgrp_tou_tou_add_1,        &btlgrp_tou_tou_add_2,        &btlgrp_win_win_00_01_off_1,
-            &btlgrp_win_win_00_01_on_1,   &btlgrp_win_win_00_01_on_2,   &btlgrp_win_win_00_01_on_3,
-            &btlgrp_win_win_00_02_off_1,  &btlgrp_win_win_00_02_on_1,   &btlgrp_win_win_00_02_on_2,
-            &btlgrp_win_win_00_03_off_1,  &btlgrp_win_win_00_03_on_1,   &btlgrp_win_win_00_03_on_2,
-            &btlgrp_win_win_02_01_off_1,  &btlgrp_win_win_02_01_on_1,   &btlgrp_win_win_02_01_on_2,
-            &btlgrp_win_win_02_01_on_3,   &btlgrp_win_win_02_02_off_1,  &btlgrp_win_win_02_02_on_1,
-            &btlgrp_win_win_02_02_on_2,   &btlgrp_win_win_02_02_on_3,   &btlgrp_win_win_03_01_off_1,
-            &btlgrp_win_win_03_01_on_1,   &btlgrp_win_win_03_01_on_2,   &btlgrp_win_win_03_01_on_3,
-            &btlgrp_win_win_03_01_on_4,
+            &btlgrp_muj_muj_05_02,        &btlgrp_muj_muj_02_01_off_01, &btlgrp_muj_muj_02_01_off_02,
+            &btlgrp_muj_muj_02_01_off_03, &btlgrp_muj_muj_02_01_off_04, &btlgrp_muj_muj_02_04_off_01,
+            &btlgrp_muj_muj_02_04_off_02, &btlgrp_muj_muj_02_04_off_03, &btlgrp_muj_muj_02_07_off_01,
+            &btlgrp_muj_muj_02_07_off_02, &btlgrp_muj_muj_02_07_off_03, &btlgrp_muj_muj_03_01_off_01,
+            &btlgrp_muj_muj_03_01_off_02, &btlgrp_muj_muj_03_01_off_03, &btlgrp_muj_muj_03_02_off_01,
+            &btlgrp_muj_muj_03_02_off_02, &btlgrp_muj_muj_03_02_off_03, &btlgrp_muj_muj_03_04_off_01,
+            &btlgrp_muj_muj_03_04_off_02, &btlgrp_muj_muj_03_04_off_03, &btlgrp_pik_pik_06_01_off_1,
+            &btlgrp_pik_pik_06_02_off_1,  &btlgrp_pik_pik_06_03_off_1,  &btlgrp_pik_pik_06_04_off_1,
+            &btlgrp_pik_pik_06_05_off_1,  &btlgrp_pik_pik_06_06_off_1,  &btlgrp_pik_pik_06_07_off_1,
+            &btlgrp_pik_pik_06_08_off_1,  &btlgrp_pik_pik_06_09_off_1,  &btlgrp_tik_tik_01_02_off_1,
+            &btlgrp_tik_tik_04_01_off_1,  &btlgrp_tik_tik_04_01_on_1,   &btlgrp_tik_tik_04_01_on_2,
+            &btlgrp_tik_tik_04_02_off_1,  &btlgrp_tik_tik_04_02_on_1,   &btlgrp_tik_tik_04_02_on_2,
+            &btlgrp_tik_tik_07_01_off_1,  &btlgrp_tik_tik_07_01_off_2,  &btlgrp_tik_tik_07_02_off_1,
+            &btlgrp_tik_tik_07_02_off_2,  &btlgrp_tik_tik_15_01_off_1,  &btlgrp_tik_tik_15_02_off_1,
+            &btlgrp_tik_tik_15_03_off_1,  &btlgrp_tik_tik_18_01_off_1,  &btlgrp_tik_tik_18_01_off_2,
+            &btlgrp_tik_tik_18_02_off_1,  &btlgrp_tik_tik_18_02_off_2,  &btlgrp_tik_tik_20_01_off_1,
+            &btlgrp_tik_tik_20_02_off_1,  &btlgrp_tik_tik_20_03_off_1,  &btlgrp_tik_tik_20_04_off_1,
+            &btlgrp_tik_tik_20_05_off_1,  &btlgrp_tik_tik_20_06_off_1,  &btlgrp_tou_tou_rank_19,
+            &btlgrp_tou_tou_rank_18,      &btlgrp_tou_tou_rank_17,      &btlgrp_tou_tou_rank_16,
+            &btlgrp_tou_tou_rank_15,      &btlgrp_tou_tou_rank_14,      &btlgrp_tou_tou_rank_13,
+            &btlgrp_tou_tou_rank_12,      &btlgrp_tou_tou_rank_11,      &btlgrp_tou_tou_rank_9,
+            &btlgrp_tou_tou_rank_8,       &btlgrp_tou_tou_rank_7,       &btlgrp_tou_tou_rank_6,
+            &btlgrp_tou_tou_rank_5,       &btlgrp_tou_tou_rank_4,       &btlgrp_tou_tou_rank_3,
+            &btlgrp_tou_tou_rank_2,       &btlgrp_tou_tou_rank_1,       &btlgrp_tou_tou_add_1,
+            &btlgrp_tou_tou_add_2,        &btlgrp_win_win_00_01_off_1,  &btlgrp_win_win_00_01_on_1,
+            &btlgrp_win_win_00_01_on_2,   &btlgrp_win_win_00_01_on_3,   &btlgrp_win_win_00_02_off_1,
+            &btlgrp_win_win_00_02_on_1,   &btlgrp_win_win_00_02_on_2,   &btlgrp_win_win_00_03_off_1,
+            &btlgrp_win_win_00_03_on_1,   &btlgrp_win_win_00_03_on_2,   &btlgrp_win_win_02_01_off_1,
+            &btlgrp_win_win_02_01_on_1,   &btlgrp_win_win_02_01_on_2,   &btlgrp_win_win_02_01_on_3,
+            &btlgrp_win_win_02_02_off_1,  &btlgrp_win_win_02_02_on_1,   &btlgrp_win_win_02_02_on_2,
+            &btlgrp_win_win_02_02_on_3,   &btlgrp_win_win_03_01_off_1,  &btlgrp_win_win_03_01_on_1,
+            &btlgrp_win_win_03_01_on_2,   &btlgrp_win_win_03_01_on_3,   &btlgrp_win_win_03_01_on_4,
         };
 
         struct BattleGroupIndexRange
@@ -1170,22 +1131,22 @@ namespace ttyd::battle_unit
         static_assert(sizeof(BattleGroupIndexRange) == 0x8);
 
         inline constexpr BattleGroupIndexRange kBtlGrpRange_aji_aji {0, 16};
-        inline constexpr BattleGroupIndexRange kBtlGrpRange_bom_bom {17, 26};
-        inline constexpr BattleGroupIndexRange kBtlGrpRange_dou_dou {27, 47};
-        inline constexpr BattleGroupIndexRange kBtlGrpRange_eki_eki {48, 62};
-        inline constexpr BattleGroupIndexRange kBtlGrpRange_gon_gon {63, 80};
-        inline constexpr BattleGroupIndexRange kBtlGrpRange_gra_gra {81, 108};
-        inline constexpr BattleGroupIndexRange kBtlGrpRange_hei_hei {109, 142};
-        inline constexpr BattleGroupIndexRange kBtlGrpRange_jin_jin {143, 165};
-        inline constexpr BattleGroupIndexRange kBtlGrpRange_jon_jon {166, 315};
-        inline constexpr BattleGroupIndexRange kBtlGrpRange_las_las {316, 368};
-        inline constexpr BattleGroupIndexRange kBtlGrpRange_moo_moo {369, 392};
-        inline constexpr BattleGroupIndexRange kBtlGrpRange_mri_mri {393, 408};
-        inline constexpr BattleGroupIndexRange kBtlGrpRange_muj_muj {409, 431};
-        inline constexpr BattleGroupIndexRange kBtlGrpRange_pik_pik {432, 440};
-        inline constexpr BattleGroupIndexRange kBtlGrpRange_tik_tik {441, 488};
-        inline constexpr BattleGroupIndexRange kBtlGrpRange_tou_tou {489, 508};
-        inline constexpr BattleGroupIndexRange kBtlGrpRange_win_win {509, 531};
+        inline constexpr BattleGroupIndexRange kBtlGrpRange_bom_bom {17, 25};
+        inline constexpr BattleGroupIndexRange kBtlGrpRange_dou_dou {26, 45};
+        inline constexpr BattleGroupIndexRange kBtlGrpRange_eki_eki {46, 60};
+        inline constexpr BattleGroupIndexRange kBtlGrpRange_gon_gon {61, 78};
+        inline constexpr BattleGroupIndexRange kBtlGrpRange_gra_gra {79, 106};
+        inline constexpr BattleGroupIndexRange kBtlGrpRange_hei_hei {107, 140};
+        inline constexpr BattleGroupIndexRange kBtlGrpRange_jin_jin {141, 163};
+        inline constexpr BattleGroupIndexRange kBtlGrpRange_jon_jon {164, 313};
+        inline constexpr BattleGroupIndexRange kBtlGrpRange_las_las {314, 366};
+        inline constexpr BattleGroupIndexRange kBtlGrpRange_moo_moo {367, 389};
+        inline constexpr BattleGroupIndexRange kBtlGrpRange_mri_mri {390, 405};
+        inline constexpr BattleGroupIndexRange kBtlGrpRange_muj_muj {406, 427};
+        inline constexpr BattleGroupIndexRange kBtlGrpRange_pik_pik {428, 436};
+        inline constexpr BattleGroupIndexRange kBtlGrpRange_tik_tik {437, 460};
+        inline constexpr BattleGroupIndexRange kBtlGrpRange_tou_tou {461, 480};
+        inline constexpr BattleGroupIndexRange kBtlGrpRange_win_win {481, 503};
 
         struct MovementSoundControl
         {
@@ -1531,7 +1492,7 @@ namespace ttyd::battle_unit
         const BattleStatRelValues *GetBattleStats(RelId rel);
         extern void ShuffleBattleStats();
 
-        int BtlUnit_GetUnitId(void* unit_ptr);
+        int BtlUnit_GetUnitId(void *unit_ptr);
         BattleWorkUnit *BtlUnit_Entry(battle_database_common::BattleUnitSetup *unit_setup);
     }
 } // namespace ttyd::battle_unit

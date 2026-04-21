@@ -696,8 +696,16 @@ namespace mod
         tik_04_init_evt[26] = 0;
         tik_04_init_evt[36] = GSWF(6055);
         tik_04_init_evt[37] = 1;
-        tik_04_init_evt[202] = GSW(1717);
-        tik_04_init_evt[203] = 18;
+        if (gState->apSettings->enemyRandomizer != 0)
+        {
+            tik_04_init_evt[202] = GSW(1717);
+            tik_04_init_evt[203] = 99;
+        }
+        else
+        {
+            tik_04_init_evt[202] = GSW(1717);
+            tik_04_init_evt[203] = 18;
+        }
 
         patch::writePatch(&tik_kurihakase_init[0], tik_kurihakase_init_hook, sizeof(tik_kurihakase_init_hook));
 
@@ -743,8 +751,16 @@ namespace mod
         tik_peach_mail[178] = GSW(1715);
         tik_peach_mail[179] = 15;
 
-        tik_07_init_evt[277] = GSW(1717);
-        tik_07_init_evt[278] = 18;
+		if (gState->apSettings->enemyRandomizer != 0)
+        {
+            tik_07_init_evt[277] = GSW(1717);
+            tik_07_init_evt[278] = 99;
+        }
+        else
+        {
+            tik_07_init_evt[277] = GSW(1717);
+            tik_07_init_evt[278] = 18;
+		}
         tik_07_init_evt[294] = GSW(1706);
         tik_07_init_evt[295] = 0; // Unused
         tik_07_init_evt[297] = GSW(1707);
@@ -761,8 +777,16 @@ namespace mod
 
         tik_15_init_evt[29] = GSW(1711);
         tik_15_init_evt[30] = 8;
-        tik_15_init_evt[42] = GSW(1717);
-        tik_15_init_evt[43] = 18;
+        if (gState->apSettings->enemyRandomizer != 0)
+        {
+            tik_15_init_evt[42] = GSW(1717);
+            tik_15_init_evt[43] = 99;
+        }
+        else
+        {
+            tik_15_init_evt[42] = GSW(1717);
+            tik_15_init_evt[43] = 18;
+        }
 
 		if (mod::owr::gState->apSettings->bluePipeToggle == 0)
 		{
@@ -778,8 +802,16 @@ namespace mod
 
 		}
 
-        tik_18_init_evt[53] = GSW(1717);
-        tik_18_init_evt[54] = 18;
+		if (gState->apSettings->enemyRandomizer != 0)
+        {
+            tik_18_init_evt[53] = GSW(1717);
+            tik_18_init_evt[54] = 99;
+        }
+        else
+        {
+            tik_18_init_evt[53] = GSW(1717);
+            tik_18_init_evt[54] = 18;
+        }
 
         tik_evt_majin2[0] = EVT_HELPER_CMD(2, 50);
         tik_evt_majin2[1] = EVT_HELPER_OP(LW(3));

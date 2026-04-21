@@ -28,5 +28,6 @@ namespace ttyd::tou
         extern RankingData *tou_rank_wp;
 
         void tou_rankingControll();
+        void tou_rankingReset();
     }
 } // namespace ttyd::tou
