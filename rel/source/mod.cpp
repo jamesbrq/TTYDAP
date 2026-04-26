@@ -1,5 +1,6 @@
 #include "errorHandling.h"
 #include "mod.h"
+#include "GhostPeers.h"
 #include "patch.h"
 #include "relmgr.h"
 #include "visibility.h"
@@ -31,8 +32,13 @@ namespace mod
 
         gMod->owr_mod_.Update();
 
+        ghosts::UpdateAll();
+
         // Register draw command
         ttyd::dispdrv::dispEntry(ttyd::dispdrv::CameraId::kDebug3d, 1, 0.f, draw, nullptr);
+        
+        ttyd::dispdrv::dispEntry(ttyd::dispdrv::CameraId::k3d, 1, 0.f, ghosts::DrawAll, nullptr);
+        ttyd::dispdrv::dispEntry(ttyd::dispdrv::CameraId::kDebug3d, 1, 100.0f, ghosts::DrawNameTagsAll, nullptr);
 
         // Call the original function
         mPFN_marioStMain_trampoline();

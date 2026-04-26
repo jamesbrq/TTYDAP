@@ -3,6 +3,7 @@
 #include "cxx.h"
 #include "patch.h"
 #include "errorHandling.h"
+#include "GhostPeers.h"
 #include "ttyd/mariost.h"
 #include "ttyd/npcdrv.h"
 #include "ttyd/animdrv.h"
@@ -28,6 +29,8 @@ namespace mod
 
         applyGameFixes();
         applyVariousGamePatches();
+
+        ghosts::Init();
 
         // Initialize typesetting early
         ttyd::fontmgr::fontmgrTexSetup();
