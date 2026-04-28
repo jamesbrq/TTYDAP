@@ -98,12 +98,12 @@ struct NpcEntry
     char currentAnimation[32];
     char stayAnimation[32];
     char talkAnimation[32];
-    Vec3 position;
-    Vec3 previousPosition;
-    Vec3 positionHistory[5];
-    Vec3 scale;
-    Vec3 rotation;
-    Vec3 rotationOffset;
+    vec3 position;
+    vec3 previousPosition;
+    vec3 positionHistory[5];
+    vec3 scale;
+    vec3 rotation;
+    vec3 rotationOffset;
     uint32_t poseId;
     uint32_t currentMotionAnimationState;
     char *wSomeAnimName_defaultM_I_2;
@@ -125,8 +125,8 @@ struct NpcEntry
     float width;
     float height;
     float wShadowSizeRelated;
-    Vec3 wJumpStartPosition;
-    Vec3 wJumpTargetPosition;
+    vec3 wJumpStartPosition;
+    vec3 wJumpTargetPosition;
 
     uint8_t gap_170[0x8];
 
@@ -168,9 +168,9 @@ struct NpcEntry
     char *landingSfxId;
     uint32_t cameraId;
     NpcTerritoryType territoryType;
-    Vec3 wTerritoryBase;
-    Vec3 wTerritoryLoiter;
-    Vec3 wTerritoryHoming;
+    vec3 wTerritoryBase;
+    vec3 wTerritoryLoiter;
+    vec3 wTerritoryHoming;
     float wSearchRange;
     float wSearchAngle;
     float wHomingRange;

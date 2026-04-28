@@ -2,6 +2,7 @@
 #include "relmgr.h"
 #include "util.h"
 #include "visibility.h"
+#include "GhostPeers.h"
 #include <AP/rel_patch_definitions.h>
 #include <gc/gx.h>
 #include <gc/OSModule.h>
@@ -47,11 +48,11 @@
 #include "OWR.h"
 #include "patch.h"
 
-#include <cstdint>
-#include <cstring>
-#include <cstdio>
-#include <cinttypes>
 #include <algorithm>
+#include <cinttypes>
+#include <cstdint>
+#include <cstdio>
+#include <cstring>
 
 using gc::pad::PadInput;
 using ttyd::common::ItemData;
@@ -167,6 +168,8 @@ namespace mod::owr
     KEEP_VAR int (*g_msgWindow_Entry_trampoline)(const char *message, int unk1, int windowType) = nullptr;
     KEEP_VAR void (*g__load_trampoline)(const char *mapName, const char *entranceName, const char *beroName) = nullptr;
     KEEP_VAR ttyd::battle_unit::BattleWorkUnit *(*g_BtlUnit_Entry_trampoline)(BattleUnitSetup *) = nullptr;
+    KEEP_VAR int (*g_psndSFXOn_trampoline)(int) = nullptr;
+    KEEP_VAR int (*g_psndSFXOn3D_trampoline)(int, const gc::vec3 *) = nullptr;
 
     void OWR::SequenceInit()
     {
@@ -1186,6 +1189,18 @@ namespace mod::owr
             return;
         unit->max_hp = statRelValues->base_hp;
         unit->level = statRelValues->level;
+    }
+
+    KEEP_FUNC int psndSFXOnHook(int sfxId)
+    {
+        ghosts::OnLocalSfxFired(sfxId, false);
+        return g_psndSFXOn_trampoline(sfxId);
+    }
+
+    KEEP_FUNC int psndSFXOn3DHook(int sfxId, const gc::vec3 *position)
+    {
+        ghosts::OnLocalSfxFired(sfxId, true);
+        return g_psndSFXOn3D_trampoline(sfxId, position);
     }
 
     KEEP_FUNC const char *msgSearchHook(const char *msgKey)

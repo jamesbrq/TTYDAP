@@ -3,6 +3,7 @@
 #include "visibility.h"
 #include <AP/rel_patch_definitions.h>
 #include <gc/OSModule.h>
+#include <gc/types.h>
 #include <StateManager.h>
 #include <ttyd/battle_database_common.h>
 #include <ttyd/battle_unit.h>
@@ -22,6 +23,7 @@ using namespace ttyd::evtmgr;
 using namespace ttyd::msgdrv;
 using namespace ttyd::battle_unit;
 using namespace ttyd::battle_database_common;
+using namespace gc;
 
 namespace mod::owr
 {
@@ -78,6 +80,8 @@ namespace mod::owr
     void replaceMultipleCharacters(ttyd::memory::SmartAllocationData *smartData, uint32_t startIndex, int value);
     BattleWorkUnit *BtlUnit_Entry_Hook(BattleUnitSetup *setup);
     void ScaleUnitStats(BattleUnitKind *unit, RelId rel);
+    int psndSFXOnHook(int sfxId);
+    int psndSFXOn3DHook(int sfxId, const vec3 *position);
 
     extern bool (*g_OSLink_trampoline)(OSModuleInfo *, void *);
     extern void (*g_seqSetSeq_trampoline)(SeqIndex, const char *, const char *);
@@ -95,6 +99,8 @@ namespace mod::owr
     extern int (*g_msgWindow_Entry_trampoline)(const char *, int, int);
     extern void (*g__load_trampoline)(const char *, const char *, const char *);
     extern BattleWorkUnit *(*g_BtlUnit_Entry_trampoline)(BattleUnitSetup *);
+    extern int (*g_psndSFXOn_trampoline)(int);
+    extern int (*g_psndSFXOn3D_trampoline)(int, const gc::vec3 *);
 
     extern const char *goombellaName;
     extern const char *goombellaDescription;

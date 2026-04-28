@@ -183,7 +183,7 @@ namespace ttyd::mario
         // marioChgPoseTime
         // marioChgPose
         uint32_t toDotMarioPose();
-        // marioChgEvtPose
+        void marioChgEvtPose(const char *poseName);
         // marioAnimeId
         // marioChkPushAnime
         // marioMoveMain
