@@ -7,12 +7,12 @@
 namespace mod::ghosts
 {
 
-    constexpr int kMaxPeers = 32;
+    constexpr int kMaxPeers = 16;
 
     constexpr uintptr_t kBlockAddress = 0x80001800;
 
     constexpr uint32_t kMagic = 0x47484F53;
-    constexpr uint32_t kVersion = 21;
+    constexpr uint32_t kVersion = 22;
 
     constexpr uint32_t kFlags2EffectsMask = 0x10000000;
     constexpr uint32_t kFlags2RearMask = 0x80000000;
@@ -93,6 +93,13 @@ namespace mod::ghosts
 
     static_assert(sizeof(SharedBlock) == 16 + kMaxPeers * sizeof(PeerSlot), "SharedBlock layout drifted");
 
+    constexpr uintptr_t kBlockUpperBound = 0x80003000;
+    static_assert(kBlockAddress + sizeof(SharedBlock) <= kBlockUpperBound,
+                  "Peer block must end below 0x80003000 - addresses at or above this range "
+                  "are reserved by the game/engine and writes there cause crashes. If you "
+                  "need more peer capacity, you must relocate kBlockAddress, NOT extend "
+                  "past 0x80003000. Current usage: see kMaxPeers and PeerSlot size.");
+
     inline SharedBlock *GetBlock()
     {
         return reinterpret_cast<SharedBlock *>(kBlockAddress);
@@ -171,7 +178,7 @@ namespace mod::ghosts
         return reinterpret_cast<volatile uint8_t *>(kSelfFriendlyFireAddress);
     }
 
-    constexpr int kSfxRingCapacity = 16;
+    constexpr int kSfxRingCapacity = 32;
 
     constexpr uintptr_t kSfxRingAddress = 0x80003BA0;
     constexpr uintptr_t kSfxRingHeadAddress = kSfxRingAddress + 0;

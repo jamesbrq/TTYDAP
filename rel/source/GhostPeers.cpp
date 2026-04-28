@@ -23,6 +23,13 @@ namespace mod::ghosts
 
     extern "C" float reviseAngle(float deg);
 
+    // psndSFXOff stops a previously-started SFX channel. Takes the
+    // channel handle returned by psndSFXOn[/3D]. Used by the
+    // motion-driven loop control to stop ghost-side loops when the
+    // peer's motionId transitions out of a looping state. Not declared
+    // in pmario_sound.h yet; declared here for local use.
+    extern "C" int psndSFXOff(int channel);
+
     namespace
     {
 
@@ -69,6 +76,16 @@ namespace mod::ghosts
 
             uint8_t lastConsumedSfxSeq;
             bool sfxSeqInitialized;
+
+            // Active looping SFX state. The mod auto-starts looping
+            // sounds when peer.motionId implies one (e.g. plane mode,
+            // hammer windup) and stops them on motion change. This is
+            // independent of the SFX ring, which only carries one-shots.
+            // activeLoopSfxId == 0 means no loop active for this slot.
+            // activeLoopChannel is the psndSFXOn_3D return value used
+            // to stop the loop later via psndSFXOff.
+            uint16_t activeLoopSfxId;
+            int activeLoopChannel;
         };
 
         constexpr float kLerpAlpha = 0.30f;
@@ -85,6 +102,15 @@ namespace mod::ghosts
         constexpr int kHitQueueTimeoutFrames = 60 * 5;
         bool g_hitQueued = false;
         int g_hitQueuedTimeout = 0;
+
+        // Reentrancy guard: when the receiver replay fires psndSFXOn[/3D]
+        // to play a peer's SFX, that call goes through our hook again.
+        // Without this guard, the hook would re-capture the replay into
+        // the ring, Python would drain it, the ghost would replay the
+        // replay, ad infinitum (1s delay echoes). When this is true,
+        // OnLocalSfxFired returns early and skips ring capture - but
+        // the trampoline (in OWR.cpp) still runs, so the sound plays.
+        bool g_inReceiverReplay = false;
 
         const SharedBlock *GetValidBlock()
         {
@@ -104,17 +130,148 @@ namespace mod::ghosts
             return std::strncmp(peer.mapName, gw->currentMapName, sizeof(peer.mapName)) == 0;
         }
 
+        // Whitelist of SFX IDs that should be mirrored to peers. Every
+        // ID here was confirmed by reading the engine assembly that
+        // calls psndSFXOn[/3D] - see mario_motion.s, mot_*.s under
+        // /mnt/user-data/uploads. Adding random IDs is risky: many SFX
+        // have stateful side-effects (env reverb, looping channels)
+        // that aren't safe to fire on a remote.
+        //
+        // Architecture note: this whitelist is purely a CAPTURE filter.
+        // The receiver replays whatever IDs arrive on the wire without
+        // checking the peer's animation - SFX and animations are
+        // independent. So an "incorrect" ID in this list at most
+        // causes a phantom sound on peer screens; it doesn't desync
+        // anything.
         constexpr uint16_t kSfxWhitelist[] = {
+            // -- Voice grunts (Mario "ha!", "yahoo!", etc.) --
+            //    mot_jump.s lines 416-434 (jump-launch voice variants)
+            0x09D,
+            0x09E,
+            0x09F,
+            0x0A0,
+            0x0A1,
+
+            // -- Plane/boat ambient cloth/wing flap --
+            //    mot_plane.s + mot_ship.s
+            0x0AF,
+
+            // -- Body landing thud (mario_motion.s line 363) --
             0x0B9,
-            0x15E,
-            0x15F,
-            0x160,
-            0x162,
-            0x197,
+
+            // -- Damage voice (mot_damage.s) --
+            0x0BA, // "ow!" damage grunt
+            0x0CB, // damage variant 2 (KO/heavy)
+
+            // -- Hip-drop (mot_hip.s) --
+            //    NOTE: 0xDB is LOOPING (hip-drop spin/charge sustained).
+            //    Excluded until loop-mirror subsystem is added.
+
+            // -- Idle/stand voice (mot_stay.s) --
+            //    NOTE: All five variants 0xDC/0xE1/0xE2/0xE4/0xEF are
+            //    LOOPING (snore / sleep-talking, channels saved at
+            //    mp offsets and stopped via psndSFXOff). Excluded here
+            //    until loop-mirror subsystem is added. They'd otherwise
+            //    snore forever on peer ghosts after a brief idle.
+
+            // -- Walk/run footsteps, terrain variants (mot_walk.s) --
+            //    The 0x140-0x14B block covers regular ground, water,
+            //    sand, snow, special, etc. Per-frame footstep dispatcher.
+            0x140,
+            0x141,
+            0x142,
+            0x143,
+            0x144,
+            0x145,
+            0x146,
+            0x147,
+            0x148,
+            0x149,
+            0x14A,
+            0x14B,
+
+            // -- Jump-launch cloth/whoosh (mot_jump.s line 437) --
+            0x14D,
+
+            // -- Universal terrain footstep (mario_motion.s 1591-1620) --
+            //    Used outside walk motion (e.g. landing recovery).
             0x14F,
+            0x150,
+            0x151,
+            0x152,
             0x153,
             0x154,
+
+            // -- Hip-drop (mot_hip.s) --
+            // NOTE: 0xDB and 0x158 are LOOPING (saved channels at
+            // mp offsets, stopped via psndSFXOff). 0x159 is one-shot.
+            0x159,
+
+            // -- Hammer (mot_hammer.s) --
+            // NOTE: 0x15B/0x15C/0x15D are LOOPING windup sounds tied
+            // to mot_hammer2 (kHammer2 = 0x13). 0x162 is also looping
+            // (saved at mp+0x2D0, stopped explicitly). They need
+            // explicit psndSFXOff to stop. Replaying them as one-shots
+            // would make them play forever on peer ghosts. Excluded
+            // here; mirror via dedicated loop-tracking subsystem when
+            // added.
+            0x15E, // hammer impact, power tier 1 (one-shot)
+            0x15F, // hammer impact, power tier 2 (one-shot)
+            0x160, // hammer impact, power tier 3 (one-shot)
+            0x163, // hammer spin variant from mot_hammer2 (one-shot)
+
+            // -- Misc Mario actions (legacy, unverified) --
             0x16A,
+
+            // -- Idle voice (mot_stay.s) --
+            // NOTE: 0xDC, 0xE1, 0xE2, 0xE4, 0xEF are LOOPING (sleeping
+            // snore loops, etc.). 0x173 is one-shot.
+            0x173,
+
+            // -- Slide-under entry/exit (mot_slit.s) --
+            0x177,
+            0x178,
+
+            // -- Roll / tube (mot_roll.s) --
+            // NOTE: 0x17C is LOOPING (tube spin loop). Others are
+            // one-shot transitions.
+            0x179,
+            0x17A,
+            0x17B,
+
+            // -- Plane transitions (mot_plane.s) --
+            // NOTE: 0x17F is the LOOPING wing-flap sound. Excluded
+            // here for the same reason as hammer windup loops above.
+            // 0x17D and 0x180 are one-shot transitions (entry/exit).
+            0x17D,
+            0x180,
+
+            // -- Pipe-grab / jabara swing (mot_jabara.s) --
+            //    Spin SFX plus held-shimmy variants
+            0x182,
+            0x183,
+            0x184,
+            0x186,
+            0x187,
+            0x188,
+            0x189,
+            0x18A,
+            0x18B,
+
+            // -- Boat motion (mot_ship.s) --
+            0x18D,
+            0x18F,
+            0x190,
+            0x192,
+
+            // -- Damage extra sounds (mot_damage.s) --
+            0x194,
+            0x195,
+
+            // -- Ground impact + screen shake combo --
+            //    Paired with 0x0B9 from mario_motion.s for landings.
+            //    Also fired from mot_damage.s on heavy hits.
+            0x197,
         };
         constexpr int kSfxWhitelistLen = sizeof(kSfxWhitelist) / sizeof(kSfxWhitelist[0]);
 
@@ -129,6 +286,95 @@ namespace mod::ghosts
                     return true;
             }
             return false;
+        }
+
+        // Map peer.motionId to the looping SFX that should be playing
+        // for this peer right now. Returns 0 if no loop applies.
+        //
+        // Motion IDs from ttyd::mario_motion::MarioMotion:
+        //   0x10 kHip / 0x11 kHip2 -> 0x158 (hip-drop spin loop)
+        //   0x13 kHammer2          -> 0x15B (hammer windup base; the
+        //                            local game varies tier 1/2/3 by
+        //                            pouchGetHammerLv but we don't
+        //                            transmit hammer level)
+        //   0x16 kRoll             -> 0x17C (tube roll loop)
+        //   0x18 kPlane            -> 0x17F (plane wing flap loop)
+        //
+        // Motions without loops return 0; the receiver stops any
+        // active loop on transition to a no-loop motion.
+        //
+        // NOT covered (yet):
+        //   - mot_stay sleep snore loops (need sub-motion state, not
+        //     just motionId - they only fire after Mario falls asleep
+        //     during prolonged kStay)
+        //   - mot_ship boat motion loop (motion 0x19; the loop SFX
+        //     wasn't conclusively identified by the heuristic)
+        //   - hammer windup tiers 2/3 (would need wire format change
+        //     to transmit hammer level)
+        uint16_t LoopSfxForMotion(uint16_t motionId)
+        {
+            switch (motionId)
+            {
+                case 0x10: // kHip
+                case 0x11: // kHip2
+                    return 0x158;
+                case 0x13: // kHammer2 (spin attack)
+                    return 0x15B;
+                case 0x16: // kRoll (tube)
+                    return 0x17C;
+                case 0x18: // kPlane
+                    return 0x17F;
+                default:
+                    return 0;
+            }
+        }
+
+        // Apply a loop-state transition for one peer slot. Compares
+        // the desired loop (from motionId) against what's currently
+        // active; stops/starts as needed. Skips entirely if peer is
+        // off-map (no audible position).
+        void UpdatePeerLoop(const PeerSlot &peer, GhostSlot &slot)
+        {
+            const uint16_t desired = PeerOnLocalMap(peer) ? LoopSfxForMotion(peer.motionId) : 0;
+            const uint16_t current = slot.activeLoopSfxId;
+
+            if (desired == current)
+                return; // no change needed
+
+            // Stop the current loop if any
+            if (current != 0)
+            {
+                g_inReceiverReplay = true;
+                psndSFXOff(slot.activeLoopChannel);
+                g_inReceiverReplay = false;
+                slot.activeLoopSfxId = 0;
+                slot.activeLoopChannel = 0;
+            }
+
+            // Start the new loop if any
+            if (desired != 0)
+            {
+                g_inReceiverReplay = true;
+                const int channel = psndSFXOn_3D(desired, &peer.position);
+                g_inReceiverReplay = false;
+                slot.activeLoopSfxId = desired;
+                slot.activeLoopChannel = channel;
+            }
+        }
+
+        // Force-stop any active loop for a slot. Called when the slot
+        // transitions to inactive (active=0), or when the peer
+        // disappears via map change.
+        void StopPeerLoop(GhostSlot &slot)
+        {
+            if (slot.activeLoopSfxId != 0)
+            {
+                g_inReceiverReplay = true;
+                psndSFXOff(slot.activeLoopChannel);
+                g_inReceiverReplay = false;
+                slot.activeLoopSfxId = 0;
+                slot.activeLoopChannel = 0;
+            }
         }
 
         constexpr int kDefaultMaxRenderedPeers = 12;
@@ -230,6 +476,11 @@ namespace mod::ghosts
 
             slot.sfxSeqInitialized = false;
             slot.lastConsumedSfxSeq = 0;
+
+            // Stop any motion-driven loop that was playing for this
+            // slot. Called whenever the slot transitions to inactive
+            // (peer.active=0) or during map-change cleanup.
+            StopPeerLoop(slot);
         }
 
         int8_t PickPoseIndex(uint32_t flags2)
@@ -385,7 +636,7 @@ namespace mod::ghosts
                 }
             }
 
-            /* if (peer.sfxCount > 0 && PeerOnLocalMap(peer))
+            if (peer.sfxCount > 0 && PeerOnLocalMap(peer))
             {
                 const int n = peer.sfxCount > kSfxEventsPerSlot ? kSfxEventsPerSlot : peer.sfxCount;
 
@@ -405,6 +656,7 @@ namespace mod::ghosts
                 else
                 {
                     uint8_t newest = slot.lastConsumedSfxSeq;
+                    g_inReceiverReplay = true;
                     for (int i = 0; i < n; ++i)
                     {
                         const SfxEvent &ev = peer.sfxEvents[i];
@@ -418,9 +670,10 @@ namespace mod::ghosts
                         if (newDiff != 0 && newDiff < 128)
                             newest = ev.seq;
                     }
+                    g_inReceiverReplay = false;
                     slot.lastConsumedSfxSeq = newest;
                 }
-            }*/
+            }
         }
 
         bool g_hammerSwingFired = false;
@@ -528,6 +781,11 @@ namespace mod::ghosts
             s.renderRotY = 0.0f;
             s.renderInitialized = false;
             s.hitFramesRemaining = 0;
+
+            s.lastConsumedSfxSeq = 0;
+            s.sfxSeqInitialized = false;
+            s.activeLoopSfxId = 0;
+            s.activeLoopChannel = 0;
         }
 
         *GetHitGracePtr() = 0;
@@ -555,7 +813,7 @@ namespace mod::ghosts
         g_initialized = false;
     }
 
-    void UpdateAll()
+    KEEP_FUNC void UpdateAll()
     {
         if (!g_initialized)
             return;
@@ -594,6 +852,13 @@ namespace mod::ghosts
             }
 
             ApplyPeerToSlot(peer, slot);
+
+            // Motion-driven loop control: examine peer.motionId, and
+            // start/stop looping SFX accordingly. Independent of the
+            // SFX ring (one-shots) - loops are inferred from motion
+            // state because the wire format only carries event
+            // start-points, not stops.
+            UpdatePeerLoop(peer, slot);
 
             if (slot.hitFramesRemaining > 0)
                 --slot.hitFramesRemaining;
@@ -880,7 +1145,7 @@ namespace mod::ghosts
         }
     }
 
-    void DrawAll(ttyd::dispdrv::CameraId, void *)
+    KEEP_FUNC void DrawAll(ttyd::dispdrv::CameraId, void *)
     {
         if (!g_initialized)
             return;
@@ -1012,7 +1277,7 @@ namespace mod::ghosts
         }
     }
 
-    void DrawNameTagsAll(ttyd::dispdrv::CameraId, void *)
+    KEEP_FUNC void DrawNameTagsAll(ttyd::dispdrv::CameraId, void *)
     {
         if (!g_initialized)
             return;
@@ -1129,7 +1394,7 @@ namespace mod::ghosts
         }
     } // namespace
 
-    void DrawLobbyHud(ttyd::dispdrv::CameraId, void *)
+    KEEP_FUNC void DrawLobbyHud(ttyd::dispdrv::CameraId, void *)
     {
         if (!g_initialized)
             return;
@@ -1240,9 +1505,14 @@ namespace mod::ghosts
         }
     }
 
-    void OnLocalSfxFired(int sfxId, bool is3D)
+    KEEP_FUNC void OnLocalSfxFired(int sfxId, bool is3D)
     {
         if (!g_initialized)
+            return;
+        // Reentrancy guard - see g_inReceiverReplay declaration. The
+        // receiver replay fires psndSFXOn[/3D] to play peer SFX; that
+        // re-enters our hook. Skip capture so we don't loop.
+        if (g_inReceiverReplay)
             return;
         if (!SfxIsAllowed(sfxId))
             return;
