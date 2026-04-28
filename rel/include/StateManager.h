@@ -5,62 +5,70 @@
 #include <ttyd/msgdrv.h>
 #include <ttyd/battle_unit.h>
 
+// Forward declaration so APSettings can hold a pointer to GhostState
+// without pulling in the full GhostPeers.h (and its TTYD includes) here.
+namespace mod::ghosts
+{
+    struct GhostState;
+}
+
 namespace mod::owr
 {
     struct APSettings
     {
         uint8_t palaceStars;                       // 0x0
-        ttyd::party::PartyMembers startingPartner; //0x1
-        uint8_t yoshiColor;         // 0x2
-        uint8_t apEnabled;          // 0x3
-        char *yoshiName;            // 0x4
-        uint8_t inGame;             // 0x8
-        uint8_t palaceSkip;         // 0x9
-        uint8_t openWestside;       // 0xA
-        uint8_t peekaboo;           // 0xB
-        uint8_t intermissions;      // 0xC
-        uint8_t startingHP;         // 0xD
-        uint8_t startingFP;         // 0xE
-        uint8_t startingBP;         // 0xF
-        uint8_t runFill;            // 0x10
-        uint8_t requiredStars[7];   // 0x11
-        uint8_t tattlesanity;       // 0x18
-        uint8_t fastTravel;         // 0x19
-        uint8_t touConditions;      // 0x1A
-        uint8_t collectedStars;     // 0x1B
-        uint8_t cutsceneSkip;       // 0x1C
-        uint8_t expMultiplier;      // 0x1D
-        uint8_t startingLevel;      // 0x1E
-        uint8_t deathLinkTriggered; // 0x1F
-        uint8_t deathLinkSent;      // 0x20
-        uint8_t music;              // 0x21
-        uint8_t blockVisibility;    // 0x22
-        uint8_t firstAttack;        // 0x23
-        uint32_t musicSeed;         // 0x24
-        uint8_t goalStars;          // 0x28
-        uint8_t goal;               // 0x29
-        uint8_t starShuffle;        // 0x2A
-        uint8_t dazzle;             // 0x2B
-        uint8_t entranceRandomizer; // 0x2C
-        uint8_t shopPurchaseLimit;  // 0x2D
-        uint8_t grubbaBribeDirection; // 0x2E
-        uint8_t grubbaBribeCost;    // 0x2F
-        uint8_t bluePipeToggle;     // 0x30
-        uint8_t enemyRandomizer;    // 0x31
-        uint8_t enemyStatScaling;   // 0x32
-        uint8_t shuffleChapterStats; // 0x33
-        uint8_t padding[4];          // 0x34-0x37 This space has data
-        uint8_t badgeBP;             // 0x38
-        uint8_t badgeFP;             // 0x39
-        uint8_t partnerFP;           // 0x3A
-
+        ttyd::party::PartyMembers startingPartner; // 0x1
+        uint8_t yoshiColor;                        // 0x2
+        uint8_t apEnabled;                         // 0x3
+        char *yoshiName;                           // 0x4
+        uint8_t inGame;                            // 0x8
+        uint8_t palaceSkip;                        // 0x9
+        uint8_t openWestside;                      // 0xA
+        uint8_t peekaboo;                          // 0xB
+        uint8_t intermissions;                     // 0xC
+        uint8_t startingHP;                        // 0xD
+        uint8_t startingFP;                        // 0xE
+        uint8_t startingBP;                        // 0xF
+        uint8_t runFill;                           // 0x10
+        uint8_t requiredStars[7];                  // 0x11
+        uint8_t tattlesanity;                      // 0x18
+        uint8_t fastTravel;                        // 0x19
+        uint8_t touConditions;                     // 0x1A
+        uint8_t collectedStars;                    // 0x1B
+        uint8_t cutsceneSkip;                      // 0x1C
+        uint8_t expMultiplier;                     // 0x1D
+        uint8_t startingLevel;                     // 0x1E
+        uint8_t deathLinkTriggered;                // 0x1F
+        uint8_t deathLinkSent;                     // 0x20
+        uint8_t music;                             // 0x21
+        uint8_t blockVisibility;                   // 0x22
+        uint8_t firstAttack;                       // 0x23
+        uint32_t musicSeed;                        // 0x24
+        uint8_t goalStars;                         // 0x28
+        uint8_t goal;                              // 0x29
+        uint8_t starShuffle;                       // 0x2A
+        uint8_t dazzle;                            // 0x2B
+        uint8_t entranceRandomizer;                // 0x2C
+        uint8_t shopPurchaseLimit;                 // 0x2D
+        uint8_t grubbaBribeDirection;              // 0x2E
+        uint8_t grubbaBribeCost;                   // 0x2F
+        uint8_t bluePipeToggle;                    // 0x30
+        uint8_t enemyRandomizer;                   // 0x31
+        uint8_t enemyStatScaling;                  // 0x32
+        uint8_t shuffleChapterStats;               // 0x33
+        uint8_t padding[4];                        // 0x34-0x37 This space has data
+        uint8_t badgeBP;                           // 0x38
+        uint8_t badgeFP;                           // 0x39
+        uint8_t partnerFP;                         // 0x3A
+        uint8_t pad_pre_ghost;                     // 0x3B - alignment pad before ghostStatePtr
+        mod::ghosts::GhostState *ghostStatePtr;    // 0x3C
     };
 
-    static_assert(sizeof(APSettings) == 0x3C);
+    static_assert(sizeof(APSettings) == 0x40);
 
     constexpr size_t NAME_LEN = 32;
 
-   struct EntranceData
+    struct EntranceData
     {
         char srcMap[NAME_LEN];
         char srcBero[NAME_LEN];
@@ -68,15 +76,15 @@ namespace mod::owr
         char destBero[NAME_LEN];
     };
 
-   static_assert(sizeof(EntranceData) == NAME_LEN * 4);
+    static_assert(sizeof(EntranceData) == NAME_LEN * 4);
 
-   struct EnemyLoadout
-   {
-       uint8_t enemyCount;
-       uint8_t enemyIds[5];
-   };
+    struct EnemyLoadout
+    {
+        uint8_t enemyCount;
+        uint8_t enemyIds[5];
+    };
 
-   static_assert(sizeof(EnemyLoadout) == 0x6);
+    static_assert(sizeof(EnemyLoadout) == 0x6);
 
     class StateManager
     {

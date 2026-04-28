@@ -1,5 +1,7 @@
 #include "GhostPeers.h"
 
+#include "OWR.h"
+#include "StateManager.h"
 #include "gc/mtx.h"
 #include "ttyd/animdrv.h"
 #include "ttyd/dispdrv.h"
@@ -7,6 +9,7 @@
 #include "ttyd/mario.h"
 #include "ttyd/mario_motion.h"
 #include "ttyd/mariost.h"
+#include "ttyd/memory.h"
 #include "ttyd/npcdrv.h"
 #include "ttyd/pmario_sound.h"
 #include "ttyd/string.h"
@@ -18,6 +21,13 @@ using namespace ttyd::pmario_sound;
 
 namespace mod::ghosts
 {
+
+    // Heap-allocated container for ALL ghost-peer scratch state. Set
+    // once in Init() and never re-assigned. Accessor inlines in
+    // GhostPeers.h dereference through this pointer. Null-checked at
+    // entry points (UpdateAll, DrawAll, etc.) via the existing
+    // g_initialized flag, which is only set after this is non-null.
+    GhostState *g_ghostState = nullptr;
 
     extern "C" void *camGetPtr(int cameraId);
 
@@ -377,12 +387,9 @@ namespace mod::ghosts
             }
         }
 
-        constexpr int kDefaultMaxRenderedPeers = 12;
-        volatile uint32_t *kTuneMaxRenderedPeers = reinterpret_cast<volatile uint32_t *>(0x80003B90);
-
         int CurrentMaxRenderedPeers()
         {
-            uint32_t v = *kTuneMaxRenderedPeers;
+            uint32_t v = *GetMaxRenderedPeersPtr();
             if (v > static_cast<uint32_t>(kMaxPeers))
                 v = static_cast<uint32_t>(kMaxPeers);
             return static_cast<int>(v);
@@ -759,6 +766,73 @@ namespace mod::ghosts
     {
         if (g_initialized)
             return;
+
+        // Allocate the heap-resident GhostState. This replaces the
+        // previous arrangement where scratch lived at fixed low-RAM
+        // addresses (0x80001800, 0x80003B20-0x80003BE4, 0x80003D00).
+        // Those addresses overlapped game/OS regions on some users'
+        // Dolphin sessions and caused deterministic crashes on AP
+        // connect. By allocating here instead, the OS gives us a
+        // region that is guaranteed not to alias anything else, and
+        // we publish the pointer to Python via APSettings.
+        //
+        // Use __memAlloc directly rather than `new GhostState()` to
+        // avoid pulling in operator new (_Znwj). The cxx.h inline
+        // exists but the elf2rel linker reports it as missing in
+        // custom.rel builds. GhostState is trivially constructible
+        // (POD members + arrays + packed wire structs), so a raw
+        // alloc + memset is equivalent to value-initialization here.
+        if (g_ghostState == nullptr)
+        {
+            void *raw = ttyd::memory::__memAlloc(ttyd::memory::HeapType::HEAP_DEFAULT, sizeof(GhostState));
+            g_ghostState = reinterpret_cast<GhostState *>(raw);
+        }
+        if (g_ghostState == nullptr)
+        {
+            // Allocation failed - cannot proceed. Leaving g_initialized
+            // false ensures UpdateAll/DrawAll bail at their first check.
+            return;
+        }
+
+        // Zero the entire allocation. __memAlloc returns uninitialized
+        // memory; memsetting here puts every field in a known state
+        // (numbers/pointers as 0, char arrays as empty strings, etc.)
+        // before we overwrite specific fields below.
+        std::memset(g_ghostState, 0, sizeof(GhostState));
+
+        // Initialize peer block header. SharedBlock has its own magic
+        // and version that Python validates - these must match the
+        // Python-side constants exactly.
+        g_ghostState->peerBlock.magic = kMagic;
+        g_ghostState->peerBlock.version = kVersion;
+
+        // Hit-system tunables (live-tunable from Python via memory
+        // edits). These match the old Init() defaults.
+        g_ghostState->hitReachScale = kDefaultHitReachScale;
+        g_ghostState->hitPeerWidth = kDefaultHitPeerWidth;
+        std::memset(g_ghostState->hitPoseName, 0, sizeof(g_ghostState->hitPoseName));
+        std::strncpy(g_ghostState->hitPoseName, kDefaultHitPoseName, sizeof(g_ghostState->hitPoseName) - 1);
+
+        // Renderer cap, default 12. Python can edit this byte to
+        // change the cap at runtime.
+        g_ghostState->maxRenderedPeers = static_cast<uint32_t>(kDefaultMaxRenderedPeers);
+
+        // Self team defaults (no team, no friendly fire). All other
+        // hit/SFX-ring/lobby fields stay zero from the memset above.
+        g_ghostState->selfTeamId = kTeamNone;
+        g_ghostState->selfFriendlyFire = 0;
+
+        // Publish the pointer into APSettings. Python reads this on
+        // startup to discover where to write/read all subsequent
+        // ghost-peer data. The APSettings struct lives at a stable
+        // address (0x80003220) that Python already knows about, and
+        // we just added a `ghostStatePtr` field at the end of it.
+        if (mod::owr::gState != nullptr && mod::owr::gState->apSettings != nullptr)
+        {
+            mod::owr::gState->apSettings->ghostStatePtr = g_ghostState;
+        }
+
+        // GhostSlot bookkeeping (mod-internal, not in GhostState).
         for (auto &s : g_slots)
         {
             s.forwardAllocated = false;
@@ -787,22 +861,6 @@ namespace mod::ghosts
             s.activeLoopSfxId = 0;
             s.activeLoopChannel = 0;
         }
-
-        *GetHitGracePtr() = 0;
-
-        *GetSelfTeamIdPtr() = kTeamNone;
-        *GetSelfFriendlyFirePtr() = 0;
-
-        *reinterpret_cast<volatile uint32_t *>(kLobbyHudAddress) = 0;
-
-        *kTuneMaxRenderedPeers = static_cast<uint32_t>(kDefaultMaxRenderedPeers);
-
-        *GetHitReachScalePtr() = kDefaultHitReachScale;
-        *GetHitPeerWidthPtr() = kDefaultHitPeerWidth;
-
-        *GetSfxRingHeadPtr() = 0;
-        *GetSfxRingTailPtr() = 0;
-        *GetSfxRingSeqPtr() = 0;
 
         g_initialized = true;
     }
