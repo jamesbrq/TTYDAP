@@ -869,7 +869,7 @@ namespace mod::owr
     }
 
     KEEP_FUNC void seqSetSeqHook(SeqIndex seq, const char *map, const char *bero)
-    {   
+    {
         if (seq == SeqIndex::kGameOver && !gState->firstDeath)
         {
             gState->apSettings->deathLinkSent = 1;
@@ -924,11 +924,13 @@ namespace mod::owr
             ttyd::swdrv::swSet(2884);
 
         // Advance Ch.5 prologue if post-cortez
-        if (ttyd::swdrv::swByteGet(1717) >= 10 && ttyd::swdrv::swByteGet(1705) < 7 && strncmp(map, "muj", 3) != 0 && strncmp(map, "dou", 3) != 0)
+        if (ttyd::swdrv::swByteGet(1717) >= 10 && ttyd::swdrv::swByteGet(1705) < 7 && strncmp(map, "muj", 3) != 0 &&
+            strncmp(map, "dou", 3) != 0)
             ttyd::swdrv::swByteSet(1705, 11);
 
         const ttyd::mario::Player *playerPtr = ttyd::mario::marioGetPtr();
-        if (strncmp(map, "tou", 3) == 0 && ttyd::swdrv::swGet(6075) == 1 && playerPtr->prevFollowerId == ttyd::party::PartyMembers::kEgg)
+        if (strncmp(map, "tou", 3) == 0 && ttyd::swdrv::swGet(6075) == 1 &&
+            playerPtr->prevFollowerId == ttyd::party::PartyMembers::kEgg)
             ttyd::party::partyKill2(1);
 
         if (gState->apSettings->cutsceneSkip)
@@ -1154,15 +1156,15 @@ namespace mod::owr
         }
         g_seq_gameInit_trampoline(info);
     }
-    
-    KEEP_FUNC void _load_Hook(const char* mapName, const char* entranceName, const char* beroName)
+
+    KEEP_FUNC void _load_Hook(const char *mapName, const char *entranceName, const char *beroName)
     {
         g__load_trampoline(mapName, entranceName, beroName);
         for (int i = 8; i < 16; i++) gState->state_msgWork[i] = 0;
         ttyd::msgdrv::msgLoad("mod", 2);
         ttyd::msgdrv::msgLoad("desc", 3);
     }
-    
+
     KEEP_FUNC BattleWorkUnit *BtlUnit_Entry_Hook(BattleUnitSetup *setup)
     {
         const OSModuleInfo *relPtr = _globalWorkPtr->relocationBase;
@@ -1225,11 +1227,13 @@ namespace mod::owr
             if (strcmp(_next_area, "rsh") != 0)
             {
 #ifdef TTYD_JP
-                const char *message = "<select 0 0 300 40>Dang\n"
-                                      "Shoot";
+                const char *message =
+                    "<select 0 0 300 40>Dang\n"
+                    "Shoot";
 #else
-                const char *message = "<select 0 0 0 40>Dang\n"
-                                      "Shoot";
+                const char *message =
+                    "<select 0 0 0 40>Dang\n"
+                    "Shoot";
 #endif
                 return message;
             }
@@ -1404,7 +1408,7 @@ namespace mod::owr
             }
             case ItemId::UP_ARROW:
             {
-                //If the player obtains Up Arrow, then automatically turn it in to Merlon if Cutscene Skip is on
+                // If the player obtains Up Arrow, then automatically turn it in to Merlon if Cutscene Skip is on
                 if (gState->apSettings->cutsceneSkip)
                 {
                     ttyd::swdrv::swSet(1186);

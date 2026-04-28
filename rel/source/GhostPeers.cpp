@@ -4,7 +4,10 @@
 #include "ttyd/dispdrv.h"
 #include "ttyd/fontmgr.h"
 #include "ttyd/mario.h"
+#include "ttyd/mario_motion.h"
 #include "ttyd/mariost.h"
+#include "ttyd/npcdrv.h"
+#include "ttyd/string.h"
 #include "gc/mtx.h"
 #include "visibility.h"
 
@@ -17,6 +20,35 @@ namespace mod::ghosts
     // marioPreDisp uses this with ID 4 (k3d) to compute Mario's screen-space
     // depth for shadow scaling.
     extern "C" void *camGetPtr(int cameraId);
+
+    // External angle-normalization helper (system.o, addr 0x80007328).
+    // Public symbol per ttyd.us.lst, but not yet typed in ttyd/system.h.
+    // Used here to normalize hammer yaw the way fbatHitCheck does.
+    extern "C" float reviseAngle(float deg);
+
+    // External pose-change helper (mario.o, addr 0x80059124). Public
+    // symbol per ttyd.us.lst, but not yet typed in ttyd/mario.h. Sets
+    // Mario's body to a named animation pose (e.g. "M_D_2"). Pose-only -
+    // does not change motion state. Used by the v19 pending-hit consumer
+    // to play a visible flinch when a peer hammers us.
+    extern "C" void marioChgEvtPose(const char *poseName);
+
+    // External sound-effect trigger (pmario_sound.o, addr 0x800D98BC).
+    // Plays a sound effect by ID. mot_damage uses 0xBA for Mario's
+    // "ouch" sound on contact damage; we use the same for peer hammer
+    // hits.
+    extern "C" int psndSFXOn(int sfxId);
+
+    // Note: _npcHitCheckHammerAllMotion is declared in ttyd/npcdrv.h
+    // (added in our fork; upstream had it commented out). It's a per-NPC
+    // arc-swept hit check used by fbatHitCheck for engine vs NPC hammer
+    // detection. We reuse it here by passing a stack-allocated NpcEntry
+    // populated from a peer's published state, then mirror the engine's
+    // own reach + yaw computation.
+    //
+    // Reads only these NpcEntry fields: position (0x8C/0x90/0x94),
+    // width (0x14C, used as radius), height (0x150). All other fields
+    // can stay zero-initialized.
 
     // -------------------------------------------------------------------------
     // Internal state - lives entirely inside the mod (custom.rel).
@@ -152,6 +184,81 @@ namespace mod::ghosts
         volatile uint32_t *kDiagUpdateSlot = reinterpret_cast<volatile uint32_t *>(0x80003C5C);
         volatile uint32_t *kDiagUpdatePhase = reinterpret_cast<volatile uint32_t *>(0x80003C60);
 
+        // Peer-hit detection counter (v19, step 3).
+        //
+        //   0x80003C64  peer_hits_detected   ++ each frame our local hammer
+        //                                    swing's impact-frame check
+        //                                    finds a peer in range. Lets us
+        //                                    verify the attacker-side
+        //                                    detection works without yet
+        //                                    needing the AP wire-up: hammer
+        //                                    near a stress-test ghost,
+        //                                    watch this tick.
+        //
+        // (Increments at most once per swing; the swing-state guard prevents
+        //  multi-fire across the active window.)
+        volatile uint32_t *kDiagPeerHits = reinterpret_cast<volatile uint32_t *>(0x80003C64);
+
+        // Hook-stage diagnostic counters (v19 step 3 debug).
+        //
+        // Increments at decision points within the fbatHitCheckAll hook +
+        // CheckPeerHammerHits, so we can bisect WHICH gate is failing when
+        // the hit counter doesn't tick. To diagnose "I hammer but
+        // peer_hits never goes up":
+        //
+        //   1. Read all 5 counters after a few swings.
+        //   2. The first counter that's ZERO is where the chain breaks.
+        //
+        //   0x80003C68  hook_calls           Hook fired at all. Should tick
+        //                                    every frame. If 0 -> hook
+        //                                    install failed.
+        //   0x80003C6C  hook_in_hammer       Frames where curMot == kHammer.
+        //                                    Tells us if we even see the
+        //                                    swing. If 0 while hammering ->
+        //                                    Player.0x2E read is wrong.
+        //   0x80003C70  hook_max_swingframe  Max value of Player.0x48 seen
+        //                                    during any frame where curMot
+        //                                    == kHammer. Tells us the swing
+        //                                    counter's value range. If this
+        //                                    stays at 0 while hammering ->
+        //                                    0x48 is the wrong offset.
+        //                                    If it goes 0..21 cleanly, the
+        //                                    offset is right and we just
+        //                                    have to find the impact frame.
+        //   0x80003C74  hook_at_impact       Frames where swing-frame match
+        //                                    fired (currently == 10). If 0
+        //                                    while hook_max_swingframe is
+        //                                    healthy -> impact frame is
+        //                                    different.
+        //   0x80003C78  hook_geom_tested    Frames where we reached the
+        //                                    per-peer geometry test on at
+        //                                    least one peer. If 0 while
+        //                                    hook_at_impact > 0 -> peer
+        //                                    iteration filtered everything
+        //                                    out (active=0, map mismatch,
+        //                                    or hammerable=1).
+        volatile uint32_t *kDiagHookCalls = reinterpret_cast<volatile uint32_t *>(0x80003C68);
+        volatile uint32_t *kDiagHookInHammer = reinterpret_cast<volatile uint32_t *>(0x80003C6C);
+        volatile uint32_t *kDiagHookMaxSwingFr = reinterpret_cast<volatile uint32_t *>(0x80003C70);
+        volatile uint32_t *kDiagHookAtImpact = reinterpret_cast<volatile uint32_t *>(0x80003C74);
+        volatile uint32_t *kDiagHookGeomTested = reinterpret_cast<volatile uint32_t *>(0x80003C78);
+
+        // ----- Hit-consumer trace counters -----
+        //
+        // Tick at distinct points in the pending-hit consumer so we can
+        // tell where the flow is exiting if the visible reaction stops
+        // working. Each counter is independent; read them with Dolphin's
+        // memory editor to see how far the consumer is reaching.
+        //
+        //   0x80003C7C  consumer_seen     ++each time pending != 0
+        //   0x80003C80  consumer_kind_ok  ++each time kind == hammer
+        //   0x80003C84  consumer_mp_ok    ++each time marioGetPtr returned non-null
+        //   0x80003C88  consumer_applied  ++each time we wrote pose state
+        volatile uint32_t *kDiagConsumerSeen = reinterpret_cast<volatile uint32_t *>(0x80003C7C);
+        volatile uint32_t *kDiagConsumerKindOk = reinterpret_cast<volatile uint32_t *>(0x80003C80);
+        volatile uint32_t *kDiagConsumerMpOk = reinterpret_cast<volatile uint32_t *>(0x80003C84);
+        volatile uint32_t *kDiagConsumerApplied = reinterpret_cast<volatile uint32_t *>(0x80003C88);
+
         // ===== FEATURE MASK (bisection probe) =====
         //
         // Live-tunable u32 at 0x80003C54. Each bit gates one piece of mod
@@ -185,7 +292,12 @@ namespace mod::ghosts
         constexpr uint32_t kFeatEffectsPose = 0x10;
         constexpr uint32_t kFeatRearPose = 0x20;
         constexpr uint32_t kFeatPaperMode = 0x40;
-        constexpr uint32_t kFeatReserved = 0x80;
+        // Bit 0x80: when SET (default), the hit-pose consumer also calls
+        // marioKeyOff/partyKeyOff to lock player input for the duration
+        // of the stagger. Clear this bit to skip the input lock entirely
+        // and just set the pose - useful for bisecting whether the input
+        // lock is what triggers the cinematic letterbox bars.
+        constexpr uint32_t kFeatHitInputLock = 0x80;
         constexpr uint32_t kFeatAllOn = 0xFF;
         volatile uint32_t *kFeatureMask = reinterpret_cast<volatile uint32_t *>(0x80003C54);
 
@@ -350,6 +462,21 @@ namespace mod::ghosts
             // wherever the last (now-stale) values pointed. After the first
             // frame this stays false until the peer goes inactive again.
             bool renderInitialized;
+
+            // Local-prediction hit-reaction state. When the local player
+            // hammers this peer, CheckPeerHammerHits sets hitFramesRemaining
+            // so we play the M_N_7 face anim on this ghost's effects pose
+            // immediately (no waiting for the network round-trip echo).
+            //
+            // While hitFramesRemaining > 0, ApplyPeerToSlot routes the
+            // anim to the effects pose and forces M_N_7, overriding the
+            // peer's published animName. When the counter expires, normal
+            // anim driving resumes.
+            //
+            // Duration matches the local player's stagger lock so the
+            // attacker sees the ghost's reaction for the same time as
+            // the victim's actual stagger lasts on the victim's screen.
+            int hitFramesRemaining;
         };
 
         // Per-frame fraction of the gap between renderX/Y/Z and peer.x/y/z
@@ -360,6 +487,58 @@ namespace mod::ghosts
 
         GhostSlot g_slots[kMaxPeers];
         bool g_initialized = false;
+
+        // Hit-reaction input lock state. See consumer comment block.
+        constexpr int kHitLockDurationFrames = 60;
+        int g_hitLockRemaining = 0;
+
+        // -----------------------------------------------------------------
+        // Post-hit grace (iframes).
+        //
+        // After a hit reaction fires, the player is invulnerable for this
+        // many frames. Two purposes:
+        //   1. Prevents being chain-stunlocked by multiple attackers
+        //      hammering in sequence.
+        //   2. Gives a brief recovery window after the 1-second stagger
+        //      where you can move again before another hit can land.
+        //
+        // We expose the iframe state on a scratch byte (kHitGraceAddress)
+        // that the AP client reads and ORs into the published `hammerable`
+        // field. Other attackers see hammerable=1 and skip us in their
+        // CheckPeerHammerHits geometry pass - so no Bounce gets sent at
+        // all during iframes.
+        //
+        // The mod also self-drops queued hits during iframes as a
+        // belt-and-suspenders defense (handles the race where someone's
+        // Bounce was in-flight when the iframes started).
+        //
+        // Duration: 90 frames = 1.5 seconds. Covers the 1-second stagger
+        // lock plus 0.5 second of recovery where you can move freely.
+        // Tweakable.
+        constexpr int kHitGraceFrames = 90;
+        int g_hitGraceRemaining = 0;
+
+        // -----------------------------------------------------------------
+        // Hit-queue state.
+        //
+        // When a hit arrives we don't fire the reaction immediately if
+        // the player is mid-walk, jumping, in a cutscene, etc. - we'd
+        // either overlap with the engine's pose driver (face anim won't
+        // render reliably) or interrupt something we don't want to
+        // (cutscene). Instead we queue the hit and re-check each frame
+        // whether the player is in a valid state to receive it.
+        //
+        // Valid trigger state: motion == kStay (idle) AND not in paper
+        // mode AND not control-locked. kStay is the only motion where
+        // Mario is unambiguously still and grounded - jumping/falling/
+        // landing all use distinct motion IDs that we exclude.
+        //
+        // The hit drops out of the queue after kHitQueueTimeoutFrames
+        // so we don't deliver a stagger 30 seconds late if the player
+        // is in a long cutscene.
+        constexpr int kHitQueueTimeoutFrames = 60 * 5; // 5 seconds @ 60Hz
+        bool g_hitQueued = false;
+        int g_hitQueuedTimeout = 0;
 
         // Read the shared block IF it's valid - magic/version match. Returns
         // null if the AP client hasn't connected yet, the block is corrupted,
@@ -556,6 +735,12 @@ namespace mod::ghosts
             // their old (stale) render position was to their new one,
             // causing a visible "swoop" across the map.
             slot.renderInitialized = false;
+
+            // Clear hit-reaction state. If a slot gets reused (peer
+            // disconnects, new peer takes the slot, map change, etc.)
+            // we don't want a leftover hit timer overriding the new
+            // peer's anim with M_N_7.
+            slot.hitFramesRemaining = 0;
         }
 
         // Route pose by flags2 - matches marioPreDisp's own logic exactly.
@@ -654,6 +839,44 @@ namespace mod::ghosts
             {
                 ttyd::animdrv::animPoseSetAnim(poseId, peer.animName, /*forceReset=*/1);
                 std::memcpy(cache, peer.animName, sizeof(peer.animName));
+            }
+
+            // -----------------------------------------------------------------
+            // Local-prediction hit reaction.
+            //
+            // While the slot's hit timer is running (set by the attacker-side
+            // hit detector in UpdateAll when our local hammer connects with
+            // this ghost), play M_N_7 on the ghost's EFFECTS pose. This is
+            // independent of whatever the ghost's body is doing - the peer
+            // can still walk/run/etc. on their forward pose while their
+            // face shows the wince.
+            //
+            // We drive this every frame the timer is up so the engine's
+            // pose tick keeps the playhead advancing. forceReset=1 only on
+            // the FIRST frame to seed the playhead at 0; subsequent frames
+            // use forceReset=0 so the anim plays through naturally.
+            //
+            // We use a separate cache slot (not lastAnimEffects) for this
+            // because the peer may legitimately publish their own effects-
+            // pose anim while we're playing the override. When our timer
+            // expires, lastAnimEffects is still in sync with what the peer
+            // last published, so normal anim driving resumes seamlessly.
+            if (slot.hitFramesRemaining > 0 && slot.effectsAllocated)
+            {
+                const int forceReset = (slot.hitFramesRemaining == kHitLockDurationFrames) ? 1 : 0;
+                ttyd::animdrv::animPoseSetAnim(slot.effectsPoseId, kDefaultHitPoseName, forceReset);
+                // Force the renderer to use the effects pose for this
+                // frame so the player can actually SEE M_N_7 on the
+                // ghost's face. Without this override, if the peer
+                // publishes flags2=0 (forward) the renderer ignores the
+                // effects pose entirely and the M_N_7 we just set is
+                // never drawn.
+                slot.activePose = 2;
+                // Invalidate the effects-anim cache so when the timer
+                // expires and the peer's published effects anim differs
+                // from M_N_7, the next ApplyPeerToSlot will re-fire
+                // animPoseSetAnim cleanly.
+                slot.lastAnimEffects[0] = '\0';
             }
 
             // -----------------------------------------------------------------
@@ -793,6 +1016,156 @@ namespace mod::ghosts
                 // else: paper state unchanged or both empty - nothing to do
             }
         }
+
+        // -----------------------------------------------------------------
+        // Peer-vs-peer hammer hit detection (v19, step 3)
+        // -----------------------------------------------------------------
+        //
+        // Mirrors what fbatHitCheck does for engine NPCs, applied to peers
+        // instead. Reads local Mario's swing state; if we're at the impact
+        // frame of a regular hammer swing, runs the engine's own arc-vs-
+        // capsule geometry test (_npcHitCheckHammerAllMotion) against each
+        // active peer.
+        //
+        // Returns the slot index of a hit peer, or -1 if no hit. Step 4
+        // will replace the diagnostic-counter increment with an AP Bounce
+        // send keyed on this index.
+        //
+        // Active-frame window: Player.0x48 == 10. Resolved from mot_hammer
+        // disasm (mot_hammer.s line 80098654: clamp 0x48 to [0..10] when
+        // not blocked, with isFinalFrame == (0x48 == 10) gating the quake
+        // event spawn). One frame per swing.
+        //
+        // Reach + yaw computation: identical to fbatHitCheck (npcdrv.s
+        // lines 1121-1132 of the function body):
+        //   reach = 1.5 * Player.0x1B8     (per-level hammer reach base)
+        //   yaw   = reviseAngle(Player.0x1AC - 90 + camera.0x114)
+        //
+        // Per-swing one-shot: g_hammerSwingFired clears whenever the local
+        // motion isn't kHammer; sets when we fire. Prevents multi-emit
+        // across edge cases (engine pause, cutscene cancel of swing, etc).
+        bool g_hammerSwingFired = false;
+
+        int CheckPeerHammerHits(const SharedBlock *block)
+        {
+            using ttyd::mario_motion::MarioMotion;
+
+            ttyd::mario::Player *me = ttyd::mario::marioGetPtr();
+            if (me == nullptr)
+                return -1;
+
+            const uint8_t *mpBytes = reinterpret_cast<const uint8_t *>(me);
+            const uint16_t curMotRaw = *reinterpret_cast<const uint16_t *>(mpBytes + 0x2E);
+            const auto curMot = static_cast<MarioMotion>(curMotRaw);
+
+            // Clear the swing-fired latch as soon as we leave hammer state.
+            if (curMot != MarioMotion::kHammer)
+            {
+                g_hammerSwingFired = false;
+                return -1;
+            }
+            *kDiagHookInHammer = *kDiagHookInHammer + 1;
+
+            // Already-fired or not-yet-impact-frame: nothing to do.
+            const int32_t swingFrame = *reinterpret_cast<const int32_t *>(mpBytes + 0x48);
+
+            // Diagnostic: track the highest swing-frame we've ever seen.
+            // If this never exceeds 0 -> 0x48 is the wrong offset. If it
+            // climbs cleanly (0..21) but never matches our expected 10 ->
+            // we have to find the real impact frame.
+            const uint32_t swingFrameU = static_cast<uint32_t>(swingFrame < 0 ? 0 : swingFrame);
+            if (swingFrameU > *kDiagHookMaxSwingFr)
+                *kDiagHookMaxSwingFr = swingFrameU;
+
+            if (swingFrame != 10)
+                return -1;
+            *kDiagHookAtImpact = *kDiagHookAtImpact + 1;
+
+            if (g_hammerSwingFired)
+                return -1;
+
+            // Compute reach and yaw the way fbatHitCheck does. The
+            // multiplier is live-tunable at kHitReachScaleAddress so we
+            // can feel out the right range without rebuilding. Engine
+            // default is 1.5; we default lower because peer-vs-peer
+            // otherwise feels too generous.
+            const float reachBase = *reinterpret_cast<const float *>(mpBytes + 0x1B8);
+            float reachScale = *GetHitReachScalePtr();
+            if (!(reachScale > 0.0f)) // catches zero, negative, and NaN
+                reachScale = kDefaultHitReachScale;
+            const float reach = reachScale * reachBase;
+
+            void *cam = camGetPtr(/*k3d=*/4);
+            if (cam == nullptr)
+                return -1;
+            const uint8_t *camBytes = reinterpret_cast<const uint8_t *>(cam);
+
+            const float playerYaw = *reinterpret_cast<const float *>(mpBytes + 0x1AC);
+            const float cameraYaw = *reinterpret_cast<const float *>(camBytes + 0x114);
+            const float yaw = reviseAngle(playerYaw - 90.0f + cameraYaw);
+
+            // Read self-team and friendly-fire state once per call.
+            // The Python client mirrors these into the scratch bytes
+            // each publish tick. Defaults at boot (zeros) mean "no team,
+            // FF off" - safe permissive defaults that don't filter
+            // anything.
+            const uint8_t selfTeamId = *GetSelfTeamIdPtr();
+            const bool friendlyFire = (*GetSelfFriendlyFirePtr() != 0);
+
+            // Iterate peers. Build a stack-allocated NpcEntry per check,
+            // populating only the fields _npcHitCheckHammerAllMotion reads:
+            //   position (0x8C/0x90/0x94), width (0x14C, used as radius),
+            //   height (0x150).
+            // Zero-init everything else so flag bits don't accidentally
+            // gate the function in unexpected ways.
+            for (int i = 0; i < kMaxPeers; ++i)
+            {
+                const PeerSlot &peer = block->peers[i];
+                if (!peer.active)
+                    continue;
+                if (!PeerOnLocalMap(peer))
+                    continue;
+                if (peer.hammerable != 0)
+                    continue; // peer opted out via /ghost_hammer
+
+                // Team check (v20). Skip if peer is on the SAME non-zero
+                // team as us AND we don't have friendly fire enabled.
+                // peer.teamId == 0 (no team) always passes through -
+                // unaligned players can hit each other freely.
+                //
+                // The check is local to the attacker: each player's own
+                // FF flag governs only their own swings. So if I have
+                // FF off and you have FF on, my swings against you skip
+                // (this gate fires here on my mod), but your swings
+                // against me land (your gate doesn't fire on your mod).
+                if (peer.teamId != kTeamNone && peer.teamId == selfTeamId && !friendlyFire)
+                    continue;
+
+                NpcEntry fakeNpc {};
+                fakeNpc.position.x = peer.x;
+                fakeNpc.position.y = peer.y;
+                fakeNpc.position.z = peer.z;
+                // Width is the capsule radius the engine uses around
+                // the target's position. Live-tunable at
+                // kHitPeerWidthAddress so we can feel out the right
+                // size without rebuilding. Smaller width = stricter
+                // hit boundary.
+                float peerWidth = *GetHitPeerWidthPtr();
+                if (!(peerWidth > 0.0f)) // catches zero, negative, and NaN
+                    peerWidth = kDefaultHitPeerWidth;
+                fakeNpc.width = peerWidth;
+                fakeNpc.height = 60.0f;
+
+                float distance = 0.0f;
+                *kDiagHookGeomTested = *kDiagHookGeomTested + 1;
+                if (_npcHitCheckHammerAllMotion(&fakeNpc, &distance, reach, yaw) != nullptr)
+                {
+                    g_hammerSwingFired = true;
+                    return i;
+                }
+            }
+            return -1;
+        }
     } // anonymous namespace
 
     // -------------------------------------------------------------------------
@@ -823,7 +1196,24 @@ namespace mod::ghosts
             s.renderZ = 0.0f;
             s.renderRotY = 0.0f;
             s.renderInitialized = false;
+            s.hitFramesRemaining = 0;
         }
+
+        // Initialize the post-hit grace byte. Without this, leftover
+        // memory from a prior session could read as 1 and cause the AP
+        // client to publish hammerable=1 right at boot.
+        *GetHitGracePtr() = 0;
+
+        // Initialize self-team scratch (v20). Defaults: no team, FF off.
+        // Python overwrites these on every publish tick once connected.
+        *GetSelfTeamIdPtr() = kTeamNone;
+        *GetSelfFriendlyFirePtr() = 0;
+
+        // Initialize lobby HUD magic to zero so DrawLobbyHud bails out
+        // until the Python client writes a real block. Without this,
+        // leftover memory could falsely match the magic and we'd render
+        // garbage on the first frame.
+        *reinterpret_cast<volatile uint32_t *>(kLobbyHudAddress) = 0;
 
         // Initialize diagnostic block. last_failed_slot starts as 0xFFFFFFFF
         // so that "slot 0 failure" doesn't get confused with "no failure yet".
@@ -848,6 +1238,12 @@ namespace mod::ghosts
         *kDiagMapChanges = 0;
         *kDiagDrawSlot = 0xFFFFFFFFu;
         *kDiagDrawPhase = 0;
+        *kDiagPeerHits = 0;
+        *kDiagHookCalls = 0;
+        *kDiagHookInHammer = 0;
+        *kDiagHookMaxSwingFr = 0;
+        *kDiagHookAtImpact = 0;
+        *kDiagHookGeomTested = 0;
 
         // Seed the live-tunable max-rendered-peers cap with our default.
         // Write a different value to 0x80003C40 with Dolphin's memory
@@ -857,6 +1253,28 @@ namespace mod::ghosts
         // Seed feature mask = all features ON. Toggle bits at 0x80003C54
         // to bisect the 16-ghost crash without rebuilding.
         *kFeatureMask = kFeatAllOn;
+
+        // Seed the hit-reaction pose-name buffer with the compiled
+        // default. Edit live in Dolphin's memory editor at
+        // kHitPoseNameAddress (0x80003B70) to try other animations
+        // (e.g. "M_D_1", "M_D_6", "M_U_2") without rebuilding.
+        {
+            char *poseBuf = GetHitPoseNamePtr();
+            // Zero the whole buffer first to ensure NUL termination
+            // even if the default is shorter than kHitPoseNameLen.
+            for (int i = 0; i < kHitPoseNameLen; ++i) poseBuf[i] = '\0';
+            // Copy the default. strlen-style cap to avoid overflow if
+            // someone changes kDefaultHitPoseName to something long.
+            const char *src = kDefaultHitPoseName;
+            for (int i = 0; i < kHitPoseNameLen - 1 && src[i] != '\0'; ++i) poseBuf[i] = src[i];
+        }
+
+        // Seed the live-tunable hit-detection knobs. Edit floats at
+        //   0x80003B80 (reach scale)
+        //   0x80003B84 (peer width)
+        // in Dolphin's memory editor to feel out the right values.
+        *GetHitReachScalePtr() = kDefaultHitReachScale;
+        *GetHitPeerWidthPtr() = kDefaultHitPeerWidth;
 
         g_initialized = true;
     }
@@ -942,6 +1360,13 @@ namespace mod::ghosts
             *kDiagUpdatePhase = 3; // entering ApplyPeerToSlot
             ApplyPeerToSlot(peer, slot);
             *kDiagUpdatePhase = 13; // post-ApplyPeerToSlot
+
+            // Tick the hit timer down. ApplyPeerToSlot already drove
+            // M_N_7 onto the effects pose for THIS frame; we decrement
+            // here so when the count hits 0 next frame, ApplyPeerToSlot
+            // resumes normal anim driving naturally.
+            if (slot.hitFramesRemaining > 0)
+                --slot.hitFramesRemaining;
 
             // Smoothing: lerp render position toward the wire-format peer
             // position each frame. Snap on first frame after activation
@@ -1226,6 +1651,304 @@ namespace mod::ghosts
                             break;
                     }
                     // Last byte stays NUL (initialized above).
+                }
+            }
+        }
+
+        // -----------------------------------------------------------------
+        // Pending-hit consumer (v19).
+        //
+        // The AP client writes a non-zero u8 to *kPendingHitAddress when an
+        // inbound `Bounce` arrives saying a peer hit us. We don't apply the
+        // reaction immediately - the player might be mid-walk, mid-jump,
+        // talking to an NPC, etc. - any of those would either fight the
+        // engine's pose driver (face anim doesn't render) or interrupt
+        // something we shouldn't touch.
+        //
+        // Instead we move the hit into a queue: g_hitQueued = true. Each
+        // frame we re-check whether the player is in a state ready to
+        // receive it. When they are, the queued hit fires.
+        //
+        // "Ready" means:
+        //   - Player ptr available
+        //   - Motion is exactly kStay (idle - not walking, jumping,
+        //     falling, hammering, talking, etc.)
+        //   - Not in paper mode (plane/ship/yoshi)
+        //   - Not control-locked (cutscene/dialog)
+        //
+        // The queue times out after kHitQueueTimeoutFrames so we don't
+        // deliver a stagger 30 seconds late if the player camps in a
+        // cutscene. Multiple hits arriving while one is queued just
+        // refresh the timeout - we don't accumulate.
+        // -----------------------------------------------------------------
+        {
+            volatile uint32_t *pending = GetPendingHitPtr();
+            const uint32_t raw = *pending;
+            if (raw != 0)
+            {
+                const uint8_t kind = static_cast<uint8_t>(raw >> 24);
+                if (kind == kHitKindHammer)
+                {
+                    // Drop the hit if we're still in iframes from a
+                    // recent reaction. This handles the race where an
+                    // attacker's Bounce was in flight when our grace
+                    // period started - we set hammerable=1 immediately
+                    // on the wire, but a Bounce already sent moments
+                    // earlier still arrives. Defense in depth.
+                    if (g_hitGraceRemaining == 0)
+                    {
+                        // Move into the queue. Reset the timeout - each
+                        // new hit gets the full window to find a quiet
+                        // moment.
+                        g_hitQueued = true;
+                        g_hitQueuedTimeout = kHitQueueTimeoutFrames;
+                    }
+                }
+                // else: unknown kind - ignore.
+
+                // Always clear the inbound slot. If the AP client sees
+                // it linger non-zero, it would try to interpret stale
+                // data on every poll.
+                *pending = 0;
+            }
+        }
+
+        // Per-frame: try to drain the queue. If we have a hit queued and
+        // the player just landed in kStay (idle, grounded, no cutscene),
+        // fire it now.
+        if (g_hitQueued)
+        {
+            ttyd::mario::Player *mp = ttyd::mario::marioGetPtr();
+            bool fired = false;
+            if (mp != nullptr)
+            {
+                using ttyd::mario_motion::MarioMotion;
+                const uint8_t *mpBytes = reinterpret_cast<const uint8_t *>(mp);
+                const uint16_t curMotRaw = *reinterpret_cast<const uint16_t *>(mpBytes + 0x2E);
+                const uint32_t flags1 = *reinterpret_cast<const uint32_t *>(mpBytes + 0x0);
+                const auto curMot = static_cast<MarioMotion>(curMotRaw);
+
+                constexpr uint32_t kCtrlLockedMask = 0x10000000;
+                const bool ctrlLocked = (flags1 & kCtrlLockedMask) != 0;
+                const bool ready = (curMot == MarioMotion::kStay) && !ctrlLocked;
+
+                if (ready)
+                {
+                    // Apply: write pose state directly (mirrors what
+                    // evt_mario_set_pose does for the "name not in
+                    // a_mario_group" path - see evt_mario.s lines
+                    // 4686-4693). M_N_7 lives in e_mario, so the
+                    // engine's pose pipeline routes it to the EFFECTS
+                    // pose (Player.0x234) via the flags2 effects bit.
+                    //
+                    // For the engine's pose pipeline to pick up M_N_7,
+                    // we need:
+                    //
+                    //   Player.0x18  = pointer to "M_N_7" string
+                    //   Player.0xC  |= 0x1000  (pose-pending bit)
+                    //   Player.0x4  |= 0x10000000  (flags2 effects bit)
+                    //
+                    // The flags2 0x10000000 bit is what makes
+                    // marioPreDisp route to the effects pose instead
+                    // of forward; without it the engine tries to apply
+                    // M_N_7 to a_mario, which silently no-ops.
+                    uint8_t *mpRw = reinterpret_cast<uint8_t *>(mp);
+                    *reinterpret_cast<const char **>(mpRw + 0x18) = kDefaultHitPoseName;
+                    *reinterpret_cast<uint32_t *>(mpRw + 0x0C) |= 0x1000;
+                    *reinterpret_cast<uint32_t *>(mpRw + 0x04) |= 0x10000000;
+
+                    // Lock player input + suppress the cinematic
+                    // letterbox bars that would otherwise appear.
+                    //
+                    // Two-part dance, both required:
+                    //
+                    //   1. Bump the input-disable refcount at
+                    //      Player.0x39. marioChkKey (mario.s line
+                    //      7088) reads ONLY this counter to gate
+                    //      input - if non-zero, input is treated
+                    //      as disabled. We avoid marioKeyOff because
+                    //      it also sets Player.0x0 |= 0x8, a bit
+                    //      other systems may key off, but that bit
+                    //      alone is NOT what triggers letterbox.
+                    //
+                    //   2. Set bit 0x200 on the letterbox camera's
+                    //      flags (camGetPtr(8)+0). camLetterBox
+                    //      (camdrv.s line 22) has an early-exit gate
+                    //      on this bit: if set, the function bails
+                    //      before testing marioChkKey, so no
+                    //      letterbox even though input is locked.
+                    //      Same mechanism evt_cam_letter_box_disable(1)
+                    //      uses.
+                    //
+                    // Without (2), camLetterBox sees marioChkKey
+                    // returning 0 (input disabled) and animates the
+                    // black bars in. With (2), the gate skips that
+                    // whole logic.
+                    //
+                    // We don't call psndSetFlag(0x40) like the evt
+                    // version does - that would also lower audio
+                    // volume to match cinematic mode.
+                    //
+                    // Gated by feature bit 0x80 so we can disable it
+                    // for testing.
+                    if (FeatOn(kFeatHitInputLock))
+                    {
+                        uint8_t *counter = mpRw + 0x39;
+                        *counter = static_cast<uint8_t>(*counter + 1);
+
+                        void *letterboxCam = camGetPtr(8);
+                        if (letterboxCam != nullptr)
+                        {
+                            uint16_t *camFlags = reinterpret_cast<uint16_t *>(letterboxCam);
+                            *camFlags = static_cast<uint16_t>(*camFlags | 0x0200);
+                        }
+
+                        g_hitLockRemaining = kHitLockDurationFrames;
+                    }
+
+                    // Standard Mario damage SFX, same as mot_damage
+                    // uses on its first frame (mot_damage.s line 122).
+                    psndSFXOn(0xBA);
+
+                    // Start the post-hit grace period. While it's
+                    // running we'll publish hammerable=1 on the wire
+                    // so other attackers skip us, and we'll also drop
+                    // any new hits that try to enter the queue.
+                    g_hitGraceRemaining = kHitGraceFrames;
+
+                    fired = true;
+                }
+            }
+
+            if (fired)
+            {
+                g_hitQueued = false;
+                g_hitQueuedTimeout = 0;
+            }
+            else
+            {
+                // Tick the queue timeout. If it expires, drop the hit -
+                // probably the player is in a long cutscene and the
+                // stagger would be jarring if we delivered it later.
+                --g_hitQueuedTimeout;
+                if (g_hitQueuedTimeout <= 0)
+                {
+                    g_hitQueued = false;
+                    g_hitQueuedTimeout = 0;
+                }
+            }
+        }
+
+        // Per-frame input-lock timer. When the consumer fires it sets
+        // g_hitLockRemaining, bumps Player.0x39 (input-disable refcount),
+        // and sets bit 0x200 on camGetPtr(8) (letterbox suppress flag).
+        // Each frame we tick down; at zero we undo both side effects.
+        //
+        // No motion change needed at expiry - the queue mechanism only
+        // fires the hit when the player is ALREADY in kStay, and the
+        // input lock prevents them from leaving it during the 1-second
+        // stagger. So they're guaranteed to still be in kStay when the
+        // lock releases.
+        if (g_hitLockRemaining > 0)
+        {
+            --g_hitLockRemaining;
+            if (g_hitLockRemaining == 0)
+            {
+                // Release input lock by decrementing the refcount.
+                ttyd::mario::Player *mp = ttyd::mario::marioGetPtr();
+                if (mp != nullptr)
+                {
+                    uint8_t *counter = reinterpret_cast<uint8_t *>(mp) + 0x39;
+                    if (*counter > 0)
+                        *counter = static_cast<uint8_t>(*counter - 1);
+                }
+
+                // Clear the letterbox suppress flag (cam-8 flag bit 0x200).
+                // Mirrors what evt_cam_letter_box_disable(0) does for that
+                // single bit (without the audio side effect).
+                void *letterboxCam = camGetPtr(8);
+                if (letterboxCam != nullptr)
+                {
+                    uint16_t *camFlags = reinterpret_cast<uint16_t *>(letterboxCam);
+                    *camFlags = static_cast<uint16_t>(*camFlags & ~0x0200);
+                }
+            }
+        }
+
+        // Per-frame post-hit grace tick. Decrement the counter and
+        // mirror current state to the scratch byte the AP client reads.
+        // The client ORs that byte into the published `hammerable` field
+        // each publish cycle, so other attackers see us as un-hammerable
+        // for the full grace window.
+        if (g_hitGraceRemaining > 0)
+            --g_hitGraceRemaining;
+        *GetHitGracePtr() = (g_hitGraceRemaining > 0) ? 1 : 0;
+
+        // -----------------------------------------------------------------
+        // Attacker-side peer hammer detection (v19).
+        //
+        // We run this from UpdateAll instead of from a separate hook on
+        // fbatHitCheckAll for two reasons:
+        //
+        //   1. Project architecture: marioStMain is already hooked by
+        //      mod.cpp's updateEarly, which calls UpdateAll. That gives
+        //      us a per-frame entry point with no additional hook plumbing.
+        //
+        //   2. fbatHitCheckAll turned out to NOT be called per-frame in
+        //      OW (only inside battle-mode dispatch we don't have visible).
+        //      The actual hammer hit-detection lives inside mot_hammer
+        //      itself - it reads Player.0x48 (swing-frame counter), and
+        //      when 0x48 == 10 it fires the quake event (mot_hammer.s
+        //      lines 1609-1623). We mirror that condition.
+        //
+        // Timing: updateEarly runs BEFORE marioStMain (and therefore
+        // before mot_hammer). Player.0x48 at our read time reflects
+        // end-of-LAST-frame's mot_hammer increment - which equals the
+        // value mot_hammer is about to read this frame. So when we see
+        // 0x48 == 10, we know mot_hammer will treat this frame as the
+        // impact frame and fire its quake event. We fire our peer check
+        // at the same logical moment.
+        //
+        // CheckPeerHammerHits() short-circuits cheaply when not in
+        // mot_hammer; cost on every non-hammer frame is one u16 read +
+        // a compare.
+        {
+            const int hitSlot = CheckPeerHammerHits(block);
+            if (hitSlot >= 0)
+            {
+                *kDiagPeerHits = *kDiagPeerHits + 1;
+
+                // Local-prediction visual: stamp the ghost's hit timer
+                // so we play M_N_7 on its face immediately, without
+                // waiting for the network round-trip echo (which would
+                // be ~100-300ms on AP). The geometry already matched
+                // locally so we're certain the hit landed; visual
+                // prediction here keeps feedback feeling instant.
+                //
+                // The ghost-side timer matches the local player's
+                // stagger lock duration. If a third observer is
+                // watching, they'll see the reaction via the normal
+                // echo path once the victim publishes their staggered
+                // state - the three views converge.
+                g_slots[hitSlot].hitFramesRemaining = kHitLockDurationFrames;
+
+                // Publish the hit event to the outbound scratch slot.
+                // The AP client polls this on its ghost-sync tick, looks
+                // up the AP slot ID for peer block index `hitSlot` (using
+                // the same key-sort that pack_peer_block applied), and
+                // sends a Bounce packet to that AP slot.
+                //
+                // We write only if the slot is currently clear (== 0).
+                // This avoids overwriting a previous hit the client
+                // hasn't picked up yet - though in practice the per-swing
+                // one-shot in CheckPeerHammerHits already rate-limits
+                // us to one event per ~20 frames (the mot_hammer swing
+                // duration), and the client polls at 60Hz, so the slot
+                // is essentially always clear when we get here.
+                volatile uint32_t *outbound = GetOutboundHitPtr();
+                if (*outbound == 0)
+                {
+                    *outbound = PackOutboundHit(kHitKindHammer, static_cast<uint8_t>(hitSlot));
                 }
             }
         }
@@ -1650,6 +2373,12 @@ namespace mod::ghosts
                 continue;
             if (peer.slotName[0] == '\0')
                 continue;
+            // v18: per-peer self-publish toggle. 0 = show (default),
+            // 1 = hide. The publisher decides this; we just respect it.
+            // Distinct from feature_mask bit 3 (kFeatNameTags) which is
+            // a local-view kill switch for ALL tags.
+            if (peer.showName != 0)
+                continue;
 
             // Step 1: world -> camera space (apply view matrix).
             // PSMTXMultVec does mat3x4 * vec3 -> vec3 (treats input as
@@ -1716,6 +2445,234 @@ namespace mod::ghosts
             ttyd::fontmgr::FontDrawColor(reinterpret_cast<uint8_t *>(const_cast<uint32_t *>(&packed)));
 
             ttyd::fontmgr::FontDrawString(screenX, screenY, peer.slotName);
+        }
+    }
+
+    // -------------------------------------------------------------------------
+    // Lobby HUD: top-right overlay rendered each frame from the scratch
+    // block at kLobbyHudAddress.
+    //
+    // Wire format mirrors Ghosts.py's pack_lobby_block. We render:
+    //   line 1: "Lobby: <name>"
+    //   line 2: "Game: <type>"           (only if game_type != none)
+    //   line 3: "Status: <status>"
+    //   line 4: "Time: Ns"               (only if timer > 0)
+    //   blank
+    //   ... text region split by \n (member list, etc.)
+    //
+    // Text region is built on the Python side via Ghosts.format_lobby_text;
+    // we just split it on newlines and draw one line per FontDrawString call.
+    //
+    // Recommended registration: same dispdrv pass as DrawNameTagsAll
+    // (kDebug3d), with order higher than name tags' order so the HUD
+    // text draws on top of any name-tag text it overlaps. Convention
+    // in this fork is `DrawAll` at order 0 (k3d, 3D models first),
+    // `DrawNameTagsAll` at order 100 (kDebug3d, on top of 3D), so this
+    // belongs at order 200 (kDebug3d, on top of name tags).
+    //
+    //   ttyd::dispdrv::dispEntry(CameraId::kDebug3d, 1, /*order=*/200.0f,
+    //                            DrawLobbyHud, nullptr);
+    // -------------------------------------------------------------------------
+
+    namespace
+    {
+        // Top-right screen corner positioning. TTYD's NDC-style screen
+        // space is roughly [-280, 280] horizontal, [-240, 240] vertical
+        // when scaled by kNameTagScreenScaleX/Y. The HUD anchors at the
+        // right edge with a small margin and starts from near the top.
+        //
+        // FontDrawString anchors at top-left of the text - we right-align
+        // each line manually by subtracting its measured width.
+        constexpr float kLobbyHudAnchorX = 270.0f; // right edge X
+        constexpr float kLobbyHudAnchorY = 220.0f; // top edge Y (TTYD's Y is inverted from screen)
+        constexpr float kLobbyHudFontScale = 0.5f;
+        constexpr float kLobbyHudLineHeight = 22.0f; // pixels between lines
+
+        // Convert a status code to a short label for the HUD header.
+        const char *LobbyStatusLabel(uint8_t status)
+        {
+            switch (status)
+            {
+                case kLobbyStatusIdle:
+                    return "Idle";
+                case kLobbyStatusWaiting:
+                    return "Waiting";
+                case kLobbyStatusCountdown:
+                    return "Starting";
+                case kLobbyStatusPlaying:
+                    return "Playing";
+                case kLobbyStatusFinished:
+                    return "Finished";
+                default:
+                    return "?";
+            }
+        }
+
+        const char *LobbyGameTypeLabel(uint8_t gameType)
+        {
+            switch (gameType)
+            {
+                case kGameTypeHideAndSeek:
+                    return "Hide and Seek";
+                default:
+                    return "";
+            }
+        }
+
+        // Right-align a string at screenX. Returns the adjusted X to
+        // pass to FontDrawString.
+        float RightAlignX(const char *str, float screenX, float fontScale)
+        {
+            const uint16_t textWidth = ttyd::fontmgr::FontGetMessageWidth(str);
+            return screenX - static_cast<float>(textWidth) * fontScale;
+        }
+    } // namespace
+
+    void DrawLobbyHud(ttyd::dispdrv::CameraId /*cam*/, void * /*user*/)
+    {
+        if (!g_initialized)
+            return;
+
+        const LobbyHudHeader *header = GetLobbyHudHeader();
+
+        // Validate magic + version. If either is off, the Python client
+        // hasn't initialized the block yet (or wrote it incompatibly) -
+        // skip rendering rather than display garbage.
+        if (header->magic != kLobbyHudMagic)
+            return;
+        if (header->version != kLobbyHudVersion)
+            return;
+
+        // Active flag: 0 = no lobby, skip drawing entirely.
+        if (header->active == 0)
+            return;
+
+        // Init font state once per draw call. Same pattern as
+        // DrawNameTagsAll.
+        ttyd::fontmgr::FontDrawStart();
+        ttyd::fontmgr::FontDrawEdge();
+        ttyd::fontmgr::FontDrawScale(kLobbyHudFontScale);
+
+        // Default white text. (FontDrawColor is set per-line below if
+        // we want role-based coloring later.)
+        const uint32_t packedWhite = 0xFFFFFFFFu;
+        ttyd::fontmgr::FontDrawColor(reinterpret_cast<uint8_t *>(const_cast<uint32_t *>(&packedWhite)));
+
+        float y = kLobbyHudAnchorY;
+
+        // Line 1: "Lobby: <name>". Lobby name field is NUL-padded so
+        // we can pass it directly to FontDrawString (which is C-string).
+        // header->name is a fixed 16-byte char[16]; ensure it's NUL-
+        // terminated for safety.
+        char buf[64];
+        char nameBuf[17];
+        std::memcpy(nameBuf, header->name, 16);
+        nameBuf[16] = '\0';
+
+        // Hand-compose label strings. The TTYD string library doesn't
+        // expose strncat, so we use strcpy + strcat with manually-sized
+        // buffers. buf is 64 bytes; the longest concatenation here is
+        // "Lobby: " (7) + name[16] = 23 chars + NUL, well within bounds.
+        ttyd::string::strcpy(buf, "Lobby: ");
+        ttyd::string::strcat(buf, nameBuf);
+
+        ttyd::fontmgr::FontDrawString(RightAlignX(buf, kLobbyHudAnchorX, kLobbyHudFontScale), y, buf);
+        y -= kLobbyHudLineHeight;
+
+        // Line 2: "Game: <type>" - only if a game type is set.
+        // "Game: " (6) + longest label "Hide and Seek" (13) = 19 + NUL.
+        const char *gameLabel = LobbyGameTypeLabel(header->gameType);
+        if (gameLabel[0] != '\0')
+        {
+            ttyd::string::strcpy(buf, "Game: ");
+            ttyd::string::strcat(buf, gameLabel);
+            ttyd::fontmgr::FontDrawString(RightAlignX(buf, kLobbyHudAnchorX, kLobbyHudFontScale), y, buf);
+            y -= kLobbyHudLineHeight;
+        }
+
+        // Line 3: "Status: <status>".
+        // "Status: " (8) + longest label "Finished" (8) = 16 + NUL.
+        ttyd::string::strcpy(buf, "Status: ");
+        ttyd::string::strcat(buf, LobbyStatusLabel(header->status));
+        ttyd::fontmgr::FontDrawString(RightAlignX(buf, kLobbyHudAnchorX, kLobbyHudFontScale), y, buf);
+        y -= kLobbyHudLineHeight;
+
+        // Line 4: timer (only if non-zero). u16 from the header is
+        // big-endian but PowerPC reads big-endian natively, so it's
+        // already in host byte order. Format as "Time: Ns".
+        if (header->timerSeconds > 0)
+        {
+            // Hand-format the seconds. Tiny integer-to-string helper
+            // that doesn't require sprintf. Limited to 3 digits since
+            // u16 max is 65535 but timer realistically caps at ~600.
+            char numBuf[8] = {0};
+            uint16_t t = header->timerSeconds;
+            int idx = 0;
+            char rev[8];
+            int rlen = 0;
+            if (t == 0)
+            {
+                rev[rlen++] = '0';
+            }
+            else
+            {
+                while (t > 0 && rlen < 6)
+                {
+                    rev[rlen++] = static_cast<char>('0' + (t % 10));
+                    t /= 10;
+                }
+            }
+            // Reverse into numBuf.
+            for (int i = rlen - 1; i >= 0; --i) numBuf[idx++] = rev[i];
+            numBuf[idx++] = 's';
+            numBuf[idx] = '\0';
+
+            // "Time: " (6) + numBuf (up to 7 chars) = 13 + NUL.
+            ttyd::string::strcpy(buf, "Time: ");
+            ttyd::string::strcat(buf, numBuf);
+            ttyd::fontmgr::FontDrawString(RightAlignX(buf, kLobbyHudAnchorX, kLobbyHudFontScale), y, buf);
+            y -= kLobbyHudLineHeight;
+        }
+
+        // Free-form text region. Iterate \n-separated lines and draw
+        // each. The text region is NUL-terminated and bounded by
+        // kLobbyTextLen.
+        const char *text = GetLobbyHudText();
+        const char *end = text + kLobbyTextLen;
+        const char *cur = text;
+
+        // Per-line buffer. Lines longer than this get truncated at
+        // render time (the underlying text region cap is already 192
+        // chars total so individual lines are short).
+        char lineBuf[80];
+
+        while (cur < end && *cur != '\0')
+        {
+            // Find end of this line (next '\n' or NUL or text-region end).
+            const char *lineStart = cur;
+            while (cur < end && *cur != '\0' && *cur != '\n') ++cur;
+
+            const int lineLen = static_cast<int>(cur - lineStart);
+            const int copyLen =
+                (lineLen < static_cast<int>(sizeof(lineBuf)) - 1) ? lineLen : static_cast<int>(sizeof(lineBuf)) - 1;
+            std::memcpy(lineBuf, lineStart, copyLen);
+            lineBuf[copyLen] = '\0';
+
+            // Skip rendering empty lines but still advance Y so
+            // separators in format_lobby_text produce visible gaps.
+            if (copyLen == 0)
+            {
+                y -= kLobbyHudLineHeight;
+            }
+            else
+            {
+                ttyd::fontmgr::FontDrawString(RightAlignX(lineBuf, kLobbyHudAnchorX, kLobbyHudFontScale), y, lineBuf);
+                y -= kLobbyHudLineHeight;
+            }
+
+            // Skip the newline separator if present.
+            if (cur < end && *cur == '\n')
+                ++cur;
         }
     }
 } // namespace mod::ghosts

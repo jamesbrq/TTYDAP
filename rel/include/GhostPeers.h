@@ -63,7 +63,8 @@ namespace mod::ghosts
     // garbage RAM at boot" - without it the mod would try to render ghosts
     // from random memory contents on the first frame.
     constexpr uint32_t kMagic = 0x47484F53; // 'GHOS'
-    constexpr uint32_t kVersion = 17;       // v17: block address moved 0x80002000 -> 0x80001800. PeerSlot layout unchanged.
+    constexpr uint32_t kVersion = 20; // v20: added `teamId` byte (predefined teams: 0=none, 1=red, 2=blue, 3=green, 4=yellow).
+                                      // Slot grows by 4 bytes (one byte teamId + 3 pad before float-aligned cameraAngle).
 
     // -------------------------------------------------------------------------
     // On-the-wire types. PACKED. Both sides must agree byte-for-byte.
@@ -98,11 +99,11 @@ namespace mod::ghosts
     // One peer's state. 176 bytes packed (was 172 in v14).
     //
     // Python equivalent (for reference, '>' = big-endian / network):
-    //   struct.pack(">B 15s 16s fff f BBBB I I H 2x f 16s 32s 16s ff fff fff f H 2x f",
+    //   struct.pack(">B 15s 16s fff f BBBB I I H B B B 3x f 16s 32s 16s ff fff fff f H 2x f",
     //       active, mapName, animName,
     //       x, y, z, rotY,
     //       r, g, b, a,
-    //       flags2, flags3, motionTimer, cameraAngle,
+    //       flags2, flags3, motionTimer, showName, hammerable, teamId, cameraAngle,
     //       slotName, paperAgbName, paperAnimName,
     //       rotX, rotZ,
     //       rotPivotX, rotPivotY, rotPivotZ,
@@ -121,7 +122,43 @@ namespace mod::ghosts
         uint32_t flags2;        // mirror of Player.flags2 - drives pose pick
         uint32_t flags3;        // mirror of Player.flags3 - drives L/R yaw
         uint16_t motionTimer;   // mirror of Player.unk_28 - drives anim playhead
-        uint8_t _pad[2];        // pad for float alignment
+        uint8_t showName;       // v18: name-tag visibility for this peer.
+                                // 0 = show (default; back-compat with v17
+                                //     zero pad - any v17 publisher is
+                                //     interpreted as "show").
+                                // 1 = hide name tag for this peer.
+                                // Consumed by DrawNameTagsAll. The receiver
+                                // also has a local feature_mask bit 3 that
+                                // disables ALL name tags regardless of this
+                                // field; the two layers compose.
+        uint8_t hammerable;     // v19: peer-vs-peer hammer opt-out.
+                                // 0 = can be hammered (default; back-compat
+                                //     with v18 zero pad).
+                                // 1 = opted out; attackers should skip
+                                //     emitting hit events targeting this
+                                //     peer.
+                                // Enforced client-side: the attacker reads
+                                // this field of the candidate victim and
+                                // declines to fire the Bounce. Trivially
+                                // bypassable - threat model is "obnoxious
+                                // peer accidentally griefs me," not
+                                // malicious actors. Same threat model as
+                                // showName.
+        uint8_t teamId;         // v20: predefined team membership.
+                                //   0 = no team (default)
+                                //   1 = red, 2 = blue, 3 = green, 4 = yellow
+                                //   5..255 = reserved
+                                // Used by attackers' CheckPeerHammerHits
+                                // alongside the local self-team-id and
+                                // friendly-fire flag: if peer is on the
+                                // same non-zero team as the local player
+                                // AND friendly fire is OFF, skip the hit.
+                                // Friendly fire is per-attacker (the local
+                                // FF flag is what matters for that
+                                // player's swings); each peer's own FF
+                                // setting governs only their own attacks.
+        uint8_t pad_v20[3];     // align cameraAngle (f32) on 4-byte
+                                // boundary. Reserved for future use.
         float cameraAngle;      // mirror of Player.unk_19c - camera-yaw offset
         char slotName[16];      // player's display name (NUL-padded). Rendered
                                 // as a name tag above the ghost. Empty string
@@ -222,10 +259,7 @@ namespace mod::ghosts
                                 // of jabara held-rest).
     } __attribute__((__packed__));
 
-    static_assert(sizeof(PeerSlot) ==
-                      1 + 15 + 16 + 4 * 4 + 4 + 4 + 4 + 2 + 2 + 4 + 16 + 32 + 16 + 4 + 4 + 4 * 3 + 4 * 3 + 4 + 2 + 2 + 4,
-                  "PeerSlot layout drifted");
-    static_assert(sizeof(PeerSlot) == 176, "PeerSlot must be exactly 176 bytes");
+    static_assert(sizeof(PeerSlot) == 180, "PeerSlot must be exactly 180 bytes");
 
     // The whole block. Header + array of slots.
     // Header is 8 bytes (magic + version) padded to 16 for alignment.
@@ -279,6 +313,346 @@ namespace mod::ghosts
     }
 
     // -------------------------------------------------------------------------
+    // Pending-hit flag (v19)
+    // -------------------------------------------------------------------------
+    //
+    // Single u32 written by the AP client when an inbound hit event arrives
+    // (a peer hammered us, delivered via the AP `Bounce` packet). The mod
+    // consumes it in UpdateAll: if non-zero, attempts to enter mot_damage
+    // (motion id 0x1F) via marioChgMot, then clears the flag.
+    //
+    // Layout:
+    //   byte 0: kind code (1 = hammer; reserved 0 = no event, others = future)
+    //   bytes 1..3: reserved (currently 0; future use for source slot id, etc.)
+    //
+    // Address: 0x80003B60. Sits 0x40 bytes past the self-paper-AGB scratch
+    // (which ends at 0x80003B40), with breathing room. Well clear of the
+    // diagnostics block at 0x80003C00.
+    //
+    // Single-byte writes from the client side suffice; we read u32 because
+    // PowerPC reads are naturally aligned to 4 bytes anyway and the upper
+    // bytes are reserved.
+    constexpr uintptr_t kPendingHitAddress = 0x80003B60;
+
+    // Hit-kind codes for byte 0 of the pending-hit flag.
+    constexpr uint8_t kHitKindNone = 0;   // no event pending
+    constexpr uint8_t kHitKindHammer = 1; // peer hammered us
+    // (2..255 reserved for future attack types)
+
+    inline volatile uint32_t *GetPendingHitPtr()
+    {
+        return reinterpret_cast<volatile uint32_t *>(kPendingHitAddress);
+    }
+
+    // -------------------------------------------------------------------------
+    // Hit-reaction pose name (v19, live-tunable)
+    // -------------------------------------------------------------------------
+    //
+    // The mod's pending-hit consumer calls marioChgEvtPose(<name>) when a
+    // hit event arrives. The pose name is read live from this buffer so we
+    // can iterate on which animation feels right (M_D_2 vs M_D_1 vs M_U_3
+    // vs anything else in a_mario's anim table) without rebuilding.
+    //
+    // Layout: 16 bytes, NUL-terminated ASCII. Edit live with Dolphin's
+    // memory editor:
+    //   1. Find address 0x80003B70 in the memory viewer
+    //   2. Type new pose name (e.g. "M_D_1\0" or "M_U_2\0")
+    //   3. Trigger a hit (write 0x01 to 0x80003B60)
+    //
+    // Init() seeds the buffer with the default ("M_D_2"). If at consume-
+    // time the buffer is empty (first byte == NUL) we fall back to the
+    // compiled-in default rather than calling marioChgEvtPose with "".
+    //
+    // Address: 0x80003B70 - 16 bytes after the pending-hit flag.
+    constexpr uintptr_t kHitPoseNameAddress = 0x80003B70;
+    constexpr int kHitPoseNameLen = 16;
+
+    // Compiled-in default. Picked from e_mario's anim table:
+    //   M_N_7 - 18 frames, looping. The "winded/wincing" expression
+    //           animation. Plays on the effects pose (Player.0x234) so
+    //           Mario's body keeps doing whatever it was doing while
+    //           his face reacts to the hit. Identified through testing
+    //           against the e_mario AGB.
+    //
+    // Other interesting candidates to try by writing into the buffer:
+    //   M_F_1  - 16 frames, LOOPING. The actual mot_damage entry face.
+    //   M_D_7  - 8 frames, LOOPING. mot_damage's stunned face.
+    //   M_D_8  - 16 frames, non-loop. Damage variant.
+    //   M_D_2  - 8 frames, non-loop (a_mario body, not e_mario).
+    //   M_I_Y  - 8 frames, non-loop. Generic blink/look (a_mario).
+    constexpr const char *kDefaultHitPoseName = "M_N_7";
+
+    inline char *GetHitPoseNamePtr()
+    {
+        return reinterpret_cast<char *>(kHitPoseNameAddress);
+    }
+
+    // -------------------------------------------------------------------------
+    // Hit-detection reach scale (v19, live-tunable)
+    // -------------------------------------------------------------------------
+    //
+    // Multiplier on the engine's per-level hammer reach (Player.0x1B8).
+    // The full formula is:
+    //
+    //   reach = kHitReachScale * Player.0x1B8
+    //
+    // Then the engine's hit-check internally adds (NpcEntry.width * 0.5)
+    // to the reach when computing the actual hit boundary.
+    //
+    // Engine default: 1.5 (this is what fbatHitCheck uses for NPC hits).
+    // We default lower because peer-vs-peer hits otherwise feel too generous.
+    //
+    // Edit live at 0x80003B80 with Dolphin's memory editor (4 bytes,
+    // big-endian IEEE 754). Init() seeds with kDefaultHitReachScale on
+    // boot. If the read value is <= 0 (not yet initialized, or someone
+    // wrote zero) we fall back to the default.
+    constexpr uintptr_t kHitReachScaleAddress = 0x80003B80;
+    constexpr float kDefaultHitReachScale = 1.0f;
+
+    inline volatile float *GetHitReachScalePtr()
+    {
+        return reinterpret_cast<volatile float *>(kHitReachScaleAddress);
+    }
+
+    // Same idea for the per-peer "NPC width" used by the engine's geometry
+    // test. The engine reads NpcEntry.width (offset 0x14C) and uses it as
+    // a capsule radius around the target's position. Smaller width = the
+    // engine treats the peer as a smaller target = Mario needs to be
+    // closer to register a hit.
+    //
+    // The original engine value for our fake-NPC was 30. We seed lower
+    // for the same "peers feel too generous" reason.
+    //
+    // Edit live at 0x80003B84 with Dolphin's memory editor (4 bytes,
+    // big-endian float). If the read value is <= 0 we fall back to the
+    // default.
+    constexpr uintptr_t kHitPeerWidthAddress = 0x80003B84;
+    constexpr float kDefaultHitPeerWidth = 15.0f;
+
+    inline volatile float *GetHitPeerWidthPtr()
+    {
+        return reinterpret_cast<volatile float *>(kHitPeerWidthAddress);
+    }
+
+    // -------------------------------------------------------------------------
+    // Outbound hit event (v19, mod -> client)
+    // -------------------------------------------------------------------------
+    //
+    // Single u32 written by the mod when our local hammer swing connects
+    // with a peer. The AP client polls this on its ghost-sync tick; when
+    // non-zero it emits a `Bounce` packet to the targeted peer's AP slot
+    // and clears the field.
+    //
+    // Layout:
+    //   byte 0: kind code (1 = hammer; same codes as kPendingHitAddress)
+    //   byte 1: peer block index (0..31) - which slot in the 32-slot
+    //           peer block we hit. The client looks this up in its
+    //           sorted peer-key list (matching pack_peer_block's order)
+    //           to find the AP slot ID.
+    //   byte 2-3: reserved
+    //
+    // Address: 0x80003B88. Sits right after the reach/peer-width
+    // tunables (which end at 0x80003B88).
+    constexpr uintptr_t kOutboundHitAddress = 0x80003B88;
+
+    inline volatile uint32_t *GetOutboundHitPtr()
+    {
+        return reinterpret_cast<volatile uint32_t *>(kOutboundHitAddress);
+    }
+
+    // Pack a hit event into the u32 word the mod writes / client reads.
+    inline uint32_t PackOutboundHit(uint8_t kind, uint8_t peerIndex)
+    {
+        return (static_cast<uint32_t>(kind) << 24) | (static_cast<uint32_t>(peerIndex) << 16);
+    }
+
+    // -------------------------------------------------------------------------
+    // Hit grace period (iframes) flag (v19)
+    // -------------------------------------------------------------------------
+    //
+    // Single u8 written by the mod when the local player has been hit
+    // and is within their post-hit invulnerability window. The Python AP
+    // client reads this byte during its self-state poll and ORs it into
+    // the published `hammerable` field, so other peers see us as
+    // un-hammerable for the duration of our grace period.
+    //
+    //   0 = hittable (default)
+    //   1 = in grace period - other peers' attackers should skip us
+    //
+    // The mod also self-checks this byte in its hit-queue drain so a
+    // race-condition hit arriving DURING the grace period gets dropped.
+    //
+    // Address: 0x80003B8C. Sits right after the outbound-hit u32
+    // (which ends at 0x80003B8B). Single byte; reads as u8.
+    constexpr uintptr_t kHitGraceAddress = 0x80003B8C;
+
+    inline volatile uint8_t *GetHitGracePtr()
+    {
+        return reinterpret_cast<volatile uint8_t *>(kHitGraceAddress);
+    }
+
+    // -------------------------------------------------------------------------
+    // Team IDs (v20)
+    // -------------------------------------------------------------------------
+    //
+    // Predefined team identifiers. Stored on the wire in PeerSlot.teamId
+    // (u8) and in the self-team scratch byte. Numeric values are stable
+    // (don't reorder) since both Python and C++ encode them by value.
+    constexpr uint8_t kTeamNone = 0; // no team / default
+    constexpr uint8_t kTeamRed = 1;
+    constexpr uint8_t kTeamBlue = 2;
+    constexpr uint8_t kTeamGreen = 3;
+    constexpr uint8_t kTeamYellow = 4;
+    // 5..255 reserved.
+
+    // -------------------------------------------------------------------------
+    // Self-team scratch (v20)
+    // -------------------------------------------------------------------------
+    //
+    // Two single-byte fields the AP client writes alongside the peer
+    // block. The mod reads them in CheckPeerHammerHits to decide whether
+    // a candidate victim should be skipped on friendly-fire grounds:
+    //
+    //   if (peer.teamId != kTeamNone &&
+    //       peer.teamId == self_team_id &&
+    //       !friendly_fire)
+    //       skip;
+    //
+    //   0x80003B8D  u8 self_team_id    Local player's team. Mirrors
+    //                                  ctx._ghost_team_id from the
+    //                                  Python client. Same kTeam* codes
+    //                                  as the wire-format teamId.
+    //   0x80003B8E  u8 friendly_fire   Local FF flag. 0 = off (default,
+    //                                  same-team hits skipped),
+    //                                  1 = on (same-team hits land
+    //                                  normally).
+    //
+    // Both bytes are written by Python on every publish tick; the mod
+    // simply reads the latest snapshot each frame.
+    constexpr uintptr_t kSelfTeamIdAddress = 0x80003B8D;
+    constexpr uintptr_t kSelfFriendlyFireAddress = 0x80003B8E;
+
+    inline volatile uint8_t *GetSelfTeamIdPtr()
+    {
+        return reinterpret_cast<volatile uint8_t *>(kSelfTeamIdAddress);
+    }
+    inline volatile uint8_t *GetSelfFriendlyFirePtr()
+    {
+        return reinterpret_cast<volatile uint8_t *>(kSelfFriendlyFireAddress);
+    }
+
+    // -------------------------------------------------------------------------
+    // Minigame lobby HUD (v20)
+    // -------------------------------------------------------------------------
+    //
+    // Single 1KB block at 0x80003D00. Python writes; mod reads in
+    // DrawLobbyHud and renders an in-game overlay top-right of screen.
+    //
+    // Layout (mirrors Ghosts.py):
+    //
+    //   offset  size  field
+    //   ------  ----  -----------------------------------------------------
+    //   0x000   4     magic (u32, 'LOBY' = 0x4C4F4259)
+    //   0x004   1     version (u8, must equal kLobbyHudVersion)
+    //   0x005   1     active (0 = no lobby; 1 = render HUD)
+    //   0x006   1     status (kLobbyStatus*)
+    //   0x007   1     game_type (kGameType*)
+    //   0x008   1     member_count (0..32)
+    //   0x009   1     self_role (kLobbyRole*)
+    //   0x00A   2     timer_seconds (u16, big-endian; 0 = no timer)
+    //   0x00C   4     reserved
+    //   0x010   16    lobby_name (char[16], NUL-padded)
+    //   0x020   768   members[32] - each 24 bytes
+    //   0x320   192   free-form HUD text (NUL-terminated, multi-line via \n)
+    //   0x3E0   ...   reserved tail
+    //   0x400         end (1024 bytes)
+    //
+    // Per-member (24 bytes):
+    //   0x00  1   slot
+    //   0x01  1   role (kLobbyRole*)
+    //   0x02  1   alive (1 = active, 0 = out / spectating)
+    //   0x03  1   pad
+    //   0x04  16  name (char[16], NUL-padded)
+    //   0x14  4   reserved
+    //
+    // Magic byte distinguishes "Python wrote here" from "uninitialized
+    // RAM at boot" - mod skips drawing if it doesn't match. To clear
+    // the HUD immediately on disconnect, write 4 zero bytes to the
+    // magic field.
+    constexpr uintptr_t kLobbyHudAddress = 0x80003D00;
+    constexpr uint32_t kLobbyHudMagic = 0x4C4F4259; // 'LOBY'
+    constexpr uint8_t kLobbyHudVersion = 1;
+    constexpr int kLobbyHudSize = 1024;
+    constexpr int kLobbyMaxMembers = 32;
+    constexpr int kLobbyMemberSize = 24;
+    constexpr int kLobbyHeaderSize = 32;
+    constexpr int kLobbyMembersOffset = kLobbyHeaderSize;
+    constexpr int kLobbyTextOffset = kLobbyMembersOffset + kLobbyMaxMembers * kLobbyMemberSize;
+    constexpr int kLobbyTextLen = 192;
+
+    // Status enum values (must match Ghosts.py).
+    constexpr uint8_t kLobbyStatusIdle = 0;
+    constexpr uint8_t kLobbyStatusWaiting = 1;
+    constexpr uint8_t kLobbyStatusCountdown = 2;
+    constexpr uint8_t kLobbyStatusPlaying = 3;
+    constexpr uint8_t kLobbyStatusFinished = 4;
+
+    // Game type enum (must match Ghosts.py).
+    constexpr uint8_t kGameTypeNone = 0;
+    constexpr uint8_t kGameTypeHideAndSeek = 1;
+
+    // Role enum (must match Ghosts.py).
+    constexpr uint8_t kLobbyRoleNone = 0;
+    constexpr uint8_t kLobbyRoleHost = 1;
+    constexpr uint8_t kLobbyRoleParticipant = 2;
+    constexpr uint8_t kLobbyRoleHider = 3;
+    constexpr uint8_t kLobbyRoleSeeker = 4;
+    constexpr uint8_t kLobbyRoleSpectator = 5;
+
+// Header view. Cast the block pointer to this for convenient field
+// access. Padding/alignment matches Ghosts.py's struct.pack(">IBBBBBBHI16s").
+#pragma pack(push, 1)
+    struct LobbyHudHeader
+    {
+        uint32_t magic;
+        uint8_t version;
+        uint8_t active;
+        uint8_t status;
+        uint8_t gameType;
+        uint8_t memberCount;
+        uint8_t selfRole;
+        uint16_t timerSeconds;
+        uint32_t reserved;
+        char name[16];
+    };
+    static_assert(sizeof(LobbyHudHeader) == kLobbyHeaderSize, "LobbyHudHeader size mismatch with kLobbyHeaderSize");
+
+    struct LobbyHudMember
+    {
+        uint8_t slot;
+        uint8_t role;
+        uint8_t alive;
+        uint8_t pad;
+        char name[16];
+        uint32_t reserved;
+    };
+    static_assert(sizeof(LobbyHudMember) == kLobbyMemberSize, "LobbyHudMember size mismatch with kLobbyMemberSize");
+#pragma pack(pop)
+
+    inline const LobbyHudHeader *GetLobbyHudHeader()
+    {
+        return reinterpret_cast<const LobbyHudHeader *>(kLobbyHudAddress);
+    }
+    inline const LobbyHudMember *GetLobbyHudMembers()
+    {
+        return reinterpret_cast<const LobbyHudMember *>(kLobbyHudAddress + kLobbyMembersOffset);
+    }
+    inline const char *GetLobbyHudText()
+    {
+        return reinterpret_cast<const char *>(kLobbyHudAddress + kLobbyTextOffset);
+    }
+
+    // -------------------------------------------------------------------------
     // Mod-side public API. Called by mod.cpp / init.rel.
     // -------------------------------------------------------------------------
     void Init();                                                   // once at startup
@@ -286,4 +660,5 @@ namespace mod::ghosts
     void UpdateAll();                                              // every frame
     void DrawAll(ttyd::dispdrv::CameraId cam, void *user);         // dispdrv callback (k3d)
     void DrawNameTagsAll(ttyd::dispdrv::CameraId cam, void *user); // dispdrv callback (k2d)
+    void DrawLobbyHud(ttyd::dispdrv::CameraId cam, void *user);    // dispdrv callback (k2d)
 } // namespace mod::ghosts

@@ -39,6 +39,7 @@ namespace mod
         
         ttyd::dispdrv::dispEntry(ttyd::dispdrv::CameraId::k3d, 1, 0.f, ghosts::DrawAll, nullptr);
         ttyd::dispdrv::dispEntry(ttyd::dispdrv::CameraId::kDebug3d, 1, 100.0f, ghosts::DrawNameTagsAll, nullptr);
+        ttyd::dispdrv::dispEntry(ttyd::dispdrv::CameraId::kDebug3d, 1, 200.0f, ghosts::DrawLobbyHud, nullptr);
 
         // Call the original function
         mPFN_marioStMain_trampoline();

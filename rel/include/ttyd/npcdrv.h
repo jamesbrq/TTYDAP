@@ -331,6 +331,7 @@ extern "C"
     NpcEntry *fbatHitCheck(uint32_t flags, void *unk);
 
     bool npcCheckInterrupt(NpcEntry *npc);
+    NpcEntry *_npcHitCheckHammerAllMotion(NpcEntry *npc, float *distance, float reach, float yaw);
     // Reference to unimplemented type BattleSetupInfo
     void npcSetupBattleInfo(NpcEntry *npc, void *battleInfo);
     void npcSetBattleInfo(NpcEntry *npc, int32_t battleInfoId);
