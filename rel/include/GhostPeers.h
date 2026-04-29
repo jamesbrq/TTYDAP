@@ -11,7 +11,7 @@ namespace mod::ghosts
     constexpr int kMaxPeers = 16;
 
     constexpr uint32_t kMagic = 0x47484F53;
-    constexpr uint32_t kVersion = 23;
+    constexpr uint32_t kVersion = 26;
 
     constexpr uint32_t kFlags2EffectsMask = 0x10000000;
     constexpr uint32_t kFlags2RearMask = 0x80000000;
@@ -19,6 +19,16 @@ namespace mod::ghosts
     constexpr int kSfxEventsPerSlot = 4;
 
     constexpr uint8_t kSfxFlag3D = 0x01;
+
+    // v26: state-sync for loops. Each peer publishes the set of
+    // currently-playing loop sfxIds (max kActiveLoopsPerPeer per
+    // publish). Receivers diff against their tracked set: anything
+    // newly-appeared starts; anything no-longer-published stops. This
+    // replaces the v25 stop-event mechanism (kSfxFlagStop), which was
+    // unreliable under per-publish event budget pressure (4 events/
+    // publish). State sync is bandwidth-bounded but reliable: even
+    // if a publish is dropped entirely, the next one self-heals.
+    constexpr int kActiveLoopsPerPeer = 6;
 
     struct SfxEvent
     {
@@ -44,7 +54,19 @@ namespace mod::ghosts
 
         uint8_t teamId;
 
-        uint8_t pad_v20[3];
+        // Per-axis spin direction hint. Source-side observation of the
+        // most recent unwrapped delta sign for each rotation axis:
+        //   +1 = recent rotation was in positive direction
+        //   -1 = recent rotation was in negative direction
+        //    0 = no fast rotation observed (or freshly-spawned peer)
+        // Receiver uses these to disambiguate fast spins (>180 deg per
+        // publish) where shortest-path lerp would pick the wrong way.
+        // Source decides "fast" by tracking unwrapped angle and
+        // setting the hint only when angular speed exceeds a threshold.
+        // Replaces what was pad_v20[3] in v23.
+        int8_t spinDirHintY;
+        int8_t spinDirHintX;
+        int8_t spinDirHintZ;
 
         float cameraAngle;
         char slotName[16];
@@ -73,13 +95,21 @@ namespace mod::ghosts
         float paperLocalTime;
 
         uint8_t sfxCount;
-        uint8_t _pad_sfx[3];
+        uint8_t activeLoopCount; // v26: count of valid entries in activeLoops below
+        uint8_t _pad_sfx[2];
         SfxEvent sfxEvents[kSfxEventsPerSlot];
+
+        // v26 state-sync: currently-playing loop sfxIds for this peer.
+        // Receivers diff against their tracked set. Any entry == 0 is
+        // an empty slot (sfxId 0 is not a real engine SFX). The set is
+        // unordered; receivers don't depend on positional consistency
+        // between publishes.
+        uint16_t activeLoops[kActiveLoopsPerPeer];
 
     } __attribute__((__packed__));
 
     static_assert(sizeof(SfxEvent) == 4, "SfxEvent must be 4 bytes");
-    static_assert(sizeof(PeerSlot) == 200, "PeerSlot must be exactly 200 bytes");
+    static_assert(sizeof(PeerSlot) == 212, "PeerSlot must be exactly 212 bytes (v26: +12 for activeLoops)");
 
     struct SharedBlock
     {
@@ -224,6 +254,16 @@ namespace mod::ghosts
         // 0x80003D00. Stored as raw bytes here since it has its own
         // sub-layout (LobbyHudHeader + members[] + text region).
         uint8_t lobbyHudBlock[kLobbyHudSize];
+
+        // v26 state-sync: mod -> Python scratch holding the LOCAL
+        // player's currently-active loop sfxIds. Sampled from
+        // g_localChannelMap each frame so the latest value is always
+        // available when Python's 20Hz publish tick runs. Python reads
+        // these and embeds in its own peer slot's activeLoops field.
+        // selfActiveLoopCount is the number of valid entries (0..N).
+        uint8_t selfActiveLoopCount;
+        uint8_t pad_loops[3];
+        uint16_t selfActiveLoops[kActiveLoopsPerPeer];
     };
 
     // Sanity checks on field offsets. Python's mirror layout depends
@@ -231,20 +271,22 @@ namespace mod::ghosts
     // GS_OFF_* constants. The compiler will catch drift here at build
     // time so layouts can't silently desync.
     static_assert(offsetof(GhostState, peerBlock) == 0, "peerBlock must start at offset 0");
-    static_assert(offsetof(GhostState, pendingHit) == 3216, "pendingHit offset drift");
-    static_assert(offsetof(GhostState, hitPoseName) == 3220, "hitPoseName offset drift");
-    static_assert(offsetof(GhostState, hitReachScale) == 3236, "hitReachScale offset drift");
-    static_assert(offsetof(GhostState, hitPeerWidth) == 3240, "hitPeerWidth offset drift");
-    static_assert(offsetof(GhostState, outboundHit) == 3244, "outboundHit offset drift");
-    static_assert(offsetof(GhostState, hitGrace) == 3248, "hitGrace offset drift");
-    static_assert(offsetof(GhostState, selfTeamId) == 3249, "selfTeamId offset drift");
-    static_assert(offsetof(GhostState, selfFriendlyFire) == 3250, "selfFriendlyFire offset drift");
-    static_assert(offsetof(GhostState, maxRenderedPeers) == 3252, "maxRenderedPeers offset drift");
-    static_assert(offsetof(GhostState, selfPaperAgbName) == 3256, "selfPaperAgbName offset drift");
-    static_assert(offsetof(GhostState, sfxRingHead) == 3288, "sfxRingHead offset drift");
-    static_assert(offsetof(GhostState, sfxRingEvents) == 3292, "sfxRingEvents offset drift");
-    static_assert(offsetof(GhostState, lobbyHudBlock) == 3420, "lobbyHudBlock offset drift");
-    static_assert(sizeof(GhostState) == 4444, "GhostState total size drift - check Python GS_TOTAL_SIZE");
+    static_assert(offsetof(GhostState, pendingHit) == 3408, "pendingHit offset drift");
+    static_assert(offsetof(GhostState, hitPoseName) == 3412, "hitPoseName offset drift");
+    static_assert(offsetof(GhostState, hitReachScale) == 3428, "hitReachScale offset drift");
+    static_assert(offsetof(GhostState, hitPeerWidth) == 3432, "hitPeerWidth offset drift");
+    static_assert(offsetof(GhostState, outboundHit) == 3436, "outboundHit offset drift");
+    static_assert(offsetof(GhostState, hitGrace) == 3440, "hitGrace offset drift");
+    static_assert(offsetof(GhostState, selfTeamId) == 3441, "selfTeamId offset drift");
+    static_assert(offsetof(GhostState, selfFriendlyFire) == 3442, "selfFriendlyFire offset drift");
+    static_assert(offsetof(GhostState, maxRenderedPeers) == 3444, "maxRenderedPeers offset drift");
+    static_assert(offsetof(GhostState, selfPaperAgbName) == 3448, "selfPaperAgbName offset drift");
+    static_assert(offsetof(GhostState, sfxRingHead) == 3480, "sfxRingHead offset drift");
+    static_assert(offsetof(GhostState, sfxRingEvents) == 3484, "sfxRingEvents offset drift");
+    static_assert(offsetof(GhostState, lobbyHudBlock) == 3612, "lobbyHudBlock offset drift");
+    static_assert(offsetof(GhostState, selfActiveLoopCount) == 4636, "selfActiveLoopCount offset drift");
+    static_assert(offsetof(GhostState, selfActiveLoops) == 4640, "selfActiveLoops offset drift");
+    static_assert(sizeof(GhostState) == 4652, "GhostState total size drift - check Python GS_TOTAL_SIZE");
 
     // Global pointer to the heap-allocated GhostState. Set by Init();
     // null before that. All accessors below dereference through this.
@@ -340,6 +382,18 @@ namespace mod::ghosts
         return reinterpret_cast<const char *>(g_ghostState->lobbyHudBlock + kLobbyTextOffset);
     }
 
+    // v26: scratch holding LOCAL player's currently-active loops, for
+    // Python's publish to read. Mod writes once per frame from
+    // SampleActiveLoops.
+    inline volatile uint8_t *GetSelfActiveLoopCountPtr()
+    {
+        return &g_ghostState->selfActiveLoopCount;
+    }
+    inline volatile uint16_t *GetSelfActiveLoopsPtr()
+    {
+        return reinterpret_cast<volatile uint16_t *>(g_ghostState->selfActiveLoops);
+    }
+
     void Init();
     void Shutdown();
     void UpdateAll();
@@ -347,7 +401,8 @@ namespace mod::ghosts
     void DrawNameTagsAll(ttyd::dispdrv::CameraId cam, void *user);
     void DrawLobbyHud(ttyd::dispdrv::CameraId cam, void *user);
 
-    void OnLocalSfxFired(int sfxId, bool is3D);
+    void OnLocalSfxFired(int sfxId, bool is3D, int channel);
+    void OnLocalSfxStopped(int channel);
 
     void installSfxHooks();
 } // namespace mod::ghosts

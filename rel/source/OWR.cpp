@@ -170,6 +170,7 @@ namespace mod::owr
     KEEP_VAR ttyd::battle_unit::BattleWorkUnit *(*g_BtlUnit_Entry_trampoline)(BattleUnitSetup *) = nullptr;
     KEEP_VAR int (*g_psndSFXOn_trampoline)(int) = nullptr;
     KEEP_VAR int (*g_psndSFXOn3D_trampoline)(int, const gc::vec3 *) = nullptr;
+    KEEP_VAR int (*g_psndSFXOff_trampoline)(int) = nullptr;
 
     void OWR::SequenceInit()
     {
@@ -1193,14 +1194,22 @@ namespace mod::owr
 
     KEEP_FUNC int psndSFXOnHook(int sfxId)
     {
-        ghosts::OnLocalSfxFired(sfxId, false);
-        return g_psndSFXOn_trampoline(sfxId);
+        const int channel = g_psndSFXOn_trampoline(sfxId);
+        ghosts::OnLocalSfxFired(sfxId, false, channel);
+        return channel;
     }
 
     KEEP_FUNC int psndSFXOn3DHook(int sfxId, const gc::vec3 *position)
     {
-        ghosts::OnLocalSfxFired(sfxId, true);
-        return g_psndSFXOn3D_trampoline(sfxId, position);
+        const int channel = g_psndSFXOn3D_trampoline(sfxId, position);
+        ghosts::OnLocalSfxFired(sfxId, true, channel);
+        return channel;
+    }
+
+    KEEP_FUNC int psndSFXOffHook(int channel)
+    {
+        ghosts::OnLocalSfxStopped(channel);
+        return g_psndSFXOff_trampoline(channel);
     }
 
     KEEP_FUNC const char *msgSearchHook(const char *msgKey)

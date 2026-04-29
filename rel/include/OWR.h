@@ -82,6 +82,7 @@ namespace mod::owr
     void ScaleUnitStats(BattleUnitKind *unit, RelId rel);
     int psndSFXOnHook(int sfxId);
     int psndSFXOn3DHook(int sfxId, const vec3 *position);
+    int psndSFXOffHook(int channel);
 
     extern bool (*g_OSLink_trampoline)(OSModuleInfo *, void *);
     extern void (*g_seqSetSeq_trampoline)(SeqIndex, const char *, const char *);
@@ -101,6 +102,7 @@ namespace mod::owr
     extern BattleWorkUnit *(*g_BtlUnit_Entry_trampoline)(BattleUnitSetup *);
     extern int (*g_psndSFXOn_trampoline)(int);
     extern int (*g_psndSFXOn3D_trampoline)(int, const gc::vec3 *);
+    extern int (*g_psndSFXOff_trampoline)(int);
 
     extern const char *goombellaName;
     extern const char *goombellaDescription;

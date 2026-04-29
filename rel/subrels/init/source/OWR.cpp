@@ -125,7 +125,7 @@ extern char starstone_current_map[32];
 extern uint32_t main_next;
 extern ttyd::pmario_sound::BGMListEntry main_psbgmlist[262];
 
-extern BattleWeapon* partnerBattleWeaponArr[];
+extern BattleWeapon *partnerBattleWeaponArr[];
 
 using ttyd::seq_mapchange::_next_area;
 using ttyd::seq_mapchange::_next_map;
@@ -135,12 +135,12 @@ using namespace ttyd::battle_database_common;
 using namespace mod::patch;
 using namespace mod::owr;
 
-uint32_t invalidParams[] = {0x802CC81C, 0x802CC8BC, 0x802CD500, 0x802CD668, 0x802CD694, 0x802CD77C, 0x802CD7B0, 0x802CD7E4,
-                            0x802CD810, 0x802CD944, 0x802CD9D4, 0x802CDA00, 0x802CDAEC, 0x802CDB48, 0x802CDB78, 0x802CDBA8,
-                            0x802CDC78, 0x802CDCA8, 0x802CDD6C, 0x802CDE0C, 0x802CE1CC, 0x802CE1FC, 0x802CE22C, 0x802CE25C,
-                            0x802CE28C, 0x802CE2C0, 0x802CE2F0, 0x802CE33C, 0x802CE370, 0x802CE3A4, 0x802CE3D8, 0x802CE408,
-                            0x802CE438, 0x802CE47C, 0x802CE4AC, 0x802CE4D8, 0x802CE504, 0x802CE530, 0x802CE598, 0x802CE5D0,
-                            0x802CE600, 0x802CE62C, 0x802CE660, 0x802CE690, 0x802CE6C0, 0x802CE6F4, 0x802CE724, 0x802CE7E4, 0x804218C8};
+uint32_t invalidParams[] = {
+    0x802CC81C, 0x802CC8BC, 0x802CD500, 0x802CD668, 0x802CD694, 0x802CD77C, 0x802CD7B0, 0x802CD7E4, 0x802CD810, 0x802CD944,
+    0x802CD9D4, 0x802CDA00, 0x802CDAEC, 0x802CDB48, 0x802CDB78, 0x802CDBA8, 0x802CDC78, 0x802CDCA8, 0x802CDD6C, 0x802CDE0C,
+    0x802CE1CC, 0x802CE1FC, 0x802CE22C, 0x802CE25C, 0x802CE28C, 0x802CE2C0, 0x802CE2F0, 0x802CE33C, 0x802CE370, 0x802CE3A4,
+    0x802CE3D8, 0x802CE408, 0x802CE438, 0x802CE47C, 0x802CE4AC, 0x802CE4D8, 0x802CE504, 0x802CE530, 0x802CE598, 0x802CE5D0,
+    0x802CE600, 0x802CE62C, 0x802CE660, 0x802CE690, 0x802CE6C0, 0x802CE6F4, 0x802CE724, 0x802CE7E4, 0x804218C8};
 
 // clang-format off
 EVT_BEGIN(main_buy_evt_hook)
@@ -444,7 +444,7 @@ namespace mod::owr
         patch::writeBranchPair(&main_psndBGMOff_f_d[83],
                                reinterpret_cast<void *>(bStarstoneBgmKeep),
                                reinterpret_cast<void *>(bStarstoneBgmKeepReturn));
-        
+
         patch::writeBranchPair(&main_psndBGMOff_f_d[121],
                                reinterpret_cast<void *>(bStarstoneBgmKeepFinal),
                                reinterpret_cast<void *>(bStarstoneBgmKeepFinalReturn));
@@ -459,7 +459,7 @@ namespace mod::owr
         writeIntWithCache(&main_psndBGMOn_f_d[96], 0x2C03000A); // cmpwi r3, 0xA
 
         // Expand msgSearch to check 4 tables
-        uint32_t* msgSearchPtr = (uint32_t*)ttyd::msgdrv::msgSearch;
+        uint32_t *msgSearchPtr = (uint32_t *)ttyd::msgdrv::msgSearch;
         writeIntWithCache(&msgSearchPtr[44], 0x2C1B0004); // cmpwi r27, 0x4
 
         uint32_t *msgLoadPtr = (uint32_t *)ttyd::msgdrv::msgLoad;
@@ -471,9 +471,7 @@ namespace mod::owr
 
         msgdrv::msgw = gState->state_msgWork;
 
-        patch::writeBranchPair(&help_disp[21], 
-                               reinterpret_cast<void *>(bShopDesc), 
-                               reinterpret_cast<void *>(bShopDescReturn));
+        patch::writeBranchPair(&help_disp[21], reinterpret_cast<void *>(bShopDesc), reinterpret_cast<void *>(bShopDescReturn));
 
         if (mod::owr::gState->apSettings->peekaboo)
             writeIntWithCache(&main_battleCheckUnitMonosiriFlag[10], 0x60000000); // NOP
@@ -500,7 +498,7 @@ namespace mod::owr
         patch::writeBranchPair(&btlseqEnd[354],
                                reinterpret_cast<void *>(bExpMultiplier),
                                reinterpret_cast<void *>(bExpMultiplierReturn));
-        
+
         patch::writeBranchPair(&evt_mobj_brick[30],
                                reinterpret_cast<void *>(bBlockVisibility),
                                reinterpret_cast<void *>(bBlockVisibilityReturn));
@@ -704,25 +702,30 @@ namespace mod::owr
         namespace IconType = ::icondrv::IconType;
 
         itemDataTable[ItemId::SUPER_LUIGI].name = goombellaName; // Goombella
-        itemDataTable[ItemId::SUPER_LUIGI].description = goombellaDescription; // A pro at Headbonking! She looks up enemy stats and HP.
-        itemDataTable[ItemId::SUPER_LUIGI].icon_id = IconType::GOOMBELLA; 
-        itemDataTable[ItemId::SUPER_LUIGI_2].name = koopsName; // Koops
+        itemDataTable[ItemId::SUPER_LUIGI].description =
+            goombellaDescription; // A pro at Headbonking! She looks up enemy stats and HP.
+        itemDataTable[ItemId::SUPER_LUIGI].icon_id = IconType::GOOMBELLA;
+        itemDataTable[ItemId::SUPER_LUIGI_2].name = koopsName;               // Koops
         itemDataTable[ItemId::SUPER_LUIGI_2].description = koopsDescription; // A shell-attack master! He has a Defense of 1.
         itemDataTable[ItemId::SUPER_LUIGI_2].icon_id = IconType::KOOPS;
         itemDataTable[ItemId::SUPER_LUIGI_3].name = flurrieName; // Flurrie
-        itemDataTable[ItemId::SUPER_LUIGI_3].description = flurrieDescription; // A double threat with her bulk and gale-force breath!
+        itemDataTable[ItemId::SUPER_LUIGI_3].description =
+            flurrieDescription; // A double threat with her bulk and gale-force breath!
         itemDataTable[ItemId::SUPER_LUIGI_3].icon_id = IconType::FLURRIE;
         itemDataTable[ItemId::SUPER_LUIGI_4].name = yoshiName; // Yoshi
-        itemDataTable[ItemId::SUPER_LUIGI_4].description = yoshiDescription; // A hotshot at multiple attacks that each deal low damage.
+        itemDataTable[ItemId::SUPER_LUIGI_4].description =
+            yoshiDescription; // A hotshot at multiple attacks that each deal low damage.
         itemDataTable[ItemId::SUPER_LUIGI_4].icon_id = IconType::YOSHI_GREEN + gState->apSettings->yoshiColor;
-        itemDataTable[ItemId::SUPER_LUIGI_5].name = vivianName; // Vivian
+        itemDataTable[ItemId::SUPER_LUIGI_5].name = vivianName;               // Vivian
         itemDataTable[ItemId::SUPER_LUIGI_5].description = vivianDescription; // An expert at fire attacks and dodge moves!
         itemDataTable[ItemId::SUPER_LUIGI_5].icon_id = IconType::VIVIAN;
         itemDataTable[ItemId::INVALID_ITEM_006F].name = bobberyName; // Bobbery
-        itemDataTable[ItemId::INVALID_ITEM_006F].description = bobberyDescription; // A demolitions expert with a taste for massive explosions!
+        itemDataTable[ItemId::INVALID_ITEM_006F].description =
+            bobberyDescription; // A demolitions expert with a taste for massive explosions!
         itemDataTable[ItemId::INVALID_ITEM_006F].icon_id = IconType::BOBBERY;
         itemDataTable[ItemId::INVALID_ITEM_0070].name = mowzName; // Ms. Mowz
-        itemDataTable[ItemId::INVALID_ITEM_0070].description = mowzDescription; // A master thief who can steal anything from anyone!
+        itemDataTable[ItemId::INVALID_ITEM_0070].description =
+            mowzDescription; // A master thief who can steal anything from anyone!
         itemDataTable[ItemId::INVALID_ITEM_0070].icon_id = IconType::MS_MOWZ;
         itemDataTable[ItemId::INVALID_ITEM_0071].name = apItemName;
         itemDataTable[ItemId::INVALID_ITEM_0071].description = apItemDescription;
@@ -751,10 +754,10 @@ namespace mod::owr
             itemDataTable[i].sell_price = ((itemDataTable[i].sell_price / divisor + 2) / 5) * 5;
             itemDataTable[i].buy_price = itemDataTable[i].discount_price = itemDataTable[i].sell_price * 2;
         }
-      
+
         if (gState->apSettings->firstAttack)
             itemDataTable[ItemId::FIRST_ATTACK].bp_cost = 0;
-      
+
         // Key Renames
         itemDataTable[ItemId::ELEVATOR_KEY_001A].name = elevatorKeyStationName;
         itemDataTable[ItemId::CARD_KEY_001D].name = cardKey1Name;
@@ -773,7 +776,7 @@ namespace mod::owr
         itemDataTable[ItemId::BLACK_KEY_0023].name = blackKeyTubeName;
         itemDataTable[ItemId::BLACK_KEY_0024].name = blackKeyBoatName;
 
-        //Progressive Renames
+        // Progressive Renames
         itemDataTable[ItemId::BOOTS].name = progressiveBootsName;
         itemDataTable[ItemId::HAMMER].name = progressiveHammerName;
 
@@ -969,6 +972,7 @@ namespace mod::owr
         g_BtlUnit_Entry_trampoline = patch::hookFunction(battle_unit::BtlUnit_Entry, BtlUnit_Entry_Hook);
         g_psndSFXOn_trampoline = patch::hookFunction(pmario_sound::psndSFXOn, psndSFXOnHook);
         g_psndSFXOn3D_trampoline = patch::hookFunction(pmario_sound::psndSFXOn_3D, psndSFXOn3DHook);
+        g_psndSFXOff_trampoline = patch::hookFunction(pmario_sound::psndSFXOff, psndSFXOffHook);
 
         // Hook gaugeDisp with a standard branch since the original function does not need to be called
         patch::writeBranch(statuswindow::gaugeDisp, DisplayStarPowerOrbs);

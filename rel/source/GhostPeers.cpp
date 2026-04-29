@@ -80,6 +80,39 @@ namespace mod::ghosts
             float renderZ;
             float renderRotY;
 
+            // Per-frame lerp targets for the rotation/pivot fields the
+            // source publishes at 20Hz. Without smoothing, these
+            // teleport between publishes and produce visible chop on
+            // motions that rotate rapidly (kHammer2 spin attack,
+            // kRoll tube roll). LerpAngleDeg handles 360-degree wrap
+            // for the rotations; pivot is plain Lerp.
+            float renderRotX;
+            float renderRotZ;
+            float renderPivotX;
+            float renderPivotY;
+            float renderPivotZ;
+
+            // Spin-direction tracking for the rotation fields. Each
+            // pair stores (last seen published angle, smoothed angular
+            // velocity in degrees per publish interval). When abs(vel)
+            // exceeds kFastSpinThresholdDegPerPublish, the lerp uses
+            // the velocity sign to disambiguate the direction across
+            // the 180-degree wrap; without this, fast spins (~5
+            // rev/sec) appear to reverse direction whenever a publish
+            // happens to land in the >180-degree crossing region.
+            // Updated only on publish arrival (peer angle change).
+            // Each axis has its own initialized flag because they may
+            // not all see their first publish change in the same frame.
+            float lastSeenRotY;
+            float lastSeenRotX;
+            float lastSeenRotZ;
+            float velRotY;
+            float velRotX;
+            float velRotZ;
+            bool spinTrackingInitY;
+            bool spinTrackingInitX;
+            bool spinTrackingInitZ;
+
             bool renderInitialized;
 
             int hitFramesRemaining;
@@ -87,18 +120,81 @@ namespace mod::ghosts
             uint8_t lastConsumedSfxSeq;
             bool sfxSeqInitialized;
 
-            // Active looping SFX state. The mod auto-starts looping
-            // sounds when peer.motionId implies one (e.g. plane mode,
-            // hammer windup) and stops them on motion change. This is
-            // independent of the SFX ring, which only carries one-shots.
-            // activeLoopSfxId == 0 means no loop active for this slot.
-            // activeLoopChannel is the psndSFXOn_3D return value used
-            // to stop the loop later via psndSFXOff.
-            uint16_t activeLoopSfxId;
-            int activeLoopChannel;
+            // Active looping SFX state, state-sync driven (v26).
+            //
+            // Each entry tracks one loop currently playing for this
+            // peer's slot. Populated when peer.activeLoops contains an
+            // sfxId we aren't tracking (state-sync diff start). Cleared
+            // when an entry is no longer in peer.activeLoops (state-
+            // sync diff stop), when the animName-change janitor
+            // force-stops it, or on ReleaseSlot.
+            //
+            // animNameAtStart records peer.animName at the moment we
+            // started the loop. Each frame, if peer.animName has
+            // drifted away, the janitor force-stops. This is a
+            // belt-and-suspenders backup: state-sync should be enough
+            // for clean cases, but for engine-managed loops where
+            // psndSFXOff isn't observable (or is observable but our
+            // chain breaks), the animation-driven hard stop catches
+            // them when the source moves on to a different animation.
+            //
+            // Capacity 8 covers up to 8 simultaneous loops per peer;
+            // wire format publishes max kActiveLoopsPerPeer (currently
+            // 6) so 8 has cushion. Linear search is cheap.
+            struct ActiveLoop
+            {
+                uint16_t sfxId;
+                int channel;
+                char animNameAtStart[16];
+                bool inUse;
+
+                // Anim-stability latch (v26 backup mechanism). When
+                // an anim-bound loop is started, the peer's animName
+                // at that instant is often a transient transition
+                // animation, not the steady-state anim that should
+                // anchor the loop's lifetime. To avoid killing the
+                // loop the moment the transition completes, we delay
+                // janitor activation until peer.animName has been
+                // stable for kAnimStabilityFrames consecutive frames.
+                //
+                // Per-frame in the janitor:
+                //  - if !watching: compare peer.animName to
+                //    animCandidate. If equal, ++stableFrames. If
+                //    stableFrames hits the threshold, snapshot
+                //    animCandidate into animNameAtStart and set
+                //    watching=true. If different, reset stableFrames=1
+                //    and overwrite animCandidate.
+                //  - if watching: standard drift check against
+                //    animNameAtStart.
+                char animCandidate[16];
+                uint8_t stableFrames;
+                bool watching;
+            };
+            static constexpr int kActiveLoopsPerSlot = 8;
+            ActiveLoop activeLoops[kActiveLoopsPerSlot];
+
+            // Anim-bound loop blocklist (v26 backup): sfxIds in this
+            // list are skipped by state-sync's start path until the
+            // source drops them from peer.activeLoops. Populated by
+            // RunAnimBoundJanitor when it force-stops a loop due to
+            // animName drift; cleared automatically once the source
+            // catches up. 8 entries is generous - max 4 anim-bound
+            // IDs total in kAnimBoundLoopSfx, plus headroom.
+            static constexpr int kBlockedSfxPerSlot = 8;
+            uint16_t blockedSfx[kBlockedSfxPerSlot];
         };
 
         constexpr float kLerpAlpha = 0.30f;
+
+        // Anim-bound loop janitor: peer.animName must be stable for
+        // this many consecutive frames before we snapshot it as the
+        // anchor and start watching for drift. Protects against
+        // mid-transition snapshots (e.g. boat entry anim flipping
+        // through a brief transition before settling on the steady-
+        // state sail anim). 10 frames @ 60Hz = ~167ms - long enough
+        // to outlast typical transitions, short enough not to leave
+        // the loop unprotected for noticeable time.
+        constexpr uint8_t kAnimStabilityFrames = 10;
 
         GhostSlot g_slots[kMaxPeers];
         bool g_initialized = false;
@@ -153,6 +249,15 @@ namespace mod::ghosts
         // independent. So an "incorrect" ID in this list at most
         // causes a phantom sound on peer screens; it doesn't desync
         // anything.
+        //
+        // v26: state-sync now handles LOOP termination via the
+        // peer.activeLoops field (diff-based). The SFX ring carries
+        // ONE-SHOTS only on receivers - any sfxId that's currently
+        // in peer.activeLoops gets filtered out of ring replay
+        // (it'll be started by the state-sync diff if not already).
+        // This means it's safe to include loop sfxIds in the whitelist:
+        // their start event arrives via the ring (records source-side
+        // intent) but their playback comes from state-sync.
         constexpr uint16_t kSfxWhitelist[] = {
             // -- Voice grunts (Mario "ha!", "yahoo!", etc.) --
             //    mot_jump.s lines 416-434 (jump-launch voice variants)
@@ -298,92 +403,360 @@ namespace mod::ghosts
             return false;
         }
 
-        // Map peer.motionId to the looping SFX that should be playing
-        // for this peer right now. Returns 0 if no loop applies.
+        // ====================================================================
+        // activeLoops table helpers (v26 state-sync driven loop tracking)
+        // ====================================================================
         //
-        // Motion IDs from ttyd::mario_motion::MarioMotion:
-        //   0x10 kHip / 0x11 kHip2 -> 0x158 (hip-drop spin loop)
-        //   0x13 kHammer2          -> 0x15B (hammer windup base; the
-        //                            local game varies tier 1/2/3 by
-        //                            pouchGetHammerLv but we don't
-        //                            transmit hammer level)
-        //   0x16 kRoll             -> 0x17C (tube roll loop)
-        //   0x18 kPlane            -> 0x17F (plane wing flap loop)
-        //
-        // Motions without loops return 0; the receiver stops any
-        // active loop on transition to a no-loop motion.
-        //
-        // NOT covered (yet):
-        //   - mot_stay sleep snore loops (need sub-motion state, not
-        //     just motionId - they only fire after Mario falls asleep
-        //     during prolonged kStay)
-        //   - mot_ship boat motion loop (motion 0x19; the loop SFX
-        //     wasn't conclusively identified by the heuristic)
-        //   - hammer windup tiers 2/3 (would need wire format change
-        //     to transmit hammer level)
-        uint16_t LoopSfxForMotion(uint16_t motionId)
+        // Per-slot table tracking which loops are currently playing for
+        // a peer. Populated/cleared by SyncActiveLoopsFromState (the
+        // diff against peer.activeLoops). No motion-id heuristics:
+        // the source's published activeLoops is the ground truth.
+
+        // Find an entry by sfxId. Returns nullptr if not present.
+        GhostSlot::ActiveLoop *FindActiveLoop(GhostSlot &slot, uint16_t sfxId)
         {
-            switch (motionId)
+            for (auto &e : slot.activeLoops)
             {
-                case 0x10: // kHip
-                case 0x11: // kHip2
-                    return 0x158;
-                case 0x13: // kHammer2 (spin attack)
-                    return 0x15B;
-                case 0x16: // kRoll (tube)
-                    return 0x17C;
-                case 0x18: // kPlane
-                    return 0x17F;
-                default:
-                    return 0;
+                if (e.inUse && e.sfxId == sfxId)
+                    return &e;
             }
+            return nullptr;
         }
 
-        // Apply a loop-state transition for one peer slot. Compares
-        // the desired loop (from motionId) against what's currently
-        // active; stops/starts as needed. Skips entirely if peer is
-        // off-map (no audible position).
-        void UpdatePeerLoop(const PeerSlot &peer, GhostSlot &slot)
+        // Find a free slot in the activeLoops table for a new entry.
+        // Returns nullptr if all slots are occupied.
+        GhostSlot::ActiveLoop *FindFreeActiveLoop(GhostSlot &slot)
         {
-            const uint16_t desired = PeerOnLocalMap(peer) ? LoopSfxForMotion(peer.motionId) : 0;
-            const uint16_t current = slot.activeLoopSfxId;
-
-            if (desired == current)
-                return; // no change needed
-
-            // Stop the current loop if any
-            if (current != 0)
+            for (auto &e : slot.activeLoops)
             {
-                g_inReceiverReplay = true;
-                psndSFXOff(slot.activeLoopChannel);
-                g_inReceiverReplay = false;
-                slot.activeLoopSfxId = 0;
-                slot.activeLoopChannel = 0;
+                if (!e.inUse)
+                    return &e;
             }
-
-            // Start the new loop if any
-            if (desired != 0)
-            {
-                g_inReceiverReplay = true;
-                const int channel = psndSFXOn_3D(desired, &peer.position);
-                g_inReceiverReplay = false;
-                slot.activeLoopSfxId = desired;
-                slot.activeLoopChannel = channel;
-            }
+            return nullptr;
         }
 
-        // Force-stop any active loop for a slot. Called when the slot
-        // transitions to inactive (active=0), or when the peer
-        // disappears via map change.
+        // Stop the channel associated with one entry and clear it.
+        // Caller is responsible for any g_inReceiverReplay guarding -
+        // typically wrapped around batches of stops.
+        void ClearActiveLoop(GhostSlot::ActiveLoop &entry)
+        {
+            // Channel 0 IS a valid index; only -1 means "no channel."
+            if (entry.inUse && entry.channel != -1)
+            {
+                psndSFXOff(entry.channel);
+            }
+            entry.inUse = false;
+            entry.sfxId = 0;
+            entry.channel = 0;
+            entry.animNameAtStart[0] = '\0';
+            entry.animCandidate[0] = '\0';
+            entry.stableFrames = 0;
+            entry.watching = false;
+        }
+
+        // Stop ALL active loops for a slot. Used on slot release and
+        // whenever we want a clean slate (map change, peer disconnect).
+        void StopAllActiveLoops(GhostSlot &slot)
+        {
+            g_inReceiverReplay = true;
+            for (auto &e : slot.activeLoops)
+            {
+                ClearActiveLoop(e);
+            }
+            g_inReceiverReplay = false;
+        }
+
+        // Compatibility wrapper used by ReleaseSlot.
         void StopPeerLoop(GhostSlot &slot)
         {
-            if (slot.activeLoopSfxId != 0)
+            StopAllActiveLoops(slot);
+        }
+
+        // Forward decls for use in SyncActiveLoopsFromState's start
+        // path and the SFX ring replay. Definitions live alongside
+        // the rest of the anim-bound janitor machinery further down.
+        bool IsBlockedSfx(const GhostSlot &slot, uint16_t sfxId);
+        bool IsAnimBoundLoop(uint16_t sfxId);
+
+        // ====================================================================
+        // State-sync: reconcile slot.activeLoops with peer.activeLoops
+        // ====================================================================
+        //
+        // The source publishes its currently-active loop sfxIds each
+        // tick. We diff:
+        //  - sfxIds in peer.activeLoops not in slot.activeLoops -> start.
+        //  - sfxIds in slot.activeLoops not in peer.activeLoops -> stop.
+        //  - already in both -> no-op.
+        //
+        // Robust to dropped publishes: even if a publish is entirely
+        // lost, the next one re-converges. No event/sequence tracking,
+        // no risk of a stuck loop from a dropped stop event.
+        void SyncActiveLoopsFromState(const PeerSlot &peer, GhostSlot &slot)
+        {
+            // The peer.activeLoops slot may contain trailing zeros after
+            // peer.activeLoopCount valid entries. Treat zeros as empty
+            // regardless of count to be defensive.
+            const int published = peer.activeLoopCount > kActiveLoopsPerPeer ? kActiveLoopsPerPeer : peer.activeLoopCount;
+
+            // Pass 1: stop any tracked loop that's not in published.
+            // Wrap in receiver-replay guard since psndSFXOff goes
+            // through our hook.
+            g_inReceiverReplay = true;
+            for (auto &e : slot.activeLoops)
             {
+                if (!e.inUse)
+                    continue;
+                bool stillPublished = false;
+                for (int i = 0; i < published; ++i)
+                {
+                    if (peer.activeLoops[i] == e.sfxId)
+                    {
+                        stillPublished = true;
+                        break;
+                    }
+                }
+                if (!stillPublished)
+                {
+                    ClearActiveLoop(e);
+                }
+            }
+            g_inReceiverReplay = false;
+
+            // Pass 2: start any published loop we aren't tracking.
+            // Off-map peers don't get audible loops (no spatial pos).
+            if (!PeerOnLocalMap(peer))
+                return;
+
+            for (int i = 0; i < published; ++i)
+            {
+                const uint16_t sfxId = peer.activeLoops[i];
+                if (sfxId == 0)
+                    continue;
+                if (FindActiveLoop(slot, sfxId) != nullptr)
+                    continue; // already tracked
+                // v26 backup: anim-bound loop blocklist. The janitor
+                // adds an sfxId here when it force-stops on animName
+                // drift; we skip the state-sync start to avoid the
+                // re-start cycle. The block clears automatically once
+                // the source stops publishing this sfxId in
+                // peer.activeLoops (handled by RunAnimBoundJanitor's
+                // pass 2).
+                if (IsBlockedSfx(slot, sfxId))
+                    continue;
+
                 g_inReceiverReplay = true;
-                psndSFXOff(slot.activeLoopChannel);
+                const int channel = psndSFXOn_3D(sfxId, &peer.position);
                 g_inReceiverReplay = false;
-                slot.activeLoopSfxId = 0;
-                slot.activeLoopChannel = 0;
+
+                if (channel == -1)
+                {
+                    // Engine returned no channel (allocation failure).
+                    // Don't track; the source's next publish either
+                    // drops it (one-shot finished) or it'll show up
+                    // again and we'll retry. Channel 0 IS valid.
+                    continue;
+                }
+
+                GhostSlot::ActiveLoop *e = FindFreeActiveLoop(slot);
+                if (e == nullptr)
+                {
+                    // Table full - stop the call to avoid orphan.
+                    g_inReceiverReplay = true;
+                    psndSFXOff(channel);
+                    g_inReceiverReplay = false;
+                    continue;
+                }
+                e->sfxId = sfxId;
+                e->channel = channel;
+                e->inUse = true;
+                // Seed the anim-stability latch. Don't snapshot
+                // animNameAtStart yet - the current peer.animName
+                // could be a transient transition. The janitor will
+                // promote animCandidate to animNameAtStart once it's
+                // been stable for kAnimStabilityFrames.
+                std::memcpy(e->animCandidate, peer.animName, sizeof(peer.animName));
+                e->animCandidate[sizeof(e->animCandidate) - 1] = '\0';
+                e->stableFrames = 1;
+                e->watching = false;
+                e->animNameAtStart[0] = '\0';
+            }
+        }
+
+        // ====================================================================
+        // Animation-bound loop janitor (targeted hard-stop for known cases)
+        // ====================================================================
+        //
+        // Some engine-managed loops have proven unreliable to terminate
+        // via the normal state-sync path - we observe them get stuck
+        // playing indefinitely on receivers despite source-side
+        // psndSFXOff calls. The state-sync chain is supposed to handle
+        // these (psndSFXOff hook -> RemoveLocalChannel -> drop from
+        // selfActiveLoops -> diff stop on receiver) but in practice
+        // these specific IDs slip through.
+        //
+        // Workaround: tag entries for these specific sfxIds with the
+        // peer's animName at start time, and force-stop locally if
+        // peer.animName drifts away. Once stopped, blocklist the sfxId
+        // for this slot until the source drops it from peer.activeLoops
+        // - otherwise state-sync would just re-start it next frame.
+        //
+        // Other loops continue to use pure state-sync without
+        // animation tagging or blocklisting; they're not subject to
+        // this re-start cycle because state-sync handles them cleanly.
+        constexpr uint16_t kAnimBoundLoopSfx[] = {
+            0x17B, // mot_roll - sub-phase loop
+            0x18F, // mot_ship - phase loop
+            0x190, // mot_ship - phase loop
+            0x192, // mot_ship - phase loop
+        };
+        constexpr int kAnimBoundLoopSfxLen = sizeof(kAnimBoundLoopSfx) / sizeof(kAnimBoundLoopSfx[0]);
+
+        bool IsAnimBoundLoop(uint16_t sfxId)
+        {
+            for (int i = 0; i < kAnimBoundLoopSfxLen; ++i)
+            {
+                if (kAnimBoundLoopSfx[i] == sfxId)
+                    return true;
+            }
+            return false;
+        }
+
+        bool IsBlockedSfx(const GhostSlot &slot, uint16_t sfxId)
+        {
+            for (uint16_t b : slot.blockedSfx)
+            {
+                if (b == sfxId)
+                    return true;
+            }
+            return false;
+        }
+
+        void AddBlockedSfx(GhostSlot &slot, uint16_t sfxId)
+        {
+            // Skip if already in the list.
+            for (uint16_t b : slot.blockedSfx)
+            {
+                if (b == sfxId)
+                    return;
+            }
+            // Find a free slot (sfxId == 0).
+            for (auto &b : slot.blockedSfx)
+            {
+                if (b == 0)
+                {
+                    b = sfxId;
+                    return;
+                }
+            }
+            // List full. Highly unlikely - we have 8 slots and only 4
+            // anim-bound IDs - but if it happens, drop quietly.
+        }
+
+        void RemoveBlockedSfx(GhostSlot &slot, uint16_t sfxId)
+        {
+            for (auto &b : slot.blockedSfx)
+            {
+                if (b == sfxId)
+                {
+                    b = 0;
+                    return;
+                }
+            }
+        }
+
+        // Run the animation-change janitor: for each tracked entry
+        // whose sfxId is anim-bound, if peer.animName has drifted from
+        // animNameAtStart, force-stop. If the sfxId is currently in
+        // peer.activeLoops (i.e., state-sync would re-start it next
+        // frame), also blocklist to prevent the re-start cycle. If
+        // the sfxId is NOT in peer.activeLoops (it came from the SFX
+        // ring as a loop-pretending-to-be-one-shot), no blocklist
+        // needed - sequence numbers prevent the same event from
+        // re-firing, so a future legitimate start would arrive as a
+        // NEW event and play normally.
+        //
+        // Pass 2 prunes the blocklist of any sfxId no longer in
+        // peer.activeLoops so future legitimate plays go through.
+        void RunAnimBoundJanitor(const PeerSlot &peer, GhostSlot &slot)
+        {
+            const int published = peer.activeLoopCount > kActiveLoopsPerPeer ? kActiveLoopsPerPeer : peer.activeLoopCount;
+
+            // Pass 1: advance latch and/or check drift.
+            g_inReceiverReplay = true;
+            for (auto &e : slot.activeLoops)
+            {
+                if (!e.inUse)
+                    continue;
+                if (!IsAnimBoundLoop(e.sfxId))
+                    continue;
+
+                if (!e.watching)
+                {
+                    // Latch phase: wait for peer.animName to be stable
+                    // for kAnimStabilityFrames consecutive frames
+                    // before committing to an anchor.
+                    if (std::memcmp(e.animCandidate, peer.animName, sizeof(peer.animName)) == 0)
+                    {
+                        if (e.stableFrames < 0xFF)
+                            ++e.stableFrames;
+                        if (e.stableFrames >= kAnimStabilityFrames)
+                        {
+                            // Promote to anchor and start watching.
+                            std::memcpy(e.animNameAtStart, e.animCandidate, sizeof(e.animCandidate));
+                            e.animNameAtStart[sizeof(e.animNameAtStart) - 1] = '\0';
+                            e.watching = true;
+                        }
+                    }
+                    else
+                    {
+                        // Anim changed during latch period. Reset.
+                        std::memcpy(e.animCandidate, peer.animName, sizeof(peer.animName));
+                        e.animCandidate[sizeof(e.animCandidate) - 1] = '\0';
+                        e.stableFrames = 1;
+                    }
+                    continue; // not yet armed - no drift check this frame
+                }
+
+                // Watching phase: standard drift check.
+                if (std::memcmp(e.animNameAtStart, peer.animName, sizeof(peer.animName)) == 0)
+                    continue; // anim still matches - leave alone
+
+                const uint16_t stoppedId = e.sfxId;
+                ClearActiveLoop(e);
+
+                // Blocklist only if state-sync would re-add it next
+                // frame. SFX-ring-only entries can be stopped cleanly
+                // without blocklist.
+                bool inStateSync = false;
+                for (int i = 0; i < published; ++i)
+                {
+                    if (peer.activeLoops[i] == stoppedId)
+                    {
+                        inStateSync = true;
+                        break;
+                    }
+                }
+                if (inStateSync)
+                    AddBlockedSfx(slot, stoppedId);
+            }
+            g_inReceiverReplay = false;
+
+            // Pass 2: prune blocklist for sfxIds the source has dropped.
+            for (auto &b : slot.blockedSfx)
+            {
+                if (b == 0)
+                    continue;
+                bool stillPublished = false;
+                for (int i = 0; i < published; ++i)
+                {
+                    if (peer.activeLoops[i] == b)
+                    {
+                        stillPublished = true;
+                        break;
+                    }
+                }
+                if (!stillPublished)
+                    b = 0;
             }
         }
 
@@ -484,10 +857,14 @@ namespace mod::ghosts
             slot.sfxSeqInitialized = false;
             slot.lastConsumedSfxSeq = 0;
 
-            // Stop any motion-driven loop that was playing for this
-            // slot. Called whenever the slot transitions to inactive
-            // (peer.active=0) or during map-change cleanup.
+            // Stop any active loops (state-sync diff) and reset
+            // tracking. Called whenever the slot transitions to
+            // inactive (peer.active=0) or during map-change cleanup.
             StopPeerLoop(slot);
+            for (auto &b : slot.blockedSfx)
+            {
+                b = 0;
+            }
         }
 
         int8_t PickPoseIndex(uint32_t flags2)
@@ -509,6 +886,99 @@ namespace mod::ghosts
             float diff = target - current;
             while (diff > 180.0f) diff -= 360.0f;
             while (diff < -180.0f) diff += 360.0f;
+            return current + diff * alpha;
+        }
+
+        // Velocity threshold above which we trust the smoothed velocity
+        // sign over the shortest-path delta. 90 deg/publish at 20Hz =
+        // 1800 deg/sec = 5 revolutions per second, which is roughly
+        // where shortest-path-sign starts being unreliable. Below this,
+        // a noisy publish (e.g. small back-and-forth motion) shouldn't
+        // be treated as a sustained spin.
+        constexpr float kFastSpinThresholdDegPerPublish = 90.0f;
+
+        // Angular IIR for the velocity estimate. New samples weighted
+        // 0.4, history 0.6 - tuned so two consecutive same-direction
+        // samples cross the fast-spin threshold (avoids latching on a
+        // single noisy delta) but not so heavy that the estimate lags
+        // a real spin's first half-revolution.
+        constexpr float kVelocityFilterAlpha = 0.4f;
+
+        // SpinAwareLerpAngle: like LerpAngleDeg, but disambiguates
+        // direction during sustained fast rotation. Two signals:
+        //
+        //   1. peerHint (-1, 0, +1): source-side hint published when
+        //      observed angular speed exceeds the hint threshold. The
+        //      authoritative signal: source tracked unwrapped angle
+        //      at 60Hz so it can't be fooled by aliasing.
+        //   2. smoothedVel: receiver-side IIR-filtered publish-to-publish
+        //      delta. Catches sustained rotation even if the source
+        //      didn't set a hint (e.g. peer running an older protocol
+        //      version that always sends 0).
+        //
+        // Hint takes priority. Without a hint, falls back to velocity.
+        // Without either, plain shortest-path (LerpAngleDeg-equivalent).
+        //
+        // current        : slot.render* (interpolated angle, wraps freely)
+        // target         : peer.rotation* (raw published angle, [-180,180])
+        // peerHint       : peer.spinDirHint* from the wire format
+        // lastSeen       : peer.rotation* from the previous frame (per-slot)
+        // smoothedVel    : exponentially-smoothed publish-to-publish delta
+        // initialized    : false until first publish change is observed
+        //
+        // Returns the new lerped angle. Updates lastSeen, smoothedVel,
+        // initialized in place.
+        float SpinAwareLerpAngle(float current,
+                                 float target,
+                                 float alpha,
+                                 int8_t peerHint,
+                                 float &lastSeen,
+                                 float &smoothedVel,
+                                 bool &initialized)
+        {
+            // Velocity bookkeeping (unchanged from previous version).
+            // We still maintain a smoothedVel even when peerHint is
+            // present, because the hint can clear back to 0 mid-spin
+            // if the source's instantaneous accumulator dipped under
+            // threshold for one publish - smoothedVel provides a
+            // graceful tail.
+            if (target != lastSeen)
+            {
+                if (!initialized)
+                {
+                    smoothedVel = 0.0f;
+                    initialized = true;
+                }
+                else
+                {
+                    float pubDelta = target - lastSeen;
+                    while (pubDelta > 180.0f) pubDelta -= 360.0f;
+                    while (pubDelta < -180.0f) pubDelta += 360.0f;
+                    smoothedVel = smoothedVel * (1.0f - kVelocityFilterAlpha) + pubDelta * kVelocityFilterAlpha;
+                }
+                lastSeen = target;
+            }
+
+            float diff = target - current;
+            while (diff > 180.0f) diff -= 360.0f;
+            while (diff < -180.0f) diff += 360.0f;
+
+            // Direction override priority: peer hint > velocity fallback.
+            int directionSign = 0;
+            if (peerHint > 0)
+                directionSign = 1;
+            else if (peerHint < 0)
+                directionSign = -1;
+            else if (smoothedVel > kFastSpinThresholdDegPerPublish)
+                directionSign = 1;
+            else if (smoothedVel < -kFastSpinThresholdDegPerPublish)
+                directionSign = -1;
+
+            if (directionSign > 0 && diff < 0.0f)
+                diff += 360.0f;
+            else if (directionSign < 0 && diff > 0.0f)
+                diff -= 360.0f;
+
             return current + diff * alpha;
         }
 
@@ -671,7 +1141,85 @@ namespace mod::ghosts
                         if (diff == 0 || diff >= 128)
                             continue;
 
-                        psndSFXOn_3D(ev.sfxId, &peer.position);
+                        // v26: SFX ring is one-shots only. Loops are
+                        // handled by SyncActiveLoopsFromState. Skip any
+                        // event whose sfxId is:
+                        //  (a) currently in peer.activeLoops (state-sync
+                        //      start this frame or already in flight), or
+                        //  (b) already tracked in slot.activeLoops (we
+                        //      previously started it via state-sync and
+                        //      this ring event is the redundant start
+                        //      from the source's psndSFXOn hook).
+                        bool isLoopState = false;
+                        const int published =
+                            peer.activeLoopCount > kActiveLoopsPerPeer ? kActiveLoopsPerPeer : peer.activeLoopCount;
+                        for (int j = 0; j < published; ++j)
+                        {
+                            if (peer.activeLoops[j] == ev.sfxId)
+                            {
+                                isLoopState = true;
+                                break;
+                            }
+                        }
+                        if (!isLoopState && FindActiveLoop(slot, ev.sfxId) != nullptr)
+                        {
+                            isLoopState = true;
+                        }
+                        if (!isLoopState)
+                        {
+                            // Anim-bound loops sometimes arrive ONLY via
+                            // the SFX ring (the source-side state-sync
+                            // chain misses them - we suspect channel
+                            // tracking glitches for these specific IDs).
+                            // For those, capture the channel and tag
+                            // with animName so the janitor can hard-stop
+                            // on animName drift. Blocklist also applies
+                            // here - if the janitor previously stopped
+                            // this sfxId, refuse to re-start until the
+                            // source drops it.
+                            if (IsAnimBoundLoop(ev.sfxId))
+                            {
+                                if (IsBlockedSfx(slot, ev.sfxId))
+                                {
+                                    // Skip - janitor previously stopped.
+                                }
+                                else
+                                {
+                                    const int channel = psndSFXOn_3D(ev.sfxId, &peer.position);
+                                    if (channel != -1)
+                                    {
+                                        GhostSlot::ActiveLoop *e = FindFreeActiveLoop(slot);
+                                        if (e != nullptr)
+                                        {
+                                            e->sfxId = ev.sfxId;
+                                            e->channel = channel;
+                                            e->inUse = true;
+                                            // Seed the anim-stability
+                                            // latch. The current
+                                            // peer.animName is often
+                                            // a transient transition
+                                            // for SFX-ring-only loops;
+                                            // wait for stability before
+                                            // committing to an anchor.
+                                            std::memcpy(e->animCandidate, peer.animName, sizeof(peer.animName));
+                                            e->animCandidate[sizeof(e->animCandidate) - 1] = '\0';
+                                            e->stableFrames = 1;
+                                            e->watching = false;
+                                            e->animNameAtStart[0] = '\0';
+                                        }
+                                        else
+                                        {
+                                            // Table full - stop to avoid orphan.
+                                            psndSFXOff(channel);
+                                        }
+                                    }
+                                }
+                            }
+                            else
+                            {
+                                psndSFXOn_3D(ev.sfxId, &peer.position);
+                            }
+                        }
 
                         const uint8_t newDiff = static_cast<uint8_t>(ev.seq - newest);
                         if (newDiff != 0 && newDiff < 128)
@@ -681,6 +1229,22 @@ namespace mod::ghosts
                     slot.lastConsumedSfxSeq = newest;
                 }
             }
+
+            // v26 state-sync: reconcile tracked loops with peer's
+            // published active set. Independent of the SFX ring -
+            // works even when the ring is empty.
+            SyncActiveLoopsFromState(peer, slot);
+
+            // Targeted backup: for known anim-bound loops (mot_roll
+            // 0x17B and mot_ship 0x18F/0x190/0x192) we observed
+            // state-sync alone fails to terminate them in some cases.
+            // The janitor force-stops these specific IDs when the
+            // peer's animName drifts from the one at start, and
+            // blocklists them until the source drops them from
+            // peer.activeLoops. Other loops continue with pure
+            // state-sync (no animation tagging or blocklisting -
+            // those would create re-start cycles).
+            RunAnimBoundJanitor(peer, slot);
         }
 
         bool g_hammerSwingFired = false;
@@ -853,13 +1417,39 @@ namespace mod::ghosts
             s.renderY = 0.0f;
             s.renderZ = 0.0f;
             s.renderRotY = 0.0f;
+            s.renderRotX = 0.0f;
+            s.renderRotZ = 0.0f;
+            s.renderPivotX = 0.0f;
+            s.renderPivotY = 0.0f;
+            s.renderPivotZ = 0.0f;
+            s.lastSeenRotY = 0.0f;
+            s.lastSeenRotX = 0.0f;
+            s.lastSeenRotZ = 0.0f;
+            s.velRotY = 0.0f;
+            s.velRotX = 0.0f;
+            s.velRotZ = 0.0f;
+            s.spinTrackingInitY = false;
+            s.spinTrackingInitX = false;
+            s.spinTrackingInitZ = false;
             s.renderInitialized = false;
             s.hitFramesRemaining = 0;
 
             s.lastConsumedSfxSeq = 0;
             s.sfxSeqInitialized = false;
-            s.activeLoopSfxId = 0;
-            s.activeLoopChannel = 0;
+            for (auto &e : s.activeLoops)
+            {
+                e.inUse = false;
+                e.sfxId = 0;
+                e.channel = 0;
+                e.animNameAtStart[0] = '\0';
+                e.animCandidate[0] = '\0';
+                e.stableFrames = 0;
+                e.watching = false;
+            }
+            for (auto &b : s.blockedSfx)
+            {
+                b = 0;
+            }
         }
 
         g_initialized = true;
@@ -870,6 +1460,141 @@ namespace mod::ghosts
         for (auto &s : g_slots) ReleaseSlot(s);
         g_initialized = false;
     }
+
+    namespace
+    {
+        constexpr int kLocalChannelMapSize = 64;
+        struct LocalChannelEntry
+        {
+            int channel;
+            uint16_t sfxId;
+            bool inUse;
+        };
+        LocalChannelEntry g_localChannelMap[kLocalChannelMapSize] = {};
+
+        // Insert/refresh the mapping channel -> sfxId. If channel is
+        // already present, update it (engine reused the slot). Otherwise
+        // find a free slot. With a 64-entry map and TTYD's <32 active
+        // channels, the table never fills.
+        //
+        // The "no channel allocated" sentinel returned by the engine is
+        // -1 (0xFFFFFFFF as unsigned), confirmed by reading the engine's
+        // own pre-checks (e.g. mot_ship.s line 628-630: addis r0, r3,
+        // 0x1; cmplwi r0, 0xFFFF tests whether channel == -1). Channel
+        // 0 IS a valid channel index in this engine - the previous
+        // version of this filter incorrectly rejected it, which caused
+        // the boat and roll loops (which sometimes alloc channel 0)
+        // to never appear in our state-sync sample, so receivers
+        // never knew to stop them.
+        void RecordLocalChannel(int channel, uint16_t sfxId)
+        {
+            if (channel == -1)
+                return;
+
+            // Update existing entry first (channel reuse).
+            for (auto &e : g_localChannelMap)
+            {
+                if (e.inUse && e.channel == channel)
+                {
+                    e.sfxId = sfxId;
+                    return;
+                }
+            }
+            // Else find free slot.
+            for (auto &e : g_localChannelMap)
+            {
+                if (!e.inUse)
+                {
+                    e.channel = channel;
+                    e.sfxId = sfxId;
+                    e.inUse = true;
+                    return;
+                }
+            }
+            // No free slot. Map is sized generously so this should
+            // never trigger; if it does, log via a counter? For now
+            // silently drop the new entry; the sound still plays.
+        }
+
+        // Remove the mapping for channel. Returns the prior sfxId or 0
+        // if not found. v26: callers only use the side effect (free
+        // the slot); the returned sfxId is no longer used to emit a
+        // stop event since state-sync handles that.
+        uint16_t RemoveLocalChannel(int channel)
+        {
+            if (channel == -1)
+                return 0;
+            for (auto &e : g_localChannelMap)
+            {
+                if (e.inUse && e.channel == channel)
+                {
+                    uint16_t sfxId = e.sfxId;
+                    e.inUse = false;
+                    e.channel = 0;
+                    e.sfxId = 0;
+                    return sfxId;
+                }
+            }
+            return 0;
+        }
+
+        // Sample the channel map into a fixed-size out array. Returns
+        // the count written (<= maxOut). Used at publish time to build
+        // the activeLoops field of the local peer's wire format.
+        //
+        // No filtering happens here - we publish whatever the engine
+        // currently has alive. One-shots that haven't been stopped yet
+        // (because the engine just hasn't gotten around to it) appear
+        // here too. That's fine: receivers re-trigger them via the
+        // diff, which sounds identical to the SFX ring path. The only
+        // odd case is a one-shot that's still in the map after its
+        // sound naturally finished - the receiver "starts" it but
+        // since it's a one-shot it just plays through quickly and
+        // appears as a stutter on the next publish (when the entry
+        // ages out by being overwritten via channel reuse). In practice
+        // the 50ms publish window is short enough that this case is
+        // imperceptible; real loops dominate the table.
+        int SampleActiveLoops(uint16_t *out, int maxOut)
+        {
+            int count = 0;
+            for (auto &e : g_localChannelMap)
+            {
+                if (count >= maxOut)
+                    break;
+                if (e.inUse && e.sfxId != 0)
+                {
+                    out[count++] = e.sfxId;
+                }
+            }
+            return count;
+        }
+
+        // Push a single SFX event onto the ring. Used by OnLocalSfxFired
+        // for start events (one-shots and loops both flow through the
+        // ring; receivers filter loops out of the SFX-ring replay path
+        // since state-sync handles them). Returns true on success.
+        bool PushSfxRingEvent(uint16_t sfxId, uint8_t flags)
+        {
+            volatile uint8_t *headPtr = GetSfxRingHeadPtr();
+            volatile uint8_t *tailPtr = GetSfxRingTailPtr();
+            volatile uint8_t *seqPtr = GetSfxRingSeqPtr();
+            volatile SfxEvent *ring = GetSfxRingEvents();
+
+            const uint8_t head = *headPtr;
+            const uint8_t tail = *tailPtr;
+            const uint8_t nextHead = static_cast<uint8_t>((head + 1) % kSfxRingCapacity);
+            if (nextHead == tail)
+                return false;
+
+            const uint8_t newSeq = static_cast<uint8_t>(*seqPtr + 1);
+            *seqPtr = newSeq;
+            ring[head].sfxId = sfxId;
+            ring[head].seq = newSeq;
+            ring[head].flags = flags;
+            *headPtr = nextHead;
+            return true;
+        }
+    } // namespace
 
     KEEP_FUNC void UpdateAll()
     {
@@ -911,17 +1636,15 @@ namespace mod::ghosts
 
             ApplyPeerToSlot(peer, slot);
 
-            // Motion-driven loop control: examine peer.motionId, and
-            // start/stop looping SFX accordingly. Independent of the
-            // SFX ring (one-shots) - loops are inferred from motion
-            // state because the wire format only carries event
-            // start-points, not stops.
-            UpdatePeerLoop(peer, slot);
+            // v26: Loop sync runs INSIDE ApplyPeerToSlot via
+            // SyncActiveLoopsFromState. The motion-id-driven backup
+            // mechanism (LoopSfxForMotion / UpdatePeerLoop /
+            // RunMotionChangeJanitor) was removed - state-sync is
+            // self-healing across dropped publishes and doesn't need
+            // motion-id heuristics.
 
             if (slot.hitFramesRemaining > 0)
                 --slot.hitFramesRemaining;
-
-            const bool snapRotY = (peer.motionId == 0x13);
 
             if (!slot.renderInitialized)
             {
@@ -929,6 +1652,30 @@ namespace mod::ghosts
                 slot.renderY = peer.position.y;
                 slot.renderZ = peer.position.z;
                 slot.renderRotY = peer.rotationY;
+                slot.renderRotX = peer.rotationX;
+                slot.renderRotZ = peer.rotationZ;
+                slot.renderPivotX = peer.rotPivotX;
+                slot.renderPivotY = peer.rotPivotY;
+                slot.renderPivotZ = peer.rotPivotZ;
+
+                // Seed spin tracking: lastSeen matches the published
+                // angle so the first delta computed on the next change
+                // is meaningful (not relative to zero). Per-axis init
+                // flags stay false until the first publish change is
+                // observed for THAT axis - one full publish interval
+                // is needed before we have a velocity sample, and
+                // different axes may receive their first change on
+                // different frames.
+                slot.lastSeenRotY = peer.rotationY;
+                slot.lastSeenRotX = peer.rotationX;
+                slot.lastSeenRotZ = peer.rotationZ;
+                slot.velRotY = 0.0f;
+                slot.velRotX = 0.0f;
+                slot.velRotZ = 0.0f;
+                slot.spinTrackingInitY = false;
+                slot.spinTrackingInitX = false;
+                slot.spinTrackingInitZ = false;
+
                 slot.renderInitialized = true;
             }
             else
@@ -936,7 +1683,46 @@ namespace mod::ghosts
                 slot.renderX = Lerp(slot.renderX, peer.position.x, kLerpAlpha);
                 slot.renderY = Lerp(slot.renderY, peer.position.y, kLerpAlpha);
                 slot.renderZ = Lerp(slot.renderZ, peer.position.z, kLerpAlpha);
-                slot.renderRotY = snapRotY ? peer.rotationY : LerpAngleDeg(slot.renderRotY, peer.rotationY, kLerpAlpha);
+
+                // Spin-aware angle lerp. Tracks publish-to-publish
+                // angular velocity per axis; when smoothed velocity
+                // exceeds kFastSpinThresholdDegPerPublish (~5 rev/sec),
+                // forces lerp direction to follow velocity rather than
+                // shortest-path. Without this, the fastest hammer spin
+                // appeared to reverse direction whenever the publish
+                // landed in the >180-degree-from-receiver crossing
+                // region. Each axis gets its own velocity tracker;
+                // they're independent because spin attack rotates yaw
+                // while plane mode rotates pitch+roll, etc.
+                slot.renderRotY = SpinAwareLerpAngle(slot.renderRotY,
+                                                     peer.rotationY,
+                                                     kLerpAlpha,
+                                                     peer.spinDirHintY,
+                                                     slot.lastSeenRotY,
+                                                     slot.velRotY,
+                                                     slot.spinTrackingInitY);
+                slot.renderRotX = SpinAwareLerpAngle(slot.renderRotX,
+                                                     peer.rotationX,
+                                                     kLerpAlpha,
+                                                     peer.spinDirHintX,
+                                                     slot.lastSeenRotX,
+                                                     slot.velRotX,
+                                                     slot.spinTrackingInitX);
+                slot.renderRotZ = SpinAwareLerpAngle(slot.renderRotZ,
+                                                     peer.rotationZ,
+                                                     kLerpAlpha,
+                                                     peer.spinDirHintZ,
+                                                     slot.lastSeenRotZ,
+                                                     slot.velRotZ,
+                                                     slot.spinTrackingInitZ);
+
+                // Pivot moves between (0,0,0) idle and motion-specific
+                // offsets when the source enters/exits paper modes.
+                // Linear lerp is fine here since pivot values are
+                // straight world offsets, not angles.
+                slot.renderPivotX = Lerp(slot.renderPivotX, peer.rotPivotX, kLerpAlpha);
+                slot.renderPivotY = Lerp(slot.renderPivotY, peer.rotPivotY, kLerpAlpha);
+                slot.renderPivotZ = Lerp(slot.renderPivotZ, peer.rotPivotZ, kLerpAlpha);
             }
 
             if (PeerOnLocalMap(peer))
@@ -1063,6 +1849,24 @@ namespace mod::ghosts
                             break;
                     }
                 }
+            }
+
+            // v26: sample currently-active loop sfxIds from the
+            // channel map and write to selfActiveLoops scratch.
+            // Python's 20Hz publisher reads this each tick and embeds
+            // it in our peer slot's activeLoops field. Receivers diff
+            // and start/stop accordingly. Updated every frame so the
+            // Python tick always sees fresh data.
+            {
+                volatile uint16_t *out = GetSelfActiveLoopsPtr();
+                volatile uint8_t *outCount = GetSelfActiveLoopCountPtr();
+                uint16_t buf[kActiveLoopsPerPeer] = {};
+                const int n = SampleActiveLoops(buf, kActiveLoopsPerPeer);
+                for (int i = 0; i < kActiveLoopsPerPeer; ++i)
+                {
+                    out[i] = buf[i];
+                }
+                *outCount = static_cast<uint8_t>(n);
             }
         }
 
@@ -1265,9 +2069,14 @@ namespace mod::ghosts
 
             gc::mtx::PSMTXScale(&matA, sx * kGhostScale * fixupX, sy * kGhostScale * fixupY, sz * kGhostScale * fixupZ);
 
+            // Pitch-flip for kJabara: when source pitches into the
+            // back-half of a circle, mirror Z so the body silhouette
+            // stays right-side-up. Use lerped pitch so the flip
+            // toggles cleanly on a smooth angle rather than chasing
+            // 20Hz publish snaps.
             if (!(peer.flags2 & 0x8) && peer.motionId == 0x14)
             {
-                float pitchAng = peer.rotationX;
+                float pitchAng = slot.renderRotX;
                 while (pitchAng < 0.0f) pitchAng += 360.0f;
                 while (pitchAng >= 360.0f) pitchAng -= 360.0f;
                 if (pitchAng >= 90.0f && pitchAng <= 270.0f)
@@ -1290,22 +2099,30 @@ namespace mod::ghosts
                 }
             }
 
-            const bool pivotActive = peer.rotPivotX != 0.0f || peer.rotPivotY != 0.0f || peer.rotPivotZ != 0.0f;
+            // Pivot/rotation values are taken from slot.render* rather
+            // than peer.* so they smooth across 20Hz publish boundaries.
+            // Without lerping, kHammer2 (spin attack) and kRoll (tube
+            // roll) showed visible chop because their pitch/roll/yaw
+            // changed faster than the publish rate.
+            const bool pivotActive = slot.renderPivotX != 0.0f || slot.renderPivotY != 0.0f || slot.renderPivotZ != 0.0f;
             if (pivotActive)
             {
-                gc::mtx::PSMTXTrans(reinterpret_cast<gc::mtx34 *>(&matStep), -peer.rotPivotX, -peer.rotPivotY, -peer.rotPivotZ);
+                gc::mtx::PSMTXTrans(reinterpret_cast<gc::mtx34 *>(&matStep),
+                                    -slot.renderPivotX,
+                                    -slot.renderPivotY,
+                                    -slot.renderPivotZ);
                 gc::mtx::PSMTXConcat(&matStep, &matA, &matA);
             }
 
-            if (peer.rotationZ != 0.0f)
+            if (slot.renderRotZ != 0.0f)
             {
-                gc::mtx::PSMTXRotRad(&matStep, 0x7A, peer.rotationZ * kDeg2Rad);
+                gc::mtx::PSMTXRotRad(&matStep, 0x7A, slot.renderRotZ * kDeg2Rad);
                 gc::mtx::PSMTXConcat(&matStep, &matA, &matA);
             }
 
-            if (peer.rotationX != 0.0f)
+            if (slot.renderRotX != 0.0f)
             {
-                gc::mtx::PSMTXRotRad(&matStep, 0x78, peer.rotationX * kDeg2Rad);
+                gc::mtx::PSMTXRotRad(&matStep, 0x78, slot.renderRotX * kDeg2Rad);
                 gc::mtx::PSMTXConcat(&matStep, &matA, &matA);
             }
 
@@ -1317,7 +2134,10 @@ namespace mod::ghosts
 
             if (pivotActive)
             {
-                gc::mtx::PSMTXTrans(reinterpret_cast<gc::mtx34 *>(&matStep), peer.rotPivotX, peer.rotPivotY, peer.rotPivotZ);
+                gc::mtx::PSMTXTrans(reinterpret_cast<gc::mtx34 *>(&matStep),
+                                    slot.renderPivotX,
+                                    slot.renderPivotY,
+                                    slot.renderPivotZ);
                 gc::mtx::PSMTXConcat(&matStep, &matA, &matA);
             }
 
@@ -1563,36 +2383,55 @@ namespace mod::ghosts
         }
     }
 
-    KEEP_FUNC void OnLocalSfxFired(int sfxId, bool is3D)
+    // ====================================================================
+    // SFX hook entry points (called from OWR.cpp psndSFX*Hook)
+    // ====================================================================
+    //
+    // OnLocalSfxFired runs on every psndSFXOn[/3D] call. It records the
+    // (channel, sfxId) mapping for state-sync sampling and pushes a
+    // start event onto the SFX ring (which receivers consult for one-
+    // shot replay). OnLocalSfxStopped runs on every psndSFXOff and
+    // just frees the channel map entry; loop termination is handled
+    // by state-sync diff on the receiver side.
+
+    KEEP_FUNC void OnLocalSfxFired(int sfxId, bool is3D, int channel)
     {
         if (!g_initialized)
             return;
-        // Reentrancy guard - see g_inReceiverReplay declaration. The
-        // receiver replay fires psndSFXOn[/3D] to play peer SFX; that
-        // re-enters our hook. Skip capture so we don't loop.
         if (g_inReceiverReplay)
             return;
+
+        // Record the channel mapping so:
+        //  (a) the publish-time SampleActiveLoops sees this sfxId
+        //      until the engine stops it;
+        //  (b) when the engine eventually calls psndSFXOff on this
+        //      channel, OnLocalSfxStopped can free the entry so the
+        //      next publish drops it from activeLoops.
+        // For one-shots that didn't allocate (channel == -1), this
+        // is a no-op (RecordLocalChannel filters them out). Channel 0
+        // is a real channel index, NOT a sentinel.
+        RecordLocalChannel(channel, static_cast<uint16_t>(sfxId & 0xFFFF));
+
+        // Push a start event regardless. Receivers filter loops out of
+        // SFX-ring replay (they handle them via state-sync diff), but
+        // one-shots flow through normally. The ring-side filter on
+        // receivers depends on knowing if the sfxId is in
+        // peer.activeLoops, which they have at receive time.
         if (!SfxIsAllowed(sfxId))
             return;
+        PushSfxRingEvent(static_cast<uint16_t>(sfxId & 0xFFFF), is3D ? kSfxFlag3D : 0);
+    }
 
-        volatile uint8_t *headPtr = GetSfxRingHeadPtr();
-        volatile uint8_t *tailPtr = GetSfxRingTailPtr();
-        volatile uint8_t *seqPtr = GetSfxRingSeqPtr();
-        volatile SfxEvent *ring = GetSfxRingEvents();
-
-        const uint8_t head = *headPtr;
-        const uint8_t tail = *tailPtr;
-        const uint8_t nextHead = static_cast<uint8_t>((head + 1) % kSfxRingCapacity);
-
-        if (nextHead == tail)
+    // v26: stop hook just frees the channel map entry. The next publish
+    // will omit that sfxId from activeLoops, and receivers will diff
+    // and stop their tracked loop. No event ring traffic for stops.
+    KEEP_FUNC void OnLocalSfxStopped(int channel)
+    {
+        if (!g_initialized)
+            return;
+        if (g_inReceiverReplay)
             return;
 
-        const uint8_t newSeq = static_cast<uint8_t>(*seqPtr + 1);
-        *seqPtr = newSeq;
-
-        ring[head].sfxId = static_cast<uint16_t>(sfxId & 0xFFFF);
-        ring[head].seq = newSeq;
-        ring[head].flags = is3D ? kSfxFlag3D : 0;
-        *headPtr = nextHead;
+        RemoveLocalChannel(channel);
     }
 } // namespace mod::ghosts
