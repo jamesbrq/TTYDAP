@@ -306,4 +306,52 @@ namespace mod::ghosts
 
     inline volatile uint8_t *GetSfxRingHeadPtr()
     {
-  
+        return &g_ghostState->sfxRingHead;
+    }
+    inline volatile uint8_t *GetSfxRingTailPtr()
+    {
+        return &g_ghostState->sfxRingTail;
+    }
+    inline volatile uint8_t *GetSfxRingSeqPtr()
+    {
+        return &g_ghostState->sfxRingSeq;
+    }
+    inline volatile SfxEvent *GetSfxRingEvents()
+    {
+        return reinterpret_cast<volatile SfxEvent *>(g_ghostState->sfxRingEvents);
+    }
+
+    inline const LobbyHudHeader *GetLobbyHudHeader()
+    {
+        return reinterpret_cast<const LobbyHudHeader *>(g_ghostState->lobbyHudBlock);
+    }
+    inline const LobbyHudMember *GetLobbyHudMembers()
+    {
+        return reinterpret_cast<const LobbyHudMember *>(g_ghostState->lobbyHudBlock + kLobbyMembersOffset);
+    }
+    inline const char *GetLobbyHudText()
+    {
+        return reinterpret_cast<const char *>(g_ghostState->lobbyHudBlock + kLobbyTextOffset);
+    }
+
+    inline volatile uint8_t *GetSelfActiveLoopCountPtr()
+    {
+        return &g_ghostState->selfActiveLoopCount;
+    }
+    inline volatile uint16_t *GetSelfActiveLoopsPtr()
+    {
+        return reinterpret_cast<volatile uint16_t *>(g_ghostState->selfActiveLoops);
+    }
+
+    void Init();
+    void Shutdown();
+    void UpdateAll();
+    void DrawAll(ttyd::dispdrv::CameraId cam, void *user);
+    void DrawNameTagsAll(ttyd::dispdrv::CameraId cam, void *user);
+    void DrawLobbyHud(ttyd::dispdrv::CameraId cam, void *user);
+
+    void OnLocalSfxFired(int sfxId, bool is3D, int channel);
+    void OnLocalSfxStopped(int channel);
+
+    void installSfxHooks();
+} // namespace mod::ghosts
