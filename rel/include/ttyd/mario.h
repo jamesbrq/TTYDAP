@@ -202,8 +202,9 @@ namespace ttyd::mario
         // marioBgmodeOn
         // marioBgmodeChk
         // marioSetMutekiTime
-        // marioKeyOn
-        // marioKeyOff
+        void marioKeyOn();
+        void marioKeyOff();
+        int8_t marioChkKey();
         // marioCtrlOn2
         // marioCtrlOff2
         // marioCtrlOn
@@ -213,7 +214,6 @@ namespace ttyd::mario
         // marioFBattlePost
         // marioFBattlePrepare
         // marioChkCtrl
-        // marioChkKey
         // marioCheckMenuDisable
         // marioCaseEventValidChk
         // marioItemGetOk

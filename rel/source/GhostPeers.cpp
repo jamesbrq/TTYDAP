@@ -12,6 +12,7 @@
 #include "ttyd/memory.h"
 #include "ttyd/npcdrv.h"
 #include "ttyd/pmario_sound.h"
+#include "ttyd/seqdrv.h"
 #include "ttyd/string.h"
 #include "visibility.h"
 
@@ -22,22 +23,12 @@ using namespace ttyd::pmario_sound;
 namespace mod::ghosts
 {
 
-    // Heap-allocated container for ALL ghost-peer scratch state. Set
-    // once in Init() and never re-assigned. Accessor inlines in
-    // GhostPeers.h dereference through this pointer. Null-checked at
-    // entry points (UpdateAll, DrawAll, etc.) via the existing
-    // g_initialized flag, which is only set after this is non-null.
     GhostState *g_ghostState = nullptr;
 
     extern "C" void *camGetPtr(int cameraId);
 
     extern "C" float reviseAngle(float deg);
 
-    // psndSFXOff stops a previously-started SFX channel. Takes the
-    // channel handle returned by psndSFXOn[/3D]. Used by the
-    // motion-driven loop control to stop ghost-side loops when the
-    // peer's motionId transitions out of a looping state. Not declared
-    // in pmario_sound.h yet; declared here for local use.
     extern "C" int psndSFXOff(int channel);
 
     namespace
@@ -80,29 +71,12 @@ namespace mod::ghosts
             float renderZ;
             float renderRotY;
 
-            // Per-frame lerp targets for the rotation/pivot fields the
-            // source publishes at 20Hz. Without smoothing, these
-            // teleport between publishes and produce visible chop on
-            // motions that rotate rapidly (kHammer2 spin attack,
-            // kRoll tube roll). LerpAngleDeg handles 360-degree wrap
-            // for the rotations; pivot is plain Lerp.
             float renderRotX;
             float renderRotZ;
             float renderPivotX;
             float renderPivotY;
             float renderPivotZ;
 
-            // Spin-direction tracking for the rotation fields. Each
-            // pair stores (last seen published angle, smoothed angular
-            // velocity in degrees per publish interval). When abs(vel)
-            // exceeds kFastSpinThresholdDegPerPublish, the lerp uses
-            // the velocity sign to disambiguate the direction across
-            // the 180-degree wrap; without this, fast spins (~5
-            // rev/sec) appear to reverse direction whenever a publish
-            // happens to land in the >180-degree crossing region.
-            // Updated only on publish arrival (peer angle change).
-            // Each axis has its own initialized flag because they may
-            // not all see their first publish change in the same frame.
             float lastSeenRotY;
             float lastSeenRotX;
             float lastSeenRotZ;
@@ -120,27 +94,6 @@ namespace mod::ghosts
             uint8_t lastConsumedSfxSeq;
             bool sfxSeqInitialized;
 
-            // Active looping SFX state, state-sync driven (v26).
-            //
-            // Each entry tracks one loop currently playing for this
-            // peer's slot. Populated when peer.activeLoops contains an
-            // sfxId we aren't tracking (state-sync diff start). Cleared
-            // when an entry is no longer in peer.activeLoops (state-
-            // sync diff stop), when the animName-change janitor
-            // force-stops it, or on ReleaseSlot.
-            //
-            // animNameAtStart records peer.animName at the moment we
-            // started the loop. Each frame, if peer.animName has
-            // drifted away, the janitor force-stops. This is a
-            // belt-and-suspenders backup: state-sync should be enough
-            // for clean cases, but for engine-managed loops where
-            // psndSFXOff isn't observable (or is observable but our
-            // chain breaks), the animation-driven hard stop catches
-            // them when the source moves on to a different animation.
-            //
-            // Capacity 8 covers up to 8 simultaneous loops per peer;
-            // wire format publishes max kActiveLoopsPerPeer (currently
-            // 6) so 8 has cushion. Linear search is cheap.
             struct ActiveLoop
             {
                 uint16_t sfxId;
@@ -148,24 +101,6 @@ namespace mod::ghosts
                 char animNameAtStart[16];
                 bool inUse;
 
-                // Anim-stability latch (v26 backup mechanism). When
-                // an anim-bound loop is started, the peer's animName
-                // at that instant is often a transient transition
-                // animation, not the steady-state anim that should
-                // anchor the loop's lifetime. To avoid killing the
-                // loop the moment the transition completes, we delay
-                // janitor activation until peer.animName has been
-                // stable for kAnimStabilityFrames consecutive frames.
-                //
-                // Per-frame in the janitor:
-                //  - if !watching: compare peer.animName to
-                //    animCandidate. If equal, ++stableFrames. If
-                //    stableFrames hits the threshold, snapshot
-                //    animCandidate into animNameAtStart and set
-                //    watching=true. If different, reset stableFrames=1
-                //    and overwrite animCandidate.
-                //  - if watching: standard drift check against
-                //    animNameAtStart.
                 char animCandidate[16];
                 uint8_t stableFrames;
                 bool watching;
@@ -173,49 +108,28 @@ namespace mod::ghosts
             static constexpr int kActiveLoopsPerSlot = 8;
             ActiveLoop activeLoops[kActiveLoopsPerSlot];
 
-            // Anim-bound loop blocklist (v26 backup): sfxIds in this
-            // list are skipped by state-sync's start path until the
-            // source drops them from peer.activeLoops. Populated by
-            // RunAnimBoundJanitor when it force-stops a loop due to
-            // animName drift; cleared automatically once the source
-            // catches up. 8 entries is generous - max 4 anim-bound
-            // IDs total in kAnimBoundLoopSfx, plus headroom.
             static constexpr int kBlockedSfxPerSlot = 8;
             uint16_t blockedSfx[kBlockedSfxPerSlot];
         };
 
         constexpr float kLerpAlpha = 0.30f;
 
-        // Anim-bound loop janitor: peer.animName must be stable for
-        // this many consecutive frames before we snapshot it as the
-        // anchor and start watching for drift. Protects against
-        // mid-transition snapshots (e.g. boat entry anim flipping
-        // through a brief transition before settling on the steady-
-        // state sail anim). 10 frames @ 60Hz = ~167ms - long enough
-        // to outlast typical transitions, short enough not to leave
-        // the loop unprotected for noticeable time.
         constexpr uint8_t kAnimStabilityFrames = 10;
 
         GhostSlot g_slots[kMaxPeers];
         bool g_initialized = false;
 
-        constexpr int kHitLockDurationFrames = 60;
-        int g_hitLockRemaining = 0;
-
         constexpr int kHitGraceFrames = 90;
+        constexpr int kHitLockDurationFrames = 30;        // ~0.5s at 60Hz
+        constexpr int kHitQueueTimeoutFrames = 60 * 5;    // 5s before giving up
         int g_hitGraceRemaining = 0;
-
-        constexpr int kHitQueueTimeoutFrames = 60 * 5;
-        bool g_hitQueued = false;
+        int g_hitLockRemaining = 0;
         int g_hitQueuedTimeout = 0;
+        bool g_hitQueued = false;
+        bool g_hitLockApplied = false;  // tracks whether we hold a
+                                         // marioKeyOff() contribution
+                                         // we still need to release.
 
-        // Reentrancy guard: when the receiver replay fires psndSFXOn[/3D]
-        // to play a peer's SFX, that call goes through our hook again.
-        // Without this guard, the hook would re-capture the replay into
-        // the ring, Python would drain it, the ghost would replay the
-        // replay, ad infinitum (1s delay echoes). When this is true,
-        // OnLocalSfxFired returns early and skips ring capture - but
-        // the trampoline (in OWR.cpp) still runs, so the sound plays.
         bool g_inReceiverReplay = false;
 
         const SharedBlock *GetValidBlock()
@@ -236,28 +150,6 @@ namespace mod::ghosts
             return std::strncmp(peer.mapName, gw->currentMapName, sizeof(peer.mapName)) == 0;
         }
 
-        // Whitelist of SFX IDs that should be mirrored to peers. Every
-        // ID here was confirmed by reading the engine assembly that
-        // calls psndSFXOn[/3D] - see mario_motion.s, mot_*.s under
-        // /mnt/user-data/uploads. Adding random IDs is risky: many SFX
-        // have stateful side-effects (env reverb, looping channels)
-        // that aren't safe to fire on a remote.
-        //
-        // Architecture note: this whitelist is purely a CAPTURE filter.
-        // The receiver replays whatever IDs arrive on the wire without
-        // checking the peer's animation - SFX and animations are
-        // independent. So an "incorrect" ID in this list at most
-        // causes a phantom sound on peer screens; it doesn't desync
-        // anything.
-        //
-        // v26: state-sync now handles LOOP termination via the
-        // peer.activeLoops field (diff-based). The SFX ring carries
-        // ONE-SHOTS only on receivers - any sfxId that's currently
-        // in peer.activeLoops gets filtered out of ring replay
-        // (it'll be started by the state-sync diff if not already).
-        // This means it's safe to include loop sfxIds in the whitelist:
-        // their start event arrives via the ring (records source-side
-        // intent) but their playback comes from state-sync.
         constexpr uint16_t kSfxWhitelist[] = {
             // -- Voice grunts (Mario "ha!", "yahoo!", etc.) --
             //    mot_jump.s lines 416-434 (jump-launch voice variants)
@@ -278,20 +170,7 @@ namespace mod::ghosts
             0x0BA, // "ow!" damage grunt
             0x0CB, // damage variant 2 (KO/heavy)
 
-            // -- Hip-drop (mot_hip.s) --
-            //    NOTE: 0xDB is LOOPING (hip-drop spin/charge sustained).
-            //    Excluded until loop-mirror subsystem is added.
 
-            // -- Idle/stand voice (mot_stay.s) --
-            //    NOTE: All five variants 0xDC/0xE1/0xE2/0xE4/0xEF are
-            //    LOOPING (snore / sleep-talking, channels saved at
-            //    mp offsets and stopped via psndSFXOff). Excluded here
-            //    until loop-mirror subsystem is added. They'd otherwise
-            //    snore forever on peer ghosts after a brief idle.
-
-            // -- Walk/run footsteps, terrain variants (mot_walk.s) --
-            //    The 0x140-0x14B block covers regular ground, water,
-            //    sand, snow, special, etc. Per-frame footstep dispatcher.
             0x140,
             0x141,
             0x142,
@@ -317,19 +196,8 @@ namespace mod::ghosts
             0x153,
             0x154,
 
-            // -- Hip-drop (mot_hip.s) --
-            // NOTE: 0xDB and 0x158 are LOOPING (saved channels at
-            // mp offsets, stopped via psndSFXOff). 0x159 is one-shot.
             0x159,
 
-            // -- Hammer (mot_hammer.s) --
-            // NOTE: 0x15B/0x15C/0x15D are LOOPING windup sounds tied
-            // to mot_hammer2 (kHammer2 = 0x13). 0x162 is also looping
-            // (saved at mp+0x2D0, stopped explicitly). They need
-            // explicit psndSFXOff to stop. Replaying them as one-shots
-            // would make them play forever on peer ghosts. Excluded
-            // here; mirror via dedicated loop-tracking subsystem when
-            // added.
             0x15E, // hammer impact, power tier 1 (one-shot)
             0x15F, // hammer impact, power tier 2 (one-shot)
             0x160, // hammer impact, power tier 3 (one-shot)
@@ -338,26 +206,16 @@ namespace mod::ghosts
             // -- Misc Mario actions (legacy, unverified) --
             0x16A,
 
-            // -- Idle voice (mot_stay.s) --
-            // NOTE: 0xDC, 0xE1, 0xE2, 0xE4, 0xEF are LOOPING (sleeping
-            // snore loops, etc.). 0x173 is one-shot.
             0x173,
 
             // -- Slide-under entry/exit (mot_slit.s) --
             0x177,
             0x178,
 
-            // -- Roll / tube (mot_roll.s) --
-            // NOTE: 0x17C is LOOPING (tube spin loop). Others are
-            // one-shot transitions.
             0x179,
             0x17A,
             0x17B,
 
-            // -- Plane transitions (mot_plane.s) --
-            // NOTE: 0x17F is the LOOPING wing-flap sound. Excluded
-            // here for the same reason as hammer windup loops above.
-            // 0x17D and 0x180 are one-shot transitions (entry/exit).
             0x17D,
             0x180,
 
@@ -383,9 +241,6 @@ namespace mod::ghosts
             0x194,
             0x195,
 
-            // -- Ground impact + screen shake combo --
-            //    Paired with 0x0B9 from mario_motion.s for landings.
-            //    Also fired from mot_damage.s on heavy hits.
             0x197,
         };
         constexpr int kSfxWhitelistLen = sizeof(kSfxWhitelist) / sizeof(kSfxWhitelist[0]);
@@ -403,14 +258,6 @@ namespace mod::ghosts
             return false;
         }
 
-        // ====================================================================
-        // activeLoops table helpers (v26 state-sync driven loop tracking)
-        // ====================================================================
-        //
-        // Per-slot table tracking which loops are currently playing for
-        // a peer. Populated/cleared by SyncActiveLoopsFromState (the
-        // diff against peer.activeLoops). No motion-id heuristics:
-        // the source's published activeLoops is the ground truth.
 
         // Find an entry by sfxId. Returns nullptr if not present.
         GhostSlot::ActiveLoop *FindActiveLoop(GhostSlot &slot, uint16_t sfxId)
@@ -435,9 +282,6 @@ namespace mod::ghosts
             return nullptr;
         }
 
-        // Stop the channel associated with one entry and clear it.
-        // Caller is responsible for any g_inReceiverReplay guarding -
-        // typically wrapped around batches of stops.
         void ClearActiveLoop(GhostSlot::ActiveLoop &entry)
         {
             // Channel 0 IS a valid index; only -1 means "no channel."
@@ -472,35 +316,13 @@ namespace mod::ghosts
             StopAllActiveLoops(slot);
         }
 
-        // Forward decls for use in SyncActiveLoopsFromState's start
-        // path and the SFX ring replay. Definitions live alongside
-        // the rest of the anim-bound janitor machinery further down.
         bool IsBlockedSfx(const GhostSlot &slot, uint16_t sfxId);
         bool IsAnimBoundLoop(uint16_t sfxId);
 
-        // ====================================================================
-        // State-sync: reconcile slot.activeLoops with peer.activeLoops
-        // ====================================================================
-        //
-        // The source publishes its currently-active loop sfxIds each
-        // tick. We diff:
-        //  - sfxIds in peer.activeLoops not in slot.activeLoops -> start.
-        //  - sfxIds in slot.activeLoops not in peer.activeLoops -> stop.
-        //  - already in both -> no-op.
-        //
-        // Robust to dropped publishes: even if a publish is entirely
-        // lost, the next one re-converges. No event/sequence tracking,
-        // no risk of a stuck loop from a dropped stop event.
         void SyncActiveLoopsFromState(const PeerSlot &peer, GhostSlot &slot)
         {
-            // The peer.activeLoops slot may contain trailing zeros after
-            // peer.activeLoopCount valid entries. Treat zeros as empty
-            // regardless of count to be defensive.
             const int published = peer.activeLoopCount > kActiveLoopsPerPeer ? kActiveLoopsPerPeer : peer.activeLoopCount;
 
-            // Pass 1: stop any tracked loop that's not in published.
-            // Wrap in receiver-replay guard since psndSFXOff goes
-            // through our hook.
             g_inReceiverReplay = true;
             for (auto &e : slot.activeLoops)
             {
@@ -534,13 +356,6 @@ namespace mod::ghosts
                     continue;
                 if (FindActiveLoop(slot, sfxId) != nullptr)
                     continue; // already tracked
-                // v26 backup: anim-bound loop blocklist. The janitor
-                // adds an sfxId here when it force-stops on animName
-                // drift; we skip the state-sync start to avoid the
-                // re-start cycle. The block clears automatically once
-                // the source stops publishing this sfxId in
-                // peer.activeLoops (handled by RunAnimBoundJanitor's
-                // pass 2).
                 if (IsBlockedSfx(slot, sfxId))
                     continue;
 
@@ -550,10 +365,6 @@ namespace mod::ghosts
 
                 if (channel == -1)
                 {
-                    // Engine returned no channel (allocation failure).
-                    // Don't track; the source's next publish either
-                    // drops it (one-shot finished) or it'll show up
-                    // again and we'll retry. Channel 0 IS valid.
                     continue;
                 }
 
@@ -569,11 +380,6 @@ namespace mod::ghosts
                 e->sfxId = sfxId;
                 e->channel = channel;
                 e->inUse = true;
-                // Seed the anim-stability latch. Don't snapshot
-                // animNameAtStart yet - the current peer.animName
-                // could be a transient transition. The janitor will
-                // promote animCandidate to animNameAtStart once it's
-                // been stable for kAnimStabilityFrames.
                 std::memcpy(e->animCandidate, peer.animName, sizeof(peer.animName));
                 e->animCandidate[sizeof(e->animCandidate) - 1] = '\0';
                 e->stableFrames = 1;
@@ -582,27 +388,6 @@ namespace mod::ghosts
             }
         }
 
-        // ====================================================================
-        // Animation-bound loop janitor (targeted hard-stop for known cases)
-        // ====================================================================
-        //
-        // Some engine-managed loops have proven unreliable to terminate
-        // via the normal state-sync path - we observe them get stuck
-        // playing indefinitely on receivers despite source-side
-        // psndSFXOff calls. The state-sync chain is supposed to handle
-        // these (psndSFXOff hook -> RemoveLocalChannel -> drop from
-        // selfActiveLoops -> diff stop on receiver) but in practice
-        // these specific IDs slip through.
-        //
-        // Workaround: tag entries for these specific sfxIds with the
-        // peer's animName at start time, and force-stop locally if
-        // peer.animName drifts away. Once stopped, blocklist the sfxId
-        // for this slot until the source drops it from peer.activeLoops
-        // - otherwise state-sync would just re-start it next frame.
-        //
-        // Other loops continue to use pure state-sync without
-        // animation tagging or blocklisting; they're not subject to
-        // this re-start cycle because state-sync handles them cleanly.
         constexpr uint16_t kAnimBoundLoopSfx[] = {
             0x17B, // mot_roll - sub-phase loop
             0x18F, // mot_ship - phase loop
@@ -664,19 +449,6 @@ namespace mod::ghosts
             }
         }
 
-        // Run the animation-change janitor: for each tracked entry
-        // whose sfxId is anim-bound, if peer.animName has drifted from
-        // animNameAtStart, force-stop. If the sfxId is currently in
-        // peer.activeLoops (i.e., state-sync would re-start it next
-        // frame), also blocklist to prevent the re-start cycle. If
-        // the sfxId is NOT in peer.activeLoops (it came from the SFX
-        // ring as a loop-pretending-to-be-one-shot), no blocklist
-        // needed - sequence numbers prevent the same event from
-        // re-firing, so a future legitimate start would arrive as a
-        // NEW event and play normally.
-        //
-        // Pass 2 prunes the blocklist of any sfxId no longer in
-        // peer.activeLoops so future legitimate plays go through.
         void RunAnimBoundJanitor(const PeerSlot &peer, GhostSlot &slot)
         {
             const int published = peer.activeLoopCount > kActiveLoopsPerPeer ? kActiveLoopsPerPeer : peer.activeLoopCount;
@@ -692,9 +464,6 @@ namespace mod::ghosts
 
                 if (!e.watching)
                 {
-                    // Latch phase: wait for peer.animName to be stable
-                    // for kAnimStabilityFrames consecutive frames
-                    // before committing to an anchor.
                     if (std::memcmp(e.animCandidate, peer.animName, sizeof(peer.animName)) == 0)
                     {
                         if (e.stableFrames < 0xFF)
@@ -724,9 +493,6 @@ namespace mod::ghosts
                 const uint16_t stoppedId = e.sfxId;
                 ClearActiveLoop(e);
 
-                // Blocklist only if state-sync would re-add it next
-                // frame. SFX-ring-only entries can be stopped cleanly
-                // without blocklist.
                 bool inStateSync = false;
                 for (int i = 0; i < published; ++i)
                 {
@@ -857,9 +623,6 @@ namespace mod::ghosts
             slot.sfxSeqInitialized = false;
             slot.lastConsumedSfxSeq = 0;
 
-            // Stop any active loops (state-sync diff) and reset
-            // tracking. Called whenever the slot transitions to
-            // inactive (peer.active=0) or during map-change cleanup.
             StopPeerLoop(slot);
             for (auto &b : slot.blockedSfx)
             {
@@ -889,45 +652,10 @@ namespace mod::ghosts
             return current + diff * alpha;
         }
 
-        // Velocity threshold above which we trust the smoothed velocity
-        // sign over the shortest-path delta. 90 deg/publish at 20Hz =
-        // 1800 deg/sec = 5 revolutions per second, which is roughly
-        // where shortest-path-sign starts being unreliable. Below this,
-        // a noisy publish (e.g. small back-and-forth motion) shouldn't
-        // be treated as a sustained spin.
         constexpr float kFastSpinThresholdDegPerPublish = 90.0f;
 
-        // Angular IIR for the velocity estimate. New samples weighted
-        // 0.4, history 0.6 - tuned so two consecutive same-direction
-        // samples cross the fast-spin threshold (avoids latching on a
-        // single noisy delta) but not so heavy that the estimate lags
-        // a real spin's first half-revolution.
         constexpr float kVelocityFilterAlpha = 0.4f;
 
-        // SpinAwareLerpAngle: like LerpAngleDeg, but disambiguates
-        // direction during sustained fast rotation. Two signals:
-        //
-        //   1. peerHint (-1, 0, +1): source-side hint published when
-        //      observed angular speed exceeds the hint threshold. The
-        //      authoritative signal: source tracked unwrapped angle
-        //      at 60Hz so it can't be fooled by aliasing.
-        //   2. smoothedVel: receiver-side IIR-filtered publish-to-publish
-        //      delta. Catches sustained rotation even if the source
-        //      didn't set a hint (e.g. peer running an older protocol
-        //      version that always sends 0).
-        //
-        // Hint takes priority. Without a hint, falls back to velocity.
-        // Without either, plain shortest-path (LerpAngleDeg-equivalent).
-        //
-        // current        : slot.render* (interpolated angle, wraps freely)
-        // target         : peer.rotation* (raw published angle, [-180,180])
-        // peerHint       : peer.spinDirHint* from the wire format
-        // lastSeen       : peer.rotation* from the previous frame (per-slot)
-        // smoothedVel    : exponentially-smoothed publish-to-publish delta
-        // initialized    : false until first publish change is observed
-        //
-        // Returns the new lerped angle. Updates lastSeen, smoothedVel,
-        // initialized in place.
         float SpinAwareLerpAngle(float current,
                                  float target,
                                  float alpha,
@@ -936,12 +664,6 @@ namespace mod::ghosts
                                  float &smoothedVel,
                                  bool &initialized)
         {
-            // Velocity bookkeeping (unchanged from previous version).
-            // We still maintain a smoothedVel even when peerHint is
-            // present, because the hint can clear back to 0 mid-spin
-            // if the source's instantaneous accumulator dipped under
-            // threshold for one publish - smoothedVel provides a
-            // graceful tail.
             if (target != lastSeen)
             {
                 if (!initialized)
@@ -1035,15 +757,6 @@ namespace mod::ghosts
                 std::memcpy(cache, peer.animName, sizeof(peer.animName));
             }
 
-            if (slot.hitFramesRemaining > 0 && slot.effectsAllocated)
-            {
-                const int forceReset = (slot.hitFramesRemaining == kHitLockDurationFrames) ? 1 : 0;
-                ttyd::animdrv::animPoseSetAnim(slot.effectsPoseId, kDefaultHitPoseName, forceReset);
-
-                slot.activePose = 2;
-
-                slot.lastAnimEffects[0] = '\0';
-            }
 
             if (slot.forwardAllocated)
             {
@@ -1141,15 +854,6 @@ namespace mod::ghosts
                         if (diff == 0 || diff >= 128)
                             continue;
 
-                        // v26: SFX ring is one-shots only. Loops are
-                        // handled by SyncActiveLoopsFromState. Skip any
-                        // event whose sfxId is:
-                        //  (a) currently in peer.activeLoops (state-sync
-                        //      start this frame or already in flight), or
-                        //  (b) already tracked in slot.activeLoops (we
-                        //      previously started it via state-sync and
-                        //      this ring event is the redundant start
-                        //      from the source's psndSFXOn hook).
                         bool isLoopState = false;
                         const int published =
                             peer.activeLoopCount > kActiveLoopsPerPeer ? kActiveLoopsPerPeer : peer.activeLoopCount;
@@ -1167,16 +871,6 @@ namespace mod::ghosts
                         }
                         if (!isLoopState)
                         {
-                            // Anim-bound loops sometimes arrive ONLY via
-                            // the SFX ring (the source-side state-sync
-                            // chain misses them - we suspect channel
-                            // tracking glitches for these specific IDs).
-                            // For those, capture the channel and tag
-                            // with animName so the janitor can hard-stop
-                            // on animName drift. Blocklist also applies
-                            // here - if the janitor previously stopped
-                            // this sfxId, refuse to re-start until the
-                            // source drops it.
                             if (IsAnimBoundLoop(ev.sfxId))
                             {
                                 if (IsBlockedSfx(slot, ev.sfxId))
@@ -1194,13 +888,6 @@ namespace mod::ghosts
                                             e->sfxId = ev.sfxId;
                                             e->channel = channel;
                                             e->inUse = true;
-                                            // Seed the anim-stability
-                                            // latch. The current
-                                            // peer.animName is often
-                                            // a transient transition
-                                            // for SFX-ring-only loops;
-                                            // wait for stability before
-                                            // committing to an anchor.
                                             std::memcpy(e->animCandidate, peer.animName, sizeof(peer.animName));
                                             e->animCandidate[sizeof(e->animCandidate) - 1] = '\0';
                                             e->stableFrames = 1;
@@ -1230,20 +917,8 @@ namespace mod::ghosts
                 }
             }
 
-            // v26 state-sync: reconcile tracked loops with peer's
-            // published active set. Independent of the SFX ring -
-            // works even when the ring is empty.
             SyncActiveLoopsFromState(peer, slot);
 
-            // Targeted backup: for known anim-bound loops (mot_roll
-            // 0x17B and mot_ship 0x18F/0x190/0x192) we observed
-            // state-sync alone fails to terminate them in some cases.
-            // The janitor force-stops these specific IDs when the
-            // peer's animName drifts from the one at start, and
-            // blocklists them until the source drops them from
-            // peer.activeLoops. Other loops continue with pure
-            // state-sync (no animation tagging or blocklisting -
-            // those would create re-start cycles).
             RunAnimBoundJanitor(peer, slot);
         }
 
@@ -1256,6 +931,12 @@ namespace mod::ghosts
             ttyd::mario::Player *me = ttyd::mario::marioGetPtr();
             if (me == nullptr)
                 return -1;
+
+            if (g_ghostState != nullptr && g_ghostState->selfGameRole == kGameRoleHider)
+            {
+                g_hammerSwingFired = true;
+                return -1;
+            }
 
             const uint8_t *mpBytes = reinterpret_cast<const uint8_t *>(me);
             const uint16_t curMotRaw = *reinterpret_cast<const uint16_t *>(mpBytes + 0x2E);
@@ -1331,21 +1012,6 @@ namespace mod::ghosts
         if (g_initialized)
             return;
 
-        // Allocate the heap-resident GhostState. This replaces the
-        // previous arrangement where scratch lived at fixed low-RAM
-        // addresses (0x80001800, 0x80003B20-0x80003BE4, 0x80003D00).
-        // Those addresses overlapped game/OS regions on some users'
-        // Dolphin sessions and caused deterministic crashes on AP
-        // connect. By allocating here instead, the OS gives us a
-        // region that is guaranteed not to alias anything else, and
-        // we publish the pointer to Python via APSettings.
-        //
-        // Use __memAlloc directly rather than `new GhostState()` to
-        // avoid pulling in operator new (_Znwj). The cxx.h inline
-        // exists but the elf2rel linker reports it as missing in
-        // custom.rel builds. GhostState is trivially constructible
-        // (POD members + arrays + packed wire structs), so a raw
-        // alloc + memset is equivalent to value-initialization here.
         if (g_ghostState == nullptr)
         {
             void *raw = ttyd::memory::__memAlloc(ttyd::memory::HeapType::HEAP_DEFAULT, sizeof(GhostState));
@@ -1358,15 +1024,8 @@ namespace mod::ghosts
             return;
         }
 
-        // Zero the entire allocation. __memAlloc returns uninitialized
-        // memory; memsetting here puts every field in a known state
-        // (numbers/pointers as 0, char arrays as empty strings, etc.)
-        // before we overwrite specific fields below.
         std::memset(g_ghostState, 0, sizeof(GhostState));
 
-        // Initialize peer block header. SharedBlock has its own magic
-        // and version that Python validates - these must match the
-        // Python-side constants exactly.
         g_ghostState->peerBlock.magic = kMagic;
         g_ghostState->peerBlock.version = kVersion;
 
@@ -1386,11 +1045,6 @@ namespace mod::ghosts
         g_ghostState->selfTeamId = kTeamNone;
         g_ghostState->selfFriendlyFire = 0;
 
-        // Publish the pointer into APSettings. Python reads this on
-        // startup to discover where to write/read all subsequent
-        // ghost-peer data. The APSettings struct lives at a stable
-        // address (0x80003220) that Python already knows about, and
-        // we just added a `ghostStatePtr` field at the end of it.
         if (mod::owr::gState != nullptr && mod::owr::gState->apSettings != nullptr)
         {
             mod::owr::gState->apSettings->ghostStatePtr = g_ghostState;
@@ -1472,20 +1126,6 @@ namespace mod::ghosts
         };
         LocalChannelEntry g_localChannelMap[kLocalChannelMapSize] = {};
 
-        // Insert/refresh the mapping channel -> sfxId. If channel is
-        // already present, update it (engine reused the slot). Otherwise
-        // find a free slot. With a 64-entry map and TTYD's <32 active
-        // channels, the table never fills.
-        //
-        // The "no channel allocated" sentinel returned by the engine is
-        // -1 (0xFFFFFFFF as unsigned), confirmed by reading the engine's
-        // own pre-checks (e.g. mot_ship.s line 628-630: addis r0, r3,
-        // 0x1; cmplwi r0, 0xFFFF tests whether channel == -1). Channel
-        // 0 IS a valid channel index in this engine - the previous
-        // version of this filter incorrectly rejected it, which caused
-        // the boat and roll loops (which sometimes alloc channel 0)
-        // to never appear in our state-sync sample, so receivers
-        // never knew to stop them.
         void RecordLocalChannel(int channel, uint16_t sfxId)
         {
             if (channel == -1)
@@ -1511,15 +1151,8 @@ namespace mod::ghosts
                     return;
                 }
             }
-            // No free slot. Map is sized generously so this should
-            // never trigger; if it does, log via a counter? For now
-            // silently drop the new entry; the sound still plays.
         }
 
-        // Remove the mapping for channel. Returns the prior sfxId or 0
-        // if not found. v26: callers only use the side effect (free
-        // the slot); the returned sfxId is no longer used to emit a
-        // stop event since state-sync handles that.
         uint16_t RemoveLocalChannel(int channel)
         {
             if (channel == -1)
@@ -1538,22 +1171,6 @@ namespace mod::ghosts
             return 0;
         }
 
-        // Sample the channel map into a fixed-size out array. Returns
-        // the count written (<= maxOut). Used at publish time to build
-        // the activeLoops field of the local peer's wire format.
-        //
-        // No filtering happens here - we publish whatever the engine
-        // currently has alive. One-shots that haven't been stopped yet
-        // (because the engine just hasn't gotten around to it) appear
-        // here too. That's fine: receivers re-trigger them via the
-        // diff, which sounds identical to the SFX ring path. The only
-        // odd case is a one-shot that's still in the map after its
-        // sound naturally finished - the receiver "starts" it but
-        // since it's a one-shot it just plays through quickly and
-        // appears as a stutter on the next publish (when the entry
-        // ages out by being overwritten via channel reuse). In practice
-        // the 50ms publish window is short enough that this case is
-        // imperceptible; real loops dominate the table.
         int SampleActiveLoops(uint16_t *out, int maxOut)
         {
             int count = 0;
@@ -1569,10 +1186,6 @@ namespace mod::ghosts
             return count;
         }
 
-        // Push a single SFX event onto the ring. Used by OnLocalSfxFired
-        // for start events (one-shots and loops both flow through the
-        // ring; receivers filter loops out of the SFX-ring replay path
-        // since state-sync handles them). Returns true on success.
         bool PushSfxRingEvent(uint16_t sfxId, uint8_t flags)
         {
             volatile uint8_t *headPtr = GetSfxRingHeadPtr();
@@ -1623,6 +1236,47 @@ namespace mod::ghosts
             }
         }
 
+        {
+            static bool s_ourLockApplied = false;
+            const bool wantFrozen = (g_ghostState->selfFrozen != 0);
+            const bool inputFree  = (ttyd::mario::marioChkKey() != 0);
+
+            if (wantFrozen)
+            {
+                if (inputFree)
+                {
+                    ttyd::mario::marioKeyOff();
+                    s_ourLockApplied = true;
+                }
+            }
+            else if (s_ourLockApplied)
+            {
+                if (!inputFree)
+                {
+                    ttyd::mario::marioKeyOn();
+                }
+                s_ourLockApplied = false;
+            }
+        }
+
+        {
+            static uint8_t s_lastTeleportSeq = 0;
+            const uint8_t curSeq = g_ghostState->pendingTeleportSeq;
+            const bool seqChanged = (curSeq != s_lastTeleportSeq);
+            const bool mapPresent = (g_ghostState->pendingTeleportMap[0] != '\0');
+            if (seqChanged && mapPresent)
+            {
+                const char *bero = (g_ghostState->pendingTeleportBero[0] != '\0')
+                                       ? g_ghostState->pendingTeleportBero
+                                       : nullptr;
+                s_lastTeleportSeq = curSeq;
+                ttyd::seqdrv::seqSetSeq(
+                    ttyd::seqdrv::SeqIndex::kMapChange,
+                    g_ghostState->pendingTeleportMap,
+                    bero);
+            }
+        }
+
         for (int i = 0; i < kMaxPeers; ++i)
         {
             const PeerSlot &peer = block->peers[i];
@@ -1636,15 +1290,9 @@ namespace mod::ghosts
 
             ApplyPeerToSlot(peer, slot);
 
-            // v26: Loop sync runs INSIDE ApplyPeerToSlot via
-            // SyncActiveLoopsFromState. The motion-id-driven backup
-            // mechanism (LoopSfxForMotion / UpdatePeerLoop /
-            // RunMotionChangeJanitor) was removed - state-sync is
-            // self-healing across dropped publishes and doesn't need
-            // motion-id heuristics.
 
-            if (slot.hitFramesRemaining > 0)
-                --slot.hitFramesRemaining;
+            // (removed) hitFramesRemaining decrement. Field no longer
+            // gates rendering — see the prediction-removal note above.
 
             if (!slot.renderInitialized)
             {
@@ -1658,14 +1306,6 @@ namespace mod::ghosts
                 slot.renderPivotY = peer.rotPivotY;
                 slot.renderPivotZ = peer.rotPivotZ;
 
-                // Seed spin tracking: lastSeen matches the published
-                // angle so the first delta computed on the next change
-                // is meaningful (not relative to zero). Per-axis init
-                // flags stay false until the first publish change is
-                // observed for THAT axis - one full publish interval
-                // is needed before we have a velocity sample, and
-                // different axes may receive their first change on
-                // different frames.
                 slot.lastSeenRotY = peer.rotationY;
                 slot.lastSeenRotX = peer.rotationX;
                 slot.lastSeenRotZ = peer.rotationZ;
@@ -1684,16 +1324,6 @@ namespace mod::ghosts
                 slot.renderY = Lerp(slot.renderY, peer.position.y, kLerpAlpha);
                 slot.renderZ = Lerp(slot.renderZ, peer.position.z, kLerpAlpha);
 
-                // Spin-aware angle lerp. Tracks publish-to-publish
-                // angular velocity per axis; when smoothed velocity
-                // exceeds kFastSpinThresholdDegPerPublish (~5 rev/sec),
-                // forces lerp direction to follow velocity rather than
-                // shortest-path. Without this, the fastest hammer spin
-                // appeared to reverse direction whenever the publish
-                // landed in the >180-degree-from-receiver crossing
-                // region. Each axis gets its own velocity tracker;
-                // they're independent because spin attack rotates yaw
-                // while plane mode rotates pitch+roll, etc.
                 slot.renderRotY = SpinAwareLerpAngle(slot.renderRotY,
                                                      peer.rotationY,
                                                      kLerpAlpha,
@@ -1716,10 +1346,6 @@ namespace mod::ghosts
                                                      slot.velRotZ,
                                                      slot.spinTrackingInitZ);
 
-                // Pivot moves between (0,0,0) idle and motion-specific
-                // offsets when the source enters/exits paper modes.
-                // Linear lerp is fine here since pivot values are
-                // straight world offsets, not angles.
                 slot.renderPivotX = Lerp(slot.renderPivotX, peer.rotPivotX, kLerpAlpha);
                 slot.renderPivotY = Lerp(slot.renderPivotY, peer.rotPivotY, kLerpAlpha);
                 slot.renderPivotZ = Lerp(slot.renderPivotZ, peer.rotPivotZ, kLerpAlpha);
@@ -1851,12 +1477,6 @@ namespace mod::ghosts
                 }
             }
 
-            // v26: sample currently-active loop sfxIds from the
-            // channel map and write to selfActiveLoops scratch.
-            // Python's 20Hz publisher reads this each tick and embeds
-            // it in our peer slot's activeLoops field. Receivers diff
-            // and start/stop accordingly. Updated every frame so the
-            // Python tick always sees fresh data.
             {
                 volatile uint16_t *out = GetSelfActiveLoopsPtr();
                 volatile uint8_t *outCount = GetSelfActiveLoopCountPtr();
@@ -1876,75 +1496,43 @@ namespace mod::ghosts
             if (raw != 0)
             {
                 const uint8_t kind = static_cast<uint8_t>(raw >> 24);
-                if (kind == kHitKindHammer)
+                if (kind == kHitKindHammer && g_hitGraceRemaining == 0 && !g_hitQueued)
                 {
-                    if (g_hitGraceRemaining == 0)
-                    {
-                        g_hitQueued = true;
-                        g_hitQueuedTimeout = kHitQueueTimeoutFrames;
-                    }
+                    g_hitQueued = true;
+                    g_hitQueuedTimeout = kHitQueueTimeoutFrames;
+                    g_hitGraceRemaining = kHitGraceFrames;
                 }
-
                 *pending = 0;
             }
         }
 
         if (g_hitQueued)
         {
-            ttyd::mario::Player *mp = ttyd::mario::marioGetPtr();
-            bool fired = false;
-            if (mp != nullptr)
-            {
-                using ttyd::mario_motion::MarioMotion;
-                const uint8_t *mpBytes = reinterpret_cast<const uint8_t *>(mp);
-                const uint16_t curMotRaw = *reinterpret_cast<const uint16_t *>(mpBytes + 0x2E);
-                const uint32_t flags1 = *reinterpret_cast<const uint32_t *>(mpBytes + 0x0);
-                const auto curMot = static_cast<MarioMotion>(curMotRaw);
-
-                constexpr uint32_t kCtrlLockedMask = 0x10000000;
-                const bool ctrlLocked = (flags1 & kCtrlLockedMask) != 0;
-                const bool ready = (curMot == MarioMotion::kStay) && !ctrlLocked;
-
-                if (ready)
-                {
-                    uint8_t *mpRw = reinterpret_cast<uint8_t *>(mp);
-                    *reinterpret_cast<const char **>(mpRw + 0x18) = kDefaultHitPoseName;
-                    *reinterpret_cast<uint32_t *>(mpRw + 0x0C) |= 0x1000;
-                    *reinterpret_cast<uint32_t *>(mpRw + 0x04) |= 0x10000000;
-
-                    uint8_t *counter = mpRw + 0x39;
-                    *counter = static_cast<uint8_t>(*counter + 1);
-
-                    void *letterboxCam = camGetPtr(8);
-                    if (letterboxCam != nullptr)
-                    {
-                        uint16_t *camFlags = reinterpret_cast<uint16_t *>(letterboxCam);
-                        *camFlags = static_cast<uint16_t>(*camFlags | 0x0200);
-                    }
-
-                    g_hitLockRemaining = kHitLockDurationFrames;
-
-                    psndSFXOn(0xBA);
-
-                    g_hitGraceRemaining = kHitGraceFrames;
-
-                    fired = true;
-                }
-            }
-
-            if (fired)
-            {
-                g_hitQueued = false;
-                g_hitQueuedTimeout = 0;
-            }
-            else
-            {
+            if (g_hitQueuedTimeout > 0)
                 --g_hitQueuedTimeout;
-                if (g_hitQueuedTimeout <= 0)
+
+            const bool ready = (ttyd::mario::marioChkKey() != 0);
+            if (g_hitQueuedTimeout == 0)
+            {
+                // Timed out without ever becoming ready. Drop the hit.
+                g_hitQueued = false;
+            }
+            else if (ready && !g_hitLockApplied)
+            {
+                ttyd::mario::Player *me = ttyd::mario::marioGetPtr();
+                if (me != nullptr && g_ghostState != nullptr)
                 {
-                    g_hitQueued = false;
-                    g_hitQueuedTimeout = 0;
+                    me->animName = g_ghostState->hitPoseName;
+
+                    me->flags2 |= 0x1000u;
+
+                    ttyd::pmario_sound::psndSFXOn(0x0BA);
+
+                    ttyd::mario::marioKeyOff();
+                    g_hitLockApplied = true;
+                    g_hitLockRemaining = kHitLockDurationFrames;
                 }
+                g_hitQueued = false;
             }
         }
 
@@ -1953,19 +1541,18 @@ namespace mod::ghosts
             --g_hitLockRemaining;
             if (g_hitLockRemaining == 0)
             {
-                ttyd::mario::Player *mp = ttyd::mario::marioGetPtr();
-                if (mp != nullptr)
+                ttyd::mario::Player *me = ttyd::mario::marioGetPtr();
+                if (me != nullptr)
                 {
-                    uint8_t *counter = reinterpret_cast<uint8_t *>(mp) + 0x39;
-                    if (*counter > 0)
-                        *counter = static_cast<uint8_t>(*counter - 1);
+                    me->flags2 &= ~0x1000u;
                 }
-
-                void *letterboxCam = camGetPtr(8);
-                if (letterboxCam != nullptr)
+                if (g_hitLockApplied)
                 {
-                    uint16_t *camFlags = reinterpret_cast<uint16_t *>(letterboxCam);
-                    *camFlags = static_cast<uint16_t>(*camFlags & ~0x0200);
+                    if (ttyd::mario::marioChkKey() == 0)
+                    {
+                        ttyd::mario::marioKeyOn();
+                    }
+                    g_hitLockApplied = false;
                 }
             }
         }
@@ -1978,8 +1565,6 @@ namespace mod::ghosts
             const int hitSlot = CheckPeerHammerHits(block);
             if (hitSlot >= 0)
             {
-                g_slots[hitSlot].hitFramesRemaining = kHitLockDurationFrames;
-
                 volatile uint32_t *outbound = GetOutboundHitPtr();
                 if (*outbound == 0)
                 {
@@ -2069,11 +1654,6 @@ namespace mod::ghosts
 
             gc::mtx::PSMTXScale(&matA, sx * kGhostScale * fixupX, sy * kGhostScale * fixupY, sz * kGhostScale * fixupZ);
 
-            // Pitch-flip for kJabara: when source pitches into the
-            // back-half of a circle, mirror Z so the body silhouette
-            // stays right-side-up. Use lerped pitch so the flip
-            // toggles cleanly on a smooth angle rather than chasing
-            // 20Hz publish snaps.
             if (!(peer.flags2 & 0x8) && peer.motionId == 0x14)
             {
                 float pitchAng = slot.renderRotX;
@@ -2099,11 +1679,6 @@ namespace mod::ghosts
                 }
             }
 
-            // Pivot/rotation values are taken from slot.render* rather
-            // than peer.* so they smooth across 20Hz publish boundaries.
-            // Without lerping, kHammer2 (spin attack) and kRoll (tube
-            // roll) showed visible chop because their pitch/roll/yaw
-            // changed faster than the publish rate.
             const bool pivotActive = slot.renderPivotX != 0.0f || slot.renderPivotY != 0.0f || slot.renderPivotZ != 0.0f;
             if (pivotActive)
             {
@@ -2177,6 +1752,10 @@ namespace mod::ghosts
 
         ttyd::fontmgr::FontDrawScale(kNameTagFontScale);
 
+        const uint8_t selfRole = (g_ghostState != nullptr)
+                                     ? g_ghostState->selfGameRole
+                                     : kGameRoleNone;
+
         for (int i = 0; i < kMaxPeers; ++i)
         {
             const PeerSlot &peer = block->peers[i];
@@ -2190,6 +1769,11 @@ namespace mod::ghosts
                 continue;
 
             if (peer.showName != 0)
+                continue;
+
+            if (selfRole == kGameRoleHider)
+                continue;
+            if (selfRole == kGameRoleSeeker && peer.gameRole != kGameRoleSeeker)
                 continue;
 
             gc::vec3 worldPos = {slot.renderX, slot.renderY + kNameTagWorldYOffset, slot.renderZ};
@@ -2219,219 +1803,5 @@ namespace mod::ghosts
             const uint16_t textWidth = ttyd::fontmgr::FontGetMessageWidth(peer.slotName);
             screenX -= (static_cast<float>(textWidth) * kNameTagFontScale) * 0.5f;
 
-            const uint32_t packed = (static_cast<uint32_t>(peer.r) << 24) | (static_cast<uint32_t>(peer.g) << 16) |
-                                    (static_cast<uint32_t>(peer.b) << 8) | 0xFFu;
-            ttyd::fontmgr::FontDrawColor(reinterpret_cast<uint8_t *>(const_cast<uint32_t *>(&packed)));
-
-            ttyd::fontmgr::FontDrawString(screenX, screenY, peer.slotName);
-        }
-    }
-
-    namespace
-    {
-
-        constexpr float kLobbyHudAnchorX = 270.0f;
-        constexpr float kLobbyHudAnchorY = 220.0f;
-        constexpr float kLobbyHudFontScale = 0.5f;
-        constexpr float kLobbyHudLineHeight = 22.0f;
-
-        const char *LobbyStatusLabel(uint8_t status)
-        {
-            switch (status)
-            {
-                case kLobbyStatusIdle:
-                    return "Idle";
-                case kLobbyStatusWaiting:
-                    return "Waiting";
-                case kLobbyStatusCountdown:
-                    return "Starting";
-                case kLobbyStatusPlaying:
-                    return "Playing";
-                case kLobbyStatusFinished:
-                    return "Finished";
-                default:
-                    return "?";
-            }
-        }
-
-        const char *LobbyGameTypeLabel(uint8_t gameType)
-        {
-            switch (gameType)
-            {
-                case kGameTypeHideAndSeek:
-                    return "Hide and Seek";
-                default:
-                    return "";
-            }
-        }
-
-        float RightAlignX(const char *str, float screenX, float fontScale)
-        {
-            const uint16_t textWidth = ttyd::fontmgr::FontGetMessageWidth(str);
-            return screenX - static_cast<float>(textWidth) * fontScale;
-        }
-    } // namespace
-
-    KEEP_FUNC void DrawLobbyHud(ttyd::dispdrv::CameraId, void *)
-    {
-        if (!g_initialized)
-            return;
-
-        const LobbyHudHeader *header = GetLobbyHudHeader();
-
-        if (header->magic != kLobbyHudMagic)
-            return;
-        if (header->version != kLobbyHudVersion)
-            return;
-
-        if (header->active == 0)
-            return;
-
-        ttyd::fontmgr::FontDrawStart();
-        ttyd::fontmgr::FontDrawEdge();
-        ttyd::fontmgr::FontDrawScale(kLobbyHudFontScale);
-
-        const uint32_t packedWhite = 0xFFFFFFFFu;
-        ttyd::fontmgr::FontDrawColor(reinterpret_cast<uint8_t *>(const_cast<uint32_t *>(&packedWhite)));
-
-        float y = kLobbyHudAnchorY;
-
-        char buf[64];
-        char nameBuf[17];
-        std::memcpy(nameBuf, header->name, 16);
-        nameBuf[16] = '\0';
-
-        ttyd::string::strcpy(buf, "Lobby: ");
-        ttyd::string::strcat(buf, nameBuf);
-
-        ttyd::fontmgr::FontDrawString(RightAlignX(buf, kLobbyHudAnchorX, kLobbyHudFontScale), y, buf);
-        y -= kLobbyHudLineHeight;
-
-        const char *gameLabel = LobbyGameTypeLabel(header->gameType);
-        if (gameLabel[0] != '\0')
-        {
-            ttyd::string::strcpy(buf, "Game: ");
-            ttyd::string::strcat(buf, gameLabel);
-            ttyd::fontmgr::FontDrawString(RightAlignX(buf, kLobbyHudAnchorX, kLobbyHudFontScale), y, buf);
-            y -= kLobbyHudLineHeight;
-        }
-
-        ttyd::string::strcpy(buf, "Status: ");
-        ttyd::string::strcat(buf, LobbyStatusLabel(header->status));
-        ttyd::fontmgr::FontDrawString(RightAlignX(buf, kLobbyHudAnchorX, kLobbyHudFontScale), y, buf);
-        y -= kLobbyHudLineHeight;
-
-        if (header->timerSeconds > 0)
-        {
-            char numBuf[8] = {0};
-            uint16_t t = header->timerSeconds;
-            int idx = 0;
-            char rev[8];
-            int rlen = 0;
-            if (t == 0)
-            {
-                rev[rlen++] = '0';
-            }
-            else
-            {
-                while (t > 0 && rlen < 6)
-                {
-                    rev[rlen++] = static_cast<char>('0' + (t % 10));
-                    t /= 10;
-                }
-            }
-
-            for (int i = rlen - 1; i >= 0; --i) numBuf[idx++] = rev[i];
-            numBuf[idx++] = 's';
-            numBuf[idx] = '\0';
-
-            ttyd::string::strcpy(buf, "Time: ");
-            ttyd::string::strcat(buf, numBuf);
-            ttyd::fontmgr::FontDrawString(RightAlignX(buf, kLobbyHudAnchorX, kLobbyHudFontScale), y, buf);
-            y -= kLobbyHudLineHeight;
-        }
-
-        const char *text = GetLobbyHudText();
-        const char *end = text + kLobbyTextLen;
-        const char *cur = text;
-
-        char lineBuf[80];
-
-        while (cur < end && *cur != '\0')
-        {
-            const char *lineStart = cur;
-            while (cur < end && *cur != '\0' && *cur != '\n') ++cur;
-
-            const int lineLen = static_cast<int>(cur - lineStart);
-            const int copyLen =
-                (lineLen < static_cast<int>(sizeof(lineBuf)) - 1) ? lineLen : static_cast<int>(sizeof(lineBuf)) - 1;
-            std::memcpy(lineBuf, lineStart, copyLen);
-            lineBuf[copyLen] = '\0';
-
-            if (copyLen == 0)
-            {
-                y -= kLobbyHudLineHeight;
-            }
-            else
-            {
-                ttyd::fontmgr::FontDrawString(RightAlignX(lineBuf, kLobbyHudAnchorX, kLobbyHudFontScale), y, lineBuf);
-                y -= kLobbyHudLineHeight;
-            }
-
-            if (cur < end && *cur == '\n')
-                ++cur;
-        }
-    }
-
-    // ====================================================================
-    // SFX hook entry points (called from OWR.cpp psndSFX*Hook)
-    // ====================================================================
-    //
-    // OnLocalSfxFired runs on every psndSFXOn[/3D] call. It records the
-    // (channel, sfxId) mapping for state-sync sampling and pushes a
-    // start event onto the SFX ring (which receivers consult for one-
-    // shot replay). OnLocalSfxStopped runs on every psndSFXOff and
-    // just frees the channel map entry; loop termination is handled
-    // by state-sync diff on the receiver side.
-
-    KEEP_FUNC void OnLocalSfxFired(int sfxId, bool is3D, int channel)
-    {
-        if (!g_initialized)
-            return;
-        if (g_inReceiverReplay)
-            return;
-
-        // Record the channel mapping so:
-        //  (a) the publish-time SampleActiveLoops sees this sfxId
-        //      until the engine stops it;
-        //  (b) when the engine eventually calls psndSFXOff on this
-        //      channel, OnLocalSfxStopped can free the entry so the
-        //      next publish drops it from activeLoops.
-        // For one-shots that didn't allocate (channel == -1), this
-        // is a no-op (RecordLocalChannel filters them out). Channel 0
-        // is a real channel index, NOT a sentinel.
-        RecordLocalChannel(channel, static_cast<uint16_t>(sfxId & 0xFFFF));
-
-        // Push a start event regardless. Receivers filter loops out of
-        // SFX-ring replay (they handle them via state-sync diff), but
-        // one-shots flow through normally. The ring-side filter on
-        // receivers depends on knowing if the sfxId is in
-        // peer.activeLoops, which they have at receive time.
-        if (!SfxIsAllowed(sfxId))
-            return;
-        PushSfxRingEvent(static_cast<uint16_t>(sfxId & 0xFFFF), is3D ? kSfxFlag3D : 0);
-    }
-
-    // v26: stop hook just frees the channel map entry. The next publish
-    // will omit that sfxId from activeLoops, and receivers will diff
-    // and stop their tracked loop. No event ring traffic for stops.
-    KEEP_FUNC void OnLocalSfxStopped(int channel)
-    {
-        if (!g_initialized)
-            return;
-        if (g_inReceiverReplay)
-            return;
-
-        RemoveLocalChannel(channel);
-    }
-} // namespace mod::ghosts
+            uint32_t packed;
+            if (peer.gameRole == kGam
