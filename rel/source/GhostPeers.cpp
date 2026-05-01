@@ -1269,6 +1269,7 @@ namespace mod::ghosts
                                        ? g_ghostState->pendingTeleportBero
                                        : nullptr;
                 s_lastTeleportSeq = curSeq;
+                ttyd::mario_motion::marioChgMot(ttyd::mario_motion::MarioMotion::kStay);
                 ttyd::seqdrv::seqSetSeq(
                     ttyd::seqdrv::SeqIndex::kMapChange,
                     g_ghostState->pendingTeleportMap,

@@ -113,7 +113,7 @@ namespace mod::ghosts
 
     constexpr const char *kDefaultHitPoseName = "M_N_7";
     constexpr float kDefaultHitReachScale = 1.0f;
-    constexpr float kDefaultHitPeerWidth = 15.0f;
+    constexpr float kDefaultHitPeerWidth = 20.0f;
 
     constexpr uint8_t kTeamNone = 0;
     constexpr uint8_t kTeamRed = 1;
