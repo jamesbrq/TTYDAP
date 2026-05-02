@@ -9,6 +9,7 @@
 #include <ttyd/battle_unit.h>
 #include <ttyd/evtmgr.h>
 #include <ttyd/msgdrv.h>
+#include <ttyd/npcdrv.h>
 #include <ttyd/party.h>
 #include <ttyd/seqdrv.h>
 #include <ttyd/win_root.h>
@@ -83,6 +84,7 @@ namespace mod::owr
     int psndSFXOnHook(int sfxId);
     int psndSFXOn3DHook(int sfxId, const vec3 *position);
     int psndSFXOffHook(int channel);
+    void npcSetupBattleInfoHook(::NpcEntry *npc, void *info);
 
     extern bool (*g_OSLink_trampoline)(OSModuleInfo *, void *);
     extern void (*g_seqSetSeq_trampoline)(SeqIndex, const char *, const char *);
@@ -103,6 +105,7 @@ namespace mod::owr
     extern int (*g_psndSFXOn_trampoline)(int);
     extern int (*g_psndSFXOn3D_trampoline)(int, const gc::vec3 *);
     extern int (*g_psndSFXOff_trampoline)(int);
+    extern void (*g_npcSetupBattleInfo_trampoline)(::NpcEntry *, void *);
 
     extern const char *goombellaName;
     extern const char *goombellaDescription;

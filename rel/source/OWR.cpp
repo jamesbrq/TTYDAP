@@ -171,6 +171,7 @@ namespace mod::owr
     KEEP_VAR int (*g_psndSFXOn_trampoline)(int) = nullptr;
     KEEP_VAR int (*g_psndSFXOn3D_trampoline)(int, const gc::vec3 *) = nullptr;
     KEEP_VAR int (*g_psndSFXOff_trampoline)(int) = nullptr;
+    KEEP_VAR void (*g_npcSetupBattleInfo_trampoline)(::NpcEntry *, void *) = nullptr;
 
     void OWR::SequenceInit()
     {
@@ -1210,6 +1211,30 @@ namespace mod::owr
     {
         ghosts::OnLocalSfxStopped(channel);
         return g_psndSFXOff_trampoline(channel);
+    }
+
+    // Pacify enemies during HnS rounds.
+    //
+    // npcSetupBattleInfo writes the battle struct at npc + 0x230. The
+    // function unconditionally memsets the struct to zero first, then
+    // (only if `info` is non-null) copies the battle template into it.
+    // Passing info=nullptr is the engine-blessed "make this NPC
+    // friendly" path — npcSetBattleInfo itself uses it when battleId
+    // == -1.
+    //
+    // We force info=nullptr while in an HnS match (selfGameRole != NONE).
+    // Effect: enemy NPCs spawn and walk around as usual but have no
+    // battle attached, so Mario touching them does nothing. When HnS
+    // ends, the next map load attaches battles normally — no persistent
+    // mutation.
+    KEEP_FUNC void npcSetupBattleInfoHook(::NpcEntry *npc, void *info)
+    {
+        if (ghosts::g_ghostState != nullptr &&
+            ghosts::g_ghostState->selfGameRole != ghosts::kGameRoleNone)
+        {
+            info = nullptr;
+        }
+        g_npcSetupBattleInfo_trampoline(npc, info);
     }
 
     KEEP_FUNC const char *msgSearchHook(const char *msgKey)

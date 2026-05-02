@@ -1661,4 +1661,434 @@ namespace mod::ghosts
                     break;
             }
 
-            gc::mtx::PSMTXScale(&matA, sx * kGhostScale  
+            gc::mtx::PSMTXScale(&matA, sx * kGhostScale * fixupX, sy * kGhostScale * fixupY, sz * kGhostScale * fixupZ);
+
+            if (!(peer.flags2 & 0x8) && peer.motionId == 0x14)
+            {
+                float pitchAng = slot.renderRotX;
+                while (pitchAng < 0.0f) pitchAng += 360.0f;
+                while (pitchAng >= 360.0f) pitchAng -= 360.0f;
+                if (pitchAng >= 90.0f && pitchAng <= 270.0f)
+                {
+                    gc::mtx::PSMTXScale(&matStep, 1.0f, 1.0f, -1.0f);
+                    gc::mtx::PSMTXConcat(&matStep, &matA, &matA);
+                }
+            }
+
+            if (!(peer.flags2 & 0x8))
+            {
+                float ang = slot.renderRotY;
+
+                while (ang < 0.0f) ang += 360.0f;
+                while (ang >= 360.0f) ang -= 360.0f;
+                if (ang > 90.0f && ang <= 270.0f)
+                {
+                    gc::mtx::PSMTXScale(&matStep, 1.0f, 1.0f, -1.0f);
+                    gc::mtx::PSMTXConcat(&matStep, &matA, &matA);
+                }
+            }
+
+            const bool pivotActive = slot.renderPivotX != 0.0f || slot.renderPivotY != 0.0f || slot.renderPivotZ != 0.0f;
+            if (pivotActive)
+            {
+                gc::mtx::PSMTXTrans(reinterpret_cast<gc::mtx34 *>(&matStep),
+                                    -slot.renderPivotX,
+                                    -slot.renderPivotY,
+                                    -slot.renderPivotZ);
+                gc::mtx::PSMTXConcat(&matStep, &matA, &matA);
+            }
+
+            if (slot.renderRotZ != 0.0f)
+            {
+                gc::mtx::PSMTXRotRad(&matStep, 0x7A, slot.renderRotZ * kDeg2Rad);
+                gc::mtx::PSMTXConcat(&matStep, &matA, &matA);
+            }
+
+            if (slot.renderRotX != 0.0f)
+            {
+                gc::mtx::PSMTXRotRad(&matStep, 0x78, slot.renderRotX * kDeg2Rad);
+                gc::mtx::PSMTXConcat(&matStep, &matA, &matA);
+            }
+
+            float yawDeg = slot.renderRotY - peer.cameraAngle;
+            while (yawDeg < 0.0f) yawDeg += 360.0f;
+            while (yawDeg >= 360.0f) yawDeg -= 360.0f;
+            gc::mtx::PSMTXRotRad(&matStep, 0x79, yawDeg * kDeg2Rad);
+            gc::mtx::PSMTXConcat(&matStep, &matA, &matA);
+
+            if (pivotActive)
+            {
+                gc::mtx::PSMTXTrans(reinterpret_cast<gc::mtx34 *>(&matStep),
+                                    slot.renderPivotX,
+                                    slot.renderPivotY,
+                                    slot.renderPivotZ);
+                gc::mtx::PSMTXConcat(&matStep, &matA, &matA);
+            }
+
+            if (peer.stretchY != 1.0f && peer.stretchY != 0.0f)
+            {
+                gc::mtx::PSMTXScale(&matStep, 1.0f, peer.stretchY, 1.0f);
+                gc::mtx::PSMTXConcat(&matStep, &matA, &matA);
+            }
+
+            gc::mtx::PSMTXTrans(reinterpret_cast<gc::mtx34 *>(&matStep), slot.renderX, slot.renderY, slot.renderZ);
+            gc::mtx::PSMTXConcat(&matStep, &matA, &matA);
+
+            ttyd::animdrv::animPoseDrawMtx(poseId, &matA, 2, 0.0f, 1.0f);
+            ttyd::animdrv::animPoseDrawMtx(poseId, &matA, 1, 0.0f, 1.0f);
+        }
+    }
+
+    KEEP_FUNC void DrawNameTagsAll(ttyd::dispdrv::CameraId, void *)
+    {
+        if (!g_initialized)
+            return;
+
+        const SharedBlock *block = GetValidBlock();
+        if (block == nullptr)
+            return;
+
+        void *camPtr = camGetPtr(4);
+        if (camPtr == nullptr)
+            return;
+
+        gc::mat4x4 *projMtx = reinterpret_cast<gc::mat4x4 *>(reinterpret_cast<char *>(camPtr) + 0x15C);
+
+        gc::mat3x4 *viewMtx = reinterpret_cast<gc::mat3x4 *>(reinterpret_cast<char *>(camPtr) + 0x11C);
+
+        ttyd::fontmgr::FontDrawStart();
+        ttyd::fontmgr::FontDrawEdge();
+
+        ttyd::fontmgr::FontDrawScale(kNameTagFontScale);
+
+        const uint8_t selfRole = (g_ghostState != nullptr) ? g_ghostState->selfGameRole : kGameRoleNone;
+
+        for (int i = 0; i < kMaxPeers; ++i)
+        {
+            const PeerSlot &peer = block->peers[i];
+            const GhostSlot &slot = g_slots[i];
+
+            if (!peer.active)
+                continue;
+            if (!PeerOnLocalMap(peer))
+                continue;
+            if (peer.slotName[0] == '\0')
+                continue;
+
+            if (peer.showName != 0)
+                continue;
+
+            if (selfRole == kGameRoleHider)
+                continue;
+            if (selfRole == kGameRoleSeeker && peer.gameRole != kGameRoleSeeker)
+                continue;
+
+            gc::vec3 worldPos = {slot.renderX, slot.renderY + kNameTagWorldYOffset, slot.renderZ};
+            gc::vec3 camPos = {0.0f, 0.0f, 0.0f};
+            gc::mtx::PSMTXMultVec(viewMtx, &worldPos, &camPos);
+
+            gc::vec3 ndcPos = {0.0f, 0.0f, 0.0f};
+            gc::mtx::PSMTX44MultVec(projMtx, &camPos, &ndcPos);
+
+            const float ndcX = ndcPos.x;
+            const float ndcY = ndcPos.y;
+            const float ndcZ = ndcPos.z;
+
+            if (ndcZ < -1.5f || ndcZ > 1.5f)
+            {
+                continue;
+            }
+
+            if (ndcX < -1.5f || ndcX > 1.5f || ndcY < -1.5f || ndcY > 1.5f)
+            {
+                continue;
+            }
+
+            float screenX = ndcX * kNameTagScreenScaleX;
+            float screenY = ndcY * kNameTagScreenScaleY;
+
+            const uint16_t textWidth = ttyd::fontmgr::FontGetMessageWidth(peer.slotName);
+            screenX -= (static_cast<float>(textWidth) * kNameTagFontScale) * 0.5f;
+
+            const uint32_t packed = (static_cast<uint32_t>(peer.r) << 24) | (static_cast<uint32_t>(peer.g) << 16) |
+                                    (static_cast<uint32_t>(peer.b) << 8) | 0xFFu;
+            ttyd::fontmgr::FontDrawColor(reinterpret_cast<uint8_t *>(const_cast<uint32_t *>(&packed)));
+
+            ttyd::fontmgr::FontDrawString(screenX, screenY, peer.slotName);
+        }
+
+        // Self-label: render "Seeker" above the local Mario when our
+        // role is seeker. Cosmetic confirmation of role; mirrors the
+        // red color we use for seeker peers.
+        //
+        // Position: use the three-vector sum (playerPosition +
+        // wModelPosition + wAnimPosition), matching what Python's
+        // _read_self_state publishes at offsets 0x8C/0x98/0xA4 so
+        // peers see us at the same world location. wAnimPosition
+        // alone lagged for a frame or two after seqSetSeq teleports,
+        // which left the label anchored at the post-spawn point
+        // while Mario walked away from it.
+        if (selfRole == kGameRoleSeeker)
+        {
+            ttyd::mario::Player *me = ttyd::mario::marioGetPtr();
+            if (me != nullptr)
+            {
+                gc::vec3 worldPos = {
+                    me->playerPosition.x + me->wModelPosition.x + me->wAnimPosition.x,
+                    me->playerPosition.y + me->wModelPosition.y + me->wAnimPosition.y + kNameTagWorldYOffset,
+                    me->playerPosition.z + me->wModelPosition.z + me->wAnimPosition.z,
+                };
+                gc::vec3 camPos = {0.0f, 0.0f, 0.0f};
+                gc::mtx::PSMTXMultVec(viewMtx, &worldPos, &camPos);
+
+                gc::vec3 ndcPos = {0.0f, 0.0f, 0.0f};
+                gc::mtx::PSMTX44MultVec(projMtx, &camPos, &ndcPos);
+
+                if (ndcPos.z >= -1.5f && ndcPos.z <= 1.5f && ndcPos.x >= -1.5f && ndcPos.x <= 1.5f && ndcPos.y >= -1.5f &&
+                    ndcPos.y <= 1.5f)
+                {
+                    const char *label = "Seeker";
+                    float screenX = ndcPos.x * kNameTagScreenScaleX;
+                    const float screenY = ndcPos.y * kNameTagScreenScaleY;
+                    const uint16_t textWidth = ttyd::fontmgr::FontGetMessageWidth(label);
+                    screenX -= (static_cast<float>(textWidth) * kNameTagFontScale) * 0.5f;
+                    const uint32_t packedSelf = 0xFF4040FFu;
+                    ttyd::fontmgr::FontDrawColor(reinterpret_cast<uint8_t *>(const_cast<uint32_t *>(&packedSelf)));
+                    ttyd::fontmgr::FontDrawString(screenX, screenY, label);
+                }
+            }
+        }
+    }
+
+    namespace
+    {
+
+        constexpr float kLobbyHudAnchorX = 270.0f;
+        constexpr float kLobbyHudAnchorY = 220.0f;
+        constexpr float kLobbyHudFontScale = 0.5f;
+        constexpr float kLobbyHudLineHeight = 22.0f;
+
+        const char *LobbyStatusLabel(uint8_t status)
+        {
+            switch (status)
+            {
+                case kLobbyStatusIdle:
+                    return "Idle";
+                case kLobbyStatusWaiting:
+                    return "Hide";
+                case kLobbyStatusCountdown:
+                    return "Seek";
+                case kLobbyStatusPlaying:
+                    return "Round Over";
+                case kLobbyStatusFinished:
+                    return "Match End";
+                default:
+                    return "?";
+            }
+        }
+
+        const char *LobbyGameTypeLabel(uint8_t gameType)
+        {
+            switch (gameType)
+            {
+                case kGameTypeHideAndSeek:
+                    return "Hide and Seek";
+                default:
+                    return "";
+            }
+        }
+
+        float RightAlignX(const char *str, float screenX, float fontScale)
+        {
+            const uint16_t textWidth = ttyd::fontmgr::FontGetMessageWidth(str);
+            return screenX - static_cast<float>(textWidth) * fontScale;
+        }
+    } // namespace
+
+    KEEP_FUNC void DrawLobbyHud(ttyd::dispdrv::CameraId, void *)
+    {
+        if (!g_initialized)
+            return;
+
+        const LobbyHudHeader *header = GetLobbyHudHeader();
+
+        if (header->magic != kLobbyHudMagic)
+            return;
+        if (header->version != kLobbyHudVersion)
+            return;
+
+        if (header->active == 0)
+            return;
+
+        ttyd::fontmgr::FontDrawStart();
+        ttyd::fontmgr::FontDrawEdge();
+        ttyd::fontmgr::FontDrawScale(kLobbyHudFontScale);
+
+        const uint32_t packedWhite = 0xFFFFFFFFu;
+        ttyd::fontmgr::FontDrawColor(reinterpret_cast<uint8_t *>(const_cast<uint32_t *>(&packedWhite)));
+
+        float y = kLobbyHudAnchorY;
+
+        char buf[64];
+        char nameBuf[17];
+        std::memcpy(nameBuf, header->name, 16);
+        nameBuf[16] = '\0';
+
+        ttyd::string::strcpy(buf, "Lobby: ");
+        ttyd::string::strcat(buf, nameBuf);
+
+        ttyd::fontmgr::FontDrawString(RightAlignX(buf, kLobbyHudAnchorX, kLobbyHudFontScale), y, buf);
+        y -= kLobbyHudLineHeight;
+
+        const char *gameLabel = LobbyGameTypeLabel(header->gameType);
+        if (gameLabel[0] != '\0')
+        {
+            ttyd::string::strcpy(buf, "Game: ");
+            ttyd::string::strcat(buf, gameLabel);
+            ttyd::fontmgr::FontDrawString(RightAlignX(buf, kLobbyHudAnchorX, kLobbyHudFontScale), y, buf);
+            y -= kLobbyHudLineHeight;
+        }
+
+        ttyd::string::strcpy(buf, "Status: ");
+        ttyd::string::strcat(buf, LobbyStatusLabel(header->status));
+        ttyd::fontmgr::FontDrawString(RightAlignX(buf, kLobbyHudAnchorX, kLobbyHudFontScale), y, buf);
+        y -= kLobbyHudLineHeight;
+
+        if (header->timerSeconds > 0)
+        {
+            char numBuf[8] = {0};
+            uint16_t t = header->timerSeconds;
+            int idx = 0;
+            char rev[8];
+            int rlen = 0;
+            if (t == 0)
+            {
+                rev[rlen++] = '0';
+            }
+            else
+            {
+                while (t > 0 && rlen < 6)
+                {
+                    rev[rlen++] = static_cast<char>('0' + (t % 10));
+                    t /= 10;
+                }
+            }
+
+            for (int i = rlen - 1; i >= 0; --i) numBuf[idx++] = rev[i];
+            numBuf[idx++] = 's';
+            numBuf[idx] = '\0';
+
+            ttyd::string::strcpy(buf, "Time: ");
+            ttyd::string::strcat(buf, numBuf);
+            ttyd::fontmgr::FontDrawString(RightAlignX(buf, kLobbyHudAnchorX, kLobbyHudFontScale), y, buf);
+            y -= kLobbyHudLineHeight;
+        }
+
+        const char *text = GetLobbyHudText();
+        const char *end = text + kLobbyTextLen;
+        const char *cur = text;
+
+        char lineBuf[80];
+
+        while (cur < end && *cur != '\0')
+        {
+            const char *lineStart = cur;
+            while (cur < end && *cur != '\0' && *cur != '\n') ++cur;
+
+            const int lineLen = static_cast<int>(cur - lineStart);
+
+            // Per-line color markers written by Python's
+            // format_match_text. \x01 = red (seeker), \x02 = green
+            // (hider). Strip the marker before rendering.
+            const char *renderStart = lineStart;
+            int renderLen = lineLen;
+            uint32_t lineColor = packedWhite;
+            if (renderLen > 0)
+            {
+                if (*renderStart == '\x01')
+                {
+                    lineColor = 0xFF4040FFu;
+                    ++renderStart;
+                    --renderLen;
+                }
+                else if (*renderStart == '\x02')
+                {
+                    lineColor = 0x40FF40FFu;
+                    ++renderStart;
+                    --renderLen;
+                }
+            }
+
+            const int copyLen =
+                (renderLen < static_cast<int>(sizeof(lineBuf)) - 1) ? renderLen : static_cast<int>(sizeof(lineBuf)) - 1;
+            std::memcpy(lineBuf, renderStart, copyLen);
+            lineBuf[copyLen] = '\0';
+
+            if (copyLen == 0)
+            {
+                y -= kLobbyHudLineHeight;
+            }
+            else
+            {
+                ttyd::fontmgr::FontDrawColor(reinterpret_cast<uint8_t *>(&lineColor));
+                ttyd::fontmgr::FontDrawString(RightAlignX(lineBuf, kLobbyHudAnchorX, kLobbyHudFontScale), y, lineBuf);
+                y -= kLobbyHudLineHeight;
+            }
+
+            if (cur < end && *cur == '\n')
+                ++cur;
+        }
+    }
+
+    // ====================================================================
+    // SFX hook entry points (called from OWR.cpp psndSFX*Hook)
+    // ====================================================================
+    //
+    // OnLocalSfxFired runs on every psndSFXOn[/3D] call. It records the
+    // (channel, sfxId) mapping for state-sync sampling and pushes a
+    // start event onto the SFX ring (which receivers consult for one-
+    // shot replay). OnLocalSfxStopped runs on every psndSFXOff and
+    // just frees the channel map entry; loop termination is handled
+    // by state-sync diff on the receiver side.
+
+    KEEP_FUNC void OnLocalSfxFired(int sfxId, bool is3D, int channel)
+    {
+        if (!g_initialized)
+            return;
+        if (g_inReceiverReplay)
+            return;
+
+        // Record the channel mapping so:
+        //  (a) the publish-time SampleActiveLoops sees this sfxId
+        //      until the engine stops it;
+        //  (b) when the engine eventually calls psndSFXOff on this
+        //      channel, OnLocalSfxStopped can free the entry so the
+        //      next publish drops it from activeLoops.
+        // For one-shots that didn't allocate (channel == -1), this
+        // is a no-op (RecordLocalChannel filters them out). Channel 0
+        // is a real channel index, NOT a sentinel.
+        RecordLocalChannel(channel, static_cast<uint16_t>(sfxId & 0xFFFF));
+
+        // Push a start event regardless. Receivers filter loops out of
+        // SFX-ring replay (they handle them via state-sync diff), but
+        // one-shots flow through normally. The ring-side filter on
+        // receivers depends on knowing if the sfxId is in
+        // peer.activeLoops, which they have at receive time.
+        if (!SfxIsAllowed(sfxId))
+            return;
+        PushSfxRingEvent(static_cast<uint16_t>(sfxId & 0xFFFF), is3D ? kSfxFlag3D : 0);
+    }
+
+    // v26: stop hook just frees the channel map entry. The next publish
+    // will omit that sfxId from activeLoops, and receivers will diff
+    // and stop their tracked loop. No event ring traffic for stops.
+    KEEP_FUNC void OnLocalSfxStopped(int channel)
+    {
+        if (!g_initialized)
+            return;
+        if (g_inReceiverReplay)
+            return;
+
+        RemoveLocalChannel(channel);
+    }
+} // namespace mod::ghosts

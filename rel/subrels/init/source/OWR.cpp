@@ -973,6 +973,7 @@ namespace mod::owr
         g_psndSFXOn_trampoline = patch::hookFunction(pmario_sound::psndSFXOn, psndSFXOnHook);
         g_psndSFXOn3D_trampoline = patch::hookFunction(pmario_sound::psndSFXOn_3D, psndSFXOn3DHook);
         g_psndSFXOff_trampoline = patch::hookFunction(pmario_sound::psndSFXOff, psndSFXOffHook);
+        g_npcSetupBattleInfo_trampoline = patch::hookFunction(::npcSetupBattleInfo, npcSetupBattleInfoHook);
 
         // Hook gaugeDisp with a standard branch since the original function does not need to be called
         patch::writeBranch(statuswindow::gaugeDisp, DisplayStarPowerOrbs);
