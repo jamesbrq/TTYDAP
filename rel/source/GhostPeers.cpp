@@ -944,6 +944,7 @@ namespace mod::ghosts
             const uint8_t selfTeamId = *GetSelfTeamIdPtr();
             const bool friendlyFire = (*GetSelfFriendlyFirePtr() != 0);
 
+            const float meY = me->playerPosition.y;
             for (int i = 0; i < kMaxPeers; ++i)
             {
                 const PeerSlot &peer = block->peers[i];
@@ -955,6 +956,16 @@ namespace mod::ghosts
                     continue;
 
                 if (peer.teamId != kTeamNone && peer.teamId == selfTeamId && !friendlyFire)
+                    continue;
+
+                // Vertical tolerance: reject hits when the peer is more
+                // than kDefaultHitVerticalTolerance units above or below
+                // us. Stops "stacked-platform" false positives where the
+                // horizontal cylinder check would otherwise land a hit
+                // through a floor/ceiling.
+                const float dy = peer.position.y - meY;
+                const float absDy = dy < 0.0f ? -dy : dy;
+                if (absDy > kDefaultHitVerticalTolerance)
                     continue;
 
                 NpcEntry fakeNpc {};

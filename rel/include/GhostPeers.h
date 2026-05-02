@@ -112,8 +112,14 @@ namespace mod::ghosts
     constexpr uint8_t kHitKindHammer = 1;
 
     constexpr const char *kDefaultHitPoseName = "M_N_7";
-    constexpr float kDefaultHitReachScale = 1.0f;
-    constexpr float kDefaultHitPeerWidth = 20.0f;
+    // Widened in P2.1 from 1.0/15.0 so HnS seekers can land hammer
+    // hits without near-pixel-perfect alignment.
+    constexpr float kDefaultHitReachScale = 1.25f;
+    constexpr float kDefaultHitPeerWidth = 30.0f;
+    // Vertical tolerance for the cylinder check — hits are rejected
+    // when |peer.y - me.y| exceeds this. Keeps stacked-platform
+    // sanity (peer two floors below shouldn't get hit).
+    constexpr float kDefaultHitVerticalTolerance = 80.0f;
 
     constexpr uint8_t kTeamNone = 0;
     constexpr uint8_t kTeamRed = 1;
