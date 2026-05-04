@@ -185,8 +185,25 @@ namespace mod::ghosts
             0x192, 0x194, 0x195, 0x196, 0x197, 0x199, 0x19B, 0x19C,
             0x19E, 0x19F, 0x1A1, 0x1A2, 0x1A4, 0x1A5, 0x1A6, 0x1A8,
             0x1A9, 0x1AA, 0x1AB, 0x200, 0x3BA, 0x3BB, 0x3BC, 0x3ED,
-            0x3EF, 0x42A, 0x42B, 0x5D9, 0x5DA, 0x5F7, 0x5F9, 0x5FA,
+            0x3EF, 0x42A, 0x42B,
+            0x42E,                                  // SFX_STG4_WAVE1
+            0x5D9, 0x5DA, 0x5F7, 0x5F9, 0x5FA,
+            0x686,                                  // SFX_STG5_WAVE1 (Keelhaul Key)
             0x6EF, 0x702, 0x703, 0x704, 0x705, 0x7B5,
+            // Water / sea / ship ambient — re-added after the
+            // "Mario-only substring" pass dropped them. Routes
+            // through psndSFXOn so the existing hook captures them;
+            // mot_ship.s itself does not call psndENV*. Restores
+            // boat-ride water ambient for peers on the Rogueport ↔
+            // Keelhaul Key boat sequence.
+            0x8D9, 0x8DA, 0x8DB, 0x8DC,             // SFX_EVT_GAME_BOAT_*
+            0x1013, 0x1014,                          // SFX_AMB_SEA1/2
+            0x1015, 0x1016,                          // SFX_ENV_SHIP1/2
+            0x1017,                                  // SFX_ENV_SEA_GULL1
+            0x1018,                                  // SFX_AMB_SHIP_CREAK1
+            0x1027, 0x1028,                          // SFX_ENV_WATER1/2
+            0x1040,                                  // SFX_AMB_WATER3
+            0x1048, 0x1049,                          // SFX_AMB_WATER_WOOD1/2
         };
         constexpr int kSfxWhitelistLen = sizeof(kSfxWhitelist) / sizeof(kSfxWhitelist[0]);
 
@@ -1269,6 +1286,40 @@ namespace mod::ghosts
             }
         }
 
+        // Debug /hns play_sfx command bus. Edge-detect on debugSfxSeq
+        // and fire psndSFXOn for the requested id. The OWR.cpp hook
+        // captures the call into OnLocalSfxFired (where SfxIsAllowed
+        // gates whether it propagates to peers), so this can also be
+        // used to verify whether a candidate id is whitelisted.
+        {
+            static uint8_t s_lastDebugSfxSeq = 0;
+            const uint8_t curSeq = g_ghostState->debugSfxSeq;
+            if (curSeq != s_lastDebugSfxSeq)
+            {
+                s_lastDebugSfxSeq = curSeq;
+                const int sfxId = static_cast<int>(g_ghostState->debugSfxId);
+                if (sfxId > 0)
+                {
+                    if (g_ghostState->debugSfxFlags & 0x01)
+                    {
+                        ttyd::mario::Player *me = ttyd::mario::marioGetPtr();
+                        if (me != nullptr)
+                        {
+                            ttyd::pmario_sound::psndSFXOn_3D(sfxId, &me->playerPosition);
+                        }
+                        else
+                        {
+                            ttyd::pmario_sound::psndSFXOn(sfxId);
+                        }
+                    }
+                    else
+                    {
+                        ttyd::pmario_sound::psndSFXOn(sfxId);
+                    }
+                }
+            }
+        }
+
         for (int i = 0; i < kMaxPeers; ++i)
         {
             const PeerSlot &peer = block->peers[i];
@@ -1362,9 +1413,31 @@ namespace mod::ghosts
                     activePoseId = slot.forwardPoseId;
                 }
 
-                if (activePoseId >= 0 && peer.paperLocalTime != -1.0f)
+                if (peer.paperLocalTime != -1.0f)
                 {
-                    ttyd::animdrv::animPoseSetLocalTime(activePoseId, peer.paperLocalTime);
+                    // The engine's animPoseSetLocalTime call site
+                    // depends on which pose the motion targets:
+                    //   - mot_jabara (M_W_6, motion_id 0x14) and
+                    //     mot_hammer2 (P_H_1A, motion_id 0x13) pin
+                    //     the body pose (forward/rear/effects).
+                    //   - N_marioForceVivianAnime in party_vivian.s
+                    //     pins the *paper* pose (mp+0x240) — the
+                    //     animId index returned by marioAnimeId
+                    //     resolves to mp[0x240] for Vivian.
+                    // Pin both so any motion that uses the
+                    // paperLocalTime field works without the publisher
+                    // having to tell us which pose to target. The
+                    // body-pose pin is a near-free no-op when the
+                    // active body pose is static (M_S_1 during the
+                    // Vivian rise sub-phase).
+                    if (activePoseId >= 0)
+                    {
+                        ttyd::animdrv::animPoseSetLocalTime(activePoseId, peer.paperLocalTime);
+                    }
+                    if (slot.paperPoseId >= 0)
+                    {
+                        ttyd::animdrv::animPoseSetLocalTime(slot.paperPoseId, peer.paperLocalTime);
+                    }
                 }
             }
         }
@@ -1445,6 +1518,16 @@ namespace mod::ghosts
                         shortName = reinterpret_cast<const char *>(arr[color & 3]);
                         break;
                     }
+                    case 0x1C:
+                        // kVivian (Veil — hide in shadow). Paper rig
+                        // is "p_bibi" (str_p_bibi_802f898c in
+                        // party_vivian.s). Without this case the
+                        // publisher wrote an empty paper_agb during
+                        // Veil, so receivers never loaded p_bibi and
+                        // the ghost rendered the M_B_3 body pose
+                        // without the shadow paper effect.
+                        shortName = reinterpret_cast<const char *>(0x802F898C);
+                        break;
                     case 0x1D:
                     {
                         const int8_t dokanType = *reinterpret_cast<const int8_t *>(mpBytes + 0x3E);
@@ -1514,6 +1597,19 @@ namespace mod::ghosts
                 ttyd::mario::Player *me = ttyd::mario::marioGetPtr();
                 if (me != nullptr && g_ghostState != nullptr)
                 {
+                    // Take Mario out of paper / tube mode before we
+                    // force-apply the stagger pose. Mirrors the start
+                    // of N_marioForceVivianAnime in party_vivian.s
+                    // (marioPaperOff + marioChgPaper(0)). Without
+                    // this, a hit while in tube mode (motion_id 0x14
+                    // / kJabara) visually triggers M_N_7 but leaves
+                    // Mario engine-wise still papered up, and the
+                    // engine re-applies the tube paper anim next
+                    // frame, snapping back into the rolled state.
+                    // Idempotent if Mario isn't already papered.
+                    ttyd::mario::marioPaperOff();
+                    ttyd::mario::marioChgPaper(nullptr);
+
                     // Mirrors the evt_mario_set_pose "name not in
                     // a_mario_group" path (evt_mario.s 4686-4693).
                     // M_N_7 lives in e_mario (effects pose), not

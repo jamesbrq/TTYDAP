@@ -176,10 +176,10 @@ namespace ttyd::mario
         // marioChkInScreen
         // marioGetScreenPos
         // marioPaperLightOff
-        // marioPaperOff
-        // marioPaperOn
+        void marioPaperOff();
+        void marioPaperOn(const char *agbName);
         // marioSetPaperAnimeLocalTime
-        // marioChgPaper
+        void marioChgPaper(const char *paperAnimName);
         // marioChgPoseTime
         // marioChgPose
         uint32_t toDotMarioPose();

@@ -226,6 +226,16 @@ namespace mod::ghosts
         uint8_t pad_v29[2];
         char pendingTeleportMap[16];
         char pendingTeleportBero[16];
+
+        // Debug "play this SFX" command bus. Python writes debugSfxId
+        // and bumps debugSfxSeq; mod's UpdateAll edge-detects on the
+        // sequence counter and calls psndSFXOn(id) (or psndSFXOn_3D
+        // at the local Mario position if debugSfxFlags bit 0 is set).
+        // Driven by /hns play_sfx <id> [3d] for ad-hoc SFX-ID probing.
+        uint32_t debugSfxId;
+        uint8_t  debugSfxSeq;
+        uint8_t  debugSfxFlags;   // bit 0 = use 3D variant
+        uint8_t  pad_debug_sfx[2];
     };
 
     static_assert(offsetof(GhostState, peerBlock) == 0, "peerBlock must start at offset 0");
@@ -249,7 +259,10 @@ namespace mod::ghosts
     static_assert(offsetof(GhostState, pendingTeleportSeq) == 4657, "pendingTeleportSeq offset drift");
     static_assert(offsetof(GhostState, pendingTeleportMap) == 4660, "pendingTeleportMap offset drift");
     static_assert(offsetof(GhostState, pendingTeleportBero) == 4676, "pendingTeleportBero offset drift");
-    static_assert(sizeof(GhostState) == 4692, "GhostState total size drift - check Python GS_TOTAL_SIZE");
+    static_assert(offsetof(GhostState, debugSfxId)    == 4692, "debugSfxId offset drift");
+    static_assert(offsetof(GhostState, debugSfxSeq)   == 4696, "debugSfxSeq offset drift");
+    static_assert(offsetof(GhostState, debugSfxFlags) == 4697, "debugSfxFlags offset drift");
+    static_assert(sizeof(GhostState) == 4700, "GhostState total size drift - check Python GS_TOTAL_SIZE");
 
     // Global pointer to the heap-allocated GhostState. Set by Init();
     // null before that. All accessors below dereference through this.
