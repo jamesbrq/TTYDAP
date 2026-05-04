@@ -5,10 +5,14 @@
 #include "ttyd/evt_cam.h"
 #include "ttyd/evt_item.h"
 #include "ttyd/evt_mario.h"
+#include "ttyd/evt_msg.h"
 #include "ttyd/evt_npc.h"
+#include "ttyd/evt_pouch.h"
 #include "ttyd/evtmgr_cmd.h"
 #include "ttyd/gor_02.h"
+#include "ttyd/gor_irai.h"
 #include "ttyd/mario_pouch.h"
+#include "ttyd/swdrv.h"
 
 #include <cstdint>
 
@@ -21,14 +25,33 @@ extern int32_t gor_10_init_evt[];
 extern int32_t gor_12_init_evt[];
 extern int32_t gor_11_init_evt[];
 extern int32_t gor_christine_nakama[];
+extern int32_t gor_irai_msg_exposition[];
+extern int32_t gor_irai_main[];
+extern int32_t gor_irai_tenshu_main[];
 
 // Assembly
 extern int32_t gor_irai_init_func[];
+extern int32_t gor_irai_main_func[];
+extern int32_t gor_irai_window_disp[];
 extern int32_t gor_keijiban_data_make[];
 extern int32_t gor_monosiri_check[];
 extern int32_t gor_evt_exchange_msg_set[];
 extern int32_t gor_exchange_ret_tbl_no[];
 extern int32_t gor_exchange_ryokin_medal[];
+
+extern "C" {
+    void bIraiCmp1(); void bIraiCmp1Return();
+    void bIraiCmp2(); void bIraiCmp2Return();
+    void bIraiCmp3(); void bIraiCmp3Return();
+    void bIraiCmp4(); void bIraiCmp4Return();
+    void bIraiCmp5(); void bIraiCmp5Return();
+    void bIraiCmp6(); void bIraiCmp6Return();
+    void bIraiCmp7(); void bIraiCmp7Return();
+    void bIraiCmp8(); void bIraiCmp8Return();
+    void bIraiCmp9(); void bIraiCmp9Return();
+    void bIraiCompact(); void bIraiCompactReturn();
+    void bIraiRenderRedCheck(); void bIraiRenderRedCheckReturn();
+}
 
 const char goombella[] = "\x83\x4C\x83\x6D\x82\xB6\x82\xA2";
 
@@ -58,6 +81,31 @@ EVT_DEFINE_USER_FUNC(checkChapterClears)
     return 2;
 }
 
+EVT_DEFINE_USER_FUNC(iraiSetStartFlag)
+{
+    (void)isFirstCall;
+
+    ttyd::swdrv::swSet(6130 + ttyd::evtmgr_cmd::evtGetValue(evt, evt->evtArguments[0]));
+    return 2;
+}
+
+EVT_DEFINE_USER_FUNC(iraiGetStartFlag)
+{
+    (void)isFirstCall;
+    int q = ttyd::evtmgr_cmd::evtGetValue(evt, evt->evtArguments[0]);
+    bool isAccepted = ttyd::swdrv::swGet(6130 + q);
+    ttyd::evtmgr_cmd::evtSetValue(evt, evt->evtArguments[1], isAccepted ? 1 : 0);
+    return 2;
+}
+
+EVT_DEFINE_USER_FUNC(iraiClearStartFlag)
+{
+    (void)isFirstCall;
+
+    ttyd::swdrv::swClear(6130 + ttyd::evtmgr_cmd::evtGetValue(evt, evt->evtArguments[0]));
+    return 2;
+}
+
 // clang-format off
 EVT_BEGIN(party_evt)
 	USER_FUNC(evt_mario::evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
@@ -70,6 +118,57 @@ EVT_BEGIN(party_evt)
 	USER_FUNC(evt_mario::evt_mario_key_onoff, 1)
 	RETURN()
 EVT_END()
+
+EVT_BEGIN(irai_cancel_check_evt)
+    IF_EQUAL(LW(0), -1)
+        SET(LW(15), 1)
+        RETURN()
+    END_IF()
+    USER_FUNC(iraiGetStartFlag, LW(11), LW(15))
+    IF_EQUAL(LW(15), 1)
+        USER_FUNC(evt_msg::evt_msg_print, 1, PTR("Do you want to cancel\nthis request?\n<o>"), 0, 0)
+        USER_FUNC(evt_msg::evt_msg_select, 1, PTR("<select 0 2 0 60>\nYes\nNo"))
+        IF_NOT_EQUAL(LW(0), 0)
+            USER_FUNC(evt_msg::evt_msg_continue)
+        ELSE()
+            USER_FUNC(evt_msg::evt_msg_print_add, 0, PTR("irai_09"))
+            USER_FUNC(evt_msg::evt_msg_select, 0, PTR("irai_01"))
+            IF_EQUAL(LW(0), 0)
+                USER_FUNC(evt_pouch::evt_pouch_get_coin, LW(2))
+                IF_LARGE_EQUAL(LW(2), 30)
+                    USER_FUNC(evt_msg::evt_msg_print_add, 0, PTR("irai_10"))
+                    USER_FUNC(evt_pouch::evt_pouch_add_coin, -30)
+                    USER_FUNC(iraiClearStartFlag, LW(11))
+                ELSE()
+                    USER_FUNC(evt_msg::evt_msg_print_add, 0, PTR("irai_11"))
+                END_IF()
+            ELSE()
+                USER_FUNC(evt_msg::evt_msg_print_add, 0, PTR("irai_12"))
+            END_IF()
+        END_IF()
+    END_IF()
+    SET(LW(0), LW(11))
+    ADD(LW(0), -1)
+    RETURN()
+EVT_END()
+
+EVT_BEGIN(irai_gswf_patch)
+    USER_FUNC(iraiSetStartFlag, LW(11))
+EVT_PATCH_END()
+
+EVT_BEGIN(irai_tenshu_gswf_patch)
+    USER_FUNC(iraiClearStartFlag, LW(11))
+EVT_PATCH_END()
+
+EVT_BEGIN(irai_cancel_check_hook)
+    RUN_CHILD_EVT(irai_cancel_check_evt)
+    IF_EQUAL(LW(15), 1)
+        USER_FUNC(gor_irai::gor_irai_end_func)
+        USER_FUNC(evt_mario::evt_mario_key_onoff, 1)
+        RETURN()
+    END_IF()
+    SET_READ(&gor_irai_msg_exposition)
+EVT_PATCH_END()
 // clang-format on
 
 void ApplyGorMiscPatches()
@@ -104,16 +203,51 @@ void ApplyGorMiscPatches()
     gor_12_init_evt[24] = GSW(1708);
     gor_12_init_evt[25] = 18;
 
-    gor_irai_init_func[33] = 0x386006A4;  // li r3, 0x6A4 (GSW(1700))
-    gor_irai_init_func[43] = 0x2C030000;  // cmpwi r3, 0x0
-    gor_irai_init_func[56] = 0x2C030000;  // cmpwi r3, 0x0
-    gor_irai_init_func[64] = 0x2C030000;  // cmpwi r3, 0x0
-    gor_irai_init_func[72] = 0x2C030000;  // cmpwi r3, 0x0
-    gor_irai_init_func[80] = 0x2C030000;  // cmpwi r3, 0x0
-    gor_irai_init_func[86] = 0x2C030000;  // cmpwi r3, 0x0
-    gor_irai_init_func[90] = 0x2C030000;  // cmpwi r3, 0x0
-    gor_irai_init_func[98] = 0x2C030000;  // cmpwi r3, 0x0
-    gor_irai_init_func[106] = 0x2C030000; // cmpwi r3, 0x0
+    patch::writePatch(&gor_irai_main[39], irai_cancel_check_hook, sizeof(irai_cancel_check_hook));
+    patch::writePatch(&gor_irai_main[106], irai_gswf_patch, sizeof(irai_gswf_patch));
+
+    patch::writePatch(&gor_irai_tenshu_main[215], irai_tenshu_gswf_patch, sizeof(irai_tenshu_gswf_patch));
+
+    patch::writeBranchPair(&gor_irai_init_func[43],
+                           reinterpret_cast<void *>(bIraiCmp1),
+                           reinterpret_cast<void *>(bIraiCmp1Return));
+    patch::writeBranchPair(&gor_irai_init_func[56],
+                           reinterpret_cast<void *>(bIraiCmp2),
+                           reinterpret_cast<void *>(bIraiCmp2Return));
+    patch::writeBranchPair(&gor_irai_init_func[64],
+                           reinterpret_cast<void *>(bIraiCmp3),
+                           reinterpret_cast<void *>(bIraiCmp3Return));
+    patch::writeBranchPair(&gor_irai_init_func[72],
+                           reinterpret_cast<void *>(bIraiCmp4),
+                           reinterpret_cast<void *>(bIraiCmp4Return));
+    patch::writeBranchPair(&gor_irai_init_func[80],
+                           reinterpret_cast<void *>(bIraiCmp5),
+                           reinterpret_cast<void *>(bIraiCmp5Return));
+    patch::writeBranchPair(&gor_irai_init_func[86],
+                           reinterpret_cast<void *>(bIraiCmp6),
+                           reinterpret_cast<void *>(bIraiCmp6Return));
+    patch::writeBranchPair(&gor_irai_init_func[90],
+                           reinterpret_cast<void *>(bIraiCmp7),
+                           reinterpret_cast<void *>(bIraiCmp7Return));
+    patch::writeBranchPair(&gor_irai_init_func[98],
+                           reinterpret_cast<void *>(bIraiCmp8),
+                           reinterpret_cast<void *>(bIraiCmp8Return));
+    patch::writeBranchPair(&gor_irai_init_func[106],
+                           reinterpret_cast<void *>(bIraiCmp9),
+                           reinterpret_cast<void *>(bIraiCmp9Return));
+
+    patch::writeBranchPair(&gor_irai_init_func[114],
+                           reinterpret_cast<void *>(bIraiCompact),
+                           reinterpret_cast<void *>(bIraiCompactReturn));
+
+    patch::writeIntWithCache(&gor_irai_main_func[90], 0x60000000);  // NOP
+
+    patch::writeBranchPair(&gor_irai_window_disp[430],
+                           &gor_irai_window_disp[433],
+                           reinterpret_cast<void *>(bIraiRenderRedCheck),
+                           reinterpret_cast<void *>(bIraiRenderRedCheckReturn));
+
+    patch::writeIntWithCache(&gor_irai_window_disp[434], 0x41820018);
 
     patch::writeBranchBL(&gor_keijiban_data_make[11], reinterpret_cast<void *>(bJohoyaSeqAddition));
 
