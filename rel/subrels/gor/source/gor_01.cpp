@@ -32,6 +32,8 @@ extern int32_t gor_bottakuru_init[];
 extern int32_t gor_luigi_init_01[];
 extern int32_t gor_luigi_npcEnt_01[];
 extern int32_t gor_kick2_init[];
+extern int32_t gor_borodo2_init_01[];
+extern int32_t gor_borodo2_talk_01[];
 extern int32_t gor_thief_init[];
 extern int32_t gor_thief_talk[];
 extern int32_t gor_christine_nakama_before[];
@@ -208,9 +210,26 @@ void ApplyGor01Patches()
 
     patch::writePatch(&gor_roten1_talk[0], roten1_talk_evt, sizeof(roten1_talk_evt));
     patch::writePatch(&gor_roten2_talk[0], roten2_talk_evt, sizeof(roten2_talk_evt));
+
+    gor_kuribo1_talk[1] = GSW(1734);
+    gor_kuribo1_talk[2] = 1;
+    gor_kuribo1_talk[4] = GSW(1764);
+    gor_kuribo1_talk[13] = GSW(1764);
     patch::writePatch(&gor_kuribo1_talk[25], kuribo1_talk_evt, sizeof(kuribo1_talk_evt));
+
     patch::writePatch(&gor_kuribo2_talk[0], kuribo2_talk_evt, sizeof(kuribo2_talk_evt));
+
+    gor_kuribo3_talk[1] = GSW(1732);
+    gor_kuribo3_talk[2] = 1;
+    gor_kuribo3_talk[3] = EVT_HELPER_CMD(2, 26);
+    gor_kuribo3_talk[4] = GSW(1762);
+    gor_kuribo3_talk[5] = 2;
+    gor_kuribo3_talk[7] = GSW(1762);
+    gor_kuribo3_talk[33] = GSW(1762);
+    gor_kuribo3_talk[57] = GSW(1732);
+    gor_kuribo3_talk[58] = 2;
     patch::writePatch(&gor_kuribo3_talk[68], kuribo3_talk_evt, sizeof(kuribo3_talk_evt));
+
     patch::writePatch(&gor_chusan1_talk[104], chusan1_talk_evt, sizeof(chusan1_talk_evt));
     patch::writePatch(&gor_chusan2_talk[0], chusan2_talk_evt, sizeof(chusan2_talk_evt));
     patch::writePatch(&gor_bomhei_talk[0], bomhei_talk_evt, sizeof(bomhei_talk_evt));
@@ -241,6 +260,22 @@ void ApplyGor01Patches()
     gor_kick2_init[2] = EVT_HELPER_CMD(1, 36);
     gor_kick2_init[3] = 7;
     gor_kick2_init[4] = EVT_HELPER_CMD(0, 0);
+
+    gor_borodo2_init_01[1] = GSW(1734);
+    gor_borodo2_init_01[2] = 1;
+    gor_borodo2_init_01[4] = GSW(1764);
+    gor_borodo2_init_01[5] = 3;
+    gor_borodo2_init_01[7] = GSW(1764);
+    gor_borodo2_init_01[8] = 3;
+    gor_borodo2_init_01[10] = GSW(1764);
+    gor_borodo2_init_01[11] = 3;
+    gor_borodo2_init_01[13] = GSW(1764);
+    gor_borodo2_init_01[14] = 3;
+
+    gor_borodo2_talk_01[264] = GSW(1764);
+    gor_borodo2_talk_01[265] = 4;
+    gor_borodo2_talk_01[270] = GSW(1734);
+    gor_borodo2_talk_01[271] = 2;
 
     gor_thief_init[1] = GSW(1700);
 
@@ -299,6 +334,7 @@ void ApplyGor01Patches()
     gor_01_init_evt[309] = 1;
     gor_01_init_evt[321] = GSW(1700);
     gor_01_init_evt[322] = 5;
+    gor_01_init_evt[375] = GSW(1731);
     gor_01_init_evt[444] = GSWF(1195);
     gor_01_init_evt[523] = GSW(1708);
     gor_01_init_evt[524] = 18;

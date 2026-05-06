@@ -24,6 +24,8 @@ extern int32_t gor_kurihakase_init[];
 extern int32_t gor_kurihakase_talk[];
 extern int32_t gor_oyabun_talk[];
 extern int32_t gor_tozokudan1_talk[];
+extern int32_t gor_tozokudan2_init[];
+extern int32_t gor_evt_unlock_mario[];
 extern int32_t gor_tozokudan2_talk[];
 extern int32_t gor_sanders_init_02[];
 extern int32_t gor_sanders_talk_02[];
@@ -33,7 +35,8 @@ extern int32_t gor_roten3_talk[];
 extern int32_t gor_borodo1_init[];
 extern int32_t gor_borodo1_regl[];
 extern int32_t gor_borodo1_talk[];
-extern int32_t gor_borodo2_talk[];
+extern int32_t gor_borodo2_init_02[];
+extern int32_t gor_borodo2_talk_02[];
 extern int32_t gor_kuragarisan_write_name[];
 extern int32_t gor_kuragarisan_talk[];
 extern int32_t gor_luigi_init_02[];
@@ -55,6 +58,7 @@ extern int32_t gor_epigraphy_map_after_stage6[];
 extern int32_t gor_kurihakase_after3minutes[];
 extern int32_t gor_evt_monosiri[];
 extern int32_t gor_02_init_evt[];
+extern int32_t gor_evt_unlock_npc[];
 
 // clang-format off
 EVT_DEFINE_USER_FUNC(getMonosiriItem)
@@ -524,7 +528,18 @@ void ApplyGor02Patches()
 
     patch::writePatch(&gor_tozokudan1_talk[208], tozokudan1_talk_hook, sizeof(tozokudan1_talk_hook));
 
+	gor_tozokudan2_init[6] = GSW(1731);
+
+	gor_evt_unlock_mario[49] = GSW(1731);
+	gor_evt_unlock_mario[50] = 2;
+
+	gor_tozokudan2_talk[1] = GSW(1731);
+	gor_tozokudan2_talk[31] = GSW(1761);
+	gor_tozokudan2_talk[40] = GSW(1761);
     patch::writePatch(&gor_tozokudan2_talk[53], tozokudan2_talk_hook, sizeof(tozokudan2_talk_hook));
+	
+	gor_evt_unlock_npc[77] = GSW(1731);
+	gor_evt_unlock_npc[78] = 2;
 
     gor_sanders_init_02[6] = GSW(1705);
     gor_sanders_init_02[8] = 2;
@@ -542,8 +557,19 @@ void ApplyGor02Patches()
     gor_sanders_talk_02[569] = GSW(1705);
     gor_sanders_talk_02[570] = 5;
 
+	gor_kuribo4_talk[1] = GSW(1732);
+	gor_kuribo4_talk[2] = 1;
+    gor_kuribo4_talk[4] = GSW(1762);
+    gor_kuribo4_talk[39] = GSW(1762);
+    gor_kuribo4_talk[40] = 2;
     patch::writePatch(&gor_kuribo4_talk[184], kuribo4_talk_evt, sizeof(kuribo4_talk_evt));
+
     patch::writePatch(&gor_chusan3_talk[0], chusan3_talk_evt, sizeof(chusan3_talk_evt));
+
+	gor_roten3_talk[1] = GSW(1733);
+	gor_roten3_talk[2] = 1;
+    gor_roten3_talk[88] = GSW(1733);
+    gor_roten3_talk[89] = 2;
     patch::writePatch(&gor_roten3_talk[0], roten3_talk_evt, sizeof(roten3_talk_evt));
 
     gor_borodo1_talk[6] = GSW(1705); // HOOK
@@ -556,7 +582,20 @@ void ApplyGor02Patches()
 
     patch::writePatch(&gor_borodo1_talk[0], borodo1_talk_evt, sizeof(borodo1_talk_evt));
 
-    patch::writePatch(&gor_borodo2_talk[24], borodo2_talk_evt, sizeof(borodo2_talk_evt));
+	gor_borodo2_init_02[6] = GSW(1734);
+    gor_borodo2_init_02[7] = 1;
+    gor_borodo2_init_02[8] = EVT_HELPER_CMD(2, 29);
+    gor_borodo2_init_02[9] = GSW(1764);
+    gor_borodo2_init_02[10] = 2;
+
+	gor_borodo2_talk_02[1] = GSW(1734);
+	gor_borodo2_talk_02[2] = 1;
+    gor_borodo2_talk_02[4] = GSW(1764);
+    gor_borodo2_talk_02[5] = 1;
+    gor_borodo2_talk_02[7] = GSW(1764);
+    gor_borodo2_talk_02[8] = 1;
+    gor_borodo2_talk_02[16] = GSW(1764);
+    patch::writePatch(&gor_borodo2_talk_02[24], borodo2_talk_evt, sizeof(borodo2_talk_evt));
 
     gor_kuragarisan_write_name[428] = GSW(1704);
     gor_kuragarisan_write_name[429] = 1;

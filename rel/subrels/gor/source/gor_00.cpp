@@ -63,6 +63,8 @@ extern int32_t gor_tentyou_init[];
 extern int32_t gor_tentyou_talk[];
 extern int32_t gor_tenin_init[];
 extern int32_t gor_tenin_talk[];
+extern int32_t gor_borodo2_init_00[];
+extern int32_t gor_borodo2_talk_00[];
 extern int32_t gor_mokorim_init[];
 extern int32_t gor_mokorim_talk[];
 extern int32_t gor_luigi_init_00[];
@@ -864,6 +866,18 @@ void ApplyGor00Patches()
     gor_tenin_talk[1] = GSW(1705);
     gor_tenin_talk[3] = 1;
     gor_tenin_talk[4] = 7;
+
+	gor_borodo2_init_00[1] = GSW(1734);
+    gor_borodo2_init_00[2] = 1;
+    gor_borodo2_init_00[4] = GSW(1764);
+    gor_borodo2_init_00[5] = 2;
+    gor_borodo2_init_00[7] = GSW(1764);
+    gor_borodo2_init_00[8] = 2;
+    gor_borodo2_init_00[10] = GSW(1764);
+    gor_borodo2_init_00[11] = 2;
+
+	gor_borodo2_talk_00[7] = GSW(1764);
+	gor_borodo2_talk_00[8] = 3;
 
     patch::writePatch(&gor_mokorim_init[2], mokorim_init_evt, sizeof(mokorim_init_evt));
 
