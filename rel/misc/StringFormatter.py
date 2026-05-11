@@ -280,6 +280,20 @@ strings_dict = {
 
     "boat_mode_desc": "Boat Mode",
 
+    "walrus_whiskers_name": "Walrus Whiskers",
+
+    "walrus_whiskers_desc": "Some Walrus Whiskers.\nThey look... tasty?",
+
+    "suifubomb_a_walrus": ("...You're joking.<wait 250> \n"
+                "Those are real walrus whiskers!\n<k>\n<p>\n"
+                "I was being sarcastic, you\n"
+                "barnacle!<wait 250> But I'm not one\n"
+                "to turn down a free meal!\n<k>\n<p>\n"
+                "Chomp nomp gromp shnorp...<wait 250> \n"
+                "Yum, that hit the spot!\n<k>\n<p>\n"
+                "Who knew? Now here's\n"
+                "your reward!\n<k>"),
+
     "stg1_gon_33_18": ("<system>\nYou got a Crystal Star!\n"
                        "<k>\n<p>\n"
                        "And you learned the special\nmove Earth Tremor!\n<k>"),

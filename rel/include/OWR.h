@@ -155,4 +155,6 @@ namespace mod::owr
     extern const char *progressiveHammerName;
     extern const char *rshNode;
     extern const char *las_09Node;
+    extern const char *walrusWhiskersName;
+    extern const char *walrusWhiskersDescription;
 } // namespace mod::owr

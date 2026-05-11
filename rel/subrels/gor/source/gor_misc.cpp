@@ -51,6 +51,8 @@ extern "C" {
     void bIraiCmp9(); void bIraiCmp9Return();
     void bIraiCompact(); void bIraiCompactReturn();
     void bIraiRenderRedCheck(); void bIraiRenderRedCheckReturn();
+    void bIraiRenderGreyCheck(); void bIraiRenderGreyCheckReturn();
+    void bIraiMainCompleteCheck(); void bIraiMainCompleteCheckReturn();
 }
 
 const char goombella[] = "\x83\x4C\x83\x6D\x82\xB6\x82\xA2";
@@ -85,16 +87,16 @@ EVT_DEFINE_USER_FUNC(iraiSetStartFlag)
 {
     (void)isFirstCall;
 
-    ttyd::swdrv::swSet(6130 + ttyd::evtmgr_cmd::evtGetValue(evt, evt->evtArguments[0]));
+    ttyd::swdrv::swByteSet(1730 + ttyd::evtmgr_cmd::evtGetValue(evt, evt->evtArguments[0]), 1);
     return 2;
 }
 
 EVT_DEFINE_USER_FUNC(iraiGetStartFlag)
 {
     (void)isFirstCall;
-    int q = ttyd::evtmgr_cmd::evtGetValue(evt, evt->evtArguments[0]);
-    bool isAccepted = ttyd::swdrv::swGet(6130 + q);
-    ttyd::evtmgr_cmd::evtSetValue(evt, evt->evtArguments[1], isAccepted ? 1 : 0);
+    ttyd::evtmgr_cmd::evtSetValue(evt,
+                                  evt->evtArguments[1],
+                                  ttyd::swdrv::swByteGet(1730 + ttyd::evtmgr_cmd::evtGetValue(evt, evt->evtArguments[0])));
     return 2;
 }
 
@@ -102,7 +104,7 @@ EVT_DEFINE_USER_FUNC(iraiClearStartFlag)
 {
     (void)isFirstCall;
 
-    ttyd::swdrv::swClear(6130 + ttyd::evtmgr_cmd::evtGetValue(evt, evt->evtArguments[0]));
+    ttyd::swdrv::swByteSet(1730 + ttyd::evtmgr_cmd::evtGetValue(evt, evt->evtArguments[0]), 0);
     return 2;
 }
 
@@ -242,12 +244,26 @@ void ApplyGorMiscPatches()
 
     patch::writeIntWithCache(&gor_irai_main_func[90], 0x60000000);  // NOP
 
+    patch::writeBranchPair(&gor_irai_main_func[95],
+                           &gor_irai_main_func[97],
+                           reinterpret_cast<void *>(bIraiMainCompleteCheck),
+                           reinterpret_cast<void *>(bIraiMainCompleteCheckReturn));
+
+    patch::writeIntWithCache(&gor_irai_main_func[97], 0x2C030002); // cmpwi r3, 0x2
+    patch::writeIntWithCache(&gor_irai_main_func[98], 0x41820018); // beq +0x18
+
+    patch::writeBranchPair(&gor_irai_window_disp[415],
+                           &gor_irai_window_disp[417],
+                           reinterpret_cast<void *>(bIraiRenderGreyCheck),
+                           reinterpret_cast<void *>(bIraiRenderGreyCheckReturn));
+
+    patch::writeIntWithCache(&gor_irai_window_disp[417], 0x2C030002); // cmpwi r3, 0x2
+    patch::writeIntWithCache(&gor_irai_window_disp[418], 0x4082001C); // bne +0x1C
+
     patch::writeBranchPair(&gor_irai_window_disp[430],
                            &gor_irai_window_disp[433],
                            reinterpret_cast<void *>(bIraiRenderRedCheck),
                            reinterpret_cast<void *>(bIraiRenderRedCheckReturn));
-
-    patch::writeIntWithCache(&gor_irai_window_disp[434], 0x41820018);
 
     patch::writeBranchBL(&gor_keijiban_data_make[11], reinterpret_cast<void *>(bJohoyaSeqAddition));
 

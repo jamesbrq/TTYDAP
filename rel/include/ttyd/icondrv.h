@@ -585,7 +585,8 @@ namespace ttyd::icondrv
 
             // Custom icons.
             AP_ITEM,
-            RETURN_PIPE
+            RETURN_PIPE,
+            WALRUS_WHISKERS
         };
     }
 

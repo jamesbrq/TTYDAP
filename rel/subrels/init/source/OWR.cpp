@@ -736,7 +736,10 @@ namespace mod::owr
         itemDataTable[ItemId::INVALID_ITEM_PAPER_0054].name = returnPipeName;
         itemDataTable[ItemId::INVALID_ITEM_PAPER_0054].description = returnPipeDescription;
         itemDataTable[ItemId::INVALID_ITEM_PAPER_0054].icon_id = IconType::RETURN_PIPE;
-        itemDataTable[ItemId::INVALID_ITEM_PAPER_0054].type_sort_order = 1;
+        itemDataTable[ItemId::INVALID_ITEM_PAPER_0054].type_sort_order = 1;        
+        itemDataTable[ItemId::INVALID_ITEM_STAR_FN0OW_0069].name = walrusWhiskersName;
+        itemDataTable[ItemId::INVALID_ITEM_STAR_FN0OW_0069].description = walrusWhiskersDescription;
+        itemDataTable[ItemId::INVALID_ITEM_STAR_FN0OW_0069].icon_id = IconType::WALRUS_WHISKERS;
         itemDataTable[ItemId::INVALID_ITEM_PLANE_MODE_ICON].name = planeModeName;
         itemDataTable[ItemId::INVALID_ITEM_PLANE_MODE_ICON].description = planeModeDescription;
         itemDataTable[ItemId::INVALID_ITEM_PAPER_MODE_ICON].name = paperModeName;

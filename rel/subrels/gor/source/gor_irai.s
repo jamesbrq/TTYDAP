@@ -1,23 +1,3 @@
-.set IRAI_GSW_GROUP_1, 1711
-.set IRAI_GSW_GROUP_2, 1713
-.set IRAI_GSW_GROUP_3, 1703
-.set IRAI_GSW_GROUP_4, 1715
-.set IRAI_GSW_GROUP_5, 1717
-.set IRAI_GSW_GROUP_6, 1706
-.set IRAI_GSW_GROUP_7, 1706
-.set IRAI_GSW_GROUP_8, 1707
-.set IRAI_GSW_GROUP_9, 1708
-
-.set IRAI_THRESH_GROUP_1, 8
-.set IRAI_THRESH_GROUP_2, 11
-.set IRAI_THRESH_GROUP_3, 20
-.set IRAI_THRESH_GROUP_4, 8
-.set IRAI_THRESH_GROUP_5, 18
-.set IRAI_THRESH_GROUP_6, 1
-.set IRAI_THRESH_GROUP_7, 43
-.set IRAI_THRESH_GROUP_8, 16
-.set IRAI_THRESH_GROUP_9, 17
-
 .global bIraiCmp1, bIraiCmp1Return
 .global bIraiCmp2, bIraiCmp2Return
 .global bIraiCmp3, bIraiCmp3Return
@@ -35,7 +15,7 @@ bIraiCmp1:
 	stw   %r4, 0x10(%r1)
 	stw   %r5, 0x14(%r1)
 	stw   %r6, 0x18(%r1)
-	li    %r3, IRAI_GSW_GROUP_1
+	li    %r3, 1711
 	bl    swByteGet
 	lwz   %r0, 0x08(%r1)
 	mtlr  %r0
@@ -43,7 +23,7 @@ bIraiCmp1:
 	lwz   %r5, 0x14(%r1)
 	lwz   %r6, 0x18(%r1)
 	addi  %r1, %r1, 0x20
-	cmpwi %r3, IRAI_THRESH_GROUP_1
+	cmpwi %r3, 8
 bIraiCmp1Return:
 	b 0
 
@@ -54,7 +34,7 @@ bIraiCmp2:
 	stw   %r4, 0x10(%r1)
 	stw   %r5, 0x14(%r1)
 	stw   %r6, 0x18(%r1)
-	li    %r3, IRAI_GSW_GROUP_2
+	li    %r3, 1713
 	bl    swByteGet
 	lwz   %r0, 0x08(%r1)
 	mtlr  %r0
@@ -62,7 +42,7 @@ bIraiCmp2:
 	lwz   %r5, 0x14(%r1)
 	lwz   %r6, 0x18(%r1)
 	addi  %r1, %r1, 0x20
-	cmpwi %r3, IRAI_THRESH_GROUP_2
+	cmpwi %r3, 11
 bIraiCmp2Return:
 	b 0
 
@@ -73,7 +53,7 @@ bIraiCmp3:
 	stw   %r4, 0x10(%r1)
 	stw   %r5, 0x14(%r1)
 	stw   %r6, 0x18(%r1)
-	li    %r3, IRAI_GSW_GROUP_3
+	li    %r3, 1703
 	bl    swByteGet
 	lwz   %r0, 0x08(%r1)
 	mtlr  %r0
@@ -81,7 +61,7 @@ bIraiCmp3:
 	lwz   %r5, 0x14(%r1)
 	lwz   %r6, 0x18(%r1)
 	addi  %r1, %r1, 0x20
-	cmpwi %r3, IRAI_THRESH_GROUP_3
+	cmpwi %r3, 20
 bIraiCmp3Return:
 	b 0
 
@@ -92,7 +72,7 @@ bIraiCmp4:
 	stw   %r4, 0x10(%r1)
 	stw   %r5, 0x14(%r1)
 	stw   %r6, 0x18(%r1)
-	li    %r3, IRAI_GSW_GROUP_4
+	li    %r3, 1715
 	bl    swByteGet
 	lwz   %r0, 0x08(%r1)
 	mtlr  %r0
@@ -100,7 +80,7 @@ bIraiCmp4:
 	lwz   %r5, 0x14(%r1)
 	lwz   %r6, 0x18(%r1)
 	addi  %r1, %r1, 0x20
-	cmpwi %r3, IRAI_THRESH_GROUP_4
+	cmpwi %r3, 8
 bIraiCmp4Return:
 	b 0
 
@@ -111,7 +91,7 @@ bIraiCmp5:
 	stw   %r4, 0x10(%r1)
 	stw   %r5, 0x14(%r1)
 	stw   %r6, 0x18(%r1)
-	li    %r3, IRAI_GSW_GROUP_5
+	li    %r3, 1717
 	bl    swByteGet
 	lwz   %r0, 0x08(%r1)
 	mtlr  %r0
@@ -119,7 +99,7 @@ bIraiCmp5:
 	lwz   %r5, 0x14(%r1)
 	lwz   %r6, 0x18(%r1)
 	addi  %r1, %r1, 0x20
-	cmpwi %r3, IRAI_THRESH_GROUP_5
+	cmpwi %r3, 18
 bIraiCmp5Return:
 	b 0
 
@@ -130,7 +110,7 @@ bIraiCmp6:
 	stw   %r4, 0x10(%r1)
 	stw   %r5, 0x14(%r1)
 	stw   %r6, 0x18(%r1)
-	li    %r3, IRAI_GSW_GROUP_6
+	li    %r3, 1706
 	bl    swByteGet
 	lwz   %r0, 0x08(%r1)
 	mtlr  %r0
@@ -138,7 +118,7 @@ bIraiCmp6:
 	lwz   %r5, 0x14(%r1)
 	lwz   %r6, 0x18(%r1)
 	addi  %r1, %r1, 0x20
-	cmpwi %r3, IRAI_THRESH_GROUP_6
+	cmpwi %r3, 1
 bIraiCmp6Return:
 	b 0
 
@@ -149,7 +129,7 @@ bIraiCmp7:
 	stw   %r4, 0x10(%r1)
 	stw   %r5, 0x14(%r1)
 	stw   %r6, 0x18(%r1)
-	li    %r3, IRAI_GSW_GROUP_7
+	li    %r3, 1706
 	bl    swByteGet
 	lwz   %r0, 0x08(%r1)
 	mtlr  %r0
@@ -157,7 +137,7 @@ bIraiCmp7:
 	lwz   %r5, 0x14(%r1)
 	lwz   %r6, 0x18(%r1)
 	addi  %r1, %r1, 0x20
-	cmpwi %r3, IRAI_THRESH_GROUP_7
+	cmpwi %r3, 43
 bIraiCmp7Return:
 	b 0
 
@@ -168,7 +148,7 @@ bIraiCmp8:
 	stw   %r4, 0x10(%r1)
 	stw   %r5, 0x14(%r1)
 	stw   %r6, 0x18(%r1)
-	li    %r3, IRAI_GSW_GROUP_8
+	li    %r3, 1707
 	bl    swByteGet
 	lwz   %r0, 0x08(%r1)
 	mtlr  %r0
@@ -176,7 +156,7 @@ bIraiCmp8:
 	lwz   %r5, 0x14(%r1)
 	lwz   %r6, 0x18(%r1)
 	addi  %r1, %r1, 0x20
-	cmpwi %r3, IRAI_THRESH_GROUP_8
+	cmpwi %r3, 16
 bIraiCmp8Return:
 	b 0
 
@@ -187,7 +167,7 @@ bIraiCmp9:
 	stw   %r4, 0x10(%r1)
 	stw   %r5, 0x14(%r1)
 	stw   %r6, 0x18(%r1)
-	li    %r3, IRAI_GSW_GROUP_9
+	li    %r3, 1708
 	bl    swByteGet
 	lwz   %r0, 0x08(%r1)
 	mtlr  %r0
@@ -195,7 +175,7 @@ bIraiCmp9:
 	lwz   %r5, 0x14(%r1)
 	lwz   %r6, 0x18(%r1)
 	addi  %r1, %r1, 0x20
-	cmpwi %r3, IRAI_THRESH_GROUP_9
+	cmpwi %r3, 17
 bIraiCmp9Return:
 	b 0
 
@@ -236,8 +216,24 @@ bIraiCompactReturn:
 
 bIraiRenderRedCheck:
 	lwzx  %r3, %r31, %r26
-	addi  %r3, %r3, 6130
-	bl swGet
-	cmpwi %r3, 0
+	addi  %r3, %r3, 1730
+	bl swByteGet
+	li %r0, 0x1
 bIraiRenderRedCheckReturn:
+	b 0
+
+.global bIraiRenderGreyCheck, bIraiRenderGreyCheckReturn
+
+bIraiRenderGreyCheck:
+	addi  %r3, %r3, 1730
+	bl swByteGet
+bIraiRenderGreyCheckReturn:
+	b 0
+
+.global bIraiMainCompleteCheck, bIraiMainCompleteCheckReturn
+
+bIraiMainCompleteCheck:
+	addi  %r3, %r3, 1730
+	bl swByteGet
+bIraiMainCompleteCheckReturn:
 	b 0

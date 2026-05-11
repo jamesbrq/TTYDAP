@@ -530,6 +530,8 @@ void ApplyGor02Patches()
 
 	gor_tozokudan2_init[6] = GSW(1731);
 
+	gor_evt_unlock_mario[14] = EVT_HELPER_CMD(2, 91);
+	gor_evt_unlock_mario[15] = EVT_HELPER_OP(&irai_complete_item_get);
 	gor_evt_unlock_mario[49] = GSW(1731);
 	gor_evt_unlock_mario[50] = 2;
 
@@ -538,6 +540,8 @@ void ApplyGor02Patches()
 	gor_tozokudan2_talk[40] = GSW(1761);
     patch::writePatch(&gor_tozokudan2_talk[53], tozokudan2_talk_hook, sizeof(tozokudan2_talk_hook));
 	
+	gor_evt_unlock_npc[11] = EVT_HELPER_CMD(2, 91);
+    gor_evt_unlock_npc[12] = EVT_HELPER_OP(&irai_complete_item_get);
 	gor_evt_unlock_npc[77] = GSW(1731);
 	gor_evt_unlock_npc[78] = 2;
 

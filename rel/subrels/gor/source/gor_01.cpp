@@ -25,6 +25,9 @@ extern int32_t gor_roten2_talk[];
 extern int32_t gor_kuribo1_talk[];
 extern int32_t gor_kuribo2_talk[];
 extern int32_t gor_kuribo3_talk[];
+extern int32_t gor_chusan1_init[];
+extern int32_t gor_chusan1_regl[];
+extern int32_t gor_chusan1_naguru[];
 extern int32_t gor_chusan1_talk[];
 extern int32_t gor_chusan2_talk[];
 extern int32_t gor_bomhei_talk[];
@@ -226,9 +229,22 @@ void ApplyGor01Patches()
     gor_kuribo3_talk[5] = 2;
     gor_kuribo3_talk[7] = GSW(1762);
     gor_kuribo3_talk[33] = GSW(1762);
+    gor_kuribo3_talk[50] = EVT_HELPER_CMD(2, 91);
+    gor_kuribo3_talk[51] = EVT_HELPER_OP(&irai_complete_item_get);
     gor_kuribo3_talk[57] = GSW(1732);
     gor_kuribo3_talk[58] = 2;
     patch::writePatch(&gor_kuribo3_talk[68], kuribo3_talk_evt, sizeof(kuribo3_talk_evt));
+    
+    gor_chusan1_init[11] = GSW(1735);
+    gor_chusan1_init[12] = 1;
+
+    gor_chusan1_regl[1] = GSW(1735);
+    gor_chusan1_regl[2] = 1;
+
+    gor_chusan1_naguru[46] = EVT_HELPER_CMD(2, 91);
+    gor_chusan1_naguru[47] = EVT_HELPER_OP(&irai_complete_item_get);
+    gor_chusan1_naguru[50] = GSW(1735);
+    gor_chusan1_naguru[51] = 2;
 
     patch::writePatch(&gor_chusan1_talk[104], chusan1_talk_evt, sizeof(chusan1_talk_evt));
     patch::writePatch(&gor_chusan2_talk[0], chusan2_talk_evt, sizeof(chusan2_talk_evt));
@@ -272,6 +288,8 @@ void ApplyGor01Patches()
     gor_borodo2_init_01[13] = GSW(1764);
     gor_borodo2_init_01[14] = 3;
 
+    gor_borodo2_talk_01[58] = EVT_HELPER_CMD(2, 91);
+    gor_borodo2_talk_01[59] = EVT_HELPER_OP(&irai_complete_item_get);
     gor_borodo2_talk_01[264] = GSW(1764);
     gor_borodo2_talk_01[265] = 4;
     gor_borodo2_talk_01[270] = GSW(1734);
@@ -334,7 +352,9 @@ void ApplyGor01Patches()
     gor_01_init_evt[309] = 1;
     gor_01_init_evt[321] = GSW(1700);
     gor_01_init_evt[322] = 5;
+    gor_01_init_evt[374] = EVT_HELPER_CMD(2, 29);
     gor_01_init_evt[375] = GSW(1731);
+    gor_01_init_evt[385] = GSWF(6331);
     gor_01_init_evt[444] = GSWF(1195);
     gor_01_init_evt[523] = GSW(1708);
     gor_01_init_evt[524] = 18;

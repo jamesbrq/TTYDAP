@@ -25,6 +25,7 @@
 #include "ttyd/evtmgr_cmd.h"
 #include "ttyd/icondrv.h"
 #include "ttyd/itemdrv.h"
+#include "ttyd/mario.h"
 #include "ttyd/mario_cam.h"
 #include "ttyd/mario_motion.h"
 #include "ttyd/mario_pouch.h"
@@ -78,6 +79,8 @@ namespace mod::owr
     KEEP_VAR const char *boatModeDescription = "boat_mode_desc";
     KEEP_VAR const char *rshNode = "rsh";
     KEEP_VAR const char *las_09Node = "las_09";
+    KEEP_VAR const char *walrusWhiskersName = "walrus_whiskers_name";
+    KEEP_VAR const char *walrusWhiskersDescription = "walrus_whiskers_desc";
 
     // Key Renames
     KEEP_VAR const char *elevatorKeyStationName = "elevator_key_station";
@@ -262,6 +265,37 @@ EVT_BEGIN_KEEP(starstone_item_z)
     USER_FUNC(setIconRenderPriority, LW(7))
     RETURN()
 EVT_END()
+
+EVT_BEGIN_KEEP(irai_complete_reward)
+    USER_FUNC(evt_item::evt_item_get_item, PTR("irai_c"))
+    WAIT_MSEC(800)
+    USER_FUNC(evt_item::evt_item_delete, PTR("irai_c"))
+    USER_FUNC(irai_complete_item_delete)
+    RETURN()
+EVT_END()
+
+EVT_DEFINE_USER_FUNC_KEEP(irai_complete_item_get)
+{
+    if (isFirstCall)
+    {
+        ttyd::mario::Player *mario = ttyd::mario::marioGetPtr();
+        gState->iraiItem = ttyd::itemdrv::itemEntry("irai_c", ttyd::evtmgr_cmd::evtGetValue(evt, evt->evtArguments[0]), 16, -1, nullptr, mario->playerPosition.x, mario->playerPosition.y, mario->playerPosition.z);
+        ttyd::evtmgr::evtEntry(const_cast<int32_t *>(irai_complete_reward), 0, 0);
+        return 0;
+    }
+    else if(gState->iraiItem)
+        return 0;
+    return 2;
+}
+
+EVT_DEFINE_USER_FUNC_KEEP(irai_complete_item_delete)
+{
+    (void)isFirstCall;
+    (void)evt;
+
+    gState->iraiItem = nullptr;
+    return 2;
+}
 // clang-format on
 
 EVT_DEFINE_USER_FUNC_KEEP(setShopFlags)

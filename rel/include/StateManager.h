@@ -100,6 +100,7 @@ namespace mod::owr
         EntranceData entranceData[600];
         EnemyLoadout enemyLoadouts[NUM_BATTLE_GROUPS];
         size_t entranceDataCount;
+        void *iraiItem;
         bool newTattle = false;
         bool firstDeath = false;
         bool fastTraveling = false;
