@@ -28,6 +28,7 @@ extern int32_t gor_peton_init_03[];
 extern int32_t gor_peton_talk_common_03[];
 extern int32_t gor_luigi_init_03[];
 extern int32_t gor_luigi_npcEnt_03[];
+extern int32_t gor_bteresa_table_talk[];
 extern int32_t gor_roten_4_talk[];
 extern int32_t gor_kinopiko_a_talk[];
 extern int32_t gor_kinopiko_b_talk_03[];
@@ -279,6 +280,13 @@ void ApplyGor03Patches()
     gor_luigi_npcEnt_03[1] = GSW(1710);
     gor_luigi_npcEnt_03[3] = 3;
     gor_luigi_npcEnt_03[4] = 4;
+
+    gor_bteresa_table_talk[1] = GSW(1741);
+    gor_bteresa_table_talk[2] = 1;
+    gor_bteresa_table_talk[57] = EVT_HELPER_CMD(2, 91);
+    gor_bteresa_table_talk[58] = EVT_HELPER_OP(&irai_complete_item_get);
+    gor_bteresa_table_talk[61] = GSW(1741);
+    gor_bteresa_table_talk[62] = 2;
 
     gor_roten_4_talk[1] = GSW(1710);
     gor_roten_4_talk[3] = 2;

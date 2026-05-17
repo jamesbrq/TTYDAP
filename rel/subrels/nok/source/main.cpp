@@ -604,6 +604,10 @@ namespace mod
         nok_boss_noko_open_gate[180] = GSW(1701);
         nok_boss_noko_open_gate[181] = 4;
 
+		nok_boss_noko_talk[1] = GSW(1738);
+        nok_boss_noko_talk[2] = 1;
+        nok_boss_noko_talk[196] = GSW(1738);
+        nok_boss_noko_talk[197] = 2;
         patch::writePatch(&nok_boss_noko_talk[278], boss_noko_talk_hook, sizeof(boss_noko_talk_hook));
 
         nok_nokorin_init[7] = GSW(1711);

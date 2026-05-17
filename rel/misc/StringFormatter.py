@@ -284,6 +284,10 @@ strings_dict = {
 
     "walrus_whiskers_desc": "Some Walrus Whiskers.\nThey look... tasty?",
 
+    "shell_pack_name": "Courage Shell Pack",
+
+    "shell_pack_desc": "A package of Courage Shells.\nA shop might want these.",
+
     "suifubomb_a_walrus": ("...You're joking.<wait 250> \n"
                 "Those are real walrus whiskers!\n<k>\n<p>\n"
                 "I was being sarcastic, you\n"

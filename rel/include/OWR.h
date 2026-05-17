@@ -85,6 +85,7 @@ namespace mod::owr
     int psndSFXOn3DHook(int sfxId, const vec3 *position);
     int psndSFXOffHook(int channel);
     void npcSetupBattleInfoHook(::NpcEntry *npc, void *info);
+    int32_t pouchRemoveItemHook(int32_t item);
 
     extern bool (*g_OSLink_trampoline)(OSModuleInfo *, void *);
     extern void (*g_seqSetSeq_trampoline)(SeqIndex, const char *, const char *);
@@ -106,6 +107,7 @@ namespace mod::owr
     extern int (*g_psndSFXOn3D_trampoline)(int, const gc::vec3 *);
     extern int (*g_psndSFXOff_trampoline)(int);
     extern void (*g_npcSetupBattleInfo_trampoline)(::NpcEntry *, void *);
+    extern int32_t (*g_pouchRemoveItem_trampoline)(int32_t);
 
     extern const char *goombellaName;
     extern const char *goombellaDescription;
@@ -157,4 +159,6 @@ namespace mod::owr
     extern const char *las_09Node;
     extern const char *walrusWhiskersName;
     extern const char *walrusWhiskersDescription;
+    extern const char *shellPackName;
+    extern const char *shellPackDescription;
 } // namespace mod::owr

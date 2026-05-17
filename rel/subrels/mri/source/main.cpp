@@ -716,7 +716,14 @@ namespace mod
 
         patch::writePatch(&mri_elder_init_01[0], mri_elder_init_01_hook, sizeof(mri_elder_init_01_hook));
 
-        patch::writePatch(&mri_elder_talk[0], elder_talk_hook, sizeof(elder_talk_hook));
+        mri_elder_talk[1] = GSW(1740);
+        mri_elder_talk[2] = 1;
+        mri_elder_talk[31] = EVT_HELPER_CMD(2, 91);
+        mri_elder_talk[32] = EVT_HELPER_OP(&irai_complete_item_get);
+        mri_elder_talk[42] = GSW(1740);
+        mri_elder_talk[43] = 2;
+        patch::writePatch(&mri_elder_talk[140], elder_talk_hook, sizeof(elder_talk_hook));
+        mri_elder_talk[144] = 0;
 
         patch::writePatch(&mri_puni_1_init[0], puni_1_init_hook, sizeof(puni_1_init_hook));
 

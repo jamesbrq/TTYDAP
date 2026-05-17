@@ -145,6 +145,7 @@ namespace mod
         win_witchtrio_momeru[862] = GSW(1712);
         win_witchtrio_momeru[863] = 1;
 
+        win_witchtrio_picture[192] = 335;
         win_witchtrio_picture[514] = GSW(1702);
         win_witchtrio_picture[515] = 13;
 

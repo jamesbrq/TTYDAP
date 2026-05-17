@@ -47,6 +47,9 @@ extern int32_t gor_goods_list;
 extern int32_t gor_01_shop_setup[];
 extern int32_t gor_christine_nakama[];
 extern int32_t gor_01_koopa_evt[];
+extern int32_t gor_iri_09_init[];
+extern int32_t gor_iri_09_tentyo_talk[];
+extern int32_t gor_iri_09_item_tbl_make[];
 extern int32_t gor_01_init_evt[];
 extern int32_t gor_cooking_evt[];
 
@@ -246,6 +249,9 @@ void ApplyGor01Patches()
     gor_chusan1_naguru[50] = GSW(1735);
     gor_chusan1_naguru[51] = 2;
 
+    gor_chusan1_talk[1] = GSW(1735);
+    gor_chusan1_talk[2] = 1;
+
     patch::writePatch(&gor_chusan1_talk[104], chusan1_talk_evt, sizeof(chusan1_talk_evt));
     patch::writePatch(&gor_chusan2_talk[0], chusan2_talk_evt, sizeof(chusan2_talk_evt));
     patch::writePatch(&gor_bomhei_talk[0], bomhei_talk_evt, sizeof(bomhei_talk_evt));
@@ -334,6 +340,25 @@ void ApplyGor01Patches()
     gor_01_koopa_evt[573] = GSW(1706);
     gor_01_koopa_evt[574] = 46;
 
+    gor_iri_09_init[1] = GSW(1739);
+    gor_iri_09_init[2] = 1;
+
+    gor_iri_09_tentyo_talk[1] = GSW(1739);
+    gor_iri_09_tentyo_talk[2] = 2;
+    gor_iri_09_tentyo_talk[9] = GSWF(6332);
+    gor_iri_09_tentyo_talk[18] = GSWF(6332);
+    gor_iri_09_tentyo_talk[32] = 90;
+    gor_iri_09_tentyo_talk[70] = 90;
+    gor_iri_09_tentyo_talk[73] = GSW(1769);
+    gor_iri_09_tentyo_talk[74] = 1;
+    gor_iri_09_tentyo_talk[76] = GSW(1769);
+    gor_iri_09_tentyo_talk[77] = 1;
+    gor_iri_09_tentyo_talk[85] = 90;
+    gor_iri_09_tentyo_talk[99] = GSW(1769);
+    gor_iri_09_tentyo_talk[100] = 1;
+    gor_iri_09_tentyo_talk[147] = GSW(1739);
+    gor_iri_09_tentyo_talk[148] = 2;
+
     gor_01_init_evt[4] = GSW(1706);
     gor_01_init_evt[5] = 45;
     gor_01_init_evt[14] = GSW(1708);
@@ -361,4 +386,7 @@ void ApplyGor01Patches()
 
     gor_cooking_evt[412] = GSW(1715);
     gor_cooking_evt[413] = 4;
+
+    // Assembly
+    patch::writeIntWithCache(&gor_iri_09_item_tbl_make[12], 0x3800005A);
 }

@@ -574,7 +574,8 @@ void ApplyGor02Patches()
 	gor_roten3_talk[2] = 1;
     gor_roten3_talk[88] = GSW(1733);
     gor_roten3_talk[89] = 2;
-    patch::writePatch(&gor_roten3_talk[0], roten3_talk_evt, sizeof(roten3_talk_evt));
+    patch::writePatch(&gor_roten3_talk[98], roten3_talk_evt, sizeof(roten3_talk_evt));
+    gor_roten3_talk[107] = 0;
 
     gor_borodo1_talk[6] = GSW(1705); // HOOK
     gor_borodo1_talk[8] = 1;
@@ -599,6 +600,7 @@ void ApplyGor02Patches()
     gor_borodo2_talk_02[7] = GSW(1764);
     gor_borodo2_talk_02[8] = 1;
     gor_borodo2_talk_02[16] = GSW(1764);
+    gor_borodo2_talk_02[17] = 2;
     patch::writePatch(&gor_borodo2_talk_02[24], borodo2_talk_evt, sizeof(borodo2_talk_evt));
 
     gor_kuragarisan_write_name[428] = GSW(1704);

@@ -750,6 +750,11 @@ namespace mod::owr
         itemDataTable[ItemId::INVALID_ITEM_BOAT_MODE_ICON].description = boatModeDescription;
         itemDataTable[ItemId::WHACKA_BUMP].sell_price = 30;
 
+        itemDataTable[ItemId::SQUARE_DIAMOND_BADGE].icon_id = IconType::MARIO_WANTED_POSTER;
+        itemDataTable[ItemId::INVALID_ITEM_MARIO_POSTER_005A].icon_id = IconType::COURAGE_SHELL_PACKAGE;
+        itemDataTable[ItemId::INVALID_ITEM_MARIO_POSTER_005A].name = shellPackName;
+        itemDataTable[ItemId::INVALID_ITEM_MARIO_POSTER_005A].description = shellPackDescription;
+
         // Buy/Sell Prices
         for (int i = ItemId::POWER_JUMP; i < ItemId::MAX_ITEM_ID; i++)
         {
@@ -977,6 +982,7 @@ namespace mod::owr
         g_psndSFXOn3D_trampoline = patch::hookFunction(pmario_sound::psndSFXOn_3D, psndSFXOn3DHook);
         g_psndSFXOff_trampoline = patch::hookFunction(pmario_sound::psndSFXOff, psndSFXOffHook);
         g_npcSetupBattleInfo_trampoline = patch::hookFunction(::npcSetupBattleInfo, npcSetupBattleInfoHook);
+        g_pouchRemoveItem_trampoline = patch::hookFunction(mario_pouch::pouchRemoveItem, pouchRemoveItemHook);
 
         // Hook gaugeDisp with a standard branch since the original function does not need to be called
         patch::writeBranch(statuswindow::gaugeDisp, DisplayStarPowerOrbs);

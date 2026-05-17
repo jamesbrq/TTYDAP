@@ -45,6 +45,8 @@ extern int32_t gon_item_evt_07[];
 extern int32_t gon_07_init_evt[];
 extern int32_t gon_evt_chk_08[];
 extern int32_t gon_evt_unlock_08[];
+extern int32_t gon_nokkosu_init[];
+extern int32_t gon_nokkosu_talk[];
 extern int32_t gon_08_init_evt[];
 extern int32_t gon_10_init_evt[];
 extern int32_t gon_gonbaba_event[];
@@ -189,6 +191,12 @@ namespace mod
 
         gon_evt_unlock_08[6] = GSWF(6013);
         gon_evt_unlock_08[7] = 1;
+
+        gon_nokkosu_init[1] = GSW(1737);
+        gon_nokkosu_init[216] = GSW(1737);
+        gon_nokkosu_init[216] = 2;
+
+        gon_nokkosu_talk[2] = 1;
 
         gon_08_init_evt[199] = GSWF(6013);
         gon_08_init_evt[200] = 1;

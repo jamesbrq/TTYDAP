@@ -8,6 +8,7 @@
 #include "ttyd/battle_audience.h"
 #include "ttyd/battle_event_cmd.h"
 #include "ttyd/battle_unit.h"
+#include "ttyd/common_types.h"
 #include "ttyd/evt_audience.h"
 #include "ttyd/evt_bero.h"
 #include "ttyd/evt_cam.h"
@@ -81,6 +82,8 @@ namespace mod::owr
     KEEP_VAR const char *las_09Node = "las_09";
     KEEP_VAR const char *walrusWhiskersName = "walrus_whiskers_name";
     KEEP_VAR const char *walrusWhiskersDescription = "walrus_whiskers_desc";
+    KEEP_VAR const char *shellPackName = "shell_pack_name";
+    KEEP_VAR const char *shellPackDescription = "shell_pack_desc";
 
     // Key Renames
     KEEP_VAR const char *elevatorKeyStationName = "elevator_key_station";
@@ -515,14 +518,29 @@ void checkShopFlag(uint32_t item, uint32_t index)
 
 void monosiriItemCheck(int unit_id)
 {
+    namespace ItemId = ::common::ItemId;
     if (ttyd::swdrv::swGet(unit_id + 0x117A) || gState->apSettings->tattlesanity == 0)
         return;
 
     gState->newTattle = true;
     ttyd::battle_audience::BattleAudience_SetPresentTargetUnitId(
         ttyd::battle_unit::BtlUnit_GetUnitId(BattleGetPartyPtr(_battleWorkPtr))); // Goombella
-    ttyd::battle_audience::BattleAudience_SetPresentItemNo(gState->tattleItems[unit_id - 1]);
+    int itemId = gState->tattleItems[unit_id - 1];
+    ttyd::battle_audience::BattleAudience_SetPresentItemNo(itemId);
     ttyd::battle_audience::BattleAudience_SetPresentItemType(0); // Non-damaging items
+    if (itemId >= 114 && itemId <= 120)
+    {
+        uint8_t count = 0;
+        for (int i = 114; i <= 120; i++)
+        {
+            if (ttyd::mario_pouch::pouchCheckItem(i) > 0)
+                count++;
+        }
+        if (gState->apSettings->goal == 2 && (count + 1) >= gState->apSettings->goalStars && ttyd::swdrv::swGet(6120) == 0)
+        {
+            ttyd::swdrv::swSet(6121);
+        }
+    }
 }
 
 int applyExpMultiplier(int exp)

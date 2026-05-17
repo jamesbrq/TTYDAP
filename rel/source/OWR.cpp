@@ -172,6 +172,7 @@ namespace mod::owr
     KEEP_VAR int (*g_psndSFXOn3D_trampoline)(int, const gc::vec3 *) = nullptr;
     KEEP_VAR int (*g_psndSFXOff_trampoline)(int) = nullptr;
     KEEP_VAR void (*g_npcSetupBattleInfo_trampoline)(::NpcEntry *, void *) = nullptr;
+    KEEP_VAR int32_t (*g_pouchRemoveItem_trampoline)(int32_t) = nullptr;
 
     void OWR::SequenceInit()
     {
@@ -1213,20 +1214,6 @@ namespace mod::owr
         return g_psndSFXOff_trampoline(channel);
     }
 
-    // Pacify enemies during HnS rounds.
-    //
-    // npcSetupBattleInfo writes the battle struct at npc + 0x230. The
-    // function unconditionally memsets the struct to zero first, then
-    // (only if `info` is non-null) copies the battle template into it.
-    // Passing info=nullptr is the engine-blessed "make this NPC
-    // friendly" path — npcSetBattleInfo itself uses it when battleId
-    // == -1.
-    //
-    // We force info=nullptr while in an HnS match (selfGameRole != NONE).
-    // Effect: enemy NPCs spawn and walk around as usual but have no
-    // battle attached, so Mario touching them does nothing. When HnS
-    // ends, the next map load attaches battles normally — no persistent
-    // mutation.
     KEEP_FUNC void npcSetupBattleInfoHook(::NpcEntry *npc, void *info)
     {
         if (ghosts::g_ghostState != nullptr &&
@@ -1299,6 +1286,81 @@ namespace mod::owr
         {
             pouchGetItem(ItemId::INVALID_ITEM_PAPER_0054);
         }
+    }
+
+    inline bool containsKeyItem(int16_t itemId)
+    {
+        constexpr uint32_t loopCount = sizeof(ttyd::mario_pouch::PouchData::key_items) / sizeof(int16_t);
+        const int16_t *keyItemsPtr = &ttyd::mario_pouch::pouchGetPtr()->key_items[0];
+
+        for (uint32_t i = 0; i < loopCount; i++)
+        {
+            const int32_t currentItem = keyItemsPtr[i];
+            if (currentItem == ItemId::INVALID_NONE)
+            {
+                // Hit an empty slot, so the item isn't present
+                return false;
+            }
+            else if (currentItem == itemId)
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    inline int32_t addItemToKeyItems(int16_t itemId)
+    {
+        constexpr uint32_t loopCount = sizeof(ttyd::mario_pouch::PouchData::key_items) / sizeof(int16_t);
+        int16_t *keyItemsPtr = &ttyd::mario_pouch::pouchGetPtr()->key_items[0];
+
+        for (uint32_t i = 0; i < loopCount; i++)
+        {
+            if (keyItemsPtr[i] == ItemId::INVALID_NONE)
+            {
+                // Empty slot found, shift everything down one and insert at the front
+                memmove(&keyItemsPtr[1], &keyItemsPtr[0], i * sizeof(int16_t));
+                keyItemsPtr[0] = itemId;
+
+                // Re-add the return pipe to ensure it stays at the top
+                pouchReAddReturnPipe();
+                return 1;
+            }
+        }
+
+        // Key items inventory is full
+        return 0;
+    }
+
+    inline bool removeItemFromKeyItems(int16_t itemId)
+    {
+        constexpr uint32_t loopCount = sizeof(ttyd::mario_pouch::PouchData::key_items) / sizeof(int16_t);
+        int16_t *keyItemsPtr = &ttyd::mario_pouch::pouchGetPtr()->key_items[0];
+
+        for (uint32_t i = 0; i < loopCount; i++)
+        {
+            const int32_t currentItem = keyItemsPtr[i];
+            if (currentItem == ItemId::INVALID_NONE)
+            {
+                // Hit an empty slot before finding the item, so it isn't there
+                return false;
+            }
+            else if (currentItem != itemId)
+            {
+                continue;
+            }
+
+            // Found the item, shift everything after it up one slot
+            const uint32_t remainingSize = (loopCount - i - 1) * sizeof(int16_t);
+            memmove(&keyItemsPtr[i], &keyItemsPtr[i + 1], remainingSize);
+
+            // Clear the last slot in case the inventory was full
+            keyItemsPtr[loopCount - 1] = ItemId::INVALID_NONE;
+            return true;
+        }
+
+        return false;
     }
 
     KEEP_FUNC uint32_t pouchGetItemHook(int32_t item)
@@ -1418,42 +1480,117 @@ namespace mod::owr
             }
             case ItemId::COCONUT:
             {
-                // If the player has already given the coconut to Flavio, then just give the coconut normally
                 if (ttyd::swdrv::swByteGet(1719) >= 4)
                 {
                     return g_pouchGetItem_trampoline(item);
                 }
 
-                // Loop through all of the important items until either the coconut or an empty slot is found
-                constexpr uint32_t loopCount = sizeof(PouchData::key_items) / sizeof(int16_t);
-                int16_t *keyItemsPtr = &pouchGetPtr()->key_items[0];
-
-                for (uint32_t i = 0; i < loopCount; i++)
+                if (!containsKeyItem(item))
                 {
-                    const int32_t currentItem = keyItemsPtr[i];
-                    if (currentItem == ItemId::COCONUT)
+                    if (addItemToKeyItems(item))
                     {
-                        // The player already has the coconut in their important items, so just give it normally
-                        return g_pouchGetItem_trampoline(item);
-                    }
-                    else if (currentItem == ItemId::INVALID_NONE)
-                    {
-                        // The player does not have the coconut and an empty slot was found, so the coconut can be added
-                        // Move all of the important items down one slot
-                        memmove(&keyItemsPtr[1], &keyItemsPtr[0], (loopCount - 1) * sizeof(int16_t));
-
-                        // Place the coconut in the first slot
-                        keyItemsPtr[0] = ItemId::COCONUT;
-
-                        // Regive the return pipe to make sure its always at the top of the inventory
                         pouchReAddReturnPipe();
-                        return 1;
+                        return 2;
                     }
+                    else
+                        return 0; // Key items inventory is full, can't give the item
+                }
+                return g_pouchGetItem_trampoline(item);
+            }
+            case ItemId::LIFE_SHROOM:
+            {
+                if (ttyd::swdrv::swByteGet(1740) >= 2)
+                {
+                    return g_pouchGetItem_trampoline(item);
                 }
 
-                // If this is reached, then the important items part of the inventory is somehow full, so do some failsafe or
-                // something
-                return 0;
+                if (!containsKeyItem(item))
+                {
+                    if (addItemToKeyItems(item))
+                    {
+                        pouchReAddReturnPipe();
+                        return 2;
+                    }
+                    else
+                        return 0; // Key items inventory is full, can't give the item
+                }
+                return g_pouchGetItem_trampoline(item);
+            }
+            case ItemId::KEEL_MANGO:
+            {
+                if (ttyd::swdrv::swByteGet(1752) >= 2)
+                {
+                    return g_pouchGetItem_trampoline(item);
+                }
+
+                if (!containsKeyItem(item))
+                {
+                    if (addItemToKeyItems(item))
+                    {
+                        pouchReAddReturnPipe();
+                        return 2;
+                    }
+                    else
+                        return 0; // Key items inventory is full, can't give the item
+                }
+                return g_pouchGetItem_trampoline(item);
+            }
+            case ItemId::MYSTIC_EGG:
+            {
+                if (ttyd::swdrv::swByteGet(1752) >= 2)
+                {
+                    return g_pouchGetItem_trampoline(item);
+                }
+
+                if (!containsKeyItem(item))
+                {
+                    if (addItemToKeyItems(item))
+                    {
+                        pouchReAddReturnPipe();
+                        return 2;
+                    }
+                    else
+                        return 0; // Key items inventory is full, can't give the item
+                }
+                return g_pouchGetItem_trampoline(item);
+            }
+            case ItemId::GOLDEN_LEAF:
+            {
+                if (ttyd::swdrv::swByteGet(1752) >= 2)
+                {
+                    return g_pouchGetItem_trampoline(item);
+                }
+
+                if (!containsKeyItem(item))
+                {
+                    if (addItemToKeyItems(item))
+                    {
+                        pouchReAddReturnPipe();
+                        return 2;
+                    }
+                    else
+                        return 0; // Key items inventory is full, can't give the item
+                }
+                return g_pouchGetItem_trampoline(item);
+            }
+            case ItemId::HONEY_CANDY:
+            {
+                if (ttyd::swdrv::swByteGet(1756) >= 2)
+                {
+                    return g_pouchGetItem_trampoline(item);
+                }
+
+                if (!containsKeyItem(item))
+                {
+                    if (addItemToKeyItems(item))
+                    {
+                        pouchReAddReturnPipe();
+                        return 2;
+                    }
+                    else
+                        return 0; // Key items inventory is full, can't give the item
+                }
+                return g_pouchGetItem_trampoline(item);
             }
             case ItemId::UP_ARROW:
             {
@@ -1481,6 +1618,34 @@ namespace mod::owr
                 }
 
                 return ret;
+            }
+        }
+    }
+
+    KEEP_FUNC int32_t pouchRemoveItemHook(int32_t item)
+    {
+        switch (item)
+        {
+            case ItemId::COCONUT:
+            case ItemId::LIFE_SHROOM:
+            case ItemId::KEEL_MANGO:
+            case ItemId::MYSTIC_EGG:
+            case ItemId::GOLDEN_LEAF:
+            case ItemId::HONEY_CANDY:
+            {
+                // These items are placed in the key items inventory via the hacky add function,
+                // so check there first and remove from there if found
+                if (removeItemFromKeyItems(item))
+                {
+                    return 1;
+                }
+
+                // Item wasn't in key items, so fall through to normal removal
+                return g_pouchRemoveItem_trampoline(item);
+            }
+            default:
+            {
+                return g_pouchRemoveItem_trampoline(item);
             }
         }
     }
