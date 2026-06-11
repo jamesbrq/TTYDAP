@@ -109,6 +109,13 @@ namespace mod::ghosts
                 char animCandidate[16];
                 uint8_t stableFrames;
                 bool watching;
+
+                // True when this entry was started by the SFX-ring
+                // anim-bound path (not state-sync). The anim-bound
+                // janitor is its sole owner; SyncActiveLoopsFromState
+                // pass-1 must not reap it just because its sfxId isn't
+                // in peer.activeLoops (it never is, by construction).
+                bool ringManaged;
             };
             static constexpr int kActiveLoopsPerSlot = 8;
             ActiveLoop activeLoops[kActiveLoopsPerSlot];
@@ -125,15 +132,15 @@ namespace mod::ghosts
         bool g_initialized = false;
 
         constexpr int kHitGraceFrames = 90;
-        constexpr int kHitLockDurationFrames = 30;        // ~0.5s at 60Hz
-        constexpr int kHitQueueTimeoutFrames = 60 * 5;    // 5s before giving up
+        constexpr int kHitLockDurationFrames = 30;     // ~0.5s at 60Hz
+        constexpr int kHitQueueTimeoutFrames = 60 * 5; // 5s before giving up
         int g_hitGraceRemaining = 0;
         int g_hitLockRemaining = 0;
         int g_hitQueuedTimeout = 0;
         bool g_hitQueued = false;
-        bool g_hitLockApplied = false;  // tracks whether we hold a
-                                         // marioKeyOff() contribution
-                                         // we still need to release.
+        bool g_hitLockApplied = false; // tracks whether we hold a
+                                       // marioKeyOff() contribution
+                                       // we still need to release.
 
         bool g_inReceiverReplay = false;
 
@@ -164,46 +171,211 @@ namespace mod::ghosts
             // and broadcasting them produces a 'crowd murmur' chatter
             // from peers in their own battles. See SFX_TABLE.csv +
             // WHITELIST_NAMES.txt for the index -> name mapping.
-            0x064, 0x085, 0x087, 0x088, 0x089, 0x08A, 0x08B, 0x08C,
-            0x08D, 0x08F, 0x091, 0x09D, 0x09E, 0x09F, 0x0A0, 0x0A1,
-            0x0A5, 0x0A6, 0x0A7, 0x0A8, 0x0A9, 0x0AB, 0x0AC, 0x0AD,
-            0x0AE, 0x0AF, 0x0B1, 0x0B2, 0x0B3, 0x0B4, 0x0B5, 0x0B7,
-            0x0B9, 0x0BA, 0x0BC, 0x0BE, 0x0BF, 0x0C0, 0x0C2, 0x0C3,
-            0x0C4, 0x0C5, 0x0C7, 0x0C8, 0x0CA, 0x0CB, 0x0CD, 0x0CE,
-            0x0D0, 0x0D1, 0x0D2, 0x0D3, 0x0D4, 0x0D5, 0x0D7, 0x0D8,
-            0x0D9, 0x0DB, 0x0DC, 0x0DE, 0x0DF, 0x0E1, 0x0E2, 0x0E4,
-            0x0E6, 0x0E7, 0x0E8, 0x0E9, 0x0EA, 0x0EC, 0x0ED, 0x0EF,
-            0x140, 0x141, 0x142, 0x143, 0x144, 0x145, 0x146, 0x147,
-            0x148, 0x149, 0x14A, 0x14B, 0x14D, 0x14F, 0x150, 0x151,
-            0x152, 0x153, 0x154, 0x156, 0x157, 0x158, 0x159, 0x15B,
-            0x15C, 0x15D, 0x15E, 0x15F, 0x160, 0x161, 0x162, 0x163,
-            0x165, 0x166, 0x167, 0x168, 0x169, 0x16B, 0x16D, 0x16F,
-            0x170, 0x171, 0x173, 0x174, 0x175, 0x177, 0x178, 0x179,
-            0x17A, 0x17B, 0x17C, 0x17D, 0x17E, 0x17F, 0x180, 0x181,
-            0x182, 0x183, 0x184, 0x185, 0x186, 0x187, 0x188, 0x189,
-            0x18A, 0x18B, 0x18C, 0x18D, 0x18E, 0x18F, 0x190, 0x191,
-            0x192, 0x194, 0x195, 0x196, 0x197, 0x199, 0x19B, 0x19C,
-            0x19E, 0x19F, 0x1A1, 0x1A2, 0x1A4, 0x1A5, 0x1A6, 0x1A8,
-            0x1A9, 0x1AA, 0x1AB, 0x200, 0x3BA, 0x3BB, 0x3BC, 0x3ED,
-            0x3EF, 0x42A, 0x42B,
-            0x42E,                                  // SFX_STG4_WAVE1
-            0x5D9, 0x5DA, 0x5F7, 0x5F9, 0x5FA,
-            0x686,                                  // SFX_STG5_WAVE1 (Keelhaul Key)
-            0x6EF, 0x702, 0x703, 0x704, 0x705, 0x7B5,
+            0x064,
+            0x085,
+            0x087,
+            0x088,
+            0x089,
+            0x08A,
+            0x08B,
+            0x08C,
+            0x08D,
+            0x08F,
+            0x091,
+            0x09D,
+            0x09E,
+            0x09F,
+            0x0A0,
+            0x0A1,
+            0x0A5,
+            0x0A6,
+            0x0A7,
+            0x0A8,
+            0x0A9,
+            0x0AB,
+            0x0AC,
+            0x0AD,
+            0x0AE,
+            0x0AF,
+            0x0B1,
+            0x0B2,
+            0x0B3,
+            0x0B4,
+            0x0B5,
+            0x0B7,
+            0x0B9,
+            0x0BA,
+            0x0BC,
+            0x0BE,
+            0x0BF,
+            0x0C0,
+            0x0C2,
+            0x0C3,
+            0x0C4,
+            0x0C5,
+            0x0C7,
+            0x0C8,
+            0x0CA,
+            0x0CB,
+            0x0CD,
+            0x0CE,
+            0x0D0,
+            0x0D1,
+            0x0D2,
+            0x0D3,
+            0x0D4,
+            0x0D5,
+            0x0D7,
+            0x0D8,
+            0x0D9,
+            0x0DB,
+            0x0DC,
+            0x0DE,
+            0x0DF,
+            0x0E1,
+            0x0E2,
+            0x0E4,
+            0x0E6,
+            0x0E7,
+            0x0E8,
+            0x0E9,
+            0x0EA,
+            0x0EC,
+            0x0ED,
+            0x0EF,
+            0x140,
+            0x141,
+            0x142,
+            0x143,
+            0x144,
+            0x145,
+            0x146,
+            0x147,
+            0x148,
+            0x149,
+            0x14A,
+            0x14B,
+            0x14D,
+            0x14F,
+            0x150,
+            0x151,
+            0x152,
+            0x153,
+            0x154,
+            0x156,
+            0x157,
+            0x158,
+            0x159,
+            0x15B,
+            0x15C,
+            0x15D,
+            0x15E,
+            0x15F,
+            0x160,
+            0x161,
+            0x162,
+            0x163,
+            0x165,
+            0x166,
+            0x167,
+            0x168,
+            0x169,
+            0x16B,
+            0x16D,
+            0x16F,
+            0x170,
+            0x171,
+            0x173,
+            0x174,
+            0x175,
+            0x177,
+            0x178,
+            0x179,
+            0x17A,
+            0x17B,
+            0x17C,
+            0x17D,
+            0x17E,
+            0x17F,
+            0x180,
+            0x181,
+            0x182,
+            0x183,
+            0x184,
+            0x185,
+            0x186,
+            0x187,
+            0x188,
+            0x189,
+            0x18A,
+            0x18B,
+            0x18C,
+            0x18D,
+            0x18E,
+            0x18F,
+            0x190,
+            0x191,
+            0x192,
+            0x194,
+            0x195,
+            0x196,
+            0x197,
+            0x199,
+            0x19B,
+            0x19C,
+            0x19E,
+            0x19F,
+            0x1A1,
+            0x1A2,
+            0x1A4,
+            0x1A5,
+            0x1A6,
+            0x1A8,
+            0x1A9,
+            0x1AA,
+            0x1AB,
+            0x200,
+            0x3BA,
+            0x3BB,
+            0x3BC,
+            0x3ED,
+            0x3EF,
+            0x42A,
+            0x42B,
+            0x42E, // SFX_STG4_WAVE1
+            0x5D9,
+            0x5DA,
+            0x5F7,
+            0x5F9,
+            0x5FA,
+            0x686, // SFX_STG5_WAVE1 (Keelhaul Key)
+            0x6EF,
+            0x702,
+            0x703,
+            0x704,
+            0x705,
+            0x7B5,
             // Water / sea / ship ambient — re-added after the
             // "Mario-only substring" pass dropped them. Routes
             // through psndSFXOn so the existing hook captures them;
             // mot_ship.s itself does not call psndENV*. Restores
             // boat-ride water ambient for peers on the Rogueport ↔
             // Keelhaul Key boat sequence.
-            0x8D9, 0x8DA, 0x8DB, 0x8DC,             // SFX_EVT_GAME_BOAT_*
-            0x1013, 0x1014,                          // SFX_AMB_SEA1/2
-            0x1015, 0x1016,                          // SFX_ENV_SHIP1/2
-            0x1017,                                  // SFX_ENV_SEA_GULL1
-            0x1018,                                  // SFX_AMB_SHIP_CREAK1
-            0x1027, 0x1028,                          // SFX_ENV_WATER1/2
-            0x1040,                                  // SFX_AMB_WATER3
-            0x1048, 0x1049,                          // SFX_AMB_WATER_WOOD1/2
+            0x8D9,
+            0x8DA,
+            0x8DB,
+            0x8DC, // SFX_EVT_GAME_BOAT_*
+            0x1013,
+            0x1014, // SFX_AMB_SEA1/2
+            0x1015,
+            0x1016, // SFX_ENV_SHIP1/2
+            0x1017, // SFX_ENV_SEA_GULL1
+            0x1018, // SFX_AMB_SHIP_CREAK1
+            0x1027,
+            0x1028, // SFX_ENV_WATER1/2
+            0x1040, // SFX_AMB_WATER3
+            0x1048,
+            0x1049, // SFX_AMB_WATER_WOOD1/2
         };
         constexpr int kSfxWhitelistLen = sizeof(kSfxWhitelist) / sizeof(kSfxWhitelist[0]);
 
@@ -219,7 +391,6 @@ namespace mod::ghosts
             }
             return false;
         }
-
 
         // Find an entry by sfxId. Returns nullptr if not present.
         GhostSlot::ActiveLoop *FindActiveLoop(GhostSlot &slot, uint16_t sfxId)
@@ -258,6 +429,7 @@ namespace mod::ghosts
             entry.animCandidate[0] = '\0';
             entry.stableFrames = 0;
             entry.watching = false;
+            entry.ringManaged = false;
         }
 
         // Stop ALL active loops for a slot. Used on slot release and
@@ -289,6 +461,12 @@ namespace mod::ghosts
             for (auto &e : slot.activeLoops)
             {
                 if (!e.inUse)
+                    continue;
+                // Ring-managed (anim-bound) entries are owned by the
+                // janitor, not state-sync. They are never in
+                // peer.activeLoops, so reaping them here would stop
+                // the loop the same frame the ring path started it.
+                if (e.ringManaged)
                     continue;
                 bool stillPublished = false;
                 for (int i = 0; i < published; ++i)
@@ -355,6 +533,7 @@ namespace mod::ghosts
                 e->stableFrames = 1;
                 e->watching = false;
                 e->animNameAtStart[0] = '\0';
+                e->ringManaged = false;
             }
         }
 
@@ -680,7 +859,7 @@ namespace mod::ghosts
             EnsurePosesAllocated(slot);
 
             // Detect peer-side map changes. When a peer transitions
-            // to a new map (their own teleport, or first-time becoming
+            // to a new map (their own map change, or first-time becoming
             // visible to us on a map they were already on), drop the
             // SFX sequence cursor so the existing skip-on-first-sample
             // path silently consumes any pre-arrival landing/footstep
@@ -743,7 +922,6 @@ namespace mod::ghosts
                 ttyd::animdrv::animPoseSetAnim(poseId, peer.animName, 1);
                 std::memcpy(cache, peer.animName, sizeof(peer.animName));
             }
-
 
             if (slot.forwardAllocated)
             {
@@ -880,6 +1058,7 @@ namespace mod::ghosts
                                             e->stableFrames = 1;
                                             e->watching = false;
                                             e->animNameAtStart[0] = '\0';
+                                            e->ringManaged = true;
                                         }
                                         else
                                         {
@@ -918,12 +1097,6 @@ namespace mod::ghosts
             ttyd::mario::Player *me = ttyd::mario::marioGetPtr();
             if (me == nullptr)
                 return -1;
-
-            if (g_ghostState != nullptr && g_ghostState->selfGameRole == kGameRoleHider)
-            {
-                g_hammerSwingFired = true;
-                return -1;
-            }
 
             const uint8_t *mpBytes = reinterpret_cast<const uint8_t *>(me);
             const uint16_t curMotRaw = *reinterpret_cast<const uint16_t *>(mpBytes + 0x2E);
@@ -1039,7 +1212,7 @@ namespace mod::ghosts
         g_ghostState->maxRenderedPeers = static_cast<uint32_t>(kDefaultMaxRenderedPeers);
 
         // Self team defaults (no team, no friendly fire). All other
-        // hit/SFX-ring/lobby fields stay zero from the memset above.
+        // hit/SFX-ring/reserved fields stay zero from the memset above.
         g_ghostState->selfTeamId = kTeamNone;
         g_ghostState->selfFriendlyFire = 0;
 
@@ -1098,6 +1271,7 @@ namespace mod::ghosts
                 e.animCandidate[0] = '\0';
                 e.stableFrames = 0;
                 e.watching = false;
+                e.ringManaged = false;
             }
             for (auto &b : s.blockedSfx)
             {
@@ -1244,82 +1418,6 @@ namespace mod::ghosts
             }
         }
 
-        {
-            static bool s_ourLockApplied = false;
-            const bool wantFrozen = (g_ghostState->selfFrozen != 0);
-            const bool inputFree  = (ttyd::mario::marioChkKey() != 0);
-
-            if (wantFrozen)
-            {
-                if (inputFree)
-                {
-                    ttyd::mario::marioKeyOff();
-                    s_ourLockApplied = true;
-                }
-            }
-            else if (s_ourLockApplied)
-            {
-                if (!inputFree)
-                {
-                    ttyd::mario::marioKeyOn();
-                }
-                s_ourLockApplied = false;
-            }
-        }
-
-        {
-            static uint8_t s_lastTeleportSeq = 0;
-            const uint8_t curSeq = g_ghostState->pendingTeleportSeq;
-            const bool seqChanged = (curSeq != s_lastTeleportSeq);
-            const bool mapPresent = (g_ghostState->pendingTeleportMap[0] != '\0');
-            if (seqChanged && mapPresent)
-            {
-                const char *bero = (g_ghostState->pendingTeleportBero[0] != '\0')
-                                       ? g_ghostState->pendingTeleportBero
-                                       : nullptr;
-                s_lastTeleportSeq = curSeq;
-                ttyd::mario_motion::marioChgMot(ttyd::mario_motion::MarioMotion::kStay);
-                ttyd::seqdrv::seqSetSeq(
-                    ttyd::seqdrv::SeqIndex::kMapChange,
-                    g_ghostState->pendingTeleportMap,
-                    bero);
-            }
-        }
-
-        // Debug /hns play_sfx command bus. Edge-detect on debugSfxSeq
-        // and fire psndSFXOn for the requested id. The OWR.cpp hook
-        // captures the call into OnLocalSfxFired (where SfxIsAllowed
-        // gates whether it propagates to peers), so this can also be
-        // used to verify whether a candidate id is whitelisted.
-        {
-            static uint8_t s_lastDebugSfxSeq = 0;
-            const uint8_t curSeq = g_ghostState->debugSfxSeq;
-            if (curSeq != s_lastDebugSfxSeq)
-            {
-                s_lastDebugSfxSeq = curSeq;
-                const int sfxId = static_cast<int>(g_ghostState->debugSfxId);
-                if (sfxId > 0)
-                {
-                    if (g_ghostState->debugSfxFlags & 0x01)
-                    {
-                        ttyd::mario::Player *me = ttyd::mario::marioGetPtr();
-                        if (me != nullptr)
-                        {
-                            ttyd::pmario_sound::psndSFXOn_3D(sfxId, &me->playerPosition);
-                        }
-                        else
-                        {
-                            ttyd::pmario_sound::psndSFXOn(sfxId);
-                        }
-                    }
-                    else
-                    {
-                        ttyd::pmario_sound::psndSFXOn(sfxId);
-                    }
-                }
-            }
-        }
-
         for (int i = 0; i < kMaxPeers; ++i)
         {
             const PeerSlot &peer = block->peers[i];
@@ -1332,7 +1430,6 @@ namespace mod::ghosts
             }
 
             ApplyPeerToSlot(peer, slot);
-
 
             // (removed) hitFramesRemaining decrement. Field no longer
             // gates rendering — see the prediction-removal note above.
@@ -1626,8 +1723,7 @@ namespace mod::ghosts
                     // victim's own renderer with no stagger while
                     // peers still saw it via the published anim.
                     uint8_t *mpRw = reinterpret_cast<uint8_t *>(me);
-                    *reinterpret_cast<const char **>(mpRw + 0x18) =
-                        g_ghostState->hitPoseName;
+                    *reinterpret_cast<const char **>(mpRw + 0x18) = g_ghostState->hitPoseName;
                     *reinterpret_cast<uint32_t *>(mpRw + 0x0C) |= 0x1000u;
                     *reinterpret_cast<uint32_t *>(mpRw + 0x04) |= 0x10000000u;
 
@@ -1857,8 +1953,6 @@ namespace mod::ghosts
 
         ttyd::fontmgr::FontDrawScale(kNameTagFontScale);
 
-        const uint8_t selfRole = (g_ghostState != nullptr) ? g_ghostState->selfGameRole : kGameRoleNone;
-
         for (int i = 0; i < kMaxPeers; ++i)
         {
             const PeerSlot &peer = block->peers[i];
@@ -1872,11 +1966,6 @@ namespace mod::ghosts
                 continue;
 
             if (peer.showName != 0)
-                continue;
-
-            if (selfRole == kGameRoleHider)
-                continue;
-            if (selfRole == kGameRoleSeeker && peer.gameRole != kGameRoleSeeker)
                 continue;
 
             gc::vec3 worldPos = {slot.renderX, slot.renderY + kNameTagWorldYOffset, slot.renderZ};
@@ -1911,228 +2000,6 @@ namespace mod::ghosts
             ttyd::fontmgr::FontDrawColor(reinterpret_cast<uint8_t *>(const_cast<uint32_t *>(&packed)));
 
             ttyd::fontmgr::FontDrawString(screenX, screenY, peer.slotName);
-        }
-
-        // Self-label: render "Seeker" above the local Mario when our
-        // role is seeker. Cosmetic confirmation of role; mirrors the
-        // red color we use for seeker peers.
-        //
-        // Position: use the three-vector sum (playerPosition +
-        // wModelPosition + wAnimPosition), matching what Python's
-        // _read_self_state publishes at offsets 0x8C/0x98/0xA4 so
-        // peers see us at the same world location. wAnimPosition
-        // alone lagged for a frame or two after seqSetSeq teleports,
-        // which left the label anchored at the post-spawn point
-        // while Mario walked away from it.
-        if (selfRole == kGameRoleSeeker)
-        {
-            ttyd::mario::Player *me = ttyd::mario::marioGetPtr();
-            if (me != nullptr)
-            {
-                gc::vec3 worldPos = {
-                    me->playerPosition.x + me->wModelPosition.x + me->wAnimPosition.x,
-                    me->playerPosition.y + me->wModelPosition.y + me->wAnimPosition.y + kNameTagWorldYOffset,
-                    me->playerPosition.z + me->wModelPosition.z + me->wAnimPosition.z,
-                };
-                gc::vec3 camPos = {0.0f, 0.0f, 0.0f};
-                gc::mtx::PSMTXMultVec(viewMtx, &worldPos, &camPos);
-
-                gc::vec3 ndcPos = {0.0f, 0.0f, 0.0f};
-                gc::mtx::PSMTX44MultVec(projMtx, &camPos, &ndcPos);
-
-                if (ndcPos.z >= -1.5f && ndcPos.z <= 1.5f && ndcPos.x >= -1.5f && ndcPos.x <= 1.5f && ndcPos.y >= -1.5f &&
-                    ndcPos.y <= 1.5f)
-                {
-                    const char *label = "Seeker";
-                    float screenX = ndcPos.x * kNameTagScreenScaleX;
-                    const float screenY = ndcPos.y * kNameTagScreenScaleY;
-                    const uint16_t textWidth = ttyd::fontmgr::FontGetMessageWidth(label);
-                    screenX -= (static_cast<float>(textWidth) * kNameTagFontScale) * 0.5f;
-                    const uint32_t packedSelf = 0xFF4040FFu;
-                    ttyd::fontmgr::FontDrawColor(reinterpret_cast<uint8_t *>(const_cast<uint32_t *>(&packedSelf)));
-                    ttyd::fontmgr::FontDrawString(screenX, screenY, label);
-                }
-            }
-        }
-    }
-
-    namespace
-    {
-
-        constexpr float kLobbyHudAnchorX = 270.0f;
-        constexpr float kLobbyHudAnchorY = 220.0f;
-        constexpr float kLobbyHudFontScale = 0.5f;
-        constexpr float kLobbyHudLineHeight = 22.0f;
-
-        const char *LobbyStatusLabel(uint8_t status)
-        {
-            switch (status)
-            {
-                case kLobbyStatusIdle:
-                    return "Idle";
-                case kLobbyStatusWaiting:
-                    return "Hide";
-                case kLobbyStatusCountdown:
-                    return "Seek";
-                case kLobbyStatusPlaying:
-                    return "Round Over";
-                case kLobbyStatusFinished:
-                    return "Match End";
-                default:
-                    return "?";
-            }
-        }
-
-        const char *LobbyGameTypeLabel(uint8_t gameType)
-        {
-            switch (gameType)
-            {
-                case kGameTypeHideAndSeek:
-                    return "Hide and Seek";
-                default:
-                    return "";
-            }
-        }
-
-        float RightAlignX(const char *str, float screenX, float fontScale)
-        {
-            const uint16_t textWidth = ttyd::fontmgr::FontGetMessageWidth(str);
-            return screenX - static_cast<float>(textWidth) * fontScale;
-        }
-    } // namespace
-
-    KEEP_FUNC void DrawLobbyHud(ttyd::dispdrv::CameraId, void *)
-    {
-        if (!g_initialized)
-            return;
-
-        const LobbyHudHeader *header = GetLobbyHudHeader();
-
-        if (header->magic != kLobbyHudMagic)
-            return;
-        if (header->version != kLobbyHudVersion)
-            return;
-
-        if (header->active == 0)
-            return;
-
-        ttyd::fontmgr::FontDrawStart();
-        ttyd::fontmgr::FontDrawEdge();
-        ttyd::fontmgr::FontDrawScale(kLobbyHudFontScale);
-
-        const uint32_t packedWhite = 0xFFFFFFFFu;
-        ttyd::fontmgr::FontDrawColor(reinterpret_cast<uint8_t *>(const_cast<uint32_t *>(&packedWhite)));
-
-        float y = kLobbyHudAnchorY;
-
-        char buf[64];
-        char nameBuf[17];
-        std::memcpy(nameBuf, header->name, 16);
-        nameBuf[16] = '\0';
-
-        ttyd::string::strcpy(buf, "Lobby: ");
-        ttyd::string::strcat(buf, nameBuf);
-
-        ttyd::fontmgr::FontDrawString(RightAlignX(buf, kLobbyHudAnchorX, kLobbyHudFontScale), y, buf);
-        y -= kLobbyHudLineHeight;
-
-        const char *gameLabel = LobbyGameTypeLabel(header->gameType);
-        if (gameLabel[0] != '\0')
-        {
-            ttyd::string::strcpy(buf, "Game: ");
-            ttyd::string::strcat(buf, gameLabel);
-            ttyd::fontmgr::FontDrawString(RightAlignX(buf, kLobbyHudAnchorX, kLobbyHudFontScale), y, buf);
-            y -= kLobbyHudLineHeight;
-        }
-
-        ttyd::string::strcpy(buf, "Status: ");
-        ttyd::string::strcat(buf, LobbyStatusLabel(header->status));
-        ttyd::fontmgr::FontDrawString(RightAlignX(buf, kLobbyHudAnchorX, kLobbyHudFontScale), y, buf);
-        y -= kLobbyHudLineHeight;
-
-        if (header->timerSeconds > 0)
-        {
-            char numBuf[8] = {0};
-            uint16_t t = header->timerSeconds;
-            int idx = 0;
-            char rev[8];
-            int rlen = 0;
-            if (t == 0)
-            {
-                rev[rlen++] = '0';
-            }
-            else
-            {
-                while (t > 0 && rlen < 6)
-                {
-                    rev[rlen++] = static_cast<char>('0' + (t % 10));
-                    t /= 10;
-                }
-            }
-
-            for (int i = rlen - 1; i >= 0; --i) numBuf[idx++] = rev[i];
-            numBuf[idx++] = 's';
-            numBuf[idx] = '\0';
-
-            ttyd::string::strcpy(buf, "Time: ");
-            ttyd::string::strcat(buf, numBuf);
-            ttyd::fontmgr::FontDrawString(RightAlignX(buf, kLobbyHudAnchorX, kLobbyHudFontScale), y, buf);
-            y -= kLobbyHudLineHeight;
-        }
-
-        const char *text = GetLobbyHudText();
-        const char *end = text + kLobbyTextLen;
-        const char *cur = text;
-
-        char lineBuf[80];
-
-        while (cur < end && *cur != '\0')
-        {
-            const char *lineStart = cur;
-            while (cur < end && *cur != '\0' && *cur != '\n') ++cur;
-
-            const int lineLen = static_cast<int>(cur - lineStart);
-
-            // Per-line color markers written by Python's
-            // format_match_text. \x01 = red (seeker), \x02 = green
-            // (hider). Strip the marker before rendering.
-            const char *renderStart = lineStart;
-            int renderLen = lineLen;
-            uint32_t lineColor = packedWhite;
-            if (renderLen > 0)
-            {
-                if (*renderStart == '\x01')
-                {
-                    lineColor = 0xFF4040FFu;
-                    ++renderStart;
-                    --renderLen;
-                }
-                else if (*renderStart == '\x02')
-                {
-                    lineColor = 0x40FF40FFu;
-                    ++renderStart;
-                    --renderLen;
-                }
-            }
-
-            const int copyLen =
-                (renderLen < static_cast<int>(sizeof(lineBuf)) - 1) ? renderLen : static_cast<int>(sizeof(lineBuf)) - 1;
-            std::memcpy(lineBuf, renderStart, copyLen);
-            lineBuf[copyLen] = '\0';
-
-            if (copyLen == 0)
-            {
-                y -= kLobbyHudLineHeight;
-            }
-            else
-            {
-                ttyd::fontmgr::FontDrawColor(reinterpret_cast<uint8_t *>(&lineColor));
-                ttyd::fontmgr::FontDrawString(RightAlignX(lineBuf, kLobbyHudAnchorX, kLobbyHudFontScale), y, lineBuf);
-                y -= kLobbyHudLineHeight;
-            }
-
-            if (cur < end && *cur == '\n')
-                ++cur;
         }
     }
 
