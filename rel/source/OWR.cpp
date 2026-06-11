@@ -1229,12 +1229,13 @@ namespace mod::owr
     // mutation.
     KEEP_FUNC void npcSetupBattleInfoHook(::NpcEntry *npc, void *info)
     {
-        if (ghosts::g_ghostState != nullptr &&
+        g_npcSetupBattleInfo_trampoline(npc, info);
+        /* if (ghosts::g_ghostState != nullptr &&
             ghosts::g_ghostState->selfGameRole != ghosts::kGameRoleNone)
         {
             info = nullptr;
         }
-        g_npcSetupBattleInfo_trampoline(npc, info);
+        g_npcSetupBattleInfo_trampoline(npc, info);*/
     }
 
     KEEP_FUNC const char *msgSearchHook(const char *msgKey)
