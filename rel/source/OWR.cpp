@@ -168,8 +168,7 @@ namespace mod::owr
     KEEP_VAR int (*g_msgWindow_Entry_trampoline)(const char *message, int unk1, int windowType) = nullptr;
     KEEP_VAR void (*g__load_trampoline)(const char *mapName, const char *entranceName, const char *beroName) = nullptr;
     KEEP_VAR ttyd::battle_unit::BattleWorkUnit *(*g_BtlUnit_Entry_trampoline)(BattleUnitSetup *) = nullptr;
-    KEEP_VAR int (*g_psndSFXOn_trampoline)(int) = nullptr;
-    KEEP_VAR int (*g_psndSFXOn3D_trampoline)(int, const gc::vec3 *) = nullptr;
+    KEEP_VAR int (*g_main__psndSFXOn_trampoline)(int, int, int, int, const void *, int, int, int) = nullptr;
     KEEP_VAR int (*g_psndSFXOff_trampoline)(int) = nullptr;
     KEEP_VAR void (*g_npcSetupBattleInfo_trampoline)(::NpcEntry *, void *) = nullptr;
 
@@ -1193,17 +1192,11 @@ namespace mod::owr
         unit->level = statRelValues->level;
     }
 
-    KEEP_FUNC int psndSFXOnHook(int sfxId)
+    KEEP_FUNC int main__psndSFXOnHook(int idOrName, int vol, int pan, int a4, const void *pos, int a6, int a7, int a8)
     {
-        const int channel = g_psndSFXOn_trampoline(sfxId);
-        ghosts::OnLocalSfxFired(sfxId, false, channel);
-        return channel;
-    }
-
-    KEEP_FUNC int psndSFXOn3DHook(int sfxId, const gc::vec3 *position)
-    {
-        const int channel = g_psndSFXOn3D_trampoline(sfxId, position);
-        ghosts::OnLocalSfxFired(sfxId, true, channel);
+        const int channel = g_main__psndSFXOn_trampoline(idOrName, vol, pan, a4, pos, a6, a7, a8);
+        if (idOrName >= 0)
+            ghosts::OnLocalSfxFired(idOrName & 0x1FFF, pos != nullptr, channel);
         return channel;
     }
 
@@ -1213,20 +1206,6 @@ namespace mod::owr
         return g_psndSFXOff_trampoline(channel);
     }
 
-    // Pacify enemies during HnS rounds.
-    //
-    // npcSetupBattleInfo writes the battle struct at npc + 0x230. The
-    // function unconditionally memsets the struct to zero first, then
-    // (only if `info` is non-null) copies the battle template into it.
-    // Passing info=nullptr is the engine-blessed "make this NPC
-    // friendly" path — npcSetBattleInfo itself uses it when battleId
-    // == -1.
-    //
-    // We force info=nullptr while in an HnS match (selfGameRole != NONE).
-    // Effect: enemy NPCs spawn and walk around as usual but have no
-    // battle attached, so Mario touching them does nothing. When HnS
-    // ends, the next map load attaches battles normally — no persistent
-    // mutation.
     KEEP_FUNC void npcSetupBattleInfoHook(::NpcEntry *npc, void *info)
     {
         g_npcSetupBattleInfo_trampoline(npc, info);

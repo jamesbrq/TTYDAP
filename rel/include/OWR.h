@@ -81,8 +81,7 @@ namespace mod::owr
     void replaceMultipleCharacters(ttyd::memory::SmartAllocationData *smartData, uint32_t startIndex, int value);
     BattleWorkUnit *BtlUnit_Entry_Hook(BattleUnitSetup *setup);
     void ScaleUnitStats(BattleUnitKind *unit, RelId rel);
-    int psndSFXOnHook(int sfxId);
-    int psndSFXOn3DHook(int sfxId, const vec3 *position);
+    int main__psndSFXOnHook(int idOrName, int vol, int pan, int a4, const void *pos, int a6, int a7, int a8);
     int psndSFXOffHook(int channel);
     void npcSetupBattleInfoHook(::NpcEntry *npc, void *info);
 
@@ -102,8 +101,7 @@ namespace mod::owr
     extern int (*g_msgWindow_Entry_trampoline)(const char *, int, int);
     extern void (*g__load_trampoline)(const char *, const char *, const char *);
     extern BattleWorkUnit *(*g_BtlUnit_Entry_trampoline)(BattleUnitSetup *);
-    extern int (*g_psndSFXOn_trampoline)(int);
-    extern int (*g_psndSFXOn3D_trampoline)(int, const gc::vec3 *);
+    extern int (*g_main__psndSFXOn_trampoline)(int, int, int, int, const void *, int, int, int);
     extern int (*g_psndSFXOff_trampoline)(int);
     extern void (*g_npcSetupBattleInfo_trampoline)(::NpcEntry *, void *);
 

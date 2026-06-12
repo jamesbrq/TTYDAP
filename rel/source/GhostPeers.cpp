@@ -29,6 +29,11 @@ namespace mod::ghosts
     extern "C" float reviseAngle(float deg);
 
     extern "C" int psndSFXOff(int channel);
+    // Returns 0 while the exact sound that produced `handle` is still
+    // playing; nonzero (-1) once it has stopped, been recycled (the
+    // handle's generation byte no longer matches the pssfx slot), or is
+    // invalid. Reuse-safe. Symbol at 0x800d95a0 (pmario_sound.o).
+    extern "C" int psndSFXChk(int handle);
 
     namespace
     {
@@ -86,6 +91,16 @@ namespace mod::ghosts
             bool spinTrackingInitX;
             bool spinTrackingInitZ;
 
+            float segStartX, segStartY, segStartZ;
+            float segTargetX, segTargetY, segTargetZ;
+            float segStartPivotX, segStartPivotY, segStartPivotZ;
+            float segTargetPivotX, segTargetPivotY, segTargetPivotZ;
+            float segStartRotY, segStartRotX, segStartRotZ;
+            float segDeltaRotY, segDeltaRotX, segDeltaRotZ;
+            float interpFrames;
+            int interpFramesSince;
+            uint16_t lastMotionTimer;
+
             bool renderInitialized;
 
             int hitFramesRemaining;
@@ -110,6 +125,18 @@ namespace mod::ghosts
                 uint8_t stableFrames;
                 bool watching;
 
+                // Parallel motion-id latch/anchor. animName churns through
+                // transition anims in paper modes (plane, tube/roll), so the
+                // anim latch above never arms for them and the loop never
+                // stops. motionId is stable for the whole mode, so this
+                // catches mode-end. The anim anchor is still needed for
+                // sounds that share a motion but differ by anim (boat phase
+                // loops), so we run BOTH and stop if either armed one drifts.
+                uint16_t motionAtStart;
+                uint16_t motionCandidate;
+                uint8_t motionStableFrames;
+                bool motionWatching;
+
                 // True when this entry was started by the SFX-ring
                 // anim-bound path (not state-sync). The anim-bound
                 // janitor is its sole owner; SyncActiveLoopsFromState
@@ -124,7 +151,19 @@ namespace mod::ghosts
             uint16_t blockedSfx[kBlockedSfxPerSlot];
         };
 
-        constexpr float kLerpAlpha = 0.30f;
+        // Time-based retargeting interpolation tunables. A new snapshot
+        // (detected by pos/rot/motionTimer change) starts a segment from
+        // the current render pose to the new target, traversed over the
+        // measured inter-arrival interval (clamped). param > 1 up to
+        // kInterpExtrapCap extrapolates (prediction) when a packet is
+        // late; past kInterpStarveReset intervals with no arrival we
+        // assume the peer stopped and clamp to the true target.
+        constexpr float kInterpMinFrames = 3.0f;
+        constexpr float kInterpMaxFrames = 15.0f;
+        constexpr float kInterpExtrapCap = 1.25f;
+        constexpr float kInterpStarveReset = 2.0f;
+        constexpr float kArrivalPosEps2 = 0.02f;
+        constexpr float kArrivalRotEps = 0.05f;
 
         constexpr uint8_t kAnimStabilityFrames = 10;
 
@@ -376,6 +415,7 @@ namespace mod::ghosts
             0x1040, // SFX_AMB_WATER3
             0x1048,
             0x1049, // SFX_AMB_WATER_WOOD1/2
+            0x91F,  // boat-fold sound (observed at runtime)
         };
         constexpr int kSfxWhitelistLen = sizeof(kSfxWhitelist) / sizeof(kSfxWhitelist[0]);
 
@@ -429,6 +469,10 @@ namespace mod::ghosts
             entry.animCandidate[0] = '\0';
             entry.stableFrames = 0;
             entry.watching = false;
+            entry.motionAtStart = 0;
+            entry.motionCandidate = 0;
+            entry.motionStableFrames = 0;
+            entry.motionWatching = false;
             entry.ringManaged = false;
         }
 
@@ -533,15 +577,17 @@ namespace mod::ghosts
                 e->stableFrames = 1;
                 e->watching = false;
                 e->animNameAtStart[0] = '\0';
+                e->motionCandidate = peer.motionId;
+                e->motionStableFrames = 1;
+                e->motionWatching = false;
+                e->motionAtStart = 0;
                 e->ringManaged = false;
             }
         }
 
         constexpr uint16_t kAnimBoundLoopSfx[] = {
-            0x17B, // mot_roll - sub-phase loop
-            0x18F, // mot_ship - phase loop
-            0x190, // mot_ship - phase loop
-            0x192, // mot_ship - phase loop
+            0x17B, // mot_roll loop
+            0x190, // mot_ship loop
         };
         constexpr int kAnimBoundLoopSfxLen = sizeof(kAnimBoundLoopSfx) / sizeof(kAnimBoundLoopSfx[0]);
 
@@ -550,6 +596,35 @@ namespace mod::ghosts
             for (int i = 0; i < kAnimBoundLoopSfxLen; ++i)
             {
                 if (kAnimBoundLoopSfx[i] == sfxId)
+                    return true;
+            }
+            return false;
+        }
+
+        // sfxIds that genuinely LOOP and need explicit stop on receivers.
+        // SampleActiveLoops must publish only these — NOT the whole mirror
+        // whitelist. One-shots (jump, footsteps, landing) allocate a channel
+        // that the engine frees without ever calling psndSFXOff, so their
+        // entries linger in g_localChannelMap; if they were sampled into
+        // activeLoops the receiver would treat them as loops and skip the
+        // reliable one-shot replay path, dropping them intermittently.
+        constexpr uint16_t kLoopSfx[] = {
+            0x17B,                                  // mot_roll tube loop
+            0x17F,                                  // mot_plane glide loop (mot_plane.s:484, stopped via +0x294->+0x28)
+            0x190,                                  // mot_ship loop (only handle-managed ship sfx; 0x18F/0x192 are one-shots)
+            0x15B,  0x15C,  0x15D,                  // hammer windup loops
+            0x8D9,  0x8DA,  0x8DB,  0x8DC,          // boat ambient
+            0x1013, 0x1014, 0x1015, 0x1016,         // sea / ship ambient
+            0x1017, 0x1018,                         // gull / ship creak
+            0x1027, 0x1028, 0x1040, 0x1048, 0x1049, // water ambient
+        };
+        constexpr int kLoopSfxLen = sizeof(kLoopSfx) / sizeof(kLoopSfx[0]);
+
+        bool IsLoopSfx(uint16_t sfxId)
+        {
+            for (int i = 0; i < kLoopSfxLen; ++i)
+            {
+                if (kLoopSfx[i] == sfxId)
                     return true;
             }
             return false;
@@ -602,42 +677,45 @@ namespace mod::ghosts
         {
             const int published = peer.activeLoopCount > kActiveLoopsPerPeer ? kActiveLoopsPerPeer : peer.activeLoopCount;
 
-            // Pass 1: advance latch and/or check drift.
+            // Pass 1: advance the motion-id latch and stop the loop once the
+            // peer leaves the motion the loop started in. Anchored on motionId
+            // ONLY. motionId is stable for an entire mode, so it survives the
+            // multi-frame fold/transition animations on entry; anchoring on
+            // animName instead armed on the fold anim and then "drifted" to
+            // the glide/sail anim, prematurely stopping AND blocklisting the
+            // loop so state-sync never restarted it (plane/boat went silent;
+            // tube, which has no fold, was spared). Every current loop is a
+            // single sustained sound within one motion, so motion-only is
+            // sufficient — the loop stops cleanly when motionId returns to
+            // idle/walk at mode end.
             g_inReceiverReplay = true;
             for (auto &e : slot.activeLoops)
             {
                 if (!e.inUse)
                     continue;
-                if (!IsAnimBoundLoop(e.sfxId))
-                    continue;
 
-                if (!e.watching)
+                if (!e.motionWatching)
                 {
-                    if (std::memcmp(e.animCandidate, peer.animName, sizeof(peer.animName)) == 0)
+                    if (e.motionCandidate == peer.motionId)
                     {
-                        if (e.stableFrames < 0xFF)
-                            ++e.stableFrames;
-                        if (e.stableFrames >= kAnimStabilityFrames)
+                        if (e.motionStableFrames < 0xFF)
+                            ++e.motionStableFrames;
+                        if (e.motionStableFrames >= kAnimStabilityFrames)
                         {
-                            // Promote to anchor and start watching.
-                            std::memcpy(e.animNameAtStart, e.animCandidate, sizeof(e.animCandidate));
-                            e.animNameAtStart[sizeof(e.animNameAtStart) - 1] = '\0';
-                            e.watching = true;
+                            e.motionAtStart = e.motionCandidate;
+                            e.motionWatching = true;
                         }
                     }
                     else
                     {
-                        // Anim changed during latch period. Reset.
-                        std::memcpy(e.animCandidate, peer.animName, sizeof(peer.animName));
-                        e.animCandidate[sizeof(e.animCandidate) - 1] = '\0';
-                        e.stableFrames = 1;
+                        e.motionCandidate = peer.motionId;
+                        e.motionStableFrames = 1;
                     }
-                    continue; // not yet armed - no drift check this frame
+                    continue; // not armed yet
                 }
 
-                // Watching phase: standard drift check.
-                if (std::memcmp(e.animNameAtStart, peer.animName, sizeof(peer.animName)) == 0)
-                    continue; // anim still matches - leave alone
+                if (e.motionAtStart == peer.motionId)
+                    continue; // still in the mode
 
                 const uint16_t stoppedId = e.sfxId;
                 ClearActiveLoop(e);
@@ -806,36 +884,49 @@ namespace mod::ghosts
 
         constexpr float kVelocityFilterAlpha = 0.4f;
 
-        float SpinAwareLerpAngle(float current,
-                                 float target,
-                                 float alpha,
-                                 int8_t peerHint,
-                                 float &lastSeen,
-                                 float &smoothedVel,
-                                 bool &initialized)
+        float WrapDeg(float a)
         {
-            if (target != lastSeen)
-            {
-                if (!initialized)
-                {
-                    smoothedVel = 0.0f;
-                    initialized = true;
-                }
-                else
-                {
-                    float pubDelta = target - lastSeen;
-                    while (pubDelta > 180.0f) pubDelta -= 360.0f;
-                    while (pubDelta < -180.0f) pubDelta += 360.0f;
-                    smoothedVel = smoothedVel * (1.0f - kVelocityFilterAlpha) + pubDelta * kVelocityFilterAlpha;
-                }
-                lastSeen = target;
-            }
+            while (a >= 360.0f) a -= 360.0f;
+            while (a < 0.0f) a += 360.0f;
+            return a;
+        }
 
-            float diff = target - current;
+        float AngAbsDiff(float a, float b)
+        {
+            float d = a - b;
+            while (d > 180.0f) d -= 360.0f;
+            while (d < -180.0f) d += 360.0f;
+            return d < 0.0f ? -d : d;
+        }
+
+        // Update the per-axis filtered publish-rate angular velocity on a
+        // new snapshot. `lastSeen` carries the previous target.
+        void UpdateSpinVel(float target, float &lastSeen, float &smoothedVel, bool &initialized)
+        {
+            if (!initialized)
+            {
+                smoothedVel = 0.0f;
+                initialized = true;
+            }
+            else
+            {
+                float pubDelta = target - lastSeen;
+                while (pubDelta > 180.0f) pubDelta -= 360.0f;
+                while (pubDelta < -180.0f) pubDelta += 360.0f;
+                smoothedVel = smoothedVel * (1.0f - kVelocityFilterAlpha) + pubDelta * kVelocityFilterAlpha;
+            }
+            lastSeen = target;
+        }
+
+        // Signed angular distance to travel from `fromAng` to `toAng`,
+        // taking the long way when the spin hint (or fast-spin velocity
+        // fallback) indicates the source rotated > 180 deg per publish.
+        float ResolveAngularDelta(float fromAng, float toAng, int8_t peerHint, float smoothedVel)
+        {
+            float diff = toAng - fromAng;
             while (diff > 180.0f) diff -= 360.0f;
             while (diff < -180.0f) diff += 360.0f;
 
-            // Direction override priority: peer hint > velocity fallback.
             int directionSign = 0;
             if (peerHint > 0)
                 directionSign = 1;
@@ -851,7 +942,7 @@ namespace mod::ghosts
             else if (directionSign < 0 && diff > 0.0f)
                 diff -= 360.0f;
 
-            return current + diff * alpha;
+            return diff;
         }
 
         void ApplyPeerToSlot(const PeerSlot &peer, GhostSlot &slot)
@@ -997,18 +1088,26 @@ namespace mod::ghosts
 
                 if (!slot.sfxSeqInitialized)
                 {
-                    uint8_t maxSeq = 0;
-                    for (int i = 0; i < n; ++i)
+                    // First sight (also re-entered after a map change, since
+                    // ReleaseSlot clears this): seed the cursor to just BEFORE
+                    // the oldest event present, so the replay below plays
+                    // every current event. We used to seed to the NEWEST and
+                    // skip, which dropped the first sound after every room
+                    // change and any transition sound that landed in the first
+                    // post-sight snapshot. sfxEvents only holds the sender's
+                    // most-recent publish (not a stale rolling history), so
+                    // replaying what's here is correct.
+                    uint8_t oldest = peer.sfxEvents[0].seq;
+                    for (int i = 1; i < n; ++i)
                     {
                         const uint8_t s = peer.sfxEvents[i].seq;
-                        const uint8_t diff = static_cast<uint8_t>(s - maxSeq);
-                        if (diff != 0 && diff < 128)
-                            maxSeq = s;
+                        const uint8_t d = static_cast<uint8_t>(oldest - s);
+                        if (d != 0 && d < 128)
+                            oldest = s;
                     }
-                    slot.lastConsumedSfxSeq = maxSeq;
+                    slot.lastConsumedSfxSeq = static_cast<uint8_t>(oldest - 1);
                     slot.sfxSeqInitialized = true;
                 }
-                else
                 {
                     uint8_t newest = slot.lastConsumedSfxSeq;
                     g_inReceiverReplay = true;
@@ -1058,6 +1157,10 @@ namespace mod::ghosts
                                             e->stableFrames = 1;
                                             e->watching = false;
                                             e->animNameAtStart[0] = '\0';
+                                            e->motionCandidate = peer.motionId;
+                                            e->motionStableFrames = 1;
+                                            e->motionWatching = false;
+                                            e->motionAtStart = 0;
                                             e->ringManaged = true;
                                         }
                                         else
@@ -1256,6 +1359,27 @@ namespace mod::ghosts
             s.spinTrackingInitY = false;
             s.spinTrackingInitX = false;
             s.spinTrackingInitZ = false;
+            s.segStartX = 0.0f;
+            s.segStartY = 0.0f;
+            s.segStartZ = 0.0f;
+            s.segTargetX = 0.0f;
+            s.segTargetY = 0.0f;
+            s.segTargetZ = 0.0f;
+            s.segStartPivotX = 0.0f;
+            s.segStartPivotY = 0.0f;
+            s.segStartPivotZ = 0.0f;
+            s.segTargetPivotX = 0.0f;
+            s.segTargetPivotY = 0.0f;
+            s.segTargetPivotZ = 0.0f;
+            s.segStartRotY = 0.0f;
+            s.segStartRotX = 0.0f;
+            s.segStartRotZ = 0.0f;
+            s.segDeltaRotY = 0.0f;
+            s.segDeltaRotX = 0.0f;
+            s.segDeltaRotZ = 0.0f;
+            s.interpFrames = kInterpMinFrames;
+            s.interpFramesSince = 0;
+            s.lastMotionTimer = 0;
             s.renderInitialized = false;
             s.hitFramesRemaining = 0;
 
@@ -1271,6 +1395,10 @@ namespace mod::ghosts
                 e.animCandidate[0] = '\0';
                 e.stableFrames = 0;
                 e.watching = false;
+                e.motionAtStart = 0;
+                e.motionCandidate = 0;
+                e.motionStableFrames = 0;
+                e.motionWatching = false;
                 e.ringManaged = false;
             }
             for (auto &b : s.blockedSfx)
@@ -1351,16 +1479,27 @@ namespace mod::ghosts
             {
                 if (count >= maxOut)
                     break;
-                // RecordLocalChannel intentionally tracks EVERY channel
-                // the engine allocates (so RemoveLocalChannel can clean
-                // up on stop). But state-sync should only republish
-                // SFX that are actually intended for peer mirroring —
-                // i.e., the same whitelist the SFX ring uses. Without
-                // this filter, UI/menu sounds like SFX_PRESS_START1
-                // (index 8) leak into selfActiveLoops, get published,
-                // and play on every peer's screen as a "ghost arrived"
-                // jingle the moment they first see us.
-                if (e.inUse && e.sfxId != 0 && SfxIsAllowed(e.sfxId))
+                // RecordLocalChannel tracks EVERY channel the engine
+                // allocates; IsLoopSfx selects only genuine loops to publish
+                // (one-shots flow through the SFX ring instead). A loop stays
+                // published until its psndSFXOff hook (OnLocalSfxStopped ->
+                // RemoveLocalChannel) drops the channel, with the receiver's
+                // motion janitor as backup.
+                //
+                // We do NOT gate on psndSFXChk here. plane/boat start the
+                // loop once and hold the handle for the whole mode; over a
+                // long glide the engine recycles that pssfx slot for other
+                // SFX, so psndSFXChk(old_handle) returns the generation-
+                // mismatch sentinel even though the loop is still audibly
+                // playing — which silenced plane/boat entirely while sparing
+                // tube (short, re-fired). The ring-exclusion fix already
+                // removed the original never-stops cause, so the liveness
+                // gate was both unnecessary and harmful.
+                // TEMP DIAGNOSTIC: emit EVERY recorded channel (IsLoopSfx
+                // filter dropped) to test whether RecordLocalChannel is
+                // storing anything. Restore the IsLoopSfx() condition after.
+                if (e.inUse && e.sfxId != 0)
+                // if (e.inUse && e.sfxId != 0 && IsLoopSfx(e.sfxId))
                 {
                     out[count++] = e.sfxId;
                 }
@@ -1446,6 +1585,22 @@ namespace mod::ghosts
                 slot.renderPivotY = peer.rotPivotY;
                 slot.renderPivotZ = peer.rotPivotZ;
 
+                slot.segStartX = slot.segTargetX = peer.position.x;
+                slot.segStartY = slot.segTargetY = peer.position.y;
+                slot.segStartZ = slot.segTargetZ = peer.position.z;
+                slot.segStartPivotX = slot.segTargetPivotX = peer.rotPivotX;
+                slot.segStartPivotY = slot.segTargetPivotY = peer.rotPivotY;
+                slot.segStartPivotZ = slot.segTargetPivotZ = peer.rotPivotZ;
+                slot.segStartRotY = peer.rotationY;
+                slot.segStartRotX = peer.rotationX;
+                slot.segStartRotZ = peer.rotationZ;
+                slot.segDeltaRotY = 0.0f;
+                slot.segDeltaRotX = 0.0f;
+                slot.segDeltaRotZ = 0.0f;
+                slot.interpFrames = kInterpMinFrames;
+                slot.interpFramesSince = 0;
+                slot.lastMotionTimer = peer.motionTimer;
+
                 slot.lastSeenRotY = peer.rotationY;
                 slot.lastSeenRotX = peer.rotationX;
                 slot.lastSeenRotZ = peer.rotationZ;
@@ -1460,35 +1615,79 @@ namespace mod::ghosts
             }
             else
             {
-                slot.renderX = Lerp(slot.renderX, peer.position.x, kLerpAlpha);
-                slot.renderY = Lerp(slot.renderY, peer.position.y, kLerpAlpha);
-                slot.renderZ = Lerp(slot.renderZ, peer.position.z, kLerpAlpha);
+                const float dpx = peer.position.x - slot.segTargetX;
+                const float dpy = peer.position.y - slot.segTargetY;
+                const float dpz = peer.position.z - slot.segTargetZ;
+                const bool posMoved = (dpx * dpx + dpy * dpy + dpz * dpz) > kArrivalPosEps2;
+                const bool rotMoved = AngAbsDiff(peer.rotationY, slot.lastSeenRotY) > kArrivalRotEps ||
+                                      AngAbsDiff(peer.rotationX, slot.lastSeenRotX) > kArrivalRotEps ||
+                                      AngAbsDiff(peer.rotationZ, slot.lastSeenRotZ) > kArrivalRotEps;
+                const bool timerMoved = (peer.motionTimer != slot.lastMotionTimer);
+                slot.lastMotionTimer = peer.motionTimer;
 
-                slot.renderRotY = SpinAwareLerpAngle(slot.renderRotY,
-                                                     peer.rotationY,
-                                                     kLerpAlpha,
-                                                     peer.spinDirHintY,
-                                                     slot.lastSeenRotY,
-                                                     slot.velRotY,
-                                                     slot.spinTrackingInitY);
-                slot.renderRotX = SpinAwareLerpAngle(slot.renderRotX,
-                                                     peer.rotationX,
-                                                     kLerpAlpha,
-                                                     peer.spinDirHintX,
-                                                     slot.lastSeenRotX,
-                                                     slot.velRotX,
-                                                     slot.spinTrackingInitX);
-                slot.renderRotZ = SpinAwareLerpAngle(slot.renderRotZ,
-                                                     peer.rotationZ,
-                                                     kLerpAlpha,
-                                                     peer.spinDirHintZ,
-                                                     slot.lastSeenRotZ,
-                                                     slot.velRotZ,
-                                                     slot.spinTrackingInitZ);
+                if (posMoved || rotMoved || timerMoved)
+                {
+                    UpdateSpinVel(peer.rotationY, slot.lastSeenRotY, slot.velRotY, slot.spinTrackingInitY);
+                    UpdateSpinVel(peer.rotationX, slot.lastSeenRotX, slot.velRotX, slot.spinTrackingInitX);
+                    UpdateSpinVel(peer.rotationZ, slot.lastSeenRotZ, slot.velRotZ, slot.spinTrackingInitZ);
 
-                slot.renderPivotX = Lerp(slot.renderPivotX, peer.rotPivotX, kLerpAlpha);
-                slot.renderPivotY = Lerp(slot.renderPivotY, peer.rotPivotY, kLerpAlpha);
-                slot.renderPivotZ = Lerp(slot.renderPivotZ, peer.rotPivotZ, kLerpAlpha);
+                    float measured = static_cast<float>(slot.interpFramesSince);
+                    if (measured < kInterpMinFrames)
+                        measured = kInterpMinFrames;
+                    if (measured > kInterpMaxFrames)
+                        measured = kInterpMaxFrames;
+                    slot.interpFrames = measured;
+                    slot.interpFramesSince = 0;
+
+                    slot.segStartX = slot.renderX;
+                    slot.segTargetX = peer.position.x;
+                    slot.segStartY = slot.renderY;
+                    slot.segTargetY = peer.position.y;
+                    slot.segStartZ = slot.renderZ;
+                    slot.segTargetZ = peer.position.z;
+
+                    slot.segStartPivotX = slot.renderPivotX;
+                    slot.segTargetPivotX = peer.rotPivotX;
+                    slot.segStartPivotY = slot.renderPivotY;
+                    slot.segTargetPivotY = peer.rotPivotY;
+                    slot.segStartPivotZ = slot.renderPivotZ;
+                    slot.segTargetPivotZ = peer.rotPivotZ;
+
+                    slot.segStartRotY = slot.renderRotY;
+                    slot.segStartRotX = slot.renderRotX;
+                    slot.segStartRotZ = slot.renderRotZ;
+                    slot.segDeltaRotY = ResolveAngularDelta(slot.renderRotY, peer.rotationY, peer.spinDirHintY, slot.velRotY);
+                    slot.segDeltaRotX = ResolveAngularDelta(slot.renderRotX, peer.rotationX, peer.spinDirHintX, slot.velRotX);
+                    slot.segDeltaRotZ = ResolveAngularDelta(slot.renderRotZ, peer.rotationZ, peer.spinDirHintZ, slot.velRotZ);
+                }
+
+                slot.interpFramesSince++;
+
+                float param;
+                if (static_cast<float>(slot.interpFramesSince) > slot.interpFrames * kInterpStarveReset)
+                {
+                    param = 1.0f;
+                }
+                else
+                {
+                    param = static_cast<float>(slot.interpFramesSince) / slot.interpFrames;
+                    if (param > kInterpExtrapCap)
+                        param = kInterpExtrapCap;
+                }
+                if (param < 0.0f)
+                    param = 0.0f;
+
+                slot.renderX = slot.segStartX + (slot.segTargetX - slot.segStartX) * param;
+                slot.renderY = slot.segStartY + (slot.segTargetY - slot.segStartY) * param;
+                slot.renderZ = slot.segStartZ + (slot.segTargetZ - slot.segStartZ) * param;
+
+                slot.renderPivotX = slot.segStartPivotX + (slot.segTargetPivotX - slot.segStartPivotX) * param;
+                slot.renderPivotY = slot.segStartPivotY + (slot.segTargetPivotY - slot.segStartPivotY) * param;
+                slot.renderPivotZ = slot.segStartPivotZ + (slot.segTargetPivotZ - slot.segStartPivotZ) * param;
+
+                slot.renderRotY = WrapDeg(slot.segStartRotY + slot.segDeltaRotY * param);
+                slot.renderRotX = WrapDeg(slot.segStartRotX + slot.segDeltaRotX * param);
+                slot.renderRotZ = WrapDeg(slot.segStartRotZ + slot.segDeltaRotZ * param);
             }
 
             if (PeerOnLocalMap(peer))
@@ -2032,12 +2231,17 @@ namespace mod::ghosts
         // is a real channel index, NOT a sentinel.
         RecordLocalChannel(channel, static_cast<uint16_t>(sfxId & 0xFFFF));
 
-        // Push a start event regardless. Receivers filter loops out of
-        // SFX-ring replay (they handle them via state-sync diff), but
-        // one-shots flow through normally. The ring-side filter on
-        // receivers depends on knowing if the sfxId is in
-        // peer.activeLoops, which they have at receive time.
+        // One-shots ride the SFX ring. Loops must NEVER ride it: they flow
+        // ONLY through activeLoops/state-sync, which guarantees the receiver
+        // tracks each as an ActiveLoop entry (stoppable by the diff AND the
+        // motion/anim janitor). If a loop start went through the ring and got
+        // processed in a frame before its sfxId appeared in peer.activeLoops,
+        // the receiver started it via the plain one-shot path (psndSFXOn_3D)
+        // — untracked, so nothing could ever stop it. That was the
+        // never-stopping-loop bug.
         if (!SfxIsAllowed(sfxId))
+            return;
+        if (IsLoopSfx(sfxId))
             return;
         PushSfxRingEvent(static_cast<uint16_t>(sfxId & 0xFFFF), is3D ? kSfxFlag3D : 0);
     }
