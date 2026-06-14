@@ -8,6 +8,8 @@
 #include <gc/OSModule.h>
 #include <gc/pad.h>
 #include <mod.h>
+#include "vm_prefetch.h"
+#include "vm_ttyd.h"
 #include <ttyd/common_types.h>
 #include <ttyd/countdown.h>
 #include <ttyd/evt_bero.h>
@@ -1169,8 +1171,16 @@ namespace mod::owr
         ttyd::msgdrv::msgLoad("desc", 3);
     }
 
-    KEEP_FUNC BattleWorkUnit *BtlUnit_Entry_Hook(BattleUnitSetup *setup)
+KEEP_FUNC BattleWorkUnit *BtlUnit_Entry_Hook(BattleUnitSetup *setup)
     {
+        if (setup)
+        {
+            BattleUnitKind *kind = setup->unit_kind_params;
+            if (kind && kind->unit_type == BattleUnitType::SYSTEM)
+                mod::vm::VM_UnlockAll(); // SYSTEM is first unit each battle: drop last fight's pins
+            mod::vm::VM_PrefetchForKind(reinterpret_cast<uint32_t>(kind), true);
+        }
+
         const OSModuleInfo *relPtr = _globalWorkPtr->relocationBase;
         if (!relPtr)
             return g_BtlUnit_Entry_trampoline(setup);
@@ -1178,7 +1188,6 @@ namespace mod::owr
         ScaleUnitStats(setup->unit_kind_params, currentRel);
         return g_BtlUnit_Entry_trampoline(setup);
     }
-
     KEEP_FUNC void ScaleUnitStats(BattleUnitKind *unit, RelId rel)
     {
         if ((gState->apSettings->enemyRandomizer == 0 && gState->apSettings->shuffleChapterStats == 0) ||

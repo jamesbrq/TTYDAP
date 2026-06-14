@@ -38,9 +38,15 @@ namespace mod::ghosts
     namespace
     {
 
-        constexpr const char *kAgbForward = "a_mario";
-        constexpr const char *kAgbRear = "a_mario_r";
-        constexpr const char *kAgbEffects = "e_mario";
+        // Body model AGB names per emblem index (marioGetColor / Player+0x3D):
+        // 0 = none (Mario), 1 = L Emblem (Luigi), 2 = W Emblem (Wario), 3 = both (Waluigi).
+        // Columns: forward, rear, effects. Mirrors the engine's mario.o rodata triplets.
+        constexpr const char *kAgbSets[4][3] = {
+            {"a_mario", "a_mario_r", "e_mario"},
+            {"a_mario_l", "a_mario_lr", "e_mario_l"},
+            {"a_mario_w", "a_mario_wr", "e_mario_w"},
+            {"a_mario_wl", "a_mario_wlr", "e_mario_wl"},
+        };
         constexpr int32_t kPoseGroup = 2;
 
         constexpr float kGhostScale = 2.0f;
@@ -60,6 +66,9 @@ namespace mod::ghosts
             int32_t effectsPoseId;
 
             int8_t activePose;
+
+            uint8_t lastColorIndex;
+            int8_t costumeHeld;
 
             char lastAnimForward[16];
             char lastAnimRear[16];
@@ -108,6 +117,22 @@ namespace mod::ghosts
             uint8_t lastConsumedSfxSeq;
             bool sfxSeqInitialized;
 
+            // Frames remaining before the next one-shot replay is allowed.
+            // Spaces consecutive ring one-shots apart so TTYD's mixer doesn't
+            // steal voices and drop one (e.g. hammer 0x160 + 0x161 batched
+            // into the same publish).
+            uint8_t sfxReplayCooldown;
+
+            // Mod-side FIFO of one-shot sfxIds waiting to be replayed, one per
+            // cooldown window. Batched one-shots (e.g. hammer DON 0x160 + WOO
+            // 0x161) are copied here and consumed off the wire immediately, so
+            // a deferred sound survives even after the wire snapshot stops
+            // exposing it (the loopback SFX window is only ~6 frames).
+            static constexpr int kSfxQueueMax = 8;
+            uint16_t sfxQueue[kSfxQueueMax];
+            uint8_t sfxQueueHead;
+            uint8_t sfxQueueCount;
+
             // Last-seen peer.mapName, used to detect cross-map
             // transitions so we can drop the SFX queue once on
             // arrival — otherwise pre-arrival landing/footstep SFX
@@ -143,6 +168,12 @@ namespace mod::ghosts
                 // pass-1 must not reap it just because its sfxId isn't
                 // in peer.activeLoops (it never is, by construction).
                 bool ringManaged;
+
+                // Frames since this entry started, advanced by the janitor.
+                // Ring-managed loops whose source SE loops its waveform but is
+                // too short for the motion latch to arm (e.g. 0x162 spin
+                // flatten) are force-stopped once this reaches the cap.
+                uint16_t framesAlive;
             };
             static constexpr int kActiveLoopsPerSlot = 8;
             ActiveLoop activeLoops[kActiveLoopsPerSlot];
@@ -167,6 +198,29 @@ namespace mod::ghosts
 
         constexpr uint8_t kAnimStabilityFrames = 10;
 
+        // Force-stop cap for ring-managed loops that never arm the motion
+        // latch (short looping SEs). ~0.67s at 60fps; tune per-SE if needed.
+        constexpr uint16_t kRingLoopMaxFrames = 40;
+
+        // One-shot replays drain one per frame so same-burst SEs (e.g. hammer
+        // DON+WOO, which fire near-simultaneously) stay tightly coupled instead
+        // of being spread ~67ms apart. Still serialized to avoid same-frame flood.
+        constexpr uint8_t kSfxReplaySpacing = 1;
+
+        int g_costumeRefs[4] = {0, 0, 0, 0};
+
+        void CostumeAcquire(int8_t colorIndex)
+        {
+            if (colorIndex >= 1 && colorIndex <= 3)
+                ++g_costumeRefs[colorIndex];
+        }
+
+        void CostumeRelease(int8_t colorIndex)
+        {
+            if (colorIndex >= 1 && colorIndex <= 3 && g_costumeRefs[colorIndex] > 0)
+                --g_costumeRefs[colorIndex];
+        }
+
         GhostSlot g_slots[kMaxPeers];
         bool g_initialized = false;
 
@@ -180,6 +234,8 @@ namespace mod::ghosts
         bool g_hitLockApplied = false; // tracks whether we hold a
                                        // marioKeyOff() contribution
                                        // we still need to release.
+        bool g_hitPosePending = false; // M_N_7 deferred until the forced
+        int g_hitPoseDelay = 0;        // kStay motion has actually settled
 
         bool g_inReceiverReplay = false;
 
@@ -474,6 +530,7 @@ namespace mod::ghosts
             entry.motionStableFrames = 0;
             entry.motionWatching = false;
             entry.ringManaged = false;
+            entry.framesAlive = 0;
         }
 
         // Stop ALL active loops for a slot. Used on slot release and
@@ -582,12 +639,22 @@ namespace mod::ghosts
                 e->motionWatching = false;
                 e->motionAtStart = 0;
                 e->ringManaged = false;
+                e->framesAlive = 0;
             }
         }
 
         constexpr uint16_t kAnimBoundLoopSfx[] = {
             0x17B, // mot_roll loop
             0x190, // mot_ship loop
+            0x162, // hammer spin-attack flatten: short looping-waveform SE,
+                   // too brief for 20Hz state-sync sampling. Rides the ring;
+                   // stopped on the receiver by the ring-loop lifetime cap.
+            0x15B,
+            0x15C,
+            0x15D, // hammer windup/swing (FUR): the audible swing
+                   // whoosh. Per-swing looping-waveform SE; must re-trigger each
+                   // swing (state-sync can't edge-detect a re-fire) and stop via
+                   // the cap/motion janitor so it doesn't drone.
         };
         constexpr int kAnimBoundLoopSfxLen = sizeof(kAnimBoundLoopSfx) / sizeof(kAnimBoundLoopSfx[0]);
 
@@ -609,14 +676,24 @@ namespace mod::ghosts
         // activeLoops the receiver would treat them as loops and skip the
         // reliable one-shot replay path, dropping them intermittently.
         constexpr uint16_t kLoopSfx[] = {
-            0x17B,                                  // mot_roll tube loop
-            0x17F,                                  // mot_plane glide loop (mot_plane.s:484, stopped via +0x294->+0x28)
-            0x190,                                  // mot_ship loop (only handle-managed ship sfx; 0x18F/0x192 are one-shots)
-            0x15B,  0x15C,  0x15D,                  // hammer windup loops
-            0x8D9,  0x8DA,  0x8DB,  0x8DC,          // boat ambient
-            0x1013, 0x1014, 0x1015, 0x1016,         // sea / ship ambient
-            0x1017, 0x1018,                         // gull / ship creak
-            0x1027, 0x1028, 0x1040, 0x1048, 0x1049, // water ambient
+            0x17B, // mot_roll tube loop
+            0x17F, // mot_plane glide loop (mot_plane.s:484, stopped via +0x294->+0x28)
+            0x190, // mot_ship loop (only handle-managed ship sfx; 0x18F/0x192 are one-shots)
+            0x8D9,
+            0x8DA,
+            0x8DB,
+            0x8DC, // boat ambient
+            0x1013,
+            0x1014,
+            0x1015,
+            0x1016, // sea / ship ambient
+            0x1017,
+            0x1018, // gull / ship creak
+            0x1027,
+            0x1028,
+            0x1040,
+            0x1048,
+            0x1049, // water ambient
         };
         constexpr int kLoopSfxLen = sizeof(kLoopSfx) / sizeof(kLoopSfx[0]);
 
@@ -694,6 +771,20 @@ namespace mod::ghosts
                 if (!e.inUse)
                     continue;
 
+                // Ring-managed short loops (e.g. 0x162) never arm the motion
+                // latch — their source SE is briefer than kAnimStabilityFrames.
+                // Bound them by elapsed frames so they don't drone forever.
+                if (e.ringManaged)
+                {
+                    if (e.framesAlive < 0xFFFF)
+                        ++e.framesAlive;
+                    if (e.framesAlive >= kRingLoopMaxFrames)
+                    {
+                        ClearActiveLoop(e);
+                        continue;
+                    }
+                }
+
                 if (!e.motionWatching)
                 {
                     if (e.motionCandidate == peer.motionId)
@@ -767,16 +858,53 @@ namespace mod::ghosts
             return idx >= 0 && idx < CurrentMaxRenderedPeers();
         }
 
-        void EnsurePosesAllocated(GhostSlot &slot)
+        void EnsurePosesAllocated(GhostSlot &slot, uint8_t colorIndex)
         {
             if (!SlotMayAllocate(slot))
                 return;
+
+            if (colorIndex > 3)
+                colorIndex = 0;
+
+            // Emblem changed since these poses were allocated: drop the three
+            // body poses so they re-allocate from the new costume triplet
+            // below. Paper poses are left alone (paper AGB carries its own
+            // color via the engine's arr[color&3] selection).
+            if (slot.lastColorIndex != colorIndex)
+            {
+                if (slot.forwardAllocated)
+                {
+                    ttyd::animdrv::animPoseRelease(slot.forwardPoseId);
+                    slot.forwardAllocated = false;
+                    slot.forwardPoseId = -1;
+                    slot.lastAnimForward[0] = '\0';
+                }
+                if (slot.rearAllocated)
+                {
+                    ttyd::animdrv::animPoseRelease(slot.rearPoseId);
+                    slot.rearAllocated = false;
+                    slot.rearPoseId = -1;
+                    slot.lastAnimRear[0] = '\0';
+                }
+                if (slot.effectsAllocated)
+                {
+                    ttyd::animdrv::animPoseRelease(slot.effectsPoseId);
+                    slot.effectsAllocated = false;
+                    slot.effectsPoseId = -1;
+                    slot.lastAnimEffects[0] = '\0';
+                }
+                slot.lastColorIndex = colorIndex;
+            }
+
+            const char *agbForward = kAgbSets[colorIndex][0];
+            const char *agbRear = kAgbSets[colorIndex][1];
+            const char *agbEffects = kAgbSets[colorIndex][2];
 
             const bool isSlot0 = (&slot == &g_slots[0]);
 
             if (!slot.forwardAllocated)
             {
-                int32_t id = ttyd::animdrv::animPoseEntry(kAgbForward, kPoseGroup);
+                int32_t id = ttyd::animdrv::animPoseEntry(agbForward, kPoseGroup);
                 if (id >= 0)
                 {
                     slot.forwardPoseId = id;
@@ -788,7 +916,7 @@ namespace mod::ghosts
             }
             if (!slot.rearAllocated)
             {
-                int32_t id = ttyd::animdrv::animPoseEntry(kAgbRear, kPoseGroup);
+                int32_t id = ttyd::animdrv::animPoseEntry(agbRear, kPoseGroup);
                 if (id >= 0)
                 {
                     slot.rearPoseId = id;
@@ -800,13 +928,20 @@ namespace mod::ghosts
             }
             if (!slot.effectsAllocated)
             {
-                int32_t id = ttyd::animdrv::animPoseEntry(kAgbEffects, kPoseGroup);
+                int32_t id = ttyd::animdrv::animPoseEntry(agbEffects, kPoseGroup);
                 if (id >= 0)
                 {
                     slot.effectsPoseId = id;
                     slot.effectsAllocated = true;
                     slot.lastAnimEffects[0] = '\0';
                 }
+            }
+
+            if (slot.forwardAllocated && slot.costumeHeld != static_cast<int8_t>(colorIndex))
+            {
+                CostumeRelease(slot.costumeHeld);
+                CostumeAcquire(static_cast<int8_t>(colorIndex));
+                slot.costumeHeld = static_cast<int8_t>(colorIndex);
             }
         }
 
@@ -834,6 +969,9 @@ namespace mod::ghosts
                 slot.lastAnimEffects[0] = '\0';
             }
             slot.activePose = 0;
+            slot.lastColorIndex = 0;
+            CostumeRelease(slot.costumeHeld);
+            slot.costumeHeld = -1;
             slot.lastPaperAnim[0] = '\0';
 
             if (slot.paperPoseId >= 0)
@@ -849,6 +987,9 @@ namespace mod::ghosts
 
             slot.sfxSeqInitialized = false;
             slot.lastConsumedSfxSeq = 0;
+            slot.sfxReplayCooldown = 0;
+            slot.sfxQueueHead = 0;
+            slot.sfxQueueCount = 0;
             slot.lastMapName[0] = '\0';
 
             StopPeerLoop(slot);
@@ -947,7 +1088,10 @@ namespace mod::ghosts
 
         void ApplyPeerToSlot(const PeerSlot &peer, GhostSlot &slot)
         {
-            EnsurePosesAllocated(slot);
+            EnsurePosesAllocated(slot, peer.colorIndex);
+
+            if (slot.sfxReplayCooldown > 0)
+                --slot.sfxReplayCooldown;
 
             // Detect peer-side map changes. When a peer transitions
             // to a new map (their own map change, or first-time becoming
@@ -961,6 +1105,8 @@ namespace mod::ghosts
             if (std::memcmp(slot.lastMapName, peer.mapName, sizeof(peer.mapName)) != 0)
             {
                 slot.sfxSeqInitialized = false;
+                slot.sfxQueueHead = 0;
+                slot.sfxQueueCount = 0;
                 StopAllActiveLoops(slot);
                 std::memcpy(slot.lastMapName, peer.mapName, sizeof(peer.mapName));
             }
@@ -1109,81 +1255,125 @@ namespace mod::ghosts
                     slot.sfxSeqInitialized = true;
                 }
                 {
-                    uint8_t newest = slot.lastConsumedSfxSeq;
-                    g_inReceiverReplay = true;
+                    // Sort the new events by ascending seq and consume each off
+                    // the wire THIS frame. State-sync loops (in peer.activeLoops)
+                    // are owned by the diff and skipped. Everything else — plain
+                    // one-shots AND anim-bound starts — is copied into the
+                    // mod-side FIFO, which is drained one per cooldown below. The
+                    // FIFO owns replay timing, so a deferred sound survives even
+                    // after the wire stops exposing it (the loopback SFX window
+                    // is only ~6 frames). The drain decides plain vs anim-bound.
+                    int order[kSfxEventsPerSlot];
+                    int m = 0;
                     for (int i = 0; i < n; ++i)
                     {
-                        const SfxEvent &ev = peer.sfxEvents[i];
-                        const uint8_t diff = static_cast<uint8_t>(ev.seq - slot.lastConsumedSfxSeq);
+                        const uint8_t diff = static_cast<uint8_t>(peer.sfxEvents[i].seq - slot.lastConsumedSfxSeq);
                         if (diff == 0 || diff >= 128)
                             continue;
+                        order[m++] = i;
+                    }
+                    for (int a = 1; a < m; ++a)
+                    {
+                        const int key = order[a];
+                        const uint8_t kd = static_cast<uint8_t>(peer.sfxEvents[key].seq - slot.lastConsumedSfxSeq);
+                        int b = a - 1;
+                        while (b >= 0 && static_cast<uint8_t>(peer.sfxEvents[order[b]].seq - slot.lastConsumedSfxSeq) > kd)
+                        {
+                            order[b + 1] = order[b];
+                            --b;
+                        }
+                        order[b + 1] = key;
+                    }
 
-                        bool isLoopState = false;
+                    uint8_t newest = slot.lastConsumedSfxSeq;
+                    for (int oi = 0; oi < m; ++oi)
+                    {
+                        const SfxEvent &ev = peer.sfxEvents[order[oi]];
+                        newest = ev.seq;
+
+                        bool isStateSync = false;
                         const int published =
                             peer.activeLoopCount > kActiveLoopsPerPeer ? kActiveLoopsPerPeer : peer.activeLoopCount;
                         for (int j = 0; j < published; ++j)
                         {
                             if (peer.activeLoops[j] == ev.sfxId)
                             {
-                                isLoopState = true;
+                                isStateSync = true;
                                 break;
                             }
                         }
-                        if (!isLoopState && FindActiveLoop(slot, ev.sfxId) != nullptr)
+                        if (isStateSync)
+                            continue; // state-sync diff owns this loop's lifecycle
+
+                        // Enqueue for spaced replay (drain handles plain vs
+                        // anim-bound). Drop on a full FIFO rather than block.
+                        if (slot.sfxQueueCount < GhostSlot::kSfxQueueMax)
                         {
-                            isLoopState = true;
+                            const int tail = (slot.sfxQueueHead + slot.sfxQueueCount) % GhostSlot::kSfxQueueMax;
+                            slot.sfxQueue[tail] = ev.sfxId;
+                            ++slot.sfxQueueCount;
                         }
-                        if (!isLoopState)
+                    }
+                    slot.lastConsumedSfxSeq = newest;
+                }
+            }
+
+            // Drain the replay FIFO: at most one per cooldown window,
+            // wire-independent. Anim-bound ids (0x161/0x162/...) are re-triggered
+            // — any previous instance is stopped first so the engine doesn't
+            // refuse the new play on a still-held channel — and tracked so the
+            // janitor / lifetime cap can stop them. Plain ids just play.
+            if (slot.sfxReplayCooldown == 0 && slot.sfxQueueCount > 0 && PeerOnLocalMap(peer))
+            {
+                const uint16_t qid = slot.sfxQueue[slot.sfxQueueHead];
+                slot.sfxQueueHead = static_cast<uint8_t>((slot.sfxQueueHead + 1) % GhostSlot::kSfxQueueMax);
+                --slot.sfxQueueCount;
+
+                g_inReceiverReplay = true;
+                if (IsAnimBoundLoop(qid))
+                {
+                    if (!IsBlockedSfx(slot, qid))
+                    {
+                        // Re-trigger: stop any prior instance so a held channel
+                        // can't block the new play.
+                        GhostSlot::ActiveLoop *old = FindActiveLoop(slot, qid);
+                        if (old != nullptr)
+                            ClearActiveLoop(*old);
+
+                        const int channel = psndSFXOn_3D(qid, &peer.position);
+                        if (channel != -1)
                         {
-                            if (IsAnimBoundLoop(ev.sfxId))
+                            GhostSlot::ActiveLoop *e = FindFreeActiveLoop(slot);
+                            if (e != nullptr)
                             {
-                                if (IsBlockedSfx(slot, ev.sfxId))
-                                {
-                                    // Skip - janitor previously stopped.
-                                }
-                                else
-                                {
-                                    const int channel = psndSFXOn_3D(ev.sfxId, &peer.position);
-                                    if (channel != -1)
-                                    {
-                                        GhostSlot::ActiveLoop *e = FindFreeActiveLoop(slot);
-                                        if (e != nullptr)
-                                        {
-                                            e->sfxId = ev.sfxId;
-                                            e->channel = channel;
-                                            e->inUse = true;
-                                            std::memcpy(e->animCandidate, peer.animName, sizeof(peer.animName));
-                                            e->animCandidate[sizeof(e->animCandidate) - 1] = '\0';
-                                            e->stableFrames = 1;
-                                            e->watching = false;
-                                            e->animNameAtStart[0] = '\0';
-                                            e->motionCandidate = peer.motionId;
-                                            e->motionStableFrames = 1;
-                                            e->motionWatching = false;
-                                            e->motionAtStart = 0;
-                                            e->ringManaged = true;
-                                        }
-                                        else
-                                        {
-                                            // Table full - stop to avoid orphan.
-                                            psndSFXOff(channel);
-                                        }
-                                    }
-                                }
+                                e->sfxId = qid;
+                                e->channel = channel;
+                                e->inUse = true;
+                                std::memcpy(e->animCandidate, peer.animName, sizeof(peer.animName));
+                                e->animCandidate[sizeof(e->animCandidate) - 1] = '\0';
+                                e->stableFrames = 1;
+                                e->watching = false;
+                                e->animNameAtStart[0] = '\0';
+                                e->motionCandidate = peer.motionId;
+                                e->motionStableFrames = 1;
+                                e->motionWatching = false;
+                                e->motionAtStart = 0;
+                                e->ringManaged = true;
+                                e->framesAlive = 0;
                             }
                             else
                             {
-                                psndSFXOn_3D(ev.sfxId, &peer.position);
+                                psndSFXOff(channel); // table full - avoid orphan
                             }
                         }
-
-                        const uint8_t newDiff = static_cast<uint8_t>(ev.seq - newest);
-                        if (newDiff != 0 && newDiff < 128)
-                            newest = ev.seq;
                     }
-                    g_inReceiverReplay = false;
-                    slot.lastConsumedSfxSeq = newest;
                 }
+                else
+                {
+                    psndSFXOn_3D(qid, &peer.position);
+                }
+                g_inReceiverReplay = false;
+                slot.sfxReplayCooldown = kSfxReplaySpacing;
             }
 
             SyncActiveLoopsFromState(peer, slot);
@@ -1334,6 +1524,8 @@ namespace mod::ghosts
             s.rearPoseId = -1;
             s.effectsPoseId = -1;
             s.activePose = 0;
+            s.lastColorIndex = 0;
+            s.costumeHeld = -1;
             s.lastAnimForward[0] = '\0';
             s.lastAnimRear[0] = '\0';
             s.lastAnimEffects[0] = '\0';
@@ -1495,11 +1687,7 @@ namespace mod::ghosts
                 // tube (short, re-fired). The ring-exclusion fix already
                 // removed the original never-stops cause, so the liveness
                 // gate was both unnecessary and harmful.
-                // TEMP DIAGNOSTIC: emit EVERY recorded channel (IsLoopSfx
-                // filter dropped) to test whether RecordLocalChannel is
-                // storing anything. Restore the IsLoopSfx() condition after.
-                if (e.inUse && e.sfxId != 0)
-                // if (e.inUse && e.sfxId != 0 && IsLoopSfx(e.sfxId))
+                if (e.inUse && e.sfxId != 0 && IsLoopSfx(e.sfxId))
                 {
                     out[count++] = e.sfxId;
                 }
@@ -1552,6 +1740,16 @@ namespace mod::ghosts
                 if (std::memcmp(s_lastMapName, currentMap, kMapNameLen) != 0)
                 {
                     for (auto &s : g_slots) ReleaseSlot(s);
+                    // Drop any loop entries that the transition tore down
+                    // internally (the engine stops them without a psndSFXOff,
+                    // so RemoveLocalChannel never fired). Otherwise a stale
+                    // loop (e.g. roll 0x17B) keeps publishing post-transition.
+                    for (auto &e : g_localChannelMap)
+                    {
+                        e.inUse = false;
+                        e.channel = 0;
+                        e.sfxId = 0;
+                    }
                     std::memcpy(s_lastMapName, currentMap, kMapNameLen);
                 }
             }
@@ -1882,6 +2080,11 @@ namespace mod::ghosts
             if (g_hitQueuedTimeout > 0)
                 --g_hitQueuedTimeout;
 
+            // Apply as soon as input is enabled (i.e. not in a cutscene /
+            // engine lock). We no longer wait for kStay: the apply path below
+            // force-stops whatever motion is running (marioChgMot(kStay)) so
+            // the stagger interrupts a held hammer swing immediately instead
+            // of waiting for the victim to release it.
             const bool ready = (ttyd::mario::marioChkKey() != 0);
             if (g_hitQueuedTimeout == 0)
             {
@@ -1893,54 +2096,77 @@ namespace mod::ghosts
                 ttyd::mario::Player *me = ttyd::mario::marioGetPtr();
                 if (me != nullptr && g_ghostState != nullptr)
                 {
-                    // Take Mario out of paper / tube mode before we
-                    // force-apply the stagger pose. Mirrors the start
-                    // of N_marioForceVivianAnime in party_vivian.s
-                    // (marioPaperOff + marioChgPaper(0)). Without
-                    // this, a hit while in tube mode (motion_id 0x14
-                    // / kJabara) visually triggers M_N_7 but leaves
-                    // Mario engine-wise still papered up, and the
-                    // engine re-applies the tube paper anim next
-                    // frame, snapping back into the rolled state.
-                    // Idempotent if Mario isn't already papered.
-                    ttyd::mario::marioPaperOff();
-                    ttyd::mario::marioChgPaper(nullptr);
+                    uint8_t *mpRw = reinterpret_cast<uint8_t *>(me);
 
-                    // Mirrors the evt_mario_set_pose "name not in
-                    // a_mario_group" path (evt_mario.s 4686-4693).
-                    // M_N_7 lives in e_mario (effects pose), not
-                    // a_mario, so the engine's pose pipeline only
-                    // picks it up if we set the effects-route bit:
-                    //
-                    //   Player.0x18 = "M_N_7"        - anim pointer
-                    //   Player.0x0C |= 0x1000        - flags3 pose-pending
-                    //   Player.0x04 |= 0x10000000    - flags2 effects route
-                    //
-                    // Without flags2 |= 0x10000000, marioPreDisp
-                    // tries to apply M_N_7 to a_mario and silently
-                    // no-ops — that was the prior bug that left the
-                    // victim's own renderer with no stagger while
-                    // peers still saw it via the published anim.
+                    // Stop the hammer's charge-loop SFX. mot_hammer2 stores
+                    // its psndSFXOn_3D handle at Player[0x2D0] and silences it
+                    // on its normal exit (psndSFXOff at 0x80097BE4, -1 == none).
+                    // Forcing the motion below skips that exit, so the loop
+                    // would drone forever unless we stop it here ourselves.
+                    int32_t hammerSfx = *reinterpret_cast<int32_t *>(mpRw + 0x2D0);
+                    if (hammerSfx != -1)
+                    {
+                        psndSFXOff(hammerSfx);
+                        *reinterpret_cast<int32_t *>(mpRw + 0x2D0) = -1;
+                    }
+
+                    // Force the active motion to stop so its driver stops
+                    // overwriting the pose / effects route. marioChgMot(kStay)
+                    // tears down mot_hammer2 (or whatever is running);
+                    // marioPaperOff clears the hammer's paper rig. We do NOT
+                    // call marioChgPaper(nullptr): that nulls Player[0x1C] (the
+                    // paper-AGB name ptr), which mot_hammer2 strcmps at
+                    // 0x80097B9C on the next swing and faults. marioPaperOff
+                    // alone leaves that pointer intact, matching the engine's
+                    // own hammer exit (marioPaperOff + marioChgPose).
+                    ttyd::mario_motion::marioChgMot(ttyd::mario_motion::MarioMotion::kStay);
+                    ttyd::mario::marioPaperOff();
+
+                    // Damage grunt — same SFX mot_damage.s fires (line 122).
+                    // The hook captures it into the SFX ring so every other
+                    // peer hears it on us.
+                    ttyd::pmario_sound::psndSFXOn(0x0BA);
+
+                    // Input lock for the stagger duration. Released by the
+                    // marioChkKey-verified path below. We skip the cinematic-
+                    // letterbox suppression the original evt_mario_set_pose
+                    // did — leaving it on broke shadow rendering elsewhere.
+                    ttyd::mario::marioKeyOff();
+                    g_hitLockApplied = true;
+                    g_hitLockRemaining = kHitLockDurationFrames;
+
+                    // Defer the M_N_7 write. Applying it the same frame as
+                    // marioChgMot loses the race against mot_stay's entry,
+                    // which sets the body pose and consumes the pose-pending
+                    // bit. Wait a few frames for kStay to settle, then apply
+                    // exactly as the (working) idle-standing case does.
+                    g_hitPosePending = true;
+                    g_hitPoseDelay = 3;
+                }
+                g_hitQueued = false;
+            }
+        }
+
+        // Phase 2: land the stagger once the forced kStay motion has settled.
+        // Mirrors the evt_mario_set_pose "name not in a_mario_group" path
+        // (evt_mario.s 4686-4693): M_N_7 lives in e_mario (effects pose), so
+        // the pose pipeline only picks it up with the effects-route bit set:
+        //   Player.0x18 = "M_N_7"      - anim pointer
+        //   Player.0x0C |= 0x1000      - flags3 pose-pending
+        //   Player.0x04 |= 0x10000000  - flags2 effects route
+        if (g_hitPosePending)
+        {
+            if (--g_hitPoseDelay <= 0)
+            {
+                ttyd::mario::Player *me = ttyd::mario::marioGetPtr();
+                if (me != nullptr && g_ghostState != nullptr)
+                {
                     uint8_t *mpRw = reinterpret_cast<uint8_t *>(me);
                     *reinterpret_cast<const char **>(mpRw + 0x18) = g_ghostState->hitPoseName;
                     *reinterpret_cast<uint32_t *>(mpRw + 0x0C) |= 0x1000u;
                     *reinterpret_cast<uint32_t *>(mpRw + 0x04) |= 0x10000000u;
-
-                    // Damage grunt — same SFX mot_damage.s fires
-                    // (line 122). The hook captures it into the
-                    // SFX ring so every other peer hears it on us.
-                    ttyd::pmario_sound::psndSFXOn(0x0BA);
-
-                    // Input lock for the stagger duration. Released
-                    // by the marioChkKey-verified path below. We
-                    // skip the cinematic-letterbox suppression that
-                    // the original evt_mario_set_pose did — leaving
-                    // it on broke shadow rendering elsewhere.
-                    ttyd::mario::marioKeyOff();
-                    g_hitLockApplied = true;
-                    g_hitLockRemaining = kHitLockDurationFrames;
                 }
-                g_hitQueued = false;
+                g_hitPosePending = false;
             }
         }
 
@@ -2226,10 +2452,14 @@ namespace mod::ghosts
         //  (b) when the engine eventually calls psndSFXOff on this
         //      channel, OnLocalSfxStopped can free the entry so the
         //      next publish drops it from activeLoops.
-        // For one-shots that didn't allocate (channel == -1), this
-        // is a no-op (RecordLocalChannel filters them out). Channel 0
-        // is a real channel index, NOT a sentinel.
-        RecordLocalChannel(channel, static_cast<uint16_t>(sfxId & 0xFFFF));
+        // Only LOOPS go in the map. One-shots end internally (the game never
+        // calls psndSFXOff for them), so their entries would never be freed
+        // and would saturate the 64-slot map; once full, RecordLocalChannel
+        // silently drops new loop starts (no free slot), so plane/boat/tube
+        // stopped reaching SampleActiveLoops and never synced. channel == -1
+        // is still a no-op inside RecordLocalChannel.
+        if (IsLoopSfx(static_cast<uint16_t>(sfxId & 0xFFFF)))
+            RecordLocalChannel(channel, static_cast<uint16_t>(sfxId & 0xFFFF));
 
         // One-shots ride the SFX ring. Loops must NEVER ride it: they flow
         // ONLY through activeLoops/state-sync, which guarantees the receiver
