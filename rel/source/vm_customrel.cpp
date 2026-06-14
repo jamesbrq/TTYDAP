@@ -35,45 +35,18 @@ namespace
     // group the game collects during our synchronous window.
     constexpr uint32_t kSmartGroupTransient = 0;
 
-    // Boot-time status block, readable in the Dolphin memory editor as
-    // big-endian u32s. d[0] is the last milestone reached, so if the rel
-    // crashes mid-bring-up the value pinpoints where.
-    volatile uint32_t *const DBG = reinterpret_cast<volatile uint32_t *>(0x80003C00);
-
     inline uint32_t alignUp(uint32_t v, uint32_t a) { return (v + a - 1) & ~(a - 1); }
-    inline void stage(uint32_t s) { DBG[0] = s; }
 }
 
 bool LoadCustomRelVM(uint32_t cacheBytes)
 {
-    for (int i = 0; i < 16; i++)
-        DBG[i] = 0;
-    stage(1); // entered
-
-    // ARAM layout probe (pristine, before our own ARAlloc). Read at 0x80003CA0.
-    {
-        volatile uint32_t *AP = reinterpret_cast<volatile uint32_t *>(0x80003CA0);
-        AP[4] = *reinterpret_cast<volatile uint32_t *>(0x8041F324); // __AR_Size
-        AP[5] = *reinterpret_cast<volatile uint32_t *>(0x8041F330); // __AR_StackPointer
-        AP[6] = *reinterpret_cast<volatile uint32_t *>(0x8041EFD8); // musyx aramTop
-        AP[7] = *reinterpret_cast<volatile uint32_t *>(0x8041F33C); // __AR_init_flag
-        AP[0] = ARGetBaseAddress();
-        AP[1] = ARGetSize();
-        AP[2] = aramGetFirstUserAddress();
-        AP[3] = aramGetUserBytes();
-    }
-
     DVDFileInfo fileInfo;
     if (!DVDOpen("/mod/custom.rel", &fileInfo))
     {
-        stage(0xE1);
         return false;
     }
 
     uint32_t fileSize = alignUp(fileInfo.length, DVD_READ_SIZE);
-    DBG[1] = fileInfo.length;
-    DBG[2] = fileSize;
-    stage(2); // opened
 
     // Transient link buffer comes from the smart (costume) arena, not
     // HEAP_DEFAULT, so HEAP_DEFAULT's bump can shrink to just the persistent
@@ -87,7 +60,6 @@ bool LoadCustomRelVM(uint32_t cacheBytes)
     uint8_t *rawBuf = linkNode ? static_cast<uint8_t *>(linkNode->pMemory) : nullptr;
     if (!rawBuf)
     {
-        stage(0xE2);
         DVDClose(&fileInfo);
         return false;
     }
@@ -98,11 +70,9 @@ bool LoadCustomRelVM(uint32_t cacheBytes)
     DVDClose(&fileInfo);
     if (result <= 0)
     {
-        stage(0xE3);
         smartFree(linkNode);
         return false;
     }
-    stage(3); // dvd read ok
 
     // Reserve the top slice of the game's aramMgr map/battle ARAM heap. init
     // already ran (ARAlloc'd the full 0x3FC000), so the SDK already treats the
@@ -121,12 +91,8 @@ bool LoadCustomRelVM(uint32_t cacheBytes)
         if (newSize != 0 && *mgrTop > aramBase)
             reinterpret_cast<void (*)()>(0x801528A0)(); // aramMgrGarbage
 
-        DBG[10] = *mgrTop;
-        DBG[11] = aramBase;
-
         if (newSize == 0 || *mgrTop > aramBase)
         {
-            stage(0xE9); // reserve failed: aramMgr heap too full at load time
             smartFree(linkNode);
             return false;
         }
@@ -137,29 +103,20 @@ bool LoadCustomRelVM(uint32_t cacheBytes)
 
     if (!mod::vm::VM_BeginLink(linkBuf, fileSize))
     {
-        stage(0xE4);
         smartFree(linkNode);
         return false;
     }
-    DBG[5] = mod::vm::VM_DbgAramBase();
-    DBG[6] = mod::vm::VM_DbgNumVpages();
-    mod::vm::VM_DebugDumpMmu(reinterpret_cast<volatile uint32_t *>(0x80003C40));
-    stage(4); // window mapped 1:1, MMU live
 
     OSModuleInfo *relWindow = reinterpret_cast<OSModuleInfo *>(mod::vm::VM_WindowBase());
-    DBG[8] = relWindow->id;       // module id, read through the window
-    DBG[9] = *reinterpret_cast<volatile uint32_t *>(mod::vm::VM_WindowBase()); // first word
 
     // BSS stays in HEAP_DEFAULT: it is tiny (~0x144) and persistent.
     constexpr int32_t kResidentHeap = HeapType::HEAP_DEFAULT;
     uint32_t bssSize = relWindow->bssSize;
     if (bssSize == 0)
         bssSize = 1;
-    DBG[7] = bssSize;
     uint8_t *bssArea = static_cast<uint8_t *>(__memAlloc(kResidentHeap, bssSize));
     if (!bssArea)
     {
-        stage(0xE5);
         mod::vm::VM_Abort();
         smartFree(linkNode);
         return false;
@@ -167,15 +124,12 @@ bool LoadCustomRelVM(uint32_t cacheBytes)
 
     if (!Link(relWindow, bssArea, false))
     {
-        stage(0xE6);
         OSUnlink(relWindow);
         mod::vm::VM_Abort();
         __memFree(kResidentHeap, bssArea);
         smartFree(linkNode);
         return false;
     }
-    DBG[3] = relWindow->fixSize; // absolute end addr post-link; expect 0x7Fxxxxxx
-    stage(5);                    // relocated for window
 
     // MakeRelFixed-equivalent (see rel_shrink.cpp). Boot relocations are now
     // fully applied, so drop the self(40)/DOL(0) imp-table entries. Otherwise
@@ -202,11 +156,7 @@ bool LoadCustomRelVM(uint32_t cacheBytes)
                 break;
             }
         }
-        DBG[14] = 0xF1000000u | (relWindow->impSize & 0x00FFFFFFu); // confirm truncation ran
     }
-
-    uint32_t residentSize = relWindow->fixSize - mod::vm::VM_WindowBase();
-    DBG[4] = residentSize;
 
     // Commit the ENTIRE image, not just [0, fixSize). Belt-and-suspenders with
     // the imp-table truncation above: even though the OS should no longer walk
@@ -224,32 +174,26 @@ bool LoadCustomRelVM(uint32_t cacheBytes)
     // Persist to ARAM and drop the 1:1 map. Frees nothing yet.
     if (!mod::vm::VM_Persist(imageSize))
     {
-        stage(0xE7);
         mod::vm::VM_Abort();
         __memFree(kResidentHeap, bssArea);
         smartFree(linkNode);
         return false;
     }
-    stage(6); // image in ARAM, window unmapped
 
     // Release the transient link buffer back to the smart arena BEFORE the
     // paging cache claims MEM1.
     smartFree(linkNode);
     linkNode = nullptr;
 
-    DBG[13] = cacheBytes;
     if (!mod::vm::VM_StartPaging(cacheBytes))
     {
-        stage(0xE8);
         mod::vm::VM_Abort();
         __memFree(kResidentHeap, bssArea);
         return false;
     }
-    stage(7);
 
     // Pin page 0 (OSModuleInfo header + section table) so the OS can always read
-    // it during module link/unlink, and so the re-read below is safe in paged
-    // mode where nothing else is resident yet.
+    // it during module link/unlink in paged mode where nothing else is resident yet.
     mod::vm::VM_PrefetchLocked(mod::vm::VM_WindowBase(), PAGE_SIZE);
 
     // Arm the DSI demand-paging net. Prefetch warms the cache for battle units;
@@ -257,8 +201,5 @@ bool LoadCustomRelVM(uint32_t cacheBytes)
     // prefetch doesn't cover, paging it in instead of faulting to a halt.
     mod::vm::VM_EnableDemandPaging();
 
-    DBG[12] = *reinterpret_cast<volatile uint32_t *>(mod::vm::VM_WindowBase()); // re-read via paged window
-    DBG[15] = 1; // success
-    stage(8);
     return true;
 }

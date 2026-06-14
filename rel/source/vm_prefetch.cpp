@@ -35,9 +35,6 @@ namespace
     };
     UnitWin g_units[mod::vm::kVmUnitCount];
 
-    // Diagnostics at 0x80003B00 (see layout comments in VM_PrefetchInit).
-    volatile uint32_t *const PF = reinterpret_cast<volatile uint32_t *>(0x80003B00);
-
     // After Link, OSModuleInfo offset fields are relocated to absolute window
     // pointers (e.g. sectionInfoOffset reads back as 0x7F00004C, not 0x4C).
     // Relative offsets are always tiny (< image size << window base), so treat
@@ -49,7 +46,6 @@ namespace mod::vm
 {
     void VM_PrefetchInit(OSModuleInfo *mod)
     {
-        PF[15] = 0x51;
         g_ready = false;
         for (int i = 0; i < 8; i++)
         {
@@ -62,18 +58,10 @@ namespace mod::vm
         const uint32_t nsec = mod->numSections;
         const uint32_t secOff = mod->sectionInfoOffset;
         const uint32_t secAddr = toWindowAddr(secOff, win); // relocated -> absolute
-        PF[16] = nsec;
-        PF[17] = secOff;
-        PF[18] = imgBytes;
-        PF[20] = secAddr;
-        PF[15] = 0x52;
 
         // Guard: never read the section table outside the mapped window.
         if (nsec == 0 || nsec > 32 || secAddr < win || secAddr + 8u * nsec > win + imgBytes)
         {
-            PF[9] = 0;
-            PF[19] = 0x0BAD5EC5; // marker: section table rejected
-            PF[15] = 0x56;
             return;
         }
 
@@ -90,7 +78,6 @@ namespace mod::vm
                 g_secSize[s] = sec[s].size;
             }
         }
-        PF[15] = 0x53;
 
         g_winLo = win;
         g_winHi = win + imgBytes;
@@ -115,23 +102,8 @@ namespace mod::vm
                 }
             }
         }
-        PF[15] = 0x54;
-
-        PF[0] = g_secBase[1]; PF[1] = g_secSize[1];
-        PF[2] = g_secBase[4]; PF[3] = g_secSize[4];
-        PF[4] = g_secBase[5]; PF[5] = g_secSize[5];
-        PF[6] = g_secBase[6]; PF[7] = g_secSize[6];
-        uint32_t maxEnd5 = 0;
-        for (int i = 0; i < kVmUnitCount; i++)
-            if (kVmUnits[i].end5 > maxEnd5)
-                maxEnd5 = kVmUnits[i].end5;
-        PF[8] = maxEnd5;
-        PF[9] = (maxEnd5 <= g_secSize[5]) ? 1u : 0u;
-        PF[12] = 0; // prefetch-hit count
-        PF[13] = 0; // window-kind-without-unit count
 
         g_ready = true;
-        PF[15] = 0x55;
     }
 
     void VM_PrefetchForKind(uint32_t kindAddr, bool lock)
@@ -166,14 +138,8 @@ namespace mod::vm
                         else
                             VM_Prefetch(ea, len);
                     }
-                PF[10] = kindAddr;
-                PF[11] = static_cast<uint32_t>(i); // last unit prefetched
-                PF[12] = PF[12] + 1;
                 return;
             }
         }
-
-        PF[13] = PF[13] + 1; // window kind matched no unit (unexpected)
-        PF[14] = kindAddr;
     }
 }

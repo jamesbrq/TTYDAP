@@ -22,14 +22,6 @@
 // re-executes against the freshly mapped page). Anything else chains to the
 // handler we replaced so real bugs still surface as before.
 
-namespace
-{
-    // Net diagnostics, read at 0x80003B60:
-    //   ND0 total   ND1 handled   ND2 chained   ND3 last addr   ND4 last DSISR
-    //   ND5 last handled addr
-    volatile uint32_t *const ND = reinterpret_cast<volatile uint32_t *>(0x80003B60);
-} // namespace
-
 extern "C"
 {
     void OSLoadContext(OSContext *ctx);  // 0x802971b4 (does not return)
@@ -53,22 +45,15 @@ extern "C"
             asm volatile("isync" ::: "memory");
         }
 
-        ND[0] = ND[0] + 1;
-
         if (exc == 3) // ISI: fault PC is in SRR0
         {
             uint32_t addr = ctx->srr0;
-            ND[3] = addr;
-            ND[4] = 0;
 
             if (vm_ifault_c(addr))
             {
-                ND[1] = ND[1] + 1;
-                ND[5] = addr;
                 OSLoadContext(ctx); // mapped: resume the faulting fetch (no log: hot path)
             }
 
-            ND[2] = ND[2] + 1;
             OSReport("VMNET IUNHANDLED exc=%d addr=%08x lr=%08x\n", exc, addr, ctx->lr);
             OSReport("  r0=%08x sp=%08x r2=%08x r3=%08x r4=%08x r5=%08x\n",
                      ctx->gpr[0],
@@ -110,17 +95,11 @@ extern "C"
         asm volatile("mfspr %0, 18" : "=r"(dsisr)); // DSISR
         asm volatile("mfspr %0, 19" : "=r"(dar));   // DAR
 
-        ND[3] = dar;
-        ND[4] = dsisr;
-
         if (vm_fault_c(dsisr, dar))
         {
-            ND[1] = ND[1] + 1;
-            ND[5] = dar;
             OSLoadContext(ctx); // mapped: resume the faulting instruction (no log: spammy)
         }
 
-        ND[2] = ND[2] + 1;
         OSReport("VMNET UNHANDLED exc=%d dar=%08x dsisr=%08x srr0=%08x lr=%08x r3=%08x r4=%08x\n",
                  exc,
                  dar,

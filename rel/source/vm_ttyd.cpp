@@ -95,22 +95,6 @@ namespace
     vm_page *VM_Base = reinterpret_cast<vm_page *>(VM_WINDOW);
     vm_page *MEM_Base = nullptr;
 
-    // Cache-placement validation diagnostics, read at 0x80003E00:
-    //   [0] cache lo   [1] cache hi   [2] ctx    [3] ctx end   [4] sp
-    //   [5] HTABORG    [6] &phys_map  [7] &virt_map  [8] conflict mask
-    //   [9] tries      [10] 0xCACE000{1=placed,0=halted}
-    volatile uint32_t *const VCHK = reinterpret_cast<volatile uint32_t *>(0x80003E00);
-
-    // Per-page-in fault counter, read at 0x80003B58. Lets a battle-faults probe
-    // see how many demand faults a fight takes (compare warm/locked vs cold).
-    volatile uint32_t *const FAULTCNT = reinterpret_cast<volatile uint32_t *>(0x80003B58);
-    // aramDmaBlocking probes: total raw AR DMAs we issue (0x80003B54) and how
-    // many of those found an ARQ completion already pending (0x80003B5C) -- i.e.
-    // collided with musyx/aramMgr ARQ traffic. ARQHIT climbing during a battle
-    // load is the contention smoking gun.
-    volatile uint32_t *const DMACNT = reinterpret_cast<volatile uint32_t *>(0x80003B54);
-    volatile uint32_t *const ARQHIT = reinterpret_cast<volatile uint32_t *>(0x80003B5C);
-
     p_map phys_map[MAX_PPAGES];
     vm_map virt_map[MAX_VPAGES];
     uint16_t pmap_max = 0;
@@ -276,9 +260,6 @@ namespace
         int cookie = OSDisableInterrupts();
         while (ARGetDMAStatus());
         bool arWasPending = (*kDspCsr & kArInt) != 0; // real ARQ completion; leave it for musyx
-        *DMACNT = *DMACNT + 1;
-        if (arWasPending)
-            *ARQHIT = *ARQHIT + 1;
         ARStartDMA(type, mram, aram, len);
         while (ARGetDMAStatus());
         if (!arWasPending) // our transfer set ARINT; clear only it (w1c), keep AID/DSP + masks
@@ -370,11 +351,7 @@ namespace
     // MEM1 as a 16MB (slot 0) + 8MB (slot 2) pair ending at 0x817FFFFF, so
     // 0x81800000 is already BAT-free -- no reshape needed. This just verifies it
     // and bails (resident fallback) if some config unexpectedly covers the
-    // window. Layout dumped at 0x80003D40:
-    //   [0..3] = IBAT0..3 upper   [4..7] = DBAT0..3 upper
-    //   [8] = 0xBA7F0000 free / 0xBA7C0BAD covered (bail).
-    volatile uint32_t *const BATDBG = reinterpret_cast<volatile uint32_t *>(0x80003D40);
-
+    // window.
     inline bool batCoversWindow(uint32_t u)
     {
         if ((u & 0x3u) == 0)
@@ -401,11 +378,7 @@ namespace
         {
             if (batCoversWindow(iu[i]) || batCoversWindow(du[i]))
                 covered = true;
-            BATDBG[i] = iu[i];
-            BATDBG[4 + i] = du[i];
         }
-        BATDBG[8] = covered ? 0xBA7C0BADu : 0xBA7F0000u;
-        DCFlushRange(const_cast<uint32_t *>(BATDBG), 0x24);
         if (covered)
             OSReport("VMBAT: window %08x is BAT-covered; aborting to resident\n", VM_WINDOW);
         return !covered;
@@ -552,21 +525,6 @@ namespace
             rejected[nrej++] = raw; // keep allocated to push the bump past the conflict
         }
 
-        uint32_t sp;
-        asm volatile("mr %0, 1" : "=r"(sp));
-        VCHK[0] = lo;
-        VCHK[1] = hi;
-        VCHK[2] = reinterpret_cast<uint32_t>(OSGetCurrentContext());
-        VCHK[3] = VCHK[2] ? VCHK[2] + kOSContextSize : 0;
-        VCHK[4] = sp;
-        VCHK[5] = reinterpret_cast<uint32_t>(HTABORG);
-        VCHK[6] = reinterpret_cast<uint32_t>(phys_map);
-        VCHK[7] = reinterpret_cast<uint32_t>(virt_map);
-        VCHK[8] = goodRaw ? 0u : mask;
-        VCHK[9] = static_cast<uint32_t>(tries);
-        VCHK[10] = 0xCACE0000u | (goodRaw ? 1u : 0u);
-        DCFlushRange(const_cast<uint32_t *>(VCHK), 0x2c);
-
         // Return the rejected blocks (the kept good block, higher up, stays live).
         for (int i = 0; i < nrej; ++i)
             __memFree(0, rejected[i]);
@@ -576,11 +534,17 @@ namespace
             // Refuse to arm paged mode on a cache that aliases live memory:
             // every fault would silently corrupt it and crash far away. Surface
             // it here, at bring-up, instead of as a random battle crash.
+            uint32_t sp;
+            asm volatile("mr %0, 1" : "=r"(sp));
+            const uint32_t ctxAddr = reinterpret_cast<uint32_t>(OSGetCurrentContext());
             OSReport("VMCACHE FATAL: no conflict-free cache after %d tries\n", tries);
             OSReport("  cand=%08x..%08x mask=%08x (1=htab 2=physmap 4=virtmap 8=ctx 10=stack 20=lowos 40=diag)\n",
                      lo, hi, mask);
             OSReport("  ctx=%08x..%08x sp=%08x htab=%08x physmap=%08x virtmap=%08x\n",
-                     VCHK[2], VCHK[3], sp, VCHK[5], VCHK[6], VCHK[7]);
+                     ctxAddr, ctxAddr ? ctxAddr + kOSContextSize : 0, sp,
+                     reinterpret_cast<uint32_t>(HTABORG),
+                     reinterpret_cast<uint32_t>(phys_map),
+                     reinterpret_cast<uint32_t>(virt_map));
             for (;;)
             {
             } // halt
@@ -821,7 +785,6 @@ namespace mod::vm
         faultDisableEE(); // keep the page-in atomic vs interrupts/reschedule
         mapPage(v);
         asm volatile("sync; isync" ::: "memory");
-        *FAULTCNT = *FAULTCNT + 1;
         return 1;
     }
 
@@ -840,7 +803,6 @@ namespace mod::vm
         faultDisableEE(); // keep the page-in atomic vs interrupts/reschedule
         mapPage(v);
         asm volatile("sync; isync" ::: "memory");
-        *FAULTCNT = *FAULTCNT + 1;
         return 1;
     }
 
@@ -871,65 +833,6 @@ namespace mod::vm
     uint32_t VM_DbgNumVpages()
     {
         return g_numVpages;
-    }
-
-    void VM_DebugDumpMmu(volatile uint32_t *m)
-    {
-        uint32_t sdr1, sr;
-        asm volatile("mfspr %0, 25" : "=r"(sdr1));
-        asm volatile("mfsrin %0, %1" : "=r"(sr) : "r"(VM_WINDOW));
-
-        m[0] = sdr1; // expect HTABORG_phys | HTABMASK
-        m[1] = sr;   // expect VM_VSID (7)
-        m[2] = reinterpret_cast<uint32_t>(HTABORG);
-        m[3] = reinterpret_cast<uint32_t>(g_linkBuf);
-        m[4] = g_linkBuf ? *reinterpret_cast<volatile uint32_t *>(g_linkBuf) : 0; // raw REL word0
-        m[5] = *reinterpret_cast<volatile uint32_t *>(VM_WINDOW);                 // via window
-
-        PTEG p0 = CalcPTEG(VM_WINDOW, 0);
-        PTEG p1 = CalcPTEG(VM_WINDOW, 1);
-        m[6] = reinterpret_cast<uint32_t>(p0);
-        m[7] = reinterpret_cast<uint32_t>(p1);
-        for (int i = 0; i < 4; i++)
-        {
-            m[8 + i * 2] = p0[i].data[0]; // PTE word0 (valid/VSID/API)
-            m[9 + i * 2] = p0[i].data[1]; // PTE word1 (RPN/WIMG/PP)
-        }
-
-        PTE exp = {{0}};
-        exp.valid = 1;
-        exp.VSID = VM_VSID;
-        exp.hash = 0;
-        exp.API = (VM_WINDOW >> 22) & 0x3F;
-        exp.RPN = (g_linkBuf ? v2p(g_linkBuf) : 0) >> 12;
-        exp.WIMG = 0;
-        exp.PP = 0b10;
-        m[16] = exp.data[0]; // expected PTE word0 for vpage 0
-        m[17] = exp.data[1]; // expected PTE word1
-
-        uint32_t cover = 0;
-        uint32_t bu[8];
-        asm volatile("mfspr %0, 536" : "=r"(bu[0])); // DBAT0U
-        asm volatile("mfspr %0, 538" : "=r"(bu[1])); // DBAT1U
-        asm volatile("mfspr %0, 540" : "=r"(bu[2])); // DBAT2U
-        asm volatile("mfspr %0, 542" : "=r"(bu[3])); // DBAT3U
-        asm volatile("mfspr %0, 528" : "=r"(bu[4])); // IBAT0U
-        asm volatile("mfspr %0, 530" : "=r"(bu[5])); // IBAT1U
-        asm volatile("mfspr %0, 532" : "=r"(bu[6])); // IBAT2U
-        asm volatile("mfspr %0, 534" : "=r"(bu[7])); // IBAT3U
-        for (int i = 0; i < 8; i++)
-        {
-            uint32_t u = bu[i];
-            if ((u & 0x3u) == 0)
-                continue;
-            uint32_t bepi = u & 0xFFFE0000u;
-            uint32_t bl = (u >> 2) & 0x7FFu;
-            uint32_t sz = (bl + 1u) << 17;
-            if (VM_WINDOW >= bepi && VM_WINDOW < bepi + sz)
-                cover |= (1u << i);
-        }
-        m[18] = cover; // want 0 (no BAT over window)
-        m[19] = (vm_initialized ? 1u : 0u) | (g_linkMode ? 2u : 0u);
     }
 
     void VM_EnableDemandPaging()

@@ -366,48 +366,55 @@ namespace mod::owr
 
         uintptr_t length_pointer = 0x80000FFC;
         uintptr_t item_pointer = 0x80001000;
+        uintptr_t index_pointer = 0x803DB860;
 
         uint32_t length = *reinterpret_cast<uint32_t *>(length_pointer);
-        int16_t *items = reinterpret_cast<int16_t *>(item_pointer);
-
-        if (length > 0)
+        if (length == 0)
+            return;
+        if (length > 255) // guard a clobbered/garbage length
         {
-            for (uint32_t i = 0; i < length; i++)
-            {
-                // Try to give the item
-                if (!pouchGetItem(items[i]))
-                {
-                    // Couldn't give the item, so try to send it to storage
-                    pouchAddKeepItem(items[i]);
-                }
-
-                if (items[i] >= 114 && items[i] <= 120)
-                {
-                    uint8_t count = 0;
-                    for (int i = 114; i <= 120; i++)
-                    {
-                        if (ttyd::mario_pouch::pouchCheckItem(i) > 0)
-                            count++;
-                    }
-                    if (gState->apSettings->goal == 2 && count >= gState->apSettings->goalStars &&
-                        ttyd::swdrv::swGet(6120) == 0)
-                    {
-                        if (checkIfInGameNotBattle())
-                        {
-                            ttyd::swdrv::swSet(6120);
-                            ttyd::seqdrv::seqSetSeq(SeqIndex::kMapChange, "end_00", 0);
-                        }
-                        else
-                        {
-                            // Defer the sequence change until we are back in the game
-                            ttyd::swdrv::swSet(6121);
-                        }
-                    }
-                }
-                items[i] = 0;
-            }
-            memset(reinterpret_cast<void *>(length_pointer), 0, sizeof(uint32_t));
+            *reinterpret_cast<uint32_t *>(length_pointer) = 0;
+            return;
         }
+
+        int16_t *items = reinterpret_cast<int16_t *>(item_pointer);
+        for (uint32_t i = 0; i < length; i++)
+        {
+            // Try to give the item
+            if (!pouchGetItem(items[i]))
+            {
+                // Couldn't give the item, so try to send it to storage
+                pouchAddKeepItem(items[i]);
+            }
+
+            if (items[i] >= 114 && items[i] <= 120)
+            {
+                uint8_t count = 0;
+                for (int i = 114; i <= 120; i++)
+                {
+                    if (ttyd::mario_pouch::pouchCheckItem(i) > 0)
+                        count++;
+                }
+                if (gState->apSettings->goal == 2 && count >= gState->apSettings->goalStars &&
+                    ttyd::swdrv::swGet(6120) == 0)
+                {
+                    if (checkIfInGameNotBattle())
+                    {
+                        ttyd::swdrv::swSet(6120);
+                        ttyd::seqdrv::seqSetSeq(SeqIndex::kMapChange, "end_00", 0);
+                    }
+                    else
+                    {
+                        // Defer the sequence change until we are back in the game
+                        ttyd::swdrv::swSet(6121);
+                    }
+                }
+            }
+            items[i] = 0;
+        }
+
+        *reinterpret_cast<uint32_t *>(index_pointer) += length;
+        *reinterpret_cast<uint32_t *>(length_pointer) = 0; // release last; producer gates on this
     }
 
     KEEP_FUNC void replaceMultipleCharacters(ttyd::memory::SmartAllocationData *smartData, uint32_t startIndex, int value)
@@ -1188,6 +1195,23 @@ KEEP_FUNC BattleWorkUnit *BtlUnit_Entry_Hook(BattleUnitSetup *setup)
         ScaleUnitStats(setup->unit_kind_params, currentRel);
         return g_BtlUnit_Entry_trampoline(setup);
     }
+    static constexpr int32_t kHpScaleBlacklist[] = {
+        BattleUnitType::MINI_YUX,   // 0x1E
+        BattleUnitType::MINI_Z_YUX, // 0x74
+        BattleUnitType::MINI_X_YUX, // 0x76
+    };
+
+    static bool IsHpScaleBlacklisted(int32_t unitType)
+    {
+        constexpr int32_t count = sizeof(kHpScaleBlacklist) / sizeof(kHpScaleBlacklist[0]);
+        for (int32_t i = 0; i < count; i++)
+        {
+            if (kHpScaleBlacklist[i] == unitType)
+                return true;
+        }
+        return false;
+    }
+
     KEEP_FUNC void ScaleUnitStats(BattleUnitKind *unit, RelId rel)
     {
         if ((gState->apSettings->enemyRandomizer == 0 && gState->apSettings->shuffleChapterStats == 0) ||
@@ -1196,6 +1220,8 @@ KEEP_FUNC BattleWorkUnit *BtlUnit_Entry_Hook(BattleUnitSetup *setup)
         const BattleStatRelValues *statRelValues = GetBattleStats(rel);
         BattleUnitKind *unit_kind = GetUnitKindById(unit->unit_type);
         if (!unit_kind || !statRelValues || rel == RelId::JON)
+            return;
+        if (IsHpScaleBlacklisted(unit->unit_type))
             return;
         unit->max_hp = statRelValues->base_hp;
         unit->level = statRelValues->level;

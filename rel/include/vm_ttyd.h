@@ -104,9 +104,6 @@ namespace mod::vm
     uint32_t VM_DbgAramBase();
     uint32_t VM_DbgNumVpages();
 
-    // Dump live MMU/PTE state to a 20-u32 block for debugging.
-    void VM_DebugDumpMmu(volatile uint32_t *m);
-
     // Stage 4: install the DSI handler for transparent demand paging.
     void VM_EnableDemandPaging();
 
