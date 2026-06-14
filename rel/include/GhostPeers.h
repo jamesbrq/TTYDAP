@@ -240,31 +240,35 @@ namespace mod::ghosts
         uint8_t pad_debug_sfx[2];
     };
 
+    // Offsets after peerBlock are anchored to sizeof(SharedBlock) so they
+    // auto-track any change to kMaxPeers (peerBlock is the first member and
+    // the only size-variable one). The deltas below are fixed by the
+    // post-peerBlock layout. Python's GS_OFF_* derive the same way.
     static_assert(offsetof(GhostState, peerBlock) == 0, "peerBlock must start at offset 0");
-    static_assert(offsetof(GhostState, pendingHit) == 3408, "pendingHit offset drift");
-    static_assert(offsetof(GhostState, hitPoseName) == 3412, "hitPoseName offset drift");
-    static_assert(offsetof(GhostState, hitReachScale) == 3428, "hitReachScale offset drift");
-    static_assert(offsetof(GhostState, hitPeerWidth) == 3432, "hitPeerWidth offset drift");
-    static_assert(offsetof(GhostState, outboundHit) == 3436, "outboundHit offset drift");
-    static_assert(offsetof(GhostState, hitGrace) == 3440, "hitGrace offset drift");
-    static_assert(offsetof(GhostState, selfTeamId) == 3441, "selfTeamId offset drift");
-    static_assert(offsetof(GhostState, selfFriendlyFire) == 3442, "selfFriendlyFire offset drift");
-    static_assert(offsetof(GhostState, maxRenderedPeers) == 3444, "maxRenderedPeers offset drift");
-    static_assert(offsetof(GhostState, selfPaperAgbName) == 3448, "selfPaperAgbName offset drift");
-    static_assert(offsetof(GhostState, sfxRingHead) == 3480, "sfxRingHead offset drift");
-    static_assert(offsetof(GhostState, sfxRingEvents) == 3484, "sfxRingEvents offset drift");
-    static_assert(offsetof(GhostState, lobbyHudBlock) == 3612, "lobbyHudBlock offset drift");
-    static_assert(offsetof(GhostState, selfActiveLoopCount) == 4636, "selfActiveLoopCount offset drift");
-    static_assert(offsetof(GhostState, selfActiveLoops) == 4640, "selfActiveLoops offset drift");
-    static_assert(offsetof(GhostState, selfGameRole) == 4652, "selfGameRole offset drift");
-    static_assert(offsetof(GhostState, selfFrozen) == 4656, "selfFrozen offset drift");
-    static_assert(offsetof(GhostState, pendingTeleportSeq) == 4657, "pendingTeleportSeq offset drift");
-    static_assert(offsetof(GhostState, pendingTeleportMap) == 4660, "pendingTeleportMap offset drift");
-    static_assert(offsetof(GhostState, pendingTeleportBero) == 4676, "pendingTeleportBero offset drift");
-    static_assert(offsetof(GhostState, debugSfxId) == 4692, "debugSfxId offset drift");
-    static_assert(offsetof(GhostState, debugSfxSeq) == 4696, "debugSfxSeq offset drift");
-    static_assert(offsetof(GhostState, debugSfxFlags) == 4697, "debugSfxFlags offset drift");
-    static_assert(sizeof(GhostState) == 4700, "GhostState total size drift - check Python GS_TOTAL_SIZE");
+    static_assert(offsetof(GhostState, pendingHit) == sizeof(SharedBlock) + 0, "pendingHit offset drift");
+    static_assert(offsetof(GhostState, hitPoseName) == sizeof(SharedBlock) + 4, "hitPoseName offset drift");
+    static_assert(offsetof(GhostState, hitReachScale) == sizeof(SharedBlock) + 20, "hitReachScale offset drift");
+    static_assert(offsetof(GhostState, hitPeerWidth) == sizeof(SharedBlock) + 24, "hitPeerWidth offset drift");
+    static_assert(offsetof(GhostState, outboundHit) == sizeof(SharedBlock) + 28, "outboundHit offset drift");
+    static_assert(offsetof(GhostState, hitGrace) == sizeof(SharedBlock) + 32, "hitGrace offset drift");
+    static_assert(offsetof(GhostState, selfTeamId) == sizeof(SharedBlock) + 33, "selfTeamId offset drift");
+    static_assert(offsetof(GhostState, selfFriendlyFire) == sizeof(SharedBlock) + 34, "selfFriendlyFire offset drift");
+    static_assert(offsetof(GhostState, maxRenderedPeers) == sizeof(SharedBlock) + 36, "maxRenderedPeers offset drift");
+    static_assert(offsetof(GhostState, selfPaperAgbName) == sizeof(SharedBlock) + 40, "selfPaperAgbName offset drift");
+    static_assert(offsetof(GhostState, sfxRingHead) == sizeof(SharedBlock) + 72, "sfxRingHead offset drift");
+    static_assert(offsetof(GhostState, sfxRingEvents) == sizeof(SharedBlock) + 76, "sfxRingEvents offset drift");
+    static_assert(offsetof(GhostState, lobbyHudBlock) == sizeof(SharedBlock) + 204, "lobbyHudBlock offset drift");
+    static_assert(offsetof(GhostState, selfActiveLoopCount) == sizeof(SharedBlock) + 1228, "selfActiveLoopCount offset drift");
+    static_assert(offsetof(GhostState, selfActiveLoops) == sizeof(SharedBlock) + 1232, "selfActiveLoops offset drift");
+    static_assert(offsetof(GhostState, selfGameRole) == sizeof(SharedBlock) + 1244, "selfGameRole offset drift");
+    static_assert(offsetof(GhostState, selfFrozen) == sizeof(SharedBlock) + 1248, "selfFrozen offset drift");
+    static_assert(offsetof(GhostState, pendingTeleportSeq) == sizeof(SharedBlock) + 1249, "pendingTeleportSeq offset drift");
+    static_assert(offsetof(GhostState, pendingTeleportMap) == sizeof(SharedBlock) + 1252, "pendingTeleportMap offset drift");
+    static_assert(offsetof(GhostState, pendingTeleportBero) == sizeof(SharedBlock) + 1268, "pendingTeleportBero offset drift");
+    static_assert(offsetof(GhostState, debugSfxId) == sizeof(SharedBlock) + 1284, "debugSfxId offset drift");
+    static_assert(offsetof(GhostState, debugSfxSeq) == sizeof(SharedBlock) + 1288, "debugSfxSeq offset drift");
+    static_assert(offsetof(GhostState, debugSfxFlags) == sizeof(SharedBlock) + 1289, "debugSfxFlags offset drift");
+    static_assert(sizeof(GhostState) == sizeof(SharedBlock) + 1292, "GhostState total size drift - check Python GS_TOTAL_SIZE");
 
     // Global pointer to the heap-allocated GhostState. Set by Init();
     // null before that. All accessors below dereference through this.
