@@ -1204,8 +1204,14 @@ KEEP_FUNC BattleWorkUnit *BtlUnit_Entry_Hook(BattleUnitSetup *setup)
     KEEP_FUNC int main__psndSFXOnHook(int idOrName, int vol, int pan, int a4, const void *pos, int a6, int a7, int a8)
     {
         const int channel = g_main__psndSFXOn_trampoline(idOrName, vol, pan, a4, pos, a6, a7, a8);
-        if (idOrName >= 0)
-            ghosts::OnLocalSfxFired(idOrName & 0x1FFF, pos != nullptr, channel);
+        if (channel != -1)
+        {
+            const int slot = channel & 0xFF;
+            const volatile uint32_t *entry = reinterpret_cast<volatile uint32_t *>(0x803DF988 + slot * 0x28);
+            const uint32_t f0 = *entry;
+            if (f0 != 0xFFFFFFFFu)
+                ghosts::OnLocalSfxFired(static_cast<int>(f0 & 0x1FFF), pos != nullptr, channel);
+        }
         return channel;
     }
 
