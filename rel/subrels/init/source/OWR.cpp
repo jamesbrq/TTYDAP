@@ -970,7 +970,7 @@ namespace mod::owr
         g_msgWindow_Entry_trampoline = patch::hookFunction(msgdrv::msgWindow_Entry, msgWindow_Entry_Hook);
         g__load_trampoline = patch::hookFunction(seq_mapchange::_load, _load_Hook);
         g_BtlUnit_Entry_trampoline = patch::hookFunction(battle_unit::BtlUnit_Entry, BtlUnit_Entry_Hook);
-        g_main__psndSFXOn_trampoline = patch::hookFunction(pmario_sound::main__psndSFXOn, main__psndSFXOnHook); // common impl; catches all psndSFXOn* wrappers
+        g_main__psndSFXOn_trampoline = patch::hookFunction(pmario_sound::main__psndSFXOn, main__psndSFXOnHook);
         g_psndSFXOff_trampoline = patch::hookFunction(pmario_sound::psndSFXOff, psndSFXOffHook);
         g_npcSetupBattleInfo_trampoline = patch::hookFunction(::npcSetupBattleInfo, npcSetupBattleInfoHook);
 
