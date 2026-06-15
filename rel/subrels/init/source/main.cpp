@@ -26,6 +26,8 @@ namespace mod
         mPFN_marioStMain_trampoline = patch::hookFunction(marioStMain, updateEarly);
         g_npcNameToPtr_trampoline = patch::hookFunction(npcNameToPtr, checkForNpcNameToPtrError);
         g_animPoseMain_trampoline = patch::hookFunction(ttyd::animdrv::animPoseMain, preventAnimPoseMainCrash);
+        ghosts::g_animPoseAutoRelease_trampoline =
+            patch::hookFunction(ttyd::animdrv::animPoseAutoRelease, ghosts::animPoseAutoReleaseHook);
 
         applyGameFixes();
         applyVariousGamePatches();

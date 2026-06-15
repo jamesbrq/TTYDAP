@@ -378,4 +378,10 @@ namespace mod::ghosts
     void OnLocalSfxStopped(int channel);
 
     void installSfxHooks();
+
+    // Hook + trampoline for animPoseAutoRelease (installed in init.rel). Keeps
+    // ghost pose bookkeeping in sync when the engine bulk-frees pose group 2
+    // on map/area transitions.
+    void animPoseAutoReleaseHook(int32_t group);
+    extern void (*g_animPoseAutoRelease_trampoline)(int32_t group);
 } // namespace mod::ghosts

@@ -24,6 +24,8 @@ namespace mod::ghosts
 
     GhostState *g_ghostState = nullptr;
 
+    KEEP_VAR void (*g_animPoseAutoRelease_trampoline)(int32_t group) = nullptr;
+
     extern "C" void *camGetPtr(int cameraId);
 
     extern "C" float reviseAngle(float deg);
@@ -123,6 +125,10 @@ namespace mod::ghosts
             // into the same publish).
             uint8_t sfxReplayCooldown;
 
+            // Backoff before retrying a failed animPaperPoseEntry, so a peer
+            // whose paper rig isn't loadable here can't re-allocate every frame.
+            uint8_t paperRetryCooldown;
+
             // Mod-side FIFO of one-shot sfxIds waiting to be replayed, one per
             // cooldown window. Batched one-shots (e.g. hammer DON 0x160 + WOO
             // 0x161) are copied here and consumed off the wire immediately, so
@@ -206,6 +212,8 @@ namespace mod::ghosts
         // DON+WOO, which fire near-simultaneously) stay tightly coupled instead
         // of being spread ~67ms apart. Still serialized to avoid same-frame flood.
         constexpr uint8_t kSfxReplaySpacing = 1;
+
+        constexpr uint8_t kPaperRetryFrames = 60;
 
         int g_costumeRefs[4] = {0, 0, 0, 0};
 
@@ -988,6 +996,7 @@ namespace mod::ghosts
             slot.sfxSeqInitialized = false;
             slot.lastConsumedSfxSeq = 0;
             slot.sfxReplayCooldown = 0;
+            slot.paperRetryCooldown = 0;
             slot.sfxQueueHead = 0;
             slot.sfxQueueCount = 0;
             slot.lastMapName[0] = '\0';
@@ -996,6 +1005,45 @@ namespace mod::ghosts
             for (auto &b : slot.blockedSfx)
             {
                 b = 0;
+            }
+        }
+
+        // Release ALL ghost poses (actually freeing the smart-heap data) and
+        // reset bookkeeping. Called from the animPoseAutoRelease hook BEFORE the
+        // engine's own group pass, while our pose IDs are still valid - so our
+        // allocations are freed exactly once (the engine's following pass skips
+        // them, now gone). Forgetting without freeing leaked them whenever the
+        // engine's group pass didn't cover poses we allocated.
+        void ReleaseAllGhostPoses()
+        {
+            for (auto &slot : g_slots)
+            {
+                if (slot.forwardAllocated)
+                    ttyd::animdrv::animPoseRelease(slot.forwardPoseId);
+                if (slot.rearAllocated)
+                    ttyd::animdrv::animPoseRelease(slot.rearPoseId);
+                if (slot.effectsAllocated)
+                    ttyd::animdrv::animPoseRelease(slot.effectsPoseId);
+                if (slot.paperPoseId >= 0)
+                    ttyd::animdrv::animPaperPoseRelease(slot.paperPoseId);
+                slot.forwardAllocated = false;
+                slot.rearAllocated = false;
+                slot.effectsAllocated = false;
+                slot.forwardPoseId = -1;
+                slot.rearPoseId = -1;
+                slot.effectsPoseId = -1;
+                slot.paperPoseId = -1;
+                slot.activePose = 0;
+                slot.lastColorIndex = 0;
+                CostumeRelease(slot.costumeHeld);
+                slot.costumeHeld = -1;
+                slot.lastAnimForward[0] = '\0';
+                slot.lastAnimRear[0] = '\0';
+                slot.lastAnimEffects[0] = '\0';
+                slot.lastPaperAnim[0] = '\0';
+                slot.lastPaperAgb[0] = '\0';
+                slot.paperRetryCooldown = 0;
+                slot.renderInitialized = false;
             }
         }
 
@@ -1088,10 +1136,23 @@ namespace mod::ghosts
 
         void ApplyPeerToSlot(const PeerSlot &peer, GhostSlot &slot)
         {
+            // Only peers on our map get poses/paper/SFX. Off-map peers (i.e.
+            // everyone else in the multiworld) were allocating Mario models and
+            // re-firing animPaperPoseEntry every frame for paper rigs we never
+            // draw - a per-frame smart-heap leak that filled up while alone.
+            if (!PeerOnLocalMap(peer))
+            {
+                ReleaseSlot(slot);
+                return;
+            }
+
             EnsurePosesAllocated(slot, peer.colorIndex);
 
             if (slot.sfxReplayCooldown > 0)
                 --slot.sfxReplayCooldown;
+
+            if (slot.paperRetryCooldown > 0)
+                --slot.paperRetryCooldown;
 
             // Detect peer-side map changes. When a peer transitions
             // to a new map (their own map change, or first-time becoming
@@ -1176,7 +1237,7 @@ namespace mod::ghosts
                     slot.lastPaperAgb[0] = '\0';
                     slot.lastPaperAnim[0] = '\0';
                 }
-                else if (peerInPaper && (!slotInPaper || agbChanged))
+                else if (peerInPaper && (!slotInPaper || agbChanged) && slot.paperRetryCooldown == 0)
                 {
                     if (slotInPaper)
                     {
@@ -1219,6 +1280,10 @@ namespace mod::ghosts
                         ttyd::animdrv::animPoseSetPaperAnim(slot.forwardPoseId, peer.paperAnimName);
                         std::memcpy(slot.lastPaperAgb, peer.paperAgbName, sizeof(peer.paperAgbName));
                         std::memcpy(slot.lastPaperAnim, peer.paperAnimName, sizeof(peer.paperAnimName));
+                    }
+                    else
+                    {
+                        slot.paperRetryCooldown = kPaperRetryFrames;
                     }
                 }
                 else if (peerInPaper && slotInPaper && animChanged)
@@ -2487,5 +2552,18 @@ namespace mod::ghosts
             return;
 
         RemoveLocalChannel(channel);
+    }
+
+    // Hooked over animPoseAutoRelease: the engine bulk-frees pose `group` here.
+    // Release our group-kPoseGroup poses ourselves first (IDs still valid), then
+    // chain. Guarantees our smart-heap allocations are freed exactly once even
+    // if the engine's pass wouldn't have covered them - no leak, no double-free.
+    KEEP_FUNC void animPoseAutoReleaseHook(int32_t group)
+    {
+        if (group == kPoseGroup && g_initialized)
+            ReleaseAllGhostPoses();
+
+        if (g_animPoseAutoRelease_trampoline != nullptr)
+            g_animPoseAutoRelease_trampoline(group);
     }
 } // namespace mod::ghosts
