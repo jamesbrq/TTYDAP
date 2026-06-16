@@ -93,7 +93,7 @@ void AnimPoseMainErrorInfo::drawErrorMessage()
     errorTextPosY = posY - (32.f * scale);
 }
 
-static const void *checkIndividualStandardHeap(const gc::os::ChunkInfo *start)
+static const void *checkIndividualStandardHeap(const gc::os::ChunkInfo *start, uint32_t heapSize)
 {
     const gc::os::ChunkInfo *prevChunk = nullptr;
     for (const gc::os::ChunkInfo *currentChunk = start; currentChunk; currentChunk = currentChunk->next)
@@ -104,8 +104,8 @@ static const void *checkIndividualStandardHeap(const gc::os::ChunkInfo *start)
             return currentChunk;
         }
 
-        // Sanity check size
-        if (currentChunk->size >= 0x1800000)
+        // Sanity check size: no chunk can exceed its heap
+        if (currentChunk->size > heapSize)
         {
             return currentChunk;
         }
@@ -122,7 +122,7 @@ static const void *checkIndividualStandardHeap(const gc::os::ChunkInfo *start)
     return nullptr;
 }
 
-static const void *checkIndividualSmartHeap(const ttyd::memory::SmartAllocationData *start)
+static const void *checkIndividualSmartHeap(const ttyd::memory::SmartAllocationData *start, uint32_t heapSize)
 {
     const ttyd::memory::SmartAllocationData *prevChunk = nullptr;
     for (const ttyd::memory::SmartAllocationData *currentChunk = start; currentChunk; currentChunk = currentChunk->pNext)
@@ -133,8 +133,8 @@ static const void *checkIndividualSmartHeap(const ttyd::memory::SmartAllocationD
             return currentChunk;
         }
 
-        // Sanity check size
-        if (currentChunk->usedSize >= 0x1800000)
+        // Sanity check size: no chunk can exceed its heap
+        if (currentChunk->usedSize > heapSize)
         {
             return currentChunk;
         }
@@ -151,7 +151,7 @@ static const void *checkIndividualSmartHeap(const ttyd::memory::SmartAllocationD
     return nullptr;
 }
 
-static const void *checkIndividualMapHeap(const ttyd::memory::MapAllocEntry *start)
+static const void *checkIndividualMapHeap(const ttyd::memory::MapAllocEntry *start, uint32_t heapSize)
 {
     for (const ttyd::memory::MapAllocEntry *currentChunk = start; currentChunk; currentChunk = currentChunk->next)
     {
@@ -161,8 +161,8 @@ static const void *checkIndividualMapHeap(const ttyd::memory::MapAllocEntry *sta
             return currentChunk;
         }
 
-        // Sanity check size
-        if (currentChunk->size >= 0x1800000)
+        // Sanity check size: no chunk can exceed its heap
+        if (currentChunk->size > heapSize)
         {
             return currentChunk;
         }
@@ -301,10 +301,11 @@ void checkHeaps()
     for (int32_t i = 0; i < numHeaps; i++)
     {
         const gc::os::HeapInfo *heapPtr = &heapArrayPtr[i];
+        const uint32_t heapSize = heapPtr->capacity;
 
         // Check the used entries
         const gc::os::ChunkInfo *tempChunk = heapPtr->firstUsed;
-        addressWithError = checkIndividualStandardHeap(tempChunk);
+        addressWithError = checkIndividualStandardHeap(tempChunk, heapSize);
         if (addressWithError)
         {
             initStandardHeapError(addressWithError, i, true);
@@ -312,7 +313,7 @@ void checkHeaps()
 
         // Check the free entries
         tempChunk = heapPtr->firstFree;
-        addressWithError = checkIndividualStandardHeap(tempChunk);
+        addressWithError = checkIndividualStandardHeap(tempChunk, heapSize);
         if (addressWithError)
         {
             initStandardHeapError(addressWithError, i, false);
@@ -321,10 +322,14 @@ void checkHeaps()
 
     // Check the smart heap
     const ttyd::memory::SmartWork *smartWorkPtr = ttyd::memory::_smartWorkPtr;
+    void **smartStart = reinterpret_cast<void **>(&ttyd::memory::heapStart);
+    void **smartEnd = reinterpret_cast<void **>(&ttyd::memory::heapEnd);
+    const uint32_t smartHeapSize = reinterpret_cast<uint32_t>(smartEnd[ttyd::memory::HEAP_SMART]) -
+                                   reinterpret_cast<uint32_t>(smartStart[ttyd::memory::HEAP_SMART]);
 
     // Check the used entries
     const ttyd::memory::SmartAllocationData *tempChunk = smartWorkPtr->pFirstUsed;
-    addressWithError = checkIndividualSmartHeap(tempChunk);
+    addressWithError = checkIndividualSmartHeap(tempChunk, smartHeapSize);
     if (addressWithError)
     {
         initSmartHeapError(addressWithError, true);
@@ -332,7 +337,7 @@ void checkHeaps()
 
     // Check the free entries
     tempChunk = smartWorkPtr->pFirstFree;
-    addressWithError = checkIndividualSmartHeap(tempChunk);
+    addressWithError = checkIndividualSmartHeap(tempChunk, smartHeapSize);
     if (addressWithError)
     {
         initSmartHeapError(addressWithError, false);
@@ -340,7 +345,7 @@ void checkHeaps()
 
     // Check the map heap
     const ttyd::memory::MapAllocEntry *mapHeapPtr = ttyd::memory::mapalloc_base_ptr;
-    addressWithError = checkIndividualMapHeap(mapHeapPtr);
+    addressWithError = checkIndividualMapHeap(mapHeapPtr, ttyd::memory::mapalloc_size);
 
     if (addressWithError)
     {
@@ -353,7 +358,7 @@ void checkHeaps()
 
     // Check the battle map heap
     mapHeapPtr = ttyd::memory::R_battlemapalloc_base_ptr;
-    addressWithError = checkIndividualMapHeap(mapHeapPtr);
+    addressWithError = checkIndividualMapHeap(mapHeapPtr, ttyd::memory::R_battlemapalloc_size);
     if (addressWithError)
     {
         initMapHeapError(addressWithError, static_cast<const ttyd::memory::MapAllocEntry *>(addressWithError)->inUse, true);

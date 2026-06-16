@@ -19,7 +19,10 @@ namespace mod
 
     void main()
     {
-        LoadCustomRelVM();
+        if (platformIsConsole())
+            LoadCustomRelVM();
+        else
+            relMgr.loadCustomRel();
 
         // Run the init rel to handle function hooks/patches/etc
         relMgr.runInitRel();
@@ -27,20 +30,42 @@ namespace mod
 
     void exit() {}
 
+    // Temporary: publish heap sizes to the diagnostic scratch block so the AP
+    // client (/heaps) can read them. Layout at 0x80003C00 (big-endian u32):
+    //   [0] magic 'HEAP'  [1] default  [2] map  [3] ext  [4] effect  [5] smart
+    //   [6] smart contiguous-free (unallocatedArenaStartSize)
+    KEEP_FUNC void writeHeapStats()
+    {
+        volatile uint32_t *out = reinterpret_cast<volatile uint32_t *>(0x80003C00);
+        out[0] = 0x48454150;
+        void **starts = reinterpret_cast<void **>(&ttyd::memory::heapStart);
+        void **ends = reinterpret_cast<void **>(&ttyd::memory::heapEnd);
+        for (int i = 0; i < 5; i++)
+            out[1 + i] = reinterpret_cast<uint32_t>(ends[i]) - reinterpret_cast<uint32_t>(starts[i]);
+        ttyd::memory::SmartWork *sw = ttyd::memory::_smartWorkPtr;
+        out[6] = sw ? sw->unallocatedArenaStartSize : 0;
+    }
+
     KEEP_FUNC void updateEarly()
     {
         // Check the game heaps for errors
         checkHeaps();
 
+        writeHeapStats();
+
         gMod->owr_mod_.Update();
 
-        ghosts::UpdateAll();
+        if (multiplayerEnabled())
+            ghosts::UpdateAll();
 
         // Register draw command
         ttyd::dispdrv::dispEntry(ttyd::dispdrv::CameraId::kDebug3d, 1, 0.f, draw, nullptr);
-        
-        ttyd::dispdrv::dispEntry(ttyd::dispdrv::CameraId::k3d, 1, 0.f, ghosts::DrawAll, nullptr);
-        ttyd::dispdrv::dispEntry(ttyd::dispdrv::CameraId::kDebug3d, 1, 100.0f, ghosts::DrawNameTagsAll, nullptr);
+
+        if (multiplayerEnabled())
+        {
+            ttyd::dispdrv::dispEntry(ttyd::dispdrv::CameraId::k3d, 1, 0.f, ghosts::DrawAll, nullptr);
+            ttyd::dispdrv::dispEntry(ttyd::dispdrv::CameraId::kDebug3d, 1, 100.0f, ghosts::DrawNameTagsAll, nullptr);
+        }
 
         // Call the original function
         mPFN_marioStMain_trampoline();
