@@ -84,6 +84,11 @@ namespace mod::owr
     int main__psndSFXOnHook(int idOrName, int vol, int pan, int a4, const void *pos, int a6, int a7, int a8);
     int psndSFXOffHook(int channel);
     void npcSetupBattleInfoHook(::NpcEntry *npc, void *info);
+    void swSetHook(int gswf);
+    void DrainReceivedFlags();
+
+    extern const char *const goods[];
+    extern const int goodsCount;
 
     extern bool (*g_OSLink_trampoline)(OSModuleInfo *, void *);
     extern void (*g_seqSetSeq_trampoline)(SeqIndex, const char *, const char *);
@@ -104,6 +109,7 @@ namespace mod::owr
     extern int (*g_main__psndSFXOn_trampoline)(int, int, int, int, const void *, int, int, int);
     extern int (*g_psndSFXOff_trampoline)(int);
     extern void (*g_npcSetupBattleInfo_trampoline)(::NpcEntry *, void *);
+    extern void (*g_swSet_trampoline)(int);
 
     extern const char *goombellaName;
     extern const char *goombellaDescription;

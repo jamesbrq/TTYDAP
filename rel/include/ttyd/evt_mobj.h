@@ -111,5 +111,6 @@ namespace ttyd::evt_mobj
 
         // .data
         extern int32_t mobj_save_blk_sysevt[1];
+        void mobjDelete(const char *name);
     }
 } // namespace ttyd::evt_mobj

@@ -27,7 +27,7 @@ namespace ttyd::itemdrv
         // itemHitCheck
         // itemNameToPtr
         void *itemNameToPtr(const char *itemName);
-        // itemDelete
+        void itemDelete(const char *name);
 
         void *itemEntry(const char *name,
                         uint32_t id,

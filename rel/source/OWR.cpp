@@ -17,6 +17,7 @@
 #include <ttyd/evt_lecture.h>
 #include <ttyd/evt_mario.h>
 #include <ttyd/evt_memcard.h>
+#include <ttyd/evt_mobj.h>
 #include <ttyd/evt_msg.h>
 #include <ttyd/evt_party.h>
 #include <ttyd/evt_pouch.h>
@@ -27,6 +28,7 @@
 #include <ttyd/evtmgr_cmd.h>
 #include <ttyd/fontmgr.h>
 #include <ttyd/icondrv.h>
+#include <ttyd/itemdrv.h>
 #include <ttyd/mario.h>
 #include <ttyd/mario_motion.h>
 #include <ttyd/mario_party.h>
@@ -45,6 +47,7 @@
 #include <ttyd/win_main.h>
 #include <ttyd/win_root.h>
 #include <ttyd/windowdrv.h>
+#include <ttyd/animdrv.h>
 
 #include "common.h"
 #include "OWR.h"
@@ -173,6 +176,7 @@ namespace mod::owr
     KEEP_VAR int (*g_main__psndSFXOn_trampoline)(int, int, int, int, const void *, int, int, int) = nullptr;
     KEEP_VAR int (*g_psndSFXOff_trampoline)(int) = nullptr;
     KEEP_VAR void (*g_npcSetupBattleInfo_trampoline)(::NpcEntry *, void *) = nullptr;
+    KEEP_VAR void (*g_swSet_trampoline)(int) = nullptr;
 
     void OWR::SequenceInit()
     {
@@ -395,8 +399,7 @@ namespace mod::owr
                     if (ttyd::mario_pouch::pouchCheckItem(i) > 0)
                         count++;
                 }
-                if (gState->apSettings->goal == 2 && count >= gState->apSettings->goalStars &&
-                    ttyd::swdrv::swGet(6120) == 0)
+                if (gState->apSettings->goal == 2 && count >= gState->apSettings->goalStars && ttyd::swdrv::swGet(6120) == 0)
                 {
                     if (checkIfInGameNotBattle())
                     {
@@ -1178,7 +1181,7 @@ namespace mod::owr
         ttyd::msgdrv::msgLoad("desc", 3);
     }
 
-KEEP_FUNC BattleWorkUnit *BtlUnit_Entry_Hook(BattleUnitSetup *setup)
+    KEEP_FUNC BattleWorkUnit *BtlUnit_Entry_Hook(BattleUnitSetup *setup)
     {
         if (setup)
         {
@@ -1256,6 +1259,140 @@ KEEP_FUNC BattleWorkUnit *BtlUnit_Entry_Hook(BattleUnitSetup *setup)
             info = nullptr;
         }
         g_npcSetupBattleInfo_trampoline(npc, info);*/
+    }
+
+    static void applyShopFlagLive(int flag)
+    {
+        char *shopWork = *reinterpret_cast<char **>(0x8041EB60);
+        if (shopWork == nullptr)
+            return;
+
+        int gswfBase = 6200;
+        const char *nextMapPtr = &ttyd::seq_mapchange::_next_map[0];
+
+        for (int i = 0; i < goodsCount; i++)
+        {
+            if (strncmp(nextMapPtr, goods[i], 6) != 0)
+            {
+                if (i == goodsCount - 1)
+                    return;
+                gswfBase += 6;
+                continue;
+            }
+            break;
+        }
+
+        int index = flag - gswfBase;
+        if (index < 0 || index >= 6)
+            return;
+
+        uint16_t *itemFlags = reinterpret_cast<uint16_t *>(shopWork + 0x14);
+        itemFlags[index] |= 1;
+    }
+
+
+    void DeleteFieldItemForFlag(int flag)
+    {
+        if (flag < 0)
+            return;
+
+        uint16_t kItemStateGetItem = 2;
+
+        char *work = reinterpret_cast<char *>(0x803dc290);
+
+        int count = *reinterpret_cast<int *>(work + 0x0);
+        char *entry = *reinterpret_cast<char **>(work + 0x4);
+        if (entry == nullptr)
+            return;
+
+        for (int i = 0; i < count; i++, entry += 0x98)
+        {
+            uint16_t status = *reinterpret_cast<uint16_t *>(entry + 0x0);
+            if ((status & 0x1) == 0)
+                continue;
+            int32_t entryFlag = *reinterpret_cast<int32_t *>(entry + 0x8);
+            if (entryFlag != flag)
+                continue;
+            uint16_t itemState = *reinterpret_cast<uint16_t *>(entry + 0x24);
+            if (itemState == kItemStateGetItem)
+                return; // local player is picking this up; leave it alone
+            ttyd::itemdrv::itemDelete(entry + 0xC);
+            return;
+        }
+    }
+
+void HandleMobjForFlag(int flag)
+    {
+        if (flag < 0)
+            return;
+
+        char *header = reinterpret_cast<char *>(0x803D98A8);
+        int count = *reinterpret_cast<int *>(header + 0x0);
+        char *entry = *reinterpret_cast<char **>(header + 0x4);
+        if (entry == nullptr)
+            return;
+
+        const int32_t encoded = -130000000 + flag;
+        for (int i = 0; i < count; i++, entry += 0x23C)
+        {
+            if ((*reinterpret_cast<uint32_t *>(entry + 0x0) & 0x1) == 0)
+                continue;
+            if (*reinterpret_cast<int32_t *>(entry + 0x1E4) != encoded)
+                continue;
+
+            const char *model = entry + 0x15;
+
+            // Flip panels: never touch. swSet already suppresses the reward
+            // on next load; the panel still flips, just gives nothing.
+            if (strncmp(model, "MOBJ_Kururin", 12) == 0)
+                return;
+
+            // Shine Sprite box: delete by instance name.
+            if (strcmp(model, "MOBJ_PowerUpBlock") == 0)
+            {
+                ttyd::evt_mobj::mobjDelete(entry + 0x5);
+                return;
+            }
+
+            // Blocks (MOBJ_Block, MOBJ_HatenaBlock, MOBJ_HiddenHatenaBlock,
+            // MOBJ_PinkBlock, badge/brick blocks) use 0x5A as the emptied/spent
+            // terminal state; 0x63 is their broken/destroyed path. A spent ? block
+            // swaps its model to MOBJ_Block, which still matches "Block", and we key
+            // off the GSWF at +0x1E4 (unchanged by the swap) so the match still holds.
+            const bool isBlock = strstr(model, "Block") != nullptr;
+            const int32_t blockState = isBlock ? 0x5A : 0x63;
+            if (*reinterpret_cast<int32_t *>(entry + 0x1DC) != blockState)
+                *reinterpret_cast<int32_t *>(entry + 0x1DC) = blockState;
+
+            // Setting 0x1DC alone doesn't change the visible model: a block's
+            // emptied look is the "_2" idle anim on its pose (mobj+0x70), which the
+            // real handler sets at the same time it writes 0x5A. The full idle is
+            // "X_1" (S_1 for most blocks, A_1 for brick); the emptied form is the
+            // sibling "X_2". Drive it here so the spent block renders correctly.
+            if (isBlock)
+            {
+                int32_t poseId = *reinterpret_cast<int32_t *>(entry + 0x70);
+                char *cur = ttyd::animdrv::animPoseGetCurrentAnim(poseId);
+                if (cur != nullptr)
+                {
+                    int len = strlen(cur);
+                    if (len >= 2 && cur[len - 2] == '_' && cur[len - 1] == '1')
+                    {
+                        char emptyAnim[16];
+                        strcpy(emptyAnim, cur);
+                        emptyAnim[len - 1] = '2';
+                        ttyd::animdrv::animPoseSetAnim(poseId, emptyAnim, 1);
+                    }
+                }
+            }
+            return;
+        }
+    }
+
+    KEEP_FUNC void swSetHook(int gswf)
+    {
+        g_swSet_trampoline(gswf);
+        applyShopFlagLive(gswf);
     }
 
     KEEP_FUNC const char *msgSearchHook(const char *msgKey)
@@ -1848,6 +1985,27 @@ KEEP_FUNC BattleWorkUnit *BtlUnit_Entry_Hook(BattleUnitSetup *setup)
         return g_winLogMain_trampoline(menu);
     }
 
+    void DrainReceivedFlags()
+    {
+        uintptr_t kRecvFlagRingAddr = 0x80003C00;
+        int kRecvFlagCapacity = 64;
+
+        volatile uint16_t *head = reinterpret_cast<volatile uint16_t *>(kRecvFlagRingAddr + 0x0);
+        volatile uint16_t *tail = reinterpret_cast<volatile uint16_t *>(kRecvFlagRingAddr + 0x2);
+        volatile uint16_t *ring = reinterpret_cast<volatile uint16_t *>(kRecvFlagRingAddr + 0x4);
+
+        uint16_t h = *head;
+        while (*tail != h)
+        {
+            uint16_t flag = ring[*tail % kRecvFlagCapacity];
+            *tail = static_cast<uint16_t>(*tail + 1);
+
+            ttyd::swdrv::swSet(flag);
+            DeleteFieldItemForFlag(flag);
+            HandleMobjForFlag(flag);
+        }
+    }
+
     void OWR::Update()
     {
         APSettings *apSettingsPtr = gState->apSettings;
@@ -1883,6 +2041,7 @@ KEEP_FUNC BattleWorkUnit *BtlUnit_Entry_Hook(BattleUnitSetup *setup)
 
         SequenceInit();
         RecieveItems();
+        DrainReceivedFlags();
     }
 
     void OWR::OnModuleLoaded(OSModuleInfo *module_info)

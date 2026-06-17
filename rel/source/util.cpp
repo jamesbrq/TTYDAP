@@ -141,7 +141,7 @@ namespace mod::util
         }
 
         // Uncached memory
-        if ((ptrRaw >= 0xC0000000) && (ptrRaw < 0xC1800000))
+        if ((ptrRaw >= 0xC0000000) && (ptrRaw < 0xC4000000))
         {
             return mod::util::PointerVerificationType::PTR_UNCACHED;
         }

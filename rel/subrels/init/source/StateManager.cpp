@@ -16,7 +16,7 @@ StateManager::StateManager()
     gState = this;
     gState->Init();
     for (int i = 0; i < 8; i++) gState->state_msgWork[i] = ttyd::msgdrv::msgWork[i]; // msgWork.entries[0] && msgWork.entries[1]
-    gState->state_msgWork[16] = ttyd::msgdrv::msgWork[8]; // msgWork.animBase
+    gState->state_msgWork[16] = ttyd::msgdrv::msgWork[8];                            // msgWork.animBase
     gState->LoadEnemyData();
     gState->entranceDataCount = gState->LoadEntranceData();
 }
@@ -26,6 +26,8 @@ void StateManager::Init()
     gState->apSettings = reinterpret_cast<APSettings *>(0x80003220);
     gState->tattleItems = reinterpret_cast<uint16_t *>(0x80003B00);
     gState->maniacItems = reinterpret_cast<uint16_t *>(0x80003400);
+
+    *reinterpret_cast<uint32_t *>(0x80003C00) = 0;
 }
 
 size_t StateManager::LoadEntranceData()
