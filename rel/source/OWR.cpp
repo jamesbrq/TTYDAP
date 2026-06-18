@@ -1286,6 +1286,28 @@ namespace mod::owr
         if (index < 0 || index >= 6)
             return;
 
+        uint32_t *itemIds = *reinterpret_cast<uint32_t **>(shopWork + 0x08);
+        uint32_t itemId = itemIds[index * 2];
+        switch (gState->apSettings->shopPurchaseLimit)
+        {
+            case 0: // Infinite
+                if (itemId > 125)
+                    return;
+                break;
+            case 1: // Consumables Only
+                if (itemId > 125 && itemId < 236)
+                    return;
+                break;
+            case 2: // Badges Only
+                if (itemId > 239)
+                    return;
+                break;
+            case 3: // Limited
+                break;
+            default:
+                break;
+        }
+
         uint16_t *itemFlags = reinterpret_cast<uint16_t *>(shopWork + 0x14);
         itemFlags[index] |= 1;
     }
