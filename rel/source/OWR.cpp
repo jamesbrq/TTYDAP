@@ -391,28 +391,9 @@ namespace mod::owr
                 pouchAddKeepItem(items[i]);
             }
 
-            if (items[i] >= 114 && items[i] <= 120)
-            {
-                uint8_t count = 0;
-                for (int i = 114; i <= 120; i++)
-                {
-                    if (ttyd::mario_pouch::pouchCheckItem(i) > 0)
-                        count++;
-                }
-                if (gState->apSettings->goal == 2 && count >= gState->apSettings->goalStars && ttyd::swdrv::swGet(6120) == 0)
-                {
-                    if (checkIfInGameNotBattle())
-                    {
-                        ttyd::swdrv::swSet(6120);
-                        ttyd::seqdrv::seqSetSeq(SeqIndex::kMapChange, "end_00", 0);
-                    }
-                    else
-                    {
-                        // Defer the sequence change until we are back in the game
-                        ttyd::swdrv::swSet(6121);
-                    }
-                }
-            }
+            // Crystal-star goal is handled in pouchGetItemHook via
+            // checkCrystalStarGoal, which fires for stars from any source
+            // (including the pouchGetItem call above).
             items[i] = 0;
         }
 
@@ -1315,7 +1296,7 @@ namespace mod::owr
 
     void DeleteFieldItemForFlag(int flag)
     {
-        if (flag < 0)
+        if (flag <= 0)
             return;
 
         uint16_t kItemStateGetItem = 2;
@@ -1345,7 +1326,7 @@ namespace mod::owr
 
 void HandleMobjForFlag(int flag)
     {
-        if (flag < 0)
+        if (flag <= 0)
             return;
 
         char *header = reinterpret_cast<char *>(0x803D98A8);
@@ -1364,8 +1345,6 @@ void HandleMobjForFlag(int flag)
 
             const char *model = entry + 0x15;
 
-            // Flip panels: never touch. swSet already suppresses the reward
-            // on next load; the panel still flips, just gives nothing.
             if (strncmp(model, "MOBJ_Kururin", 12) == 0)
                 return;
 
@@ -1376,21 +1355,11 @@ void HandleMobjForFlag(int flag)
                 return;
             }
 
-            // Blocks (MOBJ_Block, MOBJ_HatenaBlock, MOBJ_HiddenHatenaBlock,
-            // MOBJ_PinkBlock, badge/brick blocks) use 0x5A as the emptied/spent
-            // terminal state; 0x63 is their broken/destroyed path. A spent ? block
-            // swaps its model to MOBJ_Block, which still matches "Block", and we key
-            // off the GSWF at +0x1E4 (unchanged by the swap) so the match still holds.
             const bool isBlock = strstr(model, "Block") != nullptr;
             const int32_t blockState = isBlock ? 0x5A : 0x63;
             if (*reinterpret_cast<int32_t *>(entry + 0x1DC) != blockState)
                 *reinterpret_cast<int32_t *>(entry + 0x1DC) = blockState;
 
-            // Setting 0x1DC alone doesn't change the visible model: a block's
-            // emptied look is the "_2" idle anim on its pose (mobj+0x70), which the
-            // real handler sets at the same time it writes 0x5A. The full idle is
-            // "X_1" (S_1 for most blocks, A_1 for brick); the emptied form is the
-            // sibling "X_2". Drive it here so the spent block renders correctly.
             if (isBlock)
             {
                 int32_t poseId = *reinterpret_cast<int32_t *>(entry + 0x70);
@@ -1414,7 +1383,8 @@ void HandleMobjForFlag(int flag)
     KEEP_FUNC void swSetHook(int gswf)
     {
         g_swSet_trampoline(gswf);
-        applyShopFlagLive(gswf);
+        if (6200 <= gswf <= 6300)
+            applyShopFlagLive(gswf);
     }
 
     KEEP_FUNC const char *msgSearchHook(const char *msgKey)
@@ -1478,6 +1448,32 @@ void HandleMobjForFlag(int flag)
         if (pouchRemoveItem(ItemId::INVALID_ITEM_PAPER_0054))
         {
             pouchGetItem(ItemId::INVALID_ITEM_PAPER_0054);
+        }
+    }
+
+    static void checkCrystalStarGoal()
+    {
+        if (gState->apSettings->goal != 2 || ttyd::swdrv::swGet(6120) != 0)
+            return;
+
+        uint8_t count = 0;
+        for (int i = 114; i <= 120; i++)
+        {
+            if (pouchCheckItem(i) > 0)
+                count++;
+        }
+        if (count < gState->apSettings->goalStars)
+            return;
+
+        if (checkIfInGameNotBattle())
+        {
+            ttyd::swdrv::swSet(6120);
+            ttyd::seqdrv::seqSetSeq(SeqIndex::kMapChange, "end_00", 0);
+        }
+        else
+        {
+            // Defer the sequence change until we are back in the game
+            ttyd::swdrv::swSet(6121);
         }
     }
 
@@ -1659,6 +1655,13 @@ void HandleMobjForFlag(int flag)
                 {
                     pouchReAddReturnPipe();
                 }
+
+                // A crystal star can arrive through this path from any source
+                // (AP item, chest, shop, or a tattle reward via _get_present_item),
+                // so re-evaluate the crystal-star goal here rather than relying on
+                // RecieveItems, which only sees stars from the AP item array.
+                if (ItemId::DIAMOND_STAR <= item && item <= ItemId::CRYSTAL_STAR)
+                    checkCrystalStarGoal();
 
                 return ret;
             }
@@ -2009,7 +2012,7 @@ void HandleMobjForFlag(int flag)
 
     void DrainReceivedFlags()
     {
-        uintptr_t kRecvFlagRingAddr = 0x80003C00;
+        uintptr_t kRecvFlagRingAddr = 0x80004600;
         int kRecvFlagCapacity = 64;
 
         volatile uint16_t *head = reinterpret_cast<volatile uint16_t *>(kRecvFlagRingAddr + 0x0);
@@ -2021,6 +2024,9 @@ void HandleMobjForFlag(int flag)
         {
             uint16_t flag = ring[*tail % kRecvFlagCapacity];
             *tail = static_cast<uint16_t>(*tail + 1);
+
+            if (flag == 0)
+                continue;  // 0 is not a valid AP location flag; skip
 
             ttyd::swdrv::swSet(flag);
             DeleteFieldItemForFlag(flag);

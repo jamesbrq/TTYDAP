@@ -27,7 +27,7 @@ void StateManager::Init()
     gState->tattleItems = reinterpret_cast<uint16_t *>(0x80003B00);
     gState->maniacItems = reinterpret_cast<uint16_t *>(0x80003400);
 
-    *reinterpret_cast<uint32_t *>(0x80003C00) = 0;
+    *reinterpret_cast<uint32_t *>(0x80004600) = 0;
 }
 
 size_t StateManager::LoadEntranceData()
