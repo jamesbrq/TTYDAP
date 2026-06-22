@@ -1383,7 +1383,7 @@ void HandleMobjForFlag(int flag)
     KEEP_FUNC void swSetHook(int gswf)
     {
         g_swSet_trampoline(gswf);
-        if (6200 <= gswf <= 6300)
+        if (gswf >= 6200 && gswf <= 6300)
             applyShopFlagLive(gswf);
     }
 
