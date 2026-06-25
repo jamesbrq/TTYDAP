@@ -103,16 +103,17 @@ namespace mod::owr
     KEEP_VAR const char *blackKeyTubeName = "black_key_tube";
     KEEP_VAR const char *blackKeyBoatName = "black_key_boat";
 
-    //Progressive Renames
+    // Progressive Renames
     KEEP_VAR const char *progressiveBootsName = "progressive_boots";
     KEEP_VAR const char *progressiveHammerName = "progressive_hammer";
+
+    KEEP_VAR const char *const goods[] =
+        {"gor_01", "gor_03", "tik_00", "nok_00", "mri_07", "tou_01", "usu_01", "muj_01", "rsh_03", "bom_02"};
+    KEEP_VAR const int goodsCount = static_cast<int>(sizeof(goods) / sizeof(goods[0]));
 
 } // namespace mod::owr
 
 extern int32_t btlataudevtPresentItem_Get[];
-
-static const char *goods[] =
-    {"gor_01", "gor_03", "tik_00", "nok_00", "mri_07", "tou_01", "usu_01", "muj_01", "rsh_03", "bom_02"};
 
 static char result[100];
 
@@ -307,7 +308,7 @@ EVT_DEFINE_USER_FUNC_KEEP(setShopFlags)
 
     int gswfBase = 6200;
     const char *nextMapPtr = &ttyd::seq_mapchange::_next_map[0];
-    constexpr int loopCount = static_cast<int>(sizeof(goods) / sizeof(goods[0]));
+    const int loopCount = goodsCount;
 
     for (int i = 0; i < loopCount; i++)
     {
@@ -493,7 +494,7 @@ void checkShopFlag(uint32_t item, uint32_t index)
 
     int gswfBase = 6200;
     const char *nextMapPtr = &ttyd::seq_mapchange::_next_map[0];
-    constexpr int loopCount = static_cast<int>(sizeof(goods) / sizeof(goods[0]));
+    const int loopCount = goodsCount;
 
     for (int i = 0; i < loopCount; i++)
     {
@@ -569,7 +570,7 @@ int getBlockVisibility(int brickType)
     return brickType;
 }
 
-const char* shopItemDescription(const char* itemDescription)
+const char *shopItemDescription(const char *itemDescription)
 {
     char *base = reinterpret_cast<char *>(evt_shop::evt_shop_wp);
     uint32_t *itemIds = *reinterpret_cast<uint32_t **>(base + 0x08);
@@ -579,7 +580,7 @@ const char* shopItemDescription(const char* itemDescription)
         return itemDescription;
 
     const char *nextMapPtr = &ttyd::seq_mapchange::_next_map[0];
-    constexpr int loopCount = static_cast<int>(sizeof(goods) / sizeof(goods[0]));
+    const int loopCount = goodsCount;
 
     for (int i = 0; i < loopCount; i++)
     {
@@ -591,7 +592,7 @@ const char* shopItemDescription(const char* itemDescription)
     return itemDescription;
 }
 
-int itemHandleStarstone(void* itemPtr)
+int itemHandleStarstone(void *itemPtr)
 {
     if (!itemPtr)
         return 0;
@@ -645,7 +646,7 @@ EVT_DEFINE_USER_FUNC_KEEP(starstoneParamClean)
 EVT_DEFINE_USER_FUNC_KEEP(lasStarsCheck)
 {
     (void)isFirstCall;
-    if (strcmp(reinterpret_cast<const char*>(ttyd::evtmgr_cmd::evtGetValue(evt, evt->evtArguments[1])), "las_28") != 0)
+    if (strcmp(reinterpret_cast<const char *>(ttyd::evtmgr_cmd::evtGetValue(evt, evt->evtArguments[1])), "las_28") != 0)
     {
         ttyd::evtmgr_cmd::evtSetValue(evt, evt->evtArguments[0], 0);
         return 2;
@@ -656,7 +657,7 @@ EVT_DEFINE_USER_FUNC_KEEP(lasStarsCheck)
     return 2;
 }
 
-EVT_DEFINE_USER_FUNC_KEEP(marioGetRot) 
+EVT_DEFINE_USER_FUNC_KEEP(marioGetRot)
 {
     (void)isFirstCall;
     ttyd::evtmgr_cmd::evtSetFloat(evt, evt->evtArguments[0], mario::marioGetPtr()->unk_19c + 1.0f);
@@ -683,7 +684,7 @@ EVT_DEFINE_USER_FUNC_KEEP(pouchStarstoneItem)
 {
     (void)isFirstCall;
     if (!gState->starItemPtr)
-        gState->starItemPtr = itemdrv::itemNameToPtr((const char*)ttyd::evtmgr_cmd::evtGetValue(evt, evt->evtArguments[1]));
+        gState->starItemPtr = itemdrv::itemNameToPtr((const char *)ttyd::evtmgr_cmd::evtGetValue(evt, evt->evtArguments[1]));
     int itemId = *(int *)((char *)gState->starItemPtr + 0x4);
     if (ttyd::evtmgr_cmd::evtGetValue(evt, evt->evtArguments[2]) != -1)
         mario_pouch::pouchGetItem(itemId);
@@ -694,7 +695,7 @@ EVT_DEFINE_USER_FUNC_KEEP(pouchStarstoneItem)
 EVT_DEFINE_USER_FUNC_KEEP(setIconRenderPriority)
 {
     (void)isFirstCall;
-    void* iconPtr = icondrv::iconNameToPtr((const char*)evtmgr_cmd::evtGetValue(evt, evt->evtArguments[0]));
+    void *iconPtr = icondrv::iconNameToPtr((const char *)evtmgr_cmd::evtGetValue(evt, evt->evtArguments[0]));
     if (iconPtr)
     {
         uint16_t *flags = (uint16_t *)iconPtr;

@@ -8,6 +8,8 @@
 #include <gc/OSModule.h>
 #include <gc/pad.h>
 #include <mod.h>
+#include "vm_prefetch.h"
+#include "vm_ttyd.h"
 #include <ttyd/common_types.h>
 #include <ttyd/countdown.h>
 #include <ttyd/evt_bero.h>
@@ -15,6 +17,7 @@
 #include <ttyd/evt_lecture.h>
 #include <ttyd/evt_mario.h>
 #include <ttyd/evt_memcard.h>
+#include <ttyd/evt_mobj.h>
 #include <ttyd/evt_msg.h>
 #include <ttyd/evt_party.h>
 #include <ttyd/evt_pouch.h>
@@ -25,6 +28,7 @@
 #include <ttyd/evtmgr_cmd.h>
 #include <ttyd/fontmgr.h>
 #include <ttyd/icondrv.h>
+#include <ttyd/itemdrv.h>
 #include <ttyd/mario.h>
 #include <ttyd/mario_motion.h>
 #include <ttyd/mario_party.h>
@@ -43,6 +47,7 @@
 #include <ttyd/win_main.h>
 #include <ttyd/win_root.h>
 #include <ttyd/windowdrv.h>
+#include <ttyd/animdrv.h>
 
 #include "common.h"
 #include "OWR.h"
@@ -168,11 +173,11 @@ namespace mod::owr
     KEEP_VAR int (*g_msgWindow_Entry_trampoline)(const char *message, int unk1, int windowType) = nullptr;
     KEEP_VAR void (*g__load_trampoline)(const char *mapName, const char *entranceName, const char *beroName) = nullptr;
     KEEP_VAR ttyd::battle_unit::BattleWorkUnit *(*g_BtlUnit_Entry_trampoline)(BattleUnitSetup *) = nullptr;
-    KEEP_VAR int (*g_psndSFXOn_trampoline)(int) = nullptr;
-    KEEP_VAR int (*g_psndSFXOn3D_trampoline)(int, const gc::vec3 *) = nullptr;
+    KEEP_VAR int (*g_main__psndSFXOn_trampoline)(int, int, int, int, const void *, int, int, int) = nullptr;
     KEEP_VAR int (*g_psndSFXOff_trampoline)(int) = nullptr;
     KEEP_VAR void (*g_npcSetupBattleInfo_trampoline)(::NpcEntry *, void *) = nullptr;
     KEEP_VAR int32_t (*g_pouchRemoveItem_trampoline)(int32_t) = nullptr;
+    KEEP_VAR void (*g_swSet_trampoline)(int) = nullptr;
 
     void OWR::SequenceInit()
     {
@@ -366,48 +371,35 @@ namespace mod::owr
 
         uintptr_t length_pointer = 0x80000FFC;
         uintptr_t item_pointer = 0x80001000;
+        uintptr_t index_pointer = 0x803DB860;
 
         uint32_t length = *reinterpret_cast<uint32_t *>(length_pointer);
-        int16_t *items = reinterpret_cast<int16_t *>(item_pointer);
-
-        if (length > 0)
+        if (length == 0)
+            return;
+        if (length > 255) // guard a clobbered/garbage length
         {
-            for (uint32_t i = 0; i < length; i++)
-            {
-                // Try to give the item
-                if (!pouchGetItem(items[i]))
-                {
-                    // Couldn't give the item, so try to send it to storage
-                    pouchAddKeepItem(items[i]);
-                }
-
-                if (items[i] >= 114 && items[i] <= 120)
-                {
-                    uint8_t count = 0;
-                    for (int i = 114; i <= 120; i++)
-                    {
-                        if (ttyd::mario_pouch::pouchCheckItem(i) > 0)
-                            count++;
-                    }
-                    if (gState->apSettings->goal == 2 && count >= gState->apSettings->goalStars &&
-                        ttyd::swdrv::swGet(6120) == 0)
-                    {
-                        if (checkIfInGameNotBattle())
-                        {
-                            ttyd::swdrv::swSet(6120);
-                            ttyd::seqdrv::seqSetSeq(SeqIndex::kMapChange, "end_00", 0);
-                        }
-                        else
-                        {
-                            // Defer the sequence change until we are back in the game
-                            ttyd::swdrv::swSet(6121);
-                        }
-                    }
-                }
-                items[i] = 0;
-            }
-            memset(reinterpret_cast<void *>(length_pointer), 0, sizeof(uint32_t));
+            *reinterpret_cast<uint32_t *>(length_pointer) = 0;
+            return;
         }
+
+        int16_t *items = reinterpret_cast<int16_t *>(item_pointer);
+        for (uint32_t i = 0; i < length; i++)
+        {
+            // Try to give the item
+            if (!pouchGetItem(items[i]))
+            {
+                // Couldn't give the item, so try to send it to storage
+                pouchAddKeepItem(items[i]);
+            }
+
+            // Crystal-star goal is handled in pouchGetItemHook via
+            // checkCrystalStarGoal, which fires for stars from any source
+            // (including the pouchGetItem call above).
+            items[i] = 0;
+        }
+
+        *reinterpret_cast<uint32_t *>(index_pointer) += length;
+        *reinterpret_cast<uint32_t *>(length_pointer) = 0; // release last; producer gates on this
     }
 
     KEEP_FUNC void replaceMultipleCharacters(ttyd::memory::SmartAllocationData *smartData, uint32_t startIndex, int value)
@@ -1173,12 +1165,36 @@ namespace mod::owr
 
     KEEP_FUNC BattleWorkUnit *BtlUnit_Entry_Hook(BattleUnitSetup *setup)
     {
+        if (setup)
+        {
+            BattleUnitKind *kind = setup->unit_kind_params;
+            if (kind && kind->unit_type == BattleUnitType::SYSTEM)
+                mod::vm::VM_UnlockAll(); // SYSTEM is first unit each battle: drop last fight's pins
+            mod::vm::VM_PrefetchForKind(reinterpret_cast<uint32_t>(kind), true);
+        }
+
         const OSModuleInfo *relPtr = _globalWorkPtr->relocationBase;
         if (!relPtr)
             return g_BtlUnit_Entry_trampoline(setup);
         RelId currentRel = static_cast<RelId>(relPtr->id);
         ScaleUnitStats(setup->unit_kind_params, currentRel);
         return g_BtlUnit_Entry_trampoline(setup);
+    }
+    static constexpr int32_t kHpScaleBlacklist[] = {
+        BattleUnitType::MINI_YUX,   // 0x1E
+        BattleUnitType::MINI_Z_YUX, // 0x74
+        BattleUnitType::MINI_X_YUX, // 0x76
+    };
+
+    static bool IsHpScaleBlacklisted(int32_t unitType)
+    {
+        constexpr int32_t count = sizeof(kHpScaleBlacklist) / sizeof(kHpScaleBlacklist[0]);
+        for (int32_t i = 0; i < count; i++)
+        {
+            if (kHpScaleBlacklist[i] == unitType)
+                return true;
+        }
+        return false;
     }
 
     KEEP_FUNC void ScaleUnitStats(BattleUnitKind *unit, RelId rel)
@@ -1190,21 +1206,23 @@ namespace mod::owr
         BattleUnitKind *unit_kind = GetUnitKindById(unit->unit_type);
         if (!unit_kind || !statRelValues || rel == RelId::JON)
             return;
+        if (IsHpScaleBlacklisted(unit->unit_type))
+            return;
         unit->max_hp = statRelValues->base_hp;
         unit->level = statRelValues->level;
     }
 
-    KEEP_FUNC int psndSFXOnHook(int sfxId)
+    KEEP_FUNC int main__psndSFXOnHook(int idOrName, int vol, int pan, int a4, const void *pos, int a6, int a7, int a8)
     {
-        const int channel = g_psndSFXOn_trampoline(sfxId);
-        ghosts::OnLocalSfxFired(sfxId, false, channel);
-        return channel;
-    }
-
-    KEEP_FUNC int psndSFXOn3DHook(int sfxId, const gc::vec3 *position)
-    {
-        const int channel = g_psndSFXOn3D_trampoline(sfxId, position);
-        ghosts::OnLocalSfxFired(sfxId, true, channel);
+        const int channel = g_main__psndSFXOn_trampoline(idOrName, vol, pan, a4, pos, a6, a7, a8);
+        if (channel != -1)
+        {
+            const int slot = channel & 0xFF;
+            const volatile uint32_t *entry = reinterpret_cast<volatile uint32_t *>(0x803DF988 + slot * 0x28);
+            const uint32_t f0 = *entry;
+            if (f0 != 0xFFFFFFFFu)
+                ghosts::OnLocalSfxFired(static_cast<int>(f0 & 0x1FFF), pos != nullptr, channel);
+        }
         return channel;
     }
 
@@ -1216,12 +1234,158 @@ namespace mod::owr
 
     KEEP_FUNC void npcSetupBattleInfoHook(::NpcEntry *npc, void *info)
     {
-        if (ghosts::g_ghostState != nullptr &&
+        g_npcSetupBattleInfo_trampoline(npc, info);
+        /* if (ghosts::g_ghostState != nullptr &&
             ghosts::g_ghostState->selfGameRole != ghosts::kGameRoleNone)
         {
             info = nullptr;
         }
-        g_npcSetupBattleInfo_trampoline(npc, info);
+        g_npcSetupBattleInfo_trampoline(npc, info);*/
+    }
+
+    static void applyShopFlagLive(int flag)
+    {
+        char *shopWork = *reinterpret_cast<char **>(0x8041EB60);
+        if (shopWork == nullptr)
+            return;
+
+        int gswfBase = 6200;
+        const char *nextMapPtr = &ttyd::seq_mapchange::_next_map[0];
+
+        for (int i = 0; i < goodsCount; i++)
+        {
+            if (strncmp(nextMapPtr, goods[i], 6) != 0)
+            {
+                if (i == goodsCount - 1)
+                    return;
+                gswfBase += 6;
+                continue;
+            }
+            break;
+        }
+
+        int index = flag - gswfBase;
+        if (index < 0 || index >= 6)
+            return;
+
+        uint32_t *itemIds = *reinterpret_cast<uint32_t **>(shopWork + 0x08);
+        uint32_t itemId = itemIds[index * 2];
+        switch (gState->apSettings->shopPurchaseLimit)
+        {
+            case 0: // Infinite
+                if (itemId > 125)
+                    return;
+                break;
+            case 1: // Consumables Only
+                if (itemId > 125 && itemId < 236)
+                    return;
+                break;
+            case 2: // Badges Only
+                if (itemId > 239)
+                    return;
+                break;
+            case 3: // Limited
+                break;
+            default:
+                break;
+        }
+
+        uint16_t *itemFlags = reinterpret_cast<uint16_t *>(shopWork + 0x14);
+        itemFlags[index] |= 1;
+    }
+
+
+    void DeleteFieldItemForFlag(int flag)
+    {
+        if (flag <= 0)
+            return;
+
+        uint16_t kItemStateGetItem = 2;
+
+        char *work = reinterpret_cast<char *>(0x803dc290);
+
+        int count = *reinterpret_cast<int *>(work + 0x0);
+        char *entry = *reinterpret_cast<char **>(work + 0x4);
+        if (entry == nullptr)
+            return;
+
+        for (int i = 0; i < count; i++, entry += 0x98)
+        {
+            uint16_t status = *reinterpret_cast<uint16_t *>(entry + 0x0);
+            if ((status & 0x1) == 0)
+                continue;
+            int32_t entryFlag = *reinterpret_cast<int32_t *>(entry + 0x8);
+            if (entryFlag != flag)
+                continue;
+            uint16_t itemState = *reinterpret_cast<uint16_t *>(entry + 0x24);
+            if (itemState == kItemStateGetItem)
+                return; // local player is picking this up; leave it alone
+            ttyd::itemdrv::itemDelete(entry + 0xC);
+            return;
+        }
+    }
+
+void HandleMobjForFlag(int flag)
+    {
+        if (flag <= 0)
+            return;
+
+        char *header = reinterpret_cast<char *>(0x803D98A8);
+        int count = *reinterpret_cast<int *>(header + 0x0);
+        char *entry = *reinterpret_cast<char **>(header + 0x4);
+        if (entry == nullptr)
+            return;
+
+        const int32_t encoded = -130000000 + flag;
+        for (int i = 0; i < count; i++, entry += 0x23C)
+        {
+            if ((*reinterpret_cast<uint32_t *>(entry + 0x0) & 0x1) == 0)
+                continue;
+            if (*reinterpret_cast<int32_t *>(entry + 0x1E4) != encoded)
+                continue;
+
+            const char *model = entry + 0x15;
+
+            if (strncmp(model, "MOBJ_Kururin", 12) == 0)
+                return;
+
+            // Shine Sprite box: delete by instance name.
+            if (strcmp(model, "MOBJ_PowerUpBlock") == 0)
+            {
+                ttyd::evt_mobj::mobjDelete(entry + 0x5);
+                return;
+            }
+
+            const bool isBlock = strstr(model, "Block") != nullptr;
+            const int32_t blockState = isBlock ? 0x5A : 0x63;
+            if (*reinterpret_cast<int32_t *>(entry + 0x1DC) != blockState)
+                *reinterpret_cast<int32_t *>(entry + 0x1DC) = blockState;
+
+            if (isBlock)
+            {
+                int32_t poseId = *reinterpret_cast<int32_t *>(entry + 0x70);
+                char *cur = ttyd::animdrv::animPoseGetCurrentAnim(poseId);
+                if (cur != nullptr)
+                {
+                    int len = strlen(cur);
+                    if (len >= 2 && cur[len - 2] == '_' && cur[len - 1] == '1')
+                    {
+                        char emptyAnim[16];
+                        strcpy(emptyAnim, cur);
+                        emptyAnim[len - 1] = '2';
+                        ttyd::animdrv::animPoseSetAnim(poseId, emptyAnim, 1);
+                    }
+                }
+            }
+            return;
+        }
+    }
+
+    KEEP_FUNC void swSetHook(int gswf)
+    {
+        g_swSet_trampoline(gswf);
+        if (gswf >= 6200 && gswf <= 6300)
+            applyShopFlagLive(gswf);
     }
 
     KEEP_FUNC const char *msgSearchHook(const char *msgKey)
@@ -1361,6 +1525,32 @@ namespace mod::owr
         }
 
         return false;
+    }
+
+    static void checkCrystalStarGoal()
+    {
+        if (gState->apSettings->goal != 2 || ttyd::swdrv::swGet(6120) != 0)
+            return;
+
+        uint8_t count = 0;
+        for (int i = 114; i <= 120; i++)
+        {
+            if (pouchCheckItem(i) > 0)
+                count++;
+        }
+        if (count < gState->apSettings->goalStars)
+            return;
+
+        if (checkIfInGameNotBattle())
+        {
+            ttyd::swdrv::swSet(6120);
+            ttyd::seqdrv::seqSetSeq(SeqIndex::kMapChange, "end_00", 0);
+        }
+        else
+        {
+            // Defer the sequence change until we are back in the game
+            ttyd::swdrv::swSet(6121);
+        }
     }
 
     KEEP_FUNC uint32_t pouchGetItemHook(int32_t item)
@@ -1616,6 +1806,13 @@ namespace mod::owr
                 {
                     pouchReAddReturnPipe();
                 }
+
+                // A crystal star can arrive through this path from any source
+                // (AP item, chest, shop, or a tattle reward via _get_present_item),
+                // so re-evaluate the crystal-star goal here rather than relying on
+                // RecieveItems, which only sees stars from the AP item array.
+                if (ItemId::DIAMOND_STAR <= item && item <= ItemId::CRYSTAL_STAR)
+                    checkCrystalStarGoal();
 
                 return ret;
             }
@@ -1992,6 +2189,30 @@ namespace mod::owr
         return g_winLogMain_trampoline(menu);
     }
 
+    void DrainReceivedFlags()
+    {
+        uintptr_t kRecvFlagRingAddr = 0x80004600;
+        int kRecvFlagCapacity = 64;
+
+        volatile uint16_t *head = reinterpret_cast<volatile uint16_t *>(kRecvFlagRingAddr + 0x0);
+        volatile uint16_t *tail = reinterpret_cast<volatile uint16_t *>(kRecvFlagRingAddr + 0x2);
+        volatile uint16_t *ring = reinterpret_cast<volatile uint16_t *>(kRecvFlagRingAddr + 0x4);
+
+        uint16_t h = *head;
+        while (*tail != h)
+        {
+            uint16_t flag = ring[*tail % kRecvFlagCapacity];
+            *tail = static_cast<uint16_t>(*tail + 1);
+
+            if (flag == 0)
+                continue;  // 0 is not a valid AP location flag; skip
+
+            ttyd::swdrv::swSet(flag);
+            DeleteFieldItemForFlag(flag);
+            HandleMobjForFlag(flag);
+        }
+    }
+
     void OWR::Update()
     {
         APSettings *apSettingsPtr = gState->apSettings;
@@ -2027,6 +2248,7 @@ namespace mod::owr
 
         SequenceInit();
         RecieveItems();
+        DrainReceivedFlags();
     }
 
     void OWR::OnModuleLoaded(OSModuleInfo *module_info)

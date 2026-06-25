@@ -134,14 +134,14 @@ namespace mod::util
     {
         const uint32_t ptrRaw = reinterpret_cast<uint32_t>(ptr);
 
-        // Cached memory
-        if ((ptrRaw >= 0x80000000) && (ptrRaw < 0x81800000))
+        // Cached memory (extended to 0x84000000 for the 64MB MEM1 override)
+        if ((ptrRaw >= 0x80000000) && (ptrRaw < 0x84000000))
         {
             return mod::util::PointerVerificationType::PTR_CACHED;
         }
 
         // Uncached memory
-        if ((ptrRaw >= 0xC0000000) && (ptrRaw < 0xC1800000))
+        if ((ptrRaw >= 0xC0000000) && (ptrRaw < 0xC4000000))
         {
             return mod::util::PointerVerificationType::PTR_UNCACHED;
         }

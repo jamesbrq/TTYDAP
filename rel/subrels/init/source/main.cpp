@@ -26,11 +26,15 @@ namespace mod
         mPFN_marioStMain_trampoline = patch::hookFunction(marioStMain, updateEarly);
         g_npcNameToPtr_trampoline = patch::hookFunction(npcNameToPtr, checkForNpcNameToPtrError);
         g_animPoseMain_trampoline = patch::hookFunction(ttyd::animdrv::animPoseMain, preventAnimPoseMainCrash);
+        if (multiplayerEnabled())
+            ghosts::g_animPoseAutoRelease_trampoline =
+                patch::hookFunction(ttyd::animdrv::animPoseAutoRelease, ghosts::animPoseAutoReleaseHook);
 
         applyGameFixes();
         applyVariousGamePatches();
 
-        ghosts::Init();
+        if (multiplayerEnabled())
+            ghosts::Init();
 
         // Initialize typesetting early
         ttyd::fontmgr::fontmgrTexSetup();

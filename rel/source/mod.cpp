@@ -5,7 +5,10 @@
 #include "relmgr.h"
 #include "visibility.h"
 #include "ttyd/dispdrv.h"
+#include "ttyd/memory.h"
+#include "vm_customrel.h"
 
+#include <gc/os.h>
 #include <cstdio>
 #include <cstring>
 
@@ -16,8 +19,10 @@ namespace mod
 
     void main()
     {
-        // Load and link custom.rel permanently
-        relMgr.loadCustomRel();
+        if (platformIsConsole())
+            LoadCustomRelVM();
+        else
+            relMgr.loadCustomRel();
 
         // Run the init rel to handle function hooks/patches/etc
         relMgr.runInitRel();
@@ -32,14 +37,17 @@ namespace mod
 
         gMod->owr_mod_.Update();
 
-        ghosts::UpdateAll();
+        if (multiplayerEnabled())
+            ghosts::UpdateAll();
 
         // Register draw command
         ttyd::dispdrv::dispEntry(ttyd::dispdrv::CameraId::kDebug3d, 1, 0.f, draw, nullptr);
-        
-        ttyd::dispdrv::dispEntry(ttyd::dispdrv::CameraId::k3d, 1, 0.f, ghosts::DrawAll, nullptr);
-        ttyd::dispdrv::dispEntry(ttyd::dispdrv::CameraId::kDebug3d, 1, 100.0f, ghosts::DrawNameTagsAll, nullptr);
-        ttyd::dispdrv::dispEntry(ttyd::dispdrv::CameraId::kDebug3d, 1, 200.0f, ghosts::DrawLobbyHud, nullptr);
+
+        if (multiplayerEnabled())
+        {
+            ttyd::dispdrv::dispEntry(ttyd::dispdrv::CameraId::k3d, 1, 0.f, ghosts::DrawAll, nullptr);
+            ttyd::dispdrv::dispEntry(ttyd::dispdrv::CameraId::kDebug3d, 1, 100.0f, ghosts::DrawNameTagsAll, nullptr);
+        }
 
         // Call the original function
         mPFN_marioStMain_trampoline();
