@@ -7,6 +7,7 @@
 #include "ttyd/memory.h"
 
 #include <cstdint>
+#include <cstdio>
 
 using namespace gc::dvd;
 using namespace ttyd::memory;
@@ -38,10 +39,13 @@ namespace
     inline uint32_t alignUp(uint32_t v, uint32_t a) { return (v + a - 1) & ~(a - 1); }
 }
 
-bool LoadCustomRelVM(uint32_t cacheBytes)
+bool LoadCustomRelVM(const char *relName, uint32_t cacheBytes)
 {
+    char relPath[32];
+    snprintf(relPath, sizeof(relPath), "/mod/%s.rel", relName);
+
     DVDFileInfo fileInfo;
-    if (!DVDOpen("/mod/custom.rel", &fileInfo))
+    if (!DVDOpen(relPath, &fileInfo))
     {
         return false;
     }

@@ -17,7 +17,7 @@ class RelMgr
 
     // Loads and links custom.rel permanently on the default heap.
     // Not tracked by relPtr/bssPtr, so the temp rel lifecycle won't unload it.
-    bool loadCustomRel();
+    bool loadCustomRel(const char *relName = "custom");
 
     bool linkRel();
     bool unlinkRel();
