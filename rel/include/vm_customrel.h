@@ -8,4 +8,4 @@
 // prefetchAllForTest  : if true, page in the whole relocated image immediately
 //                       (requires cacheBytes >= fixed size) for a fault-free
 //                       Stage-3 correctness test.
-bool LoadCustomRelVM(uint32_t cacheBytes = 0x20000); // 32 pages: 20 lockable + 12 free; sweep down from here, watch FAULTCNT (0x80003B58)
+bool LoadCustomRelVM(const char *relName = "custom", uint32_t cacheBytes = 0x20000); // 32 pages: 20 lockable + 12 free; sweep down from here, watch FAULTCNT (0x80003B58)
