@@ -8,7 +8,7 @@
 namespace mod::ghosts
 {
 
-    constexpr int kMaxPeers = 32;
+    constexpr int kMaxPeers = 16;
 
     constexpr uint32_t kMagic = 0x47484F53;
     constexpr uint32_t kVersion = 1;
@@ -185,7 +185,7 @@ namespace mod::ghosts
     static_assert(sizeof(LobbyHudMember) == kLobbyMemberSize, "LobbyHudMember size mismatch");
 #pragma pack(pop)
 
-    constexpr int kDefaultMaxRenderedPeers = 24;
+    constexpr int kDefaultMaxRenderedPeers = 12;
 
     struct GhostState
     {
