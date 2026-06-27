@@ -837,6 +837,8 @@ namespace mod
                 }
             }
         }
+
+		ApplyBossGroups(kBossGrpRange_tik_tik);
     }
 
     void exit() {}

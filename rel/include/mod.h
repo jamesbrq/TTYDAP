@@ -26,7 +26,7 @@ namespace mod
 
     inline bool platformIsConsole()
     {
-        return *reinterpret_cast<volatile uint8_t *>(0x8000324C) != 0; // patcher flag: 1=console
+        return *reinterpret_cast<volatile uint8_t *>(0x80003281) != 0; // patcher flag: 1=console
     }
     inline bool multiplayerEnabled() { return !platformIsConsole(); }
 

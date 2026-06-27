@@ -46,6 +46,7 @@ extern int32_t jin_evt_yuka[];
 extern int32_t jin_11_init_evt[];
 extern int32_t jin_evt_usu_kagemario_party_kill[];
 extern int32_t jin_phase_event_fmario[];
+extern int32_t custom_phase_event_fmario[];
 
 // Assembly
 extern int32_t jin_evt_kagemario_init[];
@@ -199,6 +200,8 @@ namespace mod
 
         jin_phase_event_fmario[12] = 9999; // Unused
 
+        custom_phase_event_fmario[12] = 9999;
+
         if (gState->apSettings->enemyRandomizer)
         {
             for (int i = kBtlGrpRange_jin_jin.start; i <= kBtlGrpRange_jin_jin.end; i++)
@@ -213,6 +216,8 @@ namespace mod
                 }
             }
         }
+
+        ApplyBossGroups(kBossGrpRange_jin_jin);
 
         // Assembly
         jin_evt_kagemario_init[2] = 0x386006B3; // li r3, 0x6B3 (GSW(1715))

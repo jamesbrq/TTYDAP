@@ -18,6 +18,7 @@ StateManager::StateManager()
     for (int i = 0; i < 8; i++) gState->state_msgWork[i] = ttyd::msgdrv::msgWork[i]; // msgWork.entries[0] && msgWork.entries[1]
     gState->state_msgWork[16] = ttyd::msgdrv::msgWork[8];                            // msgWork.animBase
     gState->LoadEnemyData();
+    //gState->LoadBossData();
     gState->entranceDataCount = gState->LoadEntranceData();
 }
 
@@ -157,11 +158,65 @@ size_t StateManager::LoadEnemyData()
         for (uint8_t j = 0; j < 5; j++)
         {
             enemyLoadouts[i].enemyIds[j] = 0;
+            enemyLoadouts[i].originalKinds[j] = nullptr;
         }
 
         for (uint8_t j = 0; j < enemyCount; j++)
         {
             enemyLoadouts[i].enemyIds[j] = *ptr++;
+        }
+    }
+
+    __memFree(HeapType::HEAP_DEFAULT, buffer);
+    return numEntries;
+}
+
+size_t StateManager::LoadBossData()
+{
+    char buf[64];
+    snprintf(buf, sizeof(buf), "/mod/bosses.bin");
+
+    DVDFileInfo fileInfo;
+    if (!DVDOpen(buf, &fileInfo))
+        return 0;
+
+    uint32_t size = fileInfo.length;
+    uint32_t alignedSize = (size + DVD_READ_SIZE - 1) & ~(DVD_READ_SIZE - 1);
+
+    uint8_t *buffer = reinterpret_cast<uint8_t *>(__memAlloc(HeapType::HEAP_DEFAULT, alignedSize));
+    if (!buffer)
+    {
+        DVDClose(&fileInfo);
+        return 0;
+    }
+
+    int32_t result = DVDReadPrio(&fileInfo, buffer, alignedSize, 0, 0);
+    DVDClose(&fileInfo);
+
+    if (result <= 0)
+    {
+        __memFree(HeapType::HEAP_DEFAULT, buffer);
+        return 0;
+    }
+
+    const uint8_t *ptr = buffer;
+    uint16_t numEntries = (ptr[0] << 8) | ptr[1];
+    ptr += 2;
+
+    for (uint16_t i = 0; i < numEntries && i < NUM_BOSS_GROUPS; i++)
+    {
+        uint8_t enemyCount = *ptr++;
+        bossLoadouts[i].enemyCount = enemyCount;
+
+        for (uint8_t j = 0; j < 5; j++)
+        {
+            bossLoadouts[i].enemyIds[j] = 0;
+            bossLoadouts[i].originalKinds[j] = nullptr;
+        }
+
+        for (uint8_t j = 0; j < enemyCount; j++)
+        {
+            bossLoadouts[i].enemyIds[j] = *ptr++;
         }
     }
 

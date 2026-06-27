@@ -1181,6 +1181,8 @@ namespace mod
             }
         }
 
+        ApplyBossGroups(kBossGrpRange_mri_mri);
+
         // Assembly
         patch::writeBranchPair(&mri_starstone_rotate_func[26], 
             reinterpret_cast<void *>(bStoneCh2RotationPtr), 

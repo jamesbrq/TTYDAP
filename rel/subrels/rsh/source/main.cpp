@@ -1,7 +1,10 @@
 #include "subrel_rsh.h"
 #include "evt_cmd.h"
+#include "OWR.h"
 #include "patch.h"
 #include "AP/rel_patch_definitions.h"
+#include "ttyd/battle_unit.h"
+#include "ttyd/battle_database_common.h"
 #include "ttyd/evt_bero.h"
 #include "ttyd/evt_cam.h"
 #include "ttyd/evt_case.h"
@@ -17,6 +20,7 @@
 
 #include <cstdint>
 
+using namespace mod::owr;
 using namespace ttyd;
 
 extern int32_t rsh_simi_check[];
@@ -1380,6 +1384,8 @@ namespace mod
 
         rsh_prolog[14] = 0x386006AA; // li r3, 0x6AA (GSW(1706))
         rsh_prolog[16] = 0x2C03002B; // cmpwi r3, 0x2B
+
+        ApplyBossGroups(kBossGrpRange_rsh_rsh);
     }
 
     void exit() {}

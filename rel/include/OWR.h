@@ -80,6 +80,8 @@ namespace mod::owr
     void numericWindow_Disp(ttyd::dispdrv::CameraId cameraId, void *user);
     void replaceMultipleCharacters(ttyd::memory::SmartAllocationData *smartData, uint32_t startIndex, int value);
     BattleWorkUnit *BtlUnit_Entry_Hook(BattleUnitSetup *setup);
+    void ExecAllUnitBattleEndEvent_Hook();
+    void RegisterOriginalKind(BattleUnitSetup *setup, BattleUnitKind *orig);
     void ScaleUnitStats(BattleUnitKind *unit, RelId rel);
     int main__psndSFXOnHook(int idOrName, int vol, int pan, int a4, const void *pos, int a6, int a7, int a8);
     int psndSFXOffHook(int channel);
@@ -87,6 +89,29 @@ namespace mod::owr
     int32_t pouchRemoveItemHook(int32_t item);
     void swSetHook(int gswf);
     void DrainReceivedFlags();
+    int32_t AlterDamageCalculation(BattleWorkUnit *attacker, BattleWorkUnit *target, BattleWorkUnitPart *target_part,
+                                  BattleWeapon *weapon, uint32_t *unk0, uint32_t unk1);
+    int32_t InterruptStopHook(ttyd::evtmgr::EvtEntry *evt, bool isFirstCall);
+    int32_t BattleCheckConcludedHook(void *battleWork);
+
+    inline void ApplyBossGroups(const BattleGroupIndexRange &range)
+    {
+        if (!gState->apSettings->bossRandomizer)
+            return;
+        for (int i = range.start; i <= range.end; i++)
+        {
+            BattleGroupSetup *bossGroup = bossGroupList[i];
+            EnemyLoadout &loadout = gState->bossLoadouts[i];
+            for (int32_t j = 0; j < bossGroup->num_enemies; j++)
+            {
+                BattleUnitSetup &unit = bossGroup->enemy_data[j];
+                RegisterOriginalKind(&unit, unit.unit_kind_params);
+                unit.position.x = GetEnemyXPosition(loadout.enemyIds[j], unit.position.x);
+                unit.position.y = GetEnemyYPosition(loadout.enemyIds[j]);
+                unit.unit_kind_params = GetUnitKindById(loadout.enemyIds[j]);
+            }
+        }
+    }
 
     extern const char *const goods[];
     extern const int goodsCount;
@@ -107,11 +132,16 @@ namespace mod::owr
     extern int (*g_msgWindow_Entry_trampoline)(const char *, int, int);
     extern void (*g__load_trampoline)(const char *, const char *, const char *);
     extern BattleWorkUnit *(*g_BtlUnit_Entry_trampoline)(BattleUnitSetup *);
+    extern void (*g_ExecAllUnitBattleEndEvent_trampoline)();
     extern int (*g_main__psndSFXOn_trampoline)(int, int, int, int, const void *, int, int, int);
     extern int (*g_psndSFXOff_trampoline)(int);
     extern void (*g_npcSetupBattleInfo_trampoline)(::NpcEntry *, void *);
     extern int32_t (*g_pouchRemoveItem_trampoline)(int32_t);
     extern void (*g_swSet_trampoline)(int);
+    extern int32_t (*g_BattleCalculateDamage_trampoline)(BattleWorkUnit *, BattleWorkUnit *, BattleWorkUnitPart *,
+                                                         BattleWeapon *, uint32_t *, uint32_t);
+    extern int32_t (*g_InterruptStop_trampoline)(ttyd::evtmgr::EvtEntry *, bool);
+    extern int32_t (*g_BattleCheckConcluded_trampoline)(void *);
 
     extern const char *goombellaName;
     extern const char *goombellaDescription;

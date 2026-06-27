@@ -47,6 +47,12 @@ extern "C"
     void bMonosiriBucket();
     void bMonosiriBucketReturn();
     void bMonosiriBucketExtra();
+    void bMonosiriMonban();
+    void bMonosiriMonbanReturn();
+    void bMonosiriBonetail();
+    void bMonosiriBonetailReturn();
+    void bMonosiriAtomicBoo();
+    void bMonosiriAtomicBooReturn();
     void bHpColorBack();
     void bHpColorBackReturn();
     void bHpColorFront();
@@ -87,6 +93,8 @@ extern "C"
     void bPuniMainNullFixReturn();
     void checkShopFlag(uint32_t item, uint32_t index);
     void monosiriItemCheck(int unit_id);
+    int monosiriRemapWord1(int idx, int curWord1);
+    int monosiriRemapStatic(int vanilla);
     int applyExpMultiplier(int exp);
     int getBlockVisibility(int blockType);
     const char *shopItemDescription(const char *itemDescription);

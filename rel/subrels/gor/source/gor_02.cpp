@@ -1,8 +1,10 @@
 #include "subrel_gor.h"
 #include "evt_cmd.h"
 #include "OWR.h"
+#include "StateManager.h"
 #include "patch.h"
 #include "AP/rel_patch_definitions.h"
+#include "ttyd/battle_unit.h"
 #include "ttyd/evt_cam.h"
 #include "ttyd/evt_item.h"
 #include "ttyd/evt_map.h"
@@ -17,6 +19,7 @@
 
 using namespace mod;
 using namespace ttyd;
+using namespace mod::owr;
 
 extern int32_t unk_evt_gor_0003ec8c[];
 extern int32_t gor_02_event_00[];

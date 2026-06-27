@@ -108,6 +108,8 @@ namespace mod
                 }
             }
         }
+
+        ApplyBossGroups(kBossGrpRange_jon_jon);
     }
 
     void exit() {}

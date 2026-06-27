@@ -2,6 +2,7 @@
 #include "OWR.h"
 #include "patch.h"
 #include "ttyd/battle_database_common.h"
+#include "ttyd/battle.h"
 #include "ttyd/evt_bero.h"
 #include "ttyd/evt_mario.h"
 #include "ttyd/evt_memcard.h"
@@ -458,9 +459,9 @@ namespace mod::owr
         writeIntWithCache(&main_psndBGMOn_f_d[94], 0x38840831); // addi r4, r4, 0x831 GSW(1713)
         writeIntWithCache(&main_psndBGMOn_f_d[96], 0x2C03000A); // cmpwi r3, 0xA
 
-        // Expand msgSearch to check 4 tables
+        // Expand msgSearch to check 16 tables
         uint32_t *msgSearchPtr = (uint32_t *)ttyd::msgdrv::msgSearch;
-        writeIntWithCache(&msgSearchPtr[44], 0x2C1B0004); // cmpwi r27, 0x4
+        writeIntWithCache(&msgSearchPtr[44], 0x2C1B0011); // cmpwi r27, 0x11
 
         uint32_t *msgLoadPtr = (uint32_t *)ttyd::msgdrv::msgLoad;
         writeIntWithCache(&msgLoadPtr[85], 0x60000000); // NOP
@@ -978,11 +979,25 @@ namespace mod::owr
         g_msgWindow_Entry_trampoline = patch::hookFunction(msgdrv::msgWindow_Entry, msgWindow_Entry_Hook);
         g__load_trampoline = patch::hookFunction(seq_mapchange::_load, _load_Hook);
         g_BtlUnit_Entry_trampoline = patch::hookFunction(battle_unit::BtlUnit_Entry, BtlUnit_Entry_Hook);
+        g_ExecAllUnitBattleEndEvent_trampoline = patch::hookFunction(battle::_ExecAllUnitBattleEndEvent, ExecAllUnitBattleEndEvent_Hook);
         g_main__psndSFXOn_trampoline = patch::hookFunction(pmario_sound::main__psndSFXOn, main__psndSFXOnHook);
         g_psndSFXOff_trampoline = patch::hookFunction(pmario_sound::psndSFXOff, psndSFXOffHook);
         g_npcSetupBattleInfo_trampoline = patch::hookFunction(::npcSetupBattleInfo, npcSetupBattleInfoHook);
         g_pouchRemoveItem_trampoline = patch::hookFunction(mario_pouch::pouchRemoveItem, pouchRemoveItemHook);
         g_swSet_trampoline = patch::hookFunction(swdrv::swSet, swSetHook);
+
+        using BattleCalculateDamageFn =
+            int32_t (*)(BattleWorkUnit *, BattleWorkUnit *, BattleWorkUnitPart *, BattleWeapon *, uint32_t *, uint32_t);
+        g_BattleCalculateDamage_trampoline =
+            patch::hookFunction(reinterpret_cast<BattleCalculateDamageFn>(0x800FD790), AlterDamageCalculation);
+
+        using InterruptStopFn = int32_t (*)(ttyd::evtmgr::EvtEntry *, bool);
+        g_InterruptStop_trampoline =
+            patch::hookFunction(reinterpret_cast<InterruptStopFn>(0x80105368), InterruptStopHook);
+
+        using BattleCheckConcludedFn = int32_t (*)(void *);
+        g_BattleCheckConcluded_trampoline =
+            patch::hookFunction(reinterpret_cast<BattleCheckConcludedFn>(0x8011AA34), BattleCheckConcludedHook);
 
         // Hook gaugeDisp with a standard branch since the original function does not need to be called
         patch::writeBranch(statuswindow::gaugeDisp, DisplayStarPowerOrbs);

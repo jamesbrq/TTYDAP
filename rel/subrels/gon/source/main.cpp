@@ -251,6 +251,8 @@ namespace mod
                 }
             }
         }
+
+        ApplyBossGroups(kBossGrpRange_gon_gon);
     }
 
     void exit() {}

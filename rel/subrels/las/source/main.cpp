@@ -394,6 +394,8 @@ namespace mod
                 }
             }
         }
+
+        ApplyBossGroups(kBossGrpRange_las_las);
     }
 
     void exit() {}

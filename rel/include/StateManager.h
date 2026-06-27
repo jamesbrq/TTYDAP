@@ -60,11 +60,15 @@ namespace mod::owr
         uint8_t badgeBP;                           // 0x38
         uint8_t badgeFP;                           // 0x39
         uint8_t partnerFP;                         // 0x3A
-        uint8_t pad_pre_ghost;                     // 0x3B - alignment pad before ghostStatePtr
+        uint8_t bossRandomizer;                    // 0x3B
         mod::ghosts::GhostState *ghostStatePtr;    // 0x3C
+        uint8_t yoshiNameBuffer[0x20];             // 0x40 yoshiName points here (0x80003260)
+        uint8_t bossStatScaling;                   // 0x60
+        uint8_t consoleMode;                       // 0x61
+        uint8_t reserved2[2];                      // 0x62
     };
 
-    static_assert(sizeof(APSettings) == 0x40);
+    static_assert(sizeof(APSettings) == 0x64);
 
     constexpr size_t NAME_LEN = 32;
 
@@ -82,9 +86,11 @@ namespace mod::owr
     {
         uint8_t enemyCount;
         uint8_t enemyIds[5];
+        uint8_t pad[2];
+        ttyd::battle_database_common::BattleUnitKind *originalKinds[5];
     };
 
-    static_assert(sizeof(EnemyLoadout) == 0x6);
+    static_assert(sizeof(EnemyLoadout) == 0x1c);
 
     class StateManager
     {
@@ -93,12 +99,14 @@ namespace mod::owr
         StateManager();
         size_t LoadEntranceData();
         size_t LoadEnemyData();
+        size_t LoadBossData();
         APSettings *apSettings;
         uint16_t *tattleItems;
         uint16_t *maniacItems;
         uint32_t state_msgWork[17];
         EntranceData entranceData[600];
         EnemyLoadout enemyLoadouts[NUM_BATTLE_GROUPS];
+        EnemyLoadout bossLoadouts[NUM_BOSS_GROUPS];
         size_t entranceDataCount;
         void *iraiItem;
         bool newTattle = false;

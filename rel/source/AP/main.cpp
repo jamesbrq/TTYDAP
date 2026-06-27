@@ -544,6 +544,115 @@ void monosiriItemCheck(int unit_id)
     }
 }
 
+static uint8_t s_monoVanilla[64];
+static bool s_monoHave[64];
+
+struct MonoSpan
+{
+    uint8_t start;
+    uint8_t count;
+};
+
+static const uint16_t kMonoSlots[75] = {
+    0x0378, 0x0379, 0x0378, 0x0379, 0x03A0, 0x03A1, 0x0200, 0x0200, 0x0059, 0x0C7A, 0x0C80, 0x0C81,
+    0x0C82, 0x0CA1, 0x0CA8, 0x0CA9, 0x0E70, 0x0E71, 0x0E72, 0x0EA8, 0x0EA9, 0x0EAA, 0x0EAB, 0x0048,
+    0x0049, 0x0068, 0x0010, 0x0011, 0x0019, 0x001A, 0x001B, 0x0038, 0x0040, 0x0041, 0x0060, 0x0061,
+    0x0062, 0x0063, 0x0C30, 0x0C31, 0x0C38, 0x0C40, 0x0C41, 0x0C68, 0x0C69, 0x0C78, 0x0C79, 0x0CA0,
+    0x0CAA, 0x0000, 0x0001, 0x0008, 0x0009, 0x0012, 0x0018, 0x0021, 0x0030, 0x0031, 0x0032, 0x0033,
+    0x0043, 0x0080, 0x0020, 0x0029, 0x0042, 0x0050, 0x0051, 0x0058, 0x0064, 0x0070, 0x0071, 0x0072,
+    0x0073, 0x09D2, 0x09F0,
+};
+
+static const MonoSpan kMonoSpan[35] = {
+    {0,0}, {0,2}, {2,0}, {2,0}, {2,2}, {4,2}, {6,1}, {7,1},
+    {8,0}, {8,8}, {8,8}, {16,0}, {16,0}, {16,2}, {18,1}, {19,2},
+    {21,2}, {23,0}, {23,0}, {23,0}, {23,0}, {23,0}, {23,3}, {23,3},
+    {26,12}, {38,11}, {49,13}, {62,11}, {73,0}, {73,2}, {75,0}, {75,0},
+    {75,0}, {75,0}, {75,0},
+};
+
+static int monosiriRemapBoss(int vanilla)
+{
+    if (!gState->apSettings->bossRandomizer)
+        return vanilla;
+    int idx;
+    switch (vanilla)
+    {
+        case 0x06: idx = 2;  break;
+        case 0x07: idx = 3;  break;
+        case 0x08: idx = 19; break;
+        case 0x14: idx = 4;  break;
+        case 0x17: idx = 1;  break;
+        case 0x21: idx = 23; break;
+        case 0x22: idx = 15; break;
+        case 0x3F: idx = 22; break;
+        case 0x40: idx = 21; break;
+        case 0x41: idx = 20; break;
+        case 0x4C: idx = 5;  break;
+        case 0x4D: idx = 7;  break;
+        case 0x4F: idx = 6;  break;
+        case 0x5D: idx = 17; break;
+        case 0x63: idx = 16; break;
+        case 0x6B: idx = 18; break;
+        case 0x79: idx = 0;  break;
+        case 0x84: idx = 10; break;
+        case 0x87: idx = 9;  break;
+        case 0x90: idx = 11; break;
+        case 0x92: idx = 12; break;
+        case 0x94: idx = 13; break;
+        case 0x95: idx = 14; break;
+        case 0xAB: idx = 8;  break;
+        default: return vanilla;
+    }
+    int cur = gState->bossLoadouts[idx].enemyIds[0];
+    return cur ? cur : vanilla;
+}
+
+int monosiriRemapWord1(int idx, int curWord1)
+{
+    if (idx < 0 || idx >= 64)
+        return curWord1;
+
+    if (idx < 35 && gState->apSettings->enemyRandomizer && kMonoSpan[idx].count)
+    {
+        const MonoSpan span = kMonoSpan[idx];
+        int firstId = 0;
+        for (int i = 0; i < span.count; i++)
+        {
+            uint16_t packed = kMonoSlots[span.start + i];
+            int group = packed >> 3;
+            int slot = packed & 7;
+            if (group >= NUM_BATTLE_GROUPS)
+                continue;
+            int id = gState->enemyLoadouts[group].enemyIds[slot];
+            if (id <= 0)
+                continue;
+            if (firstId == 0)
+                firstId = id;
+            if (ttyd::swdrv::swGet(id + 0x117A) == 0)
+                return id;
+        }
+        if (firstId)
+            return firstId;
+        return curWord1;
+    }
+
+    if (!s_monoHave[idx])
+    {
+        s_monoVanilla[idx] = static_cast<uint8_t>(curWord1);
+        s_monoHave[idx] = true;
+    }
+    int vanilla = s_monoVanilla[idx];
+    return monosiriRemapBoss(vanilla);
+}
+
+int monosiriRemapStatic(int vanilla)
+{
+    if (vanilla <= 0 || vanilla > 0xFF)
+        return vanilla;
+    return monosiriRemapBoss(vanilla);
+}
+
 int applyExpMultiplier(int exp)
 {
     return exp * gState->apSettings->expMultiplier;

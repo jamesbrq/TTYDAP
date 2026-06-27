@@ -48,6 +48,7 @@
 #include <ttyd/win_root.h>
 #include <ttyd/windowdrv.h>
 #include <ttyd/animdrv.h>
+#include <ttyd/battle.h>
 
 #include "common.h"
 #include "OWR.h"
@@ -173,11 +174,16 @@ namespace mod::owr
     KEEP_VAR int (*g_msgWindow_Entry_trampoline)(const char *message, int unk1, int windowType) = nullptr;
     KEEP_VAR void (*g__load_trampoline)(const char *mapName, const char *entranceName, const char *beroName) = nullptr;
     KEEP_VAR ttyd::battle_unit::BattleWorkUnit *(*g_BtlUnit_Entry_trampoline)(BattleUnitSetup *) = nullptr;
+    KEEP_VAR void (*g_ExecAllUnitBattleEndEvent_trampoline)() = nullptr;
     KEEP_VAR int (*g_main__psndSFXOn_trampoline)(int, int, int, int, const void *, int, int, int) = nullptr;
     KEEP_VAR int (*g_psndSFXOff_trampoline)(int) = nullptr;
     KEEP_VAR void (*g_npcSetupBattleInfo_trampoline)(::NpcEntry *, void *) = nullptr;
     KEEP_VAR int32_t (*g_pouchRemoveItem_trampoline)(int32_t) = nullptr;
     KEEP_VAR void (*g_swSet_trampoline)(int) = nullptr;
+    KEEP_VAR int32_t (*g_BattleCalculateDamage_trampoline)(BattleWorkUnit *, BattleWorkUnit *, BattleWorkUnitPart *,
+                                                           BattleWeapon *, uint32_t *, uint32_t) = nullptr;
+    KEEP_VAR int32_t (*g_InterruptStop_trampoline)(ttyd::evtmgr::EvtEntry *, bool) = nullptr;
+    KEEP_VAR int32_t (*g_BattleCheckConcluded_trampoline)(void *) = nullptr;
 
     void OWR::SequenceInit()
     {
@@ -1163,22 +1169,205 @@ namespace mod::owr
         ttyd::msgdrv::msgLoad("desc", 3);
     }
 
+    static BattleUnitKind *g_endScriptKind[0x40];
+    static BattleUnitKind *g_powOrigKind[0x40];
+    static BattleUnitKind *g_currentBossOrigKind;
+
+    struct OrigKindEntry
+    {
+        BattleUnitSetup *setup;
+        BattleUnitKind *kind;
+    };
+    static OrigKindEntry g_origKindMap[32];
+    static int32_t g_origKindMapCount;
+
+    KEEP_FUNC void RegisterOriginalKind(BattleUnitSetup *setup, BattleUnitKind *orig)
+    {
+        if (!setup || !orig)
+            return;
+        for (int32_t i = 0; i < g_origKindMapCount; i++)
+            if (g_origKindMap[i].setup == setup)
+            {
+                g_origKindMap[i].kind = orig;
+                return;
+            }
+        if (g_origKindMapCount < 32)
+        {
+            g_origKindMap[g_origKindMapCount].setup = setup;
+            g_origKindMap[g_origKindMapCount].kind = orig;
+            g_origKindMapCount++;
+        }
+    }
+
+    static BattleUnitKind *LookupOriginalKind(BattleUnitSetup *setup)
+    {
+        for (int32_t i = 0; i < g_origKindMapCount; i++)
+            if (g_origKindMap[i].setup == setup)
+                return g_origKindMap[i].kind;
+        return nullptr;
+    }
+
+    static void *GetData_FromTable(DataTableEntry *table, int32_t id)
+    {
+        if (!table)
+            return nullptr;
+        for (; table->id != 0; table++)
+            if (static_cast<int32_t>(table->id) == id)
+                return table->data;
+        return nullptr;
+    }
+
+    static bool IsBossHpScaleExcluded(int32_t unitType)
+    {
+        switch (unitType)
+        {
+            case 0x09: // gesso_left_arm
+            case 0x0A: // gesso_right_arm
+            case 0x23: // rocket_punch
+            case 0x5F: // cortez_claw
+            case 0x60: // cortez_rapier
+            case 0x61: // cortez_sword
+            case 0x62: // cortez_saber
+            case 0x64: // gundan_zako
+            case 0x65: // gundan_zako
+            case 0x66: // gundan_zako
+            case 0x6C: // moamoa_tentacle
+            case 0x6D: // moamoa_tentacle
+            case 0x6E: // moamoa_tentacle
+            case 0x6F: // moamoa_mouth
+            case 0x7A: // rocket_punch_mkII
+            case 0x93: // batten_satellite
+            case 0x96: // SQ hand
+            case 0x97: // SQ hand
+            case 0x98: // SQ hand
+                return true;
+            default:
+                return false;
+        }
+    }
+
+    static bool IsBossDefScaleExcluded(int32_t unitType)
+    {
+        switch (unitType)
+        {
+            case 0x09: // gesso_left_arm
+            case 0x0A: // gesso_right_arm
+            case 0x23: // rocket_punch
+            case 0x5F: // cortez_claw
+            case 0x60: // cortez_rapier
+            case 0x61: // cortez_sword
+            case 0x62: // cortez_saber
+            case 0x64: // gundan_zako
+            case 0x65: // gundan_zako
+            case 0x66: // gundan_zako
+            case 0x6C: // moamoa_tentacle
+            case 0x6D: // moamoa_tentacle
+            case 0x6E: // moamoa_tentacle
+            case 0x6F: // moamoa_mouth
+            case 0x7A: // rocket_punch_mkII
+            case 0x93: // batten_satellite
+            case 0x96: // SQ hand
+            case 0x97: // SQ hand
+            case 0x98: // SQ hand
+                return true;
+            default:
+                return false;
+        }
+    }
+
+    static bool IsBossPowScaleExcluded(int32_t unitType)
+    {
+        switch (unitType)
+        {
+            default:
+                return false;
+        }
+    }
+
     KEEP_FUNC BattleWorkUnit *BtlUnit_Entry_Hook(BattleUnitSetup *setup)
     {
+        BattleUnitKind *kind = setup->unit_kind_params;
         if (setup)
         {
-            BattleUnitKind *kind = setup->unit_kind_params;
             if (kind && kind->unit_type == BattleUnitType::SYSTEM)
+            {
                 mod::vm::VM_UnlockAll(); // SYSTEM is first unit each battle: drop last fight's pins
+                for (auto &k : g_endScriptKind) k = nullptr;
+                for (auto &k : g_powOrigKind) k = nullptr;
+                g_currentBossOrigKind = nullptr;
+            }
             mod::vm::VM_PrefetchForKind(reinterpret_cast<uint32_t>(kind), true);
         }
 
+        BattleUnitKind *bossOrigKind = LookupOriginalKind(setup);
+        if (bossOrigKind)
+            g_currentBossOrigKind = bossOrigKind;
+        else if (g_currentBossOrigKind && kind && kind->unit_type <= BattleUnitType::BONETAIL)
+            bossOrigKind = g_currentBossOrigKind;
+
         const OSModuleInfo *relPtr = _globalWorkPtr->relocationBase;
-        if (!relPtr)
-            return g_BtlUnit_Entry_trampoline(setup);
-        RelId currentRel = static_cast<RelId>(relPtr->id);
-        ScaleUnitStats(setup->unit_kind_params, currentRel);
-        return g_BtlUnit_Entry_trampoline(setup);
+        if (relPtr && setup && setup->unit_kind_params)
+        {
+            RelId currentRel = static_cast<RelId>(relPtr->id);
+            if (bossOrigKind)
+            {
+                if (gState->apSettings->bossStatScaling)
+                {
+                    BattleUnitKind *newKind = setup->unit_kind_params;
+                    if (!IsBossHpScaleExcluded(newKind->unit_type))
+                    {
+                        newKind->max_hp = bossOrigKind->max_hp;
+                        newKind->level = bossOrigKind->level;
+                    }
+                    if (!IsBossDefScaleExcluded(newKind->unit_type) && newKind->parts && bossOrigKind->parts)
+                    {
+                        int32_t partCount = newKind->num_parts < bossOrigKind->num_parts
+                                                ? newKind->num_parts
+                                                : bossOrigKind->num_parts;
+                        for (int32_t i = 0; i < partCount; i++)
+                            newKind->parts[i].defense = bossOrigKind->parts[i].defense;
+                    }
+                }
+            }
+            else
+            {
+                ScaleUnitStats(setup->unit_kind_params, currentRel);
+            }
+        }
+
+        const char *mapName = GetBossMsgMap(kind->unit_type);
+        if (mapName)
+        {
+            ttyd::msgdrv::msgLoad(mapName, 15);
+        }
+
+        BattleWorkUnit *entered = g_BtlUnit_Entry_trampoline(setup);
+        if (entered)
+        {
+            int32_t slot = entered->unit_id & 0x3F;
+            g_endScriptKind[slot] = LookupOriginalKind(setup);
+            g_powOrigKind[slot] =
+                (bossOrigKind && kind && !IsBossPowScaleExcluded(kind->unit_type)) ? bossOrigKind : nullptr;
+        }
+        return entered;
+    }
+
+    KEEP_FUNC void ExecAllUnitBattleEndEvent_Hook()
+    {
+        void *bw = ttyd::battle::_battleWorkPtr;
+        for (int32_t i = 0; i < 0x40; i++)
+        {
+            BattleWorkUnit *u = reinterpret_cast<BattleWorkUnit *>(ttyd::battle::BattleGetUnitPtr(bw, i));
+            if (!u)
+                continue;
+            BattleUnitKind *orig = g_endScriptKind[i];
+            void *evt = orig ? GetData_FromTable(orig->data_table, 0x3F)
+                             : ttyd::battle_unit::BtlUnit_GetData(u, 0x3F);
+            if (!evt)
+                continue;
+            ttyd::evtmgr::EvtEntry *th = ttyd::evtmgr::evtEntry(evt, 0xa, 0);
+            *reinterpret_cast<uint32_t *>(reinterpret_cast<char *>(th) + 0x160) = u->unit_id;
+        }
     }
     static constexpr int32_t kHpScaleBlacklist[] = {
         BattleUnitType::MINI_YUX,   // 0x1E
@@ -1199,6 +1388,8 @@ namespace mod::owr
 
     KEEP_FUNC void ScaleUnitStats(BattleUnitKind *unit, RelId rel)
     {
+        if (!unit)
+            return;
         if ((gState->apSettings->enemyRandomizer == 0 && gState->apSettings->shuffleChapterStats == 0) ||
             gState->apSettings->enemyStatScaling == 0)
             return;
@@ -1210,6 +1401,90 @@ namespace mod::owr
             return;
         unit->max_hp = statRelValues->base_hp;
         unit->level = statRelValues->level;
+    }
+
+    KEEP_FUNC int32_t AlterDamageCalculation(BattleWorkUnit *attacker, BattleWorkUnit *target,
+                                             BattleWorkUnitPart *target_part, BattleWeapon *weapon, uint32_t *unk0,
+                                             uint32_t unk1)
+    {
+        int32_t base_atk = weapon ? static_cast<int32_t>(weapon->damage_function_params[0]) : 0;
+        bool overrode = false;
+        if (gState->apSettings->bossStatScaling && attacker && weapon && weapon->damage_function && !weapon->item_id &&
+            !(weapon->target_property_flags & 0x100000) && base_atk > 0)
+        {
+            BattleUnitKind *origKind = g_powOrigKind[attacker->unit_id & 0x3F];
+            if (origKind)
+            {
+                int32_t atk = GetBossAtk(origKind->unit_type);
+                if (atk >= 0)
+                {
+                    if (atk < 1) atk = 1;
+                    if (atk > 99) atk = 99;
+                    weapon->damage_function_params[0] = static_cast<uint32_t>(atk);
+                    overrode = true;
+                }
+            }
+        }
+
+        int32_t damage = g_BattleCalculateDamage_trampoline(attacker, target, target_part, weapon, unk0, unk1);
+
+        if (overrode)
+            weapon->damage_function_params[0] = static_cast<uint32_t>(base_atk);
+        return damage;
+    }
+
+    KEEP_FUNC int32_t InterruptStopHook(ttyd::evtmgr::EvtEntry *evt, bool isFirstCall)
+    {
+        if (isFirstCall && gState->apSettings->bossRandomizer &&
+            ttyd::evtmgr_cmd::evtGetValue(evt, evt->evtArguments[0]) == 1)
+        {
+            const char *currentMap = mod::common::GetCurrentMap();
+            if (!currentMap || strcmp(currentMap, "las_29") != 0)
+            {
+                void *bw = ttyd::battle::_battleWorkPtr;
+                for (int32_t i = 0; i < 0x40; i++)
+                {
+                    BattleWorkUnit *u = reinterpret_cast<BattleWorkUnit *>(ttyd::battle::BattleGetUnitPtr(bw, i));
+                    if (!u || u->current_kind > BattleUnitType::BONETAIL)
+                        continue;
+                    uint8_t *p = reinterpret_cast<uint8_t *>(u);
+                    *reinterpret_cast<int16_t *>(p + 0x10c) = 0;
+                    *reinterpret_cast<uint32_t *>(p + 0x104) |= 0x20000;
+                }
+                *reinterpret_cast<uint32_t *>(reinterpret_cast<uint8_t *>(bw) + 0xef4) |= 0x10;
+                return 2;
+            }
+        }
+        return g_InterruptStop_trampoline(evt, isFirstCall);
+    }
+
+    KEEP_FUNC int32_t BattleCheckConcludedHook(void *battleWork)
+    {
+        int32_t concluded = g_BattleCheckConcluded_trampoline(battleWork);
+        if (concluded && gState->apSettings->bossRandomizer)
+        {
+            const char *currentMap = mod::common::GetCurrentMap();
+            if (currentMap && strcmp(currentMap, "las_29") == 0)
+            {
+                bool enemyAlive = false;
+                for (int32_t i = 0; i < 0x40; i++)
+                {
+                    BattleWorkUnit *u = reinterpret_cast<BattleWorkUnit *>(ttyd::battle::BattleGetUnitPtr(battleWork, i));
+                    if (!u || u->current_kind > BattleUnitType::BONETAIL)
+                        continue;
+                    uint8_t *p = reinterpret_cast<uint8_t *>(u);
+                    if ((*reinterpret_cast<uint32_t *>(p + 0x104) & 0x20000) == 0 &&
+                        *reinterpret_cast<int16_t *>(p + 0x10c) > 0)
+                    {
+                        enemyAlive = true;
+                        break;
+                    }
+                }
+                if (!enemyAlive)
+                    *reinterpret_cast<uint32_t *>(reinterpret_cast<uint8_t *>(battleWork) + 0xef4) |= 0x20;
+            }
+        }
+        return concluded;
     }
 
     KEEP_FUNC int main__psndSFXOnHook(int idOrName, int vol, int pan, int a4, const void *pos, int a6, int a7, int a8)

@@ -1,7 +1,10 @@
 #include "AP/rel_patch_definitions.h"
 #include "evt_cmd.h"
 #include "patch.h"
+#include "OWR.h"
 #include "subrel_gor.h"
+#include "ttyd/battle_unit.h"
+#include "ttyd/battle_database_common.h"
 #include "ttyd/evt_cam.h"
 #include "ttyd/evt_item.h"
 #include "ttyd/evt_mario.h"
@@ -18,6 +21,7 @@
 
 using ttyd::gor_02::gor_follow;
 using namespace mod;
+using namespace mod::owr;
 using namespace ttyd;
 
 extern int32_t gor_luigi_gor_first_talk[];
@@ -282,9 +286,24 @@ void ApplyGorMiscPatches()
     patch::writeIntWithCache(&gor_monosiri_check[21], 0x60000000); // NOP
     patch::writeIntWithCache(&gor_monosiri_check[33], 0x60000000); // NOP
     patch::writeIntWithCache(&gor_monosiri_check[41], 0x60000000); // NOP
-    patch::writeIntWithCache(&gor_monosiri_check[44], 0x281C0017); // cmplwi r28, 0x17
+    patch::writeIntWithCache(&gor_monosiri_check[44], 0x281C0023); // cmplwi r28, 0x23
 
     patch::writeBranchBL(&gor_monosiri_check[51], reinterpret_cast<void *>(bMonosiriBucketExtra));
     patch::writeBranchBL(&gor_monosiri_check[69], reinterpret_cast<void *>(bMonosiriBucketExtra));
     patch::writeBranchBL(&gor_monosiri_check[87], reinterpret_cast<void *>(bMonosiriBucketExtra));
+
+    patch::writeBranchPair(&gor_monosiri_check[60],
+                           &gor_monosiri_check[61],
+                           reinterpret_cast<void *>(bMonosiriMonban),
+                           reinterpret_cast<void *>(bMonosiriMonbanReturn));
+    patch::writeBranchPair(&gor_monosiri_check[78],
+                           &gor_monosiri_check[79],
+                           reinterpret_cast<void *>(bMonosiriBonetail),
+                           reinterpret_cast<void *>(bMonosiriBonetailReturn));
+    patch::writeBranchPair(&gor_monosiri_check[96],
+                           &gor_monosiri_check[97],
+                           reinterpret_cast<void *>(bMonosiriAtomicBoo),
+                           reinterpret_cast<void *>(bMonosiriAtomicBooReturn));
+
+    ApplyBossGroups(kBossGrpRange_gor_gor);
 }

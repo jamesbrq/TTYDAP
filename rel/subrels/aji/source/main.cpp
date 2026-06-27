@@ -761,6 +761,8 @@ namespace mod
             }
         }
 
+        ApplyBossGroups(kBossGrpRange_aji_aji);
+
         // Assembly
         aji_check_kou_evt[13] = 0x38840827; // addi r4, r4, 0x827 GSW(1703)
         aji_check_kou_evt[17] = 0x2C030016; // cmpwi r3, 0x16
