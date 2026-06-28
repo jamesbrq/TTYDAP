@@ -207,3 +207,198 @@ bool LoadCustomRelVM(const char *relName, uint32_t cacheBytes)
 
     return true;
 }
+
+namespace
+{
+    // MakeRelFixed-equivalent: drop the self/DOL imp-table entries so the OS
+    // never re-walks our already-relocated rel table on later map transitions.
+    // Done while the window is still 1:1 mapped so it persists into ARAM.
+    void truncateImpTable(OSModuleInfo *m)
+    {
+        OSModuleImpSection *impTable = reinterpret_cast<OSModuleImpSection *>(m->impOffset);
+        uint32_t impCount = m->impSize / sizeof(OSModuleImpSection);
+        for (uint32_t i = 0; i < impCount; i++)
+        {
+            int32_t mid = impTable[i].moduleId;
+            if (mid == 0 || mid == static_cast<int32_t>(m->id))
+            {
+                m->impSize = i * sizeof(OSModuleImpSection);
+                break;
+            }
+        }
+    }
+}
+
+bool LoadBothCustomRelsVM(const char *nameA, const char *nameB, uint32_t cacheBytes)
+{
+    char pathA[32];
+    char pathB[32];
+    snprintf(pathA, sizeof(pathA), "/mod/%s.rel", nameA);
+    snprintf(pathB, sizeof(pathB), "/mod/%s.rel", nameB);
+
+    DVDFileInfo fiA;
+    DVDFileInfo fiB;
+    if (!DVDOpen(pathA, &fiA))
+        return false;
+
+    // Second rel absent -> single-rel path (no regression on builds without it).
+    if (!DVDOpen(pathB, &fiB))
+    {
+        DVDClose(&fiA);
+        return LoadCustomRelVM(nameA, cacheBytes);
+    }
+
+    uint32_t sizeA = alignUp(fiA.length, DVD_READ_SIZE);
+    uint32_t sizeB = alignUp(fiB.length, DVD_READ_SIZE);
+
+    // Both link buffers from the smart (costume) arena, live simultaneously so
+    // the game's Link() can relocate A and B while both are window-resident
+    // (B's imports into A resolve). Freed right after VM_PersistPair.
+    SmartAllocationData *nodeA = smartAlloc(sizeA + 2 * PAGE_SIZE, kSmartGroupTransient);
+    uint8_t *rawA = nodeA ? static_cast<uint8_t *>(nodeA->pMemory) : nullptr;
+    SmartAllocationData *nodeB = smartAlloc(sizeB + 2 * PAGE_SIZE, kSmartGroupTransient);
+    uint8_t *rawB = nodeB ? static_cast<uint8_t *>(nodeB->pMemory) : nullptr;
+    if (!rawA || !rawB)
+    {
+        if (nodeA)
+            smartFree(nodeA);
+        if (nodeB)
+            smartFree(nodeB);
+        DVDClose(&fiA);
+        DVDClose(&fiB);
+        return false;
+    }
+    uint8_t *linkA = reinterpret_cast<uint8_t *>(
+        (reinterpret_cast<uint32_t>(rawA) + (PAGE_SIZE - 1)) & ~(PAGE_SIZE - 1));
+    uint8_t *linkB = reinterpret_cast<uint8_t *>(
+        (reinterpret_cast<uint32_t>(rawB) + (PAGE_SIZE - 1)) & ~(PAGE_SIZE - 1));
+
+    int32_t rA = DVDReadPrio(&fiA, linkA, sizeA, 0, 0);
+    DVDClose(&fiA);
+    int32_t rB = DVDReadPrio(&fiB, linkB, sizeB, 0, 0);
+    DVDClose(&fiB);
+    if (rA <= 0 || rB <= 0)
+    {
+        smartFree(nodeA);
+        smartFree(nodeB);
+        return false;
+    }
+
+    // Reserve the top slice of the aramMgr map/battle heap for BOTH images.
+    {
+        volatile uint32_t *mgrTop = reinterpret_cast<volatile uint32_t *>(0x803E5EF0);  // work+0x20
+        volatile uint32_t *mgrBase = reinterpret_cast<volatile uint32_t *>(0x803E5EF4); // work+0x24
+        volatile uint32_t *mgrSize = reinterpret_cast<volatile uint32_t *>(0x803E5EF8); // work+0x28
+
+        uint32_t reserve = alignUp(sizeA, PAGE_SIZE) + alignUp(sizeB, PAGE_SIZE) + 0x2000;
+        uint32_t oldSize = *mgrSize;
+        uint32_t newSize = (oldSize > reserve) ? (oldSize - reserve) : 0;
+        uint32_t aramBase = *mgrBase + newSize;
+
+        if (newSize != 0 && *mgrTop > aramBase)
+            reinterpret_cast<void (*)()>(0x801528A0)(); // aramMgrGarbage
+
+        if (newSize == 0 || *mgrTop > aramBase)
+        {
+            smartFree(nodeA);
+            smartFree(nodeB);
+            return false;
+        }
+
+        *mgrSize = newSize;
+        mod::vm::VM_SetAramRegion(aramBase, reserve);
+    }
+
+    void *windowB = nullptr;
+    if (!mod::vm::VM_BeginLinkPair(linkA, sizeA, linkB, sizeB, &windowB))
+    {
+        smartFree(nodeA);
+        smartFree(nodeB);
+        return false;
+    }
+
+    OSModuleInfo *relA = reinterpret_cast<OSModuleInfo *>(mod::vm::VM_WindowBase());
+    OSModuleInfo *relB = reinterpret_cast<OSModuleInfo *>(windowB);
+
+    constexpr int32_t kResidentHeap = HeapType::HEAP_DEFAULT;
+
+    uint32_t bssSizeA = relA->bssSize ? relA->bssSize : 1;
+    uint8_t *bssA = static_cast<uint8_t *>(__memAlloc(kResidentHeap, bssSizeA));
+    if (!bssA)
+    {
+        mod::vm::VM_Abort();
+        smartFree(nodeA);
+        smartFree(nodeB);
+        return false;
+    }
+    // Link A first so B can resolve imports into it.
+    if (!Link(relA, bssA, false))
+    {
+        OSUnlink(relA);
+        mod::vm::VM_Abort();
+        __memFree(kResidentHeap, bssA);
+        smartFree(nodeA);
+        smartFree(nodeB);
+        return false;
+    }
+
+    uint32_t bssSizeB = relB->bssSize ? relB->bssSize : 1;
+    uint8_t *bssB = static_cast<uint8_t *>(__memAlloc(kResidentHeap, bssSizeB));
+    if (!bssB)
+    {
+        OSUnlink(relA);
+        mod::vm::VM_Abort();
+        __memFree(kResidentHeap, bssA);
+        smartFree(nodeA);
+        smartFree(nodeB);
+        return false;
+    }
+    if (!Link(relB, bssB, false))
+    {
+        OSUnlink(relB);
+        OSUnlink(relA);
+        mod::vm::VM_Abort();
+        __memFree(kResidentHeap, bssB);
+        __memFree(kResidentHeap, bssA);
+        smartFree(nodeA);
+        smartFree(nodeB);
+        return false;
+    }
+
+    truncateImpTable(relA);
+    truncateImpTable(relB);
+
+    // Kind->unit->span prefetch table is sourced from module A's sections.
+    mod::vm::VM_PrefetchInit(relA);
+
+    if (!mod::vm::VM_PersistPair())
+    {
+        mod::vm::VM_Abort();
+        __memFree(kResidentHeap, bssB);
+        __memFree(kResidentHeap, bssA);
+        smartFree(nodeA);
+        smartFree(nodeB);
+        return false;
+    }
+
+    smartFree(nodeA);
+    smartFree(nodeB);
+    nodeA = nullptr;
+    nodeB = nullptr;
+
+    if (!mod::vm::VM_StartPaging(cacheBytes))
+    {
+        mod::vm::VM_Abort();
+        __memFree(kResidentHeap, bssB);
+        __memFree(kResidentHeap, bssA);
+        return false;
+    }
+
+    // Pin both module headers (page 0 of each) so the OS can always read them
+    // during module link/unlink on map transitions.
+    mod::vm::VM_PrefetchLocked(mod::vm::VM_WindowBase(), PAGE_SIZE);
+    mod::vm::VM_PrefetchLocked(reinterpret_cast<uint32_t>(windowB), PAGE_SIZE);
+
+    mod::vm::VM_EnableDemandPaging();
+    return true;
+}

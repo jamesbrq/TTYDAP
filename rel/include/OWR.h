@@ -3,6 +3,7 @@
 #include "visibility.h"
 #include <AP/rel_patch_definitions.h>
 #include <gc/OSModule.h>
+#include <gc/OS.h>
 #include <gc/types.h>
 #include <StateManager.h>
 #include <ttyd/battle_database_common.h>
@@ -102,6 +103,7 @@ namespace mod::owr
         {
             BattleGroupSetup *bossGroup = bossGroupList[i];
             EnemyLoadout &loadout = gState->bossLoadouts[i];
+            bool championHere = false;
             for (int32_t j = 0; j < bossGroup->num_enemies; j++)
             {
                 BattleUnitSetup &unit = bossGroup->enemy_data[j];
@@ -109,6 +111,18 @@ namespace mod::owr
                 unit.position.x = GetEnemyXPosition(loadout.enemyIds[j], unit.position.x);
                 unit.position.y = GetEnemyYPosition(loadout.enemyIds[j]);
                 unit.unit_kind_params = GetUnitKindById(loadout.enemyIds[j]);
+                if (loadout.enemyIds[j] == 0x40)
+                    championHere = true;
+            }
+            // champion needs the Glitz Pit stage; rewrite this loaded encounter
+            if (championHere && bossSetupList[i] && bossSetupList[i]->stage_data &&
+                kChampStageGlobalDir && kChampStageCurrentDir)
+            {
+                BattleStageData *st = bossSetupList[i]->stage_data;
+                st->global_stage_data_dir = kChampStageGlobalDir;
+                st->current_stage_data_dir = kChampStageCurrentDir;
+                st->num_props = kChampNumProps;
+                st->props = kChampStageProps;
             }
         }
     }

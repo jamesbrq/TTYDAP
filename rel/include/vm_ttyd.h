@@ -80,6 +80,19 @@ namespace mod::vm
     // Convenience wrapper for Persist+StartPaging (holds the link buffer across both).
     bool VM_EndLink(uint32_t residentSize, uint32_t cacheBytes);
 
+    // Two-module variant: pack module B into the same window directly after
+    // module A (A at window page 0, B at page ceil(bytesA/PAGE)), sharing one
+    // ARAM region/HTAB/cache. Maps BOTH ranges 1:1 onto their link buffers so
+    // the caller can Link() A then B while both are resident (lets B resolve
+    // imports into A). outWindowB receives B's window base. Returns the window
+    // base (A) or nullptr. Pair with VM_PersistPair, then VM_StartPaging.
+    void *VM_BeginLinkPair(void *linkBufA, uint32_t bytesA, void *linkBufB, uint32_t bytesB, void **outWindowB);
+
+    // Persist phase for the pair: DMA both relocated images into ARAM (A at
+    // offset 0, B after A), drop the 1:1 mapping, and commit every page. Does
+    // not allocate the cache; caller frees both link buffers, then VM_StartPaging.
+    bool VM_PersistPair();
+
     // One-time: copy an already-VM_Base-relocated image from MEM into ARAM.
     bool VM_LoadImage(const void *src, uint32_t size);
 

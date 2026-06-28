@@ -20,9 +20,14 @@ namespace mod
     void main()
     {
         if (platformIsConsole())
-            LoadCustomRelVM();
+        {
+            LoadBothCustomRelsVM();
+        }
         else
-            relMgr.loadCustomRel();
+        {
+            relMgr.loadCustomRel("custom");
+            relMgr.loadCustomRel("custom2"); // no-op if absent; links after custom so it can import it
+        }
 
         // Run the init rel to handle function hooks/patches/etc
         relMgr.runInitRel();

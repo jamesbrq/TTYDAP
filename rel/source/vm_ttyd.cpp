@@ -110,6 +110,12 @@ namespace
     bool g_linkMode = false;
     void *g_linkBuf = nullptr;
 
+    void *g_pairLinkA = nullptr;
+    void *g_pairLinkB = nullptr;
+    uint32_t g_pairPagesA = 0;
+    uint32_t g_pairPagesB = 0;
+    uint32_t g_secondHeaderVpage = 0; // window vpage of module B's header (0 = single-rel)
+
     // ARQ-routed DMA (normal context only). When g_dmaUseArq is set AND interrupts
     // are enabled, aramDmaBlocking posts through ARQPostRequest so VM transfers
     // queue behind in-flight musyx/aramMgr requests on the shared AR engine
@@ -695,6 +701,94 @@ namespace mod::vm
         return VM_Persist(residentSize) && VM_StartPaging(cacheBytes);
     }
 
+    void *VM_BeginLinkPair(void *linkBufA, uint32_t bytesA, void *linkBufB, uint32_t bytesB, void **outWindowB)
+    {
+        if (vm_initialized)
+            return nullptr;
+        if ((reinterpret_cast<uint32_t>(linkBufA) & (PAGE_SIZE - 1)) != 0)
+            return nullptr;
+        if ((reinterpret_cast<uint32_t>(linkBufB) & (PAGE_SIZE - 1)) != 0)
+            return nullptr;
+
+        uint32_t pagesA = (bytesA + PAGE_SIZE - 1) / PAGE_SIZE;
+        uint32_t pagesB = (bytesB + PAGE_SIZE - 1) / PAGE_SIZE;
+        if (pagesA == 0 || pagesB == 0 || (pagesA + pagesB) > MAX_VPAGES)
+            return nullptr;
+
+        if (!bringUpMmu((pagesA + pagesB) * PAGE_SIZE))
+            return nullptr;
+
+        uint8_t *baseA = static_cast<uint8_t *>(linkBufA);
+        uint8_t *baseB = static_cast<uint8_t *>(linkBufB);
+
+        int cookie = OSDisableInterrupts();
+        for (uint32_t v = 0; v < pagesA; v++)
+        {
+            insert_pte(static_cast<uint16_t>(v), v2p(baseA + v * PAGE_SIZE), 0, 0b10);
+            virt_map[v].p_map_index = kLinear;
+            virt_map[v].committed = 0;
+        }
+        for (uint32_t v = 0; v < pagesB; v++)
+        {
+            uint32_t vv = pagesA + v;
+            insert_pte(static_cast<uint16_t>(vv), v2p(baseB + v * PAGE_SIZE), 0, 0b10);
+            virt_map[vv].p_map_index = kLinear;
+            virt_map[vv].committed = 0;
+        }
+        DCFlushRange(HTABORG, PTE_SIZE); // make PTEs visible to the HW tablewalk
+        asm volatile("sync; isync" ::: "memory");
+        OSRestoreInterrupts(cookie);
+
+        vm_saved_dsi = g_savedDsi;
+        vm_saved_isi = g_savedIsi;
+        g_pairLinkA = linkBufA;
+        g_pairLinkB = linkBufB;
+        g_pairPagesA = pagesA;
+        g_pairPagesB = pagesB;
+        g_secondHeaderVpage = pagesA;
+        g_linkMode = true;
+        vm_initialized = true;
+
+        if (outWindowB)
+            *outWindowB = reinterpret_cast<void *>(VM_WINDOW + pagesA * PAGE_SIZE);
+        return VM_Base;
+    }
+
+    bool VM_PersistPair()
+    {
+        if (!vm_initialized || !g_linkMode)
+            return false;
+
+        uint32_t alignedA = g_pairPagesA * PAGE_SIZE;
+        uint32_t alignedB = g_pairPagesB * PAGE_SIZE;
+        uint32_t aramSize = ARGetSize();
+        if (aramSize != 0 && g_aramBase + alignedA + alignedB > aramSize)
+            return false; // would overflow ARAM
+
+        DCFlushRange(g_pairLinkA, alignedA);
+        aramDmaBlocking(AR_MRAMTOARAM, reinterpret_cast<uint32_t>(g_pairLinkA), g_aramBase, alignedA);
+        DCFlushRange(g_pairLinkB, alignedB);
+        aramDmaBlocking(AR_MRAMTOARAM, reinterpret_cast<uint32_t>(g_pairLinkB), g_aramBase + alignedA, alignedB);
+
+        int cookie = OSDisableInterrupts();
+        memset(HTABORG, 0, PTE_SIZE);
+        DCFlushRange(HTABORG, PTE_SIZE);
+        tlbia();
+        asm volatile("sync; isync" ::: "memory");
+        OSRestoreInterrupts(cookie);
+
+        for (uint32_t v = 0; v < g_numVpages; v++)
+        {
+            virt_map[v].committed = 1;
+            virt_map[v].p_map_index = kNoPhys;
+        }
+
+        g_linkMode = false;
+        g_pairLinkA = nullptr;
+        g_pairLinkB = nullptr;
+        return true;
+    }
+
     bool VM_LoadImage(const void *src, uint32_t size)
     {
         if (!vm_initialized || g_linkMode)
@@ -770,6 +864,8 @@ namespace mod::vm
         g_lockedFrames = 0;
         OSRestoreInterrupts(cookie);
         VM_PrefetchLocked(VM_WINDOW, PAGE_SIZE); // keep module header (page 0) pinned
+        if (g_secondHeaderVpage != 0)
+            VM_PrefetchLocked(VM_WINDOW + g_secondHeaderVpage * PAGE_SIZE, PAGE_SIZE); // module B header
     }
 
     int VM_HandleFault(uint32_t dsisr, uint32_t dar)
@@ -824,6 +920,9 @@ namespace mod::vm
         vm_initialized = false;
         g_linkMode = false;
         g_linkBuf = nullptr;
+        g_pairLinkA = nullptr;
+        g_pairLinkB = nullptr;
+        g_secondHeaderVpage = 0;
     }
 
     uint32_t VM_DbgAramBase()

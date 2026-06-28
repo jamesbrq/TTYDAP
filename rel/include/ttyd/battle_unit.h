@@ -1467,6 +1467,72 @@ namespace ttyd::battle_unit
             &btlgrp_win_win_00_04_off_1,      // 23 win
         };
 
+        inline const char *kChampStageGlobalDir = "bti_01";
+        inline const char *kChampStageCurrentDir = "stg_03_0";
+        inline BattleStageObjectData kChampStageProps[] = {
+            { "gamen",   2, 0, {    0.0f,   0.0f, -50.0f },  0, 60, { 0, 0 } },
+            { "etc",     2, 0, {    0.0f,   0.0f, -54.0f }, 10, 50, { 0, 0 } },
+            { "side__L", 2, 0, { -137.0f,   0.0f, -40.0f }, 20, 40, { 0, 0 } },
+            { "side__R", 2, 0, {  137.0f,   0.0f, -40.0f }, 30, 30, { 0, 0 } },
+            { "B",       2, 2, {    0.0f,   0.0f,   0.0f },  0, 60, { 0, 0 } },
+            { "C",       2, 3, {    0.0f,   0.0f,   0.0f },  0, 60, { 0, 0 } },
+            { "if_wire", 5, 6, {    0.0f, 130.0f,   0.0f },  0,  0, { 0, 0 } },
+            { "if_body", 5, 6, {    0.0f, 130.0f,   0.0f },  0,  0, { 0, 0 } },
+        };
+        inline constexpr int kChampNumProps = 8;
+
+        extern BattleSetupWeightedLoadout btlgrpsel_aji_btlno_aji_mbmkii_off[];
+        extern BattleSetupWeightedLoadout btlgrpsel_gon_btlno_gon_11_01_off[];
+        extern BattleSetupWeightedLoadout btlgrpsel_gor_btlno_gor_00_01_off[];
+        extern BattleSetupWeightedLoadout btlgrpsel_gor_btlno_gor_02_01_off[];
+        extern BattleSetupWeightedLoadout btlgrpsel_hei_btlno_hei_10_01_off[];
+        extern BattleSetupWeightedLoadout btlgrpsel_jin_btlno_jin_00_01_off[];
+        extern BattleSetupWeightedLoadout btlgrpsel_jin_btlno_jin_01_02_off[];
+        extern BattleSetupWeightedLoadout btlgrpsel_jin_btlno_jin_01_01_off[];
+        extern BattleSetupWeightedLoadout btlgrpsel_jon_btlno_jon_100_zonbaba_off[];
+        extern BattleSetupWeightedLoadout btlgrpsel_las_btlno_las_09_rampell_off[];
+        extern BattleSetupWeightedLoadout btlgrpsel_las_btlno_las_bunbaba_off[];
+        extern BattleSetupWeightedLoadout btlgrpsel_las_btlno_las_28_koopa_off[];
+        extern BattleSetupWeightedLoadout btlgrpsel_las_btlno_las_28_batten_leader_off[];
+        extern BattleSetupWeightedLoadout btlgrpsel_las_btlno_las_29_black_peach_1_off[];
+        extern BattleSetupWeightedLoadout btlgrpsel_las_btlno_las_29_black_peach_2_off[];
+        extern BattleSetupWeightedLoadout btlgrpsel_mri_btlno_mri_mb_off[];
+        extern BattleSetupWeightedLoadout btlgrpsel_muj_btlno_muj_kanbu_off[];
+        extern BattleSetupWeightedLoadout btlgrpsel_muj_btlno_muj_cortez_off[];
+        extern BattleSetupWeightedLoadout btlgrpsel_rsh_btlno_rsh_06_01_off[];
+        extern BattleSetupWeightedLoadout btlgrpsel_tik_btlno_tik_gesso_off[];
+        extern BattleSetupWeightedLoadout btlgrpsel_tou_btlno_tou_01_23_off[];
+        extern BattleSetupWeightedLoadout btlgrpsel_tou_btlno_tou_01_22_off[];
+        extern BattleSetupWeightedLoadout btlgrpsel_tou_btlno_tou_01_24_off[];
+        extern BattleSetupWeightedLoadout btlgrpsel_win_btlno_win_00_04_off[];
+
+        inline BattleSetupWeightedLoadout *bossSetupList[NUM_BOSS_GROUPS] = {
+            btlgrpsel_aji_btlno_aji_mbmkii_off,           // 0  aji
+            btlgrpsel_gon_btlno_gon_11_01_off,            // 1  gon
+            btlgrpsel_gor_btlno_gor_00_01_off,            // 2  gor
+            btlgrpsel_gor_btlno_gor_02_01_off,            // 3  gor
+            btlgrpsel_hei_btlno_hei_10_01_off,            // 4  hei
+            btlgrpsel_jin_btlno_jin_00_01_off,            // 5  jin
+            btlgrpsel_jin_btlno_jin_01_02_off,            // 6  jin
+            btlgrpsel_jin_btlno_jin_01_01_off,            // 7  jin
+            btlgrpsel_jon_btlno_jon_100_zonbaba_off,      // 8  jon
+            btlgrpsel_las_btlno_las_09_rampell_off,       // 9  las
+            btlgrpsel_las_btlno_las_bunbaba_off,          // 10 las
+            btlgrpsel_las_btlno_las_28_koopa_off,         // 11 las
+            btlgrpsel_las_btlno_las_28_batten_leader_off, // 12 las
+            btlgrpsel_las_btlno_las_29_black_peach_1_off, // 13 las
+            btlgrpsel_las_btlno_las_29_black_peach_2_off, // 14 las
+            btlgrpsel_mri_btlno_mri_mb_off,               // 15 mri
+            btlgrpsel_muj_btlno_muj_kanbu_off,            // 16 muj
+            btlgrpsel_muj_btlno_muj_cortez_off,           // 17 muj
+            btlgrpsel_rsh_btlno_rsh_06_01_off,            // 18 rsh
+            btlgrpsel_tik_btlno_tik_gesso_off,            // 19 tik
+            btlgrpsel_tou_btlno_tou_01_23_off,            // 20 tou boss
+            btlgrpsel_tou_btlno_tou_01_22_off,            // 21 tou champ
+            btlgrpsel_tou_btlno_tou_01_24_off,            // 22 tou koopa
+            btlgrpsel_win_btlno_win_00_04_off,            // 23 win
+        };
+
         inline constexpr BattleGroupIndexRange kBossGrpRange_aji_aji {0, 0};
         inline constexpr BattleGroupIndexRange kBossGrpRange_gon_gon {1, 1};
         inline constexpr BattleGroupIndexRange kBossGrpRange_gor_gor {2, 3};
