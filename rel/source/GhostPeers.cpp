@@ -1,6 +1,7 @@
 #include "GhostPeers.h"
 #include "OWR.h"
 #include "StateManager.h"
+#include "mod.h"
 #include "gc/mtx.h"
 #include "ttyd/animdrv.h"
 #include "ttyd/dispdrv.h"
@@ -229,7 +230,7 @@ namespace mod::ghosts
                 --g_costumeRefs[colorIndex];
         }
 
-        GhostSlot g_slots[kMaxPeers];
+        GhostSlot *g_slots = nullptr;
         bool g_initialized = false;
 
         constexpr int kHitGraceFrames = 90;
@@ -1016,8 +1017,9 @@ namespace mod::ghosts
         // engine's group pass didn't cover poses we allocated.
         void ReleaseAllGhostPoses()
         {
-            for (auto &slot : g_slots)
+            for (int i = 0; i < kMaxPeers; ++i)
             {
+                GhostSlot &slot = g_slots[i];
                 if (slot.forwardAllocated)
                     ttyd::animdrv::animPoseRelease(slot.forwardPoseId);
                 if (slot.rearAllocated)
@@ -1538,6 +1540,8 @@ namespace mod::ghosts
 
     KEEP_FUNC void Init()
     {
+        if (!mod::multiplayerEnabled()) // console hard-forces multiplayer off
+            return;
         if (g_initialized)
             return;
 
@@ -1580,8 +1584,17 @@ namespace mod::ghosts
         }
 
         // GhostSlot bookkeeping (mod-internal, not in GhostState).
-        for (auto &s : g_slots)
+        if (g_slots == nullptr)
         {
+            void *slotsRaw = ttyd::memory::__memAlloc(ttyd::memory::HeapType::HEAP_DEFAULT, sizeof(GhostSlot) * kMaxPeers);
+            g_slots = reinterpret_cast<GhostSlot *>(slotsRaw);
+        }
+        if (g_slots == nullptr)
+            return;
+        std::memset(g_slots, 0, sizeof(GhostSlot) * kMaxPeers);
+        for (int i = 0; i < kMaxPeers; ++i)
+        {
+            GhostSlot &s = g_slots[i];
             s.forwardAllocated = false;
             s.rearAllocated = false;
             s.effectsAllocated = false;
@@ -1669,7 +1682,8 @@ namespace mod::ghosts
 
     KEEP_FUNC void Shutdown()
     {
-        for (auto &s : g_slots) ReleaseSlot(s);
+        if (g_slots != nullptr)
+            for (int i = 0; i < kMaxPeers; ++i) ReleaseSlot(g_slots[i]);
         g_initialized = false;
     }
 
@@ -1791,7 +1805,7 @@ namespace mod::ghosts
         const SharedBlock *block = GetValidBlock();
         if (block == nullptr)
         {
-            for (auto &s : g_slots) ReleaseSlot(s);
+            for (int i = 0; i < kMaxPeers; ++i) ReleaseSlot(g_slots[i]);
             return;
         }
 
@@ -1804,7 +1818,7 @@ namespace mod::ghosts
                 const char *currentMap = gw->currentMapName;
                 if (std::memcmp(s_lastMapName, currentMap, kMapNameLen) != 0)
                 {
-                    for (auto &s : g_slots) ReleaseSlot(s);
+                    for (int i = 0; i < kMaxPeers; ++i) ReleaseSlot(g_slots[i]);
                     // Drop any loop entries that the transition tore down
                     // internally (the engine stops them without a psndSFXOff,
                     // so RemoveLocalChannel never fired). Otherwise a stale
@@ -2010,8 +2024,9 @@ namespace mod::ghosts
             const uint32_t marioMatFlag = ttyd::animdrv::animPoseGetMaterialFlag(marioFwd);
             const uint32_t marioLitFlag = ttyd::animdrv::animPoseGetMaterialLightFlag(marioFwd);
 
-            for (auto &slot : g_slots)
+            for (int i = 0; i < kMaxPeers; ++i)
             {
+                GhostSlot &slot = g_slots[i];
                 if (slot.forwardAllocated)
                 {
                     ttyd::animdrv::animPoseSetMaterialFlagOn(slot.forwardPoseId, marioMatFlag);
