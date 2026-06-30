@@ -749,6 +749,27 @@ namespace mod
         tik_05_init_evt[62] = 0;
         patch::writePatch(&tik_05_init_evt[145], tik_05_init_evt_hook2, sizeof(tik_05_init_evt_hook2));
 
+		tik_iri_12_kino_makkino_talk[274] = GSW(1742);
+		tik_iri_12_kino_makkino_talk[275] = 2;
+
+		tik_iri_12_kino_talk[1] = GSW(1742);
+		tik_iri_12_kino_talk[2] = 1;
+        tik_iri_12_kino_talk[3] = EVT_HELPER_CMD(2, 26);
+        tik_iri_12_kino_talk[4] = GSW(1772);
+        tik_iri_12_kino_talk[5] = 3;
+        tik_iri_12_kino_talk[7] = GSW(1772);
+        tik_iri_12_kino_talk[8] = 0;
+        tik_iri_12_kino_talk[16] = GSW(1772);
+        tik_iri_12_kino_talk[17] = 1;
+
+		tik_iri_12_init[1] = GSW(1742);
+		tik_iri_12_init[2] = 1;
+        tik_iri_12_init[17] = EVT_HELPER_CMD(2, 26);
+        tik_iri_12_init[18] = GSW(1772);
+        tik_iri_12_init[19] = 3;
+        tik_iri_12_init[46] = GSW(1772);
+        tik_iri_12_init[47] = 3;
+
         tik_06_init_evt[25] = PTR(&tik_pit_checkpoint_evt);
 
         tik_peach_mail[178] = GSW(1715);

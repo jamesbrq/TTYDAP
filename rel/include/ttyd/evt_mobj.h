@@ -89,6 +89,8 @@ namespace ttyd::evt_mobj
         // evt_mobj_hit_onoff
         // evt_mobj_hitevt_onoff
         // evt_mobj_set_camid
+        EVT_DECLARE_USER_FUNC(evt_mapobj_flag_onoff, 4)
+        EVT_DECLARE_USER_FUNC(evt_mapobj_get_position, 4)
         EVT_DECLARE_USER_FUNC(evt_mobj_wait_animation_end, 1)
         EVT_DECLARE_USER_FUNC(evt_mobj_switch_red, 7)
         EVT_DECLARE_USER_FUNC(evt_mobj_set_anim, 2)

@@ -62,6 +62,8 @@ extern int32_t gor_kurihakase_after3minutes[];
 extern int32_t gor_evt_monosiri[];
 extern int32_t gor_02_init_evt[];
 extern int32_t gor_evt_unlock_npc[];
+extern int32_t gor_iri_13_make_item_tbl[];
+extern int32_t gor_iri_13_update_item_tbl[];
 
 // clang-format off
 EVT_DEFINE_USER_FUNC(getMonosiriItem)
@@ -569,7 +571,26 @@ void ApplyGor02Patches()
     gor_kuribo4_talk[4] = GSW(1762);
     gor_kuribo4_talk[39] = GSW(1762);
     gor_kuribo4_talk[40] = 2;
+    gor_kuribo4_talk[47] = GSW(1743);
+    gor_kuribo4_talk[48] = 1;
+    gor_kuribo4_talk[50] = GSW(1773);
+    gor_kuribo4_talk[51] = 2;
+    gor_kuribo4_talk[127] = GSW(1773);
+    gor_kuribo4_talk[128] = 3;
     patch::writePatch(&gor_kuribo4_talk[184], kuribo4_talk_evt, sizeof(kuribo4_talk_evt));
+
+	if (gState->apSettings->troubles)
+    {
+        gor_kuribo4_talk[54] = 81;
+        gor_kuribo4_talk[103] = 81;
+        gor_kuribo4_talk[108] = 81;
+        gor_kuribo4_talk[155] = 81;
+        gor_kuribo4_talk[160] = 81;
+        gor_kuribo4_talk[166] = 81;
+        patch::writeIntWithCache(&gor_iri_13_make_item_tbl[2], 0x38600051); // li r3, 0x51
+        patch::writeIntWithCache(&gor_iri_13_make_item_tbl[5], 0x38600051); // li r3, 0x51
+        patch::writeIntWithCache(&gor_iri_13_make_item_tbl[14], 0x38000051); // li r0, 0x51
+    }
 
     patch::writePatch(&gor_chusan3_talk[0], chusan3_talk_evt, sizeof(chusan3_talk_evt));
 

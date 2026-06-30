@@ -536,6 +536,9 @@ namespace mod::owr
                                reinterpret_cast<void *>(bStoneBgPointerCheck2),
                                reinterpret_cast<void *>(bStoneBgPointerCheckReturn2));
 
+        if (gState->apSettings->moonSpeed)
+            writeIntWithCache(&mario::marioMain[126], 0x60000000); // NOP
+
         if (gState->apSettings->music == 2)
         {
             uint32_t old = main_next;
@@ -752,9 +755,13 @@ namespace mod::owr
         itemDataTable[ItemId::WHACKA_BUMP].sell_price = 30;
 
         itemDataTable[ItemId::SQUARE_DIAMOND_BADGE].icon_id = IconType::MARIO_WANTED_POSTER;
+        itemDataTable[ItemId::SQUARE_DIAMOND_BADGE_P].icon_id = IconType::BRIEFCASE;
         itemDataTable[ItemId::INVALID_ITEM_MARIO_POSTER_005A].icon_id = IconType::COURAGE_SHELL_PACKAGE;
         itemDataTable[ItemId::INVALID_ITEM_MARIO_POSTER_005A].name = shellPackName;
         itemDataTable[ItemId::INVALID_ITEM_MARIO_POSTER_005A].description = shellPackDescription;
+        itemDataTable[ItemId::BRIEFCASE].icon_id = IconType::BATTLE_TRUNK_PACK;
+        itemDataTable[ItemId::BRIEFCASE].name = trunkPackName;
+        itemDataTable[ItemId::BRIEFCASE].description = trunkPackDescription;
 
         // Buy/Sell Prices
         for (int i = ItemId::POWER_JUMP; i < ItemId::MAX_ITEM_ID; i++)

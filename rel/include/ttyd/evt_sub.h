@@ -49,7 +49,7 @@ namespace ttyd::evt_sub
         // evt_sub_get_dist
         // evt_sub_area_check
         // evt_sub_get_stopwatch
-        // evt_sub_random
+        EVT_DECLARE_USER_FUNC(evt_sub_random, 2)
         // evt_sub_rumble_onoff
         // evt_sub_get_sincos
         // evt_sub_spline_free

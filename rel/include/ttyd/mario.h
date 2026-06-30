@@ -189,7 +189,7 @@ namespace ttyd::mario
         // marioMoveMain
         // marioMove
         // marioCtrlOff2Main
-        // marioMain
+        extern int32_t marioMain[];
         // marioReInit
         // marioInit
         // marioPoseInit

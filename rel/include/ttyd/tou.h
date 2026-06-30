@@ -25,6 +25,10 @@ namespace ttyd::tou
 
     extern "C"
     {
+        EVT_DECLARE_USER_FUNC(iri_13_make_name, 2)
+        EVT_DECLARE_USER_FUNC(free_tbl, 0)
+        EVT_DECLARE_USER_FUNC(get_pos, 4)
+        EVT_DECLARE_USER_FUNC(make_tbl, 0)
         extern RankingData *tou_rank_wp;
 
         void tou_rankingControll();

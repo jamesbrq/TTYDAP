@@ -83,7 +83,9 @@ namespace mod::owr
     KEEP_VAR const char *walrusWhiskersName = "walrus_whiskers_name";
     KEEP_VAR const char *walrusWhiskersDescription = "walrus_whiskers_desc";
     KEEP_VAR const char *shellPackName = "shell_pack_name";
-    KEEP_VAR const char *shellPackDescription = "shell_pack_desc";
+    KEEP_VAR const char *shellPackDescription = "shell_pack_desc";    
+    KEEP_VAR const char *trunkPackName = "trunk_pack_name";
+    KEEP_VAR const char *trunkPackDescription = "trunk_pack_desc";
 
     // Key Renames
     KEEP_VAR const char *elevatorKeyStationName = "elevator_key_station";

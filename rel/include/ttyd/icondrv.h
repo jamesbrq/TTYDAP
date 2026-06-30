@@ -587,7 +587,8 @@ namespace ttyd::icondrv
             AP_ITEM,
             RETURN_PIPE,
             WALRUS_WHISKERS,
-            COURAGE_SHELL_PACKAGE
+            COURAGE_SHELL_PACKAGE,
+            BATTLE_TRUNK_PACK
         };
     }
 

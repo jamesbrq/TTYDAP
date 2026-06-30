@@ -209,4 +209,6 @@ namespace mod::owr
     extern const char *walrusWhiskersDescription;
     extern const char *shellPackName;
     extern const char *shellPackDescription;
+    extern const char *trunkPackName;
+    extern const char *trunkPackDescription;
 } // namespace mod::owr

@@ -65,7 +65,8 @@ namespace mod::owr
         uint8_t yoshiNameBuffer[0x20];             // 0x40 yoshiName points here (0x80003260)
         uint8_t bossStatScaling;                   // 0x60
         uint8_t consoleMode;                       // 0x61
-        uint8_t reserved2[2];                      // 0x62
+        uint8_t moonSpeed;                         // 0x62
+        uint8_t troubles;                          // 0x63
     };
 
     static_assert(sizeof(APSettings) == 0x64);

@@ -982,8 +982,12 @@ namespace mod
         rsh_evt_toron_catch[273] = GSW(1706);
         rsh_evt_toron_catch[274] = 29;
 
+        rsh_evt_toron_catch2[153] = 336;
+        rsh_evt_toron_catch2[237] = 0;
+        rsh_evt_toron_catch2[263] = 336;
         rsh_evt_toron_catch2[316] = GSW(1706);
         rsh_evt_toron_catch2[317] = 29;
+        rsh_evt_toron_catch2[153] = 336;
 
         rsh_evt_toron_appear[25] = GSW(1706);
         rsh_evt_toron_appear[26] = 27;
