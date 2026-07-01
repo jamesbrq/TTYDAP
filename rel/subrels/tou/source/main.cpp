@@ -270,11 +270,12 @@ EVT_DEFINE_USER_FUNC(checkShorts)
     return 2;
 }
 
-uint16_t *iri_13_item_ids = reinterpret_cast<uint16_t *>(0x80003B00);
+uint16_t *iri_13_item_ids = reinterpret_cast<uint16_t *>(0x80003D00);
 
 EVT_DECLARE_USER_FUNC(iri_13_get_item, 3)
 EVT_DEFINE_USER_FUNC(iri_13_get_item)
 {
+    (void)isFirstCall;
     int32_t i = ttyd::evtmgr_cmd::evtGetValue(evt, evt->evtArguments[0]);
     int32_t flag = kIri13FlagBase + i;
     uint16_t id = iri_13_item_ids[i];
