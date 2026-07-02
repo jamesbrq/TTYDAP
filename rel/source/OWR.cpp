@@ -158,6 +158,33 @@ namespace mod::owr
     KEEP_VAR StateManager *gState = nullptr;
     KEEP_VAR NumericInputData g_numericInput;
 
+    KEEP_VAR const char *kChampStageGlobalDir = "bti_01";
+    KEEP_VAR const char *kChampStageCurrentDir = "stg_03_0";
+    KEEP_VAR BattleStageObjectData kChampStageProps[] = {
+        {"gamen", 2, 0, {0.0f, 0.0f, -50.0f}, 0, 60, {0, 0}},
+        {"etc", 2, 0, {0.0f, 0.0f, -54.0f}, 10, 50, {0, 0}},
+        {"side__L", 2, 0, {-137.0f, 0.0f, -40.0f}, 20, 40, {0, 0}},
+        {"side__R", 2, 0, {137.0f, 0.0f, -40.0f}, 30, 30, {0, 0}},
+        {"B", 2, 2, {0.0f, 0.0f, 0.0f}, 0, 60, {0, 0}},
+        {"C", 2, 3, {0.0f, 0.0f, 0.0f}, 0, 60, {0, 0}},
+        {"if_wire", 5, 6, {0.0f, 130.0f, 0.0f}, 0, 0, {0, 0}},
+        {"if_body", 5, 6, {0.0f, 130.0f, 0.0f}, 0, 0, {0, 0}},
+    };
+
+    KEEP_VAR const char *kZakoStageGlobalDir = "bti_01";
+    KEEP_VAR const char *kZakoStageCurrentDir = "stg_05_0";
+    KEEP_VAR BattleStageObjectData kZakoStageProps[] = {
+        {"A1", 2, 0, {107.0f, 0.0f, -53.0f}, 0, 60, {0, 0}},
+        {"S_mae_l", 2, 1, {-90.0f, 0.0f, 48.0f}, 0, 60, {0, 0}},
+        {"S_mae_r", 2, 1, {84.0f, 0.0f, 48.0f}, 0, 60, {0, 0}},
+        {"S_oku_l", 2, 1, {-35.0f, 0.0f, -42.0f}, 0, 60, {0, 0}},
+        {"S_oku_r", 2, 1, {35.0f, 0.0f, -42.0f}, 0, 60, {0, 0}},
+        {"B", 2, 2, {0.0f, 0.0f, 0.0f}, 0, 60, {0, 0}},
+        {"C", 2, 3, {0.0f, 0.0f, 0.0f}, 0, 60, {0, 0}},
+        {"if_wire", 5, 6, {0.0f, 130.0f, 0.0f}, 0, 0, {0, 0}},
+        {"if_body", 5, 6, {0.0f, 130.0f, 0.0f}, 0, 0, {0, 0}},
+    };
+
     KEEP_VAR bool (*g_OSLink_trampoline)(OSModuleInfo *, void *) = nullptr;
     KEEP_VAR void (*g_seq_logoMain_trampoline)(SeqInfo *info) = nullptr;
     KEEP_VAR void (*g_seq_gameInit_trampoline)(SeqInfo *info) = nullptr;

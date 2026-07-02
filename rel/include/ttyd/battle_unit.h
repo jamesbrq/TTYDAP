@@ -1467,20 +1467,6 @@ namespace ttyd::battle_unit
             &btlgrp_win_win_00_04_off_1,      // 23 win
         };
 
-        inline const char *kChampStageGlobalDir = "bti_01";
-        inline const char *kChampStageCurrentDir = "stg_03_0";
-        inline BattleStageObjectData kChampStageProps[] = {
-            { "gamen",   2, 0, {    0.0f,   0.0f, -50.0f },  0, 60, { 0, 0 } },
-            { "etc",     2, 0, {    0.0f,   0.0f, -54.0f }, 10, 50, { 0, 0 } },
-            { "side__L", 2, 0, { -137.0f,   0.0f, -40.0f }, 20, 40, { 0, 0 } },
-            { "side__R", 2, 0, {  137.0f,   0.0f, -40.0f }, 30, 30, { 0, 0 } },
-            { "B",       2, 2, {    0.0f,   0.0f,   0.0f },  0, 60, { 0, 0 } },
-            { "C",       2, 3, {    0.0f,   0.0f,   0.0f },  0, 60, { 0, 0 } },
-            { "if_wire", 5, 6, {    0.0f, 130.0f,   0.0f },  0,  0, { 0, 0 } },
-            { "if_body", 5, 6, {    0.0f, 130.0f,   0.0f },  0,  0, { 0, 0 } },
-        };
-        inline constexpr int kChampNumProps = 8;
-
         extern BattleSetupWeightedLoadout btlgrpsel_aji_btlno_aji_mbmkii_off[];
         extern BattleSetupWeightedLoadout btlgrpsel_gon_btlno_gon_11_01_off[];
         extern BattleSetupWeightedLoadout btlgrpsel_gor_btlno_gor_00_01_off[];

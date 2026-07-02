@@ -90,10 +90,23 @@ namespace mod::owr
     int32_t pouchRemoveItemHook(int32_t item);
     void swSetHook(int gswf);
     void DrainReceivedFlags();
-    int32_t AlterDamageCalculation(BattleWorkUnit *attacker, BattleWorkUnit *target, BattleWorkUnitPart *target_part,
-                                  BattleWeapon *weapon, uint32_t *unk0, uint32_t unk1);
+    int32_t AlterDamageCalculation(BattleWorkUnit *attacker,
+                                   BattleWorkUnit *target,
+                                   BattleWorkUnitPart *target_part,
+                                   BattleWeapon *weapon,
+                                   uint32_t *unk0,
+                                   uint32_t unk1);
     int32_t InterruptStopHook(ttyd::evtmgr::EvtEntry *evt, bool isFirstCall);
     int32_t BattleCheckConcludedHook(void *battleWork);
+
+    extern const char *kChampStageGlobalDir;
+    extern const char *kChampStageCurrentDir;
+    extern BattleStageObjectData kChampStageProps[];
+    constexpr int32_t kChampNumProps = 8;
+    extern const char *kZakoStageGlobalDir;
+    extern const char *kZakoStageCurrentDir;
+    extern BattleStageObjectData kZakoStageProps[];
+    constexpr int32_t kZakoNumProps = 9;
 
     inline void ApplyBossGroups(const BattleGroupIndexRange &range)
     {
@@ -104,6 +117,7 @@ namespace mod::owr
             BattleGroupSetup *bossGroup = bossGroupList[i];
             EnemyLoadout &loadout = gState->bossLoadouts[i];
             bool championHere = false;
+            bool zakoHere = false;
             for (int32_t j = 0; j < bossGroup->num_enemies; j++)
             {
                 BattleUnitSetup &unit = bossGroup->enemy_data[j];
@@ -113,16 +127,28 @@ namespace mod::owr
                 unit.unit_kind_params = GetUnitKindById(loadout.enemyIds[j]);
                 if (loadout.enemyIds[j] == 0x40)
                     championHere = true;
+                if (loadout.enemyIds[j] == 0x63)
+                    zakoHere = true;
             }
+
             // champion needs the Glitz Pit stage; rewrite this loaded encounter
-            if (championHere && bossSetupList[i] && bossSetupList[i]->stage_data &&
-                kChampStageGlobalDir && kChampStageCurrentDir)
+            if (championHere && bossSetupList[i] && bossSetupList[i]->stage_data && kChampStageGlobalDir &&
+                kChampStageCurrentDir)
             {
                 BattleStageData *st = bossSetupList[i]->stage_data;
                 st->global_stage_data_dir = kChampStageGlobalDir;
                 st->current_stage_data_dir = kChampStageCurrentDir;
                 st->num_props = kChampNumProps;
                 st->props = kChampStageProps;
+            }
+            // group-1 xnaut zako needs the muj palace stage (if_body/if_wire rig)
+            if (zakoHere && bossSetupList[i] && bossSetupList[i]->stage_data && kZakoStageGlobalDir && kZakoStageCurrentDir)
+            {
+                BattleStageData *st = bossSetupList[i]->stage_data;
+                st->global_stage_data_dir = kZakoStageGlobalDir;
+                st->current_stage_data_dir = kZakoStageCurrentDir;
+                st->num_props = kZakoNumProps;
+                st->props = kZakoStageProps;
             }
         }
     }
@@ -152,8 +178,12 @@ namespace mod::owr
     extern void (*g_npcSetupBattleInfo_trampoline)(::NpcEntry *, void *);
     extern int32_t (*g_pouchRemoveItem_trampoline)(int32_t);
     extern void (*g_swSet_trampoline)(int);
-    extern int32_t (*g_BattleCalculateDamage_trampoline)(BattleWorkUnit *, BattleWorkUnit *, BattleWorkUnitPart *,
-                                                         BattleWeapon *, uint32_t *, uint32_t);
+    extern int32_t (*g_BattleCalculateDamage_trampoline)(BattleWorkUnit *,
+                                                         BattleWorkUnit *,
+                                                         BattleWorkUnitPart *,
+                                                         BattleWeapon *,
+                                                         uint32_t *,
+                                                         uint32_t);
     extern int32_t (*g_InterruptStop_trampoline)(ttyd::evtmgr::EvtEntry *, bool);
     extern int32_t (*g_BattleCheckConcluded_trampoline)(void *);
 
