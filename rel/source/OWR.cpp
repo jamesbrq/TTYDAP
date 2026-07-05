@@ -185,6 +185,9 @@ namespace mod::owr
         {"if_body", 5, 6, {0.0f, 130.0f, 0.0f}, 0, 0, {0, 0}},
     };
 
+    KEEP_VAR BattleUnitSetup gKanbuPartyUnits[2];
+    KEEP_VAR BattleGroupSetup gKanbuGroup;
+
     KEEP_VAR bool (*g_OSLink_trampoline)(OSModuleInfo *, void *) = nullptr;
     KEEP_VAR void (*g_seq_logoMain_trampoline)(SeqInfo *info) = nullptr;
     KEEP_VAR void (*g_seq_gameInit_trampoline)(SeqInfo *info) = nullptr;

@@ -106,6 +106,8 @@ namespace mod::owr
     extern const char *kZakoStageGlobalDir;
     extern const char *kZakoStageCurrentDir;
     extern BattleStageObjectData kZakoStageProps[];
+    extern BattleUnitSetup gKanbuPartyUnits[2];
+    extern BattleGroupSetup gKanbuGroup;
     constexpr int32_t kZakoNumProps = 9;
 
     inline void ApplyBossGroups(const BattleGroupIndexRange &range)
@@ -116,20 +118,77 @@ namespace mod::owr
         {
             BattleGroupSetup *bossGroup = bossGroupList[i];
             EnemyLoadout &loadout = gState->bossLoadouts[i];
-            bool championHere = false;
-            bool zakoHere = false;
+
+            bool kanbuHere = false;
             for (int32_t j = 0; j < bossGroup->num_enemies; j++)
-            {
-                BattleUnitSetup &unit = bossGroup->enemy_data[j];
-                RegisterOriginalKind(&unit, unit.unit_kind_params);
-                unit.position.x = GetEnemyXPosition(loadout.enemyIds[j], unit.position.x);
-                unit.position.y = GetEnemyYPosition(loadout.enemyIds[j]);
-                unit.unit_kind_params = GetUnitKindById(loadout.enemyIds[j]);
-                if (loadout.enemyIds[j] == 0x40)
-                    championHere = true;
                 if (loadout.enemyIds[j] == 0x63)
-                    zakoHere = true;
+                    kanbuHere = true;
+
+            // Lord Crump is a two-member party: group-1 X-Naut (0x64) in slot 0,
+            // Crump (0x63) in slot 1. Our random party only ever writes 0x63, so
+            // build the full vanilla-shaped party and swap it in whole.
+            if (kanbuHere)
+            {
+                gKanbuPartyUnits[0].unit_kind_params = GetUnitKindById(0x64);
+                gKanbuPartyUnits[0].alliance = 0x01;
+                gKanbuPartyUnits[0].attack_phase = 0x04000004;
+                gKanbuPartyUnits[0].position = {80.0f, 0.0f, -20.0f};
+                gKanbuPartyUnits[0].addl_target_offset_x = 0;
+                gKanbuPartyUnits[0].unit_work[0] = 0;
+                gKanbuPartyUnits[0].unit_work[1] = 0;
+                gKanbuPartyUnits[0].unit_work[2] = 0;
+                gKanbuPartyUnits[0].unit_work[3] = 0;
+                gKanbuPartyUnits[0].item_drop_table = bossGroup->enemy_data[0].item_drop_table;
+
+                gKanbuPartyUnits[1].unit_kind_params = GetUnitKindById(0x63);
+                gKanbuPartyUnits[1].alliance = 0x01;
+                gKanbuPartyUnits[1].attack_phase = 0x04000004;
+                gKanbuPartyUnits[1].position = {160.0f, 0.0f, 0.0f};
+                gKanbuPartyUnits[1].addl_target_offset_x = 0;
+                gKanbuPartyUnits[1].unit_work[0] = 0;
+                gKanbuPartyUnits[1].unit_work[1] = 0;
+                gKanbuPartyUnits[1].unit_work[2] = 0;
+                gKanbuPartyUnits[1].unit_work[3] = 0;
+                gKanbuPartyUnits[1].item_drop_table = bossGroup->enemy_data[(bossGroup->num_enemies > 1 ? 1 : 0)].item_drop_table;
+
+                gKanbuGroup.num_enemies = 2;
+                gKanbuGroup.enemy_data = gKanbuPartyUnits;
+                gKanbuGroup.held_item_weight = bossGroup->held_item_weight;
+                gKanbuGroup.random_item_weight = bossGroup->random_item_weight;
+                gKanbuGroup.no_item_weight = bossGroup->no_item_weight;
+                gKanbuGroup.hp_drop_table = bossGroup->hp_drop_table;
+                gKanbuGroup.fp_drop_table = bossGroup->fp_drop_table;
+                gKanbuGroup.unk_1c = bossGroup->unk_1c;
+
+                RegisterOriginalKind(&gKanbuPartyUnits[0], bossGroup->enemy_data[0].unit_kind_params);
+                RegisterOriginalKind(&gKanbuPartyUnits[1], bossGroup->enemy_data[(bossGroup->num_enemies > 1 ? 1 : 0)].unit_kind_params);
+
+                if (bossSetupList[i])
+                    bossSetupList[i]->group_data = &gKanbuGroup;
+
+                if (bossSetupList[i] && bossSetupList[i]->stage_data && kZakoStageGlobalDir && kZakoStageCurrentDir)
+                {
+                    BattleStageData *st = bossSetupList[i]->stage_data;
+                    st->global_stage_data_dir = kZakoStageGlobalDir;
+                    st->current_stage_data_dir = kZakoStageCurrentDir;
+                    st->num_props = kZakoNumProps;
+                    st->props = kZakoStageProps;
+                }
+                continue;
             }
+
+            // Every other boss encounter collapses to a single enemy. The vanilla
+            // group may have >1 slot (e.g. the real kanbu group); process slot 0
+            // and force the count to 1 so stale slots are never spawned.
+            bool championHere = false;
+            BattleUnitSetup &unit = bossGroup->enemy_data[0];
+            RegisterOriginalKind(&unit, unit.unit_kind_params);
+            unit.position.x = GetEnemyXPosition(loadout.enemyIds[0], unit.position.x);
+            unit.position.y = GetEnemyYPosition(loadout.enemyIds[0]);
+            unit.unit_kind_params = GetUnitKindById(loadout.enemyIds[0]);
+            if (loadout.enemyIds[0] == 0x40)
+                championHere = true;
+            bossGroup->num_enemies = 1;
 
             // champion needs the Glitz Pit stage; rewrite this loaded encounter
             if (championHere && bossSetupList[i] && bossSetupList[i]->stage_data && kChampStageGlobalDir &&
@@ -140,15 +199,6 @@ namespace mod::owr
                 st->current_stage_data_dir = kChampStageCurrentDir;
                 st->num_props = kChampNumProps;
                 st->props = kChampStageProps;
-            }
-            // group-1 xnaut zako needs the muj palace stage (if_body/if_wire rig)
-            if (zakoHere && bossSetupList[i] && bossSetupList[i]->stage_data && kZakoStageGlobalDir && kZakoStageCurrentDir)
-            {
-                BattleStageData *st = bossSetupList[i]->stage_data;
-                st->global_stage_data_dir = kZakoStageGlobalDir;
-                st->current_stage_data_dir = kZakoStageCurrentDir;
-                st->num_props = kZakoNumProps;
-                st->props = kZakoStageProps;
             }
         }
     }
