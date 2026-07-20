@@ -1271,7 +1271,6 @@ namespace mod::owr
             case 0x6E: // moamoa_tentacle
             case 0x6F: // moamoa_mouth
             case 0x7A: // rocket_punch_mkII
-            case 0x93: // batten_satellite
             case 0x96: // SQ hand
             case 0x97: // SQ hand
             case 0x98: // SQ hand
@@ -1380,6 +1379,8 @@ namespace mod::owr
                     {
                         newKind->max_hp = bossOrigKind->max_hp;
                         newKind->level = bossOrigKind->level;
+                        if (newKind->unit_type == 0x93) // batten_satellite
+                            newKind->max_hp = 2; // Small nerf for early game beatablility
                     }
                     if (!IsBossDefScaleExcluded(newKind->unit_type) && newKind->parts && bossOrigKind->parts)
                     {
