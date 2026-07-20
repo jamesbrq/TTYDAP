@@ -108,11 +108,6 @@ namespace mod::vm
 
     void VM_PrefetchForKind(uint32_t kindAddr, bool lock)
     {
-        // Prefetch re-enabled. The earlier wrong-data symptoms were NOT a
-        // delivery problem -- prefetch loads the correct ARAM bytes. They were
-        // the sound/anim resolvers misreading positive window pointers as
-        // indices, fixed by moving VM_WINDOW into the negative range. Set true
-        // to force pure demand-paging for diagnostics.
         constexpr bool kDisablePrefetch = false;
         if (kDisablePrefetch)
             return;

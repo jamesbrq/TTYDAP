@@ -1384,8 +1384,7 @@ namespace mod::owr
                     }
                     if (!IsBossDefScaleExcluded(newKind->unit_type) && newKind->parts && bossOrigKind->parts)
                     {
-                        int32_t partCount =
-                            newKind->num_parts < bossOrigKind->num_parts ? newKind->num_parts : bossOrigKind->num_parts;
+                        int32_t partCount = newKind->num_parts < bossOrigKind->num_parts ? newKind->num_parts : bossOrigKind->num_parts;
                         for (int32_t i = 0; i < partCount; i++) newKind->parts[i].defense = bossOrigKind->parts[i].defense;
                     }
                     ApplyBossScriptPatches(newKind->unit_type, bossOrigKind->max_hp);
