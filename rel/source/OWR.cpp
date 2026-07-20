@@ -53,6 +53,7 @@
 #include "common.h"
 #include "OWR.h"
 #include "patch.h"
+#include "boss_script.h"
 
 #include <algorithm>
 #include <cinttypes>
@@ -210,8 +211,12 @@ namespace mod::owr
     KEEP_VAR void (*g_npcSetupBattleInfo_trampoline)(::NpcEntry *, void *) = nullptr;
     KEEP_VAR int32_t (*g_pouchRemoveItem_trampoline)(int32_t) = nullptr;
     KEEP_VAR void (*g_swSet_trampoline)(int) = nullptr;
-    KEEP_VAR int32_t (*g_BattleCalculateDamage_trampoline)(BattleWorkUnit *, BattleWorkUnit *, BattleWorkUnitPart *,
-                                                           BattleWeapon *, uint32_t *, uint32_t) = nullptr;
+    KEEP_VAR int32_t (*g_BattleCalculateDamage_trampoline)(BattleWorkUnit *,
+                                                           BattleWorkUnit *,
+                                                           BattleWorkUnitPart *,
+                                                           BattleWeapon *,
+                                                           uint32_t *,
+                                                           uint32_t) = nullptr;
     KEEP_VAR int32_t (*g_InterruptStop_trampoline)(ttyd::evtmgr::EvtEntry *, bool) = nullptr;
     KEEP_VAR int32_t (*g_BattleCheckConcluded_trampoline)(void *) = nullptr;
 
@@ -1314,6 +1319,33 @@ namespace mod::owr
         }
     }
 
+    static void ApplyBossScriptPatches(int32_t unitType, int32_t scaledHp)
+    {
+        switch (unitType)
+        {
+            case 0x14: // gold_chorobon
+                GoldChorobonPatches(scaledHp);
+                break;
+            case 0x17: // gonbaba (Hooktail)
+                HooktailPatches(scaledHp);
+                break;
+            case 0x22: // magnum_battender
+                MagnumBattenderPatches(scaledHp);
+                break;
+            case 0x4F: // faker_mario
+                FakerMarioPatches(scaledHp);
+                break;
+            case 0x63: // kanbu3
+                Kanbu3Patches(scaledHp);
+                break;
+            case 0x79: // magnum_battender_mkII
+                MagnumBattenderMKIIPatches(scaledHp);
+                break;
+            default:
+                break;
+        }
+    }
+
     KEEP_FUNC BattleWorkUnit *BtlUnit_Entry_Hook(BattleUnitSetup *setup)
     {
         BattleUnitKind *kind = setup->unit_kind_params;
@@ -1351,12 +1383,11 @@ namespace mod::owr
                     }
                     if (!IsBossDefScaleExcluded(newKind->unit_type) && newKind->parts && bossOrigKind->parts)
                     {
-                        int32_t partCount = newKind->num_parts < bossOrigKind->num_parts
-                                                ? newKind->num_parts
-                                                : bossOrigKind->num_parts;
-                        for (int32_t i = 0; i < partCount; i++)
-                            newKind->parts[i].defense = bossOrigKind->parts[i].defense;
+                        int32_t partCount =
+                            newKind->num_parts < bossOrigKind->num_parts ? newKind->num_parts : bossOrigKind->num_parts;
+                        for (int32_t i = 0; i < partCount; i++) newKind->parts[i].defense = bossOrigKind->parts[i].defense;
                     }
+                    ApplyBossScriptPatches(newKind->unit_type, bossOrigKind->max_hp);
                 }
             }
             else
@@ -1376,8 +1407,7 @@ namespace mod::owr
         {
             int32_t slot = entered->unit_id & 0x3F;
             g_endScriptKind[slot] = LookupOriginalKind(setup);
-            g_powOrigKind[slot] =
-                (bossOrigKind && kind && !IsBossPowScaleExcluded(kind->unit_type)) ? bossOrigKind : nullptr;
+            g_powOrigKind[slot] = (bossOrigKind && kind && !IsBossPowScaleExcluded(kind->unit_type)) ? bossOrigKind : nullptr;
         }
         return entered;
     }
@@ -1391,8 +1421,7 @@ namespace mod::owr
             if (!u)
                 continue;
             BattleUnitKind *orig = g_endScriptKind[i];
-            void *evt = orig ? GetData_FromTable(orig->data_table, 0x3F)
-                             : ttyd::battle_unit::BtlUnit_GetData(u, 0x3F);
+            void *evt = orig ? GetData_FromTable(orig->data_table, 0x3F) : ttyd::battle_unit::BtlUnit_GetData(u, 0x3F);
             if (!evt)
                 continue;
             ttyd::evtmgr::EvtEntry *th = ttyd::evtmgr::evtEntry(evt, 0xa, 0);
@@ -1433,8 +1462,11 @@ namespace mod::owr
         unit->level = statRelValues->level;
     }
 
-    KEEP_FUNC int32_t AlterDamageCalculation(BattleWorkUnit *attacker, BattleWorkUnit *target,
-                                             BattleWorkUnitPart *target_part, BattleWeapon *weapon, uint32_t *unk0,
+    KEEP_FUNC int32_t AlterDamageCalculation(BattleWorkUnit *attacker,
+                                             BattleWorkUnit *target,
+                                             BattleWorkUnitPart *target_part,
+                                             BattleWeapon *weapon,
+                                             uint32_t *unk0,
                                              uint32_t unk1)
     {
         int32_t base_atk = weapon ? static_cast<int32_t>(weapon->damage_function_params[0]) : 0;
@@ -1448,8 +1480,10 @@ namespace mod::owr
                 int32_t atk = GetBossAtk(origKind->unit_type);
                 if (atk >= 0)
                 {
-                    if (atk < 1) atk = 1;
-                    if (atk > 99) atk = 99;
+                    if (atk < 1)
+                        atk = 1;
+                    if (atk > 99)
+                        atk = 99;
                     weapon->damage_function_params[0] = static_cast<uint32_t>(atk);
                     overrode = true;
                 }
@@ -1465,8 +1499,7 @@ namespace mod::owr
 
     KEEP_FUNC int32_t InterruptStopHook(ttyd::evtmgr::EvtEntry *evt, bool isFirstCall)
     {
-        if (isFirstCall && gState->apSettings->bossRandomizer &&
-            ttyd::evtmgr_cmd::evtGetValue(evt, evt->evtArguments[0]) == 1)
+        if (isFirstCall && gState->apSettings->bossRandomizer && ttyd::evtmgr_cmd::evtGetValue(evt, evt->evtArguments[0]) == 1)
         {
             const char *currentMap = mod::common::GetCurrentMap();
             if (!currentMap || strcmp(currentMap, "las_29") != 0)
@@ -1599,7 +1632,6 @@ namespace mod::owr
         itemFlags[index] |= 1;
     }
 
-
     void DeleteFieldItemForFlag(int flag)
     {
         if (flag <= 0)
@@ -1630,7 +1662,7 @@ namespace mod::owr
         }
     }
 
-void HandleMobjForFlag(int flag)
+    void HandleMobjForFlag(int flag)
     {
         if (flag <= 0)
             return;
@@ -2510,7 +2542,7 @@ void HandleMobjForFlag(int flag)
             *tail = static_cast<uint16_t>(*tail + 1);
 
             if (flag == 0)
-                continue;  // 0 is not a valid AP location flag; skip
+                continue; // 0 is not a valid AP location flag; skip
 
             ttyd::swdrv::swSet(flag);
             DeleteFieldItemForFlag(flag);

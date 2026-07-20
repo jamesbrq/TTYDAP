@@ -115,9 +115,6 @@ extern int32_t starstone_eff_z[];
 extern int32_t starstone_interpolate_angle[];
 extern int32_t starstone_item_handler[];
 extern int32_t starstone_item_z[];
-extern int32_t unit_boss_gold_chorobon_entry_chorogun[];
-extern int32_t unit_boss_gold_chorobon_call_chorogun_event[];
-extern int32_t unit_boss_gold_chorobon_damage_event[];
 
 extern int32_t main_mobj_save_blk_sysevt[];
 extern int32_t main_init_event[];
@@ -200,28 +197,6 @@ EVT_BEGIN(bero_las_deny_hook)
     IF_EQUAL(LW(7), 1)
         RETURN()
     END_IF()
-EVT_PATCH_END()
-
-EVT_BEGIN_KEEP(unit_boss_gold_chorobon_damage_event_evt)
-    USER_FUNC(battle_event_cmd::btlevtcmd_GetHp, -2, LW(0))
-    USER_FUNC(battle_event_cmd::btlevtcmd_GetMaxHp, -2, LW(1))
-    MUL(LW(1), 70)
-    DIV(LW(1), 100)
-    IF_SMALL_EQUAL(LW(0), LW(1))
-        IF_LARGE_EQUAL(LW(0), 1)
-            USER_FUNC(battle_event_cmd::btlevtcmd_WaitAttackEnd)
-            USER_FUNC(battle_event_cmd::btlevtcmd_SpawnUnit, LW(3), PTR(&unit_boss_gold_chorobon_entry_chorogun), 0)
-            USER_FUNC(battle_event_cmd::btlevtcmd_SetUnitWork, -2, 2, LW(3))
-            RUN_CHILD_EVT(&unit_boss_gold_chorobon_call_chorogun_event)
-            USER_FUNC(battle_event_cmd::btlevtcmd_SetUnitWork, -2, 0, 1)
-        END_IF()
-    END_IF()
-    RETURN()
-EVT_END()
-
-EVT_BEGIN(unit_boss_gold_chorobon_damage_event_hook)
-    RUN_CHILD_EVT(unit_boss_gold_chorobon_damage_event_evt)
-    RETURN()
 EVT_PATCH_END()
 // clang-format on
 
