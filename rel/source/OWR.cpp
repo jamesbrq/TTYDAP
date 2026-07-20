@@ -1271,7 +1271,7 @@ namespace mod::owr
             case 0x6E: // moamoa_tentacle
             case 0x6F: // moamoa_mouth
             case 0x7A: // rocket_punch_mkII
-            case 0x96: // SQ hand
+            case 0x95: // SQ hand
             case 0x97: // SQ hand
             case 0x98: // SQ hand
                 return true;
@@ -1300,7 +1300,7 @@ namespace mod::owr
             case 0x6F: // moamoa_mouth
             case 0x7A: // rocket_punch_mkII
             case 0x93: // batten_satellite
-            case 0x96: // SQ hand
+            case 0x95: // SQ hand
             case 0x97: // SQ hand
             case 0x98: // SQ hand
                 return true;
@@ -2026,6 +2026,7 @@ namespace mod::owr
             }
             case ItemId::LIFE_SHROOM:
             {
+                return g_pouchGetItem_trampoline(item);
                 if (ttyd::swdrv::swByteGet(1740) >= 2)
                 {
                     return g_pouchGetItem_trampoline(item);
@@ -2045,6 +2046,7 @@ namespace mod::owr
             }
             case ItemId::KEEL_MANGO:
             {
+                return g_pouchGetItem_trampoline(item);
                 if (ttyd::swdrv::swByteGet(1752) >= 2)
                 {
                     return g_pouchGetItem_trampoline(item);
@@ -2064,6 +2066,7 @@ namespace mod::owr
             }
             case ItemId::MYSTIC_EGG:
             {
+                return g_pouchGetItem_trampoline(item);
                 if (ttyd::swdrv::swByteGet(1752) >= 2)
                 {
                     return g_pouchGetItem_trampoline(item);
@@ -2083,6 +2086,7 @@ namespace mod::owr
             }
             case ItemId::GOLDEN_LEAF:
             {
+                return g_pouchGetItem_trampoline(item);
                 if (ttyd::swdrv::swByteGet(1752) >= 2)
                 {
                     return g_pouchGetItem_trampoline(item);
@@ -2102,6 +2106,7 @@ namespace mod::owr
             }
             case ItemId::HONEY_CANDY:
             {
+                return g_pouchGetItem_trampoline(item);
                 if (ttyd::swdrv::swByteGet(1756) >= 2)
                 {
                     return g_pouchGetItem_trampoline(item);
