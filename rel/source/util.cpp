@@ -134,14 +134,16 @@ namespace mod::util
     {
         const uint32_t ptrRaw = reinterpret_cast<uint32_t>(ptr);
 
-        // Cached memory
-        if ((ptrRaw >= 0x80000000) && (ptrRaw < 0x81800000))
+        const bool isConsole = (*reinterpret_cast<volatile uint8_t *>(0x8000324C) != 0);
+        const uint32_t cachedHi = isConsole ? 0x81800000u : 0x84000000u;
+        const uint32_t uncachedHi = isConsole ? 0xC1800000u : 0xC4000000u;
+
+        if ((ptrRaw >= 0x80000000) && (ptrRaw < cachedHi))
         {
             return mod::util::PointerVerificationType::PTR_CACHED;
         }
 
-        // Uncached memory
-        if ((ptrRaw >= 0xC0000000) && (ptrRaw < 0xC1800000))
+        if ((ptrRaw >= 0xC0000000) && (ptrRaw < uncachedHi))
         {
             return mod::util::PointerVerificationType::PTR_UNCACHED;
         }

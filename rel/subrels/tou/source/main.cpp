@@ -10,10 +10,13 @@
 #include "ttyd/evt_hit.h"
 #include "ttyd/evt_item.h"
 #include "ttyd/evt_map.h"
+#include "ttyd/evt_mobj.h"
 #include "ttyd/evt_mario.h"
 #include "ttyd/evt_msg.h"
 #include "ttyd/evt_npc.h"
 #include "ttyd/evt_pouch.h"
+#include "ttyd/evt_snd.h"
+#include "ttyd/evt_sub.h"
 #include "ttyd/evt_window.h"
 #include "ttyd/swdrv.h"
 #include "ttyd/tou.h"
@@ -24,6 +27,7 @@
 
 using namespace ttyd;
 using namespace ttyd::tou;
+using namespace mod::owr;
 
 extern int32_t tou_evt_open_tou[];
 extern int32_t tou_talk_gardman[];
@@ -128,6 +132,7 @@ extern int32_t tou_init_gans[];
 extern int32_t tou_talk_gans[];
 extern int32_t tou_init_kinoshikowa[];
 extern int32_t tou_talk_kinoshikowa[];
+extern int32_t tou_talk_sarary[];
 extern int32_t tou_npcEnt_05[];
 extern int32_t tou_evt_sensyu[];
 extern int32_t tou_evt_sensyu2[];
@@ -248,7 +253,44 @@ EVT_DEFINE_USER_FUNC(setRanking)
     return 2;
 }
 
+#define kIri13FlagBase 6333
+
+EVT_DECLARE_USER_FUNC(checkShorts, 1)
+EVT_DEFINE_USER_FUNC(checkShorts)
+{
+    (void)isFirstCall;
+    int shortsChecked = 0;
+    for (int i = 0; i < 20; i++)
+    {
+        if (ttyd::swdrv::swGet(kIri13FlagBase + i) > 0)
+        {
+            shortsChecked += 1;
+        }
+    }
+    ttyd::evtmgr_cmd::evtSetValue(evt, evt->evtArguments[0], shortsChecked);
+    return 2;
+}
+
+uint16_t *iri_13_item_ids = reinterpret_cast<uint16_t *>(0x80003D00);
+
+EVT_DECLARE_USER_FUNC(iri_13_get_item, 3)
+EVT_DEFINE_USER_FUNC(iri_13_get_item)
+{
+    (void)isFirstCall;
+    int32_t i = ttyd::evtmgr_cmd::evtGetValue(evt, evt->evtArguments[0]);
+    int32_t flag = kIri13FlagBase + i;
+    uint16_t id = iri_13_item_ids[i];
+    ttyd::evtmgr_cmd::evtSetValue(evt, evt->evtArguments[1], id);
+    ttyd::evtmgr_cmd::evtSetValue(evt, evt->evtArguments[2], flag);
+    return 2;
+}
+
+
 // clang-format off
+EVT_BEGIN(check_shorts)
+    USER_FUNC(checkShorts, LW(0))
+EVT_PATCH_END()
+
 EVT_BEGIN(talk_sakaba_evt)
     IF_EQUAL(GSW(1707), 3)
         IF_EQUAL(GSWF(3877), 1)
@@ -686,6 +728,39 @@ EVT_END()
 EVT_BEGIN(tou_08_init_evt_hook)
 	RUN_CHILD_EVT(tou_08_init_evt_evt)
 EVT_PATCH_END()
+
+EVT_BEGIN(iri_13_init_evt)
+    IF_EQUAL(GSWF(5406), 1)
+        RETURN()
+    END_IF()
+    USER_FUNC(make_tbl)
+    SET(LW(2), 0)
+    SET(LW(8), 0)
+    DO(20)
+        USER_FUNC(get_pos, LW(2), LW(3), LW(4), LW(5))
+        USER_FUNC(iri_13_make_name, LW(2), LW(6))
+        USER_FUNC(iri_13_get_item, LW(2), LW(1), LW(7))
+        IF_NOT_EQUAL(LW(1), -1)
+            USER_FUNC(evt_item::evt_item_entry, LW(6), LW(1), LW(3), LW(4), LW(5), 16, LW(7), 0)
+            USER_FUNC(evt_mobj::evt_mapobj_flag_onoff, 1, 0, PTR("gor_hae"), 1)
+            ADD(LW(8), 1)
+        END_IF()
+        ADD(LW(2), 1)
+    WHILE()
+    USER_FUNC(free_tbl)
+    IF_NOT_EQUAL(LW(8), 0)
+        INLINE_EVT()
+            DO(0)
+                USER_FUNC(evt_sub::evt_sub_random, 1000, LW(0))
+                ADD(LW(0), 3000)
+                WAIT_MSEC(LW(0))
+                USER_FUNC(evt_mobj::evt_mapobj_get_position, PTR("gor_hae"), LW(0), LW(1), LW(2))
+                USER_FUNC(evt_snd::evt_snd_sfxon_3d, PTR("SFX_STG3_FLY1"), LW(0), LW(1), LW(2), 0)
+            WHILE()
+        END_INLINE()
+    END_IF()
+    RETURN()
+EVT_END()
 // clang-format on
 
 namespace mod
@@ -1169,7 +1244,60 @@ namespace mod
         tou_talk_kinoshikowa[373] = GSW(1703);
         tou_talk_kinoshikowa[375] = 20;
 
+        tou_talk_kinoshikowa[1] = GSW(1743);
+        tou_talk_kinoshikowa[2] = 1;
+        tou_talk_kinoshikowa[7] = EVT_HELPER_CMD(2, 26);
+        tou_talk_kinoshikowa[8] = GSW(1773);
+        tou_talk_kinoshikowa[9] = 2;
+        tou_talk_kinoshikowa[14] = GSW(1773);
+        tou_talk_kinoshikowa[23] = GSW(1773);
+        tou_talk_kinoshikowa[24] = 1;
+        tou_talk_kinoshikowa[34] = GSW(1773);
+        tou_talk_kinoshikowa[35] = 2;
+        tou_talk_kinoshikowa[68] = EVT_HELPER_CMD(2, 91);
+        tou_talk_kinoshikowa[69] = EVT_HELPER_OP(&irai_complete_item_get);
+        tou_talk_kinoshikowa[96] = GSW(1743);
+        tou_talk_kinoshikowa[97] = 2;
+        
         patch::writePatch(&tou_talk_kinoshikowa[377], tou_talk_kinoshikowa_hook, sizeof(tou_talk_kinoshikowa_hook));
+
+        tou_talk_kinoshikowa[115] = EVT_HELPER_CMD(2, 29);
+        tou_talk_kinoshikowa[116] = GSW(1753);
+        tou_talk_kinoshikowa[117] = 1;
+        tou_talk_kinoshikowa[123] = GSW(1783);
+        tou_talk_kinoshikowa[362] = EVT_HELPER_CMD(2, 50);
+        tou_talk_kinoshikowa[363] = GSW(1783);
+        tou_talk_kinoshikowa[364] = 1;
+
+        tou_talk_sarary[1] = GSW(1754);
+        tou_talk_sarary[2] = 1;
+        tou_talk_sarary[45] = GSW(1784);
+        tou_talk_sarary[58] = GSW(1784);
+        tou_talk_sarary[330] = GSW(1754);
+        tou_talk_sarary[331] = 2;
+        tou_talk_sarary[342] = GSW(1754);
+        tou_talk_sarary[343] = 2;
+
+        tou_01_init_evt[142] = GSW(1754);
+        tou_01_init_evt[143] = 2;
+
+        tou_talk_sakaba[1] = GSW(1755);
+        tou_talk_sakaba[2] = 1;
+        tou_talk_sakaba[3] = EVT_HELPER_CMD(2, 29);
+        tou_talk_sakaba[4] = GSW(1785);
+        tou_talk_sakaba[5] = 3;
+        tou_talk_sakaba[6] = EVT_HELPER_CMD(2, 26);
+        tou_talk_sakaba[7] = GSW(1785);
+        tou_talk_sakaba[8] = 5;
+        tou_talk_sakaba[16] = GSW(1785);
+        tou_talk_sakaba[17] = 4;
+
+        if (gState->apSettings->troubles)
+        {
+            patch::writePatch(&tou_talk_kinoshikowa[3],
+                              check_shorts, sizeof(check_shorts));
+            tou_talk_kinoshikowa[6] = 0;
+        }
 
         patch::writeIntWithCache(&tou_npcEnt_05[5], reinterpret_cast<uint32_t>(&tou_05_talk_gans_evt));
 
@@ -1230,6 +1358,8 @@ namespace mod
         tou_06_init_evt[313] = 1;
         tou_06_init_evt[330] = GSWF(6034);
         tou_06_init_evt[331] = 1;
+        tou_06_init_evt[466] = GSW(1743);
+        tou_06_init_evt[467] = 1;
         tou_06_init_evt[486] = GSWF(6035);
         tou_06_init_evt[487] = 1;
         tou_06_init_evt[492] = GSW(1703);
@@ -1238,6 +1368,11 @@ namespace mod
         tou_06_init_evt[504] = 1;
         tou_06_init_evt[505] = 11;
         tou_06_init_evt[518] = 21;
+
+        if (gState->apSettings->troubles)
+        {
+            tou_06_init_evt[469] = EVT_HELPER_OP(&iri_13_init_evt);
+        }
 
         tou_evt_champion[568] = GSW(1703);
         tou_evt_champion[569] = 14;

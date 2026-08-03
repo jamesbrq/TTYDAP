@@ -1,6 +1,7 @@
 #pragma once
 
 #define NUM_BATTLE_GROUPS 504
+#define NUM_BOSS_GROUPS 24
 #define UNIT_KIND_TABLE_SIZE 0xE7
 
 #include <ttyd/battle_database_common.h>
@@ -123,6 +124,67 @@ namespace ttyd::battle_unit
         extern BattleUnitKind unit_crimson_togemet;
         extern BattleUnitKind unit_monochrome_pakkun;
 
+        // Boss units
+        extern BattleUnitKind unit_boss_magnum_battender_mkII;
+        extern BattleUnitKind unit_boss_rocket_punch_mkII;
+        extern BattleUnitKind unit_boss_gonbaba;
+        extern BattleUnitKind unit_boss_kanbu1;
+        extern BattleUnitKind unit_boss_rampell;
+        extern BattleUnitKind unit_boss_zonbaba;
+        extern BattleUnitKind unit_boss_koopa;
+        extern BattleUnitKind unit_boss_kamec_obaba;
+        extern BattleUnitKind unit_boss_rampell_las;
+        extern BattleUnitKind unit_boss_black_peach;
+        extern BattleUnitKind unit_boss_shadow_queen;
+        extern BattleUnitKind unit_boss_shadow_hand_1;
+        extern BattleUnitKind unit_boss_shadow_hand_2;
+        extern BattleUnitKind unit_boss_shadow_hand_small;
+        extern BattleUnitKind unit_boss_batten_leader;
+        extern BattleUnitKind unit_boss_batten_satellite;
+        extern BattleUnitKind unit_boss_bunbaba;
+        extern BattleUnitKind unit_boss_marilyn_las;
+        extern BattleUnitKind unit_boss_majolyne_las;
+        extern BattleUnitKind unit_boss_magnum_battender;
+        extern BattleUnitKind unit_boss_rocket_punch;
+        extern BattleUnitKind unit_boss_cortez;
+        extern BattleUnitKind unit_boss_honeduka;
+        extern BattleUnitKind unit_boss_cortez_sword;
+        extern BattleUnitKind unit_boss_cortez_claw;
+        extern BattleUnitKind unit_boss_cortez_rapier;
+        extern BattleUnitKind unit_boss_cortez_saber;
+        extern BattleUnitKind unit_boss_kanbu3;
+        extern BattleUnitKind unit_boss_gundan_zako_group1;
+        extern BattleUnitKind unit_boss_gundan_zako_group2;
+        extern BattleUnitKind unit_boss_gundan_zako_group3;
+        extern BattleUnitKind unit_boss_moamoa;
+        extern BattleUnitKind unit_boss_moamoa_tentacle_a;
+        extern BattleUnitKind unit_boss_moamoa_tentacle_b;
+        extern BattleUnitKind unit_boss_moamoa_tentacle_c;
+        extern BattleUnitKind unit_boss_moamoa_mouth;
+        extern BattleUnitKind unit_boss_gesso;
+        extern BattleUnitKind unit_boss_gesso_right_arm;
+        extern BattleUnitKind unit_boss_gesso_left_arm;
+        extern BattleUnitKind unit_boss_macho_gance;
+        extern BattleUnitKind unit_boss_champion;
+        extern BattleUnitKind unit_boss_koopa_tou;
+        extern BattleUnitKind unit_boss_vivian;
+        extern BattleUnitKind unit_boss_majolyne;
+        extern BattleUnitKind unit_boss_marilyn;
+
+        // Extra units (custom rel B)
+        extern BattleUnitKind unit_monban;
+        extern BattleUnitKind unit_gold_chorobon;
+        extern BattleUnitKind unit_chorobon_gundan;
+        extern BattleUnitKind unit_iron_sinemon;
+        extern BattleUnitKind unit_iron_sinemon2;
+        extern BattleUnitKind unit_atmic_teresa;
+        extern BattleUnitKind unit_faker_mario_gra;
+        extern BattleUnitKind unit_faker_mario;
+        extern BattleUnitKind unit_gullible_christine;
+        extern BattleUnitKind unit_gullible_nokotarou;
+        extern BattleUnitKind unit_gullible_yoshi;
+        extern BattleUnitKind unit_gullible_clauda;
+
         // Use the same ID space as unitKindTable[] indices.
         static inline BattleUnitKind *GetUnitKindById(uint8_t id)
         {
@@ -138,6 +200,8 @@ namespace ttyd::battle_unit
                     return &unit_hinnya;
                 case 0x05:
                     return &unit_hannya;
+                case 0x07:
+                    return &unit_monban;
 
                 case 0x0B:
                     return &unit_togenoko;
@@ -158,6 +222,10 @@ namespace ttyd::battle_unit
                     return &unit_sinnosuke;
                 case 0x13:
                     return &unit_togedaruma;
+                case 0x14:
+                    return &unit_gold_chorobon;
+                case 0x15:
+                    return &unit_chorobon_gundan;
 
                 case 0x16:
                     return &unit_red_honenoko;
@@ -230,6 +298,10 @@ namespace ttyd::battle_unit
                     return &unit_burst_wanwan;
                 case 0x3C:
                     return &unit_togenoko_ace;
+                case 0x3D:
+                    return &unit_iron_sinemon;
+                case 0x3E:
+                    return &unit_iron_sinemon2;
 
                 case 0x42:
                     return &unit_hyper_kuriboo;
@@ -252,6 +324,20 @@ namespace ttyd::battle_unit
                     return &unit_basabasa;
                 case 0x4B:
                     return &unit_teresa;
+                case 0x4C:
+                    return &unit_atmic_teresa;
+                case 0x4E:
+                    return &unit_faker_mario_gra;
+                case 0x4F:
+                    return &unit_faker_mario;
+                case 0x50:
+                    return &unit_gullible_christine;
+                case 0x51:
+                    return &unit_gullible_nokotarou;
+                case 0x52:
+                    return &unit_gullible_yoshi;
+                case 0x53:
+                    return &unit_gullible_clauda;
 
                 case 0x54:
                     return &unit_hermos;
@@ -363,6 +449,98 @@ namespace ttyd::battle_unit
                 case 0xAA:
                     return &unit_mahorn_custom_bunsin;
 
+                // Boss units (custom rel B)
+                case 0x06:
+                    return &unit_boss_kanbu1;
+                case 0x08:
+                    return &unit_boss_gesso;
+                case 0x09:
+                    return &unit_boss_gesso_left_arm;
+                case 0x0A:
+                    return &unit_boss_gesso_right_arm;
+                case 0x17:
+                    return &unit_boss_gonbaba;
+                case 0x1F:
+                    return &unit_boss_majolyne;
+                case 0x20:
+                    return &unit_boss_marilyn;
+                case 0x21:
+                    return &unit_boss_vivian;
+                case 0x22:
+                    return &unit_boss_magnum_battender;
+                case 0x23:
+                    return &unit_boss_rocket_punch;
+                case 0x3F:
+                    return &unit_boss_koopa_tou;
+                case 0x40:
+                    return &unit_boss_champion;
+                case 0x41:
+                    return &unit_boss_macho_gance;
+                case 0x4D:
+                    return &unit_boss_rampell;
+                case 0x5D:
+                    return &unit_boss_cortez;
+                case 0x5E:
+                    return &unit_boss_honeduka;
+                case 0x5F:
+                    return &unit_boss_cortez_claw;
+                case 0x60:
+                    return &unit_boss_cortez_rapier;
+                case 0x61:
+                    return &unit_boss_cortez_sword;
+                case 0x62:
+                    return &unit_boss_cortez_saber;
+                case 0x63:
+                    return &unit_boss_kanbu3;
+                case 0x64:
+                    return &unit_boss_gundan_zako_group1;
+                case 0x65:
+                    return &unit_boss_gundan_zako_group2;
+                case 0x66:
+                    return &unit_boss_gundan_zako_group3;
+                case 0x6B:
+                    return &unit_boss_moamoa;
+                case 0x6C:
+                    return &unit_boss_moamoa_tentacle_c;
+                case 0x6D:
+                    return &unit_boss_moamoa_tentacle_b;
+                case 0x6E:
+                    return &unit_boss_moamoa_tentacle_a;
+                case 0x6F:
+                    return &unit_boss_moamoa_mouth;
+                case 0x79:
+                    return &unit_boss_magnum_battender_mkII;
+                case 0x7A:
+                    return &unit_boss_rocket_punch_mkII;
+                case 0x84:
+                    return &unit_boss_bunbaba;
+                case 0x85:
+                    return &unit_boss_majolyne_las;
+                case 0x86:
+                    return &unit_boss_marilyn_las;
+                case 0x87:
+                    return &unit_boss_rampell_las;
+                case 0x90:
+                    return &unit_boss_koopa;
+                case 0x91:
+                    return &unit_boss_kamec_obaba;
+                case 0x92:
+                    return &unit_boss_batten_leader;
+                case 0x93:
+                    return &unit_boss_batten_satellite;
+                case 0x94:
+                    return &unit_boss_black_peach;
+                case 0x95:
+                    return &unit_boss_shadow_queen;
+                case 0x96:
+                    return &unit_boss_shadow_hand_1;
+                case 0x97:
+                    return &unit_boss_shadow_hand_2;
+                case 0x98:
+                    return &unit_boss_shadow_hand_small;
+                case 0xAB:
+                    return &unit_boss_zonbaba;
+
                 default:
                     return nullptr;
             }
@@ -410,8 +588,122 @@ namespace ttyd::battle_unit
                 case 0xA7:
                     return 130.0f;
 
+                // Atomic Teresa
+                case 0x4C:
+                    return 20.0f;
+
+                // Smorg (moamoa)
+                case 0x6B:
+                    return -20.0f;
+
                 default:
                     return 0.0f;
+            }
+        }
+
+        static inline float GetEnemyXPosition(uint8_t id, float defaultX)
+        {
+            switch (id)
+            {
+                case 0x08: return 122.0f; // gesso
+                case 0x17: return 365.0f; // gonbaba
+                case 0x21: return 55.0f;  // vivian
+                case 0x4C: return 70.0f;  // atmic_teresa
+                case 0x5D: return 146.0f; // cortez
+                case 0x63: return 160.0f; // kanbu3
+                case 0x64: return 80.0f;  // gundan_zako_group1
+                case 0x6B: return 70.0f;  // moamoa
+                case 0x84: return 365.0f; // bunbaba
+                case 0x87: return 55.0f;  // rampell_las
+                case 0xAB: return 365.0f; // zonbaba
+                default:   return defaultX;
+            }
+        }
+
+        // Vanilla map (msg archive) each boss appears in; load into msg slot 3 when present.
+        static inline const char *GetBossMsgMap(uint8_t id)
+        {
+            switch (id)
+            {
+                // gor
+                case 0x06: return "gor_00"; // kanbu1
+                case 0x07: return "gor_02"; // monban
+
+                // tik
+                case 0x08:                  // gesso
+                case 0x09:                  // gesso_left_arm
+                case 0x0A: return "tik_02"; // gesso_right_arm
+
+                // hei
+                case 0x14:                  // gold_chorobon
+                case 0x15: return "hei_10"; // chorobon_gundan
+
+                // gon
+                case 0x17: return "gon_11"; // gonbaba
+
+                // win
+                case 0x1F:                  // majolyne
+                case 0x20:                  // marilyn
+                case 0x21: return "win_00"; // vivian
+
+                // mri
+                case 0x22:                  // magnum_battender
+                case 0x23: return "mri_01"; // rocket_punch
+
+                // tou
+                case 0x3D:                  // iron_sinemon
+                case 0x3E:                  // iron_sinemon2
+                case 0x3F:                  // koopa_tou
+                case 0x40:                  // champion
+                case 0x41: return "tou_03"; // macho_gance
+
+                // jin
+                case 0x4C: return "jin_00"; // atmic_teresa
+                case 0x4D:
+                case 0x4F: return "jin_04"; // rampell
+
+                // muj
+                case 0x5D:                  // cortez
+                case 0x5E:                  // honeduka
+                case 0x5F:                  // cortez_claw
+                case 0x60:                  // cortez_rapier
+                case 0x61:                  // cortez_sword
+                case 0x62: return "muj_12"; // cortez_saber
+                case 0x63:                  // kanbu3
+                case 0x64:                  // gundan_zako_group1
+                case 0x65:                  // gundan_zako_group2
+                case 0x66: return "muj_00"; // gundan_zako_group3
+
+                // rsh
+                case 0x6B:                  // moamoa
+                case 0x6C:                  // moamoa_tentacle_c
+                case 0x6D:                  // moamoa_tentacle_b
+                case 0x6E:                  // moamoa_tentacle_a
+                case 0x6F: return "rsh_06"; // moamoa_mouth
+
+                // aji
+                case 0x79:                  // magnum_battender_mkII
+                case 0x7A: return "aji_14"; // rocket_punch_mkII
+
+                // las
+                case 0x84: return "las_26"; // bunbaba
+                case 0x85:                  // majolyne_las
+                case 0x86:                  // marilyn_las
+                case 0x87: return "las_09"; // rampell_las
+                case 0x90:                  // koopa
+                case 0x91:                  // kamec_obaba
+                case 0x92:                  // batten_leader
+                case 0x93: return "las_28"; // batten_satellite
+                case 0x94:                  // black_peach
+                case 0x95:                  // shadow_queen
+                case 0x96:                  // shadow_hand_1
+                case 0x97:                  // shadow_hand_2
+                case 0x98: return "las_29"; // shadow_hand_small
+
+                // jon
+                case 0xAB: return "jon_06"; // zonbaba
+
+                default:   return nullptr;
             }
         }
 
@@ -1148,6 +1440,99 @@ namespace ttyd::battle_unit
         inline constexpr BattleGroupIndexRange kBtlGrpRange_tou_tou {461, 480};
         inline constexpr BattleGroupIndexRange kBtlGrpRange_win_win {481, 503};
 
+        inline BattleGroupSetup *bossGroupList[NUM_BOSS_GROUPS] = {
+            &btlgrp_aji_aji_mbmkII,           // 0  aji
+            &btlgrp_gon_gon_11_01_off_1,      // 1  gon
+            &btlgrp_gor_gor_00_01_off_1,      // 2  gor
+            &btlgrp_gor_gor_02_01_off_1,      // 3  gor
+            &btlgrp_hei_hei_10_01_off_1,      // 4  hei
+            &btlgrp_jin_jin_00_atmic_teresa,  // 5  jin
+            &btlgrp_jin_jin_01_faker_mario,   // 6  jin
+            &btlgrp_jin_jin_04_ramper,        // 7  jin
+            &btlgrp_jon_jon_100_01_off_1,     // 8  jon
+            &btlgrp_las_las_09_rampell,       // 9  las
+            &btlgrp_las_las_bunbaba,          // 10 las
+            &btlgrp_las_las_28_koopa,         // 11 las
+            &btlgrp_las_las_28_batten_leader, // 12 las
+            &btlgrp_las_las_29_black_peach_1, // 13 las
+            &btlgrp_las_las_29_black_peach_2, // 14 las
+            &btlgrp_mri_mri_mb,               // 15 mri
+            &btlgrp_muj_muj_kanbu,            // 16 muj
+            &btlgrp_muj_muj_cortez,           // 17 muj
+            &btlgrp_rsh_rsh_06_01_off_1,      // 18 rsh
+            &btlgrp_tik_tik_gesso,            // 19 tik
+            &btlgrp_tou_tou_boss,             // 20 tou
+            &btlgrp_tou_tou_champ,            // 21 tou
+            &btlgrp_tou_tou_koopa,            // 22 tou
+            &btlgrp_win_win_00_04_off_1,      // 23 win
+        };
+
+        extern BattleSetupWeightedLoadout btlgrpsel_aji_btlno_aji_mbmkii_off[];
+        extern BattleSetupWeightedLoadout btlgrpsel_gon_btlno_gon_11_01_off[];
+        extern BattleSetupWeightedLoadout btlgrpsel_gor_btlno_gor_00_01_off[];
+        extern BattleSetupWeightedLoadout btlgrpsel_gor_btlno_gor_02_01_off[];
+        extern BattleSetupWeightedLoadout btlgrpsel_hei_btlno_hei_10_01_off[];
+        extern BattleSetupWeightedLoadout btlgrpsel_jin_btlno_jin_00_01_off[];
+        extern BattleSetupWeightedLoadout btlgrpsel_jin_btlno_jin_01_02_off[];
+        extern BattleSetupWeightedLoadout btlgrpsel_jin_btlno_jin_01_01_off[];
+        extern BattleSetupWeightedLoadout btlgrpsel_jon_btlno_jon_100_zonbaba_off[];
+        extern BattleSetupWeightedLoadout btlgrpsel_las_btlno_las_09_rampell_off[];
+        extern BattleSetupWeightedLoadout btlgrpsel_las_btlno_las_bunbaba_off[];
+        extern BattleSetupWeightedLoadout btlgrpsel_las_btlno_las_28_koopa_off[];
+        extern BattleSetupWeightedLoadout btlgrpsel_las_btlno_las_28_batten_leader_off[];
+        extern BattleSetupWeightedLoadout btlgrpsel_las_btlno_las_29_black_peach_1_off[];
+        extern BattleSetupWeightedLoadout btlgrpsel_las_btlno_las_29_black_peach_2_off[];
+        extern BattleSetupWeightedLoadout btlgrpsel_mri_btlno_mri_mb_off[];
+        extern BattleSetupWeightedLoadout btlgrpsel_muj_btlno_muj_kanbu_off[];
+        extern BattleSetupWeightedLoadout btlgrpsel_muj_btlno_muj_cortez_off[];
+        extern BattleSetupWeightedLoadout btlgrpsel_rsh_btlno_rsh_06_01_off[];
+        extern BattleSetupWeightedLoadout btlgrpsel_tik_btlno_tik_gesso_off[];
+        extern BattleSetupWeightedLoadout btlgrpsel_tou_btlno_tou_01_23_off[];
+        extern BattleSetupWeightedLoadout btlgrpsel_tou_btlno_tou_01_22_off[];
+        extern BattleSetupWeightedLoadout btlgrpsel_tou_btlno_tou_01_24_off[];
+        extern BattleSetupWeightedLoadout btlgrpsel_win_btlno_win_00_04_off[];
+
+        inline BattleSetupWeightedLoadout *bossSetupList[NUM_BOSS_GROUPS] = {
+            btlgrpsel_aji_btlno_aji_mbmkii_off,           // 0  aji
+            btlgrpsel_gon_btlno_gon_11_01_off,            // 1  gon
+            btlgrpsel_gor_btlno_gor_00_01_off,            // 2  gor
+            btlgrpsel_gor_btlno_gor_02_01_off,            // 3  gor
+            btlgrpsel_hei_btlno_hei_10_01_off,            // 4  hei
+            btlgrpsel_jin_btlno_jin_00_01_off,            // 5  jin
+            btlgrpsel_jin_btlno_jin_01_02_off,            // 6  jin
+            btlgrpsel_jin_btlno_jin_01_01_off,            // 7  jin
+            btlgrpsel_jon_btlno_jon_100_zonbaba_off,      // 8  jon
+            btlgrpsel_las_btlno_las_09_rampell_off,       // 9  las
+            btlgrpsel_las_btlno_las_bunbaba_off,          // 10 las
+            btlgrpsel_las_btlno_las_28_koopa_off,         // 11 las
+            btlgrpsel_las_btlno_las_28_batten_leader_off, // 12 las
+            btlgrpsel_las_btlno_las_29_black_peach_1_off, // 13 las
+            btlgrpsel_las_btlno_las_29_black_peach_2_off, // 14 las
+            btlgrpsel_mri_btlno_mri_mb_off,               // 15 mri
+            btlgrpsel_muj_btlno_muj_kanbu_off,            // 16 muj
+            btlgrpsel_muj_btlno_muj_cortez_off,           // 17 muj
+            btlgrpsel_rsh_btlno_rsh_06_01_off,            // 18 rsh
+            btlgrpsel_tik_btlno_tik_gesso_off,            // 19 tik
+            btlgrpsel_tou_btlno_tou_01_23_off,            // 20 tou boss
+            btlgrpsel_tou_btlno_tou_01_22_off,            // 21 tou champ
+            btlgrpsel_tou_btlno_tou_01_24_off,            // 22 tou koopa
+            btlgrpsel_win_btlno_win_00_04_off,            // 23 win
+        };
+
+        inline constexpr BattleGroupIndexRange kBossGrpRange_aji_aji {0, 0};
+        inline constexpr BattleGroupIndexRange kBossGrpRange_gon_gon {1, 1};
+        inline constexpr BattleGroupIndexRange kBossGrpRange_gor_gor {2, 3};
+        inline constexpr BattleGroupIndexRange kBossGrpRange_hei_hei {4, 4};
+        inline constexpr BattleGroupIndexRange kBossGrpRange_jin_jin {5, 7};
+        inline constexpr BattleGroupIndexRange kBossGrpRange_jon_jon {8, 8};
+        inline constexpr BattleGroupIndexRange kBossGrpRange_las_las {9, 14};
+        inline constexpr BattleGroupIndexRange kBossGrpRange_mri_mri {15, 15};
+        inline constexpr BattleGroupIndexRange kBossGrpRange_muj_muj {16, 17};
+        inline constexpr BattleGroupIndexRange kBossGrpRange_rsh_rsh {18, 18};
+        inline constexpr BattleGroupIndexRange kBossGrpRange_tik_tik {19, 19};
+        inline constexpr BattleGroupIndexRange kBossGrpRange_tou_tou {20, 22};
+        inline constexpr BattleGroupIndexRange kBossGrpRange_win_win {23, 23};
+
         struct MovementSoundControl
         {
             const char *sound_name_left;
@@ -1491,8 +1876,10 @@ namespace ttyd::battle_unit
         extern const int g_battleStatsCount;
         const BattleStatRelValues *GetBattleStats(RelId rel);
         extern void ShuffleBattleStats();
+        int32_t GetBossAtk(int32_t unit_type);
 
         int BtlUnit_GetUnitId(void *unit_ptr);
+        void *BtlUnit_GetData(BattleWorkUnit *unit, int32_t id);
         BattleWorkUnit *BtlUnit_Entry(battle_database_common::BattleUnitSetup *unit_setup);
     }
 } // namespace ttyd::battle_unit

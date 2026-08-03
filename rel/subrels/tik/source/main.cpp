@@ -82,6 +82,10 @@ extern int32_t tik_lastdungeon_init[];
 extern int32_t tik_lastdungeon[];
 extern int32_t tik_mahojin_event7[];
 extern int32_t tik_05_init_evt[];
+extern int32_t tik_iri_12_kino_makkino_talk[];
+extern int32_t tik_iri_12_kino_talk[];
+extern int32_t tik_iri_12_init[];
+extern int32_t tik_majinaisi_direct_talk[];
 extern int32_t tik_06_init_evt[];
 extern int32_t tik_peach_mail[];
 extern int32_t tik_07_init_evt[];
@@ -746,6 +750,38 @@ namespace mod
         tik_05_init_evt[62] = 0;
         patch::writePatch(&tik_05_init_evt[145], tik_05_init_evt_hook2, sizeof(tik_05_init_evt_hook2));
 
+		tik_iri_12_kino_makkino_talk[274] = GSW(1742);
+		tik_iri_12_kino_makkino_talk[275] = 2;
+
+		tik_iri_12_kino_talk[1] = GSW(1742);
+		tik_iri_12_kino_talk[2] = 1;
+        tik_iri_12_kino_talk[3] = EVT_HELPER_CMD(2, 26);
+        tik_iri_12_kino_talk[4] = GSW(1772);
+        tik_iri_12_kino_talk[5] = 3;
+        tik_iri_12_kino_talk[7] = GSW(1772);
+        tik_iri_12_kino_talk[8] = 0;
+        tik_iri_12_kino_talk[16] = GSW(1772);
+        tik_iri_12_kino_talk[17] = 1;
+
+		tik_iri_12_init[1] = GSW(1742);
+		tik_iri_12_init[2] = 1;
+        tik_iri_12_init[17] = EVT_HELPER_CMD(2, 26);
+        tik_iri_12_init[18] = GSW(1772);
+        tik_iri_12_init[19] = 3;
+        tik_iri_12_init[46] = GSW(1772);
+        tik_iri_12_init[47] = 3;
+
+        tik_majinaisi_direct_talk[1] = GSW(1744);
+        tik_majinaisi_direct_talk[2] = 1;
+        tik_majinaisi_direct_talk[4] = GSW(1774);
+        tik_majinaisi_direct_talk[14] = GSW(1774);
+        tik_majinaisi_direct_talk[15] = 1;
+        tik_majinaisi_direct_talk[37] = GSW(1774);
+        tik_majinaisi_direct_talk[38] = 2;
+        tik_majinaisi_direct_talk[73] = EVT_HELPER_OP(&irai_complete_item_get);
+        tik_majinaisi_direct_talk[79] = GSW(1744);
+        tik_majinaisi_direct_talk[80] = 2;
+
         tik_06_init_evt[25] = PTR(&tik_pit_checkpoint_evt);
 
         tik_peach_mail[178] = GSW(1715);
@@ -834,6 +870,8 @@ namespace mod
                 }
             }
         }
+
+		ApplyBossGroups(kBossGrpRange_tik_tik);
     }
 
     void exit() {}

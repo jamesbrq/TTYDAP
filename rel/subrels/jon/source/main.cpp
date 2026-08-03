@@ -14,6 +14,14 @@ using namespace mod::owr;
 using namespace ttyd::battle_unit;
 using namespace ttyd::battle_database_common;
 
+extern int32_t jon_talk_idouya[];
+extern int32_t jon_init_evt[];
+extern int32_t jon_evt_iri_30_bomb_rakugaki[];
+extern int32_t jon_iri_12_dokan_in[];
+extern int32_t jon_iri_12_enemy_dead_event[];
+extern int32_t jon_iri_12_makkino_talk[];
+extern int32_t jon_iri_12_makkino_fall_return[];
+extern int32_t jon_iri_12_init[];
 extern int32_t jon_zonbaba_first_event[];
 
 // clang-format off
@@ -31,6 +39,68 @@ namespace mod
 {
     void main()
     {
+        jon_talk_idouya[86] = GSW(1742);
+        jon_talk_idouya[87] = 1;
+        jon_talk_idouya[89] = GSW(1772);
+        jon_talk_idouya[90] = 2;
+        jon_talk_idouya[92] = GSW(1772);
+        jon_talk_idouya[93] = 3;
+
+        jon_iri_12_dokan_in[1] = GSW(1742);
+        jon_iri_12_dokan_in[2] = 1;
+        jon_iri_12_dokan_in[4] = GSW(1772);
+        jon_iri_12_dokan_in[5] = 2;
+        jon_iri_12_dokan_in[7] = GSW(1772);
+        jon_iri_12_dokan_in[8] = 2;
+
+        jon_iri_12_enemy_dead_event[1] = GSW(1742);
+        jon_iri_12_enemy_dead_event[2] = 1;
+        jon_iri_12_enemy_dead_event[4] = GSW(1772);
+        jon_iri_12_enemy_dead_event[5] = 2;
+        jon_iri_12_enemy_dead_event[7] = GSW(1772);
+        jon_iri_12_enemy_dead_event[8] = 2;
+
+        jon_iri_12_makkino_talk[8] = GSW(1772);
+        jon_iri_12_makkino_talk[9] = 1;
+        jon_iri_12_makkino_talk[17] = GSW(1772);
+        jon_iri_12_makkino_talk[18] = 2;
+        jon_iri_12_makkino_talk[36] = GSW(1772);
+        jon_iri_12_makkino_talk[37] = 1;
+
+        jon_iri_12_makkino_fall_return[44] = GSW(1772);
+        jon_iri_12_makkino_fall_return[45] = 3;
+        jon_iri_12_makkino_fall_return[63] = GSW(1772);
+        jon_iri_12_makkino_fall_return[64] = 3;
+
+        jon_iri_12_init[1] = GSW(1742);
+        jon_iri_12_init[2] = 1;
+        jon_iri_12_init[8] = GSW(1772);
+        jon_iri_12_init[9] = 1;
+        jon_iri_12_init[52] = GSW(1772);
+        jon_iri_12_init[53] = 2;
+        jon_iri_12_init[55] = GSW(1772);
+        jon_iri_12_init[66] = 2;
+
+        jon_init_evt[266] = EVT_HELPER_CMD(2, 26);
+        jon_init_evt[267] = GSW(1760);
+        jon_init_evt[268] = 2;
+        jon_init_evt[270] = GSW(1760);
+        jon_init_evt[271] = 1;
+        jon_init_evt[289] = GSW(1760);
+        jon_init_evt[290] = 1;
+        jon_init_evt[292] = GSWF(6357);
+
+        jon_evt_iri_30_bomb_rakugaki[148] = GSWF(6357);
+
+        jon_zonbaba_first_event[642] = GSW(1742);
+        jon_zonbaba_first_event[643] = 1;
+        jon_zonbaba_first_event[645] = GSW(1772);
+        jon_zonbaba_first_event[646] = 2;
+        jon_zonbaba_first_event[648] = GSW(1772);
+        jon_zonbaba_first_event[649] = 2;
+        jon_zonbaba_first_event[667] = GSW(1772);
+        jon_zonbaba_first_event[668] = 3;
+
         if (mod::owr::gState->apSettings->goal == 3)
         {
             patch::writePatch(&jon_zonbaba_first_event[672], jon_zonbaba_first_event_hook, sizeof(jon_zonbaba_first_event_hook));
@@ -51,6 +121,8 @@ namespace mod
                 }
             }
         }
+
+        ApplyBossGroups(kBossGrpRange_jon_jon);
     }
 
     void exit() {}

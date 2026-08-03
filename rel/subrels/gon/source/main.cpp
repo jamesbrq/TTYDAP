@@ -45,6 +45,10 @@ extern int32_t gon_item_evt_07[];
 extern int32_t gon_07_init_evt[];
 extern int32_t gon_evt_chk_08[];
 extern int32_t gon_evt_unlock_08[];
+extern int32_t gon_nokkosu_init[];
+extern int32_t gon_nokkosu_talk[];
+extern int32_t gon_iri_16_init[];
+extern int32_t gon_iri_16_cloud_evt[];
 extern int32_t gon_08_init_evt[];
 extern int32_t gon_10_init_evt[];
 extern int32_t gon_gonbaba_event[];
@@ -190,6 +194,21 @@ namespace mod
         gon_evt_unlock_08[6] = GSWF(6013);
         gon_evt_unlock_08[7] = 1;
 
+        gon_nokkosu_init[1] = GSW(1737);
+        gon_nokkosu_init[2] = 1;
+
+        gon_nokkosu_talk[216] = GSW(1737);
+        gon_nokkosu_talk[217] = 2;
+
+        gon_iri_16_init[0] = EVT_HELPER_CMD(2, 29);
+        gon_iri_16_init[1] = GSW(1746);
+        gon_iri_16_init[2] = 1;
+        gon_iri_16_init[9] = GSWF(6355);
+        gon_iri_16_init[41] = GSWF(6354);
+
+        gon_iri_16_cloud_evt[9] = GSWF(6354);
+        gon_iri_16_cloud_evt[32] = GSWF(6355);
+
         gon_08_init_evt[199] = GSWF(6013);
         gon_08_init_evt[200] = 1;
         gon_08_init_evt[204] = 12;
@@ -243,6 +262,8 @@ namespace mod
                 }
             }
         }
+
+        ApplyBossGroups(kBossGrpRange_gon_gon);
     }
 
     void exit() {}

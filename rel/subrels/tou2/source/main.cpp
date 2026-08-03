@@ -237,6 +237,8 @@ namespace mod
             }
         }
 
+        ApplyBossGroups(kBossGrpRange_tou_tou);
+
         // Assembly
         tou2_disp_proc[18] = 0x38840827; // addi r4, r4, 0x827 GSW(1703)
         tou2_disp_proc[20] = 0x2C03001C; // cmpwi r3, 0x1C

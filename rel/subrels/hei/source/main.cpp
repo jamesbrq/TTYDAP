@@ -216,6 +216,8 @@ namespace mod
                 }
             }
         }
+
+        ApplyBossGroups(kBossGrpRange_hei_hei);
     }
 
     void exit() {}

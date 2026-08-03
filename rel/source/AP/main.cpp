@@ -8,6 +8,7 @@
 #include "ttyd/battle_audience.h"
 #include "ttyd/battle_event_cmd.h"
 #include "ttyd/battle_unit.h"
+#include "ttyd/common_types.h"
 #include "ttyd/evt_audience.h"
 #include "ttyd/evt_bero.h"
 #include "ttyd/evt_cam.h"
@@ -25,6 +26,7 @@
 #include "ttyd/evtmgr_cmd.h"
 #include "ttyd/icondrv.h"
 #include "ttyd/itemdrv.h"
+#include "ttyd/mario.h"
 #include "ttyd/mario_cam.h"
 #include "ttyd/mario_motion.h"
 #include "ttyd/mario_pouch.h"
@@ -78,6 +80,12 @@ namespace mod::owr
     KEEP_VAR const char *boatModeDescription = "boat_mode_desc";
     KEEP_VAR const char *rshNode = "rsh";
     KEEP_VAR const char *las_09Node = "las_09";
+    KEEP_VAR const char *walrusWhiskersName = "walrus_whiskers_name";
+    KEEP_VAR const char *walrusWhiskersDescription = "walrus_whiskers_desc";
+    KEEP_VAR const char *shellPackName = "shell_pack_name";
+    KEEP_VAR const char *shellPackDescription = "shell_pack_desc";    
+    KEEP_VAR const char *trunkPackName = "trunk_pack_name";
+    KEEP_VAR const char *trunkPackDescription = "trunk_pack_desc";
 
     // Key Renames
     KEEP_VAR const char *elevatorKeyStationName = "elevator_key_station";
@@ -97,16 +105,17 @@ namespace mod::owr
     KEEP_VAR const char *blackKeyTubeName = "black_key_tube";
     KEEP_VAR const char *blackKeyBoatName = "black_key_boat";
 
-    //Progressive Renames
+    // Progressive Renames
     KEEP_VAR const char *progressiveBootsName = "progressive_boots";
     KEEP_VAR const char *progressiveHammerName = "progressive_hammer";
+
+    KEEP_VAR const char *const goods[] =
+        {"gor_01", "gor_03", "tik_00", "nok_00", "mri_07", "tou_01", "usu_01", "muj_01", "rsh_03", "bom_02"};
+    KEEP_VAR const int goodsCount = static_cast<int>(sizeof(goods) / sizeof(goods[0]));
 
 } // namespace mod::owr
 
 extern int32_t btlataudevtPresentItem_Get[];
-
-static const char *goods[] =
-    {"gor_01", "gor_03", "tik_00", "nok_00", "mri_07", "tou_01", "usu_01", "muj_01", "rsh_03", "bom_02"};
 
 static char result[100];
 
@@ -262,6 +271,37 @@ EVT_BEGIN_KEEP(starstone_item_z)
     USER_FUNC(setIconRenderPriority, LW(7))
     RETURN()
 EVT_END()
+
+EVT_BEGIN_KEEP(irai_complete_reward)
+    USER_FUNC(evt_item::evt_item_get_item, PTR("irai_c"))
+    WAIT_MSEC(800)
+    USER_FUNC(evt_item::evt_item_delete, PTR("irai_c"))
+    USER_FUNC(irai_complete_item_delete)
+    RETURN()
+EVT_END()
+
+EVT_DEFINE_USER_FUNC_KEEP(irai_complete_item_get)
+{
+    if (isFirstCall)
+    {
+        ttyd::mario::Player *mario = ttyd::mario::marioGetPtr();
+        gState->iraiItem = ttyd::itemdrv::itemEntry("irai_c", ttyd::evtmgr_cmd::evtGetValue(evt, evt->evtArguments[0]), 16, -1, nullptr, mario->playerPosition.x, mario->playerPosition.y, mario->playerPosition.z);
+        ttyd::evtmgr::evtEntry(const_cast<int32_t *>(irai_complete_reward), 0, 0);
+        return 0;
+    }
+    else if(gState->iraiItem)
+        return 0;
+    return 2;
+}
+
+EVT_DEFINE_USER_FUNC_KEEP(irai_complete_item_delete)
+{
+    (void)isFirstCall;
+    (void)evt;
+
+    gState->iraiItem = nullptr;
+    return 2;
+}
 // clang-format on
 
 EVT_DEFINE_USER_FUNC_KEEP(setShopFlags)
@@ -270,7 +310,7 @@ EVT_DEFINE_USER_FUNC_KEEP(setShopFlags)
 
     int gswfBase = 6200;
     const char *nextMapPtr = &ttyd::seq_mapchange::_next_map[0];
-    constexpr int loopCount = static_cast<int>(sizeof(goods) / sizeof(goods[0]));
+    const int loopCount = goodsCount;
 
     for (int i = 0; i < loopCount; i++)
     {
@@ -456,7 +496,7 @@ void checkShopFlag(uint32_t item, uint32_t index)
 
     int gswfBase = 6200;
     const char *nextMapPtr = &ttyd::seq_mapchange::_next_map[0];
-    constexpr int loopCount = static_cast<int>(sizeof(goods) / sizeof(goods[0]));
+    const int loopCount = goodsCount;
 
     for (int i = 0; i < loopCount; i++)
     {
@@ -481,14 +521,138 @@ void checkShopFlag(uint32_t item, uint32_t index)
 
 void monosiriItemCheck(int unit_id)
 {
+    namespace ItemId = ::common::ItemId;
     if (ttyd::swdrv::swGet(unit_id + 0x117A) || gState->apSettings->tattlesanity == 0)
         return;
 
     gState->newTattle = true;
     ttyd::battle_audience::BattleAudience_SetPresentTargetUnitId(
         ttyd::battle_unit::BtlUnit_GetUnitId(BattleGetPartyPtr(_battleWorkPtr))); // Goombella
-    ttyd::battle_audience::BattleAudience_SetPresentItemNo(gState->tattleItems[unit_id - 1]);
+    int itemId = gState->tattleItems[unit_id - 1];
+    ttyd::battle_audience::BattleAudience_SetPresentItemNo(itemId);
     ttyd::battle_audience::BattleAudience_SetPresentItemType(0); // Non-damaging items
+    if (itemId >= 114 && itemId <= 120)
+    {
+        uint8_t count = 0;
+        for (int i = 114; i <= 120; i++)
+        {
+            if (ttyd::mario_pouch::pouchCheckItem(i) > 0)
+                count++;
+        }
+        if (gState->apSettings->goal == 2 && (count + 1) >= gState->apSettings->goalStars && ttyd::swdrv::swGet(6120) == 0)
+        {
+            ttyd::swdrv::swSet(6121);
+        }
+    }
+}
+
+static uint8_t s_monoVanilla[64];
+static bool s_monoHave[64];
+
+struct MonoSpan
+{
+    uint8_t start;
+    uint8_t count;
+};
+
+static const uint16_t kMonoSlots[75] = {
+    0x0378, 0x0379, 0x0378, 0x0379, 0x03A0, 0x03A1, 0x0200, 0x0200, 0x0059, 0x0C7A, 0x0C80, 0x0C81,
+    0x0C82, 0x0CA1, 0x0CA8, 0x0CA9, 0x0E70, 0x0E71, 0x0E72, 0x0EA8, 0x0EA9, 0x0EAA, 0x0EAB, 0x0048,
+    0x0049, 0x0068, 0x0010, 0x0011, 0x0019, 0x001A, 0x001B, 0x0038, 0x0040, 0x0041, 0x0060, 0x0061,
+    0x0062, 0x0063, 0x0C30, 0x0C31, 0x0C38, 0x0C40, 0x0C41, 0x0C68, 0x0C69, 0x0C78, 0x0C79, 0x0CA0,
+    0x0CAA, 0x0000, 0x0001, 0x0008, 0x0009, 0x0012, 0x0018, 0x0021, 0x0030, 0x0031, 0x0032, 0x0033,
+    0x0043, 0x0080, 0x0020, 0x0029, 0x0042, 0x0050, 0x0051, 0x0058, 0x0064, 0x0070, 0x0071, 0x0072,
+    0x0073, 0x09D2, 0x09F0,
+};
+
+static const MonoSpan kMonoSpan[35] = {
+    {0,0}, {0,2}, {2,0}, {2,0}, {2,2}, {4,2}, {6,1}, {7,1},
+    {8,0}, {8,8}, {8,8}, {16,0}, {16,0}, {16,2}, {18,1}, {19,2},
+    {21,2}, {23,0}, {23,0}, {23,0}, {23,0}, {23,0}, {23,3}, {23,3},
+    {26,12}, {38,11}, {49,13}, {62,11}, {73,0}, {73,2}, {75,0}, {75,0},
+    {75,0}, {75,0}, {75,0},
+};
+
+static int monosiriRemapBoss(int vanilla)
+{
+    if (!gState->apSettings->bossRandomizer)
+        return vanilla;
+    int idx;
+    switch (vanilla)
+    {
+        case 0x06: idx = 2;  break;
+        case 0x07: idx = 3;  break;
+        case 0x08: idx = 19; break;
+        case 0x14: idx = 4;  break;
+        case 0x17: idx = 1;  break;
+        case 0x21: idx = 23; break;
+        case 0x22: idx = 15; break;
+        case 0x3F: idx = 22; break;
+        case 0x40: idx = 21; break;
+        case 0x41: idx = 20; break;
+        case 0x4C: idx = 5;  break;
+        case 0x4D: idx = 7;  break;
+        case 0x4F: idx = 6;  break;
+        case 0x5D: idx = 17; break;
+        case 0x63: idx = 16; break;
+        case 0x6B: idx = 18; break;
+        case 0x79: idx = 0;  break;
+        case 0x84: idx = 10; break;
+        case 0x87: idx = 9;  break;
+        case 0x90: idx = 11; break;
+        case 0x92: idx = 12; break;
+        case 0x94: idx = 13; break;
+        case 0x95: idx = 14; break;
+        case 0xAB: idx = 8;  break;
+        default: return vanilla;
+    }
+    int cur = gState->bossLoadouts[idx].enemyIds[0];
+    return cur ? cur : vanilla;
+}
+
+int monosiriRemapWord1(int idx, int curWord1)
+{
+    if (idx < 0 || idx >= 64)
+        return curWord1;
+
+    if (idx < 35 && gState->apSettings->enemyRandomizer && kMonoSpan[idx].count)
+    {
+        const MonoSpan span = kMonoSpan[idx];
+        int firstId = 0;
+        for (int i = 0; i < span.count; i++)
+        {
+            uint16_t packed = kMonoSlots[span.start + i];
+            int group = packed >> 3;
+            int slot = packed & 7;
+            if (group >= NUM_BATTLE_GROUPS)
+                continue;
+            int id = gState->enemyLoadouts[group].enemyIds[slot];
+            if (id <= 0)
+                continue;
+            if (firstId == 0)
+                firstId = id;
+            if (ttyd::swdrv::swGet(id + 0x117A) == 0)
+                return id;
+        }
+        if (firstId)
+            return firstId;
+        return curWord1;
+    }
+
+    if (!s_monoHave[idx])
+    {
+        s_monoVanilla[idx] = static_cast<uint8_t>(curWord1);
+        s_monoHave[idx] = true;
+    }
+    int vanilla = s_monoVanilla[idx];
+    return monosiriRemapBoss(vanilla);
+}
+
+int monosiriRemapStatic(int vanilla)
+{
+    if (vanilla <= 0 || vanilla > 0xFF)
+        return vanilla;
+    return monosiriRemapBoss(vanilla);
 }
 
 int applyExpMultiplier(int exp)
@@ -517,7 +681,7 @@ int getBlockVisibility(int brickType)
     return brickType;
 }
 
-const char* shopItemDescription(const char* itemDescription)
+const char *shopItemDescription(const char *itemDescription)
 {
     char *base = reinterpret_cast<char *>(evt_shop::evt_shop_wp);
     uint32_t *itemIds = *reinterpret_cast<uint32_t **>(base + 0x08);
@@ -527,7 +691,7 @@ const char* shopItemDescription(const char* itemDescription)
         return itemDescription;
 
     const char *nextMapPtr = &ttyd::seq_mapchange::_next_map[0];
-    constexpr int loopCount = static_cast<int>(sizeof(goods) / sizeof(goods[0]));
+    const int loopCount = goodsCount;
 
     for (int i = 0; i < loopCount; i++)
     {
@@ -539,7 +703,7 @@ const char* shopItemDescription(const char* itemDescription)
     return itemDescription;
 }
 
-int itemHandleStarstone(void* itemPtr)
+int itemHandleStarstone(void *itemPtr)
 {
     if (!itemPtr)
         return 0;
@@ -593,7 +757,7 @@ EVT_DEFINE_USER_FUNC_KEEP(starstoneParamClean)
 EVT_DEFINE_USER_FUNC_KEEP(lasStarsCheck)
 {
     (void)isFirstCall;
-    if (strcmp(reinterpret_cast<const char*>(ttyd::evtmgr_cmd::evtGetValue(evt, evt->evtArguments[1])), "las_28") != 0)
+    if (strcmp(reinterpret_cast<const char *>(ttyd::evtmgr_cmd::evtGetValue(evt, evt->evtArguments[1])), "las_28") != 0)
     {
         ttyd::evtmgr_cmd::evtSetValue(evt, evt->evtArguments[0], 0);
         return 2;
@@ -604,7 +768,7 @@ EVT_DEFINE_USER_FUNC_KEEP(lasStarsCheck)
     return 2;
 }
 
-EVT_DEFINE_USER_FUNC_KEEP(marioGetRot) 
+EVT_DEFINE_USER_FUNC_KEEP(marioGetRot)
 {
     (void)isFirstCall;
     ttyd::evtmgr_cmd::evtSetFloat(evt, evt->evtArguments[0], mario::marioGetPtr()->unk_19c + 1.0f);
@@ -631,7 +795,7 @@ EVT_DEFINE_USER_FUNC_KEEP(pouchStarstoneItem)
 {
     (void)isFirstCall;
     if (!gState->starItemPtr)
-        gState->starItemPtr = itemdrv::itemNameToPtr((const char*)ttyd::evtmgr_cmd::evtGetValue(evt, evt->evtArguments[1]));
+        gState->starItemPtr = itemdrv::itemNameToPtr((const char *)ttyd::evtmgr_cmd::evtGetValue(evt, evt->evtArguments[1]));
     int itemId = *(int *)((char *)gState->starItemPtr + 0x4);
     if (ttyd::evtmgr_cmd::evtGetValue(evt, evt->evtArguments[2]) != -1)
         mario_pouch::pouchGetItem(itemId);
@@ -642,7 +806,7 @@ EVT_DEFINE_USER_FUNC_KEEP(pouchStarstoneItem)
 EVT_DEFINE_USER_FUNC_KEEP(setIconRenderPriority)
 {
     (void)isFirstCall;
-    void* iconPtr = icondrv::iconNameToPtr((const char*)evtmgr_cmd::evtGetValue(evt, evt->evtArguments[0]));
+    void *iconPtr = icondrv::iconNameToPtr((const char *)evtmgr_cmd::evtGetValue(evt, evt->evtArguments[0]));
     if (iconPtr)
     {
         uint16_t *flags = (uint16_t *)iconPtr;

@@ -164,6 +164,7 @@ extern int32_t mri_17_init_evt[];
 extern int32_t mri_20_init_evt[];
 extern int32_t mri_18_init_evt[];
 extern int32_t mri_19_init_evt[];
+extern int32_t mri_puni_piders_check[];
 
 // clang-format off
 EVT_BEGIN(guide_init_00_evt)
@@ -716,7 +717,27 @@ namespace mod
 
         patch::writePatch(&mri_elder_init_01[0], mri_elder_init_01_hook, sizeof(mri_elder_init_01_hook));
 
-        patch::writePatch(&mri_elder_talk[0], elder_talk_hook, sizeof(elder_talk_hook));
+        mri_elder_talk[1] = GSW(1740);
+        mri_elder_talk[2] = 1;
+        mri_elder_talk[31] = EVT_HELPER_CMD(2, 91);
+        mri_elder_talk[32] = EVT_HELPER_OP(&irai_complete_item_get);
+        mri_elder_talk[42] = GSW(1740);
+        mri_elder_talk[43] = 2;
+        patch::writePatch(&mri_elder_talk[140], elder_talk_hook, sizeof(elder_talk_hook));
+        mri_elder_talk[144] = 0;
+
+        mri_elder_talk[62] = GSW(1747);
+        mri_elder_talk[63] = 1;
+        mri_elder_talk[65] = GSW(1777);
+        mri_elder_talk[69] = GSW(1777);
+        mri_elder_talk[70] = 1;
+        mri_elder_talk[113] = GSW(1777);
+        mri_elder_talk[114] = 2;
+        mri_elder_talk[119] = GSW(1777);
+        mri_elder_talk[120] = 2;
+
+        mri_fabio_init[4] = GSW(1758);
+        mri_fabio_init[5] = 2;
 
         patch::writePatch(&mri_puni_1_init[0], puni_1_init_hook, sizeof(puni_1_init_hook));
 
@@ -1121,6 +1142,8 @@ namespace mod
         mri_16_init_evt[48] = 8;
         mri_16_init_evt[49] = 9;
 
+        mri_puni_piders_check[0] = EVT_HELPER_CMD(0, 2);
+
         mri_puni_disp_info[1] = GSW(1713);
         mri_puni_disp_info[2] = 17;
 
@@ -1173,6 +1196,8 @@ namespace mod
                 }
             }
         }
+
+        ApplyBossGroups(kBossGrpRange_mri_mri);
 
         // Assembly
         patch::writeBranchPair(&mri_starstone_rotate_func[26], 

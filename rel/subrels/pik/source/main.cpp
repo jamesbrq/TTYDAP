@@ -27,6 +27,8 @@ extern int32_t pik_evt_train[];
 extern int32_t pik_talk_ekiin[];
 extern int32_t pik_talk_papa_taihou_kyoka[];
 extern int32_t pik_talk_papa[];
+extern int32_t pik_init_konari[];
+extern int32_t pik_konarikin_talk[];
 extern int32_t pik_talk_mama[];
 extern int32_t pik_talk_konari[];
 extern int32_t pik_talk_madam[];
@@ -340,6 +342,82 @@ namespace mod
         pik_talk_madam[146] = 51;
         pik_talk_madam[165] = GSW(1708);
         pik_talk_madam[166] = 18;
+
+        pik_talk_madam[1] = GSW(1753);
+        pik_talk_madam[2] = 1;
+        pik_talk_madam[61] = GSW(1753);
+        pik_talk_madam[62] = 2;
+
+        pik_talk_papa[1] = GSW(1755);
+        pik_talk_papa[2] = 1;
+        pik_talk_papa[4] = GSW(1785);
+        pik_talk_papa[35] = GSW(1785);
+        pik_talk_papa[39] = EVT_HELPER_CMD(2, 26);
+        pik_talk_papa[40] = GSW(1785);
+        pik_talk_papa[41] = 4;
+        pik_talk_papa[50] = EVT_HELPER_CMD(2, 26);
+        pik_talk_papa[51] = GSW(1785);
+        pik_talk_papa[52] = 7;
+        pik_talk_papa[60] = GSW(1785);
+        pik_talk_papa[61] = 5;
+        pik_talk_papa[71] = EVT_HELPER_OP(&irai_complete_item_get);
+        pik_talk_papa[77] = GSW(1755);
+        pik_talk_papa[78] = 2;
+
+        pik_miyageya_talk[1] = GSW(1757);
+        pik_miyageya_talk[2] = 1;
+        pik_miyageya_talk[10] = GSW(1787);
+        pik_miyageya_talk[38] = GSW(1787);
+        pik_miyageya_talk[438] = GSW(1757);
+        pik_miyageya_talk[439] = 2;
+        pik_miyageya_talk[528] = EVT_HELPER_CMD(2, 26);
+        pik_miyageya_talk[529] = GSW(1757);
+        pik_miyageya_talk[530] = 2;
+
+        pik_01_init_evt[293] = GSW(1757);
+        pik_01_init_evt[294] = 1;
+        pik_01_init_evt[299] = GSW(1757);
+        pik_01_init_evt[300] = 2;
+
+        pik_konarikin_talk[1] = GSW(1759);
+        pik_konarikin_talk[2] = 1;
+        pik_konarikin_talk[3] = EVT_HELPER_CMD(2, 26);
+        pik_konarikin_talk[4] = GSW(1789);
+        pik_konarikin_talk[5] = 3;
+        pik_konarikin_talk[7] = GSW(1789);
+        pik_konarikin_talk[34] = GSW(1789);
+        pik_konarikin_talk[41] = EVT_HELPER_CMD(2, 29);
+        pik_konarikin_talk[42] = GSW(1789);
+        pik_konarikin_talk[43] = 2;
+        pik_konarikin_talk[101] = EVT_HELPER_CMD(2, 50);
+        pik_konarikin_talk[102] = GSW(1789);
+        pik_konarikin_talk[103] = 2;
+        pik_konarikin_talk[160] = EVT_HELPER_CMD(2, 50);
+        pik_konarikin_talk[161] = GSW(1789);
+        pik_konarikin_talk[162] = 2;
+        pik_konarikin_talk[219] = EVT_HELPER_CMD(2, 50);
+        pik_konarikin_talk[220] = GSW(1789);
+        pik_konarikin_talk[221] = 2;
+        pik_konarikin_talk[255] = EVT_HELPER_OP(&irai_complete_item_get);
+        pik_konarikin_talk[300] = GSW(1759);
+        pik_konarikin_talk[301] = 2;
+
+        pik_talk_mama[1] = GSW(1759);
+        pik_talk_mama[2] = 1;
+        pik_talk_mama[3] = EVT_HELPER_CMD(2, 26);
+        pik_talk_mama[4] = GSW(1789);
+        pik_talk_mama[5] = 3;
+        pik_talk_mama[237] = GSW(1789);
+        pik_talk_mama[238] = 3;
+
+        pik_init_konari[1] = GSW(1759);
+        pik_init_konari[2] = 1;
+
+        pik_konarikin_init[3] = GSW(1759);
+        pik_konarikin_init[4] = 1;
+
+        pik_talk_papa[88] = GSW(1759);
+        pik_talk_papa[89] = 1;
 
         pik_init_sarary[1] = GSW(1706);
         pik_init_sarary[2] = 49;

@@ -38,6 +38,10 @@ extern int32_t win_03_init_evt[];
 extern int32_t win_meet_clouda[];
 extern int32_t win_meet_clouda2[];
 extern int32_t win_clouda_irai[];
+extern int32_t win_fabio_init[];
+extern int32_t win_fabio_talk[];
+extern int32_t win_iri_28_enemy_all_dead[];
+extern int32_t win_iri_28_init[];
 extern int32_t win_clouda_nakama[];
 extern int32_t win_touch_door[];
 extern int32_t win_04_init_evt[];
@@ -145,6 +149,7 @@ namespace mod
         win_witchtrio_momeru[862] = GSW(1712);
         win_witchtrio_momeru[863] = 1;
 
+        win_witchtrio_picture[192] = 335;
         win_witchtrio_picture[514] = GSW(1702);
         win_witchtrio_picture[515] = 13;
 
@@ -207,6 +212,21 @@ namespace mod
         win_clouda_irai[414] = GSW(1702);
         win_clouda_irai[415] = 12;
 
+        win_fabio_init[1] = GSW(1758);
+        win_fabio_init[2] = 1;
+
+        win_fabio_talk[1] = GSW(1758);
+        win_fabio_talk[2] = 1;
+        win_fabio_talk[4] = GSW(1788);
+        win_fabio_talk[13] = GSW(1788);
+
+        win_iri_28_init[1] = GSW(1758);
+        win_iri_28_init[2] = 1;
+
+        win_iri_28_enemy_all_dead[55] = EVT_HELPER_OP(&irai_complete_item_get);
+        win_iri_28_enemy_all_dead[135] = GSW(1758);
+        win_iri_28_enemy_all_dead[136] = 2;
+
         win_clouda_nakama[1500] = EVT_HELPER_CMD(2, 50);
         win_clouda_nakama[1501] = EVT_HELPER_OP(LW(3));
         patch::writePatch(&win_clouda_nakama[1503], win_party_hook, sizeof(win_party_hook));
@@ -260,6 +280,8 @@ namespace mod
                 }
             }
         }
+
+        ApplyBossGroups(kBossGrpRange_win_win);
     }
 
     void exit() {}

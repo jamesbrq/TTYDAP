@@ -22,6 +22,27 @@ namespace ttyd::battle_unit
 
     const int g_battleStatsCount = sizeof(g_battleStats) / sizeof(g_battleStats[0]);
 
+    struct BossAtkEntry
+    {
+        int32_t unitType;
+        int32_t atk;
+    };
+
+    static const BossAtkEntry g_bossAtk[] = {
+        {0x06, 1},  {0x07, 3}, {0x08, 1}, {0x14, 1}, {0x17, 5}, {0x21, 1},
+        {0x22, 2},  {0x3F, 3}, {0x40, 4}, {0x41, 4}, {0x4C, 4}, {0x4D, 4},
+        {0x4F, 4},  {0x5D, 4}, {0x63, 3}, {0x6B, 5}, {0x79, 6}, {0x84, 8},
+        {0x87, 6},  {0x90, 7}, {0x92, 7}, {0x94, 7}, {0x95, 7}, {0xAB, 8},
+    };
+
+    int32_t GetBossAtk(int32_t unit_type)
+    {
+        for (const auto &e : g_bossAtk)
+            if (e.unitType == unit_type)
+                return e.atk;
+        return -1;
+    }
+
     const BattleStatRelValues *GetBattleStats(RelId rel)
     {
         for (int i = 0; i < g_battleStatsCount; ++i)

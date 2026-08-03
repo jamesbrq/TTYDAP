@@ -50,9 +50,41 @@ namespace ttyd::memory
         HEAP_SMART,
     };
 
+    struct HeapEnd
+    {
+        void *pHeapDefault;
+        void *pHeapMap;
+        void *pHeapExt;
+        void *pHeapEffect;
+#ifdef TTYD_JP
+        void *pHeapBattle;
+#endif
+        void *pHeapSmart;
+    } __attribute__((__packed__));
+
+    struct HeapStart
+    {
+        void *pHeapDefault;
+        void *pHeapMap;
+        void *pHeapExt;
+        void *pHeapEffect;
+#ifdef TTYD_JP
+        void *pHeapBattle;
+#endif
+        void *pHeapSmart;
+    } __attribute__((__packed__));
+
     static_assert(sizeof(SmartAllocationData) == 0x1C);
     static_assert(sizeof(SmartWork) == 0xE01C);
     static_assert(sizeof(MapAllocEntry) == 0x20);
+
+    #ifdef TTYD_JP
+    static_assert(sizeof(HeapEnd) == 0x18);
+    static_assert(sizeof(HeapStart) == 0x18);
+#else
+    static_assert(sizeof(HeapEnd) == 0x14);
+    static_assert(sizeof(HeapStart) == 0x14);
+#endif
 
     extern "C"
     {
@@ -63,6 +95,9 @@ namespace ttyd::memory
         extern SmartWork *_smartWorkPtr; // wp
         extern uint32_t mapalloc_size;
         extern MapAllocEntry *mapalloc_base_ptr;
+
+        extern HeapEnd heapEnd;
+        extern HeapStart heapStart;
 
         // memInit
         // memClear

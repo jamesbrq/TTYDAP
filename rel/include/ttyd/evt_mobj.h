@@ -89,11 +89,13 @@ namespace ttyd::evt_mobj
         // evt_mobj_hit_onoff
         // evt_mobj_hitevt_onoff
         // evt_mobj_set_camid
+        EVT_DECLARE_USER_FUNC(evt_mapobj_flag_onoff, 4)
+        EVT_DECLARE_USER_FUNC(evt_mapobj_get_position, 4)
         EVT_DECLARE_USER_FUNC(evt_mobj_wait_animation_end, 1)
         EVT_DECLARE_USER_FUNC(evt_mobj_switch_red, 7)
         EVT_DECLARE_USER_FUNC(evt_mobj_set_anim, 2)
+        EVT_DECLARE_USER_FUNC(evt_mobj_exec_cancel, 1)
         // evt_mobj_set_gravity_bound
-        // evt_mobj_exec_cancel
         // evt_mobj_set_z_position
         // evt_mobj_set_y_position
         // evt_mobj_set_x_position
@@ -111,5 +113,6 @@ namespace ttyd::evt_mobj
 
         // .data
         extern int32_t mobj_save_blk_sysevt[1];
+        void mobjDelete(const char *name);
     }
 } // namespace ttyd::evt_mobj

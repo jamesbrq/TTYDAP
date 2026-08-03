@@ -1296,6 +1296,8 @@ namespace mod
             }
         }
 
+		ApplyBossGroups(kBossGrpRange_muj_muj);
+
         // Assembly Patches
         patch::writeIntWithCache(&muj_make_itemsel_table[14], 0x38000079); // li r0, 0x79
         patch::writeIntWithCache(&muj_make_itemsel_table[20], 0x380300A0); // addi r0, r3, 0xA0

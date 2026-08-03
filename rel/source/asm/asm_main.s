@@ -44,6 +44,12 @@
 .global bHpColorFront
 .global bHpColorFrontReturn
 .global bMonosiriBucketExtra
+.global bMonosiriMonban
+.global bMonosiriMonbanReturn
+.global bMonosiriBonetail
+.global bMonosiriBonetailReturn
+.global bMonosiriAtomicBoo
+.global bMonosiriAtomicBooReturn
 .global bExpMultiplier
 .global bExpMultiplierReturn
 .global bBlockVisibility
@@ -313,6 +319,10 @@ bMonosiriBucket:
 	addi %r3, %r3, monosiriSWArr@l
 	mulli %r0, %r28, 0xC
 	add %r26, %r3, %r0
+	mr %r3, %r28
+	lwz %r4, 0x4(%r26)
+	bl monosiriRemapWord1
+	stw %r3, 0x4(%r26)
 	lwz %r3, 0x0(%r26)
 	cmpwi %r3, 0x1000
 	blt bMonosiriBucketNorm
@@ -333,9 +343,12 @@ bMonosiriBucketReturn:
 	b 0
 
 bMonosiriBucketExtra:
-	stwu %r1, -0x16(%r1)
-	mflr %r4 
-	stw %r4, 0x20(%r1)
+	stwu %r1, -0x20(%r1)
+	mflr %r0
+	stw %r0, 0x24(%r1)
+	addi %r3, %r3, -0x117A
+	bl monosiriRemapStatic
+	addi %r3, %r3, 0x117A
 	bl swGet
 	cmpwi %r3, 0x0
 	bne bMonosiriBucketExtraSkip
@@ -348,10 +361,61 @@ bMonosiriBucketExtra:
 bMonosiriBucketExtraStop:
 	li %r3, 0x1
 bMonosiriBucketExtraSkip:
-	lwz %r4, 0x20(%r1)
-	mtlr %r4
-	addi %r1, %r1, 0x16
+	lwz %r0, 0x24(%r1)
+	mtlr %r0
+	addi %r1, %r1, 0x20
 	blr
+
+bMonosiriMonban:
+	stwu %r1, -0x20(%r1)
+	mflr %r0
+	stw %r0, 0x24(%r1)
+	stw %r3, 0x8(%r1)
+	stw %r4, 0xC(%r1)
+	li %r3, 0x7
+	bl monosiriRemapStatic
+	mr %r5, %r3
+	lwz %r3, 0x8(%r1)
+	lwz %r4, 0xC(%r1)
+	lwz %r0, 0x24(%r1)
+	mtlr %r0
+	addi %r1, %r1, 0x20
+bMonosiriMonbanReturn:
+	b 0
+
+bMonosiriBonetail:
+	stwu %r1, -0x20(%r1)
+	mflr %r0
+	stw %r0, 0x24(%r1)
+	stw %r3, 0x8(%r1)
+	stw %r4, 0xC(%r1)
+	li %r3, 0xAB
+	bl monosiriRemapStatic
+	mr %r5, %r3
+	lwz %r3, 0x8(%r1)
+	lwz %r4, 0xC(%r1)
+	lwz %r0, 0x24(%r1)
+	mtlr %r0
+	addi %r1, %r1, 0x20
+bMonosiriBonetailReturn:
+	b 0
+
+bMonosiriAtomicBoo:
+	stwu %r1, -0x20(%r1)
+	mflr %r0
+	stw %r0, 0x24(%r1)
+	stw %r3, 0x8(%r1)
+	stw %r4, 0xC(%r1)
+	li %r3, 0x4C
+	bl monosiriRemapStatic
+	mr %r5, %r3
+	lwz %r3, 0x8(%r1)
+	lwz %r4, 0xC(%r1)
+	lwz %r0, 0x24(%r1)
+	mtlr %r0
+	addi %r1, %r1, 0x20
+bMonosiriAtomicBooReturn:
+	b 0
 
 bHpColorBack:
 	stwu %r1, -0x80(%r1)
@@ -710,12 +774,6 @@ monosiriSWArr:
 	.4byte 0x0000001E
 	.4byte 0x0000000B
 	.4byte 0x000006B0
-	.4byte 0x0000001F
-	.4byte 0x00000002
-	.4byte 0x000006B0
-	.4byte 0x00000020
-	.4byte 0x00000002
-	.4byte 0x000006B0
 	.4byte 0x00000021
 	.4byte 0x00000002
 	.4byte 0x000006B1
@@ -775,18 +833,6 @@ monosiriSWArr:
 	.4byte 0x000006AC
 	.4byte 0x00000084
 	.4byte 0x00000010
-	.4byte 0x000006B0
-	.4byte 0x00000085
-	.4byte 0x00000002
-	.4byte 0x000006AC
-	.4byte 0x00000085
-	.4byte 0x00000009
-	.4byte 0x000006B0
-	.4byte 0x00000086
-	.4byte 0x00000002
-	.4byte 0x000006AC
-	.4byte 0x00000086
-	.4byte 0x00000009
 	.4byte 0x000006B3
 	.4byte 0x0000004D
 	.4byte 0x00000008
@@ -797,14 +843,5 @@ monosiriSWArr:
 	.4byte 0x00000090
 	.4byte 0x00000010
 	.4byte 0x000006AC
-	.4byte 0x00000091
-	.4byte 0x00000010
-	.4byte 0x000006AC
 	.4byte 0x00000092
 	.4byte 0x00000010
-	.4byte 0x000006AC
-	.4byte 0x00000093
-	.4byte 0x00000010
-	.4byte 0x000006AC
-	.4byte 0x00000096
-	.4byte 0x00000012

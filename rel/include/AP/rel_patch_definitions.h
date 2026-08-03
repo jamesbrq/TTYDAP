@@ -50,6 +50,12 @@ extern "C"
     void bMonosiriBucket();
     void bMonosiriBucketReturn();
     void bMonosiriBucketExtra();
+    void bMonosiriMonban();
+    void bMonosiriMonbanReturn();
+    void bMonosiriBonetail();
+    void bMonosiriBonetailReturn();
+    void bMonosiriAtomicBoo();
+    void bMonosiriAtomicBooReturn();
     void bHpColorBack();
     void bHpColorBackReturn();
     void bHpColorFront();
@@ -90,6 +96,8 @@ extern "C"
     void bPuniMainNullFixReturn();
     void checkShopFlag(uint32_t item, uint32_t index);
     void monosiriItemCheck(int unit_id);
+    int monosiriRemapWord1(int idx, int curWord1);
+    int monosiriRemapStatic(int vanilla);
     int applyExpMultiplier(int exp);
     int getBlockVisibility(int blockType);
     const char *shopItemDescription(const char *itemDescription);
@@ -117,6 +125,8 @@ EVT_DECLARE_USER_FUNC(starstoneRunItemEvent, 0)
 EVT_DECLARE_USER_FUNC(starstoneCheckGoalComplete, 0)
 EVT_DECLARE_USER_FUNC(getManiacItem, 2)
 EVT_DECLARE_USER_FUNC(getManiacPrice, 2)
+EVT_DECLARE_USER_FUNC(irai_complete_item_get, 1)
+EVT_DECLARE_USER_FUNC(irai_complete_item_delete, 0)
 
 // AP cooking (Zess T. recipe checks + ingredient unlocks) — see rel/misc/cooking_research.md.
 // The apworld mirrors all of these values (Data.py flag mappings, Rom.py table writes,

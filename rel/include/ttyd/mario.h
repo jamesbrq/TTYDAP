@@ -176,20 +176,20 @@ namespace ttyd::mario
         // marioChkInScreen
         // marioGetScreenPos
         // marioPaperLightOff
-        // marioPaperOff
-        // marioPaperOn
+        void marioPaperOff();
+        void marioPaperOn(const char *agbName);
         // marioSetPaperAnimeLocalTime
-        // marioChgPaper
+        void marioChgPaper(const char *paperAnimName);
         // marioChgPoseTime
         // marioChgPose
         uint32_t toDotMarioPose();
-        // marioChgEvtPose
+        void marioChgEvtPose(const char *poseName);
         // marioAnimeId
         // marioChkPushAnime
         // marioMoveMain
         // marioMove
         // marioCtrlOff2Main
-        // marioMain
+        extern int32_t marioMain[];
         // marioReInit
         // marioInit
         // marioPoseInit
@@ -202,8 +202,9 @@ namespace ttyd::mario
         // marioBgmodeOn
         // marioBgmodeChk
         // marioSetMutekiTime
-        // marioKeyOn
-        // marioKeyOff
+        void marioKeyOn();
+        void marioKeyOff();
+        int8_t marioChkKey();
         // marioCtrlOn2
         // marioCtrlOff2
         // marioCtrlOn
@@ -213,7 +214,6 @@ namespace ttyd::mario
         // marioFBattlePost
         // marioFBattlePrepare
         // marioChkCtrl
-        // marioChkKey
         // marioCheckMenuDisable
         // marioCaseEventValidChk
         // marioItemGetOk

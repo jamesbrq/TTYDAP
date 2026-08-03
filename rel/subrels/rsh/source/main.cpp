@@ -1,7 +1,10 @@
 #include "subrel_rsh.h"
 #include "evt_cmd.h"
+#include "OWR.h"
 #include "patch.h"
 #include "AP/rel_patch_definitions.h"
+#include "ttyd/battle_unit.h"
+#include "ttyd/battle_database_common.h"
 #include "ttyd/evt_bero.h"
 #include "ttyd/evt_cam.h"
 #include "ttyd/evt_case.h"
@@ -17,6 +20,7 @@
 
 #include <cstdint>
 
+using namespace mod::owr;
 using namespace ttyd;
 
 extern int32_t rsh_simi_check[];
@@ -978,8 +982,12 @@ namespace mod
         rsh_evt_toron_catch[273] = GSW(1706);
         rsh_evt_toron_catch[274] = 29;
 
+        rsh_evt_toron_catch2[153] = 336;
+        rsh_evt_toron_catch2[237] = 0;
+        rsh_evt_toron_catch2[263] = 336;
         rsh_evt_toron_catch2[316] = GSW(1706);
         rsh_evt_toron_catch2[317] = 29;
+        rsh_evt_toron_catch2[153] = 336;
 
         rsh_evt_toron_appear[25] = GSW(1706);
         rsh_evt_toron_appear[26] = 27;
@@ -1141,6 +1149,14 @@ namespace mod
         rsh_evt_rsh_konarikin_irai_party_talk[82] = 12;
         rsh_evt_rsh_konarikin_irai_party_talk[84] = GSW(1706);
         rsh_evt_rsh_konarikin_irai_party_talk[85] = 12;
+
+        rsh_talk_cook[1] = GSW(1752);
+        rsh_talk_cook[2] = 1;
+        rsh_talk_cook[8] = GSW(1782);
+        rsh_talk_cook[11] = GSW(1782);
+        rsh_talk_cook[174] = EVT_HELPER_OP(&irai_complete_item_get);
+        rsh_talk_cook[180] = GSW(1752);
+        rsh_talk_cook[181] = 2;
 
         rsh_evt_allow_kamotsu[68] = GSW(1706);
         rsh_evt_allow_kamotsu[69] = 18;
@@ -1380,6 +1396,8 @@ namespace mod
 
         rsh_prolog[14] = 0x386006AA; // li r3, 0x6AA (GSW(1706))
         rsh_prolog[16] = 0x2C03002B; // cmpwi r3, 0x2B
+
+        ApplyBossGroups(kBossGrpRange_rsh_rsh);
     }
 
     void exit() {}

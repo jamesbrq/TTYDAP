@@ -63,6 +63,8 @@ extern int32_t gor_tentyou_init[];
 extern int32_t gor_tentyou_talk[];
 extern int32_t gor_tenin_init[];
 extern int32_t gor_tenin_talk[];
+extern int32_t gor_borodo2_init_00[];
+extern int32_t gor_borodo2_talk_00[];
 extern int32_t gor_mokorim_init[];
 extern int32_t gor_mokorim_talk[];
 extern int32_t gor_luigi_init_00[];
@@ -92,6 +94,7 @@ extern int32_t gor_return_gorotsuki_town[];
 extern int32_t gor_00_init_evt[];
 extern int32_t gor_nannpc_entry_data;
 extern int32_t gor_nannpc_ext_main_sub_fast;
+extern int32_t gor_make_itemsel_table[];
 
 const char npcEnt[] = "\x83\x8B\x83\x43\x81\x5B\x83\x57";
 const char npcEnt2[] = "\x83\x89\x83\x4E\x83\x4B\x83\x93";
@@ -829,6 +832,18 @@ void ApplyGor00Patches()
 
     patch::writePatch(&gor_suifubomb_a_init[0], suifubomb_a_init_hook, sizeof(suifubomb_a_init_hook));
     patch::writePatch(&gor_suifubomb_a_regl[0], suifubomb_a_regl_hook, sizeof(suifubomb_a_regl_hook));
+
+	gor_suifubomb_a_talk[1] = GSW(1736);
+    gor_suifubomb_a_talk[2] = 1;
+    gor_suifubomb_a_talk[4] = GSW(1766);
+    gor_suifubomb_a_talk[5] = 0;
+    gor_suifubomb_a_talk[13] = GSW(1766);
+    gor_suifubomb_a_talk[14] = 1;
+    gor_suifubomb_a_talk[64] = PTR("suifubomb_a_walrus");
+    gor_suifubomb_a_talk[67] = EVT_HELPER_CMD(2, 91);
+    gor_suifubomb_a_talk[68] = EVT_HELPER_OP(&irai_complete_item_get);
+    gor_suifubomb_a_talk[80] = GSW(1736);
+    gor_suifubomb_a_talk[81] = 2;
     patch::writePatch(&gor_suifubomb_a_talk[91], suifubomb_a_talk_evt, sizeof(suifubomb_a_talk_evt));
 
     gor_suifubomb_b_init[16] = GSW(1715);
@@ -864,6 +879,18 @@ void ApplyGor00Patches()
     gor_tenin_talk[1] = GSW(1705);
     gor_tenin_talk[3] = 1;
     gor_tenin_talk[4] = 7;
+
+	gor_borodo2_init_00[1] = GSW(1734);
+    gor_borodo2_init_00[2] = 1;
+    gor_borodo2_init_00[4] = GSW(1764);
+    gor_borodo2_init_00[5] = 2;
+    gor_borodo2_init_00[7] = GSW(1764);
+    gor_borodo2_init_00[8] = 2;
+    gor_borodo2_init_00[10] = GSW(1764);
+    gor_borodo2_init_00[11] = 2;
+
+	gor_borodo2_talk_00[7] = GSW(1764);
+	gor_borodo2_talk_00[8] = 3;
 
     patch::writePatch(&gor_mokorim_init[2], mokorim_init_evt, sizeof(mokorim_init_evt));
 
@@ -945,4 +972,13 @@ void ApplyGor00Patches()
     gor_00_init_evt[474] = 20;
     gor_00_init_evt[476] = GSW(1717);
     gor_00_init_evt[477] = 25;
+
+	// Assembly
+    patch::writeIntWithCache(&gor_make_itemsel_table[14], 0x38000079); // li r0, 0x79
+    patch::writeIntWithCache(&gor_make_itemsel_table[20], 0x380300A0); // addi r0, r3, 0xA0
+    patch::writeIntWithCache(&gor_make_itemsel_table[22], 0x2C000069); // cmpwi r0, 0x69
+    patch::writeIntWithCache(&gor_make_itemsel_table[24], 0x2C00006A); // cmpwi r0, 0x6A
+    patch::writeIntWithCache(&gor_make_itemsel_table[29], 0x2C007FFF); // cmpwi r0, 0x7FFF
+    patch::writeIntWithCache(&gor_make_itemsel_table[36], 0x2C000000); // cmpwi r0, 0x0
+    patch::writeIntWithCache(&gor_make_itemsel_table[37], 0x40800028); // bge skip
 }

@@ -15,7 +15,10 @@ namespace ttyd::pmario_sound
         int psndBGMOff(int channelFlags);
         int psndBGMOff_f_d(uint32_t bgmSlot, uint16_t fadeTime, uint32_t mode);
         int psndSFXOn(int channelFlags);
+        int psndSFXOn_3D(int channelFlags, const vec3 *position);
+        int psndSFXOff(int channel);
+        int main__psndSFXOn(int idOrName, int vol, int pan, int a4, const void *pos, int a6, int a7, int a8);
 
-        void *psbgm;
+        extern void *psbgm;
     }
-}
+} // namespace ttyd::pmario_sound

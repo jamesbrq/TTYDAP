@@ -146,11 +146,15 @@ void RelMgr::unloadRel()
     this->bssPtr = nullptr;
 }
 
-bool RelMgr::loadCustomRel()
+bool RelMgr::loadCustomRel(const char *relName)
 {
-    // Open custom.rel from disc
+    // Build the filepath from the rel name
+    char relPath[32];
+    snprintf(relPath, sizeof(relPath), "/mod/%s.rel", relName);
+
+    // Open the rel from disc
     DVDFileInfo fileInfo;
-    if (!DVDOpen("/mod/custom.rel", &fileInfo))
+    if (!DVDOpen(relPath, &fileInfo))
     {
         return false;
     }

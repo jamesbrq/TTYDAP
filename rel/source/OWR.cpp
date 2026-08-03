@@ -2,11 +2,14 @@
 #include "relmgr.h"
 #include "util.h"
 #include "visibility.h"
+#include "GhostPeers.h"
 #include <AP/rel_patch_definitions.h>
 #include <gc/gx.h>
 #include <gc/OSModule.h>
 #include <gc/pad.h>
 #include <mod.h>
+#include "vm_prefetch.h"
+#include "vm_ttyd.h"
 #include <ttyd/common_types.h>
 #include <ttyd/countdown.h>
 #include <ttyd/evt_bero.h>
@@ -14,6 +17,7 @@
 #include <ttyd/evt_lecture.h>
 #include <ttyd/evt_mario.h>
 #include <ttyd/evt_memcard.h>
+#include <ttyd/evt_mobj.h>
 #include <ttyd/evt_msg.h>
 #include <ttyd/evt_party.h>
 #include <ttyd/evt_pouch.h>
@@ -25,6 +29,7 @@
 #include <ttyd/fontmgr.h>
 #include <ttyd/icondrv.h>
 #include <ttyd/item_data.h>
+#include <ttyd/itemdrv.h>
 #include <ttyd/mario.h>
 #include <ttyd/mario_motion.h>
 #include <ttyd/mario_party.h>
@@ -43,16 +48,19 @@
 #include <ttyd/win_main.h>
 #include <ttyd/win_root.h>
 #include <ttyd/windowdrv.h>
+#include <ttyd/animdrv.h>
+#include <ttyd/battle.h>
 
 #include "common.h"
 #include "OWR.h"
 #include "patch.h"
+#include "boss_script.h"
 
-#include <cstdint>
-#include <cstring>
-#include <cstdio>
-#include <cinttypes>
 #include <algorithm>
+#include <cinttypes>
+#include <cstdint>
+#include <cstdio>
+#include <cstring>
 
 using gc::pad::PadInput;
 using ttyd::common::ItemData;
@@ -157,6 +165,36 @@ namespace mod::owr
     KEEP_VAR StateManager *gState = nullptr;
     KEEP_VAR NumericInputData g_numericInput;
 
+    KEEP_VAR const char *kChampStageGlobalDir = "bti_01";
+    KEEP_VAR const char *kChampStageCurrentDir = "stg_03_0";
+    KEEP_VAR BattleStageObjectData kChampStageProps[] = {
+        {"gamen", 2, 0, {0.0f, 0.0f, -50.0f}, 0, 60, {0, 0}},
+        {"etc", 2, 0, {0.0f, 0.0f, -54.0f}, 10, 50, {0, 0}},
+        {"side__L", 2, 0, {-137.0f, 0.0f, -40.0f}, 20, 40, {0, 0}},
+        {"side__R", 2, 0, {137.0f, 0.0f, -40.0f}, 30, 30, {0, 0}},
+        {"B", 2, 2, {0.0f, 0.0f, 0.0f}, 0, 60, {0, 0}},
+        {"C", 2, 3, {0.0f, 0.0f, 0.0f}, 0, 60, {0, 0}},
+        {"if_wire", 5, 6, {0.0f, 130.0f, 0.0f}, 0, 0, {0, 0}},
+        {"if_body", 5, 6, {0.0f, 130.0f, 0.0f}, 0, 0, {0, 0}},
+    };
+
+    KEEP_VAR const char *kZakoStageGlobalDir = "bti_01";
+    KEEP_VAR const char *kZakoStageCurrentDir = "stg_05_0";
+    KEEP_VAR BattleStageObjectData kZakoStageProps[] = {
+        {"A1", 2, 0, {107.0f, 0.0f, -53.0f}, 0, 60, {0, 0}},
+        {"S_mae_l", 2, 1, {-90.0f, 0.0f, 48.0f}, 0, 60, {0, 0}},
+        {"S_mae_r", 2, 1, {84.0f, 0.0f, 48.0f}, 0, 60, {0, 0}},
+        {"S_oku_l", 2, 1, {-35.0f, 0.0f, -42.0f}, 0, 60, {0, 0}},
+        {"S_oku_r", 2, 1, {35.0f, 0.0f, -42.0f}, 0, 60, {0, 0}},
+        {"B", 2, 2, {0.0f, 0.0f, 0.0f}, 0, 60, {0, 0}},
+        {"C", 2, 3, {0.0f, 0.0f, 0.0f}, 0, 60, {0, 0}},
+        {"if_wire", 5, 6, {0.0f, 130.0f, 0.0f}, 0, 0, {0, 0}},
+        {"if_body", 5, 6, {0.0f, 130.0f, 0.0f}, 0, 0, {0, 0}},
+    };
+
+    KEEP_VAR BattleUnitSetup gKanbuPartyUnits[2];
+    KEEP_VAR BattleGroupSetup gKanbuGroup;
+
     KEEP_VAR bool (*g_OSLink_trampoline)(OSModuleInfo *, void *) = nullptr;
     KEEP_VAR void (*g_seq_logoMain_trampoline)(SeqInfo *info) = nullptr;
     KEEP_VAR void (*g_seq_gameInit_trampoline)(SeqInfo *info) = nullptr;
@@ -173,6 +211,20 @@ namespace mod::owr
     KEEP_VAR int (*g_msgWindow_Entry_trampoline)(const char *message, int unk1, int windowType) = nullptr;
     KEEP_VAR void (*g__load_trampoline)(const char *mapName, const char *entranceName, const char *beroName) = nullptr;
     KEEP_VAR ttyd::battle_unit::BattleWorkUnit *(*g_BtlUnit_Entry_trampoline)(BattleUnitSetup *) = nullptr;
+    KEEP_VAR void (*g_ExecAllUnitBattleEndEvent_trampoline)() = nullptr;
+    KEEP_VAR int (*g_main__psndSFXOn_trampoline)(int, int, int, int, const void *, int, int, int) = nullptr;
+    KEEP_VAR int (*g_psndSFXOff_trampoline)(int) = nullptr;
+    KEEP_VAR void (*g_npcSetupBattleInfo_trampoline)(::NpcEntry *, void *) = nullptr;
+    KEEP_VAR int32_t (*g_pouchRemoveItem_trampoline)(int32_t) = nullptr;
+    KEEP_VAR void (*g_swSet_trampoline)(int) = nullptr;
+    KEEP_VAR int32_t (*g_BattleCalculateDamage_trampoline)(BattleWorkUnit *,
+                                                           BattleWorkUnit *,
+                                                           BattleWorkUnitPart *,
+                                                           BattleWeapon *,
+                                                           uint32_t *,
+                                                           uint32_t) = nullptr;
+    KEEP_VAR int32_t (*g_InterruptStop_trampoline)(ttyd::evtmgr::EvtEntry *, bool) = nullptr;
+    KEEP_VAR int32_t (*g_BattleCheckConcluded_trampoline)(void *) = nullptr;
 
     void OWR::SequenceInit()
     {
@@ -366,48 +418,35 @@ namespace mod::owr
 
         uintptr_t length_pointer = 0x80000FFC;
         uintptr_t item_pointer = 0x80001000;
+        uintptr_t index_pointer = 0x803DB860;
 
         uint32_t length = *reinterpret_cast<uint32_t *>(length_pointer);
-        int16_t *items = reinterpret_cast<int16_t *>(item_pointer);
-
-        if (length > 0)
+        if (length == 0)
+            return;
+        if (length > 255) // guard a clobbered/garbage length
         {
-            for (uint32_t i = 0; i < length; i++)
-            {
-                // Try to give the item
-                if (!pouchGetItem(items[i]))
-                {
-                    // Couldn't give the item, so try to send it to storage
-                    pouchAddKeepItem(items[i]);
-                }
-
-                if (items[i] >= 114 && items[i] <= 120)
-                {
-                    uint8_t count = 0;
-                    for (int i = 114; i <= 120; i++)
-                    {
-                        if (ttyd::mario_pouch::pouchCheckItem(i) > 0)
-                            count++;
-                    }
-                    if (gState->apSettings->goal == 2 && count >= gState->apSettings->goalStars &&
-                        ttyd::swdrv::swGet(6120) == 0)
-                    {
-                        if (checkIfInGameNotBattle())
-                        {
-                            ttyd::swdrv::swSet(6120);
-                            ttyd::seqdrv::seqSetSeq(SeqIndex::kMapChange, "end_00", 0);
-                        }
-                        else
-                        {
-                            // Defer the sequence change until we are back in the game
-                            ttyd::swdrv::swSet(6121);
-                        }
-                    }
-                }
-                items[i] = 0;
-            }
-            memset(reinterpret_cast<void *>(length_pointer), 0, sizeof(uint32_t));
+            *reinterpret_cast<uint32_t *>(length_pointer) = 0;
+            return;
         }
+
+        int16_t *items = reinterpret_cast<int16_t *>(item_pointer);
+        for (uint32_t i = 0; i < length; i++)
+        {
+            // Try to give the item
+            if (!pouchGetItem(items[i]))
+            {
+                // Couldn't give the item, so try to send it to storage
+                pouchAddKeepItem(items[i]);
+            }
+
+            // Crystal-star goal is handled in pouchGetItemHook via
+            // checkCrystalStarGoal, which fires for stars from any source
+            // (including the pouchGetItem call above).
+            items[i] = 0;
+        }
+
+        *reinterpret_cast<uint32_t *>(index_pointer) += length;
+        *reinterpret_cast<uint32_t *>(length_pointer) = 0; // release last; producer gates on this
     }
 
     KEEP_FUNC void replaceMultipleCharacters(ttyd::memory::SmartAllocationData *smartData, uint32_t startIndex, int value)
@@ -1000,7 +1039,7 @@ namespace mod::owr
     }
 
     KEEP_FUNC void seqSetSeqHook(SeqIndex seq, const char *map, const char *bero)
-    {   
+    {
         if (seq == SeqIndex::kGameOver && !gState->firstDeath)
         {
             gState->apSettings->deathLinkSent = 1;
@@ -1055,11 +1094,13 @@ namespace mod::owr
             ttyd::swdrv::swSet(2884);
 
         // Advance Ch.5 prologue if post-cortez
-        if (ttyd::swdrv::swByteGet(1717) >= 10 && ttyd::swdrv::swByteGet(1705) < 7 && strncmp(map, "muj", 3) != 0 && strncmp(map, "dou", 3) != 0)
+        if (ttyd::swdrv::swByteGet(1717) >= 10 && ttyd::swdrv::swByteGet(1705) < 7 && strncmp(map, "muj", 3) != 0 &&
+            strncmp(map, "dou", 3) != 0)
             ttyd::swdrv::swByteSet(1705, 11);
 
         const ttyd::mario::Player *playerPtr = ttyd::mario::marioGetPtr();
-        if (strncmp(map, "tou", 3) == 0 && ttyd::swdrv::swGet(6075) == 1 && playerPtr->prevFollowerId == ttyd::party::PartyMembers::kEgg)
+        if (strncmp(map, "tou", 3) == 0 && ttyd::swdrv::swGet(6075) == 1 &&
+            playerPtr->prevFollowerId == ttyd::party::PartyMembers::kEgg)
             ttyd::party::partyKill2(1);
 
         if (gState->apSettings->cutsceneSkip)
@@ -1285,27 +1326,260 @@ namespace mod::owr
         }
         g_seq_gameInit_trampoline(info);
     }
-    
-    KEEP_FUNC void _load_Hook(const char* mapName, const char* entranceName, const char* beroName)
+
+    KEEP_FUNC void _load_Hook(const char *mapName, const char *entranceName, const char *beroName)
     {
         g__load_trampoline(mapName, entranceName, beroName);
         for (int i = 8; i < 16; i++) gState->state_msgWork[i] = 0;
         ttyd::msgdrv::msgLoad("mod", 2);
         ttyd::msgdrv::msgLoad("desc", 3);
     }
-    
+
+    static BattleUnitKind *g_endScriptKind[0x40];
+    static BattleUnitKind *g_powOrigKind[0x40];
+    static BattleUnitKind *g_currentBossOrigKind;
+
+    struct OrigKindEntry
+    {
+        BattleUnitSetup *setup;
+        BattleUnitKind *kind;
+    };
+    static OrigKindEntry g_origKindMap[32];
+    static int32_t g_origKindMapCount;
+
+    KEEP_FUNC void RegisterOriginalKind(BattleUnitSetup *setup, BattleUnitKind *orig)
+    {
+        if (!setup || !orig)
+            return;
+        for (int32_t i = 0; i < g_origKindMapCount; i++)
+            if (g_origKindMap[i].setup == setup)
+            {
+                g_origKindMap[i].kind = orig;
+                return;
+            }
+        if (g_origKindMapCount < 32)
+        {
+            g_origKindMap[g_origKindMapCount].setup = setup;
+            g_origKindMap[g_origKindMapCount].kind = orig;
+            g_origKindMapCount++;
+        }
+    }
+
+    static BattleUnitKind *LookupOriginalKind(BattleUnitSetup *setup)
+    {
+        for (int32_t i = 0; i < g_origKindMapCount; i++)
+            if (g_origKindMap[i].setup == setup)
+                return g_origKindMap[i].kind;
+        return nullptr;
+    }
+
+    static void *GetData_FromTable(DataTableEntry *table, int32_t id)
+    {
+        if (!table)
+            return nullptr;
+        for (; table->id != 0; table++)
+            if (static_cast<int32_t>(table->id) == id)
+                return table->data;
+        return nullptr;
+    }
+
+    static bool IsBossHpScaleExcluded(int32_t unitType)
+    {
+        switch (unitType)
+        {
+            case 0x09: // gesso_left_arm
+            case 0x0A: // gesso_right_arm
+            case 0x23: // rocket_punch
+            case 0x5F: // cortez_claw
+            case 0x60: // cortez_rapier
+            case 0x61: // cortez_sword
+            case 0x62: // cortez_saber
+            case 0x64: // gundan_zako
+            case 0x65: // gundan_zako
+            case 0x66: // gundan_zako
+            case 0x6C: // moamoa_tentacle
+            case 0x6D: // moamoa_tentacle
+            case 0x6E: // moamoa_tentacle
+            case 0x6F: // moamoa_mouth
+            case 0x7A: // rocket_punch_mkII
+            case 0x95: // SQ hand
+            case 0x97: // SQ hand
+            case 0x98: // SQ hand
+                return true;
+            default:
+                return false;
+        }
+    }
+
+    static bool IsBossDefScaleExcluded(int32_t unitType)
+    {
+        switch (unitType)
+        {
+            case 0x09: // gesso_left_arm
+            case 0x0A: // gesso_right_arm
+            case 0x23: // rocket_punch
+            case 0x5F: // cortez_claw
+            case 0x60: // cortez_rapier
+            case 0x61: // cortez_sword
+            case 0x62: // cortez_saber
+            case 0x64: // gundan_zako
+            case 0x65: // gundan_zako
+            case 0x66: // gundan_zako
+            case 0x6C: // moamoa_tentacle
+            case 0x6D: // moamoa_tentacle
+            case 0x6E: // moamoa_tentacle
+            case 0x6F: // moamoa_mouth
+            case 0x7A: // rocket_punch_mkII
+            case 0x93: // batten_satellite
+            case 0x95: // SQ hand
+            case 0x97: // SQ hand
+            case 0x98: // SQ hand
+                return true;
+            default:
+                return false;
+        }
+    }
+
+    static bool IsBossPowScaleExcluded(int32_t unitType)
+    {
+        switch (unitType)
+        {
+            default:
+                return false;
+        }
+    }
+
+    static void ApplyBossScriptPatches(int32_t unitType, int32_t scaledHp)
+    {
+        switch (unitType)
+        {
+            case 0x14: // gold_chorobon
+                GoldChorobonPatches(scaledHp);
+                break;
+            case 0x17: // gonbaba (Hooktail)
+                HooktailPatches(scaledHp);
+                break;
+            case 0x22: // magnum_battender
+                MagnumBattenderPatches(scaledHp);
+                break;
+            case 0x4F: // faker_mario
+                FakerMarioPatches(scaledHp);
+                break;
+            case 0x63: // kanbu3
+                Kanbu3Patches(scaledHp);
+                break;
+            case 0x79: // magnum_battender_mkII
+                MagnumBattenderMKIIPatches(scaledHp);
+                break;
+            default:
+                break;
+        }
+    }
+
     KEEP_FUNC BattleWorkUnit *BtlUnit_Entry_Hook(BattleUnitSetup *setup)
     {
+        BattleUnitKind *kind = setup->unit_kind_params;
+        if (setup)
+        {
+            if (kind && kind->unit_type == BattleUnitType::SYSTEM)
+            {
+                mod::vm::VM_UnlockAll(); // SYSTEM is first unit each battle: drop last fight's pins
+                for (auto &k : g_endScriptKind) k = nullptr;
+                for (auto &k : g_powOrigKind) k = nullptr;
+                g_currentBossOrigKind = nullptr;
+            }
+            mod::vm::VM_PrefetchForKind(reinterpret_cast<uint32_t>(kind), true);
+        }
+
+        BattleUnitKind *bossOrigKind = LookupOriginalKind(setup);
+        if (bossOrigKind)
+            g_currentBossOrigKind = bossOrigKind;
+        else if (g_currentBossOrigKind && kind && kind->unit_type <= BattleUnitType::BONETAIL)
+            bossOrigKind = g_currentBossOrigKind;
+
         const OSModuleInfo *relPtr = _globalWorkPtr->relocationBase;
-        if (!relPtr)
-            return g_BtlUnit_Entry_trampoline(setup);
-        RelId currentRel = static_cast<RelId>(relPtr->id);
-        ScaleUnitStats(setup->unit_kind_params, currentRel);
-        return g_BtlUnit_Entry_trampoline(setup);
+        if (relPtr && setup && setup->unit_kind_params)
+        {
+            RelId currentRel = static_cast<RelId>(relPtr->id);
+            if (bossOrigKind)
+            {
+                if (gState->apSettings->bossStatScaling)
+                {
+                    BattleUnitKind *newKind = setup->unit_kind_params;
+                    if (!IsBossHpScaleExcluded(newKind->unit_type))
+                    {
+                        newKind->max_hp = bossOrigKind->max_hp;
+                        newKind->level = bossOrigKind->level;
+                        if (newKind->unit_type == 0x93) // batten_satellite
+                            newKind->max_hp = 2; // Small nerf for early game beatablility
+                    }
+                    if (!IsBossDefScaleExcluded(newKind->unit_type) && newKind->parts && bossOrigKind->parts)
+                    {
+                        int32_t partCount = newKind->num_parts < bossOrigKind->num_parts ? newKind->num_parts : bossOrigKind->num_parts;
+                        for (int32_t i = 0; i < partCount; i++) newKind->parts[i].defense = bossOrigKind->parts[i].defense;
+                    }
+                    ApplyBossScriptPatches(newKind->unit_type, bossOrigKind->max_hp);
+                }
+            }
+            else
+            {
+                ScaleUnitStats(setup->unit_kind_params, currentRel);
+            }
+        }
+
+        const char *mapName = GetBossMsgMap(kind->unit_type);
+        if (mapName)
+        {
+            ttyd::msgdrv::msgLoad(mapName, 15);
+        }
+
+        BattleWorkUnit *entered = g_BtlUnit_Entry_trampoline(setup);
+        if (entered)
+        {
+            int32_t slot = entered->unit_id & 0x3F;
+            g_endScriptKind[slot] = LookupOriginalKind(setup);
+            g_powOrigKind[slot] = (bossOrigKind && kind && !IsBossPowScaleExcluded(kind->unit_type)) ? bossOrigKind : nullptr;
+        }
+        return entered;
+    }
+
+    KEEP_FUNC void ExecAllUnitBattleEndEvent_Hook()
+    {
+        void *bw = ttyd::battle::_battleWorkPtr;
+        for (int32_t i = 0; i < 0x40; i++)
+        {
+            BattleWorkUnit *u = reinterpret_cast<BattleWorkUnit *>(ttyd::battle::BattleGetUnitPtr(bw, i));
+            if (!u)
+                continue;
+            BattleUnitKind *orig = g_endScriptKind[i];
+            void *evt = orig ? GetData_FromTable(orig->data_table, 0x3F) : ttyd::battle_unit::BtlUnit_GetData(u, 0x3F);
+            if (!evt)
+                continue;
+            ttyd::evtmgr::EvtEntry *th = ttyd::evtmgr::evtEntry(evt, 0xa, 0);
+            *reinterpret_cast<uint32_t *>(reinterpret_cast<char *>(th) + 0x160) = u->unit_id;
+        }
+    }
+    static constexpr int32_t kHpScaleBlacklist[] = {
+        BattleUnitType::MINI_YUX,   // 0x1E
+        BattleUnitType::MINI_Z_YUX, // 0x74
+        BattleUnitType::MINI_X_YUX, // 0x76
+    };
+
+    static bool IsHpScaleBlacklisted(int32_t unitType)
+    {
+        constexpr int32_t count = sizeof(kHpScaleBlacklist) / sizeof(kHpScaleBlacklist[0]);
+        for (int32_t i = 0; i < count; i++)
+        {
+            if (kHpScaleBlacklist[i] == unitType)
+                return true;
+        }
+        return false;
     }
 
     KEEP_FUNC void ScaleUnitStats(BattleUnitKind *unit, RelId rel)
     {
+        if (!unit)
+            return;
         if ((gState->apSettings->enemyRandomizer == 0 && gState->apSettings->shuffleChapterStats == 0) ||
             gState->apSettings->enemyStatScaling == 0)
             return;
@@ -1313,8 +1587,273 @@ namespace mod::owr
         BattleUnitKind *unit_kind = GetUnitKindById(unit->unit_type);
         if (!unit_kind || !statRelValues || rel == RelId::JON)
             return;
+        if (IsHpScaleBlacklisted(unit->unit_type))
+            return;
         unit->max_hp = statRelValues->base_hp;
         unit->level = statRelValues->level;
+    }
+
+    KEEP_FUNC int32_t AlterDamageCalculation(BattleWorkUnit *attacker,
+                                             BattleWorkUnit *target,
+                                             BattleWorkUnitPart *target_part,
+                                             BattleWeapon *weapon,
+                                             uint32_t *unk0,
+                                             uint32_t unk1)
+    {
+        int32_t base_atk = weapon ? static_cast<int32_t>(weapon->damage_function_params[0]) : 0;
+        bool overrode = false;
+        if (gState->apSettings->bossStatScaling && attacker && weapon && weapon->damage_function && !weapon->item_id &&
+            !(weapon->target_property_flags & 0x100000) && base_atk > 0)
+        {
+            BattleUnitKind *origKind = g_powOrigKind[attacker->unit_id & 0x3F];
+            if (origKind)
+            {
+                int32_t atk = GetBossAtk(origKind->unit_type);
+                if (atk >= 0)
+                {
+                    if (atk < 1)
+                        atk = 1;
+                    if (atk > 99)
+                        atk = 99;
+                    weapon->damage_function_params[0] = static_cast<uint32_t>(atk);
+                    overrode = true;
+                }
+            }
+        }
+
+        int32_t damage = g_BattleCalculateDamage_trampoline(attacker, target, target_part, weapon, unk0, unk1);
+
+        if (overrode)
+            weapon->damage_function_params[0] = static_cast<uint32_t>(base_atk);
+        return damage;
+    }
+
+    KEEP_FUNC int32_t InterruptStopHook(ttyd::evtmgr::EvtEntry *evt, bool isFirstCall)
+    {
+        if (isFirstCall && gState->apSettings->bossRandomizer && ttyd::evtmgr_cmd::evtGetValue(evt, evt->evtArguments[0]) == 1)
+        {
+            const char *currentMap = mod::common::GetCurrentMap();
+            if (!currentMap || strcmp(currentMap, "las_29") != 0)
+            {
+                void *bw = ttyd::battle::_battleWorkPtr;
+                for (int32_t i = 0; i < 0x40; i++)
+                {
+                    BattleWorkUnit *u = reinterpret_cast<BattleWorkUnit *>(ttyd::battle::BattleGetUnitPtr(bw, i));
+                    if (!u || u->current_kind > BattleUnitType::BONETAIL)
+                        continue;
+                    uint8_t *p = reinterpret_cast<uint8_t *>(u);
+                    *reinterpret_cast<int16_t *>(p + 0x10c) = 0;
+                    *reinterpret_cast<uint32_t *>(p + 0x104) |= 0x20000;
+                }
+                *reinterpret_cast<uint32_t *>(reinterpret_cast<uint8_t *>(bw) + 0xef4) |= 0x10;
+                return 2;
+            }
+        }
+        return g_InterruptStop_trampoline(evt, isFirstCall);
+    }
+
+    KEEP_FUNC int32_t BattleCheckConcludedHook(void *battleWork)
+    {
+        int32_t concluded = g_BattleCheckConcluded_trampoline(battleWork);
+        if (concluded && gState->apSettings->bossRandomizer)
+        {
+            const char *currentMap = mod::common::GetCurrentMap();
+            if (currentMap && strcmp(currentMap, "las_29") == 0)
+            {
+                bool enemyAlive = false;
+                for (int32_t i = 0; i < 0x40; i++)
+                {
+                    BattleWorkUnit *u = reinterpret_cast<BattleWorkUnit *>(ttyd::battle::BattleGetUnitPtr(battleWork, i));
+                    if (!u || u->current_kind > BattleUnitType::BONETAIL)
+                        continue;
+                    uint8_t *p = reinterpret_cast<uint8_t *>(u);
+                    if ((*reinterpret_cast<uint32_t *>(p + 0x104) & 0x20000) == 0 &&
+                        *reinterpret_cast<int16_t *>(p + 0x10c) > 0)
+                    {
+                        enemyAlive = true;
+                        break;
+                    }
+                }
+                if (!enemyAlive)
+                    *reinterpret_cast<uint32_t *>(reinterpret_cast<uint8_t *>(battleWork) + 0xef4) |= 0x20;
+            }
+        }
+        return concluded;
+    }
+
+    KEEP_FUNC int main__psndSFXOnHook(int idOrName, int vol, int pan, int a4, const void *pos, int a6, int a7, int a8)
+    {
+        const int channel = g_main__psndSFXOn_trampoline(idOrName, vol, pan, a4, pos, a6, a7, a8);
+        if (channel != -1)
+        {
+            const int slot = channel & 0xFF;
+            const volatile uint32_t *entry = reinterpret_cast<volatile uint32_t *>(0x803DF988 + slot * 0x28);
+            const uint32_t f0 = *entry;
+            if (f0 != 0xFFFFFFFFu)
+                ghosts::OnLocalSfxFired(static_cast<int>(f0 & 0x1FFF), pos != nullptr, channel);
+        }
+        return channel;
+    }
+
+    KEEP_FUNC int psndSFXOffHook(int channel)
+    {
+        ghosts::OnLocalSfxStopped(channel);
+        return g_psndSFXOff_trampoline(channel);
+    }
+
+    KEEP_FUNC void npcSetupBattleInfoHook(::NpcEntry *npc, void *info)
+    {
+        g_npcSetupBattleInfo_trampoline(npc, info);
+        /* if (ghosts::g_ghostState != nullptr &&
+            ghosts::g_ghostState->selfGameRole != ghosts::kGameRoleNone)
+        {
+            info = nullptr;
+        }
+        g_npcSetupBattleInfo_trampoline(npc, info);*/
+    }
+
+    static void applyShopFlagLive(int flag)
+    {
+        char *shopWork = *reinterpret_cast<char **>(0x8041EB60);
+        if (shopWork == nullptr)
+            return;
+
+        int gswfBase = 6200;
+        const char *nextMapPtr = &ttyd::seq_mapchange::_next_map[0];
+
+        for (int i = 0; i < goodsCount; i++)
+        {
+            if (strncmp(nextMapPtr, goods[i], 6) != 0)
+            {
+                if (i == goodsCount - 1)
+                    return;
+                gswfBase += 6;
+                continue;
+            }
+            break;
+        }
+
+        int index = flag - gswfBase;
+        if (index < 0 || index >= 6)
+            return;
+
+        uint32_t *itemIds = *reinterpret_cast<uint32_t **>(shopWork + 0x08);
+        uint32_t itemId = itemIds[index * 2];
+        switch (gState->apSettings->shopPurchaseLimit)
+        {
+            case 0: // Infinite
+                if (itemId > 125)
+                    return;
+                break;
+            case 1: // Consumables Only
+                if (itemId > 125 && itemId < 236)
+                    return;
+                break;
+            case 2: // Badges Only
+                if (itemId > 239)
+                    return;
+                break;
+            case 3: // Limited
+                break;
+            default:
+                break;
+        }
+
+        uint16_t *itemFlags = reinterpret_cast<uint16_t *>(shopWork + 0x14);
+        itemFlags[index] |= 1;
+    }
+
+    void DeleteFieldItemForFlag(int flag)
+    {
+        if (flag <= 0)
+            return;
+
+        uint16_t kItemStateGetItem = 2;
+
+        char *work = reinterpret_cast<char *>(0x803dc290);
+
+        int count = *reinterpret_cast<int *>(work + 0x0);
+        char *entry = *reinterpret_cast<char **>(work + 0x4);
+        if (entry == nullptr)
+            return;
+
+        for (int i = 0; i < count; i++, entry += 0x98)
+        {
+            uint16_t status = *reinterpret_cast<uint16_t *>(entry + 0x0);
+            if ((status & 0x1) == 0)
+                continue;
+            int32_t entryFlag = *reinterpret_cast<int32_t *>(entry + 0x8);
+            if (entryFlag != flag)
+                continue;
+            uint16_t itemState = *reinterpret_cast<uint16_t *>(entry + 0x24);
+            if (itemState == kItemStateGetItem)
+                return; // local player is picking this up; leave it alone
+            ttyd::itemdrv::itemDelete(entry + 0xC);
+            return;
+        }
+    }
+
+    void HandleMobjForFlag(int flag)
+    {
+        if (flag <= 0)
+            return;
+
+        char *header = reinterpret_cast<char *>(0x803D98A8);
+        int count = *reinterpret_cast<int *>(header + 0x0);
+        char *entry = *reinterpret_cast<char **>(header + 0x4);
+        if (entry == nullptr)
+            return;
+
+        const int32_t encoded = -130000000 + flag;
+        for (int i = 0; i < count; i++, entry += 0x23C)
+        {
+            if ((*reinterpret_cast<uint32_t *>(entry + 0x0) & 0x1) == 0)
+                continue;
+            if (*reinterpret_cast<int32_t *>(entry + 0x1E4) != encoded)
+                continue;
+
+            const char *model = entry + 0x15;
+
+            if (strncmp(model, "MOBJ_Kururin", 12) == 0)
+                return;
+
+            // Shine Sprite box: delete by instance name.
+            if (strcmp(model, "MOBJ_PowerUpBlock") == 0)
+            {
+                ttyd::evt_mobj::mobjDelete(entry + 0x5);
+                return;
+            }
+
+            const bool isBlock = strstr(model, "Block") != nullptr;
+            const int32_t blockState = isBlock ? 0x5A : 0x63;
+            if (*reinterpret_cast<int32_t *>(entry + 0x1DC) != blockState)
+                *reinterpret_cast<int32_t *>(entry + 0x1DC) = blockState;
+
+            if (isBlock)
+            {
+                int32_t poseId = *reinterpret_cast<int32_t *>(entry + 0x70);
+                char *cur = ttyd::animdrv::animPoseGetCurrentAnim(poseId);
+                if (cur != nullptr)
+                {
+                    int len = strlen(cur);
+                    if (len >= 2 && cur[len - 2] == '_' && cur[len - 1] == '1')
+                    {
+                        char emptyAnim[16];
+                        strcpy(emptyAnim, cur);
+                        emptyAnim[len - 1] = '2';
+                        ttyd::animdrv::animPoseSetAnim(poseId, emptyAnim, 1);
+                    }
+                }
+            }
+            return;
+        }
+    }
+
+    KEEP_FUNC void swSetHook(int gswf)
+    {
+        g_swSet_trampoline(gswf);
+        if (gswf >= 6200 && gswf <= 6300)
+            applyShopFlagLive(gswf);
     }
 
     KEEP_FUNC const char *msgSearchHook(const char *msgKey)
@@ -1356,11 +1895,13 @@ namespace mod::owr
             if (strcmp(_next_area, "rsh") != 0)
             {
 #ifdef TTYD_JP
-                const char *message = "<select 0 0 300 40>Dang\n"
-                                      "Shoot";
+                const char *message =
+                    "<select 0 0 300 40>Dang\n"
+                    "Shoot";
 #else
-                const char *message = "<select 0 0 0 40>Dang\n"
-                                      "Shoot";
+                const char *message =
+                    "<select 0 0 0 40>Dang\n"
+                    "Shoot";
 #endif
                 return message;
             }
@@ -1376,6 +1917,107 @@ namespace mod::owr
         if (pouchRemoveItem(ItemId::INVALID_ITEM_PAPER_0054))
         {
             pouchGetItem(ItemId::INVALID_ITEM_PAPER_0054);
+        }
+    }
+
+    inline bool containsKeyItem(int16_t itemId)
+    {
+        constexpr uint32_t loopCount = sizeof(ttyd::mario_pouch::PouchData::key_items) / sizeof(int16_t);
+        const int16_t *keyItemsPtr = &ttyd::mario_pouch::pouchGetPtr()->key_items[0];
+
+        for (uint32_t i = 0; i < loopCount; i++)
+        {
+            const int32_t currentItem = keyItemsPtr[i];
+            if (currentItem == ItemId::INVALID_NONE)
+            {
+                // Hit an empty slot, so the item isn't present
+                return false;
+            }
+            else if (currentItem == itemId)
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    inline int32_t addItemToKeyItems(int16_t itemId)
+    {
+        constexpr uint32_t loopCount = sizeof(ttyd::mario_pouch::PouchData::key_items) / sizeof(int16_t);
+        int16_t *keyItemsPtr = &ttyd::mario_pouch::pouchGetPtr()->key_items[0];
+
+        for (uint32_t i = 0; i < loopCount; i++)
+        {
+            if (keyItemsPtr[i] == ItemId::INVALID_NONE)
+            {
+                // Empty slot found, shift everything down one and insert at the front
+                memmove(&keyItemsPtr[1], &keyItemsPtr[0], i * sizeof(int16_t));
+                keyItemsPtr[0] = itemId;
+
+                // Re-add the return pipe to ensure it stays at the top
+                pouchReAddReturnPipe();
+                return 1;
+            }
+        }
+
+        // Key items inventory is full
+        return 0;
+    }
+
+    inline bool removeItemFromKeyItems(int16_t itemId)
+    {
+        constexpr uint32_t loopCount = sizeof(ttyd::mario_pouch::PouchData::key_items) / sizeof(int16_t);
+        int16_t *keyItemsPtr = &ttyd::mario_pouch::pouchGetPtr()->key_items[0];
+
+        for (uint32_t i = 0; i < loopCount; i++)
+        {
+            const int32_t currentItem = keyItemsPtr[i];
+            if (currentItem == ItemId::INVALID_NONE)
+            {
+                // Hit an empty slot before finding the item, so it isn't there
+                return false;
+            }
+            else if (currentItem != itemId)
+            {
+                continue;
+            }
+
+            // Found the item, shift everything after it up one slot
+            const uint32_t remainingSize = (loopCount - i - 1) * sizeof(int16_t);
+            memmove(&keyItemsPtr[i], &keyItemsPtr[i + 1], remainingSize);
+
+            // Clear the last slot in case the inventory was full
+            keyItemsPtr[loopCount - 1] = ItemId::INVALID_NONE;
+            return true;
+        }
+
+        return false;
+    }
+
+    static void checkCrystalStarGoal()
+    {
+        if (gState->apSettings->goal != 2 || ttyd::swdrv::swGet(6120) != 0)
+            return;
+
+        uint8_t count = 0;
+        for (int i = 114; i <= 120; i++)
+        {
+            if (pouchCheckItem(i) > 0)
+                count++;
+        }
+        if (count < gState->apSettings->goalStars)
+            return;
+
+        if (checkIfInGameNotBattle())
+        {
+            ttyd::swdrv::swSet(6120);
+            ttyd::seqdrv::seqSetSeq(SeqIndex::kMapChange, "end_00", 0);
+        }
+        else
+        {
+            // Defer the sequence change until we are back in the game
+            ttyd::swdrv::swSet(6121);
         }
     }
 
@@ -1509,46 +2151,160 @@ namespace mod::owr
             }
             case ItemId::COCONUT:
             {
-                // If the player has already given the coconut to Flavio, then just give the coconut normally
                 if (ttyd::swdrv::swByteGet(1719) >= 4)
                 {
                     return g_pouchGetItem_trampoline(item);
                 }
 
-                // Loop through all of the important items until either the coconut or an empty slot is found
-                constexpr uint32_t loopCount = sizeof(PouchData::key_items) / sizeof(int16_t);
-                int16_t *keyItemsPtr = &pouchGetPtr()->key_items[0];
-
-                for (uint32_t i = 0; i < loopCount; i++)
+                if (!containsKeyItem(item))
                 {
-                    const int32_t currentItem = keyItemsPtr[i];
-                    if (currentItem == ItemId::COCONUT)
+                    if (addItemToKeyItems(item))
                     {
-                        // The player already has the coconut in their important items, so just give it normally
-                        return g_pouchGetItem_trampoline(item);
-                    }
-                    else if (currentItem == ItemId::INVALID_NONE)
-                    {
-                        // The player does not have the coconut and an empty slot was found, so the coconut can be added
-                        // Move all of the important items down one slot
-                        memmove(&keyItemsPtr[1], &keyItemsPtr[0], (loopCount - 1) * sizeof(int16_t));
-
-                        // Place the coconut in the first slot
-                        keyItemsPtr[0] = ItemId::COCONUT;
-
-                        // Regive the return pipe to make sure its always at the top of the inventory
                         pouchReAddReturnPipe();
-                        return 1;
+                        return 2;
                     }
+                    else
+                        return 0; // Key items inventory is full, can't give the item
+                }
+                return g_pouchGetItem_trampoline(item);
+            }
+            case ItemId::LIFE_SHROOM:
+            {
+                if (ttyd::swdrv::swByteGet(1740) >= 2)
+                {
+                    return g_pouchGetItem_trampoline(item);
                 }
 
-                // If this is reached, then the important items part of the inventory is somehow full, so do some failsafe or
-                // something
-                return 0;
+                if (!containsKeyItem(item))
+                {
+                    if (addItemToKeyItems(item))
+                    {
+                        pouchReAddReturnPipe();
+                        return 2;
+                    }
+                    else
+                        return 0; // Key items inventory is full, can't give the item
+                }
+                return g_pouchGetItem_trampoline(item);
+            }
+            case ItemId::KEEL_MANGO:
+            {
+                if (ttyd::swdrv::swByteGet(1752) >= 2 && ttyd::swdrv::swByteGet(1759) >= 2)
+                {
+                    return g_pouchGetItem_trampoline(item);
+                }
+
+                if (!containsKeyItem(item))
+                {
+                    if (addItemToKeyItems(item))
+                    {
+                        pouchReAddReturnPipe();
+                        return 2;
+                    }
+                    else
+                        return 0; // Key items inventory is full, can't give the item
+                }
+                return g_pouchGetItem_trampoline(item);
+            }
+            case ItemId::MYSTIC_EGG:
+            {
+                if (ttyd::swdrv::swByteGet(1752) >= 2)
+                {
+                    return g_pouchGetItem_trampoline(item);
+                }
+
+                if (!containsKeyItem(item))
+                {
+                    if (addItemToKeyItems(item))
+                    {
+                        pouchReAddReturnPipe();
+                        return 2;
+                    }
+                    else
+                        return 0; // Key items inventory is full, can't give the item
+                }
+                return g_pouchGetItem_trampoline(item);
+            }
+            case ItemId::GOLDEN_LEAF:
+            {
+                if (ttyd::swdrv::swByteGet(1752) >= 2)
+                {
+                    return g_pouchGetItem_trampoline(item);
+                }
+
+                if (!containsKeyItem(item))
+                {
+                    if (addItemToKeyItems(item))
+                    {
+                        pouchReAddReturnPipe();
+                        return 2;
+                    }
+                    else
+                        return 0; // Key items inventory is full, can't give the item
+                }
+                return g_pouchGetItem_trampoline(item);
+            }
+            case ItemId::HONEY_CANDY:
+            {
+                if (ttyd::swdrv::swByteGet(1756) >= 2)
+                {
+                    return g_pouchGetItem_trampoline(item);
+                }
+
+                if (!containsKeyItem(item))
+                {
+                    if (addItemToKeyItems(item))
+                    {
+                        pouchReAddReturnPipe();
+                        return 2;
+                    }
+                    else
+                        return 0; // Key items inventory is full, can't give the item
+                }
+                return g_pouchGetItem_trampoline(item);
+            }
+            case ItemId::CAKE_MIX:
+            {
+                if (ttyd::swdrv::swByteGet(1744) >= 2 && ttyd::swdrv::swByteGet(1745) >= 2 &&
+                    ttyd::swdrv::swByteGet(1759) >= 2)
+                {
+                    return g_pouchGetItem_trampoline(item);
+                }
+
+                if (!containsKeyItem(item))
+                {
+                    if (addItemToKeyItems(item))
+                    {
+                        pouchReAddReturnPipe();
+                        return 2;
+                    }
+                    else
+                        return 0; // Key items inventory is full, can't give the item
+                }
+                return g_pouchGetItem_trampoline(item);
+            }
+            case ItemId::FRIGHT_MASK:
+            {
+                if (ttyd::swdrv::swByteGet(1759) >= 2)
+                {
+                    return g_pouchGetItem_trampoline(item);
+                }
+
+                if (!containsKeyItem(item))
+                {
+                    if (addItemToKeyItems(item))
+                    {
+                        pouchReAddReturnPipe();
+                        return 2;
+                    }
+                    else
+                        return 0; // Key items inventory is full, can't give the item
+                }
+                return g_pouchGetItem_trampoline(item);
             }
             case ItemId::UP_ARROW:
             {
-                //If the player obtains Up Arrow, then automatically turn it in to Merlon if Cutscene Skip is on
+                // If the player obtains Up Arrow, then automatically turn it in to Merlon if Cutscene Skip is on
                 if (gState->apSettings->cutsceneSkip)
                 {
                     ttyd::swdrv::swSet(1186);
@@ -1571,7 +2327,42 @@ namespace mod::owr
                     pouchReAddReturnPipe();
                 }
 
+                // A crystal star can arrive through this path from any source
+                // (AP item, chest, shop, or a tattle reward via _get_present_item),
+                // so re-evaluate the crystal-star goal here rather than relying on
+                // RecieveItems, which only sees stars from the AP item array.
+                if (ItemId::DIAMOND_STAR <= item && item <= ItemId::CRYSTAL_STAR)
+                    checkCrystalStarGoal();
+
                 return ret;
+            }
+        }
+    }
+
+    KEEP_FUNC int32_t pouchRemoveItemHook(int32_t item)
+    {
+        switch (item)
+        {
+            case ItemId::COCONUT:
+            case ItemId::LIFE_SHROOM:
+            case ItemId::KEEL_MANGO:
+            case ItemId::MYSTIC_EGG:
+            case ItemId::GOLDEN_LEAF:
+            case ItemId::HONEY_CANDY:
+            {
+                // These items are placed in the key items inventory via the hacky add function,
+                // so check there first and remove from there if found
+                if (removeItemFromKeyItems(item))
+                {
+                    return 1;
+                }
+
+                // Item wasn't in key items, so fall through to normal removal
+                return g_pouchRemoveItem_trampoline(item);
+            }
+            default:
+            {
+                return g_pouchRemoveItem_trampoline(item);
             }
         }
     }
@@ -1918,6 +2709,30 @@ namespace mod::owr
         return g_winLogMain_trampoline(menu);
     }
 
+    void DrainReceivedFlags()
+    {
+        uintptr_t kRecvFlagRingAddr = 0x80004600;
+        int kRecvFlagCapacity = 64;
+
+        volatile uint16_t *head = reinterpret_cast<volatile uint16_t *>(kRecvFlagRingAddr + 0x0);
+        volatile uint16_t *tail = reinterpret_cast<volatile uint16_t *>(kRecvFlagRingAddr + 0x2);
+        volatile uint16_t *ring = reinterpret_cast<volatile uint16_t *>(kRecvFlagRingAddr + 0x4);
+
+        uint16_t h = *head;
+        while (*tail != h)
+        {
+            uint16_t flag = ring[*tail % kRecvFlagCapacity];
+            *tail = static_cast<uint16_t>(*tail + 1);
+
+            if (flag == 0)
+                continue; // 0 is not a valid AP location flag; skip
+
+            ttyd::swdrv::swSet(flag);
+            DeleteFieldItemForFlag(flag);
+            HandleMobjForFlag(flag);
+        }
+    }
+
     void OWR::Update()
     {
         APSettings *apSettingsPtr = gState->apSettings;
@@ -1953,6 +2768,7 @@ namespace mod::owr
 
         SequenceInit();
         RecieveItems();
+        DrainReceivedFlags();
         updateIngredientToast();
     }
 

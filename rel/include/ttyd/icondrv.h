@@ -585,7 +585,10 @@ namespace ttyd::icondrv
 
             // Custom icons.
             AP_ITEM,
-            RETURN_PIPE
+            RETURN_PIPE,
+            WALRUS_WHISKERS,
+            COURAGE_SHELL_PACKAGE,
+            BATTLE_TRUNK_PACK
         };
     }
 

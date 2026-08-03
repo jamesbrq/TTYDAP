@@ -24,6 +24,12 @@ namespace mod
     extern Mod *gMod;
     extern void (*mPFN_marioStMain_trampoline)();
 
+    inline bool platformIsConsole()
+    {
+        return *reinterpret_cast<volatile uint8_t *>(0x80003281) != 0; // patcher flag: 1=console
+    }
+    inline bool multiplayerEnabled() { return !platformIsConsole(); }
+
     void updateEarly();
     void draw(ttyd::dispdrv::CameraId layerId, void *user);
 } // namespace mod

@@ -3,6 +3,7 @@
 #include "cxx.h"
 #include "patch.h"
 #include "errorHandling.h"
+#include "GhostPeers.h"
 #include "ttyd/mariost.h"
 #include "ttyd/npcdrv.h"
 #include "ttyd/animdrv.h"
@@ -25,9 +26,15 @@ namespace mod
         mPFN_marioStMain_trampoline = patch::hookFunction(marioStMain, updateEarly);
         g_npcNameToPtr_trampoline = patch::hookFunction(npcNameToPtr, checkForNpcNameToPtrError);
         g_animPoseMain_trampoline = patch::hookFunction(ttyd::animdrv::animPoseMain, preventAnimPoseMainCrash);
+        if (multiplayerEnabled())
+            ghosts::g_animPoseAutoRelease_trampoline =
+                patch::hookFunction(ttyd::animdrv::animPoseAutoRelease, ghosts::animPoseAutoReleaseHook);
 
         applyGameFixes();
         applyVariousGamePatches();
+
+        if (multiplayerEnabled())
+            ghosts::Init();
 
         // Initialize typesetting early
         ttyd::fontmgr::fontmgrTexSetup();

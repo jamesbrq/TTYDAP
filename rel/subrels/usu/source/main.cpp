@@ -786,6 +786,18 @@ namespace mod
 
         patch::writePatch(&usu_village_chief_talk[104], village_chief_talk_hook, sizeof(village_chief_talk_hook));
 
+        usu_village_chief_talk[1] = GSW(1747);
+        usu_village_chief_talk[2] = 1;
+        usu_village_chief_talk[4] = GSW(1777);
+        usu_village_chief_talk[29] = GSW(1777);
+        usu_village_chief_talk[33] = GSW(1777);
+        usu_village_chief_talk[34] = 1;
+        usu_village_chief_talk[43] = GSW(1777);
+        usu_village_chief_talk[44] = 2;
+        usu_village_chief_talk[78] = EVT_HELPER_OP(&irai_complete_item_get);
+        usu_village_chief_talk[90] = GSW(1747);
+        usu_village_chief_talk[91] = 2;
+
         usu_vivian_init[6] = GSW(1721);
         usu_vivian_init[8] = 0;
         usu_vivian_init[9] = 0;
@@ -943,6 +955,18 @@ namespace mod
         usu_aunt_talk[662] = 17;
         usu_aunt_talk[669] = 0;
         usu_aunt_talk[670] = 0;
+
+        usu_aunt_talk[1] = GSW(1750);
+        usu_aunt_talk[2] = 1;
+        usu_aunt_talk[4] = GSW(1780);
+        usu_aunt_talk[115] = GSW(1780);
+        usu_aunt_talk[119] = GSW(1780);
+        usu_aunt_talk[120] = 1;
+        usu_aunt_talk[362] = GSW(1750);
+        usu_aunt_talk[363] = 2;
+
+        usu_01_init_evt[333] = GSW(1750);
+        usu_01_init_evt[334] = 2;
         usu_aunt_talk[671] = 0;
         usu_aunt_talk[672] = 0;
         usu_aunt_talk[673] = 0;

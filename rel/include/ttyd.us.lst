@@ -36,6 +36,9 @@
 8041e3c0:main_next
 
 //gor_irai.o
+9,1,0000f594:gor_irai_window_disp
+9,1,0000fe60:gor_irai_end_func
+9,1,0000fedc:gor_irai_main_func
 9,1,00010600:gor_irai_init_func
 
 //evt_kagemario.o
@@ -217,6 +220,19 @@ D,1,00004de8:jin_evt_kagemario_init
 80028f18:_mapLoad
 
 80417f30:partnerBattleWeaponArr
+
+//ar.a ar.c (vm)
+802a8bdc:ARStartDMA
+802a8ba0:ARGetDMAStatus
+802a8ccc:ARAlloc
+802a8e08:ARGetSize
+802a8e00:ARGetBaseAddress
+802aa8ec:ARQPostRequest
+80291bd4:aramGetFirstUserAddress
+80291bf8:aramGetUserBytes
+//os.a OS.c (vm)
+80295aec:__OSSetExceptionHandler
+80295b08:__OSGetExceptionHandler
 
 
 
@@ -465,6 +481,9 @@ D,1,00004de8:jin_evt_kagemario_init
 8041E808:mapalloc_base_ptr
 8041E80C:R_battlemapalloc_base_ptr
 8041E814:R_battlemapalloc_size
+8041e818:mapalloc_size
+8041e81c:heapEnd
+8041e830:heapStart
 
 // evtmgr_cmd.o
 800304bc:evtSetFloat
@@ -643,7 +662,7 @@ D,1,00004de8:jin_evt_kagemario_init
 80043d80:npcSetBattleInfo
 80043e78:npcSetupBattleInfo
 800440f8:npcCheckInterrupt
-// 8004432c:_npcHitCheckHammerAllMotion
+8004432c:_npcHitCheckHammerAllMotion
 // 800446b4:_npcHitCheckSphere
 8004482c:fbatHitCheck
 80046604:fbatHitCheckAll
@@ -839,7 +858,7 @@ D,1,00004de8:jin_evt_kagemario_init
 // 800550ac:evt_sub_get_dist
 // 800551e8:evt_sub_area_check
 // 800553f8:evt_sub_get_stopwatch
-// 8005548c:evt_sub_random
+8005548c:evt_sub_random
 // 800554f8:evt_sub_rumble_onoff
 // 80055580:evt_sub_get_sincos
 // 80055648:evt_sub_spline_free
@@ -923,12 +942,15 @@ D,1,00004de8:jin_evt_kagemario_init
 8005e0c0:marioGetPtr
 
 // mario_cam.o
+801a94f0:marioGetCamId
 801a94c0:marioSetCamId
+
+8000f2fc:camGetPtr
 
 // mobjdrv.o
 // .text
 // 8005eff0:mobjNearDistCheck2
-// 8005f290:mobjCheckItemboxOpen
+8005f290:mobjCheckItemboxOpen
 // 8005f334:mobjCheckExec
 // 8005f3a4:mobjGetHint
 // 8005f3c0:mobjCalcMtx2
@@ -939,7 +961,7 @@ D,1,00004de8:jin_evt_kagemario_init
 8005f8ac:mobjNameToPtr
 // 8005f968:mobjMain
 // 8006098c:mobjSetPosition
-// 80060a94:mobjDelete
+80060a94:mobjDelete
 // 80060b9c:mobjEntry
 // 80060d78:mobjHitEntry
 // 800612f0:mobjReset
@@ -1525,6 +1547,9 @@ D,1,00004de8:jin_evt_kagemario_init
 // 800D59B4:pouchKeyItem
 800D59C8:pouchInit
 800D5EB0:pouchGetPtr
+800B7688:partyKeyOff
+800b768c:partyKeyOn
+
 // .data
 80315380:_party_max_hp_table
 
@@ -1538,14 +1563,14 @@ D,1,00004de8:jin_evt_kagemario_init
 // 800d7b64:psndENVMain
 // 800d91e8:psndENV_stop
 // 800d9558:psndSFX_get_vol
-// 800d95a0:psndSFXChk
-// 800d95f8:psndSFXOff
+800d95a0:psndSFXChk
+800d95f8:psndSFXOff
 // 800d96c0:psndSFX_dist
 // 800d96f8:psndSFX_pos
 // 800d9744:psndSFX_pit
 // 800d97d0:psndSFX_vol
 // 800d9808:psndSFXOnEx_3D
-// 800d9848:psndSFXOn_3D
+800d9848:psndSFXOn_3D
 // 800d9884:psndSFXOnVol
 800d98bc:psndSFXOn
 // 800d98f8:psndSFXOn_
@@ -2476,7 +2501,7 @@ D,1,00004de8:jin_evt_kagemario_init
 // 80113140:btlevtcmd_ChangeParty
 // 8011319c:btlevtcmd_ReplaceParts
 80113304:btlevtcmd_KillUnit
-// 801133bc:btlevtcmd_SpawnUnit
+801133bc:btlevtcmd_SpawnUnit
 // 80113430:btlevtcmd_DrawLots
 // 8011350c:btlevtcmd_GetRandomValue
 // 8011355c:btlevtcmd_GetPosFloat
@@ -3301,7 +3326,7 @@ D,1,00004de8:jin_evt_kagemario_init
 // 80214fac:_MarioExpDisp
 // 80215088:btlseqEnd_DispMain
 // 802151b4:btlseqEnd_DispInit
-// 802151c4:_ExecAllUnitBattleEndEvent
+802151c4:_ExecAllUnitBattleEndEvent
 80215234:btlseqEnd
 802166a4:BattleGetRankNameLabel
 // 802166ec:_get_rank_data
@@ -3714,7 +3739,7 @@ D,1,00004de8:jin_evt_kagemario_init
 // 800AD0E8:itemNearDistCheck
 // 800AD2AC:itemHitCheck
 800AD658:itemNameToPtr
-// 800AD6F4:itemDelete
+800AD6F4:itemDelete
 800AD7F0:itemEntry
 // 800ADFD0:itemModeChange
 800ADFE0:itemMain
@@ -4003,6 +4028,7 @@ D,1,00004de8:jin_evt_kagemario_init
 3,5,000044b8:bom_talk_murabito_f_01
 3,5,00004548:bom_talk_murabito_g_01
 3,5,000045d8:bom_talk_murabito_h_01
+3,5,000046d8:bom_init_white_01
 3,5,00004668:bom_talk_murabito_i_01
 3,5,00004730:bom_talk_white
 3,5,000047cc:bom_musume_talk
@@ -4016,6 +4042,9 @@ D,1,00004de8:jin_evt_kagemario_init
 3,5,00006e8c:bom_talk_murabito_g_02
 3,5,00006fe0:bom_talk_murabito_h_02
 3,5,00007244:bom_talk_murabito_i_02
+3,5,0000731c:bom_init_white_02
+3,5,0000779c:bom_talk_white_02
+3,5,00007970:bom_iri_25_white_bed
 3,5,00007f1c:bom_evt_white_bed
 3,5,00008700:bom_kiza_talk
 3,5,00009724:bom_02_init_evt
@@ -4028,6 +4057,9 @@ D,1,00004de8:jin_evt_kagemario_init
 5,5,000014b8:dou_watergate_handle_init
 5,5,00001808:dou_watergate_handle
 5,5,00001fe4:dou_03_init_evt
+5,5,000030e0:dou_kuribo_init
+5,5,00003120:dou_kuribo_talk
+5,5,00003d68:dou_04_init_evt
 5,5,000040e4:dou_bigdoor_event_init
 5,5,00004174:dou_bigdoor_event
 5,5,00004c54:dou_peramajin_before
@@ -4107,9 +4139,13 @@ D,1,00004de8:jin_evt_kagemario_init
 8,5,000091a0:gon_07_init_evt
 8,5,00009d38:gon_evt_chk_08
 8,5,00009d94:gon_evt_unlock_08
+8,5,00009dbc:gon_nokkosu_init
+8,5,00009dfc:gon_nokkosu_talk
 8,5,0000a23c:gon_08_init_evt
 8,5,0000b56c:gon_10_init_evt
 8,5,0000bac4:gon_gonbaba_event
+8,5,0000d1c8:gon_iri_16_cloud_evt
+8,5,0000d260:gon_iri_16_init
 8,5,0000d344:gon_11_init_evt
 8,5,0000d600:gon_chuchurina_sogu
 8,5,0000e048:gon_item_get00
@@ -4160,6 +4196,7 @@ D,1,00004de8:jin_evt_kagemario_init
 9,5,00002f38:gor_suifubomb_b_urouro2
 9,5,00002fa4:gor_suifubomb_b_init
 9,5,00003040:gor_suifubomb_b_regl
+9,1,0000309c:gor_make_itemsel_table
 9,5,00003130:gor_suifubomb_b_talk
 9,5,00003300:gor_suifubomb_c_init
 9,5,00003338:gor_suifubomb_c_talk
@@ -4169,6 +4206,8 @@ D,1,00004de8:jin_evt_kagemario_init
 9,5,00003580:gor_tentyou_talk
 9,5,000035b8:gor_tenin_init
 9,5,00003648:gor_tenin_talk
+9,5,00003680:gor_borodo2_init_00
+9,5,000037d4:gor_borodo2_talk_00
 9,5,00003808:gor_mokorim_init
 9,5,00003878:gor_mokorim_talk
 9,5,00004124:gor_luigi_init_00
@@ -4196,6 +4235,10 @@ D,1,00004de8:jin_evt_kagemario_init
 9,5,0000e554:gor_return_gorotsuki_town_init
 9,5,0000e5b8:gor_return_gorotsuki_town
 9,5,0000ef7c:gor_00_init_evt
+9,5,000229f8:gor_evt_unlock_npc
+9,5,00045b20:gor_irai_msg_exposition
+9,5,00046018:gor_irai_main
+9,5,00046210:gor_irai_tenshu_main
 
 // gor_01.o
 9,5,0000fed8:gor_badgemaster_init
@@ -4212,6 +4255,9 @@ D,1,00004de8:jin_evt_kagemario_init
 9,5,00012bec:gor_kuribo1_talk
 9,5,00012dac:gor_kuribo2_talk
 9,5,00012ef4:gor_kuribo3_talk
+9,5,00013134:gor_chusan1_init
+9,5,000131b0:gor_chusan1_regl
+9,5,000133cc:gor_chusan1_naguru
 9,5,00013508:gor_chusan1_talk
 9,5,000137e0:gor_chusan2_talk
 9,5,00013918:gor_bomhei_talk
@@ -4219,6 +4265,8 @@ D,1,00004de8:jin_evt_kagemario_init
 9,5,00013f94:gor_luigi_init_01
 9,5,00014050:gor_luigi_npcEnt_01
 9,5,00014318:gor_kick2_init
+9,5,00014454:gor_borodo2_init_01
+9,5,00014520:gor_borodo2_talk_01
 9,5,00014980:gor_thief_init
 9,5,000149b4:gor_thief_talk
 9,5,00015428:gor_christine_nakama_before
@@ -4229,6 +4277,11 @@ D,1,00004de8:jin_evt_kagemario_init
 9,5,00016e54:gor_01_shop_setup
 9,5,000173d0:gor_christine_nakama
 9,5,00019aac:gor_01_koopa_evt
+9,5,0001add0:gor_iri_09_init
+9,5,0001adf8:gor_iri_09_tentyo_talk
+9,5,0001b0b0:gor_iri_16_init
+9,5,0001b138:gor_iri_16_tyutyu_talk
+9,1,00003f10:gor_iri_09_item_tbl_make
 9,5,0001c178:gor_01_init_evt
 9,5,0001cb40:gor_R_cookbook_recipe_table
 9,5,0001ddf8:gor_cooking_evt
@@ -4236,12 +4289,16 @@ D,1,00004de8:jin_evt_kagemario_init
 9,1,00003980:gor_cook_chk2
 
 // gor_02.o
+9,1,00005600:gor_iri_13_update_item_tbl
+9,1,000056B0:gor_iri_13_make_item_tbl
 9,5,0001ec04:unk_evt_gor_0003ec8c
 9,5,0001ecdc:gor_02_event_00
 9,5,00021040:gor_kurihakase_init
 9,5,00021258:gor_kurihakase_talk
 9,5,00021908:gor_oyabun_talk
 9,5,00021f48:gor_tozokudan1_talk
+9,5,000223bc:gor_tozokudan2_init
+9,5,000228a8:gor_evt_unlock_mario
 9,5,00022b7c:gor_tozokudan2_talk
 9,5,00022edc:gor_sanders_init_02
 9,5,00022f70:gor_sanders_talk_02
@@ -4251,7 +4308,8 @@ D,1,00004de8:jin_evt_kagemario_init
 9,5,00024138:gor_borodo1_init
 9,5,000241a0:gor_borodo1_regl
 9,5,00024208:gor_borodo1_talk
-9,5,00024490:gor_borodo2_talk
+9,5,00024338:gor_borodo2_init_02
+9,5,00024490:gor_borodo2_talk_02
 9,5,0002463c:gor_kuragarisan_write_name
 9,5,00024d08:gor_kuragarisan_talk
 9,5,00024eb8:gor_luigi_init_02
@@ -4272,6 +4330,7 @@ D,1,00004de8:jin_evt_kagemario_init
 9,5,0002c2b4:gor_epigraphy_map_after_stage6
 9,5,0002c688:gor_kurihakase_after3minutes
 9,5,0002cefc:gor_evt_monosiri
+9,5,0002d008:gor_iri_19_init
 9,5,0002d4cc:gor_02_init_evt
 9,5,0002614c:gor_evt_door_sanders_open
 9,5,000261b8:gor_evt_door_sanders_close
@@ -4298,6 +4357,7 @@ D,1,00004de8:jin_evt_kagemario_init
 9,5,00031804:gor_peton_talk_common_03
 9,5,00031cfc:gor_luigi_init_03
 9,5,00031d54:gor_luigi_npcEnt_03
+9,5,00032f10:gor_bteresa_table_talk
 9,5,0003435c:gor_roten_4_talk
 9,5,0003448c:gor_kinopiko_a_talk
 9,5,0003461c:gor_kinopiko_b_talk_03
@@ -4436,6 +4496,14 @@ D,5,0000af00:jin_evt_usu_kagemario_party_kill
 D,5,00012bd0:jin_phase_event_fmario
 
 //jon
+E,5,000000b0:jon_init_evt
+E,5,00002df8:jon_talk_idouya
+E,5,000049ec:jon_iri_12_dokan_in
+E,5,0000507c:jon_iri_12_enemy_dead_event
+E,5,0000525c:jon_iri_12_makkino_talk
+E,5,00005474:jon_iri_12_makkino_fall_return
+E,5,00005628:jon_iri_12_init
+E,5,00005764:jon_evt_iri_30_bomb_rakugaki
 E,5,00005cd0:jon_zonbaba_first_event
 
 //kpa
@@ -4652,6 +4720,7 @@ F,5,00007e38:kpa_07_init_evt
 12,5,00022104:mri_dai3_battle
 12,5,000223f4:mri_15_init_evt
 12,5,000230e4:mri_16_init_evt
+18,5,000245c0:mri_puni_piders_check
 12,5,000245f0:mri_puni_disp_info
 12,5,00024ba4:mri_puni_init
 12,5,000344d8:mri_trap_event
@@ -4802,6 +4871,7 @@ F,5,00007e38:kpa_07_init_evt
 15,5,00002400:pik_talk_papa_taihou_kyoka
 15,5,00002a54:pik_talk_papa
 15,5,00002cb0:pik_talk_mama
+15,5,000031a8:pik_init_konari
 15,5,000031dc:pik_talk_konari
 15,5,000033cc:pik_talk_madam
 15,5,000032ec:pik_talk_madam_ring_return
@@ -4812,6 +4882,7 @@ F,5,00007e38:kpa_07_init_evt
 15,5,00004ff0:pik_init_powan_01
 15,5,00005058:pik_miyageya_talk
 15,5,00005924:pik_miyageya_init
+15,5,0000599c:pik_konarikin_talk
 15,5,00006044:pik_konarikin_init
 15,5,00006194:pik_narikin_papa_init
 15,5,000061f0:pik_narikin_mama_init
@@ -5004,10 +5075,14 @@ F,5,00007e38:kpa_07_init_evt
 18,5,0000e970:tik_lastdungeon
 18,5,0000eb0c:tik_mahojin_event7
 18,5,000112c0:tik_05_init_evt
+18,5,0001193c:tik_iri_12_kino_makkino_talk
+18,5,00011dac:tik_iri_12_kino_talk
+18,5,00011e58:tik_iri_12_init
 18,5,000120a0:tik_06_init_evt
 18,5,000125b0:tik_peach_mail
 18,5,00012948:tik_07_init_evt
 18,5,000130fc:tik_08_init_evt
+18,5,000164e4:tik_majinaisi_direct_talk
 18,5,0001df6c:tik_15_init_evt
 18,5,0001e644:tik_16_init_evt
 18,5,0001ee04:tik_17_init_evt
@@ -5017,6 +5092,10 @@ F,5,00007e38:kpa_07_init_evt
 
 //tou
 19,1,00001fe0:tou_evt_tou_get_ranking
+19,1,00006b7c:iri_13_make_name
+19,1,00006be4:free_tbl
+19,1,00006c30:get_pos
+19,1,00006cd0:make_tbl
 19,5,00000c00:tou_evt_open_tou
 19,5,00001a50:tou_talk_gardman
 19,5,00002298:tou_evt_tou_match_make_default_sub
@@ -5049,6 +5128,7 @@ F,5,00007e38:kpa_07_init_evt
 19,5,0000c1a4:tou_init_kiza
 19,5,0000c1f8:tou_talk_kiza
 19,5,0000c2e8:tou_init_sarary_01
+19,5,0000c3c8:tou_talk_sarary
 19,5,0000d274:tou_evt_uron
 19,5,0000d580:tou_evt_tamago_sleep
 19,5,0000dbe8:tou_evt_tamago_move
@@ -5293,10 +5373,14 @@ F,5,00007e38:kpa_07_init_evt
 1C,5,00000060:win_vivian_init
 1C,5,00000114:win_maririn_init
 1C,5,00000180:win_majorin_init
+1C,5,000001ec:win_fabio_init
+1C,5,00000240:win_fabio_talk
 1C,5,0000062c:win_witchtrio_momeru
 1C,5,00001450:win_witchtrio_picture
 1C,5,00001ca4:win_mario_vs_witchtrio
 1C,5,000027a4:win_witchtrio_lose
+1C,5,000031b0:win_iri_28_enemy_all_dead
+1C,5,00003434:win_iri_28_init
 1C,5,00003524:win_00_init_evt
 1C,5,000036c8:win_evt_dokan1_message
 1C,5,00003798:win_evt_dokan1
@@ -5426,6 +5510,74 @@ F,5,00007e38:kpa_07_init_evt
 28,5,000aaeb8:unit_crimson_togemet
 28,5,000ace38:unit_monochrome_pakkun
 
+// Bosses
+29,5,00000050:unit_boss_magnum_battender_mkII
+29,5,000033c4:unit_boss_rocket_punch_mkII
+29,5,000043f8:unit_boss_gonbaba
+29,5,000089c0:unit_monban
+29,5,00009d68:unit_boss_kanbu1
+29,5,0000b3e0:unit_faker_mario_gra
+29,5,0000d2a0:unit_chorobon_gundan
+29,5,0000dcb0:unit_gold_chorobon
+29,5,0000efb8:unit_gullible_christine
+29,5,000100d8:unit_gullible_clauda
+29,5,00010d50:unit_gullible_nokotarou
+29,5,00012638:unit_gullible_yoshi
+29,5,000137d8:unit_faker_mario
+29,5,00014620:custom_phase_event_fmario
+29,5,00016770:unit_atmic_teresa
+29,5,00018630:unit_boss_rampell
+29,5,0001ba48:unit_boss_zonbaba
+29,5,0001e688:unit_boss_koopa
+29,5,00021460:unit_boss_kamec_obaba
+29,5,00023530:unit_boss_rampell_las
+29,5,0002d5f0:unit_boss_black_peach
+29,5,0002e290:unit_boss_shadow_queen
+29,5,0002e6d4:unit_boss_shadow_hand_1
+29,5,0002e85c:unit_boss_shadow_hand_2
+29,5,0002e9e4:unit_boss_shadow_hand_small
+29,5,00037348:unit_boss_batten_leader
+29,5,0003be38:unit_boss_batten_satellite
+29,5,0003c8d8:unit_boss_bunbaba
+29,5,0003f4c0:unit_boss_marilyn_las
+29,5,00040868:unit_boss_majolyne_las
+29,5,00043028:unit_boss_magnum_battender
+29,5,00044fa0:unit_boss_rocket_punch
+29,5,00045d58:unit_boss_cortez
+29,5,0004bf20:unit_boss_honeduka
+29,5,0004c1a8:unit_boss_cortez_sword
+29,5,0004e0c8:unit_boss_cortez_claw
+29,5,0004eac8:unit_boss_cortez_rapier
+29,5,0004f868:unit_boss_cortez_saber
+29,5,00050418:unit_boss_kanbu3
+29,5,00052710:unit_boss_gundan_zako_group1
+29,5,00053608:unit_boss_gundan_zako_group2
+29,5,00054830:unit_boss_gundan_zako_group3
+29,5,00057af8:unit_boss_moamoa
+29,5,000596d8:unit_boss_moamoa_tentacle_a
+29,5,0005a458:unit_boss_moamoa_tentacle_b
+29,5,0005b1d0:unit_boss_moamoa_tentacle_c
+29,5,0005bf28:unit_boss_moamoa_mouth
+29,5,0005ca20:unit_boss_gesso
+29,5,0005e1e0:unit_boss_gesso_right_arm
+29,5,0005f240:unit_boss_gesso_left_arm
+29,5,0005fa48:unit_boss_macho_gance
+29,5,00063ab0:unit_boss_champion
+29,5,00067858:unit_iron_sinemon
+29,5,00068870:unit_iron_sinemon2
+29,5,00069888:unit_boss_koopa_tou
+29,5,0006b9b8:unit_boss_vivian
+29,5,0006ce58:unit_boss_majolyne
+29,5,0006f1a0:unit_boss_marilyn
+
+29,5,0000e49c:unit_boss_gold_chorobon_damage_event
+29,5,00004c4c:unit_boss_gonbaba_negotiation_event
+29,5,0004368c:unit_boss_magnum_battender_damage_event
+29,5,00014620:unit_faker_mario_phase_event_fmario
+29,5,00050960:unit_boss_kanbu3_damage_event
+29,5,00050ea4:unit_boss_kanbu3_dead_event
+29,5,00000860:unit_boss_magnum_battender_mkII_damage_event
+
 //battle group setups (from enemies.json)
 2,5,0002c4cc:btlgrp_aji_aji_zako
 2,5,0002c54c:btlgrp_aji_aji_01_01_off_1
@@ -5508,6 +5660,7 @@ F,5,00007e38:kpa_07_init_evt
 8,5,0000f85c:btlgrp_gon_gon_10_01_off_1
 8,5,0000f90c:btlgrp_gon_gon_10_02_off_1
 8,5,0000f9ec:btlgrp_gon_gon_10_03_off_1
+9,5,00040cf8:btlgrp_gor_gor_02_01_off_1
 A,5,000057d8:btlgrp_gra_gra_01_01_off_1
 A,5,00005888:btlgrp_gra_gra_01_01_on_1
 A,5,00005938:btlgrp_gra_gra_01_01_on_2
@@ -5960,3 +6113,50 @@ E,5,0000e210:btlgrp_jon_jon_91_05_off_3
 1C,5,0000b444:btlgrp_win_win_03_01_on_2
 1C,5,0000b4f4:btlgrp_win_win_03_01_on_3
 1C,5,0000b5d4:btlgrp_win_win_03_01_on_4
+2,5,0002c44c:btlgrp_aji_aji_mbmkII
+8,5,0000fa3c:btlgrp_gon_gon_11_01_off_1
+9,5,00040c08:btlgrp_gor_gor_00_01_off_1
+B,5,0000d40c:btlgrp_hei_hei_10_01_off_1
+D,5,000104d0:btlgrp_jin_jin_00_atmic_teresa
+D,5,00010480:btlgrp_jin_jin_01_faker_mario
+D,5,00010430:btlgrp_jin_jin_04_ramper
+E,5,00007160:btlgrp_jon_jon_100_01_off_1
+10,5,00021270:btlgrp_las_las_09_rampell
+10,5,000212c0:btlgrp_las_las_bunbaba
+10,5,00021360:btlgrp_las_las_28_koopa
+10,5,00021310:btlgrp_las_las_28_batten_leader
+10,5,000213b0:btlgrp_las_las_29_black_peach_1
+10,5,00021400:btlgrp_las_las_29_black_peach_2
+12,5,00026220:btlgrp_mri_mri_mb
+13,5,000209a8:btlgrp_muj_muj_kanbu
+13,5,00020928:btlgrp_muj_muj_cortez
+16,5,00019324:btlgrp_rsh_rsh_06_01_off_1
+18,5,00018950:btlgrp_tik_tik_gesso
+1A,5,0000dc20:btlgrp_tou_tou_boss
+1A,5,0000dc70:btlgrp_tou_tou_champ
+1A,5,0000dcc0:btlgrp_tou_tou_koopa
+
+2,5,0002cfa4:btlgrpsel_aji_btlno_aji_mbmkii_off
+8,5,0000fc3c:btlgrpsel_gon_btlno_gon_11_01_off
+9,5,00040d48:btlgrpsel_gor_btlno_gor_00_01_off
+9,5,00040d90:btlgrpsel_gor_btlno_gor_02_01_off
+B,5,0000e020:btlgrpsel_hei_btlno_hei_10_01_off
+D,5,00011298:btlgrpsel_jin_btlno_jin_00_01_off
+D,5,00011280:btlgrpsel_jin_btlno_jin_01_02_off
+D,5,00011268:btlgrpsel_jin_btlno_jin_01_01_off
+E,5,0000eba8:btlgrpsel_jon_btlno_jon_100_zonbaba_off
+10,5,00022f80:btlgrpsel_las_btlno_las_09_rampell_off
+10,5,00023010:btlgrpsel_las_btlno_las_bunbaba_off
+10,5,00022ff8:btlgrpsel_las_btlno_las_28_koopa_off
+10,5,00023028:btlgrpsel_las_btlno_las_28_batten_leader_off
+10,5,00023040:btlgrpsel_las_btlno_las_29_black_peach_1_off
+10,5,00023058:btlgrpsel_las_btlno_las_29_black_peach_2_off
+12,5,00026420:btlgrpsel_mri_btlno_mri_mb_off
+13,5,00021890:btlgrpsel_muj_btlno_muj_kanbu_off
+13,5,00021878:btlgrpsel_muj_btlno_muj_cortez_off
+16,5,0001935c:btlgrpsel_rsh_btlno_rsh_06_01_off
+18,5,0001a568:btlgrpsel_tik_btlno_tik_gesso_off
+1A,5,0000df08:btlgrpsel_tou_btlno_tou_01_23_off
+1A,5,0000def0:btlgrpsel_tou_btlno_tou_01_22_off
+1A,5,0000df20:btlgrpsel_tou_btlno_tou_01_24_off
+1C,5,0000b6cc:btlgrpsel_win_btlno_win_00_04_off

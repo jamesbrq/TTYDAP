@@ -3,6 +3,7 @@
 #include "patch.h"
 #include "AP/rel_patch_definitions.h"
 #include "ttyd/common_types.h"
+#include "ttyd/evt_item.h"
 #include "ttyd/evt_mario.h"
 #include "ttyd/evt_msg.h"
 #include "ttyd/evt_npc.h"
@@ -31,6 +32,9 @@ extern int32_t gor_roten2_talk[];
 extern int32_t gor_kuribo1_talk[];
 extern int32_t gor_kuribo2_talk[];
 extern int32_t gor_kuribo3_talk[];
+extern int32_t gor_chusan1_init[];
+extern int32_t gor_chusan1_regl[];
+extern int32_t gor_chusan1_naguru[];
 extern int32_t gor_chusan1_talk[];
 extern int32_t gor_chusan2_talk[];
 extern int32_t gor_bomhei_talk[];
@@ -38,6 +42,8 @@ extern int32_t gor_bottakuru_init[];
 extern int32_t gor_luigi_init_01[];
 extern int32_t gor_luigi_npcEnt_01[];
 extern int32_t gor_kick2_init[];
+extern int32_t gor_borodo2_init_01[];
+extern int32_t gor_borodo2_talk_01[];
 extern int32_t gor_thief_init[];
 extern int32_t gor_thief_talk[];
 extern int32_t gor_christine_nakama_before[];
@@ -48,6 +54,11 @@ extern int32_t gor_goods_list;
 extern int32_t gor_01_shop_setup[];
 extern int32_t gor_christine_nakama[];
 extern int32_t gor_01_koopa_evt[];
+extern int32_t gor_iri_09_init[];
+extern int32_t gor_iri_09_tentyo_talk[];
+extern int32_t gor_iri_09_item_tbl_make[];
+extern int32_t gor_iri_16_init[];
+extern int32_t gor_iri_16_tyutyu_talk[];
 extern int32_t gor_01_init_evt[];
 extern int32_t gor_cooking_evt[];
 
@@ -59,6 +70,14 @@ extern "C"
 }
 
 // clang-format off
+EVT_BEGIN(iri_16_mowz_evt)
+	USER_FUNC(evt_mario::evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
+	USER_FUNC(evt_item::evt_item_entry, PTR("item01"), LW(3), LW(0), LW(1), LW(2), 16, GSWF(6353), 0)
+	USER_FUNC(evt_item::evt_item_get_item, PTR("item01"))
+	WAIT_MSEC(800)
+	RETURN()
+EVT_END()
+
 EVT_BEGIN(badgemaster_talk_evt)
 	USER_FUNC(evt_msg::evt_msg_print, 0, PTR("gor_01_024_00"), 0, PTR("me"))
 	RETURN()
@@ -338,9 +357,42 @@ void ApplyGor01Patches()
 
     patch::writePatch(&gor_roten1_talk[0], roten1_talk_evt, sizeof(roten1_talk_evt));
     patch::writePatch(&gor_roten2_talk[0], roten2_talk_evt, sizeof(roten2_talk_evt));
+
+    gor_kuribo1_talk[1] = GSW(1734);
+    gor_kuribo1_talk[2] = 1;
+    gor_kuribo1_talk[4] = GSW(1764);
+    gor_kuribo1_talk[13] = GSW(1764);
     patch::writePatch(&gor_kuribo1_talk[25], kuribo1_talk_evt, sizeof(kuribo1_talk_evt));
+
     patch::writePatch(&gor_kuribo2_talk[0], kuribo2_talk_evt, sizeof(kuribo2_talk_evt));
+
+    gor_kuribo3_talk[1] = GSW(1732);
+    gor_kuribo3_talk[2] = 1;
+    gor_kuribo3_talk[3] = EVT_HELPER_CMD(2, 26);
+    gor_kuribo3_talk[4] = GSW(1762);
+    gor_kuribo3_talk[5] = 2;
+    gor_kuribo3_talk[7] = GSW(1762);
+    gor_kuribo3_talk[33] = GSW(1762);
+    gor_kuribo3_talk[50] = EVT_HELPER_CMD(2, 91);
+    gor_kuribo3_talk[51] = EVT_HELPER_OP(&irai_complete_item_get);
+    gor_kuribo3_talk[57] = GSW(1732);
+    gor_kuribo3_talk[58] = 2;
     patch::writePatch(&gor_kuribo3_talk[68], kuribo3_talk_evt, sizeof(kuribo3_talk_evt));
+    
+    gor_chusan1_init[11] = GSW(1735);
+    gor_chusan1_init[12] = 1;
+
+    gor_chusan1_regl[1] = GSW(1735);
+    gor_chusan1_regl[2] = 1;
+
+    gor_chusan1_naguru[46] = EVT_HELPER_CMD(2, 91);
+    gor_chusan1_naguru[47] = EVT_HELPER_OP(&irai_complete_item_get);
+    gor_chusan1_naguru[50] = GSW(1735);
+    gor_chusan1_naguru[51] = 2;
+
+    gor_chusan1_talk[1] = GSW(1735);
+    gor_chusan1_talk[2] = 1;
+
     patch::writePatch(&gor_chusan1_talk[104], chusan1_talk_evt, sizeof(chusan1_talk_evt));
     patch::writePatch(&gor_chusan2_talk[0], chusan2_talk_evt, sizeof(chusan2_talk_evt));
     patch::writePatch(&gor_bomhei_talk[0], bomhei_talk_evt, sizeof(bomhei_talk_evt));
@@ -371,6 +423,24 @@ void ApplyGor01Patches()
     gor_kick2_init[2] = EVT_HELPER_CMD(1, 36);
     gor_kick2_init[3] = 7;
     gor_kick2_init[4] = EVT_HELPER_CMD(0, 0);
+
+    gor_borodo2_init_01[1] = GSW(1734);
+    gor_borodo2_init_01[2] = 1;
+    gor_borodo2_init_01[4] = GSW(1764);
+    gor_borodo2_init_01[5] = 3;
+    gor_borodo2_init_01[7] = GSW(1764);
+    gor_borodo2_init_01[8] = 3;
+    gor_borodo2_init_01[10] = GSW(1764);
+    gor_borodo2_init_01[11] = 3;
+    gor_borodo2_init_01[13] = GSW(1764);
+    gor_borodo2_init_01[14] = 3;
+
+    gor_borodo2_talk_01[58] = EVT_HELPER_CMD(2, 91);
+    gor_borodo2_talk_01[59] = EVT_HELPER_OP(&irai_complete_item_get);
+    gor_borodo2_talk_01[264] = GSW(1764);
+    gor_borodo2_talk_01[265] = 4;
+    gor_borodo2_talk_01[270] = GSW(1734);
+    gor_borodo2_talk_01[271] = 2;
 
     gor_thief_init[1] = GSW(1700);
 
@@ -411,6 +481,72 @@ void ApplyGor01Patches()
     gor_01_koopa_evt[573] = GSW(1706);
     gor_01_koopa_evt[574] = 46;
 
+    gor_iri_09_init[1] = GSW(1739);
+    gor_iri_09_init[2] = 1;
+
+    gor_iri_09_tentyo_talk[1] = GSW(1739);
+    gor_iri_09_tentyo_talk[2] = 2;
+    gor_iri_09_tentyo_talk[9] = GSWF(6332);
+    gor_iri_09_tentyo_talk[18] = GSWF(6332);
+    gor_iri_09_tentyo_talk[32] = 90;
+    gor_iri_09_tentyo_talk[70] = 90;
+    gor_iri_09_tentyo_talk[73] = GSW(1769);
+    gor_iri_09_tentyo_talk[74] = 1;
+    gor_iri_09_tentyo_talk[76] = GSW(1769);
+    gor_iri_09_tentyo_talk[77] = 1;
+    gor_iri_09_tentyo_talk[85] = 90;
+    gor_iri_09_tentyo_talk[99] = GSW(1769);
+    gor_iri_09_tentyo_talk[100] = 1;
+    gor_iri_09_tentyo_talk[147] = GSW(1739);
+    gor_iri_09_tentyo_talk[148] = 2;
+
+    gor_iri_16_init[1] = GSW(1746);
+    gor_iri_16_init[2] = 1;
+
+    gor_iri_16_tyutyu_talk[1] = GSW(1746);
+    gor_iri_16_tyutyu_talk[2] = 1;
+    gor_iri_16_tyutyu_talk[15] = GSW(1776);
+    gor_iri_16_tyutyu_talk[24] = GSW(1776);
+    gor_iri_16_tyutyu_talk[28] = GSWF(6354);
+    gor_iri_16_tyutyu_talk[405] = EVT_HELPER_OP(LW(3));
+    gor_iri_16_tyutyu_talk[408] = EVT_HELPER_OP(&iri_16_mowz_evt);
+    gor_iri_16_tyutyu_talk[413] = GSW(1746);
+    gor_iri_16_tyutyu_talk[414] = 2;
+
+    gor_cooking_evt[102] = GSW(1748);
+    gor_cooking_evt[103] = 1;
+    gor_cooking_evt[105] = GSW(1778);
+    gor_cooking_evt[114] = GSW(1778);
+    gor_cooking_evt[342] = GSW(1748);
+    gor_cooking_evt[343] = 2;
+    gor_cooking_evt[384] = GSW(1748);
+    gor_cooking_evt[385] = 1;
+    gor_cooking_evt[415] = GSW(1748);
+    gor_cooking_evt[416] = 1;
+    gor_cooking_evt[430] = GSW(1748);
+    gor_cooking_evt[431] = 1;
+    gor_cooking_evt[454] = GSW(1748);
+    gor_cooking_evt[455] = 1;
+
+    gor_master_talk[1] = GSW(1750);
+    gor_master_talk[2] = 1;
+    gor_master_talk[4] = GSW(1780);
+    gor_master_talk[8] = GSW(1780);
+    gor_master_talk[9] = 1;
+    gor_master_talk[62] = GSW(1780);
+    gor_master_talk[63] = 2;
+
+    gor_master_talk[77] = GSW(1755);
+    gor_master_talk[78] = 1;
+    gor_master_talk[79] = EVT_HELPER_CMD(2, 29);
+    gor_master_talk[80] = GSW(1785);
+    gor_master_talk[81] = 2;
+    gor_master_talk[82] = EVT_HELPER_CMD(2, 26);
+    gor_master_talk[83] = GSW(1785);
+    gor_master_talk[84] = 4;
+    gor_master_talk[92] = GSW(1785);
+    gor_master_talk[93] = 3;
+
     gor_01_init_evt[4] = GSW(1706);
     gor_01_init_evt[5] = 45;
     gor_01_init_evt[14] = GSW(1708);
@@ -429,12 +565,18 @@ void ApplyGor01Patches()
     gor_01_init_evt[309] = 1;
     gor_01_init_evt[321] = GSW(1700);
     gor_01_init_evt[322] = 5;
+    gor_01_init_evt[374] = EVT_HELPER_CMD(2, 29);
+    gor_01_init_evt[375] = GSW(1731);
+    gor_01_init_evt[385] = GSWF(6331);
     gor_01_init_evt[444] = GSWF(1195);
     gor_01_init_evt[523] = GSW(1708);
     gor_01_init_evt[524] = 18;
 
     gor_cooking_evt[412] = GSW(1715);
     gor_cooking_evt[413] = 4;
+
+    // Assembly
+    patch::writeIntWithCache(&gor_iri_09_item_tbl_make[12], 0x3800005A);
 
     // AP cooking: the ingredient menus list unlocked ingredients instead of the pouch,
     // nothing is consumed, and the first cook of each recipe yields its AP item.
