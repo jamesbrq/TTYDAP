@@ -2,14 +2,20 @@
 #include "evt_cmd.h"
 #include "patch.h"
 #include "AP/rel_patch_definitions.h"
+#include "ttyd/common_types.h"
 #include "ttyd/evt_mario.h"
 #include "ttyd/evt_msg.h"
 #include "ttyd/evt_npc.h"
+#include "ttyd/evtmgr_cmd.h"
+#include "ttyd/mario_pouch.h"
+#include "ttyd/swdrv.h"
 
 #include <cstdint>
 
 using namespace mod;
+using namespace mod::ap_cooking;
 using namespace ttyd;
+using namespace ttyd::common;
 
 extern int32_t gor_badgemaster_init[];
 extern int32_t gor_badgemaster_talk[];
@@ -44,6 +50,13 @@ extern int32_t gor_christine_nakama[];
 extern int32_t gor_01_koopa_evt[];
 extern int32_t gor_01_init_evt[];
 extern int32_t gor_cooking_evt[];
+
+// Vanilla cooking lookup natives in gor.rel (.text, resolved via ttyd.us.lst)
+extern "C"
+{
+    int32_t gor_cook_chk(ttyd::evtmgr::EvtEntry *evt, bool isFirstCall);
+    int32_t gor_cook_chk2(ttyd::evtmgr::EvtEntry *evt, bool isFirstCall);
+}
 
 // clang-format off
 EVT_BEGIN(badgemaster_talk_evt)
@@ -155,6 +168,123 @@ EVT_BEGIN(gor_master_talk_hook)
     GOTO(&gor_master_talk[137])
 EVT_PATCH_END()
 // clang-format on
+
+// --- AP cooking: unlock-driven ingredient menu + recipe checks ---
+// The ingredient id table and unlock flag mapping live in AP/rel_patch_definitions.h
+// (mod::ap_cooking); unlock flags are set on first pickup in pouchGetItemHook (OWR.cpp).
+
+// Select-window table; replaces gor.rel's .bss item_tbl (only 20 slots) at
+// cooking_evt words 506/575.
+static int32_t apCookIngredientTbl[kIngredientCount + 1];
+
+// Recipe index carried from apCookChk/apCookChk2 to apCookingFlag so the check flag
+// is only set once the result item has actually been received.
+static int32_t sPendingRecipe = -1;
+
+// If the (about-to-be-cooked) output is an unchecked recipe, swap it for the AP item
+// Rom.py placed in the recipe table. outVar is the evt arg holding the result.
+// Farmable cooked results (repeat cooks of a checked recipe, reversion outputs) are
+// recorded in gCookGiveItem so pouchGetItemHook does NOT treat them as
+// ingredient-unlocking pickups. The FIRST cook of a recipe hands out the AP item the
+// fill placed there — that is a real acquisition and must unlock normally, even when
+// playing offline (no client backfill available), so it is deliberately NOT recorded.
+static void applyRecipeReplacement(evtmgr::EvtEntry *evt, int32_t outVar)
+{
+    sPendingRecipe = -1;
+    gCookGiveItem = -1;
+
+    int32_t out = static_cast<int32_t>(evtmgr_cmd::evtGetValue(evt, outVar));
+    if (out == 0)
+        out = ItemId::MISTAKE; // cooking_evt itself turns 0 into Mistake after this
+
+    if (out < kRecipeDishFirst || out > kRecipeDishLast)
+    {
+        gCookGiveItem = out; // reversion output (Mushroom, Gold Bar, ...): farmable, never unlocks
+        return;
+    }
+    const int32_t recipe = out - kRecipeDishFirst;
+    if (swdrv::swGet(kRecipeFlagBase + recipe))
+    {
+        gCookGiveItem = out; // repeat cook: the real dish, must not unlock itself
+        return;
+    }
+    const uint16_t romId = *reinterpret_cast<uint16_t *>(kRecipeItemTableAddr + recipe * 2);
+    if (romId == 0)
+        return; // table not populated -> vanilla behavior (plain acquisition, may unlock)
+    evtmgr_cmd::evtSetValue(evt, outVar, romId);
+    sPendingRecipe = recipe;
+}
+
+EVT_DEFINE_USER_FUNC(apCookChk)
+{
+    const int32_t ret = gor_cook_chk(evt, isFirstCall);
+    // cooking_evt uses result 1 before the cookbook upgrade (GSWF 5392), result 2 after
+    applyRecipeReplacement(evt, evt->evtArguments[swdrv::swGet(5392) ? 2 : 1]);
+    return ret;
+}
+
+EVT_DEFINE_USER_FUNC(apCookChk2)
+{
+    const int32_t ret = gor_cook_chk2(evt, isFirstCall);
+    applyRecipeReplacement(evt, evt->evtArguments[2]);
+    return ret;
+}
+
+EVT_DEFINE_USER_FUNC(apCookingFlag)
+{
+    (void)isFirstCall;
+    gCookGiveItem = -1; // the cooked item has been received at this point
+
+    if (sPendingRecipe >= 0)
+    {
+        swdrv::swSet(kRecipeFlagBase + sPendingRecipe);
+        sPendingRecipe = -1;
+        return 2;
+    }
+
+    // Vanilla journal behavior for repeat cooks and reversion outputs
+    const int32_t item = static_cast<int32_t>(evtmgr_cmd::evtGetValue(evt, evt->evtArguments[0]));
+    if (item >= ItemId::GOLD_BAR) // smallest possible vanilla output
+        swdrv::swSet(item - 114);
+    return 2;
+}
+
+EVT_DEFINE_USER_FUNC(apMakeIngredientTbl)
+{
+    (void)isFirstCall;
+    sPendingRecipe = -1;
+    gCookGiveItem = -1; // defensive reset at the start of every cooking interaction
+
+    // Second menu passes the first pick's table position to exclude (-1 on the first menu)
+    const int32_t exclude = static_cast<int32_t>(evtmgr_cmd::evtGetValue(evt, evt->evtArguments[0]));
+    int32_t count = 0;
+
+    // Ingredients are virtual and nothing gets consumed, so unlike vanilla the result
+    // needs a free pouch slot: offer nothing while the pouch is full.
+    const int32_t capacity = mario_pouch::pouchCheckItem(ItemId::STRANGE_SACK) > 0 ? 20 : 10;
+    if (mario_pouch::pouchGetHaveItemCnt() < capacity)
+    {
+        int32_t pos = 0;
+        for (int32_t k = 0; k < kIngredientCount; k++)
+        {
+            if (!swdrv::swGet(kIngredientFlagBase + k))
+                continue;
+            if (pos++ == exclude)
+                continue;
+            apCookIngredientTbl[count++] = kIngredientIds[k];
+        }
+    }
+    apCookIngredientTbl[count] = -1;
+    evtmgr_cmd::evtSetValue(evt, evt->evtArguments[1], count);
+    return 2;
+}
+
+EVT_DEFINE_USER_FUNC(apCookRemoveNop)
+{
+    (void)evt;
+    (void)isFirstCall;
+    return 2; // ingredients are virtual: nothing to remove from the pouch
+}
 
 void ApplyGor01Patches()
 {
@@ -305,4 +435,18 @@ void ApplyGor01Patches()
 
     gor_cooking_evt[412] = GSW(1715);
     gor_cooking_evt[413] = 4;
+
+    // AP cooking: the ingredient menus list unlocked ingredients instead of the pouch,
+    // nothing is consumed, and the first cook of each recipe yields its AP item.
+    // Word indices byte-verified against vanilla gor.rel (see rel/misc/cooking_research.md §2).
+    gor_cooking_evt[484] = PTR(&apMakeIngredientTbl); // make_item_tbl, 1st ingredient menu
+    gor_cooking_evt[506] = PTR(apCookIngredientTbl);  // select-window table #1 (vanilla .bss tbl only fits 20)
+    gor_cooking_evt[549] = PTR(&apMakeIngredientTbl); // make_item_tbl, 2nd ingredient menu
+    gor_cooking_evt[575] = PTR(apCookIngredientTbl);  // select-window table #2
+    gor_cooking_evt[695] = PTR(&apCookChk);           // single-ingredient result
+    gor_cooking_evt[700] = PTR(&apCookRemoveNop);     // N_evt_pouch_remove_item_index (1st pick)
+    gor_cooking_evt[717] = PTR(&apCookChk2);          // two-ingredient result
+    gor_cooking_evt[722] = PTR(&apCookRemoveNop);     // N_evt_pouch_remove_item_index (pair, 1st)
+    gor_cooking_evt[727] = PTR(&apCookRemoveNop);     // N_evt_pouch_remove_item_index (pair, 2nd)
+    gor_cooking_evt[819] = PTR(&apCookingFlag);       // sets the recipe check flag after receipt
 }

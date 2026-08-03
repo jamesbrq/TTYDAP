@@ -24,6 +24,7 @@
 #include <ttyd/evtmgr_cmd.h>
 #include <ttyd/fontmgr.h>
 #include <ttyd/icondrv.h>
+#include <ttyd/item_data.h>
 #include <ttyd/mario.h>
 #include <ttyd/mario_motion.h>
 #include <ttyd/mario_party.h>
@@ -144,6 +145,11 @@ const uint16_t GSWF_ARR[] = {
     // Visited Rogueport
     6300};
 constexpr int32_t GSWF_ARR_SIZE = sizeof(GSWF_ARR) / sizeof(GSWF_ARR[0]);
+
+namespace mod::ap_cooking
+{
+    KEEP_VAR int32_t gCookGiveItem = -1;
+} // namespace mod::ap_cooking
 
 namespace mod::owr
 {
@@ -746,6 +752,131 @@ namespace mod::owr
         ttyd::icondrv::iconDispGxAlpha(0.8f, &downArrowPos, 0x10, IconType::MENU_DOWN_POINTER, alpha);
     }
 
+    // --- Ingredient unlock toast: on-screen window announcing a newly unlocked
+    // cooking ingredient (queued from pouchGetItemHook, shown one at a time) ---
+    namespace
+    {
+        constexpr int32_t kToastQueueSize = 16;
+        constexpr int32_t kToastHoldFrames = 210; // ~3.5s
+        constexpr int32_t kToastAlphaStep = 15;
+        constexpr float kToastTextScale = 0.8f;
+        constexpr float kToastLineHeight = 32.0f * kToastTextScale;
+        constexpr float kToastTopY = 200.0f;
+
+        int16_t sToastQueue[kToastQueueSize];
+        int32_t sToastHead = 0;
+        int32_t sToastCount = 0;
+
+        char sToastText[80];
+        int32_t sToastState = 0; // 0 = idle, 1 = fade in, 2 = hold, 3 = fade out
+        int32_t sToastAlpha = 0;
+        int32_t sToastTimer = 0;
+        float sToastTextWidth = 0.0f;
+    } // namespace
+
+    void queueIngredientToast(int32_t item)
+    {
+        if (sToastCount >= kToastQueueSize)
+            return; // drop rather than overflow; the unlock flag itself is already set
+
+        sToastQueue[(sToastHead + sToastCount) % kToastQueueSize] = static_cast<int16_t>(item);
+        sToastCount++;
+    }
+
+    static void ingredientToastDisp(ttyd::dispdrv::CameraId cameraId, void *user)
+    {
+        (void)cameraId;
+        (void)user;
+
+        // Disable fog so the window/text render with clean colors (numericWindow_Disp pattern)
+        gc::gx::GXColor fogColor(0x66, 0x06, 0x42, 0x80);
+        gc::gx::GXSetFog(0, 0.0f, 0.0f, 0.0f, 0.0f, &fogColor);
+
+        const uint8_t alpha = static_cast<uint8_t>(sToastAlpha);
+        const float width = sToastTextWidth + 40.0f;
+        const float height = (2.0f * kToastLineHeight) + 28.0f;
+        const float x = -(width / 2.0f);
+
+        uint32_t plateColor = (static_cast<uint32_t>(alpha) * 3) / 5; // translucent black plate
+        ttyd::windowdrv::windowDispGX_Waku_col(0, &plateColor, x, kToastTopY, width, height, 30.0f);
+
+        const uint32_t textColor = 0xFFFFFF00 | alpha;
+        gSelf->DrawString(sToastText, x + 20.0f, kToastTopY - 22.0f, textColor, kToastTextScale);
+    }
+
+    void updateIngredientToast()
+    {
+        if (sToastState == 0)
+        {
+            if (sToastCount == 0)
+                return;
+
+            const int32_t item = sToastQueue[sToastHead];
+            sToastHead = (sToastHead + 1) % kToastQueueSize;
+            sToastCount--;
+
+            const char *name = "???";
+            if (item >= 0 && item < static_cast<int32_t>(sizeof(ttyd::item_data::itemDataTable) /
+                                                         sizeof(ttyd::item_data::itemDataTable[0])))
+            {
+                const char *nameKey = ttyd::item_data::itemDataTable[item].name;
+                if (nameKey)
+                {
+                    const char *searched = ttyd::msgdrv::msgSearch(nameKey);
+                    if (searched)
+                        name = searched;
+                }
+            }
+
+            constexpr const char *header = "New ingredient unlocked!";
+            snprintf(sToastText, sizeof(sToastText), "%s\n%s", header, name);
+
+            const uint16_t headerWidth = ttyd::fontmgr::FontGetMessageWidth(header);
+            const uint16_t nameWidth = ttyd::fontmgr::FontGetMessageWidth(name);
+            sToastTextWidth = static_cast<float>(headerWidth > nameWidth ? headerWidth : nameWidth) * kToastTextScale;
+
+            sToastState = 1;
+            sToastAlpha = 0;
+            sToastTimer = 0;
+            ttyd::pmario_sound::psndSFXOn(0x20012);
+        }
+
+        switch (sToastState)
+        {
+            case 1: // Fade in
+            {
+                sToastAlpha += kToastAlphaStep;
+                if (sToastAlpha >= 255)
+                {
+                    sToastAlpha = 255;
+                    sToastState = 2;
+                }
+                break;
+            }
+            case 2: // Hold
+            {
+                if (++sToastTimer >= kToastHoldFrames)
+                    sToastState = 3;
+                break;
+            }
+            case 3: // Fade out
+            {
+                sToastAlpha -= kToastAlphaStep;
+                if (sToastAlpha <= 0)
+                {
+                    sToastAlpha = 0;
+                    sToastState = 0;
+                }
+                break;
+            }
+        }
+
+        if (sToastState != 0 && checkIfInGame())
+        {
+            ttyd::dispdrv::dispEntry(ttyd::dispdrv::CameraId::kDebug3d, 1, 150.0f, ingredientToastDisp, nullptr);
+        }
+    }
+
     KEEP_FUNC bool OSLinkHook(OSModuleInfo *new_module, void *bss)
     {
         bool result = g_OSLink_trampoline(new_module, bss);
@@ -1250,6 +1381,19 @@ namespace mod::owr
 
     KEEP_FUNC uint32_t pouchGetItemHook(int32_t item)
     {
+        // Cooking ingredient unlocks: the FIRST acquisition of an ingredient item (from
+        // any source) permanently teaches it to Zess T.'s menu (gor subrel reads the
+        // flags). Runs before the switch so routed items (Coconut etc.) still unlock.
+        // Exception: items handed out by the cooking evt itself (gCookGiveItem — repeat
+        // cooks and reversion recipes) must never unlock themselves as ingredients.
+        const int32_t ingredientIdx = mod::ap_cooking::ingredientIndex(item);
+        if (ingredientIdx >= 0 && item != mod::ap_cooking::gCookGiveItem &&
+            !ttyd::swdrv::swGet(mod::ap_cooking::kIngredientFlagBase + ingredientIdx))
+        {
+            ttyd::swdrv::swSet(mod::ap_cooking::kIngredientFlagBase + ingredientIdx);
+            queueIngredientToast(item);
+        }
+
         switch (item)
         {
             case ItemId::SUPER_LUIGI:
@@ -1809,6 +1953,7 @@ namespace mod::owr
 
         SequenceInit();
         RecieveItems();
+        updateIngredientToast();
     }
 
     void OWR::OnModuleLoaded(OSModuleInfo *module_info)
