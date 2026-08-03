@@ -15,6 +15,8 @@ using namespace ttyd::battle_unit;
 using namespace ttyd::battle_database_common;
 
 extern int32_t jon_talk_idouya[];
+extern int32_t jon_init_evt[];
+extern int32_t jon_evt_iri_30_bomb_rakugaki[];
 extern int32_t jon_iri_12_dokan_in[];
 extern int32_t jon_iri_12_enemy_dead_event[];
 extern int32_t jon_iri_12_makkino_talk[];
@@ -78,6 +80,17 @@ namespace mod
         jon_iri_12_init[53] = 2;
         jon_iri_12_init[55] = GSW(1772);
         jon_iri_12_init[66] = 2;
+
+        jon_init_evt[266] = EVT_HELPER_CMD(2, 26);
+        jon_init_evt[267] = GSW(1760);
+        jon_init_evt[268] = 2;
+        jon_init_evt[270] = GSW(1760);
+        jon_init_evt[271] = 1;
+        jon_init_evt[289] = GSW(1760);
+        jon_init_evt[290] = 1;
+        jon_init_evt[292] = GSWF(6357);
+
+        jon_evt_iri_30_bomb_rakugaki[148] = GSWF(6357);
 
         jon_zonbaba_first_event[642] = GSW(1742);
         jon_zonbaba_first_event[643] = 1;

@@ -64,6 +64,7 @@ extern int32_t gor_02_init_evt[];
 extern int32_t gor_evt_unlock_npc[];
 extern int32_t gor_iri_13_make_item_tbl[];
 extern int32_t gor_iri_13_update_item_tbl[];
+extern int32_t gor_iri_19_init[];
 
 // clang-format off
 EVT_DEFINE_USER_FUNC(getMonosiriItem)
@@ -591,6 +592,12 @@ void ApplyGor02Patches()
         patch::writeIntWithCache(&gor_iri_13_make_item_tbl[5], 0x38600051); // li r3, 0x51
         patch::writeIntWithCache(&gor_iri_13_make_item_tbl[14], 0x38000051); // li r0, 0x51
     }
+
+    gor_iri_19_init[0] = EVT_HELPER_CMD(2, 29);
+    gor_iri_19_init[1] = GSW(1749);
+    gor_iri_19_init[2] = 1;
+    gor_iri_19_init[4] = GSW(1779);
+    gor_iri_19_init[14] = GSWF(6356);
 
     patch::writePatch(&gor_chusan3_talk[0], chusan3_talk_evt, sizeof(chusan3_talk_evt));
 

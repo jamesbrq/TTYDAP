@@ -610,6 +610,39 @@ namespace mod
         nok_boss_noko_talk[197] = 2;
         patch::writePatch(&nok_boss_noko_talk[278], boss_noko_talk_hook, sizeof(boss_noko_talk_hook));
 
+        nok_nokonoko_K_talk[1] = GSW(1744);
+        nok_nokonoko_K_talk[2] = 1;
+        nok_nokonoko_K_talk[4] = GSW(1774);
+        nok_nokonoko_K_talk[13] = GSW(1774);
+
+        nok_nokonoko_F_talk[1] = GSW(1745);
+        nok_nokonoko_F_talk[2] = 1;
+        nok_nokonoko_F_talk[4] = GSW(1775);
+        nok_nokonoko_F_talk[13] = GSW(1775);
+        nok_nokonoko_F_talk[47] = EVT_HELPER_CMD(2, 26);
+        nok_nokonoko_F_talk[48] = GSW(1775);
+        nok_nokonoko_F_talk[49] = 3;
+        nok_nokonoko_F_talk[58] = GSW(1775);
+        nok_nokonoko_F_talk[59] = 1;
+        nok_nokonoko_F_talk[67] = GSW(1775);
+        nok_nokonoko_F_talk[68] = 2;
+        nok_nokonoko_F_talk[77] = GSW(1775);
+        nok_nokonoko_F_talk[78] = 3;
+        nok_nokonoko_F_talk[140] = GSW(1745);
+        nok_nokonoko_F_talk[141] = 2;
+        nok_nokonoko_F_talk[170] = GSW(1745);
+        nok_nokonoko_F_talk[171] = 2;
+
+        nok_boss_noko_talk[207] = GSW(1747);
+        nok_boss_noko_talk[208] = 1;
+        nok_boss_noko_talk[210] = GSW(1777);
+        nok_boss_noko_talk[214] = GSW(1777);
+        nok_boss_noko_talk[215] = 1;
+        nok_boss_noko_talk[218] = GSW(1777);
+        nok_boss_noko_talk[219] = 2;
+        nok_boss_noko_talk[262] = GSW(1777);
+        nok_boss_noko_talk[263] = 3;
+
         nok_nokorin_init[7] = GSW(1711);
         nok_nokorin_init[8] = 8;
         nok_nokorin_init[10] = GSW(1701);

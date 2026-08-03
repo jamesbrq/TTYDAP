@@ -1150,6 +1150,14 @@ namespace mod
         rsh_evt_rsh_konarikin_irai_party_talk[84] = GSW(1706);
         rsh_evt_rsh_konarikin_irai_party_talk[85] = 12;
 
+        rsh_talk_cook[1] = GSW(1752);
+        rsh_talk_cook[2] = 1;
+        rsh_talk_cook[8] = GSW(1782);
+        rsh_talk_cook[11] = GSW(1782);
+        rsh_talk_cook[174] = EVT_HELPER_OP(&irai_complete_item_get);
+        rsh_talk_cook[180] = GSW(1752);
+        rsh_talk_cook[181] = 2;
+
         rsh_evt_allow_kamotsu[68] = GSW(1706);
         rsh_evt_allow_kamotsu[69] = 18;
 

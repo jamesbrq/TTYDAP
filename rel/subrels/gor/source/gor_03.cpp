@@ -273,6 +273,14 @@ void ApplyGor03Patches()
     gor_peton_talk_common_03[186] = 9;
     gor_peton_talk_common_03[194] = 99;
 
+    gor_peton_talk_common_03[8] = GSW(1749);
+    gor_peton_talk_common_03[9] = 1;
+    gor_peton_talk_common_03[11] = GSW(1779);
+    gor_peton_talk_common_03[20] = GSW(1779);
+    gor_peton_talk_common_03[24] = GSWF(6356);
+    gor_peton_talk_common_03[153] = GSW(1749);
+    gor_peton_talk_common_03[154] = 2;
+
     gor_luigi_init_03[1] = GSW(1710);
     gor_luigi_init_03[3] = 3;
     gor_luigi_init_03[4] = 4;
@@ -281,8 +289,8 @@ void ApplyGor03Patches()
     gor_luigi_npcEnt_03[3] = 3;
     gor_luigi_npcEnt_03[4] = 4;
 
-    gor_bteresa_table_talk[1] = GSW(1741);
-    gor_bteresa_table_talk[2] = 1;
+    gor_bteresa_table_talk[11] = GSW(1741);
+    gor_bteresa_table_talk[12] = 1;
     gor_bteresa_table_talk[57] = EVT_HELPER_CMD(2, 91);
     gor_bteresa_table_talk[58] = EVT_HELPER_OP(&irai_complete_item_get);
     gor_bteresa_table_talk[61] = GSW(1741);

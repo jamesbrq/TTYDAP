@@ -132,6 +132,7 @@ extern int32_t tou_init_gans[];
 extern int32_t tou_talk_gans[];
 extern int32_t tou_init_kinoshikowa[];
 extern int32_t tou_talk_kinoshikowa[];
+extern int32_t tou_talk_sarary[];
 extern int32_t tou_npcEnt_05[];
 extern int32_t tou_evt_sensyu[];
 extern int32_t tou_evt_sensyu2[];
@@ -1259,6 +1260,37 @@ namespace mod
         tou_talk_kinoshikowa[97] = 2;
         
         patch::writePatch(&tou_talk_kinoshikowa[377], tou_talk_kinoshikowa_hook, sizeof(tou_talk_kinoshikowa_hook));
+
+        tou_talk_kinoshikowa[115] = EVT_HELPER_CMD(2, 29);
+        tou_talk_kinoshikowa[116] = GSW(1753);
+        tou_talk_kinoshikowa[117] = 1;
+        tou_talk_kinoshikowa[123] = GSW(1783);
+        tou_talk_kinoshikowa[362] = EVT_HELPER_CMD(2, 50);
+        tou_talk_kinoshikowa[363] = GSW(1783);
+        tou_talk_kinoshikowa[364] = 1;
+
+        tou_talk_sarary[1] = GSW(1754);
+        tou_talk_sarary[2] = 1;
+        tou_talk_sarary[45] = GSW(1784);
+        tou_talk_sarary[58] = GSW(1784);
+        tou_talk_sarary[330] = GSW(1754);
+        tou_talk_sarary[331] = 2;
+        tou_talk_sarary[342] = GSW(1754);
+        tou_talk_sarary[343] = 2;
+
+        tou_01_init_evt[142] = GSW(1754);
+        tou_01_init_evt[143] = 2;
+
+        tou_talk_sakaba[1] = GSW(1755);
+        tou_talk_sakaba[2] = 1;
+        tou_talk_sakaba[3] = EVT_HELPER_CMD(2, 29);
+        tou_talk_sakaba[4] = GSW(1785);
+        tou_talk_sakaba[5] = 3;
+        tou_talk_sakaba[6] = EVT_HELPER_CMD(2, 26);
+        tou_talk_sakaba[7] = GSW(1785);
+        tou_talk_sakaba[8] = 5;
+        tou_talk_sakaba[16] = GSW(1785);
+        tou_talk_sakaba[17] = 4;
 
         if (gState->apSettings->troubles)
         {

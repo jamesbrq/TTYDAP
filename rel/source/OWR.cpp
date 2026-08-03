@@ -2026,7 +2026,6 @@ namespace mod::owr
             }
             case ItemId::LIFE_SHROOM:
             {
-                return g_pouchGetItem_trampoline(item);
                 if (ttyd::swdrv::swByteGet(1740) >= 2)
                 {
                     return g_pouchGetItem_trampoline(item);
@@ -2046,8 +2045,7 @@ namespace mod::owr
             }
             case ItemId::KEEL_MANGO:
             {
-                return g_pouchGetItem_trampoline(item);
-                if (ttyd::swdrv::swByteGet(1752) >= 2)
+                if (ttyd::swdrv::swByteGet(1752) >= 2 && ttyd::swdrv::swByteGet(1759) >= 2)
                 {
                     return g_pouchGetItem_trampoline(item);
                 }
@@ -2066,7 +2064,6 @@ namespace mod::owr
             }
             case ItemId::MYSTIC_EGG:
             {
-                return g_pouchGetItem_trampoline(item);
                 if (ttyd::swdrv::swByteGet(1752) >= 2)
                 {
                     return g_pouchGetItem_trampoline(item);
@@ -2086,7 +2083,6 @@ namespace mod::owr
             }
             case ItemId::GOLDEN_LEAF:
             {
-                return g_pouchGetItem_trampoline(item);
                 if (ttyd::swdrv::swByteGet(1752) >= 2)
                 {
                     return g_pouchGetItem_trampoline(item);
@@ -2106,8 +2102,46 @@ namespace mod::owr
             }
             case ItemId::HONEY_CANDY:
             {
-                return g_pouchGetItem_trampoline(item);
                 if (ttyd::swdrv::swByteGet(1756) >= 2)
+                {
+                    return g_pouchGetItem_trampoline(item);
+                }
+
+                if (!containsKeyItem(item))
+                {
+                    if (addItemToKeyItems(item))
+                    {
+                        pouchReAddReturnPipe();
+                        return 2;
+                    }
+                    else
+                        return 0; // Key items inventory is full, can't give the item
+                }
+                return g_pouchGetItem_trampoline(item);
+            }
+            case ItemId::CAKE_MIX:
+            {
+                if (ttyd::swdrv::swByteGet(1744) >= 2 && ttyd::swdrv::swByteGet(1745) >= 2 &&
+                    ttyd::swdrv::swByteGet(1759) >= 2)
+                {
+                    return g_pouchGetItem_trampoline(item);
+                }
+
+                if (!containsKeyItem(item))
+                {
+                    if (addItemToKeyItems(item))
+                    {
+                        pouchReAddReturnPipe();
+                        return 2;
+                    }
+                    else
+                        return 0; // Key items inventory is full, can't give the item
+                }
+                return g_pouchGetItem_trampoline(item);
+            }
+            case ItemId::FRIGHT_MASK:
+            {
+                if (ttyd::swdrv::swByteGet(1759) >= 2)
                 {
                     return g_pouchGetItem_trampoline(item);
                 }

@@ -725,6 +725,19 @@ namespace mod
         patch::writePatch(&mri_elder_talk[140], elder_talk_hook, sizeof(elder_talk_hook));
         mri_elder_talk[144] = 0;
 
+        mri_elder_talk[62] = GSW(1747);
+        mri_elder_talk[63] = 1;
+        mri_elder_talk[65] = GSW(1777);
+        mri_elder_talk[69] = GSW(1777);
+        mri_elder_talk[70] = 1;
+        mri_elder_talk[113] = GSW(1777);
+        mri_elder_talk[114] = 2;
+        mri_elder_talk[119] = GSW(1777);
+        mri_elder_talk[120] = 2;
+
+        mri_fabio_init[4] = GSW(1758);
+        mri_fabio_init[5] = 2;
+
         patch::writePatch(&mri_puni_1_init[0], puni_1_init_hook, sizeof(puni_1_init_hook));
 
         patch::writePatch(&mri_puni_1_talk[0], puni_1_talk_hook, sizeof(puni_1_talk_hook));

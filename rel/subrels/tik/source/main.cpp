@@ -85,6 +85,7 @@ extern int32_t tik_05_init_evt[];
 extern int32_t tik_iri_12_kino_makkino_talk[];
 extern int32_t tik_iri_12_kino_talk[];
 extern int32_t tik_iri_12_init[];
+extern int32_t tik_majinaisi_direct_talk[];
 extern int32_t tik_06_init_evt[];
 extern int32_t tik_peach_mail[];
 extern int32_t tik_07_init_evt[];
@@ -769,6 +770,17 @@ namespace mod
         tik_iri_12_init[19] = 3;
         tik_iri_12_init[46] = GSW(1772);
         tik_iri_12_init[47] = 3;
+
+        tik_majinaisi_direct_talk[1] = GSW(1744);
+        tik_majinaisi_direct_talk[2] = 1;
+        tik_majinaisi_direct_talk[4] = GSW(1774);
+        tik_majinaisi_direct_talk[14] = GSW(1774);
+        tik_majinaisi_direct_talk[15] = 1;
+        tik_majinaisi_direct_talk[37] = GSW(1774);
+        tik_majinaisi_direct_talk[38] = 2;
+        tik_majinaisi_direct_talk[73] = EVT_HELPER_OP(&irai_complete_item_get);
+        tik_majinaisi_direct_talk[79] = GSW(1744);
+        tik_majinaisi_direct_talk[80] = 2;
 
         tik_06_init_evt[25] = PTR(&tik_pit_checkpoint_evt);
 

@@ -53,6 +53,10 @@ extern int32_t bom_talk_murabito_i_02[];
 extern int32_t bom_evt_white_bed[];
 extern int32_t bom_kiza_talk[];
 extern int32_t bom_02_init_evt[];
+extern int32_t bom_init_white_01[];
+extern int32_t bom_init_white_02[];
+extern int32_t bom_talk_white_02[];
+extern int32_t bom_iri_25_white_bed[];
 
 // Assembly
 extern int32_t bom_bom1000_jump[];
@@ -239,10 +243,92 @@ namespace mod
         bom_talk_murabito_g_02[48] = 5;
         bom_talk_murabito_g_02[56] = 6;
 
+        bom_talk_murabito_g_02[1] = GSW(1755);
+        bom_talk_murabito_g_02[2] = 1;
+        bom_talk_murabito_g_02[3] = EVT_HELPER_CMD(2, 29);
+        bom_talk_murabito_g_02[4] = GSW(1785);
+        bom_talk_murabito_g_02[5] = 1;
+        bom_talk_murabito_g_02[6] = EVT_HELPER_CMD(2, 26);
+        bom_talk_murabito_g_02[7] = GSW(1785);
+        bom_talk_murabito_g_02[8] = 3;
+        bom_talk_murabito_g_02[16] = GSW(1785);
+        bom_talk_murabito_g_02[17] = 2;
+        bom_talk_murabito_g_02[21] = EVT_HELPER_CMD(2, 29);
+        bom_talk_murabito_g_02[22] = GSW(1785);
+        bom_talk_murabito_g_02[23] = 5;
+        bom_talk_murabito_g_02[24] = EVT_HELPER_CMD(2, 26);
+        bom_talk_murabito_g_02[25] = GSW(1785);
+        bom_talk_murabito_g_02[26] = 6;
+
+        bom_talk_white_02[1] = GSW(1755);
+        bom_talk_white_02[2] = 1;
+        bom_talk_white_02[3] = EVT_HELPER_CMD(2, 29);
+        bom_talk_white_02[4] = GSW(1785);
+        bom_talk_white_02[5] = 5;
+        bom_talk_white_02[6] = EVT_HELPER_CMD(2, 26);
+        bom_talk_white_02[7] = GSW(1785);
+        bom_talk_white_02[8] = 7;
+        bom_talk_white_02[12] = EVT_HELPER_CMD(2, 29);
+        bom_talk_white_02[13] = GSW(1785);
+        bom_talk_white_02[14] = 6;
+        bom_talk_white_02[51] = GSW(1785);
+        bom_talk_white_02[52] = 7;
+
+        bom_init_white_02[1] = GSW(1755);
+        bom_init_white_02[2] = 1;
+        bom_init_white_02[3] = EVT_HELPER_CMD(2, 29);
+        bom_init_white_02[4] = GSW(1785);
+        bom_init_white_02[5] = 5;
+        bom_init_white_02[6] = EVT_HELPER_CMD(2, 26);
+        bom_init_white_02[7] = GSW(1785);
+        bom_init_white_02[8] = 7;
+        bom_init_white_02[19] = EVT_HELPER_CMD(2, 29);
+        bom_init_white_02[20] = GSW(1785);
+        bom_init_white_02[21] = 6;
+
+        bom_iri_25_white_bed[354] = GSW(1785);
+        bom_iri_25_white_bed[355] = 6;
+
+        bom_02_init_evt[251] = GSW(1755);
+        bom_02_init_evt[252] = 1;
+        bom_02_init_evt[253] = EVT_HELPER_CMD(2, 29);
+        bom_02_init_evt[254] = GSW(1785);
+        bom_02_init_evt[255] = 5;
+        bom_02_init_evt[256] = EVT_HELPER_CMD(2, 26);
+        bom_02_init_evt[257] = GSW(1785);
+        bom_02_init_evt[258] = 7;
+        bom_02_init_evt[259] = EVT_HELPER_CMD(2, 26);
+        bom_02_init_evt[260] = GSW(1785);
+        bom_02_init_evt[261] = 6;
+
+        bom_init_white_01[1] = GSW(1755);
+        bom_init_white_01[2] = 1;
+        bom_init_white_01[3] = EVT_HELPER_CMD(2, 26);
+        bom_init_white_01[4] = GSW(1785);
+        bom_init_white_01[5] = 7;
+
         bom_talk_murabito_h_02[108] = GSW(1707);
         bom_talk_murabito_h_02[110] = 1;
         bom_talk_murabito_h_02[118] = 5;
         bom_talk_murabito_h_02[126] = 6;
+
+        bom_talk_murabito_h_02[1] = GSW(1756);
+        bom_talk_murabito_h_02[2] = 1;
+        bom_talk_murabito_h_02[79] = EVT_HELPER_OP(&irai_complete_item_get);
+        bom_talk_murabito_h_02[88] = GSW(1756);
+        bom_talk_murabito_h_02[89] = 2;
+
+        bom_talk_murabito_e_02[1] = GSW(1760);
+        bom_talk_murabito_e_02[2] = 1;
+        bom_talk_murabito_e_02[4] = GSWF(6357);
+        bom_talk_murabito_e_02[7] = GSW(1790);
+        bom_talk_murabito_e_02[16] = GSW(1790);
+        bom_talk_murabito_e_02[35] = GSW(1790);
+        bom_talk_murabito_e_02[226] = GSW(1760);
+        bom_talk_murabito_e_02[227] = 2;
+
+        bom_02_init_evt[278] = GSW(1760);
+        bom_02_init_evt[279] = 2;
 
         bom_talk_murabito_i_02[1] = GSW(1707);
         bom_talk_murabito_i_02[3] = 1;

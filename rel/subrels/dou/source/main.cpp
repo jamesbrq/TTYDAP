@@ -48,6 +48,9 @@ extern int32_t dou_escapeway_event[];
 extern int32_t dou_bombwall_bomb[];
 extern int32_t dou_bombwall_init[];
 extern int32_t dou_11_init_evt[];
+extern int32_t dou_kuribo_init[];
+extern int32_t dou_kuribo_talk[];
+extern int32_t dou_04_init_evt[];
 
 // clang-format off
 EVT_BEGIN(dou_peramajin_after_item)
@@ -98,6 +101,19 @@ namespace mod
 
         dou_bigdoor_event[141] = GSWF(6113);
         dou_bigdoor_event[142] = 1;
+
+        dou_kuribo_init[1] = GSW(1751);
+        dou_kuribo_init[2] = 1;
+
+        dou_kuribo_talk[1] = GSW(1751);
+        dou_kuribo_talk[2] = 1;
+        dou_kuribo_talk[4] = GSW(1781);
+        dou_kuribo_talk[13] = GSW(1781);
+        dou_kuribo_talk[575] = GSW(1751);
+        dou_kuribo_talk[576] = 2;
+
+        dou_04_init_evt[81] = GSW(1751);
+        dou_04_init_evt[82] = 2;
 
         dou_peramajin_after[0] = EVT_HELPER_CMD(2, 50);
         dou_peramajin_after[1] = EVT_HELPER_OP(LW(3));
