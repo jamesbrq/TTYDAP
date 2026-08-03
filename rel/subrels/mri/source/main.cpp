@@ -164,6 +164,7 @@ extern int32_t mri_17_init_evt[];
 extern int32_t mri_20_init_evt[];
 extern int32_t mri_18_init_evt[];
 extern int32_t mri_19_init_evt[];
+extern int32_t mri_puni_piders_check[];
 
 // clang-format off
 EVT_BEGIN(guide_init_00_evt)
@@ -1140,6 +1141,8 @@ namespace mod
         mri_16_init_evt[46] = GSW(1713);
         mri_16_init_evt[48] = 8;
         mri_16_init_evt[49] = 9;
+
+        mri_puni_piders_check[0] = EVT_HELPER_CMD(0, 2);
 
         mri_puni_disp_info[1] = GSW(1713);
         mri_puni_disp_info[2] = 17;

@@ -404,6 +404,8 @@ namespace mod::owr
                                reinterpret_cast<void *>(bMobjStarstoneRotation),
                                reinterpret_cast<void *>(bMobjStarstoneRotationReturn));
 
+        writeIntWithCache(&main_mobj_kururing_floor[130], 0x60000000); // nop
+        writeIntWithCache(&main_mobj_kururing_floor[144], 0x60000000); // nop
         writeIntWithCache(&main_mobj_kururing_floor[188], 0x808301BB); // lwz r4, 0x1BA(r3)
 
         writeIntWithCache(&main_mobj_powerupblk[73], 0x809F01D8);  // lwz r4, 0x1D8(r31)
