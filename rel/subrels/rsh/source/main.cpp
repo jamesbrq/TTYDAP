@@ -60,6 +60,7 @@ extern int32_t rsh_evt_2day_end[];
 extern int32_t rsh_evt_bed[];
 extern int32_t rsh_evt_toron_catch[];
 extern int32_t rsh_evt_toron_catch2[];
+extern int32_t rsh_item_tbl_kaban[];
 extern int32_t rsh_evt_toron_appear[];
 extern int32_t rsh_evt_daiji_kami_02[];
 extern int32_t rsh_evt_yuka_simi_02[];
@@ -987,6 +988,7 @@ namespace mod
         // spot (rsh.rel 0x1DE04) and must keep the item Rom.py wrote there.
         rsh_evt_toron_catch2[237] = 336; // businessman's evt_pouch_remove_item(briefcase)
         rsh_evt_toron_catch2[263] = 336; // alternate "kaban" evt_item_entry spawn
+        rsh_item_tbl_kaban[0] = 336;     // give-back select window's {briefcase, -1} table (catch2 word 220)
         rsh_evt_toron_catch2[316] = GSW(1706);
         rsh_evt_toron_catch2[317] = 29;
 

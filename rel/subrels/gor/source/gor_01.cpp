@@ -11,6 +11,7 @@
 #include "ttyd/evt_msg.h"
 #include "ttyd/evt_npc.h"
 #include "ttyd/evt_pouch.h"
+#include "ttyd/evt_snd.h"
 #include "ttyd/evtmgr_cmd.h"
 #include "ttyd/mario_pouch.h"
 #include "ttyd/swdrv.h"
@@ -93,6 +94,21 @@ EVT_BEGIN(badgemaster_talk_evt)
 	USER_FUNC(evt_msg::evt_msg_print, 0, PTR("gor_01_024_00"), 0, PTR("me"))
 	RETURN()
 EVT_END()
+// clang-format on
+
+// Wraps the trouble-branch BGM call in tyutyu_talk (word 11, always runs before
+// the handover gate): stashes Elusive Badge possession in LW(14) for the gate at
+// word 28. Vanilla gated on the Hooktail box-opened flag, but with AP the badge
+// can arrive without that chest ever being opened (and opening the chest doesn't
+// grant the badge), so possession is the only correct condition.
+EVT_DEFINE_USER_FUNC(iri16BadgeGateBgm)
+{
+    evtmgr_cmd::evtSetValue(
+        evt, LW(14), mario_pouch::pouchCheckItem(ItemId::ATTACK_FX_B_KEY_ITEM) > 0 ? 1 : 0);
+    return evt_snd::evt_snd_bgmon(evt, isFirstCall);
+}
+
+// clang-format off
 
 EVT_BEGIN(marco_init_01_evt)
 	IF_LARGE_EQUAL(GSW(1705), 1)
@@ -633,9 +649,10 @@ void ApplyGor01Patches()
 
     gor_iri_16_tyutyu_talk[1] = GSW(1746);
     gor_iri_16_tyutyu_talk[2] = 1;
+    gor_iri_16_tyutyu_talk[11] = PTR(&iri16BadgeGateBgm); // bgmon wrapper: LW(14) = has badge
     gor_iri_16_tyutyu_talk[15] = GSW(1776);
     gor_iri_16_tyutyu_talk[24] = GSW(1776);
-    gor_iri_16_tyutyu_talk[28] = GSWF(6354);
+    gor_iri_16_tyutyu_talk[28] = LW(14); // handover gate: badge possession (was chest flag 6354)
     gor_iri_16_tyutyu_talk[405] = EVT_HELPER_OP(LW(3));
     gor_iri_16_tyutyu_talk[408] = EVT_HELPER_OP(&iri_16_mowz_evt);
     gor_iri_16_tyutyu_talk[413] = GSW(1746);

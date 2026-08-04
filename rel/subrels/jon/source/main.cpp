@@ -79,7 +79,11 @@ namespace mod
         jon_iri_12_init[52] = GSW(1772);
         jon_iri_12_init[53] = 2;
         jon_iri_12_init[55] = GSW(1772);
-        jon_iri_12_init[66] = 2;
+        // Value word of the w54 "if" (vanilla: GSWF(5407)==0). [66] was a typo: it
+        // pointed 2 words past the evt's end (65 words) and corrupted the next
+        // object in jon.rel, while the unpatched w56 kept the dad from falling in
+        // on floors below the one where he was found.
+        jon_iri_12_init[56] = 2;
 
         jon_init_evt[266] = EVT_HELPER_CMD(2, 26);
         jon_init_evt[267] = GSW(1760);

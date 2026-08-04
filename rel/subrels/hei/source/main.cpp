@@ -62,6 +62,14 @@ EVT_BEGIN(hei_party_evt)
     RETURN()
 EVT_END()
 
+// nokotaro_get only has 33 words of room at [40] (return/end at w71/w72); the
+// guarded evt above is 36, so it must run as a child, not be written in place
+// (writing it as-is stomped the head of nokotaro_kanyu, the join-offer evt).
+EVT_BEGIN(hei_party_hook)
+    RUN_CHILD_EVT(hei_party_evt)
+    RETURN()
+EVT_END()
+
 EVT_BEGIN(stones_evt)
     IF_EQUAL(GSWF(1776), 0)
         USER_FUNC(evt_pouch::evt_pouch_check_item, 62, LW(0))
@@ -150,7 +158,7 @@ namespace mod
 
         hei_nokotaro_get[37] = EVT_HELPER_CMD(2, 50);
         hei_nokotaro_get[38] = EVT_HELPER_OP(LW(3));
-        patch::writePatch(&hei_nokotaro_get[40], hei_party_evt, sizeof(hei_party_evt));
+        patch::writePatch(&hei_nokotaro_get[40], hei_party_hook, sizeof(hei_party_hook));
 
         hei_nokotaro_nakama[11] = GSW(1701);
         hei_nokotaro_nakama[12] = 9;

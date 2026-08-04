@@ -274,6 +274,12 @@ EVT_DEFINE_USER_FUNC(checkShorts)
 
 uint16_t *iri_13_item_ids = reinterpret_cast<uint16_t *>(0x80003D00);
 
+// Vanilla trunk spot coordinates (25 rows of {x, y, z} ints, tou.rel sec5+0x21690).
+// Used directly instead of the vanilla make_tbl/get_pos pair: those shuffle spot
+// assignments through a heap-allocated table every map load, which both
+// randomizes where each trunk check sits and depends on a per-load allocation.
+extern int32_t tou_iri_13_pos_tbl[];
+
 EVT_DECLARE_USER_FUNC(iri_13_get_item, 3)
 EVT_DEFINE_USER_FUNC(iri_13_get_item)
 {
@@ -289,19 +295,28 @@ EVT_DEFINE_USER_FUNC(iri_13_get_item)
 // evt_item_entry takes its collected-flag argument UNEVALUATED (the raw evt
 // word; vanilla always writes a GSWF immediate there), so the flag can never be
 // passed through an LW — itemdrv was receiving the literal LW(7) encoding and
-// GSWF(6333+i) never got set, leaving every trunk check undetected. Spawn via
-// itemdrv directly with the properly encoded flag instead.
-EVT_DECLARE_USER_FUNC(iri_13_item_entry, 5)
+// GSWF(6333+i) never got set, leaving every trunk check undetected. Delegate to
+// the REAL evt_item_entry wrapper (the exact vanilla spawn path) with a
+// temporary argument list whose flag word is a proper GSWF immediate.
+EVT_DECLARE_USER_FUNC(iri_13_item_entry, 2)
 EVT_DEFINE_USER_FUNC(iri_13_item_entry)
 {
-    (void)isFirstCall;
     int32_t i = ttyd::evtmgr_cmd::evtGetValue(evt, evt->evtArguments[0]);
-    const char *name = reinterpret_cast<const char *>(ttyd::evtmgr_cmd::evtGetValue(evt, evt->evtArguments[1]));
-    float x = static_cast<float>(ttyd::evtmgr_cmd::evtGetValue(evt, evt->evtArguments[2]));
-    float y = static_cast<float>(ttyd::evtmgr_cmd::evtGetValue(evt, evt->evtArguments[3]));
-    float z = static_cast<float>(ttyd::evtmgr_cmd::evtGetValue(evt, evt->evtArguments[4]));
-    ttyd::itemdrv::itemEntry(name, iri_13_item_ids[i], 16, GSWF(kIri13FlagBase + i), nullptr, x, y, z);
-    return 2;
+    int32_t args[8] = {
+        evt->evtArguments[1],           // name (LW(6); the wrapper evaluates it)
+        iri_13_item_ids[i],             // item id immediate
+        tou_iri_13_pos_tbl[i * 3 + 0],  // x (fixed vanilla spot for trunk i)
+        tou_iri_13_pos_tbl[i * 3 + 1],  // y
+        tou_iri_13_pos_tbl[i * 3 + 2],  // z
+        16,                             // mode (vanilla trunk mode)
+        GSWF(kIri13FlagBase + i),       // collected flag, read raw by the wrapper
+        0,                              // no pickup script
+    };
+    int32_t *saved = evt->evtArguments;
+    evt->evtArguments = args;
+    int32_t ret = ttyd::evt_item::evt_item_entry(evt, isFirstCall);
+    evt->evtArguments = saved;
+    return ret;
 }
 
 
@@ -754,21 +769,18 @@ EVT_BEGIN(iri_13_init_evt)
     IF_EQUAL(GSWF(5406), 1)
         RETURN()
     END_IF()
-    USER_FUNC(make_tbl)
     SET(LW(2), 0)
     SET(LW(8), 0)
     DO(20)
-        USER_FUNC(get_pos, LW(2), LW(3), LW(4), LW(5))
         USER_FUNC(iri_13_make_name, LW(2), LW(6))
         USER_FUNC(iri_13_get_item, LW(2), LW(1), LW(7))
         IF_NOT_EQUAL(LW(1), -1)
-            USER_FUNC(iri_13_item_entry, LW(2), LW(6), LW(3), LW(4), LW(5))
+            USER_FUNC(iri_13_item_entry, LW(2), LW(6))
             USER_FUNC(evt_mobj::evt_mapobj_flag_onoff, 1, 0, PTR("gor_hae"), 1)
             ADD(LW(8), 1)
         END_IF()
         ADD(LW(2), 1)
     WHILE()
-    USER_FUNC(free_tbl)
     IF_NOT_EQUAL(LW(8), 0)
         INLINE_EVT()
             DO(0)
