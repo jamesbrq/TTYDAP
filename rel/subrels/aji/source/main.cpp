@@ -748,9 +748,11 @@ namespace mod
 
         if (gState->apSettings->enemyRandomizer)
         {
+            BattleGroupSetup **groupList = battleGroupList;
+            asm("" : "+r"(groupList));
             for (int i = kBtlGrpRange_aji_aji.start; i <= kBtlGrpRange_aji_aji.end; i++)
             {
-                BattleGroupSetup *battleGroup = battleGroupList[i];
+                BattleGroupSetup *battleGroup = groupList[i];
                 EnemyLoadout &loadout = gState->enemyLoadouts[i];
                 for (int32_t j = 0; j < battleGroup->num_enemies; j++)
                 {

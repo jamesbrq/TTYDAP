@@ -422,7 +422,7 @@ namespace mod::owr
 
         uintptr_t length_pointer = 0x80000FFC;
         uintptr_t item_pointer = 0x80001000;
-        uintptr_t index_pointer = 0x803DB860;
+        uintptr_t index_pointer = 0x803DB890;
 
         uint32_t length = *reinterpret_cast<uint32_t *>(length_pointer);
         if (length == 0)

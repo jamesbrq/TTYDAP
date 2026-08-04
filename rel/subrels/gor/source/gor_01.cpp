@@ -233,7 +233,7 @@ EVT_END()
 // msg keys "ap_cook_mode" (question) and "ap_cook_mode_select" (two options:
 // 0 = unlocked ingredient stock, 1 = the player's own items) live in mod.txt.
 EVT_BEGIN(ap_cook_mode_evt)
-	USER_FUNC(evt_msg::evt_msg_print, 0, PTR("ap_cook_mode"), 0, PTR(gor_str_nancy))
+	USER_FUNC(evt_msg::evt_msg_print_add, 0, PTR("ap_cook_mode"))
 	USER_FUNC(evt_msg::evt_msg_select, 0, PTR("ap_cook_mode_select"))
 	USER_FUNC(apSetCookMode, LW(0))
 	USER_FUNC(apMakeIngredientTbl, LW(11), LW(0))
