@@ -96,6 +96,17 @@ EVT_BEGIN(bom_talk_soncho_02_evt)
     RETURN()
 EVT_END()
 
+// The trouble bed gauntlet calls the delivery talk (iri_25_white_bed w342)
+// and only afterwards sets the vanilla "woken" flag (w353). Under the GSW(1785)
+// step counter that ordering CLOBBERS the delivery: talk sets 7 (delivered),
+// the tail then writes 6 — Goldbob's <7 branch re-runs the send-back forever
+// while the Package is already consumed. Set "woken" BEFORE the talk instead.
+EVT_BEGIN(bom_white_bed_talk_evt)
+    SET(GSW(1785), 6)
+    RUN_CHILD_EVT(&bom_talk_white_02)
+    RETURN()
+EVT_END()
+
 EVT_BEGIN(bom_evt_white_bed_evt)
     USER_FUNC(evt_party::evt_party_stop, 0)
     IF_SMALL(GSW(1707), 3)
@@ -293,7 +304,12 @@ namespace mod
         bom_init_white_02[20] = GSW(1785);
         bom_init_white_02[21] = 6;
 
-        bom_iri_25_white_bed[354] = GSW(1785);
+        // Wake-then-deliver ordering (see bom_white_bed_talk_evt): the gauntlet's
+        // callss target now sets 1785=6 before running the talk, and the tail's
+        // vanilla GSWF(5410) setii is repointed at a scratch LW so it can no
+        // longer stomp the delivered state.
+        bom_iri_25_white_bed[343] = PTR(bom_white_bed_talk_evt);
+        bom_iri_25_white_bed[354] = LW(15);
         bom_iri_25_white_bed[355] = 6;
 
         bom_02_init_evt[251] = GSW(1755);
