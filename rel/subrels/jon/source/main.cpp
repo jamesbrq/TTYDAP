@@ -60,12 +60,19 @@ namespace mod
         jon_iri_12_enemy_dead_event[7] = GSW(1772);
         jon_iri_12_enemy_dead_event[8] = 2;
 
+        // Vanilla's "not yet found" checks are GSWF(5406)==0; under the state
+        // counter that means 1772 < 2, NOT ==1 — talking to Pine T. Jr. (which
+        // sets 1) is optional, so a player going straight to the pit sits at 0.
+        // With ==1 the find dialogue never fired for them and 1772 never hit 2,
+        // losing the dad on the next floor.
+        jon_iri_12_makkino_talk[7] = EVT_HELPER_CMD(2, 26); // IF_SMALL
         jon_iri_12_makkino_talk[8] = GSW(1772);
-        jon_iri_12_makkino_talk[9] = 1;
+        jon_iri_12_makkino_talk[9] = 2;
         jon_iri_12_makkino_talk[17] = GSW(1772);
         jon_iri_12_makkino_talk[18] = 2;
+        jon_iri_12_makkino_talk[35] = EVT_HELPER_CMD(2, 26); // IF_SMALL
         jon_iri_12_makkino_talk[36] = GSW(1772);
-        jon_iri_12_makkino_talk[37] = 1;
+        jon_iri_12_makkino_talk[37] = 2;
 
         jon_iri_12_makkino_fall_return[44] = GSW(1772);
         jon_iri_12_makkino_fall_return[45] = 3;
@@ -74,8 +81,10 @@ namespace mod
 
         jon_iri_12_init[1] = GSW(1742);
         jon_iri_12_init[2] = 1;
+        // "Not yet found" on the find floor: 1772 < 2 (see makkino_talk note)
+        jon_iri_12_init[7] = EVT_HELPER_CMD(2, 26); // IF_SMALL
         jon_iri_12_init[8] = GSW(1772);
-        jon_iri_12_init[9] = 1;
+        jon_iri_12_init[9] = 2;
         jon_iri_12_init[52] = GSW(1772);
         jon_iri_12_init[53] = 2;
         jon_iri_12_init[55] = GSW(1772);
