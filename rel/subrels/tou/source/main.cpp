@@ -18,6 +18,7 @@
 #include "ttyd/evt_snd.h"
 #include "ttyd/evt_sub.h"
 #include "ttyd/evt_window.h"
+#include "ttyd/itemdrv.h"
 #include "ttyd/swdrv.h"
 #include "ttyd/tou.h"
 
@@ -282,6 +283,24 @@ EVT_DEFINE_USER_FUNC(iri_13_get_item)
     uint16_t id = iri_13_item_ids[i];
     ttyd::evtmgr_cmd::evtSetValue(evt, evt->evtArguments[1], id);
     ttyd::evtmgr_cmd::evtSetValue(evt, evt->evtArguments[2], flag);
+    return 2;
+}
+
+// evt_item_entry takes its collected-flag argument UNEVALUATED (the raw evt
+// word; vanilla always writes a GSWF immediate there), so the flag can never be
+// passed through an LW — itemdrv was receiving the literal LW(7) encoding and
+// GSWF(6333+i) never got set, leaving every trunk check undetected. Spawn via
+// itemdrv directly with the properly encoded flag instead.
+EVT_DECLARE_USER_FUNC(iri_13_item_entry, 5)
+EVT_DEFINE_USER_FUNC(iri_13_item_entry)
+{
+    (void)isFirstCall;
+    int32_t i = ttyd::evtmgr_cmd::evtGetValue(evt, evt->evtArguments[0]);
+    const char *name = reinterpret_cast<const char *>(ttyd::evtmgr_cmd::evtGetValue(evt, evt->evtArguments[1]));
+    float x = static_cast<float>(ttyd::evtmgr_cmd::evtGetValue(evt, evt->evtArguments[2]));
+    float y = static_cast<float>(ttyd::evtmgr_cmd::evtGetValue(evt, evt->evtArguments[3]));
+    float z = static_cast<float>(ttyd::evtmgr_cmd::evtGetValue(evt, evt->evtArguments[4]));
+    ttyd::itemdrv::itemEntry(name, iri_13_item_ids[i], 16, GSWF(kIri13FlagBase + i), nullptr, x, y, z);
     return 2;
 }
 
@@ -743,7 +762,7 @@ EVT_BEGIN(iri_13_init_evt)
         USER_FUNC(iri_13_make_name, LW(2), LW(6))
         USER_FUNC(iri_13_get_item, LW(2), LW(1), LW(7))
         IF_NOT_EQUAL(LW(1), -1)
-            USER_FUNC(evt_item::evt_item_entry, LW(6), LW(1), LW(3), LW(4), LW(5), 16, LW(7), 0)
+            USER_FUNC(iri_13_item_entry, LW(2), LW(6), LW(3), LW(4), LW(5))
             USER_FUNC(evt_mobj::evt_mapobj_flag_onoff, 1, 0, PTR("gor_hae"), 1)
             ADD(LW(8), 1)
         END_IF()

@@ -113,16 +113,10 @@ namespace mod::owr
     extern BattleStageData gChampStageData;
     extern BattleStageData gZakoStageData;
     constexpr int32_t kZakoNumProps = 9;
-    // bossGroupList indices of the stage-bringing bosses' home arenas: at home the
-    // vanilla stage already matches (props AND events), so no swap is needed there.
+
     constexpr int32_t kKanbuHomeArena = 16; // btlgrp_muj_muj_kanbu (zako stage)
     constexpr int32_t kChampHomeArena = 21; // btlgrp_tou_tou_champ (champion stage)
 
-    // Swap a boss battle's stage without touching the room-shared BattleStageData
-    // (every other encounter in the room keeps its own map) and without keeping the
-    // host stage's events, which target props the swapped-in map doesn't have
-    // (e.g. Smorg's scroll event / the muj deck's rotate event would crash).
-    // Null stage events are the vanilla norm; the engine skips them.
     inline void SwapBossStage(BattleSetupWeightedLoadout *setup, BattleStageData &buffer, const char *globalDir,
                               const char *currentDir, BattleStageObjectData *props, int32_t numProps)
     {

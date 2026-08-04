@@ -257,6 +257,13 @@ void ApplyGor03Patches()
     gor_mony_talk_03[11] = 9;
     gor_mony_talk_03[19] = 99;
 
+    // Frankie's vanilla trouble-active spawn branch ("if GSW(1420)==19" -> street
+    // spot 275,0,413) is dead: the modded board never sets GSW(1420) (irai_gswf_patch
+    // replaced that setii with per-trouble vars). Re-key it to trouble 19's own
+    // state so he spawns for his trouble even during the eloped window (1709 5-8).
+    gor_peton_init_03[1] = GSW(1749);
+    gor_peton_init_03[2] = 1;
+
     gor_peton_init_03[16] = GSW(1709);
     gor_peton_init_03[18] = -1;
     gor_peton_init_03[30] = 9;

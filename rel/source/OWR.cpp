@@ -422,6 +422,10 @@ namespace mod::owr
 
         uintptr_t length_pointer = 0x80000FFC;
         uintptr_t item_pointer = 0x80001000;
+        // Received-item index, persisted in the save (GlobalWork). 0x803DB890 =
+        // GSW bytes 1792-1795 (base 0x803DB190) — the first aligned u32 past every
+        // used GSW var; the old 0x803DB860 overlapped GSW 1744-1747, so receiving
+        // items incremented trouble 17's var (and taking it truncated the index).
         uintptr_t index_pointer = 0x803DB890;
 
         uint32_t length = *reinterpret_cast<uint32_t *>(length_pointer);
@@ -1343,8 +1347,6 @@ namespace mod::owr
 
     static BattleUnitKind *g_endScriptKind[0x40];
     static BattleUnitKind *g_powOrigKind[0x40];
-
-    static BattleUnitKind *g_entryOrigKind[0x40];
     static BattleUnitKind *g_currentBossOrigKind;
 
     struct OrigKindEntry
@@ -1539,7 +1541,6 @@ namespace mod::owr
                 mod::vm::VM_UnlockAll(); // SYSTEM is first unit each battle: drop last fight's pins
                 for (auto &k : g_endScriptKind) k = nullptr;
                 for (auto &k : g_powOrigKind) k = nullptr;
-                for (auto &k : g_entryOrigKind) k = nullptr;
                 g_currentBossOrigKind = nullptr;
             }
             mod::vm::VM_PrefetchForKind(reinterpret_cast<uint32_t>(kind), true);
@@ -1612,7 +1613,6 @@ namespace mod::owr
         if (entered)
         {
             int32_t slot = entered->unit_id & 0x3F;
-            g_entryOrigKind[slot] = origEntry ? origEntry->kind : nullptr;
             g_endScriptKind[slot] = (origEntry && origEntry->boss) ? origEntry->kind : nullptr;
             g_powOrigKind[slot] = nullptr;
             if (kind && !IsBossPowScaleExcluded(kind->unit_type))
@@ -1752,8 +1752,34 @@ namespace mod::owr
         return concluded;
     }
 
+    // Species whose battle scripts don't implement the enemy first-strike path
+    // ("never made to first strike you" in vanilla): with the enemy randomizer they
+    // can end up leading a formation whose field NPC ambushes, and the unarmed /
+    // untargeted first act crashes. Everyone else first-strikes fine wherever they
+    // are shuffled. Grown from reports.
+    static constexpr int32_t kFirstStrikeUnsafe[] = {
+        0x54, // Ember
+        0x55, // Lava Bubble
+        0x7C, // Phantom Ember
+    };
+
+    static bool IsFirstStrikeUnsafe(int32_t unitType)
+    {
+        constexpr int32_t count = sizeof(kFirstStrikeUnsafe) / sizeof(kFirstStrikeUnsafe[0]);
+        for (int32_t i = 0; i < count; i++)
+        {
+            if (kFirstStrikeUnsafe[i] == unitType)
+                return true;
+        }
+        return false;
+    }
+
     KEEP_FUNC void btlseqFirstAct_Hook(void *battleWork)
     {
+        // Enemy first strikes (first-attack type >= 9; 1-8 are Mario/partner types)
+        // run the lead unit's own battle scripts. If a species that can't handle
+        // that leads the formation, write type 0 so the sequence falls through to a
+        // normal battle start (entry events only) instead of crashing.
         if (gState->apSettings->enemyRandomizer)
         {
             uint8_t *info = *reinterpret_cast<uint8_t **>(reinterpret_cast<uint8_t *>(battleWork) + 0x2738);
@@ -1765,8 +1791,7 @@ namespace mod::owr
                     BattleWorkUnit *u = reinterpret_cast<BattleWorkUnit *>(ttyd::battle::BattleGetUnitPtr(battleWork, i));
                     if (!u || *(reinterpret_cast<int8_t *>(u) + 0xC) != 1) // first enemy-alliance unit only
                         continue;
-                    BattleUnitKind *orig = g_entryOrigKind[u->unit_id & 0x3F];
-                    if (orig && orig->unit_type != u->current_kind)
+                    if (IsFirstStrikeUnsafe(u->current_kind))
                         *firstAttackType = 0;
                     break;
                 }

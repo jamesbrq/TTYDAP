@@ -232,6 +232,8 @@ EVT_END()
 // should use, stores the mode, then builds the matching select-window table.
 // msg keys "ap_cook_mode" (question) and "ap_cook_mode_select" (two options:
 // 0 = unlocked ingredient stock, 1 = the player's own items) live in mod.txt.
+// An empty table ends the conversation through the parent's vanilla branch,
+// whose message apCookEmptyMsg swaps when the pouch-full guard caused it.
 EVT_BEGIN(ap_cook_mode_evt)
 	USER_FUNC(evt_msg::evt_msg_print_add, 0, PTR("ap_cook_mode"))
 	USER_FUNC(evt_msg::evt_msg_select, 0, PTR("ap_cook_mode_select"))
@@ -260,6 +262,11 @@ static int32_t sPendingRecipe = -1;
 //     outputs, no checks) — the only source of farmable dishes/reversions, so the
 //     vanilla ingredient economy bounds any farming.
 static int32_t sCookMode = 0;
+
+// Set when the unlock-mode menu came out empty ONLY because every regular item
+// slot is taken; apCookEmptyMsg turns it into a dedicated message instead of
+// letting the vanilla "no ingredients" line mislead the player.
+static bool sPouchFull = false;
 
 // Decide what the cook actually hands out. outVar is the evt arg holding the result.
 // Everything cooked is recorded in gCookGiveItem so pouchGetItemHook never treats
@@ -356,6 +363,7 @@ EVT_DEFINE_USER_FUNC(apMakeIngredientTbl)
     (void)isFirstCall;
     sPendingRecipe = -1;
     gCookGiveItem = -1; // defensive reset at the start of every cooking interaction
+    sPouchFull = false;
 
     // Second menu passes the first pick's table position to exclude (-1 on the first menu)
     const int32_t exclude = static_cast<int32_t>(evtmgr_cmd::evtGetValue(evt, evt->evtArguments[0]));
@@ -392,10 +400,26 @@ EVT_DEFINE_USER_FUNC(apMakeIngredientTbl)
                 apCookIngredientTbl[count++] = kIngredientIds[k];
             }
         }
+        else
+        {
+            sPouchFull = true;
+        }
     }
     apCookIngredientTbl[count] = -1;
     evtmgr_cmd::evtSetValue(evt, evt->evtArguments[1], count);
     return 2;
+}
+
+// Wraps the parent's empty-menu evt_msg_print_add (cooking_evt word 491): when the
+// unlock menu was hidden only because no result slot is free, explain that instead
+// of letting the vanilla "no ingredients" line mislead; the conversation then ends
+// through the vanilla goto. Writes the script's own message-arg word, so it must
+// set it BOTH ways every call (a swap would otherwise persist in the evt bytecode).
+EVT_DEFINE_USER_FUNC(apCookEmptyMsg)
+{
+    evt->evtArguments[1] = static_cast<int32_t>(
+        reinterpret_cast<intptr_t>(sPouchFull ? "ap_cook_full" : "gor_01_cook_005"));
+    return ttyd::evt_msg::evt_msg_print_add(evt, isFirstCall);
 }
 
 EVT_DEFINE_USER_FUNC(apCookRemove)
@@ -704,6 +728,7 @@ void ApplyGor01Patches()
         gor_cooking_evt[484] = PTR(ap_cook_mode_evt);     // mode select + 1st menu fill
         gor_cooking_evt[485] = EVT_HELPER_CMD(1, 3);      // LBL(999): no-op filler over the old args
         gor_cooking_evt[486] = 999;
+        gor_cooking_evt[491] = PTR(&apCookEmptyMsg);      // empty-menu msg: pouch-full aware
         gor_cooking_evt[506] = PTR(apCookIngredientTbl);  // select-window table #1 (vanilla .bss tbl only fits 20)
         gor_cooking_evt[549] = PTR(&apMakeIngredientTbl); // 2nd ingredient menu (keeps the chosen mode)
         gor_cooking_evt[575] = PTR(apCookIngredientTbl);  // select-window table #2
