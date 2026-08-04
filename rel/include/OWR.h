@@ -82,7 +82,8 @@ namespace mod::owr
     void replaceMultipleCharacters(ttyd::memory::SmartAllocationData *smartData, uint32_t startIndex, int value);
     BattleWorkUnit *BtlUnit_Entry_Hook(BattleUnitSetup *setup);
     void ExecAllUnitBattleEndEvent_Hook();
-    void RegisterOriginalKind(BattleUnitSetup *setup, BattleUnitKind *orig);
+    void RegisterOriginalKind(BattleUnitSetup *setup, BattleUnitKind *orig, bool isBoss);
+    void checkRecipeGoal();
     void ScaleUnitStats(BattleUnitKind *unit, RelId rel);
     int main__psndSFXOnHook(int idOrName, int vol, int pan, int a4, const void *pos, int a6, int a7, int a8);
     int psndSFXOffHook(int channel);
@@ -98,6 +99,7 @@ namespace mod::owr
                                    uint32_t unk1);
     int32_t InterruptStopHook(ttyd::evtmgr::EvtEntry *evt, bool isFirstCall);
     int32_t BattleCheckConcludedHook(void *battleWork);
+    void btlseqFirstAct_Hook(void *battleWork);
 
     extern const char *kChampStageGlobalDir;
     extern const char *kChampStageCurrentDir;
@@ -108,7 +110,37 @@ namespace mod::owr
     extern BattleStageObjectData kZakoStageProps[];
     extern BattleUnitSetup gKanbuPartyUnits[2];
     extern BattleGroupSetup gKanbuGroup;
+    extern BattleStageData gChampStageData;
+    extern BattleStageData gZakoStageData;
     constexpr int32_t kZakoNumProps = 9;
+    // bossGroupList indices of the stage-bringing bosses' home arenas: at home the
+    // vanilla stage already matches (props AND events), so no swap is needed there.
+    constexpr int32_t kKanbuHomeArena = 16; // btlgrp_muj_muj_kanbu (zako stage)
+    constexpr int32_t kChampHomeArena = 21; // btlgrp_tou_tou_champ (champion stage)
+
+    // Swap a boss battle's stage without touching the room-shared BattleStageData
+    // (every other encounter in the room keeps its own map) and without keeping the
+    // host stage's events, which target props the swapped-in map doesn't have
+    // (e.g. Smorg's scroll event / the muj deck's rotate event would crash).
+    // Null stage events are the vanilla norm; the engine skips them.
+    inline void SwapBossStage(BattleSetupWeightedLoadout *setup, BattleStageData &buffer, const char *globalDir,
+                              const char *currentDir, BattleStageObjectData *props, int32_t numProps)
+    {
+        buffer = *setup->stage_data;
+        buffer.global_stage_data_dir = globalDir;
+        buffer.current_stage_data_dir = currentDir;
+        buffer.num_props = numProps;
+        buffer.props = props;
+        buffer.init_evt_code = nullptr;
+        buffer.destroy_bg_a1_evt_code = nullptr;
+        buffer.destroy_bg_a2_evt_code = nullptr;
+        buffer.destroy_bg_b_evt_code = nullptr;
+        buffer.bg_a1_evt_code = nullptr;
+        buffer.bg_a2_evt_code = nullptr;
+        buffer.bg_b_scroll_evt_code = nullptr;
+        buffer.bg_b_rotate_evt_code = nullptr;
+        setup->stage_data = &buffer;
+    }
 
     inline void ApplyBossGroups(const BattleGroupIndexRange &range)
     {
@@ -160,19 +192,17 @@ namespace mod::owr
                 gKanbuGroup.fp_drop_table = bossGroup->fp_drop_table;
                 gKanbuGroup.unk_1c = bossGroup->unk_1c;
 
-                RegisterOriginalKind(&gKanbuPartyUnits[0], bossGroup->enemy_data[0].unit_kind_params);
-                RegisterOriginalKind(&gKanbuPartyUnits[1], bossGroup->enemy_data[(bossGroup->num_enemies > 1 ? 1 : 0)].unit_kind_params);
+                RegisterOriginalKind(&gKanbuPartyUnits[0], bossGroup->enemy_data[0].unit_kind_params, true);
+                RegisterOriginalKind(&gKanbuPartyUnits[1], bossGroup->enemy_data[(bossGroup->num_enemies > 1 ? 1 : 0)].unit_kind_params, true);
 
                 if (bossSetupList[i])
                     bossSetupList[i]->group_data = &gKanbuGroup;
 
-                if (bossSetupList[i] && bossSetupList[i]->stage_data && kZakoStageGlobalDir && kZakoStageCurrentDir)
+                if (i != kKanbuHomeArena && bossSetupList[i] && bossSetupList[i]->stage_data &&
+                    kZakoStageGlobalDir && kZakoStageCurrentDir)
                 {
-                    BattleStageData *st = bossSetupList[i]->stage_data;
-                    st->global_stage_data_dir = kZakoStageGlobalDir;
-                    st->current_stage_data_dir = kZakoStageCurrentDir;
-                    st->num_props = kZakoNumProps;
-                    st->props = kZakoStageProps;
+                    SwapBossStage(bossSetupList[i], gZakoStageData, kZakoStageGlobalDir, kZakoStageCurrentDir,
+                                  kZakoStageProps, kZakoNumProps);
                 }
                 continue;
             }
@@ -182,7 +212,7 @@ namespace mod::owr
             // and force the count to 1 so stale slots are never spawned.
             bool championHere = false;
             BattleUnitSetup &unit = bossGroup->enemy_data[0];
-            RegisterOriginalKind(&unit, unit.unit_kind_params);
+            RegisterOriginalKind(&unit, unit.unit_kind_params, true);
             unit.position.x = GetEnemyXPosition(loadout.enemyIds[0], unit.position.x);
             unit.position.y = GetEnemyYPosition(loadout.enemyIds[0]);
             unit.unit_kind_params = GetUnitKindById(loadout.enemyIds[0]);
@@ -191,14 +221,11 @@ namespace mod::owr
             bossGroup->num_enemies = 1;
 
             // champion needs the Glitz Pit stage; rewrite this loaded encounter
-            if (championHere && bossSetupList[i] && bossSetupList[i]->stage_data && kChampStageGlobalDir &&
-                kChampStageCurrentDir)
+            if (championHere && i != kChampHomeArena && bossSetupList[i] && bossSetupList[i]->stage_data &&
+                kChampStageGlobalDir && kChampStageCurrentDir)
             {
-                BattleStageData *st = bossSetupList[i]->stage_data;
-                st->global_stage_data_dir = kChampStageGlobalDir;
-                st->current_stage_data_dir = kChampStageCurrentDir;
-                st->num_props = kChampNumProps;
-                st->props = kChampStageProps;
+                SwapBossStage(bossSetupList[i], gChampStageData, kChampStageGlobalDir, kChampStageCurrentDir,
+                              kChampStageProps, kChampNumProps);
             }
         }
     }
@@ -236,6 +263,7 @@ namespace mod::owr
                                                          uint32_t);
     extern int32_t (*g_InterruptStop_trampoline)(ttyd::evtmgr::EvtEntry *, bool);
     extern int32_t (*g_BattleCheckConcluded_trampoline)(void *);
+    extern void (*g_btlseqFirstAct_trampoline)(void *);
 
     extern const char *goombellaName;
     extern const char *goombellaDescription;

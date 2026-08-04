@@ -380,6 +380,13 @@ namespace mod
             las_last_evt_3_1[518] = PTR("minnnanokoe");
         }
 
+        // Skip the Rogueport epilogue after the final boss: the ending event's
+        // evt_bero_mapchange goes straight to the credits instead of gor_11.
+        // Word index byte-verified: cmd at last_evt_4+0x1C98 (callc, funcptr,
+        // "gor_11", 0) -> map string is word 1832.
+        if (mod::owr::gState->apSettings->epilogueSkip)
+            las_last_evt_4[1832] = PTR("end_00");
+
         if (gState->apSettings->enemyRandomizer)
         {
             for (int i = kBtlGrpRange_las_las.start; i <= kBtlGrpRange_las_las.end; i++)
@@ -389,6 +396,7 @@ namespace mod
                 for (int32_t j = 0; j < battleGroup->num_enemies; j++)
                 {
                     BattleUnitSetup &unit = battleGroup->enemy_data[j];
+                    RegisterOriginalKind(&unit, unit.unit_kind_params, false);
                     unit.position.y = GetEnemyYPosition(loadout.enemyIds[j]);
                     unit.unit_kind_params = GetUnitKindById(loadout.enemyIds[j]);
                 }

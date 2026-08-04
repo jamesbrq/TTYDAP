@@ -67,9 +67,13 @@ namespace mod::owr
         uint8_t consoleMode;                       // 0x61
         uint8_t moonSpeed;                         // 0x62
         uint8_t troubles;                          // 0x63
+        uint8_t bossScalingNerfs;                  // 0x64
+        uint8_t cooksanity;                        // 0x65
+        uint8_t goalRecipes;                       // 0x66
+        uint8_t epilogueSkip;                      // 0x67
     };
 
-    static_assert(sizeof(APSettings) == 0x64);
+    static_assert(sizeof(APSettings) == 0x68);
 
     constexpr size_t NAME_LEN = 32;
 

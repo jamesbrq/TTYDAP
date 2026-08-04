@@ -758,7 +758,10 @@ namespace mod::owr
         itemDataTable[ItemId::WHACKA_BUMP].sell_price = 30;
 
         itemDataTable[ItemId::SQUARE_DIAMOND_BADGE].icon_id = IconType::MARIO_WANTED_POSTER;
-        itemDataTable[ItemId::SQUARE_DIAMOND_BADGE_P].icon_id = IconType::BRIEFCASE;
+        // The real Briefcase lives here now (its old slot 0x51 hosts the Battle
+        // Trunks Pack). Clone the vanilla entry before that slot is overwritten so
+        // name/description/icon/sort and key-item data all carry over.
+        itemDataTable[ItemId::SQUARE_DIAMOND_BADGE_P] = itemDataTable[ItemId::BRIEFCASE];
         itemDataTable[ItemId::INVALID_ITEM_MARIO_POSTER_005A].icon_id = IconType::COURAGE_SHELL_PACKAGE;
         itemDataTable[ItemId::INVALID_ITEM_MARIO_POSTER_005A].name = shellPackName;
         itemDataTable[ItemId::INVALID_ITEM_MARIO_POSTER_005A].description = shellPackDescription;
@@ -1008,6 +1011,10 @@ namespace mod::owr
         using BattleCheckConcludedFn = int32_t (*)(void *);
         g_BattleCheckConcluded_trampoline =
             patch::hookFunction(reinterpret_cast<BattleCheckConcludedFn>(0x8011AA34), BattleCheckConcludedHook);
+
+        using BtlseqFirstActFn = void (*)(void *);
+        g_btlseqFirstAct_trampoline =
+            patch::hookFunction(reinterpret_cast<BtlseqFirstActFn>(0x8011E5C0), btlseqFirstAct_Hook);
 
         // Hook gaugeDisp with a standard branch since the original function does not need to be called
         patch::writeBranch(statuswindow::gaugeDisp, DisplayStarPowerOrbs);

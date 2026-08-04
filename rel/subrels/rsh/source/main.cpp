@@ -982,12 +982,13 @@ namespace mod
         rsh_evt_toron_catch[273] = GSW(1706);
         rsh_evt_toron_catch[274] = 29;
 
-        rsh_evt_toron_catch2[153] = 336;
-        rsh_evt_toron_catch2[237] = 0;
-        rsh_evt_toron_catch2[263] = 336;
+        // Briefcase moved to item 336 (SQUARE_DIAMOND_BADGE_P); item 0x51 is now the
+        // Battle Trunks Pack. Word 153 is NOT poked: it is the AP location's patch
+        // spot (rsh.rel 0x1DE04) and must keep the item Rom.py wrote there.
+        rsh_evt_toron_catch2[237] = 336; // businessman's evt_pouch_remove_item(briefcase)
+        rsh_evt_toron_catch2[263] = 336; // alternate "kaban" evt_item_entry spawn
         rsh_evt_toron_catch2[316] = GSW(1706);
         rsh_evt_toron_catch2[317] = 29;
-        rsh_evt_toron_catch2[153] = 336;
 
         rsh_evt_toron_appear[25] = GSW(1706);
         rsh_evt_toron_appear[26] = 27;

@@ -195,6 +195,9 @@ namespace mod::owr
     KEEP_VAR BattleUnitSetup gKanbuPartyUnits[2];
     KEEP_VAR BattleGroupSetup gKanbuGroup;
 
+    KEEP_VAR BattleStageData gChampStageData;
+    KEEP_VAR BattleStageData gZakoStageData;
+
     KEEP_VAR bool (*g_OSLink_trampoline)(OSModuleInfo *, void *) = nullptr;
     KEEP_VAR void (*g_seq_logoMain_trampoline)(SeqInfo *info) = nullptr;
     KEEP_VAR void (*g_seq_gameInit_trampoline)(SeqInfo *info) = nullptr;
@@ -225,6 +228,7 @@ namespace mod::owr
                                                            uint32_t) = nullptr;
     KEEP_VAR int32_t (*g_InterruptStop_trampoline)(ttyd::evtmgr::EvtEntry *, bool) = nullptr;
     KEEP_VAR int32_t (*g_BattleCheckConcluded_trampoline)(void *) = nullptr;
+    KEEP_VAR void (*g_btlseqFirstAct_trampoline)(void *) = nullptr;
 
     void OWR::SequenceInit()
     {
@@ -330,7 +334,7 @@ namespace mod::owr
             ttyd::mario_party::marioPartyHello(gState->apSettings->startingPartner);
 
             if (gState->apSettings->openWestside)
-                ttyd::swdrv::swSet(1188);
+                ttyd::swdrv::swSet(6124); // Zess T. guards her kitchen instead of the west gate
         }
 
         int32_t size = GSWF_ARR_SIZE;
@@ -1075,10 +1079,12 @@ namespace mod::owr
 
         gState->fastTraveling = false;
 
-        // Give Zess T. the contact lens upon entering westside
+        // Once westside has been reached her gate block is redundant: Zess T. moves
+        // to guard her kitchen door instead (gor_01 nancy patches). Cooking still
+        // requires delivering the Contact Lens (GSWF 1188 stays untouched).
         if (strcmp(map, "gor_03") == 0)
         {
-            ttyd::swdrv::swSet(1188);
+            ttyd::swdrv::swSet(6124);
         }
 
         // Set cutscene flag for Don Pianta if player leaves westside
@@ -1337,17 +1343,30 @@ namespace mod::owr
 
     static BattleUnitKind *g_endScriptKind[0x40];
     static BattleUnitKind *g_powOrigKind[0x40];
+
+    static BattleUnitKind *g_entryOrigKind[0x40];
     static BattleUnitKind *g_currentBossOrigKind;
 
     struct OrigKindEntry
     {
         BattleUnitSetup *setup;
         BattleUnitKind *kind;
+        bool boss;
     };
-    static OrigKindEntry g_origKindMap[32];
+
+    // Sized for the Pit (jon): 150 groups x up to 5 slots, plus boss arenas.
+    static constexpr int32_t kOrigKindMapCapacity = 1024;
+    static OrigKindEntry g_origKindMap[kOrigKindMapCapacity];
     static int32_t g_origKindMapCount;
 
-    KEEP_FUNC void RegisterOriginalKind(BattleUnitSetup *setup, BattleUnitKind *orig)
+    // Setup pointers live inside the area rel, so entries go stale (and could
+    // alias another area's setups at the same address) once it unloads.
+    static void ResetOriginalKindMap()
+    {
+        g_origKindMapCount = 0;
+    }
+
+    KEEP_FUNC void RegisterOriginalKind(BattleUnitSetup *setup, BattleUnitKind *orig, bool isBoss)
     {
         if (!setup || !orig)
             return;
@@ -1355,21 +1374,23 @@ namespace mod::owr
             if (g_origKindMap[i].setup == setup)
             {
                 g_origKindMap[i].kind = orig;
+                g_origKindMap[i].boss = isBoss;
                 return;
             }
-        if (g_origKindMapCount < 32)
+        if (g_origKindMapCount < kOrigKindMapCapacity)
         {
             g_origKindMap[g_origKindMapCount].setup = setup;
             g_origKindMap[g_origKindMapCount].kind = orig;
+            g_origKindMap[g_origKindMapCount].boss = isBoss;
             g_origKindMapCount++;
         }
     }
 
-    static BattleUnitKind *LookupOriginalKind(BattleUnitSetup *setup)
+    static OrigKindEntry *LookupOriginalEntry(BattleUnitSetup *setup)
     {
         for (int32_t i = 0; i < g_origKindMapCount; i++)
             if (g_origKindMap[i].setup == setup)
-                return g_origKindMap[i].kind;
+                return &g_origKindMap[i];
         return nullptr;
     }
 
@@ -1449,6 +1470,38 @@ namespace mod::owr
         }
     }
 
+    static constexpr int32_t kHpScaleBlacklist[] = {
+        BattleUnitType::MINI_YUX,   // 0x1E
+        BattleUnitType::MINI_Z_YUX, // 0x74
+        BattleUnitType::MINI_X_YUX, // 0x76
+    };
+
+    static bool IsHpScaleBlacklisted(int32_t unitType)
+    {
+        constexpr int32_t count = sizeof(kHpScaleBlacklist) / sizeof(kHpScaleBlacklist[0]);
+        for (int32_t i = 0; i < count; i++)
+        {
+            if (kHpScaleBlacklist[i] == unitType)
+                return true;
+        }
+        return false;
+    }
+
+    static constexpr int32_t kEnemyPowScaleBlacklist[] = {
+        0x46, // twinkling_pansy (Amazy Dayzee)
+    };
+
+    static bool IsEnemyPowScaleBlacklisted(int32_t unitType)
+    {
+        constexpr int32_t count = sizeof(kEnemyPowScaleBlacklist) / sizeof(kEnemyPowScaleBlacklist[0]);
+        for (int32_t i = 0; i < count; i++)
+        {
+            if (kEnemyPowScaleBlacklist[i] == unitType)
+                return true;
+        }
+        return false;
+    }
+
     static void ApplyBossScriptPatches(int32_t unitType, int32_t scaledHp)
     {
         switch (unitType)
@@ -1486,15 +1539,18 @@ namespace mod::owr
                 mod::vm::VM_UnlockAll(); // SYSTEM is first unit each battle: drop last fight's pins
                 for (auto &k : g_endScriptKind) k = nullptr;
                 for (auto &k : g_powOrigKind) k = nullptr;
+                for (auto &k : g_entryOrigKind) k = nullptr;
                 g_currentBossOrigKind = nullptr;
             }
             mod::vm::VM_PrefetchForKind(reinterpret_cast<uint32_t>(kind), true);
         }
 
-        BattleUnitKind *bossOrigKind = LookupOriginalKind(setup);
+        OrigKindEntry *origEntry = LookupOriginalEntry(setup);
+        BattleUnitKind *bossOrigKind = (origEntry && origEntry->boss) ? origEntry->kind : nullptr;
+        BattleUnitKind *enemyOrigKind = (origEntry && !origEntry->boss) ? origEntry->kind : nullptr;
         if (bossOrigKind)
             g_currentBossOrigKind = bossOrigKind;
-        else if (g_currentBossOrigKind && kind && kind->unit_type <= BattleUnitType::BONETAIL)
+        else if (!origEntry && g_currentBossOrigKind && kind && kind->unit_type <= BattleUnitType::BONETAIL)
             bossOrigKind = g_currentBossOrigKind;
 
         const OSModuleInfo *relPtr = _globalWorkPtr->relocationBase;
@@ -1512,6 +1568,10 @@ namespace mod::owr
                         newKind->level = bossOrigKind->level;
                         if (newKind->unit_type == 0x93) // batten_satellite
                             newKind->max_hp = 2; // Small nerf for early game beatablility
+                        if (gState->apSettings->bossScalingNerfs &&
+                            (newKind->unit_type == 0x5D || newKind->unit_type == 0x5E) && // boss_cortez / boss_honeduka
+                            !(bossOrigKind->unit_type >= 0x5D && bossOrigKind->unit_type <= 0x62))
+                            newKind->max_hp = (bossOrigKind->max_hp + 2) / 3;
                     }
                     if (!IsBossDefScaleExcluded(newKind->unit_type) && newKind->parts && bossOrigKind->parts)
                     {
@@ -1519,6 +1579,21 @@ namespace mod::owr
                         for (int32_t i = 0; i < partCount; i++) newKind->parts[i].defense = bossOrigKind->parts[i].defense;
                     }
                     ApplyBossScriptPatches(newKind->unit_type, bossOrigKind->max_hp);
+                }
+            }
+            else if (enemyOrigKind && gState->apSettings->enemyRandomizer && gState->apSettings->enemyStatScaling &&
+                     !IsHpScaleBlacklisted(setup->unit_kind_params->unit_type))
+            {
+                // Enemy scaling mirrors boss scaling: the replacement fights with the
+                // vanilla HP, DEF and level of the enemy it replaced.
+                BattleUnitKind *newKind = setup->unit_kind_params;
+                newKind->max_hp = enemyOrigKind->max_hp;
+                newKind->level = enemyOrigKind->level;
+                if (newKind->parts && enemyOrigKind->parts)
+                {
+                    int32_t partCount =
+                        newKind->num_parts < enemyOrigKind->num_parts ? newKind->num_parts : enemyOrigKind->num_parts;
+                    for (int32_t i = 0; i < partCount; i++) newKind->parts[i].defense = enemyOrigKind->parts[i].defense;
                 }
             }
             else
@@ -1537,8 +1612,17 @@ namespace mod::owr
         if (entered)
         {
             int32_t slot = entered->unit_id & 0x3F;
-            g_endScriptKind[slot] = LookupOriginalKind(setup);
-            g_powOrigKind[slot] = (bossOrigKind && kind && !IsBossPowScaleExcluded(kind->unit_type)) ? bossOrigKind : nullptr;
+            g_entryOrigKind[slot] = origEntry ? origEntry->kind : nullptr;
+            g_endScriptKind[slot] = (origEntry && origEntry->boss) ? origEntry->kind : nullptr;
+            g_powOrigKind[slot] = nullptr;
+            if (kind && !IsBossPowScaleExcluded(kind->unit_type))
+            {
+                if (bossOrigKind && gState->apSettings->bossStatScaling)
+                    g_powOrigKind[slot] = bossOrigKind;
+                else if (enemyOrigKind && gState->apSettings->enemyRandomizer && gState->apSettings->enemyStatScaling &&
+                         !IsEnemyPowScaleBlacklisted(kind->unit_type))
+                    g_powOrigKind[slot] = enemyOrigKind;
+            }
         }
         return entered;
     }
@@ -1559,23 +1643,6 @@ namespace mod::owr
             *reinterpret_cast<uint32_t *>(reinterpret_cast<char *>(th) + 0x160) = u->unit_id;
         }
     }
-    static constexpr int32_t kHpScaleBlacklist[] = {
-        BattleUnitType::MINI_YUX,   // 0x1E
-        BattleUnitType::MINI_Z_YUX, // 0x74
-        BattleUnitType::MINI_X_YUX, // 0x76
-    };
-
-    static bool IsHpScaleBlacklisted(int32_t unitType)
-    {
-        constexpr int32_t count = sizeof(kHpScaleBlacklist) / sizeof(kHpScaleBlacklist[0]);
-        for (int32_t i = 0; i < count; i++)
-        {
-            if (kHpScaleBlacklist[i] == unitType)
-                return true;
-        }
-        return false;
-    }
-
     KEEP_FUNC void ScaleUnitStats(BattleUnitKind *unit, RelId rel)
     {
         if (!unit)
@@ -1602,13 +1669,17 @@ namespace mod::owr
     {
         int32_t base_atk = weapon ? static_cast<int32_t>(weapon->damage_function_params[0]) : 0;
         bool overrode = false;
-        if (gState->apSettings->bossStatScaling && attacker && weapon && weapon->damage_function && !weapon->item_id &&
+        // g_powOrigKind slots are only populated when the matching stat-scaling
+        // option (boss or enemy) is enabled, so no settings check is needed here.
+        if (attacker && weapon && weapon->damage_function && !weapon->item_id &&
             !(weapon->target_property_flags & 0x100000) && base_atk > 0)
         {
             BattleUnitKind *origKind = g_powOrigKind[attacker->unit_id & 0x3F];
             if (origKind)
             {
                 int32_t atk = GetBossAtk(origKind->unit_type);
+                if (atk < 0)
+                    atk = GetEnemyAtk(origKind->unit_type);
                 if (atk >= 0)
                 {
                     if (atk < 1)
@@ -1679,6 +1750,29 @@ namespace mod::owr
             }
         }
         return concluded;
+    }
+
+    KEEP_FUNC void btlseqFirstAct_Hook(void *battleWork)
+    {
+        if (gState->apSettings->enemyRandomizer)
+        {
+            uint8_t *info = *reinterpret_cast<uint8_t **>(reinterpret_cast<uint8_t *>(battleWork) + 0x2738);
+            int32_t *firstAttackType = info ? reinterpret_cast<int32_t *>(info + 8) : nullptr;
+            if (firstAttackType && *firstAttackType >= 9)
+            {
+                for (int32_t i = 0; i < 0x40; i++)
+                {
+                    BattleWorkUnit *u = reinterpret_cast<BattleWorkUnit *>(ttyd::battle::BattleGetUnitPtr(battleWork, i));
+                    if (!u || *(reinterpret_cast<int8_t *>(u) + 0xC) != 1) // first enemy-alliance unit only
+                        continue;
+                    BattleUnitKind *orig = g_entryOrigKind[u->unit_id & 0x3F];
+                    if (orig && orig->unit_type != u->current_kind)
+                        *firstAttackType = 0;
+                    break;
+                }
+            }
+        }
+        g_btlseqFirstAct_trampoline(battleWork);
     }
 
     KEEP_FUNC int main__psndSFXOnHook(int idOrName, int vol, int pan, int a4, const void *pos, int a6, int a7, int a8)
@@ -2021,15 +2115,35 @@ namespace mod::owr
         }
     }
 
+    KEEP_FUNC void checkRecipeGoal()
+    {
+        if (gState->apSettings->goal != 4 || ttyd::swdrv::swGet(6120) != 0)
+            return;
+
+        uint8_t count = 0;
+        for (int32_t i = 0; i < 57; i++)
+        {
+            if (ttyd::swdrv::swGet(mod::ap_cooking::kRecipeFlagBase + i))
+                count++;
+        }
+        if (count < gState->apSettings->goalRecipes)
+            return;
+
+        if (checkIfInGameNotBattle())
+        {
+            ttyd::swdrv::swSet(6120);
+            ttyd::seqdrv::seqSetSeq(SeqIndex::kMapChange, "end_00", 0);
+        }
+        else
+        {
+            ttyd::swdrv::swSet(6121);
+        }
+    }
+
     KEEP_FUNC uint32_t pouchGetItemHook(int32_t item)
     {
-        // Cooking ingredient unlocks: the FIRST acquisition of an ingredient item (from
-        // any source) permanently teaches it to Zess T.'s menu (gor subrel reads the
-        // flags). Runs before the switch so routed items (Coconut etc.) still unlock.
-        // Exception: items handed out by the cooking evt itself (gCookGiveItem — repeat
-        // cooks and reversion recipes) must never unlock themselves as ingredients.
         const int32_t ingredientIdx = mod::ap_cooking::ingredientIndex(item);
-        if (ingredientIdx >= 0 && item != mod::ap_cooking::gCookGiveItem &&
+        if (gState->apSettings->cooksanity && ingredientIdx >= 0 && item != mod::ap_cooking::gCookGiveItem &&
             !ttyd::swdrv::swGet(mod::ap_cooking::kIngredientFlagBase + ingredientIdx))
         {
             ttyd::swdrv::swSet(mod::ap_cooking::kIngredientFlagBase + ingredientIdx);
@@ -2148,6 +2262,16 @@ namespace mod::owr
                     pouchReAddReturnPipe();
                 }
                 return ret;
+            }
+            case ItemId::SQUARE_DIAMOND_BADGE_P: // relocated Briefcase (badge-range id)
+            {
+                // Vanilla routing files badge-range ids under Badges; the briefcase
+                // belongs with the key items.
+                if (containsKeyItem(item))
+                {
+                    return 1;
+                }
+                return addItemToKeyItems(item) ? 2 : 0; // 0: key items inventory is full
             }
             case ItemId::COCONUT:
             {
@@ -2349,6 +2473,7 @@ namespace mod::owr
             case ItemId::MYSTIC_EGG:
             case ItemId::GOLDEN_LEAF:
             case ItemId::HONEY_CANDY:
+            case ItemId::SQUARE_DIAMOND_BADGE_P: // relocated Briefcase
             {
                 // These items are placed in the key items inventory via the hacky add function,
                 // so check there first and remove from there if found
@@ -2775,6 +2900,10 @@ namespace mod::owr
     void OWR::OnModuleLoaded(OSModuleInfo *module_info)
     {
         RelMgr *relMgrPtr = &relMgr;
+
+        // Stat-scaling registrations point into the outgoing area rel; clear them
+        // before the relinked subrel registers this area's own setups.
+        ResetOriginalKindMap();
 
         // The vanilla rel is unlinked every time you go through a loading zone, so our custom one must be relinked
         // If the game's vanilla tou2.rel was just linked, then force our custom tou2.rel to be loaded
