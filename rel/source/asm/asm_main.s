@@ -835,7 +835,7 @@ monosiriSWArr:
 	.4byte 0x00000010
 	.4byte 0x000006B3
 	.4byte 0x0000004D
-	.4byte 0x00000008
+	.4byte 0x00000002
 	.4byte 0x000006AC
 	.4byte 0x00000087
 	.4byte 0x00000009
@@ -844,4 +844,19 @@ monosiriSWArr:
 	.4byte 0x00000010
 	.4byte 0x000006AC
 	.4byte 0x00000092
+	.4byte 0x00000010
+	.4byte 0x000006A4
+	.4byte 0x00000006
+	.4byte 0x00000005
+	.4byte 0x000006B3
+	.4byte 0x0000004F
+	.4byte 0x00000008
+	.4byte 0x000006B3
+	.4byte 0x0000003F
+	.4byte 0x0000000B
+	.4byte 0x000006AC
+	.4byte 0x00000094
+	.4byte 0x00000010
+	.4byte 0x000006AC
+	.4byte 0x00000095
 	.4byte 0x00000010

@@ -748,10 +748,12 @@ EVT_BEGIN(peton_init_muj_01_hook)
 EVT_END()
 
 EVT_BEGIN(muj_party_evt)
-	USER_FUNC(evt_mario::evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
-	USER_FUNC(evt_item::evt_item_entry, PTR("item01"), LW(3), LW(0), LW(1), LW(2), 16, GSWF(6081), 0)
-	USER_FUNC(evt_item::evt_item_get_item, PTR("item01"))
-	WAIT_MSEC(800)
+	IF_EQUAL(GSWF(6081), 0) // skip the spawn once collected (get_item would hang); tail always runs
+		USER_FUNC(evt_mario::evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
+		USER_FUNC(evt_item::evt_item_entry, PTR("item01"), LW(3), LW(0), LW(1), LW(2), 16, GSWF(6081), 0)
+		USER_FUNC(evt_item::evt_item_get_item, PTR("item01"))
+		WAIT_MSEC(800)
+	END_IF()
 	SET(GSW(1723), 2)
 	USER_FUNC(evt_npc::evt_npc_set_position, PTR("me"), 0, -1000, 0)
 	USER_FUNC(evt_cam::evt_cam3d_evt_off, 500, 11)
@@ -1290,6 +1292,7 @@ namespace mod
                 for (int32_t j = 0; j < battleGroup->num_enemies; j++)
                 {
                     BattleUnitSetup &unit = battleGroup->enemy_data[j];
+                    RegisterOriginalKind(&unit, unit.unit_kind_params, false);
                     unit.position.y = GetEnemyYPosition(loadout.enemyIds[j]);
                     unit.unit_kind_params = GetUnitKindById(loadout.enemyIds[j]);
                 }

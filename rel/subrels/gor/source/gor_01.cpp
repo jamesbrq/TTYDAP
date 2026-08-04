@@ -1,12 +1,16 @@
 #include "subrel_gor.h"
 #include "evt_cmd.h"
 #include "patch.h"
+#include "OWR.h"
 #include "AP/rel_patch_definitions.h"
 #include "ttyd/common_types.h"
+#include "ttyd/evt_bero.h"
+#include "ttyd/evt_hit.h"
 #include "ttyd/evt_item.h"
 #include "ttyd/evt_mario.h"
 #include "ttyd/evt_msg.h"
 #include "ttyd/evt_npc.h"
+#include "ttyd/evt_pouch.h"
 #include "ttyd/evtmgr_cmd.h"
 #include "ttyd/mario_pouch.h"
 #include "ttyd/swdrv.h"
@@ -69,12 +73,19 @@ extern "C"
     int32_t gor_cook_chk2(ttyd::evtmgr::EvtEntry *evt, bool isFirstCall);
 }
 
+// Zess T.'s name string in gor.rel .rodata (Shift-JIS), used as evt speaker arg
+extern char gor_str_nancy[];
+extern int32_t gor_nancy_init[];
+extern int32_t gor_nancy_regl[];
+
 // clang-format off
 EVT_BEGIN(iri_16_mowz_evt)
-	USER_FUNC(evt_mario::evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
-	USER_FUNC(evt_item::evt_item_entry, PTR("item01"), LW(3), LW(0), LW(1), LW(2), 16, GSWF(6353), 0)
-	USER_FUNC(evt_item::evt_item_get_item, PTR("item01"))
-	WAIT_MSEC(800)
+	IF_EQUAL(GSWF(6353), 0) // skip the spawn once collected (get_item would hang)
+		USER_FUNC(evt_mario::evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
+		USER_FUNC(evt_item::evt_item_entry, PTR("item01"), LW(3), LW(0), LW(1), LW(2), 16, GSWF(6353), 0)
+		USER_FUNC(evt_item::evt_item_get_item, PTR("item01"))
+		WAIT_MSEC(800)
+	END_IF()
 	RETURN()
 EVT_END()
 
@@ -186,6 +197,48 @@ EVT_BEGIN(gor_master_talk_hook)
     END_IF()
     GOTO(&gor_master_talk[137])
 EVT_PATCH_END()
+
+// Replaces nancy_init (its head is repointed here). Three states:
+//  - gate  (GSWF 6124 unset): vanilla behavior, she blocks the west gate and the
+//    w_bero exit is disabled.
+//  - door  (6124 set by OWR when westside is first reached / Open Westside, lens
+//    not delivered): she guards her kitchen door instead and the gate stays
+//    open. nancy_talk is untouched — delivering the Contact Lens still sets
+//    GSWF(1188), walks her inside and unlocks the kitchen/cooking.
+//  - delivered (GSWF 1188): vanilla kitchen position. 6124 is also set here so
+//    nancy_regl's gate-block check stays off when the lens was delivered at the
+//    gate itself.
+EVT_BEGIN(ap_nancy_init_evt)
+	IF_EQUAL(GSWF(1188), 0)
+		IF_EQUAL(GSWF(6124), 0)
+			USER_FUNC(evt_npc::evt_npc_set_ry, PTR("me"), 90)
+			USER_FUNC(evt_npc::evt_npc_set_position, PTR("me"), -573, 0, 56)
+			SET(LW(0), PTR("w_bero"))
+			RUN_CHILD_EVT(evt_bero::bero_case_switch_off)
+			USER_FUNC(evt_hit::evt_hitobj_attr_onoff, 1, 0, PTR("w_bero"), 8388612)
+		ELSE()
+			USER_FUNC(evt_npc::evt_npc_set_ry, PTR("me"), 270)
+			USER_FUNC(evt_npc::evt_npc_set_position, PTR("me"), -380, 10, 20)
+		END_IF()
+	ELSE()
+		SET(GSWF(6124), 1)
+		USER_FUNC(evt_npc::evt_npc_set_ry, PTR("me"), 270)
+		USER_FUNC(evt_npc::evt_npc_set_position, PTR("me"), -405, 10, -100)
+	END_IF()
+	RETURN()
+EVT_END()
+
+// Replaces cooking_evt's first make_item_tbl call: asks which ingredients Zess
+// should use, stores the mode, then builds the matching select-window table.
+// msg keys "ap_cook_mode" (question) and "ap_cook_mode_select" (two options:
+// 0 = unlocked ingredient stock, 1 = the player's own items) live in mod.txt.
+EVT_BEGIN(ap_cook_mode_evt)
+	USER_FUNC(evt_msg::evt_msg_print, 0, PTR("ap_cook_mode"), 0, PTR(gor_str_nancy))
+	USER_FUNC(evt_msg::evt_msg_select, 0, PTR("ap_cook_mode_select"))
+	USER_FUNC(apSetCookMode, LW(0))
+	USER_FUNC(apMakeIngredientTbl, LW(11), LW(0))
+	RETURN()
+EVT_END()
 // clang-format on
 
 // --- AP cooking: unlock-driven ingredient menu + recipe checks ---
@@ -200,13 +253,19 @@ static int32_t apCookIngredientTbl[kIngredientCount + 1];
 // is only set once the result item has actually been received.
 static int32_t sPendingRecipe = -1;
 
-// If the (about-to-be-cooked) output is an unchecked recipe, swap it for the AP item
-// Rom.py placed in the recipe table. outVar is the evt arg holding the result.
-// Farmable cooked results (repeat cooks of a checked recipe, reversion outputs) are
-// recorded in gCookGiveItem so pouchGetItemHook does NOT treat them as
-// ingredient-unlocking pickups. The FIRST cook of a recipe hands out the AP item the
-// fill placed there — that is a real acquisition and must unlock normally, even when
-// playing offline (no client backfill available), so it is deliberately NOT recorded.
+// Cooking mode, chosen by the player per cook via ap_cook_mode_evt:
+// 0 = unlocked ingredient stock: nothing is consumed, each recipe yields its AP
+//     item exactly once; repeats and reversion recipes always produce a Mistake.
+// 1 = real inventory: pure vanilla cooking (real ingredients consumed, vanilla
+//     outputs, no checks) — the only source of farmable dishes/reversions, so the
+//     vanilla ingredient economy bounds any farming.
+static int32_t sCookMode = 0;
+
+// Decide what the cook actually hands out. outVar is the evt arg holding the result.
+// Everything cooked is recorded in gCookGiveItem so pouchGetItemHook never treats
+// cooked results as ingredient-unlocking pickups; the ONLY exception is a recipe's
+// first unlock-mode cook, whose AP item is a real acquisition and must unlock
+// normally even offline.
 static void applyRecipeReplacement(evtmgr::EvtEntry *evt, int32_t outVar)
 {
     sPendingRecipe = -1;
@@ -216,20 +275,34 @@ static void applyRecipeReplacement(evtmgr::EvtEntry *evt, int32_t outVar)
     if (out == 0)
         out = ItemId::MISTAKE; // cooking_evt itself turns 0 into Mistake after this
 
+    if (sCookMode == 1)
+    {
+        // Inventory mode: vanilla cooking, but cooked results still never unlock.
+        gCookGiveItem = out;
+        return;
+    }
+
+    // Unlocked-ingredient mode: reversion recipes (non-dish outputs) belong to
+    // inventory mode only, and every recipe pays out its AP item exactly once.
     if (out < kRecipeDishFirst || out > kRecipeDishLast)
     {
-        gCookGiveItem = out; // reversion output (Mushroom, Gold Bar, ...): farmable, never unlocks
+        evtmgr_cmd::evtSetValue(evt, outVar, ItemId::MISTAKE);
+        gCookGiveItem = ItemId::MISTAKE;
         return;
     }
     const int32_t recipe = out - kRecipeDishFirst;
     if (swdrv::swGet(kRecipeFlagBase + recipe))
     {
-        gCookGiveItem = out; // repeat cook: the real dish, must not unlock itself
+        evtmgr_cmd::evtSetValue(evt, outVar, ItemId::MISTAKE);
+        gCookGiveItem = ItemId::MISTAKE;
         return;
     }
     const uint16_t romId = *reinterpret_cast<uint16_t *>(kRecipeItemTableAddr + recipe * 2);
     if (romId == 0)
-        return; // table not populated -> vanilla behavior (plain acquisition, may unlock)
+    {
+        gCookGiveItem = out;
+        return; // table not populated -> vanilla behavior (test builds only)
+    }
     evtmgr_cmd::evtSetValue(evt, outVar, romId);
     sPendingRecipe = recipe;
 }
@@ -258,6 +331,7 @@ EVT_DEFINE_USER_FUNC(apCookingFlag)
     {
         swdrv::swSet(kRecipeFlagBase + sPendingRecipe);
         sPendingRecipe = -1;
+        mod::owr::checkRecipeGoal(); // recipes goal: cooking the Nth recipe warps to the credits
         return 2;
     }
 
@@ -265,6 +339,15 @@ EVT_DEFINE_USER_FUNC(apCookingFlag)
     const int32_t item = static_cast<int32_t>(evtmgr_cmd::evtGetValue(evt, evt->evtArguments[0]));
     if (item >= ItemId::GOLD_BAR) // smallest possible vanilla output
         swdrv::swSet(item - 114);
+    return 2;
+}
+
+EVT_DEFINE_USER_FUNC(apSetCookMode)
+{
+    (void)isFirstCall;
+    sCookMode = evtmgr_cmd::evtGetValue(evt, evt->evtArguments[0]) == 1 ? 1 : 0;
+    sPendingRecipe = -1;
+    gCookGiveItem = -1;
     return 2;
 }
 
@@ -278,19 +361,36 @@ EVT_DEFINE_USER_FUNC(apMakeIngredientTbl)
     const int32_t exclude = static_cast<int32_t>(evtmgr_cmd::evtGetValue(evt, evt->evtArguments[0]));
     int32_t count = 0;
 
-    // Ingredients are virtual and nothing gets consumed, so unlike vanilla the result
-    // needs a free pouch slot: offer nothing while the pouch is full.
-    const int32_t capacity = mario_pouch::pouchCheckItem(ItemId::STRANGE_SACK) > 0 ? 20 : 10;
-    if (mario_pouch::pouchGetHaveItemCnt() < capacity)
+    if (sCookMode == 1)
     {
-        int32_t pos = 0;
-        for (int32_t k = 0; k < kIngredientCount; k++)
+        // Inventory mode: list the real pouch, vanilla-style (table index == pouch
+        // slot index, so the evt's N_evt_pouch_remove_item_index args stay valid)
+        const int32_t held = mario_pouch::pouchGetHaveItemCnt();
+        for (int32_t i = 0; i < held; i++)
         {
-            if (!swdrv::swGet(kIngredientFlagBase + k))
+            if (i == exclude)
                 continue;
-            if (pos++ == exclude)
-                continue;
-            apCookIngredientTbl[count++] = kIngredientIds[k];
+            const int32_t item = mario_pouch::pouchHaveItem(i);
+            if (item != 0)
+                apCookIngredientTbl[count++] = item;
+        }
+    }
+    else
+    {
+        // Unlock mode: virtual ingredients, nothing gets consumed, so unlike vanilla
+        // the result needs a free pouch slot: offer nothing while the pouch is full.
+        const int32_t capacity = mario_pouch::pouchCheckItem(ItemId::STRANGE_SACK) > 0 ? 20 : 10;
+        if (mario_pouch::pouchGetHaveItemCnt() < capacity)
+        {
+            int32_t pos = 0;
+            for (int32_t k = 0; k < kIngredientCount; k++)
+            {
+                if (!swdrv::swGet(kIngredientFlagBase + k))
+                    continue;
+                if (pos++ == exclude)
+                    continue;
+                apCookIngredientTbl[count++] = kIngredientIds[k];
+            }
         }
     }
     apCookIngredientTbl[count] = -1;
@@ -298,11 +398,15 @@ EVT_DEFINE_USER_FUNC(apMakeIngredientTbl)
     return 2;
 }
 
-EVT_DEFINE_USER_FUNC(apCookRemoveNop)
+EVT_DEFINE_USER_FUNC(apCookRemove)
 {
+    // Inventory mode consumes the real ingredients exactly like vanilla; unlock
+    // mode cooks from the virtual stock and removes nothing.
+    if (sCookMode == 1)
+        return ttyd::evt_pouch::N_evt_pouch_remove_item_index(evt, isFirstCall);
     (void)evt;
     (void)isFirstCall;
-    return 2; // ingredients are virtual: nothing to remove from the pouch
+    return 2;
 }
 
 void ApplyGor01Patches()
@@ -578,17 +682,36 @@ void ApplyGor01Patches()
     // Assembly
     patch::writeIntWithCache(&gor_iri_09_item_tbl_make[12], 0x3800005A);
 
-    // AP cooking: the ingredient menus list unlocked ingredients instead of the pouch,
-    // nothing is consumed, and the first cook of each recipe yields its AP item.
+    // Zess T.: once westside has been reached (GSWF 6124, set in OWR), she guards
+    // her kitchen door instead of the west gate — the Contact Lens must still be
+    // delivered (GSWF 1188) to open the kitchen and cook. Word indices
+    // byte-verified against vanilla gor.rel (nancy_init sec5+0x10B50 starts with a
+    // 3-word setii; nancy_regl word 20 is the block-loop's GSWF(1188) arg).
+    gor_nancy_init[0] = EVT_HELPER_CMD(1, 94); // RUN_CHILD_EVT
+    gor_nancy_init[1] = PTR(ap_nancy_init_evt);
+    gor_nancy_init[2] = EVT_HELPER_CMD(0, 2);  // RETURN (rest of the evt is dead)
+    gor_nancy_regl[20] = GSWF(6124);           // gate-block physics only while she guards the gate
+
+    // AP cooking: the player picks a mode per cook — the unlocked-ingredient stock
+    // (AP checks; nothing consumed; repeats/reversions = Mistake) or the real
+    // inventory (pure vanilla cooking, ingredients consumed).
     // Word indices byte-verified against vanilla gor.rel (see rel/misc/cooking_research.md §2).
-    gor_cooking_evt[484] = PTR(&apMakeIngredientTbl); // make_item_tbl, 1st ingredient menu
-    gor_cooking_evt[506] = PTR(apCookIngredientTbl);  // select-window table #1 (vanilla .bss tbl only fits 20)
-    gor_cooking_evt[549] = PTR(&apMakeIngredientTbl); // make_item_tbl, 2nd ingredient menu
-    gor_cooking_evt[575] = PTR(apCookIngredientTbl);  // select-window table #2
-    gor_cooking_evt[695] = PTR(&apCookChk);           // single-ingredient result
-    gor_cooking_evt[700] = PTR(&apCookRemoveNop);     // N_evt_pouch_remove_item_index (1st pick)
-    gor_cooking_evt[717] = PTR(&apCookChk2);          // two-ingredient result
-    gor_cooking_evt[722] = PTR(&apCookRemoveNop);     // N_evt_pouch_remove_item_index (pair, 1st)
-    gor_cooking_evt[727] = PTR(&apCookRemoveNop);     // N_evt_pouch_remove_item_index (pair, 2nd)
-    gor_cooking_evt[819] = PTR(&apCookingFlag);       // sets the recipe check flag after receipt
+    // With cooksanity off none of this is installed: Zess T. cooks fully vanilla, and
+    // the dol 0x500 recipe table (unwritten in that case) is never read.
+    if (mod::owr::gState->apSettings->cooksanity)
+    {
+        gor_cooking_evt[483] = EVT_HELPER_CMD(1, 94);     // RUN_CHILD_EVT (was: callc make_item_tbl)
+        gor_cooking_evt[484] = PTR(ap_cook_mode_evt);     // mode select + 1st menu fill
+        gor_cooking_evt[485] = EVT_HELPER_CMD(1, 3);      // LBL(999): no-op filler over the old args
+        gor_cooking_evt[486] = 999;
+        gor_cooking_evt[506] = PTR(apCookIngredientTbl);  // select-window table #1 (vanilla .bss tbl only fits 20)
+        gor_cooking_evt[549] = PTR(&apMakeIngredientTbl); // 2nd ingredient menu (keeps the chosen mode)
+        gor_cooking_evt[575] = PTR(apCookIngredientTbl);  // select-window table #2
+        gor_cooking_evt[695] = PTR(&apCookChk);           // single-ingredient result
+        gor_cooking_evt[700] = PTR(&apCookRemove);        // consume (inventory mode) / no-op (unlock mode)
+        gor_cooking_evt[717] = PTR(&apCookChk2);          // two-ingredient result
+        gor_cooking_evt[722] = PTR(&apCookRemove);
+        gor_cooking_evt[727] = PTR(&apCookRemove);
+        gor_cooking_evt[819] = PTR(&apCookingFlag);       // sets the recipe check flag after receipt
+    }
 }

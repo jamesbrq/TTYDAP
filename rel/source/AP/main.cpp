@@ -555,22 +555,56 @@ struct MonoSpan
     uint8_t count;
 };
 
-static const uint16_t kMonoSlots[75] = {
-    0x0378, 0x0379, 0x0378, 0x0379, 0x03A0, 0x03A1, 0x0200, 0x0200, 0x0059, 0x0C7A, 0x0C80, 0x0C81,
-    0x0C82, 0x0CA1, 0x0CA8, 0x0CA9, 0x0E70, 0x0E71, 0x0E72, 0x0EA8, 0x0EA9, 0x0EAA, 0x0EAB, 0x0048,
-    0x0049, 0x0068, 0x0010, 0x0011, 0x0019, 0x001A, 0x001B, 0x0038, 0x0040, 0x0041, 0x0060, 0x0061,
-    0x0062, 0x0063, 0x0C30, 0x0C31, 0x0C38, 0x0C40, 0x0C41, 0x0C68, 0x0C69, 0x0C78, 0x0C79, 0x0CA0,
-    0x0CAA, 0x0000, 0x0001, 0x0008, 0x0009, 0x0012, 0x0018, 0x0021, 0x0030, 0x0031, 0x0032, 0x0033,
-    0x0043, 0x0080, 0x0020, 0x0029, 0x0042, 0x0050, 0x0051, 0x0058, 0x0064, 0x0070, 0x0071, 0x0072,
-    0x0073, 0x09D2, 0x09F0,
+// Packed (group << 3) | slot references into gState->enemyLoadouts for every slot
+// of every ONE-TIME encounter, partitioned per recovery entry. Coverage must be
+// complete per group (all slots 0..enemyCount-1 across entries), because the enemy
+// randomizer can put any species into any slot.
+static const uint16_t kMonoSlots[84] = {
+    // [0..1]   E1/E4: hei_03 Bald Clefts
+    0x0378, 0x0379,
+    // [2..5]   E3: gon_03 Red Bones ambush adds (Dull Bones slots 1-4)
+    0x0201, 0x0202, 0x0203, 0x0204,
+    // [6..7]   E5: hei_05 Bristles
+    0x03A0, 0x03A1,
+    // [8]      E6/E7: gon_03 Red Bones (slot 0)
+    0x0200,
+    // [9..16]  E9/E10: Yux one-times (aji_08 + mri_18/20)
+    0x0059, 0x0C7A, 0x0C80, 0x0C81, 0x0C82, 0x0CA1, 0x0CA8, 0x0CA9,
+    // [17..18] E13: tou_rank_18 KP Koopas
+    0x0E70, 0x0E71,
+    // [19]     E14: tou_rank_18 KP Paratroopa
+    0x0E72,
+    // [20..21] E15: tou_rank_11 Bandits
+    0x0EA8, 0x0EA9,
+    // [22..23] E16: tou_rank_11 Big Bandits
+    0x0EAA, 0x0EAB,
+    // [24..26] E22/E23: X-Yux one-times (aji_04 + aji_10)
+    0x0048, 0x0049, 0x0068,
+    // [27..42] E24: aji X-Naut one-times (incl. the former Z-Yux slots aji_01_05[0],
+    //          aji_01_07[1,2], aji_08[2] so shuffled uniques there stay recoverable)
+    0x0010, 0x0011, 0x0019, 0x001A, 0x001B, 0x0038, 0x0040, 0x0041, 0x0060, 0x0061,
+    0x0062, 0x0063, 0x0028, 0x0039, 0x003A, 0x005A,
+    // [43..53] E25: mri X-Naut one-times
+    0x0C30, 0x0C31, 0x0C38, 0x0C40, 0x0C41, 0x0C68, 0x0C69, 0x0C78, 0x0C79, 0x0CA0,
+    0x0CAA,
+    // [54..66] E26: aji Elite X-Naut one-times
+    0x0000, 0x0001, 0x0008, 0x0009, 0x0012, 0x0018, 0x0021, 0x0030, 0x0031, 0x0032,
+    0x0033, 0x0043, 0x0080,
+    // [67..77] E27: aji X-Naut PhD one-times
+    0x0020, 0x0029, 0x0042, 0x0050, 0x0051, 0x0058, 0x0064, 0x0070, 0x0071, 0x0072,
+    0x0073,
+    // [78..83] E29: las_05 Dark Bones ambush (all five slots) + las_17_04
+    0x09D2, 0x09F0, 0x09D0, 0x09D1, 0x09D3, 0x09D4,
 };
 
-static const MonoSpan kMonoSpan[35] = {
-    {0,0}, {0,2}, {2,0}, {2,0}, {2,2}, {4,2}, {6,1}, {7,1},
-    {8,0}, {8,8}, {8,8}, {16,0}, {16,0}, {16,2}, {18,1}, {19,2},
-    {21,2}, {23,0}, {23,0}, {23,0}, {23,0}, {23,0}, {23,3}, {23,3},
-    {26,12}, {38,11}, {49,13}, {62,11}, {73,0}, {73,2}, {75,0}, {75,0},
-    {75,0}, {75,0}, {75,0},
+// E35-E39 are the mod-added boss arena entries (prologue Crump, Doopliss rematch,
+// Glitzville Bowser, Shadow Queen x2): boss-remap only, no encounter spans.
+static const MonoSpan kMonoSpan[40] = {
+    {0,0},  {0,2},  {2,0},  {2,4},  {0,2},  {6,2},  {8,1},  {8,1},
+    {9,0},  {9,8},  {9,8},  {17,0}, {17,0}, {17,2}, {19,1}, {20,2},
+    {22,2}, {24,0}, {24,0}, {24,0}, {24,0}, {24,0}, {24,3}, {24,3},
+    {27,16},{43,11},{54,13},{67,11},{78,0}, {78,6}, {84,0}, {84,0},
+    {84,0}, {84,0}, {84,0}, {84,0}, {84,0}, {84,0}, {84,0}, {84,0},
 };
 
 static int monosiriRemapBoss(int vanilla)
@@ -615,8 +649,16 @@ int monosiriRemapWord1(int idx, int curWord1)
     if (idx < 0 || idx >= 64)
         return curWord1;
 
-    if (idx < 35 && gState->apSettings->enemyRandomizer && kMonoSpan[idx].count)
+    if (idx < 40 && gState->apSettings->enemyRandomizer && kMonoSpan[idx].count)
     {
+        // Yux-type occupants spawn their minis mid-battle; the minis' tattles are
+        // just as missable as the parent's, so offer them for recovery too.
+        static const struct
+        {
+            uint8_t parent;
+            uint8_t mini;
+        } kYuxMinis[3] = {{0x1D, 0x1E}, {0x73, 0x74}, {0x75, 0x76}};
+
         const MonoSpan span = kMonoSpan[idx];
         int firstId = 0;
         for (int i = 0; i < span.count; i++)
@@ -633,6 +675,11 @@ int monosiriRemapWord1(int idx, int curWord1)
                 firstId = id;
             if (ttyd::swdrv::swGet(id + 0x117A) == 0)
                 return id;
+            for (const auto &ym : kYuxMinis)
+            {
+                if (id == ym.parent && ttyd::swdrv::swGet(ym.mini + 0x117A) == 0)
+                    return ym.mini;
+            }
         }
         if (firstId)
             return firstId;

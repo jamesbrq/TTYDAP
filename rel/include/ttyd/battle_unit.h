@@ -606,6 +606,7 @@ namespace ttyd::battle_unit
             switch (id)
             {
                 case 0x08: return 122.0f; // gesso
+                case 0x14: return 125.0f; // gold_chorobon
                 case 0x17: return 365.0f; // gonbaba
                 case 0x21: return 55.0f;  // vivian
                 case 0x4C: return 70.0f;  // atmic_teresa
@@ -616,6 +617,22 @@ namespace ttyd::battle_unit
                 case 0x84: return 365.0f; // bunbaba
                 case 0x87: return 55.0f;  // rampell_las
                 case 0xAB: return 365.0f; // zonbaba
+
+                case 0x06: // kanbu1
+                case 0x07: // monban
+                case 0x22: // magnum_battender
+                case 0x3F: // koopa_tou
+                case 0x40: // champion
+                case 0x41: // macho_gance
+                case 0x4D: // ramper
+                case 0x4F: // faker_mario
+                case 0x79: // magnum_battender_mkII
+                case 0x90: // koopa_las
+                case 0x92: // batten_leader
+                case 0x94: // black_peach_1
+                case 0x95: // black_peach_2
+                    return 90.0f;
+
                 default:   return defaultX;
             }
         }
@@ -1877,6 +1894,7 @@ namespace ttyd::battle_unit
         const BattleStatRelValues *GetBattleStats(RelId rel);
         extern void ShuffleBattleStats();
         int32_t GetBossAtk(int32_t unit_type);
+        int32_t GetEnemyAtk(int32_t unit_type);
 
         int BtlUnit_GetUnitId(void *unit_ptr);
         void *BtlUnit_GetData(BattleWorkUnit *unit, int32_t id);
