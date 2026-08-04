@@ -997,6 +997,7 @@ namespace mod::owr
         g_psndSFXOff_trampoline = patch::hookFunction(pmario_sound::psndSFXOff, psndSFXOffHook);
         g_npcSetupBattleInfo_trampoline = patch::hookFunction(::npcSetupBattleInfo, npcSetupBattleInfoHook);
         g_pouchRemoveItem_trampoline = patch::hookFunction(mario_pouch::pouchRemoveItem, pouchRemoveItemHook);
+        g_pouchCheckItem_trampoline = patch::hookFunction(mario_pouch::pouchCheckItem, pouchCheckItemHook);
         g_swSet_trampoline = patch::hookFunction(swdrv::swSet, swSetHook);
 
         using BattleCalculateDamageFn =

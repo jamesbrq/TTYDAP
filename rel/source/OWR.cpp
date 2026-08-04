@@ -219,6 +219,7 @@ namespace mod::owr
     KEEP_VAR int (*g_psndSFXOff_trampoline)(int) = nullptr;
     KEEP_VAR void (*g_npcSetupBattleInfo_trampoline)(::NpcEntry *, void *) = nullptr;
     KEEP_VAR int32_t (*g_pouchRemoveItem_trampoline)(int32_t) = nullptr;
+    KEEP_VAR int32_t (*g_pouchCheckItem_trampoline)(int32_t) = nullptr;
     KEEP_VAR void (*g_swSet_trampoline)(int) = nullptr;
     KEEP_VAR int32_t (*g_BattleCalculateDamage_trampoline)(BattleWorkUnit *,
                                                            BattleWorkUnit *,
@@ -2412,26 +2413,6 @@ namespace mod::owr
                 }
                 return g_pouchGetItem_trampoline(item);
             }
-            case ItemId::CAKE_MIX:
-            {
-                if (ttyd::swdrv::swByteGet(1744) >= 2 && ttyd::swdrv::swByteGet(1745) >= 2 &&
-                    ttyd::swdrv::swByteGet(1759) >= 2)
-                {
-                    return g_pouchGetItem_trampoline(item);
-                }
-
-                if (!containsKeyItem(item))
-                {
-                    if (addItemToKeyItems(item))
-                    {
-                        pouchReAddReturnPipe();
-                        return 2;
-                    }
-                    else
-                        return 0; // Key items inventory is full, can't give the item
-                }
-                return g_pouchGetItem_trampoline(item);
-            }
             case ItemId::FRIGHT_MASK:
             {
                 if (ttyd::swdrv::swByteGet(1759) >= 2)
@@ -2488,6 +2469,38 @@ namespace mod::owr
         }
     }
 
+    KEEP_FUNC int32_t pouchCheckItemHook(int32_t item)
+    {
+        switch (item)
+        {
+            case ItemId::COCONUT:
+            case ItemId::LIFE_SHROOM:
+            case ItemId::KEEL_MANGO:
+            case ItemId::MYSTIC_EGG:
+            case ItemId::GOLDEN_LEAF:
+            case ItemId::HONEY_CANDY:
+            case ItemId::FRIGHT_MASK:
+            case ItemId::SQUARE_DIAMOND_BADGE_P: // relocated Briefcase
+            {
+                // pouchGetItemHook parks the first copy of these in the key items
+                // inventory while their trouble is active, but pouchCheckItem is
+                // range-based and never scans key items for consumable ids — so
+                // possession checks (trouble talk evts, item-select windows) missed
+                // the protected copy. Only count it on the field: battle keeps the
+                // vanilla count so in-battle effects (e.g. Life Shroom's auto-
+                // revive) can't consume the trouble item.
+                const int32_t count = g_pouchCheckItem_trampoline(item);
+                if (checkIfInGameNotBattle() && containsKeyItem(item))
+                    return count + 1;
+                return count;
+            }
+            default:
+            {
+                return g_pouchCheckItem_trampoline(item);
+            }
+        }
+    }
+
     KEEP_FUNC int32_t pouchRemoveItemHook(int32_t item)
     {
         switch (item)
@@ -2498,6 +2511,7 @@ namespace mod::owr
             case ItemId::MYSTIC_EGG:
             case ItemId::GOLDEN_LEAF:
             case ItemId::HONEY_CANDY:
+            case ItemId::FRIGHT_MASK:
             case ItemId::SQUARE_DIAMOND_BADGE_P: // relocated Briefcase
             {
                 // These items are placed in the key items inventory via the hacky add function,

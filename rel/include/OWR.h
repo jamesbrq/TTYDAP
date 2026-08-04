@@ -89,6 +89,7 @@ namespace mod::owr
     int psndSFXOffHook(int channel);
     void npcSetupBattleInfoHook(::NpcEntry *npc, void *info);
     int32_t pouchRemoveItemHook(int32_t item);
+    int32_t pouchCheckItemHook(int32_t item);
     void swSetHook(int gswf);
     void DrainReceivedFlags();
     int32_t AlterDamageCalculation(BattleWorkUnit *attacker,
@@ -248,6 +249,7 @@ namespace mod::owr
     extern int (*g_psndSFXOff_trampoline)(int);
     extern void (*g_npcSetupBattleInfo_trampoline)(::NpcEntry *, void *);
     extern int32_t (*g_pouchRemoveItem_trampoline)(int32_t);
+    extern int32_t (*g_pouchCheckItem_trampoline)(int32_t);
     extern void (*g_swSet_trampoline)(int);
     extern int32_t (*g_BattleCalculateDamage_trampoline)(BattleWorkUnit *,
                                                          BattleWorkUnit *,

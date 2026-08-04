@@ -1,5 +1,6 @@
 #include "AP/rel_patch_definitions.h"
 #include "evt_cmd.h"
+#include "gc/os.h"
 #include "OWR.h"
 #include "patch.h"
 #include "subrel_tou.h"
