@@ -18,6 +18,7 @@ EVT_DECLARE_USER_FUNC(getMonosiriItem, 2)
 // AP cooking natives (gor_01.cpp), pointed to from cooking_evt via pokes
 EVT_DECLARE_USER_FUNC(apSetCookMode, 1)
 EVT_DECLARE_USER_FUNC(apMakeIngredientTbl, 2)
+EVT_DECLARE_USER_FUNC(apCookEmptyMsg, 2)
 EVT_DECLARE_USER_FUNC(apCookChk, 3)
 EVT_DECLARE_USER_FUNC(apCookChk2, 3)
 EVT_DECLARE_USER_FUNC(apCookingFlag, 1)
