@@ -53,6 +53,7 @@ extern int32_t bom_talk_murabito_i_02[];
 extern int32_t bom_evt_white_bed[];
 extern int32_t bom_kiza_talk[];
 extern int32_t bom_02_init_evt[];
+extern int32_t bom_init_murabito_g_02[];
 extern int32_t bom_init_white_01[];
 extern int32_t bom_init_white_02[];
 extern int32_t bom_talk_white_02[];
@@ -242,6 +243,12 @@ namespace mod
         bom_talk_murabito_g_02[40] = 1;
         bom_talk_murabito_g_02[48] = 5;
         bom_talk_murabito_g_02[56] = 6;
+
+        // The hint bob-omb inside General White's house spawns via the vanilla
+        // trouble-active branch (GSW(1420)==25, dead under the modded board);
+        // re-key it to the trouble state so the chase chain can start.
+        bom_init_murabito_g_02[1] = GSW(1755);
+        bom_init_murabito_g_02[2] = 1;
 
         bom_talk_murabito_g_02[1] = GSW(1755);
         bom_talk_murabito_g_02[2] = 1;

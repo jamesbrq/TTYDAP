@@ -451,6 +451,13 @@ EVT_DEFINE_USER_FUNC(apCookRemove)
 
 void ApplyGor01Patches()
 {
+    // Hide the badge shop keeper while Chuchulina runs the counter (trouble 16
+    // active); vanilla keyed this on the board's GSW(1420), which is never set.
+    // The post-completion hide (GSWF 5390, word 10) stays dead on purpose: our
+    // Chuchulina leaves after the trouble, so the keeper should come back.
+    gor_badgemaster_init[1] = GSW(1746);
+    gor_badgemaster_init[2] = 1;
+
     gor_badgemaster_init[21] = GSW(1703);
     gor_badgemaster_init[22] = 1;
     gor_badgemaster_init[24] = GSW(1703);
