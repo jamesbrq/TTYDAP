@@ -603,6 +603,7 @@ void ApplyGor02Patches()
 
 	gor_roten3_talk[1] = GSW(1733);
 	gor_roten3_talk[2] = 1;
+    gor_roten3_talk[82] = EVT_HELPER_OP(&irai_complete_item_get);
     gor_roten3_talk[88] = GSW(1733);
     gor_roten3_talk[89] = 2;
     patch::writePatch(&gor_roten3_talk[98], roten3_talk_evt, sizeof(roten3_talk_evt));
