@@ -589,8 +589,8 @@ void ApplyGor02Patches()
         gor_kuribo4_talk[160] = 81;
         gor_kuribo4_talk[166] = 81;
         patch::writeIntWithCache(&gor_iri_13_make_item_tbl[2], 0x38600051); // li r3, 0x51
-        patch::writeIntWithCache(&gor_iri_13_make_item_tbl[5], 0x38600051); // li r3, 0x51
-        patch::writeIntWithCache(&gor_iri_13_make_item_tbl[14], 0x38000051); // li r0, 0x51
+        patch::writeIntWithCache(&gor_iri_13_update_item_tbl[5], 0x38600051); // li r3, 0x51
+        patch::writeIntWithCache(&gor_iri_13_update_item_tbl[14], 0x38000051); // li r0, 0x51
     }
 
     gor_iri_19_init[0] = EVT_HELPER_CMD(2, 29);
