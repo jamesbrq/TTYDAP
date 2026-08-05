@@ -327,12 +327,23 @@ namespace mod::owr
         // Journal recipe page: completion comes from the AP recipe check flags GSWF(6400 + (dish - 179))
         // instead of the vanilla cooked-dish flags GSWF(dish - 114), so a recipe counts once its check
         // is sent, not once the real dish item has been produced
-        writeIntWithCache(&main_winHakoGX[184], 0x38800000);
         writeIntWithCache(&main_winLogInit[618], 0x387E184D);  // addi r3, r30, 0x184D (dish + 6221) count loop
         writeIntWithCache(&main_winLogDisp[499], 0x38631900);  // addi r3, r3, 0x1900 (k + 6400) list entries
         writeIntWithCache(&main_winLogMain[1446], 0x38631900); // addi r3, r3, 0x1900 (k + 6400) cursor select
         writeIntWithCache(&main_winHakoGX[1612], 0x38631900);  // addi r3, r3, 0x1900 (k + 6400) grid empty box
         writeIntWithCache(&main_winHakoGX[1719], 0x38631900);  // addi r3, r3, 0x1900 (k + 6400) grid dish icon
+
+        // winHakoGX's row-visibility cull reads r25 without ever initializing it (latent vanilla bug);
+        // whatever the mod's added frame code leaves in r25 culls every row, hiding the badge/recipe
+        // log box grid entirely. Drop the uninitialized term (equivalent to r25 == 0).
+        writeIntWithCache(&main_winHakoGX[184], 0x38800000); // li r4, 0 (was mulli r4, r25, 0x38)
+
+        // Journal Crystal Stars page: vanilla counts owned stars but then colors arc slots 0..N-1,
+        // assuming stars are always obtained in order. Check each slot's actual pouch ownership so
+        // out-of-order stars render as themselves (unowned slots keep the gray silhouette).
+        patch::writeBranchBL(&main_winLogInit[266], reinterpret_cast<void *>(bStarstoneOwnedCompare));
+        writeIntWithCache(&main_winLogInit[267], 0x60000000); // NOP (stub leaves the compare in cr0)
+        writeIntWithCache(&main_winLogInit[268], 0x41820024); // beq +0x24 (was bge; not owned -> gray star)
 
         writeIntWithCache(&main_monoshiriGX[231], 0x38840833); // addi r4, r4, 0x833 GSW(1715)
         writeIntWithCache(&main_monoshiriGX[233], 0x2C030005); // cmpwi r3, 0x5

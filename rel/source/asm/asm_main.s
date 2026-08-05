@@ -15,6 +15,7 @@
 .global bWinLogArrFlagCheckReturn
 .global bChapterClearCheck
 .global bJohoyaSeqAddition
+.global bStarstoneOwnedCompare
 .global bPrintPartyErrorFix
 .global bPrintPartyErrorFixReturn
 .global bPrintPartyAddErrorFix
@@ -170,6 +171,18 @@ JohoyaSeqLoop:
 	mr %r3, %r5
 	mtlr %r28
 	li %r28, 0x0
+	blr
+
+# winLogInit's crystal star page loop: r29 = arc slot 0-6. Vanilla colors the first
+# ownedCount slots; return cr0 = (pouchCheckItem(0x72 + slot) == 0) so the caller can
+# color exactly the owned stars instead. r27 is dead at the call site.
+bStarstoneOwnedCompare:
+	mflr %r27
+	addi %r3, %r29, 0x72
+	bl pouchCheckItem
+	cmpwi %r3, 0x0
+	mtlr %r27
+	li %r27, 0x0
 	blr
 
 bPrintPartyAddErrorFix:

@@ -25,6 +25,7 @@ extern "C"
     void bChapterClearCheck();
     void bChapterClearCheckReturn();
     void bJohoyaSeqAddition();
+    void bStarstoneOwnedCompare();
     void bPrintPartyErrorFix();
     void bPrintPartyErrorFixReturn();
     void bPrintPartyAddErrorFix();
