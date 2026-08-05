@@ -921,6 +921,282 @@ namespace mod::owr
         }
     }
 
+    // --- RTA timer + credits results display ---
+    namespace
+    {
+        // Total-playtime frame counter, persisted in the save file: GSW bytes 1796-1799
+        // (base 0x803DB190), the aligned u32 right after the received-item index u32 at
+        // 0x803DB890 (GSW 1792-1795). Ticks every frame a file is active, menus included.
+        constexpr uintptr_t kRtaFrameCounterAddr = 0x803DB894;
+
+        // Rom.py stores the seed name XOR'd with this key at 0x80003210 (mod protocol >= 2)
+        // so the seed can't be casually read out of RAM mid-run; the client verifies against
+        // the same encoding. Keep in sync with SEED_OBFUSCATION_KEY in the apworld's Data.py.
+        constexpr uintptr_t kSeedNameAddr = 0x80003210;
+        constexpr uint8_t kSeedObfuscationKey[16] = {0xA5, 0x1C, 0x7E, 0x33, 0xC9, 0x58, 0xE2, 0x0F,
+                                                     0x96, 0x41, 0xDB, 0x6A, 0x24, 0xB7, 0x5D, 0xF0};
+
+        // Run-integrity state, persisted in the save file. The (still obfuscated) seed is
+        // stamped into GSW bytes 1680-1695 the first frame a file is active, binding the file
+        // to its seed; a stamp that no longer matches the ISO (save copied from another seed)
+        // dirties the run. GSW 1696 is the dirty flag, also set by the client when debug
+        // commands are used or a fresh file gets a multi-item replay from the server.
+        constexpr uintptr_t kSeedStampAddr = 0x803DB190 + 1680;   // GSW 1680-1695
+        constexpr uintptr_t kRunDirtyFlagAddr = 0x803DB190 + 1696; // GSW 1696
+
+        // Wall-clock anchors (RTC seconds), also save-persisted:
+        // GSW 1668-1671 = wall seconds elapsed at goal completion (0 = not finished yet);
+        // GSW 1672-1675 = RTC value when the file was first bound to the seed (0 = unset).
+        constexpr uintptr_t kWallAtFinishAddr = 0x803DB190 + 1668;
+        constexpr uintptr_t kWallStartAddr = 0x803DB190 + 1672;
+
+        // EXI primitives (main.dol, via ttyd.us.lst) for reading the RTC seconds counter.
+        extern "C"
+        {
+            int32_t EXILock(int32_t chan, uint32_t dev, void *unlockedCallback); // 0x802bcc40
+            int32_t EXIUnlock(int32_t chan);                                     // 0x802bcd34
+            int32_t EXISelect(int32_t chan, uint32_t dev, uint32_t freq);        // 0x802bc480
+            int32_t EXIDeselect(int32_t chan);                                   // 0x802bc5ac
+            int32_t EXIImm(int32_t chan, void *buf, int32_t len, uint32_t type, void *cb); // 0x802bb918
+            int32_t EXISync(int32_t chan);                                       // 0x802bbd00
+        }
+
+        // Reads the RTC seconds counter over EXI (channel 0, device 1, read command 0x20000000).
+        // Returns false without touching *out when the bus is busy (memcard traffic) - callers
+        // simply retry on a later frame. Dolphin backs this device with the HOST clock; even
+        // with Custom RTC enabled it only shifts the base by a boot-time constant and keeps
+        // ticking in real time (truly emulated time exists only in movie playback/netplay).
+        // So unlike the time base and every value in RAM, it does not rewind with savestates.
+        bool readRtcSeconds(uint32_t *out)
+        {
+            if (!EXILock(0, 1, nullptr))
+                return false;
+            if (!EXISelect(0, 1, 3))
+            {
+                EXIUnlock(0);
+                return false;
+            }
+
+            uint32_t cmd = 0x20000000;
+            uint32_t data = 0;
+            const bool ok = EXIImm(0, &cmd, 4, 1, nullptr) && EXISync(0) && // 1 = EXI_WRITE
+                            EXIImm(0, &data, 4, 0, nullptr) && EXISync(0);  // 0 = EXI_READ
+
+            EXIDeselect(0);
+            EXIUnlock(0);
+
+            if (ok)
+                *out = data;
+            return ok;
+        }
+
+        bool inEndingArea()
+        {
+            const OSModuleInfo *relPtr = _globalWorkPtr->relocationBase;
+            return relPtr && relPtr->id == RelId::END;
+        }
+
+        void maintainRunIntegrity()
+        {
+            uint8_t *stamp = reinterpret_cast<uint8_t *>(kSeedStampAddr);
+            const uint8_t *isoSeed = reinterpret_cast<const uint8_t *>(kSeedNameAddr);
+
+            bool empty = true;
+            bool matches = true;
+            for (uint32_t i = 0; i < 16; i++)
+            {
+                if (stamp[i] != 0)
+                    empty = false;
+                if (stamp[i] != isoSeed[i])
+                    matches = false;
+            }
+
+            // The obfuscated seed always has nonzero bytes (ASCII XOR high key bytes), so an
+            // all-zero stamp can only mean a file that has never been bound to a seed yet.
+            if (empty)
+            {
+                for (uint32_t i = 0; i < 16; i++)
+                    stamp[i] = isoSeed[i];
+            }
+            else if (!matches)
+            {
+                *reinterpret_cast<uint8_t *>(kRunDirtyFlagAddr) = 1; // save from a different seed
+            }
+        }
+
+        // Once a second, compare how far the RTC advanced against how many frames we ran.
+        // A savestate load restores sLastRtc/sLastFrames to their old values while the RTC
+        // kept moving, so it shows up as a wall jump far beyond emulated time - as do
+        // emulator pauses and host clock manipulation. Gradual slowdown/lag stays under the
+        // threshold and is instead judged from the Wall vs Time lines on the credits.
+        void monitorWallClock(uint32_t frames)
+        {
+            static uint32_t sNextPollFrames = 0;
+            if (frames < sNextPollFrames)
+                return;
+
+            uint32_t rtc;
+            if (!readRtcSeconds(&rtc))
+                return; // EXI busy; retry next frame
+
+            uint32_t *wallStart = reinterpret_cast<uint32_t *>(kWallStartAddr);
+            if (*wallStart == 0)
+                *wallStart = rtc; // first bind: anchor the run's wall clock
+
+            static uint32_t sLastRtc = 0;
+            static uint32_t sLastFrames = 0;
+            if (sLastRtc != 0)
+            {
+                const int32_t rtcDelta = static_cast<int32_t>(rtc - sLastRtc);
+                const int32_t frameSeconds = static_cast<int32_t>((frames - sLastFrames) / 60);
+                if (rtcDelta < -1 || rtcDelta - frameSeconds > 10)
+                    *reinterpret_cast<uint8_t *>(kRunDirtyFlagAddr) = 1;
+            }
+
+            // A clock reading from before the seed was even generated is impossible: catches
+            // Custom RTC set to the past and host clock rollback. The 2-day slack covers
+            // timezone differences (the emulated RTC ticks in local time) and SRAM bias.
+            const uint32_t patchTime = gState->apSettings->patchTimeGC;
+            if (patchTime != 0 && rtc + (2 * 86400) < patchTime)
+                *reinterpret_cast<uint8_t *>(kRunDirtyFlagAddr) = 1;
+
+            sLastRtc = rtc;
+            sLastFrames = frames;
+            sNextPollFrames = frames + 60;
+        }
+
+        // Latch the elapsed wall time the moment the ending is reached so the credits
+        // display (and the verification code hashed from it) can no longer move.
+        void finalizeWallClock()
+        {
+            uint32_t *finish = reinterpret_cast<uint32_t *>(kWallAtFinishAddr);
+            if (*finish != 0)
+                return;
+
+            const uint32_t start = *reinterpret_cast<uint32_t *>(kWallStartAddr);
+            uint32_t rtc;
+            if (start == 0 || !readRtcSeconds(&rtc))
+                return; // retry next frame
+
+            const uint32_t elapsed = rtc - start;
+            *finish = elapsed != 0 ? elapsed : 1;
+        }
+    } // namespace
+
+    void updateRtaTimer()
+    {
+        const SeqIndex seq = seqGetSeq();
+        if (seq != SeqIndex::kGame && seq != SeqIndex::kMapChange && seq != SeqIndex::kBattle &&
+            seq != SeqIndex::kGameOver)
+            return; // no save file active (logo/title/file select)
+
+        maintainRunIntegrity();
+
+        if (inEndingArea())
+        {
+            finalizeWallClock();
+            return; // goal reached; hold the final time for the credits display
+        }
+
+        uint32_t *frames = reinterpret_cast<uint32_t *>(kRtaFrameCounterAddr);
+        (*frames)++;
+        monitorWallClock(*frames);
+    }
+
+    // Always-on RTA timer, bottom-left corner while a file is active (the credits
+    // results panel replaces it once the goal is reached). The * dirty marker gives
+    // runners immediate feedback instead of a surprise at the credits.
+    static void rtaTimerDisp(ttyd::dispdrv::CameraId cameraId, void *user)
+    {
+        (void)cameraId;
+        (void)user;
+
+        gc::gx::GXColor fogColor(0x66, 0x06, 0x42, 0x80);
+        gc::gx::GXSetFog(0, 0.0f, 0.0f, 0.0f, 0.0f, &fogColor);
+
+        const uint32_t frames = *reinterpret_cast<uint32_t *>(kRtaFrameCounterAddr);
+        const uint32_t seconds = frames / 60;
+        const uint32_t centis = (frames % 60) * 100 / 60;
+        const char *dirtyMark = (*reinterpret_cast<uint8_t *>(kRunDirtyFlagAddr) != 0) ? " *" : "";
+
+        char text[32];
+        snprintf(text, sizeof(text), "%u:%02u:%02u.%02u%s", static_cast<unsigned int>(seconds / 3600),
+                 static_cast<unsigned int>((seconds / 60) % 60), static_cast<unsigned int>(seconds % 60),
+                 static_cast<unsigned int>(centis), dirtyMark);
+        gSelf->DrawString(text, -296.0f, -206.0f, 0xFFFFFFC8, 0.8f);
+    }
+
+    // FNV-1a (32-bit) used for the credits verification code. Keep in sync with
+    // the validator in the apworld's verification.py.
+    static uint32_t fnv1a32(const void *data, uint32_t len, uint32_t hash)
+    {
+        const uint8_t *p = static_cast<const uint8_t *>(data);
+        for (uint32_t i = 0; i < len; i++)
+        {
+            hash ^= p[i];
+            hash *= 0x01000193u;
+        }
+        return hash;
+    }
+
+    static void creditsResultsDisp(ttyd::dispdrv::CameraId cameraId, void *user)
+    {
+        (void)cameraId;
+        (void)user;
+
+        // Disable fog so the text renders with clean colors (toast/numeric window pattern)
+        gc::gx::GXColor fogColor(0x66, 0x06, 0x42, 0x80);
+        gc::gx::GXSetFog(0, 0.0f, 0.0f, 0.0f, 0.0f, &fogColor);
+
+        const uint32_t frames = *reinterpret_cast<uint32_t *>(kRtaFrameCounterAddr);
+        const uint32_t seconds = frames / 60;
+        const uint32_t centis = (frames % 60) * 100 / 60;
+        const uint32_t wall = *reinterpret_cast<uint32_t *>(kWallAtFinishAddr);
+
+        // The seed is only ever decoded here, once the run is over, and only onto the stack
+        char seed[17];
+        const uint8_t *encoded = reinterpret_cast<const uint8_t *>(kSeedNameAddr);
+        for (uint32_t i = 0; i < 16; i++)
+            seed[i] = static_cast<char>(encoded[i] ^ kSeedObfuscationKey[i]);
+        seed[16] = '\0';
+
+        // A dirtied run (debug commands, cross-seed save, replayed fresh file, wall-clock
+        // jump from a savestate/pause) is marked with * on the time line
+        const char *dirtyMark = (*reinterpret_cast<uint8_t *>(kRunDirtyFlagAddr) != 0) ? " *" : "";
+
+        char timeLine[40];
+        char wallLine[40];
+        char seedLine[40];
+        snprintf(timeLine, sizeof(timeLine), "Time: %u:%02u:%02u.%02u%s", static_cast<unsigned int>(seconds / 3600),
+                 static_cast<unsigned int>((seconds / 60) % 60), static_cast<unsigned int>(seconds % 60),
+                 static_cast<unsigned int>(centis), dirtyMark);
+        snprintf(wallLine, sizeof(wallLine), "Wall: %u:%02u:%02u", static_cast<unsigned int>(wall / 3600),
+                 static_cast<unsigned int>((wall / 60) % 60), static_cast<unsigned int>(wall % 60));
+        snprintf(seedLine, sizeof(seedLine), "Seed: %s", seed);
+
+        // Verification code: keyed hash over the three lines exactly as displayed, so the
+        // screenshot is self-authenticating (validated with the apworld's verification.py)
+        char message[128];
+        snprintf(message, sizeof(message), "%s|%s|%s", timeLine, wallLine, seedLine);
+        uint32_t msgLen = 0;
+        while (message[msgLen] != '\0')
+            msgLen++;
+
+        const uint32_t h1 =
+            fnv1a32(message, msgLen, fnv1a32(kSeedObfuscationKey, sizeof(kSeedObfuscationKey), 0x811C9DC5u));
+        const uint32_t h2 =
+            fnv1a32(message, msgLen, fnv1a32(kSeedObfuscationKey, sizeof(kSeedObfuscationKey), 0xCBF29CE4u));
+
+        char codeLine[32];
+        snprintf(codeLine, sizeof(codeLine), "Code: %08X%04X", static_cast<unsigned int>(h1),
+                 static_cast<unsigned int>(h2 & 0xFFFF));
+
+        gSelf->DrawString(timeLine, -292.0f, -134.0f, 0xFFFFFFFF, 0.9f);
+        gSelf->DrawString(wallLine, -292.0f, -160.0f, 0xFFFFFFFF, 0.9f);
+        gSelf->DrawString(seedLine, -292.0f, -186.0f, 0xFFFFFFFF, 0.9f);
+        gSelf->DrawString(codeLine, -292.0f, -212.0f, 0xFFFFFFFF, 0.9f);
+    }
+
     KEEP_FUNC bool OSLinkHook(OSModuleInfo *new_module, void *bss)
     {
         bool result = g_OSLink_trampoline(new_module, bss);
@@ -2886,6 +3162,8 @@ namespace mod::owr
 
     void OWR::Update()
     {
+        updateRtaTimer();
+
         APSettings *apSettingsPtr = gState->apSettings;
         apSettingsPtr->inGame = static_cast<uint8_t>(checkIfInGame());
 
@@ -2921,6 +3199,23 @@ namespace mod::owr
         RecieveItems();
         DrainReceivedFlags();
         updateIngredientToast();
+
+        // RTA timer in the corner while playing; final time + seed reveal over the credits
+        const SeqIndex seq = seqGetSeq();
+        const bool fileActive = seq == SeqIndex::kGame || seq == SeqIndex::kMapChange || seq == SeqIndex::kBattle ||
+                                seq == SeqIndex::kGameOver;
+        if (fileActive)
+        {
+            if (inEndingArea())
+            {
+                if (seq == SeqIndex::kGame)
+                    ttyd::dispdrv::dispEntry(ttyd::dispdrv::CameraId::kDebug3d, 1, 160.0f, creditsResultsDisp, nullptr);
+            }
+            else
+            {
+                ttyd::dispdrv::dispEntry(ttyd::dispdrv::CameraId::kDebug3d, 1, 160.0f, rtaTimerDisp, nullptr);
+            }
+        }
     }
 
     void OWR::OnModuleLoaded(OSModuleInfo *module_info)

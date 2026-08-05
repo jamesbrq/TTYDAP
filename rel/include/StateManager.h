@@ -71,9 +71,10 @@ namespace mod::owr
         uint8_t cooksanity;                        // 0x65
         uint8_t goalRecipes;                       // 0x66
         uint8_t epilogueSkip;                      // 0x67
+        uint32_t patchTimeGC;                      // 0x68 seed generation time, seconds since 2000-01-01
     };
 
-    static_assert(sizeof(APSettings) == 0x68);
+    static_assert(sizeof(APSettings) == 0x6C);
 
     constexpr size_t NAME_LEN = 32;
 
