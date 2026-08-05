@@ -996,6 +996,21 @@ namespace mod::owr
             return relPtr && relPtr->id == RelId::END;
         }
 
+        // True only while a save file is actually loaded. Latched on the first real in-game
+        // frame (checkIfInGame excludes the title attract demo via its rel id) and released
+        // on the logo/title/file-select screens, so map changes, battles, and game over keep
+        // the run going while nothing before a file load ever displays or ticks the timer.
+        bool sSaveFileActive = false;
+
+        void updateSaveFileActive()
+        {
+            const SeqIndex seq = seqGetSeq();
+            if (seq == SeqIndex::kLogo || seq == SeqIndex::kTitle || seq == SeqIndex::kLoad)
+                sSaveFileActive = false;
+            else if (checkIfInGame())
+                sSaveFileActive = true;
+        }
+
         void maintainRunIntegrity()
         {
             uint8_t *stamp = reinterpret_cast<uint8_t *>(kSeedStampAddr);
@@ -1085,10 +1100,9 @@ namespace mod::owr
 
     void updateRtaTimer()
     {
-        const SeqIndex seq = seqGetSeq();
-        if (seq != SeqIndex::kGame && seq != SeqIndex::kMapChange && seq != SeqIndex::kBattle &&
-            seq != SeqIndex::kGameOver)
-            return; // no save file active (logo/title/file select)
+        updateSaveFileActive();
+        if (!sSaveFileActive)
+            return; // logo/title/file select/attract demo - no save loaded
 
         maintainRunIntegrity();
 
@@ -1123,7 +1137,7 @@ namespace mod::owr
         snprintf(text, sizeof(text), "%u:%02u:%02u.%02u%s", static_cast<unsigned int>(seconds / 3600),
                  static_cast<unsigned int>((seconds / 60) % 60), static_cast<unsigned int>(seconds % 60),
                  static_cast<unsigned int>(centis), dirtyMark);
-        gSelf->DrawString(text, -296.0f, -206.0f, 0xFFFFFFC8, 0.8f);
+        gSelf->DrawString(text, -272.0f, -196.0f, 0xFFFFFFC8, 0.8f);
     }
 
     // FNV-1a (32-bit) used for the credits verification code. Keep in sync with
@@ -1191,10 +1205,10 @@ namespace mod::owr
         snprintf(codeLine, sizeof(codeLine), "Code: %08X%04X", static_cast<unsigned int>(h1),
                  static_cast<unsigned int>(h2 & 0xFFFF));
 
-        gSelf->DrawString(timeLine, -292.0f, -134.0f, 0xFFFFFFFF, 0.9f);
-        gSelf->DrawString(wallLine, -292.0f, -160.0f, 0xFFFFFFFF, 0.9f);
-        gSelf->DrawString(seedLine, -292.0f, -186.0f, 0xFFFFFFFF, 0.9f);
-        gSelf->DrawString(codeLine, -292.0f, -212.0f, 0xFFFFFFFF, 0.9f);
+        gSelf->DrawString(timeLine, -272.0f, -134.0f, 0xFFFFFFFF, 0.9f);
+        gSelf->DrawString(wallLine, -272.0f, -160.0f, 0xFFFFFFFF, 0.9f);
+        gSelf->DrawString(seedLine, -272.0f, -186.0f, 0xFFFFFFFF, 0.9f);
+        gSelf->DrawString(codeLine, -272.0f, -212.0f, 0xFFFFFFFF, 0.9f);
     }
 
     KEEP_FUNC bool OSLinkHook(OSModuleInfo *new_module, void *bss)
@@ -3201,14 +3215,11 @@ namespace mod::owr
         updateIngredientToast();
 
         // RTA timer in the corner while playing; final time + seed reveal over the credits
-        const SeqIndex seq = seqGetSeq();
-        const bool fileActive = seq == SeqIndex::kGame || seq == SeqIndex::kMapChange || seq == SeqIndex::kBattle ||
-                                seq == SeqIndex::kGameOver;
-        if (fileActive)
+        if (sSaveFileActive)
         {
             if (inEndingArea())
             {
-                if (seq == SeqIndex::kGame)
+                if (seqGetSeq() == SeqIndex::kGame)
                     ttyd::dispdrv::dispEntry(ttyd::dispdrv::CameraId::kDebug3d, 1, 160.0f, creditsResultsDisp, nullptr);
             }
             else
