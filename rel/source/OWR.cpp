@@ -423,10 +423,6 @@ namespace mod::owr
 
         uintptr_t length_pointer = 0x80000FFC;
         uintptr_t item_pointer = 0x80001000;
-        // Received-item index, persisted in the save (GlobalWork). 0x803DB890 =
-        // GSW bytes 1792-1795 (base 0x803DB190) — the first aligned u32 past every
-        // used GSW var; the old 0x803DB860 overlapped GSW 1744-1747, so receiving
-        // items incremented trouble 17's var (and taking it truncated the index).
         uintptr_t index_pointer = 0x803DB890;
 
         uint32_t length = *reinterpret_cast<uint32_t *>(length_pointer);
@@ -1753,11 +1749,6 @@ namespace mod::owr
         return concluded;
     }
 
-    // Species whose battle scripts don't implement the enemy first-strike path
-    // ("never made to first strike you" in vanilla): with the enemy randomizer they
-    // can end up leading a formation whose field NPC ambushes, and the unarmed /
-    // untargeted first act crashes. Everyone else first-strikes fine wherever they
-    // are shuffled. Grown from reports.
     static constexpr int32_t kFirstStrikeUnsafe[] = {
         0x54, // Ember
         0x55, // Lava Bubble
@@ -1777,10 +1768,6 @@ namespace mod::owr
 
     KEEP_FUNC void btlseqFirstAct_Hook(void *battleWork)
     {
-        // Enemy first strikes (first-attack type >= 9; 1-8 are Mario/partner types)
-        // run the lead unit's own battle scripts. If a species that can't handle
-        // that leads the formation, write type 0 so the sequence falls through to a
-        // normal battle start (entry events only) instead of crashing.
         if (gState->apSettings->enemyRandomizer)
         {
             uint8_t *info = *reinterpret_cast<uint8_t **>(reinterpret_cast<uint8_t *>(battleWork) + 0x2738);

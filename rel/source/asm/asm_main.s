@@ -86,9 +86,6 @@
 .global bPuniMainNullFix
 .global bPuniMainNullFixReturn
 
-# All of the global symbols in this file excluding win_log_mapGX_arr need to be used in at least one subrel, so they cannot be set to hidden
-
-# intended to be run once before the loop in main_mapGX
 bMapGXArrInject:
 	addi %r30, %r3, 0x7918 #Original Instruction
 	lis %r3, win_log_mapGX_arr@ha
@@ -96,14 +93,12 @@ bMapGXArrInject:
 bMapGXArrInjectReturn:
 	b 0
 
-# intended to be run at the end of every loop in main_mapGX
 bMapGXArrIncrement:
 	addi %r30, %r30, 0xC #Original Intruction
 	addi %r28, %r28, 0x1
 bMapGXArrIncrementReturn:
 	b 0
 
-# intended to be run when GSW(0) is checked
 bMapGXArrFlagCheck:
 	lbz %r3, 0x0(%r28)
 	addi %r3, %r3, 0x189C
@@ -111,7 +106,6 @@ bMapGXArrFlagCheck:
 bMapGXArrFlagCheckReturn:
 	b 0
 
-# intended to be run once before the loop in main_winLogMain
 bWinLogArrInject:
 	fadds %f27, %f0, %f7 #Original Instruction
 	lis %r3, win_log_mapGX_arr@ha
@@ -119,14 +113,12 @@ bWinLogArrInject:
 bWinLogArrInjectReturn:
 	b 0
 
-# intended to be run at the end of every loop in main_winLogMain
 bWinLogArrIncrement:
 	addi %r27, %r27, 0xC #Original Intruction
 	addi %r10, %r10, 0x1
 bWinLogArrIncrementReturn:
 	b 0
 
-# intended to be run when GSW(0) is checked
 bWinLogArrFlagCheck:
 	lbz %r3, 0x0(%r10)
 	addi %r3, %r3, 0x189C
@@ -173,9 +165,6 @@ JohoyaSeqLoop:
 	li %r28, 0x0
 	blr
 
-# winLogInit's crystal star page loop: r29 = arc slot 0-6. Vanilla colors the first
-# ownedCount slots; return cr0 = (pouchCheckItem(0x72 + slot) == 0) so the caller can
-# color exactly the owned stars instead. r27 is dead at the call site.
 bStarstoneOwnedCompare:
 	mflr %r27
 	addi %r3, %r29, 0x72
