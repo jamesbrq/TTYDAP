@@ -986,6 +986,8 @@ namespace mod
 
         tou_01_init_evt[107] = GSW(1708);
         tou_01_init_evt[108] = 16;
+        tou_01_init_evt[142] = GSW(1754);
+        tou_01_init_evt[143] = 2;
         tou_01_init_evt[211] = GSWF(6027);
         tou_01_init_evt[212] = 0;
         tou_01_init_evt[313] = GSW(1703);
@@ -1312,9 +1314,6 @@ namespace mod
         tou_talk_sarary[342] = GSW(1754);
         tou_talk_sarary[343] = 2;
 
-        tou_01_init_evt[142] = GSW(1754);
-        tou_01_init_evt[143] = 2;
-
         tou_talk_sakaba[1] = GSW(1755);
         tou_talk_sakaba[2] = 1;
         tou_talk_sakaba[3] = EVT_HELPER_CMD(2, 29);
@@ -1331,6 +1330,9 @@ namespace mod
             patch::writePatch(&tou_talk_kinoshikowa[3],
                               check_shorts, sizeof(check_shorts));
             tou_talk_kinoshikowa[6] = 0;
+
+            tou_talk_kinoshikowa[60] = GSW(1773);
+            tou_talk_kinoshikowa[61] = 3;
         }
 
         patch::writeIntWithCache(&tou_npcEnt_05[5], reinterpret_cast<uint32_t>(&tou_05_talk_gans_evt));
