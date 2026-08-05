@@ -36,6 +36,7 @@ extern int32_t main_compare_func3_r[];
 extern int32_t main_compare_func3[];
 extern int32_t main_mapGX[];
 extern int32_t main_winGetMapTplName[];
+extern int32_t main_winHakoGX[];
 extern int32_t main_winLogDisp[];
 extern int32_t main_winLogMain[];
 extern int32_t main_winLogInit[];
@@ -329,6 +330,8 @@ namespace mod::owr
         writeIntWithCache(&main_winLogInit[618], 0x387E184D);  // addi r3, r30, 0x184D (dish + 6221) count loop
         writeIntWithCache(&main_winLogDisp[499], 0x38631900);  // addi r3, r3, 0x1900 (k + 6400) list entries
         writeIntWithCache(&main_winLogMain[1446], 0x38631900); // addi r3, r3, 0x1900 (k + 6400) cursor select
+        writeIntWithCache(&main_winHakoGX[1612], 0x38631900);  // addi r3, r3, 0x1900 (k + 6400) grid empty box
+        writeIntWithCache(&main_winHakoGX[1719], 0x38631900);  // addi r3, r3, 0x1900 (k + 6400) grid dish icon
 
         writeIntWithCache(&main_monoshiriGX[231], 0x38840833); // addi r4, r4, 0x833 GSW(1715)
         writeIntWithCache(&main_monoshiriGX[233], 0x2C030005); // cmpwi r3, 0x5
