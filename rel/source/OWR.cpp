@@ -1080,9 +1080,14 @@ namespace mod::owr
             static uint32_t sLastFrames = 0;
             if (sLastRtc != 0)
             {
+                // The RTC ticks in whole seconds, so alignment jitter alone can make a
+                // legitimate ~1s poll window read +1; anything beyond that means the wall
+                // clock moved while the game didn't (savestate load, emulator pause, or
+                // clock manipulation). Long stalls (2s+ shader hitches on weak setups)
+                // will also trip this - acceptable for verified time trial runs.
                 const int32_t rtcDelta = static_cast<int32_t>(rtc - sLastRtc);
                 const int32_t frameSeconds = static_cast<int32_t>((frames - sLastFrames) / 60);
-                if (rtcDelta < -1 || rtcDelta - frameSeconds > 10)
+                if (rtcDelta < -1 || rtcDelta - frameSeconds > 1)
                     *reinterpret_cast<uint8_t *>(kRunDirtyFlagAddr) |= kDirtyWallClockJump;
             }
 
