@@ -997,11 +997,16 @@ namespace mod::owr
 
             uint32_t cmd = 0x20000000;
             uint32_t data = 0;
-            const bool ok = EXIImm(0, &cmd, 4, 1, nullptr) && EXISync(0) && // 1 = EXI_WRITE
-                            EXIImm(0, &data, 4, 0, nullptr) && EXISync(0);  // 0 = EXI_READ
+            bool ok = EXIImm(0, &cmd, 4, 1, nullptr) && EXISync(0) && // 1 = EXI_WRITE
+                      EXIImm(0, &data, 4, 0, nullptr) && EXISync(0);  // 0 = EXI_READ
 
             EXIDeselect(0);
             EXIUnlock(0);
+
+            // All-zero / all-one responses are bus glitches (memcards share channel 0,
+            // so contention around saves can slip a corrupt read past the busy checks)
+            if (data == 0 || data == 0xFFFFFFFF)
+                ok = false;
 
             if (ok)
                 *out = data;
@@ -1086,10 +1091,6 @@ namespace mod::owr
             if (!readRtcSeconds(&rtc))
                 return; // EXI busy; retry next frame
 
-            uint32_t *wallStart = reinterpret_cast<uint32_t *>(kWallStartAddr);
-            if (*wallStart == 0)
-                *wallStart = rtc; // first bind: anchor the run's wall clock
-
             static uint32_t sLastRtc = 0;
             static uint32_t sLastFrames = 0;
             static uint32_t sSessionRtc = 0;    // per-session anchor: offline time between
@@ -1100,6 +1101,21 @@ namespace mod::owr
             {
                 sResetWallMonitor = false;
                 sLastRtc = 0; // re-anchor below; title-screen time stays off the clock
+            }
+
+            // Any reading more than an hour away from the last one is either a genuine
+            // clock event or a corrupted transfer (the memcard shares EXI channel 0, and
+            // on real hardware contention around saves can produce garbage that passes
+            // the transfer checks). Require a second, agreeing read before believing it.
+            if (sLastRtc != 0)
+            {
+                const uint32_t magnitude = rtc >= sLastRtc ? rtc - sLastRtc : sLastRtc - rtc;
+                if (magnitude > 3600)
+                {
+                    uint32_t confirm;
+                    if (!readRtcSeconds(&confirm) || (confirm >= rtc ? confirm - rtc : rtc - confirm) > 2)
+                        return; // glitched read; drop it and poll again next frame
+                }
             }
 
             if (sLastRtc != 0)
@@ -1116,15 +1132,48 @@ namespace mod::owr
 
                 // Reconcile against the absolute session anchor (not per-window deltas, so
                 // second-boundary jitter can't accumulate): if fewer frames ran than wall
-                // time elapsed this session, credit the difference to the timer.
-                const uint32_t expected = sSessionFrames + (rtc - sSessionRtc) * 60;
-                if (*counter < expected)
-                    *counter = expected;
+                // time elapsed this session, credit the difference to the timer. The span
+                // and raise guards keep a bad anchor or clock event from ever exploding
+                // the timer: anything beyond them re-anchors instead of crediting.
+                const uint32_t wallDelta = rtc - sSessionRtc; // u32; backward clocks wrap huge
+                constexpr uint32_t kMaxSessionSpan = 48 * 3600;   // seconds
+                constexpr uint32_t kMaxSingleRaise = 300 * 60;    // frames (5 minutes)
+                if (wallDelta > kMaxSessionSpan)
+                {
+                    sSessionRtc = rtc; // anomalous span (wrap/garbage): re-anchor, no credit
+                    sSessionFrames = *counter;
+                }
+                else
+                {
+                    const uint32_t expected = sSessionFrames + wallDelta * 60;
+                    if (*counter < expected)
+                    {
+                        if (expected - *counter > kMaxSingleRaise)
+                        {
+                            sSessionRtc = rtc; // beyond any load/stall; jump check above
+                            sSessionFrames = *counter; // already dirtied it if illegitimate
+                        }
+                        else
+                        {
+                            *counter = expected;
+                        }
+                    }
+                }
             }
             else
             {
+                // First poll of the session: the anchors poison everything downstream if
+                // they start from a corrupted transfer, so demand a second agreeing read.
+                uint32_t confirm;
+                if (!readRtcSeconds(&confirm) || (confirm >= rtc ? confirm - rtc : rtc - confirm) > 2)
+                    return; // glitched read; try again next frame
+
                 sSessionRtc = rtc;
                 sSessionFrames = *counter;
+
+                uint32_t *wallStart = reinterpret_cast<uint32_t *>(kWallStartAddr);
+                if (*wallStart == 0)
+                    *wallStart = rtc; // first bind: anchor the run's wall clock
             }
 
             // A clock reading from before the seed was even generated is impossible: catches
@@ -1965,8 +2014,10 @@ namespace mod::owr
                     {
                         newKind->max_hp = bossOrigKind->max_hp;
                         newKind->level = bossOrigKind->level;
-                        if (newKind->unit_type == 0x93) // batten_satellite
-                            newKind->max_hp = 2; // Small nerf for early game beatablility
+                        // Small nerf for early game beatability - but only when shuffled into
+                        // another boss's slot; in its vanilla location it keeps its own HP
+                        if (newKind->unit_type == 0x93 && bossOrigKind->unit_type != 0x93) // batten_satellite
+                            newKind->max_hp = 2;
                         if (gState->apSettings->bossScalingNerfs &&
                             (newKind->unit_type == 0x5D || newKind->unit_type == 0x5E) && // boss_cortez / boss_honeduka
                             !(bossOrigKind->unit_type >= 0x5D && bossOrigKind->unit_type <= 0x62))
