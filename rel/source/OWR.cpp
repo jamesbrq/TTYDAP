@@ -1800,6 +1800,13 @@ namespace mod::owr
     {
         BattleUnitSetup *setup;
         BattleUnitKind *kind;
+        // Snapshots taken at registration, when the freshly loaded rel data is guaranteed
+        // vanilla. The kind structs are shared and mutable (GetUnitKindById hands the same
+        // objects to every arena, and scaling writes into them), so copying stats through
+        // the pointer at battle time can pick up an earlier fight's mutations - the
+        // "vanilla-located boss inherits someone else's HP" class of bug.
+        int32_t maxHp;
+        int32_t level;
         bool boss;
     };
 
@@ -1823,6 +1830,8 @@ namespace mod::owr
             if (g_origKindMap[i].setup == setup)
             {
                 g_origKindMap[i].kind = orig;
+                g_origKindMap[i].maxHp = orig->max_hp;
+                g_origKindMap[i].level = orig->level;
                 g_origKindMap[i].boss = isBoss;
                 return;
             }
@@ -1830,6 +1839,8 @@ namespace mod::owr
         {
             g_origKindMap[g_origKindMapCount].setup = setup;
             g_origKindMap[g_origKindMapCount].kind = orig;
+            g_origKindMap[g_origKindMapCount].maxHp = orig->max_hp;
+            g_origKindMap[g_origKindMapCount].level = orig->level;
             g_origKindMap[g_origKindMapCount].boss = isBoss;
             g_origKindMapCount++;
         }
@@ -2001,34 +2012,46 @@ namespace mod::owr
         else if (!origEntry && g_currentBossOrigKind && kind && kind->unit_type <= BattleUnitType::BONETAIL)
             bossOrigKind = g_currentBossOrigKind;
 
+        // A unit standing in its own vanilla slot needs no scaling at all - skipping it
+        // keeps its untouched vanilla stats regardless of what earlier fights may have
+        // written into the shared kind structs.
+        const bool vanillaPlacement = origEntry && origEntry->kind && setup && setup->unit_kind_params &&
+                                      origEntry->kind->unit_type == setup->unit_kind_params->unit_type;
+
         const OSModuleInfo *relPtr = _globalWorkPtr->relocationBase;
         if (relPtr && setup && setup->unit_kind_params)
         {
             RelId currentRel = static_cast<RelId>(relPtr->id);
             if (bossOrigKind)
             {
-                if (gState->apSettings->bossStatScaling)
+                // Boss scaling only means anything when bosses can actually move: with the
+                // boss randomizer off, every boss is vanilla and must keep vanilla stats.
+                if (gState->apSettings->bossStatScaling && gState->apSettings->bossRandomizer && !vanillaPlacement)
                 {
+                    // Stats come from the registration-time snapshots when this slot has an
+                    // entry (guaranteed-vanilla values); the pointer fallback only serves
+                    // event-spawned extra units, which are HP/DEF-excluded below anyway.
+                    const int32_t origHp = origEntry ? origEntry->maxHp : bossOrigKind->max_hp;
+                    const int32_t origLevel = origEntry ? origEntry->level : bossOrigKind->level;
+
                     BattleUnitKind *newKind = setup->unit_kind_params;
                     if (!IsBossHpScaleExcluded(newKind->unit_type))
                     {
-                        newKind->max_hp = bossOrigKind->max_hp;
-                        newKind->level = bossOrigKind->level;
-                        // Small nerf for early game beatability - but only when shuffled into
-                        // another boss's slot; in its vanilla location it keeps its own HP
-                        if (newKind->unit_type == 0x93 && bossOrigKind->unit_type != 0x93) // batten_satellite
-                            newKind->max_hp = 2;
+                        newKind->max_hp = origHp;
+                        newKind->level = origLevel;
+                        if (newKind->unit_type == 0x93) // batten_satellite
+                            newKind->max_hp = 2; // Small nerf for early game beatability
                         if (gState->apSettings->bossScalingNerfs &&
                             (newKind->unit_type == 0x5D || newKind->unit_type == 0x5E) && // boss_cortez / boss_honeduka
                             !(bossOrigKind->unit_type >= 0x5D && bossOrigKind->unit_type <= 0x62))
-                            newKind->max_hp = (bossOrigKind->max_hp + 2) / 3;
+                            newKind->max_hp = (origHp + 2) / 3;
                     }
                     if (!IsBossDefScaleExcluded(newKind->unit_type) && newKind->parts && bossOrigKind->parts)
                     {
                         int32_t partCount = newKind->num_parts < bossOrigKind->num_parts ? newKind->num_parts : bossOrigKind->num_parts;
                         for (int32_t i = 0; i < partCount; i++) newKind->parts[i].defense = bossOrigKind->parts[i].defense;
                     }
-                    ApplyBossScriptPatches(newKind->unit_type, bossOrigKind->max_hp);
+                    ApplyBossScriptPatches(newKind->unit_type, origHp);
                 }
             }
             else if (enemyOrigKind && gState->apSettings->enemyRandomizer && gState->apSettings->enemyStatScaling &&
@@ -2066,7 +2089,7 @@ namespace mod::owr
             g_powOrigKind[slot] = nullptr;
             if (kind && !IsBossPowScaleExcluded(kind->unit_type))
             {
-                if (bossOrigKind && gState->apSettings->bossStatScaling)
+                if (bossOrigKind && gState->apSettings->bossStatScaling && gState->apSettings->bossRandomizer)
                     g_powOrigKind[slot] = bossOrigKind;
                 else if (enemyOrigKind && gState->apSettings->enemyRandomizer && gState->apSettings->enemyStatScaling &&
                          !IsEnemyPowScaleBlacklisted(kind->unit_type))
