@@ -1020,13 +1020,26 @@ namespace mod::owr
         // the run going while nothing before a file load ever displays or ticks the timer.
         bool sSaveFileActive = false;
 
+        // Set from updateRtaTimer whenever the sequence changes (map loads, battle entry,
+        // game over) so the wall-clock monitor knows a frame stall was a loading screen
+        // rather than a savestate/pause.
+        bool sSeqChangedSinceLastPoll = false;
+
+        // Set when a save file becomes active (fresh load, or save-and-quit followed by a
+        // reload in the same session): the wall monitor re-anchors instead of treating the
+        // time spent on the title screen as a wall jump.
+        bool sResetWallMonitor = false;
+
         void updateSaveFileActive()
         {
             const SeqIndex seq = seqGetSeq();
             if (seq == SeqIndex::kLogo || seq == SeqIndex::kTitle || seq == SeqIndex::kLoad)
                 sSaveFileActive = false;
-            else if (checkIfInGame())
+            else if (checkIfInGame() && !sSaveFileActive)
+            {
                 sSaveFileActive = true;
+                sResetWallMonitor = true; // (re)entered a file; re-anchor the wall monitor
+            }
         }
 
         void maintainRunIntegrity()
@@ -1057,11 +1070,12 @@ namespace mod::owr
             }
         }
 
-        // Once a second, compare how far the RTC advanced against how many frames we ran.
-        // A savestate load restores sLastRtc/sLastFrames to their old values while the RTC
-        // kept moving, so it shows up as a wall jump far beyond emulated time - as do
-        // emulator pauses and host clock manipulation. Gradual slowdown/lag stays under the
-        // threshold and is instead judged from the Wall vs Time lines on the credits.
+        // Once a second, compare how far the RTC advanced against how many frames we ran,
+        // and reconcile the timer UP to true wall time. Loading screens block the frame
+        // loop while the RTC keeps ticking; the reconcile makes that time count (real RTA),
+        // makes emulator pauses cost time instead of stopping the clock, and gives a
+        // savestate reload its rewound wall time straight back. A wall jump outside any
+        // sequence transition additionally dirties the run as savestate/pause manipulation.
         void monitorWallClock(uint32_t frames)
         {
             static uint32_t sNextPollFrames = 0;
@@ -1078,17 +1092,39 @@ namespace mod::owr
 
             static uint32_t sLastRtc = 0;
             static uint32_t sLastFrames = 0;
+            static uint32_t sSessionRtc = 0;    // per-session anchor: offline time between
+            static uint32_t sSessionFrames = 0; // sessions must not flow into the timer
+            uint32_t *counter = reinterpret_cast<uint32_t *>(kRtaFrameCounterAddr);
+
+            if (sResetWallMonitor)
+            {
+                sResetWallMonitor = false;
+                sLastRtc = 0; // re-anchor below; title-screen time stays off the clock
+            }
+
             if (sLastRtc != 0)
             {
                 // The RTC ticks in whole seconds, so alignment jitter alone can make a
                 // legitimate ~1s poll window read +1; anything beyond that means the wall
-                // clock moved while the game didn't (savestate load, emulator pause, or
-                // clock manipulation). Long stalls (2s+ shader hitches on weak setups)
-                // will also trip this - acceptable for verified time trial runs.
+                // clock moved while the game didn't. During sequence transitions that is
+                // just the loading screen blocking the frame loop; anywhere else it is a
+                // savestate load, an emulator pause, or clock manipulation.
                 const int32_t rtcDelta = static_cast<int32_t>(rtc - sLastRtc);
                 const int32_t frameSeconds = static_cast<int32_t>((frames - sLastFrames) / 60);
-                if (rtcDelta < -1 || rtcDelta - frameSeconds > 1)
+                if (rtcDelta < -1 || (rtcDelta - frameSeconds > 1 && !sSeqChangedSinceLastPoll))
                     *reinterpret_cast<uint8_t *>(kRunDirtyFlagAddr) |= kDirtyWallClockJump;
+
+                // Reconcile against the absolute session anchor (not per-window deltas, so
+                // second-boundary jitter can't accumulate): if fewer frames ran than wall
+                // time elapsed this session, credit the difference to the timer.
+                const uint32_t expected = sSessionFrames + (rtc - sSessionRtc) * 60;
+                if (*counter < expected)
+                    *counter = expected;
+            }
+            else
+            {
+                sSessionRtc = rtc;
+                sSessionFrames = *counter;
             }
 
             // A clock reading from before the seed was even generated is impossible: catches
@@ -1099,8 +1135,9 @@ namespace mod::owr
                 *reinterpret_cast<uint8_t *>(kRunDirtyFlagAddr) |= kDirtyClockBeforeGen;
 
             sLastRtc = rtc;
-            sLastFrames = frames;
-            sNextPollFrames = frames + 60;
+            sLastFrames = *counter;
+            sNextPollFrames = *counter + 60;
+            sSeqChangedSinceLastPoll = false;
         }
 
         // Latch the elapsed wall time the moment the ending is reached so the credits
@@ -1133,6 +1170,16 @@ namespace mod::owr
 
         if (gState->apSettings->rtaTimer == 0)
             return; // timer/credits feature disabled for this seed (mod-side gate, not a yaml option)
+
+        // Track sequence transitions so the wall-clock monitor can tell loading-screen
+        // stalls (map changes, battle entry, game over) apart from savestates/pauses
+        static SeqIndex sPrevSeq = SeqIndex::kLogo;
+        const SeqIndex seq = seqGetSeq();
+        if (seq != sPrevSeq)
+        {
+            sSeqChangedSinceLastPoll = true;
+            sPrevSeq = seq;
+        }
 
         if (inEndingArea())
         {
