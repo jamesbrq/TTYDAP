@@ -72,9 +72,10 @@ namespace mod::owr
         uint8_t goalRecipes;                       // 0x66
         uint8_t epilogueSkip;                      // 0x67
         uint32_t patchTimeGC;                      // 0x68 seed generation time, seconds since 2000-01-01
+        uint8_t rtaTimer;                          // 0x6C enables the RTA timer + credits results display
     };
 
-    static_assert(sizeof(APSettings) == 0x6C);
+    static_assert(sizeof(APSettings) == 0x70);
 
     constexpr size_t NAME_LEN = 32;
 

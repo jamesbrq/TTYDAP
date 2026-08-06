@@ -416,6 +416,21 @@ namespace mod::owr
         return (relPtr->id != RelId::DMO);
     }
 
+    // Run-integrity dirty flag (GSW 1696, save-persisted): a reason bitmask, 0 = clean.
+    // Shown after the time on the credits as *<hex> and decoded by the apworld's
+    // verification.py; the website race leaderboards reject any nonzero mask. The
+    // client mirrors the 0x08/0x10 bits, but the mod sets them here too so a modified
+    // client can't deliver items or flags without leaving a mark.
+    namespace
+    {
+        constexpr uintptr_t kRunDirtyFlagAddr = 0x803DB190 + 1696; // GSW 1696
+        constexpr uint8_t kDirtyCrossSeedSave = 0x01;   // save stamped with a different seed
+        constexpr uint8_t kDirtyWallClockJump = 0x02;   // savestate load / emulator pause
+        constexpr uint8_t kDirtyClockBeforeGen = 0x04;  // RTC predates seed generation
+        constexpr uint8_t kDirtyExternalFlags = 0x08;   // flags written from outside the game
+        constexpr uint8_t kDirtyExternalItems = 0x10;   // items delivered from outside the game
+    } // namespace
+
     void OWR::RecieveItems()
     {
         if (!checkIfInGame())
@@ -452,6 +467,9 @@ namespace mod::owr
 
         *reinterpret_cast<uint32_t *>(index_pointer) += length;
         *reinterpret_cast<uint32_t *>(length_pointer) = 0; // release last; producer gates on this
+
+        // Anything arriving through this channel came from outside the game
+        *reinterpret_cast<uint8_t *>(kRunDirtyFlagAddr) |= kDirtyExternalItems;
     }
 
     KEEP_FUNC void replaceMultipleCharacters(ttyd::memory::SmartAllocationData *smartData, uint32_t startIndex, int value)
@@ -941,8 +959,8 @@ namespace mod::owr
         // to its seed; a stamp that no longer matches the ISO (save copied from another seed)
         // dirties the run. GSW 1696 is the dirty flag, also set by the client when debug
         // commands are used or a fresh file gets a multi-item replay from the server.
-        constexpr uintptr_t kSeedStampAddr = 0x803DB190 + 1680;   // GSW 1680-1695
-        constexpr uintptr_t kRunDirtyFlagAddr = 0x803DB190 + 1696; // GSW 1696
+        constexpr uintptr_t kSeedStampAddr = 0x803DB190 + 1680; // GSW 1680-1695
+        // (kRunDirtyFlagAddr and the kDirty* reason bits are defined above, near RecieveItems)
 
         // Wall-clock anchors (RTC seconds), also save-persisted:
         // GSW 1668-1671 = wall seconds elapsed at goal completion (0 = not finished yet);
@@ -1035,7 +1053,7 @@ namespace mod::owr
             }
             else if (!matches)
             {
-                *reinterpret_cast<uint8_t *>(kRunDirtyFlagAddr) = 1; // save from a different seed
+                *reinterpret_cast<uint8_t *>(kRunDirtyFlagAddr) |= kDirtyCrossSeedSave;
             }
         }
 
@@ -1065,7 +1083,7 @@ namespace mod::owr
                 const int32_t rtcDelta = static_cast<int32_t>(rtc - sLastRtc);
                 const int32_t frameSeconds = static_cast<int32_t>((frames - sLastFrames) / 60);
                 if (rtcDelta < -1 || rtcDelta - frameSeconds > 10)
-                    *reinterpret_cast<uint8_t *>(kRunDirtyFlagAddr) = 1;
+                    *reinterpret_cast<uint8_t *>(kRunDirtyFlagAddr) |= kDirtyWallClockJump;
             }
 
             // A clock reading from before the seed was even generated is impossible: catches
@@ -1073,7 +1091,7 @@ namespace mod::owr
             // timezone differences (the emulated RTC ticks in local time) and SRAM bias.
             const uint32_t patchTime = gState->apSettings->patchTimeGC;
             if (patchTime != 0 && rtc + (2 * 86400) < patchTime)
-                *reinterpret_cast<uint8_t *>(kRunDirtyFlagAddr) = 1;
+                *reinterpret_cast<uint8_t *>(kRunDirtyFlagAddr) |= kDirtyClockBeforeGen;
 
             sLastRtc = rtc;
             sLastFrames = frames;
@@ -1104,7 +1122,12 @@ namespace mod::owr
         if (!sSaveFileActive)
             return; // logo/title/file select/attract demo - no save loaded
 
+        // Seed binding and cross-seed detection stay on even when the timer feature is
+        // gated off; the client's dirty-reason bits rely on the same flag either way.
         maintainRunIntegrity();
+
+        if (gState->apSettings->rtaTimer == 0)
+            return; // timer/credits feature disabled for this seed (mod-side gate, not a yaml option)
 
         if (inEndingArea())
         {
@@ -1118,8 +1141,9 @@ namespace mod::owr
     }
 
     // Always-on RTA timer, bottom-left corner while a file is active (the credits
-    // results panel replaces it once the goal is reached). The * dirty marker gives
-    // runners immediate feedback instead of a surprise at the credits.
+    // results panel replaces it once the goal is reached). A dirtied run turns the
+    // timer red and names the reasons on the spot, so runners don't waste an attempt
+    // only to find out at the credits.
     static void rtaTimerDisp(ttyd::dispdrv::CameraId cameraId, void *user)
     {
         (void)cameraId;
@@ -1131,13 +1155,39 @@ namespace mod::owr
         const uint32_t frames = *reinterpret_cast<uint32_t *>(kRtaFrameCounterAddr);
         const uint32_t seconds = frames / 60;
         const uint32_t centis = (frames % 60) * 100 / 60;
-        const char *dirtyMark = (*reinterpret_cast<uint8_t *>(kRunDirtyFlagAddr) != 0) ? " *" : "";
+        const uint8_t dirtyMask = *reinterpret_cast<uint8_t *>(kRunDirtyFlagAddr);
 
         char text[32];
-        snprintf(text, sizeof(text), "%u:%02u:%02u.%02u%s", static_cast<unsigned int>(seconds / 3600),
+        snprintf(text, sizeof(text), "%u:%02u:%02u.%02u", static_cast<unsigned int>(seconds / 3600),
                  static_cast<unsigned int>((seconds / 60) % 60), static_cast<unsigned int>(seconds % 60),
-                 static_cast<unsigned int>(centis), dirtyMark);
-        gSelf->DrawString(text, -272.0f, -196.0f, 0xFFFFFFC8, 0.8f);
+                 static_cast<unsigned int>(centis));
+        gSelf->DrawString(text, -272.0f, -196.0f, dirtyMask != 0 ? 0xFF5050FF : 0xFFFFFFC8, 0.8f);
+
+        if (dirtyMask != 0)
+        {
+            static const struct
+            {
+                uint8_t bit;
+                const char *label;
+            } kDirtyLabels[] = {
+                {0x01, "wrong seed"},     {0x02, "savestate/pause"}, {0x04, "clock"},
+                {0x08, "external flags"}, {0x10, "external items"},
+            };
+
+            char reasons[96];
+            uint32_t pos = snprintf(reasons, sizeof(reasons), "Run invalid: ");
+            bool first = true;
+            for (uint32_t i = 0; i < sizeof(kDirtyLabels) / sizeof(kDirtyLabels[0]); i++)
+            {
+                if ((dirtyMask & kDirtyLabels[i].bit) == 0)
+                    continue;
+                if (pos < sizeof(reasons))
+                    pos += snprintf(reasons + pos, sizeof(reasons) - pos, "%s%s", first ? "" : ", ",
+                                    kDirtyLabels[i].label);
+                first = false;
+            }
+            gSelf->DrawString(reasons, -272.0f, -176.0f, 0xFF5050FF, 0.62f);
+        }
     }
 
     // FNV-1a (32-bit) used for the credits verification code. Keep in sync with
@@ -1165,7 +1215,6 @@ namespace mod::owr
         const uint32_t frames = *reinterpret_cast<uint32_t *>(kRtaFrameCounterAddr);
         const uint32_t seconds = frames / 60;
         const uint32_t centis = (frames % 60) * 100 / 60;
-        const uint32_t wall = *reinterpret_cast<uint32_t *>(kWallAtFinishAddr);
 
         // The seed is only ever decoded here, once the run is over, and only onto the stack
         char seed[17];
@@ -1174,41 +1223,51 @@ namespace mod::owr
             seed[i] = static_cast<char>(encoded[i] ^ kSeedObfuscationKey[i]);
         seed[16] = '\0';
 
-        // A dirtied run (debug commands, cross-seed save, replayed fresh file, wall-clock
-        // jump from a savestate/pause) is marked with * on the time line
-        const char *dirtyMark = (*reinterpret_cast<uint8_t *>(kRunDirtyFlagAddr) != 0) ? " *" : "";
+        // A dirtied run shows the reason bitmask after the time (decoded by verification.py)
+        const uint8_t dirtyMask = *reinterpret_cast<uint8_t *>(kRunDirtyFlagAddr);
+        char dirtyMark[8] = "";
+        if (dirtyMask != 0)
+            snprintf(dirtyMark, sizeof(dirtyMark), " *%X", dirtyMask);
 
         char timeLine[40];
-        char wallLine[40];
         char seedLine[40];
         snprintf(timeLine, sizeof(timeLine), "Time: %u:%02u:%02u.%02u%s", static_cast<unsigned int>(seconds / 3600),
                  static_cast<unsigned int>((seconds / 60) % 60), static_cast<unsigned int>(seconds % 60),
                  static_cast<unsigned int>(centis), dirtyMark);
-        snprintf(wallLine, sizeof(wallLine), "Wall: %u:%02u:%02u", static_cast<unsigned int>(wall / 3600),
-                 static_cast<unsigned int>((wall / 60) % 60), static_cast<unsigned int>(wall % 60));
         snprintf(seedLine, sizeof(seedLine), "Seed: %s", seed);
 
-        // Verification code: keyed hash over the three lines exactly as displayed, so the
-        // screenshot is self-authenticating (validated with the apworld's verification.py)
-        char message[128];
-        snprintf(message, sizeof(message), "%s|%s|%s", timeLine, wallLine, seedLine);
+        // Verification code: the frame count and dirty mask are the payload, authenticated
+        // by a keyed MAC over "payload|seed", then whitened by XORing with a keystream
+        // derived from the MAC - so the code alone carries everything needed to verify a
+        // run, while similar runs produce entirely unrelated codes (no visible structure).
+        // Validated by verification.py / the website race leaderboards.
+        const uint32_t payloadFrames = frames > 0xFFFFFF ? 0xFFFFFF : frames; // 6 hex digits, ~77h cap
+        const uint32_t payload = (payloadFrames << 8) | dirtyMask;
+
+        char scratch[32];
+        snprintf(scratch, sizeof(scratch), "%08X|%s", static_cast<unsigned int>(payload), seed);
         uint32_t msgLen = 0;
-        while (message[msgLen] != '\0')
+        while (scratch[msgLen] != '\0')
             msgLen++;
+        const uint32_t mac =
+            fnv1a32(scratch, msgLen, fnv1a32(kSeedObfuscationKey, sizeof(kSeedObfuscationKey), 0x811C9DC5u));
 
-        const uint32_t h1 =
-            fnv1a32(message, msgLen, fnv1a32(kSeedObfuscationKey, sizeof(kSeedObfuscationKey), 0x811C9DC5u));
-        const uint32_t h2 =
-            fnv1a32(message, msgLen, fnv1a32(kSeedObfuscationKey, sizeof(kSeedObfuscationKey), 0xCBF29CE4u));
+        snprintf(scratch, sizeof(scratch), "%08X|%s", static_cast<unsigned int>(mac), seed);
+        msgLen = 0;
+        while (scratch[msgLen] != '\0')
+            msgLen++;
+        const uint32_t mask =
+            fnv1a32(scratch, msgLen, fnv1a32(kSeedObfuscationKey, sizeof(kSeedObfuscationKey), 0xCBF29CE4u));
+        const uint32_t whitened = payload ^ mask;
 
-        char codeLine[32];
-        snprintf(codeLine, sizeof(codeLine), "Code: %08X%04X", static_cast<unsigned int>(h1),
-                 static_cast<unsigned int>(h2 & 0xFFFF));
+        char codeLine[40];
+        snprintf(codeLine, sizeof(codeLine), "Code: %04X-%04X-%04X-%04X", static_cast<unsigned int>(whitened >> 16),
+                 static_cast<unsigned int>(whitened & 0xFFFF), static_cast<unsigned int>(mac >> 16),
+                 static_cast<unsigned int>(mac & 0xFFFF));
 
-        gSelf->DrawString(timeLine, -272.0f, -134.0f, 0xFFFFFFFF, 0.9f);
-        gSelf->DrawString(wallLine, -272.0f, -160.0f, 0xFFFFFFFF, 0.9f);
-        gSelf->DrawString(seedLine, -272.0f, -186.0f, 0xFFFFFFFF, 0.9f);
-        gSelf->DrawString(codeLine, -272.0f, -212.0f, 0xFFFFFFFF, 0.9f);
+        gSelf->DrawString(timeLine, -272.0f, -128.0f, 0xFFFFFFFF, 0.9f);
+        gSelf->DrawString(seedLine, -272.0f, -154.0f, 0xFFFFFFFF, 0.9f);
+        gSelf->DrawString(codeLine, -272.0f, -180.0f, 0xFFFFFFFF, 0.9f);
     }
 
     KEEP_FUNC bool OSLinkHook(OSModuleInfo *new_module, void *bss)
@@ -3171,6 +3230,9 @@ namespace mod::owr
             ttyd::swdrv::swSet(flag);
             DeleteFieldItemForFlag(flag);
             HandleMobjForFlag(flag);
+
+            // Anything arriving through the flag ring came from outside the game
+            *reinterpret_cast<uint8_t *>(kRunDirtyFlagAddr) |= kDirtyExternalFlags;
         }
     }
 
@@ -3215,7 +3277,7 @@ namespace mod::owr
         updateIngredientToast();
 
         // RTA timer in the corner while playing; final time + seed reveal over the credits
-        if (sSaveFileActive)
+        if (sSaveFileActive && apSettingsPtr->rtaTimer != 0)
         {
             if (inEndingArea())
             {
