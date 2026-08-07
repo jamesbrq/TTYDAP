@@ -559,7 +559,7 @@ struct MonoSpan
 // of every ONE-TIME encounter, partitioned per recovery entry. Coverage must be
 // complete per group (all slots 0..enemyCount-1 across entries), because the enemy
 // randomizer can put any species into any slot.
-static const uint16_t kMonoSlots[84] = {
+static const uint16_t kMonoSlots[92] = {
     // [0..1]   E1/E4: hei_03 Bald Clefts
     0x0378, 0x0379,
     // [2..5]   E3: gon_03 Red Bones ambush adds (Dull Bones slots 1-4)
@@ -595,16 +595,24 @@ static const uint16_t kMonoSlots[84] = {
     0x0073,
     // [78..83] E29: las_05 Dark Bones ambush (all five slots) + las_17_04
     0x09D2, 0x09F0, 0x09D0, 0x09D1, 0x09D3, 0x09D4,
+    // [84..87] E40: Glitz Pit add_1 team (group 479, 4 slots) - first-climb roster only
+    0x0EF8, 0x0EF9, 0x0EFA, 0x0EFB,
+    // [88..91] E41: Glitz Pit add_2 team (group 480, 4 slots) - first-climb roster only
+    0x0F00, 0x0F01, 0x0F02, 0x0F03,
 };
 
 // E35-E39 are the mod-added boss arena entries (prologue Crump, Doopliss rematch,
 // Glitzville Bowser, Shadow Queen x2): boss-remap only, no encounter spans.
-static const MonoSpan kMonoSpan[40] = {
+// E40/E41 are the Glitz Pit bottom-seed teams (tou add_1/add_2), gone from the
+// roster once rankingInit switches to fighterDt_re - patched by the tou subrel
+// to trigger at GSW(1703) >= 28 ("after leaving Glitz Pit", vanilla seq 172).
+static const MonoSpan kMonoSpan[43] = {
     {0,0},  {0,2},  {2,0},  {2,4},  {0,2},  {6,2},  {8,1},  {8,1},
     {9,0},  {9,8},  {9,8},  {17,0}, {17,0}, {17,2}, {19,1}, {20,2},
     {22,2}, {24,0}, {24,0}, {24,0}, {24,0}, {24,0}, {24,3}, {24,3},
     {27,16},{43,11},{54,13},{67,11},{78,0}, {78,6}, {84,0}, {84,0},
     {84,0}, {84,0}, {84,0}, {84,0}, {84,0}, {84,0}, {84,0}, {84,0},
+    {84,4}, {88,4}, {92,0},
 };
 
 static int monosiriRemapBoss(int vanilla)
@@ -649,7 +657,7 @@ int monosiriRemapWord1(int idx, int curWord1)
     if (idx < 0 || idx >= 64)
         return curWord1;
 
-    if (idx < 40 && gState->apSettings->enemyRandomizer && kMonoSpan[idx].count)
+    if (idx < 43 && gState->apSettings->enemyRandomizer && kMonoSpan[idx].count)
     {
         // Yux-type occupants spawn their minis mid-battle; the minis' tattles are
         // just as missable as the parent's, so offer them for recovery too.

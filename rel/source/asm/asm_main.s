@@ -862,3 +862,19 @@ monosiriSWArr:
 	.4byte 0x000006AC
 	.4byte 0x00000095
 	.4byte 0x00000010
+	# E40/E41: Glitz Pit bottom-seed teams (btlgrp_tou_tou_add_1/add_2, vanilla
+	# Swoopers / Spinia+Spania). Only in the first-climb roster (fighterDt); the
+	# post-champion roster (fighterDt_re) drops them. Vanilla rankingInit switches
+	# rosters at GSW(0) 172 ("after leaving Glitz Pit"); with GSW(0) removed the
+	# mod patches that check to GSW(1703) >= 28 (tou main.cpp) - gate the same way.
+	.4byte 0x000006A7
+	.4byte 0x0000004A
+	.4byte 0x0000001C
+	.4byte 0x000006A7
+	.4byte 0x00000004
+	.4byte 0x0000001C
+	# E42: Spania - vanilla add_2 is Spinia/Spania mixed, and the static fallback
+	# grant on E41 only covers slot 0 (Spinia). Same roster-switch gate.
+	.4byte 0x000006A7
+	.4byte 0x00000005
+	.4byte 0x0000001C
