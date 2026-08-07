@@ -1040,6 +1040,8 @@ namespace mod::owr
         g_btlseqFirstAct_trampoline =
             patch::hookFunction(reinterpret_cast<BtlseqFirstActFn>(0x8011E5C0), btlseqFirstAct_Hook);
 
+        g_DVDMgrOpen_trampoline = patch::hookFunction(ttyd::dvdmgr::DVDMgrOpen, DVDMgrOpenHook);
+
         // Hook gaugeDisp with a standard branch since the original function does not need to be called
         patch::writeBranch(statuswindow::gaugeDisp, DisplayStarPowerOrbs);
     }

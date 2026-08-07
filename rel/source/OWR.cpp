@@ -230,6 +230,7 @@ namespace mod::owr
     KEEP_VAR int32_t (*g_InterruptStop_trampoline)(ttyd::evtmgr::EvtEntry *, bool) = nullptr;
     KEEP_VAR int32_t (*g_BattleCheckConcluded_trampoline)(void *) = nullptr;
     KEEP_VAR void (*g_btlseqFirstAct_trampoline)(void *) = nullptr;
+    KEEP_VAR ttyd::dvdmgr::DvdMgrFile *(*g_DVDMgrOpen_trampoline)(const char *, int, uint16_t) = nullptr;
 
     void OWR::SequenceInit()
     {
@@ -1035,6 +1036,17 @@ namespace mod::owr
         // time spent on the title screen as a wall jump.
         bool sResetWallMonitor = false;
 
+        // Set when an RTC read fails between polls. The memcard shares EXI channel 0, so
+        // failures mean card traffic (saving the game) - the resulting frame stalls are not
+        // savestates, and the first reading after contention gets an extra confirmation.
+        bool sExiBusySinceLastPoll = false;
+
+        // Set from DVDMgrOpenHook whenever the game opens a file off the disc. Mid-map
+        // loads that never touch the sequence (the W/L Emblem badges reloading Mario's
+        // model, NPC spawns, area tattles) stall the frame loop just like a loading
+        // screen; the wall monitor must not read that stall as a savestate/pause.
+        bool sDiscReadSinceLastPoll = false;
+
         void updateSaveFileActive()
         {
             const SeqIndex seq = seqGetSeq();
@@ -1089,7 +1101,10 @@ namespace mod::owr
 
             uint32_t rtc;
             if (!readRtcSeconds(&rtc))
-                return; // EXI busy; retry next frame
+            {
+                sExiBusySinceLastPoll = true; // memcard traffic on the shared channel
+                return;                       // retry next frame
+            }
 
             static uint32_t sLastRtc = 0;
             static uint32_t sLastFrames = 0;
@@ -1106,15 +1121,20 @@ namespace mod::owr
             // Any reading more than an hour away from the last one is either a genuine
             // clock event or a corrupted transfer (the memcard shares EXI channel 0, and
             // on real hardware contention around saves can produce garbage that passes
-            // the transfer checks). Require a second, agreeing read before believing it.
+            // the transfer checks). Require a second, agreeing read before believing it -
+            // and treat the first reading after observed contention the same way, since
+            // post-save reads are exactly the ones that come back subtly wrong.
             if (sLastRtc != 0)
             {
                 const uint32_t magnitude = rtc >= sLastRtc ? rtc - sLastRtc : sLastRtc - rtc;
-                if (magnitude > 3600)
+                if (magnitude > 3600 || sExiBusySinceLastPoll)
                 {
                     uint32_t confirm;
                     if (!readRtcSeconds(&confirm) || (confirm >= rtc ? confirm - rtc : rtc - confirm) > 2)
+                    {
+                        sExiBusySinceLastPoll = true;
                         return; // glitched read; drop it and poll again next frame
+                    }
                 }
             }
 
@@ -1127,7 +1147,9 @@ namespace mod::owr
                 // savestate load, an emulator pause, or clock manipulation.
                 const int32_t rtcDelta = static_cast<int32_t>(rtc - sLastRtc);
                 const int32_t frameSeconds = static_cast<int32_t>((frames - sLastFrames) / 60);
-                if (rtcDelta < -1 || (rtcDelta - frameSeconds > 1 && !sSeqChangedSinceLastPoll))
+                if (rtcDelta < -1 ||
+                    (rtcDelta - frameSeconds > 1 && !sSeqChangedSinceLastPoll && !sExiBusySinceLastPoll &&
+                     !sDiscReadSinceLastPoll))
                     *reinterpret_cast<uint8_t *>(kRunDirtyFlagAddr) |= kDirtyWallClockJump;
 
                 // Reconcile against the absolute session anchor (not per-window deltas, so
@@ -1187,6 +1209,8 @@ namespace mod::owr
             sLastFrames = *counter;
             sNextPollFrames = *counter + 60;
             sSeqChangedSinceLastPoll = false;
+            sExiBusySinceLastPoll = false;
+            sDiscReadSinceLastPoll = false;
         }
 
         // Latch the elapsed wall time the moment the ending is reached so the credits
@@ -1207,6 +1231,15 @@ namespace mod::owr
         }
     } // namespace
 
+    // Every disc access - sync and async alike - funnels through DVDMgrOpen (fileAsync
+    // and _fileAlloc both open through it), so this is the one place to learn that the
+    // game is loading something regardless of whether the sequence changes.
+    KEEP_FUNC ttyd::dvdmgr::DvdMgrFile *DVDMgrOpenHook(const char *path, int priority, uint16_t wZero)
+    {
+        sDiscReadSinceLastPoll = true;
+        return g_DVDMgrOpen_trampoline(path, priority, wZero);
+    }
+
     void updateRtaTimer()
     {
         updateSaveFileActive();
@@ -1221,13 +1254,18 @@ namespace mod::owr
             return; // timer/credits feature disabled for this seed (mod-side gate, not a yaml option)
 
         // Track sequence transitions so the wall-clock monitor can tell loading-screen
-        // stalls (map changes, battle entry, game over) apart from savestates/pauses
+        // stalls (map changes, battle entry, game over) apart from savestates/pauses.
+        // The next-seq request changes before the current seq does, and the DVD stall
+        // can happen entirely inside that window, so watch both.
         static SeqIndex sPrevSeq = SeqIndex::kLogo;
+        static SeqIndex sPrevNextSeq = SeqIndex::kLogo;
         const SeqIndex seq = seqGetSeq();
-        if (seq != sPrevSeq)
+        const SeqIndex nextSeq = seqGetNextSeq();
+        if (seq != sPrevSeq || nextSeq != sPrevNextSeq)
         {
             sSeqChangedSinceLastPoll = true;
             sPrevSeq = seq;
+            sPrevNextSeq = nextSeq;
         }
 
         if (inEndingArea())
@@ -3390,8 +3428,14 @@ namespace mod::owr
         if (apSettingsPtr->music == 1)
             for (int i = 0; i <= 1; i++) ttyd::pmario_sound::psndBGMOff_f_d(512 + i, 0, 1);
 
+        // Deferred goal teleport (goal completed during battle/cutscene): 6120 must be set
+        // here too, or the check stays true inside end_00 and re-teleports every frame.
         if (checkIfInGameNotBattle() && ttyd::swdrv::swGet(6121) == 1 && ttyd::swdrv::swGet(6120) != 1)
+        {
+            ttyd::swdrv::swSet(6120);
+            ttyd::swdrv::swClear(6121); // deferral consumed
             ttyd::seqdrv::seqSetSeq(SeqIndex::kMapChange, "end_00", 0);
+        }
 
         // Advance Boggly Woods sequence if the great tree is opened
         if (ttyd::swdrv::swByteGet(1713) >= 1 && ttyd::swdrv::swByteGet(1702) < 8)

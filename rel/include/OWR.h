@@ -8,6 +8,7 @@
 #include <StateManager.h>
 #include <ttyd/battle_database_common.h>
 #include <ttyd/battle_unit.h>
+#include <ttyd/dvdmgr.h>
 #include <ttyd/evtmgr.h>
 #include <ttyd/msgdrv.h>
 #include <ttyd/npcdrv.h>
@@ -101,6 +102,7 @@ namespace mod::owr
     int32_t InterruptStopHook(ttyd::evtmgr::EvtEntry *evt, bool isFirstCall);
     int32_t BattleCheckConcludedHook(void *battleWork);
     void btlseqFirstAct_Hook(void *battleWork);
+    ttyd::dvdmgr::DvdMgrFile *DVDMgrOpenHook(const char *path, int priority, uint16_t wZero);
 
     extern const char *kChampStageGlobalDir;
     extern const char *kChampStageCurrentDir;
@@ -260,6 +262,7 @@ namespace mod::owr
     extern int32_t (*g_InterruptStop_trampoline)(ttyd::evtmgr::EvtEntry *, bool);
     extern int32_t (*g_BattleCheckConcluded_trampoline)(void *);
     extern void (*g_btlseqFirstAct_trampoline)(void *);
+    extern ttyd::dvdmgr::DvdMgrFile *(*g_DVDMgrOpen_trampoline)(const char *, int, uint16_t);
 
     extern const char *goombellaName;
     extern const char *goombellaDescription;
