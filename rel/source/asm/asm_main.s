@@ -869,12 +869,12 @@ monosiriSWArr:
 	# mod patches that check to GSW(1703) >= 28 (tou main.cpp) - gate the same way.
 	.4byte 0x000006A7
 	.4byte 0x0000004A
-	.4byte 0x0000001C
+	.4byte 0x00000014
 	.4byte 0x000006A7
 	.4byte 0x00000004
-	.4byte 0x0000001C
+	.4byte 0x00000014
 	# E42: Spania - vanilla add_2 is Spinia/Spania mixed, and the static fallback
 	# grant on E41 only covers slot 0 (Spinia). Same roster-switch gate.
 	.4byte 0x000006A7
 	.4byte 0x00000005
-	.4byte 0x0000001C
+	.4byte 0x00000014
