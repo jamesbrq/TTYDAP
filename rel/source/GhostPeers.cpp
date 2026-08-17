@@ -1372,6 +1372,15 @@ namespace mod::ghosts
                         if (isStateSync)
                             continue; // state-sync diff owns this loop's lifecycle
 
+                        // Same whitelist the loop path applies, for the same
+                        // reason and one more: this id came off the wire and is
+                        // handed straight to psndSFXOn_3D. The loop path was
+                        // filtered but the ring was not, so a peer running a
+                        // modified client could make everyone else's game play
+                        // any sound in the table — or an id that is not in it.
+                        if (!SfxIsAllowed(ev.sfxId))
+                            continue;
+
                         // Enqueue for spaced replay (drain handles plain vs
                         // anim-bound). Drop on a full FIFO rather than block.
                         if (slot.sfxQueueCount < GhostSlot::kSfxQueueMax)
@@ -1457,6 +1466,14 @@ namespace mod::ghosts
             ttyd::mario::Player *me = ttyd::mario::marioGetPtr();
             if (me == nullptr)
                 return -1;
+
+            // Hiders cannot hammer. The swing is marked as fired so the normal
+            // once-per-swing bookkeeping still advances; only the hit is dropped.
+            if (g_ghostState != nullptr && g_ghostState->selfGameRole == kGameRoleHider)
+            {
+                g_hammerSwingFired = true;
+                return -1;
+            }
 
             const uint8_t *mpBytes = reinterpret_cast<const uint8_t *>(me);
             const uint16_t curMotRaw = *reinterpret_cast<const uint16_t *>(mpBytes + 0x2E);
@@ -1797,6 +1814,20 @@ namespace mod::ghosts
         }
     } // namespace
 
+    // Our half of the input lock. Kept at namespace scope rather than inside
+    // UpdateAll so every exit path can release it: a `return` that skipped the
+    // unfreeze branch used to leave the player permanently unable to move.
+    static bool s_ourLockApplied = false;
+
+    static void ReleaseOurInputLock()
+    {
+        if (!s_ourLockApplied)
+            return;
+        if (ttyd::mario::marioChkKey() == 0)
+            ttyd::mario::marioKeyOn();
+        s_ourLockApplied = false;
+    }
+
     KEEP_FUNC void UpdateAll()
     {
         if (!g_initialized)
@@ -1805,6 +1836,10 @@ namespace mod::ghosts
         const SharedBlock *block = GetValidBlock();
         if (block == nullptr)
         {
+            // The client is gone or the block was torn down. Hand control back
+            // before bailing out — there is nobody left to clear selfFrozen,
+            // so returning while still holding the lock strands the player.
+            ReleaseOurInputLock();
             for (int i = 0; i < kMaxPeers; ++i) ReleaseSlot(g_slots[i]);
             return;
         }
@@ -1830,6 +1865,105 @@ namespace mod::ghosts
                         e.sfxId = 0;
                     }
                     std::memcpy(s_lastMapName, currentMap, kMapNameLen);
+                }
+            }
+        }
+
+        // Input freeze, driven by the host over selfFrozen. Used to hold hiders
+        // still during the countdown and to stop a caught player. The lock is
+        // tracked separately from the hit lock: releasing unconditionally would
+        // hand back control that the hammer lock still wants held.
+        {
+            // Dead-man's switch. A freeze can legitimately last minutes (the
+            // whole hide phase), so it cannot simply time out — instead the
+            // client re-arms it every tick and we drop the lock once it stops.
+            // A client that never touches the counter is an older build with
+            // no watchdog, and is honoured indefinitely as it always was.
+            static uint8_t s_lastFrozenSeq = 0;
+            static int s_framesSinceSeqChange = 0;
+            const uint8_t frozenSeq = g_ghostState->selfFrozenSeq;
+            if (frozenSeq != s_lastFrozenSeq)
+            {
+                s_lastFrozenSeq = frozenSeq;
+                s_framesSinceSeqChange = 0;
+            }
+            else if (s_framesSinceSeqChange < kFreezeWatchdogFrames)
+            {
+                ++s_framesSinceSeqChange;
+            }
+            const bool watchdogArmed = (frozenSeq != 0);
+            const bool clientAlive =
+                !watchdogArmed || (s_framesSinceSeqChange < kFreezeWatchdogFrames);
+
+            const bool wantFrozen = (g_ghostState->selfFrozen != 0) && clientAlive;
+            const bool inputFree  = (ttyd::mario::marioChkKey() != 0);
+
+            if (wantFrozen)
+            {
+                if (inputFree)
+                {
+                    ttyd::mario::marioKeyOff();
+                    s_ourLockApplied = true;
+                }
+            }
+            else
+            {
+                ReleaseOurInputLock();
+            }
+        }
+
+        // Forced map change, driven by the host over pendingTeleportSeq. Edge
+        // detected on the sequence byte so the same destination can be sent
+        // twice, which is how everyone is gathered at the start of a round.
+        {
+            static uint8_t s_lastTeleportSeq = 0;
+            const uint8_t curSeq = g_ghostState->pendingTeleportSeq;
+            const bool seqChanged = (curSeq != s_lastTeleportSeq);
+            const bool mapPresent = (g_ghostState->pendingTeleportMap[0] != '\0');
+            if (seqChanged && mapPresent)
+            {
+                const char *bero = (g_ghostState->pendingTeleportBero[0] != '\0')
+                                       ? g_ghostState->pendingTeleportBero
+                                       : nullptr;
+                s_lastTeleportSeq = curSeq;
+                ttyd::mario_motion::marioChgMot(ttyd::mario_motion::MarioMotion::kStay);
+                ttyd::seqdrv::seqSetSeq(
+                    ttyd::seqdrv::SeqIndex::kMapChange,
+                    g_ghostState->pendingTeleportMap,
+                    bero);
+            }
+        }
+
+        // Debug /hns play_sfx command bus. Edge-detect on debugSfxSeq
+        // and fire psndSFXOn for the requested id. The OWR.cpp hook
+        // captures the call into OnLocalSfxFired (where SfxIsAllowed
+        // gates whether it propagates to peers), so this can also be
+        // used to verify whether a candidate id is whitelisted.
+        {
+            static uint8_t s_lastDebugSfxSeq = 0;
+            const uint8_t curSeq = g_ghostState->debugSfxSeq;
+            if (curSeq != s_lastDebugSfxSeq)
+            {
+                s_lastDebugSfxSeq = curSeq;
+                const int sfxId = static_cast<int>(g_ghostState->debugSfxId);
+                if (sfxId > 0)
+                {
+                    if (g_ghostState->debugSfxFlags & 0x01)
+                    {
+                        ttyd::mario::Player *me = ttyd::mario::marioGetPtr();
+                        if (me != nullptr)
+                        {
+                            ttyd::pmario_sound::psndSFXOn_3D(sfxId, &me->playerPosition);
+                        }
+                        else
+                        {
+                            ttyd::pmario_sound::psndSFXOn(sfxId);
+                        }
+                    }
+                    else
+                    {
+                        ttyd::pmario_sound::psndSFXOn(sfxId);
+                    }
                 }
             }
         }
@@ -2458,6 +2592,8 @@ namespace mod::ghosts
 
         ttyd::fontmgr::FontDrawScale(kNameTagFontScale);
 
+        const uint8_t selfRole = (g_ghostState != nullptr) ? g_ghostState->selfGameRole : kGameRoleNone;
+
         for (int i = 0; i < kMaxPeers; ++i)
         {
             const PeerSlot &peer = block->peers[i];
@@ -2471,6 +2607,14 @@ namespace mod::ghosts
                 continue;
 
             if (peer.showName != 0)
+                continue;
+
+            // Hide and seek visibility: a hider sees no name tags at all, and a
+            // seeker sees only other seekers. Outside a match selfRole is
+            // kGameRoleNone and neither test fires, so normal play is unchanged.
+            if (selfRole == kGameRoleHider)
+                continue;
+            if (selfRole == kGameRoleSeeker && peer.gameRole != kGameRoleSeeker)
                 continue;
 
             gc::vec3 worldPos = {slot.renderX, slot.renderY + kNameTagWorldYOffset, slot.renderZ};
@@ -2505,6 +2649,228 @@ namespace mod::ghosts
             ttyd::fontmgr::FontDrawColor(reinterpret_cast<uint8_t *>(const_cast<uint32_t *>(&packed)));
 
             ttyd::fontmgr::FontDrawString(screenX, screenY, peer.slotName);
+        }
+
+        // Self-label: render "Seeker" above the local Mario when our
+        // role is seeker. Cosmetic confirmation of role; mirrors the
+        // red color we use for seeker peers.
+        //
+        // Position: use the three-vector sum (playerPosition +
+        // wModelPosition + wAnimPosition), matching what Python's
+        // _read_self_state publishes at offsets 0x8C/0x98/0xA4 so
+        // peers see us at the same world location. wAnimPosition
+        // alone lagged for a frame or two after seqSetSeq teleports,
+        // which left the label anchored at the post-spawn point
+        // while Mario walked away from it.
+        if (selfRole == kGameRoleSeeker)
+        {
+            ttyd::mario::Player *me = ttyd::mario::marioGetPtr();
+            if (me != nullptr)
+            {
+                gc::vec3 worldPos = {
+                    me->playerPosition.x + me->wModelPosition.x + me->wAnimPosition.x,
+                    me->playerPosition.y + me->wModelPosition.y + me->wAnimPosition.y + kNameTagWorldYOffset,
+                    me->playerPosition.z + me->wModelPosition.z + me->wAnimPosition.z,
+                };
+                gc::vec3 camPos = {0.0f, 0.0f, 0.0f};
+                gc::mtx::PSMTXMultVec(viewMtx, &worldPos, &camPos);
+
+                gc::vec3 ndcPos = {0.0f, 0.0f, 0.0f};
+                gc::mtx::PSMTX44MultVec(projMtx, &camPos, &ndcPos);
+
+                if (ndcPos.z >= -1.5f && ndcPos.z <= 1.5f && ndcPos.x >= -1.5f && ndcPos.x <= 1.5f && ndcPos.y >= -1.5f &&
+                    ndcPos.y <= 1.5f)
+                {
+                    const char *label = "Seeker";
+                    float screenX = ndcPos.x * kNameTagScreenScaleX;
+                    const float screenY = ndcPos.y * kNameTagScreenScaleY;
+                    const uint16_t textWidth = ttyd::fontmgr::FontGetMessageWidth(label);
+                    screenX -= (static_cast<float>(textWidth) * kNameTagFontScale) * 0.5f;
+                    const uint32_t packedSelf = 0xFF4040FFu;
+                    ttyd::fontmgr::FontDrawColor(reinterpret_cast<uint8_t *>(const_cast<uint32_t *>(&packedSelf)));
+                    ttyd::fontmgr::FontDrawString(screenX, screenY, label);
+                }
+            }
+        }
+    }
+
+    namespace
+    {
+
+        constexpr float kLobbyHudAnchorX = 270.0f;
+        constexpr float kLobbyHudAnchorY = 220.0f;
+        constexpr float kLobbyHudFontScale = 0.5f;
+        constexpr float kLobbyHudLineHeight = 22.0f;
+
+        const char *LobbyStatusLabel(uint8_t status)
+        {
+            switch (status)
+            {
+                case kLobbyStatusIdle:
+                    return "Idle";
+                case kLobbyStatusWaiting:
+                    return "Hide";
+                case kLobbyStatusCountdown:
+                    return "Seek";
+                case kLobbyStatusPlaying:
+                    return "Round Over";
+                case kLobbyStatusFinished:
+                    return "Match End";
+                default:
+                    return "?";
+            }
+        }
+
+        const char *LobbyGameTypeLabel(uint8_t gameType)
+        {
+            switch (gameType)
+            {
+                case kGameTypeHideAndSeek:
+                    return "Hide and Seek";
+                default:
+                    return "";
+            }
+        }
+
+        float RightAlignX(const char *str, float screenX, float fontScale)
+        {
+            const uint16_t textWidth = ttyd::fontmgr::FontGetMessageWidth(str);
+            return screenX - static_cast<float>(textWidth) * fontScale;
+        }
+    } // namespace
+
+    KEEP_FUNC void DrawLobbyHud(ttyd::dispdrv::CameraId, void *)
+    {
+        if (!g_initialized)
+            return;
+
+        const LobbyHudHeader *header = GetLobbyHudHeader();
+
+        if (header->magic != kLobbyHudMagic)
+            return;
+        if (header->version != kLobbyHudVersion)
+            return;
+
+        if (header->active == 0)
+            return;
+
+        ttyd::fontmgr::FontDrawStart();
+        ttyd::fontmgr::FontDrawEdge();
+        ttyd::fontmgr::FontDrawScale(kLobbyHudFontScale);
+
+        const uint32_t packedWhite = 0xFFFFFFFFu;
+        ttyd::fontmgr::FontDrawColor(reinterpret_cast<uint8_t *>(const_cast<uint32_t *>(&packedWhite)));
+
+        float y = kLobbyHudAnchorY;
+
+        char buf[64];
+        char nameBuf[17];
+        std::memcpy(nameBuf, header->name, 16);
+        nameBuf[16] = '\0';
+
+        ttyd::string::strcpy(buf, "Lobby: ");
+        ttyd::string::strcat(buf, nameBuf);
+
+        ttyd::fontmgr::FontDrawString(RightAlignX(buf, kLobbyHudAnchorX, kLobbyHudFontScale), y, buf);
+        y -= kLobbyHudLineHeight;
+
+        const char *gameLabel = LobbyGameTypeLabel(header->gameType);
+        if (gameLabel[0] != '\0')
+        {
+            ttyd::string::strcpy(buf, "Game: ");
+            ttyd::string::strcat(buf, gameLabel);
+            ttyd::fontmgr::FontDrawString(RightAlignX(buf, kLobbyHudAnchorX, kLobbyHudFontScale), y, buf);
+            y -= kLobbyHudLineHeight;
+        }
+
+        ttyd::string::strcpy(buf, "Status: ");
+        ttyd::string::strcat(buf, LobbyStatusLabel(header->status));
+        ttyd::fontmgr::FontDrawString(RightAlignX(buf, kLobbyHudAnchorX, kLobbyHudFontScale), y, buf);
+        y -= kLobbyHudLineHeight;
+
+        if (header->timerSeconds > 0)
+        {
+            char numBuf[8] = {0};
+            uint16_t t = header->timerSeconds;
+            int idx = 0;
+            char rev[8];
+            int rlen = 0;
+            if (t == 0)
+            {
+                rev[rlen++] = '0';
+            }
+            else
+            {
+                while (t > 0 && rlen < 6)
+                {
+                    rev[rlen++] = static_cast<char>('0' + (t % 10));
+                    t /= 10;
+                }
+            }
+
+            for (int i = rlen - 1; i >= 0; --i) numBuf[idx++] = rev[i];
+            numBuf[idx++] = 's';
+            numBuf[idx] = '\0';
+
+            ttyd::string::strcpy(buf, "Time: ");
+            ttyd::string::strcat(buf, numBuf);
+            ttyd::fontmgr::FontDrawString(RightAlignX(buf, kLobbyHudAnchorX, kLobbyHudFontScale), y, buf);
+            y -= kLobbyHudLineHeight;
+        }
+
+        const char *text = GetLobbyHudText();
+        const char *end = text + kLobbyTextLen;
+        const char *cur = text;
+
+        char lineBuf[80];
+
+        while (cur < end && *cur != '\0')
+        {
+            const char *lineStart = cur;
+            while (cur < end && *cur != '\0' && *cur != '\n') ++cur;
+
+            const int lineLen = static_cast<int>(cur - lineStart);
+
+            // Per-line color markers written by Python's
+            // format_match_text. \x01 = red (seeker), \x02 = green
+            // (hider). Strip the marker before rendering.
+            const char *renderStart = lineStart;
+            int renderLen = lineLen;
+            uint32_t lineColor = packedWhite;
+            if (renderLen > 0)
+            {
+                if (*renderStart == '\x01')
+                {
+                    lineColor = 0xFF4040FFu;
+                    ++renderStart;
+                    --renderLen;
+                }
+                else if (*renderStart == '\x02')
+                {
+                    lineColor = 0x40FF40FFu;
+                    ++renderStart;
+                    --renderLen;
+                }
+            }
+
+            const int copyLen =
+                (renderLen < static_cast<int>(sizeof(lineBuf)) - 1) ? renderLen : static_cast<int>(sizeof(lineBuf)) - 1;
+            std::memcpy(lineBuf, renderStart, copyLen);
+            lineBuf[copyLen] = '\0';
+
+            if (copyLen == 0)
+            {
+                y -= kLobbyHudLineHeight;
+            }
+            else
+            {
+                ttyd::fontmgr::FontDrawColor(reinterpret_cast<uint8_t *>(&lineColor));
+                ttyd::fontmgr::FontDrawString(RightAlignX(lineBuf, kLobbyHudAnchorX, kLobbyHudFontScale), y, lineBuf);
+                y -= kLobbyHudLineHeight;
+            }
+
+            if (cur < end && *cur == '\n')
+                ++cur;
         }
     }
 

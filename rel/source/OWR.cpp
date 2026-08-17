@@ -417,11 +417,6 @@ namespace mod::owr
         return (relPtr->id != RelId::DMO);
     }
 
-    // Run-integrity dirty flag (GSW 1696, save-persisted): a reason bitmask, 0 = clean.
-    // Shown after the time on the credits as *<hex> and decoded by the apworld's
-    // verification.py; the website race leaderboards reject any nonzero mask. The
-    // client mirrors the 0x08/0x10 bits, but the mod sets them here too so a modified
-    // client can't deliver items or flags without leaving a mark.
     namespace
     {
         constexpr uintptr_t kRunDirtyFlagAddr = 0x803DB190 + 1696; // GSW 1696
@@ -1838,11 +1833,6 @@ namespace mod::owr
     {
         BattleUnitSetup *setup;
         BattleUnitKind *kind;
-        // Snapshots taken at registration, when the freshly loaded rel data is guaranteed
-        // vanilla. The kind structs are shared and mutable (GetUnitKindById hands the same
-        // objects to every arena, and scaling writes into them), so copying stats through
-        // the pointer at battle time can pick up an earlier fight's mutations - the
-        // "vanilla-located boss inherits someone else's HP" class of bug.
         int32_t maxHp;
         int32_t level;
         bool boss;
@@ -2321,15 +2311,26 @@ namespace mod::owr
         return g_psndSFXOff_trampoline(channel);
     }
 
+    // Suppress overworld battles for the duration of a hide-and-seek round.
+    // Passing a null battle info leaves the NPC alone but gives it nothing to
+    // start a fight with, so touching an enemy while hiding no longer drops you
+    // into a battle you cannot escape from while the timer runs.
+    //
+    // Gated on selfGameRole rather than on "a match exists": the role is only
+    // non-zero during HIDE and SEEK, so normal play and the gaps between rounds
+    // keep their encounters.
+    //
+    // Note the single trampoline call. This was disabled by commenting out the
+    // guard, which left the unconditional call above it — uncommenting as-is
+    // would have called the original twice and set the battle up regardless.
     KEEP_FUNC void npcSetupBattleInfoHook(::NpcEntry *npc, void *info)
     {
-        g_npcSetupBattleInfo_trampoline(npc, info);
-        /* if (ghosts::g_ghostState != nullptr &&
+        if (ghosts::g_ghostState != nullptr &&
             ghosts::g_ghostState->selfGameRole != ghosts::kGameRoleNone)
         {
             info = nullptr;
         }
-        g_npcSetupBattleInfo_trampoline(npc, info);*/
+        g_npcSetupBattleInfo_trampoline(npc, info);
     }
 
     static void applyShopFlagLive(int flag)

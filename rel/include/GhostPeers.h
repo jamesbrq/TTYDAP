@@ -11,7 +11,14 @@ namespace mod::ghosts
     constexpr int kMaxPeers = 32;
 
     constexpr uint32_t kMagic = 0x47484F53;
-    constexpr uint32_t kVersion = 1;
+    // Bump on every change to the shape of GhostState. The client compares it
+    // against its own layout.VERSION and refuses to write into a block it does
+    // not understand — the check below in GetValidBlock() cannot do that job,
+    // since it only ever compares the block against the value this same build
+    // wrote into it.
+    //
+    //   2: selfFrozenSeq (input-freeze watchdog) claims a byte of pad_v29.
+    constexpr uint32_t kVersion = 2;
 
     constexpr uint8_t kGameRoleNone = 0;
     constexpr uint8_t kGameRoleHider = 1;
@@ -25,6 +32,12 @@ namespace mod::ghosts
     constexpr uint8_t kSfxFlag3D = 0x01;
 
     constexpr int kActiveLoopsPerPeer = 6;
+
+    // How long the mod keeps honouring selfFrozen after the client's watchdog
+    // counter stops advancing. Generous on purpose: the client's game thread
+    // can stall for a second or more on a blocking lobby request, and lapsing
+    // the freeze mid-hide-phase would be worse than a slightly late recovery.
+    constexpr int kFreezeWatchdogFrames = 300;   // ~5s at 60fps
 
     struct SfxEvent
     {
@@ -225,7 +238,15 @@ namespace mod::ghosts
 
         uint8_t selfFrozen;
         uint8_t pendingTeleportSeq;
-        uint8_t pad_v29[2];
+        // Dead-man's switch for selfFrozen. The client bumps this every tick
+        // it still wants the freeze held; the mod lapses the input lock if it
+        // stops changing. Without it, a client that crashes or is killed while
+        // a hider is frozen leaves the player unable to move until the console
+        // is reset, because nothing is left running to write selfFrozen back
+        // to 0. Stays 0 on clients that predate this, which the mod reads as
+        // "no watchdog" and honours the freeze indefinitely, as before.
+        uint8_t selfFrozenSeq;
+        uint8_t pad_v29;
         char pendingTeleportMap[16];
         char pendingTeleportBero[16];
 
@@ -263,6 +284,7 @@ namespace mod::ghosts
     static_assert(offsetof(GhostState, selfGameRole) == sizeof(SharedBlock) + 1244, "selfGameRole offset drift");
     static_assert(offsetof(GhostState, selfFrozen) == sizeof(SharedBlock) + 1248, "selfFrozen offset drift");
     static_assert(offsetof(GhostState, pendingTeleportSeq) == sizeof(SharedBlock) + 1249, "pendingTeleportSeq offset drift");
+    static_assert(offsetof(GhostState, selfFrozenSeq) == sizeof(SharedBlock) + 1250, "selfFrozenSeq offset drift");
     static_assert(offsetof(GhostState, pendingTeleportMap) == sizeof(SharedBlock) + 1252, "pendingTeleportMap offset drift");
     static_assert(offsetof(GhostState, pendingTeleportBero) == sizeof(SharedBlock) + 1268, "pendingTeleportBero offset drift");
     static_assert(offsetof(GhostState, debugSfxId) == sizeof(SharedBlock) + 1284, "debugSfxId offset drift");
