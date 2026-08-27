@@ -10,6 +10,9 @@
 #include "ttyd/evt_map.h"
 #include "ttyd/evt_mario.h"
 #include "ttyd/evt_msg.h"
+#include "ttyd/evt_npc.h"
+#include "ttyd/evtmgr_cmd.h"
+#include "ttyd/swdrv.h"
 
 #include <cstdint>
 
@@ -138,6 +141,15 @@ EVT_BEGIN(las_05_init_evt_hook)
 EVT_PATCH_END()
 // clang-format on
 
+EVT_DECLARE_USER_FUNC(sqPhase1BattleResult, 1)
+EVT_DEFINE_USER_FUNC(sqPhase1BattleResult)
+{
+    const int32_t ret = ttyd::evt_npc::evt_npc_get_battle_result(evt, isFirstCall);
+    if (ttyd::evtmgr_cmd::evtGetValue(evt, evt->evtArguments[0]) == 1)
+        ttyd::evtmgr_cmd::evtSetValue(evt, evt->evtArguments[0], 5);
+    return ret;
+}
+
 namespace mod
 {
     void main()
@@ -150,16 +162,16 @@ namespace mod
         las_00_init_evt[23] = GSW(1708);
         las_00_init_evt[24] = 2;
 
-        las_senkaron_event[1] = GSW(1708);
-        las_senkaron_event[2] = 2;
+        las_senkaron_event[1] = GSWF(6123);
+        las_senkaron_event[2] = 0;
         las_senkaron_event[843] = GSWF(6123);
         las_senkaron_event[844] = 1;
 
-        las_kurokaron_init[1] = GSW(1708);
-        las_kurokaron_init[2] = 2;
+        las_kurokaron_init[1] = GSWF(6123);
+        las_kurokaron_init[2] = 0;
 
-        las_kurokaron_talk[3] = GSW(1708);
-        las_kurokaron_talk[4] = 2;
+        las_kurokaron_talk[3] = GSWF(6123);
+        las_kurokaron_talk[4] = 0;
 
         las_key_evt_05[1] = GSWF(6071);
         las_key_evt_05[2] = 1;
@@ -349,6 +361,8 @@ namespace mod
 
         las_last_evt_3[1339] = GSW(1708);
         las_last_evt_3[1340] = 17;
+
+        las_last_evt_3[1330] = reinterpret_cast<int32_t>(&sqPhase1BattleResult);
 
         las_last_evt_3_2[1822] = GSW(1708);
         las_last_evt_3_2[1823] = 17;

@@ -28,9 +28,9 @@ namespace ttyd::system
         void padRumbleOff(uint32_t padId);
         void padRumbleOn(uint32_t padId);
 
-        int8_t keyGetSubStickY(uint32_t padId);
-        int8_t keyGetStickY(uint32_t padId);
-        int8_t keyGetStickX(uint32_t padId);
+        int32_t keyGetSubStickY(uint32_t padId);
+        int32_t keyGetStickY(uint32_t padId);
+        int32_t keyGetStickX(uint32_t padId);
         uint32_t keyGetButtonTrg(uint32_t padId);
         uint32_t keyGetDirTrg(uint32_t padId);
         uint32_t keyGetButtonRep(uint32_t padId);

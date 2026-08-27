@@ -1,5 +1,6 @@
 #include "AP/rel_patch_definitions.h"
 #include "evt_cmd.h"
+#include "MirrorMode.h"
 #include "OWR.h"
 #include "patch.h"
 #include "subrel_gra.h"
@@ -30,6 +31,7 @@ extern int32_t gra_04_init_evt[];
 extern int32_t gra_05_futa_open_evt[];
 extern int32_t gra_evt_gra_05iwa_move_init[];
 extern int32_t gra_evt_gra_05iwa_move_evt[];
+extern int32_t gra_evt_iwamove_main[];
 extern int32_t gra_evt_break_floor[];
 extern int32_t gra_05_init_evt[];
 extern int32_t gra_first_gra06jin[];
@@ -126,6 +128,10 @@ namespace mod
 
         gra_evt_gra_05iwa_move_evt[176] = GSW(1714);
         gra_evt_gra_05iwa_move_evt[177] = 5;
+
+        // gra_05 rock push reads the raw stick (screen-relative under mirror)
+        patch::writeBranchBL(&gra_evt_iwamove_main[43],
+                             reinterpret_cast<void *>(mod::mirror::mirrorKeyGetStickX));
 
         gra_evt_break_floor[1] = GSW(1714);
         gra_evt_break_floor[2] = 4;

@@ -30,7 +30,7 @@ namespace ttyd::evt_party
         // evt_party_set_homing_dist
         // evt_party_move_beside_mario
         // evt_party_move_behind_mario
-        // evt_party_jump_pos
+        EVT_DECLARE_USER_FUNC(evt_party_jump_pos, 6)
         // evt_party_wait_landon
         // evt_party_move_pos2
         // evt_party_move_pos

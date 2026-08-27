@@ -55,6 +55,7 @@ namespace ttyd::mario_motion
         void marioChgGetItemMotion();
         void marioChgShipMotion();
         void marioChgRollMotion();
+        void marioReInit_slit();
         void marioChgJumpStandMotion(float direction);
         void marioChgSmallJumpMotion();
 

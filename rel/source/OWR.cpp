@@ -1,4 +1,6 @@
 #include "customWarp.h"
+#include "MirrorMode.h"
+#include "tracker.h"
 #include "relmgr.h"
 #include "util.h"
 #include "visibility.h"
@@ -205,10 +207,12 @@ namespace mod::owr
     KEEP_VAR uint32_t (*g_pouchGetItem_trampoline)(int32_t) = nullptr;
     KEEP_VAR void (*g_partySetForceMove_trampoline)(ttyd::party::PartyEntry *ptr, float x, float z, float speed) = nullptr;
     KEEP_VAR int32_t (*g_evt_mario_set_pose_trampoline)(ttyd::evtmgr::EvtEntry *evt, bool firstCall) = nullptr;
+    KEEP_VAR int32_t (*g_evt_party_jump_pos_trampoline)(ttyd::evtmgr::EvtEntry *evt, bool firstCall) = nullptr;
     KEEP_VAR const char *(*g_msgSearch_trampoline)(const char *) = nullptr;
     KEEP_VAR void (*g_statusWinDisp_trampoline)(void) = nullptr;
     KEEP_VAR void (*g_pouchGetStarstone_trampoline)(int32_t) = nullptr;
     KEEP_VAR int32_t (*g_winItemMain_trampoline)(ttyd::win_root::WinPauseMenu *menu) = nullptr;
+    KEEP_VAR void (*g_marioEntry_trampoline)() = nullptr;
     KEEP_VAR int32_t (*g_winLogMain_trampoline)(ttyd::win_root::WinPauseMenu *menu) = nullptr;
     KEEP_VAR void (*g_msgAnalize_trampoline)(ttyd::memory::SmartAllocationData *smartAlloc, const char *text) = nullptr;
     KEEP_VAR int (*g_msgWindow_Entry_trampoline)(const char *message, int unk1, int windowType) = nullptr;
@@ -220,6 +224,7 @@ namespace mod::owr
     KEEP_VAR void (*g_npcSetupBattleInfo_trampoline)(::NpcEntry *, void *) = nullptr;
     KEEP_VAR int32_t (*g_pouchRemoveItem_trampoline)(int32_t) = nullptr;
     KEEP_VAR int32_t (*g_pouchCheckItem_trampoline)(int32_t) = nullptr;
+    KEEP_VAR int32_t (*g_sandersBombHitPosition_trampoline)(ttyd::evtmgr::EvtEntry *, bool) = nullptr;
     KEEP_VAR void (*g_swSet_trampoline)(int) = nullptr;
     KEEP_VAR int32_t (*g_BattleCalculateDamage_trampoline)(BattleWorkUnit *,
                                                            BattleWorkUnit *,
@@ -231,6 +236,7 @@ namespace mod::owr
     KEEP_VAR int32_t (*g_BattleCheckConcluded_trampoline)(void *) = nullptr;
     KEEP_VAR void (*g_btlseqFirstAct_trampoline)(void *) = nullptr;
     KEEP_VAR ttyd::dvdmgr::DvdMgrFile *(*g_DVDMgrOpen_trampoline)(const char *, int, uint16_t) = nullptr;
+    KEEP_VAR int32_t (*g_psndBGMOn_f_d_trampoline)(uint32_t, const char *, uint32_t, uint32_t, uint32_t) = nullptr;
 
     void OWR::SequenceInit()
     {
@@ -323,6 +329,8 @@ namespace mod::owr
 
         // Give Return Pipe.
         ttyd::mario_pouch::pouchGetItem(ItemId::INVALID_ITEM_PAPER_0054);
+
+        ttyd::mario_pouch::pouchGetItem(ItemId::TRIPLE_DIP);
 
         const bool apEnabled = static_cast<bool>(gState->apSettings->apEnabled);
         if (apEnabled)
@@ -427,6 +435,10 @@ namespace mod::owr
         constexpr uint8_t kDirtyExternalItems = 0x10;   // items delivered from outside the game
     } // namespace
 
+    // Received-item feed interface; definitions live with the feed below
+    void queueReceivedItemPopup(int16_t item, uint8_t cls, uint8_t senderSlot);
+    bool recvFeedHasRoom(int32_t announcements);
+
     void OWR::RecieveItems()
     {
         if (!checkIfInGame())
@@ -445,15 +457,31 @@ namespace mod::owr
             return;
         }
 
-        int16_t *items = reinterpret_cast<int16_t *>(item_pointer);
+        uint16_t *items = reinterpret_cast<uint16_t *>(item_pointer);
+
+        uint32_t announced = 0;
         for (uint32_t i = 0; i < length; i++)
         {
+            if (items[i] & 0x2000)
+                announced++;
+        }
+        if (!recvFeedHasRoom(static_cast<int32_t>(announced)))
+            return; // try again next frame once the feed has drained a little
+
+        for (uint32_t i = 0; i < length; i++)
+        {
+            const uint16_t packed = items[i];
+            const int16_t item = static_cast<int16_t>(packed & 0x1FF);
             // Try to give the item
-            if (!pouchGetItem(items[i]))
+            if (!pouchGetItem(item))
             {
                 // Couldn't give the item, so try to send it to storage
-                pouchAddKeepItem(items[i]);
+                pouchAddKeepItem(item);
             }
+
+            if (packed & 0x2000)
+                queueReceivedItemPopup(item, static_cast<uint8_t>((packed >> 14) & 3),
+                                       static_cast<uint8_t>((packed >> 9) & 0xF));
 
             // Crystal-star goal is handled in pouchGetItemHook via
             // checkCrystalStarGoal, which fires for stars from any source
@@ -935,6 +963,176 @@ namespace mod::owr
         }
     }
 
+    namespace
+    {
+        constexpr int32_t kRecvFeedSize = 6;         // visible rows
+        constexpr int32_t kRecvFeedFadeInFrames = 12;
+        constexpr int32_t kRecvFeedHoldFrames = 300; // ~5s
+        constexpr int32_t kRecvFeedFadeOutFrames = 30;
+        constexpr int32_t kRecvFeedLifeFrames = kRecvFeedFadeInFrames + kRecvFeedHoldFrames + kRecvFeedFadeOutFrames;
+        constexpr float kRecvFeedX = -260.0f;
+        constexpr float kRecvFeedTopY = 96.0f; // below the top-left HUD elements
+        constexpr float kRecvFeedTextScale = 0.65f;
+        constexpr float kRecvFeedRowHeight = 26.0f;
+
+        // AP classification colors (RGB): filler, useful, progression, trap
+        constexpr uint32_t kRecvFeedColors[4] = {0x00EEEE00, 0x6D8BE800, 0xAF99EF00, 0xFA807200};
+
+        constexpr uintptr_t kRecvFeedSenderRingAddr = 0x80004700;
+        constexpr uint32_t kRecvFeedSenderLen = 16;
+
+        struct RecvFeedEntry
+        {
+            int16_t item;
+            uint8_t cls;
+            int32_t age;
+            char sender[kRecvFeedSenderLen + 1];
+        };
+        RecvFeedEntry sRecvFeed[kRecvFeedSize];
+        int32_t sRecvFeedCount = 0;
+
+        constexpr int32_t kRecvFeedPendingSize = 32;
+        RecvFeedEntry sRecvPending[kRecvFeedPendingSize];
+        int32_t sRecvPendingCount = 0;
+    } // namespace
+
+    bool recvFeedHasRoom(int32_t announcements)
+    {
+        return sRecvPendingCount + announcements <= kRecvFeedPendingSize;
+    }
+
+    void queueReceivedItemPopup(int16_t item, uint8_t cls, uint8_t senderSlot)
+    {
+        if (sRecvPendingCount >= kRecvFeedPendingSize)
+            return; // unreachable: RecieveItems reserves room for the whole batch
+        RecvFeedEntry &entry = sRecvPending[sRecvPendingCount];
+        entry.item = item;
+        entry.cls = cls & 3;
+        entry.age = 0;
+
+        if (senderSlot == 15)
+        {
+            entry.sender[0] = '\0';
+            sRecvPendingCount++;
+            return;
+        }
+
+        // Copy the sender name now: the client reuses ring slots on later batches
+        const char *ringName =
+            reinterpret_cast<const char *>(kRecvFeedSenderRingAddr + (senderSlot & 0xF) * kRecvFeedSenderLen);
+        uint32_t n = 0;
+        for (; n < kRecvFeedSenderLen; n++)
+        {
+            const char c = ringName[n];
+            if (c == '\0')
+                break;
+            // The client sanitizes to printable ASCII; drop anything else defensively
+            entry.sender[n] = (c >= 0x20 && c < 0x7F) ? c : '?';
+        }
+        entry.sender[n] = '\0';
+        sRecvPendingCount++;
+    }
+
+    static void receivedItemFeedDisp(ttyd::dispdrv::CameraId cameraId, void *user)
+    {
+        (void)cameraId;
+        (void)user;
+
+        // Disable fog so the text renders with clean colors (numericWindow_Disp pattern)
+        gc::gx::GXColor fogColor(0x66, 0x06, 0x42, 0x80);
+        gc::gx::GXSetFog(0, 0.0f, 0.0f, 0.0f, 0.0f, &fogColor);
+
+        for (int32_t i = 0; i < sRecvFeedCount; i++)
+        {
+            const RecvFeedEntry &entry = sRecvFeed[i];
+
+            int32_t alpha = 255;
+            if (entry.age < kRecvFeedFadeInFrames)
+                alpha = (entry.age * 255) / kRecvFeedFadeInFrames;
+            else if (entry.age > kRecvFeedFadeInFrames + kRecvFeedHoldFrames)
+                alpha = ((kRecvFeedLifeFrames - entry.age) * 255) / kRecvFeedFadeOutFrames;
+            if (alpha < 0)
+                alpha = 0;
+            else if (alpha > 255)
+                alpha = 255;
+
+            const char *name = "???";
+            const uint32_t nameRgb = kRecvFeedColors[entry.cls];
+            if (entry.item >= 0 && entry.item < static_cast<int32_t>(sizeof(ttyd::item_data::itemDataTable) /
+                                                                     sizeof(ttyd::item_data::itemDataTable[0])))
+            {
+                const char *nameKey = ttyd::item_data::itemDataTable[entry.item].name;
+                if (nameKey)
+                {
+                    const char *searched = ttyd::msgdrv::msgSearch(nameKey);
+                    if (searched)
+                        name = searched;
+                }
+            }
+
+            const float y = kRecvFeedTopY - static_cast<float>(i) * kRecvFeedRowHeight;
+
+            // "Received <Item> from <player>" (item in its classification color)
+            const char *prefixText = "Received ";
+            const float prefixWidth =
+                static_cast<float>(ttyd::fontmgr::FontGetMessageWidth(prefixText)) * kRecvFeedTextScale;
+            const float nameWidth = static_cast<float>(ttyd::fontmgr::FontGetMessageWidth(name)) * kRecvFeedTextScale;
+
+            char senderText[kRecvFeedSenderLen + 8];
+            float senderWidth = 0.0f;
+            if (entry.sender[0] != '\0')
+            {
+                snprintf(senderText, sizeof(senderText), " from %s", entry.sender);
+                senderWidth = static_cast<float>(ttyd::fontmgr::FontGetMessageWidth(senderText)) *
+                              kRecvFeedTextScale;
+            }
+
+            uint32_t plateColor = (static_cast<uint32_t>(alpha) * 2) / 5; // translucent black plate
+            ttyd::windowdrv::windowDispGX_Waku_col(0, &plateColor, kRecvFeedX - 8.0f, y + 4.0f,
+                                                   prefixWidth + nameWidth + senderWidth + 16.0f, kRecvFeedRowHeight,
+                                                   8.0f);
+
+            const uint32_t textAlpha = static_cast<uint32_t>(alpha);
+            gSelf->DrawString(prefixText, kRecvFeedX, y, 0xC8C8C800 | textAlpha, kRecvFeedTextScale);
+            gSelf->DrawString(name, kRecvFeedX + prefixWidth, y, nameRgb | textAlpha, kRecvFeedTextScale);
+            if (senderWidth != 0.0f)
+                gSelf->DrawString(senderText, kRecvFeedX + prefixWidth + nameWidth, y, 0xC8C8C800 | textAlpha,
+                                  kRecvFeedTextScale);
+        }
+    }
+
+    void updateReceivedItemFeed()
+    {
+        if (sRecvFeedCount == 0 && sRecvPendingCount == 0)
+            return;
+
+        const int32_t ageStep = sRecvPendingCount > 0 ? 4 : 1;
+        for (int32_t i = 0; i < sRecvFeedCount; i++)
+            sRecvFeed[i].age += ageStep;
+
+        // Entries are pushed in order, so the front is always the oldest
+        while (sRecvFeedCount > 0 && sRecvFeed[0].age >= kRecvFeedLifeFrames)
+        {
+            for (int32_t i = 1; i < sRecvFeedCount; i++)
+                sRecvFeed[i - 1] = sRecvFeed[i];
+            sRecvFeedCount--;
+        }
+
+        // Pull queued announcements into freed rows
+        while (sRecvFeedCount < kRecvFeedSize && sRecvPendingCount > 0)
+        {
+            sRecvFeed[sRecvFeedCount++] = sRecvPending[0];
+            for (int32_t i = 1; i < sRecvPendingCount; i++)
+                sRecvPending[i - 1] = sRecvPending[i];
+            sRecvPendingCount--;
+        }
+
+        if (sRecvFeedCount != 0 && checkIfInGame())
+        {
+            ttyd::dispdrv::dispEntry(ttyd::dispdrv::CameraId::kDebug3d, 1, 150.0f, receivedItemFeedDisp, nullptr);
+        }
+    }
+
     // --- RTA timer + credits results display ---
     namespace
     {
@@ -1031,6 +1229,9 @@ namespace mod::owr
         // time spent on the title screen as a wall jump.
         bool sResetWallMonitor = false;
 
+        constexpr int32_t kPaperModeSaveGsw = 1800; // 0 = normal, 1 = boat, 2 = tube, 3 = paper, 4 = plane
+        bool sPaperModeRestorePending = false;
+
         // Set when an RTC read fails between polls. The memcard shares EXI channel 0, so
         // failures mean card traffic (saving the game) - the resulting frame stalls are not
         // savestates, and the first reading after contention gets an extra confirmation.
@@ -1042,11 +1243,19 @@ namespace mod::owr
         // screen; the wall monitor must not read that stall as a savestate/pause.
         bool sDiscReadSinceLastPoll = false;
 
+        uint32_t sGracePollsRemaining = 0;
+        constexpr uint32_t kGracePolls = 8;
+        constexpr int32_t kGraceMaxDriftSeconds = 10;
+
         void updateSaveFileActive()
         {
             const SeqIndex seq = seqGetSeq();
             if (seq == SeqIndex::kLogo || seq == SeqIndex::kTitle || seq == SeqIndex::kLoad)
+            {
                 sSaveFileActive = false;
+                if (seq == SeqIndex::kLoad)
+                    sPaperModeRestorePending = true; // arm: next marioEntry restores the saved mode
+            }
             else if (checkIfInGame() && !sSaveFileActive)
             {
                 sSaveFileActive = true;
@@ -1142,9 +1351,11 @@ namespace mod::owr
                 // savestate load, an emulator pause, or clock manipulation.
                 const int32_t rtcDelta = static_cast<int32_t>(rtc - sLastRtc);
                 const int32_t frameSeconds = static_cast<int32_t>((frames - sLastFrames) / 60);
-                if (rtcDelta < -1 ||
-                    (rtcDelta - frameSeconds > 1 && !sSeqChangedSinceLastPoll && !sExiBusySinceLastPoll &&
-                     !sDiscReadSinceLastPoll))
+                const int32_t drift = rtcDelta - frameSeconds;
+                const bool driftForgiven = drift <= kGraceMaxDriftSeconds &&
+                                           (sSeqChangedSinceLastPoll || sExiBusySinceLastPoll ||
+                                            sDiscReadSinceLastPoll || sGracePollsRemaining != 0);
+                if (rtcDelta < -1 || (drift > 1 && !driftForgiven))
                     *reinterpret_cast<uint8_t *>(kRunDirtyFlagAddr) |= kDirtyWallClockJump;
 
                 // Reconcile against the absolute session anchor (not per-window deltas, so
@@ -1203,6 +1414,10 @@ namespace mod::owr
             sLastRtc = rtc;
             sLastFrames = *counter;
             sNextPollFrames = *counter + 60;
+            if (sSeqChangedSinceLastPoll)
+                sGracePollsRemaining = kGracePolls;
+            else if (sGracePollsRemaining != 0)
+                sGracePollsRemaining--;
             sSeqChangedSinceLastPoll = false;
             sExiBusySinceLastPoll = false;
             sDiscReadSinceLastPoll = false;
@@ -1225,6 +1440,18 @@ namespace mod::owr
             *finish = elapsed != 0 ? elapsed : 1;
         }
     } // namespace
+
+    KEEP_FUNC int32_t psndBGMOn_f_d_Hook(uint32_t flags, const char *name, uint32_t a3, uint32_t a4, uint32_t a5)
+    {
+        if (gState && gState->apSettings && gState->apSettings->music == 1 && name)
+        {
+            const bool jingle = strncmp(name, "BGM_FF_", 7) == 0 || strcmp(name, "BGM_BATTLE_WIN1") == 0 ||
+                                strcmp(name, "BGM_BATTLE_WIN2") == 0 || strcmp(name, "BGM_BATTLE_LOSE1") == 0;
+            if (!jingle)
+                return -1;
+        }
+        return g_psndBGMOn_f_d_trampoline(flags, name, a3, a4, a5);
+    }
 
     // Every disc access - sync and async alike - funnels through DVDMgrOpen (fileAsync
     // and _fileAlloc both open through it), so this is the one place to learn that the
@@ -1272,6 +1499,64 @@ namespace mod::owr
         uint32_t *frames = reinterpret_cast<uint32_t *>(kRtaFrameCounterAddr);
         (*frames)++;
         monitorWallClock(*frames);
+    }
+
+    KEEP_FUNC void MarioEntryHook()
+    {
+        if (sPaperModeRestorePending)
+        {
+            sPaperModeRestorePending = false;
+
+            ttyd::mario::Player *mario = marioGetPtr();
+            if (mario->characterId == MarioCharacters::kMario)
+            {
+                using ttyd::mario_motion::MarioMotion;
+                switch (ttyd::swdrv::swByteGet(kPaperModeSaveGsw))
+                {
+                    case 1:
+                        mario->currentMotionId = MarioMotion::kShip;
+                        break;
+                    case 2:
+                        mario->currentMotionId = MarioMotion::kRoll;
+                        break;
+                    case 3:
+                        mario->currentMotionId = MarioMotion::kSlit;
+                        break;
+                    default:
+                        break;
+                }
+            }
+        }
+
+        g_marioEntry_trampoline();
+    }
+
+    void updatePaperModePersistence()
+    {
+        using ttyd::mario_motion::MarioMotion;
+
+        if (!checkIfInGame())
+            return;
+
+        // Interludes play as Peach/Bowser; the mirror doesn't apply
+        if (marioGetPtr()->characterId != MarioCharacters::kMario)
+            return;
+
+        const MarioMotion motion = marioGetPtr()->currentMotionId;
+
+        if (motion == MarioMotion::kShip)
+            ttyd::swdrv::swByteSet(kPaperModeSaveGsw, 1);
+        else if (motion == MarioMotion::kRoll)
+            ttyd::swdrv::swByteSet(kPaperModeSaveGsw, 2);
+        else if (motion == MarioMotion::kSlit)
+            ttyd::swdrv::swByteSet(kPaperModeSaveGsw, 3);
+        else if (motion == MarioMotion::kPlane)
+            ttyd::swdrv::swByteSet(kPaperModeSaveGsw, 4);
+        else if (motion == MarioMotion::kStay || motion == MarioMotion::kWalk || motion == MarioMotion::kDash ||
+                 motion == MarioMotion::kLand)
+        {
+            ttyd::swdrv::swByteSet(kPaperModeSaveGsw, 0);
+        }
     }
 
     // Always-on RTA timer, bottom-left corner while a file is active (the credits
@@ -1410,6 +1695,8 @@ namespace mod::owr
         if (new_module != nullptr && result)
         {
             gSelf->OnModuleLoaded(new_module);
+            mod::mirror::SyncCullingTable(new_module->id);
+            mod::tracker::trackerClearPanelTints();
         }
         return result;
     }
@@ -2066,9 +2353,14 @@ namespace mod::owr
                     if (!IsBossHpScaleExcluded(newKind->unit_type))
                     {
                         newKind->max_hp = origHp;
-                        newKind->level = origLevel;
                         if (newKind->unit_type == 0x93) // batten_satellite
+                        {
                             newKind->max_hp = 2; // Small nerf for early game beatability
+                        }
+                        else
+                        {
+                            newKind->level = origLevel;
+                        }
                         if (gState->apSettings->bossScalingNerfs &&
                             (newKind->unit_type == 0x5D || newKind->unit_type == 0x5E) && // boss_cortez / boss_honeduka
                             !(bossOrigKind->unit_type >= 0x5D && bossOrigKind->unit_type <= 0x62))
@@ -2531,8 +2823,16 @@ namespace mod::owr
         return g_msgSearch_trampoline(msgKey);
     }
 
+    inline bool removeItemFromKeyItems(int16_t itemId);
+    inline int32_t addItemToKeyItems(int16_t itemId);
+
     inline void pouchReAddReturnPipe()
     {
+        if (removeItemFromKeyItems(ItemId::TRIPLE_DIP))
+        {
+            addItemToKeyItems(ItemId::TRIPLE_DIP);
+        }
+
         // Remove the return pipe from the inventory, and then re-add it
         // Only re-add it if it was previously in the inventory, as it won't be when initially starting a new file
         if (pouchRemoveItem(ItemId::INVALID_ITEM_PAPER_0054))
@@ -2546,15 +2846,10 @@ namespace mod::owr
         constexpr uint32_t loopCount = sizeof(ttyd::mario_pouch::PouchData::key_items) / sizeof(int16_t);
         const int16_t *keyItemsPtr = &ttyd::mario_pouch::pouchGetPtr()->key_items[0];
 
+        // Full scan: stay correct even if something leaves a hole in the array
         for (uint32_t i = 0; i < loopCount; i++)
         {
-            const int32_t currentItem = keyItemsPtr[i];
-            if (currentItem == ItemId::INVALID_NONE)
-            {
-                // Hit an empty slot, so the item isn't present
-                return false;
-            }
-            else if (currentItem == itemId)
+            if (keyItemsPtr[i] == itemId)
             {
                 return true;
             }
@@ -2568,22 +2863,16 @@ namespace mod::owr
         constexpr uint32_t loopCount = sizeof(ttyd::mario_pouch::PouchData::key_items) / sizeof(int16_t);
         int16_t *keyItemsPtr = &ttyd::mario_pouch::pouchGetPtr()->key_items[0];
 
-        for (uint32_t i = 0; i < loopCount; i++)
+        // Key items inventory is full
+        if (keyItemsPtr[loopCount - 1] != ItemId::INVALID_NONE)
         {
-            if (keyItemsPtr[i] == ItemId::INVALID_NONE)
-            {
-                // Empty slot found, shift everything down one and insert at the front
-                memmove(&keyItemsPtr[1], &keyItemsPtr[0], i * sizeof(int16_t));
-                keyItemsPtr[0] = itemId;
-
-                // Re-add the return pipe to ensure it stays at the top
-                pouchReAddReturnPipe();
-                return 1;
-            }
+            return 0;
         }
 
-        // Key items inventory is full
-        return 0;
+        // Prepend, matching vanilla pouchGetItem's key-item insert
+        memmove(&keyItemsPtr[1], &keyItemsPtr[0], (loopCount - 1) * sizeof(int16_t));
+        keyItemsPtr[0] = itemId;
+        return 1;
     }
 
     inline bool removeItemFromKeyItems(int16_t itemId)
@@ -2591,15 +2880,10 @@ namespace mod::owr
         constexpr uint32_t loopCount = sizeof(ttyd::mario_pouch::PouchData::key_items) / sizeof(int16_t);
         int16_t *keyItemsPtr = &ttyd::mario_pouch::pouchGetPtr()->key_items[0];
 
+        // Full scan: stay correct even if something leaves a hole in the array
         for (uint32_t i = 0; i < loopCount; i++)
         {
-            const int32_t currentItem = keyItemsPtr[i];
-            if (currentItem == ItemId::INVALID_NONE)
-            {
-                // Hit an empty slot before finding the item, so it isn't there
-                return false;
-            }
-            else if (currentItem != itemId)
+            if (keyItemsPtr[i] != itemId)
             {
                 continue;
             }
@@ -2667,7 +2951,7 @@ namespace mod::owr
         }
     }
 
-    KEEP_FUNC uint32_t pouchGetItemHook(int32_t item)
+    static uint32_t pouchGetItemHookImpl(int32_t item)
     {
         const int32_t ingredientIdx = mod::ap_cooking::ingredientIndex(item);
         if (gState->apSettings->cooksanity && ingredientIdx >= 0 && item != mod::ap_cooking::gCookGiveItem &&
@@ -2791,14 +3075,18 @@ namespace mod::owr
                 return ret;
             }
             case ItemId::SQUARE_DIAMOND_BADGE_P: // relocated Briefcase (badge-range id)
+            case ItemId::TRIPLE_DIP:             // Save Block key item (badge-range id)
             {
-                // Vanilla routing files badge-range ids under Badges; the briefcase
-                // belongs with the key items.
                 if (containsKeyItem(item))
                 {
                     return 1;
                 }
-                return addItemToKeyItems(item) ? 2 : 0; // 0: key items inventory is full
+                if (!addItemToKeyItems(item))
+                {
+                    return 0; // key items inventory is full
+                }
+                pouchReAddReturnPipe();
+                return 2;
             }
             case ItemId::COCONUT:
             {
@@ -2970,6 +3258,45 @@ namespace mod::owr
         }
     }
 
+    KEEP_FUNC uint32_t pouchGetItemHook(int32_t item)
+    {
+        const uint32_t ret = pouchGetItemHookImpl(item);
+        if (ret != 0)
+            mod::tracker::recordItemObtained(item);
+        return ret;
+    }
+
+    KEEP_FUNC int32_t sandersBombHitPositionHook(ttyd::evtmgr::EvtEntry *evt, bool isFirstCall)
+    {
+        const int32_t ret = g_sandersBombHitPosition_trampoline(evt, isFirstCall);
+
+        struct BombPosOverride
+        {
+            int32_t unitKind;
+            float x;
+        };
+        static constexpr BombPosOverride kOverrides[] = {
+            {BattleUnitType::LEFT_TENTACLE, 90.0f}, // unit parked offstage at x=320
+        };
+
+        const int32_t targetId = ttyd::evtmgr_cmd::evtGetValue(evt, evt->evtArguments[1]);
+        const int32_t unitIdx = ttyd::battle::BattleTransID(evt, targetId);
+        const BattleWorkUnit *unit =
+            reinterpret_cast<BattleWorkUnit *>(ttyd::battle::BattleGetUnitPtr(ttyd::battle::_battleWorkPtr, unitIdx));
+        if (!unit)
+            return ret;
+
+        for (const BombPosOverride &fix : kOverrides)
+        {
+            if (unit->current_kind == fix.unitKind)
+            {
+                ttyd::evtmgr_cmd::evtSetFloat(evt, evt->evtArguments[3], fix.x);
+                break;
+            }
+        }
+        return ret;
+    }
+
     KEEP_FUNC int32_t pouchCheckItemHook(int32_t item)
     {
         switch (item)
@@ -3041,6 +3368,19 @@ namespace mod::owr
                 ttyd::mario_motion::marioChgMot(ttyd::mario_motion::MarioMotion::kStay);
         }
         return g_partySetForceMove_trampoline(ptr, x, z, speed);
+    }
+
+    KEEP_FUNC int32_t evtPartyJumpPosHook(ttyd::evtmgr::EvtEntry *evt, bool firstCall)
+    {
+        // Vanilla null-checks the party NPC only on the first call; a party
+        // member killed mid-jump crashes the unchecked continuation tick.
+        if (!firstCall)
+        {
+            const auto slot = static_cast<ttyd::party::PartySlotId>(evt->sleepTimeMs);
+            if (!ttyd::party::partyGetPtr(slot))
+                return 2; // NPC is gone; report the jump as complete
+        }
+        return g_evt_party_jump_pos_trampoline(evt, firstCall);
     }
 
     KEEP_FUNC int32_t evtMarioSetPoseHook(ttyd::evtmgr::EvtEntry *evt, bool firstCall)
@@ -3284,6 +3624,9 @@ namespace mod::owr
     }
 
     // clang-format off
+    // Vanilla save-block system event in the DOL (resolved via ttyd.us.lst)
+    extern "C" int32_t main_mobj_save_blk_sysevt[];
+
     EVT_BEGIN(custom_warp_evt)
         USER_FUNC(lect_set_systemlevel, 1)
         USER_FUNC(evt_mario_key_onoff, 0)
@@ -3317,6 +3660,11 @@ namespace mod::owr
         RETURN()
     EVT_END()
 
+    EVT_BEGIN(confirm_save_evt)
+        RUN_CHILD_EVT(main_mobj_save_blk_sysevt)
+        RETURN()
+    EVT_END()
+
     EVT_BEGIN(confirm_travel_evt)
         SET(LW(10), static_cast<int32_t>(WarpType::FAST_TRAVEL))
         RUN_CHILD_EVT(custom_warp_evt)
@@ -3330,45 +3678,342 @@ namespace mod::owr
     EVT_END()
     // clang-format on
 
+    extern "C" KEEP_FUNC void winItemBuildPartyList(uint32_t *list, int32_t currentId)
+    {
+        constexpr int32_t kEntrySize = 0x24;
+        constexpr int32_t kEntryCount = 7;
+        const PouchData *pouch = ttyd::mario_pouch::pouchGetPtr();
+
+        int32_t count = 0;
+        for (int32_t i = 0; i < kEntryCount; i++)
+        {
+            const uint8_t *entry = &winPartyDt[i * kEntrySize];
+            if (*reinterpret_cast<const int32_t *>(entry) == currentId)
+            {
+                list[count++] = reinterpret_cast<uint32_t>(entry);
+                break;
+            }
+        }
+        for (int32_t i = 0; i < kEntryCount; i++)
+        {
+            const uint8_t *entry = &winPartyDt[i * kEntrySize];
+            const int32_t id = *reinterpret_cast<const int32_t *>(entry);
+            if (id == currentId || id < 1 || id > 7)
+                continue;
+            if (!(pouch->party_data[id].flags & 1))
+                continue;
+            list[count++] = reinterpret_cast<uint32_t>(entry);
+        }
+
+        const uint32_t pad = count > 0 ? list[count - 1] : reinterpret_cast<uint32_t>(&winPartyDt[0]);
+        for (int32_t i = count; i < kEntryCount; i++)
+            list[i] = pad;
+    }
+
     // Hook item menu update function to handle interactions with added key items.
     KEEP_FUNC int32_t WinItemMainHook(ttyd::win_root::WinPauseMenu *menu)
     {
         if (menu->itemMenuState == 10)
         {
             if ((menu->buttonsPressed & gc::pad::PadInput::PAD_A) && (menu->itemSubmenuId == 1) &&
-                (menu->keyItemIds[menu->itemsCursorIdx[1]] == ItemId::INVALID_ITEM_PAPER_0054) &&
                 (marioGetPtr()->characterId == MarioCharacters::kMario))
             {
+                const int16_t hovered = menu->keyItemIds[menu->itemsCursorIdx[1]];
                 // Params taken from `evtEntryType` call in `mobjRunEvent` for running `mobj_save_blk_sysevt`, as using
                 // `evtEntry` causes message selection boxes to not show up when the system level is raised, and certain `types`
                 // cause the script to only run once the pause menu is fully closed
-                ttyd::evtmgr::evtEntryType(const_cast<int32_t *>(confirm_pipe_evt), 30, 0, 26);
-                return -2;
+                if (hovered == ItemId::INVALID_ITEM_PAPER_0054)
+                {
+                    ttyd::evtmgr::evtEntryType(const_cast<int32_t *>(confirm_pipe_evt), 30, 0, 26);
+                    return -2;
+                }
+                if (hovered == ItemId::TRIPLE_DIP) // Save Block key item
+                {
+                    ttyd::evtmgr::evtEntryType(const_cast<int32_t *>(confirm_save_evt), 30, 0, 26);
+                    return -2;
+                }
             }
         }
 
         return g_winItemMain_trampoline(menu);
     }
 
-    // Hook journal menu to fast travel from the map
+    // Tracker screen (opened with X on a hovered map node)
+    static bool sTrackerScreenOpen = false;
+    static int32_t sTrackerScreenScroll = 0;
+    static int32_t sTrackerScreenRows = 0;
+    static bool sTrackerHintShowWarp = false;
+    static bool sTrackerHintShowList = false;
+    static char sTrackerScreenTitle[64];
+
+    static constexpr int32_t kTrackerVisibleRows = 13;
+    static constexpr uint32_t kTrackerRowColors[3] = {
+        0x9A9A9A00, // LOC_CHECKED - gray
+        0x66EE6600, // LOC_AVAILABLE - green
+        0xFA807200, // LOC_OUT_OF_LOGIC - red
+    };
+
+    static void trackerHintDisp(ttyd::dispdrv::CameraId cameraId, void *user)
+    {
+        (void)cameraId;
+        (void)user;
+
+        gc::gx::GXColor fogColor(0x66, 0x06, 0x42, 0x80);
+        gc::gx::GXSetFog(0, 0.0f, 0.0f, 0.0f, 0.0f, &fogColor);
+
+        constexpr float kScale = 0.58f;
+        constexpr float kIconScale = 0.55f;
+        constexpr float kIconWidth = 26.0f; // footprint of a button icon in the row
+        constexpr float kSegmentGap = 16.0f;
+        constexpr float y = -196.0f;
+
+        const char *warpText = "Warp";
+        const char *listText = "Check List";
+        const float warpTextWidth = static_cast<float>(ttyd::fontmgr::FontGetMessageWidth(warpText)) * kScale;
+        const float listTextWidth = static_cast<float>(ttyd::fontmgr::FontGetMessageWidth(listText)) * kScale;
+
+        float width = 0.0f;
+        if (sTrackerHintShowWarp)
+            width += kIconWidth + warpTextWidth;
+        if (sTrackerHintShowList)
+            width += kIconWidth + listTextWidth;
+        if (sTrackerHintShowWarp && sTrackerHintShowList)
+            width += kSegmentGap;
+
+        float x = -width * 0.5f;
+        uint32_t plateColor = 130; // translucent black plate
+        ttyd::windowdrv::windowDispGX_Waku_col(0, &plateColor, x - 8.0f, y + 6.0f, width + 16.0f, 28.0f, 8.0f);
+
+        if (sTrackerHintShowWarp)
+        {
+            gc::vec3 iconPos = {x + kIconWidth * 0.5f - 4.0f, y - 19.0f, 0.0f};
+            ttyd::icondrv::iconDispGx(kIconScale, &iconPos, 0x18, IconType::A_BUTTON);
+            gSelf->DrawString(warpText, x + kIconWidth, y, 0xFFFFFFFF, kScale);
+            x += kIconWidth + warpTextWidth + kSegmentGap;
+        }
+        if (sTrackerHintShowList)
+        {
+            gc::vec3 iconPos = {x + kIconWidth * 0.5f - 4.0f, y - 19.0f, 0.0f};
+            ttyd::icondrv::iconDispGx(kIconScale, &iconPos, 0x18, IconType::X_BUTTON);
+            gSelf->DrawString(listText, x + kIconWidth, y, 0xFFFFFFFF, kScale);
+        }
+    }
+
+    static void trackerScreenDisp(ttyd::dispdrv::CameraId cameraId, void *user)
+    {
+        (void)cameraId;
+        (void)user;
+
+        gc::gx::GXColor fogColor(0x66, 0x06, 0x42, 0x80);
+        gc::gx::GXSetFog(0, 0.0f, 0.0f, 0.0f, 0.0f, &fogColor);
+
+        constexpr float kLeft = -272.0f;
+        constexpr float kTop = 176.0f;
+        constexpr float kWidth = 544.0f;
+        constexpr float kRowHeight = 21.0f;
+        constexpr float kRowScale = 0.58f;
+        constexpr float kMaxRowWidth = kWidth - 24.0f;
+
+        uint32_t plateColor = 215; // near-opaque black plate over the list area
+        ttyd::windowdrv::windowDispGX_Waku_col(0, &plateColor, kLeft - 8.0f, kTop + 8.0f, kWidth + 16.0f, 360.0f,
+                                               10.0f);
+
+        gSelf->DrawString(sTrackerScreenTitle, kLeft, kTop - 4.0f, 0xFFFFFFFF, 0.78f);
+
+        // Summary line: tally live statuses over the whole list
+        int32_t checkedCount = 0;
+        int32_t availableCount = 0;
+        for (int32_t i = 0; i < sTrackerScreenRows; i++)
+        {
+            const char *name;
+            uint8_t status;
+            if (!mod::tracker::trackerGetListRow(i, &name, &status))
+                break;
+            if (status == mod::tracker::LOC_CHECKED)
+                checkedCount++;
+            else if (status == mod::tracker::LOC_AVAILABLE)
+                availableCount++;
+        }
+        char summary[64];
+        snprintf(summary, sizeof(summary), "Checked: %d/%d    In logic: %d", static_cast<int>(checkedCount),
+                 static_cast<int>(sTrackerScreenRows), static_cast<int>(availableCount));
+        gSelf->DrawString(summary, kLeft, kTop - 28.0f, 0xFFFFFFFF, 0.55f);
+
+        float y = kTop - 54.0f;
+        for (int32_t i = 0; i < kTrackerVisibleRows; i++)
+        {
+            const char *name;
+            uint8_t status;
+            if (!mod::tracker::trackerGetListRow(sTrackerScreenScroll + i, &name, &status))
+                break;
+
+            float scale = kRowScale;
+            const float width = static_cast<float>(ttyd::fontmgr::FontGetMessageWidth(name));
+            if (width * scale > kMaxRowWidth)
+                scale = kMaxRowWidth / width;
+
+            gSelf->DrawString(name, kLeft, y, kTrackerRowColors[status] | 0xFF, scale);
+            y -= kRowHeight;
+        }
+
+        char footer[96];
+        const int32_t first = sTrackerScreenRows == 0 ? 0 : sTrackerScreenScroll + 1;
+        int32_t last = sTrackerScreenScroll + kTrackerVisibleRows;
+        if (last > sTrackerScreenRows)
+            last = sTrackerScreenRows;
+        const float footerY = kTop - 56.0f - kTrackerVisibleRows * kRowHeight;
+        constexpr float kFooterScale = 0.52f;
+        snprintf(footer, sizeof(footer), "%d-%d / %d   Up/Down: scroll   L/R: page", static_cast<int>(first),
+                 static_cast<int>(last), static_cast<int>(sTrackerScreenRows));
+        gSelf->DrawString(footer, kLeft, footerY, 0xC8C8C8FF, kFooterScale);
+
+        // "[B] Close" with the real button sprite
+        const float footerWidth = static_cast<float>(ttyd::fontmgr::FontGetMessageWidth(footer)) * kFooterScale;
+        gc::vec3 bIconPos = {kLeft + footerWidth + 24.0f, footerY - 19.0f, 0.0f};
+        ttyd::icondrv::iconDispGx(0.5f, &bIconPos, 0x18, IconType::B_BUTTON);
+        gSelf->DrawString("Close", kLeft + footerWidth + 38.0f, footerY, 0xC8C8C8FF, kFooterScale);
+
+        // Legend: the status words in their own colors, right-aligned on the title line
+        constexpr float kLegendScale = 0.5f;
+        constexpr float kLegendGap = 14.0f;
+        const char *legendWords[3] = {"Available", "Out of logic", "Checked"};
+        const uint8_t legendStatus[3] = {mod::tracker::LOC_AVAILABLE, mod::tracker::LOC_OUT_OF_LOGIC,
+                                         mod::tracker::LOC_CHECKED};
+        float legendWidths[3];
+        float legendTotal = 0.0f;
+        for (int32_t i = 0; i < 3; i++)
+        {
+            legendWidths[i] = static_cast<float>(ttyd::fontmgr::FontGetMessageWidth(legendWords[i])) * kLegendScale;
+            legendTotal += legendWidths[i];
+        }
+        legendTotal += kLegendGap * 2.0f;
+        float legendX = kLeft + kWidth - legendTotal;
+        for (int32_t i = 0; i < 3; i++)
+        {
+            gSelf->DrawString(legendWords[i], legendX, kTop - 6.0f, kTrackerRowColors[legendStatus[i]] | 0xFF,
+                              kLegendScale);
+            legendX += legendWidths[i] + kLegendGap;
+        }
+    }
+
+    // Hook journal menu: tracker hint/screen and fast travel from the map
     KEEP_FUNC int32_t WinLogMainHook(ttyd::win_root::WinPauseMenu *menu)
     {
         if (menu->logMenuState == 10) // map open
         {
-            if (!gState->apSettings->fastTravel)
-                return g_winLogMain_trampoline(menu);
+            mod::tracker::trackerTick();
+
+            if (sTrackerScreenOpen)
+            {
+                const uint32_t pressed = menu->buttonsPressed;
+                const uint32_t repeated = menu->buttonsRepeated;
+
+                if (pressed & (gc::pad::PadInput::PAD_B | gc::pad::PadInput::PAD_X))
+                {
+                    sTrackerScreenOpen = false;
+                    ttyd::pmario_sound::psndSFXOn(0x20013);
+                }
+                else
+                {
+                    (void)repeated;
+                    const int32_t maxScroll =
+                        sTrackerScreenRows > kTrackerVisibleRows ? sTrackerScreenRows - kTrackerVisibleRows : 0;
+
+                    static int32_t sTrackerScrollHoldFrames = 0;
+                    const uint32_t heldButtons = keyGetButton(gc::pad::PadId::CONTROLLER_ONE);
+                    const int8_t stickY =
+                        static_cast<int8_t>(keyGetStickY(gc::pad::PadId::CONTROLLER_ONE) & 0xFF);
+                    const bool holdUp = (heldButtons & gc::pad::PadInput::PAD_DPAD_UP) || stickY > 40;
+                    const bool holdDown = (heldButtons & gc::pad::PadInput::PAD_DPAD_DOWN) || stickY < -40;
+                    int32_t delta = 0;
+                    if (pressed & gc::pad::PadInput::PAD_DPAD_UP)
+                        delta--;
+                    if (pressed & gc::pad::PadInput::PAD_DPAD_DOWN)
+                        delta++;
+                    if (holdUp || holdDown)
+                    {
+                        sTrackerScrollHoldFrames++;
+                        if (sTrackerScrollHoldFrames == 1 && !(pressed & (gc::pad::PadInput::PAD_DPAD_UP |
+                                                                          gc::pad::PadInput::PAD_DPAD_DOWN)))
+                            delta += holdDown ? 1 : -1;
+                        if (sTrackerScrollHoldFrames > 12 && (sTrackerScrollHoldFrames & 1) == 0)
+                            delta += holdDown ? 1 : -1;
+                    }
+                    else
+                    {
+                        sTrackerScrollHoldFrames = 0;
+                    }
+                    if (pressed & gc::pad::PadInput::PAD_L)
+                        delta -= kTrackerVisibleRows;
+                    if (pressed & gc::pad::PadInput::PAD_R)
+                        delta += kTrackerVisibleRows;
+
+                    sTrackerScreenScroll += delta;
+                    if (sTrackerScreenScroll > maxScroll)
+                        sTrackerScreenScroll = maxScroll;
+                    if (sTrackerScreenScroll < 0)
+                        sTrackerScreenScroll = 0;
+
+                    ttyd::dispdrv::dispEntry(ttyd::dispdrv::CameraId::kDebug3d, 1, 150.0f, trackerScreenDisp,
+                                             nullptr);
+                }
+
+                return 0;
+            }
 
             if (menu->mapCursorIdx < 0) // no location selected
                 return g_winLogMain_trampoline(menu);
 
+            // The extended marker table (93 vanilla + tattle/cook virtual nodes)
+            const char *prefix =
+                reinterpret_cast<const ttyd::win_log::MapMarker *>(ap_map_markers)[menu->mapCursorIdx].map_prefix;
+            const bool virtualNode =
+                prefix && (strncmp(prefix, "tattle", 7) == 0 || strncmp(prefix, "cook", 7) == 0);
+
+            const bool fastTravel = gState->apSettings->fastTravel != 0 && !virtualNode &&
+                                    ttyd::swdrv::swGet(0x189C + win_log_mapGX_arr[menu->mapCursorIdx]);
+            const bool trackerReady = mod::tracker::trackerReady();
+            if (trackerReady || fastTravel)
+            {
+                sTrackerHintShowWarp = fastTravel;
+                sTrackerHintShowList = trackerReady;
+                ttyd::dispdrv::dispEntry(ttyd::dispdrv::CameraId::kDebug3d, 1, 150.0f, trackerHintDisp, nullptr);
+            }
+
+            if ((menu->buttonsPressed & gc::pad::PadInput::PAD_X) && trackerReady)
+            {
+                sTrackerScreenRows = mod::tracker::trackerBuildNodeList(prefix);
+                sTrackerScreenScroll = 0;
+                // The hovered node's display name, as shown by the map page itself
+                const char *title = msgSearch(ttyd::win_log::main_win_log_name);
+                snprintf(sTrackerScreenTitle, sizeof(sTrackerScreenTitle), "%s", title ? title : "Checks");
+                sTrackerScreenOpen = true;
+                ttyd::pmario_sound::psndSFXOn(0x20012);
+                return 0; // normal "stay" return (-1 = tab bar takes over, -2 = close menu)
+            }
+
+            if (!fastTravel)
+                return g_winLogMain_trampoline(menu);
+
             if ((menu->buttonsPressed & gc::pad::PadInput::PAD_A) && (marioGetPtr()->characterId == MarioCharacters::kMario))
             {
+                if (!ttyd::swdrv::swGet(0x189C + win_log_mapGX_arr[menu->mapCursorIdx]))
+                {
+                    ttyd::pmario_sound::psndSFXOn(0x20013);
+                    return g_winLogMain_trampoline(menu);
+                }
+
                 // Params taken from `evtEntryType` call in `mobjRunEvent` for running `mobj_save_blk_sysevt`, as using
                 // `evtEntry` causes message selection boxes to not show up when the system level is raised, and certain `types`
                 // cause the script to only run once the pause menu is fully closed
                 ttyd::evtmgr::evtEntryType(const_cast<int32_t *>(confirm_travel_evt), 30, 0, 26);
                 return -2;
             }
+        }
+        else if (sTrackerScreenOpen)
+        {
+            // The map page closed some other way; don't leave the overlay armed
+            sTrackerScreenOpen = false;
         }
 
         return g_winLogMain_trampoline(menu);
@@ -3404,6 +4049,16 @@ namespace mod::owr
     void OWR::Update()
     {
         updateRtaTimer();
+        updatePaperModePersistence();
+
+        if (checkIfInGameNotBattle() && ttyd::swdrv::swByteGet(1700) != 0 &&
+            marioGetPtr()->characterId == MarioCharacters::kMario)
+        {
+            if (!containsKeyItem(ItemId::INVALID_ITEM_PAPER_0054))
+                ttyd::mario_pouch::pouchGetItem(ItemId::INVALID_ITEM_PAPER_0054);
+            if (!containsKeyItem(ItemId::TRIPLE_DIP))
+                ttyd::mario_pouch::pouchGetItem(ItemId::TRIPLE_DIP);
+        }
 
         APSettings *apSettingsPtr = gState->apSettings;
         apSettingsPtr->inGame = static_cast<uint8_t>(checkIfInGame());
@@ -3426,8 +4081,6 @@ namespace mod::owr
             ttyd::evtmgr::evtEntryType(const_cast<int32_t *>(mod::owr::deathlink_evt), 30, 0, 26);
         }
 
-        if (apSettingsPtr->music == 1)
-            for (int i = 0; i <= 1; i++) ttyd::pmario_sound::psndBGMOff_f_d(512 + i, 0, 1);
 
         // Deferred goal teleport (goal completed during battle/cutscene): 6120 must be set
         // here too, or the check stays true inside end_00 and re-teleports every frame.
@@ -3446,6 +4099,7 @@ namespace mod::owr
         RecieveItems();
         DrainReceivedFlags();
         updateIngredientToast();
+        updateReceivedItemFeed();
 
         // RTA timer in the corner while playing; final time + seed reveal over the credits
         if (sSaveFileActive && apSettingsPtr->rtaTimer != 0)

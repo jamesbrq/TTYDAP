@@ -219,7 +219,7 @@ namespace ttyd::mario
         // marioItemGetOk
         // marioItemGetChk
         // marioItemGetDisable
-        // marioEntry
+        void marioEntry();
         // marioSetSpec
         // marioSetFamicomMode
         void marioSetCharMode(uint32_t mode);

@@ -10,6 +10,8 @@
 #include "ttyd/evt_hit.h"
 #include "ttyd/evt_item.h"
 #include "ttyd/evt_map.h"
+#include "ttyd/evtmgr_cmd.h"
+#include "ttyd/swdrv.h"
 #include "ttyd/evt_mario.h"
 #include "ttyd/evt_msg.h"
 #include "ttyd/evt_npc.h"
@@ -643,7 +645,29 @@ EVT_BEGIN(muj_01_init_evt_hook)
 	GOTO(&muj_01_init_evt[163])
 EVT_PATCH_END()
 
+EVT_DECLARE_USER_FUNC(mujWhackaPrepare, 1)
+EVT_DEFINE_USER_FUNC(mujWhackaPrepare)
+{
+	(void)isFirstCall;
+
+	int32_t count = 0;
+	for (int32_t flag = 6082; flag <= 6089; flag++)
+	{
+		if (ttyd::swdrv::swGet(flag))
+			count++;
+	}
+	ttyd::swdrv::swByteSet(721, count);
+
+	// Word indices of the eight ROM-patched item ids inside muj_koburon_dead
+	static constexpr int32_t kItemWordIdx[8] = {6, 11, 16, 21, 27, 32, 37, 43};
+	const int32_t item = count < 8 ? muj_koburon_dead[kItemWordIdx[count]]
+	                               : ttyd::common::ItemId::WHACKA_BUMP;
+	ttyd::evtmgr_cmd::evtSetValue(evt, evt->evtArguments[0], item);
+	return 2;
+}
+
 EVT_BEGIN(koburon_dead_evt)
+	USER_FUNC(mujWhackaPrepare, LW(3))
 	USER_FUNC(evt_npc::evt_npc_get_position, PTR("me"), LW(0), LW(1), LW(2))
 	USER_FUNC(evt_snd::evt_snd_sfxon_3d, PTR("SFX_BTL_DAMAGED_PLIABLE1"), LW(0), LW(1), LW(2), 0)
 	USER_FUNC(evt_npc::evt_npc_set_damage_anim, PTR("me"))
@@ -668,7 +692,8 @@ EVT_BEGIN(koburon_dead_evt)
 		CASE_EQUAL(7)
 			USER_FUNC(evt_item::evt_item_entry, PTR("item_99"), LW(3), LW(0), LW(1), LW(2), 14, GSWF(6089), 0)
 		CASE_ETC()
-			USER_FUNC(evt_item::evt_item_entry, PTR("item_99"), 0, LW(0), LW(1), LW(2), 14, -1, 0)
+			// All 8 checks collected: plain Whacka Bump (LW(3), set by mujWhackaPrepare)
+			USER_FUNC(evt_item::evt_item_entry, PTR("item_99"), LW(3), LW(0), LW(1), LW(2), 14, -1, 0)
 	END_SWITCH()
 	WAIT_MSEC(400)
 	IF_EQUAL(GSW(721), 7)
@@ -697,7 +722,6 @@ EVT_BEGIN(koburon_dead_evt)
 	LBL(99)
 	USER_FUNC(evt_npc::evt_npc_set_anim, PTR("me"), PTR("S_1"))
 	WAIT_MSEC(100)
-	ADD(GSW(721), 1)
 	SET(LSWF(2), 1)
 	USER_FUNC(evt_npc::evt_npc_reaction_flag_onoff, 0, PTR("me"), 15)
 	USER_FUNC(evt_npc::evt_npc_set_anim, PTR("me"), PTR("A_2"))
@@ -835,47 +859,8 @@ namespace mod
 {
     void main()
     {
-        // This sequence has to be written like this due to the LW(3) values overwriting the ones written directly into the ROM
-        // via AP
-        muj_koburon_dead[0] = EVT_HELPER_CMD(1, 34);
-        muj_koburon_dead[1] = EVT_HELPER_OP(GSW(721));
-        muj_koburon_dead[2] = EVT_HELPER_CMD(1, 36);
-        muj_koburon_dead[3] = EVT_HELPER_OP(0);
-        muj_koburon_dead[4] = EVT_HELPER_CMD(2, 50);
-        muj_koburon_dead[5] = EVT_HELPER_OP(LW(3));
-        muj_koburon_dead[7] = EVT_HELPER_CMD(1, 36);
-        muj_koburon_dead[8] = EVT_HELPER_OP(1);
-        muj_koburon_dead[9] = EVT_HELPER_CMD(2, 50);
-        muj_koburon_dead[10] = EVT_HELPER_OP(LW(3));
-        muj_koburon_dead[12] = EVT_HELPER_CMD(1, 36);
-        muj_koburon_dead[13] = EVT_HELPER_OP(2);
-        muj_koburon_dead[14] = EVT_HELPER_CMD(2, 50);
-        muj_koburon_dead[15] = EVT_HELPER_OP(LW(3));
-        muj_koburon_dead[17] = EVT_HELPER_CMD(1, 36);
-        muj_koburon_dead[18] = EVT_HELPER_OP(3);
-        muj_koburon_dead[19] = EVT_HELPER_CMD(2, 50);
-        muj_koburon_dead[20] = EVT_HELPER_OP(LW(3));
-        muj_koburon_dead[22] = EVT_HELPER_CMD(1, 36);
-        muj_koburon_dead[23] = EVT_HELPER_OP(4);
-        muj_koburon_dead[24] = 0;
-        muj_koburon_dead[25] = EVT_HELPER_CMD(2, 50);
-        muj_koburon_dead[26] = EVT_HELPER_OP(LW(3));
-        muj_koburon_dead[28] = EVT_HELPER_CMD(1, 36);
-        muj_koburon_dead[29] = EVT_HELPER_OP(5);
-        muj_koburon_dead[30] = EVT_HELPER_CMD(2, 50);
-        muj_koburon_dead[31] = EVT_HELPER_OP(LW(3));
-        muj_koburon_dead[33] = EVT_HELPER_CMD(1, 36);
-        muj_koburon_dead[34] = EVT_HELPER_OP(6);
-        muj_koburon_dead[35] = EVT_HELPER_CMD(2, 50);
-        muj_koburon_dead[36] = EVT_HELPER_OP(LW(3));
-        muj_koburon_dead[38] = EVT_HELPER_CMD(1, 36);
-        muj_koburon_dead[39] = EVT_HELPER_OP(7);
-        muj_koburon_dead[40] = 0;
-        muj_koburon_dead[41] = EVT_HELPER_CMD(2, 50);
-        muj_koburon_dead[42] = EVT_HELPER_OP(LW(3));
-        muj_koburon_dead[44] = EVT_HELPER_CMD(0, 49);
-
-        patch::writePatch(&muj_koburon_dead[45], koburon_dead_hook, sizeof(koburon_dead_hook));
+        static_assert(sizeof(koburon_dead_hook) <= 6 * sizeof(int32_t));
+        patch::writePatch(&muj_koburon_dead[0], koburon_dead_hook, sizeof(koburon_dead_hook));
 
         muj_sanders_nakama[150] = EVT_HELPER_CMD(2, 50);
         muj_sanders_nakama[151] = EVT_HELPER_OP(LW(3));

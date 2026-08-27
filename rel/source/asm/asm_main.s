@@ -1,5 +1,19 @@
 .global win_log_mapGX_arr
 .hidden win_log_mapGX_arr
+.global win_map_marker_tex
+.hidden win_map_marker_tex
+.global bMapNodeTexSelected
+.global bMapNodeTexSelectedReturn
+.global bMapNodeTex
+.global bMapNodeTexReturn
+.global bWinItemPartyList
+.global bWinItemPartyListReturn
+.global ap_map_markers
+.hidden ap_map_markers
+.global ap_marker_prefix_tattle
+.hidden ap_marker_prefix_tattle
+.global ap_marker_prefix_cook
+.hidden ap_marker_prefix_cook
 
 .global bMapGXArrInject
 .global bMapGXArrInjectReturn
@@ -15,6 +29,14 @@
 .global bWinLogArrFlagCheckReturn
 .global bChapterClearCheck
 .global bJohoyaSeqAddition
+.global bTouGamenScreenGuard
+.global bTouGamenScreenGuardReturn
+.global bAnimPoseTestXLUGuard
+.global bAnimPoseTestXLUGuardReturn
+.global bEvtItemGetItemGuard
+.global bEvtItemGetItemGuardReturn
+.global bPuniParentHeal
+.global bPuniParentHealReturn
 .global bStarstoneOwnedCompare
 .global bPrintPartyErrorFix
 .global bPrintPartyErrorFixReturn
@@ -87,7 +109,8 @@
 .global bPuniMainNullFixReturn
 
 bMapGXArrInject:
-	addi %r30, %r3, 0x7918 #Original Instruction
+	lis %r3, ap_map_markers@ha
+	addi %r30, %r3, ap_map_markers@l
 	lis %r3, win_log_mapGX_arr@ha
 	addi %r28, %r3, win_log_mapGX_arr@l
 bMapGXArrInjectReturn:
@@ -164,6 +187,40 @@ JohoyaSeqLoop:
 	mtlr %r28
 	li %r28, 0x0
 	blr
+
+bPuniParentHeal:
+	lwz %r3, 0x1D0(%r31)
+	cmpwi %r3, 0x0
+	bne bPuniParentHealReturn
+	mr %r3, %r31
+	stw %r3, 0x1D0(%r31)
+bPuniParentHealReturn:
+	b 0
+
+bEvtItemGetItemGuard:
+	cmpwi %r3, 0x0
+	beq bEvtItemGetItemGuardReturn
+	bl itemForceGet
+bEvtItemGetItemGuardReturn:
+	b 0
+
+bAnimPoseTestXLUGuard:
+	cmpwi %r3, 0x0
+	blt AnimPoseTestXLUFail
+	mulli %r0, %r3, 0x170
+bAnimPoseTestXLUGuardReturn:
+	b 0
+AnimPoseTestXLUFail:
+	li %r3, 0x0
+	blr
+
+bTouGamenScreenGuard:
+	cmpwi %r4, 0x0
+	li %r0, 0x0
+	beq bTouGamenScreenGuardReturn
+	lwz %r0, 0x4(%r4)
+bTouGamenScreenGuardReturn:
+	b 0
 
 bStarstoneOwnedCompare:
 	mflr %r27
@@ -646,6 +703,39 @@ bPuniMainNullFix:
 bPuniMainNullFixReturn:
 	b 0
 
+bMapNodeTexSelected:
+	#r29 = marker index, r26 is dead until its reload at mapGX+0x27C
+	lis %r3, win_map_marker_tex@ha
+	addi %r3, %r3, win_map_marker_tex@l
+	rlwinm %r26, %r29, 1, 0, 30
+	lhzx %r3, %r3, %r26
+bMapNodeTexSelectedReturn:
+	b 0
+
+bMapNodeTex:
+	#r29 = marker index, r0 is dead (its isLocation compare was consumed)
+	lis %r3, win_map_marker_tex@ha
+	addi %r3, %r3, win_map_marker_tex@l
+	rlwinm %r0, %r29, 1, 0, 30
+	lhzx %r3, %r3, %r0
+bMapNodeTexReturn:
+	b 0
+
+bWinItemPartyList:
+	stwu %r1, -0x10(%r1)
+	mflr %r0
+	stw %r0, 0x14(%r1)
+	mr %r4, %r3
+	addi %r3, %r1, 0x3A4
+	bl winItemBuildPartyList
+	lwz %r0, 0x14(%r1)
+	mtlr %r0
+	addi %r1, %r1, 0x10
+bWinItemPartyListReturn:
+	b 0
+
+#(select-window L/R paging prototype removed - see the TODO in init OWR.cpp)
+
 win_log_mapGX_arr:
 	.byte 0x0
 	.byte 0x1
@@ -740,6 +830,8 @@ win_log_mapGX_arr:
 	.byte 0x14
 	.byte 0x16 # Riddle Tower
 	.byte 0x14
+	.byte 0x0 # virtual node: tattle (never fast-traveled; index kept in step)
+	.byte 0x0 # virtual node: cook
 
 monosiriSWArr:
 	.4byte 0x000017A8
@@ -783,16 +875,16 @@ monosiriSWArr:
 	.4byte 0x0000000B
 	.4byte 0x000006A7
 	.4byte 0x00000025
-	.4byte 0x00000003
+	.4byte 0x00000005
 	.4byte 0x000006A7
 	.4byte 0x00000026
-	.4byte 0x00000003
+	.4byte 0x00000005
 	.4byte 0x000006A7
 	.4byte 0x0000002C
-	.4byte 0x00000003
+	.4byte 0x00000005
 	.4byte 0x000006A7
 	.4byte 0x0000002D
-	.4byte 0x00000003
+	.4byte 0x00000005
 	.4byte 0x000006A7
 	.4byte 0x00000040
 	.4byte 0x0000000E
@@ -878,3 +970,21 @@ monosiriSWArr:
 	.4byte 0x000006A7
 	.4byte 0x00000005
 	.4byte 0x00000014
+.balign 2
+win_map_marker_tex:
+	.rept 95
+	.hword 0x00BA
+	.endr
+
+.balign 4
+ap_map_markers:
+	.rept 95
+	.4byte 0x00000000
+	.4byte 0x00000000
+	.4byte 0x00000000
+	.endr
+
+ap_marker_prefix_tattle:
+	.asciz "tattle"
+ap_marker_prefix_cook:
+	.asciz "cook"

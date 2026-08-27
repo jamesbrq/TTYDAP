@@ -66,6 +66,7 @@ extern int32_t tou_evt_uron[];
 extern int32_t tou_evt_tamago_sleep[];
 extern int32_t tou_evt_tamago_move[];
 extern int32_t tou_evt_tamago[];
+extern int32_t tou_evt_tamago_hello2[];
 extern int32_t tou_talk_tamago[];
 extern int32_t tou_evt_gondora[];
 extern int32_t tou_evt_gondora2[];
@@ -206,6 +207,7 @@ extern int32_t tou_rankingInit[];
 extern int32_t tou_chk[];
 
 const char jolene[] = "\x83\x4C\x83\x6D\x83\x56\x83\x52\x83\x8F";
+const char tamago[] = "\x82\xBD\x82\xDC\x82\xB2"; // "tamago" (the Yoshi egg NPC)
 const char grubba[] = "\x83\x4B\x83\x93\x83\x58";
 
 EVT_DECLARE_USER_FUNC(setRanking, 1)
@@ -343,6 +345,15 @@ EVT_END()
 EVT_BEGIN(talk_sakaba_hook)
     RUN_CHILD_EVT(talk_sakaba_evt)
     RETURN()
+EVT_END()
+
+EVT_BEGIN(tamago_hello2_guard_evt)
+	USER_FUNC(evt_npc::evt_npc_check, PTR(&tamago), LW(10))
+	IF_EQUAL(LW(10), 0)
+		USER_FUNC(evt_npc::evt_npc_entry, PTR(&tamago), PTR("c_babyyoshi"))
+	END_IF()
+	RUN_CHILD_EVT(&tou_evt_tamago_hello2)
+	RETURN()
 EVT_END()
 
 EVT_BEGIN(jolene_egg_evt)
@@ -801,6 +812,22 @@ namespace mod
 {
     void main()
     {
+        if (ttyd::swdrv::swByteGet(1703) >= 28 && !ttyd::swdrv::swGet(2496))
+        {
+            ttyd::swdrv::swSet(2496);
+            for (int i = 0; i < 20; i++)
+                ttyd::swdrv::swClear(2465 + i); // per-fighter beaten flags (0x9A1+)
+            ttyd::swdrv::swClear(2383);
+            ttyd::swdrv::swClear(2392);
+            ttyd::swdrv::swClear(2399);
+            ttyd::swdrv::swClear(2400);
+            ttyd::swdrv::swClear(2403);
+            ttyd::swdrv::swClear(2529); // fight-record valid flag (0x9E1)
+            ttyd::swdrv::swClear(2532);
+        }
+
+        reinterpret_cast<uint32_t *>(&ttyd::tou::tou_rankingReset)[43] = 0x60000000;
+
         tou_evt_open_tou[1] = GSW(1703);
         tou_evt_open_tou[2] = 6;
 
@@ -846,6 +873,7 @@ namespace mod
         tou_evt_tou_match_after_default[1381] = 11;
         tou_evt_tou_match_after_default[1394] = GSW(1703);
         tou_evt_tou_match_after_default[1395] = 11;
+        tou_evt_tou_match_after_default[1406] = EVT_HELPER_OP(&tamago_hello2_guard_evt);
         tou_evt_tou_match_after_default[1524] = 99; // UNUSED
         tou_evt_tou_match_after_default[1535] = 99; // UNUSED
         tou_evt_tou_match_after_default[1574] = 99; // UNUSED

@@ -73,6 +73,9 @@ namespace mod::owr
         uint8_t epilogueSkip;                      // 0x67
         uint32_t patchTimeGC;                      // 0x68 seed generation time, seconds since 2000-01-01
         uint8_t rtaTimer;                          // 0x6C enables the RTA timer + credits results display
+        uint8_t tracker;                           // 0x6D in-game tracker (map colors, node lists, all nodes visible)
+        uint8_t mirrorMode;                        // 0x6E view-space mirror mode (horizontal screen flip)
+        uint8_t panelHints;                        // 0x6F tracker-colored kururing floor panels
     };
 
     static_assert(sizeof(APSettings) == 0x70);

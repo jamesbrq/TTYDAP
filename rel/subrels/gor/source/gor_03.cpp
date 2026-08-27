@@ -2,6 +2,7 @@
 #include "evt_cmd.h"
 #include "patch.h"
 #include "AP/rel_patch_definitions.h"
+#include "ttyd/evt_item.h"
 #include "ttyd/evt_map.h"
 #include "ttyd/evt_msg.h"
 
@@ -201,6 +202,25 @@ EVT_END()
 EVT_BEGIN(gor_03_init_evt_hook)
 	RUN_CHILD_EVT(gor_03_init_evt_evt)
 	GOTO(&gor_03_init_evt[292])
+EVT_PATCH_END()
+
+EVT_BEGIN_KEEP(kuzi_kinoko_item_evt)
+	IF_EQUAL(GSWF(6100), 0)
+		USER_FUNC(evt_item::evt_item_entry, PTR("kinoko"), 0x94, 0, -1000, 0, 17, -1, 0)
+		USER_FUNC(evt_item::evt_item_get_item, PTR("kinoko"))
+		USER_FUNC(evt_item::evt_item_get_item_end_wait, PTR("kinoko"))
+		SET(GSWF(6100), 1)
+	ELSE()
+		USER_FUNC(evt_item::evt_item_entry, PTR("kinoko"), 0x94, 0, -1000, 0, 17, -1, 0)
+		USER_FUNC(evt_item::evt_item_get_item, PTR("kinoko"))
+		USER_FUNC(evt_item::evt_item_get_item_end_wait, PTR("kinoko"))
+	END_IF()
+	RETURN()
+EVT_END()
+
+EVT_BEGIN(kuzi_kinoko_hook)
+	RUN_CHILD_EVT(kuzi_kinoko_item_evt)
+	GOTO(&gor_kuzi_keiziban_normal[364])
 EVT_PATCH_END()
 // clang-format on
 
@@ -403,7 +423,11 @@ void ApplyGor03Patches()
     gor_yuureturn_rtn[80] = GSW(1708);
     gor_yuureturn_rtn[81] = 19;
 
-    gor_kuzi_keiziban_normal[356] = GSWF(6100);
+    kuzi_kinoko_item_evt[6] = gor_kuzi_keiziban_normal[351];
+    patch::writePatch(&gor_kuzi_keiziban_normal[348], kuzi_kinoko_hook, sizeof(kuzi_kinoko_hook));
+    gor_kuzi_keiziban_normal[353] = 0;
+    gor_kuzi_keiziban_normal[355] = 0;
+    gor_kuzi_keiziban_normal[356] = 0;
 
     gor_peach_mail_03[238] = GSW(1703);
     gor_peach_mail_03[239] = 29;

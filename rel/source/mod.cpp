@@ -1,5 +1,6 @@
 #include "errorHandling.h"
 #include "mod.h"
+#include "tracker.h"
 #include "GhostPeers.h"
 #include "patch.h"
 #include "relmgr.h"
@@ -41,6 +42,8 @@ namespace mod
         checkHeaps();
 
         gMod->owr_mod_.Update();
+
+        tracker::trackerPanelOverlayTick();
 
         if (multiplayerEnabled())
             ghosts::UpdateAll();

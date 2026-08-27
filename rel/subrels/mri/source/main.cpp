@@ -150,6 +150,8 @@ extern int32_t mri_first_time_w_bero_14[];
 extern int32_t mri_dai3_kanbu[];
 extern int32_t mri_time_bomb[];
 extern int32_t mri_starstone_rotate_func[];
+extern int32_t mri_puniModeParentpre_parent_load[];
+extern int32_t mri_puniModeParent_parent_load[];
 extern int32_t mri_yuka_check_14[];
 extern int32_t mri_14_init_evt[];
 extern int32_t mri_dai3_battle[];
@@ -1206,10 +1208,17 @@ namespace mod
             reinterpret_cast<void *>(bStoneCh2RotationPtrReturn));
         patch::writeIntWithCache(&mri_starstone_rotate_func[27], 0x60000000); // NOP
         
-        patch::writeBranchPair(&mri_unk_mri_000130ec[96], 
-            reinterpret_cast<void *>(bPuniMainNullFix), 
+        patch::writeBranchPair(&mri_unk_mri_000130ec[96],
+            reinterpret_cast<void *>(bPuniMainNullFix),
             reinterpret_cast<void *>(bPuniMainNullFixReturn));
         patch::writeIntWithCache(&mri_unk_mri_000130ec[97], 0x41820008); // beq $+8
+
+        patch::writeBranchPair(&mri_puniModeParentpre_parent_load[0],
+            reinterpret_cast<void *>(bPuniParentHeal),
+            reinterpret_cast<void *>(bPuniParentHealReturn));
+        patch::writeBranchPair(&mri_puniModeParent_parent_load[0],
+            reinterpret_cast<void *>(bPuniParentHeal),
+            reinterpret_cast<void *>(bPuniParentHealReturn));
     }
 
     void exit() {}

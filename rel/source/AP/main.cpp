@@ -18,6 +18,7 @@
 #include "ttyd/evt_mario.h"
 #include "ttyd/evt_memcard.h"
 #include "ttyd/evt_msg.h"
+#include "ttyd/pmario_sound.h"
 #include "ttyd/evt_party.h"
 #include "ttyd/evt_shop.h"
 #include "ttyd/evt_snd.h"
@@ -70,6 +71,8 @@ namespace mod::owr
     KEEP_VAR const char *tenCoinsDescription = "10_coins_desc";
     KEEP_VAR const char *returnPipeName = "return_pipe";
     KEEP_VAR const char *returnPipeDescription = "return_pipe_desc";
+    KEEP_VAR const char *saveBlockName = "save_block";
+    KEEP_VAR const char *saveBlockDescription = "save_block_desc";
     KEEP_VAR const char *planeModeName = "plane_mode";
     KEEP_VAR const char *planeModeDescription = "plane_mode_desc";
     KEEP_VAR const char *paperModeName = "paper_mode";
@@ -134,6 +137,8 @@ EVT_END()
 EVT_BEGIN_KEEP(main_evt_sub_starstone_evt)
     USER_FUNC(handleIntermissionSkip, LW(1), LW(2), LW(3), LF(8))
     IF_EQUAL(LW(1), 1)
+        USER_FUNC(evt_mario::evt_mario_init_camid)
+        USER_FUNC(evt_party::evt_party_init_camid, 0)
         USER_FUNC(evt_mario::evt_mario_key_onoff, 1)
         USER_FUNC(evt_bero::evt_bero_mapchange, LW(2), LW(3))
         RETURN()
@@ -793,6 +798,21 @@ EVT_DEFINE_USER_FUNC_KEEP(starstoneParamClean)
 {
     (void)isFirstCall;
     (void)evt;
+
+    void *eff = *(void **)((char *)gState->starItemPtr + 0x1C);
+    if (eff)
+    {
+        char *effWork = *(char **)((char *)eff + 0xC);
+        if (effWork)
+        {
+            uint16_t *effFlags = (uint16_t *)(effWork + 0x4);
+            if (*effFlags & 0x8)
+            {
+                ttyd::pmario_sound::psndSFXOff(*(int32_t *)(effWork + 0x60));
+                *effFlags &= (uint16_t)~0x8;
+            }
+        }
+    }
 
     // Set GSWF flag
     int32_t itemFlag = *(int32_t *)((char *)gState->starItemPtr + 0x8);

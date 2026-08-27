@@ -22,9 +22,32 @@ extern "C"
     void bWinLogArrIncrementReturn();
     void bWinLogArrFlagCheck();
     void bWinLogArrFlagCheckReturn();
+    void bMapNodeTexSelected();
+    void bMapNodeTexSelectedReturn();
+    void bMapNodeTex();
+    void bMapNodeTexReturn();
+    void bWinItemPartyList();
+    void bWinItemPartyListReturn();
+    extern uint8_t winPartyDt[];
+    extern uint16_t win_map_marker_tex[95];
+    // Per-marker area index; GSWF(0x189C + entry) is set on first visit
+    extern uint8_t win_log_mapGX_arr[95];
+    extern uint8_t ap_map_markers[];
+    extern const char ap_marker_prefix_tattle[];
+    extern const char ap_marker_prefix_cook[];
     void bChapterClearCheck();
     void bChapterClearCheckReturn();
     void bJohoyaSeqAddition();
+    void bTouGamenScreenGuard();
+    void bTouGamenScreenGuardReturn();
+    void bAnimPoseTestXLUGuard();
+    void bAnimPoseTestXLUGuardReturn();
+    void bEvtItemGetItemGuard();
+    void bEvtItemGetItemGuardReturn();
+    void bPuniParentHeal();
+    void bPuniParentHealReturn();
+    // battle_stage.o work pointer for the Glitz Pit jumbotron ("gamen") TEV effect
+    extern void *main_tou_gamen_screen_wp;
     void bStarstoneOwnedCompare();
     void bPrintPartyErrorFix();
     void bPrintPartyErrorFixReturn();
@@ -153,29 +176,21 @@ namespace mod::ap_cooking
     constexpr int32_t kIngredientFlagBase = 6460;
 
     constexpr int16_t kIngredientIds[] = {
-        // 43 base ingredient items, ascending by id
-        ttyd::common::ItemId::GOLD_BAR,      ttyd::common::ItemId::GOLD_BAR_X3,
-        ttyd::common::ItemId::THUNDER_BOLT,  ttyd::common::ItemId::THUNDER_RAGE,
+        // 27 base ingredient items, ascending by id
         ttyd::common::ItemId::SHOOTING_STAR, ttyd::common::ItemId::ICE_STORM,
-        ttyd::common::ItemId::FIRE_FLOWER,   ttyd::common::ItemId::EARTH_QUAKE,
-        ttyd::common::ItemId::BOOS_SHEET,    ttyd::common::ItemId::VOLT_SHROOM,
-        ttyd::common::ItemId::REPEL_CAPE,    ttyd::common::ItemId::RUIN_POWDER,
-        ttyd::common::ItemId::SLEEPY_SHEEP,  ttyd::common::ItemId::POWER_PUNCH,
-        ttyd::common::ItemId::COURAGE_SHELL, ttyd::common::ItemId::MINI_MR_MINI,
-        ttyd::common::ItemId::MR_SOFTENER,   ttyd::common::ItemId::MUSHROOM,
-        ttyd::common::ItemId::SUPER_SHROOM,  ttyd::common::ItemId::ULTRA_SHROOM,
-        ttyd::common::ItemId::LIFE_SHROOM,   ttyd::common::ItemId::DRIED_SHROOM,
+        ttyd::common::ItemId::FIRE_FLOWER,   ttyd::common::ItemId::VOLT_SHROOM,
+        ttyd::common::ItemId::RUIN_POWDER,   ttyd::common::ItemId::COURAGE_SHELL,
+        ttyd::common::ItemId::MUSHROOM,      ttyd::common::ItemId::SUPER_SHROOM,
+        ttyd::common::ItemId::ULTRA_SHROOM,  ttyd::common::ItemId::LIFE_SHROOM,
         ttyd::common::ItemId::TASTY_TONIC,   ttyd::common::ItemId::HONEY_SYRUP,
         ttyd::common::ItemId::MAPLE_SYRUP,   ttyd::common::ItemId::JAMMIN_JELLY,
-        ttyd::common::ItemId::SLOW_SHROOM,   ttyd::common::ItemId::GRADUAL_SYRUP,
-        ttyd::common::ItemId::HOT_DOG,       ttyd::common::ItemId::POINT_SWAP,
+        ttyd::common::ItemId::SLOW_SHROOM,   ttyd::common::ItemId::POINT_SWAP,
         ttyd::common::ItemId::WHACKA_BUMP,   ttyd::common::ItemId::COCONUT,
         ttyd::common::ItemId::DRIED_BOUQUET, ttyd::common::ItemId::MYSTIC_EGG,
         ttyd::common::ItemId::GOLDEN_LEAF,   ttyd::common::ItemId::KEEL_MANGO,
         ttyd::common::ItemId::FRESH_PASTA,   ttyd::common::ItemId::CAKE_MIX,
         ttyd::common::ItemId::HOT_SAUCE,     ttyd::common::ItemId::TURTLEY_LEAF,
-        ttyd::common::ItemId::HORSETAIL,     ttyd::common::ItemId::PEACHY_PEACH,
-        ttyd::common::ItemId::SPITE_POUCH,
+        ttyd::common::ItemId::PEACHY_PEACH,
         // 10 dish-type ingredients, ascending by id (obtainable via repeat cooks
         // after their recipe check, or as pool items)
         ttyd::common::ItemId::SHROOM_FRY,    ttyd::common::ItemId::SPICY_SOUP,
@@ -185,7 +200,7 @@ namespace mod::ap_cooking
         ttyd::common::ItemId::COUPLES_CAKE,  ttyd::common::ItemId::INKY_SAUCE,
     };
     constexpr int32_t kIngredientCount = sizeof(kIngredientIds) / sizeof(kIngredientIds[0]);
-    static_assert(kIngredientCount == 53);
+    static_assert(kIngredientCount == 37);
 
     // Returns the unlock index k for an item id, or -1 if the item is not an ingredient.
     constexpr int32_t ingredientIndex(int32_t item)

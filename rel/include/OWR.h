@@ -67,6 +67,7 @@ namespace mod::owr
     uint32_t pouchGetItemHook(int32_t item);
     void partySetForceMoveHook(PartyEntry *ptr, float x, float z, float speed);
     int32_t evtMarioSetPoseHook(EvtEntry *evt, bool firstCall);
+    int32_t evtPartyJumpPosHook(EvtEntry *evt, bool firstCall);
     const char *msgSearchHook(const char *msgKey);
     void logoSkip(SeqInfo *index);
     void seq_gameInitHook(SeqInfo *index);
@@ -74,6 +75,7 @@ namespace mod::owr
     void DisplayStarPowerOrbs(float x, float y, int32_t star_power);
     void SetMaxSP(int32_t star);
     int32_t WinItemMainHook(ttyd::win_root::WinPauseMenu *menu);
+    void MarioEntryHook();
     int32_t WinLogMainHook(ttyd::win_root::WinPauseMenu *menu);
     void MsgAnalizeHook(ttyd::memory::SmartAllocationData *smartAlloc, const char *text);
     int msgWindow_Entry_Hook(const char *message, int unk1, int windowType);
@@ -123,6 +125,8 @@ namespace mod::owr
     inline void SwapBossStage(BattleSetupWeightedLoadout *setup, BattleStageData &buffer, const char *globalDir,
                               const char *currentDir, BattleStageObjectData *props, int32_t numProps)
     {
+        main_tou_gamen_screen_wp = nullptr;
+
         buffer = *setup->stage_data;
         buffer.global_stage_data_dir = globalDir;
         buffer.current_stage_data_dir = currentDir;
@@ -237,10 +241,12 @@ namespace mod::owr
     extern uint32_t (*g_pouchGetItem_trampoline)(int32_t);
     extern void (*g_partySetForceMove_trampoline)(ttyd::party::PartyEntry *, float, float, float);
     extern int32_t (*g_evt_mario_set_pose_trampoline)(ttyd::evtmgr::EvtEntry *, bool);
+    extern int32_t (*g_evt_party_jump_pos_trampoline)(ttyd::evtmgr::EvtEntry *, bool);
     extern const char *(*g_msgSearch_trampoline)(const char *);
     extern void (*g_statusWinDisp_trampoline)(void);
     extern void (*g_pouchGetStarstone_trampoline)(int32_t);
     extern int32_t (*g_winItemMain_trampoline)(ttyd::win_root::WinPauseMenu *);
+    extern void (*g_marioEntry_trampoline)();
     extern int32_t (*g_winLogMain_trampoline)(ttyd::win_root::WinPauseMenu *);
     extern void (*g_msgAnalize_trampoline)(ttyd::memory::SmartAllocationData *, const char *);
     extern int (*g_msgWindow_Entry_trampoline)(const char *, int, int);
@@ -252,6 +258,8 @@ namespace mod::owr
     extern void (*g_npcSetupBattleInfo_trampoline)(::NpcEntry *, void *);
     extern int32_t (*g_pouchRemoveItem_trampoline)(int32_t);
     extern int32_t (*g_pouchCheckItem_trampoline)(int32_t);
+    extern int32_t (*g_sandersBombHitPosition_trampoline)(ttyd::evtmgr::EvtEntry *, bool);
+    int32_t sandersBombHitPositionHook(ttyd::evtmgr::EvtEntry *evt, bool isFirstCall);
     extern void (*g_swSet_trampoline)(int);
     extern int32_t (*g_BattleCalculateDamage_trampoline)(BattleWorkUnit *,
                                                          BattleWorkUnit *,
@@ -263,6 +271,8 @@ namespace mod::owr
     extern int32_t (*g_BattleCheckConcluded_trampoline)(void *);
     extern void (*g_btlseqFirstAct_trampoline)(void *);
     extern ttyd::dvdmgr::DvdMgrFile *(*g_DVDMgrOpen_trampoline)(const char *, int, uint16_t);
+    extern int32_t (*g_psndBGMOn_f_d_trampoline)(uint32_t, const char *, uint32_t, uint32_t, uint32_t);
+    int32_t psndBGMOn_f_d_Hook(uint32_t flags, const char *name, uint32_t a3, uint32_t a4, uint32_t a5);
 
     extern const char *goombellaName;
     extern const char *goombellaDescription;
@@ -284,6 +294,8 @@ namespace mod::owr
     extern const char *tenCoinsDescription;
     extern const char *returnPipeName;
     extern const char *returnPipeDescription;
+    extern const char *saveBlockName;
+    extern const char *saveBlockDescription;
     extern const char *planeModeName;
     extern const char *planeModeDescription;
     extern const char *paperModeName;

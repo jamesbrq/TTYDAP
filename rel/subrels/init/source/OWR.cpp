@@ -1,10 +1,13 @@
 #include "evt_cmd.h"
+#include "MirrorMode.h"
 #include "OWR.h"
 #include "patch.h"
+#include "tracker.h"
 #include "ttyd/battle_database_common.h"
 #include "ttyd/battle.h"
 #include "ttyd/battle_event_cmd.h"
 #include "ttyd/evt_bero.h"
+#include "ttyd/evt_item.h"
 #include "ttyd/evt_mario.h"
 #include "ttyd/evt_memcard.h"
 #include "ttyd/evt_party.h"
@@ -47,6 +50,10 @@ extern int32_t main_irai_init_func[];
 extern int32_t main_rsh_prolog[];
 extern int32_t main_BattleInformationSetDropMaterial[];
 extern int32_t main_rule_disp[];
+extern int32_t main_animPoseTestXLU[];
+extern int32_t main_itemUseDisp[];
+extern "C" int32_t main_sanders_get_bomb_hit_position(ttyd::evtmgr::EvtEntry *evt, bool isFirstCall);
+extern int32_t main_tou_gamen_screen_tev[];
 extern int32_t main_tou_gamen_screen_tev_init[];
 extern int32_t main_bom1000_jump[];
 extern int32_t main_jump_minnnanokoe[];
@@ -74,6 +81,16 @@ extern int32_t main_seq_battleInit[];
 extern int32_t main__psndSFXOn[];
 extern int32_t main_psndBGMOff_f_d[];
 extern int32_t main_psndBGMOn_f_d[];
+extern int32_t _animPoseDrawMtx[];
+extern int32_t effDamageStarDisp[];
+extern int32_t effMissStarDisp[];
+extern int32_t effNumberGX[];
+extern int32_t effAcrobatDisp[];
+extern int32_t effNiceDisp[];
+extern int32_t _lvup_select_object_disp[];
+extern int32_t effRecoveryDisp[];
+extern int32_t effRecoveryDisp3[];
+extern int32_t effRecoveryDisp4[];
 extern int32_t main_battleCheckUnitMonosiriFlag[];
 extern int32_t main_BattleDrawEnemyHPBar[];
 extern int32_t btlseqEnd[];
@@ -144,7 +161,8 @@ uint32_t invalidParams[] = {
     0x802CD9D4, 0x802CDA00, 0x802CDAEC, 0x802CDB48, 0x802CDB78, 0x802CDBA8, 0x802CDC78, 0x802CDCA8, 0x802CDD6C, 0x802CDE0C,
     0x802CE1CC, 0x802CE1FC, 0x802CE22C, 0x802CE25C, 0x802CE28C, 0x802CE2C0, 0x802CE2F0, 0x802CE33C, 0x802CE370, 0x802CE3A4,
     0x802CE3D8, 0x802CE408, 0x802CE438, 0x802CE47C, 0x802CE4AC, 0x802CE4D8, 0x802CE504, 0x802CE530, 0x802CE598, 0x802CE5D0,
-    0x802CE600, 0x802CE62C, 0x802CE660, 0x802CE690, 0x802CE6C0, 0x802CE6F4, 0x802CE724, 0x802CE7E4, 0x804218C8};
+    0x802CE600, 0x802CE62C, 0x802CE660, 0x802CE690, 0x802CE6C0, 0x802CE6F4, 0x802CE724, 0x802CE7E4, 0x804218C8,
+    0x802CC774, 0x802CC79C, 0x802CC894, 0x802CC910, 0x802CD6F0, 0x802CE004};
 
 // clang-format off
 EVT_BEGIN(main_buy_evt_hook)
@@ -244,6 +262,53 @@ namespace mod::owr
         patch::writeBranchPair(&main_mapGX[235],
                                reinterpret_cast<void *>(bMapGXArrIncrement),
                                reinterpret_cast<void *>(bMapGXArrIncrementReturn));
+
+        {
+            const uint32_t addr = reinterpret_cast<uint32_t>(ap_map_markers);
+            const uint32_t ha = ((addr >> 16) + ((addr & 0x8000) ? 1 : 0)) & 0xFFFF;
+            const uint32_t lo = addr & 0xFFFF;
+            const uint32_t lisR3 = 0x3C600000 | ha;
+
+            writeIntWithCache(&main_winLogMain[415], lisR3); // selection loop base
+            writeIntWithCache(&main_winLogMain[417], 0x3B630000 | lo); // addi r27, r3, lo
+
+            writeIntWithCache(&main_winLogMain[512], lisR3); // hovered-name lookup base
+            writeIntWithCache(&main_winLogMain[514], 0x38630000 | lo); // addi r3, r3, lo
+
+            writeIntWithCache(&main_winLogMain[610], lisR3); // cursor-position base
+            writeIntWithCache(&main_winLogMain[613], 0x38A30000 | lo); // addi r5, r3, lo
+
+            if (*reinterpret_cast<uint8_t *>(0x8000328D) != 0)
+            {
+                uint32_t *mapGXStub = reinterpret_cast<uint32_t *>(bMapGXArrFlagCheck);
+                writeIntWithCache(&mapGXStub[0], 0x38600001); // li r3, 1
+                writeIntWithCache(&mapGXStub[1], 0x60000000); // nop
+                writeIntWithCache(&mapGXStub[2], 0x60000000); // nop
+
+                uint32_t *winLogStub = reinterpret_cast<uint32_t *>(bWinLogArrFlagCheck);
+                writeIntWithCache(&winLogStub[0], 0x38600001); // li r3, 1
+                writeIntWithCache(&winLogStub[1], 0x60000000); // nop
+                writeIntWithCache(&winLogStub[2], 0x60000000); // nop
+
+                // Marker count: 93 vanilla + the enabled virtual nodes only
+                uint32_t markerCount = 93;
+                if (mod::owr::gState->apSettings->tattlesanity)
+                    markerCount++;
+                if (mod::owr::gState->apSettings->cooksanity)
+                    markerCount++;
+                writeIntWithCache(&main_mapGX[236], 0x281D0000 | markerCount); // cmplwi r29, count
+                writeIntWithCache(&main_winLogMain[506], 0x281C0000 | markerCount); // cmplwi r28, count
+            }
+        }
+
+        // TODO(select-paging): L/R paging for select windows removed, R never registered; notes in memory/cooking docs
+        patch::writeBranchPair(&main_mapGX[153],
+                               reinterpret_cast<void *>(bMapNodeTexSelected),
+                               reinterpret_cast<void *>(bMapNodeTexSelectedReturn));
+        writeIntWithCache(&main_mapGX[185], 0x3863FFFF); // addi r3, r3, -1
+        patch::writeBranchPair(&main_mapGX[232],
+                               reinterpret_cast<void *>(bMapNodeTex),
+                               reinterpret_cast<void *>(bMapNodeTexReturn));
 
         writeIntWithCache(&main_mapGX[239], 0x60000000); // NOP
 
@@ -367,6 +432,18 @@ namespace mod::owr
         writeIntWithCache(&main_tou_gamen_screen_tev_init[27], 0x38840827); // addi r4, r4, 0x827 GSW(1703)
         writeIntWithCache(&main_tou_gamen_screen_tev_init[48], 0x2C030013); // cmpwi r3, 0x13
 
+        patch::writeBranchPair(&main_tou_gamen_screen_tev[6],
+                               reinterpret_cast<void *>(bTouGamenScreenGuard),
+                               reinterpret_cast<void *>(bTouGamenScreenGuardReturn));
+
+        patch::writeBranchPair(&main_animPoseTestXLU[1],
+                               reinterpret_cast<void *>(bAnimPoseTestXLUGuard),
+                               reinterpret_cast<void *>(bAnimPoseTestXLUGuardReturn));
+
+        patch::writeBranchPair(reinterpret_cast<uint32_t *>(&ttyd::evt_item::evt_item_get_item) + 12,
+                               reinterpret_cast<void *>(bEvtItemGetItemGuard),
+                               reinterpret_cast<void *>(bEvtItemGetItemGuardReturn));
+
         writeIntWithCache(&main_setupDataLoad[23], 0x38840824); // addi r4, r4, 0x824 GSW(1700)
 
         patch::writeBranchBL(&main_badgeShop_bargainGeneration[7], reinterpret_cast<void *>(bChapterClearCheck));
@@ -430,6 +507,19 @@ namespace mod::owr
         writeIntWithCache(&main_mobj_kururing_floor[130], 0x60000000); // nop
         writeIntWithCache(&main_mobj_kururing_floor[144], 0x60000000); // nop
         writeIntWithCache(&main_mobj_kururing_floor[188], 0x808301BB); // lwz r4, 0x1BA(r3)
+
+        // Tracker-colored flip panels (hooks the per-frame handler; the word
+        // patches above only touch instructions past the hook branch).
+        using MobjMainFn = int32_t (*)(void *);
+        mod::tracker::g_mobjKururingFloor_trampoline =
+            patch::hookFunction(reinterpret_cast<MobjMainFn>(main_mobj_kururing_floor),
+                                mod::tracker::mobjKururingFloorHook);
+
+        // Idle panels draw via the paper composite, which whites out the evt
+        // color before _animPoseDrawMtx (0x8003BC68); this hook restores it.
+        using AnimPoseDrawMtxFn = void (*)(void *, void *, int32_t, int32_t, int32_t, float, float);
+        mod::tracker::g_animPoseDrawMtx_trampoline =
+            patch::hookFunction(reinterpret_cast<AnimPoseDrawMtxFn>(_animPoseDrawMtx), mod::tracker::animPoseDrawMtxHook);
 
         writeIntWithCache(&main_mobj_powerupblk[73], 0x809F01D8);  // lwz r4, 0x1D8(r31)
         writeIntWithCache(&main_mobj_powerupblk[110], 0x809F01D8); // lwz r4, 0x1D8(r31)
@@ -626,6 +716,17 @@ namespace mod::owr
         win_log::mapMarkers[91].isLocation = 1;
         win_log::mapMarkers[91].unk_0x05 = 0;
         win_log::mapMarkers[91].y_pos = tempPos - 12;
+
+        {
+            using ttyd::win_log::MapMarker;
+            MapMarker *markers = reinterpret_cast<MapMarker *>(ap_map_markers);
+            memcpy(markers, win_log::mapMarkers, sizeof(MapMarker) * 93);
+            uint32_t markerCount = 93;
+            if (mod::owr::gState->apSettings->tattlesanity)
+                markers[markerCount++] = {-58, 2, 1, 0, 0, ap_marker_prefix_tattle};
+            if (mod::owr::gState->apSettings->cooksanity)
+                markers[markerCount++] = {-22, 2, 1, 0, 0, ap_marker_prefix_cook};
+        }
     }
 
     void ApplyMainScriptPatches()
@@ -766,7 +867,11 @@ namespace mod::owr
         itemDataTable[ItemId::INVALID_ITEM_PAPER_0054].name = returnPipeName;
         itemDataTable[ItemId::INVALID_ITEM_PAPER_0054].description = returnPipeDescription;
         itemDataTable[ItemId::INVALID_ITEM_PAPER_0054].icon_id = IconType::RETURN_PIPE;
-        itemDataTable[ItemId::INVALID_ITEM_PAPER_0054].type_sort_order = 1;        
+        itemDataTable[ItemId::INVALID_ITEM_PAPER_0054].type_sort_order = 1;
+        itemDataTable[ItemId::TRIPLE_DIP].name = saveBlockName;
+        itemDataTable[ItemId::TRIPLE_DIP].description = saveBlockDescription;
+        itemDataTable[ItemId::TRIPLE_DIP].icon_id = IconType::SAVE_BLOCK;
+        itemDataTable[ItemId::TRIPLE_DIP].type_sort_order = 2;
         itemDataTable[ItemId::INVALID_ITEM_STAR_FN0OW_0069].name = walrusWhiskersName;
         itemDataTable[ItemId::INVALID_ITEM_STAR_FN0OW_0069].description = walrusWhiskersDescription;
         itemDataTable[ItemId::INVALID_ITEM_STAR_FN0OW_0069].icon_id = IconType::WALRUS_WHISKERS;
@@ -1007,10 +1112,13 @@ namespace mod::owr
         g_pouchGetItem_trampoline = patch::hookFunction(mario_pouch::pouchGetItem, pouchGetItemHook);
         g_partySetForceMove_trampoline = patch::hookFunction(party::partySetForceMove, partySetForceMoveHook);
         g_evt_mario_set_pose_trampoline = patch::hookFunction(evt_mario::evt_mario_set_pose, evtMarioSetPoseHook);
+        g_evt_party_jump_pos_trampoline =
+            patch::hookFunction(evt_party::evt_party_jump_pos, evtPartyJumpPosHook);
         g_statusWinDisp_trampoline = patch::hookFunction(statuswindow::statusWinDisp, DisplayStarPowerNumber);
         g_pouchGetStarstone_trampoline = patch::hookFunction(mario_pouch::pouchGetStarStone, SetMaxSP);
         g_winItemMain_trampoline = patch::hookFunction(win_item::winItemMain, WinItemMainHook);
         g_winLogMain_trampoline = patch::hookFunction(win_log::main_winLogMain, WinLogMainHook);
+        g_marioEntry_trampoline = patch::hookFunction(mario::marioEntry, MarioEntryHook);
         g_msgAnalize_trampoline = patch::hookFunction(msgdrv::msgAnalize, MsgAnalizeHook);
         g_msgWindow_Entry_trampoline = patch::hookFunction(msgdrv::msgWindow_Entry, msgWindow_Entry_Hook);
         g__load_trampoline = patch::hookFunction(seq_mapchange::_load, _load_Hook);
@@ -1021,6 +1129,12 @@ namespace mod::owr
         g_npcSetupBattleInfo_trampoline = patch::hookFunction(::npcSetupBattleInfo, npcSetupBattleInfoHook);
         g_pouchRemoveItem_trampoline = patch::hookFunction(mario_pouch::pouchRemoveItem, pouchRemoveItemHook);
         g_pouchCheckItem_trampoline = patch::hookFunction(mario_pouch::pouchCheckItem, pouchCheckItemHook);
+        g_sandersBombHitPosition_trampoline =
+            patch::hookFunction(main_sanders_get_bomb_hit_position, sandersBombHitPositionHook);
+
+        patch::writeBranchPair(&main_itemUseDisp[29], &main_itemUseDisp[114],
+                               reinterpret_cast<void *>(bWinItemPartyList),
+                               reinterpret_cast<void *>(bWinItemPartyListReturn));
         g_swSet_trampoline = patch::hookFunction(swdrv::swSet, swSetHook);
 
         using BattleCalculateDamageFn =
@@ -1041,6 +1155,51 @@ namespace mod::owr
             patch::hookFunction(reinterpret_cast<BtlseqFirstActFn>(0x8011E5C0), btlseqFirstAct_Hook);
 
         g_DVDMgrOpen_trampoline = patch::hookFunction(ttyd::dvdmgr::DVDMgrOpen, DVDMgrOpenHook);
+
+        using PsndBGMOnFDFn = int32_t (*)(uint32_t, const char *, uint32_t, uint32_t, uint32_t);
+        g_psndBGMOn_f_d_trampoline =
+            patch::hookFunction(reinterpret_cast<PsndBGMOnFDFn>(main_psndBGMOn_f_d), psndBGMOn_f_d_Hook);
+
+        mirror::InstallMirrorModeHooks();
+
+        int32_t *const effLoadPosMtxSites[] = {&effDamageStarDisp[259], &effDamageStarDisp[446],
+                                               &effDamageStarDisp[604], &effMissStarDisp[140], &effNumberGX[356],
+                                               // HP/FP recovery popups (icon + number blocks)
+                                               &effRecoveryDisp[167], &effRecoveryDisp[360],
+                                               &effRecoveryDisp3[243], &effRecoveryDisp4[200]};
+        for (int32_t *site : effLoadPosMtxSites)
+        {
+            patch::writeBranchBL(site, reinterpret_cast<void *>(mirror::mirrorEffLoadPosMtx));
+        }
+        // animPoseDrawMtx sites: NICE/GOOD/GREAT rating text model.
+        int32_t *const effAnimPoseSites[] = {&effNiceDisp[74], &effNiceDisp[80], &effNiceDisp[86]};
+        for (int32_t *site : effAnimPoseSites)
+        {
+            patch::writeBranchBL(site, reinterpret_cast<void *>(mirror::mirrorEffAnimPoseDrawMtx));
+        }
+        patch::writeBranchBL(&effAcrobatDisp[41], reinterpret_cast<void *>(mirror::mirrorEffConcatReflect));
+        // Level-up stat picker (_lvup_select_object_disp): world-reflect the
+        // HP/FP/BP board draws about the battle center.
+        int32_t *const lvupPlane2Sites[] = {&_lvup_select_object_disp[102], &_lvup_select_object_disp[183],
+                                            &_lvup_select_object_disp[264]};
+        for (int32_t *site : lvupPlane2Sites)
+        {
+            patch::writeBranchBL(site, reinterpret_cast<void *>(mirror::mirrorLvupTexPlane2));
+        }
+        int32_t *const lvupPlaneSites[] = {&_lvup_select_object_disp[123], &_lvup_select_object_disp[204],
+                                           &_lvup_select_object_disp[285]};
+        for (int32_t *site : lvupPlaneSites)
+        {
+            patch::writeBranchBL(site, reinterpret_cast<void *>(mirror::mirrorLvupTexPlane));
+        }
+        // Stat values + icon under each board.
+        int32_t *const lvupIconNumberSites[] = {&_lvup_select_object_disp[343], &_lvup_select_object_disp[394],
+                                                &_lvup_select_object_disp[478]};
+        for (int32_t *site : lvupIconNumberSites)
+        {
+            patch::writeBranchBL(site, reinterpret_cast<void *>(mirror::mirrorLvupIconNumber));
+        }
+        patch::writeBranchBL(&_lvup_select_object_disp[428], reinterpret_cast<void *>(mirror::mirrorLvupIconCol));
 
         // Hook gaugeDisp with a standard branch since the original function does not need to be called
         patch::writeBranch(statuswindow::gaugeDisp, DisplayStarPowerOrbs);
