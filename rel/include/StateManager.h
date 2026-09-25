@@ -36,7 +36,7 @@ namespace mod::owr
         uint8_t touConditions;                     // 0x1A
         uint8_t collectedStars;                    // 0x1B
         uint8_t cutsceneSkip;                      // 0x1C
-        uint8_t expMultiplier;                     // 0x1D
+        uint8_t padding1;                          // 0x1D
         uint8_t startingLevel;                     // 0x1E
         uint8_t deathLinkTriggered;                // 0x1F
         uint8_t deathLinkSent;                     // 0x20
@@ -56,7 +56,7 @@ namespace mod::owr
         uint8_t enemyRandomizer;                   // 0x31
         uint8_t enemyStatScaling;                  // 0x32
         uint8_t shuffleChapterStats;               // 0x33
-        uint8_t padding[4];                        // 0x34-0x37 This space has data
+        uint8_t padding2[4];                       // 0x34-0x37 This space has data
         uint8_t badgeBP;                           // 0x38
         uint8_t badgeFP;                           // 0x39
         uint8_t partnerFP;                         // 0x3A
@@ -76,9 +76,10 @@ namespace mod::owr
         uint8_t tracker;                           // 0x6D in-game tracker (map colors, node lists, all nodes visible)
         uint8_t mirrorMode;                        // 0x6E view-space mirror mode (horizontal screen flip)
         uint8_t panelHints;                        // 0x6F tracker-colored kururing floor panels
+        uint16_t expMultiplier;                    // 0x70
     };
 
-    static_assert(sizeof(APSettings) == 0x70);
+    static_assert(sizeof(APSettings) == 0x74);
 
     constexpr size_t NAME_LEN = 32;
 

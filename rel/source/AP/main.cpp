@@ -717,7 +717,7 @@ int monosiriRemapStatic(int vanilla)
 
 int applyExpMultiplier(int exp)
 {
-    return exp * gState->apSettings->expMultiplier;
+    return (exp * gState->apSettings->expMultiplier) / 100;
 }
 
 int getBlockVisibility(int brickType)
