@@ -40,6 +40,7 @@ extern "C"
     void bJohoyaSeqAddition();
     void bTouGamenScreenGuard();
     void bTouGamenScreenGuardReturn();
+    void bFieldBattleLevel();
     void bAnimPoseTestXLUGuard();
     void bAnimPoseTestXLUGuardReturn();
     void bEvtItemGetItemGuard();

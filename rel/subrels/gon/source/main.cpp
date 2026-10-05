@@ -248,21 +248,7 @@ namespace mod
         gon_key_tbl01_05[0] = 12;
         gon_key_tbl_08[0] = 12;
 
-        if (gState->apSettings->enemyRandomizer)
-        {
-            for (int i = kBtlGrpRange_gon_gon.start; i <= kBtlGrpRange_gon_gon.end; i++)
-            {
-                BattleGroupSetup *battleGroup = battleGroupList[i];
-                EnemyLoadout &loadout = gState->enemyLoadouts[i];
-                for (int32_t j = 0; j < battleGroup->num_enemies; j++)
-                {
-                    BattleUnitSetup &unit = battleGroup->enemy_data[j];
-                    RegisterOriginalKind(&unit, unit.unit_kind_params, false);
-                    unit.position.y = GetEnemyYPosition(loadout.enemyIds[j]);
-                    unit.unit_kind_params = GetUnitKindById(loadout.enemyIds[j]);
-                }
-            }
-        }
+        ApplyEnemyGroups(battleGroupList, kBtlGrpRange_gon_gon);
 
         ApplyBossGroups(kBossGrpRange_gon_gon);
     }

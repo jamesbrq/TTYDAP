@@ -180,21 +180,7 @@ namespace mod
         eki_06_init_evt[100] = GSW(1722);
         eki_06_init_evt[101] = 1;
 
-        if (gState->apSettings->enemyRandomizer)
-        {
-            for (int i = kBtlGrpRange_eki_eki.start; i <= kBtlGrpRange_eki_eki.end; i++)
-            {
-                BattleGroupSetup *battleGroup = battleGroupList[i];
-                EnemyLoadout &loadout = gState->enemyLoadouts[i];
-                for (int32_t j = 0; j < battleGroup->num_enemies; j++)
-                {
-                    BattleUnitSetup &unit = battleGroup->enemy_data[j];
-                    RegisterOriginalKind(&unit, unit.unit_kind_params, false);
-                    unit.position.y = GetEnemyYPosition(loadout.enemyIds[j]);
-                    unit.unit_kind_params = GetUnitKindById(loadout.enemyIds[j]);
-                }
-            }
-        }
+        ApplyEnemyGroups(battleGroupList, kBtlGrpRange_eki_eki);
     }
 
     void exit() {}

@@ -530,10 +530,16 @@ void monosiriItemCheck(int unit_id)
     if (ttyd::swdrv::swGet(unit_id + 0x117A) || gState->apSettings->tattlesanity == 0)
         return;
 
+    const int itemId = gState->tattleItems[unit_id - 1];
+    if (itemId == 0)
+    {
+        gState->newTattle = false;
+        return; // No reward: finish the tattle without the present-item event.
+    }
+
     gState->newTattle = true;
     ttyd::battle_audience::BattleAudience_SetPresentTargetUnitId(
         ttyd::battle_unit::BtlUnit_GetUnitId(BattleGetPartyPtr(_battleWorkPtr))); // Goombella
-    int itemId = gState->tattleItems[unit_id - 1];
     ttyd::battle_audience::BattleAudience_SetPresentItemNo(itemId);
     ttyd::battle_audience::BattleAudience_SetPresentItemType(0); // Non-damaging items
     if (itemId >= 114 && itemId <= 120)

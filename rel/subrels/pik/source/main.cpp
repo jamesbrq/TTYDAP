@@ -596,21 +596,7 @@ namespace mod
         pik_04_init_evt[142] = GSW(1708);
         pik_04_init_evt[143] = 18;
 
-        if (gState->apSettings->enemyRandomizer)
-        {
-            for (int i = kBtlGrpRange_pik_pik.start; i <= kBtlGrpRange_pik_pik.end; i++)
-            {
-                BattleGroupSetup *battleGroup = battleGroupList[i];
-                EnemyLoadout &loadout = gState->enemyLoadouts[i];
-                for (int32_t j = 0; j < battleGroup->num_enemies; j++)
-                {
-                    BattleUnitSetup &unit = battleGroup->enemy_data[j];
-                    RegisterOriginalKind(&unit, unit.unit_kind_params, false);
-                    unit.position.y = GetEnemyYPosition(loadout.enemyIds[j]);
-                    unit.unit_kind_params = GetUnitKindById(loadout.enemyIds[j]);
-                }
-            }
-        }
+        ApplyEnemyGroups(battleGroupList, kBtlGrpRange_pik_pik);
     }
 
     void exit() {}

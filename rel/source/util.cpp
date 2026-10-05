@@ -134,7 +134,7 @@ namespace mod::util
     {
         const uint32_t ptrRaw = reinterpret_cast<uint32_t>(ptr);
 
-        const bool isConsole = (*reinterpret_cast<volatile uint8_t *>(0x8000324C) != 0);
+        const bool isConsole = (*reinterpret_cast<volatile uint8_t *>(0x80003281) != 0);
         const uint32_t cachedHi = isConsole ? 0x81800000u : 0x84000000u;
         const uint32_t uncachedHi = isConsole ? 0xC1800000u : 0xC4000000u;
 

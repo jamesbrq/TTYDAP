@@ -1268,21 +1268,7 @@ namespace mod
         muj_20_init_evt[334] = GSW(1708);
         muj_20_init_evt[335] = 18;
 
-		if (gState->apSettings->enemyRandomizer)
-        {
-            for (int i = kBtlGrpRange_muj_muj.start; i <= kBtlGrpRange_muj_muj.end; i++)
-            {
-                BattleGroupSetup *battleGroup = battleGroupList[i];
-                EnemyLoadout &loadout = gState->enemyLoadouts[i];
-                for (int32_t j = 0; j < battleGroup->num_enemies; j++)
-                {
-                    BattleUnitSetup &unit = battleGroup->enemy_data[j];
-                    RegisterOriginalKind(&unit, unit.unit_kind_params, false);
-                    unit.position.y = GetEnemyYPosition(loadout.enemyIds[j]);
-                    unit.unit_kind_params = GetUnitKindById(loadout.enemyIds[j]);
-                }
-            }
-        }
+        ApplyEnemyGroups(battleGroupList, kBtlGrpRange_muj_muj);
 
 		ApplyBossGroups(kBossGrpRange_muj_muj);
 

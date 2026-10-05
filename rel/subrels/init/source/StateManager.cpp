@@ -120,6 +120,8 @@ size_t StateManager::LoadEntranceData()
 
 size_t StateManager::LoadEnemyData()
 {
+    // Zero counts keep vanilla groups intact if loading or validation fails.
+    memset(enemyLoadouts, 0, sizeof(enemyLoadouts));
     char buf[64];
     snprintf(buf, sizeof(buf), "/mod/enemies.bin");
 
@@ -146,24 +148,78 @@ size_t StateManager::LoadEnemyData()
         return 0;
     }
 
+    if (size < 2)
+    {
+        __memFree(HeapType::HEAP_DEFAULT, buffer);
+        return 0;
+    }
     const uint8_t *ptr = buffer;
-    uint16_t numEntries = (ptr[0] << 8) | ptr[1];
+    const uint8_t *end = buffer + size;
+    const uint16_t numEntries = (ptr[0] << 8) | ptr[1];
     ptr += 2;
 
-    for (uint16_t i = 0; i < numEntries && i < NUM_BATTLE_GROUPS; i++)
+    // Validate the entire indexed table before publishing any loadouts.
+    bool valid = numEntries == NUM_BATTLE_GROUPS;
+    for (uint16_t i = 0; valid && i < numEntries; i++)
     {
-        uint8_t enemyCount = *ptr++;
-        enemyLoadouts[i].enemyCount = enemyCount;
-
-        for (uint8_t j = 0; j < 5; j++)
+        if (ptr >= end)
         {
-            enemyLoadouts[i].enemyIds[j] = 0;
-            enemyLoadouts[i].originalKinds[j] = nullptr;
+            valid = false;
+            break;
         }
-
-        for (uint8_t j = 0; j < enemyCount; j++)
+        const uint8_t count = *ptr++;
+        if (count < 1 || count > 5 || end - ptr < count)
         {
+            valid = false;
+            break;
+        }
+        ptr += count;
+    }
+    if (!valid)
+    {
+        __memFree(HeapType::HEAP_DEFAULT, buffer);
+        return 0;
+    }
+
+    ptr = buffer + 2;
+    for (uint16_t i = 0; i < numEntries; i++)
+    {
+        const uint8_t count = *ptr++;
+        enemyLoadouts[i].enemyCount = count;
+        enemyLoadouts[i].scalingSource = i; // Older files retain per-formation scaling.
+        for (uint8_t j = 0; j < count; j++)
             enemyLoadouts[i].enemyIds[j] = *ptr++;
+    }
+
+    // Singular formations optionally append one big-endian source index per group.
+    if (end - ptr >= 4 && memcmp(ptr, "EFM1", 4) == 0)
+    {
+        ptr += 4;
+        valid = end - ptr >= NUM_BATTLE_GROUPS * 2;
+        for (uint16_t i = 0; valid && i < numEntries; i++)
+        {
+            const uint16_t source = (ptr[0] << 8) | ptr[1];
+            ptr += 2;
+            if (source >= numEntries ||
+                enemyLoadouts[source].enemyCount != enemyLoadouts[i].enemyCount ||
+                memcmp(enemyLoadouts[source].enemyIds, enemyLoadouts[i].enemyIds,
+                       enemyLoadouts[i].enemyCount) != 0)
+                valid = false;
+            else
+                enemyLoadouts[i].scalingSource = source;
+        }
+        // Sources must be canonical formations, rather than chains or cycles.
+        for (uint16_t i = 0; valid && i < numEntries; i++)
+        {
+            const uint16_t source = enemyLoadouts[i].scalingSource;
+            if (enemyLoadouts[source].scalingSource != source)
+                valid = false;
+        }
+        if (!valid)
+        {
+            memset(enemyLoadouts, 0, sizeof(enemyLoadouts));
+            __memFree(HeapType::HEAP_DEFAULT, buffer);
+            return 0;
         }
     }
 

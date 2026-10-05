@@ -85,7 +85,9 @@ namespace mod::owr
     void replaceMultipleCharacters(ttyd::memory::SmartAllocationData *smartData, uint32_t startIndex, int value);
     BattleWorkUnit *BtlUnit_Entry_Hook(BattleUnitSetup *setup);
     void ExecAllUnitBattleEndEvent_Hook();
+    void ApplyEnemyGroups(BattleGroupSetup *const *groups, const BattleGroupIndexRange &range);
     void RegisterOriginalKind(BattleUnitSetup *setup, BattleUnitKind *orig, bool isBoss);
+    bool checkIfInGameNotBattle();
     void checkRecipeGoal();
     void ScaleUnitStats(BattleUnitKind *unit, RelId rel);
     int main__psndSFXOnHook(int idOrName, int vol, int pan, int a4, const void *pos, int a6, int a7, int a8);
@@ -145,12 +147,12 @@ namespace mod::owr
 
     inline void ApplyBossGroups(const BattleGroupIndexRange &range)
     {
-        if (!gState->apSettings->bossRandomizer)
-            return;
         for (int i = range.start; i <= range.end; i++)
         {
             BattleGroupSetup *bossGroup = bossGroupList[i];
-            EnemyLoadout &loadout = gState->bossLoadouts[i];
+            EnemyLoadout loadout = gState->bossLoadouts[i];
+            const bool randomized = gState->apSettings->bossRandomizer != 0;
+            if (!randomized) continue;
 
             bool kanbuHere = false;
             for (int32_t j = 0; j < bossGroup->num_enemies; j++)

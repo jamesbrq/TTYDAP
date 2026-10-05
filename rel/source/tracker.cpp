@@ -150,6 +150,12 @@ namespace mod::tracker
 
     static int32_t itemCount(uint16_t rom)
     {
+        // Cooksanity's ingredient menu uses permanent unlocks, not the current
+        // inventory or ever-owned items (cooked outputs do not unlock ingredients).
+        const int32_t ingredient = mod::ap_cooking::ingredientIndex(rom);
+        if (mod::owr::gState->apSettings->cooksanity && ingredient >= 0)
+            return ttyd::swdrv::swGet(mod::ap_cooking::kIngredientFlagBase + ingredient) ? 1 : 0;
+
         PouchData *pouch = pouchGetPtr();
         switch (rom)
         {
@@ -192,6 +198,21 @@ namespace mod::tracker
                 return pouch->shine_sprites;
             default:
             {
+                // Randomized Dazzle sells rewards in order. Reconstruct the
+                // lifetime total from the pouch and completed purchases so an
+                // inflated saved ever-counter cannot unlock later rewards.
+                if (rom == 125 && mod::owr::gState->apSettings->dazzle > 1)
+                {
+                    static constexpr int32_t kDazzleSpent[] = {
+                        0, 1, 3, 6, 10, 14, 18, 23, 29, 35, 42, 50, 60, 70, 85, 100,
+                    };
+                    int32_t purchases = ttyd::swdrv::swByteGet(1726);
+                    if (purchases < 0)
+                        purchases = 0;
+                    if (purchases > 15)
+                        purchases = 15;
+                    return pouch->star_pieces + kDazzleSpent[purchases];
+                }
                 // Star Piece (125) lives in a pouch field, not the item arrays
                 int32_t count = rom == 125 ? pouch->star_pieces : pouchCheckItem(rom);
                 for (const EverCounter &ec : kEverCounters)
@@ -436,8 +457,8 @@ namespace mod::tracker
     {
         // Panel hints need the solver even when the tracker UI is disabled;
         // trackerReady() keeps the UI itself gated on the tracker option.
-        mod::owr::APSettings *settings = mod::owr::gState->apSettings;
-        if (!settings->tracker && !settings->panelHints)
+        mod::owr::APSettings *settings = mod::owr::gState ? mod::owr::gState->apSettings : nullptr;
+        if (!settings || (!settings->tracker && !settings->panelHints))
             return;
         if (!ensureLoaded())
             return;
@@ -769,6 +790,9 @@ namespace mod::tracker
     {
         if (ttyd::seqdrv::seqGetSeq() != ttyd::seqdrv::SeqIndex::kGame)
             return;
+        // Drive the solver once per frame, independent of panel count or
+        // whether the map is open. trackerTick owns the solve cooldown.
+        trackerTick();
         for (int32_t i = 0; i < sPanelTintCount; i++)
         {
             if (sPanelTints[i].mobj)
@@ -785,13 +809,6 @@ namespace mod::tracker
         mod::owr::APSettings *settings = mod::owr::gState ? mod::owr::gState->apSettings : nullptr;
         if (!settings || !settings->panelHints)
             return ret;
-
-        static int32_t sTintTickGate = 0;
-        if (--sTintTickGate <= 0)
-        {
-            trackerTick();
-            sTintTickGate = 60;
-        }
 
         uint8_t *mobj = static_cast<uint8_t *>(mobjPtr);
         const int32_t poseId = *reinterpret_cast<int32_t *>(mobj + 0x70);

@@ -1184,21 +1184,7 @@ namespace mod
         mri_19_init_evt[41] = 8;
         mri_19_init_evt[42] = 9;
 
-        if (gState->apSettings->enemyRandomizer)
-        {
-            for (int i = kBtlGrpRange_mri_mri.start; i <= kBtlGrpRange_mri_mri.end; i++)
-            {
-                BattleGroupSetup *battleGroup = battleGroupList[i];
-                EnemyLoadout &loadout = gState->enemyLoadouts[i];
-                for (int32_t j = 0; j < battleGroup->num_enemies; j++)
-                {
-                    BattleUnitSetup &unit = battleGroup->enemy_data[j];
-                    RegisterOriginalKind(&unit, unit.unit_kind_params, false);
-                    unit.position.y = GetEnemyYPosition(loadout.enemyIds[j]);
-                    unit.unit_kind_params = GetUnitKindById(loadout.enemyIds[j]);
-                }
-            }
-        }
+        ApplyEnemyGroups(battleGroupList, kBtlGrpRange_mri_mri);
 
         ApplyBossGroups(kBossGrpRange_mri_mri);
 

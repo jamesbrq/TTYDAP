@@ -96,7 +96,7 @@ namespace mod::owr
     {
         uint8_t enemyCount;
         uint8_t enemyIds[5];
-        uint8_t pad[2];
+        uint16_t scalingSource; // Enemy-loadout index supplying vanilla stat templates.
         ttyd::battle_database_common::BattleUnitKind *originalKinds[5];
     };
 

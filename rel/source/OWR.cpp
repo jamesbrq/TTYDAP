@@ -1,4 +1,5 @@
 #include "customWarp.h"
+#include "SaveBlock.h"
 #include "MirrorMode.h"
 #include "tracker.h"
 #include "relmgr.h"
@@ -1701,8 +1702,74 @@ namespace mod::owr
         return result;
     }
 
+    namespace
+    {
+        struct FirstVisitRoom
+        {
+            const char *map;
+            uint16_t sw;
+        };
+
+        // Entrance randomizer: a node's flag is only proof you can stand at
+        // its fast-travel arrival point, so exactly the customWarp.h
+        // destination room sets it - no other room of the area counts.
+        // win_04 (hou node) is handled in code for the cutscene guard;
+        // rsh_01 is handled in code (in-game names carry a phase suffix).
+        const FirstVisitRoom kErFirstVisitRooms[] = {
+            {"gor_01", 6300}, // Rogueport
+            {"tik_01", 6301}, // Rogueport Sewers
+            {"hei_00", 6302}, // Petal Meadows
+            {"nok_00", 6303}, // Petalburg
+            {"gon_00", 6304}, // Hooktail's Castle
+            {"win_06", 6305}, // Boggly Woods
+            {"mri_00", 6306}, // Great Tree
+            {"tou_01", 6308}, // Glitzville
+            {"usu_00", 6309}, // Twilight Town
+            {"gra_00", 6310}, // Twilight Trail
+            {"gra_06", 6311}, // Creepy Steeple
+            {"muj_00", 6312}, // Keelhaul Key
+            {"muj_05", 6313}, // Pirate's Grotto
+            {"hom_00", 6314}, // Riverside Station
+            {"pik_00", 6315}, // Poshley Heights
+            {"pik_02", 6316}, // Poshley Sanctum
+            {"bom_01", 6317}, // Fahr Outpost
+            {"moo_00", 6318}, // Moon
+            {"aji_19", 6319}, // X-Naut Fortress
+            {"las_00", 6320}, // Palace of Shadow
+            {"las_09", 6322}, // Riddle Tower
+        };
+    } // namespace
+
     void setFirstVisitSW(const char *map)
     {
+        if (gState->apSettings->entranceRandomizer != 0)
+        {
+            // Flurrie's house (hou node): don't mark it visited during the
+            // missing-necklace cutscene (control locked)
+            if (strcmp(map, "win_04") == 0)
+            {
+                if (!ttyd::mario::marioCtrlOffChk())
+                    ttyd::swdrv::swSet(6307);
+                return;
+            }
+            // Excess Express: warp arrival is rsh_01; match any story phase
+            if (strncmp(map, "rsh_01", 6) == 0)
+            {
+                ttyd::swdrv::swSet(6321);
+                return;
+            }
+            for (const FirstVisitRoom &room : kErFirstVisitRooms)
+            {
+                if (strcmp(map, room.map) == 0)
+                {
+                    ttyd::swdrv::swSet(room.sw);
+                    return;
+                }
+            }
+            return;
+        }
+
+        // Vanilla layout: the original entry-map logic
         if (strncmp(map, "gor", 3) == 0)
             ttyd::swdrv::swSet(6300);
         else if (strncmp(map, "tik", 3) == 0)
@@ -1750,6 +1817,34 @@ namespace mod::owr
             ttyd::swdrv::swSet(6320);
         else if (strncmp(map, "rsh", 3) == 0)
             ttyd::swdrv::swSet(6321);
+    }
+
+    KEEP_FUNC void entranceSequenceUpdate(const char **outDestMap, const char **outDestBero)
+    {
+        if (strcmp(*outDestMap, "tik_02") == 0 && strcmp(*outDestBero, "dokan") == 0)
+        {
+            ttyd::swdrv::swSet(6056); // Blooper fight
+        }
+        if (strcmp(*outDestMap, "tik_16") == 0 && strcmp(*outDestBero, "dokan_1") == 0)
+        {
+            ttyd::swdrv::swSet(1345); // Blooper fight
+        }
+        if (strcmp(*outDestMap, "tik_16") == 0 && strcmp(*outDestBero, "dokan_2") == 0)
+        {
+            ttyd::swdrv::swSet(1346); // Blooper fight
+        }
+        if (strcmp(*outDestMap, "tik_17") == 0 && strcmp(*outDestBero, "dokan_1") == 0)
+        {
+            ttyd::swdrv::swSet(1348); // Blooper fight
+        }
+        if (strcmp(*outDestMap, "tik_17") == 0 && strcmp(*outDestBero, "dokan_2") == 0)
+        {
+            ttyd::swdrv::swSet(1349); // Blooper fight
+        }
+        if (strcmp(*outDestMap, "muj_05") == 0 && strcmp(*outDestBero, "e_bero") == 0)
+        {
+            ttyd::swdrv::swSet(6056); // Blooper fight
+        }
     }
 
     // Get destination map and bero given source map and bero
@@ -1807,7 +1902,7 @@ namespace mod::owr
             {
                 *outDestBero = entranceData[i].destBero;
             }
-
+            entranceSequenceUpdate(outDestMap, outDestBero);
             return true;
         }
         return false;
@@ -2106,6 +2201,7 @@ namespace mod::owr
 
     KEEP_FUNC void _load_Hook(const char *mapName, const char *entranceName, const char *beroName)
     {
+        mod::save_block::ResetMap();
         g__load_trampoline(mapName, entranceName, beroName);
         for (int i = 8; i < 16; i++) gState->state_msgWork[i] = 0;
         ttyd::msgdrv::msgLoad("mod", 2);
@@ -2130,11 +2226,16 @@ namespace mod::owr
     static OrigKindEntry g_origKindMap[kOrigKindMapCapacity];
     static int32_t g_origKindMapCount;
 
+    // The Pit is the largest active area: 150 formations, at most five units each.
+    static BattleUnitSetup g_resizedEnemySetups[150][5];
+    static int32_t g_resizedEnemySetupCount;
+
     // Setup pointers live inside the area rel, so entries go stale (and could
     // alias another area's setups at the same address) once it unloads.
     static void ResetOriginalKindMap()
     {
         g_origKindMapCount = 0;
+        g_resizedEnemySetupCount = 0;
     }
 
     KEEP_FUNC void RegisterOriginalKind(BattleUnitSetup *setup, BattleUnitKind *orig, bool isBoss)
@@ -2158,6 +2259,89 @@ namespace mod::owr
             g_origKindMap[g_origKindMapCount].level = orig->level;
             g_origKindMap[g_origKindMapCount].boss = isBoss;
             g_origKindMapCount++;
+        }
+    }
+
+    static void ApplyEnemyGroup(BattleGroupSetup *group, int32_t index)
+    {
+        if (!gState->apSettings->enemyRandomizer || index < 0 || index >= NUM_BATTLE_GROUPS)
+            return;
+        const EnemyLoadout &loadout = gState->enemyLoadouts[index];
+        const int32_t count = loadout.enemyCount;
+        if (!group || !group->enemy_data || group->num_enemies < 1 ||
+            group->num_enemies > 5 || count < 1 || count > 5)
+            return;
+
+        BattleUnitKind *kinds[5];
+        for (int32_t j = 0; j < count; j++)
+        {
+            kinds[j] = GetUnitKindById(loadout.enemyIds[j]);
+            if (!kinds[j])
+                return;
+        }
+
+        const int32_t scalingSource = loadout.scalingSource;
+        if (scalingSource < 0 || scalingSource >= NUM_BATTLE_GROUPS)
+            return;
+        const EnemyLoadout &templates = gState->enemyLoadouts[scalingSource];
+        for (int32_t j = 0; j < count; j++)
+            if (!templates.originalKinds[j])
+                return;
+
+        const int32_t originalCount = group->num_enemies;
+        BattleUnitSetup *units = group->enemy_data;
+        if (count != originalCount)
+        {
+            if (g_resizedEnemySetupCount >= 150)
+                return;
+            units = g_resizedEnemySetups[g_resizedEnemySetupCount++];
+            for (int32_t j = 0; j < count; j++)
+            {
+                // Added slots inherit the last vanilla setup; scaling is registered separately.
+                const int32_t source = j < originalCount ? j : originalCount - 1;
+                units[j] = group->enemy_data[source];
+                if (j >= originalCount)
+                    units[j].position.x += 40.0f * (j - originalCount + 1);
+            }
+        }
+        for (int32_t j = 0; j < count; j++)
+        {
+            RegisterOriginalKind(&units[j], templates.originalKinds[j], false);
+            units[j].position.y = GetEnemyYPosition(loadout.enemyIds[j]);
+            units[j].unit_kind_params = kinds[j];
+        }
+        group->enemy_data = units;
+        group->num_enemies = count;
+    }
+
+    KEEP_FUNC void ApplyEnemyGroups(BattleGroupSetup *const *groups, const BattleGroupIndexRange &range)
+    {
+        if (!groups || range.start < 0 ||
+            range.end >= NUM_BATTLE_GROUPS || range.start > range.end)
+            return;
+        // Capture every vanilla template before any formation's species is replaced.
+        // The source may appear before or after its alternate in the area table.
+        for (int32_t i = range.start; i <= range.end; i++)
+        {
+            EnemyLoadout &loadout = gState->enemyLoadouts[i];
+            for (int32_t j = 0; j < 5; j++)
+                loadout.originalKinds[j] = nullptr;
+            const BattleGroupSetup *group = groups[i];
+            if (!group || !group->enemy_data || group->num_enemies < 1 || group->num_enemies > 5)
+                continue;
+            for (int32_t j = 0; j < 5; j++)
+            {
+                const int32_t source = j < group->num_enemies ? j : group->num_enemies - 1;
+                loadout.originalKinds[j] = group->enemy_data[source].unit_kind_params;
+            }
+        }
+        for (int32_t i = range.start; i <= range.end; i++)
+        {
+            // Templates belong to the active area REL; never follow a stale pointer
+            // from a different area's previously captured loadout.
+            const int32_t source = gState->enemyLoadouts[i].scalingSource;
+            if (source >= range.start && source <= range.end)
+                ApplyEnemyGroup(groups[i], i);
         }
     }
 
@@ -2304,6 +2488,47 @@ namespace mod::owr
         }
     }
 
+    // Field badge checks run before BtlUnit_Entry applies encounter scaling.
+    // Read the saved per-slot level instead of mutating shared species data early.
+    extern "C" KEEP_FUNC int32_t GetFieldBattleLevel(void *info)
+    {
+        auto *group = *reinterpret_cast<BattleGroupSetup **>(static_cast<uint8_t *>(info) + 4);
+        if (!group || !group->enemy_data || group->num_enemies <= 0)
+            return 255;
+        BattleUnitKind *first = group->enemy_data[0].unit_kind_params;
+        if (!first) return 255;
+        const int32_t vanillaLevel = static_cast<uint8_t>(first->level);
+        if (!(gState->apSettings->enemyStatScaling != 0)) return vanillaLevel;
+
+        const OSModuleInfo *rel = _globalWorkPtr->relocationBase;
+        const BattleStatRelValues *chapter = rel ? GetBattleStats(static_cast<RelId>(rel->id)) : nullptr;
+        int32_t highestLevel = 0;
+        bool scaled = false;
+        for (int32_t i = 0; i < group->num_enemies; ++i)
+        {
+            BattleUnitSetup *setup = &group->enemy_data[i];
+            BattleUnitKind *kind = setup->unit_kind_params;
+            if (!kind) return 255;
+            int32_t level = static_cast<uint8_t>(kind->level);
+            OrigKindEntry *entry = LookupOriginalEntry(setup);
+            if (entry && !entry->boss && (gState->apSettings->enemyRandomizer != 0) &&
+                !IsHpScaleBlacklisted(kind->unit_type))
+            {
+                level = static_cast<uint8_t>(entry->level);
+                scaled = true;
+            }
+            else if (!entry && chapter && rel->id != static_cast<uint32_t>(RelId::JON) &&
+                     ((gState->apSettings->enemyRandomizer != 0) || gState->apSettings->shuffleChapterStats) &&
+                     GetUnitKindById(kind->unit_type) && !IsHpScaleBlacklisted(kind->unit_type))
+            {
+                level = static_cast<uint8_t>(chapter->level);
+                scaled = true;
+            }
+            if (level > highestLevel) highestLevel = level;
+        }
+        return scaled ? highestLevel : vanillaLevel;
+    }
+
     KEEP_FUNC BattleWorkUnit *BtlUnit_Entry_Hook(BattleUnitSetup *setup)
     {
         BattleUnitKind *kind = setup->unit_kind_params;
@@ -2327,6 +2552,7 @@ namespace mod::owr
         else if (!origEntry && g_currentBossOrigKind && kind && kind->unit_type <= BattleUnitType::BONETAIL)
             bossOrigKind = g_currentBossOrigKind;
 
+
         // A unit standing in its own vanilla slot needs no scaling at all - skipping it
         // keeps its untouched vanilla stats regardless of what earlier fights may have
         // written into the shared kind structs.
@@ -2341,7 +2567,7 @@ namespace mod::owr
             {
                 // Boss scaling only means anything when bosses can actually move: with the
                 // boss randomizer off, every boss is vanilla and must keep vanilla stats.
-                if (gState->apSettings->bossStatScaling && gState->apSettings->bossRandomizer && !vanillaPlacement)
+                if ((gState->apSettings->bossStatScaling != 0) && (gState->apSettings->bossRandomizer != 0) && !vanillaPlacement)
                 {
                     // Stats come from the registration-time snapshots when this slot has an
                     // entry (guaranteed-vanilla values); the pointer fallback only serves
@@ -2374,14 +2600,14 @@ namespace mod::owr
                     ApplyBossScriptPatches(newKind->unit_type, origHp);
                 }
             }
-            else if (enemyOrigKind && gState->apSettings->enemyRandomizer && gState->apSettings->enemyStatScaling &&
+            else if (enemyOrigKind && (gState->apSettings->enemyRandomizer != 0) && (gState->apSettings->enemyStatScaling != 0) &&
                      !IsHpScaleBlacklisted(setup->unit_kind_params->unit_type))
             {
                 // Enemy scaling mirrors boss scaling: the replacement fights with the
                 // vanilla HP, DEF and level of the enemy it replaced.
                 BattleUnitKind *newKind = setup->unit_kind_params;
                 newKind->max_hp = enemyOrigKind->max_hp;
-                newKind->level = enemyOrigKind->level;
+                newKind->level = origEntry->level;
                 if (newKind->parts && enemyOrigKind->parts)
                 {
                     int32_t partCount =
@@ -2409,9 +2635,9 @@ namespace mod::owr
             g_powOrigKind[slot] = nullptr;
             if (kind && !IsBossPowScaleExcluded(kind->unit_type))
             {
-                if (bossOrigKind && gState->apSettings->bossStatScaling && gState->apSettings->bossRandomizer)
+                if (bossOrigKind && (gState->apSettings->bossStatScaling != 0) && (gState->apSettings->bossRandomizer != 0))
                     g_powOrigKind[slot] = bossOrigKind;
-                else if (enemyOrigKind && gState->apSettings->enemyRandomizer && gState->apSettings->enemyStatScaling &&
+                else if (enemyOrigKind && (gState->apSettings->enemyRandomizer != 0) && (gState->apSettings->enemyStatScaling != 0) &&
                          !IsEnemyPowScaleBlacklisted(kind->unit_type))
                     g_powOrigKind[slot] = enemyOrigKind;
             }
@@ -2439,8 +2665,8 @@ namespace mod::owr
     {
         if (!unit)
             return;
-        if ((gState->apSettings->enemyRandomizer == 0 && gState->apSettings->shuffleChapterStats == 0) ||
-            gState->apSettings->enemyStatScaling == 0)
+        if ((!(gState->apSettings->enemyRandomizer != 0) && gState->apSettings->shuffleChapterStats == 0) ||
+            !(gState->apSettings->enemyStatScaling != 0))
             return;
         const BattleStatRelValues *statRelValues = GetBattleStats(rel);
         BattleUnitKind *unit_kind = GetUnitKindById(unit->unit_type);
@@ -2493,7 +2719,7 @@ namespace mod::owr
 
     KEEP_FUNC int32_t InterruptStopHook(ttyd::evtmgr::EvtEntry *evt, bool isFirstCall)
     {
-        if (isFirstCall && gState->apSettings->bossRandomizer && ttyd::evtmgr_cmd::evtGetValue(evt, evt->evtArguments[0]) == 1)
+        if (isFirstCall && (gState->apSettings->bossRandomizer != 0) && ttyd::evtmgr_cmd::evtGetValue(evt, evt->evtArguments[0]) == 1)
         {
             const char *currentMap = mod::common::GetCurrentMap();
             if (!currentMap || strcmp(currentMap, "las_29") != 0)
@@ -2518,7 +2744,7 @@ namespace mod::owr
     KEEP_FUNC int32_t BattleCheckConcludedHook(void *battleWork)
     {
         int32_t concluded = g_BattleCheckConcluded_trampoline(battleWork);
-        if (concluded && gState->apSettings->bossRandomizer)
+        if (concluded && (gState->apSettings->bossRandomizer != 0))
         {
             const char *currentMap = mod::common::GetCurrentMap();
             if (currentMap && strcmp(currentMap, "las_29") == 0)
@@ -2563,7 +2789,7 @@ namespace mod::owr
 
     KEEP_FUNC void btlseqFirstAct_Hook(void *battleWork)
     {
-        if (gState->apSettings->enemyRandomizer)
+        if ((gState->apSettings->enemyRandomizer != 0))
         {
             uint8_t *info = *reinterpret_cast<uint8_t **>(reinterpret_cast<uint8_t *>(battleWork) + 0x2738);
             int32_t *firstAttackType = info ? reinterpret_cast<int32_t *>(info + 8) : nullptr;
@@ -3661,7 +3887,9 @@ namespace mod::owr
     EVT_END()
 
     EVT_BEGIN(confirm_save_evt)
+        USER_FUNC(mod::save_block::SetItemSaveActive, 1)
         RUN_CHILD_EVT(main_mobj_save_blk_sysevt)
+        USER_FUNC(mod::save_block::SetItemSaveActive, 0)
         RETURN()
     EVT_END()
 
@@ -3901,8 +4129,6 @@ namespace mod::owr
     {
         if (menu->logMenuState == 10) // map open
         {
-            mod::tracker::trackerTick();
-
             if (sTrackerScreenOpen)
             {
                 const uint32_t pressed = menu->buttonsPressed;

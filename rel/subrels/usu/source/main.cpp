@@ -694,6 +694,45 @@ EVT_BEGIN(village_chief_init_hook)
 	RETURN()
 EVT_END()
 
+// Eve must remain approachable for her trouble even while the town is cursed.
+// Preserve the original spawn conditions when her trouble is not active.
+EVT_BEGIN(aunt_init_evt)
+	IF_EQUAL(GSW(1750), 1)
+		RETURN()
+	END_IF()
+	IF_SMALL(GSW(1715), 2)
+		IF_EQUAL(GSWF(1927), 1)
+			USER_FUNC(evt_npc::evt_npc_set_position, PTR("me"), 0, -2000, 0)
+		END_IF()
+	END_IF()
+	RETURN()
+EVT_END()
+
+EVT_BEGIN(aunt_init_hook)
+	RUN_CHILD_EVT(aunt_init_evt)
+	RETURN()
+EVT_END()
+
+EVT_BEGIN(aunt_pig_init_evt)
+	IF_EQUAL(GSW(1750), 1)
+		USER_FUNC(evt_npc::evt_npc_set_position, PTR("me"), 0, -2000, 0)
+		RETURN()
+	END_IF()
+	IF_SMALL(GSW(1715), 2)
+		IF_EQUAL(GSWF(1927), 0)
+			USER_FUNC(evt_npc::evt_npc_set_position, PTR("me"), 0, -2000, 0)
+		END_IF()
+	ELSE()
+		USER_FUNC(evt_npc::evt_npc_set_position, PTR("me"), 0, -2000, 0)
+	END_IF()
+	RETURN()
+EVT_END()
+
+EVT_BEGIN(aunt_pig_init_hook)
+	RUN_CHILD_EVT(aunt_pig_init_evt)
+	RETURN()
+EVT_END()
+
 EVT_BEGIN(usu_party_evt)
 	IF_EQUAL(GSWF(6080), 0) // skip the spawn once collected (get_item would hang); tail always runs
 		USER_FUNC(evt_mario::evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
@@ -945,11 +984,8 @@ namespace mod
         usu_kizayarou_talk[1] = GSW(1715);
         usu_kizayarou_talk[3] = 2;
 
-        usu_aunt_init[6] = GSW(1715);
-        usu_aunt_init[8] = 2;
-
-        usu_aunt_pig_init[6] = GSW(1715);
-        usu_aunt_pig_init[8] = 2;
+        patch::writePatch(&usu_aunt_init[5], aunt_init_hook, sizeof(aunt_init_hook));
+        patch::writePatch(&usu_aunt_pig_init[5], aunt_pig_init_hook, sizeof(aunt_pig_init_hook));
 
         usu_aunt_talk[403] = GSW(1715);
         usu_aunt_talk[405] = 2;

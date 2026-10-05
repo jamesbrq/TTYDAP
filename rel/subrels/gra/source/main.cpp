@@ -154,21 +154,7 @@ namespace mod
 
         gra_evt_usu_kagemario_party_kill[1] = GSW(1714); // Unused
 
-        if (gState->apSettings->enemyRandomizer)
-        {
-            for (int i = kBtlGrpRange_gra_gra.start; i <= kBtlGrpRange_gra_gra.end; i++)
-            {
-                BattleGroupSetup *battleGroup = battleGroupList[i];
-                EnemyLoadout &loadout = gState->enemyLoadouts[i];
-                for (int32_t j = 0; j < battleGroup->num_enemies; j++)
-                {
-                    BattleUnitSetup &unit = battleGroup->enemy_data[j];
-                    RegisterOriginalKind(&unit, unit.unit_kind_params, false);
-                    unit.position.y = GetEnemyYPosition(loadout.enemyIds[j]);
-                    unit.unit_kind_params = GetUnitKindById(loadout.enemyIds[j]);                    
-                }
-            }
-        }
+        ApplyEnemyGroups(battleGroupList, kBtlGrpRange_gra_gra);
 
         // These are swByteGet
         gra_evt_kagemario_init[2] = 0x386006B3; // li r3, 0x6B3 (GSW(1715))

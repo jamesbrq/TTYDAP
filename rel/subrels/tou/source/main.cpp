@@ -252,6 +252,7 @@ EVT_DEFINE_USER_FUNC(setRanking)
     }
 
     ttyd::swdrv::swSet(2443); // Set win condition flag so we fight the next rank
+    ttyd::swdrv::swClear(2532); // Clear this flag so rank up fights dont follow us.
     ttyd::tou::tou_rankingControll();
 
     return 2;

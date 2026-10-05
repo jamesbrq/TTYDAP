@@ -746,22 +746,10 @@ namespace mod
         aji_19_init_evt[43] = GSW(1707);
         aji_19_init_evt[44] = 8;
 
-        if (gState->apSettings->enemyRandomizer)
         {
             BattleGroupSetup **groupList = battleGroupList;
             asm("" : "+r"(groupList));
-            for (int i = kBtlGrpRange_aji_aji.start; i <= kBtlGrpRange_aji_aji.end; i++)
-            {
-                BattleGroupSetup *battleGroup = groupList[i];
-                EnemyLoadout &loadout = gState->enemyLoadouts[i];
-                for (int32_t j = 0; j < battleGroup->num_enemies; j++)
-                {
-                    BattleUnitSetup &unit = battleGroup->enemy_data[j];
-                    RegisterOriginalKind(&unit, unit.unit_kind_params, false);
-                    unit.position.y = GetEnemyYPosition(loadout.enemyIds[j]);
-                    unit.unit_kind_params = GetUnitKindById(loadout.enemyIds[j]);
-                }
-            }
+            ApplyEnemyGroups(groupList, kBtlGrpRange_aji_aji);
         }
 
         ApplyBossGroups(kBossGrpRange_aji_aji);

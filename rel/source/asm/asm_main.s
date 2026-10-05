@@ -31,6 +31,7 @@
 .global bJohoyaSeqAddition
 .global bTouGamenScreenGuard
 .global bTouGamenScreenGuardReturn
+.global bFieldBattleLevel
 .global bAnimPoseTestXLUGuard
 .global bAnimPoseTestXLUGuardReturn
 .global bEvtItemGetItemGuard
@@ -203,6 +204,19 @@ bEvtItemGetItemGuard:
 	bl itemForceGet
 bEvtItemGetItemGuardReturn:
 	b 0
+
+# Called at both badge checks with r3 = NPC battle info, r0 = Mario level.
+bFieldBattleLevel:
+    stwu %r1, -0x40(%r1)
+    stw %r0, 0x38(%r1)
+    mflr %r0
+    stw %r0, 0x44(%r1)
+    bl GetFieldBattleLevel
+    lwz %r0, 0x44(%r1)
+    mtlr %r0
+    lwz %r0, 0x38(%r1)
+    addi %r1, %r1, 0x40
+    blr
 
 bAnimPoseTestXLUGuard:
 	cmpwi %r3, 0x0

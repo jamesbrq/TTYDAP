@@ -1,3 +1,4 @@
+#include "SaveBlock.h"
 #include "evt_cmd.h"
 #include "MirrorMode.h"
 #include "OWR.h"
@@ -435,6 +436,17 @@ namespace mod::owr
         patch::writeBranchPair(&main_tou_gamen_screen_tev[6],
                                reinterpret_cast<void *>(bTouGamenScreenGuard),
                                reinterpret_cast<void *>(bTouGamenScreenGuardReturn));
+
+        // Bump Attack and First Attack: replace the raw species-level lookup.
+        // Both sites retain their original Mario-level comparison and badge gates.
+        int32_t *battleMode = reinterpret_cast<int32_t *>(::fbatBattleMode);
+        constexpr int32_t levelSites[] = {0x10C / 4, 0x150 / 4};
+        for (int32_t index : levelSites)
+        {
+            patch::writeBranchBL(&battleMode[index], reinterpret_cast<void *>(bFieldBattleLevel));
+            writeIntWithCache(&battleMode[index + 1], 0x60000000);
+            writeIntWithCache(&battleMode[index + 2], 0x60000000);
+        }
 
         patch::writeBranchPair(&main_animPoseTestXLU[1],
                                reinterpret_cast<void *>(bAnimPoseTestXLUGuard),
@@ -1100,6 +1112,7 @@ namespace mod::owr
         gSelf = this;
         gState = &gSelf->state;
 
+        mod::save_block::Init();
         ApplyMainAssemblyPatches();
         ApplyMainScriptPatches();
         ApplyItemDataTablePatches();
