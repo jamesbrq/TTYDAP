@@ -119,16 +119,7 @@ namespace mod::save_block
         if (itemSaveActive)
         {
             auto *savedWork = static_cast<GlobalWork *>(destination);
-            if (std::strcmp(savedWork->currentMapName, "mri_03") == 0)
-            {
-                // The cage room must reload at its pipe, even when no house door is active.
-                // dokan is the room's pipe entrance hit object (to mri_20).
-                auto hitObjGetPos = reinterpret_cast<void (*)(const char *, vec3 *)>(0x8001449c);
-                hitObjGetPos("dokan", &exit);
-                exit.y += 1.0f; // Match vanilla pipe arrival's surface clearance.
-                savedWork->savePlayerPos = exit;
-            }
-            else if (getInteriorExit(exit))
+            if (getInteriorExit(exit))
             {
                 savedWork->savePlayerPos = exit;
             }
