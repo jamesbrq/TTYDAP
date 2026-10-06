@@ -14,6 +14,7 @@
 #include "ttyd/evt_paper.h"
 #include "ttyd/evt_snd.h"
 #include "ttyd/mri_puni.h"
+#include "ttyd/mariost.h"
 
 #include <cstdint>
 
@@ -449,6 +450,24 @@ EVT_BEGIN(mri_01_init_evt_hook)
 	GOTO(&mri_01_init_evt[160])
 EVT_END()
 
+// A save reload can finish Puni setup before the guide scene reaches its wait.
+// Normal entrances still wait for state 2; reloads may also accept completed state 3.
+static int32_t (*guidePuniWait)(evtmgr::EvtEntry *, bool);
+
+KEEP_FUNC int32_t waitForGuidePuniSetup(evtmgr::EvtEntry *evt, bool firstCall)
+{
+    const int32_t result = guidePuniWait(evt, firstCall);
+    if (result != 0 || _globalWorkPtr->beroEnterName[0] != '\0')
+        return result;
+
+    int32_t completedMode = 3;
+    int32_t *arguments = evt->evtArguments;
+    evt->evtArguments = &completedMode;
+    const int32_t completed = guidePuniWait(evt, firstCall);
+    evt->evtArguments = arguments;
+    return completed;
+}
+
 EVT_BEGIN(mri_03_init_evt_switch)
 	IF_LARGE_EQUAL(GSW(1713), 8)
 		IF_SMALL_EQUAL(GSW(1713), 9)
@@ -559,9 +578,20 @@ EVT_BEGIN(mri_01_init_evt_evt2)
 	RETURN()
 EVT_END()
 
+// Bowser has no Puni work allocated. Preserve the short in-place hook and
+// branch around Mario's remaining story events, including puni_mario_wait.
+EVT_BEGIN(mri_01_init_evt_resume)
+	IF_LARGE_EQUAL(GSW(1703), 25)
+		IF_SMALL_EQUAL(GSW(1703), 27)
+			GOTO(&mri_01_init_evt[245])
+		END_IF()
+	END_IF()
+	GOTO(&mri_01_init_evt[190])
+EVT_PATCH_END()
+
 EVT_BEGIN(mri_01_init_evt_hook3)
 	RUN_CHILD_EVT(mri_01_init_evt_evt2)
-	GOTO(&mri_01_init_evt[190])
+	GOTO(mri_01_init_evt_resume)
 EVT_PATCH_END()
 
 EVT_BEGIN(bero_custom_evt)
@@ -861,6 +891,11 @@ namespace mod
 
         mri_key_table01[0] = 17;
         mri_key_table01[1] = -1;
+
+        // The room init event launches guide_sister_before at word 201.
+        auto *guideBefore = reinterpret_cast<int32_t *>(mri_03_init_evt[202]);
+        guidePuniWait = reinterpret_cast<int32_t (*)(evtmgr::EvtEntry *, bool)>(guideBefore[4]);
+        guideBefore[4] = EVT_HELPER_OP(waitForGuidePuniSetup);
 
         patch::writePatch(&mri_03_init_evt[50], mri_03_init_evt_hook, sizeof(mri_03_init_evt_hook));
         mri_03_init_evt[128] = GSWF(6020);
