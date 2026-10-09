@@ -2490,6 +2490,9 @@ namespace mod::owr
             case 0x14: // gold_chorobon
                 GoldChorobonPatches(scaledHp);
                 break;
+            case 0x15: // chorobon_gundan (Fuzzy Horde)
+                FuzzyHordePatches(scaledHp);
+                break;
             case 0x17: // gonbaba (Hooktail)
                 HooktailPatches(scaledHp);
                 break;
@@ -2618,7 +2621,10 @@ namespace mod::owr
                         int32_t partCount = newKind->num_parts < bossOrigKind->num_parts ? newKind->num_parts : bossOrigKind->num_parts;
                         for (int32_t i = 0; i < partCount; i++) newKind->parts[i].defense = bossOrigKind->parts[i].defense;
                     }
-                    ApplyBossScriptPatches(newKind->unit_type, origHp);
+                    // A Horde spawned by vanilla Gold Fuzzy retains its native 20 HP.
+                    const int32_t scriptHp = newKind->unit_type == 0x15 && !origEntry &&
+                                             bossOrigKind->unit_type == 0x14 ? 20 : origHp;
+                    ApplyBossScriptPatches(newKind->unit_type, scriptHp);
                 }
             }
             else if (enemyOrigKind && (gState->apSettings->enemyRandomizer != 0) && (gState->apSettings->enemyStatScaling != 0) &&

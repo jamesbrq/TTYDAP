@@ -262,6 +262,11 @@ void CaptureNpc(NpcEntry *npc) {
     if (!npc || !npc->tribe || !npc->tribe->modelName || npc->master || sCount >= 128) return;
     if (boss_preview::IsBossSceneNpc(npc) || !IsEncounterEnemy(npc)) return;
     auto *group = static_cast<battle_database_common::BattleGroupSetup *>(npc->battleInfo.pConfiguration);
+#ifdef TTYD_US
+    // The tower puzzle identifies its required defeat order by Bones species.
+    if (group == &btlgrp_las_las_17_01_off_1 || group == &btlgrp_las_las_17_02_off_1 ||
+        group == &btlgrp_las_las_17_03_off_1 || group == &btlgrp_las_las_17_04_off_1) return;
+#endif
     bool registered = false;
     for (int i = 0; i < sGroupCount; ++i) if (sGroups[i] == group) registered = true;
     if (!registered || !group->enemy_data || group->num_enemies < 1) return;
