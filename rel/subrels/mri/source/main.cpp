@@ -1,3 +1,4 @@
+#include "BossPreview.h"
 #include "AP/rel_patch_definitions.h"
 #include "evt_cmd.h"
 #include "OWR.h"
@@ -15,8 +16,12 @@
 #include "ttyd/evt_snd.h"
 #include "ttyd/mri_puni.h"
 #include "ttyd/mariost.h"
+#include "ttyd/seq_mapchange.h"
 
 #include <cstdint>
+#include <cstring>
+#include "ttyd/swdrv.h"
+#include <initializer_list>
 
 using namespace ttyd;
 using namespace mod::owr;
@@ -666,10 +671,33 @@ EVT_BEGIN(guide_sister_hook)
 EVT_PATCH_END()
 // clang-format on
 
+extern "C" void mri_puniAnimation(void *puni, void *instance);
+extern void *mri_Punigp;
+
 namespace mod
 {
+    static void (*puniAnimationOriginal)(void *, void *);
+
+    static void PuniAnimationReady(void *puni, void *instance)
+    {
+        const auto *entry = static_cast<const uint8_t *>(puni);
+        const uint32_t flags = *reinterpret_cast<const uint32_t *>(entry + 4);
+        // Ordinary Punis use frame tables initialized asynchronously by the
+        // entry event. NPC-backed Punis use their separate native pose path.
+        if (!(flags & 0x40000) && !(flags & 0x1e0))
+        {
+            const uint16_t animation = *reinterpret_cast<const uint16_t *>(entry + 0x11c);
+            if (!mri_Punigp || animation >= 10) return;
+            const auto *tables = static_cast<const uint8_t *>(mri_Punigp) + ((flags & 0x10) ? 0x54 : 4);
+            if (!reinterpret_cast<const void *const *>(tables)[animation]) return;
+        }
+        puniAnimationOriginal(puni, instance);
+    }
+
     void main()
     {
+        puniAnimationOriginal = patch::hookFunction(mri_puniAnimation, PuniAnimationReady);
+
         mri_countdown[1] = GSW(1713);
         mri_countdown[2] = 17;
         mri_countdown[79] = 0;
@@ -795,6 +823,14 @@ namespace mod
         mri_rival_nakama[1077] = EVT_HELPER_CMD(2, 53);
         mri_rival_nakama[1125] = GSW(1713);
         mri_rival_nakama[1126] = 5;
+
+        // Keep Crump's approach and the elder's dialogue; adapt only the
+        // robot's reveal, speech and fight staging to the replacement.
+        for (int word : {751, 954, 972, 1054, 1102})
+            mri_boss_battle[word] = reinterpret_cast<int32_t>(boss_preview::MagnusTransformCamera);
+        mri_boss_battle[1208] = reinterpret_cast<int32_t>(boss_preview::SceneCamera);
+        mri_boss_battle[966] = reinterpret_cast<int32_t>(boss_preview::SceneDialogue);
+        mri_boss_battle_win[1] = reinterpret_cast<int32_t>(boss_preview::SceneCamera);
 
         mri_boss_battle[1133] = GSW(1713);
         mri_boss_battle[1134] = 10;
@@ -1185,6 +1221,11 @@ namespace mod
         mri_puni_disp_info[2] = 17;
 
         mri_puni_init[3] = GSW(1708);
+        // Re-entering the boss scene after Palace completion must still create
+        // its Punis; the normal postgame branch otherwise skips their setup.
+        if (std::strcmp(ttyd::seq_mapchange::_next_map, "mri_01") == 0 &&
+            ttyd::swdrv::swByteGet(1713) >= 9 && ttyd::swdrv::swByteGet(1713) <= 10)
+            mri_puni_init[3] = 0;
         mri_puni_init[4] = EVT_HELPER_CMD(0, 0);
         mri_puni_init[5] = EVT_HELPER_CMD(0, 0);
         mri_puni_init[6] = EVT_HELPER_CMD(0, 0);

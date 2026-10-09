@@ -1,3 +1,4 @@
+#include "BossPreview.h"
 #include "AP/rel_patch_definitions.h"
 #include "evt_cmd.h"
 #include "mod.h"
@@ -26,6 +27,7 @@
 #include <cstdint>
 #include <cstdio>
 #include <cstring>
+#include <initializer_list>
 
 using namespace ttyd;
 using namespace mod::owr;
@@ -641,6 +643,12 @@ namespace mod
         tik_01_init_evt[189] = 16;
         tik_01_init_evt[195] = GSW(1700);
         tik_01_init_evt[196] = 11;
+
+        // Preserve Blooper's collision and fight script while replacing its visuals.
+        for (int word : {182, 314, 356, 368, 381, 433})
+            tik_geso_battle[word] = reinterpret_cast<int32_t>(boss_preview::SceneCamera);
+        for (int word : {102, 456})
+            tik_geso_battle[word] = reinterpret_cast<int32_t>(boss_preview::SceneDialogue);
 
         tik_geso_battle[657] = GSWF(6056);
         tik_geso_battle[658] = 1;

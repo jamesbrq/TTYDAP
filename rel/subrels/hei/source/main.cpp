@@ -1,3 +1,4 @@
+#include "BossPreview.h"
 #include "AP/rel_patch_definitions.h"
 #include "evt_cmd.h"
 #include "OWR.h"
@@ -13,6 +14,7 @@
 #include "ttyd/evt_pouch.h"
 
 #include <cstdint>
+#include <initializer_list>
 
 using namespace ttyd;
 using namespace mod::owr;
@@ -200,6 +202,11 @@ namespace mod
 
         hei_07_init_evt[56] = GSW(1701);
         hei_07_init_evt[57] = 8;
+
+        for (int word : {65, 97})
+            hei_evt_golden[word] = reinterpret_cast<int32_t>(boss_preview::SceneCamera);
+        for (int word : {77, 251})
+            hei_evt_golden[word] = reinterpret_cast<int32_t>(boss_preview::SceneDialogue);
 
         hei_evt_golden[267] = GSW(1701);
         hei_evt_golden[268] = 9;

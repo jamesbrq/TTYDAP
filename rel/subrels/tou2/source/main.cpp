@@ -1,3 +1,4 @@
+#include "BossPreview.h"
 #include "AP/rel_patch_definitions.h"
 #include "evt_cmd.h"
 #include "OWR.h"
@@ -9,6 +10,7 @@
 #include "ttyd/evtmgr_cmd.h"
 
 #include <cstdint>
+#include <initializer_list>
 
 using namespace ttyd;
 using namespace mod;
@@ -19,6 +21,11 @@ using namespace ttyd::battle_database_common;
 extern int32_t tou2_init_kinosikowa[];
 extern int32_t tou2_npc_entry[];
 extern int32_t tou2_evt_match[];
+extern int32_t tou2_evt_champ_opening[];
+extern int32_t tou2_evt_champ_opening_re[];
+extern int32_t tou2_evt_champion[];
+extern int32_t tou2_evt_champion2[];
+extern "C" int32_t tou2_champion_belt(evtmgr::EvtEntry *, bool);
 extern int32_t tou2_evt_kurikuri_lose[];
 extern int32_t tou2_evt_shinemon_lose[];
 extern int32_t tou2_evt_champ_win[];
@@ -81,6 +88,14 @@ EVT_PATCH_END()
 
 namespace mod
 {
+    static int32_t RawkBelt(evtmgr::EvtEntry *evt, bool firstCall)
+    {
+        if (gState && gState->apSettings && gState->apSettings->bossRandomizer &&
+            gState->bossLoadouts[21].enemyIds[0] != 0x40)
+            return 2;
+        return tou2_champion_belt(evt, firstCall);
+    }
+
     void main()
     {
         tou2_init_kinosikowa[1] = GSW(1703);
@@ -156,6 +171,33 @@ namespace mod
         tou2_evt_default_lose[112] = 12;
         tou2_evt_default_lose[113] = 28;
         tou2_evt_default_lose[118] = 28;
+
+        for (int word : {34, 283, 542})
+            tou2_evt_champ_opening[word] = reinterpret_cast<int32_t>(boss_preview::ArenaCamera);
+        for (int word : {85, 247, 506, 753})
+            tou2_evt_champ_opening_re[word] = reinterpret_cast<int32_t>(boss_preview::ArenaCamera);
+        for (int word : {285, 301})
+            tou2_evt_champ_opening_re[word] = reinterpret_cast<int32_t>(boss_preview::SceneDialogue);
+        for (int word : {578, 589, 731})
+            tou2_evt_default_opening[word] = reinterpret_cast<int32_t>(boss_preview::ArenaCamera);
+        for (int word : {657})
+            tou2_evt_default_opening[word] = reinterpret_cast<int32_t>(boss_preview::SceneDialogue);
+        for (int word : {135, 297})
+            tou2_evt_champion[word] = reinterpret_cast<int32_t>(boss_preview::ArenaCamera);
+        for (int word : {335, 351})
+            tou2_evt_champion[word] = reinterpret_cast<int32_t>(boss_preview::SceneDialogue);
+        for (int word : {22, 121})
+            tou2_evt_champion2[word] = reinterpret_cast<int32_t>(boss_preview::ArenaCamera);
+        for (int word : {133})
+            tou2_evt_champion2[word] = reinterpret_cast<int32_t>(boss_preview::SceneDialogue);
+        for (int word : {734, 846, 866})
+            tou2_evt_boss[word] = reinterpret_cast<int32_t>(boss_preview::ArenaCamera);
+        for (int word : {802, 858})
+            tou2_evt_boss[word] = reinterpret_cast<int32_t>(boss_preview::SceneDialogue);
+        tou2_evt_champ_opening[49] = reinterpret_cast<int32_t>(RawkBelt);
+        tou2_evt_default_opening[168] = reinterpret_cast<int32_t>(RawkBelt);
+        tou2_evt_champion[69] = reinterpret_cast<int32_t>(RawkBelt);
+        tou2_evt_champion2[57] = reinterpret_cast<int32_t>(RawkBelt);
 
         tou2_evt_boss[1900] = GSW(1703);
         tou2_evt_boss[1901] = 20;

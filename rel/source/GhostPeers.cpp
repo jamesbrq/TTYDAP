@@ -1,4 +1,5 @@
 #include "GhostPeers.h"
+#include "BossPreview.h"
 #include "OWR.h"
 #include "StateManager.h"
 #include "mod.h"
@@ -2941,6 +2942,7 @@ namespace mod::ghosts
     // if the engine's pass wouldn't have covered them - no leak, no double-free.
     KEEP_FUNC void animPoseAutoReleaseHook(int32_t group)
     {
+        boss_preview::BeforeAutoRelease(group);
         if (group == kPoseGroup && g_initialized)
             ReleaseAllGhostPoses();
 

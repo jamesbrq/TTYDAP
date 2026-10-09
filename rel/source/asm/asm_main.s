@@ -205,7 +205,7 @@ bEvtItemGetItemGuard:
 bEvtItemGetItemGuardReturn:
 	b 0
 
-# Called at both badge checks with r3 = NPC battle info, r0 = Mario level.
+# Called at both badge checks with r3 = encounter group, r0 = Mario level.
 bFieldBattleLevel:
     stwu %r1, -0x40(%r1)
     stw %r0, 0x38(%r1)

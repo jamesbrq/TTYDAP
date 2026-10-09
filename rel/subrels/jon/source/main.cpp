@@ -1,3 +1,4 @@
+#include "BossPreview.h"
 #include "subrel_jon.h"
 #include "evt_cmd.h"
 #include "OWR.h"
@@ -6,8 +7,11 @@
 #include "ttyd/battle_unit.h"
 #include "ttyd/battle_database_common.h"
 #include "ttyd/evt_bero.h"
+#include "ttyd/evt_mario.h"
 
 #include <cstdint>
+#include <algorithm>
+#include <initializer_list>
 
 using namespace ttyd;
 using namespace mod::owr;
@@ -23,15 +27,22 @@ extern int32_t jon_iri_12_makkino_talk[];
 extern int32_t jon_iri_12_makkino_fall_return[];
 extern int32_t jon_iri_12_init[];
 extern int32_t jon_zonbaba_first_event[];
+extern int32_t jon_evt_open_box[];
 
 // clang-format off
-EVT_BEGIN(jon_zonbaba_first_event_evt)
-    USER_FUNC(evt_bero::evt_bero_mapchange, PTR("end_00"), 0)
+EVT_BEGIN(jon_chest_goal_evt)
+    USER_FUNC(evt_mario::evt_mario_key_onoff, 1)
+    IF_EQUAL(GSW(1705), 100)
+        IF_EQUAL(GSWF(5085), 1)
+            USER_FUNC(evt_bero::evt_bero_mapchange, PTR("end_00"), 0)
+        END_IF()
+    END_IF()
     RETURN()
 EVT_END()
 
-EVT_BEGIN(jon_zonbaba_first_event_hook)
-    RUN_CHILD_EVT(jon_zonbaba_first_event_evt)
+EVT_BEGIN(jon_chest_goal_hook)
+    RUN_CHILD_EVT(jon_chest_goal_evt)
+    RETURN()
 EVT_PATCH_END()
 // clang-format on
 
@@ -105,6 +116,17 @@ namespace mod
 
         jon_evt_iri_30_bomb_rakugaki[148] = GSWF(6357);
 
+        // Keep native timing, fog and rewards. Only adapt the pre-battle
+        // camera for replacements; shared dragon rigs retain the native shots.
+        for (int word : {170, 184, 196})
+            jon_zonbaba_first_event[word] = reinterpret_cast<int32_t>(boss_preview::SceneCamera);
+        if (gState->apSettings->bossRandomizer)
+        {
+            const uint8_t enemy = gState->bossLoadouts[8].enemyIds[0];
+            if (enemy != 0x17 && enemy != 0x84 && enemy != 0xab)
+                std::fill(&jon_zonbaba_first_event[141], &jon_zonbaba_first_event[152], 0);
+        }
+
         jon_zonbaba_first_event[642] = GSW(1742);
         jon_zonbaba_first_event[643] = 1;
         jon_zonbaba_first_event[645] = GSW(1772);
@@ -116,8 +138,8 @@ namespace mod
 
         if (mod::owr::gState->apSettings->goal == 3)
         {
-            patch::writePatch(&jon_zonbaba_first_event[672], jon_zonbaba_first_event_hook, sizeof(jon_zonbaba_first_event_hook));
-            jon_zonbaba_first_event[674] = 0;
+            // End only after the floor-100 chest's normal item pickup completes.
+            patch::writePatch(&jon_evt_open_box[41], jon_chest_goal_hook, sizeof(jon_chest_goal_hook));
         }
 
         ApplyEnemyGroups(battleGroupList, kBtlGrpRange_jon_jon);

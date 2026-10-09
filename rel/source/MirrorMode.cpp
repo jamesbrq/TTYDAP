@@ -68,7 +68,8 @@ namespace mod::mirror
         MotFn g_yoshiUse_trampoline = nullptr;
         void (*g_dispDraw_trampoline)(CameraId) = nullptr;
 #if defined(TTYD_US)
-        int32_t (*g_shotTarget_trampoline)() = nullptr;
+        int32_t (*g_shotTarget_trampoline)(void *) = nullptr;
+        uint32_t (*g_sfxSpatialParams_trampoline)(uint32_t, const void *, uint32_t, uint32_t) = nullptr;
 #endif
 
         // Camera whose disp callbacks are currently rendering; 0xFF outside
@@ -490,6 +491,26 @@ namespace mod::mirror
     }
 
 #if defined(TTYD_US)
+    KEEP_FUNC uint32_t sfxSpatialParamsHook(uint32_t flags, const void *position,
+                                           uint32_t volume, uint32_t distance)
+    {
+        const uint32_t params = g_sfxSpatialParams_trampoline(flags, position, volume, distance);
+        if (!active())
+            return params;
+
+        // psnd's packed result is volume, stereo pan, surround pan, padding.
+        // Reflect only stereo pan after the native attenuation calculation.
+        const uint32_t pan = (params >> 16) & 0xFFu;
+        return (params & ~0x00FF0000u) | ((127u - pan) << 16);
+    }
+
+    KEEP_FUNC void numberDigitTransHook(gc::mtx34 *m, float x, float y, float z)
+    {
+        // effNumberGX lays out each character before applying the effect's
+        // world matrix. Counter-reflect spacing as well as individual faces.
+        gc::mtx::PSMTXTrans(m, active() ? -x : x, y, z);
+    }
+
     // Battle directions use bits 18/19; system directions use bits 14/15.
     // Retarget only world-space target and cursor reads, leaving HUD menus alone.
     KEEP_FUNC uint32_t mirrorBattleTargetRepeat(uint32_t mask)
@@ -514,17 +535,17 @@ namespace mod::mirror
                ((dirs & 0x4000u) << 1) | ((dirs & 0x8000u) >> 1);
     }
 
-    KEEP_FUNC int32_t shotTargetHook()
+    KEEP_FUNC int32_t shotTargetHook(void *battleWork)
     {
-        if (!active() || !_battleWorkPointer)
-            return g_shotTarget_trampoline();
+        if (!active() || !battleWork)
+            return g_shotTarget_trampoline(battleWork);
 
         // Body Slam reads the buffered battle stick directly rather than
         // keyGetStickX. Scope the reflection to its action-command update.
-        int8_t *stickX = reinterpret_cast<int8_t *>(_battleWorkPointer + 0xF2E);
+        int8_t *stickX = reinterpret_cast<int8_t *>(static_cast<uint8_t *>(battleWork) + 0xF2E);
         const int8_t saved = *stickX;
         *stickX = (saved == -128) ? 127 : static_cast<int8_t>(-saved);
-        const int32_t result = g_shotTarget_trampoline();
+        const int32_t result = g_shotTarget_trampoline(battleWork);
         *stickX = saved;
         return result;
     }
@@ -554,13 +575,18 @@ namespace mod::mirror
     KEEP_FUNC void InstallMirrorModeHooks()
     {
 #if defined(TTYD_US)
+        g_sfxSpatialParams_trampoline = patch::hookFunction(
+            reinterpret_cast<uint32_t (*)(uint32_t, const void *, uint32_t, uint32_t)>(0x800DC6D4),
+            sfxSpatialParamsHook);
+        // effNumberGX's per-character translation, before model/view concat.
+        patch::writeBranchBL(reinterpret_cast<void *>(0x80257EB4), numberDigitTransHook);
         // Verified US call sites in BattleCommandInput and sac_muki main_cursor.
         patch::writeBranchBL(reinterpret_cast<void *>(0x80122DE8), mirrorBattleTargetRepeat);
         patch::writeBranchBL(reinterpret_cast<void *>(0x80122E3C), mirrorBattleTargetRepeat);
         patch::writeBranchBL(reinterpret_cast<void *>(0x8024E78C), mirrorPowerLiftDirTrigger);
         patch::writeBranchBL(reinterpret_cast<void *>(0x8024E7C8), mirrorPowerLiftDirTrigger);
         g_shotTarget_trampoline = patch::hookFunction(
-            reinterpret_cast<int32_t (*)()>(0x80237F40), shotTargetHook);
+            reinterpret_cast<int32_t (*)(void *)>(0x80237F40), shotTargetHook);
 #endif
         g_camMain_trampoline = patch::hookFunction(camMain, camMainHook);
         g_marioGetStick_trampoline =

@@ -33,6 +33,8 @@ using namespace mod::owr;
 
 extern int32_t tou_evt_open_tou[];
 extern int32_t tou_talk_gardman[];
+extern int32_t tou_wait_match_guard[];
+extern int32_t tou_wait_champion_guard[];
 extern int32_t tou_evt_tou_match_make_default_sub[];
 extern int32_t tou_evt_tou_match_make_default[];
 extern int32_t tou_evt_mail_1[];
@@ -828,6 +830,15 @@ namespace mod
         }
 
         reinterpret_cast<uint32_t *>(&ttyd::tou::tou_rankingReset)[43] = 0x60000000;
+
+        // Both locker-room guard scripts wait for 240 controllable frames.
+        // Keep their control/motion safety checks, but finish after the first safe frame.
+        int32_t *const guardWaits[] = {tou_wait_match_guard, tou_wait_champion_guard};
+        for (int32_t *guardWait : guardWaits)
+        {
+            patch::writePatch(&guardWait[29], 0x2C000000); // cmpwi r0, 0 (was 240)
+            patch::writePatch(&guardWait[31], 0x38000001); // clamp elapsed frames to 1
+        }
 
         tou_evt_open_tou[1] = GSW(1703);
         tou_evt_open_tou[2] = 6;

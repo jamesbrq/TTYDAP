@@ -1,3 +1,4 @@
+#include "BossPreview.h"
 #include "AP/rel_patch_definitions.h"
 #include "evt_cmd.h"
 #include "OWR.h"
@@ -13,6 +14,7 @@
 #include "ttyd/evt_snd.h"
 
 #include <cstdint>
+#include <initializer_list>
 
 using namespace ttyd;
 using namespace mod::owr;
@@ -154,6 +156,25 @@ namespace mod
         win_witchtrio_picture[192] = 335;
         win_witchtrio_picture[514] = GSW(1702);
         win_witchtrio_picture[515] = 13;
+
+        for (int word : {128, 186, 218, 238, 258, 335, 515})
+            win_mario_vs_witchtrio[word] = reinterpret_cast<int32_t>(boss_preview::SceneCamera);
+        for (int word : {144, 198, 230, 250, 276, 323, 347, 362, 370, 395, 409, 420, 429})
+            win_mario_vs_witchtrio[word] = reinterpret_cast<int32_t>(boss_preview::SceneDialogue);
+        if (gState && gState->apSettings && gState->apSettings->bossRandomizer &&
+            gState->bossLoadouts[23].enemyIds[0] != 0x21)
+        {
+            // Keep the opening and the challenge, then retain the complete
+            // approach, battle trigger, thread cleanup and necklace reward.
+            // Clear every word in the skipped blocks so event scanning cannot
+            // interpret old command arguments as new instructions.
+            for (int word = 197; word < 408; ++word)
+                win_mario_vs_witchtrio[word] = EVT_HELPER_CMD(0, 0);
+            for (int word = 414; word < 434; ++word)
+                win_mario_vs_witchtrio[word] = EVT_HELPER_CMD(0, 0);
+        }
+        win_witchtrio_lose[110] = reinterpret_cast<int32_t>(boss_preview::SceneCamera);
+        win_witchtrio_lose[205] = reinterpret_cast<int32_t>(boss_preview::SceneDialogue);
 
         win_mario_vs_witchtrio[548] = GSW(1712);
         win_mario_vs_witchtrio[549] = 2;

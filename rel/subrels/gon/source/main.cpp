@@ -1,6 +1,7 @@
 #include "AP/rel_patch_definitions.h"
 #include "evt_cmd.h"
 #include "OWR.h"
+#include "BossPreview.h"
 #include "patch.h"
 #include "subrel_gon.h"
 #include "ttyd/battle_unit.h"
@@ -12,6 +13,7 @@
 #include "ttyd/evt_npc.h"
 
 #include <cstdint>
+#include <initializer_list>
 
 using namespace ttyd;
 using namespace mod::owr;
@@ -60,6 +62,11 @@ extern int32_t gon_key_tbl_04[];
 extern int32_t gon_key_tbl00_05[];
 extern int32_t gon_key_tbl01_05[];
 extern int32_t gon_key_tbl_08[];
+
+static int32_t SkipPreviewEvent(ttyd::evtmgr::EvtEntry *, bool)
+{
+    return 2;
+}
 
 // clang-format off
 EVT_BEGIN(gon_evt_majin2_item)
@@ -215,6 +222,37 @@ namespace mod
 
         gon_10_init_evt[35] = GSW(1711);
         gon_10_init_evt[36] = 7;
+
+        if (gState->apSettings->bossRandomizer && !boss_preview::UsesOriginalDragonScene())
+        {
+            // Move the pre-battle approach group toward the room center. Shift
+            // both starting positions and destinations to preserve the walk.
+            for (int word : {38, 41, 48, 54, 101, 107})
+                gon_gonbaba_event[word] += 350;
+
+            // Shorter dramatic waits for characters that do not perform the
+            // dragon entrance animations. Camera moves retain their full duration.
+            const int timings[][2] = {
+                {113, 650}, {163, 750}, {212, 600}, {227, 4500},
+                {256, 200}, {303, 400}, {336, 250}, {359, 250}, {371, 3000},
+            };
+            for (const auto &timing : timings)
+                gon_gonbaba_event[timing[0]] = timing[1];
+            // SFX_STG1_GNB_ROAR2 belongs only to dragon replacements.
+            gon_gonbaba_event[173] = reinterpret_cast<int32_t>(SkipPreviewEvent);
+            // The 15 ms shake commands interrupt the preceding 4500 ms move.
+            // Non-dragons keep the framing steady until that move completes.
+            for (int word : {231, 243})
+                gon_gonbaba_event[word] = reinterpret_cast<int32_t>(SkipPreviewEvent);
+        }
+
+        // Dragon replacements delegate these calls to the original scene.
+        for (int word : {201, 279, 326, 361})
+            gon_gonbaba_event[word] = reinterpret_cast<int32_t>(boss_preview::SceneCamera);
+        for (int word : {267, 314, 347})
+            gon_gonbaba_event[word] = reinterpret_cast<int32_t>(boss_preview::SceneTextAnchor);
+        for (int word : {273, 320, 353, 577})
+            gon_gonbaba_event[word] = reinterpret_cast<int32_t>(boss_preview::SceneDialogue);
 
         gon_gonbaba_event[1384] = GSW(1711);
         gon_gonbaba_event[1385] = 7;

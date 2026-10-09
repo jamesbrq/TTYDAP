@@ -1,3 +1,4 @@
+#include "BossPreview.h"
 #include "AP/rel_patch_definitions.h"
 #include "evt_cmd.h"
 #include "OWR.h"
@@ -18,6 +19,7 @@
 #include "ttyd/swdrv.h"
 
 #include <cstdint>
+#include <initializer_list>
 
 using namespace mod::owr;
 using namespace ttyd;
@@ -85,6 +87,7 @@ extern int32_t aji_evt_sw[];
 extern int32_t aji_evt_bcv_sw[];
 extern int32_t aji_evt_door_msg_13[];
 extern int32_t aji_13_init_evt[];
+extern int32_t aji_evt_boss[];
 extern int32_t aji_evt_boss2[];
 extern int32_t aji_14_init_evt[];
 extern int32_t aji_15_init_evt[];
@@ -383,6 +386,12 @@ EVT_PATCH_END()
 
 namespace mod
 {
+    static int32_t Magnus2Reveal(evtmgr::EvtEntry *evt, bool firstCall)
+    {
+        if (firstCall) boss_preview::SetMagnus2Revealed();
+        return evt_npc::evt_npc_set_anim(evt, firstCall);
+    }
+
     void main()
     {
         aji_first_evt[308] = GSW(1707);
@@ -634,6 +643,14 @@ namespace mod
         aji_13_init_evt[206] = 15;
         aji_13_init_evt[278] = GSW(1707);
         aji_13_init_evt[279] = 16;
+
+        // Preserve Crump's entrance and cockpit jump before revealing the
+        // replacement with the robot's activation and subsequent movement.
+        aji_evt_boss[339] = reinterpret_cast<int32_t>(Magnus2Reveal);
+        for (int word : {372, 400, 451})
+            aji_evt_boss[word] = reinterpret_cast<int32_t>(boss_preview::Magnus2Camera);
+        aji_evt_boss[520] = reinterpret_cast<int32_t>(boss_preview::SceneCamera);
+        aji_evt_boss[389] = reinterpret_cast<int32_t>(boss_preview::SceneDialogue);
 
         aji_evt_boss2[133] = GSW(1707);
         aji_evt_boss2[134] = 16;

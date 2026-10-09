@@ -1,3 +1,4 @@
+#include "BossPreview.h"
 #include "subrel_las.h"
 #include "evt_cmd.h"
 #include "OWR.h"
@@ -59,6 +60,7 @@ extern int32_t las_bonbaba_init[];
 extern int32_t las_26_init_evt[];
 extern int32_t las_syuryo_init[];
 extern int32_t las_first_evt_28[];
+extern int32_t las_syuryo_evt[];
 extern int32_t las_koopa_evt[];
 extern int32_t las_shuryolight_init_28[];
 extern int32_t las_28_init_evt[];
@@ -152,6 +154,36 @@ EVT_DEFINE_USER_FUNC(sqPhase1BattleResult)
 
 namespace mod
 {
+    static int32_t GrodusDialogue(evtmgr::EvtEntry *evt, bool firstCall)
+    {
+        if (firstCall) boss_preview::SetPalaceEncounter(12);
+        return boss_preview::SceneDialogue(evt, firstCall);
+    }
+
+    static int32_t BowserReveal(evtmgr::EvtEntry *evt, bool firstCall)
+    {
+        if (firstCall) boss_preview::SetPalaceEncounter(11);
+        return evt_npc::evt_npc_set_position(evt, firstCall);
+    }
+
+    static int32_t Queen1Reveal(evtmgr::EvtEntry *evt, bool firstCall)
+    {
+        if (firstCall) boss_preview::SetPalaceEncounter(13);
+        return evt_npc::evt_npc_set_position(evt, firstCall);
+    }
+
+    static int32_t Queen2Reveal(evtmgr::EvtEntry *evt, bool firstCall)
+    {
+        if (firstCall) boss_preview::SetPalaceEncounter(14);
+        return evt_npc::evt_npc_set_position(evt, firstCall);
+    }
+
+    static int32_t QueenDefeated(evtmgr::EvtEntry *evt, bool firstCall)
+    {
+        if (firstCall) boss_preview::SetPalaceEncounter(-1);
+        return evt_npc::evt_npc_set_position(evt, firstCall);
+    }
+
     void main()
     {
         las_first_evt_00[160] = GSW(1708);
@@ -201,6 +233,113 @@ namespace mod
 
         las_first_evt_09[195] = GSW(1708);
         las_first_evt_09[196] = 6;
+
+        las_majyorin_evt_main[54] = reinterpret_cast<int32_t>(boss_preview::SceneDialogue);
+        las_majyorin_evt_main[65] = reinterpret_cast<int32_t>(boss_preview::SceneCamera);
+        las_majyorin_evt_main[135] = reinterpret_cast<int32_t>(boss_preview::SceneDialogue);
+        las_majyorin_evt_main[158] = reinterpret_cast<int32_t>(boss_preview::SceneCamera);
+        las_majyorin_evt_main[172] = reinterpret_cast<int32_t>(boss_preview::SceneDialogue);
+        las_majyorin_evt_main[238] = reinterpret_cast<int32_t>(boss_preview::SceneDialogue);
+        las_majyorin_evt_main[247] = reinterpret_cast<int32_t>(boss_preview::SceneDialogue);
+        las_majyorin_evt_main[253] = reinterpret_cast<int32_t>(boss_preview::SceneDialogue);
+        las_majyorin_evt_main[259] = reinterpret_cast<int32_t>(boss_preview::SceneDialogue);
+        las_majyorin_evt_main[273] = reinterpret_cast<int32_t>(boss_preview::SceneDialogue);
+        las_majyorin_evt_main[279] = reinterpret_cast<int32_t>(boss_preview::SceneDialogue);
+        las_majyorin_evt_main[306] = reinterpret_cast<int32_t>(boss_preview::SceneCamera);
+        las_majyorin_evt_main[318] = reinterpret_cast<int32_t>(boss_preview::SceneDialogue);
+        las_majyorin_evt_main[324] = reinterpret_cast<int32_t>(boss_preview::SceneDialogue);
+        las_majyorin_evt_main[330] = reinterpret_cast<int32_t>(boss_preview::SceneDialogue);
+        las_majyorin_evt_main[336] = reinterpret_cast<int32_t>(boss_preview::SceneCamera);
+        las_bonbaba_evt[102] = reinterpret_cast<int32_t>(boss_preview::SceneDialogue);
+        las_bonbaba_evt[211] = reinterpret_cast<int32_t>(boss_preview::SceneCamera);
+        las_bonbaba_evt[241] = reinterpret_cast<int32_t>(boss_preview::SceneDialogue);
+        las_bonbaba_evt[271] = reinterpret_cast<int32_t>(boss_preview::SceneCamera);
+        las_bonbaba_evt[301] = reinterpret_cast<int32_t>(boss_preview::SceneDialogue);
+        las_bonbaba_evt[313] = reinterpret_cast<int32_t>(boss_preview::SceneCamera);
+        las_bonbaba_evt[343] = reinterpret_cast<int32_t>(boss_preview::SceneDialogue);
+        las_bonbaba_evt[349] = reinterpret_cast<int32_t>(boss_preview::SceneCamera);
+        las_syuryo_evt[83] = reinterpret_cast<int32_t>(boss_preview::SceneDialogue);
+        las_syuryo_evt[89] = reinterpret_cast<int32_t>(boss_preview::SceneCamera);
+        las_syuryo_evt[107] = reinterpret_cast<int32_t>(boss_preview::SceneDialogue);
+        las_syuryo_evt[113] = reinterpret_cast<int32_t>(boss_preview::SceneCamera);
+        las_syuryo_evt[127] = reinterpret_cast<int32_t>(boss_preview::SceneDialogue);
+        las_syuryo_evt[168] = reinterpret_cast<int32_t>(boss_preview::SceneCamera);
+        las_syuryo_evt[182] = reinterpret_cast<int32_t>(boss_preview::SceneDialogue);
+        las_syuryo_evt[188] = reinterpret_cast<int32_t>(boss_preview::SceneCamera);
+        las_syuryo_evt[208] = reinterpret_cast<int32_t>(boss_preview::SceneDialogue);
+        las_syuryo_evt[234] = reinterpret_cast<int32_t>(boss_preview::SceneCamera);
+        las_syuryo_evt[248] = reinterpret_cast<int32_t>(boss_preview::SceneDialogue);
+        las_syuryo_evt[254] = reinterpret_cast<int32_t>(boss_preview::SceneCamera);
+        las_syuryo_evt[268] = reinterpret_cast<int32_t>(boss_preview::SceneDialogue);
+        las_syuryo_evt[296] = reinterpret_cast<int32_t>(boss_preview::SceneCamera);
+        las_syuryo_evt[310] = reinterpret_cast<int32_t>(boss_preview::SceneDialogue);
+        las_syuryo_evt[372] = reinterpret_cast<int32_t>(boss_preview::SceneCamera);
+        las_syuryo_evt[395] = reinterpret_cast<int32_t>(boss_preview::SceneDialogue);
+        las_syuryo_evt[401] = reinterpret_cast<int32_t>(boss_preview::SceneCamera);
+        las_koopa_evt[167] = reinterpret_cast<int32_t>(boss_preview::SceneDialogue);
+        las_koopa_evt[625] = reinterpret_cast<int32_t>(boss_preview::SceneCamera);
+        las_koopa_evt[642] = reinterpret_cast<int32_t>(boss_preview::SceneDialogue);
+        las_koopa_evt[672] = reinterpret_cast<int32_t>(boss_preview::SceneCamera);
+        las_koopa_evt[700] = reinterpret_cast<int32_t>(boss_preview::SceneDialogue);
+        las_koopa_evt[951] = reinterpret_cast<int32_t>(boss_preview::SceneCamera);
+        las_koopa_evt[963] = reinterpret_cast<int32_t>(boss_preview::SceneDialogue);
+        las_koopa_evt[1060] = reinterpret_cast<int32_t>(boss_preview::SceneCamera);
+        las_koopa_evt[1072] = reinterpret_cast<int32_t>(boss_preview::SceneDialogue);
+        las_koopa_evt[1121] = reinterpret_cast<int32_t>(boss_preview::SceneCamera);
+        las_koopa_evt[1135] = reinterpret_cast<int32_t>(boss_preview::SceneDialogue);
+        las_koopa_evt[1141] = reinterpret_cast<int32_t>(boss_preview::SceneCamera);
+        las_last_evt_3[90] = reinterpret_cast<int32_t>(boss_preview::SceneCamera);
+        las_last_evt_3[170] = reinterpret_cast<int32_t>(boss_preview::SceneDialogue);
+        las_last_evt_3[213] = reinterpret_cast<int32_t>(boss_preview::SceneCamera);
+        las_last_evt_3[234] = reinterpret_cast<int32_t>(boss_preview::SceneDialogue);
+        las_last_evt_3[577] = reinterpret_cast<int32_t>(boss_preview::SceneDialogue);
+        las_last_evt_3[734] = reinterpret_cast<int32_t>(boss_preview::SceneCamera);
+        las_last_evt_3[752] = reinterpret_cast<int32_t>(boss_preview::SceneDialogue);
+        las_last_evt_3[885] = reinterpret_cast<int32_t>(boss_preview::SceneDialogue);
+        las_last_evt_3[904] = reinterpret_cast<int32_t>(boss_preview::SceneCamera);
+        las_last_evt_3[932] = reinterpret_cast<int32_t>(boss_preview::SceneDialogue);
+        las_last_evt_3[958] = reinterpret_cast<int32_t>(boss_preview::SceneCamera);
+        las_last_evt_3[1000] = reinterpret_cast<int32_t>(boss_preview::SceneDialogue);
+        las_last_evt_3[1055] = reinterpret_cast<int32_t>(boss_preview::SceneCamera);
+        las_last_evt_3[1078] = reinterpret_cast<int32_t>(boss_preview::SceneDialogue);
+        las_last_evt_3[1112] = reinterpret_cast<int32_t>(boss_preview::SceneCamera);
+        las_last_evt_3[1129] = reinterpret_cast<int32_t>(boss_preview::SceneDialogue);
+        las_last_evt_3[1176] = reinterpret_cast<int32_t>(boss_preview::SceneDialogue);
+        las_last_evt_3[1228] = reinterpret_cast<int32_t>(boss_preview::SceneDialogue);
+        las_last_evt_3[1238] = reinterpret_cast<int32_t>(boss_preview::SceneCamera);
+        las_last_evt_3[1261] = reinterpret_cast<int32_t>(boss_preview::SceneDialogue);
+        las_last_evt_3[1278] = reinterpret_cast<int32_t>(boss_preview::SceneCamera);
+        las_last_evt_3_1[91] = reinterpret_cast<int32_t>(boss_preview::SceneCamera);
+        las_last_evt_3_1[134] = reinterpret_cast<int32_t>(boss_preview::SceneDialogue);
+        las_last_evt_3_1[187] = reinterpret_cast<int32_t>(boss_preview::SceneCamera);
+        las_last_evt_3_1[201] = reinterpret_cast<int32_t>(boss_preview::SceneDialogue);
+        las_last_evt_3_2[84] = reinterpret_cast<int32_t>(boss_preview::SceneCamera);
+        las_last_evt_3_2[420] = reinterpret_cast<int32_t>(boss_preview::SceneCamera);
+        las_last_evt_3_2[437] = reinterpret_cast<int32_t>(boss_preview::SceneDialogue);
+        las_last_evt_3_2[531] = reinterpret_cast<int32_t>(boss_preview::SceneCamera);
+        las_last_evt_3_2[608] = reinterpret_cast<int32_t>(boss_preview::SceneDialogue);
+        las_last_evt_3_2[672] = reinterpret_cast<int32_t>(boss_preview::SceneCamera);
+        las_last_evt_3_2[689] = reinterpret_cast<int32_t>(boss_preview::SceneDialogue);
+        las_last_evt_3_2[753] = reinterpret_cast<int32_t>(boss_preview::SceneCamera);
+        las_last_evt_3_2[770] = reinterpret_cast<int32_t>(boss_preview::SceneDialogue);
+        las_last_evt_3_2[867] = reinterpret_cast<int32_t>(boss_preview::SceneCamera);
+        las_last_evt_3_2[882] = reinterpret_cast<int32_t>(boss_preview::SceneDialogue);
+        las_last_evt_3_2[1149] = reinterpret_cast<int32_t>(boss_preview::SceneCamera);
+        las_last_evt_3_2[1251] = reinterpret_cast<int32_t>(boss_preview::SceneDialogue);
+        las_last_evt_3_2[1257] = reinterpret_cast<int32_t>(boss_preview::SceneCamera);
+        las_last_evt_3_2[1623] = reinterpret_cast<int32_t>(boss_preview::SceneCamera);
+        las_last_evt_3_2[1638] = reinterpret_cast<int32_t>(boss_preview::SceneDialogue);
+        las_last_evt_3_2[1721] = reinterpret_cast<int32_t>(boss_preview::SceneCamera);
+        las_last_evt_3_2[1738] = reinterpret_cast<int32_t>(boss_preview::SceneDialogue);
+        las_last_evt_3_2[1744] = reinterpret_cast<int32_t>(boss_preview::SceneCamera);
+        las_last_evt_3_2[1759] = reinterpret_cast<int32_t>(boss_preview::SceneDialogue);
+        las_last_evt_3_2[1765] = reinterpret_cast<int32_t>(boss_preview::SceneCamera);
+        las_syuryo_evt[83] = reinterpret_cast<int32_t>(GrodusDialogue);
+        las_koopa_evt[152] = reinterpret_cast<int32_t>(BowserReveal);
+        las_last_evt_3[45] = reinterpret_cast<int32_t>(Queen1Reveal);
+        las_last_evt_3_1[45] = reinterpret_cast<int32_t>(Queen2Reveal);
+        las_last_evt_3_2[38] = reinterpret_cast<int32_t>(Queen2Reveal);
+        las_last_evt_4[31] = reinterpret_cast<int32_t>(QueenDefeated);
 
         las_majyorin_evt_main[632] = GSW(1708);
         las_majyorin_evt_main[633] = 9;
