@@ -1,4 +1,7 @@
 #include "customWarp.h"
+#include "BossPreview.h"
+#include "FieldEnemy.h"
+#include "ClientTeleport.h"
 #include "SaveBlock.h"
 #include "MirrorMode.h"
 #include "tracker.h"
@@ -64,6 +67,8 @@
 #include <cstdint>
 #include <cstdio>
 #include <cstring>
+
+extern ttyd::pmario_sound::BGMListEntry main_psbgmlist[262];
 
 using gc::pad::PadInput;
 using ttyd::common::ItemData;
@@ -237,7 +242,7 @@ namespace mod::owr
     KEEP_VAR int32_t (*g_BattleCheckConcluded_trampoline)(void *) = nullptr;
     KEEP_VAR void (*g_btlseqFirstAct_trampoline)(void *) = nullptr;
     KEEP_VAR ttyd::dvdmgr::DvdMgrFile *(*g_DVDMgrOpen_trampoline)(const char *, int, uint16_t) = nullptr;
-    KEEP_VAR int32_t (*g_psndBGMOn_f_d_trampoline)(uint32_t, const char *, uint32_t, uint32_t, uint32_t) = nullptr;
+    KEEP_VAR int32_t (*g_psndBGMOn_f_d_trampoline)(uint32_t, uint32_t, uint32_t, uint32_t, uint32_t) = nullptr;
 
     void OWR::SequenceInit()
     {
@@ -1442,16 +1447,30 @@ namespace mod::owr
         }
     } // namespace
 
-    KEEP_FUNC int32_t psndBGMOn_f_d_Hook(uint32_t flags, const char *name, uint32_t a3, uint32_t a4, uint32_t a5)
+    KEEP_FUNC int32_t psndBGMOn_f_d_Hook(uint32_t flags, uint32_t idOrName, uint32_t a3, uint32_t a4, uint32_t a5)
     {
-        if (gState && gState->apSettings && gState->apSettings->music == 1 && name)
+        if (gState && gState->apSettings && gState->apSettings->music == 1)
         {
+            // Vanilla accepts a nonnegative track index or a high-address name pointer.
+            const char *name;
+            if (static_cast<int32_t>(idOrName) >= 0)
+            {
+                if (idOrName >= 262)
+                    return -1;
+                name = main_psbgmlist[idOrName].name;
+            }
+            else
+            {
+                name = reinterpret_cast<const char *>(idOrName);
+            }
+            if (!name)
+                return -1;
             const bool jingle = strncmp(name, "BGM_FF_", 7) == 0 || strcmp(name, "BGM_BATTLE_WIN1") == 0 ||
                                 strcmp(name, "BGM_BATTLE_WIN2") == 0 || strcmp(name, "BGM_BATTLE_LOSE1") == 0;
             if (!jingle)
                 return -1;
         }
-        return g_psndBGMOn_f_d_trampoline(flags, name, a3, a4, a5);
+        return g_psndBGMOn_f_d_trampoline(flags, idOrName, a3, a4, a5);
     }
 
     // Every disc access - sync and async alike - funnels through DVDMgrOpen (fileAsync
@@ -2202,6 +2221,7 @@ namespace mod::owr
     KEEP_FUNC void _load_Hook(const char *mapName, const char *entranceName, const char *beroName)
     {
         mod::save_block::ResetMap();
+        mod::field_enemy::ResetMap();
         g__load_trampoline(mapName, entranceName, beroName);
         for (int i = 8; i < 16; i++) gState->state_msgWork[i] = 0;
         ttyd::msgdrv::msgLoad("mod", 2);
@@ -2234,6 +2254,7 @@ namespace mod::owr
     // alias another area's setups at the same address) once it unloads.
     static void ResetOriginalKindMap()
     {
+        mod::field_enemy::ResetGroups();
         g_origKindMapCount = 0;
         g_resizedEnemySetupCount = 0;
     }
@@ -2312,6 +2333,7 @@ namespace mod::owr
         }
         group->enemy_data = units;
         group->num_enemies = count;
+        mod::field_enemy::RegisterGroup(group);
     }
 
     KEEP_FUNC void ApplyEnemyGroups(BattleGroupSetup *const *groups, const BattleGroupIndexRange &range)
@@ -2506,9 +2528,8 @@ namespace mod::owr
 
     // Field badge checks run before BtlUnit_Entry applies encounter scaling.
     // Read the saved per-slot level instead of mutating shared species data early.
-    extern "C" KEEP_FUNC int32_t GetFieldBattleLevel(void *info)
+    extern "C" KEEP_FUNC int32_t GetFieldBattleLevel(BattleGroupSetup *group)
     {
-        auto *group = *reinterpret_cast<BattleGroupSetup **>(static_cast<uint8_t *>(info) + 4);
         if (!group || !group->enemy_data || group->num_enemies <= 0)
             return 255;
         BattleUnitKind *first = group->enemy_data[0].unit_kind_params;
@@ -4322,6 +4343,9 @@ namespace mod::owr
     {
         updateRtaTimer();
         updatePaperModePersistence();
+        boss_preview::Update();
+        mod::field_enemy::Update();
+        client_teleport::Update();
 
         if (checkIfInGameNotBattle() && ttyd::swdrv::swByteGet(1700) != 0 &&
             marioGetPtr()->characterId == MarioCharacters::kMario)

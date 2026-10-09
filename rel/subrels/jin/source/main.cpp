@@ -1,12 +1,15 @@
 #include "AP/rel_patch_definitions.h"
 #include "evt_cmd.h"
 #include "OWR.h"
+#include "BossPreview.h"
 #include "patch.h"
 #include "subrel_jin.h"
 #include "ttyd/battle_unit.h"
+#include "ttyd/evt_item.h"
 #include "ttyd/battle_database_common.h"
 
 #include <cstdint>
+#include <initializer_list>
 
 using namespace ttyd;
 using namespace mod::owr;
@@ -52,6 +55,18 @@ extern int32_t custom_phase_event_fmario[];
 extern int32_t jin_evt_kagemario_init[];
 
 // clang-format off
+EVT_BEGIN(jin_boo_reward_evt)
+    WAIT_MSEC(500)
+    USER_FUNC(evt_item::evt_item_get_item, PTR("teresa"))
+    SET(GSW(1716), 1)
+    RETURN()
+EVT_END()
+
+EVT_BEGIN(jin_boo_reward_hook)
+    RUN_CHILD_EVT(jin_boo_reward_evt)
+    GOTO(&jin_evt_teresa_box_open[558])
+EVT_PATCH_END()
+
 EVT_BEGIN(jin_08_init_evt_evt)
     SET(LW(0), PTR(&jin_bero_entry_data_08))
     SET(GSWF(2231), 1)
@@ -123,6 +138,21 @@ namespace mod
 
         jin_ki_data_evt_01[15] = GSWF(6107);
 
+        for (int word : {44, 89, 248, 283, 301})
+            jin_ranperu_toujou[word] = reinterpret_cast<int32_t>(boss_preview::SceneCamera);
+        for (int word : {134, 200})
+            jin_ranperu_toujou[word] = reinterpret_cast<int32_t>(boss_preview::SceneRelativeCamera);
+        for (int word : {68, 101, 227, 260, 295})
+            jin_ranperu_toujou[word] = reinterpret_cast<int32_t>(boss_preview::SceneDialogue);
+        for (int word : {105, 136, 174, 192, 210, 228, 246, 319, 344})
+            jin_ranperu_lastbattle[word] = reinterpret_cast<int32_t>(boss_preview::SceneCamera);
+        for (int word : {99, 124, 168, 186, 204, 222, 240, 270, 333})
+            jin_ranperu_lastbattle[word] = reinterpret_cast<int32_t>(boss_preview::SceneDialogue);
+        // Keep the native camera release before Atomic Boo's final dive.
+        // A fixed reveal frame leaves the camera aimed above the landing spot.
+        for (int word : {840})
+            jin_senteresa_evt[word] = reinterpret_cast<int32_t>(boss_preview::SceneDialogue);
+
         jin_ranperu_toujou[327] = GSW(1715);
         jin_ranperu_toujou[328] = 2;
 
@@ -168,8 +198,8 @@ namespace mod
         jin_06_init_evt[160] = GSWF(6045);
         jin_06_init_evt[161] = 1;
 
-        jin_evt_teresa_box_open[556] = GSW(1716);
-        jin_evt_teresa_box_open[557] = 1;
+        // Collect the temporary reward before marking the chest complete.
+        patch::writePatch(&jin_evt_teresa_box_open[553], jin_boo_reward_hook, sizeof(jin_boo_reward_hook));
 
         jin_07_init_evt[107] = GSW(1716);
         jin_07_init_evt[108] = 1;

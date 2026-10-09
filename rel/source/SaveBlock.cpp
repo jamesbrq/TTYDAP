@@ -2,6 +2,7 @@
 #include "patch.h"
 #include "visibility.h"
 #include <ttyd/evtmgr_cmd.h>
+#include <ttyd/hitdrv.h>
 #include <ttyd/mario.h>
 #include <ttyd/mariost.h>
 #include <cstring>
@@ -95,13 +96,29 @@ namespace mod::save_block
             {
                 if (!nameAt(definition, 0x10)) continue;
                 vec3 inside = {};
-                // Use the same exterior point as evt_door_param mode 4.
+                // Mode 5 returns the exterior approach point; mode 4 is indoors.
                 doorPosition(definition[1], nameAt(definition, 0x0c), nameAt(definition, 0x10),
-                             nameAt(definition, 0x14), &position, &inside, 0);
+                             nameAt(definition, 0x14), &inside, &position, 0);
             }
             return true;
         }
         return false;
+    }
+
+    static void placeFeetOnFloor(vec3 &position)
+    {
+        using namespace ttyd::hitdrv;
+        HitCheckQuery query = {};
+        query.targetPosition = {position.x, position.y, position.z};
+        query.targetPosition.y += 30.0f;
+        query.targetDirection.y = -1.0f;
+        query.inOutTargetDistance = 150.0f;
+        // Use the same collision filter as Mario's normal ground search.
+        auto groundFilter = reinterpret_cast<PFN_HitFilterFunction>(0x800915e4);
+        if (hitCheckVecFilter(&query, groundFilter) && query.hitNormal.y > 0.5f)
+            position.y = query.hitPosition.y;
+        // evt_mario_get_pos mode 1 subtracts this vanilla foot clearance.
+        position.y += 1.0f;
     }
 
     KEEP_FUNC int32_t SetItemSaveActive(EvtEntry *evt, bool)
@@ -121,6 +138,7 @@ namespace mod::save_block
             auto *savedWork = static_cast<GlobalWork *>(destination);
             if (getInteriorExit(exit))
             {
+                placeFeetOnFloor(exit);
                 savedWork->savePlayerPos = exit;
             }
         }

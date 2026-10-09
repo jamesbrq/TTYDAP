@@ -2,6 +2,7 @@
 #include "common.h"
 #include "evt_cmd.h"
 #include "OWR.h"
+#include "BossPreview.h"
 #include "patch.h"
 #include "subrel_muj.h"
 #include "ttyd/battle_unit.h"
@@ -19,6 +20,7 @@
 #include "ttyd/mario_pouch.h"
 
 #include <cstdint>
+#include <initializer_list>
 #include <cstring>
 
 using namespace ttyd;
@@ -1230,6 +1232,15 @@ namespace mod
         muj_bero_custom_12[1] = GSW(1717);
         muj_bero_custom_12[3] = 9;
         muj_bero_custom_12[57] = 14;
+
+        for (int word : {130, 183, 201})
+            muj_korutesu_event[word] = reinterpret_cast<int32_t>(boss_preview::SceneCamera);
+        for (int word : {118, 167, 195, 281, 333, 375, 401, 427, 476, 502, 531})
+            muj_korutesu_event[word] = reinterpret_cast<int32_t>(boss_preview::SceneDialogue);
+        for (int word : {108, 302})
+            muj_kaizoku_vs_dai3[word] = reinterpret_cast<int32_t>(boss_preview::ArenaCamera);
+        for (int word : {121, 239, 334})
+            muj_kaizoku_vs_dai3[word] = reinterpret_cast<int32_t>(boss_preview::SceneDialogue);
 
         muj_korutesu_event[606] = GSW(1717);
         muj_korutesu_event[607] = 10;

@@ -273,8 +273,8 @@ namespace mod::owr
     extern int32_t (*g_BattleCheckConcluded_trampoline)(void *);
     extern void (*g_btlseqFirstAct_trampoline)(void *);
     extern ttyd::dvdmgr::DvdMgrFile *(*g_DVDMgrOpen_trampoline)(const char *, int, uint16_t);
-    extern int32_t (*g_psndBGMOn_f_d_trampoline)(uint32_t, const char *, uint32_t, uint32_t, uint32_t);
-    int32_t psndBGMOn_f_d_Hook(uint32_t flags, const char *name, uint32_t a3, uint32_t a4, uint32_t a5);
+    extern int32_t (*g_psndBGMOn_f_d_trampoline)(uint32_t, uint32_t, uint32_t, uint32_t, uint32_t);
+    int32_t psndBGMOn_f_d_Hook(uint32_t flags, uint32_t idOrName, uint32_t a3, uint32_t a4, uint32_t a5);
 
     extern const char *goombellaName;
     extern const char *goombellaDescription;

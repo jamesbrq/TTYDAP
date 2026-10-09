@@ -244,6 +244,11 @@ EVT_BEGIN(ap_nancy_init_evt)
 	RETURN()
 EVT_END()
 
+// The result is calculated by the parent; this child only replaces the cooking show.
+EVT_BEGIN(fast_cooking_evt)
+    RETURN()
+EVT_END()
+
 // Replaces cooking_evt's first make_item_tbl call: asks which ingredients Zess
 // should use, stores the mode, then builds the matching select-window table.
 // msg keys "ap_cook_mode" (question) and "ap_cook_mode_select" (two options:
@@ -739,6 +744,10 @@ void ApplyGor01Patches()
     gor_nancy_init[1] = PTR(ap_nancy_init_evt);
     gor_nancy_init[2] = EVT_HELPER_CMD(0, 2);  // RETURN (rest of the evt is dead)
     gor_nancy_regl[20] = GSWF(6124);           // gate-block physics only while she guards the gate
+
+    // Skip Zess T.'s repeated animation in both vanilla cooking and Cooksanity.
+    // Ingredient consumption, result selection, item receipt and recipe flags stay in the parent.
+    gor_cooking_evt[747] = PTR(fast_cooking_evt);
 
     // AP cooking: the player picks a mode per cook — the unlocked-ingredient stock
     // (AP checks; nothing consumed; repeats/reversions = Mistake) or the real

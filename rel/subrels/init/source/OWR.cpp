@@ -1,3 +1,6 @@
+#include "BossPreview.h"
+#include "FieldEnemy.h"
+#include "ClientTeleport.h"
 #include "SaveBlock.h"
 #include "evt_cmd.h"
 #include "MirrorMode.h"
@@ -1113,6 +1116,7 @@ namespace mod::owr
         gState = &gSelf->state;
 
         mod::save_block::Init();
+        mod::field_enemy::InstallHooks();
         ApplyMainAssemblyPatches();
         ApplyMainScriptPatches();
         ApplyItemDataTablePatches();
@@ -1169,11 +1173,13 @@ namespace mod::owr
 
         g_DVDMgrOpen_trampoline = patch::hookFunction(ttyd::dvdmgr::DVDMgrOpen, DVDMgrOpenHook);
 
-        using PsndBGMOnFDFn = int32_t (*)(uint32_t, const char *, uint32_t, uint32_t, uint32_t);
+        using PsndBGMOnFDFn = int32_t (*)(uint32_t, uint32_t, uint32_t, uint32_t, uint32_t);
         g_psndBGMOn_f_d_trampoline =
             patch::hookFunction(reinterpret_cast<PsndBGMOnFDFn>(main_psndBGMOn_f_d), psndBGMOn_f_d_Hook);
 
         mirror::InstallMirrorModeHooks();
+        boss_preview::InstallHooks();
+        client_teleport::Init();
 
         int32_t *const effLoadPosMtxSites[] = {&effDamageStarDisp[259], &effDamageStarDisp[446],
                                                &effDamageStarDisp[604], &effMissStarDisp[140], &effNumberGX[356],

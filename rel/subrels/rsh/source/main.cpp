@@ -1,6 +1,7 @@
 #include "subrel_rsh.h"
 #include "evt_cmd.h"
 #include "OWR.h"
+#include "BossPreview.h"
 #include "patch.h"
 #include "AP/rel_patch_definitions.h"
 #include "ttyd/battle_unit.h"
@@ -16,9 +17,12 @@
 #include "ttyd/evt_pouch.h"
 #include "ttyd/evt_snd.h"
 #include "ttyd/evt_sub.h"
+#include "ttyd/evtmgr_cmd.h"
 #include "ttyd/evt_window.h"
 
 #include <cstdint>
+#include <initializer_list>
+#include <algorithm>
 
 using namespace mod::owr;
 using namespace ttyd;
@@ -120,6 +124,9 @@ extern int32_t rsh_05_init_evt[];
 extern int32_t rsh_05_a_init_evt[];
 extern int32_t rsh_hom_10_evt_resha_start_06[];
 extern int32_t rsh_evt_great_moamoa[];
+extern "C" int32_t rsh_evt_moamoa_fusion(evtmgr::EvtEntry *, bool);
+extern int32_t rsh_roof_moamoa_init[];
+extern "C" void rsh_roof_moamoa_dispent();
 extern int32_t rsh_06_init_evt[];
 extern int32_t rsh_06_a_init_evt[];
 extern int32_t rsh_item_tbl2[];
@@ -744,6 +751,64 @@ EVT_PATCH_END()
 
 namespace mod
 {
+    static int32_t sSmorgIntroWords[475 - 43];
+
+    static bool ReplacedSmorg()
+    {
+        return gState && gState->apSettings && gState->apSettings->bossRandomizer &&
+            gState->bossLoadouts[18].enemyIds[0] != 0x6b;
+    }
+
+    static int32_t SmorgIntro(evtmgr::EvtEntry *evt, bool firstCall)
+    {
+        if (firstCall)
+        {
+            // Restore on each replay so switching the test boss back to Smorg
+            // restores the full native intro without requiring a REL reload.
+            std::copy(sSmorgIntroWords, sSmorgIntroWords + (475 - 43), &rsh_evt_great_moamoa[43]);
+            if (ReplacedSmorg())
+            {
+                // Whole commands and balanced inline blocks become NOP words.
+                // Keep the swarm buildup camera and fusion, but skip their
+                // sounds and the later staged transformation. Both kind
+                // switches remain for passenger cleanup.
+                for (const auto &range : {std::pair<int, int>{57, 64}, {131, 142}, {144, 183},
+                                          {187, 245}, {249, 307}, {394, 445}, {465, 468}})
+                    std::fill(&rsh_evt_great_moamoa[range.first], &rsh_evt_great_moamoa[range.second], 0);
+                rsh_evt_great_moamoa[312] = 0; // No pause after the neutral pose.
+            }
+        }
+        return evt_msg::evt_msg_print(evt, firstCall);
+    }
+
+    static int32_t SmorgTransformSound(evtmgr::EvtEntry *evt, bool firstCall)
+    {
+        if (!ReplacedSmorg()) return evt_snd::evt_snd_sfxon(evt, firstCall);
+        evtmgr_cmd::evtSetValue(evt, evt->evtArguments[1], 0);
+        return 2;
+    }
+
+    static void SmorgSwarmDisplay()
+    {
+        // The fused swarm has its own renderer, independent of the base NPC.
+        // Keep it for the buildup and passenger release, hide it for replacements.
+        if (!boss_preview::HasSmorgReplacement()) rsh_roof_moamoa_dispent();
+    }
+
+    static int32_t SmorgFusion(evtmgr::EvtEntry *evt, bool firstCall)
+    {
+        if (firstCall) boss_preview::SetSmorgFormed(false);
+        const int32_t result = rsh_evt_moamoa_fusion(evt, firstCall);
+        if (result == 2) boss_preview::SetSmorgFormed(true);
+        return result;
+    }
+
+    static int32_t SmorgDefeated(evtmgr::EvtEntry *evt, bool firstCall)
+    {
+        boss_preview::SetSmorgFormed(false);
+        return evt_npc::evt_npc_set_anim(evt, firstCall);
+    }
+
     void main()
     {
         rsh_simi_check[24] = GSW(1706);
@@ -1388,6 +1453,18 @@ namespace mod
 
         rsh_hom_10_evt_resha_start_06[49] = GSW(1706);
         rsh_hom_10_evt_resha_start_06[50] = 43;
+
+        rsh_roof_moamoa_init[141] = reinterpret_cast<int32_t>(SmorgTransformSound);
+        rsh_evt_great_moamoa[14] = reinterpret_cast<int32_t>(SmorgIntro);
+        rsh_roof_moamoa_init[160] = reinterpret_cast<int32_t>(SmorgSwarmDisplay);
+        rsh_evt_great_moamoa[143] = reinterpret_cast<int32_t>(SmorgFusion);
+        rsh_evt_great_moamoa[488] = reinterpret_cast<int32_t>(SmorgDefeated);
+        for (int word : {236, 291, 367, 395, 407, 454})
+            rsh_evt_great_moamoa[word] = reinterpret_cast<int32_t>(boss_preview::SmorgCamera);
+        for (int word : {379, 387, 446})
+            rsh_evt_great_moamoa[word] = reinterpret_cast<int32_t>(boss_preview::SceneDialogue);
+
+        std::copy(&rsh_evt_great_moamoa[43], &rsh_evt_great_moamoa[475], sSmorgIntroWords);
 
         rsh_evt_great_moamoa[729] = GSW(1706);
         rsh_evt_great_moamoa[730] = 36;
