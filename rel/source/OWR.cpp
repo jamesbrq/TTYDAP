@@ -2391,7 +2391,12 @@ namespace mod::owr
         {
             case 0x09: // gesso_left_arm
             case 0x0A: // gesso_right_arm
+            case 0x15: // chorobon_gundan
             case 0x23: // rocket_punch
+            case 0x50: // gullible_christine
+            case 0x51: // gullible_nokotarou
+            case 0x52: // gullible_yoshi
+            case 0x53: // gullible_clauda
             case 0x5F: // cortez_claw
             case 0x60: // cortez_rapier
             case 0x61: // cortez_sword
@@ -2419,7 +2424,12 @@ namespace mod::owr
         {
             case 0x09: // gesso_left_arm
             case 0x0A: // gesso_right_arm
+            case 0x15: // chorobon_gundan
             case 0x23: // rocket_punch
+            case 0x50: // gullible_christine
+            case 0x51: // gullible_nokotarou
+            case 0x52: // gullible_yoshi
+            case 0x53: // gullible_clauda
             case 0x5F: // cortez_claw
             case 0x60: // cortez_rapier
             case 0x61: // cortez_sword
@@ -2446,6 +2456,12 @@ namespace mod::owr
     {
         switch (unitType)
         {
+            // The "gullible" partners in the fake mario fight have a gimmick where they match the POW of how much you've upgraded them, so best not to scale it.
+            case 0x50: // gullible_christine
+            case 0x51: // gullible_nokotarou
+            case 0x52: // gullible_yoshi
+            case 0x53: // gullible_clauda
+                return true; 
             default:
                 return false;
         }
@@ -2596,25 +2612,55 @@ namespace mod::owr
                     // Stats come from the registration-time snapshots when this slot has an
                     // entry (guaranteed-vanilla values); the pointer fallback only serves
                     // event-spawned extra units, which are HP/DEF-excluded below anyway.
-                    const int32_t origHp = origEntry ? origEntry->maxHp : bossOrigKind->max_hp;
                     const int32_t origLevel = origEntry ? origEntry->level : bossOrigKind->level;
+                    int32_t origHp = origEntry ? origEntry->maxHp : bossOrigKind->max_hp;
+                    if (bossOrigKind->unit_type >= 0x1F && bossOrigKind->unit_type <= 0x21)
+                        origHp = 31;
+                    if (bossOrigKind->unit_type == 0x5D || bossOrigKind->unit_type == 0x5E)
+                        origHp = 60;
+                    if (bossOrigKind->unit_type >= 0x85 && bossOrigKind->unit_type <= 0x87)
+                        origHp = 110;
+                    if (bossOrigKind->unit_type == 0x90 || bossOrigKind->unit_type == 0x91)
+                        origHp = 120;
+
+                    int32_t newHp = origHp;
 
                     BattleUnitKind *newKind = setup->unit_kind_params;
                     if (!IsBossHpScaleExcluded(newKind->unit_type))
                     {
-                        newKind->max_hp = origHp;
+                        if (gState->apSettings->bossScalingNerfs)
+                        {
+                            if (newKind->unit_type >= 0x1F && newKind->unit_type <= 0x21) // boss_majolyne, boss_marilyn, boss_vivian
+                            {
+                                newHp = (origHp * newKind->max_hp) / 31;
+                            }
+
+                            if (newKind->unit_type == 0x5D || newKind->unit_type == 0x5E) // boss_cortez, boss_honeduka
+                            {
+                                newHp = (origHp * newKind->max_hp) / 60;
+                            }
+
+                            if (newKind->unit_type >= 0x85 && newKind->unit_type <= 0x87) // boss_majolyne_las, boss_marilyn_las, boss_rampell_las
+                            {
+                                newHp = (origHp * newKind->max_hp) / 110;
+                            }
+
+                            if (newKind->unit_type == 0x90 || newKind->unit_type == 0x91) // boss_koopa, boss_kamec_obaba
+                            {
+                                newHp = (origHp * newKind->max_hp) / 120;
+                            }
+                        }
+
                         if (newKind->unit_type == 0x93) // batten_satellite
                         {
-                            newKind->max_hp = 2; // Small nerf for early game beatability
+                            newHp = 2; // Small nerf for early game beatability
                         }
                         else
                         {
                             newKind->level = origLevel;
                         }
-                        if (gState->apSettings->bossScalingNerfs &&
-                            (newKind->unit_type == 0x5D || newKind->unit_type == 0x5E) && // boss_cortez / boss_honeduka
-                            !(bossOrigKind->unit_type >= 0x5D && bossOrigKind->unit_type <= 0x62))
-                            newKind->max_hp = (origHp + 2) / 3;
+
+                        newKind->max_hp = newHp;
                     }
                     if (!IsBossDefScaleExcluded(newKind->unit_type) && newKind->parts && bossOrigKind->parts)
                     {
