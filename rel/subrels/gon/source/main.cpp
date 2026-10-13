@@ -8,6 +8,7 @@
 #include "ttyd/battle_database_common.h"
 #include "ttyd/evt_cam.h"
 #include "ttyd/evt_item.h"
+#include "ttyd/evt_map.h"
 #include "ttyd/evt_mario.h"
 #include "ttyd/evt_mobj.h"
 #include "ttyd/evt_npc.h"
@@ -66,6 +67,34 @@ extern int32_t gon_key_tbl_08[];
 static int32_t SkipPreviewEvent(ttyd::evtmgr::EvtEntry *, bool)
 {
     return 2;
+}
+
+static int32_t HooktailPreviewGeometry(ttyd::evtmgr::EvtEntry *evt, bool firstCall)
+{
+    // Called on the native wall restore: keep it hidden until battle so the
+    // closer angled shots cannot cross the entrance wall or foreground door.
+    auto *original = evt->evtArguments;
+    int32_t args[] = {original[0], 1, original[2], original[3]};
+    evt->evtArguments = args;
+    const int32_t result = ttyd::evt_map::evt_mapobj_flag_onoff(evt, firstCall);
+    evt->evtArguments = original;
+    return result;
+}
+
+static int32_t RestoreHooktailPreviewCamera(ttyd::evtmgr::EvtEntry *evt, bool firstCall)
+{
+    if (firstCall)
+    {
+        auto *original = evt->evtArguments;
+        for (const char *name : {"door10", "kesu"})
+        {
+            int32_t args[] = {1, 0, PTR(name), 1};
+            evt->evtArguments = args;
+            ttyd::evt_map::evt_mapobj_flag_onoff(evt, true);
+        }
+        evt->evtArguments = original;
+    }
+    return ttyd::evt_cam::evt_cam3d_evt_set(evt, firstCall);
 }
 
 // clang-format off
@@ -223,12 +252,13 @@ namespace mod
         gon_10_init_evt[35] = GSW(1711);
         gon_10_init_evt[36] = 7;
 
-        if (gState->apSettings->bossRandomizer && !boss_preview::UsesOriginalDragonScene())
+        const uint8_t hooktailReplacement = gState->bossLoadouts[1].enemyIds[0];
+        if (gState->apSettings->bossRandomizer && hooktailReplacement != 0x17 &&
+            hooktailReplacement != 0x84 && hooktailReplacement != 0xab)
         {
-            // Move the pre-battle approach group toward the room center. Shift
-            // both starting positions and destinations to preserve the walk.
-            for (int word : {38, 41, 48, 54, 101, 107})
-                gon_gonbaba_event[word] += 350;
+            for (int word : {291, 297})
+                gon_gonbaba_event[word] = reinterpret_cast<int32_t>(HooktailPreviewGeometry);
+            gon_gonbaba_event[395] = reinterpret_cast<int32_t>(RestoreHooktailPreviewCamera);
 
             // Shorter dramatic waits for characters that do not perform the
             // dragon entrance animations. Camera moves retain their full duration.

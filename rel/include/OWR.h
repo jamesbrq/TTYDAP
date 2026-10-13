@@ -94,6 +94,7 @@ namespace mod::owr
     int psndSFXOffHook(int channel);
     void npcSetupBattleInfoHook(::NpcEntry *npc, void *info);
     int32_t pouchRemoveItemHook(int32_t item);
+    int32_t pouchRemoveDiscardedItem(int32_t item);
     int32_t pouchCheckItemHook(int32_t item);
     void swSetHook(int gswf);
     void DrainReceivedFlags();

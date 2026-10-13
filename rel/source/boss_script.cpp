@@ -72,7 +72,10 @@ void MagnumBattenderPatches(int scaledHp)
 
 void FakerMarioPatches(int scaledHp)
 {
-    unit_faker_mario_phase_event_fmario[12] = 999;
+    // Boss scaling can repatch the shared rematch event after area setup.
+    // Keep Vivian's comeback IF permanently false (0 == 1), at every turn.
+    unit_faker_mario_phase_event_fmario[11] = 0;
+    unit_faker_mario_phase_event_fmario[12] = 1;
 }
 
 void Kanbu3Patches(int scaledHp)
@@ -88,4 +91,39 @@ void Kanbu3Patches(int scaledHp)
 void MagnumBattenderMKIIPatches(int scaledHp)
 {
     unit_boss_magnum_battender_mkII_damage_event[41] = (scaledHp * 20) / 100;
+}
+
+namespace {
+EVT_BEGIN_KEEP(CrumpNoTutorialPhase)
+    RETURN()
+EVT_END()
+
+int32_t SkipCrumpTutorialCall(ttyd::evtmgr::EvtEntry *, bool)
+{
+    return 2;
+}
+}
+
+KEEP_FUNC void TutorialCrumpPatches(ttyd::battle_database_common::BattleUnitKind *kind)
+{
+    if (!kind || kind->unit_type != 0x06 || !kind->init_evt_code) return;
+    auto *init = static_cast<int32_t *>(kind->init_evt_code);
+    // Preserve command sizes; skip the tutorial-only NPC's spawn, stored ID,
+    // placement and home position. Crump's normal attack/wait setup remains.
+    init[19] = PTR(CrumpNoTutorialPhase);
+    const int npcCalls[] = {25, 30, 35, 41};
+    for (int word : npcCalls)
+        init[word] = PTR(SkipCrumpTutorialCall);
+    if (!kind->data_table) return;
+    for (auto *entry = kind->data_table; entry->id; ++entry)
+    {
+        if (entry->id != 0x31 || !entry->data) continue;
+        auto *dead = static_cast<int32_t *>(entry->data);
+        // After death effects, coins/EXP and WaitAttackEnd, kill Crump directly.
+        // Omit the Goombella conversation and Mario's turns toward her.
+        for (int i = 0; i < 4; ++i) dead[173 + i] = dead[270 + i];
+        dead[177] = EVT_HELPER_CMD(0, 2); // RETURN
+        dead[178] = EVT_HELPER_CMD(0, 1); // END
+        break;
+    }
 }

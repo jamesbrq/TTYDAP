@@ -1146,6 +1146,8 @@ namespace mod::owr
         g_psndSFXOff_trampoline = patch::hookFunction(pmario_sound::psndSFXOff, psndSFXOffHook);
         g_npcSetupBattleInfo_trampoline = patch::hookFunction(::npcSetupBattleInfo, npcSetupBattleInfoHook);
         g_pouchRemoveItem_trampoline = patch::hookFunction(mario_pouch::pouchRemoveItem, pouchRemoveItemHook);
+        // itemseq_GetItem's full-inventory replacement/discard selection.
+        patch::writeBranchBL(reinterpret_cast<void *>(0x800AC6FC), pouchRemoveDiscardedItem);
         g_pouchCheckItem_trampoline = patch::hookFunction(mario_pouch::pouchCheckItem, pouchCheckItemHook);
         g_sandersBombHitPosition_trampoline =
             patch::hookFunction(main_sanders_get_bomb_hit_position, sandersBombHitPositionHook);

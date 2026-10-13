@@ -78,6 +78,45 @@ extern int32_t las_key_tbl_05[];
 extern int32_t las_key_tbl_22[];
 extern int32_t las_key_tbl_25[];
 
+static int32_t SkipGloomtailRoar(ttyd::evtmgr::EvtEntry *, bool)
+{
+    return 2;
+}
+
+static int32_t GloomtailPreviewCamera(ttyd::evtmgr::EvtEntry *evt, bool firstCall)
+{
+    if (firstCall)
+    {
+        // Vanilla restores the entrance wall for the partner close-up. The
+        // replacement's angled shot crosses it again, so hide the wall and
+        // foreground arch whenever returning to a replacement boss shot.
+        auto *original = evt->evtArguments;
+        int32_t wallArgs[] = {1, 1, PTR("S_kesu"), 1};
+        evt->evtArguments = wallArgs;
+        ttyd::evt_map::evt_mapobj_flag_onoff(evt, true);
+        int32_t archArgs[] = {1, 1, PTR("S_archi1"), 1};
+        evt->evtArguments = archArgs;
+        ttyd::evt_map::evt_mapobj_flag_onoff(evt, true);
+        evt->evtArguments = original;
+    }
+    return mod::boss_preview::SceneCamera(evt, firstCall);
+}
+
+static int32_t RestoreGloomtailPreviewGeometry(ttyd::evtmgr::EvtEntry *evt, bool firstCall)
+{
+    // The native call restores the arch after battle; also restore the wall
+    // hidden for the replacement's pre-battle camera.
+    if (firstCall)
+    {
+        auto *original = evt->evtArguments;
+        int32_t args[] = {1, 0, PTR("S_kesu"), 1};
+        evt->evtArguments = args;
+        ttyd::evt_map::evt_mapobj_flag_onoff(evt, true);
+        evt->evtArguments = original;
+    }
+    return ttyd::evt_map::evt_mapobj_flag_onoff(evt, firstCall);
+}
+
 // clang-format off
 EVT_BEGIN(stairs_revert)
     IF_LARGE_EQUAL(GSW(1708), 8)
@@ -250,6 +289,10 @@ namespace mod
         las_majyorin_evt_main[324] = reinterpret_cast<int32_t>(boss_preview::SceneDialogue);
         las_majyorin_evt_main[330] = reinterpret_cast<int32_t>(boss_preview::SceneDialogue);
         las_majyorin_evt_main[336] = reinterpret_cast<int32_t>(boss_preview::SceneCamera);
+        // Anchor the dragon script's explicit speech points to the replacement.
+        const int gloomtailSpeechWords[] = {235, 295, 337};
+        for (int word : gloomtailSpeechWords)
+            las_bonbaba_evt[word] = reinterpret_cast<int32_t>(boss_preview::SceneTextAnchor);
         las_bonbaba_evt[102] = reinterpret_cast<int32_t>(boss_preview::SceneDialogue);
         las_bonbaba_evt[211] = reinterpret_cast<int32_t>(boss_preview::SceneCamera);
         las_bonbaba_evt[241] = reinterpret_cast<int32_t>(boss_preview::SceneDialogue);
@@ -258,6 +301,16 @@ namespace mod
         las_bonbaba_evt[313] = reinterpret_cast<int32_t>(boss_preview::SceneCamera);
         las_bonbaba_evt[343] = reinterpret_cast<int32_t>(boss_preview::SceneDialogue);
         las_bonbaba_evt[349] = reinterpret_cast<int32_t>(boss_preview::SceneCamera);
+        const uint8_t gloomtailReplacement = gState->bossLoadouts[10].enemyIds[0];
+        if (gState->apSettings->bossRandomizer && gloomtailReplacement != 0x17 &&
+            gloomtailReplacement != 0x84 && gloomtailReplacement != 0xab)
+        {
+            const int cameraWords[] = {211, 271, 313, 349};
+            for (int word : cameraWords)
+                las_bonbaba_evt[word] = reinterpret_cast<int32_t>(GloomtailPreviewCamera);
+            las_bonbaba_evt[373] = reinterpret_cast<int32_t>(RestoreGloomtailPreviewGeometry);
+            las_bonbaba_evt[154] = reinterpret_cast<int32_t>(SkipGloomtailRoar);
+        }
         las_syuryo_evt[83] = reinterpret_cast<int32_t>(boss_preview::SceneDialogue);
         las_syuryo_evt[89] = reinterpret_cast<int32_t>(boss_preview::SceneCamera);
         las_syuryo_evt[107] = reinterpret_cast<int32_t>(boss_preview::SceneDialogue);

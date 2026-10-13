@@ -54,6 +54,11 @@ extern int32_t custom_phase_event_fmario[];
 // Assembly
 extern int32_t jin_evt_kagemario_init[];
 
+static int32_t SkipRematchDialogue(ttyd::evtmgr::EvtEntry *, bool)
+{
+    return 2;
+}
+
 // clang-format off
 EVT_BEGIN(jin_boo_reward_evt)
     WAIT_MSEC(500)
@@ -148,6 +153,22 @@ namespace mod
             jin_ranperu_lastbattle[word] = reinterpret_cast<int32_t>(boss_preview::SceneCamera);
         for (int word : {99, 124, 168, 186, 204, 222, 240, 270, 333})
             jin_ranperu_lastbattle[word] = reinterpret_cast<int32_t>(boss_preview::SceneDialogue);
+        if (gState->apSettings->bossRandomizer && gState->bossLoadouts[6].enemyIds[0] != 0x4f)
+        {
+            // Preserve every command's size: the event-entry label scanner
+            // walks through skipped code too. Replacing a six-word call with a
+            // two-word jump leaves message pointers to be parsed as commands.
+            // Remove the copied partners' dialogue and camera pans in place.
+            for (int word : {168, 174, 186, 192, 204, 210, 222, 228, 240})
+                jin_ranperu_lastbattle[word] = reinterpret_cast<int32_t>(SkipRematchDialogue);
+            for (int word : {184, 202, 220, 238})
+                jin_ranperu_lastbattle[word] = 0;
+            // Vivian's reply includes a choice and appended dialogue. Remove
+            // the complete message chain but retain her exit and battle setup.
+            for (int word : {306, 309, 313, 317})
+                jin_ranperu_lastbattle[word] = reinterpret_cast<int32_t>(SkipRematchDialogue);
+        }
+
         // Keep the native camera release before Atomic Boo's final dive.
         // A fixed reveal frame leaves the camera aimed above the landing spot.
         for (int word : {840})
@@ -228,9 +249,12 @@ namespace mod
 
         jin_evt_usu_kagemario_party_kill[1] = GSW(1715); // Unused
 
-        jin_phase_event_fmario[12] = 9999; // Unused
-
-        custom_phase_event_fmario[12] = 9999;
+        // Disable the entire Vivian comeback branch, rather than postponing
+        // it to a high turn number. Keep the three-word IF command intact.
+        jin_phase_event_fmario[11] = 0;
+        jin_phase_event_fmario[12] = 1;
+        custom_phase_event_fmario[11] = 0;
+        custom_phase_event_fmario[12] = 1;
 
         ApplyEnemyGroups(battleGroupList, kBtlGrpRange_jin_jin);
 

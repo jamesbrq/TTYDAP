@@ -256,6 +256,8 @@ namespace mod::owr
         if (relPtr->id == RelId::DMO)
             return;
 
+        TutorialCrumpPatches(GetUnitKindById(0x06));
+
         uint32_t SequencePosition = ttyd::swdrv::swByteGet(1700);
 
         if (SequencePosition != 0)
@@ -1028,8 +1030,11 @@ namespace mod::owr
             const char c = ringName[n];
             if (c == '\0')
                 break;
-            // The client sanitizes to printable ASCII; drop anything else defensively
-            entry.sender[n] = (c >= 0x20 && c < 0x7F) ? c : '?';
+            // Sender names are plain text, never game message commands.
+            // Older clients can leave a truncated '<...>' tag in the ring;
+            // FontGetMessageWidth then dereferences msgGetCommand's null result.
+            entry.sender[n] = c == '<' ? '(' : c == '>' ? ')' :
+                              (c >= 0x20 && c < 0x7F) ? c : '?';
         }
         entry.sender[n] = '\0';
         sRecvPendingCount++;
@@ -3615,6 +3620,14 @@ namespace mod::owr
                 return g_pouchCheckItem_trampoline(item);
             }
         }
+    }
+
+    KEEP_FUNC int32_t pouchRemoveDiscardedItem(int32_t item)
+    {
+        // The full-pouch selection only lists normal inventory items, including
+        // the incoming pickup. Never remove the protected trouble copy from
+        // key_items, even if the selected incoming item is not in the pouch.
+        return g_pouchRemoveItem_trampoline(item);
     }
 
     KEEP_FUNC int32_t pouchRemoveItemHook(int32_t item)

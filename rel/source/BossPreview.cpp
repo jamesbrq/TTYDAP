@@ -197,7 +197,8 @@ namespace mod::boss_preview
         bool FrontCameraRoom()
         {
             const auto *scene = CurrentScene();
-            return scene && scene->encounter != kHooktailEncounter && scene->encounter != kBlooperEncounter;
+            return scene && scene->encounter != kHooktailEncounter && scene->encounter != kBlooperEncounter &&
+                   scene->encounter != 10; // Gloomtail uses Hooktail's angled framing.
         }
 
         NpcEntry *PreviewNpc()
@@ -425,7 +426,15 @@ namespace mod::boss_preview
                 y = 0.0f;
             // Beldam supplies the native movement; center the preview in the
             // original trio's row rather than on its rightmost member.
-            const float x = npc->position.x - (CurrentScene() && CurrentScene()->encounter == 23 ? 40.0f : 0.0f);
+            float x = npc->position.x - (CurrentScene() && CurrentScene()->encounter == 23 ? 40.0f : 0.0f);
+            // Keep Mario's native entrance and partner camera intact. Bring the
+            // smaller replacement toward him instead of moving the approach
+            // through the room geometry. The native post-battle root moves to
+            // x=0, where its original staging must be preserved.
+            if (CurrentScene() && !UsesOriginalDragonScene() &&
+                ((CurrentScene()->encounter == 10 && npc->position.x == 100.0f) ||
+                 (CurrentScene()->encounter == kHooktailEncounter && npc->position.z != -100.0f)))
+                x -= 350.0f;
             return QueenFloorPosition({x, y, npc->position.z});
         }
 
@@ -472,19 +481,28 @@ namespace mod::boss_preview
             sBlooperEmerged = false;
         }
 
-        gc::mat3x4 FacingMatrix(const gc::vec3 &position, float scale)
+        bool HasVolumeRig()
+        {
+            // These previews use the game's volumetric rigs. Other enemy
+            // previews are layered paper models, including Crump and Mario.
+            return sEnemyId == 0x17 || sEnemyId == 0x84 || sEnemyId == 0xab ||
+                   sEnemyId == 0x22 || sEnemyId == 0x79 || sEnemyId == 0x6b;
+        }
+
+        gc::mat3x4 FacingMatrix(const gc::vec3 &position, float scale, bool paper = true)
         {
             gc::vec3 cameraPosition;
             std::memcpy(&cameraPosition, static_cast<uint8_t *>(camGetPtr(4)) + 0x0c, sizeof(cameraPosition));
             gc::vec3 facing = {cameraPosition.x - position.x, 0.0f, cameraPosition.z - position.z};
             if (facing.x == 0.0f && facing.z == 0.0f) facing.z = 1.0f;
             gc::mtx::PSVECNormalize(&facing, &facing);
-            // The Sirens are approached from the right. The Queen's assembled
-            // paper rig needs a horizontal reflection rather than a half turn,
-            // which also reverses the hands' front/back offsets.
+            // The Sirens are approached from the right. Paper models must
+            // flip horizontally while keeping their front/depth layers toward
+            // the camera; a half turn exposes their rear artwork. This applies
+            // to every paper enemy and companion, not just specific bosses.
             const bool reverse = CurrentScene() && CurrentScene()->encounter == 23;
-            const bool mirrorQueen = reverse && sEnemyId == 0x95;
-            if (reverse && !mirrorQueen)
+            const bool mirrorPaper = reverse && paper;
+            if (reverse && !mirrorPaper)
             {
                 facing.x = -facing.x;
                 facing.z = -facing.z;
@@ -493,7 +511,7 @@ namespace mod::boss_preview
             visual.a[0] = facing.z * scale; visual.a[2] = facing.x * scale;
             visual.a[5] = scale;
             visual.a[8] = -facing.x * scale; visual.a[10] = facing.z * scale;
-            if (mirrorQueen)
+            if (mirrorPaper)
             {
                 visual.a[0] = -visual.a[0];
                 visual.a[8] = -visual.a[8];
@@ -654,7 +672,7 @@ namespace mod::boss_preview
                     auto position = VisualPosition(npc);
                     if (sEnemyId == 0x6b)
                     {
-                        const auto visual = FacingMatrix(position, sVisualScale);
+                        const auto visual = FacingMatrix(position, sVisualScale, !HasVolumeRig());
                         DrawSmorg(visual, scale);
                         return;
                     }
@@ -669,7 +687,7 @@ namespace mod::boss_preview
                         // Native phase 2 suspends Peach 40 units above the body.
                         position.y += 42.0f * sVisualScale;
                     }
-                    auto visual = FacingMatrix(position, sVisualScale);
+                    auto visual = FacingMatrix(position, sVisualScale, !HasVolumeRig());
                     if (sEnemyId == 0x22 || sEnemyId == 0x79)
                     {
                         // Both Magnus battle scripts use a -55 degree base yaw.
@@ -692,7 +710,7 @@ namespace mod::boss_preview
                                 if (!GroupPosition(sPreviewPose, sCockpitGroup, extraPosition)) continue;
                             }
                             else extraPosition = RowPosition(position, extra.rowOffset);
-                            const auto extraMatrix = FacingMatrix(extraPosition, extra.scale);
+                            const auto extraMatrix = FacingMatrix(extraPosition, extra.scale, !HasVolumeRig());
                             sDrawTrampoline(extra.pose, &extraMatrix, stage, 0.0f, scale);
                         }
                     return;
@@ -792,7 +810,10 @@ namespace mod::boss_preview
         const float left = std::min(mario.x - 60.0f, boss.x - halfWidth);
         const float right = std::max(mario.x + 50.0f, boss.x + halfWidth);
         const float x = (left + right) * 0.5f;
-        const float y = std::max(InGoldenFuzzyRoom() ? -15.0f : (FrontCameraRoom() ? 0.0f : 10.0f), boss.y) + std::max(45.0f, sHeight * 0.6f);
+        // Lift both the eye and target in the Golden Fuzzy room, preserving
+        // the tilt while bringing the shot above the low floor-level framing.
+        const float y = std::max(InGoldenFuzzyRoom() ? -15.0f : (FrontCameraRoom() ? 0.0f : 10.0f), boss.y)
+                        + std::max(45.0f, sHeight * 0.6f) + (InGoldenFuzzyRoom() ? 15.0f : 0.0f);
         const float z = (mario.z + boss.z) * 0.5f;
         const float distance = std::max(FrontCameraRoom() ? 400.0f : 500.0f, (right - left + 100.0f) * 1.4f);
         // Look into the room from the entrance side, with a gentle downward tilt.
@@ -966,7 +987,8 @@ namespace mod::boss_preview
 
     KEEP_FUNC int32_t SceneDialogue(ttyd::evtmgr::EvtEntry *evt, bool firstCall)
     {
-        if (firstCall && Active() && (FrontCameraRoom() || (InBlooperRoom() && sBlooperEmerged)))
+        if (firstCall && Active() && !UsesOriginalDragonScene() &&
+            (FrontCameraRoom() || CurrentScene()->encounter == 10 || (InBlooperRoom() && sBlooperEmerged)))
         {
             if (auto *npc = PreviewNpc())
             {
