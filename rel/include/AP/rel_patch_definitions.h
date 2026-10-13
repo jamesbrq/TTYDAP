@@ -133,6 +133,7 @@ extern "C"
 EVT_DECLARE_USER_FUNC(checkChapterRequirements, 1)
 EVT_DECLARE_USER_FUNC(doorStarsCheck, 0)
 EVT_DECLARE_USER_FUNC(pitCheckpointBuffer, 1)
+EVT_DECLARE_USER_FUNC(giveShopItem, 2)
 EVT_DECLARE_USER_FUNC(setShopFlags, 1)
 EVT_DECLARE_USER_FUNC(handleIntermissionSkip, 4)
 EVT_DECLARE_USER_FUNC(checkIntermission, 1)

@@ -219,6 +219,13 @@ namespace mod::owr
             unit.position.x = GetEnemyXPosition(loadout.enemyIds[0], unit.position.x);
             unit.position.y = GetEnemyYPosition(loadout.enemyIds[0]);
             unit.unit_kind_params = GetUnitKindById(loadout.enemyIds[0]);
+            if (loadout.enemyIds[0] == 0x08)
+            {
+                // Blooper's init does not reset setup work 0..3. Shadow Queen
+                // phase 2 supplies work[0] = 1, which Blooper interprets as
+                // already fallen and skips the tentacle-death drop to the floor.
+                for (auto &work : unit.unit_work) work = 0;
+            }
             if (loadout.enemyIds[0] == 0x40)
                 championHere = true;
             bossGroup->num_enemies = 1;

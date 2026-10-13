@@ -1889,10 +1889,9 @@ namespace ttyd::battle_unit
             int8_t level;
         } __attribute__((__packed__));
 
-        extern BattleStatRelValues g_battleStats[];
+        extern const BattleStatRelValues g_battleStats[];
         extern const int g_battleStatsCount;
         const BattleStatRelValues *GetBattleStats(RelId rel);
-        extern void ShuffleBattleStats();
         int32_t GetBossAtk(int32_t unit_type);
         int32_t GetEnemyAtk(int32_t unit_type);
 

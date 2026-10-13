@@ -396,6 +396,11 @@ namespace
         uint32_t imgPages = (imageSize + PAGE_SIZE - 1) / PAGE_SIZE;
         if (imgPages == 0 || imgPages > MAX_VPAGES)
             return false;
+        // Reject every configuration error before acquiring startup resources
+        // or changing the active hardware page table.
+        uint32_t need = (imgPages * PAGE_SIZE + 0x1F) & ~0x1F;
+        if (!verifyWindowBatFree() || (g_useExtAram && need > g_extAramBytes))
+            return false;
         g_numVpages = imgPages;
 
         uint8_t *rawH = static_cast<uint8_t *>(__memAlloc(0, PTE_SIZE + 0x10000));
@@ -405,18 +410,19 @@ namespace
         memset(HTABORG, 0, PTE_SIZE);
         DCFlushRange(HTABORG, PTE_SIZE);
 
-        uint32_t need = (imgPages * PAGE_SIZE + 0x1F) & ~0x1F;
         if (g_useExtAram)
         {
-            if (need > g_extAramBytes)
-                return false;
             g_aramBase = g_extAramBase;
         }
         else
         {
             g_aramBase = ARAlloc(need);
             if (g_aramBase == 0)
+            {
+                __memFree(0, rawH);
+                HTABORG = nullptr;
                 return false;
+            }
         }
 
         for (uint32_t v = 0; v < imgPages; v++)
@@ -429,9 +435,6 @@ namespace
         asm volatile("mtspr 25, %0" ::"r"(v2p(HTABORG) | HTABMASK));
         asm volatile("mtsrin %0, %1" ::"r"(VM_VSID), "r"(VM_WINDOW));
         asm volatile("sync; isync" ::: "memory");
-
-        if (!verifyWindowBatFree())
-            return false; // window is BAT-covered; caller falls back to resident
 
         g_savedDsi = __OSGetExceptionHandler(kDsiException);
         g_savedIsi = __OSGetExceptionHandler(kIsiException);
@@ -590,7 +593,8 @@ namespace mod::vm
     {
         if (vm_initialized)
             return VM_Base;
-        if (cacheBytes >= imageSize)
+        if (cacheBytes >= imageSize || cacheBytes / PAGE_SIZE < 4 ||
+            cacheBytes / PAGE_SIZE > MAX_PPAGES)
             return nullptr;
         if (!bringUpMmu(imageSize))
             return nullptr;

@@ -20,6 +20,7 @@
 #include "ttyd/evt_msg.h"
 #include "ttyd/pmario_sound.h"
 #include "ttyd/evt_party.h"
+#include "ttyd/evt_pouch.h"
 #include "ttyd/evt_shop.h"
 #include "ttyd/evt_snd.h"
 #include "ttyd/evt_sub.h"
@@ -308,6 +309,41 @@ EVT_DEFINE_USER_FUNC_KEEP(irai_complete_item_delete)
     return 2;
 }
 // clang-format on
+
+// Only the purchased-item call uses this wrapper; shop-point rewards still
+// use vanilla evt_pouch_add_item. Keep the real stock ID for repeat purchases.
+EVT_DEFINE_USER_FUNC_KEEP(giveShopItem)
+{
+    if (gState->apSettings->remoteShopRewards)
+    {
+        char *shopWork = reinterpret_cast<char *>(ttyd::evt_shop::evt_shop_wp);
+        if (shopWork != nullptr)
+        {
+            const uint32_t selectedIndex = *reinterpret_cast<uint32_t *>(shopWork + 0x2C);
+            const uint32_t *itemIds = *reinterpret_cast<uint32_t **>(shopWork + 0x08);
+            const int itemId = evtGetValue(evt, evt->evtArguments[0]);
+            if (selectedIndex < 6 && itemIds != nullptr &&
+                itemIds[selectedIndex * 2] == static_cast<uint32_t>(itemId))
+            {
+                const char *map = &ttyd::seq_mapchange::_next_map[0];
+                for (int shop = 0; shop < goodsCount; ++shop)
+                {
+                    if (strncmp(map, goods[shop], 6) != 0)
+                        continue;
+                    if (!swGet(6200 + shop * 6 + selectedIndex))
+                    {
+                        // Complete the purchase normally. setShopFlags reports
+                        // the check afterward; the receive queue grants the item.
+                        evtSetValue(evt, evt->evtArguments[1], 0);
+                        return 2;
+                    }
+                    break;
+                }
+            }
+        }
+    }
+    return ttyd::evt_pouch::evt_pouch_add_item(evt, isFirstCall);
+}
 
 EVT_DEFINE_USER_FUNC_KEEP(setShopFlags)
 {
@@ -919,8 +955,8 @@ EVT_DEFINE_USER_FUNC_KEEP(starstoneCheckGoalComplete)
     }
     if (gState->apSettings->goal == 2 && count >= gState->apSettings->goalStars && ttyd::swdrv::swGet(6120) == 0)
     {
-        ttyd::swdrv::swSet(6120);
-        ttyd::seqdrv::seqSetSeq(SeqIndex::kMapChange, "end_00", 0);
+        // Let the caller finish its pickup/chest event before the goal transition.
+        ttyd::swdrv::swSet(6121);
     }
     return 2;
 }

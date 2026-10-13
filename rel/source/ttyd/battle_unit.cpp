@@ -2,7 +2,7 @@
 
 namespace ttyd::battle_unit
 {
-    BattleStatRelValues g_battleStats[] = {{AJI, 9, 28},
+    const BattleStatRelValues g_battleStats[] = {{AJI, 9, 28},
                                            {BOM, 9, 26},
                                            {DOU, 8, 10},
                                            {EKI, 8, 23},
@@ -90,32 +90,4 @@ namespace ttyd::battle_unit
         return nullptr;
     }
 
-    void ShuffleBattleStats()
-    {
-        const int count = g_battleStatsCount;
-        uint32_t old = ttyd::system::main_next;
-        ttyd::system::main_next = *(uint32_t *)0x80003244;
-        int origHp[17];
-        int origLv[17];
-        for (int i = 0; i < count; ++i)
-        {
-            origHp[i] = g_battleStats[i].base_hp;
-            origLv[i] = g_battleStats[i].level;
-        }
-        int indices[17];
-        for (int i = 0; i < count; ++i) indices[i] = i;
-        for (int i = count - 1; i > 0; --i)
-        {
-            int j = irand(i + 1);
-            int temp = indices[i];
-            indices[i] = indices[j];
-            indices[j] = temp;
-        }
-        for (int i = 0; i < count; ++i)
-        {
-            g_battleStats[i].base_hp = origHp[indices[i]];
-            g_battleStats[i].level = origLv[indices[i]];
-        }
-        ttyd::system::main_next = old;
-    }
 } // namespace ttyd::battle_unit

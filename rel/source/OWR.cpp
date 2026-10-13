@@ -261,10 +261,6 @@ namespace mod::owr
         if (SequencePosition != 0)
             return;
 
-        // Shuffle chapter stats before anything else
-        if (gState->apSettings->shuffleChapterStats == 1)
-            ShuffleBattleStats();
-
         ttyd::swdrv::swByteSet(1700, 16);
         ttyd::swdrv::swByteSet(1701, 3);
         ttyd::swdrv::swByteSet(1703, 1);
@@ -2558,7 +2554,7 @@ namespace mod::owr
                 scaled = true;
             }
             else if (!entry && chapter && rel->id != static_cast<uint32_t>(RelId::JON) &&
-                     ((gState->apSettings->enemyRandomizer != 0) || gState->apSettings->shuffleChapterStats) &&
+                     (gState->apSettings->enemyRandomizer != 0) &&
                      GetUnitKindById(kind->unit_type) && !IsHpScaleBlacklisted(kind->unit_type))
             {
                 level = static_cast<uint8_t>(chapter->level);
@@ -2738,8 +2734,7 @@ namespace mod::owr
     {
         if (!unit)
             return;
-        if ((!(gState->apSettings->enemyRandomizer != 0) && gState->apSettings->shuffleChapterStats == 0) ||
-            !(gState->apSettings->enemyStatScaling != 0))
+        if (gState->apSettings->enemyRandomizer == 0 || gState->apSettings->enemyStatScaling == 0)
             return;
         const BattleStatRelValues *statRelValues = GetBattleStats(rel);
         BattleUnitKind *unit_kind = GetUnitKindById(unit->unit_type);
@@ -3213,16 +3208,10 @@ namespace mod::owr
         if (count < gState->apSettings->goalStars)
             return;
 
-        if (checkIfInGameNotBattle())
-        {
-            ttyd::swdrv::swSet(6120);
-            ttyd::seqdrv::seqSetSeq(SeqIndex::kMapChange, "end_00", 0);
-        }
-        else
-        {
-            // Defer the sequence change until we are back in the game
-            ttyd::swdrv::swSet(6121);
-        }
+        // pouchGetItem runs inside the pickup event, before its animation and
+        // chest cleanup finish. Only request the goal here; Update waits for
+        // the item event to release Mario before changing rooms.
+        ttyd::swdrv::swSet(6121);
     }
 
     KEEP_FUNC void checkRecipeGoal()
@@ -4384,9 +4373,12 @@ namespace mod::owr
         }
 
 
-        // Deferred goal teleport (goal completed during battle/cutscene): 6120 must be set
-        // here too, or the check stays true inside end_00 and re-teleports every frame.
-        if (checkIfInGameNotBattle() && ttyd::swdrv::swGet(6121) == 1 && ttyd::swdrv::swGet(6120) != 1)
+        // Wait for pickups/cutscenes to release Mario, including the chest's
+        // parent event. kGame alone is also true during the get animation.
+        // Mark completion only when the deferred transition is actually safe.
+        if (checkIfInGameNotBattle() && ttyd::mario::marioChkKey() != 0 &&
+            !ttyd::mario::marioCtrlOffChk() && !gState->starItemPtr &&
+            ttyd::swdrv::swGet(6121) == 1 && ttyd::swdrv::swGet(6120) != 1)
         {
             ttyd::swdrv::swSet(6120);
             ttyd::swdrv::swClear(6121); // deferral consumed

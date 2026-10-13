@@ -1,5 +1,6 @@
 #include "subrel_init.h"
 #include "mod.h"
+#include "SmartHeap.h"
 #include "cxx.h"
 #include "patch.h"
 #include "errorHandling.h"
@@ -30,6 +31,7 @@ namespace mod
         ghosts::g_animPoseAutoRelease_trampoline =
             patch::hookFunction(ttyd::animdrv::animPoseAutoRelease, ghosts::animPoseAutoReleaseHook);
 
+        smart_heap::Init();
         applyGameFixes();
         applyVariousGamePatches();
 

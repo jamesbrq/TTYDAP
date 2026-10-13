@@ -36,7 +36,7 @@ namespace mod::owr
         uint8_t touConditions;                     // 0x1A
         uint8_t collectedStars;                    // 0x1B
         uint8_t cutsceneSkip;                      // 0x1C
-        uint8_t padding1;                          // 0x1D
+        uint8_t remoteShopRewards;                 // 0x1D
         uint8_t startingLevel;                     // 0x1E
         uint8_t deathLinkTriggered;                // 0x1F
         uint8_t deathLinkSent;                     // 0x20
@@ -55,14 +55,13 @@ namespace mod::owr
         uint8_t bluePipeToggle;                    // 0x30
         uint8_t enemyRandomizer;                   // 0x31
         uint8_t enemyStatScaling;                  // 0x32
-        uint8_t shuffleChapterStats;               // 0x33
-        uint8_t padding2[4];                       // 0x34-0x37 This space has data
+        uint8_t padding2[5];                       // 0x33-0x37 reserved;
         uint8_t badgeBP;                           // 0x38
         uint8_t badgeFP;                           // 0x39
         uint8_t partnerFP;                         // 0x3A
         uint8_t bossRandomizer;                    // 0x3B
         mod::ghosts::GhostState *ghostStatePtr;    // 0x3C
-        uint8_t yoshiNameBuffer[0x20];             // 0x40 yoshiName points here (0x80003260)
+        uint8_t yoshiNameBuffer[0x20];             // 0x40
         uint8_t bossStatScaling;                   // 0x60
         uint8_t consoleMode;                       // 0x61
         uint8_t moonSpeed;                         // 0x62
@@ -71,11 +70,11 @@ namespace mod::owr
         uint8_t cooksanity;                        // 0x65
         uint8_t goalRecipes;                       // 0x66
         uint8_t epilogueSkip;                      // 0x67
-        uint32_t patchTimeGC;                      // 0x68 seed generation time, seconds since 2000-01-01
-        uint8_t rtaTimer;                          // 0x6C enables the RTA timer + credits results display
-        uint8_t tracker;                           // 0x6D in-game tracker (map colors, node lists, all nodes visible)
-        uint8_t mirrorMode;                        // 0x6E view-space mirror mode (horizontal screen flip)
-        uint8_t panelHints;                        // 0x6F tracker-colored kururing floor panels
+        uint32_t patchTimeGC;                      // 0x68
+        uint8_t rtaTimer;                          // 0x6C
+        uint8_t tracker;                           // 0x6D
+        uint8_t mirrorMode;                        // 0x6E
+        uint8_t panelHints;                        // 0x6F
         uint16_t expMultiplier;                    // 0x70
     };
 

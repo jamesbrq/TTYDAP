@@ -169,7 +169,13 @@ namespace mod
             // Clear every word in the skipped blocks so event scanning cannot
             // interpret old command arguments as new instructions.
             for (int word = 197; word < 408; ++word)
+            {
+                // Preserve cont_onoff(0), paired with cont_onoff(1) after
+                // battle. Removing it underflows Mario's control counter
+                // and leaves letterboxing and item pickup cleanup broken.
+                if (word >= 269 && word <= 271) continue;
                 win_mario_vs_witchtrio[word] = EVT_HELPER_CMD(0, 0);
+            }
             for (int word = 414; word < 434; ++word)
                 win_mario_vs_witchtrio[word] = EVT_HELPER_CMD(0, 0);
         }

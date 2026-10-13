@@ -1,4 +1,5 @@
 #include "BossPreview.h"
+#include "SmartHeap.h"
 #include "AP/rel_patch_definitions.h"
 #include "evt_cmd.h"
 #include "OWR.h"
@@ -677,6 +678,19 @@ extern void *mri_Punigp;
 namespace mod
 {
     static void (*puniAnimationOriginal)(void *, void *);
+    static uint32_t puniAnimationTrampoline[2] __attribute__((aligned(32)));
+
+#ifdef TTYD_US
+    extern "C" void mri_puniMakeTexture(int32_t camera, void *data);
+    static uint32_t puniTextureTrampoline[2] __attribute__((aligned(32)));
+    static void (*puniTextureOriginal)(int32_t, void *);
+    static void PuniTextureDiagnostics(int32_t camera, void *data)
+    {
+        smart_heap::Checkpoint("Puni textures begin");
+        puniTextureOriginal(camera, data);
+        smart_heap::Checkpoint("Puni textures end");
+    }
+#endif
 
     static void PuniAnimationReady(void *puni, void *instance)
     {
@@ -696,7 +710,23 @@ namespace mod
 
     void main()
     {
-        puniAnimationOriginal = patch::hookFunction(mri_puniAnimation, PuniAnimationReady);
+        // This subrel is relinked on every room transition. Keep the trampoline
+        // in its BSS instead of leaking an ordinary-heap allocation each time.
+        auto *original = reinterpret_cast<uint32_t *>(mri_puniAnimation);
+        puniAnimationTrampoline[0] = original[0];
+        patch::clear_DC_IC_Cache(puniAnimationTrampoline, sizeof(puniAnimationTrampoline));
+        patch::writeBranch(&puniAnimationTrampoline[1], &original[1]);
+        patch::writeBranch(original, PuniAnimationReady);
+        puniAnimationOriginal = reinterpret_cast<void (*)(void *, void *)>(puniAnimationTrampoline);
+        smart_heap::Checkpoint("MRI relink");
+#ifdef TTYD_US
+        auto *texture = reinterpret_cast<uint32_t *>(mri_puniMakeTexture);
+        puniTextureTrampoline[0] = texture[0];
+        patch::clear_DC_IC_Cache(puniTextureTrampoline, sizeof(puniTextureTrampoline));
+        patch::writeBranch(&puniTextureTrampoline[1], &texture[1]);
+        patch::writeBranch(texture, PuniTextureDiagnostics);
+        puniTextureOriginal = reinterpret_cast<void (*)(int32_t, void *)>(puniTextureTrampoline);
+#endif
 
         mri_countdown[1] = GSW(1713);
         mri_countdown[2] = 17;

@@ -253,6 +253,9 @@ bool IsEncounterEnemy(NpcEntry *npc) {
             return HasNativeFieldAi(npc);
         return true;
     }
+    // Monochrome Cleft has a separate native tribe from the gray Cleft
+    // used by randomized replacements, despite sharing its field model.
+    if (npc->tribe == &tribes[237]) return HasNativeFieldAi(npc);
     // Native Magikoopa ground/air variants have separate tribe records.
     for (int i = 312; i <= 321; ++i)
         if (npc->tribe == &tribes[i]) return HasNativeFieldAi(npc);
@@ -260,6 +263,11 @@ bool IsEncounterEnemy(NpcEntry *npc) {
 }
 void CaptureNpc(NpcEntry *npc) {
     if (!npc || !npc->tribe || !npc->tribe->modelName || npc->master || sCount >= 128) return;
+    // gon_03's hidden Karon1 supplies c_karon_g_h to the crowd renderer.
+    // Its setup assigns battle ID 0, but it is a render source, not an encounter.
+    // Releasing that pose makes every falling Bones in the horde invisible.
+    if (std::strcmp(seq_mapchange::_next_map, "gon_03") == 0 &&
+        npc == npcNameToPtr_NoAssert("\x83\x4a\x83\x8d\x83\x93" "1")) return;
     if (boss_preview::IsBossSceneNpc(npc) || !IsEncounterEnemy(npc)) return;
     auto *group = static_cast<battle_database_common::BattleGroupSetup *>(npc->battleInfo.pConfiguration);
 #ifdef TTYD_US
@@ -314,7 +322,7 @@ EVT_BEGIN(RegularEvent)
     END_IF()
     RETURN()
 EVT_END()
-void PlaceNpc(NpcEntry *npc, const AiProfile *ai) {
+void PlaceNpc(NpcEntry *npc, const AiProfile *ai, float height) {
     using namespace hitdrv;
     HitCheckQuery query = {};
     query.targetPosition = npc->position;
@@ -332,6 +340,19 @@ void PlaceNpc(NpcEntry *npc, const AiProfile *ai) {
     npc->position.y += delta;
     npc->previousPosition = npc->position;
     npc->wTerritoryBase.y += delta;
+    if (index == 27) {
+        // Native Pider AI reads loiter.z as its thread descent distance,
+        // rather than as a roaming depth. Descend to the sampled floor.
+        npc->wTerritoryLoiter.z = hover;
+        // Hanging moves the actor above the old species' vertical search
+        // bounds. Include Mario at floor level so the find event can run.
+        const float verticalRange = hover + height;
+        npc->wTerritoryLoiter.y = std::max(npc->wTerritoryLoiter.y, verticalRange);
+        npc->wTerritoryHoming.y = std::max(npc->wTerritoryHoming.y, verticalRange);
+        // Hanging enemies attack below their home instead of facing a
+        // walking direction. Keep the original radius, but search all sides.
+        npc->wSearchAngle = 360.0f;
+    }
 }
 void Capture(evtmgr::EvtEntry *evt) {
     sCount = 0;
@@ -356,7 +377,7 @@ bool Prepare(bool startInit = true) {
         auto *npc = pending.npc;
         auto *ai = pending.ai;
         if (pending.replaceAi) {
-            PlaceNpc(npc, ai);
+            PlaceNpc(npc, ai, pending.tribe->height);
             npc->flags &= ~(0x10000000u | 0x04000000u | 0x02000000u | 0x08000000u | 0x20000u | 0x400u);
             // Both setup paths must wait for the new init event to finish.
             npc->flags &= ~2u;

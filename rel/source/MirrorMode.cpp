@@ -26,7 +26,6 @@ extern "C"
     void mot_plane(void *a, void *b, void *c);
     void mot_plane_post(void *a, void *b, void *c);
     void mot_roll(void *a, void *b, void *c);
-    void yoshi_use(void *partyNpc, void *b, void *c);
     void GXLoadPosMtxImm(float (*mtx)[4], uint32_t id);
     void animPoseDrawMtx(int32_t poseId, float (*mtx)[4], int32_t mode, float f1, float f2);
     void btlDispTexPlane(uint32_t texId, void *params, float x, float y, float z, float sclX, float sclY);
@@ -65,9 +64,15 @@ namespace mod::mirror
         MotFn g_motPlane_trampoline = nullptr;
         MotFn g_motPlanePost_trampoline = nullptr;
         MotFn g_motRoll_trampoline = nullptr;
-        MotFn g_yoshiUse_trampoline = nullptr;
         void (*g_dispDraw_trampoline)(CameraId) = nullptr;
 #if defined(TTYD_US)
+        using ImgDrawFn = void (*)(CameraId, void *);
+        ImgDrawFn g_imgDisp_trampoline = nullptr;
+        ImgDrawFn g_imgPlane_trampoline = nullptr;
+        void (*g_imgCapture_trampoline)(void *, int32_t) = nullptr;
+        void (*g_texCopySrc_trampoline)(uint16_t, uint16_t, uint16_t, uint16_t) = nullptr;
+        bool g_moonCapture = false;
+        bool g_moonDraw = false;
         int32_t (*g_shotTarget_trampoline)(void *) = nullptr;
         uint32_t (*g_sfxSpatialParams_trampoline)(uint32_t, const void *, uint32_t, uint32_t) = nullptr;
 #endif
@@ -409,7 +414,11 @@ namespace mod::mirror
 
     KEEP_FUNC void GXSetCullModeHook(int32_t mode)
     {
-        if (active() && mirroredCamera(g_curDispCam))
+        if (active() && (mirroredCamera(g_curDispCam)
+#if defined(TTYD_US)
+                         || g_moonDraw
+#endif
+                         ))
         {
             // A counter-mirrored effect draw keeps its vanilla cull mode.
             if (g_effCullNoSwapOnce || g_effCullNoSwapScope > 0)
@@ -464,22 +473,102 @@ namespace mod::mirror
         callWithMirroredStickX(g_motRoll_trampoline, a, b, c);
     }
 
-    // Yoshi riding reads the party NPC's own buffered stick at +0x158/+0x159
-    // (never marioGetStick or player+0x252), so it needs its own X negation.
-    KEEP_FUNC void yoshiUseHook(void *partyNpc, void *b, void *c)
+#if defined(TTYD_US)
+    bool isMoonImage(void *image)
     {
-        if (!active() || !partyNpc)
+        if (!active() || !image || std::strcmp(ttyd::seq_mapchange::_next_map, "gra_00") != 0)
+            return false;
+        auto *bytes = static_cast<uint8_t *>(image);
+        // The image name is reused by other effects; also match the moon
+        // tear's fixed placement. Capture output rectangles are not initialized
+        // until the first copy, so they cannot identify its first capture.
+        const auto *position = reinterpret_cast<const float *>(bytes + 0xE8);
+        return std::strcmp(reinterpret_cast<char *>(bytes + 0xD4), "img") == 0 &&
+               position[0] == -460.f && position[1] == -261.f;
+    }
+
+    KEEP_FUNC void moonCaptureHook(void *image, int32_t index)
+    {
+        const bool saved = g_moonCapture;
+        g_moonCapture = index == 0 && isMoonImage(image);
+        g_imgCapture_trampoline(image, index);
+        g_moonCapture = saved;
+    }
+
+    KEEP_FUNC void moonTexCopySrcHook(uint16_t x, uint16_t y, uint16_t width, uint16_t height)
+    {
+        // Keep the image record in native coordinates for its UV calculation;
+        // only the framebuffer region copied by GX moves to the mirrored side.
+        if (g_moonCapture && x + width <= 608)
+            x = 608 - x - width;
+        g_texCopySrc_trampoline(x, y, width, height);
+    }
+
+    void drawMoonImage(ImgDrawFn draw, CameraId cameraId, void *image)
+    {
+        if (!isMoonImage(image))
         {
-            g_yoshiUse_trampoline(partyNpc, b, c);
+            draw(cameraId, image);
             return;
         }
-
-        int8_t *stickX = reinterpret_cast<int8_t *>(static_cast<uint8_t *>(partyNpc) + 0x158);
-        const int8_t saved = *stickX;
-        *stickX = (saved == -128) ? 127 : static_cast<int8_t>(-saved);
-        g_yoshiUse_trampoline(partyNpc, b, c);
-        *stickX = saved;
+        float *view = reinterpret_cast<float *>(static_cast<uint8_t *>(camGetPtr(static_cast<int>(cameraId))) + 0x11C);
+        float savedRow[4];
+        std::memcpy(savedRow, view, sizeof(savedRow));
+        for (int i = 0; i < 4; ++i) view[i] = -view[i];
+        const bool saved = g_moonDraw;
+        g_moonDraw = true;
+        draw(cameraId, image);
+        g_moonDraw = saved;
+        std::memcpy(view, savedRow, sizeof(savedRow));
     }
+
+    KEEP_FUNC void moonImageDispHook(CameraId cameraId, void *image)
+    {
+        drawMoonImage(g_imgDisp_trampoline, cameraId, image);
+    }
+
+    KEEP_FUNC void moonImagePlaneHook(CameraId cameraId, void *image)
+    {
+        drawMoonImage(g_imgPlane_trampoline, cameraId, image);
+    }
+
+    KEEP_FUNC void moonPaperTexMtxHook(gc::mat3x4 *a, gc::mat3x4 *b, gc::mat3x4 *c)
+    {
+        using TexMtxFn = void (*)(gc::mat3x4 *, gc::mat3x4 *, gc::mat3x4 *);
+        const auto set = reinterpret_cast<TexMtxFn>(0x80039E40);
+        if (!g_moonDraw)
+        {
+            set(a, b, c);
+            return;
+        }
+        gc::mat3x4 copies[3];
+        gc::mat3x4 *inputs[3] = {a, b, c};
+        for (int i = 0; i < 3; ++i)
+        {
+            if (!inputs[i]) continue;
+            copies[i] = *inputs[i];
+            // The framebuffer is already mirrored. Reverse U within the crop
+            // so reflecting the paper mesh doesn't reverse its captured pixels.
+            for (int j = 0; j < 3; ++j) copies[i].a[j] = -copies[i].a[j];
+            copies[i].a[3] = 1.f - copies[i].a[3];
+            inputs[i] = &copies[i];
+        }
+        set(inputs[0], inputs[1], inputs[2]);
+    }
+
+    KEEP_FUNC void yoshiUpdateKeyHook(void *partyNpc)
+    {
+        // yoshi_use refreshes its buffered input internally. Reflect the fresh
+        // data at that call site, not at entry where the refresh overwrites it.
+        using UpdateKeyFn = void (*)(void *);
+        reinterpret_cast<UpdateKeyFn>(0x800B7548)(partyNpc);
+        if (active() && partyNpc)
+        {
+            int8_t *stickX = reinterpret_cast<int8_t *>(static_cast<uint8_t *>(partyNpc) + 0x158);
+            *stickX = (*stickX == -128) ? 127 : static_cast<int8_t>(-*stickX);
+        }
+    }
+#endif
 
     KEEP_FUNC int32_t mirrorKeyGetStickX(int32_t padId)
     {
@@ -575,9 +664,19 @@ namespace mod::mirror
     KEEP_FUNC void InstallMirrorModeHooks()
     {
 #if defined(TTYD_US)
+        // gra_00's moon tear uses the normally unmirrored image camera.
+        g_imgDisp_trampoline = patch::hookFunction(reinterpret_cast<ImgDrawFn>(0x800721B4), moonImageDispHook);
+        g_imgPlane_trampoline = patch::hookFunction(reinterpret_cast<ImgDrawFn>(0x80071F20), moonImagePlaneHook);
+        g_imgCapture_trampoline = patch::hookFunction(
+            reinterpret_cast<void (*)(void *, int32_t)>(0x80071A20), moonCaptureHook);
+        g_texCopySrc_trampoline = patch::hookFunction(
+            reinterpret_cast<void (*)(uint16_t, uint16_t, uint16_t, uint16_t)>(0x802B5EE8), moonTexCopySrcHook);
+        patch::writeBranchBL(reinterpret_cast<void *>(0x80072474), moonPaperTexMtxHook);
         g_sfxSpatialParams_trampoline = patch::hookFunction(
             reinterpret_cast<uint32_t (*)(uint32_t, const void *, uint32_t, uint32_t)>(0x800DC6D4),
             sfxSpatialParamsHook);
+        // The sole controller refresh inside yoshi_use, before movement/inertia.
+        patch::writeBranchBL(reinterpret_cast<void *>(0x800B4AD0), yoshiUpdateKeyHook);
         // effNumberGX's per-character translation, before model/view concat.
         patch::writeBranchBL(reinterpret_cast<void *>(0x80257EB4), numberDigitTransHook);
         // Verified US call sites in BattleCommandInput and sac_muki main_cursor.
@@ -602,7 +701,6 @@ namespace mod::mirror
         g_motPlanePost_trampoline =
             patch::hookFunction(mot_plane_post, motPlanePostHook);
         g_motRoll_trampoline = patch::hookFunction(mot_roll, motRollHook);
-        g_yoshiUse_trampoline = patch::hookFunction(yoshi_use, yoshiUseHook);
         g_btlStageObjSetRotate_trampoline =
             patch::hookFunction(btlevtcmd_BtlStageObjSetRotate, btlStageObjSetRotateHook);
         g_btlStageObjGetRotate_trampoline =

@@ -805,6 +805,7 @@ namespace mod::owr
         evt_lecture_msg[107] = GSW(1700);
         evt_lecture_msg[108] = 17;
 
+        main_buy_evt[131] = PTR(giveShopItem);
         patch::writePatch(&main_buy_evt[352], main_buy_evt_hook, sizeof(main_buy_evt_hook));
 
         patch::writePatch(&evt_sub_starstone[0], starstone_item_handler_hook, sizeof(starstone_item_handler_hook));
