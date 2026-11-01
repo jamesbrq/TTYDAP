@@ -334,7 +334,7 @@ namespace mod::owr
         // Give Return Pipe.
         ttyd::mario_pouch::pouchGetItem(ItemId::INVALID_ITEM_PAPER_0054);
 
-        ttyd::mario_pouch::pouchGetItem(ItemId::TRIPLE_DIP);
+        ttyd::mario_pouch::pouchGetItem(ItemId::LUCKY_START_P);
 
         const bool apEnabled = static_cast<bool>(gState->apSettings->apEnabled);
         if (apEnabled)
@@ -3127,9 +3127,9 @@ namespace mod::owr
 
     inline void pouchReAddReturnPipe()
     {
-        if (removeItemFromKeyItems(ItemId::TRIPLE_DIP))
+        if (removeItemFromKeyItems(ItemId::LUCKY_START_P))
         {
-            addItemToKeyItems(ItemId::TRIPLE_DIP);
+            addItemToKeyItems(ItemId::LUCKY_START_P);
         }
 
         // Remove the return pipe from the inventory, and then re-add it
@@ -3368,7 +3368,7 @@ namespace mod::owr
                 return ret;
             }
             case ItemId::SQUARE_DIAMOND_BADGE_P: // relocated Briefcase (badge-range id)
-            case ItemId::TRIPLE_DIP:             // Save Block key item (badge-range id)
+            case ItemId::LUCKY_START_P:          // Save Block key item (badge-range id)
             {
                 if (containsKeyItem(item))
                 {
@@ -4030,7 +4030,7 @@ namespace mod::owr
                     ttyd::evtmgr::evtEntryType(const_cast<int32_t *>(confirm_pipe_evt), 30, 0, 26);
                     return -2;
                 }
-                if (hovered == ItemId::TRIPLE_DIP) // Save Block key item
+                if (hovered == ItemId::LUCKY_START_P) // Save Block key item
                 {
                     ttyd::evtmgr::evtEntryType(const_cast<int32_t *>(confirm_save_evt), 30, 0, 26);
                     return -2;
@@ -4360,8 +4360,8 @@ namespace mod::owr
         {
             if (!containsKeyItem(ItemId::INVALID_ITEM_PAPER_0054))
                 ttyd::mario_pouch::pouchGetItem(ItemId::INVALID_ITEM_PAPER_0054);
-            if (!containsKeyItem(ItemId::TRIPLE_DIP))
-                ttyd::mario_pouch::pouchGetItem(ItemId::TRIPLE_DIP);
+            if (!containsKeyItem(ItemId::LUCKY_START_P))
+                ttyd::mario_pouch::pouchGetItem(ItemId::LUCKY_START_P);
         }
 
         APSettings *apSettingsPtr = gState->apSettings;

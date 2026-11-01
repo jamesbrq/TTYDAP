@@ -884,10 +884,10 @@ namespace mod::owr
         itemDataTable[ItemId::INVALID_ITEM_PAPER_0054].description = returnPipeDescription;
         itemDataTable[ItemId::INVALID_ITEM_PAPER_0054].icon_id = IconType::RETURN_PIPE;
         itemDataTable[ItemId::INVALID_ITEM_PAPER_0054].type_sort_order = 1;
-        itemDataTable[ItemId::TRIPLE_DIP].name = saveBlockName;
-        itemDataTable[ItemId::TRIPLE_DIP].description = saveBlockDescription;
-        itemDataTable[ItemId::TRIPLE_DIP].icon_id = IconType::SAVE_BLOCK;
-        itemDataTable[ItemId::TRIPLE_DIP].type_sort_order = 2;
+        itemDataTable[ItemId::LUCKY_START_P].name = saveBlockName;
+        itemDataTable[ItemId::LUCKY_START_P].description = saveBlockDescription;
+        itemDataTable[ItemId::LUCKY_START_P].icon_id = IconType::SAVE_BLOCK;
+        itemDataTable[ItemId::LUCKY_START_P].type_sort_order = 2;
         itemDataTable[ItemId::INVALID_ITEM_STAR_FN0OW_0069].name = walrusWhiskersName;
         itemDataTable[ItemId::INVALID_ITEM_STAR_FN0OW_0069].description = walrusWhiskersDescription;
         itemDataTable[ItemId::INVALID_ITEM_STAR_FN0OW_0069].icon_id = IconType::WALRUS_WHISKERS;
